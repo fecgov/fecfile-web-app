@@ -11,7 +11,7 @@ import { TableActionsButtonComponent } from '../../shared/components/table-actio
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 
 @Component({
@@ -70,15 +70,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   protected getEmptyItem(): Contact {
-    return new Contact();
-  }
-
-  public override addItem() {
-    super.addItem();
-  }
-
-  public override editItem(item: Contact) {
-    super.editItem(item);
+    return emptyContact(ContactTypes.INDIVIDUAL);
   }
 
   /**

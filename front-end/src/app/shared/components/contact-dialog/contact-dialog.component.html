@@ -1,125 +1,286 @@
 <p-dialog [(visible)]="detailVisible" [style]="{ width: '90%' }" [header]="headerText()" [modal]="true">
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+  <div class="grid">
+    <div class="col-12">
+      <h3>Contact</h3>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-10">
+      <div class="field">
+        <label for="type">CONTACT TYPE</label>
+        <app-contact-lookup
+          [(contactType)]="selectedContactType"
+          [(contact)]="contact"
+          [contactTypeOptions]="contactTypeOptions()"
+          [showSearchBox]="isCandidate() || isCommittee()"
+          [showCreateNewContactButton]="false"
+          [includeFecfileResults]="false"
+          [candidateOffice]="defaultCandidateOffice()"
+        >
+        </app-contact-lookup>
+      </div>
+    </div>
+    <div class="col-6"></div>
+  </div>
+  @if (isCandidate()) {
     <div class="grid">
-      <div class="col-12">
-        <h3>Contact</h3>
+      <div class="col-6">
+        <div class="field">
+          <label for="candidate_id">CANDIDATE ID</label>
+          <input
+            type="text"
+            pInputText
+            id="candidate_id"
+            [disabled]="form.controls['candidate_id'].disabled()"
+            [(ngModel)]="form.controls['candidate_id'].value"
+          />
+          <!-- <app-error-messages
+              [form]="form"
+              fieldName="candidate_id"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages> -->
+        </div>
+      </div>
+      <div class="col-4"></div>
+    </div>
+  }
+  @if (isCommittee() || isOrganization()) {
+    <div class="grid">
+      @if (isCommittee()) {
+        <div class="col-4">
+          <div class="field">
+            <label for="committee_id">COMMITTEE ID</label>
+            <input
+              type="text"
+              pInputText
+              id="committee_id"
+              [disabled]="form.controls['committee_id'].disabled()"
+              [(ngModel)]="form.controls['committee_id'].value"
+            />
+            <!-- <app-error-messages
+                [form]="form"
+                fieldName="committee_id"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages> -->
+          </div>
+        </div>
+      }
+      <div class="col-8">
+        <div class="field">
+          <label for="name">NAME</label>
+          <input
+            type="text"
+            pInputText
+            id="name"
+            [disabled]="form.controls['name'].disabled()"
+            [(ngModel)]="form.controls['name'].value"
+          />
+          <!-- <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        </div>
+      </div>
+      @if (isOrganization()) {
+        <div class="col-4"></div>
+      }
+    </div>
+  }
+  @if (isIndividual() || isCandidate()) {
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="last_name">LAST NAME</label>
+          <input
+            type="text"
+            pInputText
+            id="last_name"
+            [disabled]="form.controls['last_name'].disabled()"
+            [(ngModel)]="form.controls['last_name'].value"
+          />
+          <!-- <app-error-messages
+              [form]="form"
+              fieldName="last_name"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages> -->
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="first_name">FIRST NAME</label>
+          <input
+            type="text"
+            pInputText
+            id="first_name"
+            [disabled]="form.controls['first_name'].disabled()"
+            [(ngModel)]="form.controls['first_name'].value"
+          />
+          <!-- <app-error-messages
+              [form]="form"
+              fieldName="first_name"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages> -->
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+          <input
+            type="text"
+            pInputText
+            id="middle_name"
+            [disabled]="form.controls['middle_name'].disabled()"
+            [(ngModel)]="form.controls['middle_name'].value"
+          />
+          <!-- <app-error-messages
+              [form]="form"
+              fieldName="middle_name"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages> -->
+        </div>
       </div>
     </div>
     <div class="grid">
-      <div class="col-10">
+      <div class="col-3">
         <div class="field">
-          <label for="type">CONTACT TYPE</label>
-          <app-contact-lookup
-            [(contactType)]="selectedContactType"
-            [contact]="contact()"
-            [contactTypeOptions]="contactTypeOptions()"
-            [showSearchBox]="isCandidate() || isCommittee()"
-            [showCreateNewContactButton]="false"
-            [includeFecfileResults]="false"
-            [candidateOffice]="defaultCandidateOffice()"
-          >
-          </app-contact-lookup>
+          <label for="prefix">PREFIX (OPTIONAL)</label>
+          <input
+            type="text"
+            pInputText
+            id="prefix"
+            [disabled]="form.controls['prefix'].disabled()"
+            [(ngModel)]="form.controls['prefix'].value"
+          />
+          <!-- <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="suffix">SUFFIX (OPTIONAL)</label>
+          <input
+            type="text"
+            pInputText
+            id="suffix"
+            [disabled]="form.controls['suffix'].disabled()"
+            [(ngModel)]="form.controls['suffix'].value"
+          />
+          <!-- <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages> -->
         </div>
       </div>
       <div class="col-6"></div>
     </div>
-    @if (isCandidate()) {
-      <div class="grid">
-        <div class="col-6">
-          <div class="field">
-            <label for="candidate_id">CANDIDATE ID</label>
-            <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
-            <app-error-messages
-              [form]="form"
-              fieldName="candidate_id"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4"></div>
+  }
+  <div class="grid">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <h3>Address</h3>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="country">COUNTRY/REGION</label>
+        <p-select
+          inputId="country"
+          [disabled]="form.controls['country'].disabled()"
+          [(ngModel)]="form.controls['country'].value"
+          [options]="countryOptions"
+        ></p-select>
       </div>
-    }
-    @if (isCommittee() || isOrganization()) {
-      <div class="grid">
-        @if (isCommittee()) {
-          <div class="col-4">
-            <div class="field">
-              <label for="committee_id">COMMITTEE ID</label>
-              <input type="text" pInputText id="committee_id" formControlName="committee_id" />
-              <app-error-messages
-                [form]="form"
-                fieldName="committee_id"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        }
-        <div class="col-8">
-          <div class="field">
-            <label for="name">NAME</label>
-            <input type="text" pInputText id="name" formControlName="name" />
-            <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
-          </div>
-        </div>
-        @if (isOrganization()) {
-          <div class="col-4"></div>
-        }
+    </div>
+    <div class="col-6"></div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="street_1">STREET ADDRESS</label>
+        <input
+          type="text"
+          pInputText
+          id="street_1"
+          [disabled]="form.controls['street_1'].disabled()"
+          [(ngModel)]="form.controls['street_1'].value"
+        />
+        <!-- <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages> -->
       </div>
-    }
-    @if (isIndividual() || isCandidate()) {
-      <div class="grid">
-        <div class="col-4">
-          <div class="field">
-            <label for="last_name">LAST NAME</label>
-            <input type="text" pInputText id="last_name" formControlName="last_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="last_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="field">
-            <label for="first_name">FIRST NAME</label>
-            <input type="text" pInputText id="first_name" formControlName="first_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="first_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="field">
-            <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-            <input type="text" pInputText id="middle_name" formControlName="middle_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="middle_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+        <input
+          type="text"
+          pInputText
+          id="street_2"
+          [disabled]="form.controls['street_2'].disabled()"
+          [(ngModel)]="form.controls['street_2'].value"
+        />
+        <!-- <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages> -->
       </div>
-      <div class="grid">
-        <div class="col-3">
-          <div class="field">
-            <label for="prefix">PREFIX (OPTIONAL)</label>
-            <input type="text" pInputText id="prefix" formControlName="prefix" />
-            <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="field">
-            <label for="suffix">SUFFIX (OPTIONAL)</label>
-            <input type="text" pInputText id="suffix" formControlName="suffix" />
-            <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages>
-          </div>
-        </div>
-        <div class="col-6"></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="city">CITY</label>
+        <input
+          type="text"
+          pInputText
+          id="city"
+          [disabled]="form.controls['city'].disabled()"
+          [(ngModel)]="form.controls['city'].value"
+        />
+        <!-- <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages> -->
       </div>
-    }
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="state">STATE/PROVINCE</label>
+        <p-select
+          inputId="state"
+          [disabled]="form.controls['state'].disabled()"
+          [(ngModel)]="form.controls['state'].value"
+          [options]="stateOptions()"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-select>
+        <!-- <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages> -->
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="zip">ZIP/POSTAL CODE</label>
+        <input
+          type="text"
+          pInputText
+          id="zip"
+          [disabled]="form.controls['zip'].disabled()"
+          [(ngModel)]="form.controls['zip'].value"
+        />
+        <!-- <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages> -->
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+        <app-fec-international-phone-input
+          [disabled]="form.controls['telephone'].disabled()"
+          [(ngModel)]="form.controls['telephone'].value"
+        >
+        </app-fec-international-phone-input>
+        <!-- <app-error-messages
+            [form]="form"
+            fieldName="telephone"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must contain 10 numeric characters."
+          ></app-error-messages> -->
+      </div>
+    </div>
+    <div class="col-6"></div>
+  </div>
+  @if (isIndividual() || isCandidate()) {
     <div class="grid">
       <div class="col-12">
         <hr />
@@ -127,131 +288,61 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <h3>Address</h3>
+        <h3>Employer</h3>
       </div>
     </div>
     <div class="grid">
       <div class="col-6">
         <div class="field">
-          <label for="country">COUNTRY/REGION</label>
-          <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
-        </div>
-      </div>
-      <div class="col-6"></div>
-    </div>
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label for="street_1">STREET ADDRESS</label>
-          <input type="text" pInputText id="street_1" formControlName="street_1" />
-          <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
+          <label for="employer">EMPLOYER (OPTIONAL)</label>
+          <input
+            type="text"
+            pInputText
+            id="employer"
+            [disabled]="form.controls['employer'].disabled()"
+            [(ngModel)]="form.controls['employer'].value"
+          />
+          <!-- <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted"></app-error-messages> -->
         </div>
       </div>
       <div class="col-6">
         <div class="field">
-          <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-          <input type="text" pInputText id="street_2" formControlName="street_2" />
-          <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
-        </div>
-      </div>
-    </div>
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label for="city">CITY</label>
-          <input type="text" pInputText id="city" formControlName="city" />
-          <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="field">
-          <label for="state">STATE/PROVINCE</label>
-          <p-select
-            inputId="state"
-            formControlName="state"
-            [options]="stateOptions()"
-            [autoDisplayFirst]="false"
-            appendTo="body"
-          ></p-select>
-          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="field">
-          <label for="zip">ZIP/POSTAL CODE</label>
-          <input type="text" pInputText id="zip" formControlName="zip" />
-          <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
-        </div>
-      </div>
-    </div>
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
-          <app-fec-international-phone-input formControlName="telephone"> </app-fec-international-phone-input>
-          <app-error-messages
-            [form]="form"
-            fieldName="telephone"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must contain 10 numeric characters."
-          ></app-error-messages>
-        </div>
-      </div>
-      <div class="col-6"></div>
-    </div>
-    @if (isIndividual() || isCandidate()) {
-      <div class="grid">
-        <div class="col-12">
-          <hr />
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12">
-          <h3>Employer</h3>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-6">
-          <div class="field">
-            <label for="employer">EMPLOYER (OPTIONAL)</label>
-            <input type="text" pInputText id="employer" formControlName="employer" />
-            <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted"></app-error-messages>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="field">
-            <label for="occupation">OCCUPATION (OPTIONAL)</label>
-            <input type="text" pInputText id="occupation" formControlName="occupation" />
-            <app-error-messages
+          <label for="occupation">OCCUPATION (OPTIONAL)</label>
+          <input
+            type="text"
+            pInputText
+            id="occupation"
+            [disabled]="form.controls['occupation'].disabled()"
+            [(ngModel)]="form.controls['occupation'].value"
+          />
+          <!-- <app-error-messages
               [form]="form"
               fieldName="occupation"
               [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
+            ></app-error-messages> -->
         </div>
       </div>
-    }
-    @if (isCandidate()) {
-      <div class="grid">
-        <div class="col-12">
-          <hr />
-        </div>
+    </div>
+  }
+  @if (isCandidate()) {
+    <div class="grid">
+      <div class="col-12">
+        <hr />
       </div>
-      <div class="grid">
-        <div class="col-12">
-          <h3>Office</h3>
-        </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Office</h3>
       </div>
-      <app-candidate-office-input
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        officeFormControlName="candidate_office"
-        stateFormControlName="candidate_state"
-        districtFormControlName="candidate_district"
-      >
-      </app-candidate-office-input>
-    }
-  </form>
+    </div>
+    <app-candidate-office-input
+      [formSubmitted]="formSubmitted"
+      [(office)]="form.controls['candidate_office']"
+      [(state)]="form.controls['candidate_state']"
+      [(district)]="form.controls['candidate_district']"
+    >
+    </app-candidate-office-input>
+  }
 
   @if (showHistory() && !isNewItem()) {
     <div>

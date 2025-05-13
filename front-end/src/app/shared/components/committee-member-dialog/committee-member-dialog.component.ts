@@ -56,14 +56,14 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   constructor() {
     super();
     effect(() => {
-      if (this.detailVisible()) {
+      if (!this.detailVisible()) {
         this.resetForm();
       }
     });
-  }
 
-  updateSelected(roleOption: (typeof this.roleOptions)[0]) {
-    this.form.get('role')?.setValue(roleOption);
+    effect(() => {
+      console.log(this.member());
+    });
   }
 
   public submit() {

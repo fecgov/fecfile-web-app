@@ -1,4 +1,4 @@
-<p-dialog [(visible)]="detailVisible" [style]="{ width: '90%' }" [header]="headerText()" [modal]="true">
+<p-dialog [(visible)]="detailVisible" [style]="{ width: '512px' }" [header]="headerText()" [modal]="true">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
@@ -32,7 +32,7 @@
   </form>
 
   <ng-template #footer>
-    <div class="top-border-footer">
+    <div class="top-border-footer justify-content-between">
       <button
         type="button"
         pButton

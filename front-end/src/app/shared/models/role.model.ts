@@ -6,8 +6,8 @@ export enum Roles {
 }
 
 export const RoleTypeLabels: LabelList = [
-  [Roles.COMMITTEE_ADMINISTRATOR, 'Committee Administrator'],
-  [Roles.MANAGER, 'Manager'],
+  ['COMMITTEE_ADMINISTRATOR', Roles.COMMITTEE_ADMINISTRATOR],
+  ['MANAGER', Roles.MANAGER],
 ];
 
 export function getRoleKey(role: Roles): typeof Roles {

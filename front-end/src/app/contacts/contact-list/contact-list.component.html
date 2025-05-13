@@ -64,6 +64,7 @@
 
 <app-contact-dialog
   [contact]="item()"
+  [fixedContactType]="isNewItem ? null : item().type"
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact($event)"

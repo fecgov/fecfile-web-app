@@ -65,31 +65,31 @@ export enum ContactFields {
 }
 
 export class Contact extends BaseModel {
-  id: string | undefined;
+  id?: string;
   type: ContactType = ContactTypes.INDIVIDUAL;
-  candidate_id: string | undefined;
-  committee_id: string | undefined;
-  name: string | undefined;
-  last_name: string | undefined;
-  first_name: string | undefined;
-  middle_name: string | undefined;
-  prefix: string | undefined;
-  suffix: string | undefined;
+  candidate_id?: string;
+  committee_id?: string;
+  name?: string;
+  last_name?: string;
+  first_name?: string;
+  middle_name?: string;
+  prefix?: string;
+  suffix?: string;
   street_1 = '';
-  street_2: string | undefined;
+  street_2?: string;
   city = '';
   state = '';
   zip = '';
-  employer: string | undefined;
-  occupation: string | undefined;
-  candidate_office: CandidateOfficeType | undefined;
-  candidate_state: string | undefined;
-  candidate_district: string | undefined;
-  telephone: string | undefined;
+  employer?: string;
+  occupation?: string;
+  candidate_office?: CandidateOfficeType;
+  candidate_state?: string;
+  candidate_district?: string;
+  telephone?: string;
   country = 'USA';
-  created: string | undefined;
-  updated: string | undefined;
-  deleted: string | undefined;
+  created?: string;
+  updated?: string;
+  deleted?: string;
   has_transaction_or_report = false;
 
   // prettier-ignore
@@ -98,8 +98,36 @@ export class Contact extends BaseModel {
   }
 
   getNameString(): string {
-    return this.name ? this.name : `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
+    return this.name ?? `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
   }
+}
+
+export function emptyContact(type: ContactTypes) {
+  return Contact.fromJSON({
+    type,
+    name: '',
+    last_name: '',
+    first_name: '',
+    middle_name: '',
+    prefix: '',
+    suffix: '',
+    street_1: '',
+    street_2: '',
+    city: '',
+    state: '',
+    zip: '',
+    employer: '',
+    occupation: '',
+    candidate_office: undefined,
+    candidate_state: '',
+    candidate_district: '',
+    telephone: '',
+    country: 'USA',
+    created: '',
+    updated: '',
+    deleted: '',
+    has_transaction_or_report: false,
+  });
 }
 
 /**
@@ -288,9 +316,9 @@ export const CONTACTS_ONE_THROUGH_FIVE = {
 export class FecApiLookupData {}
 
 export class FecApiCandidateLookupData extends FecApiLookupData {
-  candidate_id: string | undefined;
-  office: string | undefined;
-  name: string | undefined;
+  candidate_id?: string;
+  office?: string;
+  name?: string;
 
   constructor(data: FecApiCandidateLookupData) {
     super();
@@ -357,9 +385,9 @@ export class CandidateLookupResponse {
 }
 
 export class FecApiCommitteeLookupData extends FecApiLookupData {
-  id: string | undefined;
-  is_active: boolean | undefined;
-  name: string | undefined;
+  id?: string;
+  is_active?: boolean;
+  name?: string;
 
   constructor(data: FecApiCommitteeLookupData) {
     super();

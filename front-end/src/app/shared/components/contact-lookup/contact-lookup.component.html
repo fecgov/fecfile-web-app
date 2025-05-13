@@ -6,7 +6,7 @@
 <div class="grid contact-lookup-container">
   <div class="px-0" [class.dropdown-with-search]="showSearchBox()">
     <p-select
-      [formControl]="contactTypeFormControl"
+      [(ngModel)]="contactType"
       inputId="entity_type"
       [options]="contactTypeOptions()"
       [readonly]="contactTypeReadOnly()"

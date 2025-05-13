@@ -7,12 +7,11 @@ import {
   Injector,
   input,
   model,
-  OnInit,
   output,
   viewChild,
 } from '@angular/core';
 
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
@@ -29,17 +28,15 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
 import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
-import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
-  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
+  imports: [Select, ReactiveFormsModule, FormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
 })
-export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+export class ContactLookupComponent {
   private readonly injector = inject(Injector);
   public readonly contactService = inject(ContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
@@ -70,17 +67,14 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   readonly contactTypeReadOnly = computed(() => this.contactTypeOptions().length === 1);
   readonly candidateOfficeLabel = computed(() => LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice()));
 
-  readonly contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
   readonly searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   contactLookupList: SelectItemGroup[] = [];
   searchTerm = '';
 
   constructor() {
-    super();
     effect(() => {
-      if (this.contactTypeEnabled()) this.contactTypeFormControl.enable();
-      else this.contactTypeFormControl.disable();
+      console.log(this.contact());
     });
     effect(() => {
       const ac = this.autoComplete();
@@ -97,22 +91,11 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     });
   }
 
-  ngOnInit(): void {
-    this.contactTypeFormControl.setValue(this.contactType());
-
-    this.contactTypeFormControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((contactType: ContactTypes | null) => {
-        if (!contactType) return;
-        this.contactType.set(contactType);
-      });
-  }
-
   async onDropdownSearch(event: AutoCompleteCompleteEvent) {
     const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
-      switch (this.contactTypeFormControl.value) {
+      switch (this.contactType()) {
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
             await this.contactService.candidateLookup(

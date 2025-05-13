@@ -20,11 +20,11 @@
       {{ item.line_label }}
     </td>
     <td>
-      <a [routerLink]="[item?.id]">{{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}</a>
-      @if (item?.force_unaggregated) {
+      <a [routerLink]="[item()?.id]">{{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}</a>
+      @if (item()?.force_unaggregated) {
         <div><strong>Unaggregated</strong></div>
       }
-      @if (!item?.itemized) {
+      @if (!item()?.itemized) {
         <div><strong>Unitemized</strong></div>
       }
     </td>
