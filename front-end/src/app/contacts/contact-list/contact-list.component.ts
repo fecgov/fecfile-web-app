@@ -34,7 +34,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
-  dialogContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
   readonly restoreDialogIsVisible = signal(false);
   readonly restoreContactsButtonIsVisible = resource({
@@ -75,12 +74,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public override addItem() {
-    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     super.addItem();
   }
 
   public override editItem(item: Contact) {
-    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
     super.editItem(item);
   }
 

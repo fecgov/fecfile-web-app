@@ -33,7 +33,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
-            (contactSelect)="onDesignatingCommitteeSelect($event)"
+            [(contact)]="_designatingCommittee"
           ></app-transaction-contact-lookup>
         </div>
       </div>
@@ -79,7 +79,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
-            (contactSelect)="onSubordinateCommitteeSelect($event)"
+            [(contact)]="_subordinateCommitee"
           ></app-transaction-contact-lookup>
         </div>
       </div>

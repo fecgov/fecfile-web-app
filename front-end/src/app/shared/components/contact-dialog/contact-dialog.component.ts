@@ -1,21 +1,8 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  Input,
-  model,
-  OnInit,
-  output,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -115,13 +102,24 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   readonly ContactTypes = ContactTypes;
   readonly contact = input<Contact>(new Contact());
   readonly _contact = signal<Contact>(new Contact());
-  @Input() contactTypeOptions: PrimeOptions = [];
+
   readonly detailVisible = model.required<boolean>();
   readonly showHistory = input(false);
   readonly headerTitle = input<string>();
   readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
 
   readonly savedContact = output<Contact>();
+
+  readonly fixedContactType = input<ContactTypes | null>(null);
+  readonly contactTypeOptions = computed(() => {
+    if (this.fixedContactType()) {
+      return LabelUtils.getPrimeOptions(ContactTypeLabels, [this.fixedContactType()!]);
+    } else if (this.isNewItem()) {
+      return LabelUtils.getPrimeOptions(ContactTypeLabels);
+    } else {
+      return LabelUtils.getPrimeOptions(ContactTypeLabels, [this.contact().type]);
+    }
+  });
 
   transactions: TransactionData[] = [];
   tableLoading = true;
@@ -153,12 +151,17 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   readonly isNewItem = computed(() => !this.contact().id);
   contactType = ContactTypes.INDIVIDUAL;
 
-  candidateOfficeTypeOptions: PrimeOptions = [];
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
-  candidateStateOptions: PrimeOptions = [];
+  readonly candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
+  readonly stateOptions = computed(() => {
+    if (this.selectedContactType() === ContactTypes.CANDIDATE) {
+      return LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+    } else {
+      return LabelUtils.getPrimeOptions(StatesCodeLabels);
+    }
+  });
+  readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
+  readonly candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   candidateDistrictOptions: PrimeOptions = [];
-  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
   emptyMessage = 'No data available in table';
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -237,15 +240,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   ngOnInit(): void {
-    if (this.contactTypeOptions.length === 0) {
-      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-    }
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
-    this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-
     this.form
       ?.get('country')
       ?.valueChanges.pipe(takeUntil(this.destroy$))

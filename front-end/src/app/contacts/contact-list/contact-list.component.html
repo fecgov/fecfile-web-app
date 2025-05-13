@@ -63,8 +63,7 @@
 </app-table>
 
 <app-contact-dialog
-  [contactTypeOptions]="dialogContactTypeOptions"
-  [contact]="item"
+  [contact]="item()"
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact($event)"

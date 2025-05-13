@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, computed, effect, model, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItem } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -23,13 +22,10 @@ import { BaseInputComponent } from '../base-input.component';
   ],
 })
 export class DesignatedSubordinateInputComponent extends BaseInputComponent {
-  @Output() designatingCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() designatingCommitteeClear = new EventEmitter<void>();
-  @Output() subordinateCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() subordinateCommitteeClear = new EventEmitter<void>();
-
-  committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
-  designatedOrSubordinateOptions = LabelUtils.getPrimeOptions([
+  readonly committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+  ]);
+  readonly designatedOrSubordinateOptions = LabelUtils.getPrimeOptions([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [null as any, 'Neither'],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,19 +34,47 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     [false as any, 'Subordinate committee'],
   ]);
 
+  readonly designatingCommittee = model.required<Contact | null>();
+  readonly _designatingCommittee = signal<Contact>(new Contact());
+  readonly subordinateCommitee = model.required<Contact | null>();
+  readonly _subordinateCommitee = signal<Contact>(new Contact());
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.designatingCommittee()) {
+        this.form.get('contact_4_lookup')?.updateValueAndValidity();
+        this.form.updateValueAndValidity();
+        this._designatingCommittee.set(this.designatingCommittee()!);
+      } else {
+        this.form.removeControl('contact_4_lookup');
+      }
+    });
+
+    effect(() => {
+      if (this.subordinateCommitee()) {
+        this.form.get('contact_5_lookup')?.updateValueAndValidity();
+        this.form.updateValueAndValidity();
+        this._subordinateCommitee.set(this.subordinateCommitee()!);
+      } else {
+        this.form.removeControl('contact_5_lookup');
+      }
+    });
+  }
+
   onSubordinateCommitteeIdBlur() {
     this.updateSubordinateValueAndValidity();
   }
 
   onDesignatedOrSubordinateChange(value: boolean | null) {
     if (value === true) {
-      this.clearSubordinateCommittee();
+      this.subordinateCommitee.set(null);
     } else if (value === false) {
-      this.clearDesignatingCommittee();
+      this.designatingCommittee.set(null);
     } else if (value === null) {
       this.form.get('filer_designated_to_make_coordinated_expenditures')?.setValue(null);
-      this.clearDesignatingCommittee();
-      this.clearSubordinateCommittee();
+      this.designatingCommittee.set(null);
+      this.subordinateCommitee.set(null);
     }
   }
 
@@ -63,27 +87,5 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
     this.form.get('subordinate_state')?.updateValueAndValidity();
     this.form.get('subordinate_zip')?.updateValueAndValidity();
     this.form.updateValueAndValidity();
-  }
-
-  onDesignatingCommitteeSelect(selectItem: SelectItem<Contact>) {
-    this.designatingCommitteeSelect.emit(selectItem);
-    this.form.get('contact_4_lookup')?.updateValueAndValidity();
-    this.form.updateValueAndValidity();
-  }
-
-  clearDesignatingCommittee() {
-    this.designatingCommitteeClear.emit();
-    this.form.removeControl('contact_4_lookup');
-  }
-
-  onSubordinateCommitteeSelect(selectItem: SelectItem<Contact>) {
-    this.subordinateCommitteeSelect.emit(selectItem);
-    this.form.get('contact_5_lookup')?.updateValueAndValidity();
-    this.form.updateValueAndValidity();
-  }
-
-  clearSubordinateCommittee() {
-    this.subordinateCommitteeClear.emit();
-    this.form.removeControl('contact_5_lookup');
   }
 }

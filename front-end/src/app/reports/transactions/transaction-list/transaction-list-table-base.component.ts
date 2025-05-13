@@ -305,7 +305,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         '(such as memos, in-kinds, and transfers). Please note that you cannot undo this action.',
       accept: () => {
         this.itemService.delete(item).then(() => {
-          this.item = this.getEmptyItem();
+          this.item.set(this.getEmptyItem());
           this.refreshAllTables();
           this.messageService.add({
             severity: 'success',

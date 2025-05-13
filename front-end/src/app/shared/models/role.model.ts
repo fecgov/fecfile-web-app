@@ -1,7 +1,14 @@
+import { LabelList } from '../utils/label.utils';
+
 export enum Roles {
   COMMITTEE_ADMINISTRATOR = 'Committee Administrator',
   MANAGER = 'Manager',
 }
+
+export const RoleTypeLabels: LabelList = [
+  [Roles.COMMITTEE_ADMINISTRATOR, 'Committee Administrator'],
+  [Roles.MANAGER, 'Manager'],
+];
 
 export function getRoleKey(role: Roles): typeof Roles {
   return Object.keys(Roles).find((key) => Roles[key as keyof typeof Roles] === role) as unknown as typeof Roles;

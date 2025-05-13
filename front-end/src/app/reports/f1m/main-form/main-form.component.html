@@ -195,7 +195,6 @@
               [form]="form"
               [formSubmitted]="formSubmitted"
               [contactTypeOptions]="affiliatedContact.contactTypeOptions"
-              (contactSelect)="affiliatedContact.update($event)"
             >
             </app-transaction-contact-lookup>
             <app-error-messages
@@ -312,7 +311,6 @@
                   [contactTypeOptions]="candidateContact.contactTypeOptions"
                   [excludeFecIds]="excludeFecIds"
                   [excludeIds]="excludeIds"
-                  (contactSelect)="candidateContact.update($event)"
                 >
                 </app-transaction-contact-lookup>
                 <app-error-messages

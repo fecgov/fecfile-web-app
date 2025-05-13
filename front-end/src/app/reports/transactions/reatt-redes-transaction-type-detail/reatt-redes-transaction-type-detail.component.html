@@ -27,20 +27,12 @@
       <h3>{{ transactionType?.contactTitle }}</h3>
       <form [formGroup]="form" [class.ng-submitted]="formSubmitted" id="form">
         <app-transaction-input
-          (candidateContactSelect)="updateFormWithCandidateContact($event)"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
-          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-          (quaternaryContactSelect)="updateFormWithQuaternaryContact($event)"
-          (quaternaryContactClear)="clearFormQuaternaryContact()"
-          (quinaryContactSelect)="updateFormWithQuinaryContact($event)"
-          (quinaryContactClear)="clearFormQuinaryContact()"
           [contactTypeOptions]="contactTypeOptions"
           [formSubmitted]="formSubmitted"
           [form]="form"
           [isEditable]="isEditable()"
           [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-          [transaction]="transaction"
+          [transaction]="transaction!"
         >
         </app-transaction-input>
       </form>
@@ -68,17 +60,13 @@
       <form [formGroup]="childForm" [class.ng-submitted]="formSubmitted" id="childForm">
         @if (childTransaction) {
           <app-transaction-input
-            (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
-            (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
-            (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
-            (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
             [contactTypeOptions]="childContactTypeOptions"
             [contributionAmountReadOnly]="true"
             [formSubmitted]="formSubmitted"
             [form]="childForm"
             [isEditable]="isEditable()"
             [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
-            [transaction]="childTransaction"
+            [transaction]="childTransaction!"
           >
           </app-transaction-input>
         }
@@ -116,7 +104,7 @@
             [form]="reattributedData.form"
             [isEditable]="false"
             [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
-            [transaction]="transaction?.reatt_redes"
+            [transaction]="transaction!.reatt_redes!"
           >
           </app-transaction-input>
         </form>

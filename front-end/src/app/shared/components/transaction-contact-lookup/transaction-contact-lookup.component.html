@@ -12,7 +12,7 @@
   </div>
   <app-contact-dialog
     headerTitle="Create a new contact"
-    [contactTypeOptions]="[selectedOption()]"
+    [fixedContactType]="contactType()"
     [defaultCandidateOffice]="mandatoryCandidateOffice()"
     [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"

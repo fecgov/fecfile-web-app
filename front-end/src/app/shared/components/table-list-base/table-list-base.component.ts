@@ -14,14 +14,14 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   protected readonly elementRef = inject(ElementRef);
   protected abstract readonly itemService: TableListService<T>;
 
-  item!: T;
+  readonly item = signal<T>(this.getEmptyItem());
   items: T[] = [];
   readonly rowsPerPage = signal(10);
   totalItems = 0;
   pagerState?: TableLazyLoadEvent;
   loading = true;
   readonly selectedItems = signal<T[]>([]);
-  detailVisible = false;
+  readonly detailVisible = signal(false);
   isNewItem = true;
   readonly first = signal(0);
 
@@ -106,14 +106,14 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   }
 
   public addItem() {
-    this.item = this.getEmptyItem();
-    this.detailVisible = true;
+    this.item.set(this.getEmptyItem());
+    this.detailVisible.set(true);
     this.isNewItem = true;
   }
 
   public editItem(item: T): void | Promise<boolean> {
-    this.item = item;
-    this.detailVisible = true;
+    this.item.set(item);
+    this.detailVisible.set(true);
     this.isNewItem = false;
   }
 
@@ -124,7 +124,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.itemService.delete(item).then(() => {
-          this.item = this.getEmptyItem();
+          this.item.set(this.getEmptyItem());
           this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });

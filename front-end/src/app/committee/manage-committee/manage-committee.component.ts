@@ -28,10 +28,9 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   protected readonly itemService = inject(CommitteeMemberService);
   readonly user = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
-  override item: CommitteeMember = this.getEmptyItem();
 
   protected readonly rowActions = [
-    createAction('Edit Role', this.openEdit.bind(this)),
+    createAction('Edit Role', this.editItem.bind(this)),
     createAction('Delete', this.confirmDelete.bind(this)),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
@@ -70,11 +69,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     });
   }
 
-  openEdit(member: CommitteeMember) {
-    this.item = member;
-    this.detailVisible = true;
-  }
-
   roleEdited() {
     this.refreshTable();
     this.messageService.add({
@@ -82,13 +76,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
       summary: 'Successful',
       detail: 'Role Updated',
     });
-
-    this.detailClose();
-  }
-
-  detailClose() {
-    this.detailVisible = false;
-    this.item = this.getEmptyItem();
   }
 
   isNotCurrentUser(member: CommitteeMember): boolean {

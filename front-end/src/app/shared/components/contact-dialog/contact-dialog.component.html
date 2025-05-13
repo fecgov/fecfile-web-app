@@ -1,12 +1,4 @@
-<p-dialog
-  [visible]="detailVisible"
-  [style]="{ width: '90%' }"
-  [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
-  [modal]="true"
-  (onShow)="openDialog()"
-  (onHide)="closeDialog()"
-  (visibleChange)="closeDialog($event)"
->
+<p-dialog [(visible)]="detailVisible" [style]="{ width: '90%' }" [header]="headerText()" [modal]="true">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
@@ -18,20 +10,20 @@
         <div class="field">
           <label for="type">CONTACT TYPE</label>
           <app-contact-lookup
-            [contactTypeOptions]="contactTypeOptions"
-            [showSearchBoxCallback]="showSearchBox"
+            [(contactType)]="selectedContactType"
+            [contact]="contact()"
+            [contactTypeOptions]="contactTypeOptions()"
+            [showSearchBox]="isCandidate() || isCommittee()"
             [showCreateNewContactButton]="false"
             [includeFecfileResults]="false"
-            [candidateOffice]="defaultCandidateOffice"
-            (contactTypeSelect)="contactTypeChanged($event)"
-            (contactLookupSelect)="updateContact($event)"
+            [candidateOffice]="defaultCandidateOffice()"
           >
           </app-contact-lookup>
         </div>
       </div>
       <div class="col-6"></div>
     </div>
-    @if (contactType === ContactTypes.CANDIDATE) {
+    @if (isCandidate()) {
       <div class="grid">
         <div class="col-6">
           <div class="field">
@@ -47,9 +39,9 @@
         <div class="col-4"></div>
       </div>
     }
-    @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
+    @if (isCommittee() || isOrganization()) {
       <div class="grid">
-        @if (contactType === ContactTypes.COMMITTEE) {
+        @if (isCommittee()) {
           <div class="col-4">
             <div class="field">
               <label for="committee_id">COMMITTEE ID</label>
@@ -69,12 +61,12 @@
             <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
-        @if (contactType === ContactTypes.ORGANIZATION) {
+        @if (isOrganization()) {
           <div class="col-4"></div>
         }
       </div>
     }
-    @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+    @if (isIndividual() || isCandidate()) {
       <div class="grid">
         <div class="col-4">
           <div class="field">
@@ -177,7 +169,7 @@
           <p-select
             inputId="state"
             formControlName="state"
-            [options]="stateOptions"
+            [options]="stateOptions()"
             [autoDisplayFirst]="false"
             appendTo="body"
           ></p-select>
@@ -207,7 +199,7 @@
       </div>
       <div class="col-6"></div>
     </div>
-    @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+    @if (isIndividual() || isCandidate()) {
       <div class="grid">
         <div class="col-12">
           <hr />
@@ -239,7 +231,7 @@
         </div>
       </div>
     }
-    @if (contactType === ContactTypes.CANDIDATE) {
+    @if (isCandidate()) {
       <div class="grid">
         <div class="col-12">
           <hr />
@@ -261,7 +253,7 @@
     }
   </form>
 
-  @if (showHistory && !isNewItem) {
+  @if (showHistory() && !isNewItem()) {
     <div>
       <app-table
         title="Transaction history"
@@ -299,9 +291,9 @@
         label="Cancel"
         icon="pi pi-times"
         class="p-button-secondary mr-4"
-        (click)="closeDialog()"
+        (click)="detailVisible.set(false)"
       ></button>
-      @if (headerTitle) {
+      @if (headerTitle()) {
         <button
           type="button"
           pButton
@@ -319,9 +311,9 @@
           label="Save"
           icon="pi pi-check"
           class="p-button-primary"
-          (click)="isNewItem ? saveContact() : confirmPropagation()"
+          (click)="isNewItem() ? saveContact() : confirmPropagation()"
         ></button>
-        @if (isNewItem) {
+        @if (isNewItem()) {
           <button
             type="button"
             pButton
