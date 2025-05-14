@@ -71,7 +71,6 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   }
 
   public async save(jump: 'continue' | undefined = undefined) {
-    console.log('Saving?');
     this.saveHook();
 
     this.formSubmitted = true;

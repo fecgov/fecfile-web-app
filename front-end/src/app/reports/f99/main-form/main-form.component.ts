@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { Form99, textCodes, filingFrequencies } from 'app/shared/models/form-99.model';
@@ -16,6 +16,7 @@ import { SaveCancelComponent } from '../../../shared/components/save-cancel/save
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButton } from 'primeng/selectbutton';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-main-form',
@@ -34,9 +35,9 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
   ],
   providers: [Form99Service],
 })
-export class MainFormComponent extends MainFormBaseComponent {
+export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   protected override reportService = inject(Form99Service);
-  protected canSetFilingFrequency = true;
+  protected showFilingFrequency = environment.fecSpec == '8.5';
   readonly formProperties: string[] = [
     'filer_committee_id_number',
     'committee_name',
@@ -61,6 +62,18 @@ export class MainFormComponent extends MainFormBaseComponent {
   readonly textCodes = textCodes;
   readonly filingFrequencies = filingFrequencies;
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+
+    // If we're not showing filing frequency by default, show it if it would be required
+    if (!this.showFilingFrequency) {
+      const textCodeField = this.form.get('text_code') as SubscriptionFormControl;
+      textCodeField.addSubscription((textCode) => {
+        this.showFilingFrequency = ['MSM', 'MSR'].includes(textCode);
+      }, this.destroy$);
+    }
+  }
+
   getReportPayload(): Report {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
@@ -68,7 +81,6 @@ export class MainFormComponent extends MainFormBaseComponent {
   override saveHook() {
     const filingFrequency = this.form.get('filing_frequency');
     if (filingFrequency != null) {
-      // (filingFrequency as SubscriptionFormControl).valid = true;
       this.form.get('filing_frequency')?.updateValueAndValidity();
       this.form.updateValueAndValidity();
     }

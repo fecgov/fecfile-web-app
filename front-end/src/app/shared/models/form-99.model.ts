@@ -2,6 +2,7 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from './base.model';
 import { Report, ReportTypes } from './report.model';
+import { environment } from 'environments/environment';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -32,13 +33,12 @@ export class Form99 extends Report {
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   text_code: string | undefined;
   message_text: string | undefined;
+  filing_frequency: string | undefined;
 
   static fromJSON(json: unknown): Form99 {
     return plainToInstance(Form99, json);
   }
 }
-
-const TESTBOOL = true;
 
 export const textCodes = [
   {
@@ -54,7 +54,7 @@ export const textCodes = [
     value: 'MST',
   },
   // If TESTBOOL is true, add MSR and MSW to the list of textCodes
-  ...(TESTBOOL
+  ...(environment.fecSpec == '8.5'
     ? [
         {
           label: 'Form 3L Filing Frequency Change Notice',
