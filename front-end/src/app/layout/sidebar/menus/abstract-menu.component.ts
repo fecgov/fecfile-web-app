@@ -1,15 +1,15 @@
 import { Component, computed, inject } from '@angular/core';
-import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
-import { selectActiveReport } from '../../../store/active-report.selectors';
-import { filter, map, startWith } from 'rxjs';
-import { ReportSidebarSection, SidebarState } from '../sidebar.component';
-import { MenuItem } from 'primeng/api';
-import { Store } from '@ngrx/store';
-import { ReportService } from '../../../shared/services/report.service';
-import { collectRouteData } from 'app/shared/utils/route.utils';
-import { NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { ReportStatus } from 'app/shared/models';
+import { collectRouteData } from 'app/shared/utils/route.utils';
+import { MenuItem } from 'primeng/api';
+import { filter, map, startWith } from 'rxjs';
+import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
+import { ReportService } from '../../../shared/services/report.service';
+import { selectActiveReport } from '../../../store/active-report.selectors';
+import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 
 @Component({
   template: '',
@@ -50,12 +50,18 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
     } as MenuItem;
   }
 
-  editReport(sidebarState: SidebarState): MenuItem {
+  editReport(
+    sidebarState: SidebarState,
+    isVisible = true,
+    editLabel = 'EDIT A REPORT',
+    editLabelStyleClass = 'edit-report-menu-item',
+  ): MenuItem {
     return {
-      label: 'EDIT A REPORT',
-      styleClass: 'edit-report-menu-item',
+      label: editLabel,
+      styleClass: editLabelStyleClass,
       routerLink: [`/reports/${this.reportString}/edit/${this.activeReportSignal().id}`],
       expanded: sidebarState?.section === ReportSidebarSection.CREATE,
+      visible: isVisible,
     };
   }
 
