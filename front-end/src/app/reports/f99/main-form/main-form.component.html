@@ -38,7 +38,7 @@
   <h3>Text Information</h3>
 
   <div class="field w-6">
-    <label for="text_code">TEXT CODE</label>
+    <label for="text_code">DOCUMENT TYPE</label>
     <p-select
       inputId="text_code"
       formControlName="text_code"
@@ -48,6 +48,26 @@
     ></p-select>
     <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted"></app-error-messages>
   </div>
+
+  @if (canSetFilingFrequency) {
+    <div class="field w-6">
+      <div class="field">
+        <label for="filing_frequency">FILING FREQUENCY</label>
+        <p-selectButton
+          inputId="filing_frequency"
+          data-cy="filing_frequency"
+          [options]="filingFrequencies"
+          [allowEmpty]="false"
+          formControlName="filing_frequency"
+        ></p-selectButton>
+        <app-error-messages
+          [form]="form"
+          fieldName="filing_frequency"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  }
 
   <div class="field w-full">
     <label for="message_text">TEXT MESSAGE</label>

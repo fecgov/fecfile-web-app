@@ -10,6 +10,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
+import { firstValueFrom } from 'rxjs';
 @Component({
   template: '',
 })
@@ -64,10 +65,24 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     this.router.navigateByUrl('/reports');
   }
 
+  // Prototype that can be overridden on specific forms
+  saveHook() {
+    return;
+  }
+
   public async save(jump: 'continue' | undefined = undefined) {
+    console.log('Saving?');
+    this.saveHook();
+
     this.formSubmitted = true;
     blurActiveInput(this.form);
-    if (this.form.invalid) {
+
+    // If the form is still processing validity, wait for it to finish
+    if (this.form.pending) {
+      await firstValueFrom(this.form.statusChanges);
+    }
+
+    if (!this.form.valid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }

@@ -38,6 +38,8 @@ export class Form99 extends Report {
   }
 }
 
+const TESTBOOL = true;
+
 export const textCodes = [
   {
     label: 'Disavowal Response',
@@ -50,5 +52,29 @@ export const textCodes = [
   {
     label: 'Miscellaneous Report to the FEC',
     value: 'MST',
+  },
+  // If TESTBOOL is true, add MSR and MSW to the list of textCodes
+  ...(TESTBOOL
+    ? [
+        {
+          label: 'Form 3L Filing Frequency Change Notice',
+          value: 'MSR',
+        },
+        {
+          label: 'Loan Agreement',
+          value: 'MSW',
+        },
+      ]
+    : []),
+];
+
+export const filingFrequencies = [
+  {
+    label: 'Quarterly',
+    value: 'Q',
+  },
+  {
+    label: 'Monthly',
+    value: 'M',
   },
 ];
