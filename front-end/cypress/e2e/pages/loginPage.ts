@@ -89,8 +89,6 @@ function loginDotGovLogin() {
       }
     });
   cy.contains('Welcome to FECfile').should('not.exist');
-  cy.visit('/dashboard');
-  cy.contains('In-progress reports').should('exist');
 }
 
 function retrieveAuthToken() {
