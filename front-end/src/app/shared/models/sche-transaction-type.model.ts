@@ -58,6 +58,7 @@ export abstract class SchETransactionType extends TransactionType {
     due_date_setting: '',
     secured: '',
     aggregate: '',
+    general_election_year: '',
     calendar_ytd: 'calendar_ytd_per_election_office',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',

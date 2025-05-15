@@ -116,6 +116,10 @@ export class TransactionFormUtils {
       await this.handleShowCalendarYTD(component, form, transaction, templateMap);
     }
 
+    if (transactionType.showPayeeCandidateYTD) {
+      await this.handleShowPayeeCandidateYTD(component, form, transaction, contactIdMap, templateMap);
+    }
+
     const schema = transaction.transactionType?.schema;
     if (schema) {
       SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
@@ -195,6 +199,50 @@ export class TransactionFormUtils {
         this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, undefined, inheritedElectionAggregate);
       }
     }
+  }
+
+  // Only dynamically update non-inherited calendar_ytd values on the form input.
+  // Inherited calendar_ytd display the value of the parent transaction and do not
+  // include or change with the amount value of the child transaction.
+  private static async handleShowPayeeCandidateYTD(
+    component: TransactionTypeBaseComponent,
+    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    transaction: Transaction,
+    contactIdMap: ContactIdMapType,
+    templateMap: TransactionTemplateMapType,
+  ) {
+    const contactId$ = contactIdMap['contact_2'].asObservable();
+    const previous_election$: Observable<Transaction | undefined> =
+      merge(
+        (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.general_election_year) as SubscriptionFormControl).valueChanges,
+        contactId$,
+      ).pipe(
+        switchMap(() => {
+          const expenditure_date = form.get(templateMap.date)?.value;
+          const general_election_year = form.get(templateMap.general_election_year)?.value;
+          const contact2Id = transaction.contact_2?.id;
+
+          return from(
+            component.transactionService.getPreviousTransactionForPayeeCandidate(
+              transaction,
+              contact2Id,
+              expenditure_date,
+              general_election_year,
+            ),
+          );
+        }),
+      ) || of(undefined);
+    form
+      .get(templateMap.amount)
+      ?.valueChanges.pipe(
+        startWith(form.get(templateMap.amount)?.value),
+        combineLatestWith(previous_election$, of(transaction)),
+        takeUntil(component.destroy$),
+      )
+      .subscribe(([amount, previous_election, transaction]) => {
+        this.updateAggregate(form, 'aggregate', templateMap, transaction, previous_election, amount);
+      });
   }
 
   static updateAggregate(

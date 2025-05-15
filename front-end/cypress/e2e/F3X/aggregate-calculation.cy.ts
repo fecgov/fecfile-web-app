@@ -9,9 +9,12 @@ import { defaultForm3XData } from '../models/ReportFormModel';
 import {
   defaultScheduleFormData as defaultTransactionFormData,
   DisbursementFormData,
-  formTransactionDataForSchedule,
 } from '../models/TransactionFormModel';
 import { faker } from '@faker-js/faker';
+import { makeRequestToAPI } from '../requests/methods';
+import { F3X_Q2 } from '../requests/library/reports';
+import { buildScheduleA } from '../requests/library/transactions';
+import { Individual_A_A, Individual_B_B } from '../requests/library/contacts';
 
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
@@ -19,58 +22,35 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('new transaction aggregate', () => {
-    F3XSetup();
-
-    // Create the first Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-
-    PageUtils.clickLink('Create a new contact');
-    const individualFormContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Individual' },
-    };
-    ContactListPage.enterFormData(individualFormContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const transactionOneData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 27),
+    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+      (response) => {
+        const report_id: string = response.body.id;
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          const contact_A_A = response.body;
+          const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', contact_A_A, report_id);
+          const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 25.0, '2025-04-16', contact_A_A, report_id);
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+            cy.visit(`/reports/transactions/report/${report_id}/list`);
+          });
+        });
       },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
+    );
+    cy.wait('@GetTransactionList');
 
-    cy.contains('Transactions in this report').should('exist');
+    cy.get(':nth-child(2) > :nth-child(2) > a').click();
+    cy.contains('Create a new contact').should('exist');
 
-    // Create the second Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
-    cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click({ force: true });
-
-    const transactionTwoData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 28),
-        amount: 25,
-      },
-    };
-
-    // Tests with a later date
-    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$225.01');
 
     // Tests moving the date to be earlier
-    TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 26), '');
+    TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(2025, 3, 10), '');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$25.00');
@@ -94,9 +74,9 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('[id=aggregate]').should('have.value', '$25.00');
 
     // Change the contact back
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
-    cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click({ force: true });
+    cy.get('[id="searchBox"]').type(Individual_A_A['last_name'].slice(0, 1));
+    cy.contains('A, A').should('exist');
+    cy.contains('A, A').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$225.01');
@@ -114,57 +94,28 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('existing transaction change contact', () => {
-    F3XSetup();
-
-    // Create the first Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-
-    PageUtils.clickLink('Create a new contact');
-    const individualFormContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Individual', last_name: 'A', first_name: 'A' },
-    };
-    ContactListPage.enterFormData(individualFormContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const transactionOneData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 27),
+    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+      (response) => {
+        const report_id: string = response.body.id;
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          const contact_A_A = response.body;
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_B_B, (response) => {
+            const contact_B_B = response.body;
+            const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', contact_A_A, report_id);
+            const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 25.0, '2025-04-16', contact_B_B, report_id);
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+              cy.visit(`/reports/transactions/report/${report_id}/list`);
+            });
+          });
+        });
       },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
-
-    cy.contains('Transactions in this report').should('exist');
-
-    // Create the second Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-    PageUtils.clickLink('Create a new contact');
-    const secondIndividualFormContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Individual', last_name: 'Z', first_name: 'Z' },
-    };
-    ContactListPage.enterFormData(secondIndividualFormContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const transactionTwoData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 28),
-        amount: 25,
-      },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
+    );
+    cy.wait('@GetTransactionList');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
@@ -185,53 +136,25 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('existing transaction change amount', () => {
-    F3XSetup();
-
-    // Create the first Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-
-    PageUtils.clickLink('Create a new contact');
-    const individualFormContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Individual' },
-    };
-    ContactListPage.enterFormData(individualFormContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const transactionOneData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 27),
+    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+      (response) => {
+        const report_id: string = response.body.id;
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          const contact_A_A = response.body;
+          const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', contact_A_A, report_id);
+          const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 25.0, '2025-04-16', contact_A_A, report_id);
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+            cy.visit(`/reports/transactions/report/${report_id}/list`);
+          });
+        });
       },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
-
-    cy.contains('Transactions in this report').should('exist');
-
-    // Create the second Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
-    cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click({ force: true });
-
-    const transactionTwoData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 28),
-        amount: 25,
-      },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
+    );
+    cy.wait('@GetTransactionList');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
@@ -250,53 +173,25 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('existing transaction date leapfrogging', () => {
-    F3XSetup();
-
-    // Create the first Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-
-    PageUtils.clickLink('Create a new contact');
-    const individualFormContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Individual' },
-    };
-    ContactListPage.enterFormData(individualFormContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const transactionOneData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 27),
+    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+      (response) => {
+        const report_id: string = response.body.id;
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          const contact_A_A = response.body;
+          const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', contact_A_A, report_id);
+          const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 25.0, '2025-04-16', contact_A_A, report_id);
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+            cy.visit(`/reports/transactions/report/${report_id}/list`);
+          });
+        });
       },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
-
-    cy.contains('Transactions in this report').should('exist');
-
-    // Create the second Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
-    cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click({ force: true });
-
-    const transactionTwoData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 28),
-        amount: 25,
-      },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
+    );
+    cy.wait('@GetTransactionList');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
@@ -314,73 +209,27 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('leapfrog and contact change', () => {
-    F3XSetup();
-
-    // Create the first Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-
-    PageUtils.clickLink('Create a new contact');
-    const individualFormContactData = {
-      ...defaultContactFormData,
-      ...{ contact_type: 'Individual' },
-    };
-    ContactListPage.enterFormData(individualFormContactData, true);
-    PageUtils.clickButton('Save & continue');
-
-    const transactionOneData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 27),
+    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+      (response) => {
+        const report_id: string = response.body.id;
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          const contact_A_A = response.body;
+          const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', contact_A_A, report_id);
+          const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 25.0, '2025-04-16', contact_A_A, report_id);
+          const transaction_c = buildScheduleA('INDIVIDUAL_RECEIPT', 40.0, '2025-04-20', contact_A_A, report_id);
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {});
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_c, (response) => {
+            cy.visit(`/reports/transactions/report/${report_id}/list`);
+          });
+        });
       },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionOneData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
-
-    cy.contains('Transactions in this report').should('exist');
-
-    // Create the second Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
-    cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click({ force: true });
-
-    const transactionTwoData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 28),
-        amount: 25,
-      },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionTwoData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
-
-    // Create a third Individual Receipt
-    StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
-    cy.contains(defaultContactFormData['last_name']).should('exist');
-    cy.contains(defaultContactFormData['last_name']).click({ force: true });
-
-    const transactionThreeData = {
-      ...formTransactionDataForSchedule,
-      ...{
-        purpose_description: '',
-        category_code: '',
-        date_received: new Date(currentYear, 3, 30),
-        amount: 40,
-      },
-    };
-    TransactionDetailPage.enterScheduleFormData(transactionThreeData, false, '', true, 'contribution_date');
-    PageUtils.clickButton('Save');
-    cy.contains('Confirm').should('exist');
-    PageUtils.clickButton('Continue', '', true);
+    );
+    cy.wait('@GetTransactionList');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
