@@ -4,7 +4,7 @@ export class ProfileAccountPage {
   static goToPage() {
     const alias = PageUtils.getAlias('');
     cy.intercept('/profile').as('account');
-    cy.visit('/dashboard');
+    cy.visit('/reports');
 
     cy.get('#navbarProfileDropdownMenuLink').click();
     cy.get(alias).find('.p-popover').contains('Account').click();

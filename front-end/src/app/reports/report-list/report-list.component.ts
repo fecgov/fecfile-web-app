@@ -80,7 +80,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public override async editItem(item: Report): Promise<boolean> {
-    if (!this.itemService.isEditable(item)) {
+    if (item.report_status && item.report_status !== ReportStatus.IN_PROGRESS) {
       return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
     }
 
