@@ -53,6 +53,6 @@ export class LoginService extends DestroyerComponent {
   }
 
   public userIsAuthenticated() {
-    return new Date() < new Date(parseInt(this.cookieService.get('ffapi_timeout')) * 1000);
+    return new Date() < new Date(parseInt(this.cookieService.get(environment.ffapiTimeoutCookieName)) * 1000);
   }
 }

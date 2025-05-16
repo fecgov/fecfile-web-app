@@ -13,6 +13,7 @@ export const environment = {
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
   loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
+  ffapiTimeoutCookieName: 'ffapi_timeout_dev',
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
   committee_data_source: 'test',
