@@ -81,7 +81,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
       await firstValueFrom(this.form.statusChanges);
     }
 
-    if (!this.form.valid) {
+    if (this.form.invalid) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
