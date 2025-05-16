@@ -7,18 +7,25 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { SelectButtonModule } from 'primeng/selectbutton';
+import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { DividerModule } from 'primeng/divider';
-import { SelectModule } from 'primeng/select';
+import { Select, SelectModule } from 'primeng/select';
 import { provideRouter, Router } from '@angular/router';
 import { Form99 } from 'app/shared/models/form-99.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
+import { InputText } from 'primeng/inputtext';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { AddressInputComponent } from 'app/shared/components/inputs/address-input/address-input.component';
+import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
+import { TextareaModule } from 'primeng/textarea';
+import { environment } from 'environments/environment';
+import { firstValueFrom } from 'rxjs';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -26,7 +33,7 @@ describe('MainFormComponent', () => {
   let router: Router;
   let form99Service: Form99Service;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [
         SelectButtonModule,
@@ -38,6 +45,13 @@ describe('MainFormComponent', () => {
         MainFormComponent,
         LabelPipe,
         PrintPreviewComponent,
+        SelectButton,
+        InputText,
+        ErrorMessagesComponent,
+        AddressInputComponent,
+        Select,
+        SaveCancelComponent,
+        TextareaModule,
       ],
       providers: [
         provideHttpClient(),
@@ -70,7 +84,7 @@ describe('MainFormComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('should save', fakeAsync(() => {
+  it('should save', fakeAsync(async () => {
     component.form.patchValue({
       message_text: 'message',
     });
