@@ -225,7 +225,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /develop|feature\/2218-cookie-collision|release\/sprint-[\.\d]+|release\/test|main/
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
