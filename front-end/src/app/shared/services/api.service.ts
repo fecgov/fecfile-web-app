@@ -7,11 +7,11 @@ import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
 export interface QueryParams {
   [param: string]:
-    | string
-    | number
-    | boolean
-    | ReadonlyArray<string | number | boolean>
-    | readonly (string | number | boolean)[];
+  | string
+  | number
+  | boolean
+  | ReadonlyArray<string | number | boolean>
+  | readonly (string | number | boolean)[];
 }
 
 @Injectable({
@@ -112,9 +112,32 @@ export class ApiService {
     );
   }
 
-  public put<T>(endpoint: string, payload: unknown, queryParams: QueryParams = {}): Promise<T> {
+  public put<T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Promise<T>;
+  public put<T>(
+    endpoint: string,
+    payload: unknown,
+    queryParams?: QueryParams,
+    allowedErrorCodes?: number[],
+  ): Promise<HttpResponse<T>>;
+  public put<T>(
+    endpoint: string,
+    payload: unknown,
+    queryParams: QueryParams = {},
+    allowedErrorCodes?: number[],
+  ): Promise<T> | Promise<HttpResponse<T>> {
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
+    if (allowedErrorCodes) {
+      return firstValueFrom(
+        this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
+          headers,
+          params,
+          withCredentials: true,
+          observe: 'response',
+          context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+        }),
+      );
+    }
     return firstValueFrom(
       this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
         headers,

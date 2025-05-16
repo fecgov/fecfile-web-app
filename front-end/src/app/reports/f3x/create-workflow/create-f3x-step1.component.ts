@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +23,7 @@ import {
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
+import { error } from 'console';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -81,6 +83,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   );
 
   reportId?: string;
+  coverageDatesDialogVisible = false;
 
   constructor() {
     super();
@@ -189,6 +192,10 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     this.router.navigateByUrl('/reports');
   }
 
+  public closeCoverageDatesDialog() {
+    this.coverageDatesDialogVisible = false;
+  }
+
   public async save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
@@ -207,22 +214,32 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     let report: Report;
     if (this.reportId) {
       summary.id = this.reportId;
-      report = await this.form3XService.update(summary, this.formProperties);
+      try {
+        report = await this.form3XService.update(summary, this.formProperties, [HttpStatusCode.BadRequest]);
+      } catch {
+        this.coverageDatesDialogVisible = true;
+        throw error();
+      }
     } else {
       report = await this.form3XService.create(summary, this.formProperties);
     }
 
-    //Create the report
-    if (jump === 'continue') {
-      this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-    } else {
-      this.router.navigateByUrl('/reports');
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Contact Updated',
-        life: 3000,
-      });
+    if (report) {
+      if (jump === 'continue') {
+        this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+      } else {
+        if (this.reportId) {
+          this.store.dispatch(singleClickEnableAction());
+        } else {
+          this.router.navigateByUrl('/reports');
+        }
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Report Updated',
+          life: 3000,
+        });
+      }
     }
   }
 

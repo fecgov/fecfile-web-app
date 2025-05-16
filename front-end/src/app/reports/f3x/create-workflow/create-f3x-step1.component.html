@@ -146,3 +146,26 @@
   </div>
 </form>
 <app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
+<p-dialog header="Header" [(visible)]="coverageDatesDialogVisible" [style]="{ width: '496px' }" [modal]="true">
+  <ng-template #header>
+    <span class="text-xl" id="coverage-dates-dialog-header">Can’t save report</span>
+  </ng-template>
+  <p id="coverage-dates-dialog-text">
+    Some transactions would now fall outside your new coverage dates.
+    <br /><br />
+    To fix this, delete those transactions.
+  </p>
+  <div class="grid">
+    <div class="mx-auto">
+      <button
+        pButton
+        id="coverage-dates-dialog-button"
+        class="p-button"
+        label="Manage your transactions"
+        styleClass="p-button-link"
+        (click)="closeCoverageDatesDialog()"
+        [autofocus]="true"
+      ></button>
+    </div>
+  </div>
+</p-dialog>
