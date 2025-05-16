@@ -12,6 +12,7 @@ export const environment = {
   fecApiUrl: 'https://api.open.fec.gov/v1/',
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
+  ffapiTimeoutCookieName: 'ffapi_timeout_stage',
   loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
