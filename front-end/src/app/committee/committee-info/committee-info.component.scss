@@ -9,7 +9,7 @@
 }
 
 input {
-  font-family: karla-bold, serif;
+  font-family: var(--karla-bold);
   font-size: 14px;
   color: #212121;
   height: 42px;
@@ -21,7 +21,7 @@ input {
   }
 
   .p-select > .p-inputtext {
-    font-family: karla-bold, serif;
+    font-family: var(--karla-bold);
     font-size: 14px;
     color: #212121;
   }
@@ -29,7 +29,7 @@ input {
   #treasurer_phone,
   #treasurer_phone input {
     height: 42px;
-    font-family: karla-bold, serif;
+    font-family: var(--karla-bold);
     font-size: 14px;
     color: #212121;
   }
