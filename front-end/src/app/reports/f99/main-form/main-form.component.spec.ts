@@ -29,7 +29,6 @@ describe('MainFormComponent', () => {
   let component: MainFormComponent;
   let fixture: ComponentFixture<MainFormComponent>;
   let router: Router;
-  let form99Service: Form99Service;
 
   const f99: Form99 = Form99.fromJSON({
     id: '999',
@@ -82,7 +81,6 @@ describe('MainFormComponent', () => {
       ],
     });
     router = TestBed.inject(Router);
-    form99Service = TestBed.inject(Form99Service);
     fixture = TestBed.createComponent(MainFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
