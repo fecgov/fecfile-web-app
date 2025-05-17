@@ -7,11 +7,11 @@ import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
 export interface QueryParams {
   [param: string]:
-  | string
-  | number
-  | boolean
-  | ReadonlyArray<string | number | boolean>
-  | readonly (string | number | boolean)[];
+    | string
+    | number
+    | boolean
+    | ReadonlyArray<string | number | boolean>
+    | readonly (string | number | boolean)[];
 }
 
 @Injectable({

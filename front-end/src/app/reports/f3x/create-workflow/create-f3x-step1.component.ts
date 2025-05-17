@@ -23,17 +23,18 @@ import {
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
-import { error } from 'console';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
+import { Dialog } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
 import { TextareaModule } from 'primeng/textarea';
 import { combineLatest, startWith } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-
 @Component({
   selector: 'app-create-f3x-step1',
   templateUrl: './create-f3x-step1.component.html',
@@ -47,6 +48,9 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
     Select,
     SaveCancelComponent,
     TextareaModule,
+    Dialog,
+    Ripple,
+    ButtonDirective,
   ],
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {
@@ -192,8 +196,12 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     this.router.navigateByUrl('/reports');
   }
 
-  public closeCoverageDatesDialog() {
-    this.coverageDatesDialogVisible = false;
+  public navigateToManageTransactions() {
+    this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list`);
+  }
+
+  public onHide() {
+    this.store.dispatch(singleClickEnableAction());
   }
 
   public async save(jump: 'continue' | undefined = undefined) {
@@ -218,7 +226,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         report = await this.form3XService.update(summary, this.formProperties, [HttpStatusCode.BadRequest]);
       } catch {
         this.coverageDatesDialogVisible = true;
-        throw error();
+        throw new Error();
       }
     } else {
       report = await this.form3XService.create(summary, this.formProperties);
