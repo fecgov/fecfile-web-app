@@ -37,10 +37,10 @@ export class LoginService extends DestroyerComponent {
   }
 
   public async retrieveUserLoginData(): Promise<void> {
-    if (!("ffapiTimeoutCookieName" in environment)) {
-      console.error("The ffapi_timeout cookie name environment variables is not set.");
+    if (!('ffapiTimeoutCookieName' in environment)) {
+      console.error('The ffapi_timeout cookie name environment variables is not set.');
     } else if (!this.cookieService.check(environment.ffapiTimeoutCookieName)) {
-      console.error("The ffapi_timeout cookie is not set.");
+      console.error('The ffapi_timeout cookie is not set.');
     }
 
     return this.usersService.getCurrentUser().then((userLoginData) => {
