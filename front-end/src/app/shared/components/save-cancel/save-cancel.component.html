@@ -3,7 +3,14 @@
     <button pButton pRipple label="Back" (click)="cancelForm.emit()" class="p-button-secondary"></button>
   </div>
   <div>
-    <button pButton pRipple appSingleClick label="Save" (click)="save.emit()" class="p-button-primary"></button>
+    <button
+      pButton
+      pRipple
+      appSingleClick
+      label="Save"
+      (click)="save.emit(undefined)"
+      class="p-button-primary"
+    ></button>
     <button
       pButton
       pRipple

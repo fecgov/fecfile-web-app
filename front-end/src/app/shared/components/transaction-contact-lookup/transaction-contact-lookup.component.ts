@@ -89,8 +89,10 @@ export class TransactionContactLookupComponent implements OnInit {
     if (tx?.id) {
       const contact = tx[this.contactProperty() as keyof Transaction] as Contact;
       this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [contact.type]));
-      this.selectedOption.set(this.contactTypeOptions()[0]);
     }
+    this.selectedOption.set(this.contactTypeOptions()[0]);
+    if (this.contactTypeOptions().length === 0)
+      this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [this.contactType()]));
   }
 
   /**
@@ -117,10 +119,9 @@ export class TransactionContactLookupComponent implements OnInit {
   //   }
   // }
 
-  // createNewContactSelected() {
-  //   this.contactDialog.updateContact(Contact.fromJSON({ type: this.currentType }));
-  //   this.detailVisible = true;
-  // }
+  createNewContactSelected() {
+    this.detailVisible.set(true);
+  }
 
   saveContact(contact: Contact) {
     this.contact.set(contact);

@@ -194,7 +194,8 @@
             <app-transaction-contact-lookup
               [form]="form"
               [formSubmitted]="formSubmitted"
-              [contactTypeOptions]="affiliatedContact.contactTypeOptions"
+              [contactType]="affiliatedContact.contact().type"
+              [(contact)]="affiliatedContact.contact"
             >
             </app-transaction-contact-lookup>
             <app-error-messages
@@ -307,8 +308,9 @@
                 <label for="entity_type">LOOKUP</label>
                 <app-transaction-contact-lookup
                   [form]="form"
+                  [(contact)]="candidateContact.contact"
+                  [contactType]="candidateContact.contact().type"
                   [formSubmitted]="formSubmitted"
-                  [contactTypeOptions]="candidateContact.contactTypeOptions"
                   [excludeFecIds]="excludeFecIds"
                   [excludeIds]="excludeIds"
                 >

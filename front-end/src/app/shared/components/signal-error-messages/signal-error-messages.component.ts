@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, LOCALE_ID } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { SignalControl } from '../contact-dialog/contact-dialog.component';
+import { SignalControl } from 'app/shared/models/signal-form';
 
 @Component({
   selector: 'app-signal-error-messages',

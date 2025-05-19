@@ -6,8 +6,8 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { FormGroup, FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
-import { SignalControl } from '../../contact-dialog/contact-dialog.component';
 import { SignalErrorMessagesComponent } from '../../signal-error-messages/signal-error-messages.component';
+import { SignalControl } from 'app/shared/models/signal-form';
 
 @Component({
   selector: 'app-candidate-office-input',

@@ -2,7 +2,7 @@ import { Component, effect, inject } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { Report } from 'app/shared/models/report.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';

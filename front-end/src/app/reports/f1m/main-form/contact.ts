@@ -1,5 +1,5 @@
 import { AbstractControl, Validators } from '@angular/forms';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -7,6 +7,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
 import { SelectItem } from 'primeng/api';
 import { MainFormComponent } from './main-form.component';
+import { signal, WritableSignal } from '@angular/core';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
@@ -16,7 +17,7 @@ export abstract class F1MContact {
   get contactLookupKey(): string {
     return `${this.contactKey}_lookup`;
   }
-  abstract contactTypeOptions: PrimeOptions;
+  abstract contact: WritableSignal<Contact>;
   abstract formFields: string[];
   component: MainFormComponent;
   control: AbstractControl | null;
@@ -100,8 +101,9 @@ export abstract class F1MContact {
 }
 
 export class AffiliatedContact extends F1MContact {
-  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  contactType = ContactTypes.COMMITTEE;
   formFields = ['affiliated_date_form_f1_filed', 'affiliated_committee_fec_id', 'affiliated_committee_name'];
+  contact = signal(emptyContact(ContactTypes.COMMITTEE));
 
   constructor(component: MainFormComponent) {
     super('contact_affiliated', component);
@@ -130,7 +132,7 @@ export class AffiliatedContact extends F1MContact {
 
 export class CandidateContact extends F1MContact {
   tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
-  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  contact = signal(emptyContact(ContactTypes.CANDIDATE));
   formFields: string[] = [];
 
   get dateOfContributionField() {
