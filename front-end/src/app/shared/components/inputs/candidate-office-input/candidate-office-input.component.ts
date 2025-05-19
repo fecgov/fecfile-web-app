@@ -20,15 +20,13 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
   @Input() stateFormControlName = '';
   @Input() districtFormControlName = '';
 
-  candidateOfficeTypeOptions: PrimeOptions = [];
-  candidateStateOptions: PrimeOptions = [];
+  readonly candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
+  readonly candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   candidateDistrictOptions: PrimeOptions = [];
 
   electionCodeField: string | undefined = undefined;
 
   ngOnInit(): void {
-    this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
-    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
     this.electionCodeField = this.transaction?.transactionType.templateMap.election_code;
 
     // Update the enabled/disabled state on candidate fields whenever the candidate office changes.
@@ -87,11 +85,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
 
     if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
       // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
-      if (
-        this.transaction?.transactionType.scheduleId === ScheduleIds.E &&
-        electionCode &&
-        electionCode.startsWith('P')
-      ) {
+      if (this.transaction?.transactionType.scheduleId === ScheduleIds.E && electionCode.startsWith('P')) {
         this.form.patchValue({
           [this.districtFormControlName]: null,
         });

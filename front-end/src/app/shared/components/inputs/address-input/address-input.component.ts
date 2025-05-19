@@ -1,48 +1,57 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, input } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { FluidModule } from 'primeng/fluid';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { BaseInputComponent } from '../base-input.component';
+import { TransactionTemplateMapType } from 'app/shared/models';
 
 @Component({
   selector: 'app-address-input',
   templateUrl: './address-input.component.html',
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select, FluidModule],
 })
-export class AddressInputComponent extends BaseInputComponent implements OnInit {
-  @Input() readonly = false;
-  @Input() stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-  @Input() templateMapKeyPrefix = '';
-  @Input() keyPrefix = '';
+export class AddressInputComponent {
+  readonly form = input.required<FormGroup>();
+  readonly formSubmitted = input.required<boolean>();
+  readonly templateMap = input<TransactionTemplateMapType>({
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+  } as TransactionTemplateMapType);
 
-  streetOneFieldName = '';
-  streetTwoFieldName = '';
-  cityFieldName = '';
-  stateFieldName = '';
-  zipFieldName = '';
+  readonly readonly = input(false);
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+  readonly templateMapKeyPrefix = input<'secondary' | 'signatory_1' | 'signatory_2' | 'candidate' | null>(null);
+  readonly keyPrefix = input<'subordinate_' | null>(null);
 
-  ngOnInit(): void {
-    if (this.templateMapKeyPrefix === 'secondary') {
-      this.streetOneFieldName = this.templateMap['secondary_street_1'];
-      this.streetTwoFieldName = this.templateMap['secondary_street_2'];
-      this.cityFieldName = this.templateMap['secondary_city'];
-      this.stateFieldName = this.templateMap['secondary_state'];
-      this.zipFieldName = this.templateMap['secondary_zip'];
-    } else if (!this.keyPrefix) {
-      this.streetOneFieldName = this.templateMap['street_1'];
-      this.streetTwoFieldName = this.templateMap['street_2'];
-      this.cityFieldName = this.templateMap['city'];
-      this.stateFieldName = this.templateMap['state'];
-      this.zipFieldName = this.templateMap['zip'];
-    } else {
-      this.streetOneFieldName = `${this.keyPrefix}street_1`;
-      this.streetTwoFieldName = `${this.keyPrefix}street_2`;
-      this.cityFieldName = `${this.keyPrefix}city`;
-      this.stateFieldName = `${this.keyPrefix}state`;
-      this.zipFieldName = `${this.keyPrefix}zip`;
-    }
-  }
+  readonly streetOneFieldName = computed(() => {
+    if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_street_1'];
+    if (this.keyPrefix()) return `${this.keyPrefix}street_1`;
+    return this.templateMap()['street_1'];
+  });
+  readonly streetTwoFieldName = computed(() => {
+    if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_street_2'];
+    if (this.keyPrefix()) return `${this.keyPrefix}street_2`;
+    return this.templateMap()['street_2'];
+  });
+  readonly cityFieldName = computed(() => {
+    if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_city'];
+    if (this.keyPrefix()) return `${this.keyPrefix}city`;
+    return this.templateMap()['city'];
+  });
+  readonly stateFieldName = computed(() => {
+    if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_state'];
+    if (this.keyPrefix()) return `${this.keyPrefix}state`;
+    return this.templateMap()['state'];
+  });
+  readonly zipFieldName = computed(() => {
+    if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_zip'];
+    if (this.keyPrefix()) return `${this.keyPrefix}zip`;
+    return this.templateMap()['zip'];
+  });
 }

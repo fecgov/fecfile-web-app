@@ -1,32 +1,43 @@
 import { AbstractControl, Validators } from '@angular/forms';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
-import { SelectItem } from 'primeng/api';
 import { MainFormComponent } from './main-form.component';
+import { effect } from '@angular/core';
+import { ContactManager } from 'app/shared/services/contact-management.service';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];
 
 export abstract class F1MContact {
-  contactKey: keyof Form1M;
+  key: keyof Form1M;
+  manager: ContactManager;
   get contactLookupKey(): string {
-    return `${this.contactKey}_lookup`;
+    return `${this.key}_lookup`;
   }
-  abstract contactTypeOptions: PrimeOptions;
+  abstract readonly contactType: ContactTypes;
   abstract formFields: string[];
   component: MainFormComponent;
   control: AbstractControl | null;
   abstract enableValidation(): void;
 
-  constructor(contactKey: keyof Form1M, component: MainFormComponent) {
-    this.contactKey = contactKey;
+  constructor(key: keyof Form1M, component: MainFormComponent) {
+    this.key = key;
     this.component = component;
+    this.manager = this.component.cmservice.get(this.key);
     component.form.addControl(this.contactLookupKey, new SubscriptionFormControl(''));
     this.control = component.form.get(this.contactLookupKey);
+
+    effect(
+      () => {
+        const contact = this.manager.outerContact();
+        if (contact === null) return;
+        this.update(contact);
+      },
+      { injector: this.component.injector },
+    );
   }
 
   /**
@@ -34,43 +45,50 @@ export abstract class F1MContact {
    * report object from the event emitted by the contact lookup component
    * @param $event
    */
-  update($event: SelectItem<Contact>) {
+  update(contact: Contact) {
     // If this is updating a previously selected candidate, remove it from the exclusion list.
-    const previousId = this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null;
-    this.component.excludeIds = this.component.excludeIds.filter((id: string) => id !== previousId);
-    const currentId = $event.value.id ?? null;
+    const previousId = this.component.report[`${this.key}_id` as keyof Form1M] as string | null;
+    this.component.contactService.excludeIds.update((ids) => ids.filter((id: string) => id !== previousId));
+    const currentId = contact.id ?? null;
     if (currentId) {
-      this.component.excludeIds.push(currentId);
+      this.component.contactService.excludeIds.update((ids) => {
+        ids.push(currentId);
+        return ids;
+      });
     }
-    if (this.component.report[this.contactKey]?.committee_id) {
-      this.component.excludeFecIds = this.component.excludeFecIds.filter(
-        (id: string) => id !== this.component.report[this.contactKey].committee_id,
+    if (this.component.report[this.key]?.committee_id) {
+      this.component.contactService.excludeFecIds.update((ids) =>
+        ids.filter((id: string) => id !== this.component.report[this.key].committee_id),
       );
     }
-    if ($event.value.committee_id) {
-      this.component.excludeFecIds.push($event.value.committee_id);
+    if (contact.committee_id) {
+      this.component.contactService.excludeFecIds.update((ids) => {
+        ids.push(contact.committee_id!);
+        return ids;
+      });
     }
-    if (this.component.report[this.contactKey]?.candidate_id) {
-      this.component.excludeFecIds = this.component.excludeFecIds.filter(
-        (id: string) => id !== this.component.report[this.contactKey].candidate_id,
+    if (this.component.report[this.key]?.candidate_id) {
+      this.component.contactService.excludeFecIds.update((ids) =>
+        ids.filter((id: string) => id !== this.component.report[this.key].candidate_id),
       );
     }
-    if ($event.value.candidate_id) {
-      this.component.excludeFecIds.push($event.value.candidate_id);
+    if (contact.candidate_id) {
+      this.component.contactService.excludeFecIds.update((ids) => {
+        ids.push(contact.candidate_id!);
+        return ids;
+      });
     }
 
-    (this.component.report[this.contactKey] as Contact) = $event.value;
-    (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = currentId;
-    for (const [key, value] of Object.entries(this.component.contactConfigs[this.contactKey])) {
+    (this.component.report[this.key] as Contact) = contact;
+    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = currentId;
+    for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
       this.component.form
-        .get(this.component.templateMapConfigs[this.contactKey][key as keyof TransactionTemplateMapType])
-        ?.setValue($event.value[value as keyof Contact]);
+        .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
+        ?.setValue(contact[value as keyof Contact]);
     }
 
     // Touch the invalid contact id form control so the duplicate contact id message will appear if necessary.
-    const candidateIdControl = this.component.form.get(
-      this.component.templateMapConfigs[this.contactKey]['candidate_fec_id'],
-    );
+    const candidateIdControl = this.component.form.get(this.component.templateMapConfigs[this.key]['candidate_fec_id']);
     if (candidateIdControl?.invalid) {
       candidateIdControl.markAsTouched();
     }
@@ -81,8 +99,8 @@ export abstract class F1MContact {
 
   disableValidation() {
     this.control?.clearValidators();
-    (this.component.report[this.contactKey] as Contact | undefined) = undefined;
-    (this.component.report[`${this.contactKey}_id` as keyof Form1M] as string | null) = null;
+    (this.component.report[this.key] as Contact | undefined) = undefined;
+    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = null;
 
     this.formFields.forEach((field: string) => {
       (this.component.report[field as keyof Form1M] as string | undefined) = undefined;
@@ -100,18 +118,18 @@ export abstract class F1MContact {
 }
 
 export class AffiliatedContact extends F1MContact {
-  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+  readonly contactType = ContactTypes.COMMITTEE;
   formFields = ['affiliated_date_form_f1_filed', 'affiliated_committee_fec_id', 'affiliated_committee_name'];
 
   constructor(component: MainFormComponent) {
     super('contact_affiliated', component);
 
-    component.contactConfigs[this.contactKey] = {
+    component.contactConfigs[this.key] = {
       committee_name: 'name',
       committee_fec_id: 'committee_id',
     };
 
-    component.templateMapConfigs[this.contactKey] = {
+    component.templateMapConfigs[this.key] = {
       committee_name: 'affiliated_committee_name',
       committee_fec_id: 'affiliated_committee_fec_id',
     } as TransactionTemplateMapType;
@@ -130,7 +148,7 @@ export class AffiliatedContact extends F1MContact {
 
 export class CandidateContact extends F1MContact {
   tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
-  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  readonly contactType = ContactTypes.CANDIDATE;
   formFields: string[] = [];
 
   get dateOfContributionField() {
@@ -159,7 +177,7 @@ export class CandidateContact extends F1MContact {
       `${tag}_date_of_contribution`,
     ];
 
-    component.contactConfigs[this.contactKey] = {
+    component.contactConfigs[this.key] = {
       candidate_fec_id: 'candidate_id',
       candidate_last_name: 'last_name',
       candidate_first_name: 'first_name',
@@ -171,7 +189,7 @@ export class CandidateContact extends F1MContact {
       candidate_district: 'candidate_district',
     };
 
-    component.templateMapConfigs[this.contactKey] = {
+    component.templateMapConfigs[this.key] = {
       candidate_fec_id: `${tag}_candidate_id_number`,
       candidate_last_name: `${tag}_candidate_last_name`,
       candidate_first_name: `${tag}_candidate_first_name`,

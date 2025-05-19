@@ -117,7 +117,7 @@
         <h2>Address</h2>
       </div>
     </div>
-    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
+    <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form"></app-address-input>
     <div class="grid">
       <div class="col-12">
         <hr />
@@ -189,15 +189,15 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <div class="field" [class.transaction-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
+          <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
             <label for="entity_type">LOOKUP</label>
-            <app-transaction-contact-lookup
+            <app-report-contact-lookup
               [form]="form"
+              key="contact_affiliated"
               [formSubmitted]="formSubmitted"
-              [contactTypeOptions]="affiliatedContact.contactTypeOptions"
-              (contactSelect)="affiliatedContact.update($event)"
+              [contactType]="affiliatedContact.contactType"
             >
-            </app-transaction-contact-lookup>
+            </app-report-contact-lookup>
             <app-error-messages
               [form]="form"
               [fieldName]="affiliatedContact.contactLookupKey"
@@ -304,17 +304,15 @@
           </div>
           <div class="grid">
             <div class="col-12">
-              <div class="field" [class.transaction-contact-invalid]="candidateContact.control?.status === 'INVALID'">
+              <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
                 <label for="entity_type">LOOKUP</label>
-                <app-transaction-contact-lookup
+                <app-report-contact-lookup
                   [form]="form"
                   [formSubmitted]="formSubmitted"
-                  [contactTypeOptions]="candidateContact.contactTypeOptions"
-                  [excludeFecIds]="excludeFecIds"
-                  [excludeIds]="excludeIds"
-                  (contactSelect)="candidateContact.update($event)"
+                  [key]="'contact_candidate_' + f1mCandidateTags[i]"
+                  [contactType]="candidateContact.contactType"
                 >
-                </app-transaction-contact-lookup>
+                </app-report-contact-lookup>
                 <app-error-messages
                   [form]="form"
                   [fieldName]="candidateContact.contactLookupKey"
@@ -324,29 +322,27 @@
               </div>
             </div>
           </div>
-          @if (report[candidateContact.contactKey]) {
+          @if (report[candidateContact.key]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"
-              [templateMap]="templateMapConfigs[candidateContact.contactKey]"
+              [templateMap]="templateMapConfigs[candidateContact.key]"
               templateMapKeyPrefix="candidate"
               labelPrefix="CANDIDATE"
             ></app-name-input>
             <div class="grid">
               <div class="col-3">
                 <div class="field">
-                  <label [for]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                    >CANDIDATE ID</label
-                  >
+                  <label [for]="templateMapConfigs[candidateContact.key]['candidate_fec_id']">CANDIDATE ID</label>
                   <input
                     type="text"
                     pInputText
-                    [id]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                    [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [id]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
+                    [formControlName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                   />
                   <app-error-messages
                     [form]="form"
-                    [fieldName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [fieldName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                     [formSubmitted]="formSubmitted"
                     uniqueFecIdMessage="Candidate already entered in form."
                   ></app-error-messages>
@@ -356,9 +352,9 @@
                 <app-candidate-office-input
                   [form]="form"
                   [formSubmitted]="formSubmitted"
-                  [officeFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_office']"
-                  [stateFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_state']"
-                  [districtFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_district']"
+                  [officeFormControlName]="templateMapConfigs[candidateContact.key]['candidate_office']"
+                  [stateFormControlName]="templateMapConfigs[candidateContact.key]['candidate_state']"
+                  [districtFormControlName]="templateMapConfigs[candidateContact.key]['candidate_district']"
                 >
                 </app-candidate-office-input>
               </div>
@@ -387,3 +383,5 @@
 <app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
 
 <p-confirmDialog key="dialog" class="confirm-dialog"> </p-confirmDialog>
+
+<app-contact-modal></app-contact-modal>

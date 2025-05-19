@@ -1,0 +1,271 @@
+<p-dialog [(visible)]="cmservice.showDialog" [style]="{ width: '90%' }" header="Add Contact" [modal]="true">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <div class="grid">
+      <div class="col-12">
+        <h3>Contact</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-10">
+        <div class="field">
+          <label for="type">CONTACT TYPE</label>
+          <app-contact-search [isBare]="false" [key]="cmservice.activeKey()"> </app-contact-search>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    @if (isCandidate()) {
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="candidate_id">CANDIDATE ID</label>
+            <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
+            <app-error-messages
+              [form]="form"
+              fieldName="candidate_id"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+        <div class="col-4"></div>
+      </div>
+    }
+    @if (isCommittee() || isOrganization()) {
+      <div class="grid">
+        @if (isCommittee()) {
+          <div class="col-4">
+            <div class="field">
+              <label for="committee_id">COMMITTEE ID</label>
+              <input type="text" pInputText id="committee_id" formControlName="committee_id" />
+              <app-error-messages
+                [form]="form"
+                fieldName="committee_id"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
+            </div>
+          </div>
+        }
+        <div class="col-8">
+          <div class="field">
+            <label for="name">NAME</label>
+            <input type="text" pInputText id="name" formControlName="name" />
+            <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        @if (isOrganization()) {
+          <div class="col-4"></div>
+        }
+      </div>
+    }
+    @if (isCandidate() || isIndividual()) {
+      <div class="grid">
+        <div class="col-4">
+          <div class="field">
+            <label for="last_name">LAST NAME</label>
+            <input type="text" pInputText id="last_name" formControlName="last_name" />
+            <app-error-messages
+              [form]="form"
+              fieldName="last_name"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="field">
+            <label for="first_name">FIRST NAME</label>
+            <input type="text" pInputText id="first_name" formControlName="first_name" />
+            <app-error-messages
+              [form]="form"
+              fieldName="first_name"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="field">
+            <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+            <input type="text" pInputText id="middle_name" formControlName="middle_name" />
+            <app-error-messages
+              [form]="form"
+              fieldName="middle_name"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-3">
+          <div class="field">
+            <label for="prefix">PREFIX (OPTIONAL)</label>
+            <input type="text" pInputText id="prefix" formControlName="prefix" />
+            <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="field">
+            <label for="suffix">SUFFIX (OPTIONAL)</label>
+            <input type="text" pInputText id="suffix" formControlName="suffix" />
+            <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-6"></div>
+      </div>
+    }
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Address</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="country">COUNTRY/REGION</label>
+          <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="street_1">STREET ADDRESS</label>
+          <input type="text" pInputText id="street_1" formControlName="street_1" />
+          <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+          <input type="text" pInputText id="street_2" formControlName="street_2" />
+          <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="city">CITY</label>
+          <input type="text" pInputText id="city" formControlName="city" />
+          <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="state">STATE/PROVINCE</label>
+          <p-select
+            inputId="state"
+            formControlName="state"
+            [options]="stateOptions()"
+            [autoDisplayFirst]="false"
+            appendTo="body"
+          ></p-select>
+          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="zip">ZIP/POSTAL CODE</label>
+          <input type="text" pInputText id="zip" formControlName="zip" />
+          <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+          <app-fec-international-phone-input formControlName="telephone"> </app-fec-international-phone-input>
+          <app-error-messages
+            [form]="form"
+            fieldName="telephone"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must contain 10 numeric characters."
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    @if (isCandidate() || isIndividual()) {
+      <div class="grid">
+        <div class="col-12">
+          <hr />
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <h3>Employer</h3>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="employer">EMPLOYER (OPTIONAL)</label>
+            <input type="text" pInputText id="employer" formControlName="employer" />
+            <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="field">
+            <label for="occupation">OCCUPATION (OPTIONAL)</label>
+            <input type="text" pInputText id="occupation" formControlName="occupation" />
+            <app-error-messages
+              [form]="form"
+              fieldName="occupation"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
+        </div>
+      </div>
+    }
+    @if (isCandidate()) {
+      <div class="grid">
+        <div class="col-12">
+          <hr />
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <h3>Office</h3>
+        </div>
+      </div>
+      <app-candidate-office-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        officeFormControlName="candidate_office"
+        stateFormControlName="candidate_state"
+        districtFormControlName="candidate_district"
+      >
+      </app-candidate-office-input>
+    }
+  </form>
+
+  <ng-template #footer>
+    <div class="top-border-footer">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-secondary mr-4"
+        (click)="cmservice.showDialog.set(false)"
+      ></button>
+
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Save & continue"
+        icon="pi pi-check"
+        class="p-button-info"
+        (click)="saveContact()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog key="contactDialogDialog" [style.width.px]="450"></p-confirmDialog>
