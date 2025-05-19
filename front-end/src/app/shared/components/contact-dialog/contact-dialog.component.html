@@ -34,11 +34,10 @@
             [disabled]="form.controls['candidate_id'].disabled()"
             [(ngModel)]="form.controls['candidate_id'].value"
           />
-          <!-- <app-error-messages
-              [form]="form"
-              fieldName="candidate_id"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['candidate_id']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       <div class="col-4"></div>
@@ -57,11 +56,10 @@
               [disabled]="form.controls['committee_id'].disabled()"
               [(ngModel)]="form.controls['committee_id'].value"
             />
-            <!-- <app-error-messages
-                [form]="form"
-                fieldName="committee_id"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages> -->
+            <app-signal-error-messages
+              [control]="form.controls['committee_id']"
+              [formSubmitted]="formSubmitted"
+            ></app-signal-error-messages>
           </div>
         </div>
       }
@@ -75,7 +73,10 @@
             [disabled]="form.controls['name'].disabled()"
             [(ngModel)]="form.controls['name'].value"
           />
-          <!-- <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['name']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       @if (isOrganization()) {
@@ -95,11 +96,10 @@
             [disabled]="form.controls['last_name'].disabled()"
             [(ngModel)]="form.controls['last_name'].value"
           />
-          <!-- <app-error-messages
-              [form]="form"
-              fieldName="last_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['last_name']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       <div class="col-4">
@@ -112,11 +112,10 @@
             [disabled]="form.controls['first_name'].disabled()"
             [(ngModel)]="form.controls['first_name'].value"
           />
-          <!-- <app-error-messages
-              [form]="form"
-              fieldName="first_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['first_name']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       <div class="col-4">
@@ -129,11 +128,10 @@
             [disabled]="form.controls['middle_name'].disabled()"
             [(ngModel)]="form.controls['middle_name'].value"
           />
-          <!-- <app-error-messages
-              [form]="form"
-              fieldName="middle_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['middle_name']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
     </div>
@@ -148,7 +146,10 @@
             [disabled]="form.controls['prefix'].disabled()"
             [(ngModel)]="form.controls['prefix'].value"
           />
-          <!-- <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['prefix']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       <div class="col-3">
@@ -161,7 +162,10 @@
             [disabled]="form.controls['suffix'].disabled()"
             [(ngModel)]="form.controls['suffix'].value"
           />
-          <!-- <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['suffix']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       <div class="col-6"></div>
@@ -202,7 +206,10 @@
           [disabled]="form.controls['street_1'].disabled()"
           [(ngModel)]="form.controls['street_1'].value"
         />
-        <!-- <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        <app-signal-error-messages
+          [control]="form.controls['street_1']"
+          [formSubmitted]="formSubmitted"
+        ></app-signal-error-messages>
       </div>
     </div>
     <div class="col-6">
@@ -215,7 +222,10 @@
           [disabled]="form.controls['street_2'].disabled()"
           [(ngModel)]="form.controls['street_2'].value"
         />
-        <!-- <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        <app-signal-error-messages
+          [control]="form.controls['street_2']"
+          [formSubmitted]="formSubmitted"
+        ></app-signal-error-messages>
       </div>
     </div>
   </div>
@@ -230,7 +240,10 @@
           [disabled]="form.controls['city'].disabled()"
           [(ngModel)]="form.controls['city'].value"
         />
-        <!-- <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        <app-signal-error-messages
+          [control]="form.controls['city']"
+          [formSubmitted]="formSubmitted"
+        ></app-signal-error-messages>
       </div>
     </div>
     <div class="col-3">
@@ -244,7 +257,10 @@
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
-        <!-- <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        <app-signal-error-messages
+          [control]="form.controls['state']"
+          [formSubmitted]="formSubmitted"
+        ></app-signal-error-messages>
       </div>
     </div>
     <div class="col-3">
@@ -257,7 +273,10 @@
           [disabled]="form.controls['zip'].disabled()"
           [(ngModel)]="form.controls['zip'].value"
         />
-        <!-- <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages> -->
+        <app-signal-error-messages
+          [control]="form.controls['zip']"
+          [formSubmitted]="formSubmitted"
+        ></app-signal-error-messages>
       </div>
     </div>
   </div>
@@ -270,12 +289,11 @@
           [(ngModel)]="form.controls['telephone'].value"
         >
         </app-fec-international-phone-input>
-        <!-- <app-error-messages
-            [form]="form"
-            fieldName="telephone"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must contain 10 numeric characters."
-          ></app-error-messages> -->
+        <app-signal-error-messages
+          [control]="form.controls['telephone']"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must contain 10 numeric characters."
+        ></app-signal-error-messages>
       </div>
     </div>
     <div class="col-6"></div>
@@ -302,7 +320,10 @@
             [disabled]="form.controls['employer'].disabled()"
             [(ngModel)]="form.controls['employer'].value"
           />
-          <!-- <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted"></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['employer']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
       <div class="col-6">
@@ -315,11 +336,10 @@
             [disabled]="form.controls['occupation'].disabled()"
             [(ngModel)]="form.controls['occupation'].value"
           />
-          <!-- <app-error-messages
-              [form]="form"
-              fieldName="occupation"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages> -->
+          <app-signal-error-messages
+            [control]="form.controls['occupation']"
+            [formSubmitted]="formSubmitted"
+          ></app-signal-error-messages>
         </div>
       </div>
     </div>

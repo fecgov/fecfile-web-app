@@ -1,6 +1,6 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, computed, effect, inject, input, model, output, signal, untracked } from '@angular/core';
-import { FormsModule, ValidatorFn } from '@angular/forms';
+import { FormsModule, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { CountryCodeLabels, LabelList, LabelUtils, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -31,7 +31,6 @@ import { LabelPipe } from '../../pipes/label.pipe';
 import { getReportFromJSON } from '../../services/report.service';
 import { TransactionService } from '../../services/transaction.service';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
-import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { TableComponent } from '../table/table.component';
@@ -41,6 +40,7 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { JsonSchema, validate, ValidationError } from 'fecfile-validate';
+import { SignalErrorMessagesComponent } from '../signal-error-messages/signal-error-messages.component';
 
 export class TransactionData {
   id: string;
@@ -71,18 +71,70 @@ export class TransactionData {
 export class SignalControl<T> {
   readonly value = signal<T | null>(null);
   readonly disabled = signal(false);
-  readonly errors = signal<ValidationError[]>([]);
-  readonly valid = computed(() => this.errors().length === 0);
+  readonly errors = signal<ValidationErrors>({});
+  readonly valid = computed(() => Object.keys(this.errors()).length === 0);
 
   readonly schema = signal<JsonSchema>(contactIndividualSchema);
 
   constructor(property: string) {
     effect(async () => {
-      const value = this.value();
-      if (property === 'telephone' && value === '') return;
+      let value = this.value();
+      if (value === '') value = null;
+
       const errors = await validate(this.schema(), { [property]: value }, [property]);
-      this.errors.set(errors);
+      this.errors.set(this.buildErrors(errors, value));
     });
+  }
+  private buildErrors<U>(errors: ValidationError[], value: U) {
+    const result: ValidationErrors = {};
+    if (errors.length) {
+      errors.forEach((error) => {
+        // The keyword === 'type' indicates a conditional check fail as part of an 'anyOf' JSON schema rule
+        // Basically, we tried to pass a null to a JSON schema type: ["string"] rule rather than a type: ["string", "null"] rule.
+        if (error.keyword === 'required' || (error.keyword === 'type' && error['params']['type'] === 'string')) {
+          result['required'] = true;
+        }
+        if (error.keyword === 'minLength') {
+          result['minLength'] = { requiredLength: error.params['limit'] };
+        }
+        if (error.keyword === 'maxLength' || error.keyword === 'maximum') {
+          result['maxLength'] = { requiredLength: error.params['limit'] };
+        }
+        if (error.keyword === 'minimum') {
+          result['min'] = { min: error.params['limit'] };
+        }
+        if (error.keyword === 'exclusiveMinimum') {
+          result['exclusiveMin'] = { exclusiveMin: error.params['limit'] };
+        }
+        if (error.keyword === 'maximum') {
+          result['max'] = { max: error.params['limit'] };
+        }
+        if (error.keyword === 'exclusiveMaximum') {
+          result['exclusiveMax'] = { exclusiveMax: error.params['limit'] };
+        }
+        if (error.keyword === 'pattern') {
+          result['pattern'] = { requiredPattern: error.params['pattern'] };
+        }
+        if (error.keyword === 'enum') {
+          result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
+        }
+        if (error.keyword === 'type' && error.params['type'] === 'number') {
+          if (value === '' || value === null || value === undefined) {
+            result['required'] = true;
+          } else {
+            result['pattern'] = { requiredPattern: 'Value must be a number' };
+          }
+        }
+        if (error.keyword === 'type' && error.params['type'].includes('boolean')) {
+          result['pattern'] = { requiredPattern: error.message };
+        }
+      });
+    }
+    return result;
+  }
+
+  hasError(err: string): boolean {
+    return !!this.errors()[err];
   }
 }
 
@@ -109,7 +161,7 @@ export class SignalForm {
     FormsModule,
     ContactLookupComponent,
     InputText,
-    ErrorMessagesComponent,
+    SignalErrorMessagesComponent,
     Select,
     FecInternationalPhoneInputComponent,
     CandidateOfficeInputComponent,

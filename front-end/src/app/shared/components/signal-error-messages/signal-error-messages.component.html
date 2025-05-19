@@ -1,0 +1,58 @@
+@if (showError()) {
+  @if (hasRequiredError()) {
+    <small class="p-error">{{ requiredErrorMessage() }}</small>
+  }
+  @if (control().hasError('fecIdMustBeUnique')) {
+    <small class="p-error">{{ uniqueFecIdMessage() }}</small>
+  }
+  @if (control().hasError('requiredTrue')) {
+    <small class="p-error">{{ requiredTrueErrorMessage() }}</small>
+  }
+  @if (control().hasError('minLength')) {
+    <small class="p-error">{{ _minLengthErrorMessage() }}</small>
+  }
+  @if (!control().hasError('max') && control().hasError('maxLength')) {
+    <small class="p-error">{{ _maxLengthErrorMessage() }}</small>
+  }
+  @if (control().hasError('min')) {
+    <small class="p-error">{{ _minErrorMessage() }}</small>
+  }
+  @if (control().hasError('max')) {
+    <small class="p-error">{{ _maxErrorMessage() }}</small>
+  }
+  @if (control().hasError('exclusiveMax')) {
+    <small class="p-error">{{ _exclusiveMaxErrorMessage() }}</small>
+  }
+  @if (control().hasError('exclusiveMin')) {
+    <small class="p-error">{{ _exclusiveMinErrorMessage() }}</small>
+  }
+  @if (control().hasError('invaliddate')) {
+    <small class="p-error">{{ _invalidDateErrorMessage() }}</small>
+  }
+  @if (control().hasError('noDateProvided')) {
+    <small class="p-error">{{ _noDateProvidedErrorMessage() }}</small>
+  }
+  @if (control().hasError('noCorrespondingForm3X')) {
+    <small class="p-error">{{ _noCorrespondingForm3XErrorMessage() }}</small>
+  }
+  @if (!control().hasError('maxLength') && !control().hasError('required') && control().hasError('email')) {
+    <small class="p-error">{{ _emailErrorMessage() }}</small>
+  }
+  @if (control().hasError('isAfter')) {
+    <small class="p-error">{{ isAfterMessage() }}</small>
+  }
+  @if (
+    !control().hasError('required') &&
+    !control().hasError('minLength') &&
+    !control().hasError('maxLength') &&
+    !control().hasError('min') &&
+    !control().hasError('max') &&
+    !control().hasError('exclusiveMax') &&
+    !control().hasError('exclusiveMin') &&
+    !control().hasError('invaliddate') &&
+    !control().hasError('isAfter') &&
+    control().hasError('pattern')
+  ) {
+    <small class="p-error">{{ patternErrorMessage() }}</small>
+  }
+}
