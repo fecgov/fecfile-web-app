@@ -33,6 +33,7 @@
             id="candidate_id"
             [disabled]="form.controls['candidate_id'].disabled()"
             [(ngModel)]="form.controls['candidate_id'].value"
+            (blur)="validate(form.controls['candidate_id'])"
           />
           <app-signal-error-messages
             [control]="form.controls['candidate_id']"
@@ -55,6 +56,7 @@
               id="committee_id"
               [disabled]="form.controls['committee_id'].disabled()"
               [(ngModel)]="form.controls['committee_id'].value"
+              (blur)="validate(form.controls['committee_id'])"
             />
             <app-signal-error-messages
               [control]="form.controls['committee_id']"
@@ -72,6 +74,7 @@
             id="name"
             [disabled]="form.controls['name'].disabled()"
             [(ngModel)]="form.controls['name'].value"
+            (blur)="validate(form.controls['name'])"
           />
           <app-signal-error-messages
             [control]="form.controls['name']"
@@ -95,6 +98,7 @@
             id="last_name"
             [disabled]="form.controls['last_name'].disabled()"
             [(ngModel)]="form.controls['last_name'].value"
+            (blur)="validate(form.controls['last_name'])"
           />
           <app-signal-error-messages
             [control]="form.controls['last_name']"
@@ -111,6 +115,7 @@
             id="first_name"
             [disabled]="form.controls['first_name'].disabled()"
             [(ngModel)]="form.controls['first_name'].value"
+            (blur)="validate(form.controls['first_name'])"
           />
           <app-signal-error-messages
             [control]="form.controls['first_name']"
@@ -127,6 +132,7 @@
             id="middle_name"
             [disabled]="form.controls['middle_name'].disabled()"
             [(ngModel)]="form.controls['middle_name'].value"
+            (blur)="validate(form.controls['middle_name'])"
           />
           <app-signal-error-messages
             [control]="form.controls['middle_name']"
@@ -145,6 +151,7 @@
             id="prefix"
             [disabled]="form.controls['prefix'].disabled()"
             [(ngModel)]="form.controls['prefix'].value"
+            (blur)="validate(form.controls['prefix'])"
           />
           <app-signal-error-messages
             [control]="form.controls['prefix']"
@@ -161,6 +168,7 @@
             id="suffix"
             [disabled]="form.controls['suffix'].disabled()"
             [(ngModel)]="form.controls['suffix'].value"
+            (blur)="validate(form.controls['suffix'])"
           />
           <app-signal-error-messages
             [control]="form.controls['suffix']"
@@ -189,6 +197,7 @@
           inputId="country"
           [disabled]="form.controls['country'].disabled()"
           [(ngModel)]="form.controls['country'].value"
+          (blur)="validate(form.controls['country'])"
           [options]="countryOptions"
         ></p-select>
       </div>
@@ -205,6 +214,7 @@
           id="street_1"
           [disabled]="form.controls['street_1'].disabled()"
           [(ngModel)]="form.controls['street_1'].value"
+          (blur)="validate(form.controls['street_1'])"
         />
         <app-signal-error-messages
           [control]="form.controls['street_1']"
@@ -221,6 +231,7 @@
           id="street_2"
           [disabled]="form.controls['street_2'].disabled()"
           [(ngModel)]="form.controls['street_2'].value"
+          (blur)="validate(form.controls['street_2'])"
         />
         <app-signal-error-messages
           [control]="form.controls['street_2']"
@@ -239,6 +250,7 @@
           id="city"
           [disabled]="form.controls['city'].disabled()"
           [(ngModel)]="form.controls['city'].value"
+          (blur)="validate(form.controls['city'])"
         />
         <app-signal-error-messages
           [control]="form.controls['city']"
@@ -253,6 +265,7 @@
           inputId="state"
           [disabled]="form.controls['state'].disabled()"
           [(ngModel)]="form.controls['state'].value"
+          (blur)="validate(form.controls['state'])"
           [options]="stateOptions()"
           [autoDisplayFirst]="false"
           appendTo="body"
@@ -272,6 +285,7 @@
           id="zip"
           [disabled]="form.controls['zip'].disabled()"
           [(ngModel)]="form.controls['zip'].value"
+          (blur)="validate(form.controls['zip'])"
         />
         <app-signal-error-messages
           [control]="form.controls['zip']"
@@ -287,6 +301,7 @@
         <app-fec-international-phone-input
           [disabled]="form.controls['telephone'].disabled()"
           [(ngModel)]="form.controls['telephone'].value"
+          (blur)="validate(form.controls['telephone'])"
         >
         </app-fec-international-phone-input>
         <app-signal-error-messages
@@ -319,6 +334,7 @@
             id="employer"
             [disabled]="form.controls['employer'].disabled()"
             [(ngModel)]="form.controls['employer'].value"
+            (blur)="validate(form.controls['employer'])"
           />
           <app-signal-error-messages
             [control]="form.controls['employer']"
@@ -335,6 +351,7 @@
             id="occupation"
             [disabled]="form.controls['occupation'].disabled()"
             [(ngModel)]="form.controls['occupation'].value"
+            (blur)="validate(form.controls['occupation'])"
           />
           <app-signal-error-messages
             [control]="form.controls['occupation']"

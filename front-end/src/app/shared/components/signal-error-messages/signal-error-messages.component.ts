@@ -9,7 +9,7 @@ import { SignalControl } from '../contact-dialog/contact-dialog.component';
 export class SignalErrorMessagesComponent<T> {
   private readonly localeId = inject(LOCALE_ID);
 
-  readonly control = input.required<SignalControl<T>>();
+  readonly control = input.required<SignalControl>();
   readonly formSubmitted = input.required<boolean>();
 
   readonly requiredErrorMessage = input('This is a required field.');
@@ -108,8 +108,7 @@ export class SignalErrorMessagesComponent<T> {
   });
 
   readonly showError = computed(() => {
-    // TODO add dirty/touched/blur
-    return this.formSubmitted() || !this.control().valid();
+    return this.formSubmitted() || (!this.control().valid() && this.control().dirty());
   });
 
   readonly hasRequiredError = computed(() => this.control().errors()['required']);

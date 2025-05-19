@@ -5,16 +5,15 @@ import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
 import { SignalControl } from '../../contact-dialog/contact-dialog.component';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { SignalErrorMessagesComponent } from '../../signal-error-messages/signal-error-messages.component';
 
 @Component({
   selector: 'app-candidate-office-input',
   styleUrls: ['./candidate-office-input.component.scss'],
   templateUrl: './candidate-office-input.component.html',
-  imports: [FormsModule, Select, ErrorMessagesComponent, InputText],
+  imports: [FormsModule, Select, SignalErrorMessagesComponent, InputText],
 })
 export class CandidateOfficeInputComponent implements OnInit {
   readonly formSubmitted = input.required<boolean>();
@@ -61,9 +60,9 @@ export class CandidateOfficeInputComponent implements OnInit {
     return form.get(name) as SubscriptionFormControl;
   });
 
-  readonly office = model(new SignalControl<string>('candidate_office'));
-  readonly state = model(new SignalControl<string>('candidate_state'));
-  readonly district = model(new SignalControl<string>('candidate_district'));
+  readonly office = model(new SignalControl('candidate_office'));
+  readonly state = model(new SignalControl('candidate_state'));
+  readonly district = model(new SignalControl('candidate_district'));
 
   constructor() {
     effect(() => {

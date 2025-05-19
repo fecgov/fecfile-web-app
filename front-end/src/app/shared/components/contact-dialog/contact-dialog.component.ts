@@ -68,23 +68,34 @@ export class TransactionData {
   }
 }
 
-export class SignalControl<T> {
-  readonly value = signal<T | null>(null);
+export class SignalControl {
+  private readonly property: string;
+  readonly value = signal<string | null>(null);
   readonly disabled = signal(false);
   readonly errors = signal<ValidationErrors>({});
   readonly valid = computed(() => Object.keys(this.errors()).length === 0);
+  readonly dirty = signal(false);
 
   readonly schema = signal<JsonSchema>(contactIndividualSchema);
 
   constructor(property: string) {
-    effect(async () => {
-      let value = this.value();
-      if (value === '') value = null;
-
-      const errors = await validate(this.schema(), { [property]: value }, [property]);
-      this.errors.set(this.buildErrors(errors, value));
-    });
+    this.property = property;
   }
+
+  async validate() {
+    let value = this.value();
+    if (value === '') value = null;
+
+    const errors = await validate(this.schema(), { [this.property]: value }, [this.property]);
+    this.errors.set(this.buildErrors(errors, value));
+  }
+
+  reset(value?: string) {
+    this.errors.set({});
+    this.value.set(value ?? null);
+    this.dirty.set(false);
+  }
+
   private buildErrors<U>(errors: ValidationError[], value: U) {
     const result: ValidationErrors = {};
     if (errors.length) {
@@ -139,7 +150,7 @@ export class SignalControl<T> {
 }
 
 export class SignalForm {
-  readonly controls: { [key: string]: SignalControl<string> };
+  readonly controls: { [key: string]: SignalControl };
   readonly valid = computed(() => {
     for (const control in this.controls) {
       if (!this.controls[control].valid()) return false;
@@ -147,8 +158,19 @@ export class SignalForm {
     return true;
   });
 
-  constructor(controls: { [key: string]: SignalControl<string> }) {
+  readonly dirty = computed(() => {
+    for (const control in this.controls) {
+      if (this.controls[control].dirty()) return true;
+    }
+    return false;
+  });
+
+  constructor(controls: { [key: string]: SignalControl }) {
     this.controls = controls;
+  }
+
+  reset() {
+    for (const control in this.controls) this.controls[control].reset();
   }
 }
 
@@ -213,26 +235,26 @@ export class ContactDialogComponent {
   });
 
   readonly form = new SignalForm({
-    candidate_id: new SignalControl<string>('candidate_id'),
-    committee_id: new SignalControl<string>('committee_id'),
-    name: new SignalControl<string>('name'),
-    last_name: new SignalControl<string>('last_name'),
-    first_name: new SignalControl<string>('first_name'),
-    middle_name: new SignalControl<string>('middle_name'),
-    prefix: new SignalControl<string>('prefix'),
-    suffix: new SignalControl<string>('suffix'),
-    country: new SignalControl<string>('country'),
-    street_1: new SignalControl<string>('street_1'),
-    street_2: new SignalControl<string>('street_2'),
-    city: new SignalControl<string>('city'),
-    state: new SignalControl<string>('state'),
-    zip: new SignalControl<string>('zip'),
-    telephone: new SignalControl<string>('telephone'),
-    employer: new SignalControl<string>('employer'),
-    occupation: new SignalControl<string>('occupation'),
-    candidate_office: new SignalControl<string>('candidate_office'),
-    candidate_state: new SignalControl<string>('candidate_state'),
-    candidate_district: new SignalControl<string>('candidate_district'),
+    candidate_id: new SignalControl('candidate_id'),
+    committee_id: new SignalControl('committee_id'),
+    name: new SignalControl('name'),
+    last_name: new SignalControl('last_name'),
+    first_name: new SignalControl('first_name'),
+    middle_name: new SignalControl('middle_name'),
+    prefix: new SignalControl('prefix'),
+    suffix: new SignalControl('suffix'),
+    country: new SignalControl('country'),
+    street_1: new SignalControl('street_1'),
+    street_2: new SignalControl('street_2'),
+    city: new SignalControl('city'),
+    state: new SignalControl('state'),
+    zip: new SignalControl('zip'),
+    telephone: new SignalControl('telephone'),
+    employer: new SignalControl('employer'),
+    occupation: new SignalControl('occupation'),
+    candidate_office: new SignalControl('candidate_office'),
+    candidate_state: new SignalControl('candidate_state'),
+    candidate_district: new SignalControl('candidate_district'),
   });
 
   transactions: TransactionData[] = [];
@@ -391,9 +413,9 @@ export class ContactDialogComponent {
   private resetForm() {
     const defaultCandidateOffice = this.defaultCandidateOffice();
     Object.entries(this.form.controls).forEach(([key, control]) => {
-      if (key === 'country') control.value.set(this.countryOptions[0]['value']);
-      else if (key === 'candidate_office' && defaultCandidateOffice) control.value.set(defaultCandidateOffice);
-      else control.value.set(null);
+      if (key === 'country') control.reset(this.countryOptions[0]['value']);
+      else if (key === 'candidate_office' && defaultCandidateOffice) control.reset(defaultCandidateOffice);
+      else control.reset();
     });
 
     this.formSubmitted = false;
@@ -401,7 +423,7 @@ export class ContactDialogComponent {
 
   public confirmPropagation() {
     const changes = Object.entries(this.form)
-      .map(([field, control]: [string, SignalControl<string>]) => {
+      .map(([field, control]: [string, SignalControl]) => {
         const contactValue = this.contact()[field as keyof Contact];
         if (control.value() !== contactValue) {
           return [field, control.value()];
@@ -452,5 +474,10 @@ export class ContactDialogComponent {
 
   async openTransaction(transaction: TransactionData) {
     await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
+  }
+
+  validate(control: SignalControl) {
+    control.dirty.set(true);
+    control.validate();
   }
 }
