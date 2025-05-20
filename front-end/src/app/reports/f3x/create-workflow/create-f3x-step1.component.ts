@@ -226,7 +226,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         report = await this.form3XService.update(summary, this.formProperties, [HttpStatusCode.BadRequest]);
       } catch {
         this.coverageDatesDialogVisible = true;
-        throw new Error();
+        return;
       }
     } else {
       report = await this.form3XService.create(summary, this.formProperties);
