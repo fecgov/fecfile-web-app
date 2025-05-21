@@ -243,11 +243,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit, Af
       if (jump === 'continue') {
         this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       } else {
-        if (this.report) {
-          this.store.dispatch(singleClickEnableAction());
-        } else {
-          this.router.navigateByUrl('/reports');
-        }
+        this.router.navigateByUrl('/reports');
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',

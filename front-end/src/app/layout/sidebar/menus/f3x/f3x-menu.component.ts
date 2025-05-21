@@ -64,7 +64,7 @@ export class F3XMenuComponent extends AbstractMenuComponent {
     const editReportLabel = 'EDIT REPORT DETAILS';
     const editReportLabelStyleClass = '';
     return [
-      this.editReport(sidebarState, editReportIsVisible, editReportLabel, editReportLabelStyleClass),
+      ...editReportIsVisible ? [this.editReport(sidebarState, editReportIsVisible, editReportLabel, editReportLabelStyleClass)] : [],
       this.enterTransaction(sidebarState, isEditable, transactionItems),
       this.reviewTransactions(sidebarState, isEditable),
       reviewReport,
