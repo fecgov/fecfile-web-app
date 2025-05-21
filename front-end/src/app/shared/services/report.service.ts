@@ -73,8 +73,8 @@ export class ReportService implements TableListService<Report> {
 
   public async updateWithAllowedErrorCodes(
     report: Report,
-    fieldsToValidate: string[] = [],
     allowedErrorCodes: number[],
+    fieldsToValidate: string[] = [],
   ): Promise<Report> {
     const payload = this.preparePayload(report);
     const response = await this.apiService.put<Report>(

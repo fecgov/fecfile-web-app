@@ -102,7 +102,7 @@ describe('ReportService', () => {
   it('#updateWithAllowedErrorCodes() should PUT a record', async () => {
     const form3X: Form3X = Form3X.fromJSON({ id: 1 });
 
-    service.updateWithAllowedErrorCodes(form3X, [], [HttpStatusCode.BadRequest]).then((response) => {
+    service.updateWithAllowedErrorCodes(form3X, [HttpStatusCode.BadRequest], []).then((response) => {
       expect(response).toEqual(form3X);
     });
     const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/?fields_to_validate=`);
