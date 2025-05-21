@@ -76,7 +76,7 @@ export class ReportService implements TableListService<Report> {
     if (!response.body) {
       throw new Error();
     }
-    return getReportFromJSON(response);
+    return getReportFromJSON(response.body);
   }
 
   public delete(report: Report): Promise<null> {
