@@ -5,7 +5,6 @@ import { FluidModule } from 'primeng/fluid';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { BaseInputComponent } from '../base-input.component';
 import { TransactionTemplateMapType } from 'app/shared/models';
 
 @Component({
