@@ -174,7 +174,7 @@ describe('CreateF3XStep1Component', () => {
     expect(component.form.invalid).toBe(false);
     expect(f3xServiceUpdateSpy).toHaveBeenCalledTimes(1);
     expect(component.coverageDatesDialogVisible).toBeFalse();
-    expect(navigateSpy).toHaveBeenCalledTimes(0);
+    expect(navigateSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#save on update an existing f3x record with existing transactions should warn user', async () => {
