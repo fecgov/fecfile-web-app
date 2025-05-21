@@ -58,15 +58,7 @@ export class F3XMenuComponent extends AbstractMenuComponent {
         visible: isEditable,
       },
     ];
-    const editReportIsVisible =
-      this.reportStatusSignal() === ReportStatus.IN_PROGRESS ||
-      this.reportStatusSignal() === ReportStatus.SUBMIT_FAILURE;
-    const editReportLabel = 'EDIT REPORT DETAILS';
-    const editReportLabelStyleClass = '';
-    return [
-      ...(editReportIsVisible
-        ? [this.editReport(sidebarState, editReportIsVisible, editReportLabel, editReportLabelStyleClass)]
-        : []),
+    const menuItems = [
       this.enterTransaction(sidebarState, isEditable, transactionItems),
       this.reviewTransactions(sidebarState, isEditable),
       reviewReport,
@@ -76,5 +68,17 @@ export class F3XMenuComponent extends AbstractMenuComponent {
         items: this.submitReportArray(isEditable),
       },
     ];
+
+    // Add edit report item to menu if the report is in progress or submission failure
+    if (
+      this.reportStatusSignal() === ReportStatus.IN_PROGRESS ||
+      this.reportStatusSignal() === ReportStatus.SUBMIT_FAILURE
+    ) {
+      const editReportLabel = 'EDIT REPORT DETAILS';
+      const editReportLabelStyleClass = '';
+      const editReportItem = this.editReport(sidebarState, editReportLabel, editReportLabelStyleClass);
+      menuItems.unshift(editReportItem);
+    }
+    return menuItems;
   }
 }

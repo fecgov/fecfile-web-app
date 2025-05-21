@@ -52,7 +52,6 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
 
   editReport(
     sidebarState: SidebarState,
-    isVisible = true,
     editLabel = 'EDIT A REPORT',
     editLabelStyleClass = 'edit-report-menu-item',
   ): MenuItem {
@@ -61,7 +60,6 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
       styleClass: editLabelStyleClass,
       routerLink: [`/reports/${this.reportString}/edit/${this.activeReportSignal().id}`],
       expanded: sidebarState?.section === ReportSidebarSection.CREATE,
-      visible: isVisible,
     };
   }
 
