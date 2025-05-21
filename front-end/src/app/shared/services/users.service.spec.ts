@@ -42,7 +42,7 @@ describe('UsersService', () => {
     const testCurrentUser: UserLoginData = {
       first_name: 'testFirstName',
       last_name: 'testLastName',
-      email: 'testEmail@testhost.com',
+      email: 'testEmail@TestHostComponent.com',
     };
 
     service.getCurrentUser().then((response) => {

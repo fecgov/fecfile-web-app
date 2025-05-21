@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContactModalComponent } from './contact-modal.component';
+import { provideHttpClient } from '@angular/common/http';
+import { ConfirmationService } from 'primeng/api';
 
 describe('ContactModalComponent', () => {
   let component: ContactModalComponent;
@@ -8,9 +10,9 @@ describe('ContactModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContactModalComponent]
-    })
-    .compileComponents();
+      imports: [ContactModalComponent],
+      providers: [provideHttpClient(), ConfirmationService],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ContactModalComponent);
     component = fixture.componentInstance;

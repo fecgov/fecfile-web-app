@@ -7,6 +7,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-candidate-office-input',
@@ -40,17 +41,25 @@ export class CandidateOfficeInputComponent implements OnInit {
     return this.form().get(electionCodeField) as SubscriptionFormControl;
   });
 
+  constructor() {
+    effectOnceIf(
+      () => this.isScheduleE(),
+      () => {
+        const electionCodeControl = this.electionCodeControl();
+        if (this.isScheduleE() && electionCodeControl) {
+          electionCodeControl.addSubscription(() => this.updateCandidateFieldAvailability());
+          electionCodeControl.updateValueAndValidity();
+        }
+      },
+    );
+  }
+
   ngOnInit(): void {
     // Update the enabled/disabled state on candidate fields whenever the candidate office changes.
     this.officeControl().addSubscription(() => this.updateCandidateFieldAvailability());
     this.stateControl().addSubscription(() => this.updateCandidateDistrict());
     // For Schedule E transactions, update the enabled/disabled state on the
     // candidate fields whenever the election code changes value.
-    const electionCodeControl = this.electionCodeControl();
-    if (this.isScheduleE() && electionCodeControl) {
-      electionCodeControl.addSubscription(() => this.updateCandidateFieldAvailability());
-      electionCodeControl.updateValueAndValidity();
-    }
 
     this.officeControl().updateValueAndValidity();
     this.stateControl().updateValueAndValidity();

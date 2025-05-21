@@ -67,7 +67,7 @@ describe('ManageCommitteeComponent', () => {
       CommitteeMember.fromJSON({
         first_name: 'test_first_name',
         last_name: 'test_last_name',
-        email: 'test_email@testhost.com',
+        email: 'test_email@TestHostComponent.com',
         role: 'COMMITTEE_ADMINISTRATOR',
         is_active: true,
       }),
