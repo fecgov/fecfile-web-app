@@ -75,13 +75,13 @@
               name="report_code"
               [value]="reportCode"
               [class]="
-                usedReportCodes().includes(reportCode)
+                checkDisableReportCode(reportCode)
                   ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
                   : ''
               "
               formControlName="report_code"
             ></p-radioButton>
-            <label [for]="reportCode" class="ml-2" [class]="usedReportCodes().includes(reportCode) ? 'p-disabled' : ''">
+            <label [for]="reportCode" class="ml-2" [class]="checkDisableReportCode(reportCode) ? 'p-disabled' : ''">
               {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
             </label>
           </div>

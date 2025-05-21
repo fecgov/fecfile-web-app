@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -53,7 +53,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
     ButtonDirective,
   ],
 })
-export class CreateF3XStep1Component extends FormComponent implements OnInit {
+export class CreateF3XStep1Component extends FormComponent implements OnInit, AfterViewInit {
   private readonly form3XService = inject(Form3XService);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -86,26 +86,21 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     this.committeeAccountSignal().filing_frequency === 'M' ? 'M' : 'Q',
   );
 
-  reportId?: string;
+  report?: Report;
   coverageDatesDialogVisible = false;
 
   constructor() {
     super();
+
     this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
     this.form3XService.getF3xCoverageDates().then((coverageDates) => this.existingCoverageSignal.set(coverageDates));
-    effect(() => {
-      const report = this.activeReportSignal();
-      if (this.reportId && report) {
-        this.form.patchValue(report);
-      }
-    });
 
     this.addFilingFrequency();
     this.addReportTypeCategory();
 
     effect(() => {
       const existingCoverage = this.existingCoverageSignal();
-      if (!existingCoverage) return;
+      if (this.report || !existingCoverage) return;
 
       this.form?.patchValue({ report_type_category: this.reportTypeCategories[0] });
       this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
@@ -113,16 +108,27 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
       this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
     });
   }
+  ngAfterViewInit(): void {
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    if (reportId) {
+      this.report = this.activeReportSignal();
+      this.form.patchValue(this.report, { emitEvent: false });
+    }
+  }
 
   private addReportTypeCategory() {
-    this.form.addControl('report_type_category', new SubscriptionFormControl());
+    if (!this.form.get('report_type_category')) {
+      this.form.addControl('report_type_category', new SubscriptionFormControl());
+    }
     (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
       this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
     }, this.destroy$);
   }
 
   private addFilingFrequency() {
-    this.form.addControl('filing_frequency', new SubscriptionFormControl());
+    if (!this.form.get('filing_frequency')) {
+      this.form.addControl('filing_frequency', new SubscriptionFormControl());
+    }
     (this.form?.get('filing_frequency') as SubscriptionFormControl)?.addSubscription(() => {
       this.form.patchValue({
         report_type_category: this.reportTypeCategories[0],
@@ -136,7 +142,6 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reportId = this.activatedRoute.snapshot.params['reportId'];
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
@@ -197,7 +202,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   }
 
   public navigateToManageTransactions() {
-    this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list`);
+    this.router.navigateByUrl(`/reports/transactions/report/${this.report?.id}/list`);
   }
 
   public onHide() {
@@ -213,6 +218,8 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
 
     const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
+    summary.filing_frequency = this.form.get('filing_frequency')?.value;
+    summary.report_type_category = this.form.get('report_type_category')?.value;
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === ReportCodes.TER) {
@@ -220,8 +227,8 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
 
     let report: Report;
-    if (this.reportId) {
-      summary.id = this.reportId;
+    if (this.report?.id) {
+      summary.id = this.report?.id;
       try {
         report = await this.form3XService.update(summary, this.formProperties, [HttpStatusCode.BadRequest]);
       } catch {
@@ -236,7 +243,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
       if (jump === 'continue') {
         this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
       } else {
-        if (this.reportId) {
+        if (this.report) {
           this.store.dispatch(singleClickEnableAction());
         } else {
           this.router.navigateByUrl('/reports');
@@ -249,6 +256,13 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         });
       }
     }
+  }
+
+  public checkDisableReportCode(reportCode: ReportCodes) {
+    if (this.report?.report_code === reportCode) {
+      return false;
+    }
+    return this.usedReportCodes().includes(reportCode);
   }
 
   private getUsedReportCodes() {

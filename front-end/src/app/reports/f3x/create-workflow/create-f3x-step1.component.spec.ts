@@ -168,7 +168,7 @@ describe('CreateF3XStep1Component', () => {
     const f3xServiceUpdateSpy = spyOn(form3XService, 'update').and.returnValue(Promise.resolve(f3x));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.reportId = f3x.id;
+    component.report = f3x;
     component.form.patchValue({ ...f3x });
     await component.save();
     expect(component.form.invalid).toBe(false);
@@ -181,7 +181,7 @@ describe('CreateF3XStep1Component', () => {
     const f3xServiceUpdateSpy = spyOn(form3XService, 'update').and.rejectWith();
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.reportId = f3x.id;
+    component.report = f3x;
     component.form.patchValue({ ...f3x });
     await component.save();
     expect(component.form.invalid).toBe(false);
@@ -211,7 +211,7 @@ describe('CreateF3XStep1Component', () => {
 
   it('Manage Transaction button should go back to transactions list page', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.reportId = f3x.id;
+    component.report = f3x;
     component.navigateToManageTransactions();
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/${f3x.id}/list`);
   });
