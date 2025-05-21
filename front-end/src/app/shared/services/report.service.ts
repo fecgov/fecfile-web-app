@@ -63,7 +63,19 @@ export class ReportService implements TableListService<Report> {
     return getReportFromJSON(response);
   }
 
-  public async update(report: Report, fieldsToValidate: string[] = [], allowedErrorCodes?: number[]): Promise<Report> {
+  public async update(report: Report, fieldsToValidate: string[] = []): Promise<Report> {
+    const payload = this.preparePayload(report);
+    const response = await this.apiService.put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, {
+      fields_to_validate: fieldsToValidate.join(','),
+    });
+    return getReportFromJSON(response);
+  }
+
+  public async updateWithAllowedErrorCodes(
+    report: Report,
+    fieldsToValidate: string[] = [],
+    allowedErrorCodes?: number[],
+  ): Promise<Report> {
     const payload = this.preparePayload(report);
     const response = await this.apiService.put<Report>(
       `${this.apiEndpoint}/${report.id}/`,

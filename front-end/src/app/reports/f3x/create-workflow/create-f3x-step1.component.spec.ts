@@ -165,7 +165,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should update an existing f3x record', async () => {
-    const f3xServiceUpdateSpy = spyOn(form3XService, 'update').and.returnValue(Promise.resolve(f3x));
+    const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.returnValue(Promise.resolve(f3x));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.report = f3x;
@@ -178,7 +178,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save on update an existing f3x record with existing transactions should warn user', async () => {
-    const f3xServiceUpdateSpy = spyOn(form3XService, 'update').and.rejectWith();
+    const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.rejectWith();
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.report = f3x;
