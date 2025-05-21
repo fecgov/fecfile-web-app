@@ -1,12 +1,12 @@
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { environment } from '../../../environments/environment';
+import { Form3X } from '../models/form-3x.model';
+import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
-import { ListRestResponse } from '../models/rest-api.model';
-import { Form3X } from '../models/form-3x.model';
-import { environment } from '../../../environments/environment';
-import { provideHttpClient } from '@angular/common/http';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -98,4 +98,16 @@ describe('ReportService', () => {
     req.flush('unamended 1');
     httpTestingController.verify();
   }));
+
+  it('#updateWithAllowedErrorCodes() should PUT a record', async () => {
+    const form3X: Form3X = Form3X.fromJSON({ id: 1 });
+
+    service.updateWithAllowedErrorCodes(form3X, [], [HttpStatusCode.BadRequest]).then((response) => {
+      expect(response).toEqual(form3X);
+    });
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/?fields_to_validate=`);
+    expect(req.request.method).toEqual('PUT');
+    req.flush(form3X);
+    httpTestingController.verify();
+  });
 });
