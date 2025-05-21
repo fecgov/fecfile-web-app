@@ -44,7 +44,7 @@ import { ContactSearchComponent } from '../contact-search/contact-search.compone
   ],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {
-  private readonly fb = inject(FormBuilder);
+  readonly fb = inject(FormBuilder);
   private readonly contactService = inject(ContactService);
   readonly cmservice = inject(ContactManagementService);
   protected readonly confirmationService = inject(ConfirmationService);
@@ -167,7 +167,8 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
-    if (this.form.invalid) {
+
+    if (!this.form.valid) {
       return;
     }
 

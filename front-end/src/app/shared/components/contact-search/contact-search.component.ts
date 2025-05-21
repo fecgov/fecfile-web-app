@@ -114,7 +114,7 @@ export class ContactSearchComponent {
   }
 
   private async onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
-    if (!data.id) throw new Error('Invlaid Committee');
+    if (!data.id) throw new Error('Invalid Committee');
     const committee = await this.contactService.getCommitteeDetails(data.id);
 
     let phone;

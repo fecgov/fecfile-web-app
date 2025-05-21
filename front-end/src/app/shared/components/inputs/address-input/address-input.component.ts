@@ -26,31 +26,31 @@ export class AddressInputComponent {
   readonly readonly = input(false);
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   readonly templateMapKeyPrefix = input<'secondary' | 'signatory_1' | 'signatory_2' | 'candidate' | null>(null);
-  readonly keyPrefix = input<'subordinate_' | null>(null);
+  readonly keyPrefix = input<'subordinate' | null>(null);
 
   readonly streetOneFieldName = computed(() => {
     if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_street_1'];
-    if (this.keyPrefix()) return `${this.keyPrefix}street_1`;
+    if (this.keyPrefix()) return `${this.keyPrefix()}_street_1`;
     return this.templateMap()['street_1'];
   });
   readonly streetTwoFieldName = computed(() => {
     if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_street_2'];
-    if (this.keyPrefix()) return `${this.keyPrefix}street_2`;
+    if (this.keyPrefix()) return `${this.keyPrefix()}_street_2`;
     return this.templateMap()['street_2'];
   });
   readonly cityFieldName = computed(() => {
     if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_city'];
-    if (this.keyPrefix()) return `${this.keyPrefix}city`;
+    if (this.keyPrefix()) return `${this.keyPrefix()}_city`;
     return this.templateMap()['city'];
   });
   readonly stateFieldName = computed(() => {
     if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_state'];
-    if (this.keyPrefix()) return `${this.keyPrefix}state`;
+    if (this.keyPrefix()) return `${this.keyPrefix()}_state`;
     return this.templateMap()['state'];
   });
   readonly zipFieldName = computed(() => {
     if (this.templateMapKeyPrefix() === 'secondary') return this.templateMap()['secondary_zip'];
-    if (this.keyPrefix()) return `${this.keyPrefix}zip`;
+    if (this.keyPrefix()) return `${this.keyPrefix()}_zip`;
     return this.templateMap()['zip'];
   });
 }

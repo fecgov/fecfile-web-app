@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ReportContactLookupComponent } from './report-contact-lookup.component';
 import { Component, viewChild } from '@angular/core';
 import { ContactTypes } from 'app/shared/models';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
+import { ContactManagementService } from 'app/shared/services/contact-management.service';
+import { ReportContactLookupComponent } from './report-contact-lookup.component';
 
 @Component({
   imports: [ReportContactLookupComponent],
@@ -30,7 +30,7 @@ class TestHostComponent {
     },
     { updateOn: 'blur' },
   );
-  formSubmiteed = false;
+  formSubmitted = false;
 
   component = viewChild.required(ReportContactLookupComponent);
 }
@@ -39,20 +39,40 @@ describe('ReportContactLookupComponent', () => {
   let component: ReportContactLookupComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let host: TestHostComponent;
+  let contactManagementService: ContactManagementService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReportContactLookupComponent],
+      imports: [TestHostComponent],
       providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
-    component = host.component();
     fixture.detectChanges();
+    component = host.component();
+
+    contactManagementService = TestBed.inject(ContactManagementService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize and set contact type on manager', () => {
+    const manager = contactManagementService.get(host.key);
+    const setAsSingleSpy = spyOn(manager, 'setAsSingle');
+
+    component.ngOnInit();
+
+    expect(component.manager().contactType()).toBe(host.contactType);
+    expect(setAsSingleSpy).toHaveBeenCalledOnceWith(host.contactType);
+  });
+
+  it('should open dialog and set active key in service', () => {
+    component.openDialog();
+
+    expect(contactManagementService.activeKey()).toBe(host.key);
+    expect(contactManagementService.showDialog()).toBeTrue();
   });
 });
