@@ -39,7 +39,7 @@
         "luxon": "^3.5.0",
         "@types/lodash": "^4.17.14",
         "@types/luxon": "^3.4.2",
-        "ngrx-store-localstorage": "~19.0.0",
+        "ngrx-store-localstorage": "19.0.0",
         "ngx-cookie-service": "^19.1.2",
         "ngx-logger": "^5.0.12",
         "primeflex": "^4.0.0",
