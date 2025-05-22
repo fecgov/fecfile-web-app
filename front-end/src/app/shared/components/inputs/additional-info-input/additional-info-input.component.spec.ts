@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { TextareaModule } from 'primeng/textarea';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { TextareaModule } from 'primeng/textarea';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
+import { AdditionalInfoInputComponent } from './additional-info-input.component';
 
 describe('AdditionalInfoInputComponent', () => {
   let component: AdditionalInfoInputComponent;
@@ -54,9 +54,11 @@ describe('AdditionalInfoInputComponent', () => {
     expect(cpd.classes['readonly']).toBeTruthy();
   });
 
-  xit('should have a mutable cpd if not system generated', () => {
-    const cpd = fixture.debugElement.query(By.css('#purpose_description'));
+  it('should have a mutable cpd if not system generated', () => {
+    if (component.transaction?.transactionType)
+      component.transaction.transactionType.generatePurposeDescription = undefined;
     fixture.detectChanges();
+    const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeFalsy();
   });
 
