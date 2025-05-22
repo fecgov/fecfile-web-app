@@ -42,11 +42,11 @@ describe('AdditionalInfoInputComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should have a read-only cpd if system generated', () => {
+  it('should have a read-only cpd if system generated', () => {
     if (component.transaction?.transactionType)
       component.transaction.transactionType.generatePurposeDescription = () => 'description';
     fixture.detectChanges();
@@ -60,7 +60,7 @@ describe('AdditionalInfoInputComponent', () => {
     expect(cpd.classes['readonly']).toBeFalsy();
   });
 
-  xit('should trigger the purposeDescriptionPrefix callbacks', () => {
+  it('should trigger the purposeDescriptionPrefix callbacks', () => {
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'abc',
     });
@@ -76,7 +76,7 @@ describe('AdditionalInfoInputComponent', () => {
     );
   });
 
-  xit('should detect memo prefixes', () => {
+  it('should detect memo prefixes', () => {
     expect(component.form.get(testTemplateMap.text4000)?.value).toEqual('');
     if (component.transaction) {
       component.transaction.memo_text = MemoText.fromJSON({
