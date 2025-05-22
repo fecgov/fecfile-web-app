@@ -244,6 +244,13 @@ label.disabled {
   border-left: 5px solid white;
 }
 
+.p-panelmenu-header[data-p-highlight='true'] {
+  .p-panelmenu-header-link.p-panelmenu-item-link-active {
+    margin-bottom: 0;
+    border-left: 5px solid white;
+  }
+}
+
 .p-panelmenu .p-panelmenu-header.p-highlight > a {
   background-color: transparent;
   color: white;
