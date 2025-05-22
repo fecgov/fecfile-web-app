@@ -1,7 +1,13 @@
 <div [class.security-container]="showForm">
   @if (showForm) {
     <div>
-      <img id="fec-seal-and-title" alt="FECFile Seal and Title" src="/assets/img/seal-and-title-white.svg" />
+      <img
+        id="fec-seal-and-title"
+        alt="FECFile Seal and Title"
+        src="/assets/img/seal-and-title-white.svg"
+        height="64"
+        width="247"
+      />
 
       <a class="logout-button" (click)="loginService.logOut()">
         <span>Log Out</span>
