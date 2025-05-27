@@ -61,8 +61,6 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
     keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
-    mergeReducer,
-    restoreDates: false,
   })(reducer);
 }
 
@@ -132,20 +130,3 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
   ],
 }).catch((err) => console.log(err));
-
-function mergeReducer(state: AppState, rehydratedState: AppState, action: Action) {
-  if (!['@ngrx/store/init', '@ngrx/effects/init'].includes(action.type) || !rehydratedState) return state;
-  if (rehydratedState.committeeAccount) {
-    const committeeAccount = rehydratedState.committeeAccount;
-
-    if (committeeAccount.zip) {
-      if (typeof committeeAccount.zip !== 'string') {
-        committeeAccount.zip = String(committeeAccount.zip);
-      }
-    }
-
-    rehydratedState = { ...rehydratedState, committeeAccount };
-  }
-
-  return { ...state, ...rehydratedState };
-}

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -26,14 +26,20 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   reportId?: string;
 
+  constructor() {
+    super();
+
+    effect(() => {
+      this.setConstantFormValues(this.committeeAccountSignal());
+      if (this.reportId) {
+        this.form.patchValue(this.activeReportSignal());
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
     this.initForm();
-
-    this.setConstantFormValues(this.committeeAccountSignal());
-    if (this.reportId) {
-      this.form.patchValue(this.activeReportSignal());
-    }
   }
 
   initForm() {
