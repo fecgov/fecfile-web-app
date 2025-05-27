@@ -4,7 +4,7 @@ export class ProfileUserListPage {
   static goToPage() {
     const alias = PageUtils.getAlias('');
     cy.visit('/reports');
-    cy.get('#navbarProfileDropdownMenuLink').click();
+    cy.get('#navbarProfileDropdownMenuLink').click({ force: true });
     cy.get(alias).find('.p-popover').contains('Users').click();
     cy.location('pathname').should('include', '/members');
   }
