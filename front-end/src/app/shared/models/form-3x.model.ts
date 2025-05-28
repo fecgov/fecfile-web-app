@@ -15,6 +15,8 @@ export class Form3X extends Report {
   schema = f3xSchema;
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
+  filing_frequency: string | undefined;
+  report_type_category: string | undefined;
   override hasChangeOfAddress = true;
   change_of_address: boolean | undefined;
   election_code: string | undefined;

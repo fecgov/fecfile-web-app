@@ -37,6 +37,14 @@ export const F3X_ROUTES: Route[] = [
     runGuardsAndResolvers: 'always',
   },
   {
+    path: 'edit/:reportId',
+    title: 'Edit a report',
+    component: CreateF3XStep1Component,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.CREATE },
+    runGuardsAndResolvers: 'always',
+  },
+  {
     path: 'summary/:reportId',
     title: 'View summary page',
     component: ReportSummaryComponent,
