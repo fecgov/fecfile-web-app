@@ -6,7 +6,7 @@ export class ProfileAccountPage {
     cy.intercept('/profile').as('account');
     cy.visit('/reports');
 
-    cy.get('#navbarProfileDropdownMenuLink').click({ force: true });
+    cy.get('#navbarProfileDropdownMenuLink').click();
     cy.get(alias).find('.p-popover').contains('Account').click();
     cy.location('pathname').should('include', '/committee');
   }
