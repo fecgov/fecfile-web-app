@@ -6,6 +6,7 @@ import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../tran
 import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { shortenClause } from '../clause';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
   formFields = ORGANIZATION_FORM_FIELDS;
@@ -26,19 +27,14 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchA
   override generatePurposeDescription(transaction: SchATransaction): string {
     const base = 'Pres. Nominating Convention Account JF Memo: ';
     const committeeName = (transaction.parent_transaction as SchATransaction).contributor_organization_name;
-    let committeeClause = `${base}${committeeName}`;
+    const committeeClause = `${base}${committeeName}`;
     const hasChildren = transaction.children && transaction.children.length > 0;
     if (hasChildren) {
       const parenthetical = ' (See Partnership Attribution(s) below)';
-      committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
-      return committeeClause + parenthetical;
+      return shortenClause(committeeClause, parenthetical);
     }
-    const purposeDescription = committeeClause + ' (Partnership attributions do not meet itemization threshold)';
 
-    if (purposeDescription.length > 100) {
-      return purposeDescription.slice(0, 97) + '...';
-    }
-    return purposeDescription;
+    return shortenClause(committeeClause + ' (Partnership attributions do not meet itemization threshold)');
   }
 
   override purposeDescriptionLabelNotice =

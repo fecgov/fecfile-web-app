@@ -35,7 +35,7 @@ describe('CONDUIT_EARMARK_OUT', () => {
     transaction.parent_transaction = parentTransaction;
 
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Earmarked from Joe Schmoe (Individual)');
+    expect(descrip).toBe('Earmarked from Joe Schmoe');
   });
 
   it('#generatePurposeDescription() should not yield too long of a description', () => {
@@ -51,7 +51,7 @@ describe('CONDUIT_EARMARK_OUT', () => {
 
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Earmarked from Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesbac... (Individual)',
+      'Earmarked from Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesback Adilade Dou...',
     );
   });
 });

@@ -3,6 +3,7 @@ import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { COMMITTEE, COMMITTEE_NO_AGGREGATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
+import { conduitClause } from '../clause';
 
 export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
   formFields = COMMITTEE_NO_AGGREGATE_FORM_FIELDS;
@@ -14,20 +15,13 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     true: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
     false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
+
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
-    const conduit = earmarkMemo.payee_organization_name;
-    if (conduit) {
-      let conduitClause = `Earmarked for ${conduit}`;
-      const parenthetical = ' (Committee)';
-      if ((conduitClause + parenthetical).length > 100) {
-        conduitClause = conduitClause.slice(0, 97 - parenthetical.length) + '...';
-      }
-      return conduitClause + parenthetical;
-    }
-    return '';
+    return conduitClause(earmarkMemo.payee_organization_name, 'for');
   }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11C',
