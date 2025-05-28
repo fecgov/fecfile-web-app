@@ -3,6 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, flush, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideRouter, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CoverageDates, ListRestResponse } from 'app/shared/models';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -14,6 +15,7 @@ import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -24,6 +26,7 @@ import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-s
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
   let router: Router;
+  let store: Store;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let form3XService: Form3XService;
   let reportService: ReportService;
@@ -87,6 +90,7 @@ describe('CreateF3XStep1Component', () => {
     }).compileComponents();
 
     router = TestBed.inject(Router);
+    store = TestBed.inject(Store);
     form3XService = TestBed.inject(Form3XService);
     form3XService.getF3xCoverageDates = () => firstValueFrom(of([]));
     reportService = TestBed.inject(ReportService);
@@ -160,6 +164,34 @@ describe('CreateF3XStep1Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 
+  it('#save should update an existing f3x record', async () => {
+    const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.returnValue(
+      Promise.resolve(f3x),
+    );
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+
+    component.report = f3x;
+    component.form.patchValue({ ...f3x });
+    await component.save();
+    expect(component.form.invalid).toBe(false);
+    expect(f3xServiceUpdateSpy).toHaveBeenCalledTimes(1);
+    expect(component.coverageDatesDialogVisible).toBeFalse();
+    expect(navigateSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#save on update an existing f3x record with existing transactions should warn user', async () => {
+    const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.rejectWith();
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+
+    component.report = f3x;
+    component.form.patchValue({ ...f3x });
+    await component.save();
+    expect(component.form.invalid).toBe(false);
+    expect(f3xServiceUpdateSpy).toHaveBeenCalledTimes(1);
+    expect(component.coverageDatesDialogVisible).toBeTrue();
+    expect(navigateSpy).toHaveBeenCalledTimes(0);
+  });
+
   xit('#save should not save with invalid f3x record', () => {
     spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
     component.form.patchValue({ ...f3x });
@@ -179,7 +211,20 @@ describe('CreateF3XStep1Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('#existingCoverageValidator should return errors', () => {
+  it('Manage Transaction button should go back to transactions list page', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.report = f3x;
+    component.navigateToManageTransactions();
+    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/${f3x.id}/list`);
+  });
+
+  it('Existing transactions dialog hide', () => {
+    const dispatchSpy = spyOn(store, 'dispatch');
+    component.onHide();
+    expect(dispatchSpy).toHaveBeenCalledOnceWith(singleClickEnableAction());
+  });
+
+  xit('#existingCoverageValidator should return errors', () => {
     const foo = (
       existingCoverage: CoverageDates[],
       controlFromDate: Date,
