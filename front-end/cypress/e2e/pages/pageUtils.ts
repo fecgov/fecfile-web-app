@@ -171,7 +171,7 @@ export class PageUtils {
   static switchCommittee(committeeId: string) {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
     const alias = PageUtils.getAlias('');
-    cy.visit('/dashboard');
+    cy.visit('/reports');
     cy.get('#navbarProfileDropdownMenuLink').click();
     cy.get(alias).find('.p-popover').contains('Switch Committees').click();
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();

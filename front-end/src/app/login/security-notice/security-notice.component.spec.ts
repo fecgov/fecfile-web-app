@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { DashboardComponent } from 'app/dashboard/dashboard.component';
+import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 import { UsersService } from 'app/shared/services/users.service';
 import { testMockStore, testUserLoginData } from 'app/shared/utils/unit-test.utils';
 import { LoginService } from '../../shared/services/login.service';
@@ -24,8 +24,8 @@ describe('SecurityNoticeComponent', () => {
         provideHttpClientTesting(),
         provideRouter([
           {
-            path: 'dashboard',
-            component: DashboardComponent,
+            path: 'reports',
+            component: ReportListComponent,
           },
         ]),
         { provide: Window, useValue: window },

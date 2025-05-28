@@ -47,7 +47,7 @@ describe('Amendments', () => {
     ReportListPage.goToPage();
 
     cy.get(alias).find('app-table-actions-button').click();
-    cy.get(alias).contains('Amend').click();
+    PageUtils.clickKababItem(reportFormData.report_code, 'Amend');
 
     PageUtils.containedOnPage('Amendment 1');
   });

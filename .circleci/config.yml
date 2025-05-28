@@ -6,7 +6,7 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
   node: circleci/node@6.3.0
-  python: circleci/python@2.1.1
+  python: circleci/python@2.2.0
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -159,15 +159,15 @@ jobs:
           destination: cypress/results
   deploy-job:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/python:3.11-node
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: install python
-          command: |
-            sudo apt update
-            sudo apt install python3 python3-pip
+
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: ~/project/
+          pip-dependency-file: requirements.txt
 
       - run:
           name: Install cf cli
@@ -179,12 +179,13 @@ jobs:
       - run:
           name: run deploy script
           no_output_timeout: 15m
-          command: pip install -r requirements.txt && invoke deploy --login
+          command: |
+            export PATH=$HOME/bin:$PATH
+            invoke deploy --branch $CIRCLE_BRANCH --login
 
   dependency-check:
     docker:
-      - image: cimg/node:lts-browsers
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.11-node
 
     steps:
       - checkout
@@ -195,11 +196,6 @@ jobs:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
 
-      - run:
-          name: install python
-          command: |
-            sudo apt update
-            sudo apt install python3 python3-pip
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
