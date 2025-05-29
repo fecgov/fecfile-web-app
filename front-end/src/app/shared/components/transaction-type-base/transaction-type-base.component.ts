@@ -89,7 +89,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
-      throw new Error('Fecfile: Template map not found for transaction component');
+      throw new Error('FECfile+: Template map not found for transaction component');
     }
 
     this.transactionType = this.transaction.transactionType;
@@ -142,7 +142,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
     } else {
       this.store.dispatch(singleClickEnableAction());
-      throw new Error('Fecfile: No transactions submitted for single-entry transaction form.');
+      throw new Error('FECfile+: No transactions submitted for single-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -350,7 +350,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
    * The entity_type is handled as a special case because it does not exist in the templateMap.
    */
   initInheritedFieldsFromParent(): void {
-    if (!this.transaction) throw new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent');
+    if (!this.transaction) throw new Error('FECfile+: No transaction found in initIneheritedFieldsFromParent');
 
     // If creating a new transaction, set both form and contact_1 values from parent transaction
     if (!this.transaction.id) {

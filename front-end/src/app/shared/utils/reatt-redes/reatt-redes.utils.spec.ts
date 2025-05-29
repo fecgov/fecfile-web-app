@@ -174,7 +174,7 @@ describe('ReattRedesUtils', () => {
       payload.reatt_redes.transaction_type_identifier = undefined;
       expect(function () {
         ReattRedesUtils.getPayloads(payload, true);
-      }).toThrow(Error('Fecfile online: originating transaction type not found.'));
+      }).toThrow(Error('FECfile+ online: originating transaction type not found.'));
     });
 
     it('should clone ', () => {

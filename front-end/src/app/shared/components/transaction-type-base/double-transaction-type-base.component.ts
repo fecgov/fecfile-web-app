@@ -54,14 +54,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (this.transaction) {
       this.childTransaction = this.getChildTransaction(this.transaction, 0);
     } else {
-      throw new Error('Fecfile: Transaction not found for double-entry transaction form');
+      throw new Error('FECfile+: Transaction not found for double-entry transaction form');
     }
     if (!this.childTransaction) {
-      throw new Error('Fecfile: Child transaction not found for double-entry transaction form');
+      throw new Error('FECfile+: Child transaction not found for double-entry transaction form');
     }
     this.childTransactionType = this.childTransaction?.transactionType;
     if (!this.childTransactionType?.templateMap) {
-      throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
+      throw new Error('FECfile+: Template map not found for double transaction double-entry transaction form');
     }
     this.childTemplateMap = this.childTransactionType.templateMap;
     this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
@@ -127,7 +127,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
       this.store.dispatch(singleClickEnableAction());
-      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+      throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -201,7 +201,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (this.childTransaction) {
       this.updateInheritedFields(this.childForm, this.childTransaction);
     } else {
-      throw new Error('Fecfile: Missing child transaction.');
+      throw new Error('FECfile+: Missing child transaction.');
     }
   }
 
@@ -221,7 +221,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         }
         childFieldControl?.disable();
       } else {
-        throw new Error('Fecfile: Transaction missing transactionType.');
+        throw new Error('FECfile+: Transaction missing transactionType.');
       }
     });
   }

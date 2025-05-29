@@ -48,7 +48,7 @@ export class TransactionChildFormUtils {
           if (component.transaction) {
             updatePurposeDescription(component.form, component.transaction);
           } else {
-            throw new Error('Fecfile: Parent transaction not found for component');
+            throw new Error('FECfile+: Parent transaction not found for component');
           }
         }, component.destroy$);
       }
@@ -81,7 +81,7 @@ export class TransactionChildFormUtils {
         );
         childForm.get(childTransaction.transactionType.templateMap[inherittedField])?.disable();
       } else {
-        throw new Error('Fecfile: Template map not found for transaction component');
+        throw new Error('FECfile+: Template map not found for transaction component');
       }
     });
   }

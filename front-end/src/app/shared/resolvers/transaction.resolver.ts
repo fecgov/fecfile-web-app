@@ -132,7 +132,7 @@ export class TransactionResolver {
       reportId,
     );
     if (!reattributed.transaction_type_identifier) {
-      throw Error('Fecfile online: originating reattribution transaction type not found.');
+      throw Error('FECfile+ online: originating reattribution transaction type not found.');
     }
     let to = TransactionTypeUtils.factory(
       reattributed.transaction_type_identifier,
@@ -153,7 +153,7 @@ export class TransactionResolver {
       reportId,
     );
     if (!redesignated.transaction_type_identifier) {
-      throw Error('Fecfile online: originating redesignation transaction type not found.');
+      throw Error('FECfile+ online: originating redesignation transaction type not found.');
     }
     let to = TransactionTypeUtils.factory(
       redesignated.transaction_type_identifier,

@@ -81,7 +81,7 @@ function loginDotGovLogin() {
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
     .then(($email) => {
       if ($email.length) {
-        cy.contains('Welcome to FECfile').should('exist').click(); // Ensures that the modal is in focus
+        cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
         cy.wrap($email).should('have.value', '');
         cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
         cy.wrap($email).should('have.value', 'admin@admin.com');
@@ -91,7 +91,7 @@ function loginDotGovLogin() {
         cy.get(alias).find('.p-toast-close-button').click();
       }
     });
-  cy.contains('Welcome to FECfile').should('not.exist');
+  cy.contains('Welcome to FECfile+').should('not.exist');
 }
 
 function retrieveAuthToken() {

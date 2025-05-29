@@ -81,7 +81,7 @@ export class TransactionInputComponent implements OnInit {
       this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
-      throw new Error('FECfile: No transaction passed to TransactionInputComponent');
+      throw new Error('FECfile+: No transaction passed to TransactionInputComponent');
     }
 
     // If there are mandatory values for any form fields, populate the form field and make it read-only
