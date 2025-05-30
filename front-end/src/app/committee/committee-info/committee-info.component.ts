@@ -4,7 +4,6 @@ import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/lab
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { environment } from 'environments/environment';
-import { Select } from 'primeng/select';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
 import { ButtonModule } from 'primeng/button';
 
@@ -12,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
   selector: 'app-committee-info',
   templateUrl: './committee-info.component.html',
   styleUrls: ['./committee-info.component.scss'],
-  imports: [ReactiveFormsModule, Select, FecInternationalPhoneInputComponent, ButtonModule],
+  imports: [ReactiveFormsModule, FecInternationalPhoneInputComponent, ButtonModule],
 })
 export class CommitteeInfoComponent extends FormComponent implements OnInit, AfterViewInit {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

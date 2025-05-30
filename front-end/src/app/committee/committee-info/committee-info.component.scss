@@ -43,3 +43,11 @@ input {
     color: black;
   }
 }
+
+select {
+  height: 42px;
+  min-height: 42px;
+  max-height: 42px;
+  font-family: var(--karla-bold);
+  font-size: 14px;
+}

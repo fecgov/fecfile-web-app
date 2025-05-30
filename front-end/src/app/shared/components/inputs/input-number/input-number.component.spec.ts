@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InputNumberComponent } from './input-number.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ElementRef } from '@angular/core';
+import { ElementRef, signal } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
@@ -33,6 +33,8 @@ describe('InputNumberComponent', () => {
 
     fixture = TestBed.createComponent(InputNumberComponent);
     component = fixture.componentInstance;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component.inputId as any) = signal('testInput');
     fixture.detectChanges();
   });
 

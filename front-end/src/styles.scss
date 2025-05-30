@@ -519,6 +519,7 @@ table {
 }
 
 select {
+  max-height: 47px;
   min-height: 47px;
   height: 47px;
   font-family: var(--karla);
@@ -533,4 +534,11 @@ select {
   background-repeat: no-repeat;
   background-position: right 0.75em center;
   background-size: 1em;
+}
+
+select:disabled {
+  opacity: 1;
+  background: #f1f1f1;
+  border: 2px solid gray;
+  color: black;
 }

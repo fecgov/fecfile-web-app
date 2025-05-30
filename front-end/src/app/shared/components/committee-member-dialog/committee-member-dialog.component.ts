@@ -17,7 +17,6 @@ import { FormComponent } from '../app-destroyer.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { Select } from 'primeng/select';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Roles, CommitteeMember } from 'app/shared/models';
@@ -26,7 +25,7 @@ import { Roles, CommitteeMember } from 'app/shared/models';
   selector: 'app-committee-member-dialog',
   templateUrl: './committee-member-dialog.component.html',
   styleUrls: ['./committee-member-dialog.component.scss'],
-  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select, ButtonDirective, Ripple],
+  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, ButtonDirective, Ripple],
 })
 export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges, AfterViewInit {
   protected readonly confirmationService = inject(ConfirmationService);
