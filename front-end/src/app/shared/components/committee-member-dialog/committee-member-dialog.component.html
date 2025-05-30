@@ -1,6 +1,6 @@
 <dialog #dialog tabindex="-1" aria-labelledby="dialog-title">
   <div class="dialog-header">
-    <h1 class="dialog-title" id="dialog-title">{{ member ? 'Edit' : 'Add' }} User</h1>
+    <h1 class="dialog-title" id="dialog-title">{{ member ? 'Edit' : 'Add' }} user</h1>
     <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
   </div>
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
@@ -9,8 +9,8 @@
         @if (member) {
           <div class="col-12">
             <div class="field">
-              <label id="role-label" for="role">CURRENT ROLE</label>
-              <input id="role" [disabled]="true" [value]="role" />
+              <label id="current-role-label" for="current-role">CURRENT ROLE</label>
+              <input id="current-role" [disabled]="true" [value]="role" />
             </div>
           </div>
         } @else {
@@ -25,13 +25,11 @@
         <div class="col-12">
           <div class="field">
             <label id="role-label" for="role">ROLE</label>
-            <p-select
-              inputId="role"
-              formControlName="role"
-              [options]="roleOptions"
-              [autoDisplayFirst]="true"
-              [autofocus]="!!member"
-            ></p-select>
+            <select id="role" formControlName="role">
+              @for (option of roleOptions; track option) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
             <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
