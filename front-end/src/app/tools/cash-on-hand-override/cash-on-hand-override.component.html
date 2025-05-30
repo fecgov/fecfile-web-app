@@ -22,13 +22,12 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label for="year">UPDATING CASH ON HAND JANUARY, 1</label>
-            <p-select
-              [style]="{ width: '100%' }"
-              inputId="year"
-              formControlName="year"
-              [options]="yearOptions"
-            ></p-select>
+            <label for="year">UPDATING CASH ON HAND JANUARY 1</label>
+            <select id="year" formControlName="year">
+              @for (option of yearOptions; track option) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
           </div>
         </div>
       </div>
