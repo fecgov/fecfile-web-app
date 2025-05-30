@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: 'Run Prettier with project configuration'
+          name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -157,7 +157,7 @@ jobs:
           destination: cypress/results
   deploy-job:
     docker:
-      - image: cimg/python:3.11-node
+      - image: cimg/python:3.12-node
     resource_class: large
     steps:
       - checkout
@@ -183,7 +183,7 @@ jobs:
 
   dependency-check:
     docker:
-      - image: cimg/python:3.11-node
+      - image: cimg/python:3.12-node
 
     steps:
       - checkout
