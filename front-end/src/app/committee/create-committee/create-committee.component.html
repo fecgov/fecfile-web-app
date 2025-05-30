@@ -3,7 +3,7 @@
     <h1>Create an account</h1>
     <hr type="solid" />
 
-    <img src="assets/img/Create-an-account.png" draggable="false" alt="Person sending email image" />
+    <img src="assets/img/Create-an-account.png" draggable="false" alt="People pointing to presentation" />
   </div>
   <div class="col-6 right-side">
     <div class="go-back">
@@ -12,11 +12,11 @@
     <div class="right-side-box">
       <h2 class="m-0">Find your committee</h2>
       <div class="search-label">
-        <h5 class="font-karla-bold mb-0 mr-1">COMMITTEE ID</h5>
+        <label for="search-input" class="font-karla-bold mb-0 mr-1">COMMITTEE ID</label>
         <i class="pi pi-question" (click)="showExplanation()"></i>
       </div>
       <p-inputGroup class="search-group">
-        <input type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
+        <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
         <p-button pButton class="search-button" (click)="search(searchBoxFormControl.value)">
           <ng-template pTemplate="iconTemplate">
             <div>
