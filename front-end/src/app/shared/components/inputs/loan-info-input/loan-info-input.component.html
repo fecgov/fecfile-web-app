@@ -1,52 +1,46 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-4">
-      <div class="field">
-        <label for="amount">ORIGINAL AMOUNT</label>
-        <app-input-number
-          inputId="amount"
-          [formControlName]="templateMap['amount']"
-          [inputStyleClass]="readonly ? 'readonly' : ''"
-          [readonly]="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        loan="ORIGINAL AMOUNT"
+        inputId="amount"
+        [formControlName]="templateMap['amount']"
+        [inputStyleClass]="readonly ? 'readonly' : ''"
+        [readonly]="readonly"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['amount']"
+        [formSubmitted]="formSubmitted"
+      ></app-error-messages>
     </div>
     <div class="col-4">
-      <div class="field">
-        <label for="payment_to_date">PAYMENT TO DATE</label>
-        <app-input-number
-          inputId="payment_to_date"
-          [formControlName]="templateMap['payment_to_date']"
-          inputStyleClass="readonly"
-          [readonly]="true"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['payment_to_date']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        loan="PAYMENT TO DATE"
+        inputId="payment_to_date"
+        [formControlName]="templateMap['payment_to_date']"
+        inputStyleClass="readonly"
+        [readonly]="true"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['payment_to_date']"
+        [formSubmitted]="formSubmitted"
+      ></app-error-messages>
     </div>
     <div class="col-4">
-      <div class="field">
-        <label for="balance">BALANCE OUTSTANDING</label>
-        <app-input-number
-          inputId="balance"
-          [formControlName]="templateMap['balance']"
-          inputStyleClass="readonly"
-          [readonly]="true"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['balance']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        loan="BALANCE OUTSTANDING"
+        inputId="balance"
+        [formControlName]="templateMap['balance']"
+        inputStyleClass="readonly"
+        [readonly]="true"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['balance']"
+        [formSubmitted]="formSubmitted"
+      ></app-error-messages>
     </div>
   </div>
   <div class="grid">

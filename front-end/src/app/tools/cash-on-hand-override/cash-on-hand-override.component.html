@@ -33,21 +33,22 @@
       </div>
       <div class="grid">
         <div class="col-6">
-          <div class="field">
-            <label for="currentAmount">CURRENT LINE 6A, COLUMN B AMOUNT</label>
-            <app-input-number
-              inputId="currentAmount"
-              formControlName="currentAmount"
-              [readonly]="true"
-              inputStyleClass="readonly"
-            ></app-input-number>
-          </div>
+          <app-input-number
+            inputId="currentAmount"
+            formControlName="currentAmount"
+            [readonly]="true"
+            inputStyleClass="readonly"
+            ariaLabel="Current Amount"
+            label="CURRENT LINE 6A, COLUMN B AMOUNT"
+          ></app-input-number>
         </div>
         <div class="col-6 pl-3">
-          <div class="field">
-            <label for="newAmount">NEW AMOUNT</label>
-            <app-input-number inputId="newAmount" formControlName="newAmount"></app-input-number>
-          </div>
+          <app-input-number
+            label="NEW AMOUNT"
+            inputId="newAmount"
+            formControlName="newAmount"
+            ariaLabel="New Amount"
+          ></app-input-number>
         </div>
       </div>
       <div class="grid justify-content-center">

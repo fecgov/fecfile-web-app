@@ -1,15 +1,16 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-8">
-      <div class="field">
-        <label for="amount">ORIGINAL AMOUNT</label>
-        <app-input-number inputId="amount" [formControlName]="templateMap['amount']"></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        label="ORIGINAL AMOUNT"
+        inputId="amount"
+        [formControlName]="templateMap['amount']"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['amount']"
+        [formSubmitted]="formSubmitted"
+      ></app-error-messages>
     </div>
   </div>
   <hr type="solid" />
@@ -51,29 +52,28 @@
   @if (showLineOfCredit) {
     <div class="grid">
       <div class="col-4">
-        <div class="field">
-          <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
-          <app-input-number
-            inputId="credit_amount_this_draw"
-            formControlName="credit_amount_this_draw"
-          ></app-input-number>
-          <app-error-messages
-            [form]="form"
-            fieldName="credit_amount_this_draw"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-input-number
+          label="CREDIT AMOUNT THIS DRAW (OPTIONAL)"
+          inputId="credit_amount_this_draw"
+          formControlName="credit_amount_this_draw"
+        ></app-input-number>
+        <app-error-messages
+          [form]="form"
+          fieldName="credit_amount_this_draw"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
       <div class="col-4">
-        <div class="field">
-          <label for="balance">TOTAL BALANCE</label>
-          <app-input-number inputId="balance" [formControlName]="templateMap['balance']"></app-input-number>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['balance']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-input-number
+          label="TOTAL BALANCE"
+          inputId="balance"
+          [formControlName]="templateMap['balance']"
+        ></app-input-number>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['balance']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
     </div>
   }
@@ -131,18 +131,16 @@
     </div>
     <div class="grid">
       <div class="col-4">
-        <div class="field">
-          <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
-          <app-input-number
-            inputId="collateral_value_amount"
-            formControlName="collateral_value_amount"
-          ></app-input-number>
-          <app-error-messages
-            [form]="form"
-            fieldName="collateral_value_amount"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-input-number
+          label="COLLATERAL AMOUNT"
+          inputId="collateral_value_amount"
+          formControlName="collateral_value_amount"
+        ></app-input-number>
+        <app-error-messages
+          [form]="form"
+          fieldName="collateral_value_amount"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
     </div>
     <app-yes-no-radio-input
@@ -187,15 +185,16 @@
     </div>
     <div class="grid">
       <div class="col-5">
-        <div class="field">
-          <label for="estimated_value">ESTIMATED VALUE</label>
-          <app-input-number inputId="estimated_value" formControlName="estimated_value"></app-input-number>
-          <app-error-messages
-            [form]="form"
-            fieldName="estimated_value"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
+        <app-input-number
+          loan="ESTIMATED VALUE"
+          inputId="estimated_value"
+          formControlName="estimated_value"
+        ></app-input-number>
+        <app-error-messages
+          [form]="form"
+          fieldName="estimated_value"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
       </div>
       <div class="col-5">
         <app-calendar

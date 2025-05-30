@@ -70,64 +70,58 @@
   }
   <div class="grid">
     <div class="col-6">
-      <div class="field">
-        <label for="amount">{{ transaction?.transactionType?.amountLabel }}</label>
-        <app-input-number
-          #amountInput
-          inputId="amount"
-          [formControlName]="templateMap['amount']"
-          [readonly]="contributionAmountReadOnly"
-          inputStyleClass="{{ contributionAmountInputStyleClass }}"
-          (inputEvent)="onInputAmount()"
-        ></app-input-number>
+      <app-input-number
+        #amountInput
+        [label]="transaction?.transactionType?.amountLabel"
+        inputId="amount"
+        [formControlName]="templateMap['amount']"
+        [readonly]="contributionAmountReadOnly"
+        inputStyleClass="{{ contributionAmountInputStyleClass }}"
+        (inputEvent)="onInputAmount()"
+      ></app-input-number>
 
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The amount can be 12 digits max"
-        ></app-error-messages>
-      </div>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['amount']"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="This field must be a number"
+        maxLengthErrorMessage="The amount can be 12 digits max"
+      ></app-error-messages>
     </div>
     @if (showAggregate) {
       <div class="col-6">
-        <div class="field">
-          <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
-          <app-input-number
-            inputId="aggregate"
-            [formControlName]="templateMap['aggregate']"
-            [readonly]="true"
-            inputStyleClass="readonly"
-          ></app-input-number>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['aggregate']"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must be a number"
-            maxLengthErrorMessage="The aggregate can be 12 digits max"
-          ></app-error-messages>
-        </div>
+        <app-input-number
+          [label]="transaction?.transactionType?.aggregateLabel"
+          inputId="aggregate"
+          [formControlName]="templateMap['aggregate']"
+          [readonly]="true"
+          inputStyleClass="readonly"
+        ></app-input-number>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['aggregate']"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The aggregate can be 12 digits max"
+        ></app-error-messages>
       </div>
     }
     @if (showCalendarYTD) {
       <div class="col-6">
-        <div class="field">
-          <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
-          <app-input-number
-            inputId="calendar_ytd"
-            [formControlName]="templateMap['calendar_ytd']"
-            [readonly]="true"
-            inputStyleClass="readonly"
-          ></app-input-number>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['calendar_ytd']"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must be a number"
-            maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
-          ></app-error-messages>
-        </div>
+        <app-input-number
+          [label]="transaction?.transactionType?.calendarYTDLabel"
+          inputId="calendar_ytd"
+          [formControlName]="templateMap['calendar_ytd']"
+          [readonly]="true"
+          inputStyleClass="readonly"
+        ></app-input-number>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['calendar_ytd']"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
+        ></app-error-messages>
       </div>
     }
   </div>

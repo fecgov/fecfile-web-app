@@ -1,73 +1,68 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
-        <label for="balance">BEGINNING BALANCE</label>
-        <app-input-number
-          inputId="balance"
-          [formControlName]="templateMap['balance']"
-          [readonly]="true"
-          inputStyleClass="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['balance']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The beginning balance can be 12 digits max"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        label="BEGINNING BALANCE"
+        inputId="balance"
+        [formControlName]="templateMap['balance']"
+        [readonly]="true"
+        inputStyleClass="readonly"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['balance']"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="This field must be a number"
+        maxLengthErrorMessage="The beginning balance can be 12 digits max"
+      ></app-error-messages>
     </div>
     <div class="col-6">
-      <div class="field">
-        <label for="amount">INCURRED AMOUNT</label>
-        <app-input-number inputId="amount" [formControlName]="templateMap['amount']"></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The incurred amount can be 12 digits max"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        label="INCURRED AMOUNT"
+        inputId="amount"
+        [formControlName]="templateMap['amount']"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['amount']"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="This field must be a number"
+        maxLengthErrorMessage="The incurred amount can be 12 digits max"
+      ></app-error-messages>
     </div>
   </div>
   <div class="grid">
     <div class="col-6">
-      <div class="field">
-        <label for="payment_amount">PAYMENT AMOUNT</label>
-        <app-input-number
-          inputId="payment_amount"
-          formControlName="payment_amount"
-          [readonly]="true"
-          inputStyleClass="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          fieldName="payment_amount"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The payment amount can be 12 digits max"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        label="PAYMENT AMOUNT"
+        inputId="payment_amount"
+        formControlName="payment_amount"
+        [readonly]="true"
+        inputStyleClass="readonly"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        fieldName="payment_amount"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="This field must be a number"
+        maxLengthErrorMessage="The payment amount can be 12 digits max"
+      ></app-error-messages>
     </div>
     <div class="col-6">
-      <div class="field">
-        <label for="balance_at_close">BALANCE AT CLOSE</label>
-        <app-input-number
-          inputId="balance_at_close"
-          formControlName="balance_at_close"
-          [readonly]="true"
-          inputStyleClass="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          fieldName="balance_at_close"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The balance at close can be 12 digits max"
-        ></app-error-messages>
-      </div>
+      <app-input-number
+        label="BALANCE AT CLOSE"
+        inputId="balance_at_close"
+        formControlName="balance_at_close"
+        [readonly]="true"
+        inputStyleClass="readonly"
+      ></app-input-number>
+      <app-error-messages
+        [form]="form"
+        fieldName="balance_at_close"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="This field must be a number"
+        maxLengthErrorMessage="The balance at close can be 12 digits max"
+      ></app-error-messages>
     </div>
   </div>
 </div>

@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectorRef,
@@ -8,6 +7,7 @@ import {
   forwardRef,
   inject,
   Injector,
+  input,
   Input,
   numberAttribute,
   OnInit,
@@ -39,10 +39,11 @@ type textNumber = string | number | null;
   imports: [InputText, AutoFocusModule],
 })
 export class InputNumberComponent implements OnInit, ControlValueAccessor {
-  private readonly document: Document = inject(DOCUMENT);
   public readonly el = inject(ElementRef);
   public readonly cd = inject(ChangeDetectorRef);
   private readonly injector = inject(Injector);
+
+  readonly label = input<string>();
 
   readonly locale = 'en-US';
   readonly options: Intl.NumberFormatOptions = {
@@ -57,7 +58,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
    * Identifier of the focus input to match a label defined for the component.
    * @group Props
    */
-  @Input() inputId?: string;
+  readonly inputId = input.required<string>();
   /**
    * Style class of the component.
    * @group Props
@@ -158,10 +159,10 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
    * When present, it specifies that the element should be disabled.
    * @group Props
    */
-  @Input() get disabled(): boolean | undefined {
+  @Input() get disabled(): boolean {
     return this._disabled;
   }
-  set disabled(disabled: boolean | undefined) {
+  set disabled(disabled: boolean) {
     if (disabled) this.focused = false;
 
     this._disabled = disabled;
@@ -231,7 +232,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _index: any = (d: string) => this.index.get(d);
 
-  _disabled: boolean | undefined;
+  _disabled: boolean = false;
 
   private ngControl: NgControl | null = null;
 
