@@ -462,7 +462,7 @@ describe('TransactionResolver', () => {
         });
       });
       await expectAsync(resolver.resolve(route as ActivatedRouteSnapshot)).toBeRejectedWithError(
-        'FECfile+ online: originating reattribution transaction type not found.',
+        'FECfile+: originating reattribution transaction type not found.',
       );
     });
   });

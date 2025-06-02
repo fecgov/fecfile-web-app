@@ -104,7 +104,7 @@ export class ReattRedesUtils {
 
   private static clone(payload: SchATransaction | SchBTransaction): SchATransaction | SchBTransaction {
     if (!payload.reatt_redes?.transaction_type_identifier) {
-      throw Error('FECfile+ online: originating transaction type not found.');
+      throw Error('FECfile+: originating transaction type not found.');
     }
 
     const clone =
