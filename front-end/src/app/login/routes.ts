@@ -14,7 +14,7 @@ export const LOGIN_ROUTES: Route[] = [
   {
     path: '',
     component: LoginComponent,
-    title: 'FECFile Login',
+    title: 'FECfile+ Login',
     data: {
       showUpperFooter: false,
       showCommitteeBanner: false,

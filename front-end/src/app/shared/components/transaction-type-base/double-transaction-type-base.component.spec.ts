@@ -148,7 +148,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         component.ngOnInit();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        expect(err.message).toBe('Fecfile: Template map not found for transaction component');
+        expect(err.message).toBe('FECfile+: Template map not found for transaction component');
       }
     });
 
@@ -158,7 +158,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         component.ngOnInit();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        expect(err.message).toBe('Fecfile: Child transaction not found for double-entry transaction form');
+        expect(err.message).toBe('FECfile+: Child transaction not found for double-entry transaction form');
       }
     });
 
@@ -173,7 +173,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe(
-          'Fecfile: Template map not found for double transaction double-entry transaction form',
+          'FECfile+: Template map not found for double transaction double-entry transaction form',
         );
       }
     });
@@ -307,7 +307,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.transaction = undefined;
       expect(function () {
         component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
-      }).toThrow(new Error('Fecfile: No transactions submitted for double-entry transaction form.'));
+      }).toThrow(new Error('FECfile+: No transactions submitted for double-entry transaction form.'));
     });
   });
 
@@ -340,7 +340,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.childTransaction = undefined;
       expect(function () {
         component.childUpdateFormWithPrimaryContact({ value: contact });
-      }).toThrow(new Error('Fecfile: Missing child transaction.'));
+      }).toThrow(new Error('FECfile+: Missing child transaction.'));
     });
 
     it('should call updateInheritedFields', () => {

@@ -404,7 +404,7 @@ export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {
     const transactionType = getTransactionTypeClass(transactionTypeIdentifier);
     if (!transactionType) {
-      throw new Error(`Fecfile: Class transaction type of '${transactionTypeIdentifier}' is not found`);
+      throw new Error(`FECfile+: Class transaction type of '${transactionTypeIdentifier}' is not found`);
     }
     return new transactionType();
   }
