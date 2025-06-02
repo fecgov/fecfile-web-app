@@ -1,13 +1,13 @@
-<div id="page-container" [class]="[layoutControls.backgroundStyle]">
+<div id="page-container" [class]="[layoutControls().backgroundStyle]">
   <app-banner #bannerRef></app-banner>
-  @if (layoutControls.showHeader) {
-    <div class="header-container" [style]="{ paddingBottom: layoutControls.showSidebar ? '0' : '64px' }">
-      <app-header [headerStyle]="layoutControls.headerStyle"></app-header>
+  @if (layoutControls().showHeader) {
+    <div class="header-container" [style]="{ paddingBottom: layoutControls().showSidebar ? '0' : '64px' }">
+      <app-header [headerStyle]="layoutControls().headerStyle"></app-header>
     </div>
   }
 
   <!--  Begin Sidebar section -->
-  @if (layoutControls.showSidebar) {
+  @if (layoutControls().showSidebar) {
     <div class="inline-flex w-100">
       <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
         <app-drawer></app-drawer>
@@ -15,7 +15,7 @@
       <div class="sidebar-content-container">
         <div class="main-content">
           <div class="grid">
-            @if (layoutControls.showCommitteeBanner) {
+            @if (layoutControls().showCommitteeBanner) {
               <app-committee-banner></app-committee-banner>
             }
           </div>
@@ -34,13 +34,13 @@
   <!--  End Sidebar section -->
 
   <!-- Begin No Sidebar section -->
-  @if (!layoutControls.showSidebar) {
+  @else {
     <div id="content-offset" #contentOffset>
       <div class="main-content">
-        @if (layoutControls.showCommitteeBanner) {
+        @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner></app-committee-banner>
         }
-        @if (layoutControls.backgroundStyle === BackgroundStyles.DEFAULT) {
+        @if (layoutControls().backgroundStyle === BackgroundStyles.DEFAULT) {
           <div class="container">
             <router-outlet></router-outlet>
           </div>
@@ -49,17 +49,18 @@
         }
       </div>
     </div>
-    <app-footer #footerRef [showUpperFooter]="layoutControls.showUpperFooter"></app-footer>
+    <app-footer #footerRef [showUpperFooter]="layoutControls().showUpperFooter"></app-footer>
   }
   <!-- End No Sidebar section -->
-  @if (layoutControls.showFeedbackButton) {
+
+  @if (layoutControls().showFeedbackButton) {
     <button
       type="button"
       pButton
       pRipple
       label="Feedback"
       class="p-button-info feedback-button"
-      (click)="feedbackOverlay.show($event)"
+      (click)="feedbackOverlay().show($event)"
     ></button>
   }
 

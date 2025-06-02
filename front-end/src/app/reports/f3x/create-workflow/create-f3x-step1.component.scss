@@ -3,8 +3,33 @@
   color: #999999;
 }
 
-:host ::ng-deep .p-disabled > .p-radiobutton {
-  opacity: 0.65;
+:host ::ng-deep {
+  .p-disabled > .p-radiobutton {
+    opacity: 0.65;
+  }
+
+  .p-dialog-header {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  .p-dialog-header .p-dialog-title {
+    font-family: var(--gandhi-bold);
+    font-size: 28px;
+    color: #212121;
+  }
+
+  .p-dialog-content {
+    padding-left: 16px;
+  }
+
+  .p-dialog-content > p {
+    font-family: var(--karla);
+    color: #212121;
+    line-height: 1;
+    margin-top: 0px;
+    margin-bottom: 15px;
+  }
 }
 
 #form {
