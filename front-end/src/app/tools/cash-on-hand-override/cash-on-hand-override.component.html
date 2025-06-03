@@ -21,20 +21,12 @@
     <div class="col-6">
       <div class="grid">
         <div class="col-6">
-          <div class="field">
-            <label for="year">UPDATING CASH ON HAND JANUARY 1</label>
-            <p-select
-              #yearSelect
-              [style]="{ width: '100%' }"
-              inputId="year"
-              formControlName="year"
-              [options]="yearOptions"
-            >
-              <ng-template #selectedItem let-selectedOption>
-                <input type="text" id="year" [value]="selectedOption.label" readonly (click)="yearSelect.show()" />
-              </ng-template>
-            </p-select>
-          </div>
+          <app-select
+            label="UPDATING CASH ON HAND JANUARY 1"
+            inputId="year"
+            [options]="yearOptions"
+            [control]="yearFormControl"
+          />
         </div>
       </div>
       <div class="grid">

@@ -62,22 +62,7 @@
       </div>
     </div>
     <div class="col-3">
-      <div class="field">
-        <label for="state">STATE/PROVINCE</label>
-        <p-select
-          #stateSelect
-          inputId="state"
-          formControlName="state"
-          [options]="stateOptions"
-          [autoDisplayFirst]="false"
-          appendTo="body"
-          ariaLabel="State Dropdown"
-        >
-          <ng-template #selectedItem let-selectedOption>
-            <input type="text" id="state" [value]="selectedOption.label" readonly />
-          </ng-template>
-        </p-select>
-      </div>
+      <app-select inputId="state" label="STATE/PROVINCE" [options]="stateOptions" [control]="stateControl" />
     </div>
     <div class="col-3">
       <div class="field">
@@ -142,21 +127,12 @@
       </div>
     </div>
     <div class="col-3">
-      <div class="field">
-        <label for="treasurer_state">STATE/PROVINCE</label>
-        <p-select
-          inputId="treasurer_state"
-          formControlName="treasurer_state"
-          [options]="stateOptions"
-          [autoDisplayFirst]="false"
-          appendTo="body"
-          ariaLabel="State Dropdown"
-        >
-          <ng-template #selectedItem let-selectedOption>
-            <input type="text" id="treasurer_state" [value]="selectedOption.label" readonly />
-          </ng-template>
-        </p-select>
-      </div>
+      <app-select
+        inputId="treasurer_state"
+        label="STATE/PROVINCE"
+        [options]="stateOptions"
+        [control]="treasurerStateControl"
+      />
     </div>
     <div class="col-3">
       <div class="field">
