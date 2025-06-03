@@ -65,13 +65,18 @@
       <div class="field">
         <label for="state">STATE/PROVINCE</label>
         <p-select
+          #stateSelect
           inputId="state"
           formControlName="state"
           [options]="stateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
           ariaLabel="State Dropdown"
-        ></p-select>
+        >
+          <ng-template #selectedItem let-selectedOption>
+            <input type="text" id="state" [value]="selectedOption.label" readonly />
+          </ng-template>
+        </p-select>
       </div>
     </div>
     <div class="col-3">
@@ -146,7 +151,11 @@
           [autoDisplayFirst]="false"
           appendTo="body"
           ariaLabel="State Dropdown"
-        ></p-select>
+        >
+          <ng-template #selectedItem let-selectedOption>
+            <input type="text" id="treasurer_state" [value]="selectedOption.label" readonly />
+          </ng-template>
+        </p-select>
       </div>
     </div>
     <div class="col-3">
@@ -162,7 +171,7 @@
         <label id="telephone-label" for="treasurer_phone">TELEPHONE</label>
         <app-fec-international-phone-input
           [disabled]="true"
-          id="treasurer_phone"
+          inputId="treasurer_phone"
           formControlName="treasurer_phone"
           labelName="telephone-label"
         >

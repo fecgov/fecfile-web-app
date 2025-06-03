@@ -1,6 +1,6 @@
 <dialog #dialog tabindex="-1" aria-labelledby="dialog-title">
   <div class="dialog-header">
-    <h1 class="dialog-title" id="dialog-title">{{ member ? 'Edit' : 'Add' }} User</h1>
+    <h1 class="dialog-title" id="dialog-title">{{ member ? 'Edit' : 'Add' }} user</h1>
     <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
   </div>
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
@@ -26,12 +26,17 @@
           <div class="field">
             <label id="role-label" for="role">ROLE</label>
             <p-select
+              #roleSelect
               inputId="role"
               formControlName="role"
               [options]="roleOptions"
               [autoDisplayFirst]="true"
               [autofocus]="!!member"
-            ></p-select>
+            >
+              <ng-template #selectedItem let-selectedOption>
+                <input type="text" id="role" [value]="selectedOption.label" (click)="roleSelect.show()" readonly />
+              </ng-template>
+            </p-select>
             <app-error-messages [form]="form" fieldName="role" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
