@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  input,
   Input,
   OnChanges,
   OnDestroy,
@@ -17,13 +18,13 @@ import intlTelInput, { Iti } from 'intl-tel-input';
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
-  @Input() id = 'telephone';
+  readonly inputId = input('telephone');
   @Input() disabled = false;
   @Input() labelName = '';
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
   private intlTelInput: Iti | undefined;
-  private intlTelInputOptions = {
+  private readonly intlTelInputOptions = {
     separateDialCode: true,
     initialCountry: 'us',
     preferredCountries: ['us'],
