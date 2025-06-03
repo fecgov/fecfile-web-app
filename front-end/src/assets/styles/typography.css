@@ -129,7 +129,6 @@ textarea {
   width: 100%;
 }
 input:focus,
-select:focus,
 textarea:focus {
   border-color: #112e51;
   color: #112e51;
@@ -140,25 +139,41 @@ select {
   -ms-appearance: none;
   -o-appearance: none;
   appearance: none;
-  background-image: url('data:image/svg+xml;charset=utf8, %3Csvg%20%20fill%3D%27%23112e51%27%20width%3D%2210%22%20height%3D%229%22%20viewBox%3D%220%200%2010%209%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5.706%208.013l3.685-6.234A.851.851%200%200%200%208.664.485H1.283A.852.852%200%200%200%20.55%201.769l3.69%206.244a.852.852%200%200%200%201.466%200z%22%2F%3E%3C%2Fsvg%3E');
+  background-image: url('../img/expand_more.svg');
   background-repeat: no-repeat;
   width: auto;
   background-color: transparent;
-
-  background-position: right 2rem top 50%;
-  background-size: 12px;
+  border: 2px solid var(--fec-grey-alt);
+  background-position: right 0.75rem top 50%;
+  background-size: 1rem;
   color: #212121;
-  border: 2px solid #aeb0b5;
   padding: 0.6rem 3em 0.6rem 1rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  max-height: 47px;
+  min-height: 47px;
+  height: 47px;
+  font-family: var(--karla);
+  font-size: 1rem;
+  font-weight: 400;
 }
 select::-ms-expand {
   display: none;
 }
-select:hover:not([disabled]) {
-  background-color: #d6d7d9;
+select:not([disabled]) {
+  cursor: pointer;
+}
+select:hover:not(:disabled):not(:focus):not(:focus-visible) {
+  border-color: var(--surface-border);
+}
+select:focus,
+select:focus-visible {
+  border-color: var(--p-primary-color);
+  box-shadow: var(--focus-ring);
+  outline: 0 none;
+  outline-offset: 0;
 }
 textarea {
   resize: vertical;
