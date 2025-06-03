@@ -1,6 +1,6 @@
 <div class="field">
   <label [class]="labelClass()" [for]="inputId()">{{ label() }}</label>
-  <p-select #inputSelect [formControl]="control()" [options]="options()">
+  <p-select #inputSelect [formControl]="control()" [options]="options()" [inputId]="inputId()">
     <ng-template #selectedItem let-selectedOption>
       <input type="text" [id]="inputId()" [value]="selectedOption.label" readonly (click)="inputSelect.show()" />
     </ng-template>
