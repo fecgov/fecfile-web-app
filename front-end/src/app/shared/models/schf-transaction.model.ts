@@ -31,7 +31,7 @@ export class SchFTransaction extends Transaction {
   expenditure_amount: number | undefined;
   aggregation_group: AggregationGroups | undefined;
   general_election_year: string | undefined;
-  aggregate_general_elec_expended: number | undefined;
+  aggregate_general_elec_expended: number | undefined; // calculated field
   expenditure_purpose_description: string | undefined;
   category_code: string | undefined;
   payee_committee_id_number: string | undefined;
@@ -63,6 +63,9 @@ export class SchFTransaction extends Transaction {
       });
     }
     return transaction;
+  }
+  override getFieldsNotToSave(): string[] {
+    return ['aggregate_general_elec_expended', ...super.getFieldsNotToSave()];
   }
 
   override getFieldsNotToValidate(): string[] {

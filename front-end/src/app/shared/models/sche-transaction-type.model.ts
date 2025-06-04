@@ -60,6 +60,7 @@ export abstract class SchETransactionType extends TransactionType {
     aggregate: '',
     general_election_year: '',
     calendar_ytd: 'calendar_ytd_per_election_office',
+    aggregate_general_elec_expended: '',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',
     category_code: 'category_code',

@@ -30,7 +30,7 @@ export class COORDINATED_PARTY_EXPENDITURE_VOID extends SchFTransactionType {
     ...CANDIDATE_OFFICE_FIELDS,
     ...COMMON_FIELDS,
     'general_election_year',
-    ...AGGREGATE,
+    'aggregate_general_elec_expended',
     'filer_designated_to_make_coordinated_expenditures',
     ...CATEGORY_CODE,
     ...QUATERNARY_FIELDS,
@@ -42,7 +42,6 @@ export class COORDINATED_PARTY_EXPENDITURE_VOID extends SchFTransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override aggregateLabel = 'AGGREGATE GENERAL ELECTION EXPENDITURE FOR THIS CANDIDATE';
   override showAggregate = false;
   override showPayeeCandidateYTD = true;
   override dateLabel = 'DATE';

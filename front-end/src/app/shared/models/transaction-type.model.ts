@@ -283,6 +283,7 @@ export type TransactionTemplateMapType = {
   secured: string;
   aggregate: string;
   calendar_ytd: string;
+  aggregate_general_elec_expended: string;
   general_election_year: string;
   purpose_description: string;
   text4000: string;

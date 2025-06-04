@@ -45,6 +45,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     balance: '',
     aggregate: '',
     calendar_ytd: '',
+    aggregate_general_elec_expended: '',
     general_election_year: '',
     purpose_description: '',
     text4000: 'text4000',
