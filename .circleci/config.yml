@@ -6,7 +6,7 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
   node: circleci/node@6.3.0
-  python: circleci/python@2.1.1
+  python: circleci/python@2.2.0
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -120,7 +120,7 @@ jobs:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout develop
+            git checkout ${CIRCLE_BRANCH}
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" docker-compose up --build -d
             docker container run --network container:fecfile-api-proxy \
@@ -138,7 +138,7 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${CIRCLE_BRANCH}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/F3X/aggregate-calculation.cy.ts" --headless --watch=false --browser chrome;'\
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/**/*.cy.ts" --headless --watch=false --browser chrome;'\
       - run:
           name: print api logs
           when: always
@@ -157,15 +157,15 @@ jobs:
           destination: cypress/results
   deploy-job:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/python:3.11-node
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: install python
-          command: |
-            sudo apt update
-            sudo apt install python3 python3-pip
+
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: ~/project/
+          pip-dependency-file: requirements.txt
 
       - run:
           name: Install cf cli
@@ -177,12 +177,13 @@ jobs:
       - run:
           name: run deploy script
           no_output_timeout: 15m
-          command: pip install -r requirements.txt && invoke deploy --login
+          command: |
+            export PATH=$HOME/bin:$PATH
+            invoke deploy --branch $CIRCLE_BRANCH --login
 
   dependency-check:
     docker:
-      - image: cimg/node:lts-browsers
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.11-node
 
     steps:
       - checkout
@@ -193,11 +194,6 @@ jobs:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
 
-      - run:
-          name: install python
-          command: |
-            sudo apt update
-            sudo apt install python3 python3-pip
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
@@ -220,7 +216,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main|mini-e2e-test|innovation\/e2e-performance-boost/
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
