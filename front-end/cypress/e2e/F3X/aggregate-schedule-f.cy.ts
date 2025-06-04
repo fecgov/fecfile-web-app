@@ -60,19 +60,19 @@ describe('Tests transaction form aggregate calculation', () => {
 
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$225.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
     // Tests moving the date to be earlier
     TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(2025, 3, 10), '');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$25.00');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
     // Move the date back
     TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 30), '');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$225.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
     // Change the candidate contact
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_B.first_name);
@@ -80,7 +80,7 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.contains('Senate, B').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$25.00');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
     // Change the contact back
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_A.first_name);
@@ -88,13 +88,13 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.contains('Senate, A').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$225.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
     // Change the amount
     cy.get('[id="amount"]').clear().safeType('40');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$240.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$240.01');
   });
 
   it('existing transaction change contact', () => {
@@ -146,13 +146,13 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
     // Tests changing the second transaction's contact
-    cy.get('[id=aggregate]').should('have.value', '$25.00');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_A.first_name);
     cy.contains('Senate, A').should('exist');
     cy.contains('Senate, A').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$225.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
   });
 
   it('existing transaction date leapfrogging', () => {
@@ -205,12 +205,12 @@ describe('Tests transaction form aggregate calculation', () => {
     TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 30), '');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$225.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
     PageUtils.clickButton('Save');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
-    cy.get('[id=aggregate]').should('have.value', '$25.00');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
     PageUtils.clickButton('Save');
     cy.contains('Transactions in this report').should('exist');
@@ -220,12 +220,12 @@ describe('Tests transaction form aggregate calculation', () => {
     TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 10), '');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$200.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
     PageUtils.clickButton('Save');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
-    cy.get('[id=aggregate]').should('have.value', '$225.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
   });
 
   it('leapfrog and contact change', () => {
@@ -292,7 +292,7 @@ describe('Tests transaction form aggregate calculation', () => {
     TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 29), '');
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
-    cy.get('[id=aggregate]').should('have.value', '$200.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
     PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue', '', true);
@@ -303,16 +303,16 @@ describe('Tests transaction form aggregate calculation', () => {
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
-    cy.get('[id=aggregate]').should('have.value', '$200.01');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
     PageUtils.clickButton('Save');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
-    cy.get('[id=aggregate]').should('have.value', '$25.00');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
     PageUtils.clickButton('Save');
 
     cy.contains('Transactions in this report').should('exist');
     cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(2) > a').click();
-    cy.get('[id=aggregate]').should('have.value', '$65.00');
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$65.00');
   });
 });
