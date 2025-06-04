@@ -143,7 +143,7 @@ it('should add the amount for payee candidate YTD', () => {
 
   TransactionFormUtils.updateAggregate(
     form,
-    'aggregate',
+    'aggregate_general_elec_expended',
     transaction.transactionType.templateMap,
     transaction,
     previous_transaction,
