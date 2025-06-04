@@ -2,7 +2,7 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from './base.model';
 import { Report, ReportTypes } from './report.model';
-import { environment } from 'environments/environment';
+import { fecSpec8dot5Released } from '../utils/schema.utils';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -54,7 +54,7 @@ export const textCodes = [
     value: 'MST',
   },
   // If TESTBOOL is true, add MSR and MSW to the list of textCodes
-  ...(environment.fecSpec == '8.5'
+  ...(fecSpec8dot5Released
     ? [
         {
           label: 'Form 3L Filing Frequency Change Notice',
@@ -67,6 +67,11 @@ export const textCodes = [
       ]
     : []),
 ];
+
+export enum textCodesWithFilingFrequencies {
+  MSR,
+  MSM,
+}
 
 export const filingFrequencies = [
   {
