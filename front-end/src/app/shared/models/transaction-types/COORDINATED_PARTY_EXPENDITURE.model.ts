@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   ADDRESS_FIELDS,
-  AGGREGATE,
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,
   CATEGORY_CODE,
