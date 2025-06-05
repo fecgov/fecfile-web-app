@@ -65,14 +65,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     this.router.navigateByUrl('/reports');
   }
 
-  // Prototype that can be overridden on specific forms
-  saveHook() {
-    return;
-  }
-
   public async save(jump: 'continue' | undefined = undefined) {
-    this.saveHook();
-
     this.formSubmitted = true;
     blurActiveInput(this.form);
 

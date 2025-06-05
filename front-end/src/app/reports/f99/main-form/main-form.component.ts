@@ -36,7 +36,7 @@ import { SaveCancelComponent } from '../../../shared/components/save-cancel/save
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   override reportService = inject(Form99Service);
-  protected showFilingFrequency = fecSpec8dot5Released;
+  protected showFilingFrequency = false;
   readonly formProperties: string[] = [
     'filer_committee_id_number',
     'committee_name',
@@ -64,8 +64,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
 
-    // If we're not showing filing frequency by default, show it if it would be required
-    if (!this.showFilingFrequency) {
+    // If the FEC spec is 8.5 or later, show filing frequency on certain text codes
+    if (fecSpec8dot5Released) {
       const textCodeField = this.form.get('text_code') as SubscriptionFormControl;
       textCodeField.addSubscription((textCode) => {
         this.showFilingFrequency = textCode in textCodesWithFilingFrequencies;
@@ -77,11 +77,12 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
 
-  override saveHook() {
+  override async save(jump: 'continue' | undefined = undefined) {
     const filingFrequency = this.form.get('filing_frequency');
     if (filingFrequency) {
       this.form.get('filing_frequency')?.updateValueAndValidity();
       this.form.updateValueAndValidity();
     }
+    super.save(jump);
   }
 }
