@@ -262,7 +262,6 @@ export class TransactionFormUtils {
   ) {
     const key = previousTransaction?.transactionType?.templateMap[field] as keyof ScheduleTransaction;
     const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
-    console.log(key, previousAggregate);
     if (transaction.force_unaggregated) {
       form.get(templateMap[field])?.setValue(previousAggregate);
     } else if (transaction.transactionType?.isRefund) {
