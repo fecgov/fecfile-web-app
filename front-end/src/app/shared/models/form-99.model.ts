@@ -61,7 +61,7 @@ export const textCodes = [
           value: 'MSR',
         },
         {
-          label: 'Loan Agreement',
+          label: 'Loan Agreement / Loan Forgiveness',
           value: 'MSW',
         },
       ]
