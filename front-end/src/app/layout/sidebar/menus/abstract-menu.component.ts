@@ -1,14 +1,15 @@
 import { Component, computed, inject } from '@angular/core';
-import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
-import { selectActiveReport } from '../../../store/active-report.selectors';
-import { filter, map, startWith } from 'rxjs';
-import { ReportSidebarSection, SidebarState } from '../sidebar.component';
-import { MenuItem } from 'primeng/api';
-import { Store } from '@ngrx/store';
-import { ReportService } from '../../../shared/services/report.service';
-import { collectRouteData } from 'app/shared/utils/route.utils';
-import { NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { ReportStatus } from 'app/shared/models';
+import { collectRouteData } from 'app/shared/utils/route.utils';
+import { MenuItem } from 'primeng/api';
+import { filter, map, startWith } from 'rxjs';
+import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
+import { ReportService } from '../../../shared/services/report.service';
+import { selectActiveReport } from '../../../store/active-report.selectors';
+import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 
 @Component({
   template: '',
@@ -17,14 +18,15 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
   protected readonly routeDataSignal = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       map(() => {
-        return collectRouteData(this.router);
+        return collectRouteData(this.route.snapshot);
       }),
-      startWith(collectRouteData(this.router)),
+      startWith(collectRouteData(this.route.snapshot)),
     ),
   );
   itemsSignal = computed(() => {
@@ -49,10 +51,14 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
     } as MenuItem;
   }
 
-  editReport(sidebarState: SidebarState): MenuItem {
+  editReport(
+    sidebarState: SidebarState,
+    editLabel = 'EDIT A REPORT',
+    editLabelStyleClass = 'edit-report-menu-item',
+  ): MenuItem {
     return {
-      label: 'EDIT A REPORT',
-      styleClass: 'edit-report-menu-item',
+      label: editLabel,
+      styleClass: editLabelStyleClass,
       routerLink: [`/reports/${this.reportString}/edit/${this.activeReportSignal().id}`],
       expanded: sidebarState?.section === ReportSidebarSection.CREATE,
     };
@@ -138,16 +144,16 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
     };
   }
 
-  reportStatus(isEditable: boolean): MenuItem {
+  reportStatus(): MenuItem {
     return {
       label: 'Report Status',
       routerLink: `/reports/${this.reportString}/submit/status/${this.activeReportSignal().id}`,
-      visible: !isEditable,
+      visible: this.activeReportSignal().report_status !== ReportStatus.IN_PROGRESS,
     };
   }
 
   submitReportArray(isEditable: boolean): MenuItem[] {
-    return [this.confirmInformation(isEditable), this.submitReport(isEditable), this.reportStatus(isEditable)];
+    return [this.confirmInformation(isEditable), this.submitReport(isEditable), this.reportStatus()];
   }
 
   abstract getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[];

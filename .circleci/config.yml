@@ -157,7 +157,7 @@ jobs:
           destination: cypress/results
   deploy-job:
     docker:
-      - image: cimg/python:3.11-node
+      - image: cimg/python:3.12-node
     resource_class: large
     steps:
       - checkout
@@ -183,7 +183,7 @@ jobs:
 
   dependency-check:
     docker:
-      - image: cimg/python:3.11-node
+      - image: cimg/python:3.12-node
 
     steps:
       - checkout

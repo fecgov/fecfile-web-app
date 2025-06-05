@@ -72,6 +72,7 @@ export class Form3 extends Report {
   L16_total_receipts_period: number | undefined;
   L17_operating_expenditures_period: number | undefined;
   L18_transfers_to_other_authorized_committees_period: number | undefined;
+  L19a_loan_repayments_of_loans_made_or_guaranteed_by_candidate_period: number | undefined;
   L19b_loan_repayments_of_all_other_loans_period: number | undefined;
   L19c_total_loan_repayments_period: number | undefined;
   L20a_refunds_to_individuals_period: number | undefined;
@@ -107,6 +108,7 @@ export class Form3 extends Report {
   L16_total_receipts_ytd: number | undefined;
   L17_operating_expenditures_ytd: number | undefined;
   L18_transfers_to_other_authorized_committees_ytd: number | undefined;
+  L19a_loan_repayments_of_loans_made_or_guaranteed_by_candidate_ytd: number | undefined;
   L19b_loan_repayments_of_all_other_loans_ytd: number | undefined;
   L19c_total_loan_repayments_ytd: number | undefined;
   L20a_refunds_to_individuals_ytd: number | undefined;

@@ -121,7 +121,7 @@ describe('TransactionTypeBaseComponent', () => {
         component.ngOnInit();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        expect(err.message).toBe('Fecfile: Template map not found for transaction component');
+        expect(err.message).toBe('FECfile+: Template map not found for transaction component');
       }
     });
 
@@ -164,7 +164,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should stop processing and throw an error if there is no transaction', async () => {
       component.transaction = undefined;
       await expectAsync(component.save(navEvent)).toBeRejectedWithError(
-        'Fecfile: No transactions submitted for single-entry transaction form.',
+        'FECfile+: No transactions submitted for single-entry transaction form.',
       );
     });
   });
@@ -226,7 +226,7 @@ describe('TransactionTypeBaseComponent', () => {
           'dialog',
           component.transaction,
         ),
-      ).toBeRejectedWithError('Fecfile: Cannot find template map when confirming transaction');
+      ).toBeRejectedWithError('FECfile+: Cannot find template map when confirming transaction');
     });
 
     it('should return without confirmation if using parent and contact_1', fakeAsync(async () => {
@@ -562,7 +562,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.transaction = undefined;
       expect(function () {
         component.initInheritedFieldsFromParent();
-      }).toThrow(new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent'));
+      }).toThrow(new Error('FECfile+: No transaction found in initIneheritedFieldsFromParent'));
     });
   });
 

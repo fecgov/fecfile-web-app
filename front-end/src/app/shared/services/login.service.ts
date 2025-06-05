@@ -37,6 +37,12 @@ export class LoginService extends DestroyerComponent {
   }
 
   public async retrieveUserLoginData(): Promise<void> {
+    if (!('ffapiTimeoutCookieName' in environment)) {
+      console.error('The ffapi_timeout cookie name environment variables is not set.');
+    } else if (!this.cookieService.check(environment.ffapiTimeoutCookieName)) {
+      console.error('The ffapi_timeout cookie is not set.');
+    }
+
     return this.usersService.getCurrentUser().then((userLoginData) => {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });
@@ -53,6 +59,6 @@ export class LoginService extends DestroyerComponent {
   }
 
   public userIsAuthenticated() {
-    return new Date() < new Date(parseInt(this.cookieService.get('ffapi_timeout')) * 1000);
+    return new Date() < new Date(parseInt(this.cookieService.get(environment.ffapiTimeoutCookieName)) * 1000);
   }
 }

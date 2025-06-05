@@ -12,7 +12,7 @@ export class UsersPage {
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find('#email').safeType(formData['email']);
-    PageUtils.dropdownSetValue("p-select[formcontrolname='role']", formData['role'], alias);
+    PageUtils.dropdownSetValue("p-select[ng-reflect-input-id='role']", formData['role'], alias);
   }
 
   static assertRow(formData: UserFormData, status = 'Pending') {
@@ -37,7 +37,7 @@ export class UsersPage {
   static editRole(fd: UserFormData, alias = '') {
     UsersPage.goToPage();
     PageUtils.clickKababItem(fd.email, 'Edit Role');
-    PageUtils.dropdownSetValue("p-select[formcontrolname='role']", fd['role'], alias);
+    PageUtils.dropdownSetValue("p-select[ng-reflect-input-id='role']", fd['role'], alias);
     cy.get('[data-cy="membership-submit"]').click();
   }
 

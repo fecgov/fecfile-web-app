@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
-import { CommitteeAccount } from '../models/committee-account.model';
-import { Report, ReportTypes } from '../models/report.model';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService, QueryParams } from './api.service';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { Form1M } from '../models/form-1m.model';
+import { Form24 } from '../models/form-24.model';
 import { Form3 } from '../models/form-3.model';
 import { Form3X } from '../models/form-3x.model';
-import { Form24 } from '../models/form-24.model';
 import { Form99 } from '../models/form-99.model';
-import { Form1M } from '../models/form-1m.model';
+import { Report, ReportTypes } from '../models/report.model';
+import { ListRestResponse } from '../models/rest-api.model';
+import { ApiService, QueryParams } from './api.service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON(json: any): Report {
@@ -21,7 +21,7 @@ export function getReportFromJSON(json: any): Report {
     if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);
     if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json);
   }
-  throw new Error('Fecfile: Cannot get report from JSON');
+  throw new Error('FECfile+: Cannot get report from JSON');
 }
 
 @Injectable({
@@ -71,6 +71,26 @@ export class ReportService implements TableListService<Report> {
     return getReportFromJSON(response);
   }
 
+  public async updateWithAllowedErrorCodes(
+    report: Report,
+    allowedErrorCodes: number[],
+    fieldsToValidate: string[] = [],
+  ): Promise<Report> {
+    const payload = this.preparePayload(report);
+    const response = await this.apiService.put<Report>(
+      `${this.apiEndpoint}/${report.id}/`,
+      payload,
+      {
+        fields_to_validate: fieldsToValidate.join(','),
+      },
+      allowedErrorCodes,
+    );
+    if (!response.body) {
+      throw new Error();
+    }
+    return getReportFromJSON(response.body);
+  }
+
   public delete(report: Report): Promise<null> {
     return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}/`);
   }
@@ -81,7 +101,7 @@ export class ReportService implements TableListService<Report> {
    * @returns Promise<Report>
    */
   async setActiveReportById(reportId: string | undefined): Promise<Report> {
-    if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
+    if (!reportId) throw new Error('FECfile+: No Report Id Provided.');
     const report = await this.get(reportId);
     this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
     return report;

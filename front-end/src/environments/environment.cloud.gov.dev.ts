@@ -7,12 +7,13 @@ export const environment = {
   production: false,
   name: 'development',
   apiUrl: apiUrl,
-  appTitle: 'FECfile',
+  appTitle: 'FECfile+',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
   fecApiUrl: 'https://api.open.fec.gov/v1/',
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
   loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
+  ffapiTimeoutCookieName: 'ffapi_timeout_dev',
   ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
   committee_data_source: 'test',
@@ -20,6 +21,7 @@ export const environment = {
   showForm3: true,
   showSchedF: true,
   disableLogin: false,
+  fecSpec: 8.4,
 };
 
 /*

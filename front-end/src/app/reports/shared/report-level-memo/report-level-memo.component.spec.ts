@@ -3,10 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Report, MemoText } from 'app/shared/models';
+import { MemoText, Report } from 'app/shared/models';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
+import { provideHttpClient } from '@angular/common/http';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -14,8 +16,6 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { provideHttpClient } from '@angular/common/http';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
@@ -58,7 +58,7 @@ describe('ReportLevelMemoComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     const testText4kValue = 'testText4k';
     const testMemoText: MemoText = new MemoText();
     testMemoText.id = '4';
@@ -73,7 +73,7 @@ describe('ReportLevelMemoComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('save for existing memo text happy path', async () => {
+  it('save for existing memo text happy path', async () => {
     const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
@@ -91,7 +91,7 @@ describe('ReportLevelMemoComponent', () => {
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
-  xit('save for new memo text happy path', async () => {
+  it('save for new memo text happy path', async () => {
     const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
