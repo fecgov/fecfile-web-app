@@ -69,7 +69,12 @@ export class SchFTransaction extends Transaction {
   }
 
   override getFieldsNotToValidate(): string[] {
-    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      'aggregate_general_elec_expended',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
 }
 
