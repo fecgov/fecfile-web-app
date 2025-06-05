@@ -40,38 +40,27 @@ export class Form99 extends Report {
   }
 }
 
-export const textCodes = [
-  {
-    label: 'Disavowal Response',
-    value: 'MSI',
-  },
-  {
-    label: 'Filing Frequency Change Notice',
-    value: 'MSM',
-  },
-  {
-    label: 'Miscellaneous Report to the FEC',
-    value: 'MST',
-  },
-  // If TESTBOOL is true, add MSR and MSW to the list of textCodes
-  ...(fecSpec8dot5Released
-    ? [
-        {
-          label: 'Form 3L Filing Frequency Change Notice',
-          value: 'MSR',
-        },
-        {
-          label: 'Loan Agreement / Loan Forgiveness',
-          value: 'MSW',
-        },
-      ]
-    : []),
-];
-
 export enum textCodesWithFilingFrequencies {
   MSR,
   MSM,
 }
+
+let allTextCodes = Object.entries({
+  MST: 'Miscellaneous Report to the FEC',
+  MSM: 'Filing Frequency Change Notice',
+  MSW: 'Loan Agreement / Loan Forgiveness',
+  MSI: 'Disavowal Response',
+  MSR: 'Form 3L Filing Frequency Change Notice',
+});
+
+if (!fecSpec8dot5Released) {
+  allTextCodes = allTextCodes.filter(([key]) => key in textCodesWithFilingFrequencies);
+}
+
+export const textCodes = allTextCodes.map(([code, label]) => ({
+  value: code,
+  label,
+}));
 
 export const filingFrequencies = [
   {
