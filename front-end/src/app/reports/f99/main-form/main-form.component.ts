@@ -83,6 +83,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
       this.form.get('filing_frequency')?.updateValueAndValidity();
       this.form.updateValueAndValidity();
     }
-    super.save(jump);
+    await super.save(jump);
   }
 }
