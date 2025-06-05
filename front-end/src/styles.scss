@@ -29,7 +29,7 @@ hr.black-line {
 }
 
 .p-drawer-header {
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
   font-weight: bold;
   color: #112e51;
   font-size: 16px;
@@ -73,7 +73,7 @@ label.disabled {
 
 .label-note {
   color: grey;
-  font-family: karla, sans-serif;
+  font-family: var(--karla);
 }
 
 .bold {
@@ -129,30 +129,11 @@ label.disabled {
 }
 
 .font-karla {
-  font-family:
-    karla,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    Apple Color Emoji,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
+  font-family: var(--karla);
 }
 
 .font-karla-bold {
-  font-family:
-    karla-bold,
-    karla,
-    Segoe UI,
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif,
-    Apple Color Emoji,
-    Segoe UI Emoji,
-    Segoe UI Symbol;
+  font-family: var(--karla-bold);
 }
 
 .fec-background-gradient {
@@ -199,11 +180,6 @@ label.disabled {
 
 .form-type-dialog p-select {
   display: flex;
-}
-
-.title1 {
-  font-family: ghandi-bold, serif;
-  font-size: 32px;
 }
 
 .add-button {
@@ -266,6 +242,13 @@ label.disabled {
 .p-panelmenu-header.p-panelmenu-header-active {
   margin-bottom: 0;
   border-left: 5px solid white;
+}
+
+.p-panelmenu-header[data-p-highlight='true'] {
+  .p-panelmenu-header-link.p-panelmenu-item-link-active {
+    margin-bottom: 0;
+    border-left: 5px solid white;
+  }
 }
 
 .p-panelmenu .p-panelmenu-header.p-highlight > a {

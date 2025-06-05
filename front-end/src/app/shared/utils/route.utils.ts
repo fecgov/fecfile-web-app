@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 export type RouteData = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,9 +14,9 @@ export type RouteData = {
  * This is an adaptation of an example function provided by
  * the Angular documtation (see: https://angular.io/api/router/ActivatedRouteSnapshot#properties)
  */
-export function collectRouteData(router: Router): RouteData {
+export function collectRouteData(snapshot: ActivatedRouteSnapshot): RouteData {
   let data = {} as RouteData;
-  const stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
+  const stack: ActivatedRouteSnapshot[] = [snapshot.root];
   while (stack.length > 0) {
     const route = stack.pop()!;
     data = { ...data, ...route.data };

@@ -75,13 +75,13 @@
               name="report_code"
               [value]="reportCode"
               [class]="
-                usedReportCodes().includes(reportCode)
+                checkDisableReportCode(reportCode)
                   ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
                   : ''
               "
               formControlName="report_code"
             ></p-radioButton>
-            <label [for]="reportCode" class="ml-2" [class]="usedReportCodes().includes(reportCode) ? 'p-disabled' : ''">
+            <label [for]="reportCode" class="ml-2" [class]="checkDisableReportCode(reportCode) ? 'p-disabled' : ''">
               {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
             </label>
           </div>
@@ -123,7 +123,6 @@
   <div class="grid">
     <div class="col-12">
       <h3 class="m-0">Covering period</h3>
-      <span>Please verify coverage dates since the dates cannot be changed once the report is created.</span>
     </div>
   </div>
   <div class="grid no-expand">
@@ -146,3 +145,23 @@
   </div>
 </form>
 <app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
+<p-dialog
+  [(visible)]="coverageDatesDialogVisible"
+  [style]="{ width: '30%' }"
+  header="Can’t save report"
+  [modal]="true"
+  (onHide)="onHide()"
+>
+  <p>Some transactions would now fall outside your new coverage dates.</p>
+  <p>To fix this, delete those transactions.</p>
+  <div class="align-left">
+    <button
+      pButton
+      pRipple
+      class="p-button-primary"
+      label="Manage your transactions"
+      (click)="navigateToManageTransactions()"
+      [autofocus]="true"
+    ></button>
+  </div>
+</p-dialog>

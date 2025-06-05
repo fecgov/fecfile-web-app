@@ -27,7 +27,7 @@ export class ConfirmationWrapperService {
     for (const [contactKey, config] of Object.entries(contactConfig)) {
       const templateMap = getTemplateMap(contactKey, transaction);
       if (!templateMap) {
-        throw new Error('Fecfile: Cannot find template map when confirming transaction');
+        throw new Error('FECfile+: Cannot find template map when confirming transaction');
       }
 
       const contact = getContact(contactKey, transaction);
@@ -105,7 +105,7 @@ export class ConfirmationWrapperService {
   ): string {
     let confirmationContactTitle = '';
     if (!templateMap) {
-      throw new Error('Fecfile: templateMap not found in getCreateTransactionContactconfirmationMessage');
+      throw new Error('FECfile+: templateMap not found in getCreateTransactionContactconfirmationMessage');
     }
     switch (contactType) {
       case ContactTypes.INDIVIDUAL:

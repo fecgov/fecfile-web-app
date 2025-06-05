@@ -53,7 +53,7 @@ export class TransactionContainerComponent extends DestroyerComponent implements
         const title: string = this.transaction.transactionType?.title ?? '';
         this.titleService.setTitle(title);
       } else {
-        throw new Error('Fecfile: No transaction found in TransactionContainerComponent');
+        throw new Error('FECfile+: No transaction found in TransactionContainerComponent');
       }
     });
 
