@@ -14,6 +14,7 @@ import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { takeUntil } from 'rxjs';
 import { Checkbox } from 'primeng/checkbox';
 import { ButtonDirective } from 'primeng/button';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-security-notice',
@@ -30,6 +31,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   formSubmitted = false;
   showForm = true;
   userLoginData?: UserLoginData;
+  consentText = environment.consentText;
 
   form = new FormGroup(
     {

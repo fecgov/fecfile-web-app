@@ -6,16 +6,6 @@
   top: 40px;
 }
 
-p,
-li {
-  margin-bottom: 20px;
-  padding-top: 0;
-}
-
-p + ul {
-  margin-top: 0;
-}
-
 .security-notice {
   width: 100%;
   height: 100%;
@@ -25,10 +15,6 @@ p + ul {
 .notice-header {
   padding-left: 20px;
   padding-top: 16px;
-}
-
-#security-consent-label {
-  width: 50%;
 }
 
 :host ::ng-deep {
@@ -51,28 +37,6 @@ p + ul {
 
 .decline-button {
   margin-right: 20px;
-}
-
-ul li {
-  list-style-type: disc;
-  margin-left: 16px;
-}
-
-h1 {
-  font-size: 36px;
-}
-
-h2 {
-  font-size: 28px;
-  margin: 0;
-}
-
-.top-line {
-  margin: 20px 0;
-}
-
-p {
-  font-size: 18px;
 }
 
 .notice-box-form {
@@ -105,4 +69,36 @@ p {
   margin-top: 108px;
   padding: 32px;
   border-radius: 8px;
+}
+
+::ng-deep {
+  p,
+  li {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-family: var(--gandhi-regular);
+    line-height: 1.5;
+  }
+
+  p + ul {
+    margin-top: 0;
+  }
+
+  ul li {
+    list-style-type: disc;
+    margin-left: 16px;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  h2 {
+    font-size: 28px;
+    margin: 0 !important;
+  }
+
+  .top-line {
+    margin: 20px 0;
+  }
 }
