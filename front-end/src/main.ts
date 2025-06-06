@@ -36,9 +36,22 @@ import { PopoverModule } from 'primeng/popover';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { AppComponent } from './app/app.component';
+import { CookiesRequiredComponent } from './app/login/cookies-required/app.cookiesrequired.component';
 import { ROUTES } from 'app/routes';
+import { ROUTES_CR } from 'app/login/cookies-required/routes';
 import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeng/themes/aura';
+
+function areCookiesAndLocalStorageEnabled() {
+  var test = 'test';
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return window.navigator.cookieEnabled;
+  } catch(e) {
+    return false;
+  }
+}
 
 function initializeAppFactory(loginService: LoginService, router: Router): () => Promise<void> {
   return async () => {
@@ -68,65 +81,105 @@ if (environment.production) {
   enableProdMode();
 }
 const ngCspNonce = document.body?.querySelector('[ngCspNonce]')?.getAttribute('ngCspNonce') ?? undefined;
-bootstrapApplication(AppComponent, {
-  providers: [
-    importProvidersFrom(
-      BrowserModule,
-      FormsModule,
-      ReactiveFormsModule,
-      LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
-      StoreModule.forRoot(
-        {
-          committeeAccount: committeeAccountReducer,
-          singleClickDisabled: singleClickReducer,
-          userLoginData: loginReducer,
-          activeReport: activeReportReducer,
-          navigationEvent: navigationEventReducer,
-        },
-        { metaReducers },
+
+const componentToBootstrap = areCookiesAndLocalStorageEnabled() ? AppComponent : CookiesRequiredComponent;
+
+bootstrapApplication(componentToBootstrap, {
+  providers: areCookiesAndLocalStorageEnabled() 
+    ? [
+      importProvidersFrom(
+        BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
+        LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
+        StoreModule.forRoot(
+          {
+            committeeAccount: committeeAccountReducer,
+            singleClickDisabled: singleClickReducer,
+            userLoginData: loginReducer,
+            activeReport: activeReportReducer,
+            navigationEvent: navigationEventReducer,
+          },
+          { metaReducers },
+        ),
+        EffectsModule.forRoot([]),
+        MenubarModule,
+        PanelMenuModule,
+        PanelModule,
+        ButtonModule,
+        NgOptimizedImage,
+        DialogModule,
+        InputTextModule,
+        TextareaModule,
+        PopoverModule,
+        ConfirmDialogModule,
+        ToastModule,
+        CheckboxModule,
       ),
-      EffectsModule.forRoot([]),
-      MenubarModule,
-      PanelMenuModule,
-      PanelModule,
-      ButtonModule,
-      NgOptimizedImage,
-      DialogModule,
-      InputTextModule,
-      TextareaModule,
-      PopoverModule,
-      ConfirmDialogModule,
-      ToastModule,
-      CheckboxModule,
-    ),
-    provideRouter(ROUTES),
-    provideAnimationsAsync(),
-    providePrimeNG({
-      csp: {
-        nonce: ngCspNonce,
-      },
-      theme: {
-        preset: Aura,
-        options: {
-          cssLayer: {
-            name: 'primeng',
-            order: 'primeng, theme.css,styles.css',
-            darkModeSelector: false,
+      provideRouter(ROUTES),
+      provideAnimationsAsync(),
+      providePrimeNG({
+        csp: {
+          nonce: ngCspNonce,
+        },
+        theme: {
+          preset: Aura,
+          options: {
+            cssLayer: {
+              name: 'primeng',
+              order: 'primeng, theme.css,styles.css',
+              darkModeSelector: false,
+            },
           },
         },
-      },
-    }),
-    CookieService,
-    ConfirmationService,
-    MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    FecDatePipe,
-    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
-    provideAppInitializer(() => {
-      const initializerFn = initializeAppFactory(inject(LoginService), inject(Router));
-      return initializerFn();
-    }),
-    provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
-  ],
+      }),
+      CookieService,
+      ConfirmationService,
+      MessageService,
+      { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+      FecDatePipe,
+      { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+      provideAppInitializer(() => {
+        const initializerFn = initializeAppFactory(inject(LoginService), inject(Router));
+        return initializerFn();
+      }),
+      provideAnimations(),
+      provideHttpClient(withInterceptorsFromDi()),
+    ]
+  : [
+      importProvidersFrom(
+        BrowserModule,
+        LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
+        MenubarModule,
+        PanelMenuModule,
+        PanelModule,
+        NgOptimizedImage,
+        DialogModule,
+        ToastModule,
+      ),
+      provideRouter(ROUTES_CR),
+      provideAnimationsAsync(),
+      providePrimeNG({
+        csp: {
+          nonce: ngCspNonce,
+        },
+        theme: {
+          preset: Aura,
+          options: {
+            cssLayer: {
+              name: 'primeng',
+              order: 'primeng, theme.css,styles.css',
+              darkModeSelector: false,
+            },
+          },
+        },
+      }),
+      ConfirmationService,
+      MessageService,
+      { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+      FecDatePipe,
+      { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
+      provideAnimations(),
+      provideHttpClient(withInterceptorsFromDi()),
+    ],
 }).catch((err) => console.log(err));
