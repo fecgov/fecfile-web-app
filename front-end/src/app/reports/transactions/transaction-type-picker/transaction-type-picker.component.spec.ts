@@ -7,16 +7,15 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { BehaviorSubject, of } from 'rxjs';
-import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionGroups, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { Form24 } from 'app/shared/models/form-24.model';
-import { ScheduleETransactionGroups } from 'app/shared/models/sche-transaction.model';
-import { ScheduleATransactionGroups, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -66,7 +65,7 @@ describe('TransactionTypePickerComponent', () => {
     fixture.detectChanges();
     tick(500);
     const groups = component.transactionGroups();
-    expect(groups[0]).toBe(ScheduleBTransactionGroups.OPERATING_EXPENDITURES);
+    expect(groups[0]).toBe(Disbursement.OPERATING_EXPENDITURES);
   }));
 
   it('should show only independent expenditures when in an F24', () => {
@@ -81,19 +80,19 @@ describe('TransactionTypePickerComponent', () => {
     fixture.detectChanges();
 
     const groups = component.transactionGroups();
-    expect(groups[0]).toBe(ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES);
+    expect(groups[0]).toBe(Disbursement.INDEPENDENT_EXPENDITURES);
     expect(groups.length).toEqual(1);
   });
 
   it('should change for loans and debts category', () => {
     routeParams$.next({ category: 'loans-and-debts' });
     const groups = component.transactionGroups();
-    expect(groups[0]).toBe(ScheduleCTransactionGroups.LOANS);
+    expect(groups[0]).toBe(LoansAndDebts.LOANS);
 
-    let types = component.getTransactionTypes(groups[0]);
-    expect(types[0]).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
-    types = component.getTransactionTypes(groups[1]);
-    expect(types[0]).toBe(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
+    let types = component.transactionTypes().get(groups[0]);
+    expect(types![0]).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
+    types = component.transactionTypes().get(groups[1]);
+    expect(types![0]).toBe(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
   });
 
   it('should set the title correctly', () => {
@@ -107,13 +106,15 @@ describe('TransactionTypePickerComponent', () => {
 
   describe('getTransactionTypes', () => {
     it('should limit by PACRestricted if Committee type is PAC', fakeAsync(() => {
-      const types = component.getTransactionTypes(ScheduleATransactionGroups.TRANSFERS);
-      expect(types.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
+      routeParams$.next({ category: 'receipt' });
+      const types = component.transactionTypes().get(Receipt.TRANSFERS);
+      expect(types!.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
     }));
 
     it('should limit by PTY_ONLY if Committee type is PTY', fakeAsync(() => {
-      const testTypes = component.getTransactionTypes(ScheduleATransactionGroups.OTHER);
-      expect(testTypes.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
+      routeParams$.next({ category: 'receipt' });
+      const types = component.transactionTypes().get(Receipt.OTHER);
+      expect(types!.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
     }));
   });
 });
