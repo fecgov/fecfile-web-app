@@ -15,7 +15,9 @@
     </div>
   }
 
-  <div [class.notice-box-form]="showForm" [class.notice-box]="!showForm" [innerHTML]="consentText"></div>
+  <div [class.notice-box-form]="showForm" [class.notice-box]="!showForm">
+    <ng-container *ngComponentOutlet="componentToLoad"></ng-container>
+  </div>
 
   @if (showForm) {
     <div class="footer">

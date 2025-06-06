@@ -71,34 +71,30 @@
   border-radius: 8px;
 }
 
-::ng-deep {
-  p,
-  li {
-    margin-bottom: 20px;
-    font-size: 18px;
-    font-family: var(--gandhi-regular);
-    line-height: 1.5;
-  }
+p,
+li {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
 
-  p + ul {
-    margin-top: 0;
-  }
+p + ul {
+  margin-top: 0;
+}
 
-  ul li {
-    list-style-type: disc;
-    margin-left: 16px;
-  }
+ul li {
+  list-style-type: disc;
+  margin-left: 16px;
+}
 
-  h1 {
-    font-size: 36px;
-  }
+h1 {
+  font-size: 36px;
+}
 
-  h2 {
-    font-size: 28px;
-    margin: 0 !important;
-  }
+h2 {
+  font-size: 28px;
+  margin: 0;
+}
 
-  .top-line {
-    margin: 20px 0;
-  }
+.top-line {
+  margin: 20px 0;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Type } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -15,12 +15,15 @@ import { takeUntil } from 'rxjs';
 import { Checkbox } from 'primeng/checkbox';
 import { ButtonDirective } from 'primeng/button';
 import { environment } from 'environments/environment';
+import { ProdNoticeComponent } from './prod-notice.component';
+import { DevNoticeComponent } from './dev-notice.component';
+import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-security-notice',
   templateUrl: './security-notice.component.html',
   styleUrls: ['./security-notice.component.scss'],
-  imports: [ReactiveFormsModule, Checkbox, ButtonDirective],
+  imports: [ReactiveFormsModule, Checkbox, ButtonDirective, NgComponentOutlet],
 })
 export class SecurityNoticeComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);
@@ -31,14 +34,16 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   formSubmitted = false;
   showForm = true;
   userLoginData?: UserLoginData;
-  consentText = environment.consentText;
 
-  form = new FormGroup(
+  readonly form = new FormGroup(
     {
       'security-consent-annual': new SubscriptionFormControl(false),
     },
     { updateOn: 'blur' },
   );
+  readonly componentToLoad: Type<ProdNoticeComponent> | Type<DevNoticeComponent> = environment.production
+    ? ProdNoticeComponent
+    : DevNoticeComponent;
 
   constructor() {
     super();
