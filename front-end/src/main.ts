@@ -43,12 +43,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeng/themes/aura';
 
 function areCookiesAndLocalStorageEnabled() {
-  var test = 'test';
+  const test = 'test';
   try {
     localStorage.setItem(test, test);
     localStorage.removeItem(test);
     return window.navigator.cookieEnabled;
-  } catch(e) {
+  } catch {
     return false;
   }
 }
