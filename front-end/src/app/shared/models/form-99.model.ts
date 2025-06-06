@@ -40,11 +40,6 @@ export class Form99 extends Report {
   }
 }
 
-export enum textCodesWithFilingFrequencies {
-  MSR,
-  MSM,
-}
-
 let allTextCodes = Object.entries({
   MST: 'Miscellaneous Report to the FEC',
   MSM: 'Filing Frequency Change Notice',
@@ -54,7 +49,7 @@ let allTextCodes = Object.entries({
 });
 
 if (!fecSpec8dot5Released) {
-  allTextCodes = allTextCodes.filter(([key]) => key in textCodesWithFilingFrequencies);
+  allTextCodes = allTextCodes.filter(([key]) => key !== 'MSW' && key !== 'MSR');
 }
 
 export const textCodes = allTextCodes.map(([code, label]) => ({
@@ -62,6 +57,10 @@ export const textCodes = allTextCodes.map(([code, label]) => ({
   label,
 }));
 
+export enum textCodesWithFilingFrequencies {
+  MSR,
+  MSM,
+}
 export const filingFrequencies = [
   {
     label: 'Quarterly',
