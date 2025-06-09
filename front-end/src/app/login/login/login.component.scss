@@ -120,7 +120,7 @@
 @media (min-width: 768px) {
   .blue-background {
     top: 531px;
-    height: max(449px, calc(100vh - 754px));
+    height: max(520px, calc(100vh - 754px));
   }
 
   .header-filers {
@@ -147,7 +147,7 @@
 
   .blue-background {
     top: 520px;
-    height: max(449px, calc(100vh - 754px));
+    height: max(531px, calc(100vh - 754px));
   }
 }
 
@@ -165,6 +165,6 @@
   }
 
   .blue-background {
-    height: max(603px, 100vh - 677px);
+    height: max(626px, 100vh - 677px);
   }
 }
