@@ -155,6 +155,63 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
   });
 
+  it('existing transaction change general election year', () => {
+    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+      (response) => {
+        const report_id: string = response.body.id;
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          const individual_A_A = response.body;
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_Senate_B, (response) => {
+            const candidate_S_B = response.body;
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Committee_A, (response) => {
+              const committee_A = response.body;
+
+              const transaction_a = buildScheduleF(
+                200.01,
+                '2025-04-12',
+                individual_A_A,
+                candidate_S_B,
+                committee_A,
+                report_id,
+              );
+              const transaction_b = buildScheduleF(
+                25.0,
+                '2025-04-10',
+                individual_A_A,
+                candidate_S_B,
+                committee_A,
+                report_id,
+                {
+                  general_election_year: '2023',
+                },
+              );
+              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+                cy.visit(`/reports/transactions/report/${report_id}/list`);
+              });
+            });
+          });
+        });
+      },
+    );
+    cy.wait('@GetTransactionList');
+
+    cy.contains('Transactions in this report').should('exist');
+    cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+
+    // Tests changing the second transaction's general election year
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
+    TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(2025, 3, 15), '');
+    cy.get('[id=general_election_year]').clear().safeType('2024');
+    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+
+    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
+  });
+
   it('existing transaction date leapfrogging', () => {
     cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
     makeRequestToAPI(
