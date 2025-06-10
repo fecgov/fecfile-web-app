@@ -2,7 +2,7 @@ import { HttpClient, HttpContext, HttpErrorResponse, HttpHandler, HttpStatusCode
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { throwError } from 'rxjs';
+import { firstValueFrom, throwError } from 'rxjs';
 import { testMockStore } from '../utils/unit-test.utils';
 
 import { HttpErrorInterceptor } from './http-error.interceptor';
@@ -45,7 +45,7 @@ describe('HttpErrorInterceptor', () => {
     expect(logOutSpy).toHaveBeenCalled();
   });
 
-  it('should handle outgoing error', () => {
+  it('should handle outgoing error', async () => {
     const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
     const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
     const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
@@ -62,10 +62,37 @@ describe('HttpErrorInterceptor', () => {
 
     spyOn(store, 'dispatch');
 
-    testIterceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe(
-      (x) => x,
-      (y) => y,
+    let retval = '';
+    try {
+      await firstValueFrom(testIterceptor.intercept(httpRequestSpy, httpHandlerSpy));
+    } catch (error: any) {
+      retval = error;
+    }
+    expect(retval).toEqual('Outgoing HTTP Error: ');
+  });
+
+  it('should handle no API response (status === 0)', async () => {
+    const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
+    const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
+    const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
+    spyOn(console, 'log');
+    httpHandlerSpy.handle.and.returnValue(
+      throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 0,
+          }),
+      ),
     );
-    expect(console.log).toHaveBeenCalledWith('Outgoing HTTP Error: ');
+
+    spyOn(store, 'dispatch');
+
+    let retval = '';
+    try {
+      await firstValueFrom(testIterceptor.intercept(httpRequestSpy, httpHandlerSpy));
+    } catch (error: any) {
+      retval = error;
+    }
+    expect(retval).toEqual('Failed to receive an HTTP response from the server: 0 Unknown Error');
   });
 });
