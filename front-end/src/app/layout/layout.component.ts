@@ -49,8 +49,12 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
     return new LayoutControls(collectRouteData(this.route.snapshot));
   });
 
+  isCookiesDisabled = false;
+
   ngAfterViewChecked(): void {
     this.updateContentOffset();
+
+    this.isCookiesDisabled = (this.route.root as any)._routerState.snapshot.url === '/cookies-disabled';
   }
 
   updateContentOffset() {

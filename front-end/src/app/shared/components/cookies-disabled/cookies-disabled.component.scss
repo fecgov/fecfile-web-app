@@ -1,23 +1,49 @@
 .cookies-disabled-message {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  max-width: 552px;
+  padding: 32px 0 16px 16px;
+  border-left: 3px solid #aeb0b5;
   background-color: #f8f8f8;
   text-align: left;
   font-family: var(--karla);
+
+  display: flex;
+}
+
+.text-container {
+  width: 452px;
+  padding-right: 20px;
+  padding-left: 5px;
+  font-family: var(--gandhi-regular);
+}
+
+img {
+  align-self: flex-start;
+  margin-top: -10px;
+}
+
+h1 {
+  padding-left: 5px;
+  font-size: 24px;
+
+  white-space: pre;
+}
+
+hr {
+  color: #aeb0b5;
+  border-top-width: 1px;
 }
 
 ul li {
-  list-style-type: square;
+  list-style-type: disc;
   margin-left: 24px;
   padding-left: 16px;
+  line-height: 24px;
 }
 
 p {
-  font-family: var(--karla-bold);
   margin-bottom: 1rem;
+  line-height: 24px;
+  font-size: 16px;
 }
 
 p + ul {

@@ -35,7 +35,12 @@
 
   <!-- Begin No Sidebar section -->
   @else {
-    <div id="content-offset" #contentOffset>
+    <div
+      id="content-offset"
+      #contentOffset
+      [style.marginBottom]="isCookiesDisabled ? '-100px' : '0px'"
+      [style.marginTop]="isCookiesDisabled ? '100px' : '0px'"
+    >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner></app-committee-banner>
