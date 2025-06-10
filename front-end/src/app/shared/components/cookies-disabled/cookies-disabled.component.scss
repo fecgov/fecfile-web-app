@@ -1,0 +1,26 @@
+.cookies-disabled-message {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+  text-align: left;
+  font-family: var(--karla);
+}
+
+ul li {
+  list-style-type: square;
+  margin-left: 24px;
+  padding-left: 16px;
+}
+
+p {
+  font-family: var(--karla-bold);
+  margin-bottom: 1rem;
+}
+
+p + ul {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}

@@ -1,11 +1,12 @@
 import { Route } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
+import { BackgroundStyles, LayoutComponent } from './layout/layout.component';
 import { committeeGuard } from './shared/guards/committee.guard';
 import { nameGuard } from './shared/guards/name.guard';
 import { loggedInGuard } from './shared/guards/logged-in.guard';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
+import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
 
 export const ROUTES: Route[] = [
   {
@@ -14,6 +15,11 @@ export const ROUTES: Route[] = [
     resolve: { singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
+      {
+        path: 'cookies-disabled',
+        component: CookiesDisabledComponent,
+        data: { backgroundStyle: BackgroundStyles.SECURITY_NOTICE, showHeader: false },
+      },
       {
         path: 'committee',
         loadChildren: () => import('./committee/routes').then((mod) => mod.COMMITTEE_ROUTES),
