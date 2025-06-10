@@ -1,12 +1,24 @@
 .cookies-disabled-message {
-  max-width: 600px;
+  width: 512px;
   margin: 50px auto;
-  padding: 20px;
+  padding: 32px 32px 8px 14px;
   border: 1px solid #ccc;
+  border-left: 3px  #AEB0B5;
   border-radius: 8px;
-  background-color: #f8f8f8;
   text-align: left;
-  font-family: var(--karla);
+  background-color: white;
+  font-family: var(--gandhi-regular);
+  color:#212121;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+hr {
+  height: 1px;
+  color: #AEB0B5;
+  background-color: #AEB0B5;
 }
 
 ul li {
@@ -16,11 +28,30 @@ ul li {
 }
 
 p {
-  font-family: var(--karla-bold);
+  font-size: 16px;
+  line-height: 24px;
   margin-bottom: 1rem;
 }
 
 p + ul {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+
+img.icon {
+  width: 24px;
+  height: 24px;
+}
+
+div.flex div {
+  width: 432px;
+  margin-left: 10px;
+}
+
+#fec-seal-and-title {
+  min-height: 64px;
+  max-height: 5%;
+  position: absolute;
+  left: 5px;
+  top: 40px;
 }
