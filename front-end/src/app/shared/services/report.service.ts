@@ -21,7 +21,7 @@ export function getReportFromJSON(json: any): Report {
     if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);
     if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json);
   }
-  throw new Error('Fecfile: Cannot get report from JSON');
+  throw new Error('FECfile+: Cannot get report from JSON');
 }
 
 @Injectable({
@@ -101,7 +101,7 @@ export class ReportService implements TableListService<Report> {
    * @returns Promise<Report>
    */
   async setActiveReportById(reportId: string | undefined): Promise<Report> {
-    if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
+    if (!reportId) throw new Error('FECfile+: No Report Id Provided.');
     const report = await this.get(reportId);
     this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
     return report;

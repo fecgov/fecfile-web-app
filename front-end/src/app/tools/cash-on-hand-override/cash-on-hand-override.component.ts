@@ -9,14 +9,15 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
-import { Select } from 'primeng/select';
 import { InputNumberComponent } from '../../shared/components/inputs/input-number/input-number.component';
 import { ButtonDirective } from 'primeng/button';
+import { SelectComponent } from 'app/shared/components/select/select.component';
+import { PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-cash-on-hand-override',
   templateUrl: './cash-on-hand-override.component.html',
-  imports: [ReactiveFormsModule, Select, InputNumberComponent, ButtonDirective],
+  imports: [ReactiveFormsModule, SelectComponent, InputNumberComponent, ButtonDirective],
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
   private readonly router = inject(Router);
@@ -26,8 +27,11 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
   readonly yearFormControl = new SubscriptionFormControl<string | null>(null, Validators.required);
   readonly currentAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
   readonly newAmountFormControl = new SubscriptionFormControl<number | null>(null, Validators.required);
-  yearOptions: string[] = [];
-  numberOfYearOptions = 25;
+  readonly numberOfYearOptions = 25;
+  readonly yearOptions: PrimeOptions = Array.from({ length: this.numberOfYearOptions }, (value, index) => {
+    const year = (new Date().getFullYear() - index).toString();
+    return { label: year, value: year };
+  });
 
   form: FormGroup = new FormGroup({
     year: this.yearFormControl,
@@ -48,11 +52,7 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
       }
     });
 
-    const currentYear = new Date().getFullYear();
-    this.yearOptions = Array.from({ length: this.numberOfYearOptions }, (value, index) =>
-      (currentYear - index).toString(),
-    );
-    this.yearFormControl.setValue(this.yearOptions[0]);
+    this.yearFormControl.setValue(this.yearOptions[0].value);
   }
 
   updateForm = ([cashOnHandOverride, previousYear]: [CashOnHand | undefined, Form3X | undefined]): void => {

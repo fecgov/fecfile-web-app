@@ -1,26 +1,25 @@
-import { AfterViewInit, ChangeDetectorRef, Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { environment } from 'environments/environment';
-import { Select } from 'primeng/select';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
 import { ButtonModule } from 'primeng/button';
+import { SelectComponent } from 'app/shared/components/select/select.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
 @Component({
   selector: 'app-committee-info',
   templateUrl: './committee-info.component.html',
   styleUrls: ['./committee-info.component.scss'],
-  imports: [ReactiveFormsModule, Select, FecInternationalPhoneInputComponent, ButtonModule],
+  imports: [ReactiveFormsModule, FecInternationalPhoneInputComponent, ButtonModule, SelectComponent],
 })
-export class CommitteeInfoComponent extends FormComponent implements OnInit, AfterViewInit {
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
-
+export class CommitteeInfoComponent extends FormComponent {
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
-  stateOptions: PrimeOptions = [];
-  form = this.fb.group({}, { updateOn: 'blur' });
-  formProperties: string[] = [
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+
+  readonly formProperties: string[] = [
     'name',
     'committee_id',
     'committee_type_label',
@@ -41,7 +40,9 @@ export class CommitteeInfoComponent extends FormComponent implements OnInit, Aft
     'treasurer_phone',
     'custodian_name_full',
   ];
-
+  readonly form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
+  readonly stateControl = this.form.get('state') as SubscriptionFormControl;
+  readonly treasurerStateControl = this.form.get('treasurer_state') as SubscriptionFormControl;
   constructor() {
     super();
     effect(() => {
@@ -55,15 +56,6 @@ export class CommitteeInfoComponent extends FormComponent implements OnInit, Aft
       }
       this.form.disable();
     });
-  }
-
-  ngOnInit(): void {
-    this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-  }
-
-  ngAfterViewInit(): void {
-    this.changeDetectorRef.detectChanges();
   }
 
   /**

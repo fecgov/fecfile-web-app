@@ -2,6 +2,7 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from './base.model';
 import { Report, ReportTypes } from './report.model';
+import { fecSpec8dot5Released } from '../utils/schema.utils';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -32,6 +33,7 @@ export class Form99 extends Report {
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   text_code: string | undefined;
   message_text: string | undefined;
+  filing_frequency: string | undefined;
 
   static fromJSON(json: unknown): Form99 {
     return plainToInstance(Form99, json);
@@ -50,5 +52,34 @@ export const textCodes = [
   {
     label: 'Miscellaneous Report to the FEC',
     value: 'MST',
+  },
+  // If TESTBOOL is true, add MSR and MSW to the list of textCodes
+  ...(fecSpec8dot5Released
+    ? [
+        {
+          label: 'Form 3L Filing Frequency Change Notice',
+          value: 'MSR',
+        },
+        {
+          label: 'Loan Agreement',
+          value: 'MSW',
+        },
+      ]
+    : []),
+];
+
+export enum textCodesWithFilingFrequencies {
+  MSR,
+  MSM,
+}
+
+export const filingFrequencies = [
+  {
+    label: 'Quarterly',
+    value: 'Q',
+  },
+  {
+    label: 'Monthly',
+    value: 'M',
   },
 ];

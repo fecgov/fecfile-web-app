@@ -112,6 +112,21 @@ describe('MemoCodeInputComponent', () => {
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
 
+  it('should not open the dialog box when same report date is set', () => {
+    component.report = new Form3X();
+    component.templateMap.memo_code = 'memo_code';
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+    component.transaction = testScheduleATransaction;
+
+    component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
+    expect(component.outOfDateDialogVisible).toBeTrue();
+
+    component.outOfDateDialogVisible = false;
+    component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
+    expect(component.outOfDateDialogVisible).toBeFalse();
+  });
+
   it('should add and remove the requiredTrue validator when a date is set', () => {
     component.report = new Form3X();
     component.report.coverage_from_date = new Date('01/01/2020');

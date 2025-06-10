@@ -64,7 +64,7 @@ export class TransactionFormUtils {
     const transactionType = transaction?.transactionType;
     const templateMap = transactionType?.templateMap;
     if (!transactionType || !templateMap) {
-      throw new Error('Fecfile: Cannot find template map when initializing transaction form');
+      throw new Error('FECfile+: Cannot find template map when initializing transaction form');
     }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
@@ -223,7 +223,7 @@ export class TransactionFormUtils {
     formProperties: string[],
   ): Transaction {
     if (!transaction) {
-      throw new Error('Fecfile: Payload transaction not found');
+      throw new Error('FECfile+: Payload transaction not found');
     }
 
     // Remove parent transaction links within the parent-child hierarchy in the

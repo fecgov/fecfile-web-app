@@ -123,7 +123,7 @@ export abstract class TransactionType {
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
     if (!schema_name) {
-      throw new Error('Fecfile: Schema name for transaction type not found.');
+      throw new Error('FECfile+: Schema name for transaction type not found.');
     }
     return schema_name;
   }

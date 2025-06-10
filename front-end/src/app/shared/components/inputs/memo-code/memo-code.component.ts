@@ -1,20 +1,20 @@
 import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit } from '@angular/core';
-import { Validators, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { takeUntil } from 'rxjs';
-import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
-import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { CheckboxModule } from 'primeng/checkbox';
-import { Tooltip } from 'primeng/tooltip';
-import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { SelectButton } from 'primeng/selectbutton';
-import { Dialog } from 'primeng/dialog';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Dialog } from 'primeng/dialog';
+import { SelectButton } from 'primeng/selectbutton';
+import { Tooltip } from 'primeng/tooltip';
+import { takeUntil } from 'rxjs';
 import { FecDatePipe } from '../../../pipes/fec-date.pipe';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-memo-code',
@@ -61,8 +61,10 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
     if (dateControl?.enabled) {
       dateControl.addSubscription((date: Date) => {
-        this.coverageDate = date;
-        this.updateMemoItemWithDate(date);
+        if (date && date.getTime() !== this.coverageDate.getTime()) {
+          this.coverageDate = date;
+          this.updateMemoItemWithDate(date);
+        }
       }, this.destroy$);
     }
 
