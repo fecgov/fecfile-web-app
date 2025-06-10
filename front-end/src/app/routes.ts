@@ -18,7 +18,12 @@ export const ROUTES: Route[] = [
       {
         path: 'cookies-disabled',
         component: CookiesDisabledComponent,
-        data: { backgroundStyle: BackgroundStyles.SECURITY_NOTICE, showHeader: false, showFeedbackButton: false },
+        data: {
+          backgroundStyle: BackgroundStyles.SECURITY_NOTICE,
+          showHeader: false,
+          showFeedbackButton: false,
+          showUpperFooter: false,
+        },
       },
       {
         path: 'committee',
