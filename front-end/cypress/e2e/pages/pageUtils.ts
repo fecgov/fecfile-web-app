@@ -186,7 +186,7 @@ export class PageUtils {
       .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
       .then(($email) => {
         if ($email.length) {
-          cy.contains('Welcome to FECfile').should('exist').click(); // Ensures that the modal is in focus
+          cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
           cy.get('#email').should('have.value', '');
           cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
           cy.get('#email').should('have.value', 'admin@admin.com');
@@ -194,6 +194,6 @@ export class PageUtils {
           PageUtils.clickButton('Save');
         }
       });
-    cy.contains('Welcome to FECfile').should('not.exist');
+    cy.contains('Welcome to FECfile+').should('not.exist');
   }
 }

@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReportStatus } from 'app/shared/models';
 import { collectRouteData } from 'app/shared/utils/route.utils';
@@ -18,14 +18,15 @@ export abstract class AbstractMenuComponent extends DestroyerComponent {
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
   protected readonly routeDataSignal = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       map(() => {
-        return collectRouteData(this.router);
+        return collectRouteData(this.route.snapshot);
       }),
-      startWith(collectRouteData(this.router)),
+      startWith(collectRouteData(this.route.snapshot)),
     ),
   );
   itemsSignal = computed(() => {

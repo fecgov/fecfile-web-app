@@ -11,7 +11,7 @@ describe('Manage reports', () => {
     Initialize();
   });
 
-  xit('should create form 1m by affiliation', () => {
+  it('should create form 1m by affiliation', () => {
     ContactListPage.createCommittee();
     const committeeID = Cypress.env('COMMITTEE_ID');
     ReportListPage.createF1M();
@@ -29,7 +29,7 @@ describe('Manage reports', () => {
     cy.get('[data-cy="report-list-component').should('exist');
   });
 
-  xit('should create form 1m by qualification', () => {
+  it('should create form 1m by qualification', () => {
     const candidates = [0, 1, 2, 3, 4].map((index) => {
       const candidate = createContact(ContactType.CANDIDATE);
       ContactListPage.createCandidate(candidate);

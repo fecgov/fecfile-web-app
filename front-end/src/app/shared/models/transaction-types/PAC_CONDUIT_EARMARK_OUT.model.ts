@@ -8,6 +8,7 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK_OUT } from './common-types/CONDUIT_EARMARK_OUT.model';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { conduitClause } from '../clause';
 
 export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
@@ -24,16 +25,7 @@ export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
   override generatePurposeDescription(transaction: SchBTransaction): string {
     if (!transaction.parent_transaction) return '';
     const earmark: SchATransaction = transaction.parent_transaction as SchATransaction;
-    const conduit = earmark.contributor_organization_name;
-    if (conduit) {
-      let conduitClause = `Earmarked from ${conduit}`;
-      const parenthetical = ' (Committee)';
-      if ((conduitClause + parenthetical).length > 100) {
-        conduitClause = conduitClause.slice(0, 97 - parenthetical.length) + '...';
-      }
-      return conduitClause + parenthetical;
-    }
-    return '';
+    return conduitClause(earmark.contributor_organization_name, 'from');
   }
   getNewTransaction() {
     return SchBTransaction.fromJSON({
