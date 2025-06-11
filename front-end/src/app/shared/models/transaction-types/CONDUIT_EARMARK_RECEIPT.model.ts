@@ -3,6 +3,7 @@ import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
+import { conduitClause } from '../clause';
 
 export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
   formFields = INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS;
@@ -18,16 +19,7 @@ export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
-    if (earmarkMemo.payee_organization_name) {
-      const conduit = earmarkMemo.payee_organization_name;
-      let conduitClause = `Earmarked for ${conduit}`;
-      const parenthetical = ' (Committee)';
-      if ((conduitClause + parenthetical).length > 100) {
-        conduitClause = conduitClause.slice(0, 97 - parenthetical.length) + '...';
-      }
-      return conduitClause + parenthetical;
-    }
-    return '';
+    return conduitClause(earmarkMemo.payee_organization_name, 'for');
   }
 
   getNewTransaction() {

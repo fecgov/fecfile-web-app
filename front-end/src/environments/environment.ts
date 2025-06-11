@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   name: 'development',
   apiUrl: 'https://localhost/api/v1',
-  appTitle: 'FECfile',
+  appTitle: 'FECfile+',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
   fecApiUrl: 'https://api.open.fec.gov/v1/',
   userCanSetFilingFrequency: true,
@@ -20,6 +20,7 @@ export const environment = {
   showForm3: false,
   showSchedF: false,
   disableLogin: false,
+  fecSpec: 8.4,
 };
 
 /*

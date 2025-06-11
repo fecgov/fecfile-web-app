@@ -56,7 +56,7 @@ describe('ReportService', () => {
       fail('Expected function to throw an error, but it did not.');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      expect(err.message).toBe('Fecfile: No Report Id Provided.');
+      expect(err.message).toBe('FECfile+: No Report Id Provided.');
     }
   });
 

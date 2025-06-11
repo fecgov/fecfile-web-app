@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -13,6 +14,7 @@ import { firstValueFrom, of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { signal } from '@angular/core';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',
@@ -61,7 +63,7 @@ describe('CommitteeMemberDialogComponent', () => {
     const newEmail = 'test_1234321@test.com';
     component.form.get('email')?.setValue(newEmail);
     component.submit();
-    expect(component.detailVisible).toBeFalse();
+    expect(component.detailVisible()).toBeFalse();
   });
 
   it('should not add user with pre-existing email', () => {
@@ -84,7 +86,7 @@ describe('CommitteeMemberDialogComponent', () => {
   });
 
   it('should default role to first in list', () => {
-    component.detailVisible = true;
+    (component.detailVisible as any) = signal<boolean>(true);
     component.ngOnChanges();
     expect(component.form.get('role')?.value).toBe('COMMITTEE_ADMINISTRATOR');
   });
@@ -97,14 +99,14 @@ describe('CommitteeMemberDialogComponent', () => {
 
     it('should call editRole when member is defined', () => {
       spyOn(component, 'editRole');
-      component.member = { role: 'MANAGER' } as CommitteeMember;
+      (component.member as any) = signal<CommitteeMember | undefined>({ role: 'MANAGER' } as CommitteeMember);
       component.submit();
       expect(component.editRole).toHaveBeenCalled();
     });
 
     it('should call addUser when member is undefined', () => {
       spyOn(component, 'addUser');
-      component.member = undefined;
+      (component.member as any) = signal<CommitteeMember | undefined>(undefined);
       component.submit();
       expect(component.addUser).toHaveBeenCalled();
     });
@@ -112,7 +114,7 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('editRole', () => {
     beforeEach(() => {
-      component.member = { role: 'MANAGER' } as CommitteeMember;
+      (component.member as any) = signal<CommitteeMember | undefined>({ role: 'MANAGER' } as CommitteeMember);
       component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
     });
 
@@ -126,7 +128,7 @@ describe('CommitteeMemberDialogComponent', () => {
     it('should call committeeMemberService.update when role is valid', async () => {
       const updateSpy = spyOn(testCommitteeService, 'update').and.returnValue(Promise.resolve(johnSmith));
       const resetSpy = spyOn(component, 'resetForm');
-      component.member = johnSmith;
+      (component.member as any) = signal<CommitteeMember | undefined>(johnSmith);
       component.form.get('role')?.setValue('MANAGER');
       await component.editRole();
 
@@ -186,13 +188,13 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('role getter', () => {
     it('should return empty string if member is undefined', () => {
-      component.member = undefined;
-      expect(component.role).toBe('');
+      (component.member as any) = signal<CommitteeMember | undefined>(undefined);
+      expect(component.role()).toBe('');
     });
 
     it('should return the role label from Roles enum', () => {
-      component.member = { role: 'MANAGER' } as CommitteeMember;
-      expect(component.role).toBe(Roles.MANAGER);
+      (component.member as any) = signal<CommitteeMember | undefined>({ role: 'MANAGER' } as CommitteeMember);
+      expect(component.role()).toBe(Roles.MANAGER);
     });
   });
 });

@@ -83,13 +83,13 @@ describe('PrintPreviewComponent', () => {
     const testF3x: Form3X = Form3X.fromJSON({
       webprint_submission: {
         fecfile_task_state: 'FAILED',
-        fecfile_error: 'fecfile dropped the ball',
+        fecfile_error: 'fecfile+ dropped the ball',
       },
     });
 
     component.updatePrintStatus(testF3x);
     expect(component.webPrintStage).toBe('failure');
-    expect(component.printError).toBe('fecfile dropped the ball');
+    expect(component.printError).toBe('fecfile+ dropped the ball');
   });
 
   it('#submitPrintJob() calls the service', fakeAsync(() => {

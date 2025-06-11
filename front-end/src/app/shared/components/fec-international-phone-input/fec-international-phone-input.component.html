@@ -4,7 +4,7 @@
     [class.p-disabled]="disabled"
     #internationalPhoneInput
     type="tel"
-    [id]="id"
+    [id]="inputId()"
     [attr.labelName]="labelName"
     (keyup)="onKey($event)"
     (blur)="onBlur($event)"
