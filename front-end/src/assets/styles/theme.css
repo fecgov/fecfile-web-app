@@ -1548,10 +1548,11 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 
 .p-selectbutton {
   display: flex;
+  width: fit-content;
 }
 
 .p-selectbutton > p-togglebutton {
-  width: 50%;
+  width: fit-content;
   text-wrap-mode: nowrap;
 }
 
@@ -1655,9 +1656,14 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   transition: height 0.15s;
 }
 
+.p-togglebutton-content {
+  padding: 8px 20px;
+}
+
 .p-togglebutton {
+  padding: 0;
   background: var(--p-content-background);
-  border: 3px solid var(--fec-grey-alt);
+  border: 2px solid var(--fec-grey-alt);
   color: var(--p-content-color);
   font-weight: 400;
   font-family: var(--karla);
@@ -1666,6 +1672,12 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
     background-color 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
+}
+.p-selectbutton .p-togglebutton:first-child:not(.p-togglebutton-checked) {
+  border-right: 0px;
+}
+.p-selectbutton .p-togglebutton:last-child:not(.p-togglebutton-checked) {
+  border-left: 0px;
 }
 .p-togglebutton .p-button-icon-left,
 .p-togglebutton .p-button-icon-right {
@@ -1910,8 +1922,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--surface-border);
   color: #5b616b;
 }
-.p-button:focus,
-.p-togglebutton:focus {
+.p-button:focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: var(--focus-ring);
