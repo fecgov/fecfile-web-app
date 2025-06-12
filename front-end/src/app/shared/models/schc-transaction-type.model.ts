@@ -66,6 +66,8 @@ export abstract class SchCTransactionType extends TransactionType {
     secured: 'secured',
     aggregate: '',
     calendar_ytd: '',
+    aggregate_general_elec_expended: '',
+    general_election_year: '',
     purpose_description: '',
     text4000: 'text4000',
     category_code: '',

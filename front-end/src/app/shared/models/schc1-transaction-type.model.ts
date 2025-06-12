@@ -60,6 +60,8 @@ export abstract class SchC1TransactionType extends TransactionType {
     secured: 'collateral',
     aggregate: '',
     calendar_ytd: '',
+    aggregate_general_elec_expended: '',
+    general_election_year: '',
     purpose_description: '',
     text4000: '',
     category_code: '',

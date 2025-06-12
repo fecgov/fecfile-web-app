@@ -39,6 +39,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
   @Input() showCalendarYTD = false;
+  @Input() showPayeeCandidateYTD = false;
 
   @Input() memoCodeCheckboxLabel = '';
   @Input() memoItemHelpText: string | undefined;
