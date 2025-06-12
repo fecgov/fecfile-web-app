@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClient, HttpContext, HttpErrorResponse, HttpHandler, HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
