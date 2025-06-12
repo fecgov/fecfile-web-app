@@ -69,7 +69,10 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
       offsetElement.style.paddingBottom === '' ? 0 : parseInt(offsetElement.style.paddingBottom, 10);
 
     let padding = window.innerHeight - height - footerHeight - bannerHeight + currentPadding;
-    if (!this.isCookiesDisabled && (this.layoutControls().showHeader || this.layoutControls().backgroundStyle === BackgroundStyles.SECURITY_NOTICE))
+    if (
+      !this.isCookiesDisabled &&
+      (this.layoutControls().showHeader || this.layoutControls().backgroundStyle === BackgroundStyles.SECURITY_NOTICE)
+    )
       padding -= 144;
 
     const paddingBottom = Math.max(64, padding);
