@@ -6,13 +6,10 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/models/report.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import {
-  ScheduleETransactionGroups,
-  ScheduleETransactionTypeLabels,
-  ScheduleETransactionTypes,
-} from 'app/shared/models/sche-transaction.model';
+import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { Card } from 'primeng/card';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
+import { Disbursement } from 'app/shared/models/transaction-group';
 
 @Component({
   selector: 'app-transaction-independent-expenditure-picker',
@@ -24,7 +21,7 @@ export class TransactionIndependentExpenditurePickerComponent extends DestroyerC
   private readonly store = inject(Store);
   private readonly titleService = inject(Title);
   readonly transactionTypeLabels = ScheduleETransactionTypeLabels;
-  readonly transactionGroups = ScheduleETransactionGroups;
+  readonly transactionGroups = Disbursement;
   readonly transactionTypes = [
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,

@@ -4,11 +4,11 @@
 }
 <p-accordion expandIcon="pi pi-angle-right" [(value)]="active">
   @for (transactionGroup of transactionGroups(); track transactionGroup; let index = $index) {
-    @if (hasTransactions(transactionGroup)) {
+    @if (hasTransactions().get(transactionGroup)) {
       <p-accordion-panel [value]="index">
         <p-accordion-header>{{ transactionGroup }}</p-accordion-header>
         <p-accordion-content class="grid">
-          @for (transactionType of getTransactionTypes(transactionGroup); track transactionType) {
+          @for (transactionType of transactionTypes().get(transactionGroup); track transactionType) {
             <div class="col-12">
               @if (!isTransactionDisabled(transactionType)) {
                 <a

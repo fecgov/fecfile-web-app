@@ -69,12 +69,6 @@ export class SchFTransaction extends Transaction {
   }
 }
 
-export enum ScheduleFTransactionGroups {
-  COORDINATED_EXPENDITURES = 'CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS',
-}
-
-export type ScheduleFTransactionGroupsType = ScheduleFTransactionGroups.COORDINATED_EXPENDITURES;
-
 export enum ScheduleFTransactionTypes {
   COORDINATED_PARTY_EXPENDITURE = 'COORDINATED_PARTY_EXPENDITURE',
   COORDINATED_PARTY_EXPENDITURE_VOID = 'COORDINATED_PARTY_EXPENDITURE_VOID',
