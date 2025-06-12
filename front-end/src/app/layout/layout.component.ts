@@ -53,13 +53,14 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
   isCookiesDisabled = false;
 
   ngAfterViewChecked(): void {
-    this.updateContentOffset();
-
     this.isCookiesDisabled = (this.route.root as any)._routerState.snapshot.url === '/cookies-disabled';
+
+    this.updateContentOffset();
   }
 
   updateContentOffset() {
     if (this.layoutControls().showSidebar) return;
+
     const offsetElement = this.contentOffset().nativeElement;
     const height = offsetElement.offsetHeight;
     const footerHeight = this.footer().getFooterElement().offsetHeight;
@@ -68,7 +69,7 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
       offsetElement.style.paddingBottom === '' ? 0 : parseInt(offsetElement.style.paddingBottom, 10);
 
     let padding = window.innerHeight - height - footerHeight - bannerHeight + currentPadding;
-    if (this.layoutControls().showHeader || this.layoutControls().backgroundStyle === BackgroundStyles.SECURITY_NOTICE)
+    if (!this.isCookiesDisabled && (this.layoutControls().showHeader || this.layoutControls().backgroundStyle === BackgroundStyles.SECURITY_NOTICE))
       padding -= 144;
 
     const paddingBottom = Math.max(64, padding);
