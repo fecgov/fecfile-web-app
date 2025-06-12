@@ -1673,12 +1673,7 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
     border-color 0.15s,
     box-shadow 0.15s;
 }
-.p-selectbutton .p-togglebutton:first-child:not(.p-togglebutton-checked) {
-  border-right: 0px;
-}
-.p-selectbutton .p-togglebutton:last-child:not(.p-togglebutton-checked) {
-  border-left: 0px;
-}
+
 .p-togglebutton .p-button-icon-left,
 .p-togglebutton .p-button-icon-right {
   color: #ffffff;
