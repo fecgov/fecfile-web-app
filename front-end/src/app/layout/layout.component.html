@@ -38,14 +38,14 @@
     <div
       id="content-offset"
       #contentOffset
-      [style.marginBottom]="isCookiesDisabled ? '-100px' : '0px'"
-      [style.marginTop]="isCookiesDisabled ? '100px' : '0px'"
+      [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
+      [style.marginTop]="isCookiesDisabled() ? '100px' : '0px'"
     >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner></app-committee-banner>
         }
-        @if (layoutControls().backgroundStyle === BackgroundStyles.DEFAULT) {
+        @if (isDefault()) {
           <div class="container">
             <router-outlet></router-outlet>
           </div>
@@ -54,7 +54,11 @@
         }
       </div>
     </div>
-    <app-footer #footerRef [showUpperFooter]="layoutControls().showUpperFooter"></app-footer>
+    <app-footer
+      #footerRef
+      [showUpperFooter]="layoutControls().showUpperFooter"
+      [style.paddingTop]="topPadding()"
+    ></app-footer>
   }
   <!-- End No Sidebar section -->
 

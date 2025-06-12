@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -10,9 +10,4 @@ import { RouterLink } from '@angular/router';
 export class FooterComponent {
   @Input() showSidebar = false;
   @Input() showUpperFooter = true;
-
-  @ViewChild('footerElement') footerElement!: ElementRef;
-  getFooterElement(): HTMLElement {
-    return this.footerElement.nativeElement;
-  }
 }
