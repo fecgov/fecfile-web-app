@@ -31,6 +31,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Outgoing HTTP Error: ${error.error.message}`;
+        } else if (error.status === 0) {
+          errorMessage = `Failed to receive an HTTP response from the server: ${error.status} ${error.statusText}`;
         } else {
           errorMessage = `Incoming HTTP Error - [Error Code]: ${error.status} ${error.statusText}`;
         }
@@ -39,7 +41,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         } else {
           this.store.dispatch(singleClickEnableAction());
         }
-        console.log(errorMessage);
         return throwError(() => errorMessage);
       }),
     );
