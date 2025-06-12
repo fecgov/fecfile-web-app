@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, AfterViewChecked, ElementRef, inject, viewChild, computed } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
@@ -49,8 +50,12 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
     return new LayoutControls(collectRouteData(this.route.snapshot));
   });
 
+  isCookiesDisabled = false;
+
   ngAfterViewChecked(): void {
     this.updateContentOffset();
+
+    this.isCookiesDisabled = (this.route.root as any)._routerState.snapshot.url === '/cookies-disabled';
   }
 
   updateContentOffset() {
