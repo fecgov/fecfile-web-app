@@ -24,7 +24,7 @@ describe('LayoutComponent', () => {
     mockFooter = jasmine.createSpyObj('FooterComponent', ['getFooterElement']);
     mockBanner = jasmine.createSpyObj('BannerComponent', ['getBannerElement']);
     mockFooter.getFooterElement = () => {
-      return { offsetHeight: 456 } as HTMLElement;
+      return { offsetHeight: 220 } as HTMLElement;
     };
     mockBanner.getBannerElement = () => {
       return { offsetHeight: 35 } as HTMLElement;
@@ -71,6 +71,7 @@ describe('LayoutComponent', () => {
 
   it('should update content offset correctly', () => {
     component.layoutControls().showSidebar = false;
+    component.layoutControls().showHeader = false;
     component.updateContentOffset();
 
     const expectedPaddingBottom = Math.max(

@@ -67,7 +67,11 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
     const currentPadding =
       offsetElement.style.paddingBottom === '' ? 0 : parseInt(offsetElement.style.paddingBottom, 10);
 
-    const paddingBottom = Math.max(64, window.innerHeight - height - footerHeight - bannerHeight + currentPadding);
+    let padding = window.innerHeight - height - footerHeight - bannerHeight + currentPadding;
+    if (this.layoutControls().showHeader || this.layoutControls().backgroundStyle === BackgroundStyles.SECURITY_NOTICE)
+      padding -= 144;
+
+    const paddingBottom = Math.max(64, padding);
 
     // Apply the margin-bottom to the div
     offsetElement.style.paddingBottom = paddingBottom + 'px';
