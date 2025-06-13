@@ -517,3 +517,9 @@ table {
   font-size: 1.5rem;
   margin-left: 0.5rem;
 }
+
+app-login {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
