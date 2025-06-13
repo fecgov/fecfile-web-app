@@ -44,6 +44,10 @@ app-footer {
   padding: 0;
 }
 
+.footer-spacer {
+  min-height: 64px;
+}
+
 .sidebar-content-container {
   min-height: calc(100vh - 2rem);
   width: calc(100% - 250px);

@@ -1,7 +1,3 @@
-:root {
-  --scrollbar-width: 0px; /* Default value, will be updated by JavaScript if needed */
-}
-
 .login-box-header {
   font-family: var(--karla-bold);
   font-size: 32px;
@@ -83,6 +79,7 @@
   position: relative;
   padding-bottom: 64px;
   height: calc(100% - 301px);
+  flex: 1;
 }
 
 .blue-background {
