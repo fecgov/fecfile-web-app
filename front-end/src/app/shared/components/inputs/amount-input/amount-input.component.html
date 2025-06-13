@@ -62,7 +62,8 @@
             [templateMap]="templateMap"
             [overrideMemoItemHelpText]="memoItemHelpText"
             [transaction]="transaction"
-            [checkboxLabel]="memoCodeCheckboxLabel"
+            checkboxLabel="MEMO ITEM"
+            [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
           ></app-memo-code>
         </div>
       </div>

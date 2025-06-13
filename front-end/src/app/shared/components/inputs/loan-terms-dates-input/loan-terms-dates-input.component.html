@@ -31,7 +31,7 @@
       @switch (dueDateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
-            <label for="due_date">DATE DUE (USER DEFINED)</label>
+            <label for="due_date">DATE DUE <span class="paren-label">(USER DEFINED)</span></label>
             <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
             <app-error-messages
               [form]="form"
@@ -75,7 +75,7 @@
       @switch (interestRateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
-            <label for="interest_rate">INTEREST RATE (USER DEFINED)</label>
+            <label for="interest_rate">INTEREST RATE <span class="paren-label">(USER DEFINED)</span></label>
             <input type="text" pInputText id="interest_rate" [formControlName]="templateMap['interest_rate']" />
             <app-error-messages
               [form]="form"
@@ -86,7 +86,7 @@
         }
         @case (termFieldSettings.EXACT_PERCENTAGE) {
           <div class="field">
-            <label for="interest_rate">EXACT PERCENTAGE (%)</label>
+            <label for="interest_rate">EXACT PERCENTAGE <span class="paren-label">(%)</span></label>
             <input
               #interestRatePercentage
               type="text"

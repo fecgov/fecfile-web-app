@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -22,6 +23,7 @@ import { InputNumberComponent } from '../input-number/input-number.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleATransactionTypes } from 'app/shared/models';
 import { setActiveReportAction } from 'app/store/active-report.actions';
+import { signal } from '@angular/core';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -91,9 +93,13 @@ describe('AmountInputComponent', () => {
     const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
     component.transaction = transaction;
     component.templateMap = transaction.transactionType.templateMap;
-    const checkboxLabel = '';
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    component.memoCode = { checkboxLabel, updateMemoItemWithDate: (date) => undefined } as MemoCodeInputComponent;
+    const checkboxLabel = signal('MEMO ITEM');
+
+    component.memoCode = {
+      checkboxLabel,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      updateMemoItemWithDate: (date: any) => undefined,
+    } as unknown as MemoCodeInputComponent;
     component.form.patchValue({
       [transaction.transactionType.templateMap.date]: undefined,
     });
@@ -101,7 +107,7 @@ describe('AmountInputComponent', () => {
       [transaction.transactionType.templateMap.date2]: date,
     });
     fixture.detectChanges();
-    expect(component.memoCode.checkboxLabel).toBe(checkboxLabel);
+    expect(component.memoCode.checkboxLabel()).toBe(checkboxLabel());
   });
 
   it('should not allow memo item selection for loan repayment', fakeAsync(() => {
