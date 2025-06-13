@@ -39,7 +39,7 @@
           [formSubmitted]="formSubmitted"
           [form]="form"
           [isEditable]="isEditable()"
-          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
+          [memoHasOptional$]="memoHasOptional$"
           [transaction]="transaction"
         >
         </app-transaction-input>
@@ -77,7 +77,7 @@
             [formSubmitted]="formSubmitted"
             [form]="childForm"
             [isEditable]="isEditable()"
-            [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
+            [memoHasOptional$]="childMemoHasOptional$"
             [transaction]="childTransaction"
           >
           </app-transaction-input>
@@ -115,7 +115,7 @@
             [formSubmitted]="formSubmitted"
             [form]="reattributedData.form"
             [isEditable]="false"
-            [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
+            [memoHasOptional$]="reattributedData.memoHasOptional$"
             [transaction]="transaction?.reatt_redes"
           >
           </app-transaction-input>

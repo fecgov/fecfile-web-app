@@ -44,7 +44,8 @@
     [form]="form"
     [formSubmitted]="formSubmitted"
     controlName="line_of_credit"
-    label="Is there a line of credit? (OPTIONAL)"
+    label="Is there a line of credit? "
+    parenLabel="(OPTIONAL)"
     ariaLabelYes="There is a line of credit"
     ariaLabelNo="There is not a line of credit"
   ></app-yes-no-radio-input>
@@ -52,7 +53,9 @@
     <div class="grid">
       <div class="col-4">
         <div class="field">
-          <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
+          <label for="credit_amount_this_draw"
+            >CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span></label
+          >
           <app-input-number
             inputId="credit_amount_this_draw"
             formControlName="credit_amount_this_draw"
@@ -149,7 +152,8 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       controlName="perfected_interest"
-      label="Does the lender have a perfected security interest in it? (OPTIONAL)"
+      label="Does the lender have a perfected security interest in it? "
+      parenLabel="(OPTIONAL)"
       ariaLabelYes="Lender has a perfected security interest"
       ariaLabelNo="Lender does not have a perfected security interest"
     ></app-yes-no-radio-input>
@@ -253,7 +257,7 @@
         not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
         assures repayment.
       </p>
-      <label for="basis_of_loan_description">DESCRIPTION (OPTIONAL)</label>
+      <label for="basis_of_loan_description">DESCRIPTION <span class="paren-label">(OPTIONAL)</span></label>
       <div>
         <textarea
           id="basis_of_loan_description"

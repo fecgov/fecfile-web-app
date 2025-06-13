@@ -24,7 +24,7 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="middle_name">{{ labelPrefix }} MIDDLE NAME (OPTIONAL)</label>
+        <label for="middle_name">{{ labelPrefix }} MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="middle_name" [formControlName]="middleNameFieldName" />
         <app-error-messages
           [form]="form"
@@ -37,7 +37,7 @@
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <label for="prefix">{{ labelPrefix }} PREFIX (OPTIONAL)</label>
+        <label for="prefix">{{ labelPrefix }} PREFIX <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="prefix" [formControlName]="prefixFieldName" />
         <app-error-messages
           [form]="form"
@@ -48,7 +48,7 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="suffix">{{ labelPrefix }} SUFFIX (OPTIONAL)</label>
+        <label for="suffix">{{ labelPrefix }} SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="suffix" [formControlName]="suffixFieldName" />
         <app-error-messages
           [form]="form"

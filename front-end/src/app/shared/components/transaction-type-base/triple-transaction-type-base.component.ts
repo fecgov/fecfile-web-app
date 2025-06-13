@@ -43,7 +43,7 @@ export abstract class TripleTransactionTypeBaseComponent
   childForm_2: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   childContactIdMap_2: ContactIdMapType = {};
   childTemplateMap_2: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  childMemoCodeCheckboxLabel_2$ = of('');
+  memoHasOptional_2$ = of(false);
 
   override ngOnInit(): void {
     // Initialize primary and secondary forms.
@@ -78,12 +78,9 @@ export abstract class TripleTransactionTypeBaseComponent
         ?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
-      this.childMemoCodeCheckboxLabel_2$ = this.memoCodeCheckboxLabel$;
+      this.memoHasOptional_2$ = this.memoHasOptional$;
     } else {
-      this.childMemoCodeCheckboxLabel_2$ = this.getMemoCodeCheckboxLabel$(
-        this.childForm_2,
-        this.childTransactionType_2,
-      );
+      this.memoHasOptional_2$ = this.getMemoHasOptional$(this.childForm_2, this.childTransactionType_2);
     }
 
     TransactionFormUtils.onInit(

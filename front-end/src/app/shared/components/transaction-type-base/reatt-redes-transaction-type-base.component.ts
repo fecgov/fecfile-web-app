@@ -17,7 +17,7 @@ interface AccordionData {
   formProperties: string[];
   contactTypeOptions: PrimeOptions;
   form: FormGroup;
-  memoCodeCheckboxLabel$: Observable<string>;
+  memoHasOptional$: Observable<boolean>;
   contactIdMap: ContactIdMapType;
 }
 
@@ -112,7 +112,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       },
     );
     this.reattributedData.contactIdMap = {};
-    this.reattributedData.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(
+    this.reattributedData.memoHasOptional$ = this.getMemoHasOptional$(
       this.reattributedData.form,
       reatRedes.transactionType,
     );

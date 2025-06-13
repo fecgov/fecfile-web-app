@@ -27,7 +27,9 @@
         </div>
         <div class="col-12 md:col-6">
           <div class="field">
-            <label for="confirmation_email_2"><strong>EMAIL #2</strong> (Optional)</label>
+            <label for="confirmation_email_2"
+              ><strong>EMAIL #2</strong> <span class="paren-label">(Optional)</span></label
+            >
             <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
             <app-error-messages
               [form]="form"
@@ -108,7 +110,7 @@
           </div>
           <div class="col-6">
             <div class="field">
-              <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+              <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="street_2" formControlName="street_2" />
               <app-error-messages
                 [form]="form"

@@ -1,11 +1,16 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label [for]="controlName" class="control-label">{{ label }}</label>
-      @if (tooltipText) {
+      <label [for]="controlName()" class="control-label">
+        {{ label() }}
+        @if (parenLabel()) {
+          <span class="parenLabel">parenLabel()</span>
+        }
+      </label>
+      @if (tooltipText()) {
         <span
           class="pi pi-info-circle circle-icon-tooltip"
-          pTooltip="{{ tooltipText }}"
+          pTooltip="{{ tooltipText() }}"
           [escape]="tooltipEscape"
         ></span>
       }
@@ -14,23 +19,23 @@
   <div class="grid">
     <div class="col-1 flex">
       <p-radioButton
-        [name]="controlName"
+        [name]="controlName()"
         inputId="N"
         [value]="false"
-        [formControlName]="controlName"
-        [ariaLabel]="ariaLabelNo"
-        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+        [formControlName]="controlName()"
+        [ariaLabel]="ariaLabelNo()"
+        [class]="radioClass()"
       ></p-radioButton>
       <label for="N" class="ml-2">NO</label>
     </div>
     <div class="col-1 flex">
       <p-radioButton
-        [name]="controlName"
+        [name]="controlName()"
         inputId="Y"
         [value]="true"
-        [formControlName]="controlName"
-        [ariaLabel]="ariaLabelYes"
-        [class]="control?.invalid && (formSubmitted || control?.dirty || control?.touched) ? 'ng-invalid ng-dirty' : ''"
+        [formControlName]="controlName()"
+        [ariaLabel]="ariaLabelYes()"
+        [class]="radioClass()"
       ></p-radioButton>
       <label for="Y" class="ml-2">YES</label>
     </div>
@@ -39,9 +44,9 @@
     <div class="col-12">
       <app-error-messages
         [form]="form"
-        [fieldName]="controlName"
+        [fieldName]="controlName()"
         [formSubmitted]="formSubmitted"
-        [patternErrorMessage]="errorMessage"
+        [patternErrorMessage]="errorMessage()"
       ></app-error-messages>
     </div>
   </div>

@@ -10,7 +10,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, of, startWith, takeUntil } from 'rxjs';
+import { map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
@@ -69,7 +69,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.reportService.isEditable(this.activeReportSignal()) &&
       !ReattRedesUtils.isCopyFromPreviousReport(this.transaction),
   );
-  memoCodeCheckboxLabel$ = of('');
+  memoHasOptional$ = of(false);
 
   constructor() {
     super();
@@ -102,7 +102,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       { updateOn: 'blur' },
     );
 
-    this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
+    this.memoHasOptional$ = this.getMemoHasOptional$(this.form, this.transactionType);
 
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
 
@@ -326,19 +326,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction, this.contactIdMap['contact_5']);
   }
 
-  getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
-    const requiredLabel = 'MEMO ITEM';
-    const optionalLabel = requiredLabel + ' (OPTIONAL)';
-
+  getMemoHasOptional$(form: FormGroup, transactionType: TransactionType): Observable<boolean> {
     const memoControl = form.get(transactionType?.templateMap.memo_code);
     if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) {
-      return of(requiredLabel);
+      return of(true);
     }
     return memoControl.valueChanges.pipe(
-      map(() => {
-        return memoControl.hasValidator(Validators.requiredTrue) ? requiredLabel : optionalLabel;
-      }),
-      startWith(optionalLabel),
+      map(() => !memoControl.hasValidator(Validators.requiredTrue)),
+      startWith(true),
       takeUntil(this.destroy$),
     );
   }

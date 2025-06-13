@@ -44,7 +44,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childForm: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  childMemoCodeCheckboxLabel$ = of('');
+  childMemoHasOptional$ = of(false);
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -79,9 +79,9 @@ export abstract class DoubleTransactionTypeBaseComponent
         ?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
-      this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
+      this.childMemoHasOptional$ = this.memoHasOptional$;
     } else {
-      this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
+      this.childMemoHasOptional$ = this.getMemoHasOptional$(this.childForm, this.childTransactionType);
     }
 
     TransactionFormUtils.onInit(

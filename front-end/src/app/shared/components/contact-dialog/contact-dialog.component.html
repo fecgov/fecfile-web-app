@@ -101,7 +101,7 @@
           </div>
           <div class="col-4">
             <div class="field">
-              <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+              <label for="middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="middle_name" formControlName="middle_name" />
               <app-error-messages
                 [form]="form"
@@ -114,14 +114,14 @@
         <div class="grid">
           <div class="col-3">
             <div class="field">
-              <label for="prefix">PREFIX (OPTIONAL)</label>
+              <label for="prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="prefix" formControlName="prefix" />
               <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
-              <label for="suffix">SUFFIX (OPTIONAL)</label>
+              <label for="suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="suffix" formControlName="suffix" />
               <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
@@ -158,7 +158,7 @@
         </div>
         <div class="col-6">
           <div class="field">
-            <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+            <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
             <input type="text" pInputText id="street_2" formControlName="street_2" />
             <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
@@ -196,7 +196,7 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+            <label id="telephone-label" for="telephone">TELEPHONE <span class="paren-label">(OPTIONAL)</span></label>
             <app-fec-international-phone-input formControlName="telephone"> </app-fec-international-phone-input>
             <app-error-messages
               [form]="form"
@@ -222,7 +222,7 @@
         <div class="grid">
           <div class="col-6">
             <div class="field">
-              <label for="employer">EMPLOYER (OPTIONAL)</label>
+              <label for="employer">EMPLOYER <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="employer" formControlName="employer" />
               <app-error-messages
                 [form]="form"
@@ -233,7 +233,7 @@
           </div>
           <div class="col-6">
             <div class="field">
-              <label for="occupation">OCCUPATION (OPTIONAL)</label>
+              <label for="occupation">OCCUPATION <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="occupation" formControlName="occupation" />
               <app-error-messages
                 [form]="form"
