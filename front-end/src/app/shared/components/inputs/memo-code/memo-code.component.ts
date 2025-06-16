@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, input, OnChanges, OnInit } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -34,10 +34,15 @@ import { BaseInputComponent } from '../base-input.component';
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly store = inject(Store);
-  @Input() overrideMemoItemHelpText: string | undefined;
-  @Input() checkboxLabel = '';
+  readonly overrideMemoItemHelpText = input<string>();
+  readonly checkboxLabel = input('');
+  readonly parenLabel = input<string>();
 
-  memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
+  readonly memoItemHelpText = computed(() =>
+    this.overrideMemoItemHelpText()
+      ? this.overrideMemoItemHelpText()!
+      : 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.',
+  );
   memoCodeReadOnly = false;
   coverageDate: Date = new Date();
   coverageDateQuestion = 'Did you mean to date this transaction outside of the report coverage period?';
@@ -69,7 +74,6 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
 
     this.memoCodeReadOnly = TransactionFormUtils.isMemoCodeReadOnly(this.transaction?.transactionType);
-    if (this.overrideMemoItemHelpText) this.memoItemHelpText = this.overrideMemoItemHelpText;
 
     this.memoControl = (this.form.get(this.templateMap.memo_code) as SubscriptionFormControl) || this.memoControl;
     const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;

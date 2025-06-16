@@ -446,10 +446,6 @@ table {
   font-weight: 900;
 }
 
-.optional-text {
-  color: #aeb0b5;
-}
-
 .top-border-footer {
   display: flex;
   width: 100%;
@@ -522,4 +518,8 @@ app-login {
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+.paren-label {
+  font-family: var(--karla);
 }

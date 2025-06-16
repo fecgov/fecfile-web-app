@@ -515,15 +515,15 @@ describe('TransactionTypeBaseComponent', () => {
     });
   });
 
-  describe('getMemoCodeCheckboxLabel$', () => {
+  describe('getMemoHasOptional$', () => {
     it('should return required label if read only', () => {
       component.ngOnInit();
       if (!component.transactionType) throw new Error('Bad test');
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
         return true;
       });
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual('MEMO ITEM');
+      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
+        expect(res).toEqual(true);
       });
       expect(spy).toHaveBeenCalled();
     });
@@ -537,10 +537,10 @@ describe('TransactionTypeBaseComponent', () => {
       const memo = component.form.get(component.transactionType.templateMap.memo_code);
       if (!memo) throw new Error('missing memo');
       memo.addValidators([Validators.requiredTrue]);
-      let result = '';
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => (result = res));
+      let result = false;
+      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => (result = res));
       memo.setValue('');
-      expect(result).toEqual('MEMO ITEM');
+      expect(result).toEqual(false);
       expect(spy).toHaveBeenCalled();
     });
 
@@ -549,8 +549,8 @@ describe('TransactionTypeBaseComponent', () => {
       if (!component.transactionType) throw new Error('Bad test');
       component.form.get(component.transactionType?.templateMap.memo_code)?.clearValidators();
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.returnValue(false);
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual('MEMO ITEM (OPTIONAL)');
+      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
+        expect(res).toEqual(true);
       });
       tick();
       expect(spy).toHaveBeenCalled();
