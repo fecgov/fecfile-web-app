@@ -90,9 +90,7 @@ describe('AdditionalInfoInputComponent', () => {
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
       component.transaction?.transactionType?.purposeDescriptionPrefix,
     );
-    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toEqual(
-      { required: true },
-    );
+    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toEqual({ required: true });
   });
 
   it('should detect memo prefixes', () => {
