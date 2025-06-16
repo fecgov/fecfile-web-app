@@ -42,6 +42,16 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     if (text_prefix && text_prefix.length > 0) {
       this.initPrefix(this.templateMap.text4000, text_prefix + ' ');
     }
+
+    // If this transaction type has a purpose description prefix, add a validator to the form control
+    // to set a required error if only the prefix is present
+    if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
+      this.form
+        .get(this.templateMap.purpose_description)
+        ?.addValidators((control) =>
+          control.value === this.transaction?.transactionType?.purposeDescriptionPrefix ? { required: true } : null,
+        );
+    }
   }
 
   isDescriptionSystemGenerated(): boolean {

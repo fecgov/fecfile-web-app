@@ -78,6 +78,23 @@ describe('AdditionalInfoInputComponent', () => {
     );
   });
 
+  it('purpose_description of just prefix just trigger required error', () => {
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: 'Prefix: hihi',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toBeFalsy();
+
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: '',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+      component.transaction?.transactionType?.purposeDescriptionPrefix,
+    );
+    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toEqual(
+      { required: true },
+    );
+  });
+
   it('should detect memo prefixes', () => {
     expect(component.form.get(testTemplateMap.text4000)?.value).toEqual('');
     if (component.transaction) {
