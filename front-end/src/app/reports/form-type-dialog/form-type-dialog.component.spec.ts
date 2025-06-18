@@ -65,7 +65,7 @@ describe('FormTypeDialogComponent', () => {
   describe('goToReportForm', () => {
     it('should route properly', () => {
       const navigateSpy = spyOn(router, 'navigateByUrl');
-      component.selectedType = FormTypes.F3X;
+      component.selectedType.set(FormTypes.F3X);
       component.goToReportForm();
       expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
     });
@@ -73,16 +73,16 @@ describe('FormTypeDialogComponent', () => {
 
   describe('updateSelected', () => {
     it('should set the selectedType to the provided type', () => {
-      component.updateSelected(FormTypes.F3X);
-      expect(component.selectedType).toEqual(FormTypes.F3X);
+      component.selectedType.set(FormTypes.F3X);
+      expect(component.selectedType()).toEqual(FormTypes.F3X);
     });
   });
 
   it('should create Form24', () => {
-    component.updateSelected(FormTypes.F24);
-    expect(component.selectedType).toEqual(FormTypes.F24);
+    component.selectedType.set(FormTypes.F24);
+    expect(component.selectedType()).toEqual(FormTypes.F24);
 
-    component.selectedForm24Type = '48';
+    component.f24().selectedForm24Type.set('48');
 
     const create = spyOn(form24Service, 'create').and.returnValue(
       Promise.resolve(

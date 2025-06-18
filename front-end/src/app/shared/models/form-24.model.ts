@@ -14,6 +14,7 @@ export class Form24 extends Report {
   schema = f24Schema;
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
+  name?: string;
 
   get formLabel() {
     return 'FORM 24';

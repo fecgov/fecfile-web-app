@@ -38,14 +38,15 @@
     </ng-template>
     <ng-template #body let-item>
       <td>{{ item.formLabel }}</td>
-      @if (item.form_type === 'F99') {
-        <td>
+      <td>
+        @if (item.form_type === 'F99') {
           {{ (item.formSubLabel || 'Miscellaneous Report to the FEC').toUpperCase() }}
-        </td>
-      } @else {
-        <td>{{ item.report_code_label }}</td>
-      }
-
+        } @else if (item.form_type === 'F24N' || item.form_type === 'F24A') {
+          {{ item.name.toUpperCase() }}
+        } @else {
+          {{ item.report_code_label }}
+        }
+      </td>
       <td>
         @if (item.coverage_from_date || item.coverage_through_date) {
           {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
@@ -69,8 +70,4 @@
     </ng-template>
   </app-table>
 </div>
-<app-form-type-dialog
-  [noReports]="totalItems === 0"
-  (dialogClose)="dialogVisible = false"
-  [dialogVisible]="dialogVisible"
-></app-form-type-dialog>
+<app-form-type-dialog [(dialogVisible)]="dialogVisible"></app-form-type-dialog>
