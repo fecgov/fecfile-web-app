@@ -27,7 +27,7 @@ describe('Loans', () => {
     Initialize();
   });
 
-  xit('should test: Loan Received From Individual', () => {
+  it('should test: Loan Received From Individual', () => {
     setupLoanReceivedFromIndividual();
     PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
