@@ -59,7 +59,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
 
   readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'form_type', label: 'Form' },
-    { field: 'report_code_label', label: 'Type' },
+    { field: 'formSubLabel', label: 'Name' },
     { field: 'coverage_through_date', label: 'Coverage' },
     { field: 'report_status', label: 'Status' },
     { field: 'version_label', label: 'Version' },

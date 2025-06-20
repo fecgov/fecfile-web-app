@@ -4,40 +4,38 @@
       <div class="flex flex-column">
         <h1 class="gandhi-bold size-36">Transactions in this report</h1>
         <span class="subtitle">
-          <strong>{{ report?.formLabel }}: </strong>{{ report?.formSubLabel }}
+          <strong>{{ report().formLabel }}: </strong>{{ report().formSubLabel }}
         </span>
       </div>
     </ng-template>
 
     <ng-template pTemplate="right">
-      @if (report?.report_status === reportStatus.IN_PROGRESS) {
+      @if (isInProgress()) {
         <app-table-actions-button
           [tableActions]="tableActions"
-          [actionItem]="report"
+          [actionItem]="report()"
           [rounded]="false"
           (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
           buttonIcon="pi pi-plus"
           buttonLabel="Add transaction"
           buttonStyleClass="add-button"
           buttonAriaLabel="Add a Transaction"
-        ></app-table-actions-button>
+        />
       }
     </ng-template>
   </p-toolbar>
-  @if (report?.report_type !== reportTypes.F24) {
-    <app-transaction-receipts [report]="report" (reloadTables)="refreshTables()"></app-transaction-receipts>
+  @if (!isForm24()) {
+    <app-transaction-receipts (reloadTables)="refreshTables()" />
   }
 
   <app-transaction-disbursements
-    [report]="report"
-    [openReportSelectionDialog]="openReportSelectDialog"
+    (requestReportSelection)="
+      openSecondaryReportSelectionDialog($event.transaction, $event.formType, $event.createMethod)
+    "
     (reloadTables)="refreshTables()"
-  ></app-transaction-disbursements>
-  @if (report?.report_type !== reportTypes.F24) {
-    <app-transaction-loans-and-debts
-      [report]="report"
-      (reloadTables)="refreshTables()"
-    ></app-transaction-loans-and-debts>
+  />
+  @if (!isForm24()) {
+    <app-transaction-loans-and-debts (reloadTables)="refreshTables()" />
   }
 </div>
 
@@ -64,12 +62,12 @@
   </ng-template>
 </p-confirmDialog>
 
-<app-select-report-dialog></app-select-report-dialog>
+<app-select-report-dialog />
 
 <app-secondary-report-selection-dialog
-  (dialogClose)="reportSelectDialogVisible = false"
-  [dialogVisible]="reportSelectDialogVisible"
+  [(dialogVisible)]="reportSelectDialogVisible"
   [reportType]="reportSelectFormType"
   [transaction]="reportSelectionTransaction"
-  [createEventMethod]="reportSelectionCreateMethod"
-></app-secondary-report-selection-dialog>
+  (create)="(reportSelectionCreateMethod)"
+  (reloadTables)="refreshTables()"
+/>

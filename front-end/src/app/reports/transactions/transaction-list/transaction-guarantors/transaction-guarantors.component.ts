@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -17,7 +17,7 @@ import { CurrencyPipe } from '@angular/common';
   styleUrls: ['../../transaction.scss'],
   imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe],
 })
-export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchC2Service);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
@@ -50,19 +50,19 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     new TableAction(
       'View',
       this.editItem.bind(this),
-      () => !this.reportIsEditable,
+      () => !this.reportIsEditable(),
       () => true,
     ),
     new TableAction(
       'Edit',
       this.editItem.bind(this),
-      () => this.reportIsEditable,
+      () => this.reportIsEditable(),
       () => true,
     ),
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
-      () => this.reportIsEditable,
+      () => this.reportIsEditable(),
       () => true,
     ),
   ];

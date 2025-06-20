@@ -39,13 +39,7 @@
     <ng-template #body let-item>
       <td>{{ item.formLabel }}</td>
       <td>
-        @if (item.form_type === 'F99') {
-          {{ (item.formSubLabel || 'Miscellaneous Report to the FEC').toUpperCase() }}
-        } @else if (item.form_type === 'F24N' || item.form_type === 'F24A') {
-          {{ item.name.toUpperCase() }}
-        } @else {
-          {{ item.report_code_label }}
-        }
+        {{ item.formSubLabel }}
       </td>
       <td>
         @if (item.coverage_from_date || item.coverage_through_date) {

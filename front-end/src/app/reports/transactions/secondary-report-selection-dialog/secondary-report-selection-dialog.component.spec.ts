@@ -3,35 +3,66 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { firstValueFrom, of } from 'rxjs';
-import { F3xFormTypes, Form3X } from 'app/shared/models/form-3x.model';
-import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { MessageService } from 'primeng/api';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Component, signal, viewChild } from '@angular/core';
+import { F24FormTypes, Form24, Form3X, Transaction } from 'app/shared/models';
+import { of } from 'rxjs';
+
+const mockReports = [
+  Form24.fromJSON({ id: '1', name: 'test1', created: '2022-12-01', report_status: ReportStatus.IN_PROGRESS }),
+  Form24.fromJSON({ id: '2', name: 'test2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
+  Form24.fromJSON({
+    id: '3',
+    name: 'test3',
+    created: '2023-01-15',
+    form_type: F24FormTypes.F24A,
+    report_status: ReportStatus.IN_PROGRESS,
+  }),
+  Form3X.fromJSON({ id: '2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
+];
+
+@Component({
+  imports: [SecondaryReportSelectionDialogComponent],
+  standalone: true,
+  template: `<app-secondary-report-selection-dialog
+    [(dialogVisible)]="visible"
+    [reportType]="reportType"
+    [transaction]="transaction"
+    (create)="reportSelectionCreateMethod()"
+    (reloadTables)="refreshTables()"
+  />`,
+})
+class TestHostComponent {
+  component = viewChild.required(SecondaryReportSelectionDialogComponent);
+  readonly visible = signal(false);
+  reportType = ReportTypes.F24;
+  transaction: Transaction = testScheduleATransaction;
+  reportSelectionCreateMethod = jasmine.createSpy('create');
+  refreshTables = jasmine.createSpy('refreshTables');
+}
 
 describe('SecondaryReportSelectionDialogComponent', () => {
   let component: SecondaryReportSelectionDialogComponent;
-  let fixture: ComponentFixture<SecondaryReportSelectionDialogComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
+  let messageService: MessageService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
-  const testReports = [
-    Form3X.fromJSON({ id: '1', created: '2022-12-01', report_status: ReportStatus.IN_PROGRESS }),
-    Form3X.fromJSON({ id: '2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
-    Form3X.fromJSON({
-      id: '3',
-      created: '2023-01-15',
-      form_type: F3xFormTypes.F3XA,
-      report_status: ReportStatus.IN_PROGRESS,
-    }),
-  ];
+  let addSpy: jasmine.Spy<(transaction: Transaction, report: Report) => Promise<HttpResponse<string>>>;
+  let reportServiceMock: jasmine.SpyObj<ReportService>;
+  let messageSpy: jasmine.Spy<(message: ToastMessageOptions) => void>;
 
   beforeEach(async () => {
+    reportServiceMock = jasmine.createSpyObj('ReportService', ['getAllReports']);
+    reportServiceMock.getAllReports.and.returnValue(Promise.resolve(mockReports));
+
     await TestBed.configureTestingModule({
       imports: [DialogModule, Dialog, SecondaryReportSelectionDialogComponent, LabelPipe],
       providers: [
@@ -43,7 +74,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
             redirectTo: '',
           },
         ]),
-        ReportService,
+        { provide: ReportService, useValue: reportServiceMock },
         TransactionService,
         MessageService,
         DatePipe,
@@ -53,8 +84,8 @@ describe('SecondaryReportSelectionDialogComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: Form3X.fromJSON({
-                  report_type: ReportTypes.F3X,
+                report: Form24.fromJSON({
+                  report_type: ReportTypes.F24,
                 }),
               },
             },
@@ -65,11 +96,13 @@ describe('SecondaryReportSelectionDialogComponent', () => {
         },
       ],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(SecondaryReportSelectionDialogComponent);
     transactionService = TestBed.inject(TransactionService);
-    reportService = TestBed.inject(ReportService);
-    component = fixture.componentInstance;
+    addSpy = spyOn(transactionService, 'addToReport');
+    messageService = TestBed.inject(MessageService);
+    messageSpy = spyOn(messageService, 'add');
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
@@ -77,73 +110,76 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should retrieve reports when reportType is set', () => {
-    const spy = spyOn(reportService, 'getAllReports').and.returnValue(firstValueFrom(of([])));
-    component.reportType = ReportTypes.F3X;
-    expect(spy).toHaveBeenCalled();
+  it('should load in-progress reports for given report type', async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(reportServiceMock.getAllReports).toHaveBeenCalled();
+    const filteredReports = component.reports();
+    expect(filteredReports.length).toBe(3);
+    expect(filteredReports[0].id).toBe('1');
   });
 
-  it('should set related values when reports are retrieved', () => {
-    const labelSpy = spyOn(component, 'getReportLabels');
-    component.setReports(testReports);
+  it('should correctly compute placeholder text', async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
 
-    expect(labelSpy).toHaveBeenCalled();
+    const placeholder = component.placeholder();
+    expect(placeholder).toBe('Select a F24 Report');
   });
 
-  it('should set the placeholder text correctly', () => {
-    component._reportType = ReportTypes.F3X;
-    component.setReports(testReports);
-    expect(component.placeholder).toEqual(`Select a ${ReportTypes.F3X} Report`);
+  it('should successfully link transaction to selected report', async () => {
+    addSpy.and.resolveTo(new HttpResponse({ status: 200 }));
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    component.selectedReport.set(mockReports[0]);
+    await component.linkToSelectedReport();
+    expect(addSpy).toHaveBeenCalledWith(host.transaction, mockReports[0]);
+    expect(host.reportSelectionCreateMethod).toHaveBeenCalled();
+    expect(host.refreshTables).toHaveBeenCalled();
+    expect(host.visible()).toBe(false);
+    expect(messageSpy).toHaveBeenCalledWith({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Transaction added to F24 Report',
+      key: 'reportLinkToast',
+      life: 3000,
+    });
   });
 
-  it('should generate report labels correctly', () => {
-    component.reports = testReports;
-    component._reportType = ReportTypes.F3X;
-    component.reportLabels = component.getReportLabels();
-    expect(component.reportLabels.length).toEqual(3);
-    expect(component.reportLabels[0][1].endsWith('#1')).toBeTrue();
-    expect(component.reportLabels[0][1].includes('2022')).toBeTrue();
-    expect(component.reportLabels[1][1].endsWith('#2')).toBeTrue();
-    expect(component.reportLabels[2][1].includes('#1')).toBeTrue();
-    expect(component.reportLabels[2][1].endsWith('(Amendment)')).toBeTrue();
-    expect(component.reportLabels[2][1].includes('2023')).toBeTrue();
+  it('should handle service error when adding report', async () => {
+    addSpy.and.resolveTo(new HttpResponse({ status: 500 }));
+
+    component.selectedReport.set(mockReports[0]);
+    await component.linkToSelectedReport();
+
+    expect(messageSpy).toHaveBeenCalledWith({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Transaction was not added to F24 Report',
+      key: 'reportLinkToast',
+      life: 3000,
+    });
   });
 
-  it('should set the dropdown text when choosing a report', () => {
-    component._reportType = ReportTypes.F3X;
-    component.setReports(testReports);
-    component.reportLabels = component.getReportLabels();
-    component.selectedReport.set(component.reports[1]);
-
-    expect(component.selectedReport()).toEqual(component.reports[1]);
-    expect(component.dropDownFieldText).toEqual(`${component.reports[1]?.getLongLabel()} [2022] #2`);
-
-    component.selectedReport.set(component.reports[2]);
-    expect(component.dropDownFieldText).toEqual(`${component.reports[2]?.getLongLabel()} [2023] #1 (Amendment)`);
-  });
-
-  it('should add a transaction to a report', () => {
-    component.reports = testReports;
-    component.transaction = testScheduleATransaction;
-    component._reportType = ReportTypes.F3X;
-    component.reportLabels = component.getReportLabels();
-    component.selectedReport.set(component.reports[1]);
-
-    const transactionSpy = spyOn(transactionService, 'addToReport').and.returnValue(
-      firstValueFrom(
-        of({
-          status: 200,
-        } as HttpResponse<string>),
-      ),
-    );
-    component.linkToSelectedReport();
-
-    expect(transactionSpy).toHaveBeenCalledOnceWith(testScheduleATransaction, component.reports[1]);
-  });
-
-  it('should call applyFocus on select when showDialog is called', () => {
-    component.select = jasmine.createSpyObj('Select', ['applyFocus']);
+  it('should show dialog and focus select when showDialog is called', () => {
+    spyOn(component.select(), 'applyFocus');
     component.showDialog();
-    expect(component.select.applyFocus).toHaveBeenCalled();
+    expect(component.select().applyFocus).toHaveBeenCalled();
+  });
+
+  it('should show "Loading Reports..." if no report selected', () => {
+    component.selectedReport.set(undefined);
+    fixture.detectChanges();
+    expect(component.dropDownFieldText()).toBe('Loading Reports...');
+  });
+
+  it('should show correct label if report selected', async () => {
+    await fixture.whenStable();
+    component.selectedReport.set(mockReports[0]);
+    fixture.detectChanges();
+    expect(component.dropDownFieldText()).toBe('test1');
   });
 });

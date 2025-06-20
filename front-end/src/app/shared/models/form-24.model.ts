@@ -21,7 +21,7 @@ export class Form24 extends Report {
   }
 
   get formSubLabel() {
-    return this.report_code_label ?? '';
+    return this.name ?? '';
   }
 
   override get canAmend(): boolean {
