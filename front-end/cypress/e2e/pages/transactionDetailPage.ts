@@ -57,7 +57,7 @@ export class TransactionDetailPage {
     if (formData.supportOpposeCode) {
       cy.get("[data-cy='support_oppose_code']").contains(formData.supportOpposeCode).click();
       cy.get('#entity_type_dropdown').last().type(contactData.contact_type);
-      cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 1));
+      cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 3));
       cy.contains(contactData.last_name).should('exist');
       cy.contains(contactData.last_name).click();
     }

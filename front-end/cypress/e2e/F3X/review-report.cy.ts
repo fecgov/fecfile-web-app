@@ -42,7 +42,7 @@ describe('Receipt Transactions', () => {
 
     // Create transaction
     StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 3));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click({ force: true });
     TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');

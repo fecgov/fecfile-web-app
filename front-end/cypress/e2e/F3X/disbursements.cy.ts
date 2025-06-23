@@ -41,7 +41,7 @@ describe('Disbursements', () => {
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
@@ -61,7 +61,7 @@ describe('Disbursements', () => {
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', organizationFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 3));
     cy.contains(organizationFormData.name).should('exist');
     cy.contains(organizationFormData.name).click();
 
@@ -86,7 +86,7 @@ describe('Disbursements', () => {
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
@@ -173,7 +173,7 @@ describe('Disbursements', () => {
     setCommitteeToPTY();
     StartTransaction.Disbursements().Federal().CreditCardPayment();
 
-    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 3));
     cy.contains(organizationFormData.name).should('exist');
     cy.contains(organizationFormData.name).click();
 

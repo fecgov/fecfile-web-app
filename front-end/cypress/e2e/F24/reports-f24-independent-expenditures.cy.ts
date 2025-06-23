@@ -39,7 +39,7 @@ describe('Form 24 Independent Expenditures', () => {
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 

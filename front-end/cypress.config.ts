@@ -11,7 +11,6 @@ export default defineConfig({
   trashAssetsBeforeRuns: false,
   viewportHeight: 768,
   viewportWidth: 1366,
-  videoUploadOnPasses: false,
   chromeWebSecurity: false,
   reporter: 'mochawesome',
   reporterOptions: {
