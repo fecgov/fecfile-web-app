@@ -7,6 +7,7 @@ import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { CreateF24Component } from './create-f24/create-f24.component';
 import { FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-form-type-dialog',
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
   imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component],
 })
 export class FormTypeDialogComponent {
+  readonly messageService = inject(MessageService);
   readonly router = inject(Router);
   readonly formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
 
@@ -29,17 +31,26 @@ export class FormTypeDialogComponent {
 
   readonly f24 = viewChild.required(CreateF24Component);
 
-  goToReportForm(): void | Promise<void> {
+  async goToReportForm(): Promise<void> {
     const type = this.selectedType();
     if (!type) return;
-
-    if (this.isF24()) {
-      this.f24().createF24();
-    } else if (this.formType()?.createRoute) {
-      this.router.navigateByUrl(this.formType()?.createRoute ?? '');
+    try {
+      if (this.isF24()) {
+        await this.f24().createF24();
+      } else if (this.formType()?.createRoute) {
+        await this.router.navigateByUrl(this.formType()?.createRoute ?? '');
+      }
+      this.selectedType.set(undefined);
+      this.dialogVisible.set(false);
+    } catch (err) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error creating this Form 24',
+        life: 3000,
+      });
+      throw err;
     }
-    this.selectedType.set(undefined);
-    this.dialogVisible.set(false);
   }
 
   getFormType(type?: FormTypes): FormType | undefined {

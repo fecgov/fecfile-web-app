@@ -12,6 +12,7 @@ import { Form3X } from 'app/shared/models/form-3x.model';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MessageService } from 'primeng/api';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
@@ -33,6 +34,7 @@ describe('FormTypeDialogComponent', () => {
         ]),
         Form24Service,
         provideMockStore(testMockStore),
+        MessageService,
         {
           provide: ActivatedRoute,
           useValue: {

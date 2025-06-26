@@ -68,6 +68,6 @@
   [(dialogVisible)]="reportSelectDialogVisible"
   [reportType]="reportSelectFormType"
   [transaction]="reportSelectionTransaction"
-  (create)="(reportSelectionCreateMethod)"
+  (create)="reportSelectionCreateMethod()"
   (reloadTables)="refreshTables()"
 />
