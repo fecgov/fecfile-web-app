@@ -32,7 +32,11 @@
       </div>
       @if (activeReportSignal().report_type === reportTypes.F24) {
         <div class="col-4">
-          <app-linked-report-input [form]="form" [templateMap]="templateMap"></app-linked-report-input>
+          <app-linked-report-input
+            [form]="form"
+            [templateMap]="templateMap"
+            [transaction]="transaction"
+          ></app-linked-report-input>
         </div>
       }
       @if (transaction?.transactionType?.scheduleId === 'F') {

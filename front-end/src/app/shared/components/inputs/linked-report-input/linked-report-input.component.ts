@@ -22,6 +22,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
   private readonly reportService = inject(ReportService);
   private readonly datePipe = inject(FecDatePipe);
+
   committeeF3xReports: Promise<Report[]> = this.reportService.getAllReports();
   linkedF3xControl = new SubscriptionFormControl();
 
@@ -60,6 +61,8 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   }
 
   async getLinkedForm3X(disbursementDate?: Date, disseminationDate?: Date): Promise<Form3X | undefined> {
+    const report = await this.getForm3XReport();
+    if (report) return report;
     const date = disbursementDate ?? disseminationDate;
     if (date) {
       const reports = await this.committeeF3xReports.then((reports) => {
@@ -78,6 +81,14 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     }
 
     return undefined;
+  }
+
+  private async getForm3XReport(): Promise<Form3X | undefined> {
+    const reports = this.transaction?.reports;
+    if (!reports) return undefined;
+    const form3x = reports.find((report) => report.report_type === ReportTypes.F3X);
+    if (!form3x) return undefined;
+    return (await this.reportService.get(form3x.id!)) as Form3X;
   }
 
   getForm3XLabel(report: Form3X | undefined): string {
