@@ -6534,9 +6534,18 @@ input {
 }
 
 .p-accordioncontent-content {
+  width: 100%;
+}
+
+.content-accordion-wrapper {
   padding: 20px;
   border: 1px solid var(--surface-border);
-  width: 100%;
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.p-accordioncontent[data-p-active='true'] .content-accordion-wrapper {
+  opacity: 1;
 }
 
 .p-confirmdialog > .p-dialog-footer {
