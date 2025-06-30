@@ -27,12 +27,21 @@
 
 @if (transaction?.contact_1) {
   @switch (entityType) {
-    @case (ContactTypes.ORGANIZATION || ContactTypes.COMMITTEE) {
+    @case (ContactTypes.ORGANIZATION) {
       <app-committee-input
         [form]="form"
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
-        [entityRole]="form.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
+        entityRole="ORGANIZATION"
+        [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+      ></app-committee-input>
+    }
+    @case (ContactTypes.COMMITTEE) {
+      <app-committee-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [templateMap]="templateMap"
+        entityRole="COMMITTEE"
         [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
       ></app-committee-input>
     }
