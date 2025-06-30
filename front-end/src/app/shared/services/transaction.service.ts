@@ -133,7 +133,7 @@ export class TransactionService implements TableListService<Transaction> {
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
-    if (transaction && actionDateString && aggregation_group && general_election_year) {
+    if (transaction && actionDateString && contact_2_id && aggregation_group && general_election_year) {
       const params: { [key: string]: string } = {
         transaction_id,
         contact_2_id,
