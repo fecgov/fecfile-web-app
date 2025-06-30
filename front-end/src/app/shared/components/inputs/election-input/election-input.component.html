@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="col-3">
       <div class="field flex flex-column">
-        <label for="electionType">{{ labelPrefix }} ELECTION TYPE</label>
+        <label for="electionType">{{ _labelPrefix() }} ELECTION TYPE</label>
         <p-select
           inputId="electionType"
           [options]="electionTypeOptions"
@@ -25,7 +25,7 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="electionYear">{{ labelPrefix }} ELECTION YEAR</label>
+        <label for="electionYear">{{ _labelPrefix() }} ELECTION YEAR</label>
         <input
           id="electionYear"
           type="text"
@@ -46,7 +46,7 @@
     <div class="col-6">
       <div class="field">
         <label for="election_other_description"
-          >{{ labelPrefix }} ELECTION DESCRIPTION <span class="paren-label">(REQUIRED IF OTHER)</span></label
+          >{{ _labelPrefix() }} ELECTION DESCRIPTION <span class="paren-label">(REQUIRED IF OTHER)</span></label
         >
         <input
           type="text"

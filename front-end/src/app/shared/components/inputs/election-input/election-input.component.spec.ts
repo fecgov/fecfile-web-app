@@ -4,14 +4,41 @@ import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ElectionInputComponent } from './election-input.component';
 import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Transaction } from 'app/shared/models';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [ElectionInputComponent],
+  standalone: true,
+  template: `<app-election-input
+    [transaction]="transaction"
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+  />`,
+})
+class TestHostComponent {
+  form: FormGroup = new FormGroup(
+    {
+      election_code: new SubscriptionFormControl(''),
+      election_other_description: new SubscriptionFormControl(''),
+    },
+    { updateOn: 'blur' },
+  );
+  formSubmitted = false;
+  templateMap = testTemplateMap;
+  transaction: Transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
+  component = viewChild.required(ElectionInputComponent);
+}
 
 describe('ElectionInputComponent', () => {
   let component: ElectionInputComponent;
-  let fixture: ComponentFixture<ElectionInputComponent>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,17 +53,9 @@ describe('ElectionInputComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ElectionInputComponent);
-    component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        election_code: new SubscriptionFormControl(''),
-        election_other_description: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
-    component.transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
-    component.templateMap = testTemplateMap;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
@@ -67,17 +86,7 @@ describe('ElectionInputComponent', () => {
   });
 
   it('should disable all fields', () => {
-    fixture = TestBed.createComponent(ElectionInputComponent);
-    component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        election_code: new SubscriptionFormControl(''),
-        election_other_description: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
-    component.form.disable();
-    component.templateMap = testTemplateMap;
+    host.form.disable();
     fixture.detectChanges();
     expect(component.form.get('electionYear')?.disabled).toBe(true);
   });

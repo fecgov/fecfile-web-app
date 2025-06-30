@@ -3,12 +3,12 @@
     <div class="grid">
       <div class="col-12">
         <label for="purpose_description">
-          {{ transaction?.transactionType?.purposeDescripLabel }}
-          <span class="paren-label">{{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}</span>
+          {{ transactionType()?.purposeDescripLabel }}
+          <span class="paren-label">{{ transactionType()?.generatePurposeDescriptionLabel() }}</span>
         </label>
-        @if (transaction?.transactionType?.purposeDescriptionLabelNotice) {
+        @if (transactionType()?.purposeDescriptionLabelNotice) {
           <em>
-            {{ transaction?.transactionType?.purposeDescriptionLabelNotice }}
+            {{ transactionType()?.purposeDescriptionLabelNotice }}
           </em>
         }
 
@@ -32,25 +32,25 @@
       </div>
     </div>
   }
-  @if (transaction?.transactionType?.hasDesignatedSubordinate()) {
+  @if (transactionType()?.hasDesignatedSubordinate()) {
     <app-designated-subordinate-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
-      [transaction]="transaction"
+      [transaction]="transaction()"
       (designatingCommitteeSelect)="onDesignatingCommitteeSelect($event)"
       (designatingCommitteeClear)="onDesignatingCommitteeClear()"
       (subordinateCommitteeSelect)="onSubordinateCommitteeSelect($event)"
       (subordinateCommitteeClear)="onSubordinateCommitteeClear()"
     ></app-designated-subordinate-input>
   }
-  @if (transaction?.transactionType?.hasMemoText()) {
+  @if (transactionType()?.hasMemoText()) {
     <div class="grid">
       <div class="col-12">
         <label for="text4000"
           >NOTE OR MEMO TEXT
           <span class="paren-label">{{
-            transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)'
+            transactionType()?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)'
           }}</span></label
         >
         <div>
@@ -71,7 +71,7 @@
       </div>
     </div>
   }
-  @if (transaction?.transactionType?.hasCategoryCode()) {
+  @if (transactionType()?.hasCategoryCode()) {
     <div class="grid">
       <div class="col-6">
         <div class="field flex flex-column">

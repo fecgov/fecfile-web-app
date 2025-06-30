@@ -35,7 +35,7 @@
           #memoCode
           inputId="memo_code"
           [formControlName]="templateMap['memo_code']"
-          [options]="memoCodeMapOptions"
+          [options]="memoCodeMapOptions()"
           optionLabel="label"
           optionValue="value"
         ></p-selectButton>
@@ -70,7 +70,7 @@
         {{ coverageDate | fecDate }}
       </b>
       falls outside the report coverages dates of
-      <b> {{ report?.coverage_from_date | fecDate }}-{{ report?.coverage_through_date | fecDate }}</b
+      <b> {{ coverageFromDate() | fecDate }}-{{ coverageThroughDate() | fecDate }}</b
       >. {{ coverageDateQuestion }} <br /><br />
       If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>

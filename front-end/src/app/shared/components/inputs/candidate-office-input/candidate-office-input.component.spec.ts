@@ -7,15 +7,52 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from './candidate-office-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { testScheduleATransaction, testIndependentExpenditure } from 'app/shared/utils/unit-test.utils';
+import {
+  testScheduleATransaction,
+  testIndependentExpenditure,
+  testTemplateMap,
+} from 'app/shared/utils/unit-test.utils';
+import { Component, viewChild } from '@angular/core';
+import { Transaction } from 'app/shared/models';
+
+const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
+const testCandidateStateFormControlName = 'testCandidateStateFormControlName';
+const districtFormControlName = 'districtFormControlName';
+
+@Component({
+  imports: [CandidateOfficeInputComponent],
+  standalone: true,
+  template: `<app-candidate-office-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    officeFormControlName="candidate_office"
+    stateFormControlName="candidate_state"
+    districtFormControlName="candidate_district"
+  />`,
+})
+class TestHostComponent {
+  form: FormGroup = new FormGroup({
+    donor_candidate_last_name: new SubscriptionFormControl(''),
+    donor_candidate_first_name: new SubscriptionFormControl(''),
+    donor_candidate_middle_name: new SubscriptionFormControl(''),
+    donor_candidate_prefix: new SubscriptionFormControl(''),
+    donor_candidate_suffix: new SubscriptionFormControl(''),
+    election_code: new SubscriptionFormControl(''),
+    [testCandidateOfficeFormControlName]: new SubscriptionFormControl(''),
+    [testCandidateStateFormControlName]: new SubscriptionFormControl(''),
+    [districtFormControlName]: new SubscriptionFormControl(''),
+  });
+
+  formSubmitted = false;
+  templateMap = testTemplateMap;
+  transaction: Transaction = testScheduleATransaction;
+  component = viewChild.required(CandidateOfficeInputComponent);
+}
 
 describe('CandidateOfficeInputComponent', () => {
   let component: CandidateOfficeInputComponent;
-  let fixture: ComponentFixture<CandidateOfficeInputComponent>;
-
-  const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
-  const testCandidateStateFormControlName = 'testCandidateStateFormControlName';
-  const districtFormControlName = 'districtFormControlName';
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,27 +65,9 @@ describe('CandidateOfficeInputComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CandidateOfficeInputComponent);
-    component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction;
-    component.form = new FormGroup({
-      donor_candidate_last_name: new SubscriptionFormControl(''),
-      donor_candidate_first_name: new SubscriptionFormControl(''),
-      donor_candidate_middle_name: new SubscriptionFormControl(''),
-      donor_candidate_prefix: new SubscriptionFormControl(''),
-      donor_candidate_suffix: new SubscriptionFormControl(''),
-      election_code: new SubscriptionFormControl(''),
-    });
-
-    component.form.addControl(testCandidateOfficeFormControlName, new SubscriptionFormControl());
-    component.officeFormControlName = testCandidateOfficeFormControlName;
-
-    component.form.addControl(testCandidateStateFormControlName, new SubscriptionFormControl());
-    component.stateFormControlName = testCandidateStateFormControlName;
-
-    component.form.addControl(districtFormControlName, new SubscriptionFormControl());
-    component.districtFormControlName = districtFormControlName;
-
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
@@ -102,18 +121,18 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('adds subscription to election_code for Schedule E transactions', () => {
-    component.transaction = testIndependentExpenditure;
-    component.ngOnInit();
+    host.transaction = testIndependentExpenditure;
+    fixture.detectChanges();
 
     const electionCodeControl = component.form.get(
-      component.transaction.transactionType.templateMap.election_code,
+      host.transaction.transactionType.templateMap.election_code,
     ) as SubscriptionFormControl;
     expect(electionCodeControl.subscriptions).toHaveSize(1);
   });
 
   it('updates state availability for SchE transactions in Presidential Primary elections', () => {
-    component.transaction = testIndependentExpenditure;
-    component.ngOnInit();
+    host.transaction = testIndependentExpenditure;
+    fixture.detectChanges();
 
     component.form.patchValue({ [component.officeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL });
     component.form.patchValue({ election_code: 'P2025' });

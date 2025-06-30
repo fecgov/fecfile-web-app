@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   effect,
   inject,
   input,
@@ -11,7 +12,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
-import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
+import { isDebtRepayment, isLoanRepayment, ScheduleIds } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
@@ -61,10 +62,18 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   contributionAmountInputStyleClass = '';
   reportTypes = ReportTypes;
 
+  protected readonly isLoanRepayment = computed(
+    () => !!this.transaction()?.loan_id && this.transactionType()?.scheduleId !== ScheduleIds.C,
+  );
+  protected readonly isDebtRepayment = computed(
+    () => !!this.transaction()?.debt_id && this.transactionType()?.scheduleId !== ScheduleIds.D,
+  );
+
   constructor() {
     super();
     effect(() => {
-      if (isDebtRepayment(this.transaction) || isLoanRepayment(this.transaction)) {
+      const transaction = this.transaction();
+      if (isDebtRepayment(transaction) || isLoanRepayment(transaction)) {
         this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
           const form3X = this.activeReportSignal() as Form3X;
           const date = control.value;
@@ -104,10 +113,13 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
 
     // For Schedule E memos, insert the calendar_ytd from the parent into the form control
-    if (this.transaction?.transactionType.inheritCalendarYTD) {
-      this.form
-        .get(this.transaction.transactionType.templateMap.calendar_ytd)
-        ?.setValue((this.transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
+    const transaction = this.transaction();
+    if (transaction) {
+      if (transaction.transactionType.inheritCalendarYTD) {
+        this.form
+          .get(transaction.transactionType.templateMap.calendar_ytd)
+          ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
+      }
     }
   }
 
@@ -125,7 +137,4 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       }
     }
   }
-
-  protected readonly isLoanRepayment = isLoanRepayment;
-  protected readonly isDebtRepayment = isDebtRepayment;
 }

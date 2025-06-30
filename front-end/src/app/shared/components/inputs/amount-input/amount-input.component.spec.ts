@@ -21,13 +21,53 @@ import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ScheduleATransactionTypes } from 'app/shared/models';
+import { ScheduleATransactionTypes, Transaction } from 'app/shared/models';
 import { setActiveReportAction } from 'app/store/active-report.actions';
-import { signal } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+@Component({
+  imports: [AmountInputComponent],
+  standalone: true,
+  template: `<app-amount-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+    [contributionAmountReadOnly]="contributionAmountReadOnly"
+    [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
+    [showAggregate]="!!transaction?.transactionType?.showAggregate"
+    [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
+    [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
+    [transaction]="transaction"
+    [memoHasOptional]="(memoHasOptional$ | async)!"
+  />`,
+})
+class TestHostComponent {
+  form: FormGroup = new FormGroup(
+    {
+      contribution_date: new SubscriptionFormControl(''),
+      memo_code: new SubscriptionFormControl(''),
+      contribution_amount: new SubscriptionFormControl(''),
+      contribution_aggregate: new SubscriptionFormControl(''),
+      disbursement_date: new SubscriptionFormControl(''),
+      dissemination_date: new SubscriptionFormControl(''),
+      expenditure_date: new SubscriptionFormControl(''),
+    },
+    { updateOn: 'blur' },
+  );
+  formSubmitted = false;
+  templateMap = testTemplateMap;
+  transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
+  contributionAmountReadOnly = false;
+  memoHasOptional: Observable<boolean> = of(false);
+
+  component = viewChild.required(AmountInputComponent);
+}
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
-  let fixture: ComponentFixture<AmountInputComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
   let store: MockStore;
 
   beforeEach(async () => {
@@ -48,22 +88,11 @@ describe('AmountInputComponent', () => {
       providers: [ConfirmationService, provideMockStore(testMockStore)],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AmountInputComponent);
+    fixture = TestBed.createComponent(TestHostComponent);
     store = TestBed.inject(MockStore);
-    component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contribution_date: new SubscriptionFormControl(''),
-        memo_code: new SubscriptionFormControl(''),
-        contribution_amount: new SubscriptionFormControl(''),
-        contribution_aggregate: new SubscriptionFormControl(''),
-        disbursement_date: new SubscriptionFormControl(''),
-        dissemination_date: new SubscriptionFormControl(''),
-        expenditure_date: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
-    component.templateMap = testTemplateMap;
+    host = fixture.componentInstance;
+    component = host.component();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -91,8 +120,8 @@ describe('AmountInputComponent', () => {
     fixture.detectChanges();
     const transaction = getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
     const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
-    component.transaction = transaction;
-    component.templateMap = transaction.transactionType.templateMap;
+    host.transaction = transaction;
+    host.templateMap = transaction.transactionType.templateMap;
     const checkboxLabel = signal('MEMO ITEM');
 
     component.memoCode = {
@@ -113,8 +142,8 @@ describe('AmountInputComponent', () => {
   it('should not allow memo item selection for loan repayment', fakeAsync(() => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
     transaction.loan_id = 'test';
-    component.transaction = transaction;
-    component.templateMap = transaction.transactionType.templateMap;
+    host.transaction = transaction;
+    host.templateMap = transaction.transactionType.templateMap;
     store.dispatch(setActiveReportAction({ payload: testActiveReport }));
     fixture.detectChanges();
 
