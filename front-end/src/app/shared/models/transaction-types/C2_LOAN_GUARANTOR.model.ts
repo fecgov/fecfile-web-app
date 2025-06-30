@@ -11,6 +11,7 @@ import {
   INDIVIDUAL_FIELDS,
   EMPLOYEE_INFO_FIELDS,
   INDIVIDUAL_COMMITTEE,
+  INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_SINGLE_CONTACT } from '../contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
@@ -24,17 +25,19 @@ import {
   ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
+import { fecSpec8dot5Released } from 'app/shared/utils/schema.utils';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
   formFields = [
     ...ADDRESS_FIELDS,
     ...INDIVIDUAL_FIELDS,
-    ...COM_FIELDS,
     'amount',
     ...EMPLOYEE_INFO_FIELDS,
     'entity_type',
+    ...(fecSpec8dot5Released ? COM_FIELDS : []),
   ];
+
   override contactConfig = STANDARD_SINGLE_CONTACT;
   override navigationControls = new TransactionNavigationControls(
     [
@@ -52,7 +55,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL],
   );
-  contactTypeOptions = INDIVIDUAL_COMMITTEE;
+  contactTypeOptions = fecSpec8dot5Released ? INDIVIDUAL_COMMITTEE : INDIVIDUAL;
   schema = schema;
   override hasAmountInput = true;
   override hasAdditionalInfo = false;
