@@ -55,7 +55,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL],
   );
-  contactTypeOptions = fecSpec8dot5Released ? INDIVIDUAL : INDIVIDUAL_COMMITTEE;
+  contactTypeOptions = fecSpec8dot5Released ? INDIVIDUAL_COMMITTEE : INDIVIDUAL;
   schema = schema;
   override hasAmountInput = true;
   override hasAdditionalInfo = false;
