@@ -54,7 +54,6 @@
   --p-panelmenu-panel-background: transparent;
   --p-panelmenu-item-focus-background: transparent;
   --p-content-background: white;
-  --p-accordion-content-color: var(--p-content-color);
   --p-togglebutton-content-checked-background: transparent;
   --p-datepicker-panel-padding: 0;
   --p-content-color: #212121;
@@ -92,6 +91,9 @@
   --p-accordion-header-active-hover-color: var(--p-accordion-header-active-color);
   --p-accordion-header-hover-background: var(--p-accordion-header-background);
   --p-accordion-panel-border-color: var(--surface-border);
+  --p-accordion-content-color: var(--p-content-color);
+  --p-accordion-content-border-width: 0;
+  --p-accordion-content-padding: 0;
 
   /* Font */
   --karla: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
