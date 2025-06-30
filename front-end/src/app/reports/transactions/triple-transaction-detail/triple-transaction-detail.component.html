@@ -21,27 +21,29 @@
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      @if (transactionType?.formTitle) {
-        <h2>
-          {{ transactionType?.formTitle }}
-        </h2>
-      }
-      <h3>{{ transactionType?.contactTitle }}</h3>
-      <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-        <app-transaction-input
-          [isEditable]="isEditable()"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [transaction]="transaction"
-          [contactTypeOptions]="contactTypeOptions"
-          [memoHasOptional$]="memoHasOptional$"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
-          (candidateContactSelect)="updateFormWithCandidateContact($event)"
-          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-        >
-        </app-transaction-input>
-      </form>
+      <div class="content-accordion-wrapper">
+        @if (transactionType?.formTitle) {
+          <h2>
+            {{ transactionType?.formTitle }}
+          </h2>
+        }
+        <h3>{{ transactionType?.contactTitle }}</h3>
+        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+          <app-transaction-input
+            [isEditable]="isEditable()"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [transaction]="transaction"
+            [contactTypeOptions]="contactTypeOptions"
+            [memoHasOptional$]="memoHasOptional$"
+            (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+            (candidateContactSelect)="updateFormWithCandidateContact($event)"
+            (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
+            (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
+          >
+          </app-transaction-input>
+        </form>
+      </div>
     </p-accordion-content>
   </p-accordion-panel>
 
@@ -55,30 +57,32 @@
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      <h2>{{ childTransaction?.transactionType?.title }}</h2>
-      @if (childTransactionType?.description) {
-        <p>
-          <em [innerHtml]="childTransactionType?.description"></em>
-        </p>
-      }
+      <div class="content-accordion-wrapper">
+        <h2>{{ childTransaction?.transactionType?.title }}</h2>
+        @if (childTransactionType?.description) {
+          <p>
+            <em [innerHtml]="childTransactionType?.description"></em>
+          </p>
+        }
 
-      <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
-        <app-transaction-input
-          [isEditable]="isEditable()"
-          [form]="childForm"
-          [formSubmitted]="formSubmitted"
-          [transaction]="childTransaction"
-          [contactTypeOptions]="childContactTypeOptions"
-          [memoHasOptional$]="childMemoHasOptional$"
-          [contributionAmountReadOnly]="true"
-          (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
-          (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
-          (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
-        >
-        </app-transaction-input>
-      </form>
+        <h3>{{ childTransactionType?.contactTitle }}</h3>
+        <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
+          <app-transaction-input
+            [isEditable]="isEditable()"
+            [form]="childForm"
+            [formSubmitted]="formSubmitted"
+            [transaction]="childTransaction"
+            [contactTypeOptions]="childContactTypeOptions"
+            [memoHasOptional$]="childMemoHasOptional$"
+            [contributionAmountReadOnly]="true"
+            (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
+            (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
+            (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
+            (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
+          >
+          </app-transaction-input>
+        </form>
+      </div>
     </p-accordion-content>
   </p-accordion-panel>
 
@@ -92,29 +96,31 @@
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      <h2>{{ childTransaction_2?.transactionType?.title }}</h2>
-      @if (childTransactionType_2?.description) {
-        <p>
-          <em [innerHtml]="childTransactionType_2?.description"></em>
-        </p>
-      }
-      <h3>{{ childTransactionType_2?.contactTitle }}</h3>
-      <form id="childForm_2" [formGroup]="childForm_2" [class.ng-submitted]="formSubmitted">
-        <app-transaction-input
-          [isEditable]="isEditable()"
-          [form]="childForm_2"
-          [formSubmitted]="formSubmitted"
-          [transaction]="childTransaction_2"
-          [contactTypeOptions]="childContactTypeOptions_2"
-          [memoHasOptional$]="memoHasOptional_2$"
-          [contributionAmountReadOnly]="true"
-          (primaryContactSelect)="childUpdateFormWithPrimaryContact_2($event)"
-          (candidateContactSelect)="childUpdateFormWithCandidateContact_2($event)"
-          (secondaryContactSelect)="childUpdateFormWithSecondaryContact_2($event)"
-          (tertiaryContactSelect)="childUpdateFormWithTertiaryContact_2($event)"
-        >
-        </app-transaction-input>
-      </form>
+      <div class="content-accordion-wrapper">
+        <h2>{{ childTransaction_2?.transactionType?.title }}</h2>
+        @if (childTransactionType_2?.description) {
+          <p>
+            <em [innerHtml]="childTransactionType_2?.description"></em>
+          </p>
+        }
+        <h3>{{ childTransactionType_2?.contactTitle }}</h3>
+        <form id="childForm_2" [formGroup]="childForm_2" [class.ng-submitted]="formSubmitted">
+          <app-transaction-input
+            [isEditable]="isEditable()"
+            [form]="childForm_2"
+            [formSubmitted]="formSubmitted"
+            [transaction]="childTransaction_2"
+            [contactTypeOptions]="childContactTypeOptions_2"
+            [memoHasOptional$]="memoHasOptional_2$"
+            [contributionAmountReadOnly]="true"
+            (primaryContactSelect)="childUpdateFormWithPrimaryContact_2($event)"
+            (candidateContactSelect)="childUpdateFormWithCandidateContact_2($event)"
+            (secondaryContactSelect)="childUpdateFormWithSecondaryContact_2($event)"
+            (tertiaryContactSelect)="childUpdateFormWithTertiaryContact_2($event)"
+          >
+          </app-transaction-input>
+        </form>
+      </div>
     </p-accordion-content>
   </p-accordion-panel>
 </p-accordion>

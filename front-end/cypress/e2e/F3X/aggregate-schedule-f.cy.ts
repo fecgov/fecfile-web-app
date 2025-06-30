@@ -79,16 +79,16 @@ describe('Tests transaction form aggregate calculation', () => {
 
     // Change the candidate contact
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_B.first_name);
-    cy.contains('Senate, B').should('exist');
-    cy.contains('Senate, B').click({ force: true });
+    cy.contains('Senate, Beta').should('exist');
+    cy.contains('Senate, Beta').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
     // Change the contact back
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_A.first_name);
-    cy.contains('Senate, A').should('exist');
-    cy.contains('Senate, A').click({ force: true });
+    cy.contains('Senate, Alpha').should('exist');
+    cy.contains('Senate, Alpha').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
@@ -284,8 +284,8 @@ describe('Tests transaction form aggregate calculation', () => {
     // Tests changing the second transaction's contact
     cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_A.first_name);
-    cy.contains('Senate, A').should('exist');
-    cy.contains('Senate, A').click({ force: true });
+    cy.contains('Senate, Alpha').should('exist');
+    cy.contains('Senate, Alpha').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
@@ -478,8 +478,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
     // Change the first transaction's candidate
     cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_B.first_name);
-    cy.contains('Senate, B').should('exist');
-    cy.contains('Senate, B').click({ force: true });
+    cy.contains('Senate, Beta').should('exist');
+    cy.contains('Senate, Beta').click({ force: true });
 
     // Tests moving the first transaction's date to be later than the second
     TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 29), '');

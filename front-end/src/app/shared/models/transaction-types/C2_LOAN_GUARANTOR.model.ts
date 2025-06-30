@@ -6,10 +6,11 @@ import {
 } from '../schc2-transaction.model';
 import { SchC2TransactionType } from '../schc2-transaction-type.model';
 import {
+  COM_FIELDS,
   ADDRESS_FIELDS,
   INDIVIDUAL_FIELDS,
   EMPLOYEE_INFO_FIELDS,
-  INDIVIDUAL,
+  INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_SINGLE_CONTACT } from '../contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
@@ -26,7 +27,14 @@ import { hasNoContact } from '../transaction.model';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
-  formFields = [...ADDRESS_FIELDS, ...INDIVIDUAL_FIELDS, 'amount', ...EMPLOYEE_INFO_FIELDS, 'entity_type'];
+  formFields = [
+    ...ADDRESS_FIELDS,
+    ...INDIVIDUAL_FIELDS,
+    ...COM_FIELDS,
+    'amount',
+    ...EMPLOYEE_INFO_FIELDS,
+    'entity_type',
+  ];
   override contactConfig = STANDARD_SINGLE_CONTACT;
   override navigationControls = new TransactionNavigationControls(
     [
@@ -44,7 +52,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL],
   );
-  contactTypeOptions = INDIVIDUAL;
+  contactTypeOptions = INDIVIDUAL_COMMITTEE;
   schema = schema;
   override hasAmountInput = true;
   override hasAdditionalInfo = false;

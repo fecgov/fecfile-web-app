@@ -8,6 +8,7 @@ export const INDIVIDUAL = [ContactTypes.INDIVIDUAL];
 export const ORGANIZATION = [ContactTypes.ORGANIZATION];
 export const COMMITTEE = [ContactTypes.COMMITTEE];
 export const COMMITTEE_INDIVIDUAL = [ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL];
+export const INDIVIDUAL_COMMITTEE = [ContactTypes.INDIVIDUAL, ContactTypes.COMMITTEE];
 export const ORGANIZATION_INDIVIDUAL = [ContactTypes.ORGANIZATION, ContactTypes.INDIVIDUAL];
 export const INDIVIDUAL_ORGANIZATION = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
 export const INDIVIDUAL_ORGANIZATION_COMMITTEE = [

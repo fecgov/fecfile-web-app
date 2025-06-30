@@ -47,8 +47,12 @@ export class RegisteredFilers {
     PageUtils.clickLink('Party Receipt');
   }
 
-  static PAC() {
+  static PAC_Earmark() {
     PageUtils.clickLink('PAC Earmark Receipt');
+  }
+
+  static PAC() {
+    PageUtils.clickLink('PAC Receipt');
   }
 }
 
