@@ -1,15 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import {
-  getTestTransactionByType,
-  testActiveReport,
-  testMockStore,
-  testTemplateMap,
-} from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -17,17 +10,18 @@ import { Dialog } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { AmountInputComponent } from './amount-input.component';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleATransactionTypes, Transaction } from 'app/shared/models';
-import { setActiveReportAction } from 'app/store/active-report.actions';
 import { Component, signal, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
+import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 
 @Component({
-  imports: [AmountInputComponent],
+  imports: [AmountInputComponent, AsyncPipe],
   standalone: true,
   template: `<app-amount-input
     [form]="form"
@@ -52,6 +46,7 @@ class TestHostComponent {
       disbursement_date: new SubscriptionFormControl(''),
       dissemination_date: new SubscriptionFormControl(''),
       expenditure_date: new SubscriptionFormControl(''),
+      calendar_ytd_per_election_office: new SubscriptionFormControl(''),
     },
     { updateOn: 'blur' },
   );
@@ -68,7 +63,6 @@ describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let host: TestHostComponent;
-  let store: MockStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -89,10 +83,14 @@ describe('AmountInputComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
-    store = TestBed.inject(MockStore);
+
     host = fixture.componentInstance;
     component = host.component();
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture.destroy(); // destroy the fixture to avoid memory leaks & state carried between test cases
   });
 
   it('should create', () => {
@@ -126,8 +124,7 @@ describe('AmountInputComponent', () => {
 
     component.memoCode = {
       checkboxLabel,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      updateMemoItemWithDate: (date: any) => undefined,
+      updateMemoItemWithDate: () => undefined,
     } as unknown as MemoCodeInputComponent;
     component.form.patchValue({
       [transaction.transactionType.templateMap.date]: undefined,
@@ -144,8 +141,8 @@ describe('AmountInputComponent', () => {
     transaction.loan_id = 'test';
     host.transaction = transaction;
     host.templateMap = transaction.transactionType.templateMap;
-    store.dispatch(setActiveReportAction({ payload: testActiveReport }));
     fixture.detectChanges();
+    component.ngOnInit();
 
     const dateFormControl = component.form.get(component.templateMap.date);
 

@@ -7,7 +7,7 @@ import { CommitteeInputComponent } from './committee-input.component';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Transaction, ContactTypes } from 'app/shared/models';
 
 @Component({
   imports: [CommitteeInputComponent],
@@ -16,13 +16,15 @@ import { Transaction } from 'app/shared/models';
     [form]="form"
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
-    [entityRole]="form.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
+    [transaction]="transaction"
+    entityRole="ORGANIZATION"
     [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
   />`,
 })
 class TestHostComponent {
   form: FormGroup = new FormGroup(
     {
+      entity_type: new SubscriptionFormControl(ContactTypes.ORGANIZATION),
       contributor_organization_name: new SubscriptionFormControl(''),
       donor_committee_fec_id: new SubscriptionFormControl(''),
       donor_committee_name: new SubscriptionFormControl(''),

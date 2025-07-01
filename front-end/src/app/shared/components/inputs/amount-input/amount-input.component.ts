@@ -1,15 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  computed,
-  effect,
-  inject,
-  input,
-  Input,
-  OnChanges,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, computed, inject, input, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment, ScheduleIds } from 'app/shared/models/transaction.model';
@@ -42,10 +31,9 @@ import { InputText } from 'primeng/inputtext';
     ErrorMessagesComponent,
   ],
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit, OnChanges {
+export class AmountInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);
   readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   @Input() contributionAmountReadOnly = false;
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
@@ -69,10 +57,38 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     () => !!this.transaction()?.debt_id && this.transactionType()?.scheduleId !== ScheduleIds.D,
   );
 
-  constructor() {
-    super();
-    effect(() => {
-      const transaction = this.transaction();
+  ngOnInit(): void {
+    if (this.contributionAmountReadOnly) {
+      this.contributionAmountInputStyleClass = 'readonly';
+    }
+
+    // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
+    // and set up the "Just checking..." pop-up as needed.
+    if (this.templateMap.date && this.templateMap.date2) {
+      const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
+      const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl;
+      if (dateControl && date2Control) {
+        dateControl.addSubscription(() => {
+          date2Control.updateValueAndValidity({ emitEvent: false });
+          this.memoCode.coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
+          // Opening of 'Just checking...' pop-up is handled in app-memo-code component directly.
+        }, this.destroy$);
+        date2Control.addSubscription((date: Date) => {
+          dateControl.updateValueAndValidity({ emitEvent: false });
+          // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
+          if (!dateControl.value) {
+            this.memoCode.coverageDate = date;
+            this.memoCode.coverageDateQuestion =
+              'Did you mean to enter a disbursement date outside of the report coverage period?';
+            this.memoCode.updateMemoItemWithDate(date);
+          }
+        }, this.destroy$);
+      }
+    }
+
+    // For Schedule E memos, insert the calendar_ytd from the parent into the form control
+    const transaction = this.transaction();
+    if (transaction) {
       if (isDebtRepayment(transaction) || isLoanRepayment(transaction)) {
         this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
           const form3X = this.activeReportSignal() as Form3X;
@@ -84,47 +100,13 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
           return null;
         });
       }
-    });
-  }
 
-  ngOnInit(): void {
-    if (this.contributionAmountReadOnly) {
-      this.contributionAmountInputStyleClass = 'readonly';
-    }
-
-    // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
-    // and set up the "Just checking..." pop-up as needed.
-    if (this.templateMap.date2) {
-      (this.form.get(this.templateMap.date) as SubscriptionFormControl)?.addSubscription(() => {
-        this.form.get(this.templateMap.date2)?.updateValueAndValidity({ emitEvent: false });
-        this.memoCode.coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
-        // Opening of 'Just checking...' pop-up is handled in app-memo-code component directly.
-      }, this.destroy$);
-      (this.form.get(this.templateMap.date2) as SubscriptionFormControl)?.addSubscription((date: Date) => {
-        this.form.get(this.templateMap.date)?.updateValueAndValidity({ emitEvent: false });
-        // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
-        if (!this.form.get(this.templateMap.date)?.value) {
-          this.memoCode.coverageDate = date;
-          this.memoCode.coverageDateQuestion =
-            'Did you mean to enter a disbursement date outside of the report coverage period?';
-          this.memoCode.updateMemoItemWithDate(date);
-        }
-      }, this.destroy$);
-    }
-
-    // For Schedule E memos, insert the calendar_ytd from the parent into the form control
-    const transaction = this.transaction();
-    if (transaction) {
       if (transaction.transactionType.inheritCalendarYTD) {
         this.form
           .get(transaction.transactionType.templateMap.calendar_ytd)
           ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
       }
     }
-  }
-
-  ngOnChanges(): void {
-    this.changeDetectorRef.detectChanges();
   }
 
   onInputAmount() {

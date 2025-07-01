@@ -53,7 +53,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   readonly coverageFromDate = computed(() => (this.report() as Form3X)?.coverage_from_date);
   readonly coverageThroughDate = computed(() => (this.report() as Form3X)?.coverage_through_date);
 
-  memoControl: SubscriptionFormControl = new SubscriptionFormControl();
+  memoControl: SubscriptionFormControl<boolean> = new SubscriptionFormControl<boolean>();
   outOfDateDialogVisible = false;
   readonly memoCodeMapOptions = computed(() => {
     const memoCodeMap = this.transactionType()?.memoCodeMap;
@@ -83,15 +83,15 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       }, this.destroy$);
     }
 
-    this.memoControl = (this.form.get(this.templateMap.memo_code) as SubscriptionFormControl) || this.memoControl;
+    this.memoControl =
+      (this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>) || this.memoControl;
     const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;
     if (savedDate) {
       this.updateMemoItemWithDate(savedDate);
     }
 
     if (this.transactionType()?.memoCodeTransactionTypes) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.updateTransactionTypeIdentifier();
       });
     }
@@ -106,12 +106,9 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   updateTransactionTypeIdentifier(): void {
     const transaction = this.transaction();
     if (transaction?.transactionType.memoCodeTransactionTypes) {
-      const memo_code = this.form.get(this.templateMap.memo_code)?.value as boolean;
-      if (memo_code) {
-        transaction.transaction_type_identifier = transaction.transactionType.memoCodeTransactionTypes.true;
-      } else {
-        transaction.transaction_type_identifier = transaction.transactionType.memoCodeTransactionTypes.false;
-      }
+      transaction.transaction_type_identifier = this.memoControl.value
+        ? transaction.transactionType.memoCodeTransactionTypes.true
+        : transaction.transactionType.memoCodeTransactionTypes.false;
     }
   }
 
@@ -120,7 +117,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   }
 
   onMemoItemClick() {
-    if (!this.memoCodeReadOnly && this.dateIsOutsideReport && !this.memoControl.value) {
+    if (!this.memoCodeReadOnly() && this.dateIsOutsideReport && !this.memoControl.value) {
       this.outOfDateDialogVisible = true;
     }
   }
