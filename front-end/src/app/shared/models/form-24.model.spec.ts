@@ -47,4 +47,5 @@ describe('Form24', () => {
     };
     const form = Form24.fromJSON(data);
     expect(form.formSubLabel).toEqual('Test Form Name');
+  });
 });
