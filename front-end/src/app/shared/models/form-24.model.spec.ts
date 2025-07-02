@@ -38,39 +38,13 @@ describe('Form24', () => {
     expect(form.formSubLabel).toEqual('');
   });
 
-  describe('getReportLabel', () => {
-    it('should return 24 or 48 depending upon 24_48 prop', () => {
-      const data = {
-        id: '999',
-        form_type: F24FormTypes.F24N,
-        committee_name: 'foo',
-        report_version: undefined,
-        report_type_24_48: '24',
-        report_code_label: '24 HOUR',
-      };
-      const form = Form24.fromJSON(data);
-      expect(form.report_code_label).toBe('24 HOUR');
-
-      form.report_type_24_48 = '48';
-      form.report_code_label = '48 HOUR';
-      expect(form.report_code_label).toBe('48 HOUR');
-    });
-  });
-
-  describe('getLongLabel', () => {
-    it('should return 24 or 48 depending upon 24_48 prop', () => {
-      const data = {
-        id: '999',
-        form_type: F24FormTypes.F24N,
-        committee_name: 'foo',
-        report_version: undefined,
-        report_type_24_48: '24',
-      };
-      const form = Form24.fromJSON(data);
-      expect(form.getLongLabel()).toBe('24-Hour Report');
-
-      form.report_type_24_48 = '48';
-      expect(form.getLongLabel()).toBe('48-Hour Report');
-    });
-  });
+  it('should display name for sub label', () => {
+    const data = {
+      id: '999',
+      form_type: F24FormTypes.F24N,
+      committee_name: 'foo',
+      name: 'Test Form Name',
+    };
+    const form = Form24.fromJSON(data);
+    expect(form.formSubLabel).toEqual('Test Form Name');
 });
