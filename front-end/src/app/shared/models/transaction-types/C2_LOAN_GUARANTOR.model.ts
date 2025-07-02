@@ -28,8 +28,8 @@ import { hasNoContact } from '../transaction.model';
 import { fecSpec8dot5Released } from 'app/shared/utils/schema.utils';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
-  title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
-  formFields = [
+  readonly title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
+  readonly formFields = [
     ...ADDRESS_FIELDS,
     ...INDIVIDUAL_FIELDS,
     'amount',
@@ -38,8 +38,8 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     ...(fecSpec8dot5Released ? COM_FIELDS : []),
   ];
 
-  override contactConfig = STANDARD_SINGLE_CONTACT;
-  override navigationControls = new TransactionNavigationControls(
+  override readonly contactConfig = STANDARD_SINGLE_CONTACT;
+  override readonly navigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
@@ -55,11 +55,11 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL],
   );
-  contactTypeOptions = fecSpec8dot5Released ? INDIVIDUAL_COMMITTEE : INDIVIDUAL;
-  schema = schema;
-  override hasAmountInput = true;
-  override hasAdditionalInfo = false;
-  override showAggregate = false;
+  readonly contactTypeOptions = fecSpec8dot5Released ? INDIVIDUAL_COMMITTEE : INDIVIDUAL;
+  readonly schema = schema;
+  override readonly hasAmountInput = true;
+  override readonly hasAdditionalInfo = false;
+  override readonly showAggregate = false;
 
   getNewTransaction() {
     return SchC2Transaction.fromJSON({
