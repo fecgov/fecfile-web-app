@@ -29,7 +29,7 @@
         <div><strong>Unaggregated</strong></div>
       }
       <!-- transactions are always itemized on f24 even if they aren't marked as such in the db -->
-      @if (!item?.itemized && report?.report_type !== form24ReportType) {
+      @if (!item?.itemized && !isForm24()) {
         <div><strong>Unitemized</strong></div>
       }
     </td>

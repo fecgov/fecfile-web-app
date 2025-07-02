@@ -54,10 +54,6 @@ export abstract class Report extends BaseModel {
   get canAmend() {
     return false;
   }
-
-  getLongLabel(): string {
-    return this.form_type;
-  }
 }
 
 export enum ReportTypes {
