@@ -2,9 +2,15 @@ import { Initialize } from '../pages/loginPage';
 import { PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
-import { defaultFormData as individualContactFormData, committeeFormData } from '../models/ContactFormModel';
+import {
+  defaultFormData as individualContactFormData,
+  committeeFormData,
+  createContact,
+  ContactType,
+} from '../models/ContactFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
+import { ContactListPage } from '../pages/contactListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -59,5 +65,30 @@ describe('Loans', () => {
     cy.get('h1').click();
     PageUtils.clickButton('Save');
     cy.contains('Transactions in this report').should('exist');
+  });
+
+  it('should test: Loan By Committee - delete Guarantor', () => {
+    const secondIndividual = createContact(ContactType.INDIVIDUAL);
+    ContactListPage.createIndividual(secondIndividual);
+
+    setupLoanReceivedFromIndividual();
+    PageUtils.clickButton('Save & add loan guarantor');
+    cy.contains('Guarantors to loan source').should('exist');
+    PageUtils.searchBoxInput(secondIndividual.last_name);
+    cy.get('#amount').safeType(formData['amount']);
+    cy.intercept({
+      method: 'Post',
+    }).as('saveGuarantor');
+    PageUtils.clickButton('Save & add loan guarantor');
+    cy.wait('@saveGuarantor');
+    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+    PageUtils.clickButton('Cancel');
+
+    PageUtils.clickKababItem('Loan Received from Individual', 'Edit');
+    PageUtils.clickKababItem(secondIndividual.last_name, 'Delete');
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('.p-confirmdialog-accept-button').click();
+
+    cy.contains(individualContactFormData.last_name).should('not.exist');
   });
 });

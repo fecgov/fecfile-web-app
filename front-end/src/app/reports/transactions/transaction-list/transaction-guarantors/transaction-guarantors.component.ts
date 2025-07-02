@@ -10,12 +10,13 @@ import { QueryParams } from 'app/shared/services/api.service';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { CurrencyPipe } from '@angular/common';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-transaction-guarantors',
   templateUrl: './transaction-guarantors.component.html',
   styleUrls: ['../../transaction.scss'],
-  imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe],
+  imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe, ConfirmDialog],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent implements OnInit {
   override readonly itemService = inject(TransactionSchC2Service);
@@ -66,4 +67,8 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
       () => true,
     ),
   ];
+
+  public override refreshAllTables() {
+    this.refreshTable();
+  }
 }

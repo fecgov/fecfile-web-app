@@ -159,7 +159,11 @@ export class PageUtils {
       .last()
       .find('app-table-actions-button')
       .children()
-      .last()
+      .first()
+      .children()
+      .first()
+      .scrollIntoView()
+      .should('be.visible')
       .click();
     return cy.get(alias).find('.p-popover');
   }
