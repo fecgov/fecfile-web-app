@@ -5,7 +5,6 @@ import { makeRequestToAPI } from '../requests/methods';
 import { F3X_Q2 } from '../requests/library/reports';
 import { buildScheduleF } from '../requests/library/transactions';
 import { Individual_A_A, Candidate_Senate_A, Candidate_Senate_B, Committee_A } from '../requests/library/contacts';
-import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { organizationFormData } from '../models/ContactFormModel';
 import { ContactListPage } from '../pages/contactListPage';
 

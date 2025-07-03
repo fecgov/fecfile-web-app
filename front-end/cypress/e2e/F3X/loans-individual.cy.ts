@@ -28,6 +28,20 @@ function setupLoanReceivedFromIndividual() {
   TransactionDetailPage.enterLoanFormData(formData);
 }
 
+function addGuarantor(name: string, amount: number | string) {
+  PageUtils.clickButton('Save & add loan guarantor');
+  cy.contains('Guarantors to loan source').should('exist');
+  PageUtils.searchBoxInput(name);
+  cy.get('#amount').safeType(amount);
+  cy.intercept({
+    method: 'Post',
+  }).as('saveGuarantor');
+  PageUtils.clickButton('Save & add loan guarantor');
+  cy.wait('@saveGuarantor');
+  PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+  PageUtils.clickButton('Cancel');
+}
+
 describe('Loans', () => {
   beforeEach(() => {
     Initialize();
@@ -52,37 +66,18 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Guarantors', () => {
+    const secondIndividual = createContact(ContactType.INDIVIDUAL);
+    ContactListPage.createIndividual(secondIndividual);
     setupLoanReceivedFromIndividual();
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.contains('Guarantors to loan source').should('exist');
-    PageUtils.dropdownSetValue('#entity_type_dropdown', committeeFormData.contact_type, '');
-    cy.get('#contact_1_lookup').find('#searchBox').safeType(committeeFormData.name);
-    cy.contains(committeeFormData.name).should('exist');
-    cy.contains(committeeFormData.name).click({ force: true });
-    cy.get('#organization_name').should('exist').should('have.value', committeeFormData.name);
-    cy.get('#committee_fec_id').should('exist').should('have.value', committeeFormData.committee_id);
-    cy.get('#amount').safeType('2000');
-    cy.get('h1').click();
-    PageUtils.clickButton('Save');
+    addGuarantor(secondIndividual.last_name, formData['amount']);
     cy.contains('Transactions in this report').should('exist');
   });
 
   it('should test: Loan By Committee - delete Guarantor', () => {
     const secondIndividual = createContact(ContactType.INDIVIDUAL);
     ContactListPage.createIndividual(secondIndividual);
-
     setupLoanReceivedFromIndividual();
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.contains('Guarantors to loan source').should('exist');
-    PageUtils.searchBoxInput(secondIndividual.last_name);
-    cy.get('#amount').safeType(formData['amount']);
-    cy.intercept({
-      method: 'Post',
-    }).as('saveGuarantor');
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@saveGuarantor');
-    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-    PageUtils.clickButton('Cancel');
+    addGuarantor(secondIndividual.last_name, formData['amount']);
 
     PageUtils.clickKababItem('Loan Received from Individual', 'Edit');
     PageUtils.clickKababItem(secondIndividual.last_name, 'Delete');

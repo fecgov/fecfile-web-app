@@ -44,7 +44,7 @@ describe('Loans', () => {
     Initialize();
   });
 
-  xit('should test: Loan By Committee', () => {
+  it('should test: Loan By Committee', () => {
     setupLoanByCommittee();
     PageUtils.clickButton('Save both transactions');
     PageUtils.urlCheck('/list');
@@ -61,7 +61,7 @@ describe('Loans', () => {
       });
   });
 
-  xit('should test: Loan By Committee - Receive loan repayment', () => {
+  it('should test: Loan By Committee - Receive loan repayment', () => {
     // Search for created committee and enter load data, then add load guarantor
     setupLoanByCommittee();
     PageUtils.clickButton('Save both transactions');
@@ -80,7 +80,7 @@ describe('Loans', () => {
     cy.contains('Loan Repayment Received').should('exist');
   });
 
-  xit('should test: Loan By Committee - add Guarantor', () => {
+  it('should test: Loan By Committee - add Guarantor', () => {
     setupLoanByCommittee();
     addGuarantor();
     cy.contains('Loan By Committee').click();
@@ -92,19 +92,8 @@ describe('Loans', () => {
     setupLoanByCommittee();
     addGuarantor();
     PageUtils.clickKababItem('Loan By Committee', 'Edit');
-    cy.wait(500);
+    PageUtils.clickKababItem(individualContactFormData.last_name, 'Delete');
     const alias = PageUtils.getAlias('');
-    cy.get(alias)
-      .contains(individualContactFormData.last_name)
-      .closest('td')
-      .siblings()
-      .last()
-      .find('app-table-actions-button')
-      .children()
-      .last()
-      .scrollIntoView()
-      .click();
-    cy.get(alias).find('.p-popover').contains('Delete').first().click({ force: true });
     cy.get(alias).find('.p-confirmdialog-accept-button').click();
 
     cy.contains(individualContactFormData.last_name).should('not.exist');
