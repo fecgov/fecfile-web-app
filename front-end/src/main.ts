@@ -7,7 +7,14 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from './app/shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './app/shared/pipes/fec-date.pipe';
-import { RouteReuseStrategy, Router, provideRouter } from '@angular/router';
+import {
+  InMemoryScrollingFeature,
+  InMemoryScrollingOptions,
+  RouteReuseStrategy,
+  Router,
+  provideRouter,
+  withInMemoryScrolling,
+} from '@angular/router';
 import { CustomRouteReuseStrategy } from './app/custom-route-reuse-strategy';
 import { LoginService } from './app/shared/services/login.service';
 import { SchedulerAction, asyncScheduler } from 'rxjs';
@@ -82,6 +89,12 @@ function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReduce
 if (environment.production) {
   enableProdMode();
 }
+const scrollConfig: InMemoryScrollingOptions = {
+  scrollPositionRestoration: 'top',
+  anchorScrolling: 'enabled',
+};
+
+const inMemoryScrollingFeature: InMemoryScrollingFeature = withInMemoryScrolling(scrollConfig);
 const ngCspNonce = document.body?.querySelector('[ngCspNonce]')?.getAttribute('ngCspNonce') ?? undefined;
 bootstrapApplication(AppComponent, {
   providers: [
@@ -115,7 +128,7 @@ bootstrapApplication(AppComponent, {
       ToastModule,
       CheckboxModule,
     ),
-    provideRouter(ROUTES),
+    provideRouter(ROUTES, inMemoryScrollingFeature),
     provideAnimationsAsync(),
     providePrimeNG({
       csp: {
