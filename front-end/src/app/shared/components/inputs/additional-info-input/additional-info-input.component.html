@@ -4,7 +4,7 @@
       <div class="col-12">
         <label for="purpose_description">
           {{ transaction?.transactionType?.purposeDescripLabel }}
-          {{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}
+          <span class="paren-label">{{ transaction?.transactionType?.generatePurposeDescriptionLabel() }}</span>
         </label>
         @if (transaction?.transactionType?.purposeDescriptionLabelNotice) {
           <em>
@@ -48,7 +48,10 @@
     <div class="grid">
       <div class="col-12">
         <label for="text4000"
-          >NOTE OR MEMO TEXT {{ transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)' }}</label
+          >NOTE OR MEMO TEXT
+          <span class="paren-label">{{
+            transaction?.transactionType?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)'
+          }}</span></label
         >
         <div>
           <textarea
@@ -72,7 +75,7 @@
     <div class="grid">
       <div class="col-6">
         <div class="field flex flex-column">
-          <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
+          <label for="category_code">CATEGORY CODE <span class="paren-label">(OPTIONAL)</span></label>
           <p-select
             inputId="category_code"
             [formControlName]="templateMap['category_code']"

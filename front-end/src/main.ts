@@ -39,9 +39,19 @@ import { AppComponent } from './app/app.component';
 import { ROUTES } from 'app/routes';
 import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeng/themes/aura';
+import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 
-function initializeAppFactory(loginService: LoginService, router: Router): () => Promise<void> {
+function initializeAppFactory(
+  loginService: LoginService,
+  router: Router,
+  cookieCheckService: CookieCheckService,
+): () => Promise<void> {
   return async () => {
+    if (!cookieCheckService.areCookiesEnabled()) {
+      router.navigate(['/cookies-disabled']);
+      return;
+    }
+
     function checkSession(this: SchedulerAction<undefined>) {
       if (router.url !== '/login' && !loginService.userIsAuthenticated()) loginService.logOut();
       this.schedule(undefined, 1000);
@@ -57,11 +67,16 @@ function initializeAppFactory(loginService: LoginService, router: Router): () =>
 
 const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncReducer];
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
-  return localStorageSync({
-    keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport'],
-    storageKeySerializer: (key) => `fecfile_online_${key}`,
-    rehydrate: true,
-  })(reducer);
+  try {
+    return localStorageSync({
+      keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport'],
+      storageKeySerializer: (key) => `fecfile_online_${key}`,
+      rehydrate: true,
+    })(reducer);
+  } catch (error) {
+    console.log(error);
+    return reducer;
+  }
 }
 
 if (environment.production) {
@@ -70,6 +85,7 @@ if (environment.production) {
 const ngCspNonce = document.body?.querySelector('[ngCspNonce]')?.getAttribute('ngCspNonce') ?? undefined;
 bootstrapApplication(AppComponent, {
   providers: [
+    CookieCheckService,
     importProvidersFrom(
       BrowserModule,
       FormsModule,
@@ -123,7 +139,7 @@ bootstrapApplication(AppComponent, {
     FecDatePipe,
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
     provideAppInitializer(() => {
-      const initializerFn = initializeAppFactory(inject(LoginService), inject(Router));
+      const initializerFn = initializeAppFactory(inject(LoginService), inject(Router), inject(CookieCheckService));
       return initializerFn();
     }),
     provideAnimations(),

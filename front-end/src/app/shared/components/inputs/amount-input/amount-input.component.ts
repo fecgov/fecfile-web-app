@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, effect, inject, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  effect,
+  inject,
+  input,
+  Input,
+  OnChanges,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { isDebtRepayment, isLoanRepayment } from 'app/shared/models/transaction.model';
@@ -39,8 +49,9 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
   @Input() showCalendarYTD = false;
+  @Input() showPayeeCandidateYTD = false;
 
-  @Input() memoCodeCheckboxLabel = '';
+  readonly memoHasOptional = input(false);
   @Input() memoItemHelpText: string | undefined;
 
   @ViewChild('amountInput') amountInput!: InputNumber;

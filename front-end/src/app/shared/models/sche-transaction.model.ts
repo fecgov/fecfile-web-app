@@ -90,12 +90,6 @@ export class SchETransaction extends Transaction {
   }
 }
 
-export enum ScheduleETransactionGroups {
-  INDEPENDENT_EXPENDITURES = 'INDEPENDENT EXPENDITURES',
-}
-
-export type ScheduleETransactionGroupsType = ScheduleETransactionGroups.INDEPENDENT_EXPENDITURES;
-
 export enum ScheduleETransactionTypes {
   INDEPENDENT_EXPENDITURE = 'INDEPENDENT_EXPENDITURE',
   INDEPENDENT_EXPENDITURE_VOID = 'INDEPENDENT_EXPENDITURE_VOID',
