@@ -62,7 +62,8 @@
             [templateMap]="templateMap"
             [overrideMemoItemHelpText]="memoItemHelpText"
             [transaction]="transaction"
-            [checkboxLabel]="memoCodeCheckboxLabel"
+            checkboxLabel="MEMO ITEM"
+            [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
           ></app-memo-code>
         </div>
       </div>
@@ -126,6 +127,26 @@
             [formSubmitted]="formSubmitted"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
+          ></app-error-messages>
+        </div>
+      </div>
+    }
+    @if (showPayeeCandidateYTD) {
+      <div class="col-6">
+        <div class="field">
+          <label for="aggregate_general_elec_expended">AGGREGATE GENERAL ELECTION EXPENDITURE FOR THIS CANDIDATE</label>
+          <app-input-number
+            inputId="aggregate_general_elec_expended"
+            [formControlName]="templateMap['aggregate_general_elec_expended']"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          ></app-input-number>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['aggregate_general_elec_expended']"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The aggregate can be 12 digits max"
           ></app-error-messages>
         </div>
       </div>

@@ -30,7 +30,8 @@ export class SchFTransaction extends Transaction {
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
   expenditure_amount: number | undefined;
   aggregation_group: AggregationGroups | undefined;
-  aggregate_general_elec_expended: number | undefined;
+  general_election_year: string | undefined;
+  aggregate_general_elec_expended: number | undefined; // calculated field
   expenditure_purpose_description: string | undefined;
   category_code: string | undefined;
   payee_committee_id_number: string | undefined;
@@ -63,17 +64,19 @@ export class SchFTransaction extends Transaction {
     }
     return transaction;
   }
+  override getFieldsNotToSave(): string[] {
+    return ['aggregate_general_elec_expended', ...super.getFieldsNotToSave()];
+  }
 
   override getFieldsNotToValidate(): string[] {
-    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      'aggregate_general_elec_expended',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
 }
-
-export enum ScheduleFTransactionGroups {
-  COORDINATED_EXPENDITURES = 'CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS',
-}
-
-export type ScheduleFTransactionGroupsType = ScheduleFTransactionGroups.COORDINATED_EXPENDITURES;
 
 export enum ScheduleFTransactionTypes {
   COORDINATED_PARTY_EXPENDITURE = 'COORDINATED_PARTY_EXPENDITURE',

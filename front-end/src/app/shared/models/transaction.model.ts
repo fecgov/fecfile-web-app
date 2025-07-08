@@ -1,9 +1,9 @@
 import { BaseModel } from './base.model';
 import { Contact, ContactTypes } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
+import { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
@@ -17,10 +17,11 @@ import {
   ScheduleC2TransactionGroupsType,
   ScheduleC2TransactionTypes,
 } from './schc2-transaction.model';
-import { SchDTransaction, ScheduleDTransactionGroupsType, ScheduleDTransactionTypes } from './schd-transaction.model';
-import { SchETransaction, ScheduleETransactionGroupsType, ScheduleETransactionTypes } from './sche-transaction.model';
-import { SchFTransaction, ScheduleFTransactionGroupsType, ScheduleFTransactionTypes } from './schf-transaction.model';
+import { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.model';
+import { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
+import { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
 import { Form3X, Form24, Form3, Report, ReportTypes } from './.';
+import { Disbursement, LoansAndDebts, Receipt } from './transaction-group';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -203,14 +204,11 @@ export type TransactionTypes =
   | ScheduleETransactionTypes
   | ScheduleFTransactionTypes;
 export type TransactionGroupTypes =
-  | ScheduleATransactionGroupsType
-  | ScheduleBTransactionGroupsType
-  | ScheduleCTransactionGroupsType
+  | Receipt
+  | Disbursement
+  | LoansAndDebts
   | ScheduleC1TransactionGroupsType
-  | ScheduleC2TransactionGroupsType
-  | ScheduleDTransactionGroupsType
-  | ScheduleETransactionGroupsType
-  | ScheduleFTransactionGroupsType;
+  | ScheduleC2TransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',

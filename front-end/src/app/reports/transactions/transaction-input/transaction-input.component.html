@@ -66,8 +66,9 @@
       [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
       [showAggregate]="!!transaction?.transactionType?.showAggregate"
       [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
+      [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
       [transaction]="transaction"
-      [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
+      [memoHasOptional]="(memoHasOptional$ | async)!"
     ></app-amount-input>
   }
   @if (transaction?.transactionType?.hasDebtInput) {
@@ -214,7 +215,7 @@
           <label for="contact_2"
             >LOOKUP
             @if (!transaction?.transactionType?.contact2IsRequired(form)) {
-              (OPTIONAL)
+              <span class="paren-label">(OPTIONAL)</span>
             }
           </label>
           <app-transaction-contact-lookup

@@ -216,7 +216,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.form.get(component.templateMap.last_name)?.setValue('Last');
 
     expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
-      'Earmarked from First Last (Individual)',
+      'Earmarked from First Last',
     );
   });
 

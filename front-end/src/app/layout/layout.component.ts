@@ -1,4 +1,5 @@
-import { Component, AfterViewChecked, ElementRef, inject, viewChild, computed } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, AfterViewChecked, inject, viewChild, computed, signal } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
@@ -38,34 +39,27 @@ export class LayoutComponent extends DestroyerComponent implements AfterViewChec
   private readonly route = inject(ActivatedRoute);
   private readonly navEnd = toSignal(injectNavigationEnd());
 
-  readonly BackgroundStyles = BackgroundStyles;
-
-  readonly footer = viewChild.required(FooterComponent);
-  readonly contentOffset = viewChild.required<ElementRef>('contentOffset');
-  readonly banner = viewChild.required(BannerComponent);
+  readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
 
   readonly layoutControls = computed(() => {
     this.navEnd();
     return new LayoutControls(collectRouteData(this.route.snapshot));
   });
 
+  isCookiesDisabled = signal(false);
+
+  readonly topPadding = computed(() => {
+    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) {
+      return '0px';
+    } else if (this.isCookiesDisabled()) {
+      return '165px';
+    } else {
+      return '64px';
+    }
+  });
+
   ngAfterViewChecked(): void {
-    this.updateContentOffset();
-  }
-
-  updateContentOffset() {
-    if (this.layoutControls().showSidebar) return;
-    const offsetElement = this.contentOffset().nativeElement;
-    const height = offsetElement.offsetHeight;
-    const footerHeight = this.footer().getFooterElement().offsetHeight;
-    const bannerHeight = this.banner().getBannerElement().offsetHeight;
-    const currentPadding =
-      offsetElement.style.paddingBottom === '' ? 0 : parseInt(offsetElement.style.paddingBottom, 10);
-
-    const paddingBottom = Math.max(64, window.innerHeight - height - footerHeight - bannerHeight + currentPadding);
-
-    // Apply the margin-bottom to the div
-    offsetElement.style.paddingBottom = paddingBottom + 'px';
+    this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
   }
 }
 

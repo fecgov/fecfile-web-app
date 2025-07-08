@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/c
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { Form3X } from '../models/form-3x.model';
+import { ScheduleFTransactionTypes, SchFTransaction } from '../models/schf-transaction.model';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -121,6 +122,47 @@ describe('TransactionService', () => {
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
       const req = httpTestingController.expectOne(
         `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&contact_1_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`,
+      );
+      expect(req.request.method).toEqual('GET');
+      req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
+      httpTestingController.verify();
+    });
+  });
+
+  describe('getPreviousTransactionForPayeeCandidate', () => {
+    it('should GET previous transaction', () => {
+      const mockResponse: SchFTransaction = SchFTransaction.fromJSON({
+        id: 1,
+        transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+        aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
+      });
+      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+      ).getNewTransaction();
+      mockTransaction.id = 'abc';
+      service.getPreviousTransactionForPayeeCandidate(mockTransaction, '1', new Date(), '2024').then((response) => {
+        expect(response?.id).toEqual(mockResponse.id);
+      });
+      const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+      const req = httpTestingController.expectOne(
+        `${environment.apiUrl}/transactions/previous/payee-candidate/?transaction_id=abc&contact_2_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.COORDINATED_PARTY_EXPENDITURES}&general_election_year=2024`,
+      );
+      expect(req.request.method).toEqual('GET');
+      req.flush(mockResponse);
+      httpTestingController.verify();
+    });
+
+    it('should return undefined', () => {
+      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+      ).getNewTransaction();
+      mockTransaction.id = 'abc';
+      service.getPreviousTransactionForPayeeCandidate(mockTransaction, '1', new Date(), '2024').then((response) => {
+        expect(response).toEqual(undefined);
+      });
+      const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+      const req = httpTestingController.expectOne(
+        `${environment.apiUrl}/transactions/previous/payee-candidate/?transaction_id=abc&contact_2_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.COORDINATED_PARTY_EXPENDITURES}&general_election_year=2024`,
       );
       expect(req.request.method).toEqual('GET');
       req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });

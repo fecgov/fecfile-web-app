@@ -55,7 +55,7 @@ export class TransactionInputComponent implements OnInit {
   @Input() transaction?: Transaction;
   @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  @Input() memoCodeCheckboxLabel$?: Observable<string>;
+  @Input() memoHasOptional$?: Observable<boolean>;
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
   @Input() isSingle = false;
