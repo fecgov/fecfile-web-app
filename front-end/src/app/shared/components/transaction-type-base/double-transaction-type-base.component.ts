@@ -90,6 +90,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction,
       this.childContactIdMap,
       this.contactService,
+      this.injector,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
     // Determine which accordion pane to open initially based on transaction id in page URL

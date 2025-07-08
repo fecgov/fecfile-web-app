@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, Injector, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -35,6 +35,7 @@ import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wra
   template: '',
 })
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
+  protected readonly injector = inject(Injector);
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -104,7 +105,14 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     this.memoHasOptional$ = this.getMemoHasOptional$(this.form, this.transactionType);
 
-    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactIdMap, this.contactService);
+    TransactionFormUtils.onInit(
+      this,
+      this.form,
+      this.transaction,
+      this.contactIdMap,
+      this.contactService,
+      this.injector,
+    );
 
     // Determine if amount should always be negative and then force it to be so if needed
     if (this.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {

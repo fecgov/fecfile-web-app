@@ -19,13 +19,35 @@ export class PageUtils {
     }
   }
 
+  static getFormattedDate(date: Date) {
+    var year = date.getFullYear();
+
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+
+    return month + '/' + day + '/' + year;
+  }
+
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
     const currentDate: Date = new Date();
     //
-    cy.get(alias).find(calendar).first().as('calendarElement').click();
+    cy.get(alias).find(calendar).first().click();
+    cy.get(alias).find('.p-datepicker-panel').as('calendarElement');
+    cy.get('@calendarElement', { timeout: 10000 }).should('be.visible');
+    // cy.get(alias).find(calendar).first().type(this.getFormattedDate(dateObj));
+    // cy.press(Cypress.Keyboard.Keys.TAB);
+    cy.get(alias).find('.p-datepicker-panel').as('calendarElement');
 
-    cy.get('@calendarElement').find('.p-datepicker-select-year').first().scrollIntoView().click();
+    cy.get('@calendarElement', { timeout: 10000 })
+      .find('.p-datepicker-select-year')
+      .first()
+      .scrollIntoView()
+      .should('be.visible')
+      .click();
     //    Choose the year
     const year: number = dateObj.getFullYear();
     const currentYear: number = currentDate.getFullYear();
@@ -41,10 +63,11 @@ export class PageUtils {
         cy.get('@calendarElement').find('.p-datepicker-next-button').scrollIntoView().click();
       }
     }
-    cy.get('@calendarElement')
+    cy.get('@calendarElement', { timeout: 10000 })
       .find('.p-datepicker-year')
       .contains(year.toString())
       .scrollIntoView()
+      .should('be.visible')
       .click({ force: true });
 
     //    Choose the month

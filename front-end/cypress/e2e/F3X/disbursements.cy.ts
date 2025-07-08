@@ -117,7 +117,7 @@ describe('Disbursements', () => {
     PageUtils.clickSidebarItem('Manage your transactions');
 
     PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
-    PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '#1', '');
+    PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
     PageUtils.clickButton('Confirm');
 
     ReportListPage.editReport('FORM 24');

@@ -89,6 +89,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childTransaction_2,
       this.childContactIdMap_2,
       this.contactService,
+      this.injector,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
   }

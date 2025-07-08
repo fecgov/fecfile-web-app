@@ -29,6 +29,9 @@ import {
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { effect, Injector, runInInjectionContext } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 export type DateType = Date | string | undefined;
 
@@ -50,6 +53,7 @@ export class TransactionFormUtils {
     transaction: Transaction | undefined,
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
+    injector: Injector,
   ): Promise<void> {
     if (transaction?.id) {
       form.patchValue({ ...transaction });
@@ -117,7 +121,7 @@ export class TransactionFormUtils {
     }
 
     if (transactionType.showPayeeCandidateYTD) {
-      await this.handleShowPayeeCandidateYTD(component, form, transaction, contactIdMap, templateMap);
+      this.handleShowPayeeCandidateYTD(component, form, transaction, contactIdMap, templateMap, injector);
     }
 
     const schema = transaction.transactionType?.schema;
@@ -214,52 +218,40 @@ export class TransactionFormUtils {
   // Only dynamically update non-inherited calendar_ytd values on the form input.
   // Inherited calendar_ytd display the value of the parent transaction and do not
   // include or change with the amount value of the child transaction.
-  private static async handleShowPayeeCandidateYTD(
+  private static handleShowPayeeCandidateYTD(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup<any>,
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
-  ) {
-    const contactId$ = contactIdMap['contact_2'].asObservable();
-    const previous_expenditure$: Observable<Transaction | undefined> =
-      merge(
-        (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
-        (form.get(templateMap.general_election_year) as SubscriptionFormControl).valueChanges,
-        contactId$,
-      ).pipe(
-        switchMap(() => {
-          const expenditure_date = form.get(templateMap.date)?.value;
-          const general_election_year = form.get(templateMap.general_election_year)?.value;
-          const contact2Id = transaction.contact_2?.id;
+    injector: Injector,
+  ): void {
+    const dateField = form.get(templateMap.date) as SubscriptionFormControl;
+    const yearField = form.get(templateMap.general_election_year) as SubscriptionFormControl;
+    const amountField = form.get(templateMap.amount) as SubscriptionFormControl;
+    runInInjectionContext(injector, () => {
+      const contactId = toSignal(contactIdMap['contact_2'], { initialValue: transaction.contact_2?.id ?? '' });
 
-          return from(
-            component.transactionService.getPreviousTransactionForPayeeCandidate(
-              transaction,
-              contact2Id,
-              expenditure_date,
-              general_election_year,
-            ),
+      const date = toSignal(dateField.valueChanges, { initialValue: dateField.value });
+      const year = toSignal(yearField.valueChanges, { initialValue: yearField.value });
+      const amount = toSignal(amountField.valueChanges, { initialValue: amountField.value });
+
+      const previous = derivedAsync(
+        () => {
+          return component.transactionService.getPreviousTransactionForPayeeCandidate(
+            transaction,
+            contactId(),
+            date(),
+            year(),
           );
-        }),
-      ) || of(undefined);
-    form
-      .get(templateMap.amount)
-      ?.valueChanges.pipe(
-        startWith(form.get(templateMap.amount)?.value),
-        combineLatestWith(previous_expenditure$, of(transaction)),
-        takeUntil(component.destroy$),
-      )
-      .subscribe(([amount, previous_election, transaction]) => {
-        this.updateAggregate(
-          form,
-          'aggregate_general_elec_expended',
-          templateMap,
-          transaction,
-          previous_election,
-          amount,
-        );
+        },
+        { initialValue: undefined },
+      );
+
+      effect(() => {
+        this.updateAggregate(form, 'aggregate_general_elec_expended', templateMap, transaction, previous(), amount());
       });
+    });
   }
 
   static updateAggregate(
