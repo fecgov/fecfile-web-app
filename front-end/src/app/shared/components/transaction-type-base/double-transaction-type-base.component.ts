@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -18,7 +18,7 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, scrollToTop } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
 
 /**
@@ -36,7 +36,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  @ViewChild(Accordion) accordion?: Accordion;
+  readonly accordion = viewChild.required(Accordion);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -45,6 +45,14 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoHasOptional$ = of(false);
+
+  constructor() {
+    super();
+    effect(() => {
+      this.accordion().value();
+      scrollToTop();
+    });
+  }
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -95,7 +103,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
-      this.accordion.value.set(1);
+      this.accordion().value.set(1);
     }
   }
 
