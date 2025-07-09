@@ -65,22 +65,20 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState
-        ? this.pagerState
-        : {
-            first: 0,
-            rows: this.rowsPerPage,
-          };
+      event = this.pagerState ?? {
+        first: 0,
+        rows: this.rowsPerPage,
+      };
     }
 
     // Calculate the record page number to retrieve from the API.
-    const first: number = event.first ? event.first : 0;
-    const rows: number = event.rows ? event.rows : 10;
+    const first: number = event.first ?? 0;
+    const rows: number = event.rows ?? 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
     const params = this.getParams();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ?? '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {

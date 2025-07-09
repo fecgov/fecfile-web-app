@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +14,7 @@ import { TransactionSchAService } from 'app/shared/services/transaction-schA.ser
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -94,7 +96,7 @@ describe('TransactionReceiptsComponent', () => {
     ).toBeFalse();
     expect(itemizeAction?.isAvailable({ itemized: false })).toBeFalse();
     expect(unitemizeAction?.isAvailable({ itemized: true })).toBeFalse();
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = signal(true);
     expect(viewAction?.isAvailable()).toBeFalse();
     expect(editAction?.isAvailable()).toBeTrue();
     expect(

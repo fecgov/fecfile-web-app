@@ -66,41 +66,36 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
-  active = model<number>(-1);
+  readonly active = model<number>(-1);
 
-  transactionGroups: Signal<TransactionGroupTypes[]> = computed(() => {
-    if (this.category() === 'disbursement') {
-      if (this.report().report_type === ReportTypes.F3) {
+  readonly isF3X = computed(() => this.report().report_type === ReportTypes.F3X);
+  readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
+
+  readonly transactionGroups: Signal<TransactionGroupTypes[]> = computed(() => {
+    switch (this.category()) {
+      case 'receipt':
         return [
-          Disbursement.OPERATING_EXPENDITURES,
-          Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
-          Disbursement.OTHER_EXPENDITURES,
-          Disbursement.REFUND,
-          Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+          Receipt.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS,
+          Receipt.CONTRIBUTIONS_FROM_REGISTERED_FILERS,
+          Receipt.TRANSFERS,
+          Receipt.REFUNDS,
+          Receipt.OTHER,
         ];
-      } else if (this.report().report_type === ReportTypes.F3X) {
-        return [
-          Disbursement.OPERATING_EXPENDITURES,
-          Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
-          Disbursement.OTHER_EXPENDITURES,
-          Disbursement.REFUND,
-          Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
-          Disbursement.INDEPENDENT_EXPENDITURES,
-        ];
-      } else if (this.report().report_type === ReportTypes.F24) {
-        return [Disbursement.INDEPENDENT_EXPENDITURES];
-      }
+      case 'disbursement':
+        if (this.isF3() || this.isF3X()) {
+          return [
+            Disbursement.OPERATING_EXPENDITURES,
+            Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+            Disbursement.OTHER_EXPENDITURES,
+            Disbursement.REFUND,
+            Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+          ];
+        } else {
+          return [];
+        }
+      case 'loans-and-debts':
+        return [LoansAndDebts.LOANS, LoansAndDebts.DEBTS];
     }
-    if (this.category() === 'loans-and-debts') {
-      return [LoansAndDebts.LOANS, LoansAndDebts.DEBTS];
-    }
-    return [
-      Receipt.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS,
-      Receipt.CONTRIBUTIONS_FROM_REGISTERED_FILERS,
-      Receipt.TRANSFERS,
-      Receipt.REFUNDS,
-      Receipt.OTHER,
-    ];
   });
 
   constructor() {
@@ -214,6 +209,12 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
             ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
             ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
+            ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
+            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
+            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
           ];
           break;
         case Disbursement.OTHER_EXPENDITURES:
@@ -279,16 +280,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
           ];
           break;
-        case Disbursement.INDEPENDENT_EXPENDITURES:
-          transactionTypes = [
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
-            ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
-          ];
-          break;
+
         case Disbursement.COORDINATED_EXPENDITURES:
           transactionTypes = [
             ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,

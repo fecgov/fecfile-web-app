@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +16,7 @@ import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 
 describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TransactionGuarantorsComponent>;
@@ -79,7 +81,7 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   it('should have delete', () => {
-    component.reportIsEditable = true;
+    (component.reportIsEditable as any) = signal(true);
     expect(component.rowActions[0].isAvailable()).toEqual(false);
     expect(component.rowActions[1].isAvailable()).toEqual(true);
     expect(component.rowActions[2].isAvailable()).toEqual(true);

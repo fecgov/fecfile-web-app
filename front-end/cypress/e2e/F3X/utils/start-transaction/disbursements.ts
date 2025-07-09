@@ -28,6 +28,10 @@ export class Contributions {
   static ToCandidate() {
     PageUtils.clickLink('Contribution to Candidate');
   }
+
+  static CoordinatedPartyExpenditure() {
+    PageUtils.clickLink('Coordinated Party Expenditure');
+  }
 }
 
 export class Federal {
