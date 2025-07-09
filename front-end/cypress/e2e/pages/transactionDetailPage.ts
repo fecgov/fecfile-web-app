@@ -1,4 +1,3 @@
-import { ContactFormData } from '../models/ContactFormModel';
 import {
   ContributionFormData,
   DisbursementFormData,

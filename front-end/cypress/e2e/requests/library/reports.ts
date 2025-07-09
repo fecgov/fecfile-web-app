@@ -1,3 +1,13 @@
+export const F3X_Q1 = {
+  report_type: 'F3X',
+  form_type: 'F3XN',
+  report_code: 'Q1',
+  coverage_from_date: '2025-01-01',
+  coverage_through_date: '2025-03-31',
+  state_of_election: null,
+  date_of_election: null,
+};
+
 export const F3X_Q2 = {
   report_type: 'F3X',
   form_type: 'F3XN',
@@ -16,6 +26,7 @@ export const F24_24 = {
   can_unamend: false,
   report_type: 'F24',
   form_type: 'F24N',
+  name: '24-HOUR: Report of Independent Expenditure',
   report_type_24_48: '24',
   street_1: '1234 Street',
   city: 'Washington',
