@@ -74,9 +74,9 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.get('[id=aggregate]').should('have.value', '$25.00');
 
     // Change the contact back
-    cy.get('[id="searchBox"]').type(Individual_A_A['last_name'].slice(0, 1));
-    cy.contains('A, A').should('exist');
-    cy.contains('A, A').click({ force: true });
+    cy.get('[id="searchBox"]').type(Individual_A_A['last_name'].slice(0, 3));
+    cy.contains('Ant').should('exist');
+    cy.contains('Ant').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$225.01');
@@ -123,8 +123,8 @@ describe('Tests transaction form aggregate calculation', () => {
     // Tests changing the second transaction's contact
     cy.get('[id=aggregate]').should('have.value', '$25.00');
     cy.get('[id="searchBox"]').type('A');
-    cy.contains('A, A').should('exist');
-    cy.contains('A, A').click({ force: true });
+    cy.contains('Ant').should('exist');
+    cy.contains('Ant').click({ force: true });
     cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
 
     cy.get('[id=aggregate]').should('have.value', '$225.01');
@@ -260,11 +260,11 @@ describe('Tests transaction form aggregate calculation', () => {
   it('existing IE date leapfrogging', () => {
     const individualFormContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Individual', first_name: 'A', last_name: 'A' },
+      ...{ contact_type: 'Individual', first_name: 'Accidental', last_name: 'Ant' },
     };
     const individualTwoFormContactData = {
       ...defaultContactFormData,
-      ...{ contact_type: 'Individual', first_name: 'Z', last_name: 'Z' },
+      ...{ contact_type: 'Individual', first_name: 'Zealous', last_name: 'Zebra' },
     };
 
     cy.visit('/reports');
@@ -277,13 +277,13 @@ describe('Tests transaction form aggregate calculation', () => {
     F3XSetup({ candidate: true, report: f3x_report_data });
 
     // Create the first Independent Expenditure
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualFormContactData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualFormContactData.last_name.slice(0, 1));
-    cy.contains('A, A').should('exist');
-    cy.contains('A, A').click();
+    cy.get('[id="searchBox"]').type(individualFormContactData.last_name.slice(0, 3));
+    cy.contains('Ant').should('exist');
+    cy.contains('Ant').click();
 
     const independentExpenditureData: DisbursementFormData = {
       ...defaultTransactionFormData,
@@ -311,13 +311,13 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.contains('Transactions in this report').should('exist');
 
     // Create the second Independent Expenditure
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualTwoFormContactData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualTwoFormContactData.last_name.slice(0, 1));
-    cy.contains('Z, Z').should('exist');
-    cy.contains('Z, Z').click();
+    cy.get('[id="searchBox"]').type(individualTwoFormContactData.last_name.slice(0, 3));
+    cy.contains('Zebra').should('exist');
+    cy.contains('Zebra').click();
 
     const independentExpenditureTwoData: DisbursementFormData = {
       ...defaultTransactionFormData,
@@ -345,13 +345,13 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.contains('Transactions in this report').should('exist');
 
     // Create the third Independent Expenditure
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualFormContactData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualFormContactData.last_name.slice(0, 1));
-    cy.contains('A, A').should('exist');
-    cy.contains('A, A').click();
+    cy.get('[id="searchBox"]').type(individualFormContactData.last_name.slice(0, 3));
+    cy.contains('Ant').should('exist');
+    cy.contains('Ant').click();
 
     const independentExpenditureThreeData: DisbursementFormData = {
       ...defaultTransactionFormData,

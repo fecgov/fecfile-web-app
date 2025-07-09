@@ -8,22 +8,24 @@
       <p-accordion-panel [value]="index">
         <p-accordion-header>{{ transactionGroup }}</p-accordion-header>
         <p-accordion-content class="grid">
-          @for (transactionType of transactionTypes().get(transactionGroup); track transactionType) {
-            <div class="col-12">
-              @if (!isTransactionDisabled(transactionType)) {
-                <a
-                  [routerLink]="getRouterLink(transactionType)"
-                  [queryParams]="debtId() ? { debt: debtId() } : undefined"
-                >
-                  {{ transactionType | label: transactionTypeLabels }}
-                </a>
-              } @else {
-                <div class="disabled">
-                  {{ transactionType | label: transactionTypeLabels }}
-                </div>
-              }
-            </div>
-          }
+          <div class="content-accordion-wrapper">
+            @for (transactionType of transactionTypes().get(transactionGroup); track transactionType) {
+              <div class="col-12">
+                @if (!isTransactionDisabled(transactionType)) {
+                  <a
+                    [routerLink]="getRouterLink(transactionType)"
+                    [queryParams]="debtId() ? { debt: debtId() } : undefined"
+                  >
+                    {{ transactionType | label: transactionTypeLabels }}
+                  </a>
+                } @else {
+                  <div class="disabled">
+                    {{ transactionType | label: transactionTypeLabels }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </p-accordion-content>
       </p-accordion-panel>
     }

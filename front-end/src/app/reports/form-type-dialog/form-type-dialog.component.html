@@ -1,4 +1,4 @@
-<p-dialog [modal]="true" [(visible)]="dialogVisible" (onHide)="closeDialog()" [style]="{ width: '512px' }">
+<p-dialog [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '512px' }">
   <ng-template #header>
     <h1>Create a new report</h1>
   </ng-template>
@@ -11,34 +11,19 @@
         </ng-template>
         <ng-template #selectedItem let-selectedOption>
           <span class="option">
-            <b>{{ getFormType(selectedType)?.label }}:</b> {{ getFormType(selectedType)?.description }}
+            <b>{{ this.formType()?.label }}:</b> {{ this.formType()?.description }}
           </span>
         </ng-template>
         <ng-template let-type #item>
-          <span
-            class="option"
-            (click)="updateSelected(type)"
-            (keydown.enter)="updateSelected(type)"
-            [attr.data-cy]="type"
-          >
+          <span class="option" [attr.data-cy]="type">
             <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}
           </span>
         </ng-template>
       </p-select>
     </div>
-    @if (selectedType === formTypes.F24) {
-      <div class="modal-item-margin">
-        <label for="form24Options">REPORT TYPE</label>
-
-        <p-selectbutton
-          inputid="form24Options"
-          [options]="form24Options"
-          [(ngModel)]="selectedForm24Type"
-          optionLabel="label"
-          optionValue="value"
-        />
-      </div>
-    }
+    <div [hidden]="!isF24()">
+      <app-create-f24 />
+    </div>
   </div>
   <ng-template #footer>
     <div class="flex justify-content-center w-full pb-3">
@@ -46,7 +31,7 @@
         id="submit-button"
         pButton
         pRipple
-        [disabled]="isSubmitDisabled"
+        [disabled]="isSubmitDisabled()"
         label="Start building report"
         data-cy="start-report"
         class="p-button-primary"

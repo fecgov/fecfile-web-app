@@ -2,17 +2,17 @@
   @if (templateMap.purpose_description) {
     <div class="grid">
       <div class="col-12">
-        <label for="purpose_description">
-          {{ transactionType()?.purposeDescripLabel }}
-          <span class="paren-label">{{ transactionType()?.generatePurposeDescriptionLabel() }}</span>
-        </label>
-        @if (transactionType()?.purposeDescriptionLabelNotice) {
-          <em>
-            {{ transactionType()?.purposeDescriptionLabelNotice }}
-          </em>
-        }
+        <div class="field">
+          <label for="purpose_description">
+            {{ transactionType()?.purposeDescripLabel }}
+            <span class="paren-label">{{ transactionType()?.generatePurposeDescriptionLabel() }}</span>
+          </label>
+          @if (transactionType()?.purposeDescriptionLabelNotice) {
+            <em>
+              {{ transactionType()?.purposeDescriptionLabelNotice }}
+            </em>
+          }
 
-        <div>
           <textarea
             id="purpose_description"
             [rows]="4"
@@ -47,13 +47,13 @@
   @if (transactionType()?.hasMemoText()) {
     <div class="grid">
       <div class="col-12">
-        <label for="text4000"
-          >NOTE OR MEMO TEXT
-          <span class="paren-label">{{
-            transactionType()?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)'
-          }}</span></label
-        >
-        <div>
+        <div class="field">
+          <label for="text4000"
+            >NOTE OR MEMO TEXT
+            <span class="paren-label">{{
+              transactionType()?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)'
+            }}</span></label
+          >
           <textarea
             id="text4000"
             [rows]="5"

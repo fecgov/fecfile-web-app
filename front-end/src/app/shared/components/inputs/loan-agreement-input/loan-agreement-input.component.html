@@ -114,8 +114,8 @@
   @if (showSecured) {
     <div class="grid">
       <div class="col-12">
-        <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
-        <div>
+        <div class="field">
+          <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
           <textarea
             id="desc_collateral"
             [rows]="5"
@@ -171,8 +171,8 @@
   @if (showFutureIncome) {
     <div class="grid">
       <div class="col-12">
-        <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
-        <div>
+        <div class="field">
+          <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
           <textarea
             id="desc_specification_of_the_above"
             [rows]="5"
@@ -252,13 +252,14 @@
   <h3>Basis of loan</h3>
   <div class="grid">
     <div class="col-12">
-      <p>
-        If neither of the types of collateral described above was pledged for this loan, or if the amount pledged does
-        not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
-        assures repayment.
-      </p>
-      <label for="basis_of_loan_description">DESCRIPTION <span class="paren-label">(OPTIONAL)</span></label>
-      <div>
+      <div class="field">
+        <p>
+          If neither of the types of collateral described above was pledged for this loan, or if the amount pledged does
+          not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
+          assures repayment.
+        </p>
+        <label for="basis_of_loan_description">DESCRIPTION <span class="paren-label">(OPTIONAL)</span></label>
+
         <textarea
           id="basis_of_loan_description"
           [rows]="5"

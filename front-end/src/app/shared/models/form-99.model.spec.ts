@@ -34,7 +34,7 @@ describe('Form99', () => {
         ['MSI', 'Disavowal Response'],
         ['MSM', 'Filing Frequency Change Notice'],
         ['MST', 'Miscellaneous Report to the FEC'],
-        [undefined, ''],
+        [undefined, 'Miscellaneous Report to the FEC'],
       ];
       for (const [textCode, label] of valueLabelPairs) {
         const data = {

@@ -1,6 +1,7 @@
 <div class="field">
   <label [for]="fieldName()" [innerHTML]="label()"></label>
   <p-datepicker
+    appendTo="body"
     (onFocus)="calendarOpened = true"
     (onClose)="validateDate(false)"
     (onBlur)="validateDate(calendarOpened)"

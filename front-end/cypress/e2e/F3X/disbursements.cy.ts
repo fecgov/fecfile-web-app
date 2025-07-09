@@ -41,7 +41,7 @@ describe('Disbursements', () => {
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
@@ -57,11 +57,11 @@ describe('Disbursements', () => {
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
     F3XSetup({ organization: true, candidate: true });
-    StartTransaction.Disbursements().Independent().IndependentExpenditureVoid();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditureVoid();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', organizationFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 3));
     cy.contains(organizationFormData.name).should('exist');
     cy.contains(organizationFormData.name).click();
 
@@ -82,11 +82,11 @@ describe('Disbursements', () => {
   it('should be able to link an Independent Expenditure to a Form 24', () => {
     F24Setup({ individual: true, candidate: true });
     F3XSetup();
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
     cy.contains(individualContactFormData.last_name).should('exist');
     cy.contains(individualContactFormData.last_name).click();
 
@@ -173,7 +173,7 @@ describe('Disbursements', () => {
     setCommitteeToPTY();
     StartTransaction.Disbursements().Federal().CreditCardPayment();
 
-    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 1));
+    cy.get('[id="searchBox"]').type(organizationFormData.name.slice(0, 3));
     cy.contains(organizationFormData.name).should('exist');
     cy.contains(organizationFormData.name).click();
 
