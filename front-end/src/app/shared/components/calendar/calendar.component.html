@@ -6,7 +6,7 @@
     (onBlur)="validateDate(calendarOpened)"
     [inputId]="fieldName()"
     [name]="fieldName()"
-    [formControl]="control()"
+    [formControl]="control()!"
     [attr.data-cy]="fieldName()"
   ></p-datepicker>
   @if (control() && showErrors()) {
