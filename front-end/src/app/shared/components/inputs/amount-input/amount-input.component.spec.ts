@@ -156,7 +156,6 @@ describe('AmountInputComponent', () => {
       [transaction.transactionType.templateMap.date]: invalidDate,
     });
     fixture.detectChanges();
-    console.log(dateFormControl);
     expect(dateFormControl?.invalid).toBeTrue();
 
     const msg = dateFormControl?.errors?.['invaliddate'].msg;

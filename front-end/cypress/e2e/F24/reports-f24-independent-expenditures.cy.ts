@@ -1,7 +1,6 @@
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { candidateFormData, defaultFormData as individualContactFormData } from '../models/ContactFormModel';
 import {
   defaultScheduleFormData as defaultTransactionFormData,
   DisbursementFormData,
@@ -11,7 +10,7 @@ import { StartTransaction } from '../F3X/utils/start-transaction/start-transacti
 import { faker } from '@faker-js/faker';
 import { F24Setup } from './f24-setup';
 import { ReportListPage } from '../pages/reportListPage';
-import { defaultForm3XData } from '../models/ReportFormModel';
+import { Candidate_House_A, Individual_A_A } from '../requests/library/contacts';
 
 const independentExpenditureData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -30,22 +29,21 @@ describe('Form 24 Independent Expenditures', () => {
   });
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
-    const f3x_report_data = {
-      ...defaultForm3XData,
-    };
-    F3XSetup({ individual: true, candidate: true, report: f3x_report_data });
+    F3XSetup({ individual: true, candidate: true });
     F24Setup();
+    ReportListPage.goToPage();
+    PageUtils.clickKababItem('FORM 24', 'Edit');
     StartTransaction.IndependentExpenditures().IndependentExpenditure();
 
-    PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
+    PageUtils.dropdownSetValue('#entity_type_dropdown', 'Individual', '');
     cy.contains('LOOKUP').should('exist');
-    cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
-    cy.contains(individualContactFormData.last_name).should('exist');
-    cy.contains(individualContactFormData.last_name).click();
+    cy.get('[id="searchBox"]').type(Individual_A_A.last_name.slice(0, 3));
+    cy.contains(Individual_A_A.last_name).should('exist');
+    cy.contains(Individual_A_A.last_name).click({ force: true });
 
     TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
       independentExpenditureData,
-      candidateFormData,
+      { contact_type: 'Candidate', last_name: Candidate_House_A.last_name },
       false,
       '',
       'date_signed',
@@ -54,14 +52,14 @@ describe('Form 24 Independent Expenditures', () => {
     PageUtils.clickButton('Save');
     PageUtils.clickLink('Independent Expenditure');
     cy.contains('Address').should('exist');
-    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
-    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
+    cy.get('#first_name').should('have.value', Individual_A_A.first_name);
+    cy.get('#last_name').should('have.value', Individual_A_A.last_name);
 
-    ReportListPage.editReport('12-DAY PRE-GENERAL');
+    ReportListPage.editReport('JULY 15 QUARTERLY REPORT (Q2)');
     PageUtils.clickSidebarItem('Manage your transactions');
     PageUtils.clickLink('Independent Expenditure');
     cy.contains('Address').should('exist');
-    cy.get('#first_name').should('have.value', individualContactFormData.first_name);
-    cy.get('#last_name').should('have.value', individualContactFormData.last_name);
+    cy.get('#first_name').should('have.value', Individual_A_A.first_name);
+    cy.get('#last_name').should('have.value', Individual_A_A.last_name);
   });
 });

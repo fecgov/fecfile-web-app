@@ -22,8 +22,7 @@ export class PageUtils {
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
     const currentDate: Date = new Date();
-    //
-    cy.get(alias).find(calendar).first().as('calendarElement').click();
+    cy.get('alias').find(calendar).first().as('calendarElement').click();
 
     cy.get('@calendarElement').find('.p-datepicker-select-year').first().scrollIntoView().click();
     //    Choose the year

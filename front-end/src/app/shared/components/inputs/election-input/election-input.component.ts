@@ -1,4 +1,4 @@
-import { Component, computed, input, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -15,10 +15,7 @@ import { InputText } from 'primeng/inputtext';
   imports: [ReactiveFormsModule, Select, PrimeTemplate, ErrorMessagesComponent, InputText],
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
-  readonly labelPrefix = input('');
-  readonly _labelPrefix = computed(() => this.electionLabelPrefix() ?? this.labelPrefix());
-
-  readonly electionLabelPrefix = computed(() => this.transactionType()?.electionLabelPrefix);
+  readonly labelPrefix = computed(() => this.transactionType()?.electionLabelPrefix ?? '');
 
   readonly electionTypeOptions = [
     { label: 'Primary (P)', value: 'P' },

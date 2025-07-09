@@ -28,7 +28,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
     'corresponding coverage dates.';
 
-  readonly checked = signal(false);
+  readonly userTouchedDates = signal(false);
   readonly disbursementDate = signal<Date | undefined>(undefined);
   readonly disseminationDate = signal<Date | undefined>(undefined);
 
@@ -54,8 +54,8 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     const disbursementDate = this.disbursementDate();
     const disseminationDate = this.disseminationDate();
     const report = this.form3X();
-    if (report && !this.checked()) {
-      this.checked.set(true); // We want to use the report unless one of the dates has changed.
+    if (report && !this.userTouchedDates()) {
+      this.userTouchedDates.set(true); // We want to use the report unless one of the dates has changed.
       return report;
     }
     const date = disbursementDate ?? disseminationDate;

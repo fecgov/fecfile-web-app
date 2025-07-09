@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
-import { isDebtRepayment, isLoanRepayment, ScheduleIds } from 'app/shared/models/transaction.model';
+import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
@@ -33,7 +33,7 @@ import { InputText } from 'primeng/inputtext';
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);
-  readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
+  readonly report = this.store.selectSignal(selectActiveReport);
   @Input() contributionAmountReadOnly = false;
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
@@ -48,7 +48,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
-  reportTypes = ReportTypes;
+  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
 
   protected readonly isLoanRepayment = computed(
     () => !!this.transaction()?.loan_id && this.transactionType()?.scheduleId !== ScheduleIds.C,
@@ -86,21 +86,21 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       }
     }
 
+    if (this.isDebtRepayment() || this.isLoanRepayment()) {
+      this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
+        const form3X = this.report() as Form3X;
+        const date = control.value;
+        if (date && !DateUtils.isWithin(date, form3X.coverage_from_date, form3X.coverage_through_date)) {
+          const message = 'Date must fall within the report date range.';
+          return { invaliddate: { msg: message } };
+        }
+        return null;
+      });
+    }
+
     // For Schedule E memos, insert the calendar_ytd from the parent into the form control
     const transaction = this.transaction();
     if (transaction) {
-      if (isDebtRepayment(transaction) || isLoanRepayment(transaction)) {
-        this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
-          const form3X = this.activeReportSignal() as Form3X;
-          const date = control.value;
-          if (date && !DateUtils.isWithin(date, form3X.coverage_from_date, form3X.coverage_through_date)) {
-            const message = 'Date must fall within the report date range.';
-            return { invaliddate: { msg: message } };
-          }
-          return null;
-        });
-      }
-
       if (transaction.transactionType.inheritCalendarYTD) {
         this.form
           .get(transaction.transactionType.templateMap.calendar_ytd)

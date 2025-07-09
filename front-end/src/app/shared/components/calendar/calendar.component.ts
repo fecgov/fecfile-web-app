@@ -22,7 +22,6 @@ export class CalendarComponent {
   calendarOpened = false;
   readonly control = computed(() => {
     const field = this.fieldName();
-    console.log(`field: ${field}`);
     const control = this.form()?.get(field);
     if (!control) return undefined;
     return control as SubscriptionFormControl;
