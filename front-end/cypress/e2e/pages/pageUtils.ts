@@ -19,73 +19,52 @@ export class PageUtils {
     }
   }
 
-  static getFormattedDate(date: Date) {
-    var year = date.getFullYear();
-
-    var month = (1 + date.getMonth()).toString();
-    month = month.length > 1 ? month : '0' + month;
-
-    var day = date.getDate().toString();
-    day = day.length > 1 ? day : '0' + day;
-
-    return month + '/' + day + '/' + year;
-  }
-
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
-    const currentDate: Date = new Date();
-    //
     cy.get(alias).find(calendar).first().click();
-    cy.get(alias).find('.p-datepicker-panel').as('calendarElement');
-    cy.get('@calendarElement', { timeout: 10000 }).should('be.visible');
-    // cy.get(alias).find(calendar).first().type(this.getFormattedDate(dateObj));
-    // cy.press(Cypress.Keyboard.Keys.TAB);
-    cy.get(alias).find('.p-datepicker-panel').as('calendarElement');
+    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
 
-    cy.get('@calendarElement', { timeout: 10000 })
-      .find('.p-datepicker-select-year')
-      .first()
-      .scrollIntoView()
-      .should('be.visible')
-      .click();
-    //    Choose the year
-    const year: number = dateObj.getFullYear();
-    const currentYear: number = currentDate.getFullYear();
-    const decadeStart: number = currentYear - (currentYear % 10);
-    const decadeEnd: number = decadeStart + 9;
-    if (year < decadeStart) {
-      for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev-button').scrollIntoView().click();
-      }
-    }
-    if (year > decadeEnd) {
-      for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next-button').scrollIntoView().click();
-      }
-    }
-    cy.get('@calendarElement', { timeout: 10000 })
-      .find('.p-datepicker-year')
-      .contains(year.toString())
-      .scrollIntoView()
-      .should('be.visible')
-      .click({ force: true });
+    PageUtils.pickYear(dateObj.getFullYear());
+    PageUtils.pickMonth(dateObj.getMonth());
+    PageUtils.pickDay(dateObj.getDate().toString());
+    cy.wait(100);
+  }
 
-    //    Choose the month
-    const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const Month: string = Months[dateObj.getMonth()];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).scrollIntoView().click({ force: true });
-
-    //    Choose the day
-    const Day: string = dateObj.getDate().toString();
+  static pickDay(day: string) {
     cy.get('@calendarElement')
       .find('td')
       .find('span')
       .not('.p-disabled')
       .parent()
-      .contains(Day)
-      .scrollIntoView()
+      .contains(day)
+
       .click();
-    cy.wait(100);
+  }
+
+  static pickMonth(month: number) {
+    const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const Month: string = Months[month];
+    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
+  }
+
+  static pickYear(year: number) {
+    const currentYear: number = new Date().getFullYear();
+
+    cy.get('body').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+
+    const decadeStart: number = currentYear - (currentYear % 10);
+    const decadeEnd: number = decadeStart + 9;
+    if (year < decadeStart) {
+      for (let i = 0; i < decadeStart - year; i += 10) {
+        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
+      }
+    }
+    if (year > decadeEnd) {
+      for (let i = 0; i < year - decadeEnd; i += 10) {
+        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
+      }
+    }
+    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
 
   static clickSidebarSection(section: string) {
