@@ -34,7 +34,7 @@ function CreateContribution() {
 
   StartTransaction.Disbursements().Contributions().ToCandidate();
 
-  cy.get('[id="searchBox"]').type(committeeFormData.name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(committeeFormData.name.slice(0, 3));
   cy.contains(committeeFormData.name).should('exist');
   cy.contains(committeeFormData.name).click();
 

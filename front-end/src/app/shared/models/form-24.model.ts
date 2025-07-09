@@ -14,21 +14,18 @@ export class Form24 extends Report {
   schema = f24Schema;
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
+  name?: string;
 
   get formLabel() {
     return 'FORM 24';
   }
 
   get formSubLabel() {
-    return this.report_code_label ?? '';
+    return this.name ?? '';
   }
 
   override get canAmend(): boolean {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
-  }
-
-  override getLongLabel(): string {
-    return `${this.report_type_24_48}-Hour Report`;
   }
 
   report_type_24_48: '24' | '48' | undefined;

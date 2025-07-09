@@ -22,7 +22,7 @@ export class Form99 extends Report {
   }
 
   get formSubLabel() {
-    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? 'Miscellaneous Report to the FEC';
   }
 
   treasurer_last_name: string | undefined;
