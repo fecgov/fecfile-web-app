@@ -6,27 +6,51 @@ import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit
 import { CommitteeInputComponent } from './committee-input.component';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Component, viewChild } from '@angular/core';
+import { Transaction, ContactTypes } from 'app/shared/models';
+
+@Component({
+  imports: [CommitteeInputComponent],
+  standalone: true,
+  template: `<app-committee-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+    [transaction]="transaction"
+    entityRole="ORGANIZATION"
+    [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+  />`,
+})
+class TestHostComponent {
+  form: FormGroup = new FormGroup(
+    {
+      entity_type: new SubscriptionFormControl(ContactTypes.ORGANIZATION),
+      contributor_organization_name: new SubscriptionFormControl(''),
+      donor_committee_fec_id: new SubscriptionFormControl(''),
+      donor_committee_name: new SubscriptionFormControl(''),
+    },
+    { updateOn: 'blur' },
+  );
+  formSubmitted = false;
+  templateMap = testTemplateMap;
+  transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECEIPT) as SchATransaction;
+  component = viewChild.required(CommitteeInputComponent);
+}
 
 describe('CommitteeInputComponent', () => {
   let component: CommitteeInputComponent;
-  let fixture: ComponentFixture<CommitteeInputComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [InputTextModule, ReactiveFormsModule, CommitteeInputComponent, ErrorMessagesComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CommitteeInputComponent);
-    component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contributor_organization_name: new SubscriptionFormControl(''),
-        donor_committee_fec_id: new SubscriptionFormControl(''),
-        donor_committee_name: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
-    component.templateMap = testTemplateMap;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+
     fixture.detectChanges();
   });
 
@@ -35,11 +59,8 @@ describe('CommitteeInputComponent', () => {
   });
 
   it('should sync committee_name to organization_name', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECEIPT) as SchATransaction;
-
-    component.transaction.transactionType.synchronizeOrgComNameValues = true;
-
-    component.ngOnInit();
+    host.transaction.transactionType.synchronizeOrgComNameValues = true;
+    fixture.detectChanges();
 
     expect(component.form.get('donor_committee_name')?.value).toBe('');
     component.form.get('contributor_organization_name')?.setValue('ORG');

@@ -18,7 +18,7 @@
     [form]="form"
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
-    [transaction]="transaction"
+    [transaction]="transaction()"
   ></app-loan-terms-dates-input>
   <app-yes-no-radio-input
     [form]="form"
@@ -217,7 +217,7 @@
           <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
           <app-transaction-contact-lookup
             contactProperty="contact_2"
-            [transaction]="transaction"
+            [transaction]="transaction()"
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"

@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, computed, effect, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { DestroyerComponent } from '../app-destroyer.component';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { DatePicker } from 'primeng/datepicker';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
@@ -12,31 +11,41 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
   styleUrl: './calendar.component.scss',
   imports: [DatePicker, ReactiveFormsModule, ErrorMessagesComponent],
 })
-export class CalendarComponent extends DestroyerComponent implements OnInit {
-  @Input() form!: FormGroup;
-  @Input() formSubmitted = false;
-  @Input() fieldName!: string;
-  @Input() label!: string;
-  @Input() showErrors = true;
-  @Input() requiredErrorMessage = 'This is a required field.';
+export class CalendarComponent {
+  readonly form = input.required<FormGroup>();
+  readonly formSubmitted = input.required<boolean>();
+  readonly fieldName = input.required<string>();
+  readonly label = input.required<string>();
+  readonly showErrors = input(true);
+  readonly requiredErrorMessage = input('This is a required field.');
 
   calendarOpened = false;
-  control!: SubscriptionFormControl<Date | null>;
+  readonly control = computed(() => {
+    const field = this.fieldName();
+    const control = this.form()?.get(field);
+    if (!control) return undefined;
+    return control as SubscriptionFormControl;
+  });
 
-  ngOnInit(): void {
-    this.control = this.form?.get(this.fieldName) as SubscriptionFormControl;
-    const date = DateUtils.parseDate(this.control.value);
-    this.control.setValue(date);
+  constructor() {
+    effect(() => {
+      const control = this.control();
+      if (control) {
+        const date = DateUtils.parseDate(control.value);
+        control.setValue(date);
+      }
+    });
   }
 
   validateDate(calendarUpdate: boolean) {
     this.calendarOpened = calendarUpdate;
-    if (!this.calendarOpened && this.control) {
+    const control = this.control();
+    if (!this.calendarOpened && control) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const pendingValue = (this.control as any)._pendingValue;
-      this.control.markAsTouched();
-      this.control.setValue(pendingValue);
-      this.control.updateValueAndValidity();
+      const pendingValue = (control as any)._pendingValue;
+      control.markAsTouched();
+      control.setValue(pendingValue);
+      control.updateValueAndValidity();
     }
   }
 }
