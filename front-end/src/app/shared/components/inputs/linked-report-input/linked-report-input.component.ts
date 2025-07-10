@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, untracked } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
@@ -28,9 +28,9 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
     'corresponding coverage dates.';
 
-  readonly userTouchedDates = signal(false);
   readonly disbursementDate = signal<Date | undefined>(undefined);
   readonly disseminationDate = signal<Date | undefined>(undefined);
+  readonly userTouchedValues = signal(false);
 
   readonly committeeF3xReports = derivedAsync(
     () =>
@@ -53,9 +53,9 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   readonly associatedF3X = derivedAsync(() => {
     const disbursementDate = this.disbursementDate();
     const disseminationDate = this.disseminationDate();
+
     const report = this.form3X();
-    if (report && !this.userTouchedDates()) {
-      this.userTouchedDates.set(true); // We want to use the report unless one of the dates has changed.
+    if (report && !this.userTouchedValues()) {
       return report;
     }
     const date = disbursementDate ?? disseminationDate;
@@ -100,6 +100,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     const linkedF3xControl = new SubscriptionFormControl();
     this.form.addControl('linkedF3x', linkedF3xControl);
     this.form.addControl('linkedF3xId', new SubscriptionFormControl());
+    const memoControl = this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>;
     const dateControl =
       (this.form.get(this.templateMap['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
     const date2Control =
@@ -108,7 +109,17 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       buildCorrespondingForm3XValidator(this.form, this.templateMap['date'], this.templateMap['date2']),
     );
 
-    dateControl.valueChanges.subscribe((value) => this.disbursementDate.set(value));
-    date2Control.valueChanges.subscribe((value) => this.disseminationDate.set(value));
+    this.disbursementDate.set(dateControl.value);
+    this.disbursementDate.set(date2Control.value);
+
+    dateControl.valueChanges.subscribe((value) => {
+      this.userTouchedValues.set(true);
+      this.disbursementDate.set(value);
+    });
+    date2Control.valueChanges.subscribe((value) => {
+      this.userTouchedValues.set(true);
+      this.disseminationDate.set(value);
+    });
+    memoControl.valueChanges.subscribe(() => this.userTouchedValues.set(true));
   }
 }
