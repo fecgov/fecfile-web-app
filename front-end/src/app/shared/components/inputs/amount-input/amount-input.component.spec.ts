@@ -18,7 +18,6 @@ import { Component, signal, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
-import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 
 @Component({
   imports: [AmountInputComponent, AsyncPipe],
@@ -100,7 +99,7 @@ describe('AmountInputComponent', () => {
   it('should not call updateInput when negativeAmountValueOnly is false', () => {
     component.negativeAmountValueOnly = false;
     fixture.detectChanges();
-    const updateInputMethodFalse = spyOn(component.amountInput, 'updateInput');
+    const updateInputMethodFalse = spyOn(component.amountInput(), 'updateInput');
     expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
     component.onInputAmount();
     // expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
@@ -109,7 +108,7 @@ describe('AmountInputComponent', () => {
   it('should call updateInput when negativeAmountValueOnly is true', () => {
     component.negativeAmountValueOnly = true;
     fixture.detectChanges();
-    const updateInputMethodTrue = spyOn(component.amountInput, 'updateInput');
+    const updateInputMethodTrue = spyOn(component.amountInput(), 'updateInput');
     component.onInputAmount();
     expect(updateInputMethodTrue).toHaveBeenCalled();
   });
@@ -122,10 +121,6 @@ describe('AmountInputComponent', () => {
     host.templateMap = transaction.transactionType.templateMap;
     const checkboxLabel = signal('MEMO ITEM');
 
-    component.memoCode = {
-      checkboxLabel,
-      updateMemoItemWithDate: () => undefined,
-    } as unknown as MemoCodeInputComponent;
     component.form.patchValue({
       [transaction.transactionType.templateMap.date]: undefined,
     });
@@ -133,7 +128,7 @@ describe('AmountInputComponent', () => {
       [transaction.transactionType.templateMap.date2]: date,
     });
     fixture.detectChanges();
-    expect(component.memoCode.checkboxLabel()).toBe(checkboxLabel());
+    expect(component.memoCode()?.checkboxLabel()).toBe(checkboxLabel());
   });
 
   it('should not allow memo item selection for loan repayment', fakeAsync(() => {

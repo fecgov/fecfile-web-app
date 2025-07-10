@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, computed, inject, input, OnChanges, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -44,8 +44,10 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       : 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.',
   );
   readonly memoCodeReadOnly = computed(() => TransactionFormUtils.isMemoCodeReadOnly(this.transactionType()));
-  coverageDate: Date = new Date();
-  coverageDateQuestion = 'Did you mean to date this transaction outside of the report coverage period?';
+  readonly coverageDate = signal(new Date());
+  readonly coverageDateQuestion = signal(
+    'Did you mean to date this transaction outside of the report coverage period?',
+  );
   reportTypes = ReportTypes;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
@@ -76,8 +78,8 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
     if (dateControl?.enabled) {
       dateControl.addSubscription((date: Date) => {
-        if (date && date.getTime() !== this.coverageDate.getTime()) {
-          this.coverageDate = date;
+        if (date && date.getTime() !== this.coverageDate().getTime()) {
+          this.coverageDate.set(date);
           this.updateMemoItemWithDate(date);
         }
       }, this.destroy$);

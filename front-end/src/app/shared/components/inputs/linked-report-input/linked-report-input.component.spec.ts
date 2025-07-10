@@ -15,7 +15,7 @@ const mockReports: Report[] = [
   Form3X.fromJSON({
     id: '1',
     coverage_from_date: '2024-01-01',
-    coverage_through_date: '2024-01-31',
+    coverage_through_date: '2024-03-31',
     form_type: 'F3XN',
     report_type: 'F3X',
     report_code: 'Q1',
@@ -38,8 +38,8 @@ const mockReports: Report[] = [
   }),
   Form3X.fromJSON({
     id: '2',
-    coverage_from_date: '2024-02-01',
-    coverage_through_date: '2024-02-28',
+    coverage_from_date: '2024-04-01',
+    coverage_through_date: '2024-06-30',
     form_type: 'F3XN',
     report_type: 'F3X',
     report_code: 'Q1',
@@ -68,7 +68,11 @@ const mockReports: Report[] = [
   template: `<app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction" />`,
 })
 class TestHostComponent implements OnDestroy {
-  form: FormGroup = new FormGroup({});
+  form: FormGroup = new FormGroup({
+    [testTemplateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
+    [testTemplateMap['date2']]: new SubscriptionFormControl(new Date('06/01/2024')),
+    [testTemplateMap['memo_code']]: new SubscriptionFormControl(),
+  });
   templateMap = testTemplateMap;
   transaction: Transaction = testScheduleATransaction;
 
@@ -76,18 +80,9 @@ class TestHostComponent implements OnDestroy {
 
   constructor() {
     this.transaction.reports = mockReports;
-    this.form.addControl(testTemplateMap['date'], new SubscriptionFormControl());
-    this.form.addControl(testTemplateMap['date2'], new SubscriptionFormControl());
   }
   ngOnDestroy(): void {
-    testScheduleATransaction.reports = [
-      {
-        report_type: 'F3X',
-        report_code: 'Q1',
-        report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
-        coverage_through_date: '2024-04-20',
-      } as unknown as Report,
-    ];
+    testScheduleATransaction.reports = [mockReports[0]];
   }
 }
 
@@ -126,7 +121,7 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should set associated F3X based on disbursement date', async () => {
-    component.disbursementDate.set(new Date('2024-02-15'));
+    component.form.get(testTemplateMap['date'])?.setValue(new Date('2024-06-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -147,11 +142,10 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should correctly format the label of the associated F3X report', async () => {
-    component.disbursementDate.set(new Date('2024-02-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const expectedLabel = 'YEAR-END: 02/01/2024 - 02/28/2024';
+    const expectedLabel = 'MID-YEAR-REPORT: 01/01/2024 - 03/31/2024';
     const form3XLabel = component.form3XLabel();
     expect(form3XLabel).toEqual(expectedLabel);
   });
@@ -160,11 +154,11 @@ describe('LinkedReportInputComponent', () => {
     spyOn(component.form.get('linkedF3x')!, 'setValue');
     spyOn(component.form.get('linkedF3xId')!, 'setValue');
 
-    component.disbursementDate.set(new Date('2024-01-15'));
+    component.form.get(testTemplateMap['date'])?.setValue(new Date('2024-01-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenCalledWith('MID-YEAR-REPORT: 01/01/2024 - 01/31/2024');
+    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenCalledWith('MID-YEAR-REPORT: 01/01/2024 - 03/31/2024');
     expect(component.form.get('linkedF3xId')!.setValue).toHaveBeenCalledWith('1');
   });
 
@@ -173,16 +167,28 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should update associated report when dates change', async () => {
-    component.disbursementDate.set(new Date('2024-02-15'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(component.associatedF3X()?.id).toBe('2');
-
-    component.disbursementDate.set(new Date('2024-01-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
     expect(component.associatedF3X()?.id).toBe('1');
+
+    component.form.get(testTemplateMap['date'])?.setValue(new Date('2024-06-15'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.associatedF3X()?.id).toBe('2');
+  });
+
+  it('should update associated report when memo changes', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.associatedF3X()?.id).toBe('1');
+
+    component.form.get(testTemplateMap['memo_code'])?.setValue(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.associatedF3X()?.id).toBe('2');
   });
 });
