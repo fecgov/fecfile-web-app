@@ -8,8 +8,8 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, Report, UploadSubmission } from 'app/shared/models';
-import { Component, OnDestroy, viewChild } from '@angular/core';
+import { Transaction, Form3X, Report, UploadSubmission, SchATransaction } from 'app/shared/models';
+import { Component, viewChild } from '@angular/core';
 
 const mockReports: Report[] = [
   Form3X.fromJSON({
@@ -67,22 +67,19 @@ const mockReports: Report[] = [
   standalone: true,
   template: `<app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction" />`,
 })
-class TestHostComponent implements OnDestroy {
+class TestHostComponent {
   form: FormGroup = new FormGroup({
     [testTemplateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
     [testTemplateMap['date2']]: new SubscriptionFormControl(new Date('06/01/2024')),
     [testTemplateMap['memo_code']]: new SubscriptionFormControl(),
   });
   templateMap = testTemplateMap;
-  transaction: Transaction = testScheduleATransaction;
+  transaction: Transaction = { ...testScheduleATransaction } as SchATransaction;
 
   component = viewChild.required(LinkedReportInputComponent);
 
   constructor() {
     this.transaction.reports = mockReports;
-  }
-  ngOnDestroy(): void {
-    testScheduleATransaction.reports = [mockReports[0]];
   }
 }
 
