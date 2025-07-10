@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, inject, input, Input, OnInit, viewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
@@ -43,8 +43,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   readonly memoHasOptional = input(false);
   @Input() memoItemHelpText: string | undefined;
 
-  @ViewChild('amountInput') amountInput!: InputNumber;
-  @ViewChild('memoCode') memoCode!: MemoCodeInputComponent;
+  readonly amountInput = viewChild.required<InputNumber>('amountInput');
+  readonly memoCode = viewChild(MemoCodeInputComponent);
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
@@ -70,17 +70,20 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       if (dateControl && date2Control) {
         dateControl.addSubscription(() => {
           date2Control.updateValueAndValidity({ emitEvent: false });
-          this.memoCode.coverageDateQuestion = 'Did you mean to enter a date outside of the report coverage period?';
+          this.memoCode()?.coverageDateQuestion.set(
+            'Did you mean to enter a date outside of the report coverage period?',
+          );
           // Opening of 'Just checking...' pop-up is handled in app-memo-code component directly.
         }, this.destroy$);
         date2Control.addSubscription((date: Date) => {
           dateControl.updateValueAndValidity({ emitEvent: false });
           // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
           if (!dateControl.value) {
-            this.memoCode.coverageDate = date;
-            this.memoCode.coverageDateQuestion =
-              'Did you mean to enter a disbursement date outside of the report coverage period?';
-            this.memoCode.updateMemoItemWithDate(date);
+            this.memoCode()?.coverageDate.set(date);
+            this.memoCode()?.coverageDateQuestion.set(
+              'Did you mean to enter a disbursement date outside of the report coverage period?',
+            );
+            this.memoCode()?.updateMemoItemWithDate(date);
           }
         }, this.destroy$);
       }
@@ -112,10 +115,10 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   onInputAmount() {
     if (this.negativeAmountValueOnly) {
       // Automatically convert the amount value to a negative dollar amount.
-      const inputValue = this.amountInput.input.nativeElement.value;
+      const inputValue = this.amountInput().input.nativeElement.value;
       if (inputValue.startsWith('$')) {
         const value = Number(parseInt(inputValue.slice(1)).toFixed(2));
-        this.amountInput.updateInput(-1 * value, undefined, 'insert', undefined);
+        this.amountInput().updateInput(-1 * value, undefined, 'insert', undefined);
       }
     }
   }

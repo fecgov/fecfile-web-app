@@ -67,11 +67,11 @@
     </ng-template>
     <p id="out-of-date-dialog-text">
       <b>
-        {{ coverageDate | fecDate }}
+        {{ coverageDate() | fecDate }}
       </b>
       falls outside the report coverages dates of
       <b> {{ coverageFromDate() | fecDate }}-{{ coverageThroughDate() | fecDate }}</b
-      >. {{ coverageDateQuestion }} <br /><br />
+      >. {{ coverageDateQuestion() }} <br /><br />
       If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>
     <div class="grid">
