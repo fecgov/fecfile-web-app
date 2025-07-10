@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function getContactFields(prefix: string, contact: any, contact_number = 1) {
   return {
     [`${prefix}_first_name`]: contact.first_name,
@@ -35,10 +35,8 @@ export function buildScheduleA(
   type: string,
   amount: number,
   date: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contact: any,
   report_id?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extra_data?: any,
 ) {
   return {
@@ -63,17 +61,71 @@ export function buildScheduleA(
   };
 }
 
+export function buildContributionToCandidate(
+  expenditure_amount: number,
+  expenditure_date: string,
+  contacts: any[2],
+  report_id?: string,
+  extra_data?: any,
+) {
+  return {
+    schedule_id: 'B',
+    form_type: 'SB23',
+    entity_type: 'COM',
+    transaction_type_identifier: 'CONTRIBUTION_TO_CANDIDATE',
+    schema_name: 'CANDIDATE_CONTRIBUTIONS',
+    category_code: null,
+    memo_code: null,
+    purpose_description: null,
+    text4000: null,
+    expenditure_amount,
+    expenditure_date,
+    expenditure_purpose_descrip: null,
+    children: [],
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    ...getContactFields('payee', contacts[0]),
+    ...getContactFields('beneficiary_committee', contacts[1], 2),
+    ...extra_data,
+  };
+}
+
+export function buildIndependentExpenditure(
+  expenditure_amount: number,
+  dates: [string, string],
+  contacts: any[2],
+  memo_code: boolean,
+  report_id?: string,
+  extra_data?: any,
+) {
+  return {
+    schedule_id: 'E',
+    form_type: 'SE',
+    entity_type: contacts[0].type,
+    aggregation_group: 'INDEPENDENT_EXPENDITURE',
+    transaction_type_identifier: 'INDEPENDENT_EXPENDITURE',
+    schema_name: 'INDEPENDENT_EXPENDITURES',
+    memo_code,
+    expenditure_amount,
+    dissemination_date: dates[0],
+    disbursement_date: dates[1],
+    contribution_purpose_descrip: null,
+    children: [],
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    ...getContactFields('payee', contacts[0]),
+    ...getContactFields('so_candidate', contacts[1], 2),
+    ...extra_data,
+  };
+}
+
 export function buildScheduleF(
   amount: number,
   date: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contact_1: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contact_2: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contact_3: any,
   report_id?: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extra_data?: any,
 ) {
   return {

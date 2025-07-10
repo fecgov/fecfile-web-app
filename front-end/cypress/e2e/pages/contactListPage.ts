@@ -5,6 +5,7 @@ import {
   defaultFormData as individualContactFormData,
   organizationFormData,
 } from '../models/ContactFormModel';
+import { clearContacts } from '../requests/library/contacts';
 import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
@@ -107,6 +108,7 @@ export class ContactListPage {
 
   //Deletes all reports belonging to the logged-in committee
   static deleteAllContacts() {
+    clearContacts();
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
         method: 'GET',

@@ -1,24 +1,17 @@
 import { Initialize } from '../pages/loginPage';
-import { PageUtils } from '../pages/pageUtils';
-import { ReportListPage } from '../pages/reportListPage';
+import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { candidateFormData, committeeFormData } from '../models/ContactFormModel';
-import { StartTransaction } from './utils/start-transaction/start-transaction';
-import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
+import { f3ReportId$, F3XSetup } from './f3x-setup';
 import {
   ContributionFormData,
   defaultScheduleFormData as defaultTransactionFormData,
 } from '../models/TransactionFormModel';
 import { Contributions } from './utils/start-transaction/disbursements';
-
-const APRIL_15 = 'APRIL 15';
-
-const contributionData: ContributionFormData = {
-  ...defaultTransactionFormData,
-  ...{
-    candidate: candidateFormData.candidate_id,
-  },
-};
+import { F3X_Q1, F3X_Q2 } from '../requests/library/reports';
+import { Candidate_House_A$, Committee_A$ } from '../requests/library/contacts';
+import { combineLatest, filter, first } from 'rxjs';
+import { buildContributionToCandidate } from '../requests/library/transactions';
+import { makeRequestToAPI } from '../requests/methods';
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
@@ -28,22 +21,6 @@ const redesignationData: ContributionFormData = {
     category_code: undefined,
   },
 };
-
-function CreateContribution() {
-  F3XSetup({ committee: true, candidate: true, report: reportFormDataApril });
-
-  StartTransaction.Disbursements().Contributions().ToCandidate();
-
-  cy.get('[id="searchBox"]').type(committeeFormData.name.slice(0, 3));
-  cy.contains(committeeFormData.name).should('exist');
-  cy.contains(committeeFormData.name).click();
-
-  TransactionDetailPage.enterScheduleFormDataForContribution(contributionData, false, '', 'expenditure_date');
-
-  PageUtils.clickButton('Save');
-  PageUtils.urlCheck('/list');
-  cy.contains(Contributions.TO_CANDIDATE).should('exist');
-}
 
 function Redesignate(old = false) {
   PageUtils.clickKababItem(Contributions.TO_CANDIDATE, 'Redesignate');
@@ -73,20 +50,29 @@ describe('Redesignations', () => {
   });
 
   it('should test redesignating a Schedule E contribution in the current report', () => {
-    // Create an individual contact to be used as reattributor to
-    CreateContribution();
-    Redesignate();
-  });
-
-  // Test disabled until a mock is set up for submitting a report.
-  xit('should test redesignating a Schedule E contribution from a submitted report', () => {
-    // Create an individual contact to be used with contact lookup
-    CreateContribution();
-    ReportListPage.createF3X(reportFormDataJuly);
-    ReportListPage.submitReport(APRIL_15);
-    ReportListPage.editReport(APRIL_15, 'Review');
-    PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
-    cy.wait(500);
-    Redesignate(true);
+    makeRequestToAPI(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      F3X_Q2,
+    );
+    F3XSetup({ committee: true, candidate: true, report: F3X_Q1 });
+    combineLatest([
+      Committee_A$.pipe(filter((value) => value !== undefined)),
+      Candidate_House_A$.pipe(filter((value) => value !== undefined)),
+      f3ReportId$.pipe(filter((value) => value !== '')),
+    ])
+      .pipe(first())
+      .subscribe(([committeeA, candidateA, reportId]) => {
+        const transaction = buildContributionToCandidate(
+          100.55,
+          `${currentYear}-03-27`,
+          [committeeA, candidateA],
+          reportId,
+          { election_code: 'P2020', support_oppose_code: 'S', date_signed: `${currentYear}-07-09` },
+        );
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction);
+        cy.visit(`/reports/transactions/report/${reportId}/list`);
+        Redesignate();
+      });
   });
 });

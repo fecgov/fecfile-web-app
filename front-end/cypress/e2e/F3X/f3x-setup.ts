@@ -1,42 +1,88 @@
-import {
-  defaultForm3XData as reportFormData,
-  defaultForm3XData as defaultReportFormData,
-  F3xCreateReportFormData,
-} from '../models/ReportFormModel';
-import { ContactListPage } from '../pages/contactListPage';
-import { ReportListPage } from '../pages/reportListPage';
-import { currentYear } from '../pages/pageUtils';
+import { Candidate_House_A, Committee_A, Individual_A_A, Organization_A } from '../requests/library/contacts';
+import { makeRequestToAPI } from '../requests/methods';
+import { F3X, F3X_Q2 } from '../requests/library/reports';
 
 export interface Setup {
   organization?: boolean;
   individual?: boolean;
   candidate?: boolean;
   committee?: boolean;
-  report?: F3xCreateReportFormData;
+  report?: F3X;
 }
 
-export function F3XSetup(setup: Setup = {}) {
-  if (setup.individual) ContactListPage.createIndividual();
-  if (setup.organization) ContactListPage.createOrganization();
-  if (setup.candidate) ContactListPage.createCandidate();
-  if (setup.committee) ContactListPage.createCommittee();
-  ReportListPage.createF3X(setup.report ?? defaultReportFormData);
+export async function F3XSetup(setup: Setup = {}) {
+  // Initialize results object
+  const results = {
+    organization: null,
+    individual: null,
+    candidate: null,
+    committee: null,
+    report: null,
+  };
+
+  // Create an array of promises
+  const apiCalls = [];
+
+  // Collect API call Chainables based on setup
+  if (setup.individual) {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          results.individual = response.body;
+          resolve();
+        });
+      }),
+    );
+  }
+
+  if (setup.organization) {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Organization_A, (response) => {
+          results.organization = response.body;
+          resolve();
+        });
+      }),
+    );
+  }
+
+  if (setup.candidate) {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_House_A, (response) => {
+          results.candidate = response.body;
+          resolve();
+        });
+      }),
+    );
+  }
+
+  if (setup.committee) {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Committee_A, (response) => {
+          results.committee = response.body;
+          resolve();
+        });
+      }),
+    );
+  }
+
+  apiCalls.push(
+    new Cypress.Promise((resolve) => {
+      makeRequestToAPI(
+        'POST',
+        'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+        setup.report ?? F3X_Q2,
+        (response) => {
+          results.report = response.body.id;
+          resolve();
+        },
+      );
+    }),
+  );
+
+  // Combine all the Chainables and return them
+  await Cypress.Promise.all(apiCalls);
+  return results;
 }
-
-export const reportFormDataApril: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q1',
-    coverage_from_date: new Date(currentYear, 0, 1),
-    coverage_through_date: new Date(currentYear, 3, 30),
-  },
-};
-
-export const reportFormDataJuly: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q2',
-    coverage_from_date: new Date(currentYear, 4, 1),
-    coverage_through_date: new Date(currentYear, 7, 30),
-  },
-};

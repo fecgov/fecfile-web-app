@@ -1,3 +1,5 @@
+import { BehaviorSubject } from 'rxjs';
+
 const address_fields = {
   street_1: '1234 Test Ln',
   street_2: null,
@@ -19,6 +21,7 @@ const name_optionals = {
   suffix: null,
 };
 
+export const Individual_A_A$ = new BehaviorSubject<any>(undefined);
 export const Individual_A_A = {
   type: 'IND',
   last_name: 'Ant',
@@ -28,6 +31,7 @@ export const Individual_A_A = {
   ...eo_fields,
 };
 
+export const Individual_B_B$ = new BehaviorSubject<any>(undefined);
 export const Individual_B_B = {
   type: 'IND',
   last_name: 'Bat',
@@ -107,6 +111,7 @@ export const Candidate_Senate_B = {
   ...eo_fields,
 };
 
+export const Candidate_House_A$ = new BehaviorSubject<any>(undefined);
 export const Candidate_House_A = {
   type: 'CAN',
   candidate_id: 'H1AK00001',
@@ -133,6 +138,7 @@ export const Candidate_House_B = {
   ...eo_fields,
 };
 
+export const Committee_A$ = new BehaviorSubject<any>(undefined);
 export const Committee_A = {
   type: 'COM',
   committee_id: 'C00000001',
@@ -147,6 +153,7 @@ export const Committee_B = {
   ...address_fields,
 };
 
+export const Organization_A$ = new BehaviorSubject<any>(undefined);
 export const Organization_A = {
   type: 'ORG',
   name: 'Organization A',
@@ -158,3 +165,10 @@ export const Organization_B = {
   name: 'Organization B',
   ...address_fields,
 };
+
+export function clearContacts() {
+  Individual_A_A$.next(undefined);
+  Organization_A$.next(undefined);
+  Committee_A$.next(undefined);
+  Candidate_House_A$.next(undefined);
+}

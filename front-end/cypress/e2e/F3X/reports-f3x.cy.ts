@@ -97,14 +97,6 @@ describe('Manage reports', () => {
     ReportListPage.createF3X();
   });
 
-  xit('Check values on the Summary Page', () => {
-    ReportListPage.createF3X();
-  });
-
-  xit('Check values on the Detail Summary Page', () => {
-    ReportListPage.createF3X();
-  });
-
   it('Create a report level memo', () => {
     ReportListPage.createF3X();
 

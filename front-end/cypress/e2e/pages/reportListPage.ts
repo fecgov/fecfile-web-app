@@ -4,8 +4,7 @@ import { PageUtils } from './pageUtils';
 
 export class ReportListPage {
   static goToPage() {
-    cy.visit('/contacts');
-    cy.get('nav').find('.nav-item').contains('Reports').click();
+    cy.visit('/reports');
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
