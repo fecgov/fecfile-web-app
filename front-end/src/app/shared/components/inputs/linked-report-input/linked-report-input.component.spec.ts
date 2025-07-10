@@ -8,7 +8,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, Report, UploadSubmission } from 'app/shared/models';
+import { Transaction, Form3X, Report, UploadSubmission, SchATransaction } from 'app/shared/models';
 import { Component, OnDestroy, viewChild } from '@angular/core';
 
 const mockReports: Report[] = [
@@ -20,7 +20,7 @@ const mockReports: Report[] = [
     report_type: 'F3X',
     report_code: 'Q1',
     report_status: 'In progress',
-    report_code_label: 'MID-YEAR-REPORT',
+    report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
     upload_submission: UploadSubmission.fromJSON({}),
     webprint_submission: {
       fec_email: 'test@test.com',
@@ -74,7 +74,7 @@ class TestHostComponent implements OnDestroy {
     [testTemplateMap['memo_code']]: new SubscriptionFormControl(),
   });
   templateMap = testTemplateMap;
-  transaction: Transaction = testScheduleATransaction;
+  transaction: Transaction = { ...testScheduleATransaction } as SchATransaction;
 
   component = viewChild.required(LinkedReportInputComponent);
 
@@ -145,7 +145,7 @@ describe('LinkedReportInputComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const expectedLabel = 'MID-YEAR-REPORT: 01/01/2024 - 03/31/2024';
+    const expectedLabel = 'APRIL 15 (Q1): 01/01/2024 - 03/31/2024';
     const form3XLabel = component.form3XLabel();
     expect(form3XLabel).toEqual(expectedLabel);
   });
@@ -158,7 +158,7 @@ describe('LinkedReportInputComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenCalledWith('MID-YEAR-REPORT: 01/01/2024 - 03/31/2024');
+    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenCalledWith('APRIL 15 (Q1): 01/01/2024 - 03/31/2024');
     expect(component.form.get('linkedF3xId')!.setValue).toHaveBeenCalledWith('1');
   });
 
