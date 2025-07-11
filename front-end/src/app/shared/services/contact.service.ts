@@ -28,8 +28,6 @@ export class ContactService implements TableListService<Contact> {
 
   readonly maxFecResults = signal(10);
   readonly maxFecfileResults = signal(5);
-  readonly excludeFecIds = signal<string[]>([]);
-  readonly excludeIds = signal<string[]>([]);
 
   /**
    * Given the type of contact given, return the appropriate JSON schema doc
@@ -106,25 +104,34 @@ export class ContactService implements TableListService<Contact> {
     return this.apiService.get<CommitteeAccount>(`/contacts/committee/`, { committee_id });
   }
 
-  public async candidateLookup(search: string, office?: CandidateOfficeType): Promise<CandidateLookupResponse> {
+  public async candidateLookup(
+    search: string,
+    exclude_fec_ids: string,
+    exclude_ids: string,
+    office?: CandidateOfficeType,
+  ): Promise<CandidateLookupResponse> {
     const response = await this.apiService.get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
       q: search,
       max_fec_results: this.maxFecResults(),
       max_fecfile_results: this.maxFecfileResults(),
       office: office ?? '',
-      exclude_fec_ids: this.excludeFecIds().join(','),
-      exclude_ids: this.excludeIds().join(','),
+      exclude_fec_ids,
+      exclude_ids,
     });
     return CandidateLookupResponse.fromJSON(response);
   }
 
-  public async committeeLookup(search: string): Promise<CommitteeLookupResponse> {
+  public async committeeLookup(
+    search: string,
+    exclude_fec_ids: string,
+    exclude_ids: string,
+  ): Promise<CommitteeLookupResponse> {
     const response = await this.apiService.get<CommitteeLookupResponse>('/contacts/committee_lookup/', {
       q: search,
       max_fec_results: this.maxFecResults(),
       max_fecfile_results: this.maxFecfileResults(),
-      exclude_fec_ids: this.excludeFecIds().join(','),
-      exclude_ids: this.excludeIds().join(','),
+      exclude_fec_ids,
+      exclude_ids,
     });
     return CommitteeLookupResponse.fromJSON(response);
   }
@@ -148,21 +155,21 @@ export class ContactService implements TableListService<Contact> {
     };
   };
 
-  public async individualLookup(search: string): Promise<IndividualLookupResponse> {
+  public async individualLookup(search: string, exclude_ids: string): Promise<IndividualLookupResponse> {
     const response = await this.apiService.get<IndividualLookupResponse>('/contacts/individual_lookup/', {
       q: search,
       max_fecfile_results: this.maxFecfileResults(),
-      exclude_ids: this.excludeIds().join(','),
+      exclude_ids,
     });
 
     return IndividualLookupResponse.fromJSON(response);
   }
 
-  public async organizationLookup(search: string): Promise<OrganizationLookupResponse> {
+  public async organizationLookup(search: string, exclude_ids: string): Promise<OrganizationLookupResponse> {
     const response = await this.apiService.get<OrganizationLookupResponse>('/contacts/organization_lookup/', {
       q: search,
       max_fecfile_results: this.maxFecfileResults(),
-      exclude_ids: this.excludeIds().join(','),
+      exclude_ids,
     });
     return OrganizationLookupResponse.fromJSON(response);
   }

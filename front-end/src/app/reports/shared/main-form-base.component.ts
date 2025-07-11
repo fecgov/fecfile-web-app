@@ -40,10 +40,6 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.initForm();
-  }
-
-  initForm() {
     this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }

@@ -164,42 +164,6 @@ describe('MainFormComponent', () => {
     expect((payload as Form1M).committee_name).toBe('test committee');
   });
 
-  it('getSelectedContactIds() should return correct ids', fakeAsync(() => {
-    fixture.detectChanges();
-    component.form.patchValue({
-      statusBy: 'qualification',
-      I_candidate_id_number: 'P00000001',
-      II_candidate_id_number: 'P00000002',
-      III_candidate_id_number: 'P00000003',
-    });
-    tick(100);
-
-    let candidateIds = component.getSelectedContactIds();
-    expect(candidateIds.length).toBe(3);
-    expect(candidateIds.includes('P00000001')).toBeTrue();
-    expect(candidateIds.includes('P00000002')).toBeTrue();
-    expect(candidateIds.includes('P00000003')).toBeTrue();
-    expect(candidateIds.includes('P00000004')).toBeFalse();
-
-    candidateIds = component.getSelectedContactIds('II');
-    expect(candidateIds.length).toBe(2);
-    expect(candidateIds.includes('P00000001')).toBeTrue();
-    expect(candidateIds.includes('P00000002')).toBeFalse();
-    expect(candidateIds.includes('P00000003')).toBeTrue();
-    expect(candidateIds.includes('P00000004')).toBeFalse();
-
-    // Verify duplicating a candidtate id invalidates the form control.
-    const control = component.form.get('II_candidate_id_number');
-    expect(control).toBeTruthy();
-    expect(control?.valid).toBeTrue();
-    control?.setValue('P00000001');
-    tick(100);
-    expect(control?.valid).toBeFalse();
-    control?.setValue('P00000002');
-    tick(100);
-    expect(control?.valid).toBeTrue();
-  }));
-
   it('Update a contact from the contact lookup', () => {
     fixture.detectChanges();
     const committee = Contact.fromJSON({

@@ -19,7 +19,7 @@ export abstract class DestroyerComponent implements OnDestroy {
 @Component({
   template: '',
 })
-export abstract class FormComponent {
+export abstract class FormComponent extends DestroyerComponent {
   protected readonly fb = inject(FormBuilder);
   protected readonly store = inject(Store);
   protected committeeAccount = this.store.selectSignal(selectCommitteeAccount);

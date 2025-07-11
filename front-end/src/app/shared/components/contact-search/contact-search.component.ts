@@ -38,22 +38,28 @@ export class ContactSearchComponent {
       this.searchTerm = searchTerm;
       switch (this.manager().contactType()) {
         case ContactTypes.CANDIDATE:
-          this.contactLookupList = (await this.contactService.candidateLookup(searchTerm)).toSelectItemGroups(
-            this.isBare(),
-          );
+          this.contactLookupList = (
+            await this.contactService.candidateLookup(
+              searchTerm,
+              this.manager().excludeFecIds(),
+              this.manager().excludeIds(),
+            )
+          ).toSelectItemGroups(this.isBare());
           break;
         case ContactTypes.COMMITTEE:
-          this.contactService.committeeLookup(searchTerm).then((response) => {
-            this.contactLookupList = response?.toSelectItemGroups(this.isBare());
-          });
+          this.contactService
+            .committeeLookup(searchTerm, this.manager().excludeFecIds(), this.manager().excludeIds())
+            .then((response) => {
+              this.contactLookupList = response?.toSelectItemGroups(this.isBare());
+            });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm).then((response) => {
+          this.contactService.individualLookup(searchTerm, this.manager().excludeIds()).then((response) => {
             this.contactLookupList = response?.toSelectItemGroups();
           });
           break;
         case ContactTypes.ORGANIZATION:
-          this.contactService.organizationLookup(searchTerm).then((response) => {
+          this.contactService.organizationLookup(searchTerm, this.manager().excludeIds()).then((response) => {
             this.contactLookupList = response?.toSelectItemGroups();
           });
           break;

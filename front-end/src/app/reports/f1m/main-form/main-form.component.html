@@ -28,11 +28,7 @@
             [readonly]="true"
             formControlName="committee_name"
           />
-          <app-error-messages
-            [form]="form"
-            fieldName="committee_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-3">
@@ -47,11 +43,7 @@
             data-cy="committee-id-input"
             formControlName="filer_committee_id_number"
           />
-          <app-error-messages
-            [form]="form"
-            fieldName="committee_id"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -76,7 +68,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="X" class="ml-2">STATE PARTY</label>
       </div>
     </div>
@@ -93,7 +85,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="N" class="ml-2">OTHER</label>
       </div>
     </div>
@@ -104,7 +96,7 @@
           fieldName="committee_type"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
-        ></app-error-messages>
+        />
       </div>
     </div>
     <div class="grid">
@@ -146,7 +138,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="affiliation" class="ml-2">AFFILIATION</label>
       </div>
     </div>
@@ -163,7 +155,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="qualification" class="ml-2">QUALIFICATION</label>
       </div>
     </div>
@@ -174,7 +166,7 @@
           fieldName="statusBy"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
-        ></app-error-messages>
+        />
       </div>
     </div>
     @if (statusByControl?.value === 'affiliation') {
@@ -196,13 +188,12 @@
               key="contact_affiliated"
               [formSubmitted]="formSubmitted"
               [contactType]="affiliatedContact.contactType"
-            >
-            </app-report-contact-lookup>
+            />
             <app-error-messages
               [form]="form"
               [fieldName]="affiliatedContact.contactLookupKey"
               [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            />
           </div>
         </div>
       </div>
@@ -217,11 +208,7 @@
                 id="affiliated_committee_name"
                 formControlName="affiliated_committee_name"
               />
-              <app-error-messages
-                [form]="form"
-                fieldName="affiliated_committee_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="affiliated_committee_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-3">
@@ -237,7 +224,7 @@
                 [form]="form"
                 fieldName="affiliated_committee_fec_id"
                 [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              />
             </div>
           </div>
         </div>
@@ -248,7 +235,7 @@
               [form]="form"
               [formSubmitted]="formSubmitted"
               label="AFFILIATED DATE"
-            ></app-calendar>
+            />
           </div>
         </div>
         <div class="grid">
@@ -271,7 +258,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="DATE OF 51<sup>st</sup> CONTRIBUTION"
-          ></app-calendar>
+          />
         </div>
         <div class="col-4">
           <app-calendar
@@ -279,7 +266,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="DATE OF ORIGINAL REGISTRATION"
-          ></app-calendar>
+          />
         </div>
         <div class="col-4">
           <app-calendar
@@ -287,7 +274,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="DATE COMMITTEE MET REQUIREMENTS"
-          ></app-calendar>
+          />
         </div>
       </div>
       <div class="grid">
@@ -318,7 +305,7 @@
                   [fieldName]="candidateContact.contactLookupKey"
                   [formSubmitted]="formSubmitted"
                   requiredErrorMessage="Candidate information is required"
-                ></app-error-messages>
+                />
               </div>
             </div>
           </div>
@@ -329,7 +316,7 @@
               [templateMap]="templateMapConfigs[candidateContact.key]"
               templateMapKeyPrefix="candidate"
               labelPrefix="CANDIDATE"
-            ></app-name-input>
+            />
             <div class="grid">
               <div class="col-3">
                 <div class="field">
@@ -345,7 +332,7 @@
                     [fieldName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                     [formSubmitted]="formSubmitted"
                     uniqueFecIdMessage="Candidate already entered in form."
-                  ></app-error-messages>
+                  />
                 </div>
               </div>
               <div class="col-9 co-input-container">
@@ -355,8 +342,7 @@
                   [officeFormControlName]="templateMapConfigs[candidateContact.key]['candidate_office']"
                   [stateFormControlName]="templateMapConfigs[candidateContact.key]['candidate_state']"
                   [districtFormControlName]="templateMapConfigs[candidateContact.key]['candidate_district']"
-                >
-                </app-candidate-office-input>
+                />
               </div>
             </div>
             <div class="grid">
@@ -366,7 +352,7 @@
                   [form]="form"
                   [formSubmitted]="formSubmitted"
                   label="DATE OF CONTRIBUTION"
-                ></app-calendar>
+                />
               </div>
             </div>
           }
@@ -380,8 +366,7 @@
     }
   </form>
 </div>
-<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
 
-<p-confirmDialog key="dialog" class="confirm-dialog"> </p-confirmDialog>
-
-<app-contact-modal></app-contact-modal>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()" />
+<p-confirmDialog key="dialog" class="confirm-dialog" />
+<app-contact-modal />

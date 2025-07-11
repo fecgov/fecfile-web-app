@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, inject, input, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -36,8 +36,6 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
-  readonly excludeFecIds = input<string[]>([]);
-  readonly excludeIds = input<string[]>([]);
 
   @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
@@ -61,14 +59,6 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   searchTerm = '';
-
-  constructor() {
-    super();
-    effect(() => {
-      this.contactService.excludeFecIds.set(this.excludeFecIds());
-      this.contactService.excludeIds.set(this.excludeIds());
-    });
-  }
 
   ngOnInit(): void {
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
@@ -95,21 +85,21 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
-            await this.contactService.candidateLookup(searchTerm, this.candidateOffice)
+            await this.contactService.candidateLookup(searchTerm, '', '', this.candidateOffice)
           ).toSelectItemGroups(this.includeFecfileResults);
           break;
         case ContactTypes.COMMITTEE:
-          this.contactService.committeeLookup(searchTerm).then((response) => {
+          this.contactService.committeeLookup(searchTerm, '', '').then((response) => {
             this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults);
           });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm).then((response) => {
+          this.contactService.individualLookup(searchTerm, '').then((response) => {
             this.contactLookupList = response.toSelectItemGroups();
           });
           break;
         case ContactTypes.ORGANIZATION:
-          this.contactService.organizationLookup(searchTerm).then((response) => {
+          this.contactService.organizationLookup(searchTerm, '').then((response) => {
             this.contactLookupList = response.toSelectItemGroups();
           });
           break;

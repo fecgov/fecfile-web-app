@@ -12,7 +12,6 @@ import {
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { MessageService } from 'primeng/api';
@@ -29,7 +28,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { CoverageDates, CommitteeAccount, Form3, F3FormTypes } from 'app/shared/models';
+import { CoverageDates, Form3, F3FormTypes } from 'app/shared/models';
 
 @Component({
   selector: 'app-create-f3-step1',
@@ -70,7 +69,6 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   public existingCoverage: CoverageDates[] | undefined;
   public usedReportCodes?: ReportCodes[];
   public thisYear = new Date().getFullYear();
-  committeeAccount?: CommitteeAccount;
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   ngOnInit(): void {
@@ -85,22 +83,20 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
         }
       });
 
-    combineLatest([this.store.select(selectCommitteeAccount), this.form3Service.getF3CoverageDates()])
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(([committeeAccount, existingCoverage]) => {
-        this.committeeAccount = committeeAccount;
-        this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
-        this.form?.patchValue({ form_type: 'F3N' });
-        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
-        this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
-        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
-          this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
-        }, this.destroy$);
+    this.form3Service.getF3CoverageDates().then((existingCoverage) => {
+      this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
+      this.form?.patchValue({ form_type: 'F3N' });
+      this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
+      this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
+      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
+        this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      }, this.destroy$);
 
-        this.existingCoverage = existingCoverage;
-        this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
-      });
+      this.existingCoverage = existingCoverage;
+      this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+    });
+
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
@@ -157,7 +153,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
 
   public getFirstEnabledReportCode() {
     return this.getReportCodes().find((reportCode) => {
-      return !(this.usedReportCodes && this.usedReportCodes.includes(reportCode));
+      return !this.usedReportCodes?.includes(reportCode);
     });
   }
 
@@ -177,29 +173,26 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
       return;
     }
 
-    const report: Form3 = Form3.fromJSON(SchemaUtils.getFormValues(this.form, f3Schema, this.formProperties));
+    const summary: Form3 = Form3.fromJSON(SchemaUtils.getFormValues(this.form, f3Schema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
-    if (report.report_code === ReportCodes.TER) {
-      report.form_type = F3FormTypes.F3T;
+    if (summary.report_code === ReportCodes.TER) {
+      summary.form_type = F3FormTypes.F3T;
     }
 
-    const create$ = this.form3Service.create(report, this.formProperties);
-
     //Create the report
-    create$.then((report) => {
-      if (jump === 'continue') {
-        this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-      } else {
-        this.router.navigateByUrl('/reports');
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Updated',
-          life: 3000,
-        });
-      }
-    });
+    const report = await this.form3Service.create(summary, this.formProperties);
+    if (jump === 'continue') {
+      this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+    } else {
+      this.router.navigateByUrl('/reports');
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Contact Updated',
+        life: 3000,
+      });
+    }
   }
 }
 

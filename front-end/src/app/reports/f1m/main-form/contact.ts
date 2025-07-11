@@ -5,7 +5,7 @@ import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.m
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
 import { MainFormComponent } from './main-form.component';
-import { effect } from '@angular/core';
+import { effect, untracked } from '@angular/core';
 import { ContactManager } from 'app/shared/services/contact-management.service';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
@@ -27,6 +27,17 @@ export abstract class F1MContact {
     this.key = key;
     this.component = component;
     this.manager = this.component.cmservice.get(this.key);
+
+    const contact = this.component.report[this.key] as Contact | undefined;
+    if (contact) this.manager.outerContact.set(contact);
+
+    const managers: ContactManager[] = [];
+    if (key !== 'contact_affiliated') managers.push(this.component.cmservice.get('contact_affiliated'));
+    for (const tag of f1mCandidateTags) {
+      if (`contact_candidate_${tag}` !== key) managers.push(this.component.cmservice.get(`contact_candidate_${tag}`));
+    }
+    this.manager.relatedManagers.set(managers);
+
     component.form.addControl(this.contactLookupKey, new SubscriptionFormControl(''));
     this.control = component.form.get(this.contactLookupKey);
 
@@ -34,7 +45,7 @@ export abstract class F1MContact {
       () => {
         const contact = this.manager.outerContact();
         if (contact === null) return;
-        this.update(contact);
+        untracked(() => this.update(contact));
       },
       { injector: this.component.injector },
     );
@@ -46,41 +57,8 @@ export abstract class F1MContact {
    * @param contact
    */
   update(contact: Contact) {
-    // If this is updating a previously selected candidate, remove it from the exclusion list.
-    const previousId = this.component.report[`${this.key}_id` as keyof Form1M] as string | null;
-    this.component.contactService.excludeIds.update((ids) => ids.filter((id: string) => id !== previousId));
-    const currentId = contact.id ?? null;
-    if (currentId) {
-      this.component.contactService.excludeIds.update((ids) => {
-        ids.push(currentId);
-        return ids;
-      });
-    }
-    if (this.component.report[this.key]?.committee_id) {
-      this.component.contactService.excludeFecIds.update((ids) =>
-        ids.filter((id: string) => id !== this.component.report[this.key].committee_id),
-      );
-    }
-    if (contact.committee_id) {
-      this.component.contactService.excludeFecIds.update((ids) => {
-        ids.push(contact.committee_id!);
-        return ids;
-      });
-    }
-    if (this.component.report[this.key]?.candidate_id) {
-      this.component.contactService.excludeFecIds.update((ids) =>
-        ids.filter((id: string) => id !== this.component.report[this.key].candidate_id),
-      );
-    }
-    if (contact.candidate_id) {
-      this.component.contactService.excludeFecIds.update((ids) => {
-        ids.push(contact.candidate_id!);
-        return ids;
-      });
-    }
-
     (this.component.report[this.key] as Contact) = contact;
-    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = currentId;
+    (this.component.report[`${this.key}_id` as keyof Form1M] as string | null) = contact.id ?? null;
     for (const [key, value] of Object.entries(this.component.contactConfigs[this.key])) {
       this.component.form
         .get(this.component.templateMapConfigs[this.key][key as keyof TransactionTemplateMapType])
@@ -147,7 +125,7 @@ export class AffiliatedContact extends F1MContact {
 }
 
 export class CandidateContact extends F1MContact {
-  tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
+  readonly tag: F1MCandidateTag; // Valid values are: I, II, III, IV, V
   readonly contactType = ContactTypes.CANDIDATE;
   formFields: string[] = [];
 

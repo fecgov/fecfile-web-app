@@ -1,4 +1,4 @@
-import { Component, inject, Injector, OnInit } from '@angular/core';
+import { Component, inject, Injector, OnDestroy, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -47,7 +47,7 @@ import { ContactManagementService } from 'app/shared/services/contact-management
   ],
   styleUrl: './main-form.component.scss',
 })
-export class MainFormComponent extends MainFormBaseComponent implements OnInit {
+export class MainFormComponent extends MainFormBaseComponent implements OnInit, OnDestroy {
   readonly injector = inject(Injector);
   readonly cmservice = inject(ContactManagementService);
   protected override readonly reportService: Form1MService = inject(Form1MService);
@@ -143,40 +143,13 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     // object is set to read-only by the NgRx store.
     this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReport())));
 
+    this.initForm();
+
     // Set the statusBy radio button based on form values
     if (this.report.affiliated_committee_name) {
       this.statusByControl?.setValue('affiliation');
     } else {
       this.statusByControl?.setValue('qualification');
-    }
-
-    // If this is an edit, update the lookup ids to exclude
-    if (this.report.id) {
-      if (this.report.affiliated_committee_name) {
-        if (this.report?.contact_affiliated?.committee_id)
-          this.contactService.excludeFecIds.update((ids) => {
-            ids.push(this.report.contact_affiliated!.committee_id!);
-            return ids;
-          });
-        if (this.report.contact_affiliated_id)
-          this.contactService.excludeIds.update((ids) => {
-            ids.push(this.report.contact_affiliated_id!);
-            return ids;
-          });
-      } else {
-        f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-          if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
-            this.contactService.excludeFecIds.update((ids) => {
-              ids.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
-              return ids;
-            });
-          if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
-            this.contactService.excludeIds.update((ids) => {
-              ids.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
-              return ids;
-            });
-        });
-      }
     }
   }
 
@@ -201,8 +174,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     return this.templateMapConfigs[contactKey];
   }
 
-  override initForm() {
-    super.initForm();
+  initForm() {
     this.committeeTypeControl = this.form.get('committee_type');
     this.statusByControl = this.form.get('statusBy') as SubscriptionFormControl;
     this.statusByControl?.addValidators(Validators.required);
@@ -241,8 +213,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
         this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
         this.disableValidation([this.affiliatedContact]);
       }
-      this.contactService.excludeIds.set([]);
-      this.contactService.excludeFecIds.set([]);
       this.form.get('date_of_original_registration')?.updateValueAndValidity();
       this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
       this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
@@ -294,19 +264,5 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
         });
       }
     });
-  }
-
-  /**
-   * Generate a list of candidate contact ids that are currently entered in the F1M
-   * form so that we can check for duplicates and screen them from the lookup
-   * or raise a validation error on the screen.
-   * @param excludeContactTag - values: I, II, III, IV, or V
-   * @returns string[] - list of contact ids currently selected by user for Qualifications
-   */
-  getSelectedContactIds(excludeContactTag: F1MCandidateTag | undefined = undefined) {
-    return f1mCandidateTags
-      .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
-      .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
-      .filter((id) => !!id);
   }
 }

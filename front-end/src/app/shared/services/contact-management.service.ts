@@ -9,6 +9,33 @@ export class ContactManager {
   readonly contact = signal<Contact>(new Contact());
   readonly outerContact = signal<Contact | null>(null);
   readonly clearOnLoad = signal(true);
+  readonly relatedManagers = signal<ContactManager[]>([]);
+
+  readonly excludeIds = computed(() => {
+    const ids: string[] = [];
+    const id = this.outerContact()?.id;
+    if (id) ids.push(id);
+    if (this.relatedManagers().length === 0) return ids.join(',');
+    for (const manager of this.relatedManagers()) {
+      const id = manager.outerContact()?.id;
+      if (id) ids.push(id);
+    }
+    return ids.join(',');
+  });
+
+  readonly excludeFecIds = computed(() => {
+    const ids: string[] = [];
+    if (this.relatedManagers().length === 0) return ids.join(',');
+    const contact = this.outerContact();
+    if (contact?.candidate_id) ids.push(contact.candidate_id);
+    if (contact?.committee_id) ids.push(contact.committee_id);
+    for (const manager of this.relatedManagers()) {
+      const contact = manager.outerContact();
+      if (contact?.candidate_id) ids.push(contact.candidate_id);
+      if (contact?.committee_id) ids.push(contact.committee_id);
+    }
+    return ids.join(',');
+  });
 
   setAsSingle(contactType: ContactTypes) {
     this.setContactTypeOptions([contactType]);
