@@ -93,21 +93,6 @@ export class SchATransaction extends Transaction {
   }
 }
 
-export enum ScheduleATransactionGroups {
-  CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS = 'CONTRIBUTIONS FROM INDIVIDUALS/PERSONS',
-  CONTRIBUTIONS_FROM_REGISTERED_FILERS = 'CONTRIBUTIONS FROM REGISTERED FILERS',
-  TRANSFERS = 'TRANSFERS',
-  REFUNDS = 'REFUNDS',
-  OTHER = 'OTHER',
-}
-
-export type ScheduleATransactionGroupsType =
-  | ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS
-  | ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS
-  | ScheduleATransactionGroups.TRANSFERS
-  | ScheduleATransactionGroups.REFUNDS
-  | ScheduleATransactionGroups.OTHER;
-
 export enum ScheduleATransactionTypes {
   // Contributions from Individuals/Persons
   INDIVIDUAL_RECEIPT = 'INDIVIDUAL_RECEIPT',

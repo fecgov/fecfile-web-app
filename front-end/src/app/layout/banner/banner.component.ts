@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -16,11 +16,6 @@ export class BannerComponent implements OnDestroy {
     });
 
   expanded = false;
-  @ViewChild('banner') bannerElement!: ElementRef;
-
-  getBannerElement(): HTMLElement {
-    return this.bannerElement.nativeElement;
-  }
 
   onBannerClick() {
     this.expanded = !this.expanded;

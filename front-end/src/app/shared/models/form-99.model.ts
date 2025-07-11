@@ -2,6 +2,7 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from './base.model';
 import { Report, ReportTypes } from './report.model';
+import { fecSpec8dot5Released } from '../utils/schema.utils';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -21,7 +22,7 @@ export class Form99 extends Report {
   }
 
   get formSubLabel() {
-    return textCodes.find(({ value }) => value === this.text_code)?.label ?? '';
+    return textCodes.find(({ value }) => value === this.text_code)?.label ?? 'Miscellaneous Report to the FEC';
   }
 
   treasurer_last_name: string | undefined;
@@ -32,23 +33,41 @@ export class Form99 extends Report {
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
   text_code: string | undefined;
   message_text: string | undefined;
+  filing_frequency: string | undefined;
 
   static fromJSON(json: unknown): Form99 {
     return plainToInstance(Form99, json);
   }
 }
 
-export const textCodes = [
+let allTextCodes = Object.entries({
+  MST: 'Miscellaneous Report to the FEC',
+  MSM: 'Filing Frequency Change Notice',
+  MSW: 'Loan Agreement / Loan Forgiveness',
+  MSI: 'Disavowal Response',
+  MSR: 'Form 3L Filing Frequency Change Notice',
+});
+
+if (!fecSpec8dot5Released) {
+  allTextCodes = allTextCodes.filter(([key]) => key !== 'MSW' && key !== 'MSR');
+}
+
+export const textCodes = allTextCodes.map(([code, label]) => ({
+  value: code,
+  label,
+}));
+
+export enum textCodesWithFilingFrequencies {
+  MSR,
+  MSM,
+}
+export const filingFrequencies = [
   {
-    label: 'Disavowal Response',
-    value: 'MSI',
+    label: 'Quarterly',
+    value: 'Q',
   },
   {
-    label: 'Filing Frequency Change Notice',
-    value: 'MSM',
-  },
-  {
-    label: 'Miscellaneous Report to the FEC',
-    value: 'MST',
+    label: 'Monthly',
+    value: 'M',
   },
 ];

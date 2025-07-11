@@ -89,7 +89,7 @@ export class ContactService implements TableListService<Contact> {
    */
   public async getCandidateDetails(candidate_id: string | null): Promise<Candidate> {
     if (!candidate_id) {
-      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
+      throw new Error('FECfile+: No Candidate Id provided in getCandidateDetails()');
     }
     return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
   }
@@ -101,7 +101,7 @@ export class ContactService implements TableListService<Contact> {
    */
   public async getCommitteeDetails(committee_id: string | null): Promise<CommitteeAccount> {
     if (!committee_id) {
-      throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
+      throw new Error('FECfile+: No Committee Id provided in getCommitteeDetails()');
     }
     return this.apiService.get<CommitteeAccount>(`/contacts/committee/`, { committee_id });
   }

@@ -9,7 +9,7 @@ describe('TransactionTypeUtils', () => {
   it('non-existing transaction type should throw an error', () => {
     expect(() => {
       TransactionTypeUtils.factory('DOES_NOT_EXIST');
-    }).toThrow(new Error("Fecfile: Class transaction type of 'DOES_NOT_EXIST' is not found"));
+    }).toThrow(new Error("FECfile+: Class transaction type of 'DOES_NOT_EXIST' is not found"));
   });
 
   it('should return the correct schedule object given a scheduleId', () => {

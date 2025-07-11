@@ -5,10 +5,25 @@
   max-width: 250px;
 }
 
+#page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#content-offset {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .main-content {
   margin-left: auto;
   margin-right: auto;
   width: fit-content;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-content-container > .main-content {
@@ -25,13 +40,12 @@
   margin: 0;
 }
 
-.footer-full {
-  position: absolute;
-  width: 100%;
+app-footer {
+  padding: 0;
 }
 
-app-footer {
-  padding: 32px 0 0 0;
+.footer-spacer {
+  min-height: 64px;
 }
 
 .sidebar-content-container {

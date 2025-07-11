@@ -8,10 +8,45 @@ import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
+import { Component, viewChild } from '@angular/core';
+import { Transaction } from 'app/shared/models';
+
+@Component({
+  imports: [AdditionalInfoInputComponent],
+  standalone: true,
+  template: `<app-additional-info-input
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+    [transaction]="transaction"
+    (designatingCommitteeSelect)="updateFormWithQuaternaryContact($event)"
+    (designatingCommitteeClear)="clearFormQuaternaryContact()"
+    (subordinateCommitteeSelect)="updateFormWithQuinaryContact($event)"
+    (subordinateCommitteeClear)="clearFormQuinaryContact()"
+  />`,
+})
+class TestHostComponent {
+  form: FormGroup = new FormGroup(
+    {
+      filer_designated_to_make_coordinated_expenditures: new SubscriptionFormControl(''),
+      contribution_purpose_descrip: new SubscriptionFormControl(''),
+      text4000: new SubscriptionFormControl(''),
+    },
+    { updateOn: 'blur' },
+  );
+  formSubmitted = false;
+  templateMap = testTemplateMap;
+  transaction: Transaction = testScheduleATransaction;
+  component = viewChild.required(AdditionalInfoInputComponent);
+  constructor() {
+    this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
+  }
+}
 
 describe('AdditionalInfoInputComponent', () => {
   let component: AdditionalInfoInputComponent;
-  let fixture: ComponentFixture<AdditionalInfoInputComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,20 +59,9 @@ describe('AdditionalInfoInputComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdditionalInfoInputComponent);
-    component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        filer_designated_to_make_coordinated_expenditures: new SubscriptionFormControl(''),
-        contribution_purpose_descrip: new SubscriptionFormControl(''),
-        text4000: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
-    component.templateMap = testTemplateMap;
-    component.transaction = testScheduleATransaction;
-    if (component.transaction.transactionType)
-      component.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
 
     fixture.detectChanges();
   });
@@ -47,16 +71,15 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should have a read-only cpd if system generated', () => {
-    if (component.transaction?.transactionType)
-      component.transaction.transactionType.generatePurposeDescription = () => 'description';
+    if (host.transaction?.transactionType)
+      host.transaction.transactionType.generatePurposeDescription = () => 'description';
     fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeTruthy();
   });
 
   it('should have a mutable cpd if not system generated', () => {
-    if (component.transaction?.transactionType)
-      component.transaction.transactionType.generatePurposeDescription = undefined;
+    if (host.transaction?.transactionType) host.transaction.transactionType.generatePurposeDescription = undefined;
     fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeFalsy();
@@ -67,31 +90,42 @@ describe('AdditionalInfoInputComponent', () => {
       [testTemplateMap.purpose_description]: 'abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.transaction?.transactionType?.purposeDescriptionPrefix,
+      host.transaction?.transactionType?.purposeDescriptionPrefix,
     );
 
     component.form.patchValue({
       [testTemplateMap.purpose_description]: 'Prefax: abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
-      component.transaction?.transactionType?.purposeDescriptionPrefix + 'abc',
+      host.transaction?.transactionType?.purposeDescriptionPrefix + 'abc',
     );
+  });
+
+  it('purpose_description of just prefix just trigger required error', () => {
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: 'Prefix: hihi',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toBeFalsy();
+
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: '',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+      host.transaction?.transactionType?.purposeDescriptionPrefix,
+    );
+    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toEqual({ required: true });
   });
 
   it('should detect memo prefixes', () => {
     expect(component.form.get(testTemplateMap.text4000)?.value).toEqual('');
-    if (component.transaction) {
-      component.transaction.memo_text = MemoText.fromJSON({
-        text_prefix: 'MEMO PREFIX:',
-      });
-    }
+    host.transaction.memo_text = MemoText.fromJSON({
+      text_prefix: 'MEMO PREFIX:',
+    });
     component.ngOnInit();
     component.form.patchValue({
       [testTemplateMap.text4000]: 'abc',
     });
     fixture.detectChanges();
-    expect(component.form.get(testTemplateMap.text4000)?.value).toBe(
-      component.transaction?.memo_text?.text_prefix + ' ',
-    );
+    expect(component.form.get(testTemplateMap.text4000)?.value).toBe(host.transaction?.memo_text?.text_prefix + ' ');
   });
 });

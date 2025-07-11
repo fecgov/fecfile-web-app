@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, OnInit } from '@angular/core';
+import { Component, forwardRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
@@ -25,7 +25,7 @@ import { MemoCodePipe } from '../transaction-list.component';
     forwardRef(() => MemoCodePipe),
   ],
 })
-export class TransactionReceiptsComponent extends TransactionListTableBaseComponent implements OnInit {
+export class TransactionReceiptsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchAService);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
   override readonly caption =

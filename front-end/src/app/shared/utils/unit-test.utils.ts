@@ -23,6 +23,7 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { Form24 } from '../models';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -106,6 +107,32 @@ export const testActiveReport: Form3X = Form3X.fromJSON({
   report_code: 'Q1',
   report_status: 'In progress',
   report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
+  upload_submission: UploadSubmission.fromJSON({}),
+  webprint_submission: {
+    fec_email: 'test@test.com',
+    fec_batch_id: '1234',
+    fec_image_url: 'image.test.com',
+    fec_submission_id: 'FEC-1234567',
+    fec_message: 'Message Goes Here',
+    fec_status: 'COMPLETED',
+    fecfile_error: '',
+    fecfile_task_state: 'COMPLETED',
+    id: 0,
+    created: '10/10/2010',
+    updated: '10/12/2010',
+  },
+});
+
+export const testF24 = Form24.fromJSON({
+  id: '999',
+  coverage_from_date: '2022-05-25',
+  coverage_through_date: '2022-06-30',
+  form_type: 'F24N',
+  report_type: 'F24',
+  report_code: 'Q1',
+  report_status: 'In progress',
+  report_code_label: '24 HOUR',
+  name: '24 HOUR TEST',
   upload_submission: UploadSubmission.fromJSON({}),
   webprint_submission: {
     fec_email: 'test@test.com',
@@ -306,6 +333,8 @@ export const testTemplateMap: TransactionTemplateMapType = {
   balance: 'loan_balance',
   aggregate: 'contribution_aggregate',
   calendar_ytd: '',
+  aggregate_general_elec_expended: '',
+  general_election_year: 'general_election_year',
   purpose_description: 'contribution_purpose_descrip',
   text4000: 'text4000',
   category_code: '',

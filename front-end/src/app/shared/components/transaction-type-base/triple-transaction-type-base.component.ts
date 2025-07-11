@@ -43,7 +43,7 @@ export abstract class TripleTransactionTypeBaseComponent
   childForm_2: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   childContactIdMap_2: ContactIdMapType = {};
   childTemplateMap_2: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  childMemoCodeCheckboxLabel_2$ = of('');
+  memoHasOptional_2$ = of(false);
 
   override ngOnInit(): void {
     // Initialize primary and secondary forms.
@@ -53,14 +53,14 @@ export abstract class TripleTransactionTypeBaseComponent
     if (this.transaction) {
       this.childTransaction_2 = this.getChildTransaction(this.transaction, 1);
     } else {
-      throw new Error('Fecfile: Transaction not found for triple-entry transaction form');
+      throw new Error('FECfile+: Transaction not found for triple-entry transaction form');
     }
     if (!this.childTransaction_2) {
-      throw new Error('Fecfile: Child 2 transaction not found for triple-entry transaction form');
+      throw new Error('FECfile+: Child 2 transaction not found for triple-entry transaction form');
     }
     this.childTransactionType_2 = this.childTransaction_2?.transactionType;
     if (!this.childTransactionType_2?.templateMap) {
-      throw new Error('Fecfile: Template map not found for triple transaction triple-entry transaction form');
+      throw new Error('FECfile+: Template map not found for triple transaction triple-entry transaction form');
     }
     this.childTemplateMap_2 = this.childTransactionType_2.templateMap;
     this.childContactTypeOptions_2 = getContactTypeOptions(this.childTransactionType_2.contactTypeOptions ?? []);
@@ -78,12 +78,9 @@ export abstract class TripleTransactionTypeBaseComponent
         ?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
-      this.childMemoCodeCheckboxLabel_2$ = this.memoCodeCheckboxLabel$;
+      this.memoHasOptional_2$ = this.memoHasOptional$;
     } else {
-      this.childMemoCodeCheckboxLabel_2$ = this.getMemoCodeCheckboxLabel$(
-        this.childForm_2,
-        this.childTransactionType_2,
-      );
+      this.memoHasOptional_2$ = this.getMemoHasOptional$(this.childForm_2, this.childTransactionType_2);
     }
 
     TransactionFormUtils.onInit(
@@ -108,7 +105,7 @@ export abstract class TripleTransactionTypeBaseComponent
       );
     } else {
       this.store.dispatch(singleClickEnableAction());
-      throw new Error('Fecfile: No transactions submitted for triple-entry transaction form.');
+      throw new Error('FECfile+: No transactions submitted for triple-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -189,7 +186,7 @@ export abstract class TripleTransactionTypeBaseComponent
     if (this.childTransaction_2) {
       this.updateInheritedFields(this.childForm_2, this.childTransaction_2);
     } else {
-      throw new Error('Fecfile: Missing child transaction.');
+      throw new Error('FECfile+: Missing child transaction.');
     }
   }
 

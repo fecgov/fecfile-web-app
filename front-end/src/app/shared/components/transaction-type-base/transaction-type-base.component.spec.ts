@@ -55,6 +55,10 @@ describe('TransactionTypeBaseComponent', () => {
     navigateByUrl: jasmine.createSpy('navigateByUrl'),
   };
 
+  beforeAll(async () => {
+    await import(`fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT.validator`);
+  });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TransactionDetailComponent],
@@ -121,7 +125,7 @@ describe('TransactionTypeBaseComponent', () => {
         component.ngOnInit();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        expect(err.message).toBe('Fecfile: Template map not found for transaction component');
+        expect(err.message).toBe('FECfile+: Template map not found for transaction component');
       }
     });
 
@@ -164,7 +168,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should stop processing and throw an error if there is no transaction', async () => {
       component.transaction = undefined;
       await expectAsync(component.save(navEvent)).toBeRejectedWithError(
-        'Fecfile: No transactions submitted for single-entry transaction form.',
+        'FECfile+: No transactions submitted for single-entry transaction form.',
       );
     });
   });
@@ -226,7 +230,7 @@ describe('TransactionTypeBaseComponent', () => {
           'dialog',
           component.transaction,
         ),
-      ).toBeRejectedWithError('Fecfile: Cannot find template map when confirming transaction');
+      ).toBeRejectedWithError('FECfile+: Cannot find template map when confirming transaction');
     });
 
     it('should return without confirmation if using parent and contact_1', fakeAsync(async () => {
@@ -515,15 +519,15 @@ describe('TransactionTypeBaseComponent', () => {
     });
   });
 
-  describe('getMemoCodeCheckboxLabel$', () => {
+  describe('getMemoHasOptional$', () => {
     it('should return required label if read only', () => {
       component.ngOnInit();
       if (!component.transactionType) throw new Error('Bad test');
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
         return true;
       });
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual('MEMO ITEM');
+      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
+        expect(res).toEqual(true);
       });
       expect(spy).toHaveBeenCalled();
     });
@@ -537,10 +541,10 @@ describe('TransactionTypeBaseComponent', () => {
       const memo = component.form.get(component.transactionType.templateMap.memo_code);
       if (!memo) throw new Error('missing memo');
       memo.addValidators([Validators.requiredTrue]);
-      let result = '';
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => (result = res));
+      let result = false;
+      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => (result = res));
       memo.setValue('');
-      expect(result).toEqual('MEMO ITEM');
+      expect(result).toEqual(false);
       expect(spy).toHaveBeenCalled();
     });
 
@@ -549,8 +553,8 @@ describe('TransactionTypeBaseComponent', () => {
       if (!component.transactionType) throw new Error('Bad test');
       component.form.get(component.transactionType?.templateMap.memo_code)?.clearValidators();
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.returnValue(false);
-      component.getMemoCodeCheckboxLabel$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual('MEMO ITEM (OPTIONAL)');
+      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
+        expect(res).toEqual(true);
       });
       tick();
       expect(spy).toHaveBeenCalled();
@@ -562,7 +566,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.transaction = undefined;
       expect(function () {
         component.initInheritedFieldsFromParent();
-      }).toThrow(new Error('Fecfile: No transaction found in initIneheritedFieldsFromParent'));
+      }).toThrow(new Error('FECfile+: No transaction found in initIneheritedFieldsFromParent'));
     });
   });
 

@@ -339,7 +339,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   updateContact(contact: Contact) {
     this.contact = contact;
     this.contactType = contact.type;
-    this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((opt) => opt.value === contact.type);
     this.form.patchValue(contact);
   }
 

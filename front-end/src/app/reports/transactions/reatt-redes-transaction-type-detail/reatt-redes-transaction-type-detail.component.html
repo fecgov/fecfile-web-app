@@ -18,32 +18,34 @@
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      @if (transactionType?.formTitle) {
-        <h2>
-          {{ transactionType?.formTitle }}
-        </h2>
-      }
+      <div class="content-accordion-wrapper">
+        @if (transactionType?.formTitle) {
+          <h2>
+            {{ transactionType?.formTitle }}
+          </h2>
+        }
 
-      <h3>{{ transactionType?.contactTitle }}</h3>
-      <form [formGroup]="form" [class.ng-submitted]="formSubmitted" id="form">
-        <app-transaction-input
-          (candidateContactSelect)="updateFormWithCandidateContact($event)"
-          (primaryContactSelect)="updateFormWithPrimaryContact($event)"
-          (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
-          (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
-          (quaternaryContactSelect)="updateFormWithQuaternaryContact($event)"
-          (quaternaryContactClear)="clearFormQuaternaryContact()"
-          (quinaryContactSelect)="updateFormWithQuinaryContact($event)"
-          (quinaryContactClear)="clearFormQuinaryContact()"
-          [contactTypeOptions]="contactTypeOptions"
-          [formSubmitted]="formSubmitted"
-          [form]="form"
-          [isEditable]="isEditable()"
-          [memoCodeCheckboxLabel$]="memoCodeCheckboxLabel$"
-          [transaction]="transaction"
-        >
-        </app-transaction-input>
-      </form>
+        <h3>{{ transactionType?.contactTitle }}</h3>
+        <form [formGroup]="form" [class.ng-submitted]="formSubmitted" id="form">
+          <app-transaction-input
+            (candidateContactSelect)="updateFormWithCandidateContact($event)"
+            (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+            (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
+            (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
+            (quaternaryContactSelect)="updateFormWithQuaternaryContact($event)"
+            (quaternaryContactClear)="clearFormQuaternaryContact()"
+            (quinaryContactSelect)="updateFormWithQuinaryContact($event)"
+            (quinaryContactClear)="clearFormQuinaryContact()"
+            [contactTypeOptions]="contactTypeOptions"
+            [formSubmitted]="formSubmitted"
+            [form]="form"
+            [isEditable]="isEditable()"
+            [memoHasOptional$]="memoHasOptional$"
+            [transaction]="transaction"
+          >
+          </app-transaction-input>
+        </form>
+      </div>
     </p-accordion-content>
   </p-accordion-panel>
 
@@ -57,32 +59,34 @@
       </div>
     </p-accordion-header>
     <p-accordion-content>
-      <h2>{{ childTransaction?.transactionType?.formTitle }}</h2>
-      @if (childTransactionType?.description) {
-        <p>
-          <em [innerHtml]="childTransactionType?.description"></em>
-        </p>
-      }
-
-      <h3>{{ childTransactionType?.contactTitle }}</h3>
-      <form [formGroup]="childForm" [class.ng-submitted]="formSubmitted" id="childForm">
-        @if (childTransaction) {
-          <app-transaction-input
-            (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
-            (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
-            (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
-            (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
-            [contactTypeOptions]="childContactTypeOptions"
-            [contributionAmountReadOnly]="true"
-            [formSubmitted]="formSubmitted"
-            [form]="childForm"
-            [isEditable]="isEditable()"
-            [memoCodeCheckboxLabel$]="childMemoCodeCheckboxLabel$"
-            [transaction]="childTransaction"
-          >
-          </app-transaction-input>
+      <div class="content-accordion-wrapper">
+        <h2>{{ childTransaction?.transactionType?.formTitle }}</h2>
+        @if (childTransactionType?.description) {
+          <p>
+            <em [innerHtml]="childTransactionType?.description"></em>
+          </p>
         }
-      </form>
+
+        <h3>{{ childTransactionType?.contactTitle }}</h3>
+        <form [formGroup]="childForm" [class.ng-submitted]="formSubmitted" id="childForm">
+          @if (childTransaction) {
+            <app-transaction-input
+              (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
+              (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
+              (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
+              (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"
+              [contactTypeOptions]="childContactTypeOptions"
+              [contributionAmountReadOnly]="true"
+              [formSubmitted]="formSubmitted"
+              [form]="childForm"
+              [isEditable]="isEditable()"
+              [memoHasOptional$]="childMemoHasOptional$"
+              [transaction]="childTransaction"
+            >
+            </app-transaction-input>
+          }
+        </form>
+      </div>
     </p-accordion-content>
   </p-accordion-panel>
 
@@ -93,33 +97,35 @@
         <p class="accordion-subtext">Duplicate of the original transaction</p>
       </p-accordion-header>
       <p-accordion-content>
-        @if (transaction?.reatt_redes?.transactionType?.showParentTransactionTitle) {
-          <h2>
-            {{ transaction?.reatt_redes?.parent_transaction?.transactionType?.title }}
+        <div class="content-accordion-wrapper">
+          @if (transaction?.reatt_redes?.transactionType?.showParentTransactionTitle) {
+            <h2>
+              {{ transaction?.reatt_redes?.parent_transaction?.transactionType?.title }}
+            </h2>
+          }
+
+          <h2 [class.dark-gray-text]="transaction?.reatt_redes?.transactionType?.showParentTransactionTitle">
+            {{ transaction?.reatt_redes?.transactionType?.title }}
           </h2>
-        }
+          @if (transaction?.reatt_redes?.transactionType?.subTitle) {
+            <div>
+              {{ transaction?.reatt_redes?.transactionType?.subTitle }}
+            </div>
+          }
 
-        <h2 [class.dark-gray-text]="transaction?.reatt_redes?.transactionType?.showParentTransactionTitle">
-          {{ transaction?.reatt_redes?.transactionType?.title }}
-        </h2>
-        @if (transaction?.reatt_redes?.transactionType?.subTitle) {
-          <div>
-            {{ transaction?.reatt_redes?.transactionType?.subTitle }}
-          </div>
-        }
-
-        <h3>{{ transaction?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
-        <form [formGroup]="reattributedData.form" [class.ng-submitted]="formSubmitted" id="pull-forward-form">
-          <app-transaction-input
-            [contactTypeOptions]="reattributedData.contactTypeOptions"
-            [formSubmitted]="formSubmitted"
-            [form]="reattributedData.form"
-            [isEditable]="false"
-            [memoCodeCheckboxLabel$]="reattributedData.memoCodeCheckboxLabel$"
-            [transaction]="transaction?.reatt_redes"
-          >
-          </app-transaction-input>
-        </form>
+          <h3>{{ transaction?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
+          <form [formGroup]="reattributedData.form" [class.ng-submitted]="formSubmitted" id="pull-forward-form">
+            <app-transaction-input
+              [contactTypeOptions]="reattributedData.contactTypeOptions"
+              [formSubmitted]="formSubmitted"
+              [form]="reattributedData.form"
+              [isEditable]="false"
+              [memoHasOptional$]="reattributedData.memoHasOptional$"
+              [transaction]="transaction?.reatt_redes"
+            >
+            </app-transaction-input>
+          </form>
+        </div>
       </p-accordion-content>
     </p-accordion-panel>
   }

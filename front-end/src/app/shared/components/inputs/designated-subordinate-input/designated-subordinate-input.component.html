@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="field">
         <label for="designated_or_subordinate_dropdown">
-          <strong>ADD DESIGNATING COMMITTEE OR SUBORDINATE COMMITTEE?</strong> (OPTIONAL)
+          ADD DESIGNATING COMMITTEE OR SUBORDINATE COMMITTEE? <span class="paren-label">(OPTIONAL)</span>
         </label>
         <p-select
           inputId="designated_or_subordinate_dropdown"
@@ -29,7 +29,7 @@
           <label for="entity_type">LOOKUP</label>
           <app-transaction-contact-lookup
             contactProperty="contact_4"
-            [transaction]="transaction"
+            [transaction]="transaction()"
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
@@ -75,7 +75,7 @@
           <label for="entity_type">LOOKUP</label>
           <app-transaction-contact-lookup
             contactProperty="contact_5"
-            [transaction]="transaction"
+            [transaction]="transaction()"
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"

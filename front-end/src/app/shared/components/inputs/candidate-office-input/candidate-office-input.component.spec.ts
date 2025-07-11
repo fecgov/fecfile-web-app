@@ -67,7 +67,6 @@ describe('CandidateOfficeInputComponent', () => {
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
-
     fixture.detectChanges();
   });
 
@@ -79,27 +78,23 @@ describe('CandidateOfficeInputComponent', () => {
     component.form().patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.PRESIDENTIAL,
     });
-    const stateFormControl = component.stateControl();
-    const districtFormControl = component.districtControl();
 
-    expect(stateFormControl.value).toBeNull();
-    expect(stateFormControl.disabled).toBe(true);
+    expect(component.stateControl()?.value).toBeNull();
+    expect(component.stateControl()?.disabled).toBe(true);
 
-    expect(districtFormControl.value).toBeNull();
-    expect(districtFormControl.disabled).toBe(true);
+    expect(component.districtControl()?.value).toBeNull();
+    expect(component.districtControl()?.disabled).toBe(true);
   });
 
   it('test SENATE office', () => {
     component.form().patchValue({
       [testCandidateOfficeFormControlName]: CandidateOfficeTypes.SENATE,
     });
-    const stateFormControl = component.stateControl();
-    const districtFormControl = component.districtControl();
 
-    expect(stateFormControl.disabled).toBe(false);
+    expect(component.stateControl()?.disabled).toBe(false);
 
-    expect(districtFormControl.value).toBeNull();
-    expect(districtFormControl.disabled).toBe(true);
+    expect(component.districtControl()?.value).toBeNull();
+    expect(component.districtControl()?.disabled).toBe(true);
   });
 
   it('test HOUSE office', () => {
@@ -109,11 +104,9 @@ describe('CandidateOfficeInputComponent', () => {
     component.form().patchValue({
       [testCandidateStateFormControlName]: 'FL',
     });
-    const stateFormControl = component.stateControl();
-    const districtFormControl = component.districtControl();
 
-    expect(stateFormControl.disabled).toBe(false);
-    expect(districtFormControl.disabled).toBe(false);
+    expect(component.stateControl()?.disabled).toBe(false);
+    expect(component.districtControl()?.disabled).toBe(false);
 
     expect(component.candidateDistrictOptions).toEqual(
       LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels('FL')),
@@ -123,52 +116,50 @@ describe('CandidateOfficeInputComponent', () => {
   it('adds subscription to election_code for Schedule E transactions', () => {
     host.transaction = testIndependentExpenditure;
     fixture.detectChanges();
+    component.ngOnInit();
 
-    const electionCodeControl = component.electionCodeControl();
+    const electionCodeControl = component.electionControl();
     expect(electionCodeControl!.subscriptions).toHaveSize(1);
   });
 
   it('updates state availability for SchE transactions in Presidential Primary elections', () => {
     host.transaction = testIndependentExpenditure;
     fixture.detectChanges();
+    component.ngOnInit();
 
     component.form().patchValue({ [component.officeFormControlName()]: CandidateOfficeTypes.PRESIDENTIAL });
     component.form().patchValue({ election_code: 'P2025' });
-    expect(component.stateControl().disabled).toBeFalse();
+    expect(component.stateControl()?.disabled).toBeFalse();
 
     component.form().patchValue({ election_code: 'G2025' });
-    expect(component.stateControl().disabled).toBeTrue();
+    expect(component.stateControl()?.disabled).toBeTrue();
   });
 
   it('updates the district field correctly while switching between states', () => {
-    const stateField = component.stateControl();
-    const districtField = component.districtControl();
-    const officeField = component.officeControl();
+    component.officeControl()?.setValue(CandidateOfficeTypes.HOUSE);
+    expect(component.districtControl()?.disabled).toBeFalse();
 
-    officeField.setValue(CandidateOfficeTypes.HOUSE);
-    expect(districtField.disabled).toBeFalse();
+    component.stateControl()?.setValue('AK');
+    expect(component.districtControl()?.value).toEqual('00');
 
-    stateField.setValue('AK');
-    expect(districtField.value).toEqual('00');
+    component.stateControl()?.setValue('CA');
+    expect(component.districtControl()?.value).toEqual(null);
 
-    stateField.setValue('CA');
-    expect(districtField.value).toEqual(null);
+    component.districtControl()?.setValue('20');
+    expect(component.districtControl()?.value).toEqual('20');
 
-    districtField.setValue('20');
-    expect(districtField.value).toEqual('20');
+    component.stateControl()?.setValue('AR');
+    expect(component.districtControl()?.value).toEqual(null);
 
-    stateField.setValue('AR');
-    expect(districtField.value).toEqual(null);
+    component.stateControl()?.setValue('CA');
+    component.districtControl()?.setValue('02');
+    component.stateControl()?.setValue('AR');
+    expect(component.districtControl()?.value).toEqual('02');
 
-    stateField.setValue('CA');
-    districtField.setValue('02');
-    stateField.setValue('AR');
-    expect(districtField.value).toEqual('02');
+    component.stateControl()?.setValue('AK');
+    expect(component.districtControl()?.value).toEqual('00');
 
-    stateField.setValue('AK');
-    expect(districtField.value).toEqual('00');
-
-    stateField.setValue('INVALID');
-    expect(districtField.value).toEqual(null);
+    component.stateControl()?.setValue('INVALID');
+    expect(component.districtControl()?.value).toEqual(null);
   });
 });
