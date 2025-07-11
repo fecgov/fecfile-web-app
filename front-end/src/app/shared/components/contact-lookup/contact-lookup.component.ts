@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, input, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {

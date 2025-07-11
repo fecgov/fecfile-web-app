@@ -1,4 +1,4 @@
-import { Component, inject, Injector, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -152,6 +152,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
         this.statusByControl?.setValue('qualification');
       }
     }
+    this.statusByControl?.updateValueAndValidity();
   }
 
   async getConfirmations(): Promise<boolean> {
@@ -218,7 +219,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
       this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
       this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
     });
-    this.statusByControl?.updateValueAndValidity();
   }
 
   enableValidation(contacts: F1MContact[]) {

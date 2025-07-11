@@ -73,7 +73,7 @@ describe('ContactSearchComponent', () => {
 
       await component.onDropdownSearch(event);
 
-      expect(spy).toHaveBeenCalledWith(searchTerm);
+      expect(spy).toHaveBeenCalledWith(searchTerm, '', '');
       expect(mockResponse.toSelectItemGroups).toHaveBeenCalledWith(component.isBare());
       expect(component.contactLookupList).toEqual([{ label: 'Candidates', items: [] }]);
     });
@@ -91,7 +91,7 @@ describe('ContactSearchComponent', () => {
       const event = { query: searchTerm } as AutoCompleteCompleteEvent;
       await component.onDropdownSearch(event);
 
-      expect(spy).toHaveBeenCalledWith(searchTerm);
+      expect(spy).toHaveBeenCalledWith(searchTerm, '', '');
       expect(mockResponse.toSelectItemGroups).toHaveBeenCalledWith(component.isBare());
       expect(component.contactLookupList).toEqual([{ label: 'Committees', items: [] }]);
     });
@@ -110,7 +110,7 @@ describe('ContactSearchComponent', () => {
 
       await component.onDropdownSearch(event);
 
-      expect(spy).toHaveBeenCalledWith(searchTerm);
+      expect(spy).toHaveBeenCalledWith(searchTerm, '');
       expect(mockResponse.toSelectItemGroups).toHaveBeenCalled();
       expect(component.contactLookupList).toEqual([{ label: 'Individuals', items: [] }]);
     });
@@ -129,7 +129,7 @@ describe('ContactSearchComponent', () => {
       const event = { query: searchTerm } as AutoCompleteCompleteEvent;
       await component.onDropdownSearch(event);
 
-      expect(spy).toHaveBeenCalledWith(searchTerm);
+      expect(spy).toHaveBeenCalledWith(searchTerm, '');
       expect(mockResponse.toSelectItemGroups).toHaveBeenCalled();
       expect(component.contactLookupList).toEqual([{ label: 'Organizations', items: [] }]);
     });

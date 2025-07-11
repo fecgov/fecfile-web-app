@@ -145,8 +145,7 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    service.excludeFecIds.set(['C000000001', 'C000000002']);
-    const value = await service.candidateLookup(testSearch);
+    const value = await service.candidateLookup(testSearch, 'C000000001,C000000002', '');
     expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -173,7 +172,7 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    const value = await service.committeeLookup(testSearch);
+    const value = await service.committeeLookup(testSearch, '', '');
     expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -190,7 +189,7 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    service.individualLookup(testSearch).then((value) => expect(value).toEqual(expectedRetval));
+    service.individualLookup(testSearch, '').then((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
@@ -206,7 +205,7 @@ describe('ContactService', () => {
       exclude_ids: '',
     };
 
-    const value = await service.organizationLookup(testSearch);
+    const value = await service.organizationLookup(testSearch, '');
     expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
