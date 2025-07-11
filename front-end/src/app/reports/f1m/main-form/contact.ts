@@ -42,8 +42,8 @@ export abstract class F1MContact {
 
   /**
    * Update the values in the form controls and contact object embedded in the
-   * report object from the event emitted by the contact lookup component
-   * @param $event
+   * report object when the contact changes in the ContactManager
+   * @param contact
    */
   update(contact: Contact) {
     // If this is updating a previously selected candidate, remove it from the exclusion list.

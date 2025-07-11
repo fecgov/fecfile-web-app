@@ -26,23 +26,22 @@ export class ContactManager {
 export class ContactManagementService {
   private readonly map = new Map<string, ContactManager>();
   readonly showDialog = signal(false);
-  readonly activeKey = signal<string>('');
-  readonly active = computed(() => this.get(this.activeKey()));
+  readonly activeKey = signal<string>(''); // Key being used by the ContactModal
+  readonly activeManager = computed(() => this.get(this.activeKey())); // Returns the ContactManager associated with the key
 
   constructor() {
+    // When Request to show dialog is called,
+    // and the active ContactManager should show an empty contact ready to be edited,
+    // set the contact to a new Empty Contact of the appropriate contact type.
     effect(() => {
-      if (this.showDialog() && this.active().clearOnLoad()) {
-        this.active().contact.set(emptyContact(this.active().contactType()));
+      if (this.showDialog() && this.activeManager().clearOnLoad()) {
+        this.activeManager().contact.set(emptyContact(this.activeManager().contactType()));
       }
     });
   }
 
+  // Return the ContactManager associated with the key or lazily initialize one if it's the first request
   get(key: string) {
-    let manager = this.map.get(key);
-    if (!manager) {
-      manager = new ContactManager();
-      this.map.set(key, manager);
-    }
-    return manager;
+    return this.map.get(key) ?? this.map.set(key, new ContactManager()).get(key)!;
   }
 }

@@ -63,7 +63,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   );
   formSubmitted = false;
 
-  readonly manager = computed(() => this.cmservice.active());
+  readonly manager = computed(() => this.cmservice.activeManager());
 
   readonly stateOptions = computed(() => {
     if (this.manager().contactType() === ContactTypes.CANDIDATE) {
@@ -92,9 +92,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
   constructor() {
     super();
-    effect(() => {
-      this.form.patchValue(this.manager().contact(), { emitEvent: false });
-    });
+    effect(() => this.form.patchValue(this.manager().contact(), { emitEvent: false }));
 
     effect(() => {
       if (!this.cmservice.showDialog()) this.reset();

@@ -64,8 +64,8 @@ export class SubmitReportStep1Component extends FormComponent implements OnInit 
   constructor() {
     super();
     effect(() => {
-      SchemaUtils.addJsonSchemaValidators(this.form, this.activeReportSignal().schema, false);
-      this.initializeFormWithReport(this.activeReportSignal(), this.committeeAccountSignal());
+      SchemaUtils.addJsonSchemaValidators(this.form, this.activeReport().schema, false);
+      this.initializeFormWithReport(this.activeReport(), this.committeeAccount());
     });
   }
 
@@ -104,19 +104,19 @@ export class SubmitReportStep1Component extends FormComponent implements OnInit 
   public async continue(): Promise<void> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
-    if (this.form.invalid || this.activeReportSignal() == undefined) {
+    if (this.form.invalid || this.activeReport() == undefined) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
     let addressFields = {};
     if (this.form.value.change_of_address) {
       addressFields = {
-        ...SchemaUtils.getFormValues(this.form, this.activeReportSignal().schema, this.formProperties),
+        ...SchemaUtils.getFormValues(this.form, this.activeReport().schema, this.formProperties),
       };
     }
 
     const payload: Report = getReportFromJSON({
-      ...this.activeReportSignal(),
+      ...this.activeReport(),
       ...addressFields,
       change_of_address: this.form.value.change_of_address,
       confirmation_email_1: this.form.value.confirmation_email_1,
@@ -124,8 +124,8 @@ export class SubmitReportStep1Component extends FormComponent implements OnInit 
     });
 
     this.reportService.update(payload, this.formProperties).then(() => {
-      if (this.activeReportSignal().id) {
-        this.router.navigateByUrl(this.getContinueUrl?.(this.activeReportSignal()) ?? '');
+      if (this.activeReport().id) {
+        this.router.navigateByUrl(this.getContinueUrl?.(this.activeReport()) ?? '');
       }
 
       this.messageService.add({

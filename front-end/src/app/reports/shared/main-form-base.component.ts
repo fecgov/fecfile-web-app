@@ -31,9 +31,9 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     super();
 
     effect(() => {
-      this.setConstantFormValues(this.committeeAccountSignal());
+      this.setConstantFormValues(this.committeeAccount());
       if (this.reportId) {
-        this.form.patchValue(this.activeReportSignal());
+        this.form.patchValue(this.activeReport());
       }
     });
   }

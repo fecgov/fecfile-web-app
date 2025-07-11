@@ -1,4 +1,4 @@
-import { Component, effect, inject, Injector } from '@angular/core';
+import { Component, inject, Injector, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -47,7 +47,7 @@ import { ContactManagementService } from 'app/shared/services/contact-management
   ],
   styleUrl: './main-form.component.scss',
 })
-export class MainFormComponent extends MainFormBaseComponent {
+export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   readonly injector = inject(Injector);
   readonly cmservice = inject(ContactManagementService);
   protected override readonly reportService: Form1MService = inject(Form1MService);
@@ -136,52 +136,48 @@ export class MainFormComponent extends MainFormBaseComponent {
 
   report = new Form1M();
 
-  constructor() {
-    super();
+  override ngOnInit(): void {
+    super.ngOnInit();
+    if (!this.reportId) return;
+    // A deep copy of activeReport has to be made because the actual activeReport
+    // object is set to read-only by the NgRx store.
+    this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReport())));
 
-    effect(() => {
-      if (this.reportId) {
-        // A deep copy of activeReport has to be made because the actual activeReport
-        // object is set to read-only by the NgRx store.
-        this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReportSignal())));
+    // Set the statusBy radio button based on form values
+    if (this.report.affiliated_committee_name) {
+      this.statusByControl?.setValue('affiliation');
+    } else {
+      this.statusByControl?.setValue('qualification');
+    }
 
-        // Set the statusBy radio button based on form values
-        if (this.report.affiliated_committee_name) {
-          this.statusByControl?.setValue('affiliation');
-        } else {
-          this.statusByControl?.setValue('qualification');
-        }
-
-        // If this is an edit, update the lookup ids to exclude
-        if (this.report.id) {
-          if (this.report.affiliated_committee_name) {
-            if (this.report?.contact_affiliated?.committee_id)
-              this.contactService.excludeFecIds.update((ids) => {
-                ids.push(this.report.contact_affiliated!.committee_id!);
-                return ids;
-              });
-            if (this.report.contact_affiliated_id)
-              this.contactService.excludeIds.update((ids) => {
-                ids.push(this.report.contact_affiliated_id!);
-                return ids;
-              });
-          } else {
-            f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-              if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
-                this.contactService.excludeFecIds.update((ids) => {
-                  ids.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
-                  return ids;
-                });
-              if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
-                this.contactService.excludeIds.update((ids) => {
-                  ids.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
-                  return ids;
-                });
+    // If this is an edit, update the lookup ids to exclude
+    if (this.report.id) {
+      if (this.report.affiliated_committee_name) {
+        if (this.report?.contact_affiliated?.committee_id)
+          this.contactService.excludeFecIds.update((ids) => {
+            ids.push(this.report.contact_affiliated!.committee_id!);
+            return ids;
+          });
+        if (this.report.contact_affiliated_id)
+          this.contactService.excludeIds.update((ids) => {
+            ids.push(this.report.contact_affiliated_id!);
+            return ids;
+          });
+      } else {
+        f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
+          if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
+            this.contactService.excludeFecIds.update((ids) => {
+              ids.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
+              return ids;
             });
-          }
-        }
+          if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
+            this.contactService.excludeIds.update((ids) => {
+              ids.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
+              return ids;
+            });
+        });
       }
-    });
+    }
   }
 
   async getConfirmations(): Promise<boolean> {
