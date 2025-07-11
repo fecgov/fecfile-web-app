@@ -21,12 +21,12 @@ export class SubmitReportStatusComponent extends DestroyerComponent implements O
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   private readonly form3XService = inject(Form3XService);
-  readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
-  readonly reportCodeSignal = computed(() => this.activeReportSignal().report_code as ReportCodes);
-  readonly coverageDatesSignal = computed(() => this.activeReportSignal().coverageDates);
-  readonly fecStatusSignal = computed(() => this.activeReportSignal().upload_submission?.fec_status);
-  readonly fecMessageSignal = computed(() => this.activeReportSignal().upload_submission?.fec_message);
-  readonly reportStatusSignal = computed(() => this.activeReportSignal().report_status as ReportStatus);
+  readonly activeReport = this.store.selectSignal(selectActiveReport);
+  readonly reportCodeSignal = computed(() => this.activeReport().report_code as ReportCodes);
+  readonly coverageDatesSignal = computed(() => this.activeReport().coverageDates);
+  readonly fecStatusSignal = computed(() => this.activeReport().upload_submission?.fec_status);
+  readonly fecMessageSignal = computed(() => this.activeReport().upload_submission?.fec_message);
+  readonly reportStatusSignal = computed(() => this.activeReport().report_status as ReportStatus);
 
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 

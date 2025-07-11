@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
       <div class="field">
@@ -7,14 +7,14 @@
           type="text"
           pInputText
           id="street_1"
-          [formControlName]="streetOneFieldName"
-          [readonly]="readonly"
-          [class.readonly]="readonly"
+          [formControlName]="streetOneFieldName()"
+          [readonly]="readonly()"
+          [class.readonly]="readonly()"
         />
         <app-error-messages
-          [form]="form"
-          [fieldName]="streetOneFieldName"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="streetOneFieldName()"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -25,14 +25,14 @@
           type="text"
           pInputText
           id="street_2"
-          [formControlName]="streetTwoFieldName"
-          [readonly]="readonly"
-          [class.readonly]="readonly"
+          [formControlName]="streetTwoFieldName()"
+          [readonly]="readonly()"
+          [class.readonly]="readonly()"
         />
         <app-error-messages
-          [form]="form"
-          [fieldName]="streetTwoFieldName"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="streetTwoFieldName()"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -45,14 +45,14 @@
           type="text"
           pInputText
           id="city"
-          [formControlName]="cityFieldName"
-          [readonly]="readonly"
-          [class.readonly]="readonly"
+          [formControlName]="cityFieldName()"
+          [readonly]="readonly()"
+          [class.readonly]="readonly()"
         />
         <app-error-messages
-          [form]="form"
-          [fieldName]="cityFieldName"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="cityFieldName()"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -61,18 +61,18 @@
         <label for="state">STATE/PROVINCE</label>
         <p-select
           inputId="state"
-          [formControlName]="stateFieldName"
+          [formControlName]="stateFieldName()"
           [options]="stateOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-          [readonly]="readonly"
-          styleClass="{{ readonly ? 'readonly' : '' }}"
+          [readonly]="readonly()"
+          styleClass="{{ readonly() ? 'readonly' : '' }}"
           fluid
         ></p-select>
         <app-error-messages
-          [form]="form"
-          [fieldName]="stateFieldName"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="stateFieldName()"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -83,14 +83,14 @@
           type="text"
           pInputText
           id="zip"
-          [formControlName]="zipFieldName"
-          [readonly]="readonly"
-          [class.readonly]="readonly"
+          [formControlName]="zipFieldName()"
+          [readonly]="readonly()"
+          [class.readonly]="readonly()"
         />
         <app-error-messages
-          [form]="form"
-          [fieldName]="zipFieldName"
-          [formSubmitted]="formSubmitted"
+          [form]="form()"
+          [fieldName]="zipFieldName()"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>

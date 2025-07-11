@@ -1,6 +1,6 @@
 <h1>Submit report</h1>
 <h5>
-  <strong>{{ activeReportSignal().formLabel }}:</strong> {{ activeReportSignal().formSubLabel }}
+  <strong>{{ activeReport().formLabel }}:</strong> {{ activeReport().formSubLabel }}
 </h5>
 <hr type="solid" />
 <p-card>
@@ -107,7 +107,7 @@
         </div>
       </div>
     </div>
-    @if (activeReportSignal().report_version) {
+    @if (activeReport().report_version) {
       <div class="grid">
         <div class="col-12">
           <div class="field-row">
@@ -164,7 +164,7 @@
           label="Back"
           type="button"
           class="p-button-secondary"
-          (click)="router.navigateByUrl(getBackUrl?.(activeReportSignal()) || '')"
+          (click)="router.navigateByUrl(getBackUrl?.(activeReport()) || '')"
         ></button>
       </div>
       <div class="col-8 submit-container">

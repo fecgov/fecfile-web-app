@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
       <div class="field">
@@ -11,9 +11,9 @@
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           [fieldName]="officeFormControlName()"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -29,9 +29,9 @@
           appendTo="body"
         ></p-select>
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           [fieldName]="stateFormControlName()"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>
@@ -57,9 +57,9 @@
           ></p-select>
         }
         <app-error-messages
-          [form]="form"
+          [form]="form()"
           [fieldName]="districtFormControlName()"
-          [formSubmitted]="formSubmitted"
+          [formSubmitted]="formSubmitted()"
         ></app-error-messages>
       </div>
     </div>

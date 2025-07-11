@@ -15,7 +15,7 @@ import { F3MenuComponent } from './menus/f3/f3-menu.component';
 })
 export class SidebarComponent {
   private readonly store = inject(Store);
-  protected readonly activeReportSignal = this.store.selectSignal(selectActiveReport);
+  protected readonly activeReport = this.store.selectSignal(selectActiveReport);
   readonly reportTypes = ReportTypes;
 }
 
