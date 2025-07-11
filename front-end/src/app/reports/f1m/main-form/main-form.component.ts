@@ -138,18 +138,19 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
 
   override ngOnInit(): void {
     super.ngOnInit();
-    if (!this.reportId) return;
     // A deep copy of activeReport has to be made because the actual activeReport
     // object is set to read-only by the NgRx store.
-    this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReport())));
+    if (this.reportId) this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReport())));
 
     this.initForm();
 
-    // Set the statusBy radio button based on form values
-    if (this.report.affiliated_committee_name) {
-      this.statusByControl?.setValue('affiliation');
-    } else {
-      this.statusByControl?.setValue('qualification');
+    if (this.reportId) {
+      // Set the statusBy radio button based on form values
+      if (this.report.affiliated_committee_name) {
+        this.statusByControl?.setValue('affiliation');
+      } else {
+        this.statusByControl?.setValue('qualification');
+      }
     }
   }
 
