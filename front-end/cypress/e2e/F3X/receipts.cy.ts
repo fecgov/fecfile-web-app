@@ -17,14 +17,6 @@ const scheduleData = {
   },
 };
 
-function getContact(contact: ContactFormData, alias = '') {
-  alias = PageUtils.getAlias(alias);
-  const name = contact['last_name'] ?? contact['name'];
-  cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
-  cy.contains(name).should('exist');
-  cy.contains(name).click({ force: true });
-}
-
 function checkTable(index: number, type: string, containMemo: boolean, value: string) {
   cy.get('tbody tr').eq(index).as('row');
   cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
@@ -46,7 +38,7 @@ describe('Receipt Transactions', () => {
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
       const individual: ContactFormData = result.individual;
-      getContact(individual);
+      TransactionDetailPage.getContact(individual);
 
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');
       PageUtils.clickButton('Save');
@@ -86,7 +78,7 @@ describe('Receipt Transactions', () => {
       StartTransaction.Receipts().Individual().Returned();
 
       const individual: ContactFormData = result.individual;
-      getContact(individual);
+      TransactionDetailPage.getContact(individual);
 
       TransactionDetailPage.enterScheduleFormData(negativeAmountFormData, false, '', true, 'contribution_date');
       PageUtils.clickButton('Save');
@@ -122,7 +114,7 @@ describe('Receipt Transactions', () => {
       StartTransaction.Receipts().Individual().Partnership();
       const org = result.organization;
       const individual = result.individual;
-      getContact(org);
+      TransactionDetailPage.getContact(org);
 
       TransactionDetailPage.enterScheduleFormData(formTransactionData, false, '', true, 'contribution_date');
       const alias = PageUtils.getAlias('');
@@ -147,7 +139,7 @@ describe('Receipt Transactions', () => {
       cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
       cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').first().click();
       PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
-      getContact(individual);
+      TransactionDetailPage.getContact(individual);
       TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
 
       cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
@@ -194,7 +186,7 @@ describe('Receipt Transactions', () => {
       cy.visit(`/reports/transactions/report/${result.report}/list`);
       StartTransaction.Receipts().RegisteredFilers().Party();
 
-      getContact(committee);
+      TransactionDetailPage.getContact(committee);
 
       const localFormTransactionData = {
         ...formTransactionDataForSchedule,
@@ -230,7 +222,7 @@ describe('Receipt Transactions', () => {
       cy.visit(`/reports/transactions/report/${result.report}/list`);
       StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
-      getContact(committee);
+      TransactionDetailPage.getContact(committee);
 
       const transactionFormData = {
         ...formTransactionDataForSchedule,
@@ -268,7 +260,7 @@ describe('Receipt Transactions', () => {
 
       // Enter STEP ONE transaction
       cy.get('p-accordion-panel').first().as('stepOneAccordion');
-      getContact(individual, '@stepOneAccordion');
+      TransactionDetailPage.getContact(individual, '@stepOneAccordion');
       const transactionFormData = {
         ...formTransactionDataForSchedule,
         ...{
@@ -288,7 +280,7 @@ describe('Receipt Transactions', () => {
       // Enter STEP TWO transaction
       PageUtils.clickAccordion('STEP TWO');
       cy.get('p-accordion-panel').last().as('stepTwoAccordion');
-      getContact(committee, '@stepTwoAccordion');
+      TransactionDetailPage.getContact(committee, '@stepTwoAccordion');
       TransactionDetailPage.enterScheduleFormData(
         transactionFormData,
         true,
@@ -358,7 +350,7 @@ describe('Receipt Transactions', () => {
 
       // Enter STEP ONE transaction
       cy.get('p-accordion-panel').first().as('stepOneAccordion');
-      getContact(committee, '@stepOneAccordion');
+      TransactionDetailPage.getContact(committee, '@stepOneAccordion');
 
       const transactionFormData = {
         ...formTransactionDataForSchedule,
@@ -380,7 +372,7 @@ describe('Receipt Transactions', () => {
       PageUtils.clickAccordion('STEP TWO');
       cy.get('p-accordion-panel').last().as('stepTwoAccordion');
       PageUtils.dropdownSetValue('#entity_type_dropdown', 'Individual', '@stepTwoAccordion');
-      getContact(individual, '@stepTwoAccordion');
+      TransactionDetailPage.getContact(individual, '@stepTwoAccordion');
 
       TransactionDetailPage.enterScheduleFormData(
         transactionFormData,
@@ -455,7 +447,7 @@ describe('Receipt Transactions', () => {
       // Create a Joint Fundraising Transfer
       StartTransaction.Receipts().Transfers().JointFundraising();
 
-      getContact(committee);
+      TransactionDetailPage.getContact(committee);
 
       const tier1TransactionData = {
         ...formTransactionDataForSchedule,
@@ -473,7 +465,7 @@ describe('Receipt Transactions', () => {
 
       // Create Partnership Receipt Joint Fundraising Transfer Memo
       cy.contains('h1', 'Partnership Receipt Joint Fundraising Transfer Memo').should('exist');
-      getContact(organization);
+      TransactionDetailPage.getContact(organization);
       const tier2TransactionData = {
         ...formTransactionDataForSchedule,
         ...{
@@ -489,7 +481,7 @@ describe('Receipt Transactions', () => {
 
       // Create Partnership Individual Joint Fundraising Transfer Memo
       cy.contains('h1', 'Individual Joint Fundraising Transfer Memo').should('exist');
-      getContact(individual);
+      TransactionDetailPage.getContact(individual);
       const tier3TransactionData = {
         ...formTransactionDataForSchedule,
         ...{
@@ -551,7 +543,7 @@ describe('Receipt Transactions', () => {
       cy.visit(`/reports/transactions/report/${result.report}/list`);
 
       StartTransaction.Receipts().RegisteredFilers().PAC();
-      getContact(committee);
+      TransactionDetailPage.getContact(committee);
       cy.get('#organization_name').should('exist').should('have.value', committee.name);
       cy.get('#committee_fec_id').should('exist').should('have.value', committee.committee_id);
     });

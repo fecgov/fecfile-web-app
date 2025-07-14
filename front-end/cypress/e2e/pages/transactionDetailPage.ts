@@ -233,6 +233,14 @@ export class TransactionDetailPage {
     }
   }
 
+  static getContact(contact: ContactFormData, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    const name = contact['last_name'] ?? contact['name'];
+    cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
+    cy.contains(name).should('exist');
+    cy.contains(name).click({ force: true });
+  }
+
   static assertFormData(formData: ScheduleFormData, alias = '', id = '#expenditure_date') {
     alias = PageUtils.getAlias(alias);
     if (formData.date_received) {
