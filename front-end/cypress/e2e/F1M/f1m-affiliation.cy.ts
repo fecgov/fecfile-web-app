@@ -71,17 +71,31 @@ describe('Manage reports', () => {
       PageUtils.calendarSetValue('[data-cy="date_of_original_registration"]');
       PageUtils.calendarSetValue('[data-cy="date_committee_met_requirements"]');
 
+      const excludeFecIds: string[] = [];
+      const excludeIds: string[] = [];
       for (let index = 0; index < candidates.length; index++) {
+        const nameEntry = candidates[index].first_name.slice(0, 3);
+        cy.intercept(
+          'GET',
+          `http://localhost:8080/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+          {
+            statusCode: 200,
+            body: {
+              fec_api_candidates: [],
+              fecfile_candidates: [candidates[index]],
+            },
+          },
+        );
         const candidateSection = cy.get(`[data-cy="candidate-${index}"]`);
-        candidateSection.find('[id="searchBox"]').type(candidates[index].first_name.slice(0, 3));
-        candidateSection
-          .get('.p-autocomplete-list-container')
-          .contains(candidates[index].first_name.slice(0, 3))
-          .click();
+        candidateSection.find('[id="searchBox"]').type(nameEntry);
+        candidateSection.get('.p-autocomplete-list-container').contains(nameEntry).click();
         cy.get(`[data-cy="candidate-${index}"]`)
           .find('[data-cy="last-name"]')
           .should('have.value', candidates[index].last_name);
         PageUtils.calendarSetValue(getId(index), new Date(), `[data-cy="candidate-${index}"]`);
+
+        excludeFecIds.push(candidates[index].candidate_id);
+        excludeIds.push(candidates[index].id!);
       }
 
       PageUtils.clickButton('Save and continue');
