@@ -5,7 +5,6 @@ import {
   defaultFormData as individualContactFormData,
   organizationFormData,
 } from '../models/ContactFormModel';
-import { clearContacts } from '../requests/library/contacts';
 import { PageUtils } from './pageUtils';
 import { StatesCodeLabels } from 'app/shared/utils/label.utils';
 export class ContactListPage {
@@ -120,31 +119,12 @@ export class ContactListPage {
     }
   }
 
-  //Deletes all reports belonging to the logged-in committee
+  //Deletes all contacts belonging to the logged-in committee
   static deleteAllContacts() {
-    clearContacts();
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
-        method: 'GET',
-        url: 'http://localhost:8080/api/v1/contacts/',
-        headers: {
-          'x-csrftoken': cookie?.value,
-        },
-      }).then((resp) => {
-        const contacts = resp.body;
-        for (const contact of contacts) {
-          ContactListPage.deleteContact(contact.id);
-        }
-      });
-    });
-  }
-
-  //Deletes a single report by its ID
-  static deleteContact(contactID: string) {
-    cy.getCookie('csrftoken').then((cookie) => {
-      cy.request({
-        method: 'DELETE',
-        url: `http://localhost:8080/api/v1/contacts/${contactID}/`,
+        method: 'POST',
+        url: 'http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/',
         headers: {
           'x-csrftoken': cookie?.value,
         },
