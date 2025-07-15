@@ -42,19 +42,23 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     { initialValue: [] },
   );
 
-  private readonly form3X = derivedAsync(async () => {
+  // the form3X that is associated with the transaction on load
+  private readonly initialForm3X = derivedAsync(async () => {
     const reports = this.transaction()?.reports;
     if (!reports) return undefined;
     const report = reports.find((report) => report.report_type === ReportTypes.F3X);
-    if (!report) return undefined;
-    return (await this.reportService.get(report.id!)) as Form3X;
+    if (!report?.id) return undefined;
+    return (await this.reportService.get(report.id)) as Form3X;
   });
 
+  // the form3X that is associated with the transaction based on
+  // the disbursement date or dissemination date ONLY if the date or memo
+  // code has been touched by the user, otherwise it will return the initialForm3X
   readonly associatedF3X = derivedAsync(() => {
     const disbursementDate = this.disbursementDate();
     const disseminationDate = this.disseminationDate();
 
-    const report = this.form3X();
+    const report = this.initialForm3X();
     if (report && !this.userTouchedValues()) {
       return report;
     }
@@ -69,7 +73,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       }
     }
 
-    return report;
+    return null;
   });
 
   readonly form3XLabel = computed(() => {
