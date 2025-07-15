@@ -114,7 +114,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     );
 
     this.disbursementDate.set(dateControl.value);
-    this.disbursementDate.set(date2Control.value);
+    this.disseminationDate.set(date2Control.value);
 
     dateControl.valueChanges.subscribe((value) => {
       this.userTouchedValues.set(true);

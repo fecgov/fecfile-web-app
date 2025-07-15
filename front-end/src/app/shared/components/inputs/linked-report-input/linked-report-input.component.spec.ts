@@ -70,7 +70,7 @@ const mockReports: Report[] = [
 class TestHostComponent {
   form: FormGroup = new FormGroup({
     [testTemplateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
-    [testTemplateMap['date2']]: new SubscriptionFormControl(new Date('06/01/2024')),
+    [testTemplateMap['date2']]: new SubscriptionFormControl(new Date('06/02/2024')),
     [testTemplateMap['memo_code']]: new SubscriptionFormControl(),
   });
   templateMap = testTemplateMap;
