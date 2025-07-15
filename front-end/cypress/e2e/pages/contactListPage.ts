@@ -9,8 +9,7 @@ import { PageUtils } from './pageUtils';
 import { StatesCodeLabels } from 'app/shared/utils/label.utils';
 export class ContactListPage {
   static goToPage() {
-    cy.visit('/reports');
-    cy.get('nav').find('.nav-item').contains('Contacts').click();
+    cy.visit('/contacts');
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
