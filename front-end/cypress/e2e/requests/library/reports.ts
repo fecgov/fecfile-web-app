@@ -30,6 +30,16 @@ export const F3X_Q2: F3X = {
   date_of_election: null,
 };
 
+export const F3X_Q3: F3X = {
+  report_type: 'F3X',
+  form_type: 'F3XN',
+  report_code: 'Q3',
+  coverage_from_date: `${currentYear}-07-01`,
+  coverage_through_date: `${currentYear}-09-30`,
+  state_of_election: null,
+  date_of_election: null,
+};
+
 export const F24_24 = {
   hasChangeOfAddress: false,
   submitAlertText:
