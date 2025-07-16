@@ -12,7 +12,7 @@
   <div>{{ transactionType?.subTitle }}</div>
 }
 
-@if (activeReportSignal().report_type === reportTypes.F24) {
+@if (activeReport().report_type === reportTypes.F24) {
   <app-independent-expenditure-create-f3x-input></app-independent-expenditure-create-f3x-input>
 }
 @if (!isEditable()) {

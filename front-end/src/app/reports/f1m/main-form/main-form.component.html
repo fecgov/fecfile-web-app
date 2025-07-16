@@ -1,4 +1,4 @@
-<div data-cy="form-1m-component">
+<div data-cy="form-1m-component" class="form-container">
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
@@ -28,11 +28,7 @@
             [readonly]="true"
             formControlName="committee_name"
           />
-          <app-error-messages
-            [form]="form"
-            fieldName="committee_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-3">
@@ -47,11 +43,7 @@
             data-cy="committee-id-input"
             formControlName="filer_committee_id_number"
           />
-          <app-error-messages
-            [form]="form"
-            fieldName="committee_id"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -76,7 +68,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="X" class="ml-2">STATE PARTY</label>
       </div>
     </div>
@@ -93,7 +85,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="N" class="ml-2">OTHER</label>
       </div>
     </div>
@@ -104,7 +96,7 @@
           fieldName="committee_type"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
-        ></app-error-messages>
+        />
       </div>
     </div>
     <div class="grid">
@@ -117,7 +109,7 @@
         <h2>Address</h2>
       </div>
     </div>
-    <app-address-input [readonly]="true" [templateMap]="templateMap" [form]="form"></app-address-input>
+    <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form"></app-address-input>
     <div class="grid">
       <div class="col-12">
         <hr />
@@ -146,7 +138,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="affiliation" class="ml-2">AFFILIATION</label>
       </div>
     </div>
@@ -163,7 +155,7 @@
               ? 'ng-invalid ng-dirty'
               : ''
           "
-        ></p-radioButton>
+        />
         <label for="qualification" class="ml-2">QUALIFICATION</label>
       </div>
     </div>
@@ -174,7 +166,7 @@
           fieldName="statusBy"
           [formSubmitted]="formSubmitted"
           requiredErrorMessage="An answer is required."
-        ></app-error-messages>
+        />
       </div>
     </div>
     @if (statusByControl?.value === 'affiliation') {
@@ -189,20 +181,19 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <div class="field" [class.transaction-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
+          <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
             <label for="entity_type">LOOKUP</label>
-            <app-transaction-contact-lookup
+            <app-report-contact-lookup
               [form]="form"
+              key="contact_affiliated"
               [formSubmitted]="formSubmitted"
-              [contactTypeOptions]="affiliatedContact.contactTypeOptions"
-              (contactSelect)="affiliatedContact.update($event)"
-            >
-            </app-transaction-contact-lookup>
+              [contactType]="affiliatedContact.contactType"
+            />
             <app-error-messages
               [form]="form"
               [fieldName]="affiliatedContact.contactLookupKey"
               [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            />
           </div>
         </div>
       </div>
@@ -217,11 +208,7 @@
                 id="affiliated_committee_name"
                 formControlName="affiliated_committee_name"
               />
-              <app-error-messages
-                [form]="form"
-                fieldName="affiliated_committee_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="affiliated_committee_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-3">
@@ -237,7 +224,7 @@
                 [form]="form"
                 fieldName="affiliated_committee_fec_id"
                 [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              />
             </div>
           </div>
         </div>
@@ -248,7 +235,7 @@
               [form]="form"
               [formSubmitted]="formSubmitted"
               label="AFFILIATED DATE"
-            ></app-calendar>
+            />
           </div>
         </div>
         <div class="grid">
@@ -271,7 +258,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="DATE OF 51<sup>st</sup> CONTRIBUTION"
-          ></app-calendar>
+          />
         </div>
         <div class="col-4">
           <app-calendar
@@ -279,7 +266,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="DATE OF ORIGINAL REGISTRATION"
-          ></app-calendar>
+          />
         </div>
         <div class="col-4">
           <app-calendar
@@ -287,7 +274,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="DATE COMMITTEE MET REQUIREMENTS"
-          ></app-calendar>
+          />
         </div>
       </div>
       <div class="grid">
@@ -304,63 +291,58 @@
           </div>
           <div class="grid">
             <div class="col-12">
-              <div class="field" [class.transaction-contact-invalid]="candidateContact.control?.status === 'INVALID'">
+              <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
                 <label for="entity_type">LOOKUP</label>
-                <app-transaction-contact-lookup
+                <app-report-contact-lookup
                   [form]="form"
                   [formSubmitted]="formSubmitted"
-                  [contactTypeOptions]="candidateContact.contactTypeOptions"
-                  [excludeFecIds]="excludeFecIds"
-                  [excludeIds]="excludeIds"
-                  (contactSelect)="candidateContact.update($event)"
+                  [key]="'contact_candidate_' + f1mCandidateTags[i]"
+                  [contactType]="candidateContact.contactType"
                 >
-                </app-transaction-contact-lookup>
+                </app-report-contact-lookup>
                 <app-error-messages
                   [form]="form"
                   [fieldName]="candidateContact.contactLookupKey"
                   [formSubmitted]="formSubmitted"
                   requiredErrorMessage="Candidate information is required"
-                ></app-error-messages>
+                />
               </div>
             </div>
           </div>
-          @if (report[candidateContact.contactKey]) {
+          @if (report[candidateContact.key]) {
             <app-name-input
               [form]="form"
               [formSubmitted]="formSubmitted"
-              [templateMap]="templateMapConfigs[candidateContact.contactKey]"
+              [templateMap]="templateMapConfigs[candidateContact.key]"
               templateMapKeyPrefix="candidate"
               labelPrefix="CANDIDATE"
-            ></app-name-input>
+            />
             <div class="grid">
               <div class="col-3">
                 <div class="field">
-                  <label [for]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                    >CANDIDATE ID</label
-                  >
+                  <label [for]="templateMapConfigs[candidateContact.key]['candidate_fec_id']">CANDIDATE ID</label>
                   <input
                     type="text"
                     pInputText
-                    [id]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
-                    [formControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [id]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
+                    [formControlName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                   />
                   <app-error-messages
                     [form]="form"
-                    [fieldName]="templateMapConfigs[candidateContact.contactKey]['candidate_fec_id']"
+                    [fieldName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                     [formSubmitted]="formSubmitted"
                     uniqueFecIdMessage="Candidate already entered in form."
-                  ></app-error-messages>
+                  />
                 </div>
               </div>
               <div class="col-9 co-input-container">
                 <app-candidate-office-input
                   [form]="form"
                   [formSubmitted]="formSubmitted"
-                  [officeFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_office']"
-                  [stateFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_state']"
-                  [districtFormControlName]="templateMapConfigs[candidateContact.contactKey]['candidate_district']"
-                >
-                </app-candidate-office-input>
+                  [officeFormControlName]="templateMapConfigs[candidateContact.key]['candidate_office']"
+                  [stateFormControlName]="templateMapConfigs[candidateContact.key]['candidate_state']"
+                  [districtFormControlName]="templateMapConfigs[candidateContact.key]['candidate_district']"
+                />
               </div>
             </div>
             <div class="grid">
@@ -370,7 +352,7 @@
                   [form]="form"
                   [formSubmitted]="formSubmitted"
                   label="DATE OF CONTRIBUTION"
-                ></app-calendar>
+                />
               </div>
             </div>
           }
@@ -384,6 +366,7 @@
     }
   </form>
 </div>
-<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
 
-<p-confirmDialog key="dialog" class="confirm-dialog"> </p-confirmDialog>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()" />
+<p-confirmDialog key="dialog" class="confirm-dialog" />
+<app-contact-modal />

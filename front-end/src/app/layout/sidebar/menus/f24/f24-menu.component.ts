@@ -12,18 +12,18 @@ import { PanelMenu } from 'primeng/panelmenu';
 })
 export class F24MenuComponent extends AbstractMenuComponent {
   override readonly reportString = 'f24';
-  readonly formLabelSignal = computed(() => this.activeReportSignal().formLabel);
-  readonly subLabelSignal = computed(() => this.activeReportSignal().formSubLabel);
+  readonly formLabelSignal = computed(() => this.activeReport().formLabel);
+  readonly subLabelSignal = computed(() => this.activeReport().formSubLabel);
 
   getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[] {
     const transactionItems = [
       {
         label: 'Manage your transactions',
-        routerLink: `/reports/transactions/report/${this.activeReportSignal().id}/list`,
+        routerLink: `/reports/transactions/report/${this.activeReport().id}/list`,
       },
       {
         label: 'Add an independent expenditure',
-        routerLink: `/reports/f24/report/${this.activeReportSignal().id}/transactions/select/independent-expenditures`,
+        routerLink: `/reports/f24/report/${this.activeReport().id}/transactions/select/independent-expenditures`,
       },
     ];
     const reviewReport = this.reviewReport(sidebarState);

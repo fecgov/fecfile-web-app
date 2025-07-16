@@ -98,8 +98,39 @@ export class Contact extends BaseModel {
   }
 
   getNameString(): string {
-    return this.name ? this.name : `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
+    return this.name ?? `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
   }
+}
+
+export function emptyContact(type: ContactTypes) {
+  return Contact.fromJSON({
+    type,
+    name: '',
+    last_name: '',
+    first_name: '',
+    middle_name: '',
+    prefix: '',
+    suffix: '',
+    street_1: '',
+    street_2: '',
+    city: '',
+    state: '',
+    zip: '',
+    employer: '',
+    occupation: '',
+    candidate_office: undefined,
+    candidate_state: '',
+    candidate_district: '',
+    telephone: '',
+    country: 'USA',
+    created: '',
+    updated: '',
+    deleted: '',
+    has_transaction_or_report: false,
+    candidate_id: undefined,
+    id: undefined,
+    committee_id: undefined,
+  });
 }
 
 /**

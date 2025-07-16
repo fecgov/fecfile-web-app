@@ -32,12 +32,12 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
 
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
-  committeeAccountIdSignal = computed(() => this.committeeAccountSignal().committee_id);
+  committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
   routeDataSignal = toSignal(this.route.data);
   nextUrlSignal = computed(() => {
     const getNextUrl = this.routeDataSignal()?.['getNextUrl'];
     if (!getNextUrl) return '';
-    return getNextUrl(this.activeReportSignal());
+    return getNextUrl(this.activeReport());
   });
 
   assignedMemoText: MemoText = new MemoText();
@@ -47,7 +47,7 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   constructor() {
     super();
     effect(() => {
-      const report = this.activeReportSignal();
+      const report = this.activeReport();
       if (report.id) {
         this.memoTextService.getForReportId(report.id).then((memoTextList) => {
           if (memoTextList && memoTextList.length > 0) {
@@ -73,7 +73,7 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
       ...this.assignedMemoText,
       ...SchemaUtils.getFormValues(this.form, textSchema, this.formProperties),
     });
-    payload.report_id = this.activeReportSignal().id;
+    payload.report_id = this.activeReport().id;
 
     if (this.assignedMemoText.id) {
       await this.memoTextService.update(payload, this.formProperties);
