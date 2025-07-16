@@ -82,16 +82,16 @@ describe('Manage reports', () => {
     cy.get('app-error-messages[data-cy="coverage_through_date-error"]').should('contain', errorMessage);
   });
 
-  xit('Create report with previous existing report types disabled', () => {
-    // Create report #1
-    ReportListPage.createF3X();
-    ReportListPage.goToPage();
-    // Start second report and check to see if report code disabled
-    F3xCreateReportPage.coverageCall();
-    ReportListPage.clickCreateAndSelectForm('F3X');
-    F3xCreateReportPage.waitForCoverage();
-    cy.get('label[for="12G"]').should('have.class', 'p-disabled');
-  });
+  // it('Create report with previous existing report types disabled', () => {
+  //   // Create report #1
+  //   ReportListPage.createF3X();
+  //   ReportListPage.goToPage();
+  //   // Start second report and check to see if report code disabled
+  //   F3xCreateReportPage.coverageCall();
+  //   ReportListPage.clickCreateAndSelectForm('F3X');
+  //   F3xCreateReportPage.waitForCoverage();
+  //   cy.get('label[for="12G"]').should('have.class', 'p-disabled');
+  // });
 
   it('Create report and save', () => {
     ReportListPage.createF3X();
@@ -113,11 +113,11 @@ describe('Manage reports', () => {
     cy.get('[id="text4000"]').should('have.value', memoText);
   });
 
-  xit('Confirm report information', () => {
-    ReportListPage.createF3X();
-  });
+  // it('Confirm report information', () => {
+  //   ReportListPage.createF3X();
+  // });
 
-  xit('Submit a report', () => {
-    ReportListPage.createF3X();
-  });
+  // it('Submit a report', () => {
+  //   ReportListPage.createF3X();
+  // });
 });

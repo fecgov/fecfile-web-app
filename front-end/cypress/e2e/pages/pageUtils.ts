@@ -31,14 +31,13 @@ export class PageUtils {
   }
 
   static pickDay(day: string) {
-    cy.get('@calendarElement')
-      .find('td')
-      .find('span')
-      .not('.p-disabled')
-      .parent()
-      .contains(day)
-
-      .click();
+    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
+    cy.get('@calendarElement').then(($calendar) => {
+      const daySpan = $calendar.find(`td span:not(.p-disabled):contains(day)`);
+      if (daySpan.length > 0) {
+        cy.wrap(daySpan.parent()).click();
+      }
+    });
   }
 
   static pickMonth(month: number) {
