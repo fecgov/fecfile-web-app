@@ -6,6 +6,7 @@
 */
 
 import { safeType, overwrite } from './commands';
+import 'reflect-metadata';
 Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
 

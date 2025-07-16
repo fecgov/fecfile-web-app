@@ -1,3 +1,23 @@
+import { MockContact } from './library/contacts';
+import { F3X } from './library/reports';
+
+export function makeF3x(f3x: F3X, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI(
+    'POST',
+    'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+    f3x,
+    callback,
+  );
+}
+
+export function makeContact(contact: MockContact, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', contact, callback);
+}
+
+export function makeTransaction(transaction: any, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction, callback);
+}
+
 export function makeRequestToAPI(
   method: string,
   url: string,

@@ -4,7 +4,7 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { F3XSetup, Setup } from './f3x-setup';
-import { makeRequestToAPI } from '../requests/methods';
+import { makeRequestToAPI, makeTransaction } from '../requests/methods';
 import { F3X_Q3 } from '../requests/library/reports';
 import {
   Authorizor,
@@ -79,7 +79,7 @@ function setupLoanFromBank(setup: Setup) {
 
     apiCalls.push(
       new Cypress.Promise((resolve) => {
-        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', loanFromBank);
+        makeTransaction(loanFromBank);
         resolve();
       }),
     );
