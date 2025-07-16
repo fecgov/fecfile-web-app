@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormGroup } from '@angular/forms';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
@@ -161,7 +162,7 @@ export class TransactionFormUtils {
   // include or change with the amount value of the child transaction.
   private static async handleShowCalendarYTD(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup<any>,
     transaction: Transaction,
     templateMap: TransactionTemplateMapType,
   ) {
@@ -318,7 +319,6 @@ export class TransactionFormUtils {
    * @param form
    * @param formValues
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static addExtraFormFields(transaction: Transaction, form: FormGroup, formValues: any) {
     transaction.transactionType?.formFields.forEach((field) => {
       if (!(field in formValues)) {
@@ -335,7 +335,6 @@ export class TransactionFormUtils {
    * @param transaction
    * @param formValues
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static removeUnsavedFormFields(transaction: Transaction, formValues: any) {
     transaction.getFieldsNotToSave().forEach((field: string) => delete formValues[field]);
     return formValues;
@@ -389,7 +388,7 @@ export class TransactionFormUtils {
   }
 
   // prettier-ignore
-  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) {
     const text = form.get('text4000')?.value;
     if (text && text.length > 0) {
       const memo_text = MemoText.fromJSON({
@@ -420,7 +419,7 @@ export class TransactionFormUtils {
 
   static handleShowAggregateValueChanges(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup<any>,
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
@@ -443,7 +442,6 @@ export class TransactionFormUtils {
           // existing transaction would not emit the date.
           startWith<Date>(form.get(templateMap.date)?.value),
           combineLatestWith(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (form.get(templateMap.amount)?.valueChanges as Observable<any>).pipe(
               startWith(form.get(templateMap.amount)?.value),
             ),
