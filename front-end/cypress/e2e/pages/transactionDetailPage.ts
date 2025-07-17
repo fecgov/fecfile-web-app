@@ -1,4 +1,3 @@
-import { ContactFormData } from '../models/ContactFormModel';
 import {
   ContributionFormData,
   DisbursementFormData,
@@ -40,7 +39,7 @@ export class TransactionDetailPage {
 
   static enterSheduleFormDataForVoidExpenditure(
     formData: DisbursementFormData,
-    contactData: ContactFormData,
+    contactData: { contact_type: string; last_name: string },
     readOnlyAmount = false,
     alias = '',
     dateSigned = 'treasurer_date_signed',

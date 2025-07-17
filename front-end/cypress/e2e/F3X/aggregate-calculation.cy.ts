@@ -277,7 +277,7 @@ describe('Tests transaction form aggregate calculation', () => {
     F3XSetup({ candidate: true, report: f3x_report_data });
 
     // Create the first Independent Expenditure
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualFormContactData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
@@ -311,7 +311,7 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.contains('Transactions in this report').should('exist');
 
     // Create the second Independent Expenditure
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualTwoFormContactData.contact_type, '');
     cy.contains('LOOKUP').should('exist');
@@ -345,7 +345,7 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.contains('Transactions in this report').should('exist');
 
     // Create the third Independent Expenditure
-    StartTransaction.Disbursements().Independent().IndependentExpenditure();
+    StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualFormContactData.contact_type, '');
     cy.contains('LOOKUP').should('exist');

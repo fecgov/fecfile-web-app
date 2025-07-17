@@ -21,7 +21,7 @@ export class LoanInfoInputComponent extends BaseInputComponent implements OnInit
     // It is a calculated field and not saved to the database
     const paymentControl = this.form.get(this.templateMap.payment_to_date);
     if (paymentControl) {
-      if (!this.transaction?.id || !paymentControl.value) {
+      if (!this.transaction()?.id || !paymentControl.value) {
         paymentControl.setValue(0);
       }
     }

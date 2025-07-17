@@ -1,6 +1,6 @@
 import { PageUtils } from '../../../pages/pageUtils';
 import { Receipts } from './receipts';
-import { Disbursements, Independent } from './disbursements';
+import { Disbursements, Contributions } from './disbursements';
 import { Loans } from './loans';
 import { Debts } from './debts';
 
@@ -18,7 +18,7 @@ export class StartTransaction {
   // Used in Form 24 Reports
   static IndependentExpenditures() {
     PageUtils.clickSidebarItem('Add an independent expenditure');
-    return Independent;
+    return Contributions;
   }
 
   static Loans() {
