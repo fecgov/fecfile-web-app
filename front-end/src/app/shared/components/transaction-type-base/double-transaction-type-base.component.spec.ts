@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -20,81 +20,47 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { TransactionType } from '../../models/transaction-type.model';
-import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
+import { Component, viewChild } from '@angular/core';
+import { Transaction } from 'app/shared/models';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
-  override formProperties: string[] = [
-    'entity_type',
-    'contributor_organization_name',
-    'contributor_last_name',
-    'contributor_first_name',
-    'contributor_middle_name',
-    'contributor_prefix',
-    'contributor_suffix',
-    'contributor_street_1',
-    'contributor_street_2',
-    'contributor_city',
-    'contributor_state',
-    'contributor_zip',
-    'contributor_employer',
-    'contributor_occupation',
-    'contribution_date',
-    'contribution_amount',
-    'contribution_aggregate',
-    'contribution_purpose_descrip',
-    'memo_code',
-    'text4000',
-  ];
-  override childFormProperties: string[] = [
-    'entity_type',
-    'contributor_organization_name',
-    'contributor_last_name',
-    'contributor_first_name',
-    'contributor_middle_name',
-    'contributor_prefix',
-    'contributor_suffix',
-    'contributor_street_1',
-    'contributor_street_2',
-    'contributor_city',
-    'contributor_state',
-    'contributor_zip',
-    'contributor_employer',
-    'contributor_occupation',
-    'contribution_date',
-    'contribution_amount',
-    'contribution_aggregate',
-    'contribution_purpose_descrip',
-    'memo_code',
-    'text4000',
-  ];
-
-  override ngOnInit(): void {
-    super.ngOnInit();
-  }
+@Component({
+  imports: [DoubleTransactionDetailComponent],
+  standalone: true,
+  template: `<app-double-transaction-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(DoubleTransactionDetailComponent);
+  transaction?: Transaction;
 }
 
 describe('DoubleTransactionTypeBaseComponent', () => {
-  let component: TestDoubleTransactionTypeBaseComponent;
-  let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
-  let testTransaction: SchATransaction;
+  let component: DoubleTransactionDetailComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
   let reportService: ReportService;
   let testRouter: Router;
+  let testTransaction: Transaction;
 
   beforeAll(async () => {
     await import(`fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARKS.validator`);
     await import(`fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS.validator`);
     await import(`fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_MEMO.validator`);
     await import(`fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RECEIPT.validator`);
+    await import(`fecfile-validate/fecfile_validate_js/dist/Contact_Committee.validator`);
+    await import(`fecfile-validate/fecfile_validate_js/dist/Text.validator`);
   });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestDoubleTransactionTypeBaseComponent],
+      imports: [DoubleTransactionDetailComponent],
       providers: [
+        provideAnimationsAsync(),
         provideMockStore(testMockStore),
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -114,27 +80,29 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   beforeEach(fakeAsync(() => {
-    testRouter = TestBed.inject(Router);
+    const contact = new Contact();
+    contact.name = 'Name';
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    testTransaction.id = 'ABC';
+    testTransaction.contact_1 = contact;
     testTransaction.report_ids = ['123'];
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
+
+    testRouter = TestBed.inject(Router);
+    transactionService = TestBed.inject(TransactionService);
     reportService = TestBed.inject(ReportService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
-    transactionService = TestBed.inject(TransactionService);
 
-    fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
-    component = fixture.componentInstance;
-    component.transaction = testTransaction;
-    component.childTransaction = testTransaction;
-    tick(100);
-    flush();
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    host.transaction = testTransaction;
+    component = host.component();
+    fixture.detectChanges();
   }));
 
   it('should create', () => {
@@ -180,22 +148,18 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it("should set the child transaction's contact when its shared with the parent", () => {
-    component.transaction = testTransaction;
-    component.childTransaction = testTransaction.children?.[0] as SchATransaction;
-    if (component.childTransaction.transactionType) {
-      component.childTransaction.transactionType.useParentContact = true;
-    }
+    host.transaction!.children[0].transactionType.useParentContact = true;
 
     const contact = new Contact();
     contact.name = 'Name';
-    component.transaction.contact_1 = contact;
+    host.transaction!.contact_1 = contact;
 
     const selectContact: SelectItem<Contact> = {
       value: contact,
     };
     fixture.detectChanges();
     component.updateFormWithPrimaryContact(selectContact);
-    expect(component.childTransaction.contact_1?.name).toEqual('Name');
+    expect(component.childTransaction?.contact_1?.name).toEqual('Name');
   });
 
   xit("should auto-generate the child transaction's purpose description", () => {
@@ -204,7 +168,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     ) as SchATransaction;
     trans.entity_type = ContactTypes.INDIVIDUAL;
     const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
-    component.transaction = trans;
+    host.transaction = trans;
     spyOn(component, 'getChildTransaction').and.callFake(() => {
       childTransaction.parent_transaction = component.transaction;
       return childTransaction;
@@ -221,13 +185,13 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('should push changes in the parent to the child for inherited fields', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
-    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    host.transaction.children = [getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED)];
     spyOn(component, 'getChildTransaction').and.returnValue(
       getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED),
     );
     component.ngOnInit();
-    expect(component.childTransaction.transactionType?.getInheritedFields(component.childTransaction)).toContain(
+    expect(component.childTransaction?.transactionType?.getInheritedFields(component.childTransaction)).toContain(
       'amount',
     );
     component.childForm.get(component.childTemplateMap.amount)?.setValue(0);

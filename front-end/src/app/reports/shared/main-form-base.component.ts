@@ -65,7 +65,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     this.router.navigateByUrl('/reports');
   }
 
-  public async save(jump: 'continue' | undefined = undefined) {
+  public async save(jump: 'continue' | void) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
 

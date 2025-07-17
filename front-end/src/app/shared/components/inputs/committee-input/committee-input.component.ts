@@ -18,7 +18,7 @@ export class CommitteeInputComponent extends BaseInputComponent implements OnIni
   @Input() tertiaryContact = false;
 
   ngOnInit(): void {
-    if (this.transaction?.transactionType?.synchronizeOrgComNameValues) {
+    if (this.transactionType()?.synchronizeOrgComNameValues) {
       this.form
         .get(this.templateMap.organization_name)
         ?.valueChanges.pipe(takeUntil(this.destroy$))

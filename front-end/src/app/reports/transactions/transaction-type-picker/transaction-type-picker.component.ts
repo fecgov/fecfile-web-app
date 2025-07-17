@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, model, Signal } from '@angular/core';
+import { Component, computed, effect, inject, model, Signal, viewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -20,11 +20,12 @@ import { ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from 'app/s
 import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { AccordionModule } from 'primeng/accordion';
+import { Accordion, AccordionModule } from 'primeng/accordion';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
 import { environment } from '../../../../environments/environment';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
+import { scrollToTop } from 'app/shared/utils/form.utils';
 
 type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
@@ -38,6 +39,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
   private readonly titleService = inject(Title);
+  private readonly accordion = viewChild.required(Accordion);
 
   readonly transactionTypeLabels: LabelList = [
     ...ScheduleATransactionTypeLabels,
@@ -105,6 +107,11 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
     });
     effect(() => {
       if (this.params$() || this.queryParams$()) this.active.set(-1);
+    });
+
+    effect(() => {
+      this.accordion().value();
+      scrollToTop();
     });
   }
 

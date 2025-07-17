@@ -50,7 +50,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   addValidators() {
     // Add the date range validation check to the DATE INCURRED input
-    if (!isPulledForwardLoan(this.transaction) && !isPulledForwardLoan(this.transaction?.parent_transaction)) {
+    if (!isPulledForwardLoan(this.transaction()) && !isPulledForwardLoan(this.transaction()?.parent_transaction)) {
       this.store
         .select(selectActiveReport)
         .pipe(take(1))

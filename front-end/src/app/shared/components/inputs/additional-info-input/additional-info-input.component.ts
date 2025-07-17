@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, computed, OnInit, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Contact } from 'app/shared/models';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -19,25 +19,23 @@ import { DesignatedSubordinateInputComponent } from '../designated-subordinate-i
   imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule, DesignatedSubordinateInputComponent],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
-  @Output() designatingCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() designatingCommitteeClear = new EventEmitter<void>();
-  @Output() subordinateCommitteeSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() subordinateCommitteeClear = new EventEmitter<void>();
+  readonly designatingCommitteeSelect = output<SelectItem<Contact>>();
+  readonly designatingCommitteeClear = output<void>();
+  readonly subordinateCommitteeSelect = output<SelectItem<Contact>>();
+  readonly subordinateCommitteeClear = output<void>();
 
-  categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
+  readonly categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
+  readonly purposeDescriptionPrefix = computed(() => this.transactionType()?.purposeDescriptionPrefix);
 
   ngOnInit(): void {
     SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
     this.form.updateValueAndValidity();
-
-    if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
-      this.initPrefix(
-        this.templateMap.purpose_description,
-        this.transaction?.transactionType?.purposeDescriptionPrefix,
-      );
+    const purposeDescriptionPrefix = this.purposeDescriptionPrefix();
+    if (purposeDescriptionPrefix) {
+      this.initPrefix(this.templateMap.purpose_description, purposeDescriptionPrefix);
     }
 
-    const text_prefix = this.transaction?.memo_text?.text_prefix ?? this.transaction?.transactionType?.memoTextPrefix;
+    const text_prefix = this.transaction()?.memo_text?.text_prefix ?? this.transactionType()?.memoTextPrefix;
 
     if (text_prefix && text_prefix.length > 0) {
       this.initPrefix(this.templateMap.text4000, text_prefix + ' ');
@@ -45,18 +43,16 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
 
     // If this transaction type has a purpose description prefix, add a validator to the form control
     // to set a required error if only the prefix is present
-    if (this.transaction?.transactionType?.purposeDescriptionPrefix) {
+    if (purposeDescriptionPrefix) {
       this.form
         .get(this.templateMap.purpose_description)
-        ?.addValidators((control) =>
-          control.value === this.transaction?.transactionType?.purposeDescriptionPrefix ? { required: true } : null,
-        );
+        ?.addValidators((control) => (control.value === purposeDescriptionPrefix ? { required: true } : null));
     }
   }
 
   isDescriptionSystemGenerated(): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return this.transaction?.transactionType?.generatePurposeDescription !== undefined;
+    return this.transactionType()?.generatePurposeDescription !== undefined;
   }
 
   initPrefix(field: string, prefix: string) {

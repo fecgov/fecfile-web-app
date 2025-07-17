@@ -209,7 +209,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit, Af
     this.store.dispatch(singleClickEnableAction());
   }
 
-  public async save(jump: 'continue' | undefined = undefined) {
+  public async save(jump: 'continue' | void) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {

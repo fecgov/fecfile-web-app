@@ -53,7 +53,6 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
         MessageService,
         ConfirmationService,
         FormBuilder,
-        provideMockStore(testMockStore),
         FecDatePipe,
       ],
     }).compileComponents();

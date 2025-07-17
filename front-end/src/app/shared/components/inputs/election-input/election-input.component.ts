@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
@@ -15,9 +15,9 @@ import { InputText } from 'primeng/inputtext';
   imports: [ReactiveFormsModule, Select, PrimeTemplate, ErrorMessagesComponent, InputText],
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
-  @Input() labelPrefix = '';
+  readonly labelPrefix = computed(() => this.transactionType()?.electionLabelPrefix ?? '');
 
-  electionTypeOptions = [
+  readonly electionTypeOptions = [
     { label: 'Primary (P)', value: 'P' },
     { label: 'General (G)', value: 'G' },
     { label: 'Convention (C)', value: 'C' },
@@ -28,15 +28,11 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   ];
 
   ngOnInit(): void {
-    if (this.transaction?.transactionType.electionLabelPrefix) {
-      this.labelPrefix = this.transaction?.transactionType.electionLabelPrefix;
-    }
-
     // Get inital values for election type and year for additional form inputs
 
     const election_code = this.form.get('election_code');
-    const electionType = election_code?.value?.slice(0, 1) || '';
-    const electionYear = election_code?.value?.slice(1, 5) || '';
+    const electionType = election_code?.value?.slice(0, 1) ?? '';
+    const electionYear = election_code?.value?.slice(1, 5) ?? '';
 
     // Create two additional form controls that will join values to populate the composit election_code form control value
     this.form.addControl('electionType', new SubscriptionFormControl(electionType, Validators.required));
@@ -48,14 +44,15 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     if (election_code?.disabled) {
       this.form.get('electionType')?.disable();
       this.form.get('electionYear')?.disable();
-      if (!ReattRedesUtils.isReattRedes(this.transaction, [ReattRedesTypes.REDESIGNATION_FROM])) {
+      if (!ReattRedesUtils.isReattRedes(this.transaction(), [ReattRedesTypes.REDESIGNATION_FROM])) {
         this.form.disable();
       }
     }
 
     // Check for mandatory Field designation and disable if necessary
-    if (this.transaction && 'electionType' in this.transaction.transactionType.mandatoryFormValues) {
-      this.form.get('electionType')?.setValue(this.transaction.transactionType.mandatoryFormValues['electionType']);
+    const transaction = this.transaction();
+    if (transaction && 'electionType' in transaction.transactionType.mandatoryFormValues) {
+      this.form.get('electionType')?.setValue(transaction.transactionType.mandatoryFormValues['electionType']);
       this.form.get('electionType')?.disable();
     } else {
       this.form
@@ -65,8 +62,8 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
           this.updateElectionCode();
         });
     }
-    if (this.transaction && 'electionYear' in this.transaction.transactionType.mandatoryFormValues) {
-      this.form.get('electionYear')?.setValue(this.transaction.transactionType.mandatoryFormValues['electionYear']);
+    if (transaction && 'electionYear' in transaction.transactionType.mandatoryFormValues) {
+      this.form.get('electionYear')?.setValue(transaction.transactionType.mandatoryFormValues['electionYear']);
       this.form.get('electionYear')?.disable();
     } else {
       this.form

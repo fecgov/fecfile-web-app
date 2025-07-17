@@ -1,5 +1,5 @@
 <div [formGroup]="form">
-  @if (transaction?.transactionType?.hasDate()) {
+  @if (transactionType()?.hasDate()) {
     @if (templateMap['date2']) {
       <div class="grid">
         <div class="col-12">
@@ -15,9 +15,9 @@
             [fieldName]="templateMap['date2']"
             [form]="form"
             [formSubmitted]="formSubmitted"
-            [label]="transaction?.transactionType?.date2Label || ''"
+            [label]="transactionType()?.date2Label || ''"
             requiredErrorMessage="At least ONE date field must be entered."
-          ></app-calendar>
+          />
         </div>
       }
 
@@ -26,32 +26,28 @@
           [fieldName]="templateMap['date']"
           [form]="form"
           [formSubmitted]="formSubmitted"
-          [label]="transaction?.transactionType?.dateLabel || ''"
+          [label]="transactionType()?.dateLabel || ''"
           [showErrors]="!templateMap['date2']"
-        ></app-calendar>
+        />
       </div>
-      @if (activeReportSignal().report_type === reportTypes.F24) {
+      @if (isF24()) {
         <div class="col-4">
-          <app-linked-report-input [form]="form" [templateMap]="templateMap"></app-linked-report-input>
+          <app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction()" />
         </div>
       }
-      @if (transaction?.transactionType?.scheduleId === 'F') {
+      @if (transactionType()?.scheduleId === 'F') {
         <div class="col-4">
           <div class="field">
             <label for="general_election_year">GENERAL ELECTION YEAR</label>
             <input type="text" pInputText id="general_election_year" formControlName="general_election_year" />
-            <app-error-messages
-              [form]="form"
-              fieldName="general_election_year"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            <app-error-messages [form]="form" fieldName="general_election_year" [formSubmitted]="formSubmitted" />
           </div>
         </div>
       }
     </div>
   }
 
-  @if (transaction?.transactionType?.hasMemoCode() && !isDebtRepayment(transaction) && !isLoanRepayment(transaction)) {
+  @if (transactionType()?.hasMemoCode() && !isDebtRepayment() && !isLoanRepayment()) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -61,10 +57,10 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [overrideMemoItemHelpText]="memoItemHelpText"
-            [transaction]="transaction"
+            [transaction]="transaction()"
             checkboxLabel="MEMO ITEM"
             [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
-          ></app-memo-code>
+          />
         </div>
       </div>
     </div>
@@ -72,7 +68,7 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="amount">{{ transaction?.transactionType?.amountLabel }}</label>
+        <label for="amount">{{ transactionType()?.amountLabel }}</label>
         <app-input-number
           #amountInput
           inputId="amount"
@@ -80,7 +76,7 @@
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
           (inputEvent)="onInputAmount()"
-        ></app-input-number>
+        />
 
         <app-error-messages
           [form]="form"
@@ -88,46 +84,46 @@
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The amount can be 12 digits max"
-        ></app-error-messages>
+        />
       </div>
     </div>
     @if (showAggregate) {
       <div class="col-6">
         <div class="field">
-          <label for="aggregate">{{ transaction?.transactionType?.aggregateLabel }}</label>
+          <label for="aggregate">{{ transactionType()?.aggregateLabel }}</label>
           <app-input-number
             inputId="aggregate"
             [formControlName]="templateMap['aggregate']"
             [readonly]="true"
             inputStyleClass="readonly"
-          ></app-input-number>
+          />
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['aggregate']"
             [formSubmitted]="formSubmitted"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The aggregate can be 12 digits max"
-          ></app-error-messages>
+          />
         </div>
       </div>
     }
     @if (showCalendarYTD) {
       <div class="col-6">
         <div class="field">
-          <label for="calendar_ytd">{{ transaction?.transactionType?.calendarYTDLabel }}</label>
+          <label for="calendar_ytd">{{ transactionType()?.calendarYTDLabel }}</label>
           <app-input-number
             inputId="calendar_ytd"
             [formControlName]="templateMap['calendar_ytd']"
             [readonly]="true"
             inputStyleClass="readonly"
-          ></app-input-number>
+          />
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['calendar_ytd']"
             [formSubmitted]="formSubmitted"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The calendar year-to-date can be 12 digits max"
-          ></app-error-messages>
+          />
         </div>
       </div>
     }
@@ -140,14 +136,14 @@
             [formControlName]="templateMap['aggregate_general_elec_expended']"
             [readonly]="true"
             inputStyleClass="readonly"
-          ></app-input-number>
+          />
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['aggregate_general_elec_expended']"
             [formSubmitted]="formSubmitted"
             patternErrorMessage="This field must be a number"
             maxLengthErrorMessage="The aggregate can be 12 digits max"
-          ></app-error-messages>
+          />
         </div>
       </div>
     }
