@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import { ReportListPage } from '../pages/reportListPage';
 import { F24Setup } from '../F24/f24-setup';
 import { ContactListPage } from '../pages/contactListPage';
+import { F24_24 } from '../requests/library/reports';
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -80,8 +81,8 @@ describe('Disbursements', () => {
   });
 
   it('should be able to link an Independent Expenditure to a Form 24', () => {
-    F24Setup({ individual: true, candidate: true });
-    F3XSetup();
+    F24Setup();
+    F3XSetup({ individual: true, candidate: true });
     StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
@@ -117,7 +118,7 @@ describe('Disbursements', () => {
     PageUtils.clickSidebarItem('Manage your transactions');
 
     PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
-    PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '#1', '');
+    PageUtils.dropdownSetValue('[data-cy="select-form-24"]', F24_24.name);
     PageUtils.clickButton('Confirm');
 
     ReportListPage.editReport('FORM 24');
