@@ -5,7 +5,7 @@ import {
   defaultScheduleFormData as defaultTransactionFormData,
   DisbursementFormData,
 } from '../models/TransactionFormModel';
-import { f3ReportId$, F3XSetup } from '../F3X/f3x-setup';
+import { f3ReportId$, NewF3XSetup } from '../F3X/f3x-setup';
 import { StartTransaction } from '../F3X/utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
 import { F24Setup } from './f24-setup';
@@ -34,7 +34,7 @@ describe('Form 24 Independent Expenditures', () => {
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
     F24Setup();
-    F3XSetup({ individual: true, candidate: true });
+    NewF3XSetup({ individual: true, candidate: true });
 
     ReportListPage.editReport('FORM 24');
     StartTransaction.IndependentExpenditures().IndependentExpenditure();
@@ -74,7 +74,7 @@ describe('Form 24 Independent Expenditures', () => {
       F3X_Q1,
     );
     F24Setup();
-    F3XSetup({ individual: true, candidate: true });
+    NewF3XSetup({ individual: true, candidate: true });
 
     combineLatest([
       Individual_A_A$.pipe(filter((value) => value !== undefined)),
