@@ -1,5 +1,34 @@
 import { BehaviorSubject } from 'rxjs';
 
+export enum ContactTypes {
+  CANDIDATE = 'CAN',
+  COMMITTEE = 'COM',
+  INDIVIDUAL = 'IND',
+  ORGANIZATION = 'ORG',
+}
+
+export interface MockContact {
+  type: ContactTypes;
+  committee_id?: string;
+  name?: string;
+  last_name?: string;
+  first_name?: string;
+  middle_name?: string | null;
+  prefix?: string | null;
+  suffix?: string | null;
+  candidate_id?: string;
+  candidate_office?: string;
+  candidate_state?: string | null;
+  candidate_district?: string | null;
+  street_1: string;
+  street_2: string | null;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  telephone: string | null;
+}
+
 const address_fields = {
   street_1: '1234 Test Ln',
   street_2: null,
@@ -154,14 +183,14 @@ export const Committee_B = {
 };
 
 export const Organization_A$ = new BehaviorSubject<any>(undefined);
-export const Organization_A = {
-  type: 'ORG',
+export const Organization_A: MockContact = {
+  type: ContactTypes.ORGANIZATION,
   name: 'Organization A',
   ...address_fields,
 };
 
-export const Organization_B = {
-  type: 'ORG',
+export const Organization_B: MockContact = {
+  type: ContactTypes.ORGANIZATION,
   name: 'Organization B',
   ...address_fields,
 };
