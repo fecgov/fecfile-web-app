@@ -26,19 +26,23 @@ export class PageUtils {
 
     PageUtils.pickYear(dateObj.getFullYear());
     PageUtils.pickMonth(dateObj.getMonth());
+
     PageUtils.pickDay(dateObj.getDate().toString());
+
     cy.wait(100);
   }
 
   static pickDay(day: string) {
+    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
     cy.get('@calendarElement')
       .find('td')
       .find('span')
       .not('.p-disabled')
       .parent()
       .contains(day)
-
-      .click();
+      .then(($day) => {
+        cy.wrap($day.parent()).click();
+      });
   }
 
   static pickMonth(month: number) {
@@ -66,6 +70,7 @@ export class PageUtils {
     }
     cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
+
   static clickSidebarSection(section: string) {
     cy.get('p-panelmenu').contains(section).parent().as('section');
     cy.get('@section').click();
@@ -175,10 +180,7 @@ export class PageUtils {
 
   static switchCommittee(committeeId: string) {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
-    const alias = PageUtils.getAlias('');
-    cy.visit('/reports');
-    cy.get('#navbarProfileDropdownMenuLink').click();
-    cy.get(alias).find('.p-popover').contains('Switch Committees').click();
+    cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
     cy.wait(1000);
