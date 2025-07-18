@@ -54,7 +54,14 @@ export class PageUtils {
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    cy.get('body').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.wait(100);
+    cy.get('@calendarElement').then(($calendarElement) => {
+      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
+        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
+      }
+    });
+    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
 
     const decadeStart: number = currentYear - (currentYear % 10);
     const decadeEnd: number = decadeStart + 9;
