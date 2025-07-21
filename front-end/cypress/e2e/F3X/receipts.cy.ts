@@ -33,7 +33,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: defaultContactFormData });
     StartTransaction.Receipts().Individual().IndividualReceipt();
 
     // Select the contact from the contact lookup
@@ -110,7 +110,7 @@ describe('Receipt Transactions', () => {
       ...{ purpose_description: '', category_code: '' },
     };
     ContactListPage.createOrganization(formContactData);
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: defaultContactFormData });
     StartTransaction.Receipts().Individual().Partnership();
     PageUtils.searchBoxInput(formContactData.name);
 
@@ -560,7 +560,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Committee Fields Display Properly', () => {
-    F3XSetup({ committee: true });
+    F3XSetup({ committee: committeeFormData });
     StartTransaction.Receipts().RegisteredFilers().PAC();
     cy.contains('Contact').should('exist');
     cy.get('#contact_1_lookup').find('#searchBox').safeType(committeeFormData.name);

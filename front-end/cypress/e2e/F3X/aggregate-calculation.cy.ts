@@ -267,7 +267,7 @@ describe('Tests transaction form aggregate calculation', () => {
     const f3x_report_data = {
       ...defaultForm3XData,
     };
-    F3XSetup({ candidate: true, report: f3x_report_data });
+    F3XSetup({ candidate: candidateFormData, report: f3x_report_data });
 
     // Create the first Independent Expenditure
     StartTransaction.Disbursements().Contributions().IndependentExpenditure();

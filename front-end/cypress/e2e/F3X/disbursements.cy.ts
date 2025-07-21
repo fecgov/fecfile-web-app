@@ -36,7 +36,7 @@ describe('Disbursements', () => {
   });
 
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: individualContactFormData });
     setCommitteeToPTY();
     StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
 
@@ -57,7 +57,7 @@ describe('Disbursements', () => {
   });
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
-    F3XSetup({ organization: true, candidate: true });
+    F3XSetup({ organization: organizationFormData, candidate: candidateFormData });
     StartTransaction.Disbursements().Contributions().IndependentExpenditureVoid();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', organizationFormData.contact_type, '');
@@ -82,7 +82,7 @@ describe('Disbursements', () => {
 
   it('should be able to link an Independent Expenditure to a Form 24', () => {
     F24Setup();
-    F3XSetup({ individual: true, candidate: true });
+    F3XSetup({ individual: individualContactFormData, candidate: candidateFormData });
     StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
     PageUtils.dropdownSetValue('#entity_type_dropdown', individualContactFormData.contact_type, '');
@@ -170,7 +170,7 @@ describe('Disbursements', () => {
   });
 
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    F3XSetup({ organization: true });
+    F3XSetup({ organization: organizationFormData });
     setCommitteeToPTY();
     StartTransaction.Disbursements().Federal().CreditCardPayment();
 

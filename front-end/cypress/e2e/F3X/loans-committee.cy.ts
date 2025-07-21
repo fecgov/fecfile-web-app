@@ -14,7 +14,7 @@ const formData = {
 };
 
 function setupLoanByCommittee() {
-  F3XSetup({ committee: true, individual: true });
+  F3XSetup({ committee: committeeFormData, individual: individualContactFormData });
   StartTransaction.Loans().ByCommittee();
   // Search for created committee and enter load data, then add load guarantor
   PageUtils.urlCheck('LOAN_BY_COMMITTEE');
