@@ -3,7 +3,7 @@ import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { candidateFormData, defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
-import { F3XSetup } from './f3x-setup';
+import { F3XSetup, NewF3XSetup } from './f3x-setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import {
@@ -15,6 +15,7 @@ import { makeRequestToAPI } from '../requests/methods';
 import { F3X_Q2 } from '../requests/library/reports';
 import { buildScheduleA } from '../requests/library/transactions';
 import { Individual_A_A, Individual_B_B } from '../requests/library/contacts';
+import { BehaviorSubject } from 'rxjs';
 
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
@@ -194,6 +195,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('leapfrog and contact change', () => {
+    const transCreated = new BehaviorSubject(0);
     cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
     makeRequestToAPI(
       'POST',
@@ -203,36 +205,45 @@ describe('Tests transaction form aggregate calculation', () => {
         const report_id: string = response.body.id;
         makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
           const contact_A_A = response.body;
-          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_B_B, (response) => {
             const individual2 = response.body;
             const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', contact_A_A, report_id);
             const transaction_b = buildScheduleA('INDIVIDUAL_RECEIPT', 25.0, '2025-04-16', contact_A_A, report_id);
             const transaction_c = buildScheduleA('INDIVIDUAL_RECEIPT', 40.0, '2025-04-20', contact_A_A, report_id);
-            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
-            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {});
-            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_c, (response) => {
-              cy.visit(`/reports/transactions/report/${report_id}/list`);
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) =>
+              transCreated.next(transCreated.getValue() + 1),
+            );
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) =>
+              transCreated.next(transCreated.getValue() + 1),
+            );
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_c, (response) =>
+              transCreated.next(transCreated.getValue() + 1),
+            );
+
+            transCreated.subscribe((value) => {
+              if (value === 3) {
+                cy.visit(`/reports/transactions/report/${report_id}/list`);
+
+                cy.contains('Transactions in this report').should('exist');
+                cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
+
+                // Tests moving the first transaction's date to be later than the second
+                TransactionDetailPage.getContact(individual2);
+                TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
+                cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+
+                cy.get('[id=aggregate]').should('have.value', '$200.01');
+                PageUtils.clickButton('Save');
+                cy.contains('Confirm').should('exist');
+                PageUtils.clickButton('Continue', '', true);
+
+                cy.contains('Transactions in this report').should('exist');
+                cy.get('.p-toast-close-button').click({ force: true });
+                cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
+                cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
+                cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
+              }
             });
-
-            cy.wait('@GetTransactionList');
-
-            cy.contains('Transactions in this report').should('exist');
-            cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
-
-            // Tests moving the first transaction's date to be later than the second
-            TransactionDetailPage.getContact(individual2);
-            TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
-            cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
-
-            cy.get('[id=aggregate]').should('have.value', '$200.01');
-            PageUtils.clickButton('Save');
-            cy.contains('Confirm').should('exist');
-            PageUtils.clickButton('Continue', '', true);
-
-            cy.contains('Transactions in this report').should('exist');
-            cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-            cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
-            cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
           });
         });
       },
