@@ -24,7 +24,7 @@ describe('F24MenuComponent', () => {
             redirectTo: '',
           },
         ]),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
       imports: [PanelMenuModule, BrowserAnimationsModule, F24MenuComponent],
     }).compileComponents();

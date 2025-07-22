@@ -15,7 +15,7 @@ describe('TransactionInputComponent', () => {
   let fixture: ComponentFixture<TransactionInputComponent>;
 
   const selectItem = {
-    value: testContact,
+    value: testContact(),
   };
 
   beforeEach(() => {
@@ -24,14 +24,14 @@ describe('TransactionInputComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         ConfirmationService,
         ReportService,
       ],
     });
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction;
+    component.transaction = testScheduleATransaction();
     component.transaction.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };

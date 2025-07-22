@@ -18,7 +18,7 @@ describe('NameInputComponent', () => {
 
     fixture = TestBed.createComponent(NameInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     component.form = new FormGroup(
       {
         contributor_last_name: new SubscriptionFormControl(''),

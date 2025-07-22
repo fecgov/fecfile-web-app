@@ -45,8 +45,8 @@ class TestHostComponent {
   });
 
   formSubmitted = false;
-  templateMap = testTemplateMap;
-  transaction: Transaction = testScheduleATransaction;
+  templateMap = testTemplateMap();
+  transaction: Transaction = testScheduleATransaction();
   component = viewChild.required(CandidateOfficeInputComponent);
 }
 
@@ -116,7 +116,7 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('adds subscription to election_code for Schedule E transactions', () => {
-    host.transaction = testIndependentExpenditure;
+    host.transaction = testIndependentExpenditure();
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -127,7 +127,7 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('updates state availability for SchE transactions in Presidential Primary elections', fakeAsync(() => {
-    host.transaction = testIndependentExpenditure;
+    host.transaction = testIndependentExpenditure();
     fixture.detectChanges();
     component.ngOnInit();
 

@@ -23,7 +23,7 @@ describe('NavigationControlComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ButtonModule, SelectModule, ReactiveFormsModule, NavigationControlComponent],
-      providers: [FormBuilder, provideMockStore(testMockStore)],
+      providers: [FormBuilder, provideMockStore(testMockStore())],
     }).compileComponents();
     store = TestBed.inject(Store);
 

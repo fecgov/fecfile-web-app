@@ -24,7 +24,7 @@ describe('LoginService', () => {
         provideHttpClientTesting(),
         ApiService,
         LoginService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     service = TestBed.inject(LoginService);
@@ -42,7 +42,7 @@ describe('LoginService', () => {
 
     const dispatchSpy = spyOn(store, 'dispatch');
 
-    service.userLoginData$ = of(testUserLoginData);
+    service.userLoginData$ = of(testUserLoginData());
     service.logOut();
     expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
   });

@@ -14,7 +14,7 @@ describe('ReportIsEditableGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore())],
     });
     guard = TestBed.inject(ReportIsEditableGuard);
   });

@@ -27,7 +27,7 @@ describe('loggedInGuard', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         LoginService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     loginService = TestBed.inject(LoginService);

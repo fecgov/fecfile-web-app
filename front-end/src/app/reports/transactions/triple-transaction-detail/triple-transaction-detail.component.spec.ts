@@ -51,7 +51,7 @@ describe('TripleTransactionDetailComponent', () => {
         TripleTransactionDetailComponent,
       ],
       providers: [
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
@@ -59,7 +59,6 @@ describe('TripleTransactionDetailComponent', () => {
         MessageService,
         ConfirmationService,
         FormBuilder,
-        provideMockStore(testMockStore),
         FecDatePipe,
       ],
     }).compileComponents();
@@ -69,7 +68,7 @@ describe('TripleTransactionDetailComponent', () => {
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = transaction;
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     component.ngOnInit();
   });
 

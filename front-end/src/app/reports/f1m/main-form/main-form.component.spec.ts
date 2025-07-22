@@ -40,7 +40,7 @@ describe('MainFormComponent', () => {
     },
     selectors: [
       { selector: selectActiveReport, value: testActiveReport },
-      { selector: selectCommitteeAccount, value: testCommitteeAccount },
+      { selector: selectCommitteeAccount, value: testCommitteeAccount() },
     ],
   };
 

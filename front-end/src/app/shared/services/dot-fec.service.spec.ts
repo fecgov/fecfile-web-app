@@ -57,7 +57,7 @@ describe('DotFecService', () => {
         provideHttpClientTesting(),
         DotFecService,
         ApiService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideRouter([]),
         { provide: Actions, useValue: actions$ },
         { provide: RendererFactory2, useClass: MockRendererFactory },
@@ -146,7 +146,7 @@ describe('DotFecService', () => {
   it('should clear downloads on committee change', waitForAsync(() => {
     service.downloads.set([download]);
     expect(service.downloads().length).toEqual(1);
-    service.store.dispatch(setCommitteeAccountDetailsAction({ payload: testCommitteeAccount }));
+    service.store.dispatch(setCommitteeAccountDetailsAction({ payload: testCommitteeAccount() }));
     setTimeout(() => {
       expect(service.downloads().length).toEqual(0);
     }, 0);

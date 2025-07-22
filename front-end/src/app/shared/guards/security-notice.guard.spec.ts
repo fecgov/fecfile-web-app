@@ -25,7 +25,7 @@ describe('securityNoticeGuard', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         LoginService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
   });

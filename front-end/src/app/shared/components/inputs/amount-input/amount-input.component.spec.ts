@@ -50,7 +50,7 @@ class TestHostComponent {
     { updateOn: 'blur' },
   );
   formSubmitted = false;
-  templateMap = testTemplateMap;
+  templateMap = testTemplateMap();
   transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
   contributionAmountReadOnly = false;
   memoHasOptional: Observable<boolean> = of(false);
@@ -78,7 +78,7 @@ describe('AmountInputComponent', () => {
         Tooltip,
         InputNumberComponent,
       ],
-      providers: [ConfirmationService, provideMockStore(testMockStore)],
+      providers: [ConfirmationService, provideMockStore(testMockStore())],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

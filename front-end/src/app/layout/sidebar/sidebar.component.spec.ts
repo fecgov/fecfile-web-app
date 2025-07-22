@@ -17,7 +17,12 @@ describe('SidebarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, MenuModule, PanelMenuModule, SidebarComponent, F3XMenuComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideMockStore(testMockStore()),
+      ],
     }).compileComponents();
   });
 
