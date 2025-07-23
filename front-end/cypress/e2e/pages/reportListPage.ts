@@ -34,19 +34,6 @@ export class ReportListPage {
     });
   }
 
-  //Deletes a single report by its ID
-  static deleteReport(reportID: string) {
-    cy.getCookie('csrftoken').then((cookie) => {
-      cy.request({
-        method: 'DELETE',
-        url: `http://localhost:8080/api/v1/reports/${reportID}/`,
-        headers: {
-          'x-csrftoken': cookie?.value,
-        },
-      });
-    });
-  }
-
   static createF3X(fd = defaultReportFormData) {
     ReportListPage.goToPage();
     F3xCreateReportPage.coverageCall();

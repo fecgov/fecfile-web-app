@@ -2,7 +2,7 @@ import { Initialize } from '../pages/loginPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { candidateFormData, committeeFormData } from '../models/ContactFormModel';
+import { candidateFormData, committeeFormData, ContactFormData } from '../models/ContactFormModel';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
 import {
@@ -10,15 +10,9 @@ import {
   defaultScheduleFormData as defaultTransactionFormData,
 } from '../models/TransactionFormModel';
 import { Contributions } from './utils/start-transaction/disbursements';
+import { ContactListPage } from '../pages/contactListPage';
 
 const APRIL_15 = 'APRIL 15';
-
-const contributionData: ContributionFormData = {
-  ...defaultTransactionFormData,
-  ...{
-    candidate: candidateFormData.candidate_id,
-  },
-};
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
@@ -30,14 +24,21 @@ const redesignationData: ContributionFormData = {
 };
 
 function CreateContribution() {
-  F3XSetup({ committee: true, candidate: true, report: reportFormDataApril });
+  const candidate = { ...candidateFormData };
+  const committee = { ...committeeFormData, first_name: undefined, last_name: undefined } as any as ContactFormData;
+  ContactListPage.createCandidate(candidate);
+  ContactListPage.createCommittee(committee);
+  F3XSetup({ report: reportFormDataApril });
+
+  const contributionData: ContributionFormData = {
+    ...defaultTransactionFormData,
+    ...{
+      candidate: candidate.candidate_id,
+    },
+  };
 
   StartTransaction.Disbursements().Contributions().ToCandidate();
-
-  cy.get('[id="searchBox"]').type(committeeFormData.name.slice(0, 3));
-  cy.contains(committeeFormData.name).should('exist');
-  cy.contains(committeeFormData.name).click();
-
+  TransactionDetailPage.getContact(committee);
   TransactionDetailPage.enterScheduleFormDataForContribution(contributionData, false, '', 'expenditure_date');
 
   PageUtils.clickButton('Save');

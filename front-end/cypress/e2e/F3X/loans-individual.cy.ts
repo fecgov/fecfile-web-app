@@ -20,7 +20,7 @@ const formData = {
 };
 
 function setupLoanReceivedFromIndividual() {
-  F3XSetup({ individual: true, committee: true });
+  F3XSetup({ individual: individualContactFormData, committee: committeeFormData });
   StartTransaction.Loans().Individual();
   PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
   PageUtils.searchBoxInput(individualContactFormData.last_name);
