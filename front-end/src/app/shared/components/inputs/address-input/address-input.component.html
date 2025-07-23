@@ -20,7 +20,7 @@
     </div>
     <div class="col-6">
       <div class="field">
-        <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+        <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
         <input
           type="text"
           pInputText
@@ -58,7 +58,7 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="state">STATE/PROVINCE</label>
+        <span id="state-label" class="span-label">STATE/PROVINCE</span>
         <p-select
           inputId="state"
           [formControlName]="stateFieldName"

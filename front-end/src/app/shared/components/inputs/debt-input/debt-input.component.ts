@@ -14,7 +14,7 @@ export class DebtInputComponent extends BaseInputComponent implements OnInit {
   ngOnInit(): void {
     // For new create transactions, the debt calculated amounts are initialized to 0
     // They a calculated fields and not saved to the database
-    if (!this.transaction?.id) {
+    if (!this.transaction()?.id) {
       this.form.get(this.templateMap.balance)?.setValue(0);
       this.form.get('payment_amount')?.setValue(0);
       this.form.get('balance_at_close')?.setValue(0);

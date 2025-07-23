@@ -13,16 +13,20 @@
           [readonly]="form.controls[templateMap['memo_code']].disabled"
           (click)="onMemoItemClick()"
         ></p-checkbox>
-        <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">{{
-          checkboxLabel
-        }}</label>
-        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText }}"></span>
+        <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">
+          {{ checkboxLabel() }}
+          @if (parenLabel()) {
+            <span class="paren-label">{{ parenLabel() }}</span>
+          }
+        </label>
+        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
       <div class="col-12">
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['memo_code']"
           [formSubmitted]="formSubmitted"
+          [patternErrorMessage]="'This is a required field.'"
         ></app-error-messages>
       </div>
     } @else {
@@ -31,20 +35,20 @@
           #memoCode
           inputId="memo_code"
           [formControlName]="templateMap['memo_code']"
-          [options]="memoCodeMapOptions"
+          [options]="memoCodeMapOptions()"
           optionLabel="label"
           optionValue="value"
         ></p-selectButton>
       </div>
       <div class="col-12">
         @if (memoControl.value) {
-          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText }}"></span>
+          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM
         }
         @if (memoControl.value !== undefined) {
-          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText }}"></span>
+          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
         }
       </div>
       <div class="col-12">
@@ -63,11 +67,11 @@
     </ng-template>
     <p id="out-of-date-dialog-text">
       <b>
-        {{ coverageDate | fecDate }}
+        {{ coverageDate() | fecDate }}
       </b>
       falls outside the report coverages dates of
-      <b> {{ report?.coverage_from_date | fecDate }}-{{ report?.coverage_through_date | fecDate }}</b
-      >. {{ coverageDateQuestion }} <br /><br />
+      <b> {{ coverageFromDate() | fecDate }}-{{ coverageThroughDate() | fecDate }}</b
+      >. {{ coverageDateQuestion() }} <br /><br />
       If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>
     <div class="grid">

@@ -4,6 +4,7 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import {
+  candidateFormData,
   ContactFormData,
   ContactType,
   createContact,
@@ -44,10 +45,10 @@ const reattributeData: ScheduleFormData = {
 const assignee: ContactFormData = createContact(ContactType.INDIVIDUAL);
 
 function CreateReceipt() {
-  F3XSetup({ individual: true, candidate: true, report: reportFormDataApril });
+  F3XSetup({ individual: individualContactFormData, candidate: candidateFormData, report: reportFormDataApril });
   StartTransaction.Receipts().Individual().IndividualReceipt();
 
-  cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
   cy.contains(individualContactFormData.last_name).should('exist');
   cy.contains(individualContactFormData.last_name).click();
   TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData), false, '', true, 'contribution_date');
@@ -67,7 +68,7 @@ function Reattribute(old = false) {
   }
   cy.wait(500);
 
-  cy.get('[id="searchBox"]').type(assignee.last_name.slice(0, 1));
+  cy.get('[id="searchBox"]').type(assignee.last_name.slice(0, 3));
   cy.contains(assignee.last_name).should('exist');
   cy.contains(assignee.last_name).click();
   TransactionDetailPage.enterScheduleFormData(

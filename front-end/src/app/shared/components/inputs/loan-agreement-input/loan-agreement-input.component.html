@@ -18,7 +18,7 @@
     [form]="form"
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
-    [transaction]="transaction"
+    [transaction]="transaction()"
   ></app-loan-terms-dates-input>
   <app-yes-no-radio-input
     [form]="form"
@@ -44,7 +44,8 @@
     [form]="form"
     [formSubmitted]="formSubmitted"
     controlName="line_of_credit"
-    label="Is there a line of credit? (OPTIONAL)"
+    label="Is there a line of credit? "
+    parenLabel="(OPTIONAL)"
     ariaLabelYes="There is a line of credit"
     ariaLabelNo="There is not a line of credit"
   ></app-yes-no-radio-input>
@@ -52,7 +53,9 @@
     <div class="grid">
       <div class="col-4">
         <div class="field">
-          <label for="credit_amount_this_draw">CREDIT AMOUNT THIS DRAW (OPTIONAL)</label>
+          <label for="credit_amount_this_draw"
+            >CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span></label
+          >
           <app-input-number
             inputId="credit_amount_this_draw"
             formControlName="credit_amount_this_draw"
@@ -111,8 +114,8 @@
   @if (showSecured) {
     <div class="grid">
       <div class="col-12">
-        <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
-        <div>
+        <div class="field">
+          <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
           <textarea
             id="desc_collateral"
             [rows]="5"
@@ -149,7 +152,8 @@
       [form]="form"
       [formSubmitted]="formSubmitted"
       controlName="perfected_interest"
-      label="Does the lender have a perfected security interest in it? (OPTIONAL)"
+      label="Does the lender have a perfected security interest in it? "
+      parenLabel="(OPTIONAL)"
       ariaLabelYes="Lender has a perfected security interest"
       ariaLabelNo="Lender does not have a perfected security interest"
     ></app-yes-no-radio-input>
@@ -167,8 +171,8 @@
   @if (showFutureIncome) {
     <div class="grid">
       <div class="col-12">
-        <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
-        <div>
+        <div class="field">
+          <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
           <textarea
             id="desc_specification_of_the_above"
             [rows]="5"
@@ -213,7 +217,7 @@
           <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
           <app-transaction-contact-lookup
             contactProperty="contact_2"
-            [transaction]="transaction"
+            [transaction]="transaction()"
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
@@ -248,13 +252,14 @@
   <h3>Basis of loan</h3>
   <div class="grid">
     <div class="col-12">
-      <p>
-        If neither of the types of collateral described above was pledged for this loan, or if the amount pledged does
-        not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
-        assures repayment.
-      </p>
-      <label for="basis_of_loan_description">DESCRIPTION (OPTIONAL)</label>
-      <div>
+      <div class="field">
+        <p>
+          If neither of the types of collateral described above was pledged for this loan, or if the amount pledged does
+          not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
+          assures repayment.
+        </p>
+        <label for="basis_of_loan_description">DESCRIPTION <span class="paren-label">(OPTIONAL)</span></label>
+
         <textarea
           id="basis_of_loan_description"
           [rows]="5"

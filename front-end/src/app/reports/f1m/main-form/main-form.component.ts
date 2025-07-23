@@ -257,7 +257,7 @@ export class MainFormComponent extends MainFormBaseComponent {
     return Object.assign(this.report, formValues);
   }
 
-  public override async save(jump: 'continue' | undefined = undefined): Promise<void> {
+  public override async save(jump: 'continue' | void): Promise<void> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {

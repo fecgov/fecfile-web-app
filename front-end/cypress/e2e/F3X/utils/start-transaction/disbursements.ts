@@ -11,11 +11,6 @@ export class Disbursements {
     return Federal;
   }
 
-  static Independent() {
-    PageUtils.clickAccordion('INDEPENDENT EXPENDITURES');
-    return Independent;
-  }
-
   static Other() {
     PageUtils.clickAccordion('OTHER EXPENDITURES');
     return Other;
@@ -24,9 +19,22 @@ export class Disbursements {
 
 export class Contributions {
   static readonly TO_CANDIDATE = 'Contribution to Candidate';
+  static readonly INDEPENDENT_EXPENDITURE = 'Independent Expenditure';
 
   static ToCandidate() {
-    PageUtils.clickLink('Contribution to Candidate');
+    PageUtils.clickLink(Contributions.TO_CANDIDATE);
+  }
+
+  static CoordinatedPartyExpenditure() {
+    PageUtils.clickLink('Coordinated Party Expenditure');
+  }
+
+  static IndependentExpenditureVoid() {
+    PageUtils.clickLink(`${Contributions.INDEPENDENT_EXPENDITURE} - Void`);
+  }
+
+  static IndependentExpenditure() {
+    PageUtils.clickLink(Contributions.INDEPENDENT_EXPENDITURE);
   }
 }
 
@@ -37,18 +45,6 @@ export class Federal {
 
   static CreditCardPayment() {
     PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-  }
-}
-
-export class Independent {
-  static readonly INDEPENDENT_EXPENDITURE = 'Independent Expenditure';
-
-  static IndependentExpenditureVoid() {
-    PageUtils.clickLink('Independent Expenditure - Void');
-  }
-
-  static IndependentExpenditure() {
-    PageUtils.clickLink(Independent.INDEPENDENT_EXPENDITURE);
   }
 }
 

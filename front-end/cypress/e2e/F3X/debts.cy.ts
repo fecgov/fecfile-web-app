@@ -42,7 +42,7 @@ describe('Debts', () => {
   }
 
   it('should test Debt Owed By Committee loan', () => {
-    setupDebtOwedByCommittee({ committee: true });
+    setupDebtOwedByCommittee({ committee: committeeFormData });
     PageUtils.urlCheck('/list');
     cy.contains('Debt Owed By Committee').should('exist');
 
@@ -55,7 +55,7 @@ describe('Debts', () => {
   });
 
   it('should test Owed To Committee loan', () => {
-    F3XSetup({ committee: true });
+    F3XSetup({ committee: committeeFormData });
     StartTransaction.Debts().ToCommittee();
 
     PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -75,9 +75,9 @@ describe('Debts', () => {
     cy.location('pathname').should('include', '/reports');
 
     setupDebtOwedByCommittee({
-      candidate: true,
-      organization: true,
-      committee: true,
+      candidate: candidateFormData,
+      organization: organizationFormData,
+      committee: committeeFormData,
     });
     PageUtils.urlCheck('/list');
     cy.contains('Debt Owed By Committee').should('exist');

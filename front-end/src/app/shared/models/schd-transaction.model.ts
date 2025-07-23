@@ -48,12 +48,6 @@ export class SchDTransaction extends Transaction {
   }
 }
 
-export enum ScheduleDTransactionGroups {
-  DEBTS = 'DEBTS',
-}
-
-export type ScheduleDTransactionGroupsType = ScheduleDTransactionGroups.DEBTS;
-
 export enum ScheduleDTransactionTypes {
   DEBT_OWED_BY_COMMITTEE = 'DEBT_OWED_BY_COMMITTEE',
   DEBT_OWED_TO_COMMITTEE = 'DEBT_OWED_TO_COMMITTEE',

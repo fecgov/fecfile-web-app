@@ -55,7 +55,7 @@ export class TransactionInputComponent implements OnInit {
   @Input() transaction?: Transaction;
   @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  @Input() memoCodeCheckboxLabel$?: Observable<string>;
+  @Input() memoHasOptional$?: Observable<boolean>;
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
   @Input() isSingle = false;
@@ -81,7 +81,7 @@ export class TransactionInputComponent implements OnInit {
       this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
-      throw new Error('FECfile: No transaction passed to TransactionInputComponent');
+      throw new Error('FECfile+: No transaction passed to TransactionInputComponent');
     }
 
     // If there are mandatory values for any form fields, populate the form field and make it read-only

@@ -36,13 +36,13 @@ describe('Receipt Transactions', () => {
 
   it('should recalculate after transaction created or updated', () => {
     // Create report and check summary calc runs
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: defaultContactFormData });
     ReviewReport.Summary();
     cy.get('img.fec-loader-image').should('exist');
 
     // Create transaction
     StartTransaction.Receipts().Individual().IndividualReceipt();
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 3));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click({ force: true });
     TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');

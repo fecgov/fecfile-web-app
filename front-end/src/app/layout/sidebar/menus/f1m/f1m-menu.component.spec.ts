@@ -53,8 +53,6 @@ describe('F1MMenuComponent', () => {
 
   xit('should set the sidebar state to REVIEW A REPORT', async () => {
     await router.navigateByUrl('edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-    const items = component.itemsSignal();
-    console.log(items);
     expect(component.itemsSignal()[1].expanded).toBeTrue();
   });
 });

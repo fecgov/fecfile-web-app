@@ -27,12 +27,21 @@
 
 @if (transaction?.contact_1) {
   @switch (entityType) {
-    @case (ContactTypes.ORGANIZATION || ContactTypes.COMMITTEE) {
+    @case (ContactTypes.ORGANIZATION) {
       <app-committee-input
         [form]="form"
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
-        [entityRole]="form.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
+        entityRole="ORGANIZATION"
+        [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+      ></app-committee-input>
+    }
+    @case (ContactTypes.COMMITTEE) {
+      <app-committee-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [templateMap]="templateMap"
+        entityRole="COMMITTEE"
         [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
       ></app-committee-input>
     }
@@ -66,8 +75,9 @@
       [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
       [showAggregate]="!!transaction?.transactionType?.showAggregate"
       [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
+      [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
       [transaction]="transaction"
-      [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
+      [memoHasOptional]="(memoHasOptional$ | async)!"
     ></app-amount-input>
   }
   @if (transaction?.transactionType?.hasDebtInput) {
@@ -170,16 +180,22 @@
     <app-section-header [isSingle]="isSingle" [text]="transactionType?.committeeCandidateHeader"></app-section-header>
     @if (transactionType?.contact3IsRequired) {
       <div class="candidate_committee_lookup">
-        <label for="contact_3">LOOKUP </label>
-        <app-transaction-contact-lookup
-          id="contact_3_lookup"
-          contactProperty="contact_3"
-          [transaction]="transaction"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [contactTypeOptions]="committeeContactTypeOptions"
-          (contactSelect)="updateFormWithTertiaryContact($event)"
-        ></app-transaction-contact-lookup>
+        <div class="grid">
+          <div class="col-12">
+            <div class="field">
+              <label for="contact_3">LOOKUP </label>
+              <app-transaction-contact-lookup
+                id="contact_3_lookup"
+                contactProperty="contact_3"
+                [transaction]="transaction"
+                [form]="form"
+                [formSubmitted]="formSubmitted"
+                [contactTypeOptions]="committeeContactTypeOptions"
+                (contactSelect)="updateFormWithTertiaryContact($event)"
+              ></app-transaction-contact-lookup>
+            </div>
+          </div>
+        </div>
         @if (transaction?.contact_3) {
           <app-committee-input
             [form]="form"
@@ -210,22 +226,26 @@
 
     @if (transaction?.transactionType?.hasCandidateInformation(form)) {
       @if (!transactionType?.hideContactLookup) {
-        <div class="candidate_committee_lookup">
-          <label for="contact_2"
-            >LOOKUP
-            @if (!transaction?.transactionType?.contact2IsRequired(form)) {
-              (OPTIONAL)
-            }
-          </label>
-          <app-transaction-contact-lookup
-            id="contact_2_lookup"
-            contactProperty="contact_2"
-            [transaction]="transaction"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            [contactTypeOptions]="candidateContactTypeOptions"
-            (contactSelect)="updateFormWithCandidateContact($event)"
-          ></app-transaction-contact-lookup>
+        <div class="grid candidate_committee_lookup">
+          <div class="col-12">
+            <div class="field">
+              <label for="contact_2"
+                >LOOKUP
+                @if (!transaction?.transactionType?.contact2IsRequired(form)) {
+                  <span class="paren-label">(OPTIONAL)</span>
+                }
+              </label>
+              <app-transaction-contact-lookup
+                id="contact_2_lookup"
+                contactProperty="contact_2"
+                [transaction]="transaction"
+                [form]="form"
+                [formSubmitted]="formSubmitted"
+                [contactTypeOptions]="candidateContactTypeOptions"
+                (contactSelect)="updateFormWithCandidateContact($event)"
+              ></app-transaction-contact-lookup>
+            </div>
+          </div>
         </div>
       }
       @if (transaction?.contact_2) {

@@ -34,7 +34,7 @@ describe('PAC_PAC_CONDUIT_EARMARK', () => {
     transaction.children = [childTransaction];
 
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Earmarked for Joe (Committee)');
+    expect(descrip).toBe('Earmarked for Joe');
   });
 
   it('#generatePurposeDescription() should not yield too long of a description', () => {
@@ -48,7 +48,7 @@ describe('PAC_PAC_CONDUIT_EARMARK', () => {
 
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Earmarked for Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesback ... (Committee)',
+      'Earmarked for Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesback Adilade Dour...',
     );
   });
 });

@@ -234,7 +234,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
       await expectAsync(
         component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction)),
-      ).toBeRejectedWithError('Fecfile: No transactions submitted for triple-entry transaction form.');
+      ).toBeRejectedWithError('FECfile+: No transactions submitted for triple-entry transaction form.');
     });
   });
 });

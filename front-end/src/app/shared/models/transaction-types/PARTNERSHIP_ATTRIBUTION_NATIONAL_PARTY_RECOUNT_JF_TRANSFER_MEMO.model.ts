@@ -5,6 +5,7 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
+import { shortenClause } from '../clause';
 
 export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
   formFields = INDIVIDUAL_FORM_FIELDS;
@@ -18,14 +19,11 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO ext
   override navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
+    const committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
       (transaction.parent_transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;
     const parenthetical = ' (Partnership Attribution)';
-    if ((committeeClause + parenthetical).length > 100) {
-      committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
-    }
-    return committeeClause + parenthetical;
+    return shortenClause(committeeClause, parenthetical);
   }
 
   getNewTransaction() {

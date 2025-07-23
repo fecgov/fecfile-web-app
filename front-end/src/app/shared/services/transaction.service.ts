@@ -119,6 +119,42 @@ export class TransactionService implements TableListService<Transaction> {
     return undefined;
   }
 
+  public async getPreviousTransactionForPayeeCandidate(
+    transaction: Transaction | undefined,
+    contact2Id: string | undefined,
+    expenditure_date: Date | string,
+    general_election_year: string | undefined,
+  ): Promise<Transaction | undefined> {
+    const actionDateString: string =
+      expenditure_date === '' ? '' : formatDate(expenditure_date, 'yyyy-MM-dd', 'en-US') || '';
+
+    const transaction_id: string = transaction?.id ?? '';
+    const contact_2_id: string = contact2Id ?? '';
+    const aggregation_group: AggregationGroups | undefined =
+      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
+
+    if (transaction && actionDateString && contact_2_id && aggregation_group && general_election_year) {
+      const params: { [key: string]: string } = {
+        transaction_id,
+        contact_2_id,
+        date: actionDateString,
+        aggregation_group,
+        general_election_year,
+      };
+
+      const response = await this.apiService.get<HttpResponse<Transaction>>(
+        '/transactions/previous/payee-candidate/',
+        params,
+        [HttpStatusCode.NotFound],
+      );
+      if (response.status === HttpStatusCode.NotFound) {
+        return undefined;
+      }
+      return getFromJSON(response.body);
+    }
+    return undefined;
+  }
+
   public async create(transaction: Transaction): Promise<Transaction> {
     const payload = this.preparePayload(transaction);
     const id = await this.apiService.post<string>(`${transaction.transactionType.apiEndpoint}/`, payload);

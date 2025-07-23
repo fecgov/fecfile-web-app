@@ -36,6 +36,7 @@ export abstract class TransactionType {
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   showCalendarYTD = false;
+  showPayeeCandidateYTD = false;
   inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
@@ -123,7 +124,7 @@ export abstract class TransactionType {
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
     if (!schema_name) {
-      throw new Error('Fecfile: Schema name for transaction type not found.');
+      throw new Error('FECfile+: Schema name for transaction type not found.');
     }
     return schema_name;
   }
@@ -282,6 +283,8 @@ export type TransactionTemplateMapType = {
   secured: string;
   aggregate: string;
   calendar_ytd: string;
+  aggregate_general_elec_expended: string;
+  general_election_year: string;
   purpose_description: string;
   text4000: string;
   category_code: string;

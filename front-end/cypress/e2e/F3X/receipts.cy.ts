@@ -3,7 +3,7 @@ import { TransactionTableColumns } from '../pages/f3xTransactionListPage';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
+import { committeeFormData, defaultFormData as defaultContactFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
@@ -33,11 +33,11 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: defaultContactFormData });
     StartTransaction.Receipts().Individual().IndividualReceipt();
 
     // Select the contact from the contact lookup
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 3));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click({ force: true });
 
@@ -110,7 +110,7 @@ describe('Receipt Transactions', () => {
       ...{ purpose_description: '', category_code: '' },
     };
     ContactListPage.createOrganization(formContactData);
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: defaultContactFormData });
     StartTransaction.Receipts().Individual().Partnership();
     PageUtils.searchBoxInput(formContactData.name);
 
@@ -137,7 +137,7 @@ describe('Receipt Transactions', () => {
     cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
     cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').first().click();
     PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
-    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 1));
+    cy.get('[id="searchBox"]').type(defaultContactFormData['last_name'].slice(0, 3));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
     TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
@@ -349,7 +349,7 @@ describe('Receipt Transactions', () => {
 
   it('Create a dual-entry PAC Earmark Receipt transaction', () => {
     F3XSetup();
-    StartTransaction.Receipts().RegisteredFilers().PAC();
+    StartTransaction.Receipts().RegisteredFilers().PAC_Earmark();
 
     // Enter STEP ONE transaction
     cy.get('p-accordion-panel').first().as('stepOneAccordion');
@@ -557,5 +557,16 @@ describe('Receipt Transactions', () => {
       '#contribution_date',
     );
     PageUtils.clickButton('Cancel');
+  });
+
+  it('Committee Fields Display Properly', () => {
+    F3XSetup({ committee: committeeFormData });
+    StartTransaction.Receipts().RegisteredFilers().PAC();
+    cy.contains('Contact').should('exist');
+    cy.get('#contact_1_lookup').find('#searchBox').safeType(committeeFormData.name);
+    cy.contains(committeeFormData.name).should('exist');
+    cy.contains(committeeFormData.name).click({ force: true });
+    cy.get('#organization_name').should('exist').should('have.value', committeeFormData.name);
+    cy.get('#committee_fec_id').should('exist').should('have.value', committeeFormData.committee_id);
   });
 });

@@ -14,13 +14,29 @@ const formData = {
 };
 
 function setupLoanByCommittee() {
-  F3XSetup({ committee: true, individual: true });
+  F3XSetup({ committee: committeeFormData, individual: individualContactFormData });
   StartTransaction.Loans().ByCommittee();
   // Search for created committee and enter load data, then add load guarantor
   PageUtils.urlCheck('LOAN_BY_COMMITTEE');
   PageUtils.searchBoxInput(committeeFormData.committee_id);
   formData.date_received = undefined;
   TransactionDetailPage.enterLoanFormData(formData);
+}
+
+function addGuarantor() {
+  PageUtils.clickButton('Save & add loan guarantor');
+  PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
+  PageUtils.searchBoxInput(individualContactFormData.last_name);
+  cy.get('#amount').safeType(formData['amount']);
+  cy.intercept({
+    method: 'Post',
+  }).as('saveGuarantor');
+  PageUtils.clickButton('Save & add loan guarantor');
+  cy.wait('@saveGuarantor');
+  PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+  PageUtils.clickButton('Cancel');
+
+  PageUtils.urlCheck('/list');
 }
 
 describe('Loans', () => {
@@ -66,21 +82,20 @@ describe('Loans', () => {
 
   it('should test: Loan By Committee - add Guarantor', () => {
     setupLoanByCommittee();
-    PageUtils.clickButton('Save & add loan guarantor');
-    PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
-    PageUtils.searchBoxInput(individualContactFormData.last_name);
-    cy.get('#amount').safeType(formData['amount']);
-    cy.intercept({
-      method: 'Post',
-    }).as('saveGuarantor');
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@saveGuarantor');
-    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-    PageUtils.clickButton('Cancel');
-
-    PageUtils.urlCheck('/list');
+    addGuarantor();
     cy.contains('Loan By Committee').click();
     PageUtils.urlCheck('/list/');
     cy.contains(individualContactFormData.last_name).should('exist');
+  });
+
+  it('should test: Loan By Committee - delete Guarantor', () => {
+    setupLoanByCommittee();
+    addGuarantor();
+    PageUtils.clickKababItem('Loan By Committee', 'Edit');
+    PageUtils.clickKababItem(individualContactFormData.last_name, 'Delete');
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('.p-confirmdialog-accept-button').click();
+
+    cy.contains(individualContactFormData.last_name).should('not.exist');
   });
 });

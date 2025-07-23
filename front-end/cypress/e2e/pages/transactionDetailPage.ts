@@ -40,7 +40,7 @@ export class TransactionDetailPage {
 
   static enterSheduleFormDataForVoidExpenditure(
     formData: DisbursementFormData,
-    contactData: ContactFormData,
+    contactData: { contact_type: string; last_name: string },
     readOnlyAmount = false,
     alias = '',
     dateSigned = 'treasurer_date_signed',
@@ -57,7 +57,7 @@ export class TransactionDetailPage {
     if (formData.supportOpposeCode) {
       cy.get("[data-cy='support_oppose_code']").contains(formData.supportOpposeCode).click();
       cy.get('#entity_type_dropdown').last().type(contactData.contact_type);
-      cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 1));
+      cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 3));
       cy.contains(contactData.last_name).should('exist');
       cy.contains(contactData.last_name).click();
     }
@@ -231,6 +231,20 @@ export class TransactionDetailPage {
         .find(`[data-cy='${dateSigned2}']`)
         .type('04/27/2024');
     }
+  }
+
+  static getContact(contact: ContactFormData, alias = '', type: string | undefined = undefined) {
+    alias = PageUtils.getAlias(alias);
+
+    if (type) {
+      PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias);
+      cy.contains('LOOKUP').should('exist');
+    }
+
+    const name = contact['last_name'] ?? contact['name'];
+    cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
+    cy.contains(name).should('exist');
+    cy.contains(name).click({ force: true });
   }
 
   static assertFormData(formData: ScheduleFormData, alias = '', id = '#expenditure_date') {

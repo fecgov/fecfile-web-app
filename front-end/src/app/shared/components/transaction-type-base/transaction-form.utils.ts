@@ -64,7 +64,7 @@ export class TransactionFormUtils {
     const transactionType = transaction?.transactionType;
     const templateMap = transactionType?.templateMap;
     if (!transactionType || !templateMap) {
-      throw new Error('Fecfile: Cannot find template map when initializing transaction form');
+      throw new Error('FECfile+: Cannot find template map when initializing transaction form');
     }
 
     Object.keys(transactionType.contactConfig ?? {}).forEach((contact) => {
@@ -116,6 +116,10 @@ export class TransactionFormUtils {
       await this.handleShowCalendarYTD(component, form, transaction, templateMap);
     }
 
+    if (transactionType.showPayeeCandidateYTD) {
+      await this.handleShowPayeeCandidateYTD(component, form, transaction, contactIdMap, templateMap);
+    }
+
     const schema = transaction.transactionType?.schema;
     if (schema) {
       SchemaUtils.addJsonSchemaValidators(form, schema, false, transaction);
@@ -131,6 +135,16 @@ export class TransactionFormUtils {
             form
               .get(templateMap[field as keyof TransactionTemplateMapType])
               ?.addAsyncValidators(contactService.getFecIdValidator(id));
+            form
+              .get(templateMap[field as keyof TransactionTemplateMapType])
+              ?.addAsyncValidators(
+                SchemaUtils.jsonSchemaValidator(
+                  templateMap[field as keyof TransactionTemplateMapType],
+                  form,
+                  schema,
+                  transaction,
+                ),
+              );
             form.get(templateMap[field as keyof TransactionTemplateMapType])?.updateValueAndValidity();
           }
         }
@@ -197,6 +211,57 @@ export class TransactionFormUtils {
     }
   }
 
+  // Only dynamically update non-inherited calendar_ytd values on the form input.
+  // Inherited calendar_ytd display the value of the parent transaction and do not
+  // include or change with the amount value of the child transaction.
+  private static async handleShowPayeeCandidateYTD(
+    component: TransactionTypeBaseComponent,
+    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    transaction: Transaction,
+    contactIdMap: ContactIdMapType,
+    templateMap: TransactionTemplateMapType,
+  ) {
+    const contactId$ = contactIdMap['contact_2'].asObservable();
+    const previous_expenditure$: Observable<Transaction | undefined> =
+      merge(
+        (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.general_election_year) as SubscriptionFormControl).valueChanges,
+        contactId$,
+      ).pipe(
+        switchMap(() => {
+          const expenditure_date = form.get(templateMap.date)?.value;
+          const general_election_year = form.get(templateMap.general_election_year)?.value;
+          const contact2Id = transaction.contact_2?.id;
+
+          return from(
+            component.transactionService.getPreviousTransactionForPayeeCandidate(
+              transaction,
+              contact2Id,
+              expenditure_date,
+              general_election_year,
+            ),
+          );
+        }),
+      ) || of(undefined);
+    form
+      .get(templateMap.amount)
+      ?.valueChanges.pipe(
+        startWith(form.get(templateMap.amount)?.value),
+        combineLatestWith(previous_expenditure$, of(transaction)),
+        takeUntil(component.destroy$),
+      )
+      .subscribe(([amount, previous_election, transaction]) => {
+        this.updateAggregate(
+          form,
+          'aggregate_general_elec_expended',
+          templateMap,
+          transaction,
+          previous_election,
+          amount,
+        );
+      });
+  }
+
   static updateAggregate(
     form: FormGroup,
     field: TemplateMapKeyType,
@@ -223,7 +288,7 @@ export class TransactionFormUtils {
     formProperties: string[],
   ): Transaction {
     if (!transaction) {
-      throw new Error('Fecfile: Payload transaction not found');
+      throw new Error('FECfile+: Payload transaction not found');
     }
 
     // Remove parent transaction links within the parent-child hierarchy in the

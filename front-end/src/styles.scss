@@ -446,10 +446,6 @@ table {
   font-weight: 900;
 }
 
-.optional-text {
-  color: #aeb0b5;
-}
-
 .top-border-footer {
   display: flex;
   width: 100%;
@@ -516,4 +512,20 @@ table {
 .circle-icon-tooltip {
   font-size: 1.5rem;
   margin-left: 0.5rem;
+}
+
+app-login {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.paren-label {
+  font-family: var(--karla);
+}
+
+.span-label {
+  display: inline-block;
+  margin: 0 0 0.5rem 0;
+  font-family: var(--karla-bold);
 }

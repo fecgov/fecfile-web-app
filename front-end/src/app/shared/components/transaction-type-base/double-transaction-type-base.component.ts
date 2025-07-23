@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -18,7 +18,7 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, scrollToTop } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
 
 /**
@@ -36,7 +36,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  @ViewChild(Accordion) accordion?: Accordion;
+  readonly accordion = viewChild.required(Accordion);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -44,7 +44,15 @@ export abstract class DoubleTransactionTypeBaseComponent
   childForm: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   childContactIdMap: ContactIdMapType = {};
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  childMemoCodeCheckboxLabel$ = of('');
+  childMemoHasOptional$ = of(false);
+
+  constructor() {
+    super();
+    effect(() => {
+      this.accordion().value();
+      scrollToTop();
+    });
+  }
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -54,14 +62,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (this.transaction) {
       this.childTransaction = this.getChildTransaction(this.transaction, 0);
     } else {
-      throw new Error('Fecfile: Transaction not found for double-entry transaction form');
+      throw new Error('FECfile+: Transaction not found for double-entry transaction form');
     }
     if (!this.childTransaction) {
-      throw new Error('Fecfile: Child transaction not found for double-entry transaction form');
+      throw new Error('FECfile+: Child transaction not found for double-entry transaction form');
     }
     this.childTransactionType = this.childTransaction?.transactionType;
     if (!this.childTransactionType?.templateMap) {
-      throw new Error('Fecfile: Template map not found for double transaction double-entry transaction form');
+      throw new Error('FECfile+: Template map not found for double transaction double-entry transaction form');
     }
     this.childTemplateMap = this.childTransactionType.templateMap;
     this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
@@ -79,9 +87,9 @@ export abstract class DoubleTransactionTypeBaseComponent
         ?.includes('memo_code' as TemplateMapKeyType) &&
       this.transactionType
     ) {
-      this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
+      this.childMemoHasOptional$ = this.memoHasOptional$;
     } else {
-      this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
+      this.childMemoHasOptional$ = this.getMemoHasOptional$(this.childForm, this.childTransactionType);
     }
 
     TransactionFormUtils.onInit(
@@ -95,7 +103,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
-      this.accordion.value.set(1);
+      this.accordion().value.set(1);
     }
   }
 
@@ -127,7 +135,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
       this.store.dispatch(singleClickEnableAction());
-      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+      throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -201,7 +209,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (this.childTransaction) {
       this.updateInheritedFields(this.childForm, this.childTransaction);
     } else {
-      throw new Error('Fecfile: Missing child transaction.');
+      throw new Error('FECfile+: Missing child transaction.');
     }
   }
 
@@ -221,7 +229,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         }
         childFieldControl?.disable();
       } else {
-        throw new Error('Fecfile: Transaction missing transactionType.');
+        throw new Error('FECfile+: Transaction missing transactionType.');
       }
     });
   }

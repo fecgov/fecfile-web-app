@@ -1548,10 +1548,11 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 
 .p-selectbutton {
   display: flex;
+  width: fit-content;
 }
 
 .p-selectbutton > p-togglebutton {
-  width: 50%;
+  width: fit-content;
   text-wrap-mode: nowrap;
 }
 
@@ -1655,9 +1656,14 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   transition: height 0.15s;
 }
 
+.p-togglebutton-content {
+  padding: 8px 20px;
+}
+
 .p-togglebutton {
+  padding: 0;
   background: var(--p-content-background);
-  border: 3px solid var(--fec-grey-alt);
+  border: 2px solid var(--fec-grey-alt);
   color: var(--p-content-color);
   font-weight: 400;
   font-family: var(--karla);
@@ -1667,6 +1673,7 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
     border-color 0.15s,
     box-shadow 0.15s;
 }
+
 .p-togglebutton .p-button-icon-left,
 .p-togglebutton .p-button-icon-right {
   color: #ffffff;
@@ -1910,8 +1917,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--surface-border);
   color: #5b616b;
 }
-.p-button:focus,
-.p-togglebutton:focus {
+.p-button:focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: var(--focus-ring);
@@ -2065,7 +2071,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-button.p-button-info,
 .p-buttonset.p-button-info > .p-button,
 .p-splitbutton.p-button-info > .p-button {
-  color: #ffffff;
+  color: #212121;
   background: #35bdbb;
   border: 1px solid #35bdbb;
 }
@@ -2073,7 +2079,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-buttonset.p-button-info > .p-button:enabled:hover,
 .p-splitbutton.p-button-info > .p-button:enabled:hover {
   background: #2b9896;
-  color: #ffffff;
+  color: #212121;
   border-color: #2b9896;
 }
 .p-button.p-button-info:enabled:focus,
@@ -2085,7 +2091,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-buttonset.p-button-info > .p-button:enabled:active,
 .p-splitbutton.p-button-info > .p-button:enabled:active {
   background: #138496;
-  color: #ffffff;
+  color: #212121;
   border-color: #117a8b;
 }
 .p-button.p-button-info.p-button-outlined,
@@ -6528,9 +6534,18 @@ input {
 }
 
 .p-accordioncontent-content {
+  width: 100%;
+}
+
+.content-accordion-wrapper {
   padding: 20px;
   border: 1px solid var(--surface-border);
-  width: 100%;
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.p-accordioncontent[data-p-active='true'] .content-accordion-wrapper {
+  opacity: 1;
 }
 
 .p-confirmdialog > .p-dialog-footer {
@@ -6538,4 +6553,11 @@ input {
   width: 100%;
   border-top: 1px solid var(--surface-hover);
   padding: 1.25rem 1.5rem 0.5rem 1.5rem;
+}
+
+.p-select > span > input {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
