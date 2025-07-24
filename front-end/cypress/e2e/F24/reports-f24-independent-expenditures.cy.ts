@@ -11,6 +11,7 @@ import { faker } from '@faker-js/faker';
 import { F24Setup } from './f24-setup';
 import { ReportListPage } from '../pages/reportListPage';
 import { Candidate_House_A, Individual_A_A } from '../requests/library/contacts';
+import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpenditureData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -34,7 +35,7 @@ describe('Form 24 Independent Expenditures', () => {
 
     ReportListPage.editReport('FORM 24');
     StartTransaction.IndependentExpenditures().IndependentExpenditure();
-    TransactionDetailPage.getContact(Individual_A_A, '', 'Individual');
+    ContactLookup.getContact(Individual_A_A.last_name!, '', 'Individual');
 
     TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
       independentExpenditureData,
