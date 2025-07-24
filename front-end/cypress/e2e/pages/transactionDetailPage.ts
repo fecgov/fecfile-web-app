@@ -233,21 +233,6 @@ export class TransactionDetailPage {
     }
   }
 
-  static getContact(contact: MockContact, alias = '', type: string | undefined = undefined) {
-    alias = PageUtils.getAlias(alias);
-
-    if (type) {
-      PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias);
-      cy.contains('LOOKUP').should('exist');
-    }
-
-    const name = contact['last_name'] ?? contact['name'];
-    if (!name) return;
-    cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
-    cy.contains(name).should('exist');
-    cy.contains(name).click({ force: true });
-  }
-
   static assertFormData(formData: ScheduleFormData, alias = '', id = '#expenditure_date') {
     alias = PageUtils.getAlias(alias);
     if (formData.date_received) {
