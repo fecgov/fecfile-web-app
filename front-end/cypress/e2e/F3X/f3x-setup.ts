@@ -1,80 +1,95 @@
-import { defaultForm3XData as reportFormData, F3xCreateReportFormData } from '../models/ReportFormModel';
-import { currentYear } from '../pages/pageUtils';
 import {
   Candidate_House_A,
-  Candidate_House_A$,
+  Candidate_Senate_A,
   Committee_A,
-  Committee_A$,
   Individual_A_A,
-  Individual_A_A$,
+  Individual_B_B,
+  MockContact,
   Organization_A,
-  Organization_A$,
 } from '../requests/library/contacts';
-import { makeRequestToAPI } from '../requests/methods';
-import { F3X_Q2 } from '../requests/library/reports';
-import { BehaviorSubject } from 'rxjs';
-import { ContactListPage } from '../pages/contactListPage';
-import { ReportListPage } from '../pages/reportListPage';
+import { makeContact, makeF3x } from '../requests/methods';
+import { F3X, F3X_Q2 } from '../requests/library/reports';
 
 export interface Setup {
   organization?: boolean;
   individual?: boolean;
+  individual2?: boolean;
   candidate?: boolean;
+  candidateSenate?: boolean;
   committee?: boolean;
-  report?: F3xCreateReportFormData;
+  report?: F3X;
 }
 
-export const f3ReportId$ = new BehaviorSubject('');
+type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
+function addContact(contact: MockContact, results: F3xResults, property: ConType) {
+  return new Cypress.Promise((resolve) => {
+    makeContact(contact, (response) => {
+      results[property] = response.body;
+      resolve();
+    });
+  });
+}
 
-export function NewF3XSetup(setup: Setup = {}) {
-  if (setup.individual)
-    makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
-      Individual_A_A$.next(response.body);
-    });
-  if (setup.organization)
-    makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Organization_A, (response) => {
-      Organization_A$.next(response.body);
-    });
-  if (setup.candidate)
-    makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_House_A, (response) => {
-      Candidate_House_A$.next(response.body);
-    });
-  if (setup.committee)
-    makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Committee_A, (response) => {
-      Committee_A$.next(response.body);
-    });
-  makeRequestToAPI(
-    'POST',
-    'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
-    F3X_Q2,
-    (response) => {
-      f3ReportId$.next(response.body.id);
-    },
+export interface F3xResults {
+  organization: any | null;
+  individual: any | null;
+  individual2: any | null;
+  candidate: any | null;
+  candidateSenate: any | null;
+  committee: any | null;
+  report: string;
+}
+
+export async function F3XSetup(setup: Setup = {}) {
+  // Initialize results object
+  const results: F3xResults = {
+    organization: null,
+    individual: null,
+    individual2: null,
+    candidate: null,
+    candidateSenate: null,
+    committee: null,
+    report: '',
+  };
+
+  // Create an array of promises
+  const apiCalls = [];
+
+  // Collect API call Chainables based on setup
+  if (setup.individual) {
+    apiCalls.push(addContact(Individual_A_A, results, 'individual'));
+  }
+
+  if (setup.individual2) {
+    apiCalls.push(addContact(Individual_B_B, results, 'individual2'));
+  }
+
+  if (setup.organization) {
+    apiCalls.push(addContact(Organization_A, results, 'organization'));
+  }
+
+  if (setup.candidate) {
+    apiCalls.push(addContact(Candidate_House_A, results, 'candidate'));
+  }
+
+  if (setup.candidateSenate) {
+    apiCalls.push(addContact(Candidate_Senate_A, results, 'candidateSenate'));
+  }
+
+  if (setup.committee) {
+    apiCalls.push(addContact(Committee_A, results, 'committee'));
+  }
+
+  apiCalls.push(
+    new Cypress.Promise((resolve) => {
+      makeF3x(setup.report ?? F3X_Q2, (response) => {
+        results.report = response.body.id;
+        resolve();
+      });
+    }),
   );
+
+  // Combine all the Chainables and return them
+  await Cypress.Promise.all(apiCalls);
+  return results;
 }
-
-export function F3XSetup(setup: Setup = {}) {
-  if (setup.individual) ContactListPage.createIndividual();
-  if (setup.organization) ContactListPage.createOrganization();
-  if (setup.candidate) ContactListPage.createCandidate();
-  if (setup.committee) ContactListPage.createCommittee();
-  ReportListPage.createF3X(setup.report ?? reportFormData);
-}
-
-export const reportFormDataApril: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q1',
-    coverage_from_date: new Date(currentYear, 0, 1),
-    coverage_through_date: new Date(currentYear, 3, 30),
-  },
-};
-
-export const reportFormDataJuly: F3xCreateReportFormData = {
-  ...reportFormData,
-  ...{
-    report_code: 'Q2',
-    coverage_from_date: new Date(currentYear, 4, 1),
-    coverage_through_date: new Date(currentYear, 7, 30),
-  },
-};

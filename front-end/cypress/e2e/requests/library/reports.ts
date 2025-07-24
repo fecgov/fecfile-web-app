@@ -1,24 +1,63 @@
-export const F3X_Q1 = {
+import { currentYear } from '../../pages/pageUtils';
+
+export interface F3X {
+  report_type: string;
+  form_type: string;
+  report_code: string;
+  coverage_from_date: string;
+  coverage_through_date: string;
+  state_of_election: string | null;
+  date_of_election: string | null;
+}
+
+export const F3X_Q1: F3X = {
   report_type: 'F3X',
   form_type: 'F3XN',
   report_code: 'Q1',
-  coverage_from_date: '2025-01-01',
-  coverage_through_date: '2025-03-31',
+  coverage_from_date: `${currentYear}-01-01`,
+  coverage_through_date: `${currentYear}-03-31`,
   state_of_election: null,
   date_of_election: null,
 };
 
-export const F3X_Q2 = {
+export const F3X_Q2: F3X = {
   report_type: 'F3X',
   form_type: 'F3XN',
   report_code: 'Q2',
-  coverage_from_date: '2025-04-01',
-  coverage_through_date: '2025-06-30',
+  coverage_from_date: `${currentYear}-04-01`,
+  coverage_through_date: `${currentYear}-06-30`,
   state_of_election: null,
   date_of_election: null,
 };
 
-export const F24_24 = {
+export const F3X_Q3: F3X = {
+  report_type: 'F3X',
+  form_type: 'F3XN',
+  report_code: 'Q3',
+  coverage_from_date: `${currentYear}-07-01`,
+  coverage_through_date: `${currentYear}-09-30`,
+  state_of_election: null,
+  date_of_election: null,
+};
+
+export interface F24 {
+  hasChangeOfAddress: boolean;
+  submitAlertText: string;
+  can_delete: boolean;
+  can_unamend: boolean;
+  report_type: 'F24';
+  form_type: 'F24N' | 'F24A';
+  name: string;
+  report_type_24_48: '24';
+  street_1: string;
+  city: string;
+  state: string;
+  zip: string;
+  filer_committee_id_number: string;
+  committee_name: string;
+}
+
+export const F24_24: F24 = {
   hasChangeOfAddress: false,
   submitAlertText:
     'Are you sure you want to submit this form electronically? Please note that you cannot undo this action. Any changes needed will need to be filed as an amended report.',

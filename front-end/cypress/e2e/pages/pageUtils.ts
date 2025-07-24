@@ -122,20 +122,6 @@ export class PageUtils {
     );
   }
 
-  static searchBoxInput(input: string, parentId?: string) {
-    if (parentId) {
-      cy.get(`[id="${parentId}"]`).find('[id="searchBox"]').type(input.slice(0, 3));
-    } else {
-      cy.get('[id="searchBox"]').type(input.slice(0, 3));
-    }
-    cy.intercept({
-      method: 'Get',
-    }).as('search');
-    cy.wait('@search');
-    cy.contains(input).should('exist');
-    cy.contains(input).click({ force: true });
-  }
-
   static enterValue(fieldName: string, fieldValue: any) {
     cy.get(fieldName).type(fieldValue);
   }

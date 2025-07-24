@@ -1,13 +1,42 @@
-export function makeRequestToAPI(
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { MockContact } from './library/contacts';
+import { F3X, F24 } from './library/reports';
+
+export function makeF3x(f3x: F3X, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI(
+    'POST',
+    'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+    f3x,
+    callback,
+  );
+}
+
+export function makeF24(f24: F24, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI(
+    'POST',
+    'http://localhost:8080/api/v1/reports/form-24/?fields_to_validate=report_type_24_48',
+    f24,
+    callback,
+  );
+}
+
+export function makeContact(contact: MockContact, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', contact, callback);
+}
+
+export function makeTransaction(transaction: any, callback = (response: Cypress.Response<any>) => {}) {
+  makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction, callback);
+}
+
+function makeRequestToAPI(
   method: string,
   url: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   body: any,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   callback = (response: Cypress.Response<any>) => {},
 ) {
   cy.getAllCookies().then((cookies: Cypress.ObjectLike[]) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let cookie_obj: any = {};
     cookies.forEach((cookie: Cypress.ObjectLike) => {
       const name = cookie['name'];
@@ -26,50 +55,3 @@ export function makeRequestToAPI(
     }).then(callback);
   });
 }
-
-// EVERYTHING AFTER THIS POINT IS NON-FUNCTIONING PROTOTYPE
-
-/*
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function setupTestingData(report: any, contacts: any[], transactions: any[]) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const saved_contacts: any[] = [];
-
-  makeRequestToAPI(
-    'POST',
-    'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
-    report,
-    (response) => {
-      const report_id: string = response.body.id;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      for (let i = 0; i < contacts.length; i++) {
-        const contact = contacts[i];
-        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', contact, (response) => {
-          saved_contacts.push(response.body);
-          console.log('PUSH', saved_contacts);
-        });
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      transactions.forEach((transaction: any) => {
-        const saved_contact = saved_contacts
-          .filter((contact) => {
-            return (
-              contact.name == transaction.contact_1.name &&
-              contact.first_name == transaction.contact_1.first_name &&
-              contact.last_name == transaction.contact_1.last_name
-            );
-          })
-          .pop();
-        transaction.contact_1_id = saved_contact.id;
-        transaction.report_ids = [report_id];
-
-        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction, (response) => {
-          console.log(response);
-        });
-      });
-    },
-  );
-}
-*/
