@@ -76,6 +76,9 @@ describe('Manage reports', () => {
       const excludeIds: string[] = [];
       for (let index = 0; index < candidates.length; index++) {
         ContactLookup.getCandidate(candidates[index], excludeFecIds, excludeIds, `[data-cy="candidate-${index}"]`);
+        cy.get(`[data-cy="candidate-${index}"]`)
+          .find('[data-cy="last-name"]')
+          .should('have.value', candidates[index].last_name);
         PageUtils.calendarSetValue(getId(index), new Date(), `[data-cy="candidate-${index}"]`);
         excludeFecIds.push(candidates[index].candidate_id);
         excludeIds.push(candidates[index].id!);
