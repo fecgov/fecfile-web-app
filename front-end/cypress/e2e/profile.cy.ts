@@ -9,7 +9,7 @@ describe('Manage profile', () => {
 
   it('Can view the Account Info page', () => {
     ProfileAccountPage.goToPage();
-    cy.contains('C99999999').should('exist');
+    cy.get('#committee_id').should('have.value', 'C99999999');
   });
 
   it('Can view the Users table', () => {
