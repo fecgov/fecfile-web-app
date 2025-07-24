@@ -124,7 +124,7 @@ describe('Receipt Transactions', () => {
 
       // Create memo transaction
       cy.contains('h1', 'Partnership Attribution').should('exist');
-      PageUtils.searchBoxInput(individual.first_name);
+      ContactLookup.getContact(individual.first_name);
       PageUtils.clickButton('Save');
       const memoFormTransactionData = {
         ...formTransactionDataForSchedule,

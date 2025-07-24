@@ -1,3 +1,4 @@
+import { ContactFormData } from '../models/ContactFormModel';
 import {
   ContributionFormData,
   DisbursementFormData,
@@ -5,6 +6,7 @@ import {
   ScheduleFormData,
 } from '../models/TransactionFormModel';
 import { MockContact } from '../requests/library/contacts';
+import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
@@ -40,7 +42,7 @@ export class TransactionDetailPage {
 
   static enterSheduleFormDataForVoidExpenditure(
     formData: DisbursementFormData,
-    contactData: { contact_type: string; last_name: string },
+    contactData: ContactFormData,
     readOnlyAmount = false,
     alias = '',
     dateSigned = 'treasurer_date_signed',
@@ -56,10 +58,7 @@ export class TransactionDetailPage {
 
     if (formData.supportOpposeCode) {
       cy.get("[data-cy='support_oppose_code']").contains(formData.supportOpposeCode).click();
-      cy.get('#entity_type_dropdown').last().type(contactData.contact_type);
-      cy.get('[id="searchBox"]').last().type(contactData.last_name.slice(0, 3));
-      cy.contains(contactData.last_name).should('exist');
-      cy.contains(contactData.last_name).click();
+      ContactLookup.getCandidate(contactData, [], [], '#contact_2_lookup');
     }
 
     this.enterCommon(formData, alias);

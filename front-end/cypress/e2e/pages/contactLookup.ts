@@ -37,7 +37,7 @@ export class ContactLookup {
     );
     const candidateSection = cy.get(alias);
     candidateSection.find('[id="searchBox"]').type(nameEntry);
-    candidateSection.get('.p-autocomplete-list-container').contains(nameEntry).click();
+    candidateSection.get('.p-autocomplete-list-container').contains(nameEntry).click({ force: true });
   }
 
   static getCommittee(

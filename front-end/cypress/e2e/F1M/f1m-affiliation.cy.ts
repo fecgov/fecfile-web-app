@@ -29,9 +29,7 @@ describe('Manage reports', () => {
       PageUtils.valueCheck('[data-cy="committee-id-input"]', committeeID);
       cy.get('[data-cy="state-party-radio"]').click();
       cy.get('[data-cy="affiliation-radio"').click();
-      cy.get('[id="searchBox"]').type(committee.committee_id.slice(0, 3));
-      cy.contains(committee.name).should('exist');
-      cy.contains(committee.name).click();
+      ContactLookup.getCommittee(committee);
       PageUtils.valueCheck('[id="affiliated_committee_name"', committee.name);
       PageUtils.clickButton('Save');
       cy.get('[data-cy="affiliated_date_form_f1_filed-error"]').contains('This is a required field.');

@@ -20,7 +20,7 @@ describe('Debts', () => {
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
       PageUtils.containedOnPage('Debt Owed By Committee');
-      ContactLookup.getContact(result.committee.name, '', 'Committee');
+      ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
       TransactionDetailPage.enterLoanFormData(debtFormData);
       PageUtils.clickButton('Save');
       return cy.wrap(result);
@@ -35,8 +35,8 @@ describe('Debts', () => {
     PageUtils.urlCheck('COORDINATED_PARTY_EXPENDITURE');
     PageUtils.containedOnPage('Coordinated Party Expenditure');
     ContactLookup.getContact(organization.name, '', 'Organization');
-    PageUtils.searchBoxInput(committee.committee_id, 'contact_3_lookup');
-    PageUtils.searchBoxInput(candidate.candidate_id, 'contact_2_lookup');
+    ContactLookup.getCommittee(committee, [], [], '#contact_3_lookup');
+    ContactLookup.getCandidate(candidate, [], [], '#contact_2_lookup');
 
     TransactionDetailPage.enterDate(`[data-cy="expenditure_date"]`, new Date(currentYear, 4 - 1, 27));
     cy.get('#general_election_year').safeType(currentYear);
@@ -69,7 +69,7 @@ describe('Debts', () => {
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
       PageUtils.containedOnPage('Debt Owed To Committee');
 
-      PageUtils.searchBoxInput(result.committee.committee_id);
+      ContactLookup.getCommittee(result.committee);
       TransactionDetailPage.enterLoanFormData(debtFormData);
       PageUtils.clickButton('Save');
       PageUtils.urlCheck('/list');

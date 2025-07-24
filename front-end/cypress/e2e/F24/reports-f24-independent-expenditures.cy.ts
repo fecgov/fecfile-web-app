@@ -10,7 +10,6 @@ import { StartTransaction } from '../F3X/utils/start-transaction/start-transacti
 import { faker } from '@faker-js/faker';
 import { F24Setup } from './f24-setup';
 import { ReportListPage } from '../pages/reportListPage';
-import { Candidate_House_A, Individual_A_A } from '../requests/library/contacts';
 import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpenditureData: DisbursementFormData = {
@@ -31,31 +30,31 @@ describe('Form 24 Independent Expenditures', () => {
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
     F24Setup();
-    F3XSetup({ individual: true, candidate: true });
+    cy.wrap(F3XSetup({ individual: true, candidate: true })).then((result: any) => {
+      ReportListPage.editReport('FORM 24');
+      StartTransaction.IndependentExpenditures().IndependentExpenditure();
+      ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
-    ReportListPage.editReport('FORM 24');
-    StartTransaction.IndependentExpenditures().IndependentExpenditure();
-    ContactLookup.getContact(Individual_A_A.last_name!, '', 'Individual');
+      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+        independentExpenditureData,
+        result.candidate,
+        false,
+        '',
+        'date_signed',
+      );
 
-    TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-      independentExpenditureData,
-      { contact_type: 'Candidate', last_name: Candidate_House_A.last_name! },
-      false,
-      '',
-      'date_signed',
-    );
+      PageUtils.clickButton('Save');
+      PageUtils.clickLink('Independent Expenditure');
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
 
-    PageUtils.clickButton('Save');
-    PageUtils.clickLink('Independent Expenditure');
-    cy.contains('Address').should('exist');
-    cy.get('#first_name').should('have.value', Individual_A_A.first_name);
-    cy.get('#last_name').should('have.value', Individual_A_A.last_name);
-
-    ReportListPage.editReport('JULY 15 QUARTERLY REPORT (Q2)');
-    PageUtils.clickSidebarItem('Manage your transactions');
-    PageUtils.clickLink('Independent Expenditure');
-    cy.contains('Address').should('exist');
-    cy.get('#first_name').should('have.value', Individual_A_A.first_name);
-    cy.get('#last_name').should('have.value', Individual_A_A.last_name);
+      ReportListPage.editReport('JULY 15 QUARTERLY REPORT (Q2)');
+      PageUtils.clickSidebarItem('Manage your transactions');
+      PageUtils.clickLink('Independent Expenditure');
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
+    });
   });
 });

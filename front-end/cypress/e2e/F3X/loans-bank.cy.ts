@@ -186,7 +186,7 @@ describe('Loans', () => {
 
       PageUtils.clickButton('Save & add loan guarantor');
       PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
-      PageUtils.searchBoxInput(result.individual.last_name);
+      ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       cy.contains(/^Save$/).click();
       clickLoan('Edit');

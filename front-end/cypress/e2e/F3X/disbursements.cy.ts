@@ -56,7 +56,7 @@ describe('Disbursements', () => {
       ContactLookup.getContact(result.organization.name);
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
         independentExpVoidData,
-        { contact_type: 'Candidate', last_name: result.candidate.last_name },
+        result.candidate,
         false,
         '',
         'date_signed',
@@ -79,7 +79,7 @@ describe('Disbursements', () => {
 
         TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
           independentExpVoidData,
-          { contact_type: 'Candidate', last_name: result.candidate.last_name },
+          result.candidate,
           false,
           '',
           'date_signed',

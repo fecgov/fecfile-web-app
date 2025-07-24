@@ -183,7 +183,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
         independentExpenditureData,
-        { contact_type: 'CAN', last_name: result.candidate.last_name },
+        result.candidate,
         false,
         '',
         'date_signed',
@@ -212,7 +212,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
         independentExpenditureTwoData,
-        { contact_type: 'CAN', last_name: result.candidate.last_name },
+        result.candidate,
         false,
         '',
         'date_signed',
@@ -241,7 +241,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
         independentExpenditureThreeData,
-        { contact_type: 'CAN', last_name: result.candidate.last_name },
+        result.candidate,
         false,
         '',
         'date_signed',

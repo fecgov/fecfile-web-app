@@ -31,7 +31,7 @@ function setupLoanReceivedFromIndividual() {
 function addGuarantor(name: string, amount: number | string) {
   PageUtils.clickButton('Save & add loan guarantor');
   cy.contains('Guarantors to loan source').should('exist');
-  PageUtils.searchBoxInput(name);
+  ContactLookup.getContact(name);
   cy.get('#amount').safeType(amount);
   cy.intercept({
     method: 'Post',

@@ -5,6 +5,7 @@ import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { ContactFormData } from '../models/ContactFormModel';
 import { F3XSetup } from './f3x-setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
+import { ContactLookup } from '../pages/contactLookup';
 
 const formData = {
   ...defaultLoanFormData,
@@ -19,7 +20,7 @@ function setupLoanByCommittee() {
     StartTransaction.Loans().ByCommittee();
     // Search for created committee and enter load data, then add load guarantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');
-    PageUtils.searchBoxInput(result.committee.committee_id);
+    ContactLookup.getCommittee(result.committee);
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
     return cy.wrap(result);
@@ -29,7 +30,7 @@ function setupLoanByCommittee() {
 function addGuarantor(individual: ContactFormData) {
   PageUtils.clickButton('Save & add loan guarantor');
   PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
-  PageUtils.searchBoxInput(individual.last_name);
+  ContactLookup.getContact(individual.last_name);
   cy.get('#amount').safeType(formData['amount']);
   cy.intercept({
     method: 'Post',
