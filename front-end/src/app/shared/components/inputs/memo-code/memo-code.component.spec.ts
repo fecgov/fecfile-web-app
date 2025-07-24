@@ -11,7 +11,7 @@ import {
   testScheduleATransaction,
 } from 'app/shared/utils/unit-test.utils';
 import { MemoCodeInputComponent } from './memo-code.component';
-import { provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -19,10 +19,55 @@ import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Component, viewChild } from '@angular/core';
+import { Transaction } from 'app/shared/models';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+
+@Component({
+  imports: [MemoCodeInputComponent],
+  standalone: true,
+  template: `<app-memo-code
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    [templateMap]="templateMap"
+    [overrideMemoItemHelpText]="memoItemHelpText"
+    [transaction]="transaction"
+    checkboxLabel="MEMO ITEM"
+    [parenLabel]="memoHasOptional ? '(OPTIONAL)' : ''"
+  />`,
+})
+class TestHostComponent {
+  form = new FormGroup(
+    {
+      contribution_date: new SubscriptionFormControl(''),
+      memo_code: new SubscriptionFormControl(''),
+      contribution_amount: new SubscriptionFormControl(''),
+      contribution_aggregate: new SubscriptionFormControl(''),
+    },
+    { updateOn: 'blur' },
+  );
+  formSubmitted = false;
+  templateMap = testTemplateMap;
+  memoItemHelpText = '';
+  transaction: Transaction = testScheduleATransaction;
+  memoHasOptional = false;
+  component = viewChild.required(MemoCodeInputComponent);
+}
 
 describe('MemoCodeInputComponent', () => {
   let component: MemoCodeInputComponent;
-  let fixture: ComponentFixture<MemoCodeInputComponent>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let mockStore: MockStore;
+
+  function setForm3X(memoCode = true) {
+    const form3x = new Form3X();
+    if (memoCode) host.templateMap.memo_code = 'memo_code';
+    form3x.coverage_from_date = new Date('01/01/2020');
+    form3x.coverage_through_date = new Date('01/31/2020');
+    mockStore.overrideSelector(selectActiveReport, form3x);
+    mockStore.refreshState();
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,18 +86,12 @@ describe('MemoCodeInputComponent', () => {
       providers: [provideMockStore(testMockStore), ConfirmationService],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MemoCodeInputComponent);
-    component = fixture.componentInstance;
-    component.form = new FormGroup(
-      {
-        contribution_date: new SubscriptionFormControl(''),
-        memo_code: new SubscriptionFormControl(''),
-        contribution_amount: new SubscriptionFormControl(''),
-        contribution_aggregate: new SubscriptionFormControl(''),
-      },
-      { updateOn: 'blur' },
-    );
-    component.templateMap = testTemplateMap;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+
+    mockStore = TestBed.inject(MockStore);
+
     fixture.detectChanges();
   });
 
@@ -66,15 +105,11 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
-    component.report = new Form3X();
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
-
+    setForm3X();
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.form.get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
+
     expect(component.outOfDateDialogVisible).toBeTrue();
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
@@ -83,11 +118,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
-    component.report = new Form3X();
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-
+    setForm3X();
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
     component.form.get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
@@ -95,10 +126,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
-    component.report = new Form3X();
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
+    setForm3X();
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.outOfDateDialogVisible = false;
@@ -113,11 +141,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not open the dialog box when same report date is set', () => {
-    component.report = new Form3X();
-    component.templateMap.memo_code = 'memo_code';
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    setForm3X();
 
     component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
     expect(component.outOfDateDialogVisible).toBeTrue();
@@ -128,10 +152,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should add and remove the requiredTrue validator when a date is set', () => {
-    component.report = new Form3X();
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    setForm3X(false);
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
@@ -144,13 +165,9 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should preserve old validators when clearing an added requiredTrue validator', () => {
-    component.report = new Form3X();
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    setForm3X(false);
 
     component.form.get('memo_code')?.addValidators(Validators.email);
-
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
 
@@ -161,10 +178,7 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should not crash if it tries to update the contribution date without a memo_code formControl', () => {
-    component.report = new Form3X();
-    component.report.coverage_from_date = new Date('01/01/2020');
-    component.report.coverage_through_date = new Date('01/31/2020');
-    component.transaction = testScheduleATransaction;
+    setForm3X(false);
     component.form.removeControl('memo_code');
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
@@ -172,30 +186,30 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should update transaction type identifiers correctly based on the TransactionType', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    fixture.detectChanges();
     component.ngOnInit();
 
-    const trueTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.true;
-    const falseTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.false;
+    const trueTTI = component.transactionType()?.memoCodeTransactionTypes?.true;
+    const falseTTI = component.transactionType()?.memoCodeTransactionTypes?.false;
 
     component.memoControl.setValue(true);
-    expect(component.transaction.transaction_type_identifier).toEqual(trueTTI);
+
+    expect(component.transaction()?.transaction_type_identifier).toEqual(trueTTI);
 
     component.memoControl.setValue(false);
-    expect(component.transaction.transaction_type_identifier).toEqual(falseTTI);
+    fixture.detectChanges();
+    expect(component.transaction()?.transaction_type_identifier).toEqual(falseTTI);
   });
 
   it('should form the memoCodeMapOptions correctly', () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    fixture.detectChanges();
     component.ngOnInit();
 
-    for (const option of component.memoCodeMapOptions) {
-      if (option.value === false) {
-        expect(option.label).toEqual(component.transaction.transactionType?.memoCodeMap?.false);
-      }
-      if (option.value === true) {
-        expect(option.label).toEqual(component.transaction.transactionType?.memoCodeMap?.true);
-      }
+    for (const option of component.memoCodeMapOptions()) {
+      const memoCodeMap = host.transaction.transactionType.memoCodeMap!;
+      expect(option.label).toEqual(option.value ? memoCodeMap.true : memoCodeMap.false);
     }
   });
 });

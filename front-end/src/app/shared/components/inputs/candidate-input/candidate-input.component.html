@@ -75,7 +75,7 @@
   </div>
   @if (hasCandidateOfficeInput) {
     <app-candidate-office-input
-      [transaction]="transaction"
+      [transaction]="transaction()"
       [form]="form"
       [formSubmitted]="formSubmitted"
       [officeFormControlName]="templateMap['candidate_office']"
