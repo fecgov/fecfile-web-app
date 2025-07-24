@@ -1,3 +1,4 @@
+import { StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   candidateFormData,
   committeeFormData,
@@ -5,7 +6,6 @@ import {
   defaultFormData as individualContactFormData,
   organizationFormData,
 } from '../models/ContactFormModel';
-import { clearContacts, Individual_A_A$ } from '../requests/library/contacts';
 import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
@@ -74,20 +74,34 @@ export class ContactListPage {
     if (['Individual', 'Candidate'].includes(formData['contact_type'])) {
       cy.get(alias).find('#last_name').should('have.value', formData['last_name']);
       cy.get(alias).find('#first_name').should('have.value', formData['first_name']);
-      cy.get(alias).find('#middle_name').should('have.value', formData['middle_name']);
-      cy.get(alias).find('#prefix').should('have.value', formData['prefix']);
-      cy.get(alias).find('#suffix').should('have.value', formData['suffix']);
-      cy.get(alias).find('#employer').should('have.value', formData['employer']);
-      cy.get(alias).find('#occupation').should('have.value', formData['occupation']);
+      cy.get(alias)
+        .find('#middle_name')
+        .should('have.value', formData['middle_name'] ?? '');
+      cy.get(alias)
+        .find('#prefix')
+        .should('have.value', formData['prefix'] ?? '');
+      cy.get(alias)
+        .find('#suffix')
+        .should('have.value', formData['suffix'] ?? '');
+      cy.get(alias)
+        .find('#employer')
+        .should('have.value', formData['employer'] ?? '');
+      cy.get(alias)
+        .find('#occupation')
+        .should('have.value', formData['occupation'] ?? '');
     }
 
     if (!excludeCountry) {
       cy.get(alias).find('[inputid="country"]').should('contain', formData['country']);
     }
     cy.get(alias).find('#street_1').should('have.value', formData['street_1']);
-    cy.get(alias).find('#street_2').should('have.value', formData['street_2']);
+    cy.get(alias)
+      .find('#street_2')
+      .should('have.value', formData['street_2'] ?? '');
     cy.get(alias).find('#city').should('have.value', formData['city']);
-    cy.get(alias).find('[inputid="state"]').should('contain', formData['state']);
+    const state =
+      formData['state'].length === 2 ? StatesCodeLabels.find((f) => f[0] === formData['state'])![1] : formData['state'];
+    cy.get(alias).find('[inputid="state"]').should('contain', state);
     cy.get(alias).find('#zip').should('have.value', formData['zip']);
 
     if (formData['contact_type'] === 'Candidate') {
