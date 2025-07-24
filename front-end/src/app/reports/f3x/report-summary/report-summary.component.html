@@ -3,12 +3,12 @@
     <div class="summary-header">
       <h1>Summary page</h1>
       <div>
-        <strong>{{ report.formLabel }}</strong
-        >{{ report.formSubLabel }}
+        <strong>{{ f3x().formLabel }}</strong
+        >{{ f3x().formSubLabel }}
       </div>
     </div>
 
-    @if (calculationFinished$ | async) {
+    @if (calculationFinished()) {
       <div>
         <table>
           <caption>
@@ -22,50 +22,50 @@
           </tr>
           <tr>
             <td class="right-border">6(a)</td>
-            <td class="justify-left right-border">Cash on hand January 1, {{ report.L6a_year_for_above_ytd }}</td>
+            <td class="justify-left right-border">Cash on hand January 1, {{ f3x().L6a_year_for_above_ytd }}</td>
             <td class="right-border"></td>
-            <td>{{ report.L6a_cash_on_hand_jan_1_ytd | defaultZero | currency }}</td>
+            <td>{{ f3x().L6a_cash_on_hand_jan_1_ytd | defaultZero | currency }}</td>
           </tr>
           <tr class="gray">
             <td class="right-border">6(b)</td>
             <td class="justify-left right-border">Cash on hand at beginning of reporting period</td>
-            <td class="right-border">{{ report.L6b_cash_on_hand_beginning_period | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L6b_cash_on_hand_beginning_period | defaultZero | currency }}</td>
             <td></td>
           </tr>
           <tr>
             <td class="right-border">6(c)</td>
             <td class="justify-left right-border">Total receipts (from Line 19)</td>
-            <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
-            <td>{{ report.L19_total_receipts_ytd | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L19_total_receipts_period | defaultZero | currency }}</td>
+            <td>{{ f3x().L19_total_receipts_ytd | defaultZero | currency }}</td>
           </tr>
           <tr class="gray">
             <td class="right-border">6(d)</td>
             <td class="justify-left right-border">
               Subtotal (add Lines 6(b) and 6(c) for Column A and Lines 6(a) and 6(c) from Column B)
             </td>
-            <td class="right-border">{{ report.L6d_subtotal_period | defaultZero | currency }}</td>
-            <td>{{ report.L6d_subtotal_ytd | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L6d_subtotal_period | defaultZero | currency }}</td>
+            <td>{{ f3x().L6d_subtotal_ytd | defaultZero | currency }}</td>
           </tr>
           <tr>
             <td class="right-border">7</td>
             <td class="justify-left right-border">Total disbursements (from Line 31)</td>
-            <td class="right-border">{{ report.L7_total_disbursements_period | defaultZero | currency }}</td>
-            <td>{{ report.L7_total_disbursements_ytd | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L7_total_disbursements_period | defaultZero | currency }}</td>
+            <td>{{ f3x().L7_total_disbursements_ytd | defaultZero | currency }}</td>
           </tr>
           <tr class="gray">
             <td class="right-border">8</td>
             <td class="justify-left right-border">
               Cash on hand at close of reporting period (subtract Line 7 from Line 6(d))
             </td>
-            <td class="right-border">{{ report.L8_cash_on_hand_at_close_period | defaultZero | currency }}</td>
-            <td>{{ report.L8_cash_on_hand_close_ytd | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L8_cash_on_hand_at_close_period | defaultZero | currency }}</td>
+            <td>{{ f3x().L8_cash_on_hand_close_ytd | defaultZero | currency }}</td>
           </tr>
           <tr>
             <td class="right-border">9</td>
             <td class="justify-left right-border">
               Debts and obligations owed <strong>TO</strong> the committee (Itemize all on Schedule C and/or Schedule D)
             </td>
-            <td class="right-border">{{ report.L9_debts_to_period | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L9_debts_to_period | defaultZero | currency }}</td>
             <td></td>
           </tr>
           <tr class="gray last">
@@ -74,7 +74,7 @@
               Debts and obligations owed <strong>BY</strong> the committee (Itemized all on Schedule C and/or Schedule
               D)
             </td>
-            <td class="right-border">{{ report.L10_debts_by_period | defaultZero | currency }}</td>
+            <td class="right-border">{{ f3x().L10_debts_by_period | defaultZero | currency }}</td>
             <td></td>
           </tr>
         </table>
@@ -98,7 +98,7 @@
             pRipple
             label="Back"
             class="p-button-secondary"
-            (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
+            (click)="router.navigateByUrl('/reports/transactions/report/' + f3x().id + '/list')"
           ></button>
         </div>
       </div>
@@ -110,7 +110,7 @@
             pRipple
             label="Review detailed summary page"
             class="p-button-primary"
-            (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+            (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + f3x().id)"
           ></button>
         </div>
       </div>

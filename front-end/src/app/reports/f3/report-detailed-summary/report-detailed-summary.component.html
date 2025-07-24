@@ -2,11 +2,11 @@
   <div class="summary-header">
     <h1>Detailed summary page</h1>
     <div>
-      <strong>{{ report.formLabel }}</strong
-      >{{ report.formSubLabel }}
+      <strong>{{ f3().formLabel }}</strong
+      >{{ f3().formSubLabel }}
     </div>
   </div>
-  @if (calculationFinished$ | async) {
+  @if (calculationFinished()) {
     <div>
       <table>
         <caption>
@@ -35,14 +35,14 @@
           <td class="justify-left right-border indent-2">
             <em>Itemized<span class="parenthesis-text"> (use Schedule A)</span></em>
           </td>
-          <td class="right-border">{{ report.L11ai_individuals_itemized_period | defaultZero | currency }}</td>
-          <td>{{ report.L11ai_individuals_itemized_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L11ai_individuals_itemized_period | defaultZero | currency }}</td>
+          <td>{{ f3().L11ai_individuals_itemized_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(a)(ii)</td>
           <td class="justify-left right-border indent-2"><em>Unitemized</em></td>
-          <td class="right-border">{{ report.L11aii_individuals_unitemized_period | defaultZero | currency }}</td>
-          <td>{{ report.L11aii_individuals_unitemized_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L11aii_individuals_unitemized_period | defaultZero | currency }}</td>
+          <td>{{ f3().L11aii_individuals_unitemized_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(a)(iii)</td>
@@ -52,30 +52,30 @@
               >Lines 11(a)(i) <b>+</b> 11(a)(ii) <b>=</b> Line 11(a)(iii)</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L11aiii_total_individual_period | defaultZero | currency }}</td>
-          <td>{{ report.L11aiii_total_individual_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L11aiii_total_individual_period | defaultZero | currency }}</td>
+          <td>{{ f3().L11aiii_total_individual_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1">Political party committees</td>
-          <td class="right-border">{{ report.L11b_political_party_committees_period | defaultZero | currency }}</td>
-          <td>{{ report.L11b_political_party_committees_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L11b_political_party_committees_period | defaultZero | currency }}</td>
+          <td>{{ f3().L11b_political_party_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
           <td class="justify-left right-border indent-1">Other political committees (Such as PACs)</td>
           <td class="right-border">
-            {{ report.L11c_other_political_committees_period | defaultZero | currency }}
+            {{ f3().L11c_other_political_committees_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L11c_other_political_committees_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L11c_other_political_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(d)</td>
           <td class="justify-left right-border indent-1">The candidate</td>
           <td class="right-border">
-            {{ report.L11d_the_candidate_period | defaultZero | currency }}
+            {{ f3().L11d_the_candidate_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L11d_the_candidate_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L11d_the_candidate_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(e)</td>
@@ -83,16 +83,16 @@
             Total contributions (other than loans)
             <app-calculation-overlay> Lines 11(a)(iii) + 11(b) + 11(c) + 11(d)= Line 11(e)</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L11e_total_contributions_period | defaultZero | currency }}</td>
-          <td>{{ report.L11e_total_contributions_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L11e_total_contributions_period | defaultZero | currency }}</td>
+          <td>{{ f3().L11e_total_contributions_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">12</td>
           <td class="justify-left right-border bold">TRANSFERS FROM OTHER AUTHORIZED COMMITTEES</td>
           <td class="right-border">
-            {{ report.L12_transfers_from_other_authorized_committees_period | defaultZero | currency }}
+            {{ f3().L12_transfers_from_other_authorized_committees_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L12_transfers_from_other_authorized_committees_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L12_transfers_from_other_authorized_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">13</td>
@@ -104,37 +104,37 @@
           <td class="right-border">(a)</td>
           <td class="justify-left right-border bold">Made or guaranteed by the candidate</td>
           <td class="right-border">
-            {{ report.L13a_loans_made_or_guaranteed_by_the_candidate_period | defaultZero | currency }}
+            {{ f3().L13a_loans_made_or_guaranteed_by_the_candidate_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L13a_loans_made_or_guaranteed_by_the_candidate_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L13a_loans_made_or_guaranteed_by_the_candidate_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="white">
           <td class="right-border">(b)</td>
           <td class="justify-left right-border bold">All other loans</td>
-          <td class="right-border">{{ report.L13b_all_other_loans_period | defaultZero | currency }}</td>
-          <td>{{ report.L13b_all_other_loans_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L13b_all_other_loans_period | defaultZero | currency }}</td>
+          <td>{{ f3().L13b_all_other_loans_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="white">
           <td class="right-border">(c)</td>
           <td class="justify-left right-border bold">TOTAL LOANS</td>
-          <td class="right-border">{{ report.L13c_total_loans_period | defaultZero | currency }}</td>
-          <td>{{ report.L13c_total_loans_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L13c_total_loans_period | defaultZero | currency }}</td>
+          <td>{{ f3().L13c_total_loans_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">14</td>
           <td class="justify-left right-border bold">OFFSETS TO OPERATING EXPENDITURES (REFUNDS, REBATES, ETC.)</td>
           <td class="right-border">
-            {{ report.L14_offsets_to_operating_expenditures_period | defaultZero | currency }}
+            {{ f3().L14_offsets_to_operating_expenditures_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L14_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L14_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">15</td>
           <td class="justify-left right-border bold">OTHER RECEIPTS (DIVIDENDS, INTEREST, ETC.)</td>
           <td class="right-border">
-            {{ report.L15_other_receipts_period | defaultZero | currency }}
+            {{ f3().L15_other_receipts_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L15_other_receipts_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L15_other_receipts_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="dark-gray last">
           <td class="right-border bold">16</td>
@@ -145,8 +145,8 @@
               appear on Line 24)</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L16_total_receipts_period | defaultZero | currency }}</td>
-          <td class="bold">{{ report.L16_total_receipts_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L16_total_receipts_period | defaultZero | currency }}</td>
+          <td class="bold">{{ f3().L16_total_receipts_ytd | defaultZero | currency }}</td>
         </tr>
       </table>
 
@@ -167,18 +167,18 @@
           <td class="right-border bold">17</td>
           <td class="justify-left right-border bold">OPERATING EXPENDITURES</td>
           <td class="right-border">
-            {{ report.L17_operating_expenditures_period | defaultZero | currency }}
+            {{ f3().L17_operating_expenditures_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L17_operating_expenditures_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L17_operating_expenditures_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">18</td>
           <td class="justify-left right-border bold">TRANSFERS TO OTHER AUTHORIZED COMMITTEES</td>
           <td class="right-border">
-            {{ report.L18_transfers_to_other_authorized_committees_period | defaultZero | currency }}
+            {{ f3().L18_transfers_to_other_authorized_committees_period | defaultZero | currency }}
           </td>
           <td>
-            {{ report.L18_transfers_to_other_authorized_committees_ytd | defaultZero | currency }}
+            {{ f3().L18_transfers_to_other_authorized_committees_ytd | defaultZero | currency }}
           </td>
         </tr>
 
@@ -193,19 +193,19 @@
           <td class="right-border">(a)</td>
           <td class="justify-left right-border bold">Of Loans Made or Guaranteed by the Candidate</td>
           <td class="right-border">
-            {{ report.L19a_loan_repayments_of_loans_made_or_guaranteed_by_candidate_period | defaultZero | currency }}
+            {{ f3().L19a_loan_repayments_of_loans_made_or_guaranteed_by_candidate_period | defaultZero | currency }}
           </td>
           <td>
-            {{ report.L19a_loan_repayments_of_loans_made_or_guaranteed_by_candidate_ytd | defaultZero | currency }}
+            {{ f3().L19a_loan_repayments_of_loans_made_or_guaranteed_by_candidate_ytd | defaultZero | currency }}
           </td>
         </tr>
         <tr class="white">
           <td class="right-border">(b)</td>
           <td class="justify-left right-border bold">Of all other loans</td>
           <td class="right-border">
-            {{ report.L19b_loan_repayments_of_all_other_loans_period | defaultZero | currency }}
+            {{ f3().L19b_loan_repayments_of_all_other_loans_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L19b_loan_repayments_of_all_other_loans_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L19b_loan_repayments_of_all_other_loans_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="white">
           <td class="right-border">(c)</td>
@@ -214,9 +214,9 @@
             <app-calculation-overlay>Line 19(a) <b>+</b> 19(b) <b>=</b> Line 19(c)</app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L19c_total_loan_repayments_period | defaultZero | currency }}
+            {{ f3().L19c_total_loan_repayments_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L19c_total_loan_repayments_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L19c_total_loan_repayments_ytd | defaultZero | currency }}</td>
         </tr>
 
         <tr class="gray">
@@ -231,17 +231,17 @@
             <em>Individuals/Persons Other Than Political Committees</em>
           </td>
           <td class="right-border right-border indent-1">
-            {{ report.L20a_refunds_to_individuals_period | defaultZero | currency }}
+            {{ f3().L20a_refunds_to_individuals_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L20a_refunds_to_individuals_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L20a_refunds_to_individuals_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(b)</td>
           <td class="justify-left right-border indent-1"><em>Political Party Committees</em></td>
           <td class="right-border">
-            {{ report.L20b_refunds_to_political_party_committees_period | defaultZero | currency }}
+            {{ f3().L20b_refunds_to_political_party_committees_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L20b_refunds_to_political_party_committees_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L20b_refunds_to_political_party_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(c)</td>
@@ -249,9 +249,9 @@
             <em>Other Political Committees</em> <span class="parenthesis-text">(such as PACs)</span>
           </td>
           <td class="right-border">
-            {{ report.L20c_refunds_to_other_political_committees_period | defaultZero | currency }}
+            {{ f3().L20c_refunds_to_other_political_committees_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L20c_refunds_to_other_political_committees_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L20c_refunds_to_other_political_committees_ytd | defaultZero | currency }}</td>
         </tr>
         <tr>
           <td class="right-border">(d)</td>
@@ -263,17 +263,17 @@
             >
           </td>
           <td class="right-border">
-            {{ report.L20d_total_contribution_refunds_period | defaultZero | currency }}
+            {{ f3().L20d_total_contribution_refunds_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L20d_total_contribution_refunds_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L20d_total_contribution_refunds_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">21</td>
           <td class="justify-left right-border bold">OTHER DISBURSEMENTS</td>
           <td class="right-border">
-            {{ report.L21_other_disbursements_period | defaultZero | currency }}
+            {{ f3().L21_other_disbursements_period | defaultZero | currency }}
           </td>
-          <td>{{ report.L21_other_disbursements_ytd | defaultZero | currency }}</td>
+          <td>{{ f3().L21_other_disbursements_ytd | defaultZero | currency }}</td>
         </tr>
         <tr class="dark-gray last">
           <td class="right-border bold">22</td>
@@ -283,8 +283,8 @@
               >Lines 17 <b>-</b> 18 <b>+</b> 19(c)<b>+</b> 20(d)<b>+</b> 21 <b>=</b> Line 22</app-calculation-overlay
             >
           </td>
-          <td class="right-border">{{ report.L22_total_disbursements_period | defaultZero | currency }}</td>
-          <td>{{ report.L22_total_disbursements_ytd | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L22_total_disbursements_period | defaultZero | currency }}</td>
+          <td>{{ f3().L22_total_disbursements_ytd | defaultZero | currency }}</td>
         </tr>
       </table>
 
@@ -303,7 +303,7 @@
           <td class="right-border bold">23</td>
           <td class="justify-left right-border bold">CASH ON HAND AT BEGINNING OF REPORTING PERIOD</td>
           <td class="right-border">
-            {{ report.L23_cash_on_hand_beginning_reporting_period | defaultZero | currency }}
+            {{ f3().L23_cash_on_hand_beginning_reporting_period | defaultZero | currency }}
           </td>
         </tr>
         <tr class="gray">
@@ -311,21 +311,21 @@
           <td class="justify-left right-border bold cell-with-overlay">
             TOTAL RECEIPTS THIS PERIOD<app-calculation-overlay>Carried from Line 16.</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L24_total_receipts_period | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L24_total_receipts_period | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">25</td>
           <td class="justify-left right-border bold cell-with-overlay">
             SUBTOTAL<app-calculation-overlay>Line 23 <b>+</b> 24 <b>=</b> Line 25</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L25_subtotals_period | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L25_subtotals_period | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">26</td>
           <td class="justify-left right-border bold cell-with-overlay">
             TOTAL DISBURSEMENTS THIS PERIOD<app-calculation-overlay>Carried from Line 22.</app-calculation-overlay>
           </td>
-          <td class="right-border">{{ report.L26_total_disbursements_period | defaultZero | currency }}</td>
+          <td class="right-border">{{ f3().L26_total_disbursements_period | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">27</td>
@@ -334,7 +334,7 @@
             <app-calculation-overlay>Line 25 <b>-</b> 26 <b>=</b> Line 27</app-calculation-overlay>
           </td>
           <td class="right-border">
-            {{ report.L27_cash_on_hand_at_close_period | defaultZero | currency }}
+            {{ f3().L27_cash_on_hand_at_close_period | defaultZero | currency }}
           </td>
         </tr>
       </table>
@@ -358,7 +358,7 @@
           pRipple
           label="Back"
           class="p-button-secondary"
-          (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
+          (click)="router.navigateByUrl('/reports/f3x/summary/' + f3().id)"
         ></button>
       </div>
     </div>
@@ -370,7 +370,7 @@
           pRipple
           label="See print preview"
           class="p-button-primary"
-          (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
+          (click)="router.navigateByUrl('/reports/f3x/web-print/' + f3().id)"
         ></button>
       </div>
     </div>
