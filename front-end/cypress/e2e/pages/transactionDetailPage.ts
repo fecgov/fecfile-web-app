@@ -5,6 +5,7 @@ import {
   LoanFormData,
   ScheduleFormData,
 } from '../models/TransactionFormModel';
+import { MockContact } from '../requests/library/contacts';
 import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
@@ -233,7 +234,7 @@ export class TransactionDetailPage {
     }
   }
 
-  static getContact(contact: ContactFormData, alias = '', type: string | undefined = undefined) {
+  static getContact(contact: MockContact, alias = '', type: string | undefined = undefined) {
     alias = PageUtils.getAlias(alias);
 
     if (type) {
@@ -242,6 +243,7 @@ export class TransactionDetailPage {
     }
 
     const name = contact['last_name'] ?? contact['name'];
+    if (!name) return;
     cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
     cy.contains(name).should('exist');
     cy.contains(name).click({ force: true });
