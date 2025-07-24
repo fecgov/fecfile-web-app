@@ -28,7 +28,7 @@ export function makeTransaction(transaction: any, callback = (response: Cypress.
   makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction, callback);
 }
 
-export function makeRequestToAPI(
+function makeRequestToAPI(
   method: string,
   url: string,
 

@@ -4,7 +4,7 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { F3XSetup, Setup } from './f3x-setup';
-import { makeF3x, makeRequestToAPI, makeTransaction } from '../requests/methods';
+import { makeF3x, makeTransaction } from '../requests/methods';
 import { F3X_Q3 } from '../requests/library/reports';
 import {
   Authorizor,
