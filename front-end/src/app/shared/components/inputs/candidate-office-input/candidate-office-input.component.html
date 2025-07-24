@@ -5,14 +5,14 @@
         <label for="candidate_office">CANDIDATE OFFICE</label>
         <p-select
           inputId="candidate_office"
-          [formControlName]="officeFormControlName"
+          [formControlName]="officeFormControlName()"
           [options]="candidateOfficeTypeOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-select>
         <app-error-messages
           [form]="form"
-          [fieldName]="officeFormControlName"
+          [fieldName]="officeFormControlName()"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -22,15 +22,15 @@
         <label for="candidate_state">CANDIDATE STATE</label>
         <p-select
           inputId="candidate_state"
-          [formControlName]="stateFormControlName"
+          [formControlName]="stateFormControlName()"
           [options]="candidateStateOptions"
           [autoDisplayFirst]="false"
-          [class.disabled]="form.get(stateFormControlName)?.disabled"
+          [class.disabled]="stateControl()?.disabled"
           appendTo="body"
         ></p-select>
         <app-error-messages
           [form]="form"
-          [fieldName]="stateFormControlName"
+          [fieldName]="stateFormControlName()"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -43,22 +43,22 @@
             type="text"
             pInputText
             id="candidate_district"
-            [formControlName]="districtFormControlName"
+            [formControlName]="districtFormControlName()"
             class="p-disabled"
           />
         } @else {
           <p-select
             inputId="candidate_district"
-            [formControlName]="districtFormControlName"
+            [formControlName]="districtFormControlName()"
             [options]="candidateDistrictOptions"
-            [class.disabled]="form.get(stateFormControlName)?.disabled"
+            [class.disabled]="stateControl()?.disabled"
             appendTo="body"
             [autoDisplayFirst]="false"
           ></p-select>
         }
         <app-error-messages
           [form]="form"
-          [fieldName]="districtFormControlName"
+          [fieldName]="districtFormControlName()"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

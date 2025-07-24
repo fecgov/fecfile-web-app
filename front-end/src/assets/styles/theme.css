@@ -2071,7 +2071,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-button.p-button-info,
 .p-buttonset.p-button-info > .p-button,
 .p-splitbutton.p-button-info > .p-button {
-  color: #ffffff;
+  color: #212121;
   background: #35bdbb;
   border: 1px solid #35bdbb;
 }
@@ -2079,7 +2079,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-buttonset.p-button-info > .p-button:enabled:hover,
 .p-splitbutton.p-button-info > .p-button:enabled:hover {
   background: #2b9896;
-  color: #ffffff;
+  color: #212121;
   border-color: #2b9896;
 }
 .p-button.p-button-info:enabled:focus,
@@ -2091,7 +2091,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-buttonset.p-button-info > .p-button:enabled:active,
 .p-splitbutton.p-button-info > .p-button:enabled:active {
   background: #138496;
-  color: #ffffff;
+  color: #212121;
   border-color: #117a8b;
 }
 .p-button.p-button-info.p-button-outlined,

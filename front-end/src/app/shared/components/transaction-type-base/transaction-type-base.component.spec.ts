@@ -55,6 +55,10 @@ describe('TransactionTypeBaseComponent', () => {
     navigateByUrl: jasmine.createSpy('navigateByUrl'),
   };
 
+  beforeAll(async () => {
+    await import(`fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT.validator`);
+  });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TransactionDetailComponent],
