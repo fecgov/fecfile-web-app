@@ -1,13 +1,11 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { firstValueFrom, Observable, takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../components/app-destroyer.component';
-import { UserLoginData } from '../models/user.model';
 import { UsersService } from '../services/users.service';
 
 @Injectable({
@@ -18,9 +16,10 @@ export class LoginService extends DestroyerComponent {
   private readonly router = inject(Router);
   private readonly cookieService = inject(CookieService);
   private readonly usersService = inject(UsersService);
-  public userLoginData$: Observable<UserLoginData> = this.store
-    .select(selectUserLoginData)
-    .pipe(takeUntil(this.destroy$));
+  public userLoginData = this.store.selectSignal(selectUserLoginData);
+
+  readonly userHasProfileData = computed(() => !!this.userLoginData()?.first_name && !!this.userLoginData()?.last_name);
+  readonly userHasConsented = computed(() => !!this.userLoginData()?.security_consented);
 
   public logOut() {
     this.store.dispatch(userLoginDataDiscardedAction());
@@ -29,11 +28,6 @@ export class LoginService extends DestroyerComponent {
     } else {
       window.location.href = environment.loginDotGovLogoutUrl;
     }
-  }
-
-  public async hasUserLoginData(): Promise<boolean> {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    return !!userLoginData.email;
   }
 
   public async retrieveUserLoginData(): Promise<void> {
@@ -46,16 +40,6 @@ export class LoginService extends DestroyerComponent {
     return this.usersService.getCurrentUser().then((userLoginData) => {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });
-  }
-
-  public async userHasProfileData(): Promise<boolean> {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    return !!userLoginData?.first_name && !!userLoginData.last_name;
-  }
-
-  public async userHasConsented(): Promise<boolean> {
-    const userLoginData = await firstValueFrom(this.userLoginData$);
-    return !!userLoginData.security_consented;
   }
 
   public userIsAuthenticated() {
