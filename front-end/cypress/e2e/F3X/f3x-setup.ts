@@ -13,6 +13,8 @@ import {
 import { makeRequestToAPI } from '../requests/methods';
 import { F3X_Q2 } from '../requests/library/reports';
 import { BehaviorSubject } from 'rxjs';
+import { ContactListPage } from '../pages/contactListPage';
+import { ReportListPage } from '../pages/reportListPage';
 
 export interface Setup {
   organization?: boolean;
@@ -24,7 +26,7 @@ export interface Setup {
 
 export const f3ReportId$ = new BehaviorSubject('');
 
-export function F3XSetup(setup: Setup = {}) {
+export function NewF3XSetup(setup: Setup = {}) {
   if (setup.individual)
     makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
       Individual_A_A$.next(response.body);
@@ -49,6 +51,14 @@ export function F3XSetup(setup: Setup = {}) {
       f3ReportId$.next(response.body.id);
     },
   );
+}
+
+export function F3XSetup(setup: Setup = {}) {
+  if (setup.individual) ContactListPage.createIndividual();
+  if (setup.organization) ContactListPage.createOrganization();
+  if (setup.candidate) ContactListPage.createCandidate();
+  if (setup.committee) ContactListPage.createCommittee();
+  ReportListPage.createF3X(setup.report ?? reportFormData);
 }
 
 export const reportFormDataApril: F3xCreateReportFormData = {

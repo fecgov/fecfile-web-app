@@ -4,7 +4,13 @@ import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { makeRequestToAPI } from '../requests/methods';
 import { F3X_Q2 } from '../requests/library/reports';
 import { buildScheduleF } from '../requests/library/transactions';
-import { Individual_A_A, Candidate_Senate_A, Candidate_Senate_B, Committee_A } from '../requests/library/contacts';
+import {
+  Individual_A_A,
+  Candidate_Senate_A,
+  Candidate_Senate_B,
+  Committee_A,
+  Organization_A,
+} from '../requests/library/contacts';
 import { organizationFormData } from '../models/ContactFormModel';
 import { ContactListPage } from '../pages/contactListPage';
 
@@ -114,122 +120,132 @@ describe('Tests transaction form aggregate calculation', () => {
             const candidate_S_A = response.body;
             makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Committee_A, (response) => {
               const committee_A = response.body;
+              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Organization_A, (response) => {
+                const org = response.body;
+                const transaction_a = buildScheduleF(
+                  200.01,
+                  '2025-04-12',
+                  individual_A_A,
+                  candidate_S_A,
+                  committee_A,
+                  report_id,
+                );
+                const transaction_b = buildScheduleF(
+                  25.0,
+                  '2025-04-16',
+                  individual_A_A,
+                  candidate_S_A,
+                  committee_A,
+                  report_id,
+                );
+                makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+                makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+                  cy.visit(`/reports/transactions/report/${report_id}/create/COORDINATED_PARTY_EXPENDITURE`);
+                });
 
-              const transaction_a = buildScheduleF(
-                200.01,
-                '2025-04-12',
-                individual_A_A,
-                candidate_S_A,
-                committee_A,
-                report_id,
-              );
-              const transaction_b = buildScheduleF(
-                25.0,
-                '2025-04-16',
-                individual_A_A,
-                candidate_S_A,
-                committee_A,
-                report_id,
-              );
-              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
-              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
-                cy.visit(`/reports/transactions/report/${report_id}/create/COORDINATED_PARTY_EXPENDITURE`);
+                // New transaction form should have loaded
+                cy.contains('Contact').should('exist');
+
+                // Create a new contact
+                TransactionDetailPage.getContact(org);
+                TransactionDetailPage.getContact(candidate_S_A, '#contact_2_lookup');
+                cy.get('#amount').safeType('100');
+                cy.get('h1').click();
+                cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+                TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
+                cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as(
+                  'GetPrevious',
+                );
+                cy.get('#general_election_year').safeType('2024').blur();
+                cy.wait('@GetPrevious');
+                cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and update
+                cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+
+                // Tests changing the second transaction's contact
+                cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_B.first_name);
+                cy.contains('Senate, B').should('exist');
+                cy.contains('Senate, B').click({ force: true });
+                cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+                cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
               });
             });
           });
         });
       },
     );
-    // New transaction form should have loaded
-    cy.contains('Contact').should('exist');
-
-    // Create a new contact
-    PageUtils.clickLink('Create a new contact');
-    ContactListPage.enterFormData(organizationFormData, true);
-    PageUtils.clickButton('Save & continue');
-    cy.get('#amount').safeType('100');
-    cy.get('h1').click();
-    cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
-    cy.get('#general_election_year').safeType('2024');
-    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
-    TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
-    cy.wait('@GetPrevious');
-    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and update
-    cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
-
-    // Tests changing the second transaction's contact
-    cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_B.first_name);
-    cy.contains('Senate, B').should('exist');
-    cy.contains('Senate, B').click({ force: true });
-    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
-    cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
   });
 
   it('new transaction aggregate different election year', () => {
     cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**').as('GetTransactionList');
-    makeRequestToAPI(
-      'POST',
-      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
-      F3X_Q2,
-      (response) => {
-        const report_id: string = response.body.id;
-        makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
-          const individual_A_A = response.body;
-          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_Senate_B);
-          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_Senate_A, (response) => {
-            const candidate_S_A = response.body;
-            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Committee_A, (response) => {
-              const committee_A = response.body;
+    makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Organization_A, (response) => {
+      const org = response.body;
+      makeRequestToAPI(
+        'POST',
+        'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+        F3X_Q2,
+        (response) => {
+          const report_id: string = response.body.id;
+          makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Individual_A_A, (response) => {
+            const individual_A_A = response.body;
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_Senate_B);
+            makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Candidate_Senate_A, (response) => {
+              const candidate_S_A = response.body;
+              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', Committee_A, (response) => {
+                const committee_A = response.body;
 
-              const transaction_a = buildScheduleF(
-                200.01,
-                '2025-04-12',
-                individual_A_A,
-                candidate_S_A,
-                committee_A,
-                report_id,
-              );
-              const transaction_b = buildScheduleF(
-                25.0,
-                '2025-04-16',
-                individual_A_A,
-                candidate_S_A,
-                committee_A,
-                report_id,
-              );
-              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
-              makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
-                cy.visit(`/reports/transactions/report/${report_id}/create/COORDINATED_PARTY_EXPENDITURE`);
+                const transaction_a = buildScheduleF(
+                  200.01,
+                  '2025-04-12',
+                  individual_A_A,
+                  candidate_S_A,
+                  committee_A,
+                  report_id,
+                );
+                const transaction_b = buildScheduleF(
+                  25.0,
+                  '2025-04-16',
+                  individual_A_A,
+                  candidate_S_A,
+                  committee_A,
+                  report_id,
+                );
+                makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_a, (response) => {});
+                makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction_b, (response) => {
+                  cy.visit(`/reports/transactions/report/${report_id}/create/COORDINATED_PARTY_EXPENDITURE`);
+                });
+
+                // New transaction form should have loaded
+                cy.contains('Contact').should('exist');
+
+                // Create a new contact
+                TransactionDetailPage.getContact(org);
+                TransactionDetailPage.getContact(candidate_S_A, '#contact_2_lookup');
+                cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as(
+                  'GetPrevious',
+                );
+                cy.get('#amount').safeType('100');
+                cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+                cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+
+                TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
+                cy.get('#general_election_year').safeType('1990').blur();
+                cy.wait('@GetPrevious');
+                cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and update
+                cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+
+                // Tests changing the second transaction's contact
+                cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_A.first_name);
+                cy.contains('Senate, A').should('exist');
+                cy.contains('Senate, A').click({ force: true });
+                cy.get('h1').click();
+
+                cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$100.00');
               });
             });
           });
-        });
-      },
-    );
-    // New transaction form should have loaded
-    cy.contains('Contact').should('exist');
-
-    // Create a new contact
-    PageUtils.clickLink('Create a new contact');
-    ContactListPage.enterFormData(organizationFormData, true);
-    PageUtils.clickButton('Save & continue');
-    cy.get('#amount').safeType('100');
-    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
-    cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
-    cy.get('#general_election_year').safeType('1990');
-    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
-    TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
-    cy.wait('@GetPrevious');
-    cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and update
-    cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
-
-    // Tests changing the second transaction's contact
-    cy.get('#contact_2_lookup').find('#searchBox').safeType(Candidate_Senate_A.first_name);
-    cy.contains('Senate, A').should('exist');
-    cy.contains('Senate, A').click({ force: true });
-    cy.get('h1').click();
-
-    cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$100.00');
+        },
+      );
+    });
   });
 
   it('existing transaction change contact', () => {

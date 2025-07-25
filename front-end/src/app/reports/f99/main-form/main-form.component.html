@@ -1,8 +1,8 @@
 <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
   <h1>Form 99</h1>
-  <h5>MISCELLANEOUS REPORT TO THE FEC</h5>
+  <span class="misc-label">MISCELLANEOUS REPORT TO THE FEC</span>
   <hr />
-  <h3>Committee</h3>
+  <h2>Committee</h2>
 
   <div class="field w-9">
     <label for="committee_name">COMMITTEE NAME</label>
@@ -30,22 +30,23 @@
   </div>
 
   <hr type="solid" />
-  <h3>Address</h3>
+  <h2>Address</h2>
 
   <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form"></app-address-input>
 
   <hr type="solid" />
-  <h3>Text Information</h3>
+  <h2>Text Information</h2>
 
   <div class="field w-6">
-    <label for="text_code">DOCUMENT TYPE</label>
+    <span class="span-label" id="text_code_label">DOCUMENT TYPE</span>
     <p-select
+      ariaLabelledBy="text_code_label"
       inputId="text_code"
       formControlName="text_code"
       [options]="textCodes"
       [autoDisplayFirst]="false"
       appendTo="body"
-    ></p-select>
+    />
     <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted"></app-error-messages>
   </div>
 

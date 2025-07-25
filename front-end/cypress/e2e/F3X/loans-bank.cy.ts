@@ -38,7 +38,11 @@ describe('Loans', () => {
   });
 
   it('should test new C1 - Loan Agreement for existing Schedule C Loan', () => {
-    setupLoanFromBank({ individual: true, organization: true, report: reportFormDataApril });
+    setupLoanFromBank({
+      individual: individualContactFormData,
+      organization: organizationFormData,
+      report: reportFormDataApril,
+    });
 
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
@@ -99,7 +103,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    setupLoanFromBank({ individual: true, organization: true });
+    setupLoanFromBank({ individual: individualContactFormData, organization: organizationFormData });
 
     PageUtils.clickButton('Save transactions');
     PageUtils.urlCheck('/list');
@@ -118,7 +122,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
-    setupLoanFromBank({ organization: true });
+    setupLoanFromBank({ organization: organizationFormData });
 
     PageUtils.clickButton('Save transactions');
 
@@ -137,7 +141,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
-    setupLoanFromBank({ organization: true });
+    setupLoanFromBank({ organization: organizationFormData });
 
     PageUtils.clickButton('Save transactions');
 
@@ -157,7 +161,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
-    setupLoanFromBank({ individual: true, organization: true });
+    setupLoanFromBank({ individual: individualContactFormData, organization: organizationFormData });
 
     PageUtils.clickButton('Save & add loan guarantor');
 

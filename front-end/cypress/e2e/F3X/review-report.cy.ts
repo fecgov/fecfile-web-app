@@ -36,7 +36,7 @@ describe('Receipt Transactions', () => {
 
   it('should recalculate after transaction created or updated', () => {
     // Create report and check summary calc runs
-    F3XSetup({ individual: true });
+    F3XSetup({ individual: defaultContactFormData });
     ReviewReport.Summary();
     cy.get('img.fec-loader-image').should('exist');
 

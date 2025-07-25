@@ -70,7 +70,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
 
-  override async save(jump: 'continue' | undefined = undefined) {
+  override async save(jump: 'continue' | void) {
     const filingFrequency = this.form.get('filing_frequency');
     if (filingFrequency) {
       this.form.get('filing_frequency')?.updateValueAndValidity();
