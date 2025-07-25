@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, untracked } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -92,7 +92,10 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
   constructor() {
     super();
-    effect(() => this.form.patchValue(this.manager().contact(), { emitEvent: false }));
+    effect(() => {
+      const contact = this.manager().contact();
+      untracked(() => this.form.patchValue(contact, { emitEvent: false }));
+    });
 
     effect(() => {
       if (!this.cmservice.showDialog()) this.reset();
@@ -133,6 +136,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
   private reset() {
     this.form.markAsUntouched();
+    this.form.markAsPristine();
     this.formSubmitted = false;
   }
 
