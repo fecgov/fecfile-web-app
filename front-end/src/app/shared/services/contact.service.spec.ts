@@ -134,27 +134,18 @@ describe('ContactService', () => {
     const expectedRetval = new CandidateLookupResponse();
     const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
     const testSearch = 'testSearch';
-    const testMaxFecResults = 1;
-    const testMaxFecfileResults = 2;
 
     const expectedEndpoint = '/contacts/candidate_lookup/';
     const expectedParams = {
       q: testSearch,
-      max_fec_results: testMaxFecResults,
-      max_fecfile_results: testMaxFecfileResults,
+      max_fec_results: service.maxFecResults(),
+      max_fecfile_results: service.maxFecfileResults(),
       office: '',
       exclude_fec_ids: 'C000000001,C000000002',
       exclude_ids: '',
     };
 
-    const value = await service.candidateLookup(
-      testSearch,
-      testMaxFecResults,
-      testMaxFecfileResults,
-      undefined,
-      ['C000000001', 'C000000002'],
-      [],
-    );
+    const value = await service.candidateLookup(testSearch, 'C000000001,C000000002', '');
     expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -162,13 +153,11 @@ describe('ContactService', () => {
   it('#committeeLookup() happy path', async () => {
     const expectedRetval = new CommitteeLookupResponse();
     const testSearch = 'testSearch';
-    const testMaxFecResults = 1;
-    const testMaxFecfileResults = 2;
     const apiServiceGetSpy = spyOn(testApiService, 'get')
       .withArgs('/contacts/committee_lookup/', {
         q: testSearch,
-        max_fec_results: testMaxFecResults,
-        max_fecfile_results: testMaxFecfileResults,
+        max_fec_results: service.maxFecResults(),
+        max_fecfile_results: service.maxFecfileResults(),
         exclude_fec_ids: '',
         exclude_ids: '',
       })
@@ -177,13 +166,13 @@ describe('ContactService', () => {
     const expectedEndpoint = '/contacts/committee_lookup/';
     const expectedParams = {
       q: testSearch,
-      max_fec_results: testMaxFecResults,
-      max_fecfile_results: testMaxFecfileResults,
+      max_fec_results: service.maxFecResults(),
+      max_fecfile_results: service.maxFecfileResults(),
       exclude_fec_ids: '',
       exclude_ids: '',
     };
 
-    const value = await service.committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults, [], []);
+    const value = await service.committeeLookup(testSearch, '', '');
     expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
@@ -192,18 +181,15 @@ describe('ContactService', () => {
     const expectedRetval = new IndividualLookupResponse();
     const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
     const testSearch = 'testSearch';
-    const testMaxFecfileResults = 2;
 
     const expectedEndpoint = '/contacts/individual_lookup/';
     const expectedParams = {
       q: testSearch,
-      max_fecfile_results: testMaxFecfileResults,
+      max_fecfile_results: service.maxFecfileResults(),
       exclude_ids: '',
     };
 
-    service
-      .individualLookup(testSearch, testMaxFecfileResults, [])
-      .then((value) => expect(value).toEqual(expectedRetval));
+    service.individualLookup(testSearch, '').then((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
@@ -211,16 +197,15 @@ describe('ContactService', () => {
     const expectedRetval = new OrganizationLookupResponse();
     const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
     const testSearch = 'testSearch';
-    const testMaxFecfileResults = 2;
 
     const expectedEndpoint = '/contacts/organization_lookup/';
     const expectedParams = {
       q: testSearch,
-      max_fecfile_results: testMaxFecfileResults,
+      max_fecfile_results: service.maxFecfileResults(),
       exclude_ids: '',
     };
 
-    const value = await service.organizationLookup(testSearch, testMaxFecfileResults, []);
+    const value = await service.organizationLookup(testSearch, '');
     expect(value).toEqual(expectedRetval);
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });

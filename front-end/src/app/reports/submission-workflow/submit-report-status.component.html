@@ -1,7 +1,7 @@
 <div class="mt-5 ml-2 p-component">
   <h1>Report status</h1>
   <span class="subtitle">
-    <strong>{{ activeReportSignal().formLabel }}: </strong>{{ activeReportSignal().formSubLabel }}
+    <strong>{{ activeReport().formLabel }}: </strong>{{ activeReport().formSubLabel }}
   </span>
   <hr type="solid" />
   <div class="flex">
@@ -55,7 +55,7 @@
         }
         <h3 class="submission-info-heading">Form Type:</h3>
         <p class="submission-info-text">
-          {{ activeReportSignal().formLabel }}
+          {{ activeReport().formLabel }}
         </p>
         <h3 class="submission-info-heading">Report Type:</h3>
         <p class="submission-info-text">
@@ -71,13 +71,13 @@
         }
         <h3 class="submission-info-heading">Confirmation Emails:</h3>
         <p class="submission-info-text word-break">
-          {{ activeReportSignal().confirmation_email_1 }} <br />
-          {{ activeReportSignal().confirmation_email_2 }}
+          {{ activeReport().confirmation_email_1 }} <br />
+          {{ activeReport().confirmation_email_2 }}
         </p>
         @if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
           <h2 class="submission-info-heading">E-filing ID:</h2>
           <p class="submission-info-text">
-            {{ activeReportSignal().upload_submission?.fec_report_id }}
+            {{ activeReport().upload_submission?.fec_report_id }}
           </p>
         }
         <button

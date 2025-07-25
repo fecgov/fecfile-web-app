@@ -66,8 +66,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
   isEditable = computed(
     () =>
-      this.reportService.isEditable(this.activeReportSignal()) &&
-      !ReattRedesUtils.isCopyFromPreviousReport(this.transaction),
+      this.reportService.isEditable(this.activeReport()) && !ReattRedesUtils.isCopyFromPreviousReport(this.transaction),
   );
   memoHasOptional$ = of(false);
 
@@ -260,7 +259,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactTypeOptions,
-      this.committeeAccountSignal(),
+      this.committeeAccount(),
     );
   }
 
