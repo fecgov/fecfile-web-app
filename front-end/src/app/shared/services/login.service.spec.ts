@@ -7,14 +7,12 @@ import { ApiService } from './api.service';
 import { Router } from '@angular/router';
 import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { CookieService } from 'ngx-cookie-service';
 import { LoginService } from './login.service';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('LoginService', () => {
   let service: LoginService;
   let store: MockStore;
-  let cookieService: CookieService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,7 +26,6 @@ describe('LoginService', () => {
     });
     service = TestBed.inject(LoginService);
     store = TestBed.inject(MockStore);
-    cookieService = TestBed.inject(CookieService);
     TestBed.inject(Router);
   });
 

@@ -43,7 +43,6 @@ describe('securityNoticeGuard', () => {
     store.overrideSelector(selectUserLoginData, { ...testUserLoginData(), security_consented: true });
     const route: ActivatedRouteSnapshot = {} as any;
     const state: RouterStateSnapshot = {} as any;
-    const loginService = TestBed.inject(LoginService);
     const safe = await executeGuard(route, state);
     expect(safe).toBeTrue();
   });
