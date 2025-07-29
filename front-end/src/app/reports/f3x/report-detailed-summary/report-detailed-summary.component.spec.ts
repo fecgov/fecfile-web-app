@@ -1,85 +1,165 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { CardModule } from 'primeng/card';
 import { ReportDetailedSummaryComponent } from './report-detailed-summary.component';
 import { ReportService } from 'app/shared/services/report.service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ApiService } from 'app/shared/services/api.service';
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CalculationStatus, ServerSideEventService } from 'app/shared/services/server-side-event.service';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 describe('ReportDetailedSummaryComponent', () => {
   let component: ReportDetailedSummaryComponent;
   let fixture: ComponentFixture<ReportDetailedSummaryComponent>;
-  const f3x: Form3X = Form3X.fromJSON({
+  let store: MockStore;
+  let apiService: jasmine.SpyObj<ApiService>;
+  let reportService: jasmine.SpyObj<ReportService>;
+  let sseService: jasmine.SpyObj<ServerSideEventService>;
+  let sseSubject: Subject<string>;
+
+  const initialF3x: Form3X = Form3X.fromJSON({
     id: '999',
-    coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
-    report_code: 'Q1',
+    calculation_status: null,
   });
-  const f3xSubject: Subject<object> = new BehaviorSubject<object>({ report: f3x });
-  let apiService: ApiService;
 
   beforeEach(async () => {
+    apiService = jasmine.createSpyObj('ApiService', ['post']);
+    reportService = jasmine.createSpyObj('ReportService', ['setActiveReportById']);
+    sseService = jasmine.createSpyObj('ServerSideEventService', ['calculationNotification']);
+    sseSubject = new Subject<string>();
+
     await TestBed.configureTestingModule({
-      imports: [CardModule, ReportDetailedSummaryComponent],
+      imports: [ReportDetailedSummaryComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        ReportService,
-        provideMockStore(testMockStore),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            data: f3xSubject,
-          },
-        },
-        ApiService,
+        provideMockStore({
+          initialState: {},
+          selectors: [{ selector: selectActiveReport, value: initialF3x }],
+        }),
+        { provide: ApiService, useValue: apiService },
+        { provide: ReportService, useValue: reportService },
+        { provide: ServerSideEventService, useValue: sseService },
       ],
     }).compileComponents();
 
-    apiService = TestBed.inject(ApiService);
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
     component = fixture.componentInstance;
+    store = TestBed.inject(MockStore);
+
+    sseService.calculationNotification.and.returnValue(sseSubject.asObservable());
     fixture.detectChanges();
-    spyOn(apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse<unknown>()));
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('CALCULATING', () => {
-    beforeEach(async () => {
-      f3x.calculation_status = 'CALCULATING';
-      TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
-      TestBed.inject(MockStore).refreshState();
-      fixture.detectChanges();
-      return component.startCalculation(f3x.id!);
+  describe('ngOnInit', () => {
+    it('should start calculation if status is null', () => {
+      const startCalculationSpy = spyOn(component, 'startCalculation');
+      component.ngOnInit();
+      expect(startCalculationSpy).toHaveBeenCalledWith('999');
     });
-    it('should create', () => {
-      expect(component).toBeTruthy();
+
+    it('should listen for completion if status is CALCULATING', () => {
+      const listenSpy = spyOn(component, 'listenForCompletion');
+      const calculatingReport = { ...initialF3x, calculation_status: CalculationStatus.CALCULATING } as Form3X;
+      store.overrideSelector(selectActiveReport, calculatingReport);
+      store.refreshState();
+      fixture.detectChanges();
+
+      component.ngOnInit();
+      expect(listenSpy).toHaveBeenCalledWith('999');
+    });
+
+    it('should set calculationFinished to true if status is SUCCEEDED', () => {
+      const succeededReport = { ...initialF3x, calculation_status: CalculationStatus.SUCCEEDED } as Form3X;
+      store.overrideSelector(selectActiveReport, succeededReport);
+      store.refreshState();
+      fixture.detectChanges();
+
+      component.ngOnInit();
+      expect(component.calculationFinished()).toBe(true);
+    });
+
+    it('should do nothing if report has no ID', () => {
+      const startCalculationSpy = spyOn(component, 'startCalculation');
+      const listenSpy = spyOn(component, 'listenForCompletion');
+      const noIdReport = { ...initialF3x, id: undefined } as Form3X;
+      store.overrideSelector(selectActiveReport, noIdReport);
+      store.refreshState();
+      fixture.detectChanges();
+
+      component.ngOnInit();
+      expect(startCalculationSpy).not.toHaveBeenCalled();
+      expect(listenSpy).not.toHaveBeenCalled();
     });
   });
 
-  describe('SUCCEEDED', () => {
-    beforeEach(async () => {
-      f3x.calculation_status = 'SUCCEEDED';
-      TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
-      TestBed.inject(MockStore).refreshState();
-      fixture.detectChanges();
-      return component.startCalculation(f3x.id!);
+  describe('startCalculation', () => {
+    it('should call apiService.post and then listenForCompletion', fakeAsync(() => {
+      const listenSpy = spyOn(component, 'listenForCompletion');
+      apiService.post.and.resolveTo();
+      component.startCalculation('999');
+      tick();
+
+      expect(apiService.post).toHaveBeenCalledWith('/web-services/summary/calculate-summary/', { report_id: '999' });
+      expect(listenSpy).toHaveBeenCalledWith('999');
+      expect(component.calculationFinished()).toBe(false);
+    }));
+
+    it('should handle errors from apiService.post', fakeAsync(() => {
+      const consoleErrorSpy = spyOn(console, 'error');
+      const listenSpy = spyOn(component, 'listenForCompletion');
+      apiService.post.and.rejectWith('API Error');
+      component.startCalculation('999');
+      tick();
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to start calculation', 'API Error');
+      expect(listenSpy).not.toHaveBeenCalled();
+    }));
+  });
+
+  describe('listenForCompletion', () => {
+    it('should refresh summary when SSE service emits SUCCEEDED', () => {
+      const refreshSummarySpy = spyOn(component, 'refreshSummary');
+      component.listenForCompletion('999');
+      sseSubject.next(CalculationStatus.SUCCEEDED);
+
+      expect(sseService.calculationNotification).toHaveBeenCalledWith('999');
+      expect(refreshSummarySpy).toHaveBeenCalledWith('999');
     });
-    it('should create', () => {
-      expect(component).toBeTruthy();
+
+    it('should not refresh summary if status is not SUCCEEDED', () => {
+      const refreshSummarySpy = spyOn(component, 'refreshSummary');
+      component.listenForCompletion('999');
+      sseSubject.next(CalculationStatus.FAILED);
+      expect(refreshSummarySpy).not.toHaveBeenCalled();
     });
+
+    it('should handle errors from the SSE service', () => {
+      const consoleErrorSpy = spyOn(console, 'error');
+      component.listenForCompletion('999');
+      sseSubject.error('SSE Error');
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith('SSE connection error', 'SSE Error');
+    });
+  });
+
+  describe('refreshSummary', () => {
+    it('should call setActiveReportById and set calculationFinished to true', fakeAsync(() => {
+      reportService.setActiveReportById.and.resolveTo();
+      component.refreshSummary('999');
+      tick();
+
+      expect(reportService.setActiveReportById).toHaveBeenCalledWith('999');
+      expect(component.calculationFinished()).toBe(true);
+    }));
   });
 });

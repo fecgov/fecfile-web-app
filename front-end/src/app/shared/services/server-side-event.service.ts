@@ -45,10 +45,6 @@ export class ServerSideEventService {
         observer.complete();
       };
       eventSource.onerror = (error) => {
-        if ((error.target as EventSource).readyState === EventSource.CLOSED) {
-          observer.complete();
-          return;
-        }
         observer.error(error);
       };
       return () => eventSource.close();

@@ -60,7 +60,6 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (status) => {
-          console.log(`Calculation finished with status: ${status}`);
           if (status === CalculationStatus.SUCCEEDED) {
             this.refreshSummary(reportId);
           }
