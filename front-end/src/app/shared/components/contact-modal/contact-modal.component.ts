@@ -94,7 +94,11 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     super();
     effect(() => {
       const contact = this.manager().contact();
-      untracked(() => this.form.patchValue(contact, { emitEvent: false }));
+
+      untracked(() => {
+        this.updateContactType();
+        this.form.patchValue(contact, { emitEvent: false });
+      });
     });
 
     effect(() => {
