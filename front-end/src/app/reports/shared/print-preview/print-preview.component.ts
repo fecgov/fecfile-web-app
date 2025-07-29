@@ -1,21 +1,20 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { takeUntil } from 'rxjs';
 import { Card } from 'primeng/card';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
+import { ServerSideEventService } from 'app/shared/services/server-side-event.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-print-preview',
@@ -29,36 +28,33 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   public readonly route = inject(ActivatedRoute);
   private readonly webPrintService = inject(WebPrintService);
   private readonly reportService = inject(ReportService);
-  report: Report = new Form3X() as unknown as Report;
-  committeeAccount?: CommitteeAccount;
+  private readonly sseService = inject(ServerSideEventService);
+  readonly _report = this.store.selectSignal(selectActiveReport);
+  private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
+
+  readonly report = signal<Report>(this._report());
+
   submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
-  pollingTime = 2000;
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'not-submitted';
   getBackUrl?: (report?: Report) => string;
   getContinueUrl?: (report?: Report) => string;
 
-  ngOnInit(): void {
-    this.store
-      .select<Report | null>(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (report) {
-          this.report = report;
-          this.updatePrintStatus(report);
-          if (this.webPrintStage === 'checking') {
-            this.pollPrintStatus();
-          }
-        }
-      });
+  constructor() {
+    super();
+    effect(() => {
+      const report = this.report();
+      this.updatePrintStatus(report);
+    });
+  }
 
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
-        this.committeeAccount = committeeAccount;
-      });
+  ngOnInit(): void {
+    const report = this.report();
+    this.updatePrintStatus(report);
+    if (this.webPrintStage === 'checking' && report.webprint_submission?.id) {
+      this.listenForPrintStatus(report.webprint_submission.id);
+    }
 
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
       this.getBackUrl = getBackUrl;
@@ -66,8 +62,12 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     });
   }
 
+  async updateReport() {
+    const report = await this.reportService.get(this.report().id!);
+    this.report.set(report);
+  }
+
   public updatePrintStatus(report: Report) {
-    this.report = report;
     if (!report.webprint_submission) {
       // If there is no submission object, the preview has not been submitted
       this.webPrintStage = 'not-submitted';
@@ -103,40 +103,35 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     }
   }
 
-  public async pollPrintStatus(): Promise<void> {
-    /** Request the status of the report
-     * tap into observable to update ui with status
-     * delay polling again
-     * if the status is not completed, poll again
-     */
-    try {
-      const report = await this.reportService.get(this.report.id!);
-      this.updatePrintStatus(report);
-      await new Promise((resolve) => setTimeout(resolve, this.pollingTime)); // Replaces `concatMap(timer(...))`
-      if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
-        this.pollPrintStatus();
-      }
-    } catch (error) {
-      console.error('Error fetching report:', error);
-    }
+  public listenForPrintStatus(submissionId: string | number): void {
+    this.sseService
+      .webPrintNotification(submissionId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (status) => {
+          console.log(`WebPrint job finished with status: ${status}`);
+        },
+        error: (err) => {
+          console.log(`WebPrint job failed with error: ${err}`);
+        },
+        complete: () => this.updateReport(),
+      });
   }
 
   public async submitPrintJob() {
-    if (this.report.id) {
-      /** Update the report with the committee information
-       * this is a must because the .fec requires this information */
-      await this.reportService.fecUpdate(this.report, this.committeeAccount);
-      return this.webPrintService.submitPrintJob(this.report.id).then(
-        () => {
-          // Start polling for a completed status
-          this.pollPrintStatus();
-        },
-        () => {
-          // Handles any failure when submitting the print request
-          this.webPrintStage = 'failure';
-          this.printError = 'Failed to compile PDF';
-        },
-      );
+    const report = this.report();
+    const committeeAccount = this.committeeAccount();
+    if (report.id && committeeAccount) {
+      await this.reportService.fecUpdate(report, committeeAccount);
+
+      try {
+        const response = await this.webPrintService.submitPrintJob(report.id);
+        this.webPrintStage = 'checking';
+        this.listenForPrintStatus(response.submission_id);
+      } catch (err) {
+        this.webPrintStage = 'failure';
+        this.printError = 'Failed to compile PDF';
+      }
     }
   }
 

@@ -18,7 +18,7 @@ export class WebPrintService {
     this.reportService.setActiveReportById(reportId);
   }
 
-  public submitPrintJob(reportId: string): Promise<object> {
+  public submitPrintJob(reportId: string): Promise<{ submission_id: string }> {
     return this.apiService.post('/web-services/submit-to-webprint/', {
       report_id: reportId,
     });

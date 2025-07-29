@@ -13,10 +13,7 @@ import { CalculationOverlayComponent } from '../../../shared/components/calculat
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
-import {
-  CalculationNotificationService,
-  CalculationStatus,
-} from 'app/shared/services/calculation-notification.service';
+import { CalculationStatus, ServerSideEventService } from 'app/shared/services/server-side-event.service';
 
 @Component({
   selector: 'app-report-detailed-summary',
@@ -29,7 +26,7 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
   public readonly router = inject(Router);
   private readonly apiService = inject(ApiService);
   private readonly reportService = inject(ReportService);
-  private readonly calculationNotificationService = inject(CalculationNotificationService);
+  private readonly sseService = inject(ServerSideEventService);
   private readonly report = this.store.selectSignal(selectActiveReport);
   readonly f3 = computed(() => this.report() as Form3);
   readonly calculationFinished = signal(false);
@@ -58,8 +55,8 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
 
   listenForCompletion(reportId: string): void {
     this.calculationFinished.set(false);
-    this.calculationNotificationService
-      .watch(reportId)
+    this.sseService
+      .calculationNotification(reportId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (status) => {
