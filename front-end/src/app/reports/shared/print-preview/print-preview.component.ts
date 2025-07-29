@@ -29,7 +29,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   private readonly webPrintService = inject(WebPrintService);
   private readonly reportService = inject(ReportService);
   private readonly sseService = inject(ServerSideEventService);
-  readonly _report = this.store.selectSignal(selectActiveReport);
+  private readonly _report = this.store.selectSignal(selectActiveReport);
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly report = signal<Report>(this._report());
@@ -67,7 +67,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     this.report.set(report);
   }
 
-  public updatePrintStatus(report: Report) {
+  updatePrintStatus(report: Report) {
     if (!report.webprint_submission) {
       // If there is no submission object, the preview has not been submitted
       this.webPrintStage = 'not-submitted';
@@ -108,17 +108,11 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       .webPrintNotification(submissionId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (status) => {
-          console.log(`WebPrint job finished with status: ${status}`);
-        },
-        error: (err) => {
-          console.log(`WebPrint job failed with error: ${err}`);
-        },
-        complete: () => this.updateReport(),
+        complete: () => void this.updateReport(),
       });
   }
 
-  public async submitPrintJob() {
+  async submitPrintJob() {
     const report = this.report();
     const committeeAccount = this.committeeAccount();
     if (report.id && committeeAccount) {
@@ -131,11 +125,12 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       } catch (err) {
         this.webPrintStage = 'failure';
         this.printError = 'Failed to compile PDF';
+        void err;
       }
     }
   }
 
-  public downloadPDF() {
+  downloadPDF() {
     if (this.downloadURL.length > 0) {
       window.open(this.downloadURL, '_blank');
     }

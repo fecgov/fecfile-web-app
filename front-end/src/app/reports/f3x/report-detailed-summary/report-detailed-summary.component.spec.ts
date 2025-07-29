@@ -63,7 +63,7 @@ describe('ReportDetailedSummaryComponent', () => {
       TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
       TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
-      return component.refreshSummary();
+      return component.startCalculation(f3x.id!);
     });
     it('should create', () => {
       expect(component).toBeTruthy();
@@ -76,7 +76,7 @@ describe('ReportDetailedSummaryComponent', () => {
       TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
       TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
-      return component.refreshSummary();
+      return component.startCalculation(f3x.id!);
     });
     it('should create', () => {
       expect(component).toBeTruthy();

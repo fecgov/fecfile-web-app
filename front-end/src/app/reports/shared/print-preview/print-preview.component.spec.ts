@@ -93,40 +93,39 @@ describe('PrintPreviewComponent', () => {
   });
 
   it('#submitPrintJob() calls the service', fakeAsync(() => {
-    component.report = Form3X.fromJSON({ id: '123' });
-    component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
-    const poll = spyOn(component, 'pollPrintStatus');
-    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => Promise.resolve(component.report));
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() =>
+      Promise.resolve({ submission_id: '123' }),
+    );
+    const poll = spyOn(component, 'listenForPrintStatus');
+    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => Promise.resolve(component.report()));
     component.submitPrintJob();
 
-    tick(100);
+    tick();
     expect(update).toHaveBeenCalled();
     expect(submit).toHaveBeenCalled();
     expect(poll).toHaveBeenCalled();
   }));
 
   it('#submitPrintJob() calls the service for a non-F3X report', fakeAsync(() => {
-    component.report = Form99.fromJSON({ id: '123' });
-    component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
-    const poll = spyOn(component, 'pollPrintStatus');
+    component.report.set(Form99.fromJSON({ id: '123' }));
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() =>
+      Promise.resolve({ submission_id: '123' }),
+    );
+    const poll = spyOn(component, 'listenForPrintStatus');
     component.submitPrintJob();
 
-    tick(100);
+    tick();
     expect(submit).toHaveBeenCalled();
     expect(poll).toHaveBeenCalled();
   }));
 
   it('#submitPrintJob() sets failure state on failure', fakeAsync(() => {
-    component.report = Form3X.fromJSON({ id: '123' });
-    component.pollingTime = 0;
     spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
-    const poll = spyOn(component, 'pollPrintStatus');
-    spyOn(reportService, 'fecUpdate').and.returnValue(Promise.resolve(component.report));
+    const poll = spyOn(component, 'listenForPrintStatus');
+    spyOn(reportService, 'fecUpdate').and.returnValue(Promise.resolve(component.report()));
     component.submitPrintJob();
 
-    tick(100);
+    tick();
     expect(poll).not.toHaveBeenCalled();
     expect(component.webPrintStage).toBe('failure');
     expect(component.printError).toBe('Failed to compile PDF');
