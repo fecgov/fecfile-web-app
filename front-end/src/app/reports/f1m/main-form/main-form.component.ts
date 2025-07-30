@@ -155,6 +155,12 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
     this.statusByControl?.updateValueAndValidity();
   }
 
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.cmservice.get('contact_affiliated').outerContact.set(null);
+    f1mCandidateTags.forEach((tag) => this.cmservice.get(`contact_candidate_${tag}`).outerContact.set(null));
+  }
+
   async getConfirmations(): Promise<boolean> {
     if (!this.report) return false;
     return this.confirmationService.confirmWithUser(
