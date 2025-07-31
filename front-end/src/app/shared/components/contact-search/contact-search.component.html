@@ -1,0 +1,50 @@
+<div class="grid contact-lookup-container">
+  <div class="px-0" [class.dropdown-with-search]="isBare()">
+    <p-select
+      [(ngModel)]="manager().contactType"
+      inputId="entity_type"
+      [options]="manager().contactTypeOptions()"
+      [readonly]="true"
+      styleClass="readonly"
+      id="entity_type_dropdown"
+      appendTo="body"
+    >
+      <ng-template pTemplate="dropdownicon"></ng-template>
+    </p-select>
+  </div>
+
+  <div class="pl-0">
+    <p-autoComplete
+      id="searchBox"
+      [(ngModel)]="searchTerm"
+      [group]="true"
+      field="label"
+      [dropdown]="true"
+      [suggestions]="contactLookupList"
+      placeholder="Search for a contact"
+      [forceSelection]="true"
+      (completeMethod)="onDropdownSearch($event)"
+      (onSelect)="onContactLookupSelect($event.value)"
+      scrollHeight="30vh"
+      appendTo="body"
+    >
+      <ng-template let-group pTemplate="group">
+        <div class="option-group-header">{{ group.label }}</div>
+        @if (!group.items || !group.items.length) {
+          <div class="try-another-search-text">Try another search or create a new contact</div>
+        }
+      </ng-template>
+      <ng-template let-contact pTemplate="item">
+        <div class="contact-label-container">
+          <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
+          @if (isContact(contact.value)) {
+            <span class="in-contacts"> In contacts </span>
+          }
+        </div>
+      </ng-template>
+      <ng-template pTemplate="dropdownicon">
+        <img alt="Magnifying lens" src="assets/img/contact_lookup_magnifying_glass.svg" height="20px" width="20px" />
+      </ng-template>
+    </p-autoComplete>
+  </div>
+</div>

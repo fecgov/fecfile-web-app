@@ -26,8 +26,6 @@ export class TransactionContactLookupComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   @Input() formSubmitted = false;
   @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() excludeFecIds: string[] = [];
-  @Input() excludeIds: string[] = [];
 
   @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() readonly contactSelect = new EventEmitter<SelectItem<Contact>>();

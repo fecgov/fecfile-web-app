@@ -31,19 +31,15 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     super();
 
     effect(() => {
-      this.setConstantFormValues(this.committeeAccountSignal());
+      this.setConstantFormValues(this.committeeAccount());
       if (this.reportId) {
-        this.form.patchValue(this.activeReportSignal());
+        this.form.patchValue(this.activeReport());
       }
     });
   }
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.initForm();
-  }
-
-  initForm() {
     this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }

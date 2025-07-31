@@ -4,13 +4,12 @@ import { initialState as initActiveReport } from 'app/store/active-report.reduce
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Form1MService } from 'app/shared/services/form-1m.service';
-
 import { DividerModule } from 'primeng/divider';
 import { SelectModule } from 'primeng/select';
 import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
@@ -48,6 +47,7 @@ describe('MainFormComponent', () => {
     await import(`fecfile-validate/fecfile_validate_js/dist/F1M.validator`);
     await import(`fecfile-validate/fecfile_validate_js/dist/Contact_Candidate.validator`);
     await import(`fecfile-validate/fecfile_validate_js/dist/Contact_Committee.validator`);
+    await import(`fecfile-validate/fecfile_validate_js/dist/Contact_Individual.validator`);
   });
 
   beforeEach(() => {
@@ -90,6 +90,7 @@ describe('MainFormComponent', () => {
 
   it('ngOnInit should set up an edited report', () => {
     fixture.detectChanges();
+
     expect(component.form.get('statusBy')?.value).toBe('affiliation');
   });
 
@@ -164,42 +165,6 @@ describe('MainFormComponent', () => {
     expect((payload as Form1M).committee_name).toBe('test committee');
   });
 
-  it('getSelectedContactIds() should return correct ids', fakeAsync(() => {
-    fixture.detectChanges();
-    component.form.patchValue({
-      statusBy: 'qualification',
-      I_candidate_id_number: 'P00000001',
-      II_candidate_id_number: 'P00000002',
-      III_candidate_id_number: 'P00000003',
-    });
-    tick(100);
-
-    let candidateIds = component.getSelectedContactIds();
-    expect(candidateIds.length).toBe(3);
-    expect(candidateIds.includes('P00000001')).toBeTrue();
-    expect(candidateIds.includes('P00000002')).toBeTrue();
-    expect(candidateIds.includes('P00000003')).toBeTrue();
-    expect(candidateIds.includes('P00000004')).toBeFalse();
-
-    candidateIds = component.getSelectedContactIds('II');
-    expect(candidateIds.length).toBe(2);
-    expect(candidateIds.includes('P00000001')).toBeTrue();
-    expect(candidateIds.includes('P00000002')).toBeFalse();
-    expect(candidateIds.includes('P00000003')).toBeTrue();
-    expect(candidateIds.includes('P00000004')).toBeFalse();
-
-    // Verify duplicating a candidtate id invalidates the form control.
-    const control = component.form.get('II_candidate_id_number');
-    expect(control).toBeTruthy();
-    expect(control?.valid).toBeTrue();
-    control?.setValue('P00000001');
-    tick(100);
-    expect(control?.valid).toBeFalse();
-    control?.setValue('P00000002');
-    tick(100);
-    expect(control?.valid).toBeTrue();
-  }));
-
   it('Update a contact from the contact lookup', () => {
     fixture.detectChanges();
     const committee = Contact.fromJSON({
@@ -208,39 +173,31 @@ describe('MainFormComponent', () => {
       name: 'Organization Name',
       type: 'ORG',
     });
-    component.report.contact_affiliated = Contact.fromJSON({
-      id: '00000-00000-00000-00000',
-      committee_id: 'X000000000',
-    });
-    component.report.contact_affiliated_id = '00000-00000-00000-00000';
-    component.excludeIds = ['00000-00000-00000-00000'];
-    component.excludeFecIds = ['X000000000'];
-    component.affiliatedContact.update({ value: committee } as SelectItem);
+
+    component.affiliatedContact.manager.outerContact.set(committee);
+    component.affiliatedContact.update(committee);
     expect(component.report.contact_affiliated_id).toEqual('11111-2222222-333333-444444444');
     expect(component.form.get('affiliated_committee_fec_id')?.value).toEqual('C000000001');
     expect(component.form.get('affiliated_committee_name')?.value).toEqual('Organization Name');
-    expect(component.excludeIds[0]).toEqual('11111-2222222-333333-444444444');
-    expect(component.excludeFecIds[0]).toEqual('C000000001');
+    expect(component.affiliatedContact.manager.excludeIds()).toEqual('11111-2222222-333333-444444444');
+    expect(component.affiliatedContact.manager.excludeFecIds()).toEqual('C000000001');
 
     const candidate = Contact.fromJSON({
-      id: '11111-2222222-333333-444444444',
+      id: '22222-33333333-444444-55555555',
       candidate_id: 'C000000002',
       last_name: 'Smith',
       type: 'CAN',
     });
-    component.report.contact_candidate_I = Contact.fromJSON({
-      id: '00000-00000-00000-00000',
-      candidate_id: 'X000000000',
-    });
-    component.report.contact_candidate_I_id = '00000-00000-00000-00000';
-    component.excludeIds = ['00000-00000-00000-00000'];
-    component.excludeFecIds = ['X000000000'];
-    component.candidateContacts[0].update({ value: candidate } as SelectItem);
-    expect(component.report.contact_candidate_I?.id).toEqual('11111-2222222-333333-444444444');
+
+    component.candidateContacts[0].manager.outerContact.set(candidate);
+    component.candidateContacts[0].update(candidate);
+    expect(component.report.contact_candidate_I?.id).toEqual('22222-33333333-444444-55555555');
     expect(component.form.get('I_candidate_id_number')?.value).toEqual('C000000002');
     expect(component.form.get('I_candidate_last_name')?.value).toEqual('Smith');
-    expect(component.excludeIds[0]).toEqual('11111-2222222-333333-444444444');
-    expect(component.excludeFecIds[0]).toEqual('C000000002');
+    expect(component.candidateContacts[0].manager.excludeIds()).toEqual(
+      '22222-33333333-444444-55555555,11111-2222222-333333-444444444',
+    );
+    expect(component.candidateContacts[0].manager.excludeFecIds()).toEqual('C000000002,C000000001');
 
     expect(component.candidateContacts[0].dateOfContributionField).toEqual('I_date_of_contribution');
     expect(component.candidateContacts[0].candidateId).toEqual('C000000002');
@@ -250,7 +207,7 @@ describe('MainFormComponent', () => {
   xit('Exclude ids should prepopulate when editing a F1M', () => {
     fixture.detectChanges();
     component.ngOnInit();
-    expect(component.excludeFecIds[0]).toEqual('C000000005');
-    expect(component.excludeIds[0]).toEqual('22222-22222-22222-2222222');
+    expect(component.affiliatedContact.manager.excludeFecIds()).toEqual('C000000005');
+    expect(component.affiliatedContact.manager.excludeIds()).toEqual('22222-22222-22222-2222222');
   });
 });
