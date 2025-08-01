@@ -1,8 +1,31 @@
 <div>
-  <app-second-committee-admin-dialog></app-second-committee-admin-dialog>
-  <app-poller></app-poller>
-  <router-outlet></router-outlet>
-  <p-confirmDialog></p-confirmDialog>
-  <p-toast></p-toast>
-  <app-download-tray></app-download-tray>
+  <app-second-committee-admin-dialog />
+  <app-poller />
+  <router-outlet />
+  <p-confirmDialog
+    #confirm
+    [draggable]="false"
+    [closable]="false"
+    [style]="{ width: '40vw' }"
+    aria-labelledby="confirm-header"
+  >
+    <ng-template #header>
+      <div class="custom-header" id="confirm-header">
+        <span class="p-dialog-title">Are you sure?</span>
+        <div class="p-dialog-header-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="p-dialog-header-icon p-link"
+            (click)="confirm.close()"
+          >
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
+  <p-toast />
+  <app-download-tray />
 </div>
