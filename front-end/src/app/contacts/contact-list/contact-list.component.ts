@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, resource } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -30,14 +30,13 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
     LabelPipe,
   ],
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
+export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
-  restoreContactsButtonIsVisible = false;
   searchTerm = '';
 
   // contact lookup
@@ -56,7 +55,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     ),
   ];
 
-  sortableHeaders: { field: string; label: string }[] = [
+  readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'sort_name', label: 'Name' },
     { field: 'type', label: 'Type' },
     { field: 'sort_fec_id', label: 'FEC ID' },
@@ -64,21 +63,18 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  ngOnInit() {
-    this.checkForDeletedContacts();
-  }
-
-  public async checkForDeletedContacts() {
-    const contactListResponse = await this.deletedContactService.getTableData();
-    const deletedContactsExist = contactListResponse.count > 0;
-    this.restoreContactsButtonIsVisible = deletedContactsExist;
-    return deletedContactsExist;
-  }
+  readonly restoreContactsButtonIsVisible = resource({
+    loader: async () => {
+      const contactListResponse = await this.deletedContactService.getTableData();
+      const deletedContactsExist = contactListResponse.count > 0;
+      return deletedContactsExist;
+    },
+  });
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     await super.loadTableItems(event);
 
-    await this.checkForDeletedContacts();
+    await this.restoreContactsButtonIsVisible.reload();
   }
 
   protected getEmptyItem(): Contact {

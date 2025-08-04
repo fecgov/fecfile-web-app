@@ -1,12 +1,28 @@
 <p-dialog
+  #dialog
   [(visible)]="visible"
   [style]="{ width: '90%' }"
-  header="Restore deleted contacts"
+  [draggable]="false"
+  [closable]="false"
   [modal]="true"
-  (onHide)="hide()"
 >
+  <ng-template #header>
+    <div class="custom-header" [id]="dialog.ariaLabelledBy">
+      <h1>Restore deleted contacts</h1>
+      <div class="p-dialog-header-actions">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          class="p-dialog-header-icon p-link"
+          (click)="dialog.close($event)"
+        >
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
   <app-table
-    title="Restore deleted contacts"
     [items]="items"
     [totalItems]="totalItems"
     [loading]="loading"
@@ -24,7 +40,6 @@
     (selectAllChange)="onSelectAllChange($event)"
     (rowsPerPageChange)="onRowsPerPageChange($event)"
   >
-    <ng-template #header> </ng-template>
     <ng-template #body let-item>
       <td>{{ displayName(item) }}</td>
       <td>{{ item.type | label: contactTypeLabels }}</td>
@@ -40,7 +55,7 @@
         label="Cancel"
         icon="pi pi-times"
         class="p-button-secondary mr-4"
-        (click)="hide()"
+        (click)="dialog.close($event)"
         [autofocus]="true"
       ></button>
       <button
