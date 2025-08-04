@@ -2,15 +2,16 @@
   <app-second-committee-admin-dialog />
   <app-poller />
   <router-outlet />
+  <label class="sr-only" id="confirm-dialog-label">Confirmation Dialog</label>
   <p-confirmDialog
     #confirm
     [draggable]="false"
     [closable]="false"
     [style]="{ width: '40vw' }"
-    aria-labelledby="confirm-header"
+    aria-labelledby="confirm-dialog-label"
   >
     <ng-template #header>
-      <div class="custom-header" id="confirm-header">
+      <div class="custom-header">
         <span class="p-dialog-title">Are you sure?</span>
         <div class="p-dialog-header-actions">
           <button
