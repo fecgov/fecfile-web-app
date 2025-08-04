@@ -1,5 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export function getContactFields(prefix: string, contact: any, contact_number = 1) {
+import { Contact } from '../../../../src/app/shared/models';
+
+export interface LoanInfo {
+  loan_amount: number;
+  loan_incurred_date: string;
+  loan_due_date: string;
+  loan_interest_rate: string;
+  secured: boolean;
+  loan_restructured: boolean;
+}
+
+export interface Authorizor {
+  last_name: string;
+  first_name: string;
+  middle_name: string | null;
+  prefix: string | null;
+  suffix: string | null;
+  date_signed: string;
+  title?: string;
+}
+
+function getAuthorizationFields(prefix: string, authorizor: Authorizor) {
+  const auth = {
+    [`${prefix}_first_name`]: authorizor.first_name,
+    [`${prefix}_last_name`]: authorizor.last_name,
+    [`${prefix}_middle_name`]: authorizor.middle_name,
+    [`${prefix}_prefix`]: authorizor.prefix,
+    [`${prefix}_suffix`]: authorizor.suffix,
+    [`${prefix}_date_signed`]: authorizor.date_signed,
+  };
+  if (authorizor.title) auth[`${prefix}_title`] = authorizor.title;
+  return auth;
+}
+
+export function getContactFields(prefix: string, contact: Contact, contact_number = 1) {
   return {
     [`${prefix}_first_name`]: contact.first_name,
     [`${prefix}_last_name`]: contact.last_name,
@@ -35,7 +69,7 @@ export function buildScheduleA(
   type: string,
   amount: number,
   date: string,
-  contact: any,
+  contact: Contact,
   report_id?: string,
   extra_data?: any,
 ) {
@@ -61,12 +95,122 @@ export function buildScheduleA(
   };
 }
 
+export function buildLoanAgreement(
+  loanInfo: LoanInfo,
+  contact: Contact,
+  authorizors: [Authorizor, Authorizor],
+  report_id: string,
+  extra_data?: any,
+) {
+  return {
+    contact_1: contact,
+    use_parent_contact: true,
+    schedule_id: 'C1',
+    form_type: 'SC1/10',
+    entity_type: 'ORG',
+    transaction_type_identifier: 'C1_LOAN_AGREEMENT',
+    schema_name: 'C1_LOAN_AGREEMENT',
+    memo_code: null,
+    purpose_description: null,
+    text4000: null,
+    ...loanInfo,
+    children: [],
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    ...getContactFields('lender', contact),
+    ...getAuthorizationFields('treasurer', authorizors[0]),
+    ...getAuthorizationFields('authorized', authorizors[1]),
+    ...extra_data,
+  };
+}
+
+export function buildLoanFromBank(
+  loanInfo: LoanInfo,
+  contact: Contact,
+  report_id: string,
+  children: [any, any],
+  extra_data?: any,
+) {
+  return {
+    schedule_id: 'C',
+    form_type: 'SC/10',
+    entity_type: 'ORG',
+    transaction_type_identifier: 'LOAN_RECEIVED_FROM_BANK',
+    schema_name: 'LOANS',
+    memo_code: null,
+    purpose_description: null,
+    text4000: null,
+    receipt_line_number: '13',
+    ...loanInfo,
+    children,
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    ...getContactFields('lender', contact),
+    ...extra_data,
+  };
+}
+export function buildLoanReceipt(
+  contribution_amount: number,
+  contribution_date: string,
+  contact: Contact,
+  report_id: string,
+  extra_data?: any,
+) {
+  return {
+    schedule_id: 'A',
+    form_type: 'SA13',
+    entity_type: contact.type,
+    aggregation_group: 'GENERAL',
+    transaction_type_identifier: 'LOAN_RECEIVED_FROM_BANK_RECEIPT',
+    schema_name: 'LOANS_RECEIVED',
+    contribution_amount,
+    contribution_date,
+    contribution_purpose_descrip: null,
+    children: [],
+    contact_1: contact,
+    use_parent_contact: true,
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    contact_1_id: contact.id,
+    ...extra_data,
+  };
+}
+
+export function buildContributionToCandidate(
+  expenditure_amount: number,
+  expenditure_date: string,
+  contacts: [Contact, Contact],
+  report_id: string,
+  extra_data?: any,
+) {
+  return {
+    schedule_id: 'B',
+    form_type: 'SB23',
+    entity_type: 'COM',
+    transaction_type_identifier: 'CONTRIBUTION_TO_CANDIDATE',
+    schema_name: 'CANDIDATE_CONTRIBUTIONS',
+    category_code: null,
+    memo_code: null,
+    purpose_description: null,
+    text4000: null,
+    expenditure_amount,
+    expenditure_date,
+    expenditure_purpose_descrip: null,
+    children: [],
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    ...getContactFields('payee', contacts[0]),
+    ...getContactFields('beneficiary_committee', contacts[1], 2),
+    ...extra_data,
+  };
+}
+
 export function buildIndependentExpenditure(
   expenditure_amount: number,
   dates: [string, string],
-  contacts: any[2],
+  contacts: [Contact, Contact],
   memo_code: boolean,
-  report_id?: string,
+  report_id: string,
   extra_data?: any,
 ) {
   return {
@@ -96,7 +240,7 @@ export function buildScheduleF(
   contact_1: any,
   contact_2: any,
   contact_3: any,
-  report_id?: string,
+  report_id: string,
   extra_data?: any,
 ) {
   return {

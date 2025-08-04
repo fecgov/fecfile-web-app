@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 export class ContactFormData {
+  id?: string;
   contact_type: string;
   last_name: string;
   first_name: string;

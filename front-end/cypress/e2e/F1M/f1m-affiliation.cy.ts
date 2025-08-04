@@ -1,10 +1,19 @@
 import { Initialize } from '../pages/loginPage';
-import { ContactListPage } from '../pages/contactListPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { PageUtils } from '../pages/pageUtils';
-import { ContactType, committeeFormData, createContact } from '../models/ContactFormModel';
+import { ContactFormData } from '../models/ContactFormModel';
 import { faker } from '@faker-js/faker';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
+import {
+  Candidate_House_A,
+  Candidate_House_B,
+  Candidate_Presidential_A,
+  Candidate_Presidential_B,
+  Candidate_Senate_A,
+  Committee_A,
+} from '../requests/library/contacts';
+import { makeContact } from '../requests/methods';
+import { ContactLookup } from '../pages/contactLookup';
 
 describe('Manage reports', () => {
   beforeEach(() => {
@@ -12,59 +21,81 @@ describe('Manage reports', () => {
   });
 
   it('should create form 1m by affiliation', () => {
-    ContactListPage.createCommittee();
-    const committeeID = Cypress.env('COMMITTEE_ID');
-    ReportListPage.createF1M();
-    PageUtils.valueCheck('[data-cy="committee-id-input"]', committeeID);
-    cy.get('[data-cy="state-party-radio"]').click();
-    cy.get('[data-cy="affiliation-radio"').click();
-    cy.get('[id="searchBox"]').type(committeeFormData.committee_id.slice(0, 3));
-    cy.contains(committeeFormData.name).should('exist');
-    cy.contains(committeeFormData.name).click();
-    PageUtils.valueCheck('[id="affiliated_committee_name"', committeeFormData.name);
-    PageUtils.clickButton('Save');
-    cy.get('[data-cy="affiliated_date_form_f1_filed-error"]').contains('This is a required field.');
-    PageUtils.calendarSetValue('[data-cy="affiliated_date_form_f1_filed"]');
-    PageUtils.clickButton('Save');
-    cy.get('[data-cy="report-list-component').should('exist');
+    makeContact(Committee_A, (response) => {
+      const committeeID = Cypress.env('COMMITTEE_ID');
+      const committee = response.body;
+
+      ReportListPage.createF1M();
+      PageUtils.valueCheck('[data-cy="committee-id-input"]', committeeID);
+      cy.get('[data-cy="state-party-radio"]').click();
+      cy.get('[data-cy="affiliation-radio"').click();
+      ContactLookup.getCommittee(committee);
+      PageUtils.valueCheck('[id="affiliated_committee_name"', committee.name);
+      PageUtils.clickButton('Save');
+      cy.get('[data-cy="affiliated_date_form_f1_filed-error"]').contains('This is a required field.');
+      PageUtils.calendarSetValue('[data-cy="affiliated_date_form_f1_filed"]');
+      PageUtils.clickButton('Save');
+      cy.get('[data-cy="report-list-component').should('exist');
+    });
   });
 
   it('should create form 1m by qualification', () => {
-    const candidates = [0, 1, 2, 3, 4].map((index) => {
-      const candidate = createContact(ContactType.CANDIDATE);
-      ContactListPage.createCandidate(candidate);
-      return candidate;
+    const candidates: ContactFormData[] = [];
+    const candidateList = [
+      Candidate_House_A,
+      Candidate_House_B,
+      Candidate_Presidential_A,
+      Candidate_Presidential_B,
+      Candidate_Senate_A,
+    ];
+
+    const apiCalls = candidateList.map((candidate) => {
+      return new Cypress.Promise((resolve) => {
+        makeContact(candidate, (response) => {
+          candidates.push(response.body);
+          resolve();
+        });
+      });
     });
-    ReportListPage.createF1M();
-    PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
-    cy.get('[data-cy="state-party-radio"]').click();
-    cy.get('[data-cy="qualification-radio"').click();
-    cy.get('[data-cy="qualification-radio"').click();
-    PageUtils.calendarSetValue('[data-cy="date_of_51st_contributor"]');
-    PageUtils.calendarSetValue('[data-cy="date_of_original_registration"]');
-    PageUtils.calendarSetValue('[data-cy="date_committee_met_requirements"]');
-    for (let index = 0; index < candidates.length; index++) {
-      const candidateSection = cy.get(`[data-cy="candidate-${index}"]`);
-      candidateSection.find('[id="searchBox"]').type(candidates[index].first_name.slice(0, 3));
-      candidateSection.get('.p-autocomplete-list-container').contains(candidates[index].first_name.slice(0, 3)).click();
-      cy.get(`[data-cy="candidate-${index}"]`)
-        .find('[data-cy="last-name"]')
-        .should('have.value', candidates[index].last_name);
-      PageUtils.calendarSetValue(getId(index), new Date(), `[data-cy="candidate-${index}"]`);
-    }
-    PageUtils.clickButton('Save and continue');
-    cy.get('[data-cy="print-preview"]').should('exist');
 
-    PageUtils.clickSidebarSection('REVIEW A REPORT');
-    PageUtils.clickSidebarItem('Add a report level memo');
-    const memoText = faker.lorem.sentence({ min: 1, max: 4 });
-    ReportLevelMemoPage.enterFormData(memoText);
-    PageUtils.clickButton('Save & continue');
+    cy.wrap(Promise.all(apiCalls)).then(() => {
+      expect(candidates).to.have.lengthOf(candidateList.length);
 
-    // Verify it is still there when we go back to the page
-    PageUtils.clickSidebarSection('REVIEW A REPORT');
-    PageUtils.clickSidebarItem('Add a report level memo');
-    cy.get('[id="text4000"]').should('have.value', memoText);
+      ReportListPage.createF1M();
+      PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
+      cy.get('[data-cy="state-party-radio"]').click();
+      cy.get('[data-cy="qualification-radio"]').click();
+      cy.get('[data-cy="qualification-radio"]').click();
+      PageUtils.calendarSetValue('[data-cy="date_of_51st_contributor"]');
+      PageUtils.calendarSetValue('[data-cy="date_of_original_registration"]');
+      PageUtils.calendarSetValue('[data-cy="date_committee_met_requirements"]');
+
+      const excludeFecIds: string[] = [];
+      const excludeIds: string[] = [];
+      for (let index = 0; index < candidates.length; index++) {
+        ContactLookup.getCandidate(candidates[index], excludeFecIds, excludeIds, `[data-cy="candidate-${index}"]`);
+        cy.get(`[data-cy="candidate-${index}"]`)
+          .find('[data-cy="last-name"]')
+          .should('have.value', candidates[index].last_name);
+        PageUtils.calendarSetValue(getId(index), new Date(), `[data-cy="candidate-${index}"]`);
+        excludeFecIds.push(candidates[index].candidate_id);
+        excludeIds.push(candidates[index].id!);
+      }
+
+      PageUtils.clickButton('Save and continue');
+      cy.get('[data-cy="print-preview"]').should('exist');
+
+      PageUtils.clickSidebarSection('REVIEW A REPORT');
+      PageUtils.clickSidebarItem('Add a report level memo');
+      const memoText = faker.lorem.sentence({ min: 1, max: 4 });
+      ReportLevelMemoPage.enterFormData(memoText);
+      PageUtils.clickButton('Save & continue');
+
+      // Verify it is still there when we go back to the page
+      PageUtils.clickSidebarSection('REVIEW A REPORT');
+      PageUtils.clickSidebarItem('Add a report level memo');
+      cy.get('[id="text4000"]').should('have.value', memoText);
+    });
   });
 });
 
