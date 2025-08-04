@@ -38,3 +38,27 @@
 li:hover {
   background: var(--surface-hover);
 }
+
+.nav-item-button {
+  padding: 0 !important;
+}
+
+button {
+  border: inherit;
+  padding: 8px;
+  margin: inherit;
+  background: inherit;
+  font: inherit;
+  font-size: inherit;
+  text-transform: inherit;
+  width: 100%;
+  text-align: inherit;
+  display: inherit;
+  align-items: inherit;
+  cursor: inherit;
+  gap: inherit;
+}
+
+i {
+  padding-right: 4px !important;
+}
