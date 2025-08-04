@@ -1,7 +1,7 @@
 <div class="modal-item-margin field">
-  <label for="form24Options">REPORT TYPE</label>
+  <span class="span-label">REPORT TYPE</span>
   <p-selectbutton
-    inputid="form24Options"
+    inputId="form24Options"
     [options]="form24Options"
     [(ngModel)]="selectedForm24Type"
     optionLabel="label"
@@ -11,7 +11,7 @@
 
 <div class="w-full field">
   <label for="form24Name">EDIT NAME</label>
-  <input pInputText type="text" [(ngModel)]="form24Name" />
+  <input pInputText type="text" [(ngModel)]="form24Name" id="form24Name" />
   @if (!isSubmitDisabled() && form24NameErrors()) {
     <small class="p-error">{{ this.form24NameErrors() }}</small>
   }

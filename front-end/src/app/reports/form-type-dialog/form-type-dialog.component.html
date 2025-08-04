@@ -1,7 +1,21 @@
-<p-dialog [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '512px' }">
+<p-dialog #dialog [(visible)]="dialogVisible" [style]="{ width: '512px' }" [closable]="false" [draggable]="false">
   <ng-template #header>
-    <h1>Create a new report</h1>
+    <div class="custom-header" [id]="dialog.ariaLabelledBy">
+      <h1>Create a new report</h1>
+      <div class="p-dialog-header-actions">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          class="p-dialog-header-icon p-link"
+          (click)="dialog.close($event)"
+        >
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+    </div>
   </ng-template>
+
   <div class="dialog-body">
     <div class="dropdown">
       <span id="type-label">FORM TYPE</span>
