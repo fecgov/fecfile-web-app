@@ -32,7 +32,7 @@ describe('SignatureInputComponent', () => {
     component.form = form;
     component.templateMapKeyPrefix = 'signatory_2';
     component.templateMap = {
-      ...testTemplateMap,
+      ...testTemplateMap(),
       ...{
         signatory_2_last_name: 'authorized_last_name',
         signatory_2_first_name: 'authorized_first_name',

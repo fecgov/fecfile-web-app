@@ -44,7 +44,7 @@ describe('CommitteeMemberDialogComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         ConfirmationService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         CommitteeMemberService,
       ],
     }).compileComponents();

@@ -14,7 +14,7 @@ describe('SupportOpposeInputComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SupportOpposeInputComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore())],
     });
     fixture = TestBed.createComponent(SupportOpposeInputComponent);
     component = fixture.componentInstance;

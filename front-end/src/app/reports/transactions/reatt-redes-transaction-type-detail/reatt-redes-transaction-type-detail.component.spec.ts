@@ -45,7 +45,7 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
         ReattRedesTransactionTypeDetailComponent,
       ],
       providers: [
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
@@ -63,7 +63,7 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
     component = fixture.componentInstance;
     spyOn(component, 'getChildTransaction').and.callFake(() => transaction);
     component.transaction = transaction;
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     component.ngOnInit();
   });
 

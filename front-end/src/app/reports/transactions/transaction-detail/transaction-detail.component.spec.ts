@@ -65,7 +65,7 @@ describe('TransactionDetailComponent', () => {
         MessageService,
         ConfirmationService,
         FormBuilder,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         FecDatePipe,
         ReportService,
       ],
@@ -78,7 +78,7 @@ describe('TransactionDetailComponent', () => {
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = transaction;
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     component.ngOnInit();
   });
 

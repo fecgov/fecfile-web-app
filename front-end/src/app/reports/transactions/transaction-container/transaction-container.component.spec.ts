@@ -71,7 +71,7 @@ describe('TransactionContainerComponent', () => {
             },
           },
         },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         FecDatePipe,
       ],
     }).compileComponents();

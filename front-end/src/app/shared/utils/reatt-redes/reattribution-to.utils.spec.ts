@@ -7,7 +7,7 @@ import { SubscriptionFormControl } from '../subscription-form-control';
 describe('Reattribution To', () => {
   describe('overlayTransactionProperties', () => {
     it('should override default properties', () => {
-      const origTransaction = { ...testScheduleATransaction } as SchATransaction;
+      const origTransaction = testScheduleATransaction();
       const toTransaction = ReattributionToUtils.overlayTransactionProperties(
         getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
         origTransaction,
@@ -21,7 +21,7 @@ describe('Reattribution To', () => {
 
   describe('overlayForm', () => {
     it('should update validators and watch for value changes', () => {
-      const transaction = { ...testScheduleATransaction } as SchATransaction;
+      const transaction = testScheduleATransaction();
       transaction.reatt_redes = {
         id: '999',
         report_ids: ['999'],

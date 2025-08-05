@@ -24,7 +24,7 @@ describe('EmployerInputComponent', () => {
       },
       { updateOn: 'blur' },
     );
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     fixture.detectChanges();
   });
 

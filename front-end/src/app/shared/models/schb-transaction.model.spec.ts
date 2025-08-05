@@ -118,7 +118,7 @@ describe('SchBTransaction', () => {
 
     it('should create REDESIGNATION_TO from json', () => {
       const overlaySpy = spyOn(RedesignationToUtils, 'overlayTransactionProperties').and.callFake((trans) => {
-        trans.reatt_redes = testScheduleBTransaction;
+        trans.reatt_redes = testScheduleBTransaction();
         return trans;
       });
       const json = {

@@ -49,7 +49,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
         provideAnimations(),
         TransactionService,
         ConfirmationService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         FecDatePipe,
       ],
     }).compileComponents();
@@ -107,7 +107,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
     it('should confirm with user 1 time if only primary transaction contact updated', fakeAsync(() => {
       if (!component.transaction) throw new Error('Bad test');
-      component.transaction.contact_1 = testContact;
+      component.transaction.contact_1 = testContact();
       component.getConfirmations().then((res) => {
         expect(res).toBeTrue();
       });
@@ -159,13 +159,13 @@ describe('TripleTransactionTypeBaseComponent', () => {
     it('should run the super version and then update data if ', () => {
       if (!component.childTransaction_2 || !component.transaction) throw new Error('Bad test');
       component.childTransaction_2.transactionType.useParentContact = true;
-      component.transaction.contact_1 = testContact;
+      component.transaction.contact_1 = testContact();
       expect(
         component.childTransaction_2?.transactionType?.getUseParentContact(component.childTransaction_2),
       ).toBeTruthy();
       expect(component.transaction.contact_1).toBeTruthy();
       const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
-      const selectItem: SelectItem<Contact> = { value: testContact };
+      const selectItem: SelectItem<Contact> = { value: component.transaction.contact_1 };
       component.updateFormWithPrimaryContact(selectItem);
       expect(spy).toHaveBeenCalled();
       expect(component.childTransaction_2.contact_1).toEqual(component.transaction.contact_1);
@@ -175,7 +175,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
   describe('childUpdateFormWithPrimaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
       const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
-      const selectItem: SelectItem<Contact> = { value: testContact };
+      const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithPrimaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
@@ -189,7 +189,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
   describe('childUpdateFormWithCandidateContact_2', () => {
     it('should run the super version and then update data if ', () => {
       const spy = spyOn(TransactionContactUtils, 'updateFormWithCandidateContact');
-      const selectItem: SelectItem<Contact> = { value: testContact };
+      const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithCandidateContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
@@ -203,7 +203,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
   describe('childUpdateFormWithSecondaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
       const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
-      const selectItem: SelectItem<Contact> = { value: testContact };
+      const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithSecondaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
@@ -217,7 +217,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
   describe('childUpdateFormWithTertiaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
       const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
-      const selectItem: SelectItem<Contact> = { value: testContact };
+      const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithTertiaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,

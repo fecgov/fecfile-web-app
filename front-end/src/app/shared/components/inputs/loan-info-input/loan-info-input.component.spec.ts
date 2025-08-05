@@ -13,7 +13,7 @@ describe('LoanInfoInputComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [LoanInfoInputComponent],
-      providers: [provideMockStore(testMockStore)],
+      providers: [provideMockStore(testMockStore())],
     });
     fixture = TestBed.createComponent(LoanInfoInputComponent);
     component = fixture.componentInstance;
@@ -30,7 +30,7 @@ describe('LoanInfoInputComponent', () => {
     );
     component.form = form;
     component.templateMap = {
-      ...testTemplateMap,
+      ...testTemplateMap(),
       ...{
         amount: 'loan_amount',
         balance: 'total_balance',

@@ -8,13 +8,9 @@ describe('Redesignated Utils', () => {
   let payload: SchBTransaction;
 
   beforeEach(() => {
-    payload = SchBTransaction.fromJSON({
-      ...testScheduleBTransaction,
-    });
+    payload = testScheduleBTransaction();
     payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-    payload.reatt_redes = SchBTransaction.fromJSON({
-      ...testScheduleBTransaction,
-    });
+    payload.reatt_redes = testScheduleBTransaction();
   });
   describe('overlayTransactionProperties', () => {
     let data;

@@ -10,7 +10,7 @@ describe('ApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), ApiService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), ApiService, provideMockStore(testMockStore())],
     });
     service = TestBed.inject(ApiService);
   });

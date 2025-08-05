@@ -77,7 +77,7 @@ describe('MainFormComponent', () => {
         FormBuilder,
         MessageService,
         FecDatePipe,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     router = TestBed.inject(Router);
