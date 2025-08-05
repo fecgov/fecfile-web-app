@@ -47,14 +47,9 @@
         </div>
       </div>
     </div>
-    <div class="grid">
-      <div class="col-12">
-        <div class="field">
-          <label for="committee_type">TYPE OF COMMITTEE</label>
-        </div>
-      </div>
-    </div>
-    <div class="grid">
+
+    <fieldset class="field">
+      <legend>TYPE OF COMMITTEE</legend>
       <div class="col-12 flex">
         <p-radioButton
           inputId="X"
@@ -71,8 +66,6 @@
         />
         <label for="X" class="ml-2">STATE PARTY</label>
       </div>
-    </div>
-    <div class="grid">
       <div class="col-12 flex">
         <p-radioButton
           inputId="N"
@@ -88,17 +81,17 @@
         />
         <label for="N" class="ml-2">OTHER</label>
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          fieldName="committee_type"
-          [formSubmitted]="formSubmitted"
-          requiredErrorMessage="An answer is required."
-        />
+      <div class="grid">
+        <div class="col-12">
+          <app-error-messages
+            [form]="form"
+            fieldName="committee_type"
+            [formSubmitted]="formSubmitted"
+            requiredErrorMessage="An answer is required."
+          />
+        </div>
       </div>
-    </div>
+    </fieldset>
     <div class="grid">
       <div class="col-12">
         <hr />
@@ -120,12 +113,9 @@
         <p>I certify that one of the following situations is correct:</p>
       </div>
     </div>
-    <div class="grid">
-      <div class="col-12">
-        <label for="statusBy">STATUS BY</label>
-      </div>
-    </div>
-    <div class="grid">
+
+    <fieldset class="field">
+      <legend>STATUS BY</legend>
       <div class="col-12 flex">
         <p-radioButton
           inputId="affiliation"
@@ -141,34 +131,34 @@
         />
         <label for="affiliation" class="ml-2">AFFILIATION</label>
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-12 flex">
-        <p-radioButton
-          inputId="qualification"
-          name="statusBy"
-          value="qualification"
-          data-cy="qualification-radio"
-          formControlName="statusBy"
-          [class]="
-            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
-              ? 'ng-invalid ng-dirty'
-              : ''
-          "
-        />
-        <label for="qualification" class="ml-2">QUALIFICATION</label>
+      <div class="grid">
+        <div class="col-12 flex">
+          <p-radioButton
+            inputId="qualification"
+            name="statusBy"
+            value="qualification"
+            data-cy="qualification-radio"
+            formControlName="statusBy"
+            [class]="
+              statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+                ? 'ng-invalid ng-dirty'
+                : ''
+            "
+          />
+          <label for="qualification" class="ml-2">QUALIFICATION</label>
+        </div>
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          fieldName="statusBy"
-          [formSubmitted]="formSubmitted"
-          requiredErrorMessage="An answer is required."
-        />
+      <div class="grid">
+        <div class="col-12">
+          <app-error-messages
+            [form]="form"
+            fieldName="statusBy"
+            [formSubmitted]="formSubmitted"
+            requiredErrorMessage="An answer is required."
+          />
+        </div>
       </div>
-    </div>
+    </fieldset>
     @if (statusByControl?.value === 'affiliation') {
       <div class="grid">
         <div class="col-12">
@@ -286,13 +276,12 @@
         <div attr.data-cy="candidate-{{ i }}">
           <div class="grid">
             <div class="col-12">
-              <h4>Candidate #{{ i + 1 }}</h4>
+              <h3 class="candidate-header">Candidate #{{ i + 1 }}</h3>
             </div>
           </div>
           <div class="grid">
             <div class="col-12">
               <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
-                <label for="entity_type">LOOKUP</label>
                 <app-report-contact-lookup
                   [form]="form"
                   [formSubmitted]="formSubmitted"
