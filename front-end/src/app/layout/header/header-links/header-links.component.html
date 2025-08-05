@@ -1,17 +1,17 @@
 <ul class="flex">
   @switch (headerStyle) {
     @case (headerStyles.DEFAULT) {
-      <li class="nav-item" routerLink="/reports">Reports</li>
-      <li class="nav-item" routerLink="/contacts">Contacts</li>
-      <li class="nav-item nav-item-button">
-        <button (click)="toolsOp.toggle($event)" (keydown.enter)="toolsOp.toggle($event)">
+      <li><a class="nav-item" routerLink="/reports">Reports</a></li>
+      <li><a class="nav-item" routerLink="/contacts">Contacts</a></li>
+      <li>
+        <button class="nav-item" (click)="toolsOp.toggle($event)">
           <span>Tools</span>
           <i class="pi pi-sort-down-fill"></i>
         </button>
       </li>
 
-      <li id="navbarProfileDropdownMenuLink" class="nav-item nav-item-button">
-        <button (click)="accountOp.toggle($event)" (keydown.enter)="accountOp.toggle($event)">
+      <li id="navbarProfileDropdownMenuLink">
+        <button class="nav-item" (click)="accountOp.toggle($event)">
           <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
           <i class="pi pi-sort-down-fill"></i>
         </button>
@@ -19,14 +19,14 @@
     }
     @case (headerStyles.LOGIN) {
       @if (!disableLogin) {
-        <li class="nav-item">
-          <button (click)="navigateToLoginDotGov()" (keydown.enter)="navigateToLoginDotGov()">SIGN IN</button>
+        <li>
+          <button class="nav-item" (click)="navigateToLoginDotGov()">SIGN IN</button>
         </li>
       }
     }
     @case (headerStyles.LOGOUT) {
-      <li class="nav-item">
-        <button (click)="logOut()" (keydown.enter)="logOut()">Log Out</button>
+      <li>
+        <button class="nav-item" (click)="logOut()">Log Out</button>
       </li>
     }
   }
@@ -34,12 +34,8 @@
 
 <p-popover #toolsOp>
   <ul>
-    <li class="cursor-pointer py-2 px-4">
-      <button
-        (click)="openLink('/tools/update-cash-on-hand', toolsOp)"
-        (keydown.enter)="openLink('/tools/update-cash-on-hand', toolsOp)"
-        autofocus
-      >
+    <li>
+      <button class="popover-button" (click)="openLink('/tools/update-cash-on-hand', toolsOp)" autofocus>
         Update cash on hand
       </button>
     </li>
@@ -48,33 +44,19 @@
 
 <p-popover #accountOp>
   <ul>
-    <li class="cursor-pointer py-2 px-4">
-      <button
-        (click)="openLink('/committee/', accountOp)"
-        (keydown.enter)="openLink('/committee/', accountOp)"
-        autofocus
-      >
-        Account
-      </button>
+    <li>
+      <button class="popover-button" (click)="openLink('/committee/', accountOp)" autofocus>Account</button>
     </li>
-    <li class="cursor-pointer py-2 px-4">
-      <button
-        (click)="openLink('/committee/members', accountOp)"
-        (keydown.enter)="openLink('/committee/members', accountOp)"
-      >
-        Users
-      </button>
+    <li>
+      <button class="popover-button" (click)="openLink('/committee/members', accountOp)">Users</button>
     </li>
-    <li class="cursor-pointer py-2 px-4">
-      <button
-        (click)="openLink('/login/select-committee/', accountOp)"
-        (keydown.enter)="openLink('/login/select-committee/', accountOp)"
-      >
+    <li>
+      <button class="popover-button" (click)="openLink('/login/select-committee/', accountOp)">
         Switch Committees
       </button>
     </li>
-    <li class="cursor-pointer py-2 px-4">
-      <button (click)="logOut()" (keydown.enter)="logOut()">Logout</button>
+    <li>
+      <button class="popover-button" (click)="logOut()">Logout</button>
     </li>
   </ul>
 </p-popover>
