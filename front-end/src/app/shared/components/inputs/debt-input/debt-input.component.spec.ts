@@ -14,11 +14,11 @@ describe('DebtInputComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [DebtInputComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore())],
     });
     fixture = TestBed.createComponent(DebtInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     component.form.setControl('loan_balance', new SubscriptionFormControl());
     component.form.setControl('contribution_amount', new SubscriptionFormControl());
     component.form.setControl('payment_amount', new SubscriptionFormControl());

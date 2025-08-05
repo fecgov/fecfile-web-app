@@ -13,11 +13,10 @@ describe('LoanTermsInputComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [LoanTermsInputComponent],
-      providers: [provideMockStore(testMockStore)],
+      providers: [provideMockStore(testMockStore())],
     });
     fixture = TestBed.createComponent(LoanTermsInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap;
     component.form = new FormGroup(
       {
         loan_incurred_date: new SubscriptionFormControl(''),
@@ -28,7 +27,7 @@ describe('LoanTermsInputComponent', () => {
       { updateOn: 'blur' },
     );
     component.templateMap = {
-      ...testTemplateMap,
+      ...testTemplateMap(),
       ...{
         interest_rate: 'loan_interest_rate',
         date: 'loan_incurred_date',

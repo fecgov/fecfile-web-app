@@ -7,7 +7,7 @@ import { SubscriptionFormControl } from '../subscription-form-control';
 describe('RedesignationToUtils', () => {
   describe('overlayTransactionProperties', () => {
     it('should override default properties', () => {
-      const origTransaction = { ...testScheduleBTransaction } as SchBTransaction;
+      const origTransaction = testScheduleBTransaction();
       const toTransaction = RedesignationToUtils.overlayTransactionProperties(
         getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE) as SchBTransaction,
         origTransaction,
@@ -21,7 +21,7 @@ describe('RedesignationToUtils', () => {
 
   describe('overlayForm', () => {
     it('should update validators and watch for value changes', () => {
-      const transaction = { ...testScheduleBTransaction } as SchBTransaction;
+      const transaction = testScheduleBTransaction();
       transaction.reatt_redes = {
         id: '999',
         report_id: '999',

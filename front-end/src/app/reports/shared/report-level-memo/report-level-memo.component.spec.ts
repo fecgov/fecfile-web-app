@@ -36,7 +36,7 @@ describe('ReportLevelMemoComponent', () => {
         MessageService,
         MemoTextService,
         FormBuilder,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         { provide: Router, useValue: mockRouter },
         {
           provide: ActivatedRoute,

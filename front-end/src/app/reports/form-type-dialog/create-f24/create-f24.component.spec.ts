@@ -19,7 +19,7 @@ describe('CreateF24Component', () => {
       providers: [
         provideHttpClient(),
         provideRouter([]),
-        provideMockStore({ initialState: { committeeAccount: testCommitteeAccount } }),
+        provideMockStore({ initialState: { committeeAccount: testCommitteeAccount() } }),
         { provide: Form24Service, useValue: form24ServiceSpy },
       ],
     }).compileComponents();
@@ -66,8 +66,9 @@ describe('CreateF24Component', () => {
   }));
 
   it('should create F24 and navigate upon success', fakeAsync(() => {
+    const report = testF24();
     form24Service.getAllReports.and.resolveTo([]);
-    form24Service.create.and.returnValue(Promise.resolve(testF24));
+    form24Service.create.and.returnValue(Promise.resolve(report));
     spyOn(router, 'navigateByUrl');
 
     component.selectedForm24Type.set('24');
@@ -75,7 +76,7 @@ describe('CreateF24Component', () => {
 
     component.createF24().then(() => {
       expect(form24Service.create).toHaveBeenCalled();
-      expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/${testF24.id}/list`);
+      expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/${report.id}/list`);
     });
     tick();
   }));

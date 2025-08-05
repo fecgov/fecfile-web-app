@@ -42,9 +42,9 @@ class TestHostComponent {
     [this.stateFormControlName]: new SubscriptionFormControl(''),
     [this.districtFormControlName]: new SubscriptionFormControl(''),
   });
-  formSubmiteed = false;
-  transaction: Transaction = testScheduleATransaction;
 
+  formSubmitted = false;
+  transaction: Transaction = testScheduleATransaction();
   component = viewChild.required(CandidateOfficeInputComponent);
 }
 
@@ -114,7 +114,7 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('adds subscription to election_code for Schedule E transactions', () => {
-    host.transaction = testIndependentExpenditure;
+    host.transaction = testIndependentExpenditure();
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -123,7 +123,7 @@ describe('CandidateOfficeInputComponent', () => {
   });
 
   it('updates state availability for SchE transactions in Presidential Primary elections', () => {
-    host.transaction = testIndependentExpenditure;
+    host.transaction = testIndependentExpenditure();
     fixture.detectChanges();
     component.ngOnInit();
 

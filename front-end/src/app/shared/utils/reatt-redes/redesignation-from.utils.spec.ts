@@ -7,20 +7,21 @@ import { SubscriptionFormControl } from '../subscription-form-control';
 describe('Redesignation From', () => {
   describe('overlayTransactionProperties', () => {
     it('should override default properties', () => {
+      const transaction = testScheduleBTransaction();
       const fromTransaction = RedesignationFromUtils.overlayTransactionProperties(
         getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE) as SchBTransaction,
-        testScheduleBTransaction,
+        transaction,
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
       expect(fromTransaction.transactionType.accordionTitle).toBe('AUTO-POPULATED');
       expect(fromTransaction.fields_to_validate?.includes('memo_code')).toBeFalse();
-      expect(fromTransaction.reatt_redes_id).toBe(testScheduleBTransaction.id);
+      expect(fromTransaction.reatt_redes_id).toBe(transaction.id);
     });
   });
 
   describe('overlayForm', () => {
     it('should update validators and watch for value changes', () => {
-      const transaction = { ...testScheduleBTransaction } as SchBTransaction;
+      const transaction = testScheduleBTransaction();
       transaction.parent_transaction = {
         id: '888',
         reatt_redes: SchBTransaction.fromJSON({

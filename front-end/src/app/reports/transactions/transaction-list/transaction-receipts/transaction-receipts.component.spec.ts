@@ -32,7 +32,7 @@ describe('TransactionReceiptsComponent', () => {
         provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
           useValue: {

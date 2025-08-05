@@ -23,7 +23,7 @@ describe('F3XMenuComponent', () => {
             redirectTo: '',
           },
         ]),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
       imports: [PanelMenuModule, BrowserAnimationsModule, F3XMenuComponent],
     }).compileComponents();

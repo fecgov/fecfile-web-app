@@ -51,7 +51,7 @@ describe('ManageCommitteeComponent', () => {
         ConfirmationService,
         MessageService,
         FormBuilder,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         CommitteeMemberService,
       ],
     }).compileComponents();

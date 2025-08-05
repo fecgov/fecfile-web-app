@@ -40,7 +40,7 @@ describe('DesignatedSubordinateInputComponent', () => {
       },
       { updateOn: 'blur' },
     );
-    component.templateMap = testTemplateMap;
+    component.templateMap = testTemplateMap();
     fixture.detectChanges();
   });
 
@@ -78,7 +78,7 @@ describe('DesignatedSubordinateInputComponent', () => {
     const designatingCommitteeSelectEmitSpy = spyOn(component.designatingCommitteeSelect, 'emit');
     const selectItem = {
       label: '',
-      value: testContact,
+      value: testContact(),
       styleClass: '',
       icon: '',
       title: '',
@@ -98,7 +98,7 @@ describe('DesignatedSubordinateInputComponent', () => {
     const subordinateCommitteeSelectEmitSpy = spyOn(component.subordinateCommitteeSelect, 'emit');
     const selectItem = {
       label: '',
-      value: testContact,
+      value: testContact(),
       styleClass: '',
       icon: '',
       title: '',

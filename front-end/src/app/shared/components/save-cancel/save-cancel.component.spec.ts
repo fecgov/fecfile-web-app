@@ -11,7 +11,7 @@ describe('SaveCancelComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SaveCancelComponent],
-      providers: [provideMockStore(testMockStore)],
+      providers: [provideMockStore(testMockStore())],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SaveCancelComponent);

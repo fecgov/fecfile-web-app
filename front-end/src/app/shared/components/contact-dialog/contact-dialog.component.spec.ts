@@ -52,7 +52,7 @@ describe('ContactDialogComponent', () => {
         provideHttpClientTesting(),
         ConfirmationService,
         FormBuilder,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         DatePipe,
       ],
     }).compileComponents();
@@ -61,7 +61,7 @@ describe('ContactDialogComponent', () => {
     transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
-    component.contact = { ...testContact } as Contact;
+    component.contact = testContact();
     component.contactLookup = {
       contactTypeFormControl: new SubscriptionFormControl(),
     } as ContactLookupComponent;
@@ -133,7 +133,7 @@ describe('ContactDialogComponent', () => {
   describe('transactions', () => {
     it('should route to transaction', () => {
       const spy = spyOn(component.router, 'navigate');
-      const transaction = testScheduleATransaction;
+      const transaction = testScheduleATransaction();
       component.openTransaction(new TransactionData(transaction));
       expect(spy).toHaveBeenCalledWith([
         `reports/transactions/report/${transaction.report_ids?.[0]}/list/${transaction.id}`,
@@ -153,7 +153,7 @@ describe('ContactDialogComponent', () => {
       const transaction: SchATransaction = getTestTransactionByType(
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ) as SchATransaction;
-      transaction.reports = [testActiveReport];
+      transaction.reports = [testActiveReport()];
       transaction.reports?.push(Form24.fromJSON({ id: '1', report_type: ReportTypes.F24 }));
       spyOn(transactionService, 'getTableData').and.returnValue(
         Promise.resolve({

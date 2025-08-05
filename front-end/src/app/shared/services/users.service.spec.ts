@@ -22,7 +22,7 @@ describe('UsersService', () => {
         provideHttpClientTesting(),
         ApiService,
         LoginService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);

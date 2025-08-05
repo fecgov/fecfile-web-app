@@ -36,7 +36,12 @@ describe('CommitteeInfoComponent', () => {
     if (form1m_link) Object.assign(environment, { form1m_link });
     // Now configure and compile TestBed with the updated environment
     await TestBed.configureTestingModule({
-      providers: [provideMockStore(testMockStore), provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+      providers: [
+        provideMockStore(testMockStore()),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
       imports: [
         DividerModule,
         SelectModule,

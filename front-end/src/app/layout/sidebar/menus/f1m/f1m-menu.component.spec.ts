@@ -28,7 +28,7 @@ describe('F1MMenuComponent', () => {
             data: { sidebarSection: ReportSidebarSection.CREATE },
           },
         ]),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         ReportService,
       ],
       imports: [PanelMenuModule, BrowserAnimationsModule, F1MMenuComponent],
