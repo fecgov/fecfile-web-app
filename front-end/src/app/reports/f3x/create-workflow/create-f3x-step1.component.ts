@@ -83,7 +83,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit, Af
 
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   private readonly filingFrequencySignal = computed(() =>
-    this.committeeAccountSignal().filing_frequency === 'M' ? 'M' : 'Q',
+    this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q',
   );
 
   report?: Report;
@@ -111,7 +111,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit, Af
   ngAfterViewInit(): void {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
     if (reportId) {
-      this.report = this.activeReportSignal();
+      this.report = this.activeReport();
       this.form.patchValue(this.report, { emitEvent: false });
     }
   }

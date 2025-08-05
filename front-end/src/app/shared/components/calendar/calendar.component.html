@@ -12,7 +12,7 @@
   ></p-datepicker>
   @if (control() && showErrors()) {
     <app-error-messages
-      [attr.data-cy]="fieldName + '-error'"
+      [attr.data-cy]="fieldName() + '-error'"
       [form]="form()"
       [control]="control()"
       [formSubmitted]="formSubmitted()"

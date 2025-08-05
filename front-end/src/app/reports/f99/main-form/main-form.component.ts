@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { filingFrequencies, Form99, textCodes, textCodesWithFilingFrequencies } from 'app/shared/models/form-99.model';
 import { Report } from 'app/shared/models/report.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { fecSpec8dot5Released, SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -51,13 +50,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   ];
   readonly schema = f99Schema;
   readonly webprintURL = '/reports/f99/web-print/';
-  readonly templateMap = {
-    street_1: 'street_1',
-    street_2: 'street_2',
-    city: 'city',
-    state: 'state',
-    zip: 'zip',
-  } as TransactionTemplateMapType;
+
   readonly textCodes = textCodes;
   readonly filingFrequencies = filingFrequencies;
 

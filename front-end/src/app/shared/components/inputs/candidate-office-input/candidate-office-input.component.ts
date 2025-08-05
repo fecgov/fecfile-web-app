@@ -1,10 +1,9 @@
 import { Component, computed, input, OnInit } from '@angular/core';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { BaseInputComponent } from '../base-input.component';
-import { ScheduleIds } from 'app/shared/models/transaction.model';
+import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
@@ -15,39 +14,45 @@ import { InputText } from 'primeng/inputtext';
   templateUrl: './candidate-office-input.component.html',
   imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText],
 })
-export class CandidateOfficeInputComponent extends BaseInputComponent implements OnInit {
-  readonly officeFormControlName = input('');
-  readonly stateFormControlName = input('');
-  readonly districtFormControlName = input('');
+export class CandidateOfficeInputComponent implements OnInit {
+  readonly transaction = input<Transaction>();
+  readonly form = input.required<FormGroup>();
+  readonly formSubmitted = input.required<boolean>();
+
+  readonly officeFormControlName = input.required<string>();
+  readonly stateFormControlName = input.required<string>();
+  readonly districtFormControlName = input.required<string>();
+
+  readonly transactionType = computed(() => this.transaction()?.transactionType);
+
+  readonly candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
+  readonly candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
 
   readonly officeControl = computed(() => {
-    const control = this.form.get(this.officeFormControlName());
+    const control = this.form().get(this.officeFormControlName());
     if (!control) return undefined;
     return control as SubscriptionFormControl;
   });
   readonly stateControl = computed(() => {
-    const control = this.form.get(this.stateFormControlName());
+    const control = this.form().get(this.stateFormControlName());
     if (!control) return undefined;
     return control as SubscriptionFormControl;
   });
   readonly districtControl = computed(() => {
-    const control = this.form.get(this.districtFormControlName());
+    const control = this.form().get(this.districtFormControlName());
     if (!control) return undefined;
     return control as SubscriptionFormControl;
   });
 
-  readonly candidateOfficeTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
-  readonly candidateStateOptions: PrimeOptions = LabelUtils.getPrimeOptions(
-    LabelUtils.getStateCodeLabelsWithoutMilitary(),
-  );
   candidateDistrictOptions: PrimeOptions = [];
 
   readonly isScheduleE = computed(() => this.transactionType()?.scheduleId === ScheduleIds.E);
   readonly electionCodeField = computed(() => this.transactionType()?.templateMap.election_code);
+
   readonly electionControl = computed(() => {
     const electionCode = this.electionCodeField();
     if (!electionCode) return undefined;
-    return this.form.get(electionCode) as SubscriptionFormControl;
+    return this.form().get(electionCode) as SubscriptionFormControl;
   });
 
   ngOnInit(): void {
@@ -94,16 +99,16 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
     const officeValue = (this.officeControl()?.value ?? '') as string;
     const electionCode = (this.electionControl()?.value ?? '') as string;
 
-    if (!officeValue || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
+    if (officeValue === '' || officeValue === CandidateOfficeTypes.PRESIDENTIAL) {
       // Handle special case for Schedule E where presidential primaries require the candidate state to have a value.
       if (this.isScheduleE() && electionCode.startsWith('P')) {
-        this.form.patchValue({
+        this.form().patchValue({
           [this.districtFormControlName()]: null,
         });
         this.stateControl()?.enable();
         this.districtControl()?.disable();
       } else {
-        this.form.patchValue({
+        this.form().patchValue({
           [this.stateFormControlName()]: null,
           [this.districtFormControlName()]: null,
         });
@@ -111,7 +116,7 @@ export class CandidateOfficeInputComponent extends BaseInputComponent implements
         this.districtControl()?.disable();
       }
     } else if (officeValue === CandidateOfficeTypes.SENATE) {
-      this.form.patchValue({
+      this.form().patchValue({
         [this.districtFormControlName()]: null,
       });
       this.stateControl()?.enable();

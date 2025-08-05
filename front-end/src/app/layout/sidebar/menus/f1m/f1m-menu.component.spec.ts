@@ -48,7 +48,7 @@ describe('F1MMenuComponent', () => {
 
   it('should get report from url', () => {
     router.navigateByUrl('/reports/f1m/edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-    expect(component.activeReportSignal().id).toBe('999');
+    expect(component.activeReport().id).toBe('999');
   });
 
   xit('should set the sidebar state to REVIEW A REPORT', async () => {

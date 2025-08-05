@@ -1,8 +1,8 @@
 <div class="confirm-information">
   <h1>Confirm information</h1>
-  <h5>
-    <strong>{{ activeReportSignal().formLabel }}:</strong> {{ activeReportSignal().formSubLabel }}
-  </h5>
+  <span class="h5">
+    <strong>{{ activeReport().formLabel }}:</strong> {{ activeReport().formSubLabel }}
+  </span>
   <hr type="solid" />
   <p-card>
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
@@ -39,7 +39,7 @@
           </div>
         </div>
       </div>
-      @if (activeReportSignal().hasChangeOfAddress) {
+      @if (activeReport().hasChangeOfAddress) {
         <hr type="solid" />
         <div class="grid">
           <div class="col-12">
@@ -156,7 +156,7 @@
           pRipple
           label="Back"
           class="p-button-secondary"
-          (click)="router.navigateByUrl(getBackUrl?.(activeReportSignal()) ?? '')"
+          (click)="router.navigateByUrl(getBackUrl?.(activeReport()) ?? '')"
         ></button>
         <button
           pButton

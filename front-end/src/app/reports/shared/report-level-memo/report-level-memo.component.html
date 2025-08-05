@@ -2,11 +2,11 @@
   <h1>Report level memo</h1>
   <div>
     <span class="bold"
-      >{{ activeReportSignal().formLabel }}
-      @if (activeReportSignal().formSubLabel) {
+      >{{ activeReport().formLabel }}
+      @if (activeReport().formSubLabel) {
         :
       }
-      {{ activeReportSignal().formSubLabel }}</span
+      {{ activeReport().formSubLabel }}</span
     >
   </div>
 </div>
@@ -15,7 +15,7 @@
   <div class="grid">
     <div class="col-11">
       <label for="{{ text4kFormProperty }}">
-        <strong> ENTER A MEMO RELATED TO THIS FORM {{ activeReportSignal().report_type.slice(1) }} </strong>
+        <strong> ENTER A MEMO RELATED TO THIS FORM {{ activeReport().report_type.slice(1) }} </strong>
         <span class="paren-label">(OPTIONAL)</span>
       </label>
       <div>
@@ -44,7 +44,7 @@
           pRipple
           label="Back"
           class="p-button-secondary"
-          (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReportSignal().id)"
+          (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReport().id)"
         ></button>
       </div>
     </div>
