@@ -1,4 +1,4 @@
-import { Component, inject, resource } from '@angular/core';
+import { Component, computed, inject, OnInit, resource } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -8,11 +8,12 @@ import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
-import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
+import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
+import { ContactManagementService } from 'app/shared/services/contact-management.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -25,21 +26,20 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
     ButtonDirective,
     Ripple,
     TableActionsButtonComponent,
-    ContactDialogComponent,
+    ContactModalComponent,
     DeletedContactDialogComponent,
     LabelPipe,
   ],
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> {
+export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   protected readonly itemService = inject(ContactService);
+  readonly cmService = inject(ContactManagementService);
   public readonly deletedContactService = inject(DeletedContactService);
   contactTypeLabels: LabelList = ContactTypeLabels;
-  dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
   searchTerm = '';
 
-  // contact lookup
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
     ContactTypes.COMMITTEE,
     ContactTypes.INDIVIDUAL,
@@ -63,6 +63,8 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     { field: 'occupation', label: 'Occupation' },
   ];
 
+  readonly manager = computed(() => this.cmService.activeManager());
+
   readonly restoreContactsButtonIsVisible = resource({
     loader: async () => {
       const contactListResponse = await this.deletedContactService.getTableData();
@@ -71,10 +73,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     },
   });
 
+  ngOnInit() {
+    this.cmService.activeKey.set('');
+  }
+
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     await super.loadTableItems(event);
-
-    await this.restoreContactsButtonIsVisible.reload();
+    this.restoreContactsButtonIsVisible.reload();
   }
 
   protected getEmptyItem(): Contact {
@@ -82,14 +87,17 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public override addItem() {
-    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-    super.addItem();
+    this.isNewItem = true;
+    this.manager().setAsAllContacts();
+    this.manager().contact.set(emptyContact(this.manager().contactType()));
+    this.cmService.showDialog();
   }
 
-  public override editItem(item: Contact) {
-    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
-    super.editItem(item);
+  public override editItem(contact: Contact) {
+    this.manager().setAsSingle(contact.type);
     this.isNewItem = false;
+    this.manager().contact.set(contact);
+    this.cmService.showDialog();
   }
 
   /**

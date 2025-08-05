@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, OnInit, untracked } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -49,6 +49,8 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   readonly cmservice = inject(ContactManagementService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
+
+  readonly showHistory = input(false);
 
   readonly form: FormGroup = this.fb.group(
     SchemaUtils.getFormGroupFields([

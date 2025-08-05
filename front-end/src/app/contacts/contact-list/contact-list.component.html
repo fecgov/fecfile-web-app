@@ -66,15 +66,6 @@
   </ng-template>
 </app-table>
 
-<app-contact-dialog
-  [contactTypeOptions]="dialogContactTypeOptions"
-  [contact]="item"
-  [(detailVisible)]="detailVisible"
-  [showHistory]="true"
-  (savedContact)="saveContact($event)"
-></app-contact-dialog>
+<app-contact-modal [showHistory]="true" />
 
-<app-deleted-contact-dialog
-  [(visible)]="restoreDialogIsVisible"
-  (contactsRestored)="refreshTable()"
-></app-deleted-contact-dialog>
+<app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />

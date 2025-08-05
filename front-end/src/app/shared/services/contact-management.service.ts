@@ -41,6 +41,11 @@ export class ContactManager {
     this.setContactTypeOptions([contactType]);
   }
 
+  setAsAllContacts() {
+    this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels));
+    this.contactType.set(ContactTypes.INDIVIDUAL);
+  }
+
   setContactTypeOptions(contactTypes: ContactTypes[]) {
     this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, contactTypes));
     this.contactType.set(contactTypes[0]);
