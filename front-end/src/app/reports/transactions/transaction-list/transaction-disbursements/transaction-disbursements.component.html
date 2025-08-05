@@ -1,18 +1,15 @@
 <app-table
+  [(first)]="first"
   title="Disbursements"
   [items]="items"
-  [totalItems]="totalItems"
+  [(totalItems)]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
   sortField="line_label,created"
   [sortableHeaders]="sortableHeaders"
   itemName="transactions"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #header>
     <th id="transaction_id" role="columnheader">Transaction ID</th>

@@ -1,18 +1,15 @@
 <app-table
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(first)]="first"
+  [(selectedItems)]="selectedItems"
   itemName="transactions"
   title="Loans and Debts"
   [items]="items"
-  [totalItems]="totalItems"
+  [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="line_label,created"
-  [rowsPerPage]="rowsPerPage"
+  [(rowsPerPage)]="rowsPerPage"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #header>
     <th id="transaction_id" role="columnheader">Transaction ID</th>
