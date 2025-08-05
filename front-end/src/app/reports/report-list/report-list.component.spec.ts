@@ -34,7 +34,7 @@ describe('ReportListComponent', () => {
         ConfirmationService,
         MessageService,
         ApiService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         { provide: Actions, useValue: actions$ },
         {
           provide: ActivatedRoute,
@@ -60,7 +60,7 @@ describe('ReportListComponent', () => {
 
   describe('rowActions', () => {
     it('should have "Unamend" if report can_unamend', () => {
-      const report = testActiveReport;
+      const report = testActiveReport();
       report.can_unamend = false;
       const action = component.rowActions.find((action) => action.label === 'Unamend');
       if (action) {
@@ -188,15 +188,16 @@ describe('ReportListComponent', () => {
   describe('deleteReport', () => {
     it('should call confirm', () => {
       const confirmSpy = spyOn(component.confirmationService, 'confirm');
-      component.confirmDelete(testActiveReport);
+      component.confirmDelete(testActiveReport());
       expect(confirmSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should delete', fakeAsync(async () => {
+      const report = testActiveReport();
       const deleteSpy = spyOn(reportService, 'delete').and.returnValue(Promise.resolve(null));
       const messageServiceSpy = spyOn(component.messageService, 'add');
-      await component.delete(testActiveReport);
-      expect(deleteSpy).toHaveBeenCalledOnceWith(testActiveReport);
+      await component.delete(report);
+      expect(deleteSpy).toHaveBeenCalledOnceWith(report);
       expect(messageServiceSpy).toHaveBeenCalledOnceWith({
         severity: 'success',
         summary: 'Successful',

@@ -15,7 +15,7 @@ describe('HttpErrorInterceptor', () => {
 
   beforeEach(() =>
     TestBed.configureTestingModule({
-      providers: [HttpErrorInterceptor, HttpClient, HttpHandler, LoginService, provideMockStore(testMockStore)],
+      providers: [HttpErrorInterceptor, HttpClient, HttpHandler, LoginService, provideMockStore(testMockStore())],
     }),
   );
 

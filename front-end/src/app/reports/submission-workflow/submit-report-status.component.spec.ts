@@ -26,7 +26,7 @@ describe('SubmitReportStatusComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideRouter([]),
         {
           provide: ActivatedRoute,

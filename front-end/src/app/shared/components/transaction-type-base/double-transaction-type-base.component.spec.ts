@@ -61,7 +61,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       imports: [DoubleTransactionDetailComponent],
       providers: [
         provideAnimationsAsync(),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter(ROUTES),
@@ -71,7 +71,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         TransactionService,
         ConfirmationService,
         ConfirmationWrapperService,
-        provideMockStore(testMockStore),
         FecDatePipe,
         ReportService,
         TransactionService,

@@ -33,7 +33,7 @@ describe('FormTypeDialogComponent', () => {
           },
         ]),
         Form24Service,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         MessageService,
         {
           provide: ActivatedRoute,

@@ -27,7 +27,7 @@ describe('DeletedContactDialogComponent', () => {
         provideRouter([]),
         ConfirmationService,
         MessageService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         DeletedContactService,
       ],
     }).compileComponents();

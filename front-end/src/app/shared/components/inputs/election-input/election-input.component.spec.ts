@@ -30,7 +30,7 @@ class TestHostComponent {
     { updateOn: 'blur' },
   );
   formSubmitted = false;
-  templateMap = testTemplateMap;
+  templateMap = testTemplateMap();
   transaction: Transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
   component = viewChild.required(ElectionInputComponent);
 }

@@ -1,8 +1,8 @@
 <div class="confirm-information">
   <h1>Confirm information</h1>
-  <h5>
+  <span class="h5">
     <strong>{{ activeReport().formLabel }}:</strong> {{ activeReport().formSubLabel }}
-  </h5>
+  </span>
   <hr type="solid" />
   <p-card>
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
@@ -42,16 +42,11 @@
       @if (activeReport().hasChangeOfAddress) {
         <hr type="solid" />
         <div class="grid">
-          <div class="col-12">
-            <div class="field">
+          <fieldset class="field">
+            <legend class="pb-4">
               <h2>Verify physical address</h2>
-              <br />
               <div>Has your address changed in the last 10 days?</div>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12 field">
+            </legend>
             <div class="flex flex-wrap gap-3">
               <div class="flex align-items-center">
                 <p-radioButton
@@ -78,7 +73,7 @@
                 patternErrorMessage="Please select 'Yes' or 'No'"
               ></app-error-messages>
             </div>
-          </div>
+          </fieldset>
         </div>
       }
 

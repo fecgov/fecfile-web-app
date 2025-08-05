@@ -35,7 +35,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         CommitteeMemberService,
         { provide: MessageService, useValue: messageService },
         CommitteeMemberEmailValidator,

@@ -29,7 +29,7 @@ describe('CreateCommitteeComponent', () => {
         provideRouter([]),
         ConfirmationService,
         MessageService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         UsersService,
       ],
     });
@@ -97,7 +97,7 @@ describe('CreateCommitteeComponent', () => {
       Promise.resolve(true),
     );
     const userSpy = spyOn(testUserService, 'getCurrentUser').and.returnValue(
-      Promise.resolve(testCommitteeAdminLoginData),
+      Promise.resolve(testCommitteeAdminLoginData()),
     );
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();

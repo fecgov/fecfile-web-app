@@ -53,7 +53,7 @@ describe('ContactLookupComponent', () => {
         FormBuilder,
         ContactService,
         EventEmitter,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         LabelPipe,
       ],
     }).compileComponents();
@@ -496,7 +496,8 @@ describe('ContactLookupComponent', () => {
 
   it('#onContactLookupSelect should call proper lookup', fakeAsync(() => {
     spyOn(component, 'onContactSelect');
-    component.onContactLookupSelect({ value: testContact });
-    expect(component.onContactSelect).toHaveBeenCalledWith(testContact);
+    const contact = testContact();
+    component.onContactLookupSelect({ value: contact });
+    expect(component.onContactSelect).toHaveBeenCalledWith(contact);
   }));
 });

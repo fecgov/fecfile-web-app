@@ -41,7 +41,7 @@ describe('TransactionTypePickerComponent', () => {
             queryParamMap: of({ get: (key: string) => (key === 'param1' ? 'value1' : undefined) }),
           },
         },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
   });

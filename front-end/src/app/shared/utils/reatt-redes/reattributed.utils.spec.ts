@@ -6,14 +6,10 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 describe('Reattributed Utils', () => {
   let payload: SchATransaction;
   beforeEach(() => {
-    payload = SchATransaction.fromJSON({
-      ...testScheduleATransaction,
-    });
+    payload = testScheduleATransaction();
     payload.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
 
-    payload.reatt_redes = SchATransaction.fromJSON({
-      ...testScheduleATransaction,
-    });
+    payload.reatt_redes = testScheduleATransaction();
   });
 
   describe('overlayTransactionProperties', () => {
