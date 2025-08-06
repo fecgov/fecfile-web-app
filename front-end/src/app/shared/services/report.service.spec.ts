@@ -14,7 +14,7 @@ describe('ReportService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), ReportService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), ReportService, provideMockStore(testMockStore())],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ReportService);

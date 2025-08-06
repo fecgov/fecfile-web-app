@@ -13,7 +13,7 @@ describe('committeeGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideMockStore(testMockStore)],
+      providers: [provideMockStore(testMockStore())],
     });
   });
 

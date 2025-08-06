@@ -26,7 +26,7 @@ describe('CashOnHandOverrideComponent', () => {
         Form3XService,
         CashOnHandService,
         MessageService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
   });

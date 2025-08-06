@@ -58,7 +58,7 @@ describe('ContactListComponent', () => {
         FormBuilder,
         MessageService,
         ContactService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -177,10 +177,10 @@ describe('ContactListComponent', () => {
   });
 
   it('#saveContact calls itemService', () => {
-    spyOn(service, 'update').and.returnValue(Promise.resolve(testContact));
-    spyOn(service, 'create').and.returnValue(Promise.resolve(testContact));
+    const contact = testContact();
+    spyOn(service, 'update').and.returnValue(Promise.resolve(contact));
+    spyOn(service, 'create').and.returnValue(Promise.resolve(contact));
     spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-    const contact = testContact;
     component.saveContact(contact);
     expect(service.update).toHaveBeenCalledTimes(1);
     contact.id = undefined;

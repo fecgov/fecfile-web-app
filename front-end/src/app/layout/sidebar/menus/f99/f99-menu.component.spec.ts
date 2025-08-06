@@ -24,7 +24,7 @@ describe('F99MenuComponent', () => {
             redirectTo: '',
           },
         ]),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
       imports: [PanelMenuModule, BrowserAnimationsModule, F99MenuComponent],
     }).compileComponents();

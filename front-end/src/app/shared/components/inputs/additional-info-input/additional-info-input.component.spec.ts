@@ -35,8 +35,8 @@ class TestHostComponent {
     { updateOn: 'blur' },
   );
   formSubmitted = false;
-  templateMap = testTemplateMap;
-  transaction: Transaction = testScheduleATransaction;
+  templateMap = testTemplateMap();
+  transaction: Transaction = testScheduleATransaction();
   component = viewChild.required(AdditionalInfoInputComponent);
   constructor() {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
@@ -87,45 +87,45 @@ describe('AdditionalInfoInputComponent', () => {
 
   it('should trigger the purposeDescriptionPrefix callbacks', () => {
     component.form.patchValue({
-      [testTemplateMap.purpose_description]: 'abc',
+      [host.templateMap.purpose_description]: 'abc',
     });
-    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+    expect(component.form.get(host.templateMap.purpose_description)?.value).toBe(
       host.transaction?.transactionType?.purposeDescriptionPrefix,
     );
 
     component.form.patchValue({
-      [testTemplateMap.purpose_description]: 'Prefax: abc',
+      [host.templateMap.purpose_description]: 'Prefax: abc',
     });
-    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+    expect(component.form.get(host.templateMap.purpose_description)?.value).toBe(
       host.transaction?.transactionType?.purposeDescriptionPrefix + 'abc',
     );
   });
 
   it('purpose_description of just prefix just trigger required error', () => {
     component.form.patchValue({
-      [testTemplateMap.purpose_description]: 'Prefix: hihi',
+      [host.templateMap.purpose_description]: 'Prefix: hihi',
     });
-    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toBeFalsy();
+    expect(component.form.get(host.templateMap.purpose_description)?.errors).toBeFalsy();
 
     component.form.patchValue({
-      [testTemplateMap.purpose_description]: '',
+      [host.templateMap.purpose_description]: '',
     });
-    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+    expect(component.form.get(host.templateMap.purpose_description)?.value).toBe(
       host.transaction?.transactionType?.purposeDescriptionPrefix,
     );
-    expect(component.form.get(testTemplateMap.purpose_description)?.errors).toEqual({ required: true });
+    expect(component.form.get(host.templateMap.purpose_description)?.errors).toEqual({ required: true });
   });
 
   it('should detect memo prefixes', () => {
-    expect(component.form.get(testTemplateMap.text4000)?.value).toEqual('');
+    expect(component.form.get(host.templateMap.text4000)?.value).toEqual('');
     host.transaction.memo_text = MemoText.fromJSON({
       text_prefix: 'MEMO PREFIX:',
     });
     component.ngOnInit();
     component.form.patchValue({
-      [testTemplateMap.text4000]: 'abc',
+      [host.templateMap.text4000]: 'abc',
     });
     fixture.detectChanges();
-    expect(component.form.get(testTemplateMap.text4000)?.value).toBe(host.transaction?.memo_text?.text_prefix + ' ');
+    expect(component.form.get(host.templateMap.text4000)?.value).toBe(host.transaction?.memo_text?.text_prefix + ' ');
   });
 });

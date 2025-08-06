@@ -16,7 +16,7 @@ import {
   testMockStore,
 } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { of, Subject } from 'rxjs';
+import { firstValueFrom, of, Subject } from 'rxjs';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
@@ -63,7 +63,7 @@ describe('TransactionTypeBaseComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TransactionDetailComponent],
       providers: [
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideAnimationsAsync(),
@@ -93,7 +93,6 @@ describe('TransactionTypeBaseComponent', () => {
           }),
         },
         ConfirmationService,
-        provideMockStore(testMockStore),
         FecDatePipe,
       ],
     }).compileComponents();
@@ -548,17 +547,15 @@ describe('TransactionTypeBaseComponent', () => {
       expect(spy).toHaveBeenCalled();
     });
 
-    it('should return optional label if memo not required', fakeAsync(() => {
+    it('should return optional label if memo not required', async () => {
       component.ngOnInit();
       if (!component.transactionType) throw new Error('Bad test');
       component.form.get(component.transactionType?.templateMap.memo_code)?.clearValidators();
       const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.returnValue(false);
-      component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual(true);
-      });
-      tick();
+      const res = await firstValueFrom(component.getMemoHasOptional$(component.form, component.transactionType));
+      expect(res).toEqual(true);
       expect(spy).toHaveBeenCalled();
-    }));
+    });
   });
 
   describe('initInheritedFieldsFromParent', () => {
@@ -589,23 +586,14 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('should populate treasurer data from committee for schedule E', () => {
-    component.transaction = testIndependentExpenditure;
-    fixture.detectChanges();
-    expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(
-      testCommitteeAccount.treasurer_name_2,
-    );
-    expect(component.form.get(component.templateMap['signatory_1_first_name'])!.value).toBe(
-      testCommitteeAccount.treasurer_name_1,
-    );
-    expect(component.form.get(component.templateMap['signatory_1_middle_name'])!.value).toBe(
-      testCommitteeAccount.treasurer_name_middle,
-    );
-    expect(component.form.get(component.templateMap['signatory_1_prefix'])!.value).toBe(
-      testCommitteeAccount.treasurer_name_prefix,
-    );
-    expect(component.form.get(component.templateMap['signatory_1_suffix'])!.value).toBe(
-      testCommitteeAccount.treasurer_name_suffix,
-    );
+    component.transaction = testIndependentExpenditure();
+    const ca = testCommitteeAccount();
+    component.ngOnInit();
+    expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(ca.treasurer_name_2);
+    expect(component.form.get(component.templateMap['signatory_1_first_name'])!.value).toBe(ca.treasurer_name_1);
+    expect(component.form.get(component.templateMap['signatory_1_middle_name'])!.value).toBe(ca.treasurer_name_middle);
+    expect(component.form.get(component.templateMap['signatory_1_prefix'])!.value).toBe(ca.treasurer_name_prefix);
+    expect(component.form.get(component.templateMap['signatory_1_suffix'])!.value).toBe(ca.treasurer_name_suffix);
   });
 
   describe('aggregate calculation', () => {

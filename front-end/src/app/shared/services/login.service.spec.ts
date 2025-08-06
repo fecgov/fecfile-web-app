@@ -7,15 +7,12 @@ import { ApiService } from './api.service';
 import { Router } from '@angular/router';
 import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { CookieService } from 'ngx-cookie-service';
-import { of } from 'rxjs';
 import { LoginService } from './login.service';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('LoginService', () => {
   let service: LoginService;
   let store: MockStore;
-  let cookieService: CookieService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,12 +21,11 @@ describe('LoginService', () => {
         provideHttpClientTesting(),
         ApiService,
         LoginService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     service = TestBed.inject(LoginService);
     store = TestBed.inject(MockStore);
-    cookieService = TestBed.inject(CookieService);
     TestBed.inject(Router);
   });
 
@@ -38,37 +34,21 @@ describe('LoginService', () => {
   });
 
   it('#logOut non-login.gov happy path', async () => {
-    TestBed.resetTestingModule();
-
     const dispatchSpy = spyOn(store, 'dispatch');
-
-    service.userLoginData$ = of(testUserLoginData);
+    store.overrideSelector(selectUserLoginData, testUserLoginData());
     service.logOut();
     expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
   });
 
-  //Can't figure out how to override service's userLoginData
-  xit('#logOut login.gov happy path', () => {
-    TestBed.resetTestingModule();
-
+  it('#logOut login.gov happy path', () => {
     spyOn(store, 'dispatch');
-    spyOn(cookieService, 'delete');
 
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
-    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
-  });
-
-  it('hasUserLoginData should return true', () => {
-    service.hasUserLoginData().then((userHasProfileData) => {
-      expect(userHasProfileData).toBeTrue();
-    });
   });
 
   it('userHasProfileData should return true', () => {
-    service.userHasProfileData().then((userHasProfileData) => {
-      expect(userHasProfileData).toBeTrue();
-    });
+    expect(service.userHasProfileData()).toBeTrue();
   });
 
   describe('#userHasConsented should work', () => {
@@ -81,7 +61,7 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
       });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
+      expect(service.userHasConsented()).toBeFalse();
     });
 
     it('test false security_consented', () => {
@@ -94,7 +74,7 @@ describe('LoginService', () => {
         email: '',
         security_consented: false,
       });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeFalse());
+      expect(service.userHasConsented()).toBeFalse();
     });
 
     it('test true security_consented', () => {
@@ -107,7 +87,7 @@ describe('LoginService', () => {
         email: '',
         security_consented: true,
       });
-      service.userHasConsented().then((userHasConsented) => expect(userHasConsented).toBeTrue());
+      expect(service.userHasConsented()).toBeTrue();
     });
   });
 });

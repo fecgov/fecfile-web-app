@@ -47,9 +47,9 @@ class TestHostComponent {
     { updateOn: 'blur' },
   );
   formSubmitted = false;
-  templateMap = testTemplateMap;
+  templateMap = testTemplateMap();
   memoItemHelpText = '';
-  transaction: Transaction = testScheduleATransaction;
+  transaction: Transaction = testScheduleATransaction();
   memoHasOptional = false;
   component = viewChild.required(MemoCodeInputComponent);
 }
@@ -83,7 +83,7 @@ describe('MemoCodeInputComponent', () => {
         Dialog,
         Tooltip,
       ],
-      providers: [provideMockStore(testMockStore), ConfirmationService],
+      providers: [provideMockStore(testMockStore()), ConfirmationService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

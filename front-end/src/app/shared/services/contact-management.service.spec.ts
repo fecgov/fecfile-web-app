@@ -36,7 +36,7 @@ describe('ContactManagementService', () => {
     const key = 'testKey';
     const manager = service.get(key);
     manager.clearOnLoad.set(true);
-    manager.contact.set(testContact);
+    manager.contact.set(testContact());
 
     service.activeKey.set(key);
     service.showDialog.set(true);
@@ -48,7 +48,7 @@ describe('ContactManagementService', () => {
     const key = 'testKey';
     const manager = service.get(key);
     manager.clearOnLoad.set(false);
-    const contactData = testContact;
+    const contactData = testContact();
     manager.contact.set(contactData);
 
     service.activeKey.set(key);

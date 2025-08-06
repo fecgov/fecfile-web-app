@@ -26,7 +26,7 @@ describe('UpdateCurrentUserComponent', () => {
         ConfirmationService,
         MessageService,
         FormBuilder,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         UsersService,
       ],
     }).compileComponents();

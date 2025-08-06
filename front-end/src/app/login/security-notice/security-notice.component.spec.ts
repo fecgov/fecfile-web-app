@@ -29,7 +29,7 @@ describe('SecurityNoticeComponent', () => {
           },
         ]),
         { provide: Window, useValue: window },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
   });
@@ -47,9 +47,10 @@ describe('SecurityNoticeComponent', () => {
   });
 
   it('should submit', () => {
-    const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(Promise.resolve(testUserLoginData));
+    const expectedUserLoginData = testUserLoginData();
+    const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(Promise.resolve(expectedUserLoginData));
     component.signConsentForm();
-    const expectedUserLoginData = testUserLoginData;
+
     expect(spy).toHaveBeenCalledOnceWith(expectedUserLoginData);
 
     expectedUserLoginData.consent_for_one_year = true;

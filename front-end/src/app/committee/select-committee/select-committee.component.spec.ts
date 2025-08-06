@@ -17,7 +17,7 @@ describe('SelectCommitteeComponent', () => {
       imports: [SelectCommitteeComponent],
       providers: [
         CommitteeAccountService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),

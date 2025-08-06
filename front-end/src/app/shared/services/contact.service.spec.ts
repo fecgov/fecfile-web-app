@@ -33,7 +33,7 @@ describe('ContactService', () => {
         ContactService,
         DeletedContactService,
         ApiService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
 

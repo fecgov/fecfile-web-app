@@ -21,7 +21,7 @@ describe('AppComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         LoginService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         ConfirmationService,
         MessageService,
         ScannedActionsSubject,
