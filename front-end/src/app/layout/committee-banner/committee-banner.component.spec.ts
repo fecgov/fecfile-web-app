@@ -33,6 +33,6 @@ describe('CommitteeBannerComponent', () => {
       CommitteeAccount.fromJSON({ id: '123', committee_type_label: pacQualifiedUnauthorized }),
     );
     TestBed.inject(MockStore).refreshState();
-    expect(component.committeeTypeLabel).toEqual(pacQualifiedUnauthorized);
+    expect(component.committeeTypeLabel()).toEqual(pacQualifiedUnauthorized);
   });
 });

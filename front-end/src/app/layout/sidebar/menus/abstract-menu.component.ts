@@ -6,7 +6,6 @@ import { ReportStatus } from 'app/shared/models';
 import { collectRouteData } from 'app/shared/utils/route.utils';
 import { MenuItem } from 'primeng/api';
 import { filter, map, startWith } from 'rxjs';
-import { DestroyerComponent } from '../../../shared/components/app-destroyer.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportSidebarSection, SidebarState } from '../sidebar.component';
@@ -14,7 +13,7 @@ import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 @Component({
   template: '',
 })
-export abstract class AbstractMenuComponent extends DestroyerComponent {
+export abstract class AbstractMenuComponent {
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);
   private readonly router = inject(Router);

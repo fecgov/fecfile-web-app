@@ -20,7 +20,6 @@ import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { take } from 'rxjs';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
 const loansDebts = [
@@ -315,21 +314,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public async updateItem(item: Transaction) {
     if (this.itemService.update) {
       try {
-        await this.untilDestroyed(this.itemService.update(item));
+        await this.itemService.update(item);
         this.loadTableItems({});
       } catch (error) {
         console.error('Error updating item:', error);
       }
     }
-  }
-
-  private untilDestroyed<T>(promise: Promise<T>): Promise<T> {
-    return Promise.race([
-      promise,
-      new Promise<T>((_, reject) => {
-        this.destroy$.pipe(take(1)).subscribe(() => reject(new Error('Destroyed')));
-      }),
-    ]);
   }
 
   public formatId(id: string | null): string {
