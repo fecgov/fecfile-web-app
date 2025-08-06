@@ -44,7 +44,7 @@ class TestHostComponent {
   component = viewChild.required(SecondaryReportSelectionDialogComponent);
   readonly visible = signal(false);
   reportType = ReportTypes.F24;
-  transaction: Transaction = testScheduleATransaction;
+  transaction: Transaction = testScheduleATransaction();
   reportSelectionCreateMethod = jasmine.createSpy('create');
   refreshTables = jasmine.createSpy('refreshTables');
 }
@@ -78,7 +78,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
         TransactionService,
         MessageService,
         DatePipe,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
           useValue: {

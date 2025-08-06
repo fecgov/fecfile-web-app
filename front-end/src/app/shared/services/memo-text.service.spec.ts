@@ -13,7 +13,7 @@ describe('MemoTextService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), MemoTextService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), MemoTextService, provideMockStore(testMockStore())],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);

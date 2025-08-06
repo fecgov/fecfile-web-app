@@ -18,7 +18,7 @@ describe('CommitteeAccountService', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         CommitteeAccountService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);

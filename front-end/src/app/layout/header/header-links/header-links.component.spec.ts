@@ -14,7 +14,12 @@ describe('HeaderLinksComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MenubarModule, HeaderLinksComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideMockStore(testMockStore()),
+      ],
     }).compileComponents();
   });
 

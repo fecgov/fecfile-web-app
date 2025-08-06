@@ -104,7 +104,7 @@ describe('ContactModalComponent', () => {
   });
 
   it('should save contact if form is valid', async () => {
-    component.form.patchValue(testContact);
+    component.form.patchValue(testContact());
     component.form.patchValue({ telephone: null });
 
     fixture.detectChanges();

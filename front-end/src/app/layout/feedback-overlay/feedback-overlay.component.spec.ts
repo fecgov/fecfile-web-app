@@ -22,7 +22,7 @@ describe('FeedbackOverlayComponent', () => {
         provideHttpClientTesting(),
         ConfirmationService,
         MessageService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
 

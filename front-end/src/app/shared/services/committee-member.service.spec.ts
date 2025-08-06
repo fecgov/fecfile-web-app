@@ -19,7 +19,7 @@ describe('CommitteeMemberService', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         CommitteeMemberService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -88,14 +88,14 @@ describe('CommitteeMemberService', () => {
     spyOn(service, 'membersSignal').and.returnValue([
       CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
-    mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData);
+    mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
 
     expect(service.needsSecondAdmin()).toBeTrue();
   });
 
   it('should return false for needsSecondAdmin() if more than one committee admin exists', () => {
-    mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData);
+    mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
     spyOn(service, 'membersSignal').and.returnValue([
       CommitteeMember.fromJSON({ email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),

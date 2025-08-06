@@ -37,7 +37,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReattRedesTransactionTypeDetailComponent],
       providers: [
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
@@ -47,7 +47,6 @@ describe('ReattTransactionTypeBaseComponent', () => {
         FormBuilder,
         TransactionService,
         ConfirmationService,
-        provideMockStore(testMockStore),
         FecDatePipe,
         ReportService,
         TransactionService,
@@ -57,7 +56,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   beforeEach(() => {
     testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    testTransaction.reports = [testActiveReport];
+    testTransaction.reports = [testActiveReport()];
     testTransaction.report_ids = ['999'];
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
@@ -76,7 +75,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
     component.transaction = testTransaction;
     component.childTransaction = testTransaction;
     let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    reattRedes.reports = [testActiveReport];
+    reattRedes.reports = [testActiveReport()];
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
     component.transaction.reatt_redes = reattRedes;
     component.ngOnInit();

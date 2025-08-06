@@ -41,7 +41,7 @@ describe('TransactionListComponent', () => {
         provideRouter([]),
         MessageService,
         ConfirmationService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         {
           provide: TransactionService,
           useValue: {

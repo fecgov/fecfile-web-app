@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
@@ -40,7 +40,7 @@ describe('TransactionContactLookupComponent', () => {
         ConfirmationService,
         FormBuilder,
         EventEmitter,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         DatePipe,
         LabelPipe,
         {
@@ -67,7 +67,7 @@ describe('TransactionContactLookupComponent', () => {
 
   it('should create a component for "contact_2" or "contact_3', () => {
     component.contactProperty = 'contact_2';
-    component.transaction = testScheduleATransaction;
+    component.transaction = testScheduleATransaction();
     component.ngOnInit();
     expect(component.form.get('contact_2_lookup')).toBeTruthy();
 
@@ -92,7 +92,7 @@ describe('TransactionContactLookupComponent', () => {
 
   it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
     component.detailVisible = false;
-    const contact = Contact.fromJSON({ ...testContact });
+    const contact = testContact();
     component.contactLookupSelected(contact);
     contact.id = undefined;
     component.contactLookupSelected(contact);
@@ -107,7 +107,8 @@ describe('TransactionContactLookupComponent', () => {
 
   it('saving a contact should emit the contact', () => {
     spyOn(component.contactSelect, 'emit');
-    component.saveContact(testContact);
-    expect(component.contactSelect.emit).toHaveBeenCalledWith({ value: testContact });
+    const contact = testContact();
+    component.saveContact(contact);
+    expect(component.contactSelect.emit).toHaveBeenCalledWith({ value: contact });
   });
 });

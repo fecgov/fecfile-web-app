@@ -116,8 +116,8 @@ describe('ReattRedesUtils', () => {
 
   describe('amountValidator', () => {
     let control: SubscriptionFormControl;
-    const txn = { ...testScheduleATransaction } as SchATransaction;
-    txn.reatt_redes = { ...testScheduleATransaction } as SchATransaction;
+    const txn = testScheduleATransaction();
+    txn.reatt_redes = testScheduleATransaction();
     (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
     (txn.reatt_redes as SchATransaction).contribution_amount = 100;
 
@@ -160,13 +160,9 @@ describe('ReattRedesUtils', () => {
     let payload: SchBTransaction;
 
     beforeEach(() => {
-      payload = SchBTransaction.fromJSON({
-        ...testScheduleBTransaction,
-      });
+      payload = testScheduleBTransaction();
       payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-      payload.reatt_redes = SchBTransaction.fromJSON({
-        ...testScheduleBTransaction,
-      });
+      payload.reatt_redes = testScheduleBTransaction();
     });
 
     it('should throw error when originating missing transaction type', () => {

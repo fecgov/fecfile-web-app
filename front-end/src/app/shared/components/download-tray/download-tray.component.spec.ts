@@ -31,7 +31,7 @@ describe('DownloadTrayComponent', () => {
           { path: '', component: LayoutComponent },
           { path: 'reports', component: ReportListComponent },
         ]),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         { provide: Actions, useValue: actions$ },
       ],
     });
