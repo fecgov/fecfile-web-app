@@ -2,31 +2,7 @@
   <app-second-committee-admin-dialog />
   <app-poller />
   <router-outlet />
-  <label class="sr-only" id="confirm-dialog-label">Confirmation Dialog</label>
-  <p-confirmDialog
-    #confirm
-    [draggable]="false"
-    [closable]="false"
-    [style]="{ width: '40vw' }"
-    aria-labelledby="confirm-dialog-label"
-  >
-    <ng-template #header>
-      <div class="custom-header">
-        <span class="p-dialog-title">Are you sure?</span>
-        <div class="p-dialog-header-actions">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-times"
-            class="p-dialog-header-icon p-link"
-            (click)="confirm.close()"
-          >
-            <span class="sr-only">Close</span>
-          </button>
-        </div>
-      </div>
-    </ng-template>
-  </p-confirmDialog>
+  <p-confirmDialog #confirm [draggable]="false" [style]="{ width: '40vw' }" appendTo="" />
   <p-toast />
   <app-download-tray />
 </div>
