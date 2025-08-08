@@ -1,18 +1,15 @@
 <app-table
+  [(first)]="first"
   [items]="items"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-  [totalItems]="totalItems"
+  [(totalItems)]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
   itemName="contacts"
   sortField="sort_name"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #caption>
     <p-toolbar>

@@ -2,43 +2,24 @@
   #dialog
   [(visible)]="visible"
   [style]="{ width: '90%' }"
-  [draggable]="false"
-  [closable]="false"
+  header="Restore deleted contacts"
   [modal]="true"
+  closeAriaLabel="Close"
 >
-  <ng-template #header>
-    <div class="custom-header" [id]="dialog.ariaLabelledBy">
-      <h1>Restore deleted contacts</h1>
-      <div class="p-dialog-header-actions">
-        <button
-          pButton
-          type="button"
-          icon="pi pi-times"
-          class="p-dialog-header-icon p-link"
-          (click)="dialog.close($event)"
-        >
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-    </div>
-  </ng-template>
   <app-table
+    [(first)]="first"
     [items]="items"
-    [totalItems]="totalItems"
+    [(totalItems)]="totalItems"
     [loading]="loading"
     sortField="sort_name"
-    [rowsPerPage]="rowsPerPage"
-    [selectAll]="selectAll"
+    [(rowsPerPage)]="rowsPerPage"
     [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-    [selectedItems]="selectedItems"
+    [(selectedItems)]="selectedItems"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
     [sortableHeaders]="sortableHeaders"
     [hasCheckbox]="true"
     [checkboxLabel]="getCheckboxLabel.bind(this)"
     (loadTableItems)="loadTableItems($event)"
-    (selectionChange)="onSelectionChange($event)"
-    (selectAllChange)="onSelectAllChange($event)"
-    (rowsPerPageChange)="onRowsPerPageChange($event)"
   >
     <ng-template #body let-item>
       <td>{{ displayName(item) }}</td>
@@ -62,7 +43,7 @@
         pButton
         pRipple
         id="restoreButton"
-        [disabled]="selectedItems.length <= 0"
+        [disabled]="selectedItems().length <= 0"
         label="Restore selected"
         icon="pi pi-check"
         class="p-button-primary"

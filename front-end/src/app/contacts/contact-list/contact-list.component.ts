@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit, resource } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
@@ -119,19 +119,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   public onRestoreClick() {
     this.restoreDialogIsVisible = true;
-  }
-
-  public override async onSelectAllChange(event: TableSelectAllChangeEvent) {
-    const checked: boolean = event.checked;
-
-    if (checked) {
-      const response = await this.itemService.getTableData(1);
-      this.selectedItems = response.results.filter((item: Contact) => this.canDeleteItem(item)) || [];
-      this.selectAll = true;
-    } else {
-      this.selectedItems = [];
-      this.selectAll = false;
-    }
   }
 
   saveContact(contact: Contact) {

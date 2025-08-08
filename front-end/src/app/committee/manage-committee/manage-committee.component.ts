@@ -39,8 +39,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
 
-  override rowsPerPage = 10;
-
   readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'name', label: 'Name' },
     { field: 'email', label: 'Email' },
@@ -75,7 +73,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   openEdit(member: CommitteeMember) {
     this.member = member;
-    this.detailVisible = true;
+    this.detailVisible.set(true);
   }
 
   roleEdited() {
@@ -90,7 +88,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   detailClose() {
-    this.detailVisible = false;
+    this.detailVisible.set(false);
     this.member = undefined;
   }
 

@@ -31,15 +31,16 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   constructor() {
     super();
     effect(() => {
-      this.onSelectionChange([]);
+      this.selectedItems.set([]);
       if (this.visible()) {
-        this.refreshTable();
+        this.first.set(0);
+        this.loadTableItems({ first: 0, rows: this.rowsPerPage() });
       }
     });
   }
 
   async restoreSelected(): Promise<void> {
-    const restoredContacts = await this.itemService.restore(this.selectedItems);
+    const restoredContacts = await this.itemService.restore(this.selectedItems());
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
