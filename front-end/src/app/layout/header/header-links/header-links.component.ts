@@ -21,17 +21,11 @@ export class HeaderLinksComponent {
   readonly store = inject(Store);
   readonly loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   readonly disableLogin = environment.disableLogin;
-  @Input() ratio = 1;
-  @Input() full = false;
   @Input() headerStyle = HeaderStyles.DEFAULT;
 
   headerStyles = HeaderStyles;
 
   role?: Roles;
-
-  get fontSize(): string {
-    return (12 * this.ratio).toFixed() + 'px';
-  }
 
   navigateToLoginDotGov() {
     if (this.loginDotGovAuthUrl) {

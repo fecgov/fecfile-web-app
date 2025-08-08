@@ -2,7 +2,6 @@ import { Component, effect, inject, OnInit, Type } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
@@ -23,7 +22,7 @@ import { NgComponentOutlet } from '@angular/common';
   styleUrls: ['./security-notice.component.scss'],
   imports: [ReactiveFormsModule, Checkbox, ButtonDirective, NgComponentOutlet],
 })
-export class SecurityNoticeComponent extends DestroyerComponent implements OnInit {
+export class SecurityNoticeComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
   public readonly loginService = inject(LoginService);
@@ -44,7 +43,6 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     : DevNoticeComponent;
 
   constructor() {
-    super();
     this.activatedRoute.data.subscribe((d) => {
       this.showForm = !!d['backgroundStyle'];
     });

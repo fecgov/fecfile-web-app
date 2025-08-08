@@ -1,22 +1,25 @@
 <div class="components-wrapper">
   @switch (transactionCardinality()) {
     @case (1) {
-      <app-transaction-detail [transaction]="transaction" />
+      <app-transaction-detail [transaction]="transaction()" />
     }
     @case (2) {
-      <app-double-transaction-detail [transaction]="transaction" />
+      <app-double-transaction-detail [transaction]="transaction()" />
     }
     @case (3) {
-      <app-triple-transaction-detail [transaction]="transaction" />
+      <app-triple-transaction-detail [transaction]="transaction()" />
     }
     @case (-1) {
-      <app-reatt-redes-transaction-type-detail [transaction]="transaction" />
+      <app-reatt-redes-transaction-type-detail [transaction]="transaction()" />
     }
   }
 
-  <app-transaction-children-list-container [transaction]="transaction" />
+  <app-transaction-children-list-container [transaction]="transaction()" />
 
-  <app-transaction-navigation [isEditable]="isEditableReport && isEditableTransaction" [transaction]="transaction" />
+  <app-transaction-navigation
+    [isEditable]="isEditableReport() && isEditableTransaction()"
+    [transaction]="transaction()"
+  />
 </div>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }" />
