@@ -69,4 +69,6 @@ The following events occur for fecfile-web-api and fecfile-web-app independently
   - [local](https://github.com/fecgov/fecfile-web-app/blob/develop/front-end/angular.json)
 
 See [Additional Developer Notes](https://github.com/fecgov/fecfile-web-api/wiki/Additional-Developer-Notes).
+
+
 This project is tested with [BrowserStack](https://browserstack.com).
