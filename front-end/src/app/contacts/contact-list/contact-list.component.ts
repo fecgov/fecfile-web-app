@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, resource } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, resource } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
-import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelList } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
@@ -33,19 +33,13 @@ import { ContactManagementService } from 'app/shared/services/contact-management
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   protected readonly itemService = inject(ContactService);
-  readonly cmService = inject(ContactManagementService);
-  public readonly deletedContactService = inject(DeletedContactService);
-  contactTypeLabels: LabelList = ContactTypeLabels;
+  private readonly cmService = inject(ContactManagementService);
+  private readonly deletedContactService = inject(DeletedContactService);
+  readonly contactTypeLabels: LabelList = ContactTypeLabels;
 
   restoreDialogIsVisible = false;
-  searchTerm = '';
 
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-    ContactTypes.COMMITTEE,
-    ContactTypes.INDIVIDUAL,
-  ]);
-
-  public rowActions: TableAction[] = [
+  readonly rowActions: TableAction[] = [
     new TableAction('Edit', this.editItem.bind(this)),
     new TableAction(
       'Delete',
@@ -73,6 +67,17 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     },
   });
 
+  readonly headerTitle = computed(() => (this.isNewItem() ? 'Add Contact' : 'Edit Contact'));
+
+  constructor() {
+    super();
+    effect(() => {
+      const contact = this.manager().outerContact();
+      if (!contact) return;
+      this.saveContact(contact);
+    });
+  }
+
   ngOnInit() {
     this.cmService.activeKey.set('');
   }
@@ -83,21 +88,23 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   }
 
   protected getEmptyItem(): Contact {
-    return new Contact();
+    return emptyContact(this.manager().contactType());
   }
 
   public override addItem() {
-    this.isNewItem = true;
+    this.isNewItem.set(true);
+    this.manager().clearOnLoad.set(true);
     this.manager().setAsAllContacts();
     this.manager().contact.set(emptyContact(this.manager().contactType()));
-    this.cmService.showDialog();
+    this.cmService.showDialog.set(true);
   }
 
   public override editItem(contact: Contact) {
     this.manager().setAsSingle(contact.type);
-    this.isNewItem = false;
+    this.manager().clearOnLoad.set(false);
+    this.isNewItem.set(false);
     this.manager().contact.set(contact);
-    this.cmService.showDialog();
+    this.cmService.showDialog.set(true);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal, untracked } from '@angular/core';
 import { LabelUtils, PrimeOptions } from '../utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from '../models';
 
@@ -68,6 +68,14 @@ export class ContactManagementService {
     effect(() => {
       if (this.showDialog() && this.activeManager().clearOnLoad()) {
         this.activeManager().contact.set(emptyContact(this.activeManager().contactType()));
+      }
+    });
+
+    effect(() => {
+      const activeManager = this.activeManager();
+      const contactType = activeManager.contactType();
+      if (activeManager.clearOnLoad()) {
+        untracked(() => activeManager.contact.set(emptyContact(contactType)));
       }
     });
   }
