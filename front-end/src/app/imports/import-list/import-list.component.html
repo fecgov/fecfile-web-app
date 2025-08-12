@@ -1,0 +1,95 @@
+<div class="import-list-container">
+  <app-table
+    data-cy="import-list-component"
+    [items]="items"
+    [totalItems]="totalItems"
+    [loading]="loading"
+    [rowsPerPage]="rowsPerPage"
+    [selectAll]="selectAll"
+    [selectedItems]="selectedItems"
+    itemName="imports"
+    [sortableHeaders]="sortableHeaders"
+    sortField="form_type"
+    (loadTableItems)="loadTableItems($event)"
+    (selectionChange)="onSelectionChange($event)"
+    (selectAllChange)="onSelectAllChange($event)"
+    (rowsPerPageChange)="onRowsPerPageChange($event)"
+  >
+    <ng-template #caption>
+      <p-toolbar>
+        <ng-template pTemplate="left">
+          <h1 class="m-0">Manage dotFEC file imports</h1>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <button
+            pButton
+            pRipple
+            label="Import dotFEC file"
+            data-cy="import-report"
+            icon="pi pi-plus"
+            class="add-button"
+            (click)="showDialog()"
+          ></button>
+        </ng-template>
+      </p-toolbar>
+    </ng-template>
+    <ng-template #header>
+      <th id="actions" role="columnheader">Actions</th>
+    </ng-template>
+    <ng-template #body let-item>
+      <td>{{ item.report_type }}</td>
+      <td>
+        @if (item.coverage_from_date || item.coverage_through_date) {
+          {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+        } @else {
+          N/A
+        }
+      </td>
+      <td>{{ item.status }}</td>
+      <td>
+        <app-table-actions-button
+          [tableActions]="rowActions"
+          [actionItem]="item"
+          (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+          buttonIcon="pi pi-ellipsis-v"
+          buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+          [buttonAriaLabel]="'edit ' + displayName(item)"
+        ></app-table-actions-button>
+      </td>
+    </ng-template>
+  </app-table>
+</div>
+
+<p-dialog #dialog [(visible)]="dialogVisible" [style]="{ width: '512px' }" [draggable]="false" closeAriaLabel="Close">
+  <ng-template #header>
+    <div [id]="dialog.ariaLabelledBy">
+      <h1>Upload a dotFEC file</h1>
+    </div>
+  </ng-template>
+
+  <div class="dialog-body">
+    <p-fileupload
+      #dotFECFileUpload
+      mode="basic"
+      chooseLabel="Choose"
+      chooseIcon="pi pi-upload"
+      name="dotFECFile"
+      maxFileSize="1000000"
+    />
+    <!--<p-button label="Upload" (onClick)="fu.upload()" severity="secondary" />-->
+  </div>
+  <ng-template #footer>
+    <div class="flex justify-content-center w-full pb-3">
+      <button
+        id="submit-button"
+        pButton
+        pRipple
+        [disabled]="!hasAttachedFile()"
+        label="Upload dotFEC file"
+        data-cy="upload-file"
+        class="p-button-primary"
+        (click)="uploadFile()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,3 +1,5 @@
+import { TransactionTypeUtils } from './transaction-type.utils';
+
 export type LabelList = string[][];
 export type PrimeOptions = { label: string; value: string }[];
 

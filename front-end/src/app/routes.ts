@@ -48,6 +48,11 @@ export const ROUTES: Route[] = [
         canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },
       {
+        path: 'imports',
+        loadChildren: () => import('./imports/routes').then((mod) => mod.IMPORT_ROUTES),
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
+      },
+      {
         path: 'contacts',
         loadChildren: () => import('./contacts/routes').then((mod) => mod.CONTACTS_ROUTES),
         canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],

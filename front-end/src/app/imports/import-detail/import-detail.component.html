@@ -1,0 +1,50 @@
+<div>
+  <table>
+    <tr>
+      <th>Transaction Type</th>
+      <th>Entity Type</th>
+      <th>Name</th>
+      <th>Amount</th>
+      <th>Transaction ID</th>
+      <th>Parent ID</th>
+    </tr>
+    @for (transaction of all_transactions; track transaction) {
+      <tr>
+        <td>
+          <p-select
+            [options]="get_filtered_types(transaction.entity_type)"
+            optionValue="value"
+            optionLabel="label"
+            placeholder="Select a Transaction Type"
+            class="w-12"
+            appendTo="body"
+            id="typeDropdown"
+            (onChange)="set_tti($event, transaction)"
+          >
+            <ng-template #dropdownicon>
+              <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="8px" width="8px" />
+            </ng-template>
+          </p-select>
+        </td>
+        <td>
+          {{ transaction.entity_type }}
+        </td>
+        <td>
+          {{ transaction.contact_1?.name || `${transaction.contact_1?.last_name}, ${transaction.contact_1?.first_name}`}}
+        </td>
+        <td>
+          {{ transaction.schedule_a?.contribution_amount }}
+        </td>
+        <td>
+          {{ transaction.transaction_id }}
+        </td>
+        <td>
+          {{ transaction.temp_p_id }}
+        </td>
+      </tr>
+      <br />
+    }
+  </table>
+
+  <button pButton label="Approve and Import" class="p-button-secondary" (click)="approve_and_import()"></button>
+</div>

@@ -24,7 +24,7 @@ export class ApiService {
   getHeaders(headersToAdd: object = {}) {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
     const baseHeaders = {
-      'Content-Type': 'application/json',
+      //'Content-Type': 'application/json',
       // If using different cache headers,
       // modify CORS_ALLOW_HEADERS in API settings
       'cache-control': 'no-cache, no-store',
@@ -83,14 +83,16 @@ export class ApiService {
     payload: unknown,
     queryParams?: QueryParams,
     allowedErrorCodes?: number[],
+    addHeaders?: object,
   ): Promise<HttpResponse<T>>;
   public post<T>(
     endpoint: string,
     payload: unknown,
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
+    addHeaders: object = {},
   ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = this.getHeaders(addHeaders);
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
