@@ -60,11 +60,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   readonly manager = computed(() => this.cmService.activeManager());
 
   readonly restoreContactsButtonIsVisible = resource({
-    loader: async () => {
-      const contactListResponse = await this.deletedContactService.getTableData();
-      const deletedContactsExist = contactListResponse.count > 0;
-      return deletedContactsExist;
-    },
+    loader: () => this.restoreLoader(),
   });
 
   readonly headerTitle = computed(() => (this.isNewItem() ? 'Add Contact' : 'Edit Contact'));
@@ -150,5 +146,11 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
         });
       });
     }
+  }
+
+  async restoreLoader() {
+    const contactListResponse = await this.deletedContactService.getTableData();
+    const deletedContactsExist = contactListResponse.count > 0;
+    return deletedContactsExist;
   }
 }
