@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -371,6 +371,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
     if (this.form.invalid) {
+      printFormErrors(this.form);
       return;
     }
 

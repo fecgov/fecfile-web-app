@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { passwordValidator } from 'app/shared/utils/validators.utils';
@@ -113,6 +113,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
+      printFormErrors(this.form);
       return;
     }
 

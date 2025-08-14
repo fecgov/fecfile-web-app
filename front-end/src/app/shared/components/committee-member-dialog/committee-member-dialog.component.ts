@@ -21,6 +21,7 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Roles, CommitteeMember } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
+import { printFormErrors } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-committee-member-dialog',
@@ -130,6 +131,8 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
       } catch (error) {
         console.error('Error adding member', error);
       }
+    } else {
+      printFormErrors(this.form);
     }
   }
 }

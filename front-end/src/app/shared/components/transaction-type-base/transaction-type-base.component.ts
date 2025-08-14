@@ -14,7 +14,7 @@ import { map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { FormComponent } from '../app-destroyer.component';
@@ -166,6 +166,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
   isInvalid(): boolean {
     blurActiveInput(this.form);
+    if (this.form.invalid) printFormErrors(this.form);
     return this.form.invalid || !this.transaction;
   }
 

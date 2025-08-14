@@ -18,7 +18,7 @@ import { ContactIdMapType, TransactionContactUtils } from './transaction-contact
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { blurActiveInput, scrollToTop } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
 import { Accordion } from 'primeng/accordion';
 
 /**
@@ -160,6 +160,7 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override isInvalid(): boolean {
     blurActiveInput(this.childForm);
+    if (this.childForm.invalid) printFormErrors(this.form);
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
   }
 
