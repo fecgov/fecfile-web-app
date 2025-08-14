@@ -22,21 +22,11 @@
             <label for="type">(CHOOSE ONE)</label>
           </div>
           <div class="col-12 flex">
-            <p-radioButton
-              inputId="Q"
-              name="filing_frequency"
-              value="Q"
-              formControlName="filing_frequency"
-            ></p-radioButton>
+            <p-radioButton inputId="Q" name="filing_frequency" value="Q" formControlName="filing_frequency" />
             <label for="Q" class="ml-2">QUARTERLY REPORTING</label>
           </div>
           <div class="col-12 flex">
-            <p-radioButton
-              inputId="M"
-              name="filing_frequency"
-              value="M"
-              formControlName="filing_frequency"
-            ></p-radioButton>
+            <p-radioButton inputId="M" name="filing_frequency" value="M" formControlName="filing_frequency" />
             <label for="M" class="ml-2">MONTHLY REPORTING</label>
           </div>
         </div>
@@ -60,8 +50,8 @@
           [options]="reportTypeCategories"
           [allowEmpty]="false"
           formControlName="report_type_category"
-        ></p-selectButton>
-        <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
+        />
+        <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" />
       </div>
     </div>
     <div class="col-6"></div>
@@ -80,7 +70,7 @@
                   : ''
               "
               formControlName="report_code"
-            ></p-radioButton>
+            />
             <label [for]="reportCode" class="ml-2" [class]="checkDisableReportCode(reportCode) ? 'p-disabled' : ''">
               {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
             </label>
@@ -97,7 +87,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="ELECTION ON"
-          ></app-calendar>
+          />
         </div>
         <div class="col-12">
           <div class="field flex flex-column" data-cy="state_of_election">
@@ -108,8 +98,8 @@
               [options]="stateOptions"
               [autoDisplayFirst]="false"
               appendTo="body"
-            ></p-select>
-            <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+            />
+            <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted" />
           </div>
         </div>
       </div>
@@ -127,24 +117,14 @@
   </div>
   <div class="grid no-expand">
     <div class="col-6">
-      <app-calendar
-        fieldName="coverage_from_date"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        label="FROM"
-      ></app-calendar>
+      <app-calendar fieldName="coverage_from_date" [form]="form" [formSubmitted]="formSubmitted" label="FROM" />
     </div>
     <div class="col-6">
-      <app-calendar
-        fieldName="coverage_through_date"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        label="TO"
-      ></app-calendar>
+      <app-calendar fieldName="coverage_through_date" [form]="form" [formSubmitted]="formSubmitted" label="TO" />
     </div>
   </div>
 </form>
-<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()" />
 <p-dialog
   [(visible)]="coverageDatesDialogVisible"
   [style]="{ width: '30%' }"

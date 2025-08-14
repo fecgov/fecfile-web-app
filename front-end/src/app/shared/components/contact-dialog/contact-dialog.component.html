@@ -38,11 +38,7 @@
             <div class="field">
               <label for="candidate_id">CANDIDATE ID</label>
               <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
-              <app-error-messages
-                [form]="form"
-                fieldName="candidate_id"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="candidate_id" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-4"></div>
@@ -55,11 +51,7 @@
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
                 <input type="text" pInputText id="committee_id" formControlName="committee_id" />
-                <app-error-messages
-                  [form]="form"
-                  fieldName="committee_id"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
+                <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
               </div>
             </div>
           }
@@ -67,7 +59,7 @@
             <div class="field">
               <label for="name">NAME</label>
               <input type="text" pInputText id="name" formControlName="name" />
-              <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           @if (contactType === ContactTypes.ORGANIZATION) {
@@ -81,33 +73,21 @@
             <div class="field">
               <label for="last_name">LAST NAME</label>
               <input type="text" pInputText id="last_name" formControlName="last_name" />
-              <app-error-messages
-                [form]="form"
-                fieldName="last_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="first_name">FIRST NAME</label>
               <input type="text" pInputText id="first_name" formControlName="first_name" />
-              <app-error-messages
-                [form]="form"
-                fieldName="first_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="middle_name" formControlName="middle_name" />
-              <app-error-messages
-                [form]="form"
-                fieldName="middle_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="middle_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
         </div>
@@ -116,14 +96,14 @@
             <div class="field">
               <label for="prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="prefix" formControlName="prefix" />
-              <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="suffix" formControlName="suffix" />
-              <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-6"></div>
@@ -143,7 +123,7 @@
         <div class="col-6">
           <div class="field">
             <label for="country">COUNTRY/REGION</label>
-            <p-select inputId="country" formControlName="country" [options]="countryOptions"></p-select>
+            <p-select inputId="country" formControlName="country" [options]="countryOptions" />
           </div>
         </div>
         <div class="col-6"></div>
@@ -153,14 +133,14 @@
           <div class="field">
             <label for="street_1">STREET ADDRESS</label>
             <input type="text" pInputText id="street_1" formControlName="street_1" />
-            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
           </div>
         </div>
         <div class="col-6">
           <div class="field">
             <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
             <input type="text" pInputText id="street_2" formControlName="street_2" />
-            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
           </div>
         </div>
       </div>
@@ -169,7 +149,7 @@
           <div class="field">
             <label for="city">CITY</label>
             <input type="text" pInputText id="city" formControlName="city" />
-            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
           </div>
         </div>
         <div class="col-3">
@@ -181,15 +161,15 @@
               [options]="stateOptions"
               [autoDisplayFirst]="false"
               appendTo="body"
-            ></p-select>
-            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+            />
+            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
           </div>
         </div>
         <div class="col-3">
           <div class="field">
             <label for="zip">ZIP/POSTAL CODE</label>
             <input type="text" pInputText id="zip" formControlName="zip" />
-            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
+            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
           </div>
         </div>
       </div>
@@ -203,7 +183,7 @@
               fieldName="telephone"
               [formSubmitted]="formSubmitted"
               patternErrorMessage="This field must contain 10 numeric characters."
-            ></app-error-messages>
+            />
           </div>
         </div>
         <div class="col-6"></div>
@@ -224,22 +204,14 @@
             <div class="field">
               <label for="employer">EMPLOYER <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="employer" formControlName="employer" />
-              <app-error-messages
-                [form]="form"
-                fieldName="employer"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-6">
             <div class="field">
               <label for="occupation">OCCUPATION <span class="paren-label">(OPTIONAL)</span></label>
               <input type="text" pInputText id="occupation" formControlName="occupation" />
-              <app-error-messages
-                [form]="form"
-                fieldName="occupation"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted" />
             </div>
           </div>
         </div>
@@ -343,4 +315,4 @@
   </p-dialog>
 </div>
 
-<p-confirmDialog key="contactDialogDialog" [style.width.px]="450"></p-confirmDialog>
+<p-confirmDialog key="contactDialogDialog" [style.width.px]="450" />

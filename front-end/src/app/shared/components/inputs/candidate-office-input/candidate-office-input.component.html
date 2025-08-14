@@ -9,12 +9,8 @@
           [options]="candidateOfficeTypeOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-        ></p-select>
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="officeFormControlName()"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        />
+        <app-error-messages [form]="form()" [fieldName]="officeFormControlName()" [formSubmitted]="formSubmitted()" />
       </div>
     </div>
     <div class="col-3">
@@ -27,12 +23,8 @@
           [autoDisplayFirst]="false"
           [class.disabled]="stateControl()?.disabled"
           appendTo="body"
-        ></p-select>
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="stateFormControlName()"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        />
+        <app-error-messages [form]="form()" [fieldName]="stateFormControlName()" [formSubmitted]="formSubmitted()" />
       </div>
     </div>
     <div class="col-3">
@@ -54,13 +46,9 @@
             [class.disabled]="stateControl()?.disabled"
             appendTo="body"
             [autoDisplayFirst]="false"
-          ></p-select>
+          />
         }
-        <app-error-messages
-          [form]="form()"
-          [fieldName]="districtFormControlName()"
-          [formSubmitted]="formSubmitted()"
-        ></app-error-messages>
+        <app-error-messages [form]="form()" [fieldName]="districtFormControlName()" [formSubmitted]="formSubmitted()" />
       </div>
     </div>
   </div>

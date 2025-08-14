@@ -33,7 +33,7 @@
       <tr role="row">
         @if (hasCheckbox) {
           <th id="header-checkbox" role="columnheader">
-            <p-tableHeaderCheckbox ariaLabel="Restore"></p-tableHeaderCheckbox>
+            <p-tableHeaderCheckbox ariaLabel="Restore" />
           </th>
         }
         @if (sortableHeaders) {
@@ -41,7 +41,7 @@
             <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
               <div class="flex justify-content-between">
                 <span>{{ h.label }}</span>
-                <p-sortIcon [field]="h.field"></p-sortIcon>
+                <p-sortIcon [field]="h.field" />
               </div>
             </th>
           }
@@ -54,7 +54,7 @@
       <tr role="row">
         @if (hasCheckbox) {
           <td>
-            <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel!(item)"></p-tableCheckbox>
+            <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel!(item)" />
           </td>
         }
         <ng-container *ngTemplateOutlet="body; context: { $implicit: item }"></ng-container>
@@ -100,7 +100,7 @@
       </div>
     </ng-template>
     <ng-template pTemplate="sorticon" let-sortOrder>
-      <app-table-sort-icon [sortOrder]="sortOrder"></app-table-sort-icon>
+      <app-table-sort-icon [sortOrder]="sortOrder" />
     </ng-template>
     <ng-template pTemplate="paginatorleft">
       <div class="responsive-container">

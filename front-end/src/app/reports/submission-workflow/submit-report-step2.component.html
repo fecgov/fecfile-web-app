@@ -17,33 +17,21 @@
         <div class="field">
           <label for="treasurer_last_name">LAST NAME</label>
           <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="treasurer_last_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="treasurer_last_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-4">
         <div class="field">
           <label for="treasurer_first_name">FIRST NAME</label>
           <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="treasurer_first_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="treasurer_first_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-4">
         <div class="field">
           <label for="treasurer_middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="treasurer_middle_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="treasurer_middle_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -52,22 +40,14 @@
         <div class="field">
           <label for="treasurer_prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
-          <app-error-messages
-            [form]="form"
-            fieldName="treasurer_prefix"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="treasurer_prefix" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-3">
         <div class="field">
           <label for="treasurer_suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
-          <app-error-messages
-            [form]="form"
-            fieldName="treasurer_suffix"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="treasurer_suffix" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -104,7 +84,7 @@
             fieldName="filingPassword"
             [formSubmitted]="formSubmitted"
             patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
-          ></app-error-messages>
+          />
         </div>
       </div>
     </div>
@@ -112,7 +92,7 @@
       <div class="grid">
         <div class="col-12">
           <div class="field-row">
-            <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo"></p-checkbox>
+            <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo" />
             <label for="backdoor-check" class="mb-0 ml-2">
               ADD A BACKDOOR CODE <span class="paren-label">(OPTIONAL)</span>
             </label>
@@ -123,11 +103,7 @@
                   <div class="field">
                     <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
                     <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
-                    <app-error-messages
-                      [form]="form"
-                      fieldName="backdoor_code"
-                      [formSubmitted]="formSubmitted"
-                    ></app-error-messages>
+                    <app-error-messages [form]="form" fieldName="backdoor_code" [formSubmitted]="formSubmitted" />
                   </div>
                 </div>
               </div>
@@ -146,7 +122,7 @@
             formControlName="userCertified"
             [trueValue]="true"
             [falseValue]="false"
-          ></p-checkbox>
+          />
           <label for="userCertified" class="ml-2">
             <strong>
               I certify that I have examined this Statement and to the best of my knowledge and belief it is true,
