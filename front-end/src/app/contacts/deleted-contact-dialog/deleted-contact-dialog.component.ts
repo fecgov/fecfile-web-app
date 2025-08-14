@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, model, output } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -14,13 +14,12 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
   templateUrl: './deleted-contact-dialog.component.html',
   imports: [Dialog, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
-export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnChanges {
+export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   protected readonly itemService = inject(DeletedContactService);
 
-  @Input() visible = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() contactsRestored = new EventEmitter<string[]>();
+  readonly visible = model(false);
+  contactsRestored = output<string[]>();
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   sortableHeaders: { field: string; label: string }[] = [
@@ -30,19 +29,19 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  ngOnChanges(): void {
-    this.changeDetectorRef.detectChanges();
-  }
-
-  hide(): void {
-    this.selectAll = false;
-    this.onSelectionChange([]);
-    this.visibleChange.emit(false);
-    this.visible = false;
+  constructor() {
+    super();
+    effect(() => {
+      this.selectedItems.set([]);
+      if (this.visible()) {
+        this.first.set(0);
+        this.loadTableItems({ first: 0, rows: this.rowsPerPage() });
+      }
+    });
   }
 
   async restoreSelected(): Promise<void> {
-    const restoredContacts = await this.itemService.restore(this.selectedItems);
+    const restoredContacts = await this.itemService.restore(this.selectedItems());
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
@@ -50,7 +49,7 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
       life: 3000,
     });
     this.contactsRestored.emit(restoredContacts);
-    this.hide();
+    this.visible.set(false);
   }
 
   getCheckboxLabel(item: Contact): string {

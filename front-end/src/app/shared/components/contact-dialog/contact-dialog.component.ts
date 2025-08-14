@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
@@ -103,6 +103,7 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
   @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
+  readonly first = signal(0);
 
   transactions: TransactionData[] = [];
   tableLoading = true;

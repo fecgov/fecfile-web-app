@@ -1,19 +1,16 @@
 <div class="report-list-container">
   <app-table
+    [(first)]="first"
     data-cy="report-list-component"
     [items]="items"
-    [totalItems]="totalItems"
+    [(totalItems)]="totalItems"
     [loading]="loading"
-    [rowsPerPage]="rowsPerPage"
-    [selectAll]="selectAll"
-    [selectedItems]="selectedItems"
+    [(rowsPerPage)]="rowsPerPage"
+    [(selectedItems)]="selectedItems"
     itemName="reports"
     [sortableHeaders]="sortableHeaders"
     sortField="form_type"
     (loadTableItems)="loadTableItems($event)"
-    (selectionChange)="onSelectionChange($event)"
-    (selectAllChange)="onSelectAllChange($event)"
-    (rowsPerPageChange)="onRowsPerPageChange($event)"
   >
     <ng-template #caption>
       <p-toolbar>
