@@ -137,7 +137,7 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override isInvalid(): boolean {
     blurActiveInput(this.childForm_2);
-    if (this.childForm_2.invalid) printFormErrors(this.form);
+    if (this.childForm_2.invalid) printFormErrors(this.childForm_2);
     return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 

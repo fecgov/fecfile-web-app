@@ -160,7 +160,7 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override isInvalid(): boolean {
     blurActiveInput(this.childForm);
-    if (this.childForm.invalid) printFormErrors(this.form);
+    if (this.childForm.invalid) printFormErrors(this.childForm);
     return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
   }
 
