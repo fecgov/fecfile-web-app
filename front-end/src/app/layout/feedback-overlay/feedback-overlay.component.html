@@ -31,11 +31,7 @@
                     <span class="paren-label">(Required)</span></label
                   >
                   <textarea id="action" [rows]="3" pTextarea [autoResize]="true" formControlName="action"></textarea>
-                  <app-error-messages
-                    [form]="form"
-                    fieldName="action"
-                    [formSubmitted]="formSubmitted"
-                  ></app-error-messages>
+                  <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted" />
                 </div>
               </div>
             </div>
@@ -50,11 +46,7 @@
                     [autoResize]="true"
                     formControlName="feedback"
                   ></textarea>
-                  <app-error-messages
-                    [form]="form"
-                    fieldName="feedback"
-                    [formSubmitted]="formSubmitted"
-                  ></app-error-messages>
+                  <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
                 </div>
               </div>
             </div>
@@ -70,11 +62,7 @@
                     >
                   </label>
                   <textarea id="about" [rows]="3" pTextarea [autoResize]="true" formControlName="about"></textarea>
-                  <app-error-messages
-                    [form]="form"
-                    fieldName="about"
-                    [formSubmitted]="formSubmitted"
-                  ></app-error-messages>
+                  <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted" />
                 </div>
               </div>
             </div>

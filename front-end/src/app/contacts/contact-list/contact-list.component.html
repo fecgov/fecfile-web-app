@@ -58,7 +58,7 @@
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
         [buttonAriaLabel]="'edit ' + displayName(item)"
-      ></app-table-actions-button>
+      />
     </td>
   </ng-template>
 </app-table>
@@ -69,9 +69,6 @@
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact($event)"
-></app-contact-dialog>
+/>
 
-<app-deleted-contact-dialog
-  [(visible)]="restoreDialogIsVisible"
-  (contactsRestored)="refreshTable()"
-></app-deleted-contact-dialog>
+<app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />

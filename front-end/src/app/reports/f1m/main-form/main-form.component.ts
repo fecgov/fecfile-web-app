@@ -7,7 +7,7 @@ import { Form1M } from 'app/shared/models/form-1m.model';
 import { Report } from 'app/shared/models/report.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -245,6 +245,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
+      printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
       return;
     }

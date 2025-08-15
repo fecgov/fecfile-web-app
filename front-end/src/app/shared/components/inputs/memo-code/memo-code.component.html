@@ -12,7 +12,7 @@
           [falseValue]="false"
           [readonly]="form.controls[templateMap['memo_code']].disabled"
           (click)="onMemoItemClick()"
-        ></p-checkbox>
+        />
         <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">
           {{ checkboxLabel() }}
           @if (parenLabel()) {
@@ -27,7 +27,7 @@
           [fieldName]="templateMap['memo_code']"
           [formSubmitted]="formSubmitted"
           [patternErrorMessage]="'This is a required field.'"
-        ></app-error-messages>
+        />
       </div>
     } @else {
       <div class="col-3">
@@ -38,7 +38,7 @@
           [options]="memoCodeMapOptions()"
           optionLabel="label"
           optionValue="value"
-        ></p-selectButton>
+        />
       </div>
       <div class="col-12">
         @if (memoControl.value) {
@@ -57,7 +57,7 @@
           [fieldName]="templateMap['memo_code']"
           [formSubmitted]="formSubmitted"
           [patternErrorMessage]="'This is a required field.'"
-        ></app-error-messages>
+        />
       </div>
     }
   </div>

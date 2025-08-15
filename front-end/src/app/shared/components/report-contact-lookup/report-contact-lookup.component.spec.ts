@@ -15,7 +15,7 @@ import { ReportContactLookupComponent } from './report-contact-lookup.component'
     [formSubmitted]="formSubmitted"
     [key]="key"
     [contactType]="contactType"
-  ></app-report-contact-lookup>`,
+  />`,
 })
 class TestHostComponent {
   key = 'contact_1';
