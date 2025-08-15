@@ -126,17 +126,6 @@ describe('ContactListComponent', () => {
     expect(status).toBeFalse();
   });
 
-  it('#onSelectAllChange set properties', async () => {
-    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-    await component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
-    expect(component.selectAll).toBeFalse();
-    expect(component.selectedItems).toEqual([]);
-
-    await component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
-    expect(component.selectAll).toBeTrue();
-    expect(component.selectedItems.length).toBe(1);
-  });
-
   it('#restoreButton should make dialog visible', () => {
     component.onRestoreClick();
     expect(component.restoreDialogIsVisible).toBeTrue();

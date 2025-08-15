@@ -1,17 +1,7 @@
-import {
-  Component,
-  ContentChild,
-  EventEmitter,
-  Input,
-  Output,
-  TemplateRef,
-  ViewChild,
-  OnInit,
-  OnChanges,
-  AfterContentChecked,
-} from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
-import { TableLazyLoadEvent, TableSelectAllChangeEvent, Table, TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
 import { PrimeTemplate } from 'primeng/api';
 import { Select } from 'primeng/select';
@@ -33,77 +23,48 @@ import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.compo
     TableSortIconComponent,
   ],
 })
-export class TableComponent<T> implements OnInit, AfterContentChecked, OnChanges {
-  @Input() title?: string;
-  @Input() itemName = 'entries';
-  @Input() items: T[] = [];
-  @Input() globalFilterFields = [''];
-  @Input() totalItems = 0;
-  @Input() loading = false;
-  @Input() rowsPerPage = 5;
-  @Input() selectAll = false;
-  @Input() selectedItems: T[] = [];
-  @Input() currentPageReportTemplate = 'Showing {first} to {last} of {totalRecords} items';
-  @Input() sortField = '';
-  @Input() sortableHeaders: { field: string; label: string }[] = [];
-  @Input() hasCheckbox = false;
-  @Input() checkboxLabel?: (item: T) => string;
-  @Input() emptyMessage = 'No data available in table';
+export class TableComponent<T> {
+  readonly title = input<string>();
+  readonly itemName = input('entries');
+  readonly items = input.required<T[]>();
+  readonly globalFilterFields = input(['']);
+  readonly totalItems = model.required<number>();
+  readonly loading = input.required<boolean>();
+  readonly rowsPerPage = model(5);
+  readonly selectedItems = model<T[]>([]);
+  readonly currentPageReportTemplate = input('Showing {first} to {last} of {totalRecords} items');
+  readonly sortField = input.required<string>();
+  readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
+  readonly hasCheckbox = input(false);
+  readonly checkboxLabel = input<(item: T) => string>();
+  readonly emptyMessage = input('No data available in table');
 
-  @Output() loadTableItems = new EventEmitter<TableLazyLoadEvent>();
-  @Output() selectionChange = new EventEmitter<T[]>();
-  @Output() selectAllChange = new EventEmitter<TableSelectAllChangeEvent>();
-  @Output() rowsPerPageChange = new EventEmitter<number>();
-  @Output() pageChange = new EventEmitter<PageTransitionEvent>();
+  readonly loadTableItems = output<TableLazyLoadEvent>();
+  readonly pageChange = output<PageTransitionEvent>();
 
-  paginationPageSizeOptions = [5, 10, 15, 20];
+  readonly paginationPageSizeOptions = [5, 10, 15, 20];
 
-  @ViewChild('dt') dt?: Table;
+  readonly dt = viewChild.required<Table>('dt');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('toolbar') toolbar!: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('caption') caption!: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('header') header!: TemplateRef<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @ContentChild('body') body!: TemplateRef<any>;
+  readonly caption = contentChild<TemplateRef<any>>('caption');
+  readonly header = contentChild<TemplateRef<any>>('header');
+  readonly body = contentChild<TemplateRef<any>>('body');
 
-  showing = 'Showing 0 to 0 of 0 entries';
+  readonly showing = computed(() => {
+    return `Showing ${this.from()} to ${this.to()} of ${this.totalItems()} ${this.itemName()}`;
+  });
 
-  ngOnInit() {
-    this.updateShowing();
-  }
+  readonly from = computed(() => (this.totalItems() === 0 ? 0 : this.first() + 1));
+  readonly to = computed(() => {
+    const to = this.first() + this.rowsPerPage();
+    const total = this.totalItems();
+    if (to > total) return total;
+    return to;
+  });
 
-  ngAfterContentChecked() {
-    this.updateShowing();
-  }
-
-  ngOnChanges() {
-    this.updateShowing();
-  }
-
-  updateShowing() {
-    if (!this.dt) return;
-    const from = this.totalItems === 0 ? 0 : this.first + 1;
-    let to = this.first;
-    if (this.dt.rows) to += this.dt.rows;
-    const total = this.dt.totalRecords ?? 0;
-    if (to > total) to = total;
-    this.showing = `Showing ${from} to ${to} of ${total} ${this.itemName}`;
-  }
-
-  get first(): number {
-    return this.dt?.first ?? 0;
-  }
-
-  set first(first: number) {
-    if (!this.dt) return;
-    this.dt.first = first;
-  }
+  readonly first = model.required<number>();
 
   changePage(value: PaginatorState) {
-    if (!this.dt) return;
-    this.dt.onPageChange({ first: value.first ?? 0, rows: value.rows ?? 0 });
+    this.dt().onPageChange(value as TablePageEvent);
   }
 }

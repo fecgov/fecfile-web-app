@@ -1,18 +1,15 @@
 <app-table
+  [(first)]="first"
   title="Receipts"
   [items]="items"
-  [totalItems]="totalItems"
+  [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="line_label,created"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
   itemName="transactions"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #header>
     <th id="transaction_id" role="columnheader">Transaction ID</th>

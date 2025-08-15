@@ -241,6 +241,7 @@
     @if (showHistory && !isNewItem) {
       <div>
         <app-table
+          [(first)]="first"
           title="Transaction history"
           sortField="transaction_type_identifier"
           [items]="transactions"

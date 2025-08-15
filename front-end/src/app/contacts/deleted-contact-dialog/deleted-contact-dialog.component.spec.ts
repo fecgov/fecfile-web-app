@@ -12,10 +12,26 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { DeletedContactService } from 'app/shared/services/contact.service';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [DeletedContactDialogComponent],
+  standalone: true,
+  template: `<app-deleted-contact-dialog [(visible)]="visible" (contactsRestored)="contactsRestored()" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(DeletedContactDialogComponent);
+  visible = false;
+
+  contactsRestored() {
+    console.log('Contacts restored');
+  }
+}
 
 describe('DeletedContactDialogComponent', () => {
   let component: DeletedContactDialogComponent;
-  let fixture: ComponentFixture<DeletedContactDialogComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let host: TestHostComponent;
   let service: DeletedContactService;
 
   beforeEach(async () => {
@@ -32,8 +48,9 @@ describe('DeletedContactDialogComponent', () => {
       ],
     }).compileComponents();
     service = TestBed.inject(DeletedContactService);
-    fixture = TestBed.createComponent(DeletedContactDialogComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
 
     fixture.detectChanges();
   });
@@ -43,19 +60,20 @@ describe('DeletedContactDialogComponent', () => {
   });
 
   it('should enable restore', () => {
-    component.visible = true;
-    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
-    component.hide();
-    expect(component.selectedItems).toEqual([]);
+    component.visible.set(true);
+    component.selectedItems.set([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
+    component.visible.set(false);
+    fixture.detectChanges();
+    expect(component.selectedItems()).toEqual([]);
   });
 
   it('should restore', async () => {
     spyOn(service, 'restore').and.returnValue(Promise.resolve(['1']));
-    component.visible = true;
-    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
+    component.visible.set(true);
+    component.selectedItems.set([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     await component.restoreSelected();
-
-    expect(component.selectedItems).toEqual([]);
+    fixture.detectChanges();
+    expect(component.selectedItems()).toEqual([]);
   });
 
   it('should display name', () => {
