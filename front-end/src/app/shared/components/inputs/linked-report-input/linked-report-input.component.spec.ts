@@ -8,7 +8,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, Report, UploadSubmission, SchATransaction } from 'app/shared/models';
+import { Transaction, Form3X, Report, UploadSubmission } from 'app/shared/models';
 import { Component, viewChild } from '@angular/core';
 
 const mockReports: Report[] = [
@@ -68,13 +68,13 @@ const mockReports: Report[] = [
   template: `<app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction" />`,
 })
 class TestHostComponent {
+  templateMap = testTemplateMap();
   form: FormGroup = new FormGroup({
-    [testTemplateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
-    [testTemplateMap['date2']]: new SubscriptionFormControl(new Date('06/02/2024')),
-    [testTemplateMap['memo_code']]: new SubscriptionFormControl(),
+    [this.templateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
+    [this.templateMap['date2']]: new SubscriptionFormControl(new Date('06/02/2024')),
+    [this.templateMap['memo_code']]: new SubscriptionFormControl(),
   });
-  templateMap = testTemplateMap;
-  transaction: Transaction = { ...testScheduleATransaction } as SchATransaction;
+  transaction: Transaction = testScheduleATransaction();
 
   component = viewChild.required(LinkedReportInputComponent);
 
@@ -84,6 +84,7 @@ class TestHostComponent {
 }
 
 describe('LinkedReportInputComponent', () => {
+  let host: TestHostComponent;
   let component: LinkedReportInputComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let reportServiceMock: jasmine.SpyObj<ReportService>;
@@ -96,14 +97,15 @@ describe('LinkedReportInputComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LinkedReportInputComponent, InputTextModule, ErrorMessagesComponent],
       providers: [
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         FecDatePipe,
         { provide: ReportService, useValue: reportServiceMock },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
-    component = fixture.componentInstance.component();
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
     await fixture.whenStable();
   });
@@ -118,7 +120,7 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should set associated F3X based on disbursement date', async () => {
-    component.form.get(testTemplateMap['date'])?.setValue(new Date('2024-06-15'));
+    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-06-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -151,7 +153,7 @@ describe('LinkedReportInputComponent', () => {
     spyOn(component.form.get('linkedF3x')!, 'setValue');
     spyOn(component.form.get('linkedF3xId')!, 'setValue');
 
-    component.form.get(testTemplateMap['date'])?.setValue(new Date('2024-01-15'));
+    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-01-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -169,7 +171,7 @@ describe('LinkedReportInputComponent', () => {
 
     expect(component.associatedF3X()?.id).toBe('1');
 
-    component.form.get(testTemplateMap['date'])?.setValue(new Date('2024-06-15'));
+    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-06-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -182,7 +184,7 @@ describe('LinkedReportInputComponent', () => {
 
     expect(component.associatedF3X()?.id).toBe('1');
 
-    component.form.get(testTemplateMap['memo_code'])?.setValue(true);
+    component.form.get(host.templateMap['memo_code'])?.setValue(true);
     fixture.detectChanges();
     await fixture.whenStable();
 

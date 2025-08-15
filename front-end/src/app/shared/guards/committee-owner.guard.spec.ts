@@ -25,7 +25,7 @@ describe('committeeOwnerGuard', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: CommitteeMemberService, useValue: mockMemberService },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     });
     store = TestBed.inject(MockStore);

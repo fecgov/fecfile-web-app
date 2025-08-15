@@ -32,7 +32,7 @@ class TestHostComponent {
     { updateOn: 'blur' },
   );
   formSubmitted = false;
-  templateMap = testTemplateMap;
+  templateMap = testTemplateMap();
   transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECEIPT) as SchATransaction;
   component = viewChild.required(CommitteeInputComponent);
 }

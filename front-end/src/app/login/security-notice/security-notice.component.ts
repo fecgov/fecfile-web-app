@@ -1,9 +1,8 @@
-import { Component, inject, OnInit, Type } from '@angular/core';
+import { Component, effect, inject, OnInit, Type } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { blurActiveInput } from 'app/shared/utils/form.utils';
@@ -11,7 +10,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { takeUntil } from 'rxjs';
 import { Checkbox } from 'primeng/checkbox';
 import { ButtonDirective } from 'primeng/button';
 import { environment } from 'environments/environment';
@@ -33,7 +31,7 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
   private readonly activatedRoute = inject(ActivatedRoute);
   formSubmitted = false;
   showForm = true;
-  userLoginData?: UserLoginData;
+  readonly userLoginData = this.store.selectSignal(selectUserLoginData);
 
   readonly form = new FormGroup(
     {
@@ -50,28 +48,25 @@ export class SecurityNoticeComponent extends DestroyerComponent implements OnIni
     this.activatedRoute.data.subscribe((d) => {
       this.showForm = !!d['backgroundStyle'];
     });
+
+    effect(() => {
+      this.userLoginData();
+      this.formSubmitted = false;
+    });
   }
 
   ngOnInit() {
     this.formSubmitted = false;
-
-    this.store
-      .select(selectUserLoginData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((userLoginData: UserLoginData) => {
-        this.formSubmitted = false;
-        this.userLoginData = userLoginData;
-      });
   }
 
   async signConsentForm() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
-    if (this.form.invalid || !this.userLoginData) {
+    if (this.form.invalid || !this.userLoginData()) {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
-    const updatedUserLoginData = { ...this.userLoginData };
+    const updatedUserLoginData = { ...this.userLoginData() };
     if (this.form.get('security-consent-annual')?.value) {
       updatedUserLoginData.consent_for_one_year = true;
     }

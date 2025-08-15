@@ -14,7 +14,12 @@ describe('IndependentExpenditureCreateF3xInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TooltipModule, IndependentExpenditureCreateF3xInputComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideMockStore(testMockStore()),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(IndependentExpenditureCreateF3xInputComponent);

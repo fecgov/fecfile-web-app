@@ -26,19 +26,23 @@ export class PageUtils {
 
     PageUtils.pickYear(dateObj.getFullYear());
     PageUtils.pickMonth(dateObj.getMonth());
+
     PageUtils.pickDay(dateObj.getDate().toString());
+
     cy.wait(100);
   }
 
   static pickDay(day: string) {
+    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
     cy.get('@calendarElement')
       .find('td')
       .find('span')
       .not('.p-disabled')
       .parent()
       .contains(day)
-
-      .click();
+      .then(($day) => {
+        cy.wrap($day.parent()).click();
+      });
   }
 
   static pickMonth(month: number) {
@@ -50,7 +54,14 @@ export class PageUtils {
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    cy.get('body').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.wait(100);
+    cy.get('@calendarElement').then(($calendarElement) => {
+      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
+        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
+      }
+    });
+    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
 
     const decadeStart: number = currentYear - (currentYear % 10);
     const decadeEnd: number = decadeStart + 9;
@@ -66,6 +77,7 @@ export class PageUtils {
     }
     cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
+
   static clickSidebarSection(section: string) {
     cy.get('p-panelmenu').contains(section).parent().as('section');
     cy.get('@section').click();
@@ -108,20 +120,6 @@ export class PageUtils {
       '/' +
       date.getFullYear()
     );
-  }
-
-  static searchBoxInput(input: string, parentId?: string) {
-    if (parentId) {
-      cy.get(`[id="${parentId}"]`).find('[id="searchBox"]').type(input.slice(0, 3));
-    } else {
-      cy.get('[id="searchBox"]').type(input.slice(0, 3));
-    }
-    cy.intercept({
-      method: 'Get',
-    }).as('search');
-    cy.wait('@search');
-    cy.contains(input).should('exist');
-    cy.contains(input).click({ force: true });
   }
 
   static enterValue(fieldName: string, fieldValue: any) {
@@ -175,10 +173,7 @@ export class PageUtils {
 
   static switchCommittee(committeeId: string) {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
-    const alias = PageUtils.getAlias('');
-    cy.visit('/reports');
-    cy.get('#navbarProfileDropdownMenuLink').click();
-    cy.get(alias).find('.p-popover').contains('Switch Committees').click();
+    cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
     cy.wait(1000);

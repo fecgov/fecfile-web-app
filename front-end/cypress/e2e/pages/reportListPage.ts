@@ -1,7 +1,6 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
-import { f3ReportId$ } from '../F3X/f3x-setup';
 
 export class ReportListPage {
   static goToPage() {
@@ -20,26 +19,11 @@ export class ReportListPage {
     }
   }
 
-  //Deletes all reports belonging to the logged-in committee
   static deleteAllReports() {
-    f3ReportId$.next('');
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
         method: 'POST',
         url: 'http://localhost:8080/api/v1/reports/e2e-delete-all-reports/',
-        headers: {
-          'x-csrftoken': cookie?.value,
-        },
-      });
-    });
-  }
-
-  //Deletes a single report by its ID
-  static deleteReport(reportID: string) {
-    cy.getCookie('csrftoken').then((cookie) => {
-      cy.request({
-        method: 'DELETE',
-        url: `http://localhost:8080/api/v1/reports/${reportID}/`,
         headers: {
           'x-csrftoken': cookie?.value,
         },

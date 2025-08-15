@@ -1,7 +1,10 @@
-<p-dialog [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '512px' }">
+<p-dialog #dialog [(visible)]="dialogVisible" [style]="{ width: '512px' }" [draggable]="false" closeAriaLabel="Close">
   <ng-template #header>
-    <h1>Create a new report</h1>
+    <div [id]="dialog.ariaLabelledBy">
+      <h1>Create a new report</h1>
+    </div>
   </ng-template>
+
   <div class="dialog-body">
     <div class="dropdown">
       <span id="type-label">FORM TYPE</span>

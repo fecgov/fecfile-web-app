@@ -1,4 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
+export enum ContactTypes {
+  CANDIDATE = 'CAN',
+  COMMITTEE = 'COM',
+  INDIVIDUAL = 'IND',
+  ORGANIZATION = 'ORG',
+}
 
 const address_fields = {
   street_1: '1234 Test Ln',
@@ -21,9 +26,8 @@ const name_optionals = {
   suffix: null,
 };
 
-export const Individual_A_A$ = new BehaviorSubject<any>(undefined);
-export const Individual_A_A = {
-  type: 'IND',
+export const Individual_A_A: MockContact = {
+  type: ContactTypes.INDIVIDUAL,
   last_name: 'Ant',
   first_name: 'Accidental',
   ...name_optionals,
@@ -31,9 +35,8 @@ export const Individual_A_A = {
   ...eo_fields,
 };
 
-export const Individual_B_B$ = new BehaviorSubject<any>(undefined);
-export const Individual_B_B = {
-  type: 'IND',
+export const Individual_B_B: MockContact = {
+  type: ContactTypes.INDIVIDUAL,
   last_name: 'Bat',
   first_name: 'Bouncy',
   ...name_optionals,
@@ -41,8 +44,8 @@ export const Individual_B_B = {
   ...eo_fields,
 };
 
-export const Individual_C_C = {
-  type: 'IND',
+export const Individual_C_C: MockContact = {
+  type: ContactTypes.INDIVIDUAL,
   last_name: 'Cat',
   first_name: 'Careful',
   ...name_optionals,
@@ -50,8 +53,8 @@ export const Individual_C_C = {
   ...eo_fields,
 };
 
-export const Individual_D_D = {
-  type: 'IND',
+export const Individual_D_D: MockContact = {
+  type: ContactTypes.INDIVIDUAL,
   last_name: 'Dog',
   first_name: 'Diggory',
   ...name_optionals,
@@ -59,8 +62,8 @@ export const Individual_D_D = {
   ...eo_fields,
 };
 
-export const Candidate_Presidential_A = {
-  type: 'CAN',
+export const Candidate_Presidential_A: MockContact = {
+  type: ContactTypes.CANDIDATE,
   candidate_id: 'P00000001',
   candidate_office: 'P',
   candidate_state: null,
@@ -72,8 +75,8 @@ export const Candidate_Presidential_A = {
   ...eo_fields,
 };
 
-export const Candidate_Presidential_B = {
-  type: 'CAN',
+export const Candidate_Presidential_B: MockContact = {
+  type: ContactTypes.CANDIDATE,
   candidate_id: 'P00000002',
   candidate_office: 'P',
   candidate_state: null,
@@ -85,8 +88,8 @@ export const Candidate_Presidential_B = {
   ...eo_fields,
 };
 
-export const Candidate_Senate_A = {
-  type: 'CAN',
+export const Candidate_Senate_A: MockContact = {
+  type: ContactTypes.CANDIDATE,
   candidate_id: 'S1AK00001',
   candidate_office: 'S',
   candidate_state: 'AK',
@@ -98,8 +101,8 @@ export const Candidate_Senate_A = {
   ...eo_fields,
 };
 
-export const Candidate_Senate_B = {
-  type: 'CAN',
+export const Candidate_Senate_B: MockContact = {
+  type: ContactTypes.CANDIDATE,
   candidate_id: 'S1AK00002',
   candidate_office: 'S',
   candidate_state: 'AK',
@@ -111,9 +114,8 @@ export const Candidate_Senate_B = {
   ...eo_fields,
 };
 
-export const Candidate_House_A$ = new BehaviorSubject<any>(undefined);
-export const Candidate_House_A = {
-  type: 'CAN',
+export const Candidate_House_A: MockContact = {
+  type: ContactTypes.CANDIDATE,
   candidate_id: 'H1AK00001',
   candidate_office: 'H',
   candidate_state: 'AK',
@@ -125,8 +127,8 @@ export const Candidate_House_A = {
   ...eo_fields,
 };
 
-export const Candidate_House_B = {
-  type: 'CAN',
+export const Candidate_House_B: MockContact = {
+  type: ContactTypes.CANDIDATE,
   candidate_id: 'H1AK00002',
   candidate_office: 'H',
   candidate_state: 'AK',
@@ -138,37 +140,50 @@ export const Candidate_House_B = {
   ...eo_fields,
 };
 
-export const Committee_A$ = new BehaviorSubject<any>(undefined);
-export const Committee_A = {
-  type: 'COM',
+export const Committee_A: MockContact = {
+  type: ContactTypes.COMMITTEE,
   committee_id: 'C00000001',
   name: 'Committee A',
   ...address_fields,
 };
 
-export const Committee_B = {
-  type: 'COM',
+export const Committee_B: MockContact = {
+  type: ContactTypes.COMMITTEE,
   committee_id: 'C00000002',
   name: 'Committee B',
   ...address_fields,
 };
 
-export const Organization_A$ = new BehaviorSubject<any>(undefined);
-export const Organization_A = {
-  type: 'ORG',
+export const Organization_A: MockContact = {
+  type: ContactTypes.ORGANIZATION,
   name: 'Organization A',
   ...address_fields,
 };
 
-export const Organization_B = {
-  type: 'ORG',
+export const Organization_B: MockContact = {
+  type: ContactTypes.ORGANIZATION,
   name: 'Organization B',
   ...address_fields,
 };
 
-export function clearContacts() {
-  Individual_A_A$.next(undefined);
-  Organization_A$.next(undefined);
-  Committee_A$.next(undefined);
-  Candidate_House_A$.next(undefined);
+export interface MockContact {
+  type: ContactTypes;
+  committee_id?: string;
+  name?: string;
+  last_name?: string;
+  first_name?: string;
+  middle_name?: string | null;
+  prefix?: string | null;
+  suffix?: string | null;
+  candidate_id?: string;
+  candidate_office?: string;
+  candidate_state?: string | null;
+  candidate_district?: string | null;
+  street_1: string;
+  street_2: string | null;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  telephone: string | null;
 }

@@ -40,7 +40,7 @@ describe('SubmitReportStep2Component', () => {
         provideHttpClientTesting(),
         FormBuilder,
         { provide: Router, useValue: mockRouter },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         { provide: MessageService, useValue: mockMessageService },
         ConfirmationService,
         ApiService,

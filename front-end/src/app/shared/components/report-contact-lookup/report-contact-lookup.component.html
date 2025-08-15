@@ -1,0 +1,10 @@
+<div class="flex">
+  <app-contact-search [key]="key()" />
+  <div class="add-contact-container">
+    or
+    <span [style.verticalAlign]="'middle'"
+      ><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px"
+    /></span>
+    <a (click)="openDialog()">Create a new contact</a>
+  </div>
+</div>
