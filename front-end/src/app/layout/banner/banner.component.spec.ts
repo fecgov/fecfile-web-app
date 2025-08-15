@@ -19,7 +19,7 @@ describe('BannerComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         BannerComponent,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
   });

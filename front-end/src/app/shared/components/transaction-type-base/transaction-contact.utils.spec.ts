@@ -66,7 +66,7 @@ describe('ContactUtils', () => {
 
     selectItem = {
       label: '',
-      value: testContact,
+      value: testContact(),
       styleClass: '',
       icon: '',
       title: '',
@@ -77,7 +77,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithPrimaryContact', () => {
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
     expect(form.get('contributor_last_name')?.value).toBe('Smith');
     expect(form.get('contributor_first_name')?.value).toBe('Joe');
     expect(form.get('contributor_middle_name')?.value).toBe('James');
@@ -92,23 +92,19 @@ describe('ContactUtils', () => {
     expect(form.get('contributor_zip')?.value).toBe('22201');
 
     selectItem.value.type = ContactTypes.COMMITTEE;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
     expect(form.get('donor_committee_fec_id')?.value).toBe('888');
     expect(form.get('donor_committee_name')?.value).toBe('Organization LLC');
 
     selectItem.value.type = ContactTypes.ORGANIZATION;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction, contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
   });
 
   it('test updateFormWithCandidateContact', () => {
-    TransactionContactUtils.updateFormWithCandidateContact(
-      selectItem,
-      form,
-      testScheduleATransaction,
-      new Subject<string>(),
-    );
+    const transaction = testScheduleATransaction();
+    TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Smith');
     expect(form.get('donor_candidate_first_name')?.value).toBe('Joe');
@@ -118,7 +114,7 @@ describe('ContactUtils', () => {
     expect(form.get('donor_candidate_office')?.value).toBe('H');
     expect(form.get('donor_candidate_state')?.value).toBe('VA');
     expect(form.get('donor_candidate_district')?.value).toBe('1');
-    expect(testScheduleATransaction.contact_2).toBeTruthy();
+    expect(transaction.contact_2).toBeTruthy();
   });
 
   it('test updateFormWithSecondaryContact', () => {

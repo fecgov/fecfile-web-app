@@ -22,7 +22,7 @@ describe('LoginComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: Window, useValue: window },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         provideRouter([
           {
             path: 'reports',

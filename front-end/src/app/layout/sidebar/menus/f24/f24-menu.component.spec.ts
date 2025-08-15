@@ -24,7 +24,7 @@ describe('F24MenuComponent', () => {
             redirectTo: '',
           },
         ]),
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
       imports: [PanelMenuModule, BrowserAnimationsModule, F24MenuComponent],
     }).compileComponents();
@@ -47,6 +47,6 @@ describe('F24MenuComponent', () => {
 
   it('should get report from url', () => {
     router.navigateByUrl('/reports/transactions/report/999/list');
-    expect(component.activeReportSignal().id).toBe('999');
+    expect(component.activeReport().id).toBe('999');
   });
 });

@@ -37,7 +37,7 @@ describe('SubmitReportStep1Component', () => {
         FormBuilder,
         ReportService,
         MessageService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
           useValue: {

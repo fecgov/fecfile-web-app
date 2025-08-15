@@ -26,7 +26,7 @@ describe('TransactionService', () => {
         provideHttpClientTesting(),
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
         TransactionService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         DatePipe,
       ],
     });

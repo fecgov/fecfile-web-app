@@ -15,7 +15,7 @@ describe('WebPrintService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), WebPrintService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), WebPrintService, provideMockStore(testMockStore())],
     }).compileComponents();
 
     TestBed.inject(HttpTestingController);

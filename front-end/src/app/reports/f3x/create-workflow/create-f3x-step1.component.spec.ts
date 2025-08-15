@@ -30,6 +30,7 @@ describe('CreateF3XStep1Component', () => {
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let form3XService: Form3XService;
   let reportService: ReportService;
+  const mockStore = testMockStore();
 
   const f3x: Form3X = Form3X.fromJSON({
     id: '999',
@@ -72,7 +73,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   beforeEach(async () => {
-    testMockStore.initialState.fecfile_online_activeReport = testActiveReport;
+    mockStore.initialState.fecfile_online_activeReport = testActiveReport();
 
     await TestBed.configureTestingModule({
       imports: [SelectButtonModule, RadioButtonModule, DatePickerModule, ReactiveFormsModule, CreateF3XStep1Component],
@@ -85,7 +86,7 @@ describe('CreateF3XStep1Component', () => {
         MessageService,
         FecDatePipe,
         LabelPipe,
-        provideMockStore(testMockStore),
+        provideMockStore(mockStore),
       ],
     }).compileComponents();
 

@@ -32,7 +32,7 @@ describe('ReportDetailedSummaryComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         ReportService,
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
           useValue: {

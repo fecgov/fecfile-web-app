@@ -10,7 +10,7 @@ describe('Form99Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), Form1MService, provideMockStore(testMockStore)],
+      providers: [provideHttpClient(), provideHttpClientTesting(), Form1MService, provideMockStore(testMockStore())],
     });
 
     service = TestBed.inject(Form1MService);

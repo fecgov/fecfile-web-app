@@ -20,7 +20,12 @@ describe('PrintPreviewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [PrintPreviewComponent, DividerModule, PrintPreviewComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([]), provideMockStore(testMockStore)],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        provideMockStore(testMockStore()),
+      ],
     }).compileComponents();
     fixture = TestBed.createComponent(PrintPreviewComponent);
     reportService = TestBed.inject(ReportService);

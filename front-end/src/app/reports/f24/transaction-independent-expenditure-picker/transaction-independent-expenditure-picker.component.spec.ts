@@ -37,7 +37,7 @@ describe('TransactionIndependentExpenditurePickerComponent', () => {
             }),
           },
         },
-        provideMockStore(testMockStore),
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
   });

@@ -1,21 +1,12 @@
-import { ContactListPage } from '../pages/contactListPage';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
-import { ReportListPage } from '../pages/reportListPage';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import {
-  ContactFormData,
-  ContactType,
-  createContact,
-  defaultFormData as individualContactFormData,
-} from '../models/ContactFormModel';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
-import { F3XSetup, reportFormDataApril, reportFormDataJuly } from './f3x-setup';
+import { F3XSetup } from './f3x-setup';
 import { ScheduleFormData } from '../models/TransactionFormModel';
 import { Individual } from './utils/start-transaction/receipts';
 import { faker } from '@faker-js/faker';
-
-const APRIL_15 = 'APRIL 15';
+import { ContactLookup } from '../pages/contactLookup';
 
 const receiptData: ScheduleFormData = {
   amount: 100.55,
@@ -41,23 +32,29 @@ const reattributeData: ScheduleFormData = {
   memo_text: '',
 };
 
-const assignee: ContactFormData = createContact(ContactType.INDIVIDUAL);
-
 function CreateReceipt() {
-  F3XSetup({ individual: true, candidate: true, report: reportFormDataApril });
-  StartTransaction.Receipts().Individual().IndividualReceipt();
+  return cy.wrap(F3XSetup({ individual: true, candidate: true })).then((result: any) => {
+    cy.visit(`/reports/transactions/report/${result.report}/list`);
+    StartTransaction.Receipts().Individual().IndividualReceipt();
 
-  cy.get('[id="searchBox"]').type(individualContactFormData.last_name.slice(0, 3));
-  cy.contains(individualContactFormData.last_name).should('exist');
-  cy.contains(individualContactFormData.last_name).click();
-  TransactionDetailPage.enterScheduleFormData(new ScheduleFormData(receiptData), false, '', true, 'contribution_date');
+    ContactLookup.getContact(result.individual.last_name);
+    TransactionDetailPage.enterScheduleFormData(
+      new ScheduleFormData(receiptData),
+      false,
+      '',
+      true,
+      'contribution_date',
+    );
 
-  PageUtils.clickButton('Save');
-  PageUtils.urlCheck('/list');
-  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
+    PageUtils.clickButton('Save');
+    PageUtils.urlCheck('/list');
+    cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
+
+    cy.wrap(result);
+  });
 }
 
-function Reattribute(old = false) {
+function Reattribute(result: any, old = false) {
   PageUtils.clickKababItem(' 11(a)(ii) ', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
@@ -67,9 +64,7 @@ function Reattribute(old = false) {
   }
   cy.wait(500);
 
-  cy.get('[id="searchBox"]').type(assignee.last_name.slice(0, 3));
-  cy.contains(assignee.last_name).should('exist');
-  cy.contains(assignee.last_name).click();
+  ContactLookup.getContact(result.individual.last_name);
   TransactionDetailPage.enterScheduleFormData(
     new ScheduleFormData(reattributeData),
     false,
@@ -89,22 +84,21 @@ describe('Reattributions', () => {
   });
 
   it('should test reattributing a Schedule A in the current report', () => {
-    // Create an individual contact to be used as reattributor to
-    ContactListPage.createIndividual(assignee);
-    CreateReceipt();
-    Reattribute();
+    CreateReceipt().then((result) => {
+      Reattribute(result);
+    });
   });
 
   // Test disabled until a mock is set up for submitting a report.
-  xit('should test reattributing a Schedule A in a submitted report', () => {
-    // Create an individual contact to be used with contact lookup
-    ContactListPage.createIndividual(assignee);
-    CreateReceipt();
-    ReportListPage.createF3X(reportFormDataJuly);
-    ReportListPage.submitReport(APRIL_15);
-    ReportListPage.editReport(APRIL_15, 'Review');
-    PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
-    cy.wait(500);
-    Reattribute(true);
-  });
+  // xit('should test reattributing a Schedule A in a submitted report', () => {
+  //   // Create an individual contact to be used with contact lookup
+  //   ContactListPage.createIndividual(assignee);
+  //   CreateReceipt();
+  //   ReportListPage.createF3X(reportFormDataJuly);
+  //   ReportListPage.submitReport(APRIL_15);
+  //   ReportListPage.editReport(APRIL_15, 'Review');
+  //   PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
+  //   cy.wait(500);
+  //   Reattribute(true);
+  // });
 });

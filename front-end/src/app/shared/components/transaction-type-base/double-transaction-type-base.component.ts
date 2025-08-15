@@ -183,7 +183,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction,
       this.childContactTypeOptions,
-      this.committeeAccountSignal(),
+      this.committeeAccount(),
     );
   }
 

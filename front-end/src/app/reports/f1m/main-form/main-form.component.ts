@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -21,9 +21,12 @@ import { AddressInputComponent } from '../../../shared/components/inputs/address
 import { CandidateOfficeInputComponent } from '../../../shared/components/inputs/candidate-office-input/candidate-office-input.component';
 import { NameInputComponent } from '../../../shared/components/inputs/name-input/name-input.component';
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
-import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { AffiliatedContact, CandidateContact, F1MCandidateTag, f1mCandidateTags, F1MContact } from './contact';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { ReportContactLookupComponent } from 'app/shared/components/report-contact-lookup/report-contact-lookup.component';
+import { ContactService } from 'app/shared/services/contact.service';
+import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
+import { ContactManagementService } from 'app/shared/services/contact-management.service';
 
 @Component({
   selector: 'app-main-form',
@@ -34,18 +37,24 @@ import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wra
     ErrorMessagesComponent,
     RadioButton,
     AddressInputComponent,
-    TransactionContactLookupComponent,
+    ReportContactLookupComponent,
     CalendarComponent,
     NameInputComponent,
     CandidateOfficeInputComponent,
     SaveCancelComponent,
     ConfirmDialog,
+    ContactModalComponent,
   ],
   styleUrl: './main-form.component.scss',
 })
-export class MainFormComponent extends MainFormBaseComponent {
-  protected override reportService: Form1MService = inject(Form1MService);
+export class MainFormComponent extends MainFormBaseComponent implements OnInit, OnDestroy {
+  readonly injector = inject(Injector);
+  readonly cmservice = inject(ContactManagementService);
+  protected override readonly reportService: Form1MService = inject(Form1MService);
+  readonly contactService = inject(ContactService);
   protected readonly confirmationService = inject(ConfirmationWrapperService);
+
+  readonly f1mCandidateTags = f1mCandidateTags;
   readonly formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',
@@ -116,59 +125,40 @@ export class MainFormComponent extends MainFormBaseComponent {
   ];
   readonly schema = f1mSchema;
   readonly webprintURL = '/reports/f1m/web-print/';
-  readonly templateMap = {
-    street_1: 'street_1',
-    street_2: 'street_2',
-    city: 'city',
-    state: 'state',
-    zip: 'zip',
-  } as TransactionTemplateMapType;
 
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
 
   committeeTypeControl: AbstractControl | null = null;
-  statusByControl: AbstractControl | null = null;
+  statusByControl: SubscriptionFormControl | null = null;
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;
   candidateContacts: CandidateContact[] = [];
-  excludeFecIds: string[] = [];
-  excludeIds: string[] = [];
 
   report = new Form1M();
 
-  constructor() {
-    super();
+  override ngOnInit(): void {
+    super.ngOnInit();
+    // A deep copy of activeReport has to be made because the actual activeReport
+    // object is set to read-only by the NgRx store.
+    if (this.reportId) this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReport())));
 
-    effect(() => {
-      if (this.reportId) {
-        // A deep copy of activeReport has to be made because the actual activeReport
-        // object is set to read-only by the NgRx store.
-        this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReportSignal())));
+    this.initForm();
 
-        // Set the statusBy radio button based on form values
-        if (this.report.affiliated_committee_name) {
-          this.form.get('statusBy')?.setValue('affiliation');
-        } else {
-          this.form.get('statusBy')?.setValue('qualification');
-        }
-
-        // If this is an edit, update the lookup ids to exclude
-        if (this.report.id) {
-          if (this.report.affiliated_committee_name) {
-            if (this.report?.contact_affiliated?.committee_id)
-              this.excludeFecIds.push(this.report.contact_affiliated.committee_id);
-            if (this.report.contact_affiliated_id) this.excludeIds.push(this.report.contact_affiliated_id);
-          } else {
-            f1mCandidateTags.forEach((tag: F1MCandidateTag) => {
-              if (this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id)
-                this.excludeFecIds.push(this.report[`contact_candidate_${tag}` as keyof Form1M].candidate_id);
-              if (this.report[`contact_candidate_${tag}_id` as keyof Form1M])
-                this.excludeIds.push(this.report[`contact_candidate_${tag}_id` as keyof Form1M]);
-            });
-          }
-        }
+    if (this.reportId) {
+      // Set the statusBy radio button based on form values
+      if (this.report.affiliated_committee_name) {
+        this.statusByControl?.setValue('affiliation');
+      } else {
+        this.statusByControl?.setValue('qualification');
       }
-    });
+    }
+    this.statusByControl?.updateValueAndValidity();
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.cmservice.get('contact_affiliated').outerContact.set(null);
+    f1mCandidateTags.forEach((tag) => this.cmservice.get(`contact_candidate_${tag}`).outerContact.set(null));
   }
 
   async getConfirmations(): Promise<boolean> {
@@ -192,10 +182,9 @@ export class MainFormComponent extends MainFormBaseComponent {
     return this.templateMapConfigs[contactKey];
   }
 
-  override initForm() {
-    super.initForm();
+  initForm() {
     this.committeeTypeControl = this.form.get('committee_type');
-    this.statusByControl = this.form.get('statusBy');
+    this.statusByControl = this.form.get('statusBy') as SubscriptionFormControl;
     this.statusByControl?.addValidators(Validators.required);
     this.affiliatedContact = new AffiliatedContact(this);
     this.candidateContacts = f1mCandidateTags.map((tag: F1MCandidateTag) => new CandidateContact(tag, this));
@@ -214,33 +203,28 @@ export class MainFormComponent extends MainFormBaseComponent {
       });
     });
 
-    (this.form.get('statusBy') as SubscriptionFormControl)?.addSubscription(
-      (value: 'affiliation' | 'qualification') => {
-        SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
-        if (value === 'affiliation') {
-          this.enableValidation([this.affiliatedContact]);
-          this.disableValidation(this.candidateContacts);
-          this.form.get('date_of_original_registration')?.clearValidators();
-          this.form.get('date_of_51st_contributor')?.clearValidators();
-          this.form.get('date_committee_met_requirements')?.clearValidators();
-          this.form.get('date_of_original_registration')?.setValue(undefined);
-          this.form.get('date_of_51st_contributor')?.setValue(undefined);
-          this.form.get('date_committee_met_requirements')?.setValue(undefined);
-        } else {
-          this.enableValidation(this.candidateContacts);
-          this.form.get('date_of_original_registration')?.addValidators(Validators.required);
-          this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
-          this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
-          this.disableValidation([this.affiliatedContact]);
-        }
-        this.excludeIds = [];
-        this.excludeFecIds = [];
-        this.form.get('date_of_original_registration')?.updateValueAndValidity();
-        this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
-        this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
-      },
-    );
-    this.form.get('statusBy')?.updateValueAndValidity();
+    this.statusByControl?.addSubscription((value: 'affiliation' | 'qualification') => {
+      SchemaUtils.addJsonSchemaValidators(this.form, this.schema, true);
+      if (value === 'affiliation') {
+        this.enableValidation([this.affiliatedContact]);
+        this.disableValidation(this.candidateContacts);
+        this.form.get('date_of_original_registration')?.clearValidators();
+        this.form.get('date_of_51st_contributor')?.clearValidators();
+        this.form.get('date_committee_met_requirements')?.clearValidators();
+        this.form.get('date_of_original_registration')?.setValue(undefined);
+        this.form.get('date_of_51st_contributor')?.setValue(undefined);
+        this.form.get('date_committee_met_requirements')?.setValue(undefined);
+      } else {
+        this.enableValidation(this.candidateContacts);
+        this.form.get('date_of_original_registration')?.addValidators(Validators.required);
+        this.form.get('date_of_51st_contributor')?.addValidators(Validators.required);
+        this.form.get('date_committee_met_requirements')?.addValidators(Validators.required);
+        this.disableValidation([this.affiliatedContact]);
+      }
+      this.form.get('date_of_original_registration')?.updateValueAndValidity();
+      this.form.get('date_of_51st_contributor')?.updateValueAndValidity();
+      this.form.get('date_committee_met_requirements')?.updateValueAndValidity();
+    });
   }
 
   enableValidation(contacts: F1MContact[]) {
@@ -287,19 +271,5 @@ export class MainFormComponent extends MainFormBaseComponent {
         });
       }
     });
-  }
-
-  /**
-   * Generate a list of candidate contact ids that are currently entered in the F1M
-   * form so that we can check for duplicates and screen them from the lookup
-   * or raise a validation error on the screen.
-   * @param excludeContactTag - values: I, II, III, IV, or V
-   * @returns string[] - list of contact ids currently selected by user for Qualifications
-   */
-  getSelectedContactIds(excludeContactTag: F1MCandidateTag | undefined = undefined) {
-    return f1mCandidateTags
-      .filter((tag: F1MCandidateTag) => tag !== excludeContactTag)
-      .map((tag: F1MCandidateTag) => this.form.get(`${tag}_candidate_id_number`)?.value)
-      .filter((id) => !!id);
   }
 }
