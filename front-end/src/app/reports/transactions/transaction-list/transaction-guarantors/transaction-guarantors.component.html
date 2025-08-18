@@ -1,18 +1,15 @@
 <app-table
+  [(first)]="first"
   title="Guarantors"
   [items]="items"
-  [totalItems]="totalItems"
+  [(totalItems)]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
   [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
   sortField="name"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #header>
     <th id="buttons" role="columnheader">Actions</th>
@@ -36,7 +33,7 @@
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="p-button-text"
         buttonAriaLabel="action"
-      ></app-table-actions-button>
+      />
     </td>
   </ng-template>
 </app-table>

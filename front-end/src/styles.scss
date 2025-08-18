@@ -530,6 +530,11 @@ app-login {
   font-family: var(--karla-bold);
 }
 
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 legend {
   padding: 8px;
   display: inline-block;

@@ -27,11 +27,7 @@
           [autoResize]="true"
           formControlName="{{ text4kFormProperty }}"
         ></textarea>
-        <app-error-messages
-          [form]="form"
-          fieldName="{{ text4kFormProperty }}"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <app-error-messages [form]="form" fieldName="{{ text4kFormProperty }}" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   </div>

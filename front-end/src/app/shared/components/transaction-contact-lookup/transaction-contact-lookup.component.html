@@ -15,12 +15,12 @@
     [defaultCandidateOffice]="mandatoryCandidateOffice"
     [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"
-  ></app-contact-dialog>
+  />
 </div>
 @if (errorMessageFormControl) {
   <app-error-messages
     [control]="errorMessageFormControl"
     [formSubmitted]="formSubmitted"
     [requiredErrorMessage]="currentContactLabel + ' information is required'"
-  ></app-error-messages>
+  />
 }

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
@@ -60,6 +60,7 @@ export class SecurityNoticeComponent implements OnInit {
   async signConsentForm() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
+    if (this.form.invalid) printFormErrors(this.form);
     if (this.form.invalid || !this.userLoginData()) {
       this.store.dispatch(singleClickEnableAction());
       return;

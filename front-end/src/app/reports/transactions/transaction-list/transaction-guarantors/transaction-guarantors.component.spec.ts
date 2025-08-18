@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -16,11 +16,23 @@ import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { signal } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
+import { ScheduleCTransactionTypes } from 'app/shared/models';
+
+@Component({
+  imports: [TransactionGuarantorsComponent],
+  standalone: true,
+  template: `<app-transaction-guarantors [loan]="loan" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(TransactionGuarantorsComponent);
+  loan = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+}
 
 describe('TransactionGuarantorsComponent', () => {
-  let fixture: ComponentFixture<TransactionGuarantorsComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
   let component: TransactionGuarantorsComponent;
+  let host: TestHostComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -63,21 +75,22 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionGuarantorsComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.getParams()['parent']).toBeUndefined();
+    expect(component.params()['parent']).toBeUndefined();
   });
 
   it('should load items with loan', () => {
-    component.loan = { id: '1' } as Transaction;
+    host.loan = { id: '1' } as Transaction;
     fixture.detectChanges();
     expect(component).toBeTruthy();
-    expect(component.getParams()['parent']).toEqual('1');
+    expect(component.params()['parent']).toEqual('1');
   });
 
   it('should have delete', () => {
