@@ -19,7 +19,7 @@
         <label for="report_type_category">TIME PERIOD</label>
         <p-selectButton
           data-cy="report-type-category"
-          [options]="getReportTypeCategories()"
+          [options]="reportTypeCategories"
           [allowEmpty]="false"
           formControlName="report_type_category"
         />
@@ -30,20 +30,20 @@
     <div class="col-6">
       <div class="field grid" data-cy="report_code">
         <label for="type">(CHOOSE ONE)</label>
-        @for (reportCode of getReportCodes(); track reportCode) {
+        @for (reportCode of reportCodes(); track reportCode) {
           <div class="p-field-checkbox col-12 flex">
             <p-radioButton
               [inputId]="reportCode"
               name="report_code"
               [value]="reportCode"
               [class]="
-                usedReportCodes?.includes(reportCode)
+                disabledReportCodes()[reportCode]
                   ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
                   : ''
               "
               formControlName="report_code"
             />
-            <label [for]="reportCode" class="ml-2" [class]="usedReportCodes?.includes(reportCode) ? 'p-disabled' : ''">
+            <label [for]="reportCode" class="ml-2" [class]="disabledReportCodes()[reportCode] ? 'p-disabled' : ''">
               {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
             </label>
           </div>
@@ -96,4 +96,4 @@
     </div>
   </div>
 </form>
-<app-save-cancel (save)="save($event)" (cancelForm)="goBack()" />
+<app-save-cancel (save)="save($event)" (cancelForm)="router.navigateByUrl('/reports')" />

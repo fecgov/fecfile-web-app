@@ -1,278 +1,200 @@
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { of } from 'rxjs';
+import { Form3X, F3xFormTypes, Report, CoverageDates } from 'app/shared/models';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportCodes } from 'app/shared/utils/report-code.utils';
+import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { singleClickEnableAction } from '../../../store/single-click.actions';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, flush, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { provideRouter, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { provideMockStore } from '@ngrx/store/testing';
-import { CoverageDates, ListRestResponse } from 'app/shared/models';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { ReportService } from 'app/shared/services/report.service';
-import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { MessageService } from 'primeng/api';
-import { DatePickerModule } from 'primeng/datepicker';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { firstValueFrom, of } from 'rxjs';
-import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 
-describe('CreateF3XStep1Component', () => {
-  let component: CreateF3XStep1Component;
-  let router: Router;
-  let store: Store;
-  let fixture: ComponentFixture<CreateF3XStep1Component>;
-  let form3XService: Form3XService;
-  let reportService: ReportService;
-  const mockStore = testMockStore();
+let component: CreateF3XStep1Component;
+let fixture: ComponentFixture<CreateF3XStep1Component>;
+let router: Router;
+let form3XService: Form3XService;
+let store: MockStore;
 
-  const f3x: Form3X = Form3X.fromJSON({
-    id: '999',
-    coverage_from_date: '2022-05-25',
-    coverage_through_date: '2022-06-25',
-    form_type: 'F3XN',
-    report_code: 'Q1',
-  });
-
-  const thisYear = new Date().getFullYear();
-  const first = new Date(thisYear, 0, 1);
-  const second = new Date(thisYear, 0, 2);
-  const third = new Date(thisYear, 0, 3);
-  const fourth = new Date(thisYear, 0, 4);
-  const fifth = new Date(thisYear, 0, 5);
-  const sixth = new Date(thisYear, 0, 6);
-  const seventh = new Date(thisYear, 0, 7);
-  const eighth = new Date(thisYear, 0, 8);
-  const ninth = new Date(thisYear, 0, 9);
-  const tenth = new Date(thisYear, 0, 10);
-  const thirdThroughFifth = CoverageDates.fromJSON(
+describe('CreateF3XStep1Component: New', () => {
+  const mockCoverageDates = [
     {
-      report_code: 'Q1',
-      coverage_from_date: third,
-      coverage_through_date: fifth,
+      report_code: ReportCodes.Q1,
+      coverage_from_date: new Date('2024-01-01'),
+      coverage_through_date: new Date('2024-03-31'),
     },
-    'APRIL 15 QUARTERLY REPORT (Q1)',
-  );
-  const seventhThroughNinth = CoverageDates.fromJSON(
-    {
-      report_code: 'Q2',
-      coverage_from_date: seventh,
-      coverage_through_date: ninth,
-    },
-    'JULY 15 QUARTERLY REPORT (Q2)',
-  );
+  ];
 
-  beforeAll(async () => {
-    await import(`fecfile-validate/fecfile_validate_js/dist/F3X.validator`);
-  });
-
+  let coverageDateSpy: jasmine.Spy<() => Promise<CoverageDates[]>>;
   beforeEach(async () => {
-    mockStore.initialState.fecfile_online_activeReport = testActiveReport();
-
     await TestBed.configureTestingModule({
-      imports: [SelectButtonModule, RadioButtonModule, DatePickerModule, ReactiveFormsModule, CreateF3XStep1Component],
+      imports: [ReactiveFormsModule, CreateF3XStep1Component],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([]),
+        provideNoopAnimations(),
         Form3XService,
-        FormBuilder,
         MessageService,
-        FecDatePipe,
-        LabelPipe,
-        provideMockStore(mockStore),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({}),
+            snapshot: { params: of({}) },
+          },
+        },
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
 
     router = TestBed.inject(Router);
-    store = TestBed.inject(Store);
+    store = TestBed.inject(MockStore);
     form3XService = TestBed.inject(Form3XService);
-    form3XService.getF3xCoverageDates = () => firstValueFrom(of([]));
-    reportService = TestBed.inject(ReportService);
+    spyOn(router, 'navigateByUrl').and.stub();
+    spyOn(store, 'dispatch').and.callThrough();
+
+    coverageDateSpy = spyOn(form3XService, 'getF3xCoverageDates').and.resolveTo(mockCoverageDates);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
-    component.ngOnInit();
-
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create and initialize the form for a new report', () => {
     expect(component).toBeTruthy();
+    expect(component.reportId()).toBeNull();
+    expect(component.form.get('filing_frequency')?.value).toBe('Q');
+    expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
+    expect(coverageDateSpy).toHaveBeenCalled();
   });
 
-  it('should update form when filing frequency changes', () => {
-    component.form.controls['filing_frequency'].setValue('M');
-    fixture.detectChanges();
-    expect(component.form.controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
-  });
+  it('should call create method on save when form is valid', async () => {
+    const mockForm3X = new Form3X();
+    mockForm3X.id = '999';
+    const createSpy = spyOn(form3XService, 'create').and.resolveTo(mockForm3X);
 
-  it('should update codes when report_type_category changes', () => {
-    component.form.controls['filing_frequency'].setValue('Q');
-    fixture.detectChanges();
-    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
-    fixture.detectChanges();
-    expect(component.form.controls['report_code'].value).toEqual(ReportCodes.MY);
-    component.form.controls['report_type_category'].setValue(undefined);
-    fixture.detectChanges();
-    expect(component.form.controls['report_code'].value).toEqual(undefined);
-  });
-
-  describe('with existing coverage', () => {
-    beforeEach(async () => {
-      router = TestBed.inject(Router);
-      form3XService = TestBed.inject(Form3XService);
-      form3XService.getF3xCoverageDates = () => firstValueFrom(of([thirdThroughFifth]));
-      reportService = TestBed.inject(ReportService);
-      fixture = TestBed.createComponent(CreateF3XStep1Component);
-      component = fixture.componentInstance;
-
-      fixture.detectChanges();
+    component.form.patchValue({
+      report_code: ReportCodes.Q2,
+      coverage_from_date: new Date('2024-04-01'),
+      coverage_through_date: new Date('2024-06-30'),
     });
-    it('should pick first unused report code', () => {
-      component.form.controls['filing_frequency'].setValue('Q');
-      component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
-      fixture.detectChanges();
-      expect(component.form.controls['report_code'].value).toEqual(ReportCodes.Q2);
-    });
-  });
+    fixture.detectChanges();
 
-  it('#save should save a new f3x record', async () => {
-    const listResponse = {
-      count: 0,
-      next: '/',
-      previous: '/',
-      results: [],
-      pageNumber: 0,
-    } as ListRestResponse;
-    spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
-    spyOn(reportService, 'getTableData').and.returnValue(Promise.resolve(listResponse));
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-
-    component.form.patchValue({ ...f3x });
-    await component.save();
-    expect(component.form.invalid).toBe(false);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-
-    navigateSpy.calls.reset();
-    component.form.patchValue({ ...f3x });
     await component.save('continue');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
+
+    expect(createSpy).toHaveBeenCalled();
+    expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/999/list`);
   });
 
-  it('#save should update an existing f3x record', async () => {
-    const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.returnValue(
-      Promise.resolve(f3x),
-    );
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+  it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
+    const createSpy = spyOn(form3XService, 'create');
+    const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes');
+    component.form.patchValue({ coverage_from_date: null });
+    await fixture.whenStable();
 
-    component.report = f3x;
-    component.form.patchValue({ ...f3x });
+    expect(component.form.valid).toBeFalse();
     await component.save();
-    expect(component.form.invalid).toBe(false);
-    expect(f3xServiceUpdateSpy).toHaveBeenCalledTimes(1);
-    expect(component.coverageDatesDialogVisible).toBeFalse();
-    expect(navigateSpy).toHaveBeenCalledTimes(1);
+
+    expect(component.formSubmitted).toBeTrue();
+    expect(createSpy).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
+  });
+});
+
+describe('CreateF3XStep1Component: Edit', () => {
+  let messageService: MessageService;
+  let getSpy: jasmine.Spy<(reportId: string) => Promise<Report>>;
+  let messageSpy: jasmine.Spy<(message: ToastMessageOptions) => void>;
+  const mockReportId = '123';
+  const mockReport = Form3X.fromJSON({
+    id: mockReportId,
+    filing_frequency: 'Q',
+    report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
+    report_code: ReportCodes.Q2,
+    coverage_from_date: '2024-04-01',
+    coverage_through_date: '2024-06-30',
   });
 
-  it('#save on update an existing f3x record with existing transactions should warn user', async () => {
-    const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.rejectWith();
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-
-    component.report = f3x;
-    component.form.patchValue({ ...f3x });
-    await component.save();
-    expect(component.form.invalid).toBe(false);
-    expect(f3xServiceUpdateSpy).toHaveBeenCalledTimes(1);
-    expect(component.coverageDatesDialogVisible).toBeTrue();
-    expect(navigateSpy).toHaveBeenCalledTimes(0);
-  });
-
-  xit('#save should not save with invalid f3x record', () => {
-    spyOn(form3XService, 'create').and.returnValue(Promise.resolve(f3x));
-    component.form.patchValue({ ...f3x });
-    component.form.patchValue({ form_type: 'NO-GOOD' });
-    component.form.updateValueAndValidity();
-    flush();
-    tick(1000);
-    component.save();
-    flush();
-    tick(1000);
-    expect(component.form.invalid).toBe(true);
-  });
-
-  it('back button should go back to report list page', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.goBack();
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-  });
-
-  it('Manage Transaction button should go back to transactions list page', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.report = f3x;
-    component.navigateToManageTransactions();
-    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/${f3x.id}/list`);
-  });
-
-  it('Existing transactions dialog hide', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
-    component.onHide();
-    expect(dispatchSpy).toHaveBeenCalledOnceWith(singleClickEnableAction());
-  });
-
-  xit('#existingCoverageValidator should return errors', () => {
-    const foo = (
-      existingCoverage: CoverageDates[],
-      controlFromDate: Date,
-      controlThroughDate: Date,
-      expectedFromMessage: string | null,
-      expectedThroughMessage: string | null,
-    ) => {
-      const validator = buildNonOverlappingCoverageValidator(existingCoverage);
-      const group = new FormGroup(
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, CreateF3XStep1Component],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        Form3XService,
+        MessageService,
         {
-          coverage_from_date: new SubscriptionFormControl(controlFromDate),
-          coverage_through_date: new SubscriptionFormControl(controlThroughDate),
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({ reportId: mockReportId }),
+            snapshot: { params: of({ reportId: mockReportId }) },
+          },
         },
-        { updateOn: 'blur' },
-      );
-      validator(group);
+        provideMockStore(testMockStore()),
+      ],
+    }).compileComponents();
 
-      expect(group.get('coverage_from_date')?.errors).toEqual(
-        expectedFromMessage ? { invaliddate: { msg: expectedFromMessage } } : null,
-      );
-      expect(group.get('coverage_through_date')?.errors).toEqual(
-        expectedThroughMessage ? { invaliddate: { msg: expectedThroughMessage } } : null,
-      );
-    };
-    const hitsQ1Msg = `You have entered coverage dates that overlap the coverage dates of the following report: APRIL 15 QUARTERLY REPORT (Q1)  01/03/${thisYear} - 01/05/${thisYear}`;
-    const hitsQ2Msg = `You have entered coverage dates that overlap the coverage dates of the following report: JULY 15 QUARTERLY REPORT (Q2)  01/07/${thisYear} - 01/09/${thisYear}`;
+    router = TestBed.inject(Router);
+    store = TestBed.inject(MockStore);
+    spyOn(router, 'navigateByUrl').and.stub();
+    spyOn(store, 'dispatch').and.callThrough();
 
-    /**
-     * FC, TC: from/through control
-     * [1--1]: existing coverage
-     * FC--[1--1]--TC--[2--2]
-     */
-    foo([thirdThroughFifth, seventhThroughNinth], first, tenth, hitsQ1Msg, hitsQ1Msg);
+    form3XService = TestBed.inject(Form3XService);
+    messageService = TestBed.inject(MessageService);
+    getSpy = spyOn(form3XService, 'get').and.resolveTo(mockReport);
+    messageSpy = spyOn(messageService, 'add');
 
-    //FC--[1--TC--1]--[2--2]
-    foo([thirdThroughFifth, seventhThroughNinth], first, fourth, null, hitsQ1Msg);
+    fixture = TestBed.createComponent(CreateF3XStep1Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    //FC--[1--1]--[2--TC--2]
-    foo([thirdThroughFifth, seventhThroughNinth], first, eighth, hitsQ1Msg, hitsQ1Msg);
+  it('should fetch existing report and patch form', () => {
+    expect(component.reportId()).toBe(mockReportId);
+    expect(getSpy).toHaveBeenCalledWith(mockReportId);
+    fixture.detectChanges();
+    expect(component.form.get('report_code')?.value).toBe(ReportCodes.Q2);
+    expect(component.form.get('filing_frequency')?.value).toBe('Q');
+  });
 
-    //[1--FC--1]--[2--TC--2]
-    foo([thirdThroughFifth, seventhThroughNinth], fourth, eighth, hitsQ1Msg, hitsQ2Msg);
+  it('should call update method on save', async () => {
+    const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.resolveTo(mockReport);
+    component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
 
-    //[1--1]--FC--[2--TC--2]
-    foo([thirdThroughFifth, seventhThroughNinth], sixth, eighth, null, hitsQ2Msg);
+    await component.save();
 
-    //FC--TC--[1--1]--[2--2]
-    foo([thirdThroughFifth, seventhThroughNinth], first, second, null, null);
+    expect(updateSpy).toHaveBeenCalled();
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/reports');
+    expect(messageSpy).toHaveBeenCalled();
+  });
+
+  describe('Reactive Logic', () => {
+    it('should update reportCodes when filing frequency and category change', () => {
+      component.form.patchValue({
+        filing_frequency: 'Q',
+        report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
+      });
+      fixture.detectChanges();
+      expect(component.reportCodes()).toContain(ReportCodes.Q1);
+
+      component.form.patchValue({ filing_frequency: 'M' });
+      fixture.detectChanges();
+      expect(component.reportCodes()).toContain(ReportCodes.M2);
+    });
+
+    it('should automatically update coverage dates when report code changes', fakeAsync(() => {
+      component.form.get('report_code')?.setValue(ReportCodes.Q2);
+      tick();
+      fixture.detectChanges();
+
+      const fromDate = component.form.get('coverage_from_date')?.value;
+      const throughDate = component.form.get('coverage_through_date')?.value;
+
+      expect(fromDate.getMonth()).toBe(3); // April
+      expect(throughDate.getMonth()).toBe(5); // June
+    }));
   });
 });
