@@ -125,11 +125,14 @@ describe('ReportCodeUtils', () => {
       const result = getCoverageDatesFunction(ReportCodes.M3);
       expect(typeof result).toBe('function');
       if (result) {
-        const [startDate, endDate] = result(2024, true, 'M');
+        let [startDate, endDate] = result(2024, true, 'M');
         expect(startDate.getMonth()).toBe(1);
         expect(startDate.getDate()).toBe(1);
         expect(endDate.getMonth()).toBe(1);
         expect(endDate.getDate()).toBe(29);
+
+        [startDate, endDate] = result(2025, true, 'M');
+        expect(endDate.getDate()).toBe(28);
       }
     });
 
