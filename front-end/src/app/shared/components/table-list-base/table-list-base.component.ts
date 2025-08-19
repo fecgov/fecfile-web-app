@@ -4,12 +4,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
-import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> extends DestroyerComponent implements AfterViewInit {
+export abstract class TableListBaseComponent<T> implements AfterViewInit {
   readonly messageService = inject(MessageService);
   readonly confirmationService = inject(ConfirmationService);
   protected readonly elementRef = inject(ElementRef);
@@ -35,7 +34,6 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   });
 
   constructor() {
-    super();
     effect(() => {
       this.rowsPerPage();
       this.loadTableItems({

@@ -45,9 +45,7 @@ describe('TransactionIndependentExpenditurePickerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionIndependentExpenditurePickerComponent);
     component = fixture.componentInstance;
-    component.report = Form3X.fromJSON({
-      report_type: ReportTypes.F3X,
-    });
+
     fixture.detectChanges();
   });
 

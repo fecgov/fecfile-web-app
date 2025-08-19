@@ -1,10 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportService } from '../../../shared/services/report.service';
@@ -15,6 +12,7 @@ import { ReattRedesTransactionTypeDetailComponent } from '../reatt-redes-transac
 import { TransactionChildrenListContainerComponent } from '../transaction-children-list-container/transaction-children-list-container.component';
 import { TransactionNavigationComponent } from '../transaction-navigation/transaction-navigation.component';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { injectRouteData } from 'ngxtension/inject-route-data';
 
 @Component({
   selector: 'app-transaction-container',
@@ -30,48 +28,34 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
     ConfirmDialog,
   ],
 })
-export class TransactionContainerComponent extends DestroyerComponent implements OnInit {
-  private readonly activatedRoute = inject(ActivatedRoute);
+export class TransactionContainerComponent {
   private readonly store = inject(Store);
   private readonly titleService = inject(Title);
   private readonly reportService = inject(ReportService);
-  transaction: Transaction | undefined;
-  isEditableReport = true;
-  isEditableTransaction = true;
+  readonly report = this.store.selectSignal(selectActiveReport);
+  readonly isEditableReport = computed(() => this.reportService.isEditable(this.report()));
 
-  ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        this.isEditableReport = this.reportService.isEditable(report);
-      });
+  private readonly _transaction: Signal<Transaction | null> = injectRouteData('transaction');
+  readonly transaction = computed(() => this._transaction() ?? undefined);
+  readonly isEditableTransaction = computed(() => !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()));
 
-    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      this.transaction = data['transaction'];
-      if (this.transaction) {
-        const title: string = this.transaction.transactionType?.title ?? '';
-        this.titleService.setTitle(title);
-      } else {
-        throw new Error('FECfile+: No transaction found in TransactionContainerComponent');
-      }
-    });
-
-    this.isEditableTransaction = !ReattRedesUtils.isCopyFromPreviousReport(this.transaction);
-  }
-
-  transactionCardinality(): number {
+  readonly transactionCardinality = computed(() => {
+    const transaction = this.transaction();
     if (
-      ReattRedesUtils.isReattRedes(this.transaction) &&
+      ReattRedesUtils.isReattRedes(transaction) &&
       !(
-        ReattRedesUtils.isReattRedes(this.transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
-        this.transaction?.id
+        ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&
+        transaction?.id
       )
     )
       return -1;
-    if (isPulledForwardLoan(this.transaction)) {
+    if (isPulledForwardLoan(transaction)) {
       return 1;
     }
-    return (this.transaction?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;
+    return (transaction?.transactionType?.dependentChildTransactionTypes?.length ?? 0) + 1;
+  });
+
+  constructor() {
+    effect(() => this.titleService.setTitle(this.transaction()?.transactionType?.title ?? ''));
   }
 }

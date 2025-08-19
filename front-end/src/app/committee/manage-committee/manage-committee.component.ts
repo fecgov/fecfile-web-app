@@ -26,7 +26,7 @@ import { ButtonDirective } from 'primeng/button';
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
   private readonly store = inject(Store);
   protected readonly itemService = inject(CommitteeMemberService);
-  readonly user$ = this.store.selectSignal(selectUserLoginData);
+  readonly user = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
 
@@ -34,8 +34,8 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     new TableAction('Edit Role', this.openEdit.bind(this), undefined),
     new TableAction('Delete', this.confirmDelete.bind(this)),
   ];
-  private readonly currentUserEmail = computed(() => this.user$().email ?? '');
-  readonly currentUserRole = computed(() => Roles[this.user$().role as keyof typeof Roles]);
+  private readonly currentUserEmail = computed(() => this.user().email ?? '');
+  readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
 

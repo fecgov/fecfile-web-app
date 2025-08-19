@@ -44,7 +44,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   protected readonly reportService = inject(ReportService);
   protected readonly activatedRoute = inject(ActivatedRoute);
 
-  protected readonly navigationEventSignal = this.store.selectSignal(selectNavigationEvent);
+  protected readonly navigationEvent = this.store.selectSignal(selectNavigationEvent);
 
   @Input() transaction: Transaction | undefined;
   formProperties: string[] = [];
@@ -77,7 +77,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     });
 
     effect(() => {
-      const navEvent = this.navigationEventSignal();
+      const navEvent = this.navigationEvent();
       if (navEvent) {
         const navigationEvent = { ...navEvent };
         this.handleNavigate(navigationEvent);

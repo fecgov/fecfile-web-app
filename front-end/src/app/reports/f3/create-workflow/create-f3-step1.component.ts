@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
@@ -11,11 +11,10 @@ import {
   getCoverageDatesFunction,
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { MessageService } from 'primeng/api';
-import { combineLatest, startWith, takeUntil } from 'rxjs';
+import { combineLatest, startWith } from 'rxjs';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
@@ -29,6 +28,9 @@ import { CalendarComponent } from 'app/shared/components/calendar/calendar.compo
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 import { CoverageDates, Form3, F3FormTypes } from 'app/shared/models';
+import { injectParams } from 'ngxtension/inject-params';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-create-f3-step1',
@@ -49,7 +51,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   private readonly form3Service = inject(Form3Service);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
+
   readonly formProperties: string[] = [
     'report_type_category',
     'report_code',
@@ -71,17 +73,26 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   public thisYear = new Date().getFullYear();
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
+  readonly reportId = injectParams('reportId');
+  readonly report = derivedAsync(() => {
+    const id = this.reportId();
+    if (!id) return undefined;
+    return this.form3Service.get(id);
+  });
+
+  constructor() {
+    super();
+    effectOnceIf(
+      () => this.report(),
+      () => {
+        const report = this.report();
+        this.form.patchValue(report!);
+      },
+    );
+  }
+
   ngOnInit(): void {
-    const reportId = this.activatedRoute.snapshot.data['reportId'];
     this.form3Service.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => {
-        if (reportId && report) {
-          this.form.patchValue(report);
-        }
-      });
 
     this.form3Service.getF3CoverageDates().then((existingCoverage) => {
       this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
