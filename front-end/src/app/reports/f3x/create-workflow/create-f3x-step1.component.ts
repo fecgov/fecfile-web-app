@@ -80,7 +80,15 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   });
 
   readonly existingCoverage = derivedAsync(async () => {
-    const existingCoverage = await this.form3XService.getF3xCoverageDates();
+    const reportId = this.reportId();
+    if (reportId && !this.report()) return undefined;
+    let existingCoverage = await this.form3XService.getF3xCoverageDates();
+    if (reportId) {
+      existingCoverage = existingCoverage.filter(
+        (coverage) =>
+          coverage.coverage_from_date?.getTime() !== (this.report() as Form3X).coverage_from_date?.getTime(),
+      );
+    }
     this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
     return existingCoverage;
   });

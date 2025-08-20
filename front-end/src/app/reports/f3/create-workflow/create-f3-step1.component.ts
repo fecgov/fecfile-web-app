@@ -68,9 +68,15 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
 
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
   readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
-
   readonly existingCoverage = derivedAsync(async () => {
-    const existingCoverage = await this.form3Service.getF3CoverageDates();
+    const reportId = this.reportId();
+    if (reportId && !this.report()) return undefined;
+    let existingCoverage = await this.form3Service.getF3CoverageDates();
+    if (reportId) {
+      existingCoverage = existingCoverage.filter(
+        (coverage) => coverage.coverage_from_date?.getTime() !== (this.report() as Form3).coverage_from_date?.getTime(),
+      );
+    }
     this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
     return existingCoverage;
   });
