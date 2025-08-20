@@ -6,7 +6,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         label="DATE INCURRED"
-      ></app-calendar>
+      />
     </div>
     <div class="col-6"></div>
     <div class="col-6">
@@ -19,12 +19,12 @@
           [options]="dueDateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-        ></p-select>
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['due_date_setting']"
           [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
       </div>
     </div>
     <div class="col-6">
@@ -33,11 +33,7 @@
           <div class="field">
             <label for="due_date">DATE DUE <span class="paren-label">(USER DEFINED)</span></label>
             <input type="text" pInputText inputId="due_date" [formControlName]="templateMap['due_date']" />
-            <app-error-messages
-              [form]="form"
-              [fieldName]="templateMap['due_date']"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            <app-error-messages [form]="form" [fieldName]="templateMap['due_date']" [formSubmitted]="formSubmitted" />
           </div>
         }
         @case (termFieldSettings.SPECIFIC_DATE) {
@@ -46,7 +42,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="SPECIFIC DATE"
-          ></app-calendar>
+          />
         }
         @default {}
       }
@@ -62,7 +58,7 @@
           [options]="interestRateSettingOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-        ></p-select>
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['interest_rate_setting']"
@@ -81,7 +77,7 @@
               [form]="form"
               [fieldName]="templateMap['interest_rate']"
               [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            />
           </div>
         }
         @case (termFieldSettings.EXACT_PERCENTAGE) {
@@ -99,7 +95,7 @@
               [fieldName]="templateMap['interest_rate']"
               [formSubmitted]="formSubmitted"
               patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
-            ></app-error-messages>
+            />
           </div>
         }
         @default {}

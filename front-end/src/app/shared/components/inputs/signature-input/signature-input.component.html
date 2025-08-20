@@ -4,18 +4,14 @@
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [templateMapKeyPrefix]="templateMapKeyPrefix"
-  ></app-name-input>
+  />
   <div class="grid">
     @if (titleFieldName) {
       <div class="col-4">
         <div class="field">
           <label for="title">TITLE</label>
           <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
-          <app-error-messages
-            [form]="form"
-            [fieldName]="titleFieldName"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" [fieldName]="titleFieldName" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     }
@@ -26,7 +22,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         label="DATE SIGNED"
-      ></app-calendar>
+      />
     </div>
   </div>
 </div>

@@ -20,7 +20,7 @@
             {{ electionCode?.label.split(' ')[1] }}
           </ng-template>
         </p-select>
-        <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted"></app-error-messages>
+        <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted" />
       </div>
     </div>
     <div class="col-3">
@@ -40,7 +40,7 @@
           fieldName="electionYear"
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field requires a 4-digit year. (YYYY)"
-        ></app-error-messages>
+        />
       </div>
     </div>
     <div class="col-6">
@@ -58,7 +58,7 @@
           [form]="form"
           [fieldName]="templateMap['election_other_description']"
           [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
       </div>
     </div>
   </div>

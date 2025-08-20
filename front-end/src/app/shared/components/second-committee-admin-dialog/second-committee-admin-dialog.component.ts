@@ -10,6 +10,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { printFormErrors } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-second-committee-admin-dialog',
@@ -36,6 +37,7 @@ export class SecondCommitteeAdminDialogComponent extends FormComponent {
   async save() {
     this.formSubmitted = true;
     if (this.form.invalid) {
+      printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
       return;
     }

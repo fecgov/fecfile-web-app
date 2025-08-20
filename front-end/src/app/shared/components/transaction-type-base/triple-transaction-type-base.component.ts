@@ -18,7 +18,7 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -137,6 +137,7 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override isInvalid(): boolean {
     blurActiveInput(this.childForm_2);
+    if (this.childForm_2.invalid) printFormErrors(this.childForm_2);
     return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
   }
 

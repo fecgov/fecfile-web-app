@@ -9,7 +9,7 @@ import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-canc
 import { CoverageDates, F3xFormTypes, Form3X } from 'app/shared/models';
 import { Report } from 'app/shared/models/report.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
@@ -217,6 +217,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
+      printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
       return;
     }
