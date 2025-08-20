@@ -5,7 +5,6 @@ import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
-import { take } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
@@ -43,6 +42,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
+  readonly report = this.store.selectSignal(selectActiveReport);
+
   ngOnInit(): void {
     this.addValidators();
     this.addSubscriptions();
@@ -51,19 +52,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   addValidators() {
     // Add the date range validation check to the DATE INCURRED input
     if (!isPulledForwardLoan(this.transaction()) && !isPulledForwardLoan(this.transaction()?.parent_transaction)) {
-      this.store
-        .select(selectActiveReport)
-        .pipe(take(1))
-        .subscribe((report) => {
-          this.form
-            .get(this.templateMap.date)
-            ?.addValidators(
-              buildWithinReportDatesValidator(
-                (report as Form3X).coverage_from_date,
-                (report as Form3X).coverage_through_date,
-              ),
-            );
-        });
+      const report = this.report() as Form3X;
+      this.form
+        .get(this.templateMap.date)
+        ?.addValidators(buildWithinReportDatesValidator(report.coverage_from_date, report.coverage_through_date));
     }
 
     this.interestRateSettingField?.addValidators([Validators.required]);

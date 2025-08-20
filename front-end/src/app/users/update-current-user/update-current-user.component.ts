@@ -25,18 +25,15 @@ export class UpdateCurrentUserComponent extends FormComponent {
   private readonly router = inject(Router);
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);
-  private readonly userSignal = this.store.selectSignal(selectUserLoginData);
+  private readonly user = this.store.selectSignal(selectUserLoginData);
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
 
   constructor() {
     super();
     effect(() => {
-      this.form.setControl('last_name', new SubscriptionFormControl(this.userSignal().last_name, Validators.required));
-      this.form.setControl(
-        'first_name',
-        new SubscriptionFormControl(this.userSignal().first_name, Validators.required),
-      );
-      this.form.setControl('email', new SubscriptionFormControl(this.userSignal().email, Validators.required));
+      this.form.setControl('last_name', new SubscriptionFormControl(this.user().last_name, Validators.required));
+      this.form.setControl('first_name', new SubscriptionFormControl(this.user().first_name, Validators.required));
+      this.form.setControl('email', new SubscriptionFormControl(this.user().email, Validators.required));
       this.formSubmitted = false;
     });
   }

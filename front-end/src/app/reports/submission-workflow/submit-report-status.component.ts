@@ -1,7 +1,6 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { ReportStatus } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
@@ -16,7 +15,7 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
   styleUrls: ['./submit-report-status.component.scss'],
   imports: [ButtonDirective, Ripple, LongDatePipe],
 })
-export class SubmitReportStatusComponent extends DestroyerComponent implements OnInit {
+export class SubmitReportStatusComponent implements OnInit {
   reportStatusEnum = ReportStatus;
   private readonly store = inject(Store);
   public readonly router = inject(Router);
