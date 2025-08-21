@@ -63,7 +63,7 @@ def _build_angular_app(ctx, space):
         print(f"error building Angular app.  Exiting with code {result.return_code}")
         exit(result.return_code)
 
-    ctx.run("npm ls", warn=True, echo=True)
+    ctx.run("npm ls --all", warn=True, echo=True)
 
     os.chdir(orig_directory)
 
