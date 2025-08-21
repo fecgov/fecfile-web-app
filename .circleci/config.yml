@@ -193,7 +193,10 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-
+      - run:
+          name: Check installed node dependencies
+          command: npm ls --all 2>/dev/null
+          working_directory: ~/project/front-end/
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
