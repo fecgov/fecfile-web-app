@@ -1,4 +1,11 @@
-<p-dialog #dialog [(visible)]="visible" [style]="{ width: '90%' }" header="Restore deleted contacts" [modal]="true">
+<p-dialog
+  #dialog
+  [(visible)]="visible"
+  [style]="{ width: '90%' }"
+  header="Restore deleted contacts"
+  [modal]="true"
+  closeAriaLabel="Close"
+>
   <app-table
     [(first)]="first"
     [items]="items"
@@ -14,7 +21,6 @@
     [checkboxLabel]="getCheckboxLabel.bind(this)"
     (loadTableItems)="loadTableItems($event)"
   >
-    <ng-template #header> </ng-template>
     <ng-template #body let-item>
       <td>{{ displayName(item) }}</td>
       <td>{{ item.type | label: contactTypeLabels }}</td>

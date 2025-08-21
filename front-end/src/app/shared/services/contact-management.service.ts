@@ -1,4 +1,4 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal, untracked } from '@angular/core';
 import { LabelUtils, PrimeOptions } from '../utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from '../models';
 
@@ -41,6 +41,11 @@ export class ContactManager {
     this.setContactTypeOptions([contactType]);
   }
 
+  setAsAllContacts() {
+    this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels));
+    this.contactType.set(ContactTypes.INDIVIDUAL);
+  }
+
   setContactTypeOptions(contactTypes: ContactTypes[]) {
     this.contactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, contactTypes));
     this.contactType.set(contactTypes[0]);
@@ -63,6 +68,14 @@ export class ContactManagementService {
     effect(() => {
       if (this.showDialog() && this.activeManager().clearOnLoad()) {
         this.activeManager().contact.set(emptyContact(this.activeManager().contactType()));
+      }
+    });
+
+    effect(() => {
+      const activeManager = this.activeManager();
+      const contactType = activeManager.contactType();
+      if (activeManager.clearOnLoad()) {
+        untracked(() => activeManager.contact.set(emptyContact(contactType)));
       }
     });
   }
