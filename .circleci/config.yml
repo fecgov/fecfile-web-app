@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -195,7 +195,7 @@ jobs:
           app-dir: ~/project/front-end/
       - run:
           name: Check installed node dependencies
-          command: npm ls --all 2>/dev/null
+          command: npm ls --all
           working_directory: ~/project/front-end/
       - python/install-packages:
           pkg-manager: pip
