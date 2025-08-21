@@ -55,12 +55,7 @@ export class TableComponent<T> {
   });
 
   readonly from = computed(() => (this.totalItems() === 0 ? 0 : this.first() + 1));
-  readonly to = computed(() => {
-    const to = this.first() + this.rowsPerPage();
-    const total = this.totalItems();
-    if (to > total) return total;
-    return to;
-  });
+  readonly to = computed(() => Math.min(this.first() + this.rowsPerPage(), this.totalItems()));
 
   readonly first = model.required<number>();
 

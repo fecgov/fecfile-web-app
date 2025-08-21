@@ -58,20 +58,20 @@
     <div class="col-6">
       <div class="field grid" data-cy="report_code">
         <label for="type">(CHOOSE ONE)</label>
-        @for (reportCode of getReportCodes(); track reportCode) {
+        @for (reportCode of reportCodes(); track reportCode) {
           <div class="p-field-checkbox col-12 flex">
             <p-radioButton
               [inputId]="reportCode"
               name="report_code"
               [value]="reportCode"
               [class]="
-                checkDisableReportCode(reportCode)
+                disabledReportCodes()[reportCode]
                   ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
                   : ''
               "
               formControlName="report_code"
             />
-            <label [for]="reportCode" class="ml-2" [class]="checkDisableReportCode(reportCode) ? 'p-disabled' : ''">
+            <label [for]="reportCode" class="ml-2" [class]="disabledReportCodes()[reportCode] ? 'p-disabled' : ''">
               {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
             </label>
           </div>
@@ -124,24 +124,24 @@
     </div>
   </div>
 </form>
-<app-save-cancel (save)="save($event)" (cancelForm)="goBack()" />
+<app-save-cancel (save)="save($event)" (cancelForm)="router.navigateByUrl('/reports')" />
 <p-dialog
   [(visible)]="coverageDatesDialogVisible"
   [style]="{ width: '30%' }"
   header="Can’t save report"
   [modal]="true"
+  [draggable]="false"
+  closeAriaLabel="Close"
   (onHide)="onHide()"
 >
   <p>Some transactions would now fall outside your new coverage dates.</p>
   <p>To fix this, delete those transactions.</p>
   <div class="align-left">
-    <button
-      pButton
-      pRipple
+    <p-button
       class="p-button-primary"
       label="Manage your transactions"
-      (click)="navigateToManageTransactions()"
+      [routerLink]="['/reports/transactions/report', reportId(), 'list']"
       [autofocus]="true"
-    ></button>
+    />
   </div>
 </p-dialog>
