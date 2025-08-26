@@ -14,7 +14,7 @@ import { CommitteeAccount } from 'app/shared/models';
 @Component({
   imports: [ContactSearchComponent],
   standalone: true,
-  template: `<app-contact-search [key]="key" [isBare]="isBare"></app-contact-search>`,
+  template: `<app-contact-search [key]="key" [isBare]="isBare" />`,
 })
 class TestHostComponent {
   key = 'contact_1';

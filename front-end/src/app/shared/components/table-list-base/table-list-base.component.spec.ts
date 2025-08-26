@@ -60,7 +60,7 @@ describe('TableListBaseComponent', () => {
   it('#loadTableItems should load items', () => {
     component.loadTableItems({}).then(() => {
       expect(component.items[0]).toBe('abc');
-      expect(component.totalItems).toBe(2);
+      expect(component.totalItems()).toBe(2);
       expect(component.loading).toBe(false);
     });
   });
@@ -74,23 +74,6 @@ describe('TableListBaseComponent', () => {
     expect(component.loading).toBe(false);
   });
 
-  it('#onSelectAllChange should update selected property values', async () => {
-    await component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
-    expect(component.selectedItems[0]).toBe('abc');
-    expect(component.selectAll).toBe(true);
-
-    await component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
-    expect(component.selectedItems.length).toBe(0);
-    expect(component.selectAll).toBe(false);
-  });
-
-  it('#onSelectionChange should update selected property values', async () => {
-    await component.loadTableItems({});
-    component.onSelectionChange();
-    expect(component.selectAll).toBe(false);
-    expect(component.selectedItems.length).toBe(0);
-  });
-
   it('#deleteItem should delete an item', async () => {
     await component.loadTableItems({});
     await component.deleteItem('abc');
@@ -101,7 +84,7 @@ describe('TableListBaseComponent', () => {
     spyOn(component, 'refreshTable').and.returnValue(Promise.resolve());
     await component.loadTableItems({ first: 0, rows: 2 });
     expect(component.items.length).toBe(2);
-    component.selectedItems = ['abc'];
+    component.selectedItems.set(['abc']);
     await component.deleteSelectedItemsAccept();
     testTableListService.tableResults = ['def'];
     component.deleteSelectedItemsAccept();

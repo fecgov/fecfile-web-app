@@ -13,12 +13,12 @@
           [autoDisplayFirst]="false"
           appendTo="body"
           (onChange)="onDesignatedOrSubordinateChange($event.value)"
-        ></p-select>
+        />
         <app-error-messages
           [form]="form"
           fieldName="filer_designated_to_make_coordinated_expenditures"
           [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
             (contactSelect)="onDesignatingCommitteeSelect($event)"
-          ></app-transaction-contact-lookup>
+          />
         </div>
       </div>
     </div>
@@ -43,11 +43,7 @@
         <div class="field">
           <label for="designating_committee_name">DESIGNATING COMMITTEE NAME</label>
           <input type="text" pInputText id="designating_committee_name" formControlName="designating_committee_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="designating_committee_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="designating_committee_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-3">
@@ -63,7 +59,7 @@
             [form]="form"
             fieldName="designating_committee_id_number"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          />
         </div>
       </div>
     </div>
@@ -80,7 +76,7 @@
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
             (contactSelect)="onSubordinateCommitteeSelect($event)"
-          ></app-transaction-contact-lookup>
+          />
         </div>
       </div>
     </div>
@@ -89,11 +85,7 @@
         <div class="field">
           <label for="subordinate_committee_name">SUBORDINATE COMMITTEE NAME</label>
           <input type="text" pInputText id="subordinate_committee_name" formControlName="subordinate_committee_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="subordinate_committee_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="subordinate_committee_name" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-3">
@@ -110,7 +102,7 @@
             [form]="form"
             fieldName="subordinate_committee_id_number"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          />
         </div>
       </div>
     </div>
@@ -119,6 +111,6 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       keyPrefix="subordinate"
-    ></app-address-input>
+    />
   }
 </div>

@@ -29,7 +29,7 @@ const testTemplateMap = {
     [templateMap]="templateMap"
     [templateMapKeyPrefix]="templateMapKeyPrefix"
     [keyPrefix]="keyPrefix"
-  ></app-address-input>`,
+  />`,
 })
 class TestHostComponent {
   templateMap = testTemplateMap;

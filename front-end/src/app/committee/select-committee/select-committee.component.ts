@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { UsersService } from 'app/shared/services/users.service';
@@ -14,7 +13,7 @@ import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions'
   styleUrls: ['./select-committee.component.scss'],
   imports: [RouterLink],
 })
-export class SelectCommitteeComponent extends DestroyerComponent implements OnInit {
+export class SelectCommitteeComponent implements OnInit {
   protected readonly committeeAccountService = inject(CommitteeAccountService);
   protected readonly store = inject(Store);
   protected readonly router = inject(Router);

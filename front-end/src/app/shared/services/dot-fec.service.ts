@@ -29,7 +29,7 @@ export class DotFecService {
   private readonly loggedOut = toSignal(
     this.actions.pipe(filter((action) => action.type === '[User Login Data] Discarded')),
   );
-  private readonly committee = toSignal(this.store.select(selectCommitteeAccount));
+  private readonly committee = this.store.selectSignal(selectCommitteeAccount);
 
   constructor() {
     effect(() => {
