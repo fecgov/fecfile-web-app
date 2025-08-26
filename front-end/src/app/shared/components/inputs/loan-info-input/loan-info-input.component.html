@@ -8,12 +8,8 @@
           [formControlName]="templateMap['amount']"
           [inputStyleClass]="readonly ? 'readonly' : ''"
           [readonly]="readonly"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
+        <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
       </div>
     </div>
     <div class="col-4">
@@ -24,12 +20,12 @@
           [formControlName]="templateMap['payment_to_date']"
           inputStyleClass="readonly"
           [readonly]="true"
-        ></app-input-number>
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['payment_to_date']"
           [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
       </div>
     </div>
     <div class="col-4">
@@ -40,12 +36,8 @@
           [formControlName]="templateMap['balance']"
           inputStyleClass="readonly"
           [readonly]="true"
-        ></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['balance']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
+        <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   </div>
@@ -60,7 +52,7 @@
           [transaction]="transaction()"
           checkboxLabel="MEMO ITEM "
           parenLabel="(OPTIONAL)"
-        ></app-memo-code>
+        />
       </div>
     </div>
   </div>

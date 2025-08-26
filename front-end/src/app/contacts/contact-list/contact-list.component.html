@@ -1,18 +1,15 @@
 <app-table
+  [(first)]="first"
   [items]="items"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-  [totalItems]="totalItems"
+  [(totalItems)]="totalItems"
   [loading]="loading"
-  [rowsPerPage]="rowsPerPage"
-  [selectAll]="selectAll"
-  [selectedItems]="selectedItems"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
   itemName="contacts"
   sortField="sort_name"
   [sortableHeaders]="sortableHeaders"
   (loadTableItems)="loadTableItems($event)"
-  (selectionChange)="onSelectionChange($event)"
-  (selectAllChange)="onSelectAllChange($event)"
-  (rowsPerPageChange)="onRowsPerPageChange($event)"
 >
   <ng-template #caption>
     <p-toolbar>
@@ -61,7 +58,7 @@
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
         [buttonAriaLabel]="'edit ' + displayName(item)"
-      ></app-table-actions-button>
+      />
     </td>
   </ng-template>
 </app-table>
@@ -72,9 +69,6 @@
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact($event)"
-></app-contact-dialog>
+/>
 
-<app-deleted-contact-dialog
-  [(visible)]="restoreDialogIsVisible"
-  (contactsRestored)="refreshTable()"
-></app-deleted-contact-dialog>
+<app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />

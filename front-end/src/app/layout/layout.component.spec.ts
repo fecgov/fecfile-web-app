@@ -10,6 +10,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -30,7 +31,7 @@ describe('LayoutComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideMockStore(), // Provide a mock store
+        provideMockStore(testMockStore()),
       ],
     }).compileComponents();
 

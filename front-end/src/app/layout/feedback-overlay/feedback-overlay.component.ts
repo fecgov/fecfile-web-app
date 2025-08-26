@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { ButtonDirective } from 'primeng/button';
@@ -59,6 +59,7 @@ export class FeedbackOverlayComponent extends FormComponent {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
+      printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
       return;
     }

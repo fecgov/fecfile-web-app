@@ -5,7 +5,7 @@ import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { JsonSchema } from 'fecfile-validate';
@@ -71,6 +71,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     }
 
     if (this.form.invalid) {
+      printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
       return;
     }

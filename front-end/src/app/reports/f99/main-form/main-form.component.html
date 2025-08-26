@@ -14,7 +14,7 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" />
   </div>
   <div class="field w-3">
     <label for="filer_committee_id_number">COMMITTEE ID</label>
@@ -26,13 +26,13 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
   </div>
 
   <hr type="solid" />
   <h2>Address</h2>
 
-  <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form"></app-address-input>
+  <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form" />
 
   <hr type="solid" />
   <h2>Text Information</h2>
@@ -47,7 +47,7 @@
       [autoDisplayFirst]="false"
       appendTo="body"
     />
-    <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted" />
   </div>
 
   @if (showFilingFrequency) {
@@ -60,12 +60,8 @@
           [options]="filingFrequencies"
           [allowEmpty]="false"
           formControlName="filing_frequency"
-        ></p-selectButton>
-        <app-error-messages
-          [form]="form"
-          fieldName="filing_frequency"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
+        <app-error-messages [form]="form" fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   }
@@ -80,9 +76,9 @@
       [autoResize]="true"
       formControlName="message_text"
     ></textarea>
-    <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted"></app-error-messages>
+    <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" />
   </div>
 
   <hr type="solid" />
 </form>
-<app-save-cancel (save)="save($event)" (cancelForm)="goBack()"></app-save-cancel>
+<app-save-cancel (save)="save($event)" (cancelForm)="goBack()" />

@@ -15,7 +15,7 @@
           [form]="form"
           [fieldName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        />
       </div>
     </div>
     @if (includeFecId && (form.get('entity_type')?.value === 'COM' || tertiaryContact)) {
@@ -34,7 +34,7 @@
             [form]="form"
             [fieldName]="templateMap['committee_fec_id']"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          />
         </div>
       </div>
     }

@@ -3,12 +3,8 @@
     <div class="col-8">
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
-        <app-input-number inputId="amount" [formControlName]="templateMap['amount']"></app-input-number>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <app-input-number inputId="amount" [formControlName]="templateMap['amount']" />
+        <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   </div>
@@ -19,7 +15,7 @@
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [transaction]="transaction()"
-  ></app-loan-terms-dates-input>
+  />
   <app-yes-no-radio-input
     [form]="form"
     [formSubmitted]="formSubmitted"
@@ -27,7 +23,7 @@
     label="Has loan been restructured?"
     ariaLabelYes="This loan has been restructured"
     ariaLabelNo="This loan has not been restructured"
-  ></app-yes-no-radio-input>
+  />
   @if (showLoanRestructured) {
     <div class="grid">
       <div class="col-4">
@@ -36,7 +32,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           label="DATE OF ORIGINAL LOAN"
-        ></app-calendar>
+        />
       </div>
     </div>
   }
@@ -48,7 +44,7 @@
     parenLabel="(OPTIONAL)"
     ariaLabelYes="There is a line of credit"
     ariaLabelNo="There is not a line of credit"
-  ></app-yes-no-radio-input>
+  />
   @if (showLineOfCredit) {
     <div class="grid">
       <div class="col-4">
@@ -56,26 +52,15 @@
           <label for="credit_amount_this_draw"
             >CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span></label
           >
-          <app-input-number
-            inputId="credit_amount_this_draw"
-            formControlName="credit_amount_this_draw"
-          ></app-input-number>
-          <app-error-messages
-            [form]="form"
-            fieldName="credit_amount_this_draw"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-input-number inputId="credit_amount_this_draw" formControlName="credit_amount_this_draw" />
+          <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-4">
         <div class="field">
           <label for="balance">TOTAL BALANCE</label>
-          <app-input-number inputId="balance" [formControlName]="templateMap['balance']"></app-input-number>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['balance']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-input-number inputId="balance" [formControlName]="templateMap['balance']" />
+          <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -89,7 +74,7 @@
     label="Are other parties secondarily liable for the debt incurred?"
     ariaLabelYes="Other parties are secondarily liable"
     ariaLabelNo="Other parties are not secondarily liable"
-  ></app-yes-no-radio-input>
+  />
   @if (showOthersLiable) {
     <div class="grid">
       <div class="col-12">
@@ -110,7 +95,7 @@
     label="Are any of the following pledged as collateral for the loan: real estate, personal property, goods, negotiable instruments, certificates of deposit, chattel papers, stocks, accounts receivable, cash on deposit, or other similar traditional collateral?"
     ariaLabelYes="Collateral has been pledged"
     ariaLabelNo="Collateral has not been pledged"
-  ></app-yes-no-radio-input>
+  />
   @if (showSecured) {
     <div class="grid">
       <div class="col-12">
@@ -124,11 +109,7 @@
             [autoResize]="true"
             formControlName="desc_collateral"
           ></textarea>
-          <app-error-messages
-            [form]="form"
-            fieldName="desc_collateral"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="desc_collateral" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -136,15 +117,8 @@
       <div class="col-4">
         <div class="field">
           <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
-          <app-input-number
-            inputId="collateral_value_amount"
-            formControlName="collateral_value_amount"
-          ></app-input-number>
-          <app-error-messages
-            [form]="form"
-            fieldName="collateral_value_amount"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-input-number inputId="collateral_value_amount" formControlName="collateral_value_amount" />
+          <app-error-messages [form]="form" fieldName="collateral_value_amount" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -156,7 +130,7 @@
       parenLabel="(OPTIONAL)"
       ariaLabelYes="Lender has a perfected security interest"
       ariaLabelNo="Lender does not have a perfected security interest"
-    ></app-yes-no-radio-input>
+    />
   }
   <hr type="solid" />
   <h3>Future income</h3>
@@ -167,7 +141,7 @@
     label="Are any future contributions or future receipts of interest income, pledged as collateral for the loan?"
     ariaLabelYes="Future income has been pledged"
     ariaLabelNo="Future income has not been pledged"
-  ></app-yes-no-radio-input>
+  />
   @if (showFutureIncome) {
     <div class="grid">
       <div class="col-12">
@@ -185,7 +159,7 @@
             [form]="form"
             fieldName="desc_specification_of_the_above"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          />
         </div>
       </div>
     </div>
@@ -193,12 +167,8 @@
       <div class="col-5">
         <div class="field">
           <label for="estimated_value">ESTIMATED VALUE</label>
-          <app-input-number inputId="estimated_value" formControlName="estimated_value"></app-input-number>
-          <app-error-messages
-            [form]="form"
-            fieldName="estimated_value"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-input-number inputId="estimated_value" formControlName="estimated_value" />
+          <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-5">
@@ -207,7 +177,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           label="DEPOSITORY ACCOUNT ESTABLISHED"
-        ></app-calendar>
+        />
       </div>
     </div>
     <div class="grid">
@@ -222,7 +192,7 @@
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
             (contactSelect)="updateFormWithLocationOfAccountContact($event)"
-          ></app-transaction-contact-lookup>
+          />
         </div>
       </div>
     </div>
@@ -236,7 +206,7 @@
               [form]="form"
               [fieldName]="templateMap['secondary_name']"
               [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            />
           </div>
         </div>
       </div>
@@ -245,7 +215,7 @@
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
         templateMapKeyPrefix="secondary"
-      ></app-address-input>
+      />
     }
   }
   <hr type="solid" />
@@ -268,11 +238,7 @@
           [autoResize]="true"
           formControlName="basis_of_loan_description"
         ></textarea>
-        <app-error-messages
-          [form]="form"
-          fieldName="basis_of_loan_description"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <app-error-messages [form]="form" fieldName="basis_of_loan_description" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   </div>

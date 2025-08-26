@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -20,7 +20,6 @@ import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { take } from 'rxjs';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
 const loansDebts = [
@@ -34,7 +33,7 @@ const loansDebts = [
 @Component({
   template: '',
 })
-export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> {
+export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
   protected readonly reportService = inject(ReportService);
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
@@ -42,7 +41,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   readonly report = this.store.selectSignal(selectActiveReport);
 
   abstract scheduleTransactionTypeLabels: LabelList;
-  override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
   readonly isForm24 = computed(() => this.report().form_type === FormTypes.F24);
@@ -204,6 +202,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
+  ngOnInit() {
+    this.rowsPerPage.set(5);
+  }
+
   public onTableActionClick(action: TableAction, report?: Report) {
     action.action(report);
   }
@@ -212,11 +214,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return {} as Transaction;
   }
 
-  override getParams(): QueryParams {
-    const params: QueryParams = { ...super.getParams(), page_size: this.rowsPerPage };
+  override readonly params = computed(() => {
+    const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.reportId) params['report_id'] = this.reportId;
     return params;
-  }
+  });
 
   override editItem(item: Transaction): Promise<boolean> {
     return this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
@@ -315,21 +317,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   public async updateItem(item: Transaction) {
     if (this.itemService.update) {
       try {
-        await this.untilDestroyed(this.itemService.update(item));
+        await this.itemService.update(item);
         this.loadTableItems({});
       } catch (error) {
         console.error('Error updating item:', error);
       }
     }
-  }
-
-  private untilDestroyed<T>(promise: Promise<T>): Promise<T> {
-    return Promise.race([
-      promise,
-      new Promise<T>((_, reject) => {
-        this.destroy$.pipe(take(1)).subscribe(() => reject(new Error('Destroyed')));
-      }),
-    ]);
   }
 
   public formatId(id: string | null): string {

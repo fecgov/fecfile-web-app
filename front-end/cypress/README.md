@@ -17,7 +17,7 @@ to reinitialize tests.
 
 To add the test login account, log into the fecfile-api docker container and run:
 docker exec -it fecfile-api /bin/bash
-python manage.py loaddata fixtures/e2e-test-data.json
+python manage.py loaddata fixtures/user-data.json
 
 ## Preparing the Front-End
 

@@ -2,11 +2,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, flush, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { provideRouter, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { CoverageDates, ListRestResponse } from 'app/shared/models';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { CoverageDates, ListRestResponse, Report, Form3X } from 'app/shared/models';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -20,17 +18,33 @@ import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { firstValueFrom, of } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, of } from 'rxjs';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
+import { Store } from '@ngrx/store';
+
+const params = new BehaviorSubject<object>({
+  reportId: '999',
+});
+
+const routeMock = {
+  params,
+  snapshot: {
+    queryParamMap: {
+      get: () => 'b49f0957-4404-4237-95ec-0df053083b19',
+    },
+    params: {
+      reportId: '999',
+    },
+  },
+};
 
 describe('CreateF3XStep1Component', () => {
+  let store: Store;
   let component: CreateF3XStep1Component;
   let router: Router;
-  let store: Store;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let form3XService: Form3XService;
   let reportService: ReportService;
-  const mockStore = testMockStore();
 
   const f3x: Form3X = Form3X.fromJSON({
     id: '999',
@@ -73,6 +87,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   beforeEach(async () => {
+    const mockStore = testMockStore();
     mockStore.initialState.fecfile_online_activeReport = testActiveReport();
 
     await TestBed.configureTestingModule({
@@ -86,14 +101,19 @@ describe('CreateF3XStep1Component', () => {
         MessageService,
         FecDatePipe,
         LabelPipe,
+        {
+          provide: ActivatedRoute,
+          useValue: routeMock,
+        },
         provideMockStore(mockStore),
       ],
     }).compileComponents();
-
-    router = TestBed.inject(Router);
     store = TestBed.inject(Store);
+    router = TestBed.inject(Router);
     form3XService = TestBed.inject(Form3XService);
     form3XService.getF3xCoverageDates = () => firstValueFrom(of([]));
+
+    spyOn(form3XService, 'get').and.returnValue(Promise.resolve(f3x));
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
@@ -135,6 +155,7 @@ describe('CreateF3XStep1Component', () => {
       fixture.detectChanges();
     });
     it('should pick first unused report code', () => {
+      params.next({});
       component.form.controls['filing_frequency'].setValue('Q');
       component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
       fixture.detectChanges();
@@ -143,6 +164,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should save a new f3x record', async () => {
+    params.next({});
     const listResponse = {
       count: 0,
       next: '/',
@@ -166,12 +188,11 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should update an existing f3x record', async () => {
+    params.next({ reportId: '999' });
+    const navigateSpy = spyOn(router, 'navigateByUrl');
     const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.returnValue(
       Promise.resolve(f3x),
     );
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-
-    component.report = f3x;
     component.form.patchValue({ ...f3x });
     await component.save();
     expect(component.form.invalid).toBe(false);
@@ -181,10 +202,11 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save on update an existing f3x record with existing transactions should warn user', async () => {
+    params.next({ reportId: '999' });
     const f3xServiceUpdateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.rejectWith();
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
-    component.report = f3x;
+    fixture.detectChanges();
     component.form.patchValue({ ...f3x });
     await component.save();
     expect(component.form.invalid).toBe(false);
@@ -212,10 +234,11 @@ describe('CreateF3XStep1Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('Manage Transaction button should go back to transactions list page', () => {
+  it('Manage Transaction button should go back to transactions list page', async () => {
+    params.next({ reportId: '999' });
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.report = f3x;
-    component.navigateToManageTransactions();
+    fixture.detectChanges();
+    await component.navigateToManageTransactions();
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/${f3x.id}/list`);
   });
 

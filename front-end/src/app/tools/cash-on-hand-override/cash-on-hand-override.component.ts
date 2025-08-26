@@ -13,6 +13,7 @@ import { InputNumberComponent } from '../../shared/components/inputs/input-numbe
 import { ButtonDirective } from 'primeng/button';
 import { SelectComponent } from 'app/shared/components/select/select.component';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { printFormErrors } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-cash-on-hand-override',
@@ -80,6 +81,8 @@ export class CashOnHandOverrideComponent extends DestroyerComponent implements O
             this.router.navigate(['reports']);
           });
       }
+    } else {
+      printFormErrors(this.form);
     }
   }
 }

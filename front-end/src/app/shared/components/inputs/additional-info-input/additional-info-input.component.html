@@ -27,7 +27,7 @@
             [form]="form"
             [fieldName]="templateMap['purpose_description']"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          />
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
       (designatingCommitteeClear)="onDesignatingCommitteeClear()"
       (subordinateCommitteeSelect)="onSubordinateCommitteeSelect($event)"
       (subordinateCommitteeClear)="onSubordinateCommitteeClear()"
-    ></app-designated-subordinate-input>
+    />
   }
   @if (transactionType()?.hasMemoText()) {
     <div class="grid">
@@ -62,11 +62,7 @@
             [autoResize]="true"
             [formControlName]="templateMap['text4000']"
           ></textarea>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['text4000']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" [fieldName]="templateMap['text4000']" [formSubmitted]="formSubmitted" />
         </div>
       </div>
     </div>
@@ -84,12 +80,12 @@
             appendTo="body"
             class="w-full"
             [showClear]="true"
-          ></p-select>
+          />
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['category_code']"
             [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          />
         </div>
       </div>
     </div>

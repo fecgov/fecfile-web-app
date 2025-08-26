@@ -25,7 +25,7 @@ const districtFormControlName = 'districtFormControlName';
     [officeFormControlName]="officeFormControlName"
     [stateFormControlName]="stateFormControlName"
     [districtFormControlName]="districtFormControlName"
-  ></app-candidate-office-input>`,
+  />`,
 })
 class TestHostComponent {
   officeFormControlName = testCandidateOfficeFormControlName;

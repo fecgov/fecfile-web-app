@@ -7,7 +7,7 @@ import { UsersService } from 'app/shared/services/users.service';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Card } from 'primeng/card';
 import { UserLoginData } from 'app/shared/models';
@@ -25,18 +25,15 @@ export class UpdateCurrentUserComponent extends FormComponent {
   private readonly router = inject(Router);
   private readonly usersService = inject(UsersService);
   private readonly loginService = inject(LoginService);
-  private readonly userSignal = this.store.selectSignal(selectUserLoginData);
+  private readonly user = this.store.selectSignal(selectUserLoginData);
   form: FormGroup = this.fb.group({}, { updateOn: 'blur' });
 
   constructor() {
     super();
     effect(() => {
-      this.form.setControl('last_name', new SubscriptionFormControl(this.userSignal().last_name, Validators.required));
-      this.form.setControl(
-        'first_name',
-        new SubscriptionFormControl(this.userSignal().first_name, Validators.required),
-      );
-      this.form.setControl('email', new SubscriptionFormControl(this.userSignal().email, Validators.required));
+      this.form.setControl('last_name', new SubscriptionFormControl(this.user().last_name, Validators.required));
+      this.form.setControl('first_name', new SubscriptionFormControl(this.user().first_name, Validators.required));
+      this.form.setControl('email', new SubscriptionFormControl(this.user().email, Validators.required));
       this.formSubmitted = false;
     });
   }
@@ -45,6 +42,7 @@ export class UpdateCurrentUserComponent extends FormComponent {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
+      printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
       return;
     }

@@ -97,7 +97,7 @@ describe('ManageCommitteeComponent', () => {
     component.openEdit(committeeMembers[0]);
 
     expect(component.member).toEqual(committeeMembers[0]);
-    expect(component.detailVisible).toBeTrue();
+    expect(component.detailVisible()).toBeTrue();
   });
 
   it('should call loadTableItems, show success message, and close detail', () => {
@@ -118,10 +118,10 @@ describe('ManageCommitteeComponent', () => {
 
   it('should close detail and clear member', () => {
     component.member = committeeMembers[0];
-    component.detailVisible = true;
+    component.detailVisible.set(true);
     component.detailClose();
 
-    expect(component.detailVisible).toBeFalse();
+    expect(component.detailVisible()).toBeFalse();
     expect(component.member).toBeUndefined();
   });
 

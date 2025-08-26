@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, AfterViewChecked, inject, viewChild, computed, signal } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderStyles, HeaderComponent } from './header/header.component';
@@ -34,7 +33,7 @@ export enum BackgroundStyles {
     FeedbackOverlayComponent,
   ],
 })
-export class LayoutComponent extends DestroyerComponent implements AfterViewChecked {
+export class LayoutComponent implements AfterViewChecked {
   readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
   private readonly route = inject(ActivatedRoute);
   private readonly navEnd = toSignal(injectNavigationEnd());
