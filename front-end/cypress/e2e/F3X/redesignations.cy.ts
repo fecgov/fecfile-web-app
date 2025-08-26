@@ -47,9 +47,8 @@ describe('Redesignations', () => {
     Initialize();
   });
 
-  it('should test redesignating a Schedule E contribution in the current report', () => {
-    makeF3x(F3X_Q2);
-    cy.wrap(F3XSetup({ committee: true, candidate: true, report: F3X_Q1 })).then((result: any) => {
+  it('should test redesignating a Schedule E contribution in the current report', async () => {
+    cy.wrap(F3XSetup({ committee: true, candidate: true, reports: [F3X_Q1, F3X_Q2] })).then((result: any) => {
       const transaction = buildContributionToCandidate(
         100.55,
         `${currentYear}-03-27`,

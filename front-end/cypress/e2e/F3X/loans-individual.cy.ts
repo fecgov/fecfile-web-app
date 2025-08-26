@@ -30,6 +30,7 @@ function setupLoanReceivedFromIndividual() {
 
 function addGuarantor(name: string, amount: number | string) {
   PageUtils.clickButton('Save & add loan guarantor');
+  PageUtils.closeToast();
   cy.contains('Guarantors to loan source').should('exist');
   ContactLookup.getContact(name);
   cy.get('#amount').safeType(amount);
@@ -38,6 +39,7 @@ function addGuarantor(name: string, amount: number | string) {
   }).as('saveGuarantor');
   PageUtils.clickButton('Save & add loan guarantor');
   cy.wait('@saveGuarantor');
+  PageUtils.closeToast();
   PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
   PageUtils.clickButton('Cancel');
 }
@@ -80,9 +82,23 @@ describe('Loans', () => {
     makeContact(Individual_B_B, (response) => {
       const individual2 = response.body;
       setupLoanReceivedFromIndividual().then((result: any) => {
+        cy.intercept(
+          'GET',
+          `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
+        ).as('GetReceipts');
+        cy.intercept(
+          'GET',
+          `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
+        ).as('GetLoans');
+        cy.intercept(
+          'GET',
+          `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
+        ).as('GetDisbursements');
         addGuarantor(individual2.last_name, formData['amount']);
-
-        PageUtils.clickKababItem('Loan Received from Individual', 'Edit');
+        cy.wait('@GetLoans');
+        cy.wait('@GetDisbursements');
+        cy.wait('@GetReceipts');
+        PageUtils.clickKababItem('Loan Received from Individual', 'Edit', 'app-transaction-receipts');
         PageUtils.clickKababItem(individual2.last_name, 'Delete');
         const alias = PageUtils.getAlias('');
         cy.get(alias).find('.p-confirmdialog-accept-button').click();

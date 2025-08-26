@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -33,7 +33,7 @@ const loansDebts = [
 @Component({
   template: '',
 })
-export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
+export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> {
   protected readonly reportService = inject(ReportService);
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
@@ -202,9 +202,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
-  ngOnInit() {
-    this.rowsPerPage.set(5);
-  }
+  override readonly rowsPerPage = signal(5);
 
   public onTableActionClick(action: TableAction, report?: Report) {
     action.action(report);

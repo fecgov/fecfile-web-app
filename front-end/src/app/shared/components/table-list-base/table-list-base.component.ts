@@ -36,10 +36,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   constructor() {
     effect(() => {
       this.rowsPerPage();
-      this.loadTableItems({
-        first: 0,
-        rows: this.rowsPerPage(),
-      });
+      this.refreshTable();
     });
   }
 
@@ -161,8 +158,11 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     this.reloadTables.emit();
   }
 
-  public refreshTable() {
-    return this.loadTableItems({} as TableLazyLoadEvent);
+  async refreshTable() {
+    this.loadTableItems({
+      first: 0,
+      rows: this.rowsPerPage(),
+    });
   }
 
   public onRowActionClick(action: TableAction, item: T) {

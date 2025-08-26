@@ -18,6 +18,7 @@ export interface Setup {
   candidateSenate?: boolean;
   committee?: boolean;
   report?: F3X;
+  reports?: F3X[];
 }
 
 type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
@@ -80,14 +81,27 @@ export async function F3XSetup(setup: Setup = {}) {
     apiCalls.push(addContact(Committee_A, results, 'committee'));
   }
 
-  apiCalls.push(
-    new Cypress.Promise((resolve) => {
-      makeF3x(setup.report ?? F3X_Q2, (response) => {
-        results.report = response.body.id;
-        resolve();
-      });
-    }),
-  );
+  if (setup.reports) {
+    setup.reports.forEach((report, index) => {
+      apiCalls.push(
+        new Cypress.Promise((resolve) => {
+          makeF3x(report, (response) => {
+            if (index === 0) results.report = response.body.id;
+            resolve();
+          });
+        }),
+      );
+    });
+  } else {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeF3x(setup.report ?? F3X_Q2, (response) => {
+          results.report = response.body.id;
+          resolve();
+        });
+      }),
+    );
+  }
 
   // Combine all the Chainables and return them
   await Cypress.Promise.all(apiCalls);
