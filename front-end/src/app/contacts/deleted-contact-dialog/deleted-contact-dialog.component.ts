@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, inject, model, output } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, model, output, untracked } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -34,8 +34,10 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     effect(() => {
       this.selectedItems.set([]);
       if (this.visible()) {
-        this.first.set(0);
-        this.loadTableItems({ first: 0, rows: this.rowsPerPage() });
+        untracked(() => {
+          this.first.set(0);
+          this.loadTableItems({ first: 0, rows: this.rowsPerPage() });
+        });
       }
     });
   }

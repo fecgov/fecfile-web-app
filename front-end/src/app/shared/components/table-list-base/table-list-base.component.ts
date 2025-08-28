@@ -160,7 +160,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
   async refreshTable() {
     this.loadTableItems({
-      first: 0,
+      first: this.first(),
       rows: this.rowsPerPage(),
     });
   }

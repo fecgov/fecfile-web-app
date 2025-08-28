@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
+import { Component, TemplateRef, output, contentChild, computed, input, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
-import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { NgTemplateOutlet } from '@angular/common';
 import { PrimeTemplate } from 'primeng/api';
 import { Select } from 'primeng/select';
@@ -44,8 +44,6 @@ export class TableComponent<T> {
 
   readonly paginationPageSizeOptions = [5, 10, 15, 20];
 
-  readonly dt = viewChild.required<Table>('dt');
-
   readonly caption = contentChild<TemplateRef<any>>('caption');
   readonly header = contentChild<TemplateRef<any>>('header');
   readonly body = contentChild<TemplateRef<any>>('body');
@@ -65,6 +63,6 @@ export class TableComponent<T> {
   readonly first = model.required<number>();
 
   changePage(value: PaginatorState) {
-    this.dt().onPageChange(value as TablePageEvent);
+    this.first.set(value.first ?? 0);
   }
 }
