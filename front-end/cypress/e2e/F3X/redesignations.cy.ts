@@ -1,7 +1,7 @@
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import {
   ContributionFormData,
   defaultScheduleFormData as defaultTransactionFormData,
@@ -9,7 +9,8 @@ import {
 import { Contributions } from './utils/start-transaction/disbursements';
 import { F3X_Q1, F3X_Q2 } from '../requests/library/reports';
 import { buildContributionToCandidate } from '../requests/library/transactions';
-import { makeF3x, makeTransaction } from '../requests/methods';
+import { makeTransaction } from '../requests/methods';
+import { ReportListPage } from '../pages/reportListPage';
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
@@ -48,7 +49,7 @@ describe('Redesignations', () => {
   });
 
   it('should test redesignating a Schedule E contribution in the current report', async () => {
-    cy.wrap(F3XSetup({ committee: true, candidate: true, reports: [F3X_Q1, F3X_Q2] })).then((result: any) => {
+    cy.wrap(DataSetup({ committee: true, candidate: true, reports: [F3X_Q1, F3X_Q2] })).then((result: any) => {
       const transaction = buildContributionToCandidate(
         100.55,
         `${currentYear}-03-27`,
@@ -56,9 +57,10 @@ describe('Redesignations', () => {
         result.report,
         { election_code: 'P2020', support_oppose_code: 'S', date_signed: `${currentYear}-07-09` },
       );
-      makeTransaction(transaction);
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
-      Redesignate();
+      makeTransaction(transaction, () => {
+        ReportListPage.goToReportList(result.report);
+        Redesignate();
+      });
     });
   });
 });

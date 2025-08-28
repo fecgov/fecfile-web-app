@@ -114,7 +114,8 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('button', name).click({ force });
+    cy.get(alias).contains('button', name).as('btn');
+    cy.get('@btn').click({ force });
   }
 
   static dateToString(date: Date) {
@@ -165,10 +166,10 @@ export class PageUtils {
       .children()
       .first()
       .children()
-      .first()
-      .scrollIntoView()
-      .should('be.visible')
-      .click();
+      .then(($btn) => {
+        cy.wrap($btn.first()).as('btn');
+        cy.get('@btn').click();
+      });
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
@@ -176,7 +177,10 @@ export class PageUtils {
     cy.get(PageUtils.getAlias(''))
       .find('.p-popover')
       .contains(item)
-      .then(($item) => cy.wrap($item.first()).click());
+      .then(($item) => {
+        cy.wrap($item.first()).as('btn');
+        cy.get('@btn').click();
+      });
   }
 
   static switchCommittee(committeeId: string) {

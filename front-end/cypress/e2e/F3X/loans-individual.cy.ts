@@ -2,11 +2,10 @@ import { Initialize } from '../pages/loginPage';
 import { PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
-import { makeContact } from '../requests/methods';
-import { Individual_B_B } from '../requests/library/contacts';
 import { ContactLookup } from '../pages/contactLookup';
+import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -16,8 +15,8 @@ const formData = {
 };
 
 function setupLoanReceivedFromIndividual() {
-  return cy.wrap(F3XSetup({ individual: true, committee: true })).then((result: any) => {
-    cy.visit(`/reports/transactions/report/${result.report}/list`);
+  return cy.wrap(DataSetup({ individual: true, individual2: true, committee: true })).then((result: any) => {
+    ReportListPage.goToReportList(result.report);
     StartTransaction.Loans().Individual();
     PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
     ContactLookup.getContact(result.individual.last_name);
@@ -26,22 +25,6 @@ function setupLoanReceivedFromIndividual() {
 
     cy.wrap(result);
   });
-}
-
-function addGuarantor(name: string, amount: number | string) {
-  PageUtils.clickButton('Save & add loan guarantor');
-  PageUtils.closeToast();
-  cy.contains('Guarantors to loan source').should('exist');
-  ContactLookup.getContact(name);
-  cy.get('#amount').safeType(amount);
-  cy.intercept({
-    method: 'Post',
-  }).as('saveGuarantor');
-  PageUtils.clickButton('Save & add loan guarantor');
-  cy.wait('@saveGuarantor');
-  PageUtils.closeToast();
-  PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-  PageUtils.clickButton('Cancel');
 }
 
 describe('Loans', () => {
@@ -69,42 +52,27 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Guarantors', () => {
-    makeContact(Individual_B_B, (response) => {
-      const individual2 = response.body;
-      setupLoanReceivedFromIndividual().then((result) => {
-        addGuarantor(individual2.last_name, formData['amount']);
-        cy.contains('Transactions in this report').should('exist');
-      });
+    setupLoanReceivedFromIndividual().then((result: any) => {
+      TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
+      cy.contains('Transactions in this report').should('exist');
     });
   });
 
   it('should test: Loan By Committee - delete Guarantor', () => {
-    makeContact(Individual_B_B, (response) => {
-      const individual2 = response.body;
-      setupLoanReceivedFromIndividual().then((result: any) => {
-        cy.intercept(
-          'GET',
-          `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
-        ).as('GetReceipts');
-        cy.intercept(
-          'GET',
-          `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
-        ).as('GetLoans');
-        cy.intercept(
-          'GET',
-          `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
-        ).as('GetDisbursements');
-        addGuarantor(individual2.last_name, formData['amount']);
-        cy.wait('@GetLoans');
-        cy.wait('@GetDisbursements');
-        cy.wait('@GetReceipts');
-        PageUtils.clickKababItem('Loan Received from Individual', 'Edit', 'app-transaction-receipts');
-        PageUtils.clickKababItem(individual2.last_name, 'Delete');
-        const alias = PageUtils.getAlias('');
-        cy.get(alias).find('.p-confirmdialog-accept-button').click();
+    setupLoanReceivedFromIndividual().then((result: any) => {
+      TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
 
-        cy.contains(result.individual.last_name).should('not.exist');
-      });
+      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
+      let alias = PageUtils.getAlias('app-transaction-receipts');
+      cy.get(alias).contains('Loan Received from Individual').click();
+      cy.wait('@GuarantorList');
+      cy.wait('@GuarantorList');
+      PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
+
+      alias = PageUtils.getAlias('');
+      cy.get(alias).find('.p-confirmdialog-accept-button').click();
+
+      cy.contains(result.individual.last_name).should('not.exist');
     });
   });
 });

@@ -1,9 +1,10 @@
 import { defaultScheduleFormData } from '../models/TransactionFormModel';
 import { Initialize } from '../pages/loginPage';
 import { PageUtils, currentYear } from '../pages/pageUtils';
+import { ReportListPage } from '../pages/reportListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { ReviewReport } from './utils/review-report';
 
 const scheduleData = {
@@ -22,7 +23,7 @@ describe('Receipt Transactions', () => {
 
   it('should calculate summary values on first visit', () => {
     // Create report and check summary calc runs
-    cy.wrap(F3XSetup()).then((result: any) => {
+    cy.wrap(DataSetup()).then((result: any) => {
       const reportId = result.report;
       cy.visit(`/reports/transactions/report/${reportId}/list`);
       ReviewReport.Summary();
@@ -37,9 +38,9 @@ describe('Receipt Transactions', () => {
   });
 
   it('should recalculate after transaction created or updated', () => {
-    cy.wrap(F3XSetup({ individual: true })).then((result: any) => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       // check summary calc runs
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       ReviewReport.Summary();
       cy.get('img.fec-loader-image').should('exist');
 

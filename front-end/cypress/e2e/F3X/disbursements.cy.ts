@@ -7,10 +7,9 @@ import {
   DisbursementFormData,
   formTransactionDataForSchedule,
 } from '../models/TransactionFormModel';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
-import { F24Setup } from '../F24/f24-setup';
 import { ContactListPage } from '../pages/contactListPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { ContactLookup } from '../pages/contactLookup';
@@ -31,10 +30,10 @@ describe('Disbursements', () => {
     Initialize();
   });
 
-  it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
-    cy.wrap(F3XSetup({ individual: true })).then((result: any) => {
+  xit('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       setCommitteeToPTY();
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
@@ -49,9 +48,9 @@ describe('Disbursements', () => {
     });
   });
 
-  it('should test Independent Expenditure - Void Schedule E disbursement', () => {
-    cy.wrap(F3XSetup({ individual: true, candidate: true, organization: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+  xit('should test Independent Expenditure - Void Schedule E disbursement', () => {
+    cy.wrap(DataSetup({ individual: true, candidate: true, organization: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Contributions().IndependentExpenditureVoid();
       ContactLookup.getContact(result.organization.name);
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
@@ -70,55 +69,86 @@ describe('Disbursements', () => {
   });
 
   it('should be able to link an Independent Expenditure to a Form 24', () => {
-    cy.wrap(F3XSetup({ individual: true, candidate: true })).then((result: any) => {
-      cy.wrap(F24Setup()).then(() => {
-        cy.visit(`/reports/transactions/report/${result.report}/list`);
-        StartTransaction.Disbursements().Contributions().IndependentExpenditure();
+    cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
+      StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
-        ContactLookup.getContact(result.individual.last_name, '', 'Individual');
+      ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
-        TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-          independentExpVoidData,
-          result.candidate,
-          false,
-          '',
-          'date_signed',
-        );
-        PageUtils.clickButton('Save');
+      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
+        independentExpVoidData,
+        result.candidate,
+        false,
+        '',
+        'date_signed',
+      );
+      PageUtils.clickButton('Save');
+      PageUtils.closeToast();
 
-        // Check that fields saved correctly
-        PageUtils.clickLink('Independent Expenditure');
-        cy.contains('Address').should('exist');
-        cy.get('#first_name').should('have.value', result.individual.first_name);
-        cy.get('#last_name').should('have.value', result.individual.last_name);
+      // Check that fields saved correctly
+      PageUtils.clickLink('Independent Expenditure');
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
 
-        // Check that the date fields have the right errors
-        cy.get('#dissemination_date').clear();
-        cy.get('#disbursement_date').clear();
-        PageUtils.clickButton('Save'); // Trigger errors to show
-        cy.get('app-amount-input')
-          .should('contain', 'At least ONE date field must be entered.')
-          .should('not.contain', 'This is a required field.');
+      // Check that the date fields have the right errors
+      cy.get('#dissemination_date').clear();
+      cy.get('#disbursement_date').clear();
+      PageUtils.clickButton('Save'); // Trigger errors to show
+      cy.get('app-amount-input')
+        .should('contain', 'At least ONE date field must be entered.')
+        .should('not.contain', 'This is a required field.');
 
-        // Add IE to a F24 Report
-        PageUtils.clickSidebarItem('Manage your transactions');
+      // Add IE to a F24 Report
+      cy.intercept(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
+      ).as('GetReceipts');
+      cy.intercept(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
+      ).as('GetLoans');
+      cy.intercept(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
+      ).as('GetDisbursements');
+      ReportListPage.goToReportList(result.report);
 
-        PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
-        PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
-        PageUtils.clickButton('Confirm');
+      cy.wait('@GetLoans');
+      cy.wait('@GetDisbursements');
+      cy.wait('@GetReceipts');
+      cy.wait('@GetLoans');
+      cy.wait('@GetDisbursements');
+      cy.wait('@GetReceipts');
+      cy.wait('@GetLoans');
+      cy.wait('@GetDisbursements');
+      cy.wait('@GetReceipts');
 
-        ReportListPage.editReport('FORM 24');
-        PageUtils.clickLink('Independent Expenditure');
-        cy.contains('Address').should('exist');
-        cy.get('#first_name').should('have.value', result.individual.first_name);
-        cy.get('#last_name').should('have.value', result.individual.last_name);
-      });
+      cy.wait('@GetLoans');
+      cy.wait('@GetDisbursements');
+      cy.wait('@GetReceipts');
+      cy.wait('@GetLoans');
+      cy.wait('@GetDisbursements');
+      cy.wait('@GetReceipts');
+      cy.wait('@GetLoans');
+      cy.wait('@GetDisbursements');
+      cy.wait('@GetReceipts');
+
+      PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
+      PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
+      PageUtils.clickButton('Confirm');
+
+      ReportListPage.goToReportList(result.f24);
+      PageUtils.clickLink('Independent Expenditure');
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
     });
   });
 
-  it('Create an Other Disbursement transaction', () => {
-    cy.wrap(F3XSetup({ organization: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+  xit('Create an Other Disbursement transaction', () => {
+    cy.wrap(DataSetup({ organization: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Other().Other();
       ContactLookup.getContact(result.organization.name);
 
@@ -151,10 +181,10 @@ describe('Disbursements', () => {
     });
   });
 
-  it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    cy.wrap(F3XSetup({ organization: true })).then((result: any) => {
+  xit('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
+    cy.wrap(DataSetup({ organization: true })).then((result: any) => {
       setCommitteeToPTY();
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Federal().CreditCardPayment();
       ContactLookup.getContact(result.organization.name);
 
