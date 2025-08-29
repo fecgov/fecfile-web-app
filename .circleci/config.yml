@@ -1,14 +1,11 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   browser-tools: circleci/browser-tools@1.4.8
   node: circleci/node@6.3.0
   python: circleci/python@2.2.0
 
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   lint:
     docker:
@@ -19,12 +16,10 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-
       - run:
           name: Print the linter version
           command: ./node_modules/.bin/eslint --version
           working_directory: ~/project/front-end/
-
       - run:
           name: Run linter
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
@@ -33,39 +28,30 @@ jobs:
           name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
+
   test:
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
       - image: cimg/node:lts-browsers
     resource_class: large
     steps:
       - checkout
-
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
+          name: Check install
           command: |
             google-chrome --version
             chromedriver --version
-          name: Check install
-
-      # If we need to modify the params for install-packages:
-      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-
       - run:
           name: run unit tests
           command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
           working_directory: ~/project/front-end/
-
       - store_artifacts:
           path: ~/project/front-end/coverage/front-end/lcov-report/
           destination: coverage-report
-
-      # Sonar cloud setup and scanning
       - run:
           name: Create sonar-scanner cache directory if it does not exist
           command: mkdir -p /tmp/cache/scanner
@@ -89,7 +75,6 @@ jobs:
               curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$VERSION-$OS.zip
               unzip -qq -o sonar-scanner-cli-$VERSION-$OS.zip -d $SCANNER_DIRECTORY
             fi
-
             chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
             chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/jre/bin/java
             $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
@@ -100,6 +85,7 @@ jobs:
           paths:
             - /tmp/cache/scanner
 
+  # EXISTING end-to-end job (kept as-is)
   e2e-test:
     docker:
       - image: cimg/node:lts-browsers
@@ -155,25 +141,23 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
+
   deploy-job:
     docker:
       - image: cimg/python:3.12-node
     resource_class: large
     steps:
       - checkout
-
       - python/install-packages:
           pkg-manager: pip
           app-dir: ~/project/
           pip-dependency-file: requirements.txt
-
       - run:
           name: Install cf cli
           command: |
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
             curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=8.12.0" | tar xzv -C $HOME/bin
-
       - run:
           name: run deploy script
           no_output_timeout: 15m
@@ -184,22 +168,189 @@ jobs:
   dependency-check:
     docker:
       - image: cimg/python:3.12-node
-
     steps:
       - checkout
-
-      # If we need to modify the params for install-packages:
-      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
 
+  # --- NEW: Local headless Cypress (matrix: chrome/edge/firefox) ---
+  cypress-local:
+    parameters:
+      browser:
+        type: enum
+        enum: ["chrome", "edge", "firefox"]
+    docker:
+      - image: cimg/node:lts-browsers
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: false
+
+      # Start API (same as e2e-test)
+      - run:
+          name: clone fecfile-web-api
+          command: |
+            rm -rf .git fecfile-web-api
+            git clone https://github.com/fecgov/fecfile-web-api.git
+          working_directory: ~
+      - run:
+          name: use redis
+          command: |
+            export MOCK_OPENFEC=REDIS
+            echo $MOCK_OPENFEC
+      - run:
+          name: start fecfile-web-api
+          command: |
+            git checkout ${CIRCLE_BRANCH}
+            docker-compose down
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" E2E_TEST="True" docker-compose up --build -d
+            docker container run --network container:fecfile-api-proxy \
+              docker.io/jwilder/dockerize \
+              -wait http://localhost:8080/devops/status/ \
+              -wait-retry-interval 2s \
+              -timeout 60s; \
+          working_directory: ~/project/fecfile-web-api
+
+      # Build & serve Angular app for Cypress to hit http://localhost:4200
+      - checkout
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
+      - run:
+          name: Build Angular app
+          working_directory: ~/project/front-end
+          command: |
+            npm run build -- --configuration=production
+      - run:
+          name: Serve built app
+          working_directory: ~/project/front-end
+          background: true
+          command: |
+            npx http-server ./dist/front-end -p 4200 --silent
+
+      # (Optional) Install Edge if you truly need real Edge locally
+      - run:
+          name: Install Microsoft Edge (Linux)
+          when: on_success
+          command: |
+            if [ "<< parameters.browser >>" = "edge" ]; then
+              sudo apt-get update
+              sudo apt-get install -y curl gnupg
+              curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/ms.gpg
+              echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ms.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+              sudo apt-get update
+              sudo apt-get install -y microsoft-edge-stable
+            fi
+
+      - run:
+          name: Run Cypress (<< parameters.browser >> headless)
+          command: |
+            cd ~/project/front-end
+            npx cypress run --browser << parameters.browser >> --headless
+
+      - store_artifacts:
+          path: ~/project/front-end/cypress/results
+          destination: cypress/results/<< parameters.browser >>
+      - store_test_results:
+          path: ~/project/front-end/cypress/results/junit
+
+  # --- NEW: BrowserStack (Safari + Opera in parallel; supports local/public) ---
+  e2e-browserstack:
+    docker:
+      - image: cimg/node:20.12-browsers   # Node 20 plays nicer with BS CLI
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: false
+
+      # Start API (same as e2e-test)
+      - run:
+          name: clone fecfile-web-api
+          command: |
+            rm -rf .git fecfile-web-api
+            git clone https://github.com/fecgov/fecfile-web-api.git
+          working_directory: ~
+      - run:
+          name: use redis
+          command: |
+            export MOCK_OPENFEC=REDIS
+            echo $MOCK_OPENFEC
+      - run:
+          name: start fecfile-web-api
+          command: |
+            git checkout ${CIRCLE_BRANCH}
+            docker-compose down
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" E2E_TEST="True" docker-compose up --build -d
+            docker container run --network container:fecfile-api-proxy \
+              docker.io/jwilder/dockerize \
+              -wait http://localhost:8080/devops/status/ \
+              -wait-retry-interval 2s \
+              -timeout 60s; \
+          working_directory: ~/project/fecfile-web-api
+
+      - checkout
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
+
+      # Build & serve app only if we're running BrowserStack Local to hit localhost
+      - run:
+          name: Conditionally build & serve Angular app for local BS tunnel
+          working_directory: ~/project/front-end
+          command: |
+            if [ "${BROWSERSTACK_LOCAL}" = "true" ]; then
+              npm run build -- --configuration=production
+              nohup npx http-server ./dist/front-end -p 4200 --silent >/dev/null 2>&1 &
+              echo "Local app served on http://localhost:4200 for BrowserStack Local"
+            else
+              echo "Skipping local serve; expecting BASE_URL to be a public environment"
+            fi
+
+      # Start BrowserStack Local only when requested
+      - run:
+          name: Conditionally start BrowserStack Local
+          working_directory: ~/project/front-end
+          background: true
+          command: |
+            if [ "${BROWSERSTACK_LOCAL}" = "true" ]; then
+              npx browserstack-cypress local --key "$BROWSERSTACK_ACCESS_KEY" --daemon start --local-identifier "$CIRCLE_WORKFLOW_ID"
+            else
+              echo "BROWSERSTACK_LOCAL=false; not starting Local tunnel"
+            fi
+
+      - run:
+          name: Run Cypress on BrowserStack (Safari + Opera)
+          working_directory: ~/project/front-end
+          command: |
+            # BASE_URL should be set in CircleCI env when BROWSERSTACK_LOCAL=false (e.g., https://dev.yoursite.com)
+            # When BROWSERSTACK_LOCAL=true, your cypress.config.ts should default to http://localhost:4200
+            npx browserstack-cypress run
+
+      # Always attempt to stop Local if we started it
+      - run:
+          name: Conditionally stop BrowserStack Local
+          when: always
+          working_directory: ~/project/front-end
+          command: |
+            if [ "${BROWSERSTACK_LOCAL}" = "true" ]; then
+              npx browserstack-cypress local --key "$BROWSERSTACK_ACCESS_KEY" --daemon stop --local-identifier "$CIRCLE_WORKFLOW_ID" || true
+            fi
+
+      - run:
+          name: Build Mochawesome HTML (merge JSON → HTML)
+          working_directory: ~/project/front-end
+          command: |
+            npm run report:make || true
+
+      - store_artifacts:
+          path: ~/project/front-end/cypress/results
+          destination: cypress/results/browserstack
+      - store_test_results:
+          path: ~/project/front-end/cypress/results/junit
+
 # Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 parameters:
   is-triggered-e2e-test:
     type: boolean
@@ -213,25 +364,46 @@ workflows:
       - lint
       - test
       - dependency-check
+
+      # Existing e2e job (kept)
       - e2e-test:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job: # Deploy job even when e2e tests fail
-          name: deploy-even-if-e2e-job-fails
-          requires:
-            - lint
-            - test
-            - dependency-check
+
+      # NEW: Local cross-browser matrix in parallel
+      - cypress-local:
+          name: cypress-local-chrome
+          filters:
+            branches:
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+          matrix:
+            parameters:
+              browser: ["chrome"]
+      - cypress-local:
+          name: cypress-local-edge
+          filters:
+            branches:
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+          matrix:
+            parameters:
+              browser: ["edge"]
+      - cypress-local:
+          name: cypress-local-firefox
+          filters:
+            branches:
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+          matrix:
+            parameters:
+              browser: ["firefox"]
+
+      # NEW: BrowserStack (Safari + Opera in parallel)
+      - e2e-browserstack:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
-  # This job is run when an e2e test is triggered with the
-  # is-triggered-e2e-test parameter via the fecfile-web-api
-  # circleci config file.  It is used to run the e2e tests
-  # when the fecfile-web-api is deployed to dev, stage,
-  # test, or prod.
+  # Triggered workflow (kept)
   triggered-e2e-test:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:

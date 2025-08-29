@@ -18,7 +18,7 @@
         "importHelpers": true,
         "target": "ES2024",
         "module": "ES2022",
-        "typeRoots": ["./node_modules/@types"],
+        "typeRoots": ["./node_modules/@types", "./node_modules/cypress/types"],
         "lib": ["ES2024", "dom"],
         "allowSyntheticDefaultImports": true,
         "useDefineForClassFields": false
