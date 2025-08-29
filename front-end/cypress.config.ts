@@ -1,7 +1,10 @@
+
+/// <reference types="node" />
 import { defineConfig } from 'cypress';
 
+type BsObsFn = (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => void;
+
 export default defineConfig({
-  defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
   video: false,
   videosFolder: 'cypress/videos',
@@ -9,22 +12,26 @@ export default defineConfig({
   screenshotOnRunFailure: true,
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
-  viewportHeight: 768,
-  viewportWidth: 1366,
   chromeWebSecurity: false,
-  reporter: 'mochawesome',
-  reporterOptions: {
-    reportDir: 'cypress/results',
-    reportFilename: '[status]_[datetime]-[name]',
-    overwrite: false,
-    html: true,
-    json: false,
-  },
-  retries: {
-    runMode: 1,
-    openMode: 0,
-  },
+  experimentalWebKitSupport: true,
+  retries: { runMode: 1, openMode: 0 },
+
   e2e: {
-    baseUrl: 'http://localhost:4200',
+   async setupNodeEvents(on, config) {
+      const mod = await import('browserstack-cypress-cli/bin/testObservability/plugin');
+      const bsObs: BsObsFn =
+        // Handle both CJS and ESM default interop
+        ((mod as unknown as { default?: BsObsFn }).default || (mod as unknown as BsObsFn)) as BsObsFn;
+      
+      bsObs(on, config);
+      return config;
+    },
+
+    specPattern: 'cypress/e2e/**/*.cy.ts',
+    
+    baseUrl: process.env.BASE_URL || 'http://localhost:4200',
+    defaultCommandTimeout: 10_000,
+    viewportHeight: 768,
+    viewportWidth: 1366,
   },
 });

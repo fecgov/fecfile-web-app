@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": ["ES2024", "DOM"],
+    "moduleResolution": "node",
+    "types": ["cypress", "node"],
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "cypress/**/*.ts",
+    "cypress.config.ts"
+  ]
+}
