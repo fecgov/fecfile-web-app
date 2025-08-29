@@ -30,7 +30,7 @@ describe('Disbursements', () => {
     Initialize();
   });
 
-  xit('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
+  it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       setCommitteeToPTY();
       ReportListPage.goToReportList(result.report);
@@ -48,7 +48,7 @@ describe('Disbursements', () => {
     });
   });
 
-  xit('should test Independent Expenditure - Void Schedule E disbursement', () => {
+  it('should test Independent Expenditure - Void Schedule E disbursement', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, organization: true })).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Contributions().IndependentExpenditureVoid();
@@ -146,7 +146,7 @@ describe('Disbursements', () => {
     });
   });
 
-  xit('Create an Other Disbursement transaction', () => {
+  it('Create an Other Disbursement transaction', () => {
     cy.wrap(DataSetup({ organization: true })).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Other().Other();
@@ -181,7 +181,7 @@ describe('Disbursements', () => {
     });
   });
 
-  xit('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
+  it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
     cy.wrap(DataSetup({ organization: true })).then((result: any) => {
       setCommitteeToPTY();
       ReportListPage.goToReportList(result.report);
