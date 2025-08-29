@@ -22,3 +22,5 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
 
   return safeType(prevSubject, '{selectall}{del}' + outString);
 }
+
+import 'browserstack-cypress-cli/bin/testObservability/cypress'

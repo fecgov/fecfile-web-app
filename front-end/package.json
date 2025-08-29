@@ -14,6 +14,13 @@
         "build-prod": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.prod",
         "build-test": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.test",
         "build-local": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=local",
+        "bs:public": "BASE_URL=https://stage.fecfile.fec.gov/login BROWSERSTACK_LOCAL=false browserstack-cypress run",
+        "bs:local": "BASE_URL=http://localhost:4200 BROWSERSTACK_LOCAL=true browserstack-cypress run",
+        "bs:run": "browserstack-cypress run --sync --verbose",
+        "bs:local:start": "browserstack-cypress local --key $BROWSERSTACK_ACCESS_KEY --daemon start --local-identifier bs-local",
+        "bs:local:stop": "browserstack-cypress local --key $BROWSERSTACK_ACCESS_KEY --daemon stop --local-identifier bs-local",
+        "bs:run:chrome": "browserstack-cypress run --browsers '[\"Chrome@Windows@11\"]' --sync",
+        "bs:run:webkit": "browserstack-cypress run --browsers '[\"webkit@OS X@Sonoma\"]' --sync",
         "test": "npx --node-options='--max-old-space-size=4000' -y -p @angular/cli ng test",
         "e2e": "npx -y -p @angular/cli ng e2e",
         "json-server": "nodemon ./server/server.js",
@@ -22,7 +29,10 @@
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "prettier:check:ci": "./node_modules/.bin/prettier --check .",
-        "prettier:fix": "./node_modules/.bin/prettier --write ."
+        "prettier:fix": "./node_modules/.bin/prettier --write .",
+        "report:merge": "mochawesome-merge cypress/results/mochawesome/*.json > cypress/results/mochawesome/merged.json",
+        "report:html": "marge cypress/results/mochawesome/merged.json --reportDir cypress/results/mochawesome --inline",
+        "report:make": "npm run report:merge && npm run report:html"
     },
     "private": true,
     "dependencies": {
@@ -45,7 +55,8 @@
         "ngxtension": "^5.0.0",
         "primeflex": "^4.0.0",
         "primeicons": "^7.0.0",
-        "primeng": "^19.1.3"
+        "primeng": "^19.1.3",
+        "snyk": "^1.1298.2"
     },
     "devDependencies": {
         "@angular-devkit/core": "19.2.15",
@@ -68,11 +79,13 @@
         "@faker-js/faker": "^8.4.1",
         "@types/intl-tel-input": "^18.1.4",
         "@types/jasmine": "^3.10.0",
-        "@types/node": "^20.11.19",
+        "@types/node": "^20.19.10",
         "@typescript-eslint/eslint-plugin": "^8.3.0",
         "@typescript-eslint/parser": "^8.3.0",
-        "cypress": "^14.0.1",
+        "browserstack-cypress-cli": "^1.33.0",
+        "cypress": "^15.0.0",
         "cypress-mochawesome-reporter": "^3.8.2",
+        "cypress-multi-reporters": "^2.0.5",
         "eslint": "^9.19.0",
         "glob": "^9.3.5",
         "jasmine-core": "^4.0.0",
@@ -82,11 +95,15 @@
         "karma-jasmine": "^4.0.0",
         "karma-jasmine-html-reporter": "^1.7.0",
         "karma-spec-reporter": "^0.0.33",
+        "mocha-junit-reporter": "^2.2.1",
+        "mochawesome": "^7.1.3",
+        "mochawesome-merge": "^5.0.0",
+        "mochawesome-report-generator": "^6.2.0",
         "prettier": "^3.4.2",
         "reflect-metadata": "^0.2.1",
         "rxjs": "^7.8.1",
         "tslib": "^2.8.1",
-        "typescript": "^5.7.3",
+        "typescript": "^5.8.3",
         "zone.js": "^0.15.0"
     },
     "browser": {

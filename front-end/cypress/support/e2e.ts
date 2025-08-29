@@ -21,3 +21,5 @@ declare global {
     }
   }
 }
+
+import 'browserstack-cypress-cli/bin/testObservability/cypress'
