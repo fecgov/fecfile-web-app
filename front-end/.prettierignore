@@ -2,6 +2,3 @@
 *.yml
 node_modules
 assets
-results/
-cypress/results/
-coverage/
