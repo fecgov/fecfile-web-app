@@ -29,7 +29,7 @@ export default defineConfig({
 
     specPattern: 'cypress/e2e/**/*.cy.ts',
     
-    baseUrl: process.env.BASE_URL || 'http://localhost:4200',
+    baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:4200',
     defaultCommandTimeout: 10_000,
     viewportHeight: 768,
     viewportWidth: 1366,

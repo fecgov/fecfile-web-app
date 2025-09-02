@@ -1,16 +1,13 @@
 {
   "auth": { "username": "${BROWSERSTACK_USERNAME}", "access_key": "${BROWSERSTACK_ACCESS_KEY}" },
   "browsers": [
-    { "browser": "Chrome",  "os": "Windows 11", "versions": ["latest"]},
-    { "browser": "Edge",    "os": "Windows 11", "versions": ["latest"]},
-    { "browser": "Firefox", "os": "Windows 11", "versions": ["latest"]},
-    { "browser": "webkit",  "os": "OS X Big Sur", "versions": ["latest"]}
+    { "browser": "Chrome",  "os": "Windows 11", "versions": ["latest"]}
   ],
   "run_settings": {
     "cypress_config_file": "./cypress.config.ts",
     "project_name": "fecfile-web-app",
     "build_name": "Cypress E2E - Win11 + WebKit",
-    "parallels": 4,
+    "parallels": 1,
     "cypress_version": "14.latest",
     "spec_timeout": 120,
     "specs": [
