@@ -2,3 +2,10 @@
 *.yml
 node_modules
 assets
+cypress.config.ts 
+cypress/bs-cypress.d.ts 
+cypress/support/commands.ts 
+cypress/support/component-index.html 
+cypress/support/component.ts 
+cypress/support/e2e.ts 
+results/browserstack-cypress-report.html
