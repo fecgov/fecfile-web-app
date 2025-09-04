@@ -1,0 +1,685 @@
+{
+  "cypress/e2e/F3X/amendments.cy.ts": {
+    "Amendments -> should test Create an amendment (Attempt 1)": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 14:20",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 5 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"bc232681-2625-4829-ae8b-2a302bf3f959\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Ant\",\n  \"first_name\": \"Accidental\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T14:15:44.140339-04:00\",\n  \"updated\": \"2025-09-03T14:15:44.140347-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"36f70e96-f353-44e0-b7bc-a39c9b54b634\",\n  \"committee_name\": null,\n  \"street_1\": null,\n  \"street_2\": null,\n  \"city\": null,\n  \"state\": null,\n  \"zip\": null,\n  \"form_type\": \"F3XN\",\n  \"report_version\": null,\n  \"report_id\": null,\n  \"report_code\": \"Q2\",\n  \"coverage_from_date\": \"2025-04-01\",\n  \"coverage_through_date\": \"2025-06-30\",\n  \"treasurer_last_name\": null,\n  \"treasurer_first_name\": null,\n  \"treasurer_middle_name\": null,\n  \"treasurer_prefix\": null,\n  \"treasurer_suffix\": null,\n  \"date_signed\": null,\n  \"calculation_status\": null,\n  \"calculation_token\": null,\n  \"confirmation_email_1\": null,\n  \"confirmation_email_2\": null,\n  \"created\": \"2025-09-03T14:15:44.177380-04:00\",\n  \"updated\": \"2025-09-03T14:15:44.177388-04:00\",\n  \"upload_submission\": null,\n  \"webprint_submission\": null,\n  \"can_delete\": true,\n  \"can_unamend\": false,\n  \"filing_frequency\": null,\n  \"report_type_category\": null,\n  \"change_of_address\": false,\n  \"election_code\": null,\n  \"date_of_election\": null,\n  \"state_of_election\": null,\n  \"qualified_committee\": false,\n  \"L6b_cash_on_hand_beginning_period\": null,\n  \"L6c_total_receipts_period\": null,\n  \"L6d_subtotal_period\": null,\n  \"L7_total_disbursements_period\": null,\n  \"L8_cash_on_hand_at_close_period\": null,\n  \"L9_debts_to_period\": null,\n  \"L10_debts_by_period\": null,\n  \"L11ai_itemized_period\": null,\n  \"L11aii_unitemized_period\": null,\n  \"L11aiii_total_period\": null,\n  \"L11b_political_party_committees_period\": null,\n  \"L11c_other_political_committees_pacs_period\": null,\n  \"L11d_total_contributions_period\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_period\": null,\n  \"L13_all_loans_received_period\": null,\n  \"L14_loan_repayments_received_period\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_period\": null,\n  \"L16_refunds_of_federal_contributions_period\": null,\n  \"L17_other_federal_receipts_dividends_period\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_period\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_period\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_period\": null,\n  \"L19_total_receipts_period\": null,\n  \"L20_total_federal_receipts_period\": null,\n  \"L21ai_federal_share_period\": null,\n  \"L21aii_nonfederal_share_period\": null,\n  \"L21b_other_federal_operating_expenditures_period\": null,\n  \"L21c_total_operating_expenditures_period\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_period\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_period\": null,\n  \"L24_independent_expenditures_period\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_period\": null,\n  \"L26_loan_repayments_period\": null,\n  \"L27_loans_made_period\": null,\n  \"L28a_individuals_persons_period\": null,\n  \"L28b_political_party_committees_period\": null,\n  \"L28c_other_political_committees_period\": null,\n  \"L28d_total_contributions_refunds_period\": null,\n  \"L29_other_disbursements_period\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_period\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_period\": null,\n  \"L30b_nonallocable_fed_election_activity_period\": null,\n  \"L30c_total_federal_election_activity_period\": null,\n  \"L31_total_disbursements_period\": null,\n  \"L32_total_federal_disbursements_period\": null,\n  \"L33_total_contributions_period\": null,\n  \"L34_total_contribution_refunds_period\": null,\n  \"L35_net_contributions_period\": null,\n  \"L36_total_federal_operating_expenditures_period\": null,\n  \"L37_offsets_to_operating_expenditures_period\": null,\n  \"L38_net_operating_expenditures_period\": null,\n  \"L6a_cash_on_hand_jan_1_ytd\": null,\n  \"L6a_year_for_above_ytd\": \"2025\",\n  \"L6c_total_receipts_ytd\": null,\n  \"L6d_subtotal_ytd\": null,\n  \"L7_total_disbursements_ytd\": null,\n  \"L8_cash_on_hand_close_ytd\": null,\n  \"L11ai_itemized_ytd\": null,\n  \"L11aii_unitemized_ytd\": null,\n  \"L11aiii_total_ytd\": null,\n  \"L11b_political_party_committees_ytd\": null,\n  \"L11c_other_political_committees_pacs_ytd\": null,\n  \"L11d_total_contributions_ytd\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_ytd\": null,\n  \"L13_all_loans_received_ytd\": null,\n  \"L14_loan_repayments_received_ytd\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_ytd\": null,\n  \"L16_refunds_of_federal_contributions_ytd\": null,\n  \"L17_other_federal_receipts_dividends_ytd\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_ytd\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_ytd\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_ytd\": null,\n  \"L19_total_receipts_ytd\": null,\n  \"L20_total_federal_receipts_ytd\": null,\n  \"L21ai_federal_share_ytd\": null,\n  \"L21aii_nonfederal_share_ytd\": null,\n  \"L21b_other_federal_operating_expenditures_ytd\": null,\n  \"L21c_total_operating_expenditures_ytd\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_ytd\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_ytd\": null,\n  \"L24_independent_expenditures_ytd\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_ytd\": null,\n  \"L26_loan_repayments_made_ytd\": null,\n  \"L27_loans_made_ytd\": null,\n  \"L28a_individuals_persons_ytd\": null,\n  \"L28b_political_party_committees_ytd\": null,\n  \"L28c_other_political_committees_ytd\": null,\n  \"L28d_total_contributions_refunds_ytd\": null,\n  \"L29_other_disbursements_ytd\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_ytd\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_ytd\": null,\n  \"L30b_nonallocable_fed_election_activity_ytd\": null,\n  \"L30c_total_federal_election_activity_ytd\": null,\n  \"L31_total_disbursements_ytd\": null,\n  \"L32_total_federal_disbursements_ytd\": null,\n  \"L33_total_contributions_ytd\": null,\n  \"L34_total_contribution_refunds_ytd\": null,\n  \"L35_net_contributions_ytd\": null,\n  \"L36_total_federal_operating_expenditures_ytd\": null,\n  \"L37_offsets_to_operating_expenditures_ytd\": null,\n  \"L38_net_operating_expenditures_ytd\": null,\n  \"report_type\": \"F3X\"\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/reports/transactions/report/36f70e96-f353-44e0-b7bc-a39c9b54b634/list",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/36f70e96-f353-44e0-b7bc-a39c9b54b634/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, SUBMIT YOUR REPORT",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=36f70e96-f353-44e0-b7bc-a39c9b54b634&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=36f70e96-f353-44e0-b7bc-a39c9b54b634&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=36f70e96-f353-44e0-b7bc-a39c9b54b634&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Submit report",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/36f70e96-f353-44e0-b7bc-a39c9b54b634/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "url\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **http://localhost:4200/reports/f3x/submit/step2/36f70e96-f353-44e0-b7bc-a39c9b54b634** to include **/submit/step2**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/36f70e96-f353-44e0-b7bc-a39c9b54b634/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/f3x/submit/step2/36f70e96-f353-44e0-b7bc-a39c9b54b634",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#treasurer_last_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTEST",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#treasurer_first_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTEST",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#filingPassword",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t",
+        "severity": "error"
+      }
+    ],
+    "Amendments -> should test Create an amendment (Attempt 2)": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 14:20",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 1 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"b8d6d494-d26c-4489-bd5c-58112ca39121\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Ant\",\n  \"first_name\": \"Accidental\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T14:15:47.087554-04:00\",\n  \"updated\": \"2025-09-03T14:15:47.087569-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"6e1852bc-96b7-4fd8-a02c-b9f2f899a999\",\n  \"committee_name\": null,\n  \"street_1\": null,\n  \"street_2\": null,\n  \"city\": null,\n  \"state\": null,\n  \"zip\": null,\n  \"form_type\": \"F3XN\",\n  \"report_version\": null,\n  \"report_id\": null,\n  \"report_code\": \"Q2\",\n  \"coverage_from_date\": \"2025-04-01\",\n  \"coverage_through_date\": \"2025-06-30\",\n  \"treasurer_last_name\": null,\n  \"treasurer_first_name\": null,\n  \"treasurer_middle_name\": null,\n  \"treasurer_prefix\": null,\n  \"treasurer_suffix\": null,\n  \"date_signed\": null,\n  \"calculation_status\": null,\n  \"calculation_token\": null,\n  \"confirmation_email_1\": null,\n  \"confirmation_email_2\": null,\n  \"created\": \"2025-09-03T14:15:47.139547-04:00\",\n  \"updated\": \"2025-09-03T14:15:47.139556-04:00\",\n  \"upload_submission\": null,\n  \"webprint_submission\": null,\n  \"can_delete\": true,\n  \"can_unamend\": false,\n  \"filing_frequency\": null,\n  \"report_type_category\": null,\n  \"change_of_address\": false,\n  \"election_code\": null,\n  \"date_of_election\": null,\n  \"state_of_election\": null,\n  \"qualified_committee\": false,\n  \"L6b_cash_on_hand_beginning_period\": null,\n  \"L6c_total_receipts_period\": null,\n  \"L6d_subtotal_period\": null,\n  \"L7_total_disbursements_period\": null,\n  \"L8_cash_on_hand_at_close_period\": null,\n  \"L9_debts_to_period\": null,\n  \"L10_debts_by_period\": null,\n  \"L11ai_itemized_period\": null,\n  \"L11aii_unitemized_period\": null,\n  \"L11aiii_total_period\": null,\n  \"L11b_political_party_committees_period\": null,\n  \"L11c_other_political_committees_pacs_period\": null,\n  \"L11d_total_contributions_period\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_period\": null,\n  \"L13_all_loans_received_period\": null,\n  \"L14_loan_repayments_received_period\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_period\": null,\n  \"L16_refunds_of_federal_contributions_period\": null,\n  \"L17_other_federal_receipts_dividends_period\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_period\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_period\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_period\": null,\n  \"L19_total_receipts_period\": null,\n  \"L20_total_federal_receipts_period\": null,\n  \"L21ai_federal_share_period\": null,\n  \"L21aii_nonfederal_share_period\": null,\n  \"L21b_other_federal_operating_expenditures_period\": null,\n  \"L21c_total_operating_expenditures_period\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_period\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_period\": null,\n  \"L24_independent_expenditures_period\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_period\": null,\n  \"L26_loan_repayments_period\": null,\n  \"L27_loans_made_period\": null,\n  \"L28a_individuals_persons_period\": null,\n  \"L28b_political_party_committees_period\": null,\n  \"L28c_other_political_committees_period\": null,\n  \"L28d_total_contributions_refunds_period\": null,\n  \"L29_other_disbursements_period\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_period\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_period\": null,\n  \"L30b_nonallocable_fed_election_activity_period\": null,\n  \"L30c_total_federal_election_activity_period\": null,\n  \"L31_total_disbursements_period\": null,\n  \"L32_total_federal_disbursements_period\": null,\n  \"L33_total_contributions_period\": null,\n  \"L34_total_contribution_refunds_period\": null,\n  \"L35_net_contributions_period\": null,\n  \"L36_total_federal_operating_expenditures_period\": null,\n  \"L37_offsets_to_operating_expenditures_period\": null,\n  \"L38_net_operating_expenditures_period\": null,\n  \"L6a_cash_on_hand_jan_1_ytd\": null,\n  \"L6a_year_for_above_ytd\": \"2025\",\n  \"L6c_total_receipts_ytd\": null,\n  \"L6d_subtotal_ytd\": null,\n  \"L7_total_disbursements_ytd\": null,\n  \"L8_cash_on_hand_close_ytd\": null,\n  \"L11ai_itemized_ytd\": null,\n  \"L11aii_unitemized_ytd\": null,\n  \"L11aiii_total_ytd\": null,\n  \"L11b_political_party_committees_ytd\": null,\n  \"L11c_other_political_committees_pacs_ytd\": null,\n  \"L11d_total_contributions_ytd\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_ytd\": null,\n  \"L13_all_loans_received_ytd\": null,\n  \"L14_loan_repayments_received_ytd\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_ytd\": null,\n  \"L16_refunds_of_federal_contributions_ytd\": null,\n  \"L17_other_federal_receipts_dividends_ytd\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_ytd\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_ytd\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_ytd\": null,\n  \"L19_total_receipts_ytd\": null,\n  \"L20_total_federal_receipts_ytd\": null,\n  \"L21ai_federal_share_ytd\": null,\n  \"L21aii_nonfederal_share_ytd\": null,\n  \"L21b_other_federal_operating_expenditures_ytd\": null,\n  \"L21c_total_operating_expenditures_ytd\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_ytd\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_ytd\": null,\n  \"L24_independent_expenditures_ytd\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_ytd\": null,\n  \"L26_loan_repayments_made_ytd\": null,\n  \"L27_loans_made_ytd\": null,\n  \"L28a_individuals_persons_ytd\": null,\n  \"L28b_political_party_committees_ytd\": null,\n  \"L28c_other_political_committees_ytd\": null,\n  \"L28d_total_contributions_refunds_ytd\": null,\n  \"L29_other_disbursements_ytd\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_ytd\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_ytd\": null,\n  \"L30b_nonallocable_fed_election_activity_ytd\": null,\n  \"L30c_total_federal_election_activity_ytd\": null,\n  \"L31_total_disbursements_ytd\": null,\n  \"L32_total_federal_disbursements_ytd\": null,\n  \"L33_total_contributions_ytd\": null,\n  \"L34_total_contribution_refunds_ytd\": null,\n  \"L35_net_contributions_ytd\": null,\n  \"L36_total_federal_operating_expenditures_ytd\": null,\n  \"L37_offsets_to_operating_expenditures_ytd\": null,\n  \"L38_net_operating_expenditures_ytd\": null,\n  \"report_type\": \"F3X\"\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/reports/transactions/report/6e1852bc-96b7-4fd8-a02c-b9f2f899a999/list",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/6e1852bc-96b7-4fd8-a02c-b9f2f899a999/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=6e1852bc-96b7-4fd8-a02c-b9f2f899a999&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, SUBMIT YOUR REPORT",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=6e1852bc-96b7-4fd8-a02c-b9f2f899a999&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=6e1852bc-96b7-4fd8-a02c-b9f2f899a999&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Submit report",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "url\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/6e1852bc-96b7-4fd8-a02c-b9f2f899a999/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **http://localhost:4200/reports/f3x/submit/step2/6e1852bc-96b7-4fd8-a02c-b9f2f899a999** to include **/submit/step2**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/6e1852bc-96b7-4fd8-a02c-b9f2f899a999/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/f3x/submit/step2/6e1852bc-96b7-4fd8-a02c-b9f2f899a999",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#treasurer_last_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTEST",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#treasurer_first_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTEST",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#filingPassword",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t",
+        "severity": "error"
+      }
+    ],
+    "Amendments -> should test Create an amendment (Attempt 3)": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 14:20",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 1 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"87c79a99-1a2a-49e8-8b61-7f874ad53af6\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Ant\",\n  \"first_name\": \"Accidental\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T14:15:50.409984-04:00\",\n  \"updated\": \"2025-09-03T14:15:50.410005-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"e7a10598-397a-43c7-a5e2-54bd833aa3b7\",\n  \"committee_name\": null,\n  \"street_1\": null,\n  \"street_2\": null,\n  \"city\": null,\n  \"state\": null,\n  \"zip\": null,\n  \"form_type\": \"F3XN\",\n  \"report_version\": null,\n  \"report_id\": null,\n  \"report_code\": \"Q2\",\n  \"coverage_from_date\": \"2025-04-01\",\n  \"coverage_through_date\": \"2025-06-30\",\n  \"treasurer_last_name\": null,\n  \"treasurer_first_name\": null,\n  \"treasurer_middle_name\": null,\n  \"treasurer_prefix\": null,\n  \"treasurer_suffix\": null,\n  \"date_signed\": null,\n  \"calculation_status\": null,\n  \"calculation_token\": null,\n  \"confirmation_email_1\": null,\n  \"confirmation_email_2\": null,\n  \"created\": \"2025-09-03T14:15:50.485176-04:00\",\n  \"updated\": \"2025-09-03T14:15:50.485185-04:00\",\n  \"upload_submission\": null,\n  \"webprint_submission\": null,\n  \"can_delete\": true,\n  \"can_unamend\": false,\n  \"filing_frequency\": null,\n  \"report_type_category\": null,\n  \"change_of_address\": false,\n  \"election_code\": null,\n  \"date_of_election\": null,\n  \"state_of_election\": null,\n  \"qualified_committee\": false,\n  \"L6b_cash_on_hand_beginning_period\": null,\n  \"L6c_total_receipts_period\": null,\n  \"L6d_subtotal_period\": null,\n  \"L7_total_disbursements_period\": null,\n  \"L8_cash_on_hand_at_close_period\": null,\n  \"L9_debts_to_period\": null,\n  \"L10_debts_by_period\": null,\n  \"L11ai_itemized_period\": null,\n  \"L11aii_unitemized_period\": null,\n  \"L11aiii_total_period\": null,\n  \"L11b_political_party_committees_period\": null,\n  \"L11c_other_political_committees_pacs_period\": null,\n  \"L11d_total_contributions_period\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_period\": null,\n  \"L13_all_loans_received_period\": null,\n  \"L14_loan_repayments_received_period\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_period\": null,\n  \"L16_refunds_of_federal_contributions_period\": null,\n  \"L17_other_federal_receipts_dividends_period\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_period\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_period\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_period\": null,\n  \"L19_total_receipts_period\": null,\n  \"L20_total_federal_receipts_period\": null,\n  \"L21ai_federal_share_period\": null,\n  \"L21aii_nonfederal_share_period\": null,\n  \"L21b_other_federal_operating_expenditures_period\": null,\n  \"L21c_total_operating_expenditures_period\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_period\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_period\": null,\n  \"L24_independent_expenditures_period\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_period\": null,\n  \"L26_loan_repayments_period\": null,\n  \"L27_loans_made_period\": null,\n  \"L28a_individuals_persons_period\": null,\n  \"L28b_political_party_committees_period\": null,\n  \"L28c_other_political_committees_period\": null,\n  \"L28d_total_contributions_refunds_period\": null,\n  \"L29_other_disbursements_period\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_period\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_period\": null,\n  \"L30b_nonallocable_fed_election_activity_period\": null,\n  \"L30c_total_federal_election_activity_period\": null,\n  \"L31_total_disbursements_period\": null,\n  \"L32_total_federal_disbursements_period\": null,\n  \"L33_total_contributions_period\": null,\n  \"L34_total_contribution_refunds_period\": null,\n  \"L35_net_contributions_period\": null,\n  \"L36_total_federal_operating_expenditures_period\": null,\n  \"L37_offsets_to_operating_expenditures_period\": null,\n  \"L38_net_operating_expenditures_period\": null,\n  \"L6a_cash_on_hand_jan_1_ytd\": null,\n  \"L6a_year_for_above_ytd\": \"2025\",\n  \"L6c_total_receipts_ytd\": null,\n  \"L6d_subtotal_ytd\": null,\n  \"L7_total_disbursements_ytd\": null,\n  \"L8_cash_on_hand_close_ytd\": null,\n  \"L11ai_itemized_ytd\": null,\n  \"L11aii_unitemized_ytd\": null,\n  \"L11aiii_total_ytd\": null,\n  \"L11b_political_party_committees_ytd\": null,\n  \"L11c_other_political_committees_pacs_ytd\": null,\n  \"L11d_total_contributions_ytd\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_ytd\": null,\n  \"L13_all_loans_received_ytd\": null,\n  \"L14_loan_repayments_received_ytd\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_ytd\": null,\n  \"L16_refunds_of_federal_contributions_ytd\": null,\n  \"L17_other_federal_receipts_dividends_ytd\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_ytd\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_ytd\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_ytd\": null,\n  \"L19_total_receipts_ytd\": null,\n  \"L20_total_federal_receipts_ytd\": null,\n  \"L21ai_federal_share_ytd\": null,\n  \"L21aii_nonfederal_share_ytd\": null,\n  \"L21b_other_federal_operating_expenditures_ytd\": null,\n  \"L21c_total_operating_expenditures_ytd\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_ytd\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_ytd\": null,\n  \"L24_independent_expenditures_ytd\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_ytd\": null,\n  \"L26_loan_repayments_made_ytd\": null,\n  \"L27_loans_made_ytd\": null,\n  \"L28a_individuals_persons_ytd\": null,\n  \"L28b_political_party_committees_ytd\": null,\n  \"L28c_other_political_committees_ytd\": null,\n  \"L28d_total_contributions_refunds_ytd\": null,\n  \"L29_other_disbursements_ytd\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_ytd\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_ytd\": null,\n  \"L30b_nonallocable_fed_election_activity_ytd\": null,\n  \"L30c_total_federal_election_activity_ytd\": null,\n  \"L31_total_disbursements_ytd\": null,\n  \"L32_total_federal_disbursements_ytd\": null,\n  \"L33_total_contributions_ytd\": null,\n  \"L34_total_contribution_refunds_ytd\": null,\n  \"L35_net_contributions_ytd\": null,\n  \"L36_total_federal_operating_expenditures_ytd\": null,\n  \"L37_offsets_to_operating_expenditures_ytd\": null,\n  \"L38_net_operating_expenditures_ytd\": null,\n  \"report_type\": \"F3X\"\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/reports/transactions/report/e7a10598-397a-43c7-a5e2-54bd833aa3b7/list",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/e7a10598-397a-43c7-a5e2-54bd833aa3b7/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, SUBMIT YOUR REPORT",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=e7a10598-397a-43c7-a5e2-54bd833aa3b7&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=e7a10598-397a-43c7-a5e2-54bd833aa3b7&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=e7a10598-397a-43c7-a5e2-54bd833aa3b7&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Submit report",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/e7a10598-397a-43c7-a5e2-54bd833aa3b7/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "url\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **http://localhost:4200/reports/f3x/submit/step2/e7a10598-397a-43c7-a5e2-54bd833aa3b7** to include **/submit/step2**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/e7a10598-397a-43c7-a5e2-54bd833aa3b7/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/f3x/submit/step2/e7a10598-397a-43c7-a5e2-54bd833aa3b7",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#treasurer_last_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTEST",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#treasurer_first_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTEST",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#filingPassword",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t",
+        "severity": "error"
+      }
+    ]
+  }
+}
