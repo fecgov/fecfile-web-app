@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Form3Service } from 'app/shared/services/form-3.service';
@@ -14,7 +14,6 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { environment } from 'environments/environment';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { MessageService } from 'primeng/api';
-import { combineLatest, startWith } from 'rxjs';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
@@ -27,10 +26,11 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { CoverageDates, Form3, F3FormTypes } from 'app/shared/models';
-import { injectParams } from 'ngxtension/inject-params';
+import { Form3, F3FormTypes } from 'app/shared/models';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { injectParams } from 'ngxtension/inject-params';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-create-f3-step1',
@@ -51,7 +51,6 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   private readonly form3Service = inject(Form3Service);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
-
   readonly formProperties: string[] = [
     'report_type_category',
     'report_code',
@@ -62,53 +61,75 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     'form_type',
   ];
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
-  stateOptions: PrimeOptions = [];
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3Schema), {
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+  readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3Schema), {
     updateOn: 'blur',
   });
 
-  readonly F3ReportTypeCategories = F3ReportTypeCategories;
-  public existingCoverage: CoverageDates[] | undefined;
-  public usedReportCodes?: ReportCodes[];
+  readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
+  readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
+  readonly existingCoverage = derivedAsync(async () => {
+    const reportId = this.reportId();
+    if (reportId && !this.report()) return undefined;
+    let existingCoverage = await this.form3Service.getF3CoverageDates();
+    if (reportId) {
+      existingCoverage = existingCoverage.filter(
+        (coverage) => coverage.coverage_from_date?.getTime() !== (this.report() as Form3).coverage_from_date?.getTime(),
+      );
+    }
+    this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+    return existingCoverage;
+  });
+
+  readonly usedReportCodes = computed(() => {
+    const existingCoverage = this.existingCoverage();
+    if (!existingCoverage) return [];
+    return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
+      const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
+      if (years.includes(this.thisYear)) {
+        return [...codes, coverage.report_code] as ReportCodes[];
+      }
+      return codes;
+    }, []);
+  });
+
+  readonly disabledReportCodes = computed(() => {
+    const statusObject = Object.values(ReportCodes).reduce(
+      (accumulator, currentCode) => {
+        accumulator[currentCode] = this.checkDisableReportCode(currentCode);
+        return accumulator;
+      },
+      {} as { [key in ReportCodes]: boolean },
+    );
+
+    return statusObject;
+  });
+
+  readonly reportTypeCategories = [F3ReportTypeCategories.ELECTION_YEAR, F3ReportTypeCategories.NON_ELECTION_YEAR];
+  readonly reportCodes = computed(() =>
+    this.isElectionYear() ? quarterlyElectionYearReportCodes : quarterlyNonElectionYearReportCodes,
+  );
+  private readonly isElectionYear = computed(() => F3ReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
+  readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
+  private readonly coverages = computed(() => {
+    const coverageDatesFunction = getCoverageDatesFunction(this.reportCode());
+    if (!coverageDatesFunction) return undefined;
+    return coverageDatesFunction(this.thisYear, this.isElectionYear(), 'Q');
+  });
+
   public thisYear = new Date().getFullYear();
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   readonly reportId = injectParams('reportId');
   readonly report = derivedAsync(() => {
-    const id = this.reportId();
-    if (!id) return undefined;
-    return this.form3Service.get(id);
+    const reportId = this.reportId();
+    if (!reportId) return undefined;
+    return this.form3Service.get(reportId);
   });
 
   constructor() {
     super();
-    effectOnceIf(
-      () => this.report(),
-      () => {
-        const report = this.report();
-        this.form.patchValue(report!);
-      },
-    );
-  }
-
-  ngOnInit(): void {
-    this.form3Service.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-
-    this.form3Service.getF3CoverageDates().then((existingCoverage) => {
-      this.form.addControl('report_type_category', new SubscriptionFormControl(this.getReportTypeCategories()[0]));
-      this.form?.patchValue({ form_type: 'F3N' });
-      this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
-      this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
-      this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
-      (this.form?.get('report_type_category') as SubscriptionFormControl)?.addSubscription(() => {
-        this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
-      }, this.destroy$);
-
-      this.existingCoverage = existingCoverage;
-      this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
-    });
-
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+    this.form.patchValue({ form_type: F3FormTypes.F3N, report_type_category: this.reportTypeCategories[0] });
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
@@ -117,66 +138,52 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
       this.form.controls['coverage_through_date'].updateValueAndValidity();
     });
-    // Prepopulate coverage dates if the report code has rules to do so
-    combineLatest([
-      this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
-      this.form.controls['report_type_category'].valueChanges.pipe(
-        startWith(this.form.controls['report_type_category'].value),
-      ),
-    ]).subscribe(([reportCode, reportTypeCategory]) => {
-      const coverageDatesFunction = getCoverageDatesFunction(reportCode);
-      if (coverageDatesFunction) {
-        const isElectionYear = F3ReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
-        const [coverage_from_date, coverage_through_date] = coverageDatesFunction(this.thisYear, isElectionYear, 'Q');
-        this.form.patchValue({ coverage_from_date, coverage_through_date });
+
+    SchemaUtils.addJsonSchemaValidators(this.form, f3Schema, false);
+
+    effectOnceIf(
+      () => this.existingCoverage() && !this.reportId(),
+      () => {
+        this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      },
+    );
+    effectOnceIf(
+      () => this.report(),
+      () => this.form.patchValue(this.report()!, { emitEvent: false }),
+    );
+
+    effect(() => {
+      const coverages = this.coverages();
+      if (coverages) {
+        this.form.patchValue({ coverage_from_date: coverages[0], coverage_through_date: coverages[1] });
       } else {
         this.form.patchValue({ coverage_from_date: null, coverage_through_date: null });
       }
     });
-
-    SchemaUtils.addJsonSchemaValidators(this.form, f3Schema, false);
-  }
-
-  public getReportTypeCategories(): F3ReportTypeCategoryType[] {
-    return [F3ReportTypeCategories.ELECTION_YEAR, F3ReportTypeCategories.NON_ELECTION_YEAR];
-  }
-
-  public getReportCodes(): ReportCodes[] {
-    switch (this.form.get('report_type_category')?.value) {
-      case F3ReportTypeCategories.ELECTION_YEAR:
-        return quarterlyElectionYearReportCodes;
-      case F3ReportTypeCategories.NON_ELECTION_YEAR:
-        return quarterlyNonElectionYearReportCodes;
-      default:
-        return [];
-    }
-  }
-
-  public getUsedReportCodes(existingCoverage: CoverageDates[]): ReportCodes[] {
-    return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
-      const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
-      if (years.includes(this.thisYear)) {
-        return [...codes, coverage.report_code] as ReportCodes[];
-      }
-      return codes;
-    }, []);
-  }
-
-  public getFirstEnabledReportCode() {
-    return this.getReportCodes().find((reportCode) => {
-      return !this.usedReportCodes?.includes(reportCode);
+    effect(() => {
+      this.reportTypeCategory();
+      this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
     });
   }
 
-  public isElectionReport() {
-    return electionReportCodes.includes(this.form.get('report_code')?.value);
+  ngOnInit() {
+    this.form3Service.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
   }
 
-  public goBack() {
-    this.router.navigateByUrl('/reports');
+  private getFirstEnabledReportCode() {
+    const report = this.report();
+    if (report && this.reportCodes().includes(report.report_code as ReportCodes)) return report.report_code;
+    return this.reportCodes().find((reportCode) => {
+      return !this.usedReportCodes().includes(reportCode);
+    });
   }
 
-  public async save(jump: 'continue' | void) {
+  private checkDisableReportCode(reportCode: ReportCodes) {
+    if (this.report()?.report_code === reportCode) return false;
+    return this.usedReportCodes().includes(reportCode);
+  }
+
+  async save(jump: 'continue' | void) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {

@@ -7,8 +7,8 @@ import {
   MockContact,
   Organization_A,
 } from '../requests/library/contacts';
-import { makeContact, makeF3x } from '../requests/methods';
-import { F3X, F3X_Q2 } from '../requests/library/reports';
+import { makeContact, makeF24, makeF3x } from '../requests/methods';
+import { F24_24, F3X, F3X_Q2 } from '../requests/library/reports';
 
 export interface Setup {
   organization?: boolean;
@@ -18,10 +18,12 @@ export interface Setup {
   candidateSenate?: boolean;
   committee?: boolean;
   report?: F3X;
+  reports?: F3X[];
+  f24?: boolean;
 }
 
 type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
-function addContact(contact: MockContact, results: F3xResults, property: ConType) {
+export function addContact(contact: MockContact, results: Results, property: ConType) {
   return new Cypress.Promise((resolve) => {
     makeContact(contact, (response) => {
       results[property] = response.body;
@@ -30,7 +32,7 @@ function addContact(contact: MockContact, results: F3xResults, property: ConType
   });
 }
 
-export interface F3xResults {
+export interface Results {
   organization: any | null;
   individual: any | null;
   individual2: any | null;
@@ -38,11 +40,12 @@ export interface F3xResults {
   candidateSenate: any | null;
   committee: any | null;
   report: string;
+  f24: string | null;
 }
 
-export async function F3XSetup(setup: Setup = {}) {
+export async function DataSetup(setup: Setup = {}) {
   // Initialize results object
-  const results: F3xResults = {
+  const results: Results = {
     organization: null,
     individual: null,
     individual2: null,
@@ -50,6 +53,7 @@ export async function F3XSetup(setup: Setup = {}) {
     candidateSenate: null,
     committee: null,
     report: '',
+    f24: null,
   };
 
   // Create an array of promises
@@ -80,14 +84,38 @@ export async function F3XSetup(setup: Setup = {}) {
     apiCalls.push(addContact(Committee_A, results, 'committee'));
   }
 
-  apiCalls.push(
-    new Cypress.Promise((resolve) => {
-      makeF3x(setup.report ?? F3X_Q2, (response) => {
-        results.report = response.body.id;
-        resolve();
-      });
-    }),
-  );
+  if (setup.f24) {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeF24(F24_24, (response) => {
+          results.f24 = response.body.id;
+          resolve();
+        });
+      }),
+    );
+  }
+
+  if (setup.reports) {
+    setup.reports.forEach((report, index) => {
+      apiCalls.push(
+        new Cypress.Promise((resolve) => {
+          makeF3x(report, (response) => {
+            if (index === 0) results.report = response.body.id;
+            resolve();
+          });
+        }),
+      );
+    });
+  } else {
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeF3x(setup.report ?? F3X_Q2, (response) => {
+          results.report = response.body.id;
+          resolve();
+        });
+      }),
+    );
+  }
 
   // Combine all the Chainables and return them
   await Cypress.Promise.all(apiCalls);

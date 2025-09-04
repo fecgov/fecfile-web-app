@@ -3,7 +3,7 @@ import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
-import { F3XSetup, Setup } from './f3x-setup';
+import { DataSetup, Setup } from './setup';
 import { makeF3x, makeTransaction } from '../requests/methods';
 import { F3X_Q3 } from '../requests/library/reports';
 import {
@@ -14,6 +14,7 @@ import {
   LoanInfo,
 } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
+import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -41,7 +42,7 @@ function clickLoan(button: string, urlCheck = '/list') {
 }
 
 function setupLoanFromBank(setup: Setup) {
-  return cy.wrap(F3XSetup(setup)).then(async (result: any) => {
+  return cy.wrap(DataSetup(setup)).then(async (result: any) => {
     const apiCalls = [];
     const organization = result.organization;
     const reportId = result.report;
@@ -97,7 +98,7 @@ describe('Loans', () => {
     makeF3x(F3X_Q3, (response) => {
       const q3 = response.body.id;
       setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-        cy.visit(`/reports/transactions/report/${q3}/list`);
+        ReportListPage.goToReportList(q3);
         clickLoan('New loan agreement');
 
         PageUtils.urlCheck('/C1_LOAN_AGREEMENT');
@@ -129,8 +130,8 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    cy.wrap(F3XSetup({ individual: true, organization: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Loans().FromBank();
 
       ContactLookup.getContact(result.organization.name);
@@ -158,12 +159,12 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       clickLoan('Make loan repayment', 'LOAN_REPAYMENT_MADE');
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
       PageUtils.enterValue('#amount', formData.amount);
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave(result.report);
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Made').should('exist');
     });
@@ -171,7 +172,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       clickLoan('Review loan agreement');
       PageUtils.clickButton('Save transactions');
       PageUtils.urlCheck('/list');
@@ -181,14 +182,14 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       clickLoan('Edit');
 
       PageUtils.clickButton('Save & add loan guarantor');
       PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
-      cy.contains(/^Save$/).click();
+      TransactionDetailPage.clickSave(result.report);
       clickLoan('Edit');
       cy.contains('ORGANIZATION NAME').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);

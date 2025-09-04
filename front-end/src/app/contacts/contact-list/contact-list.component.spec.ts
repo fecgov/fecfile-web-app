@@ -90,15 +90,15 @@ describe('ContactListComponent', () => {
   });
 
   it('#addItem opens the dialog to add an item', () => {
-    component.isNewItem = false;
+    component.isNewItem.set(false);
     component.addItem();
-    expect(component.isNewItem).toBe(true);
+    expect(component.isNewItem()).toBe(true);
   });
 
   it('#editItem opens the dialog to edit an item', () => {
-    component.isNewItem = true;
+    component.isNewItem.set(true);
     component.editItem(contact);
-    expect(component.isNewItem).toBe(false);
+    expect(component.isNewItem()).toBe(false);
   });
 
   it('#displayName returns the contact name', () => {
@@ -132,37 +132,28 @@ describe('ContactListComponent', () => {
   });
 
   it('#restoreButton should be visible if there is a deleted contact', async () => {
-    expect(component.restoreContactsButtonIsVisible).toBeFalse();
-
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 1,
-        next: '',
-        previous: '',
-        pageNumber: 1,
-        results: [contact],
-      }),
-    );
-    await component.checkForDeletedContacts();
-
-    expect(component.restoreContactsButtonIsVisible).toBeTrue();
+    spyOn(deletedContactService, 'getTableData').and.resolveTo({
+      count: 1,
+      next: '',
+      previous: '',
+      pageNumber: 1,
+      results: [contact],
+    });
+    const visible = await component.restoreLoader();
+    expect(visible).toBeTrue();
   });
 
   it('#restoreButton should not be visible if there are no deleted contacts', async () => {
-    component.restoreContactsButtonIsVisible = true;
+    spyOn(deletedContactService, 'getTableData').and.resolveTo({
+      count: 0,
+      next: '',
+      previous: '',
+      pageNumber: 1,
+      results: [],
+    });
 
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 0,
-        next: '',
-        previous: '',
-        pageNumber: 1,
-        results: [],
-      }),
-    );
-    await component.checkForDeletedContacts();
-
-    expect(component.restoreContactsButtonIsVisible).toBeFalse();
+    const visible = await component.restoreLoader();
+    expect(visible).toBeFalse();
   });
 
   it('#saveContact calls itemService', () => {

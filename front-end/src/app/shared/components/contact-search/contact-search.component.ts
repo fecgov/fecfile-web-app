@@ -28,6 +28,7 @@ export class ContactSearchComponent {
   readonly isBare = input(true);
 
   readonly manager = computed(() => this.cmservice.get(this.key()));
+  readonly contactDropdownReadonly = computed(() => this.manager().contactTypeOptions().length === 1);
 
   contactLookupList: SelectItemGroup[] = [];
   searchTerm = '';

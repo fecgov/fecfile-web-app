@@ -124,6 +124,50 @@ export function buildLoanAgreement(
   };
 }
 
+export function buildDebtOwedByCommittee(
+  contact: Contact,
+  report_id: string,
+  purpose_of_debt_or_obligation: string,
+  amount: number,
+  extra_data?: any,
+) {
+  return {
+    children: [],
+    form_type: 'SD10',
+    transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
+    schema_name: 'DEBTS',
+    fields_to_validate: [
+      'report_type',
+      'form_type',
+      'transaction_type_identifier',
+      'entity_type',
+      'creditor_last_name',
+      'creditor_first_name',
+      'creditor_middle_name',
+      'creditor_prefix',
+      'creditor_suffix',
+      'creditor_street_1',
+      'creditor_street_2',
+      'creditor_city',
+      'creditor_state',
+      'creditor_zip',
+      'purpose_of_debt_or_obligation',
+      'beginning_balance',
+      'incurred_amount',
+    ],
+    report_ids: [report_id],
+    entity_type: 'COM',
+    purpose_of_debt_or_obligation,
+    beginning_balance: 0,
+    incurred_amount: amount,
+    payment_amount: 0,
+    balance_at_close: amount,
+    schedule_id: 'D',
+    ...getContactFields('creditor', contact),
+    ...extra_data,
+  };
+}
+
 export function buildLoanFromBank(
   loanInfo: LoanInfo,
   contact: Contact,
@@ -149,6 +193,7 @@ export function buildLoanFromBank(
     ...extra_data,
   };
 }
+
 export function buildLoanReceipt(
   contribution_amount: number,
   contribution_date: string,
