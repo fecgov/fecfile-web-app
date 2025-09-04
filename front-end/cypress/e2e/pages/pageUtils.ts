@@ -1,6 +1,11 @@
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
+  static closeToast() {
+    const alias = PageUtils.getAlias('');
+    cy.get(alias).find('.p-toast-close-button').should('exist').click();
+  }
+
   static clickElement(elementSelector: string, alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias)
@@ -109,7 +114,8 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('button', name).click({ force });
+    cy.get(alias).contains('button', name).as('btn');
+    cy.get('@btn').click({ force });
   }
 
   static dateToString(date: Date) {
@@ -149,8 +155,8 @@ export class PageUtils {
    * Example: <td>text</td> is good, but <td><div>text</div></td> won't work
    * @param identifier string to identify which Row the kabob is in.
    */
-  static getKabob(identifier: string) {
-    const alias = PageUtils.getAlias('');
+  static getKabob(identifier: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
     cy.get(alias)
       .contains(identifier)
       .closest('td')
@@ -160,15 +166,21 @@ export class PageUtils {
       .children()
       .first()
       .children()
-      .first()
-      .scrollIntoView()
-      .should('be.visible')
-      .click();
-    return cy.get(alias).find('.p-popover');
+      .then(($btn) => {
+        cy.wrap($btn.first()).as('btn');
+        cy.get('@btn').click();
+      });
   }
 
-  static clickKababItem(identifier: string, item: string) {
-    PageUtils.getKabob(identifier).contains(item).first().click({ force: true });
+  static clickKababItem(identifier: string, item: string, alias = '') {
+    PageUtils.getKabob(identifier, alias);
+    cy.get(PageUtils.getAlias(''))
+      .find('.p-popover')
+      .contains(item)
+      .then(($item) => {
+        cy.wrap($item.first()).as('btn');
+        cy.get('@btn').click();
+      });
   }
 
   static switchCommittee(committeeId: string) {

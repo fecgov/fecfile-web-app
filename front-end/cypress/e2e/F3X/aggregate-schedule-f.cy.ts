@@ -3,12 +3,13 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { makeTransaction } from '../requests/methods';
 import { buildScheduleF } from '../requests/library/transactions';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { ContactLookup } from '../pages/contactLookup';
+import { ReportListPage } from '../pages/reportListPage';
 
 function generateReportAndContacts(transData: [number, string, boolean][]) {
   return cy
-    .wrap(F3XSetup({ individual: true, candidate: true, candidateSenate: true, committee: true, organization: true }))
+    .wrap(DataSetup({ individual: true, candidate: true, candidateSenate: true, committee: true, organization: true }))
     .then((result: any) => {
       transData.forEach((data, i) => {
         const transaction = buildScheduleF(
@@ -36,7 +37,7 @@ describe('Tests transaction form aggregate calculation', () => {
       [200.01, '2025-04-12', true],
       [25.0, '2025-04-16', true],
     ]).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.get(':nth-child(2) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
@@ -110,7 +111,7 @@ describe('Tests transaction form aggregate calculation', () => {
       [200.01, '2025-04-12', true],
       [25.0, '2025-04-16', false],
     ]).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
@@ -126,7 +127,7 @@ describe('Tests transaction form aggregate calculation', () => {
       [200.01, '2025-04-12', true],
       [25.0, '2025-04-10', true],
     ]).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
@@ -144,7 +145,7 @@ describe('Tests transaction form aggregate calculation', () => {
       [200.01, '2025-04-12', true],
       [25.0, '2025-04-16', true],
     ]).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 
@@ -180,7 +181,7 @@ describe('Tests transaction form aggregate calculation', () => {
       [25.0, '2025-04-16', true],
       [40.0, '2025-04-20', true],
     ]).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 

@@ -1,7 +1,7 @@
 import { PageUtils } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
 import { Initialize } from '../pages/loginPage';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 
 describe('Amendments', () => {
   beforeEach(() => {
@@ -10,8 +10,8 @@ describe('Amendments', () => {
 
   it('should test Create an amendment', () => {
     const alias = PageUtils.getAlias('');
-    cy.wrap(F3XSetup({ individual: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
       PageUtils.clickLink('Submit report');
       PageUtils.urlCheck('/submit/step2');

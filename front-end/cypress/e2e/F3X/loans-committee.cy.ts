@@ -3,9 +3,10 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { ContactFormData } from '../models/ContactFormModel';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
+import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -15,8 +16,8 @@ const formData = {
 };
 
 function setupLoanByCommittee() {
-  return cy.wrap(F3XSetup({ individual: true, committee: true })).then((result: any) => {
-    cy.visit(`/reports/transactions/report/${result.report}/list`);
+  return cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
+    ReportListPage.goToReportList(result.report);
     StartTransaction.Loans().ByCommittee();
     // Search for created committee and enter load data, then add load guarantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');
@@ -25,22 +26,6 @@ function setupLoanByCommittee() {
     TransactionDetailPage.enterLoanFormData(formData);
     return cy.wrap(result);
   });
-}
-
-function addGuarantor(individual: ContactFormData) {
-  PageUtils.clickButton('Save & add loan guarantor');
-  PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
-  ContactLookup.getContact(individual.last_name);
-  cy.get('#amount').safeType(formData['amount']);
-  cy.intercept({
-    method: 'Post',
-  }).as('saveGuarantor');
-  PageUtils.clickButton('Save & add loan guarantor');
-  cy.wait('@saveGuarantor');
-  PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-  PageUtils.clickButton('Cancel');
-
-  PageUtils.urlCheck('/list');
 }
 
 describe('Loans', () => {
@@ -88,7 +73,7 @@ describe('Loans', () => {
 
   it('should test: Loan By Committee - add Guarantor', () => {
     setupLoanByCommittee().then((result: any) => {
-      addGuarantor(result.individual);
+      TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       cy.contains('Loan By Committee').click();
       PageUtils.urlCheck('/list/');
       cy.contains(result.individual.last_name).should('exist');
@@ -97,8 +82,11 @@ describe('Loans', () => {
 
   it('should test: Loan By Committee - delete Guarantor', () => {
     setupLoanByCommittee().then((result: any) => {
-      addGuarantor(result.individual);
-      PageUtils.clickKababItem('Loan By Committee', 'Edit');
+      TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
+      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
+      cy.contains('Loan By Committee').click();
+      cy.wait('@GuarantorList');
+      cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
       const alias = PageUtils.getAlias('');
       cy.get(alias).find('.p-confirmdialog-accept-button').click();

@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: 'Run Prettier with project configuration'
+          name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:

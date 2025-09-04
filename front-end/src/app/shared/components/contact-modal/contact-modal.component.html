@@ -1,4 +1,11 @@
-<p-dialog [(visible)]="cmservice.showDialog" [style]="{ width: '90%' }" header="Add Contact" [modal]="true">
+<p-dialog
+  [(visible)]="cmservice.showDialog"
+  [style]="{ width: '90%' }"
+  [header]="headerTitle()"
+  [modal]="true"
+  [draggable]="false"
+  closeAriaLabel="Close"
+>
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="grid">
       <div class="col-12">
@@ -229,16 +236,27 @@
         class="p-button-secondary mr-4"
         (click)="cmservice.showDialog.set(false)"
       ></button>
-
       <button
         type="button"
         pButton
         pRipple
-        label="Save & continue"
+        [label]="showHistory() ? 'Save' : 'Save & continue'"
         icon="pi pi-check"
-        class="p-button-info"
+        [class]="showHistory() ? 'p-button-primary' : 'p-button-info'"
         (click)="saveContact()"
       ></button>
+
+      @if (showHistory() && !manager().contact().id) {
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Save & Add More"
+          icon="pi pi-check"
+          class="p-button-info"
+          (click)="saveContact(false)"
+        ></button>
+      }
     </div>
   </ng-template>
 </p-dialog>

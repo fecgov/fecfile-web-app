@@ -39,7 +39,7 @@
         "intl-tel-input": "^23.0.4",
         "lodash": "^4.17.21",
         "luxon": "^3.5.0",
-        "ngrx-store-localstorage": "~19.0.0",
+        "ngrx-store-localstorage": "^19.0.2",
         "ngx-cookie-service": "^19.1.2",
         "ngx-logger": "^5.0.12",
         "ngxtension": "^5.0.0",
@@ -88,6 +88,9 @@
         "tslib": "^2.8.1",
         "typescript": "^5.7.3",
         "zone.js": "^0.15.0"
+    },
+    "overrides": {
+        "rollup": "^4.48.1"
     },
     "browser": {
         "crypto": false
