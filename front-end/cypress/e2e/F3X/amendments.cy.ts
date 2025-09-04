@@ -23,7 +23,7 @@ describe('Amendments', () => {
       PageUtils.findOnPage('div', 'Are you sure?');
 
       PageUtils.clickButton('Yes');
-      cy.wait(5000);
+      cy.wait(7000);
       ReportListPage.goToPage();
 
       PageUtils.clickKababItem('Q2', 'Amend');
