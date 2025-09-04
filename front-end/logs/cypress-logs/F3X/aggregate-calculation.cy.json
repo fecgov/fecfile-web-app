@@ -1,0 +1,3480 @@
+{
+  "cypress/e2e/F3X/aggregate-calculation.cy.ts": {
+    "Tests transaction form aggregate calculation -> existing IE date leapfrogging (Attempt 1)": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 16:10",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:intercept",
+        "message": "Method: GET\nMatcher: \"**/api/v1/committees/**\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:intercept",
+        "message": "Method: POST\nMatcher: \"**/api/v1/committees/*/activate/**\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:intercept",
+        "message": "Method: GET\nMatcher: \"**/api/v1/committee-members/**\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] Warnings while compiling.",
+        "severity": "warning"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] WARNING\n/home/svmsepi0l/dev/fecfile-web-app/front-end/src/app/shared/utils/reatt-redes/reatt-redes.utils.ts depends on 'lodash'. CommonJS or AMD dependencies can cause optimization bailouts.\nFor more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies",
+        "severity": "warning"
+      },
+      {
+        "type": "cons:error",
+        "message": "The ffapi_timeout cookie is not set.",
+        "severity": "error"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#loginButton",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 403",
+        "severity": "warning"
+      },
+      {
+        "type": "cons:log",
+        "message": "Incoming HTTP Error - [Error Code]: 403 Forbidden",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:warn",
+        "message": "NG0912: Component ID generation collision detected. Components 'ProdNoticeComponent' and 'DevNoticeComponent' with selector 'ng-component' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://angular.dev/errors/NG0912",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/login",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "page load\t--page loaded--",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] Warnings while compiling.",
+        "severity": "warning"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] WARNING\n/home/svmsepi0l/dev/fecfile-web-app/front-end/src/app/shared/utils/reatt-redes/reatt-redes.utils.ts depends on 'lodash'. CommonJS or AMD dependencies can cause optimization bailouts.\nFor more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/login/security-notice",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] Warnings while compiling.",
+        "severity": "warning"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] WARNING\n/home/svmsepi0l/dev/fecfile-web-app/front-end/src/app/shared/utils/reatt-redes/reatt-redes.utils.ts depends on 'lodash'. CommonJS or AMD dependencies can cause optimization bailouts.\nFor more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#security-consent-annual",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:warn",
+        "message": "NG0912: Component ID generation collision detected. Components 'ProdNoticeComponent' and 'DevNoticeComponent' with selector 'ng-component' generated the same component ID. To fix this, you can change the selector of one of those components or add an extra host attribute to force a different ID. Find more at https://angular.dev/errors/NG0912",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t[data-cy=\"consent-button\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "PUT http://localhost:8080/api/v1/users/update_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t@GetCommitteeAccounts, {timeout: 30000}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/login/select-committee",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "(GetCommitteeAccounts) GET http://localhost:8080/api/v1/committees/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.committee-list .committee-info",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "(ActivateCommittee) POST http://localhost:8080/api/v1/committees/c94c5d1a-9e73-464d-ad72-b73b5d8667a9/activate/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t@ActivateCommittee, {timeout: 30000}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tManage reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<h1.m-0.ng-star-inserted>** to exist in the DOM\nActual: \t\"<h1.m-0.ng-star-inserted>\"\nExpected: \t\"<h1.m-0.ng-star-inserted>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t@GetCommitteeMembers, {timeout: 30000}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "(GetCommitteeMembers) GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/?page=1&ordering=form_type&page_size=10\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/form-24/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy=\"second-committee-email\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tWelcome to FECfile+",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **undefined** not to exist in the DOM",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 2 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"3e0be9c9-80a5-47c6-b611-c66262e10144\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Ant\",\n  \"first_name\": \"Accidental\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:00:13.696772-04:00\",\n  \"updated\": \"2025-09-03T16:00:13.696793-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"1ec547f2-0804-42bf-8c39-140dd78c7493\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Bat\",\n  \"first_name\": \"Bouncy\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:00:13.789088-04:00\",\n  \"updated\": \"2025-09-03T16:00:13.789115-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"5261e9d6-d633-48fb-b5e3-03369528e455\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"H1AK00001\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"House\",\n  \"first_name\": \"Aleph\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"H\",\n  \"candidate_state\": \"AK\",\n  \"candidate_district\": \"00\",\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:00:13.899174-04:00\",\n  \"updated\": \"2025-09-03T16:00:13.899206-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"d5294801-fa93-4843-9a03-bd769dba6bf5\",\n  \"committee_name\": null,\n  \"street_1\": null,\n  \"street_2\": null,\n  \"city\": null,\n  \"state\": null,\n  \"zip\": null,\n  \"form_type\": \"F3XN\",\n  \"report_version\": null,\n  \"report_id\": null,\n  \"report_code\": \"Q2\",\n  \"coverage_from_date\": \"2025-04-01\",\n  \"coverage_through_date\": \"2025-06-30\",\n  \"treasurer_last_name\": null,\n  \"treasurer_first_name\": null,\n  \"treasurer_middle_name\": null,\n  \"treasurer_prefix\": null,\n  \"treasurer_suffix\": null,\n  \"date_signed\": null,\n  \"calculation_status\": null,\n  \"calculation_token\": null,\n  \"confirmation_email_1\": null,\n  \"confirmation_email_2\": null,\n  \"created\": \"2025-09-03T16:00:14.027308-04:00\",\n  \"updated\": \"2025-09-03T16:00:14.027331-04:00\",\n  \"upload_submission\": null,\n  \"webprint_submission\": null,\n  \"can_delete\": true,\n  \"can_unamend\": false,\n  \"filing_frequency\": null,\n  \"report_type_category\": null,\n  \"change_of_address\": false,\n  \"election_code\": null,\n  \"date_of_election\": null,\n  \"state_of_election\": null,\n  \"qualified_committee\": false,\n  \"L6b_cash_on_hand_beginning_period\": null,\n  \"L6c_total_receipts_period\": null,\n  \"L6d_subtotal_period\": null,\n  \"L7_total_disbursements_period\": null,\n  \"L8_cash_on_hand_at_close_period\": null,\n  \"L9_debts_to_period\": null,\n  \"L10_debts_by_period\": null,\n  \"L11ai_itemized_period\": null,\n  \"L11aii_unitemized_period\": null,\n  \"L11aiii_total_period\": null,\n  \"L11b_political_party_committees_period\": null,\n  \"L11c_other_political_committees_pacs_period\": null,\n  \"L11d_total_contributions_period\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_period\": null,\n  \"L13_all_loans_received_period\": null,\n  \"L14_loan_repayments_received_period\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_period\": null,\n  \"L16_refunds_of_federal_contributions_period\": null,\n  \"L17_other_federal_receipts_dividends_period\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_period\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_period\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_period\": null,\n  \"L19_total_receipts_period\": null,\n  \"L20_total_federal_receipts_period\": null,\n  \"L21ai_federal_share_period\": null,\n  \"L21aii_nonfederal_share_period\": null,\n  \"L21b_other_federal_operating_expenditures_period\": null,\n  \"L21c_total_operating_expenditures_period\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_period\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_period\": null,\n  \"L24_independent_expenditures_period\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_period\": null,\n  \"L26_loan_repayments_period\": null,\n  \"L27_loans_made_period\": null,\n  \"L28a_individuals_persons_period\": null,\n  \"L28b_political_party_committees_period\": null,\n  \"L28c_other_political_committees_period\": null,\n  \"L28d_total_contributions_refunds_period\": null,\n  \"L29_other_disbursements_period\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_period\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_period\": null,\n  \"L30b_nonallocable_fed_election_activity_period\": null,\n  \"L30c_total_federal_election_activity_period\": null,\n  \"L31_total_disbursements_period\": null,\n  \"L32_total_federal_disbursements_period\": null,\n  \"L33_total_contributions_period\": null,\n  \"L34_total_contribution_refunds_period\": null,\n  \"L35_net_contributions_period\": null,\n  \"L36_total_federal_operating_expenditures_period\": null,\n  \"L37_offsets_to_operating_expenditures_period\": null,\n  \"L38_net_operating_expenditures_period\": null,\n  \"L6a_cash_on_hand_jan_1_ytd\": null,\n  \"L6a_year_for_above_ytd\": \"2025\",\n  \"L6c_total_receipts_ytd\": null,\n  \"L6d_subtotal_ytd\": null,\n  \"L7_total_disbursements_ytd\": null,\n  \"L8_cash_on_hand_close_ytd\": null,\n  \"L11ai_itemized_ytd\": null,\n  \"L11aii_unitemized_ytd\": null,\n  \"L11aiii_total_ytd\": null,\n  \"L11b_political_party_committees_ytd\": null,\n  \"L11c_other_political_committees_pacs_ytd\": null,\n  \"L11d_total_contributions_ytd\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_ytd\": null,\n  \"L13_all_loans_received_ytd\": null,\n  \"L14_loan_repayments_received_ytd\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_ytd\": null,\n  \"L16_refunds_of_federal_contributions_ytd\": null,\n  \"L17_other_federal_receipts_dividends_ytd\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_ytd\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_ytd\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_ytd\": null,\n  \"L19_total_receipts_ytd\": null,\n  \"L20_total_federal_receipts_ytd\": null,\n  \"L21ai_federal_share_ytd\": null,\n  \"L21aii_nonfederal_share_ytd\": null,\n  \"L21b_other_federal_operating_expenditures_ytd\": null,\n  \"L21c_total_operating_expenditures_ytd\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_ytd\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_ytd\": null,\n  \"L24_independent_expenditures_ytd\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_ytd\": null,\n  \"L26_loan_repayments_made_ytd\": null,\n  \"L27_loans_made_ytd\": null,\n  \"L28a_individuals_persons_ytd\": null,\n  \"L28b_political_party_committees_ytd\": null,\n  \"L28c_other_political_committees_ytd\": null,\n  \"L28d_total_contributions_refunds_ytd\": null,\n  \"L29_other_disbursements_ytd\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_ytd\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_ytd\": null,\n  \"L30b_nonallocable_fed_election_activity_ytd\": null,\n  \"L30c_total_federal_election_activity_ytd\": null,\n  \"L31_total_disbursements_ytd\": null,\n  \"L32_total_federal_disbursements_ytd\": null,\n  \"L33_total_contributions_ytd\": null,\n  \"L34_total_contribution_refunds_ytd\": null,\n  \"L35_net_contributions_ytd\": null,\n  \"L36_total_federal_operating_expenditures_ytd\": null,\n  \"L37_offsets_to_operating_expenditures_ytd\": null,\n  \"L38_net_operating_expenditures_ytd\": null,\n  \"report_type\": \"F3X\"\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/reports/transactions/report/d5294801-fa93-4843-9a03-bd769dba6bf5/list",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] Warnings while compiling.",
+        "severity": "warning"
+      },
+      {
+        "type": "cons:warn",
+        "message": "[webpack-dev-server] WARNING\n/home/svmsepi0l/dev/fecfile-web-app/front-end/src/app/shared/utils/reatt-redes/reatt-redes.utils.ts depends on 'lodash'. CommonJS or AMD dependencies can cause optimization bailouts.\nFor more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "(GetCommitteeMembers) GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Add a disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=d5294801-fa93-4843-9a03-bd769dba6bf5&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=d5294801-fa93-4843-9a03-bd769dba6bf5&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=d5294801-fa93-4843-9a03-bd769dba6bf5&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-accordion-header, CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/d5294801-fa93-4843-9a03-bd769dba6bf5/select/disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Independent Expenditure",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#entity_type_dropdown",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/d5294801-fa93-4843-9a03-bd769dba6bf5/create/INDEPENDENT_EXPENDITURE",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, Individual",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tLOOKUP",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<label>** to exist in the DOM\nActual: \t\"<label>\"\nExpected: \t\"<label>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<mark>** to exist in the DOM\nActual: \t\"<mark>\"\nExpected: \t\"<mark>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/contacts/individual_lookup/?q=Ant&max_fecfile_results=5&exclude_ids=\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] App updated. Recompiling...",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy=\"disbursement_date\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-panel",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-select-year",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<button.p-ripple.p-datepicker-select-year.ng-tns-c2825477640-55.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-decade",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<span.p-datepicker-decade.ng-tns-c2825477640-55.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-year",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t2025",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<span.p-ripple.ng-tns-c2825477640-55.p-datepicker-year.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-month",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tApr",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tspan",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "not\t.p-disabled",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parent\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tspan",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "not\t.p-disabled",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parent\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<td.ng-tns-c2825477640-55.p-datepicker-day-cell.ng-star-inserted>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_23_ms__At__Wed_Sep_03_2025_16_00_20_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)",
+        "severity": "error"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_27_ms__At__Wed_Sep_03_2025_16_00_20_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)",
+        "severity": "error"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t[data-cy='support_oppose_code']",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tSUPPORT",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_357_ms__At__Wed_Sep_03_2025_16_00_20_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)\n    at ____________________Elapsed_1876_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLInputElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_110_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_2_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_2_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_2_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_73_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLLIElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_4_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)",
+        "severity": "error"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_369_ms__At__Wed_Sep_03_2025_16_00_20_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)\n    at ____________________Elapsed_1877_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLInputElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_110_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_2_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_2_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_2_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_73_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLLIElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_4_ms__At__Wed_Sep_03_2025_16_00_18_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)",
+        "severity": "error"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:intercept",
+        "message": "Method: GET\nMatcher: \"http://localhost:8080/api/v1/contacts/candidate_lookup/?q=Hou&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=\"\nMocked Response: {\"statusCode\":200,\"body\":{\"fec_api_candidates\":[],\"fecfile_candidates\":[{\"committee_account\":\"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\"id\":\"5261e9d6-d633-48fb-b5e3-03369528e455\",\"type\":\"CAN\",\"candidate_id\":\"H1AK00001\",\"committee_id\":null,\"name\":null,\"last_name\":\"House\",\"first_name\":\"Aleph\",\"middle_name\":null,\"prefix\":null,\"suffix\":null,\"street_1\":\"1234 Test Ln\",\"street_2\":null,\"city\":\"Testville\",\"state\":\"AK\",\"zip\":\"12345\",\"employer\":\"E\",\"occupation\":\"O\",\"candidate_office\":\"H\",\"candidate_state\":\"AK\",\"candidate_district\":\"00\",\"telephone\":null,\"country\":\"USA\",\"created\":\"2025-09-03T16:00:13.899174-04:00\",\"updated\":\"2025-09-03T16:00:13.899206-04:00\",\"has_transaction_or_report\":false}]}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#contact_2_lookup",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tHou",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.p-autocomplete-list-container",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "STUBBED GET http://localhost:8080/api/v1/contacts/candidate_lookup/?q=Hou&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tHou",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#text4000",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tDecumbo comitatus.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttextarea#purpose_description",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<textarea#purpose_description.p-textarea.p-component.ng-untouched.ng-pristine.ng-pending.p-textarea-resizable>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTandem.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#amount",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<input#amount.p-inputtext.p-component.p-inputnumber-input>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[inputid=\"electionType\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, G",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#electionYear",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<input#electionYear.p-inputtext.p-component.ng-untouched.ng-pristine.ng-invalid>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t2022",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tapp-name-input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tinput#last_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tCrist",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tapp-name-input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tinput#first_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tFrederick",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tdiv.grid",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy='date_signed']",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t04/27/2024",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\th1",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#calendar_ytd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<input#calendar_ytd.p-inputtext.p-component.p-inputnumber-input.readonly.p-filled>** to have value **$100.00**\nActual: \t\"$100.00\"\nExpected: \t\"$100.00\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tbutton, Save",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: false}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "POST http://localhost:8080/api/v1/transactions/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tTransactions in this report",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<h1.gandhi-bold.size-36>** to exist in the DOM\nActual: \t\"<h1.gandhi-bold.size-36>\"\nExpected: \t\"<h1.gandhi-bold.size-36>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/d5294801-fa93-4843-9a03-bd769dba6bf5/list",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=d5294801-fa93-4843-9a03-bd769dba6bf5&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Add a disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=d5294801-fa93-4843-9a03-bd769dba6bf5&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=d5294801-fa93-4843-9a03-bd769dba6bf5&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-accordion-header, CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/d5294801-fa93-4843-9a03-bd769dba6bf5/select/disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Independent Expenditure",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#entity_type_dropdown",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/d5294801-fa93-4843-9a03-bd769dba6bf5/create/INDEPENDENT_EXPENDITURE",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, Individual",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tLOOKUP",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<label>** to exist in the DOM\nActual: \t\"<label>\"\nExpected: \t\"<label>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tBat",
+        "severity": "error"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] App updated. Reloading...",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "page load\t--page loaded--",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "(GetCommitteeMembers) GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/d5294801-fa93-4843-9a03-bd769dba6bf5/\nStatus: 200",
+        "severity": "success"
+      }
+    ],
+    "Tests transaction form aggregate calculation -> existing IE date leapfrogging (Attempt 2)": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 16:10",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 3 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"0849dc0a-c83c-4fb1-b49f-222712f94a6d\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Ant\",\n  \"first_name\": \"Accidental\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:00:34.438101-04:00\",\n  \"updated\": \"2025-09-03T16:00:34.438122-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"ef9accaf-2c20-44ff-ab31-f2d0a632544b\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Bat\",\n  \"first_name\": \"Bouncy\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:00:34.500119-04:00\",\n  \"updated\": \"2025-09-03T16:00:34.500140-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"2359fc4c-999b-45a9-8c86-4b7fae9cdcb8\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"H1AK00001\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"House\",\n  \"first_name\": \"Aleph\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"H\",\n  \"candidate_state\": \"AK\",\n  \"candidate_district\": \"00\",\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:00:34.559235-04:00\",\n  \"updated\": \"2025-09-03T16:00:34.559257-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"369e349c-2de4-42ba-8908-c2057c5bc707\",\n  \"committee_name\": null,\n  \"street_1\": null,\n  \"street_2\": null,\n  \"city\": null,\n  \"state\": null,\n  \"zip\": null,\n  \"form_type\": \"F3XN\",\n  \"report_version\": null,\n  \"report_id\": null,\n  \"report_code\": \"Q2\",\n  \"coverage_from_date\": \"2025-04-01\",\n  \"coverage_through_date\": \"2025-06-30\",\n  \"treasurer_last_name\": null,\n  \"treasurer_first_name\": null,\n  \"treasurer_middle_name\": null,\n  \"treasurer_prefix\": null,\n  \"treasurer_suffix\": null,\n  \"date_signed\": null,\n  \"calculation_status\": null,\n  \"calculation_token\": null,\n  \"confirmation_email_1\": null,\n  \"confirmation_email_2\": null,\n  \"created\": \"2025-09-03T16:00:34.628654-04:00\",\n  \"updated\": \"2025-09-03T16:00:34.628671-04:00\",\n  \"upload_submission\": null,\n  \"webprint_submission\": null,\n  \"can_delete\": true,\n  \"can_unamend\": false,\n  \"filing_frequency\": null,\n  \"report_type_category\": null,\n  \"change_of_address\": false,\n  \"election_code\": null,\n  \"date_of_election\": null,\n  \"state_of_election\": null,\n  \"qualified_committee\": false,\n  \"L6b_cash_on_hand_beginning_period\": null,\n  \"L6c_total_receipts_period\": null,\n  \"L6d_subtotal_period\": null,\n  \"L7_total_disbursements_period\": null,\n  \"L8_cash_on_hand_at_close_period\": null,\n  \"L9_debts_to_period\": null,\n  \"L10_debts_by_period\": null,\n  \"L11ai_itemized_period\": null,\n  \"L11aii_unitemized_period\": null,\n  \"L11aiii_total_period\": null,\n  \"L11b_political_party_committees_period\": null,\n  \"L11c_other_political_committees_pacs_period\": null,\n  \"L11d_total_contributions_period\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_period\": null,\n  \"L13_all_loans_received_period\": null,\n  \"L14_loan_repayments_received_period\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_period\": null,\n  \"L16_refunds_of_federal_contributions_period\": null,\n  \"L17_other_federal_receipts_dividends_period\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_period\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_period\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_period\": null,\n  \"L19_total_receipts_period\": null,\n  \"L20_total_federal_receipts_period\": null,\n  \"L21ai_federal_share_period\": null,\n  \"L21aii_nonfederal_share_period\": null,\n  \"L21b_other_federal_operating_expenditures_period\": null,\n  \"L21c_total_operating_expenditures_period\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_period\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_period\": null,\n  \"L24_independent_expenditures_period\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_period\": null,\n  \"L26_loan_repayments_period\": null,\n  \"L27_loans_made_period\": null,\n  \"L28a_individuals_persons_period\": null,\n  \"L28b_political_party_committees_period\": null,\n  \"L28c_other_political_committees_period\": null,\n  \"L28d_total_contributions_refunds_period\": null,\n  \"L29_other_disbursements_period\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_period\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_period\": null,\n  \"L30b_nonallocable_fed_election_activity_period\": null,\n  \"L30c_total_federal_election_activity_period\": null,\n  \"L31_total_disbursements_period\": null,\n  \"L32_total_federal_disbursements_period\": null,\n  \"L33_total_contributions_period\": null,\n  \"L34_total_contribution_refunds_period\": null,\n  \"L35_net_contributions_period\": null,\n  \"L36_total_federal_operating_expenditures_period\": null,\n  \"L37_offsets_to_operating_expenditures_period\": null,\n  \"L38_net_operating_expenditures_period\": null,\n  \"L6a_cash_on_hand_jan_1_ytd\": null,\n  \"L6a_year_for_above_ytd\": \"2025\",\n  \"L6c_total_receipts_ytd\": null,\n  \"L6d_subtotal_ytd\": null,\n  \"L7_total_disbursements_ytd\": null,\n  \"L8_cash_on_hand_close_ytd\": null,\n  \"L11ai_itemized_ytd\": null,\n  \"L11aii_unitemized_ytd\": null,\n  \"L11aiii_total_ytd\": null,\n  \"L11b_political_party_committees_ytd\": null,\n  \"L11c_other_political_committees_pacs_ytd\": null,\n  \"L11d_total_contributions_ytd\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_ytd\": null,\n  \"L13_all_loans_received_ytd\": null,\n  \"L14_loan_repayments_received_ytd\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_ytd\": null,\n  \"L16_refunds_of_federal_contributions_ytd\": null,\n  \"L17_other_federal_receipts_dividends_ytd\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_ytd\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_ytd\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_ytd\": null,\n  \"L19_total_receipts_ytd\": null,\n  \"L20_total_federal_receipts_ytd\": null,\n  \"L21ai_federal_share_ytd\": null,\n  \"L21aii_nonfederal_share_ytd\": null,\n  \"L21b_other_federal_operating_expenditures_ytd\": null,\n  \"L21c_total_operating_expenditures_ytd\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_ytd\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_ytd\": null,\n  \"L24_independent_expenditures_ytd\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_ytd\": null,\n  \"L26_loan_repayments_made_ytd\": null,\n  \"L27_loans_made_ytd\": null,\n  \"L28a_individuals_persons_ytd\": null,\n  \"L28b_political_party_committees_ytd\": null,\n  \"L28c_other_political_committees_ytd\": null,\n  \"L28d_total_contributions_refunds_ytd\": null,\n  \"L29_other_disbursements_ytd\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_ytd\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_ytd\": null,\n  \"L30b_nonallocable_fed_election_activity_ytd\": null,\n  \"L30c_total_federal_election_activity_ytd\": null,\n  \"L31_total_disbursements_ytd\": null,\n  \"L32_total_federal_disbursements_ytd\": null,\n  \"L33_total_contributions_ytd\": null,\n  \"L34_total_contribution_refunds_ytd\": null,\n  \"L35_net_contributions_ytd\": null,\n  \"L36_total_federal_operating_expenditures_ytd\": null,\n  \"L37_offsets_to_operating_expenditures_ytd\": null,\n  \"L38_net_operating_expenditures_ytd\": null,\n  \"report_type\": \"F3X\"\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/reports/transactions/report/369e349c-2de4-42ba-8908-c2057c5bc707/list",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/369e349c-2de4-42ba-8908-c2057c5bc707/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Add a disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=369e349c-2de4-42ba-8908-c2057c5bc707&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=369e349c-2de4-42ba-8908-c2057c5bc707&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=369e349c-2de4-42ba-8908-c2057c5bc707&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/369e349c-2de4-42ba-8908-c2057c5bc707/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-accordion-header, CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/369e349c-2de4-42ba-8908-c2057c5bc707/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/369e349c-2de4-42ba-8908-c2057c5bc707/select/disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Independent Expenditure",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/369e349c-2de4-42ba-8908-c2057c5bc707/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#entity_type_dropdown",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/369e349c-2de4-42ba-8908-c2057c5bc707/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/369e349c-2de4-42ba-8908-c2057c5bc707/create/INDEPENDENT_EXPENDITURE",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, Individual",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tLOOKUP",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<label>** to exist in the DOM\nActual: \t\"<label>\"\nExpected: \t\"<label>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<mark>** to exist in the DOM\nActual: \t\"<mark>\"\nExpected: \t\"<mark>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/contacts/individual_lookup/?q=Ant&max_fecfile_results=5&exclude_ids=\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy=\"disbursement_date\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-panel",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-select-year",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<button.p-ripple.p-datepicker-select-year.ng-tns-c2825477640-55.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-decade",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<span.p-datepicker-decade.ng-tns-c2825477640-55.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-year",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t2025",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<span.p-ripple.ng-tns-c2825477640-55.p-datepicker-year.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-month",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tApr",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tspan",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "not\t.p-disabled",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parent\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tspan",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "not\t.p-disabled",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parent\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<td.ng-tns-c2825477640-55.p-datepicker-day-cell.ng-star-inserted>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_11_ms__At__Wed_Sep_03_2025_16_00_41_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)",
+        "severity": "error"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_13_ms__At__Wed_Sep_03_2025_16_00_41_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)",
+        "severity": "error"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t[data-cy='support_oppose_code']",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tSUPPORT",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_200_ms__At__Wed_Sep_03_2025_16_00_42_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)\n    at ____________________Elapsed_3685_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLInputElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_78_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_0_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_48_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLLIElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_5_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)",
+        "severity": "error"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_204_ms__At__Wed_Sep_03_2025_16_00_42_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)\n    at ____________________Elapsed_3686_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLInputElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_78_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_0_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_48_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLLIElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_5_ms__At__Wed_Sep_03_2025_16_00_38_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)",
+        "severity": "error"
+      },
+      {
+        "type": "cy:intercept",
+        "message": "Method: GET\nMatcher: \"http://localhost:8080/api/v1/contacts/candidate_lookup/?q=Hou&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=\"\nMocked Response: {\"statusCode\":200,\"body\":{\"fec_api_candidates\":[],\"fecfile_candidates\":[{\"committee_account\":\"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\"id\":\"2359fc4c-999b-45a9-8c86-4b7fae9cdcb8\",\"type\":\"CAN\",\"candidate_id\":\"H1AK00001\",\"committee_id\":null,\"name\":null,\"last_name\":\"House\",\"first_name\":\"Aleph\",\"middle_name\":null,\"prefix\":null,\"suffix\":null,\"street_1\":\"1234 Test Ln\",\"street_2\":null,\"city\":\"Testville\",\"state\":\"AK\",\"zip\":\"12345\",\"employer\":\"E\",\"occupation\":\"O\",\"candidate_office\":\"H\",\"candidate_state\":\"AK\",\"candidate_district\":\"00\",\"telephone\":null,\"country\":\"USA\",\"created\":\"2025-09-03T16:00:34.559235-04:00\",\"updated\":\"2025-09-03T16:00:34.559257-04:00\",\"has_transaction_or_report\":false}]}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#contact_2_lookup",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tHou",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.p-autocomplete-list-container",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "STUBBED GET http://localhost:8080/api/v1/contacts/candidate_lookup/?q=Hou&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tHou",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#text4000",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tDecumbo comitatus.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttextarea#purpose_description",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<textarea#purpose_description.p-textarea.p-component.ng-untouched.ng-pristine.p-textarea-resizable.ng-invalid>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTandem.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#amount",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<input#amount.p-inputtext.p-component.p-inputnumber-input>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[inputid=\"electionType\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, G",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#electionYear",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<input#electionYear.p-inputtext.p-component.ng-untouched.ng-pristine.ng-invalid>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t2022",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tapp-name-input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tinput#last_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tMurphy",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tapp-name-input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tinput#first_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tLuther",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tdiv.grid",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy='date_signed']",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t04/27/2024",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\th1",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#calendar_ytd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<input#calendar_ytd.p-inputtext.p-component.p-inputnumber-input.readonly.p-filled>** to have value **$100.00**\nActual: \t\"$100.00\"\nExpected: \t\"$100.00\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tbutton, Save",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: false}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tTransactions in this report",
+        "severity": "error"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **undefined** to exist in the DOM",
+        "severity": "error"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      }
+    ],
+    "Tests transaction form aggregate calculation -> existing IE date leapfrogging (Attempt 3)": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 16:10",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 3 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"b3fb58f3-39b8-486e-91bd-2c800c957e6d\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Ant\",\n  \"first_name\": \"Accidental\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:01:02.107669-04:00\",\n  \"updated\": \"2025-09-03T16:01:02.107688-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"a8ebbde2-f1e9-487b-add6-95f41efaa45d\",\n  \"type\": \"IND\",\n  \"candidate_id\": null,\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Bat\",\n  \"first_name\": \"Bouncy\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": null,\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:01:02.163421-04:00\",\n  \"updated\": \"2025-09-03T16:01:02.163436-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"9263de49-7bf9-4af4-861f-dad297ef1ae7\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"H1AK00001\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"House\",\n  \"first_name\": \"Aleph\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"H\",\n  \"candidate_state\": \"AK\",\n  \"candidate_district\": \"00\",\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-03T16:01:02.217401-04:00\",\n  \"updated\": \"2025-09-03T16:01:02.217416-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"138c3dca-6ed0-43f1-83f9-7a57febd1662\",\n  \"committee_name\": null,\n  \"street_1\": null,\n  \"street_2\": null,\n  \"city\": null,\n  \"state\": null,\n  \"zip\": null,\n  \"form_type\": \"F3XN\",\n  \"report_version\": null,\n  \"report_id\": null,\n  \"report_code\": \"Q2\",\n  \"coverage_from_date\": \"2025-04-01\",\n  \"coverage_through_date\": \"2025-06-30\",\n  \"treasurer_last_name\": null,\n  \"treasurer_first_name\": null,\n  \"treasurer_middle_name\": null,\n  \"treasurer_prefix\": null,\n  \"treasurer_suffix\": null,\n  \"date_signed\": null,\n  \"calculation_status\": null,\n  \"calculation_token\": null,\n  \"confirmation_email_1\": null,\n  \"confirmation_email_2\": null,\n  \"created\": \"2025-09-03T16:01:02.290825-04:00\",\n  \"updated\": \"2025-09-03T16:01:02.290845-04:00\",\n  \"upload_submission\": null,\n  \"webprint_submission\": null,\n  \"can_delete\": true,\n  \"can_unamend\": false,\n  \"filing_frequency\": null,\n  \"report_type_category\": null,\n  \"change_of_address\": false,\n  \"election_code\": null,\n  \"date_of_election\": null,\n  \"state_of_election\": null,\n  \"qualified_committee\": false,\n  \"L6b_cash_on_hand_beginning_period\": null,\n  \"L6c_total_receipts_period\": null,\n  \"L6d_subtotal_period\": null,\n  \"L7_total_disbursements_period\": null,\n  \"L8_cash_on_hand_at_close_period\": null,\n  \"L9_debts_to_period\": null,\n  \"L10_debts_by_period\": null,\n  \"L11ai_itemized_period\": null,\n  \"L11aii_unitemized_period\": null,\n  \"L11aiii_total_period\": null,\n  \"L11b_political_party_committees_period\": null,\n  \"L11c_other_political_committees_pacs_period\": null,\n  \"L11d_total_contributions_period\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_period\": null,\n  \"L13_all_loans_received_period\": null,\n  \"L14_loan_repayments_received_period\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_period\": null,\n  \"L16_refunds_of_federal_contributions_period\": null,\n  \"L17_other_federal_receipts_dividends_period\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_period\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_period\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_period\": null,\n  \"L19_total_receipts_period\": null,\n  \"L20_total_federal_receipts_period\": null,\n  \"L21ai_federal_share_period\": null,\n  \"L21aii_nonfederal_share_period\": null,\n  \"L21b_other_federal_operating_expenditures_period\": null,\n  \"L21c_total_operating_expenditures_period\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_period\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_period\": null,\n  \"L24_independent_expenditures_period\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_period\": null,\n  \"L26_loan_repayments_period\": null,\n  \"L27_loans_made_period\": null,\n  \"L28a_individuals_persons_period\": null,\n  \"L28b_political_party_committees_period\": null,\n  \"L28c_other_political_committees_period\": null,\n  \"L28d_total_contributions_refunds_period\": null,\n  \"L29_other_disbursements_period\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_period\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_period\": null,\n  \"L30b_nonallocable_fed_election_activity_period\": null,\n  \"L30c_total_federal_election_activity_period\": null,\n  \"L31_total_disbursements_period\": null,\n  \"L32_total_federal_disbursements_period\": null,\n  \"L33_total_contributions_period\": null,\n  \"L34_total_contribution_refunds_period\": null,\n  \"L35_net_contributions_period\": null,\n  \"L36_total_federal_operating_expenditures_period\": null,\n  \"L37_offsets_to_operating_expenditures_period\": null,\n  \"L38_net_operating_expenditures_period\": null,\n  \"L6a_cash_on_hand_jan_1_ytd\": null,\n  \"L6a_year_for_above_ytd\": \"2025\",\n  \"L6c_total_receipts_ytd\": null,\n  \"L6d_subtotal_ytd\": null,\n  \"L7_total_disbursements_ytd\": null,\n  \"L8_cash_on_hand_close_ytd\": null,\n  \"L11ai_itemized_ytd\": null,\n  \"L11aii_unitemized_ytd\": null,\n  \"L11aiii_total_ytd\": null,\n  \"L11b_political_party_committees_ytd\": null,\n  \"L11c_other_political_committees_pacs_ytd\": null,\n  \"L11d_total_contributions_ytd\": null,\n  \"L12_transfers_from_affiliated_other_party_cmtes_ytd\": null,\n  \"L13_all_loans_received_ytd\": null,\n  \"L14_loan_repayments_received_ytd\": null,\n  \"L15_offsets_to_operating_expenditures_refunds_ytd\": null,\n  \"L16_refunds_of_federal_contributions_ytd\": null,\n  \"L17_other_federal_receipts_dividends_ytd\": null,\n  \"L18a_transfers_from_nonfederal_account_h3_ytd\": null,\n  \"L18b_transfers_from_nonfederal_levin_h5_ytd\": null,\n  \"L18c_total_nonfederal_transfers_18a_18b_ytd\": null,\n  \"L19_total_receipts_ytd\": null,\n  \"L20_total_federal_receipts_ytd\": null,\n  \"L21ai_federal_share_ytd\": null,\n  \"L21aii_nonfederal_share_ytd\": null,\n  \"L21b_other_federal_operating_expenditures_ytd\": null,\n  \"L21c_total_operating_expenditures_ytd\": null,\n  \"L22_transfers_to_affiliated_other_party_cmtes_ytd\": null,\n  \"L23_contributions_to_federal_candidates_cmtes_ytd\": null,\n  \"L24_independent_expenditures_ytd\": null,\n  \"L25_coordinated_expend_made_by_party_cmtes_ytd\": null,\n  \"L26_loan_repayments_made_ytd\": null,\n  \"L27_loans_made_ytd\": null,\n  \"L28a_individuals_persons_ytd\": null,\n  \"L28b_political_party_committees_ytd\": null,\n  \"L28c_other_political_committees_ytd\": null,\n  \"L28d_total_contributions_refunds_ytd\": null,\n  \"L29_other_disbursements_ytd\": null,\n  \"L30ai_shared_federal_activity_h6_fed_share_ytd\": null,\n  \"L30aii_shared_federal_activity_h6_nonfed_ytd\": null,\n  \"L30b_nonallocable_fed_election_activity_ytd\": null,\n  \"L30c_total_federal_election_activity_ytd\": null,\n  \"L31_total_disbursements_ytd\": null,\n  \"L32_total_federal_disbursements_ytd\": null,\n  \"L33_total_contributions_ytd\": null,\n  \"L34_total_contribution_refunds_ytd\": null,\n  \"L35_net_contributions_ytd\": null,\n  \"L36_total_federal_operating_expenditures_ytd\": null,\n  \"L37_offsets_to_operating_expenditures_ytd\": null,\n  \"L38_net_operating_expenditures_ytd\": null,\n  \"report_type\": \"F3X\"\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/reports/transactions/report/138c3dca-6ed0-43f1-83f9-7a57febd1662/list",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tp-panelmenu",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/138c3dca-6ed0-43f1-83f9-7a57febd1662/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Add a disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@menuItem",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=138c3dca-6ed0-43f1-83f9-7a57febd1662&schedules=A\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=138c3dca-6ed0-43f1-83f9-7a57febd1662&schedules=C,D\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=138c3dca-6ed0-43f1-83f9-7a57febd1662&schedules=B,E,F\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/138c3dca-6ed0-43f1-83f9-7a57febd1662/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-accordion-header, CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/138c3dca-6ed0-43f1-83f9-7a57febd1662/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/138c3dca-6ed0-43f1-83f9-7a57febd1662/select/disbursement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ta, Independent Expenditure",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/138c3dca-6ed0-43f1-83f9-7a57febd1662/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#entity_type_dropdown",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/138c3dca-6ed0-43f1-83f9-7a57febd1662/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports/transactions/report/138c3dca-6ed0-43f1-83f9-7a57febd1662/create/INDEPENDENT_EXPENDITURE",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, Individual",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tLOOKUP",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<label>** to exist in the DOM\nActual: \t\"<label>\"\nExpected: \t\"<label>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<mark>** to exist in the DOM\nActual: \t\"<mark>\"\nExpected: \t\"<mark>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/contacts/individual_lookup/?q=Ant&max_fecfile_results=5&exclude_ids=\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tAnt",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy=\"disbursement_date\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-panel",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-select-year",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<button.p-ripple.p-datepicker-select-year.ng-tns-c2825477640-55.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-decade",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<span.p-datepicker-decade.ng-tns-c2825477640-55.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-year",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t2025",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<span.p-ripple.ng-tns-c2825477640-55.p-datepicker-year.ng-star-inserted>** to be **visible**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-datepicker-month",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tApr",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tspan",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "not\t.p-disabled",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parent\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@calendarElement",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tspan",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "not\t.p-disabled",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parent\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<td.ng-tns-c2825477640-55.p-datepicker-day-cell.ng-star-inserted>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_12_ms__At__Wed_Sep_03_2025_16_01_10_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)",
+        "severity": "error"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_13_ms__At__Wed_Sep_03_2025_16_01_10_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)",
+        "severity": "error"
+      },
+      {
+        "type": "cy:command",
+        "message": "wait\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t[data-cy='support_oppose_code']",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tSUPPORT",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_185_ms__At__Wed_Sep_03_2025_16_01_10_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)\n    at ____________________Elapsed_4668_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLInputElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_80_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_49_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLLIElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_5_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)",
+        "severity": "error"
+      },
+      {
+        "type": "cons:error",
+        "message": "ERROR,\nTypeError: Cannot read properties of null (reading 'getTime')\n    at Object.next (http://localhost:4200/src_app_reports_transactions_routes_ts.js:6268:59)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at ConsumerObserver.next (http://localhost:4200/vendor.js:172168:25)\n    at SafeSubscriber._next (http://localhost:4200/vendor.js:172137:22)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:172110:12)\n    at http://localhost:4200/vendor.js:11454:20\n    at errorContext (http://localhost:4200/vendor.js:135555:5)\n    at EventEmitter_.next (http://localhost:4200/vendor.js:11447:69)\n    at ____________________Elapsed_189_ms__At__Wed_Sep_03_2025_16_01_10_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMacroTask (http://localhost:4200/polyfills.js:4413:19)\n    at scheduleMacroTaskWithCurrentZone (http://localhost:4200/polyfills.js:4870:23)\n    at ____________________Elapsed_4669_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLInputElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_80_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_1_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)\n    at ____________________Elapsed_49_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleEventTask (http://localhost:4200/polyfills.js:4416:19)\n    at HTMLLIElement.addEventListener (http://localhost:4200/polyfills.js:5628:27)\n    at ____________________Elapsed_5_ms__At__Wed_Sep_03_2025_16_01_06_GMT_0400__Eastern_Daylight_Time_ (http://localhost)\n    at Object.onScheduleTask (http://localhost:4200/vendor.js:162644:18)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at Object.onScheduleTask (http://localhost:4200/polyfills.js:4450:61)\n    at _ZoneDelegate.scheduleTask (http://localhost:4200/polyfills.js:4562:43)\n    at ZoneImpl.scheduleTask (http://localhost:4200/polyfills.js:4391:35)\n    at ZoneImpl.scheduleMicroTask (http://localhost:4200/polyfills.js:4410:19)\n    at scheduleResolveOrReject (http://localhost:4200/polyfills.js:6602:12)",
+        "severity": "error"
+      },
+      {
+        "type": "cy:intercept",
+        "message": "Method: GET\nMatcher: \"http://localhost:8080/api/v1/contacts/candidate_lookup/?q=Hou&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=\"\nMocked Response: {\"statusCode\":200,\"body\":{\"fec_api_candidates\":[],\"fecfile_candidates\":[{\"committee_account\":\"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\"id\":\"9263de49-7bf9-4af4-861f-dad297ef1ae7\",\"type\":\"CAN\",\"candidate_id\":\"H1AK00001\",\"committee_id\":null,\"name\":null,\"last_name\":\"House\",\"first_name\":\"Aleph\",\"middle_name\":null,\"prefix\":null,\"suffix\":null,\"street_1\":\"1234 Test Ln\",\"street_2\":null,\"city\":\"Testville\",\"state\":\"AK\",\"zip\":\"12345\",\"employer\":\"E\",\"occupation\":\"O\",\"candidate_office\":\"H\",\"candidate_state\":\"AK\",\"candidate_district\":\"00\",\"telephone\":null,\"country\":\"USA\",\"created\":\"2025-09-03T16:01:02.217401-04:00\",\"updated\":\"2025-09-03T16:01:02.217416-04:00\",\"has_transaction_or_report\":false}]}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#contact_2_lookup",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[id=\"searchBox\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tHou",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.p-autocomplete-list-container",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "STUBBED GET http://localhost:8080/api/v1/contacts/candidate_lookup/?q=Hou&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tHou",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#text4000",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tDecumbo comitatus.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\ttextarea#purpose_description",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<textarea#purpose_description.p-textarea.p-component.ng-untouched.ng-pristine.p-textarea-resizable.ng-invalid>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tTandem.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#amount",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<input#amount.p-inputtext.p-component.p-inputnumber-input>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t100",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[inputid=\"electionType\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tp-selectitem, G",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "scrollIntoView\t{offset: {top: 0, left: 0}}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t#electionYear",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t<input#electionYear.p-inputtext.p-component.ng-untouched.ng-pristine.ng-invalid>",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t2022",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G20&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G202&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tapp-name-input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tinput#last_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tStamm",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/transactions/previous/election/?transaction_id=&date=2025-04-05&aggregation_group=INDEPENDENT_EXPENDITURE&election_code=G2022&candidate_office=H&candidate_state=AK&candidate_district=00\nStatus: 404",
+        "severity": "warning"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tapp-name-input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tinput#first_name",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\tDell",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.signatory_1_input",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tdiv.grid",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "children\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t[data-cy='date_signed']",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "type\t04/27/2024",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\th1",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#calendar_ytd",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<input#calendar_ytd.p-inputtext.p-component.p-inputnumber-input.readonly.p-filled>** to have value **$100.00**\nActual: \t\"$100.00\"\nExpected: \t\"$100.00\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tbody",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tbutton, Save",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: false}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tTransactions in this report",
+        "severity": "error"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **undefined** to exist in the DOM",
+        "severity": "error"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:4200/index.html\nStatus: 200",
+        "severity": "success"
+      }
+    ]
+  }
+}
