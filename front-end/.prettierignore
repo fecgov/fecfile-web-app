@@ -9,3 +9,4 @@ cypress/support/component-index.html
 cypress/support/component.ts 
 cypress/support/e2e.ts 
 results/browserstack-cypress-report.html
+cypress/results/
