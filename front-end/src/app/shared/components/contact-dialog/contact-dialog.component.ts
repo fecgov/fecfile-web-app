@@ -40,6 +40,7 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 
 export class TransactionData {
   id: string;
@@ -88,6 +89,7 @@ export class TransactionData {
     DatePipe,
     LabelPipe,
     SearchableSelectComponent,
+    ToUpperDirective,
   ],
   providers: [SearchableSelectComponent],
 })
@@ -153,6 +155,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     { field: 'date', label: 'Date' },
     { field: 'amount', label: 'Amount' },
   ];
+
+  readonly patternMessage =
+    'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
 
   pagerState?: TableLazyLoadEvent;
 

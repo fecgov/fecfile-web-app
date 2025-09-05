@@ -19,8 +19,13 @@
         <div class="col-6">
           <div class="field">
             <label for="candidate_id">CANDIDATE ID</label>
-            <input type="text" pInputText id="candidate_id" formControlName="candidate_id" />
-            <app-error-messages [form]="form" fieldName="candidate_id" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="candidate_id" appToUpper formControlName="candidate_id" />
+            <app-error-messages
+              [form]="form"
+              fieldName="candidate_id"
+              [formSubmitted]="formSubmitted"
+              [patternErrorMessage]="patternMessage"
+            />
           </div>
         </div>
         <div class="col-4"></div>
@@ -32,8 +37,13 @@
           <div class="col-4">
             <div class="field">
               <label for="committee_id">COMMITTEE ID</label>
-              <input type="text" pInputText id="committee_id" formControlName="committee_id" />
-              <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
+              <input type="text" pInputText id="committee_id" appToUpper formControlName="committee_id" />
+              <app-error-messages
+                [form]="form"
+                fieldName="committee_id"
+                [formSubmitted]="formSubmitted"
+                [patternErrorMessage]="patternMessage"
+              />
             </div>
           </div>
         }

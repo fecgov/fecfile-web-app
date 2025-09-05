@@ -25,6 +25,7 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 
 @Component({
   selector: 'app-contact-modal',
@@ -43,6 +44,7 @@ import { SearchableSelectComponent } from '../searchable-select/searchable-selec
     Ripple,
     ConfirmDialog,
     SearchableSelectComponent,
+    ToUpperDirective,
   ],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {
@@ -79,6 +81,8 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   candidateDistrictOptions: PrimeOptions = [];
   emptyMessage = 'No data available in table';
 
+  readonly patternMessage =
+    'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
   readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'transaction_type_identifier', label: 'Type' },
     { field: 'form_type', label: 'Form' },
