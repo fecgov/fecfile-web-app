@@ -39,6 +39,7 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 
 export class TransactionData {
   id: string;
@@ -86,6 +87,7 @@ export class TransactionData {
     CurrencyPipe,
     DatePipe,
     LabelPipe,
+    ToUpperDirective,
   ],
 })
 export class ContactDialogComponent extends DestroyerComponent implements OnInit {
@@ -150,6 +152,9 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     { field: 'date', label: 'Date' },
     { field: 'amount', label: 'Amount' },
   ];
+
+  readonly patternMessage =
+    'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
 
   pagerState?: TableLazyLoadEvent;
 
