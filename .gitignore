@@ -44,6 +44,8 @@ local_settings.py
 # Cypress
 front-end/cypress/screenshots/
 front-end/cypress/videos/
+front-end/cypress/results/
+front-end/cypress/downloads/
 
 # misc
 /.sass-cache
