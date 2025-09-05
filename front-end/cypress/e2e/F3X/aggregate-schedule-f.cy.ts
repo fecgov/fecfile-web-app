@@ -6,6 +6,7 @@ import { buildScheduleF } from '../requests/library/transactions';
 import { DataSetup } from './setup';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { StartTransaction } from './utils/start-transaction/start-transaction';
 
 function generateReportAndContacts(transData: [number, string, boolean][]) {
   return cy
@@ -29,7 +30,23 @@ function generateReportAndContacts(transData: [number, string, boolean][]) {
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
     Initialize();
+  });
+
+  it('sets aggregate to value when no previous', () => {
     setCommitteeToPTY();
+    cy.wrap(DataSetup({ organization: true, candidate: true, committee: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
+      StartTransaction.Disbursements().Contributions().CoordinatedPartyExpenditure();
+      ContactLookup.getContact(result.organization.name, '', 'Organization');
+      ContactLookup.getCommittee(result.committee, [], [], '#contact_3_lookup');
+      ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
+
+      TransactionDetailPage.enterDate(`[data-cy="expenditure_date"]`, new Date(currentYear, 4 - 1, 27));
+      cy.get('#general_election_year').safeType(currentYear);
+      cy.get('#amount').safeType(100.0);
+      cy.get('#purpose_description').first().safeType('test').blur();
+      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$100.00');
+    });
   });
 
   it('new transaction aggregate', () => {
@@ -51,7 +68,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('body').find('.p-datepicker-panel').as('calendarElement');
       cy.get('@calendarElement').find('[data-date="2025-3-29"]').click('bottom', { force: true });
       cy.get('@calendarElement').find('[data-date="2025-3-29"]').click('bottom', { force: true });
-
+      cy.get('[id=aggregate_general_elec_expended]').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
       // Change the candidate contact
