@@ -1,19 +1,18 @@
-import { Component, computed, effect, inject, OnInit, resource } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { PrimeTemplate } from 'primeng/api';
-import { LabelList } from 'app/shared/utils/label.utils';
+import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
+import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
-import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from 'app/shared/models';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
-import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
-import { ContactManagementService } from 'app/shared/services/contact-management.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -26,20 +25,28 @@ import { ContactManagementService } from 'app/shared/services/contact-management
     ButtonDirective,
     Ripple,
     TableActionsButtonComponent,
-    ContactModalComponent,
+    ContactDialogComponent,
     DeletedContactDialogComponent,
     LabelPipe,
   ],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   protected readonly itemService = inject(ContactService);
-  private readonly cmService = inject(ContactManagementService);
-  private readonly deletedContactService = inject(DeletedContactService);
-  readonly contactTypeLabels: LabelList = ContactTypeLabels;
+  public readonly deletedContactService = inject(DeletedContactService);
+  contactTypeLabels: LabelList = ContactTypeLabels;
+  dialogContactTypeOptions: PrimeOptions = [];
 
   restoreDialogIsVisible = false;
+  restoreContactsButtonIsVisible = false;
+  searchTerm = '';
 
-  readonly rowActions: TableAction[] = [
+  // contact lookup
+  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+    ContactTypes.INDIVIDUAL,
+  ]);
+
+  public rowActions: TableAction[] = [
     new TableAction('Edit', this.editItem.bind(this)),
     new TableAction(
       'Delete',
@@ -49,7 +56,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     ),
   ];
 
-  readonly sortableHeaders: { field: string; label: string }[] = [
+  sortableHeaders: { field: string; label: string }[] = [
     { field: 'sort_name', label: 'Name' },
     { field: 'type', label: 'Type' },
     { field: 'sort_fec_id', label: 'FEC ID' },
@@ -57,50 +64,36 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  readonly manager = computed(() => this.cmService.activeManager());
-
-  readonly restoreContactsButtonIsVisible = resource({
-    loader: () => this.restoreLoader(),
-  });
-
-  readonly headerTitle = computed(() => (this.isNewItem() ? 'Add Contact' : 'Edit Contact'));
-
-  constructor() {
-    super();
-    effect(() => {
-      const contact = this.manager().outerContact();
-      if (!contact) return;
-      this.saveContact(contact);
-    });
+  ngOnInit() {
+    this.checkForDeletedContacts();
   }
 
-  ngOnInit() {
-    this.cmService.activeKey.set('');
+  public async checkForDeletedContacts() {
+    const contactListResponse = await this.deletedContactService.getTableData();
+    const deletedContactsExist = contactListResponse.count > 0;
+    this.restoreContactsButtonIsVisible = deletedContactsExist;
+    return deletedContactsExist;
   }
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     await super.loadTableItems(event);
-    this.restoreContactsButtonIsVisible.reload();
+
+    await this.checkForDeletedContacts();
   }
 
   protected getEmptyItem(): Contact {
-    return emptyContact(this.manager().contactType());
+    return new Contact();
   }
 
   public override addItem() {
-    this.isNewItem.set(true);
-    this.manager().clearOnLoad.set(true);
-    this.manager().setAsAllContacts();
-    this.manager().contact.set(emptyContact(this.manager().contactType()));
-    this.cmService.showDialog.set(true);
+    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    super.addItem();
   }
 
-  public override editItem(contact: Contact) {
-    this.manager().setAsSingle(contact.type);
-    this.manager().clearOnLoad.set(false);
-    this.isNewItem.set(false);
-    this.manager().contact.set(contact);
-    this.cmService.showDialog.set(true);
+  public override editItem(item: Contact) {
+    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
+    super.editItem(item);
+    this.isNewItem = false;
   }
 
   /**
@@ -146,11 +139,5 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
         });
       });
     }
-  }
-
-  async restoreLoader() {
-    const contactListResponse = await this.deletedContactService.getTableData();
-    const deletedContactsExist = contactListResponse.count > 0;
-    return deletedContactsExist;
   }
 }

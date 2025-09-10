@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, OnInit, untracked } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, untracked } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -17,7 +17,7 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypes, emptyContact } from '../../models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
 import { DestroyerComponent } from '../app-destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -49,9 +49,6 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   readonly cmservice = inject(ContactManagementService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
-
-  readonly showHistory = input(false);
-  readonly headerTitle = input<string>('Create a new contact');
 
   readonly form: FormGroup = this.fb.group(
     SchemaUtils.getFormGroupFields([
@@ -97,11 +94,10 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     super();
     effect(() => {
       const contact = this.manager().contact();
+
       untracked(() => {
         this.updateContactType();
         this.form.patchValue(contact, { emitEvent: false });
-        this.form.markAsPristine();
-        this.form.markAsUntouched();
       });
     });
 
@@ -173,7 +169,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.form.updateValueAndValidity();
   }
 
-  saveContact(closeDialog = true) {
+  saveContact() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -189,13 +185,9 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     });
     contact.type = this.manager().contactType();
     this.manager().contact.set(contact);
+
+    this.cmservice.showDialog.set(false);
     this.manager().outerContact.set(contact);
     this.formSubmitted = false;
-
-    if (closeDialog) {
-      this.cmservice.showDialog.set(false);
-    } else {
-      this.manager().contact.set(emptyContact(contact.type));
-    }
   }
 }
