@@ -206,12 +206,14 @@
               <input
                 type="text"
                 pInputText
+                appToUpper
                 id="affiliated_committee_fec_id"
                 formControlName="affiliated_committee_fec_id"
               />
               <app-error-messages
                 [form]="form"
                 fieldName="affiliated_committee_fec_id"
+                [patternErrorMessage]="committeePatternMessage"
                 [formSubmitted]="formSubmitted"
               />
             </div>
@@ -312,6 +314,7 @@
                   <input
                     type="text"
                     pInputText
+                    appToUpper
                     [id]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                     [formControlName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                   />
@@ -319,6 +322,7 @@
                     [form]="form"
                     [fieldName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
                     [formSubmitted]="formSubmitted"
+                    [patternErrorMessage]="candidatePatternMessage"
                     uniqueFecIdMessage="Candidate already entered in form."
                   />
                 </div>
