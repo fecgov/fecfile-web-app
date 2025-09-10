@@ -76,6 +76,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   ngOnInit() {
     this.cmService.activeKey.set('');
+    this.manager().outerContact.set(null);
   }
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
@@ -146,6 +147,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
         });
       });
     }
+    this.manager().outerContact.set(null);
   }
 
   async restoreLoader() {

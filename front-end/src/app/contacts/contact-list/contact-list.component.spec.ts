@@ -167,4 +167,15 @@ describe('ContactListComponent', () => {
     component.saveContact(contact);
     expect(service.create).toHaveBeenCalledTimes(1);
   });
+
+  it('setting outer contact saves and resets to null', () => {
+    const contact = testContact();
+    contact.id = undefined;
+    spyOn(service, 'create').and.returnValue(Promise.resolve(contact));
+    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
+    component.manager().outerContact.set(contact);
+    fixture.detectChanges();
+    expect(service.create).toHaveBeenCalledTimes(1);
+    expect(component.manager().outerContact()).toBeNull();
+  });
 });
