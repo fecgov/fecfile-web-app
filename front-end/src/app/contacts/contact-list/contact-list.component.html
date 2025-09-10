@@ -17,7 +17,7 @@
         <h1 class="m-0">Manage contacts</h1>
       </ng-template>
       <ng-template pTemplate="right">
-        @if (restoreContactsButtonIsVisible.value()) {
+        @if (restoreContactsButtonIsVisible) {
           <button
             pButton
             pRipple
@@ -63,6 +63,12 @@
   </ng-template>
 </app-table>
 
-<app-contact-modal [showHistory]="true" [headerTitle]="headerTitle()" />
+<app-contact-dialog
+  [contactTypeOptions]="dialogContactTypeOptions"
+  [contact]="item"
+  [(detailVisible)]="detailVisible"
+  [showHistory]="true"
+  (savedContact)="saveContact($event)"
+/>
 
 <app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />

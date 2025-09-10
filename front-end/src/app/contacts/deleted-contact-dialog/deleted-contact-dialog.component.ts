@@ -1,4 +1,4 @@
-import { Component, effect, inject, model, output } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, model, output } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -15,13 +15,14 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
   imports: [Dialog, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
 export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> {
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   protected readonly itemService = inject(DeletedContactService);
 
   readonly visible = model(false);
-  readonly contactsRestored = output<string[]>();
+  contactsRestored = output<string[]>();
   contactTypeLabels: LabelList = ContactTypeLabels;
 
-  readonly sortableHeaders: { field: string; label: string }[] = [
+  sortableHeaders: { field: string; label: string }[] = [
     { field: 'sort_name', label: 'Name' },
     { field: 'type', label: 'Type' },
     { field: 'employer', label: 'Employer' },

@@ -22,7 +22,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   loading = true;
   readonly selectedItems = signal<T[]>([]);
   readonly detailVisible = signal(false);
-  readonly isNewItem = signal(true);
+  isNewItem = true;
   readonly first = signal(0);
 
   protected caption?: string;
@@ -112,13 +112,13 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   public addItem() {
     this.item = this.getEmptyItem();
     this.detailVisible.set(true);
-    this.isNewItem.set(true);
+    this.isNewItem = true;
   }
 
   public editItem(item: T): Promise<boolean> | void {
     this.item = item;
     this.detailVisible.set(true);
-    this.isNewItem.set(false);
+    this.isNewItem = false;
   }
 
   public deleteItem(item: T): void | Promise<void> {

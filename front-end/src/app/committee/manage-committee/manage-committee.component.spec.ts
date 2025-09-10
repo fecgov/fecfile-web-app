@@ -82,15 +82,15 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('#addItem opens the dialog to add an item', () => {
-    component.isNewItem.set(false);
+    component.isNewItem = false;
     component.addItem();
-    expect(component.isNewItem()).toBe(true);
+    expect(component.isNewItem).toBe(true);
   });
 
   it('#editItem opens the dialog to edit an item', () => {
-    component.isNewItem.set(true);
+    component.isNewItem = true;
     component.editItem(committeeMembers[0]);
-    expect(component.isNewItem()).toBe(false);
+    expect(component.isNewItem).toBe(false);
   });
 
   it('should open edit mode and set member', () => {
