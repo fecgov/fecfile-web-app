@@ -1,6 +1,9 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 
+export const committeePatternMessage =
+  'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
+
 export class CommitteeAccount extends BaseModel {
   id: string | undefined;
   custodian_city: string | undefined;
