@@ -24,6 +24,7 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
+import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-contact-modal',
@@ -41,6 +42,7 @@ import { ContactSearchComponent } from '../contact-search/contact-search.compone
     ButtonDirective,
     Ripple,
     ConfirmDialog,
+    SearchableSelectComponent,
   ],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {

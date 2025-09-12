@@ -7,12 +7,13 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
+import { SearchableSelectComponent } from '../../searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-candidate-office-input',
   styleUrls: ['./candidate-office-input.component.scss'],
   templateUrl: './candidate-office-input.component.html',
-  imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText],
+  imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText, SearchableSelectComponent],
 })
 export class CandidateOfficeInputComponent implements OnInit {
   readonly transaction = input<Transaction>();

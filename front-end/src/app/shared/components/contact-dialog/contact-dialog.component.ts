@@ -39,6 +39,7 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 
 export class TransactionData {
   id: string;
@@ -86,7 +87,9 @@ export class TransactionData {
     CurrencyPipe,
     DatePipe,
     LabelPipe,
+    SearchableSelectComponent,
   ],
+  providers: [SearchableSelectComponent],
 })
 export class ContactDialogComponent extends DestroyerComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

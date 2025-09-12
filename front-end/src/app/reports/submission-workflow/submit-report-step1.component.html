@@ -110,9 +110,10 @@
           <div class="col-3">
             <div class="field">
               <label for="state">STATE/PROVINCE</label>
-              <p-select
+              <app-searchable-select
                 inputId="state"
                 formControlName="state"
+                [form]="form"
                 [options]="stateOptions"
                 [autoDisplayFirst]="false"
                 appendTo="body"

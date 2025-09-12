@@ -16,9 +16,10 @@
     <div class="col-3">
       <div class="field">
         <label for="candidate_state">CANDIDATE STATE</label>
-        <p-select
+        <app-searchable-select
           inputId="candidate_state"
           [formControlName]="stateFormControlName()"
+          [form]="form()"
           [options]="candidateStateOptions"
           [autoDisplayFirst]="false"
           [class.disabled]="stateControl()?.disabled"
