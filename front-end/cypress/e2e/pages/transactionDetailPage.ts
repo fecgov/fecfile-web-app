@@ -259,6 +259,62 @@ export class TransactionDetailPage {
     }
   }
 
+  static clickSave(reportId: string) {
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+    ).as('GetReceipts');
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+    ).as('GetLoans');
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+    ).as('GetDisbursements');
+    cy.contains(/^Save$/).click();
+
+    cy.wait('@GetLoans');
+    cy.wait('@GetDisbursements');
+    cy.wait('@GetReceipts');
+  }
+
+  static addGuarantor(name: string, amount: number | string, reportId: string) {
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+    ).as('GetReceipts');
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+    ).as('GetLoans');
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+    ).as('GetDisbursements');
+
+    PageUtils.clickButton('Save & add loan guarantor');
+    PageUtils.closeToast();
+    cy.contains('Guarantors to loan source').should('exist');
+    ContactLookup.getContact(name);
+    cy.get('#amount').safeType(amount);
+    cy.intercept({
+      method: 'Post',
+    }).as('saveGuarantor');
+    PageUtils.clickButton('Save & add loan guarantor');
+    cy.wait('@saveGuarantor');
+    PageUtils.closeToast();
+    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+    PageUtils.clickButton('Cancel');
+
+    cy.wait('@GetLoans');
+    cy.wait('@GetDisbursements');
+    cy.wait('@GetReceipts');
+    cy.wait('@GetLoans');
+    cy.wait('@GetDisbursements');
+    cy.wait('@GetReceipts');
+  }
+
   private static enterMemo(formData: ScheduleFormData, alias: string) {
     if (formData.memo_code) {
       cy.get(alias)
@@ -280,10 +336,6 @@ export class TransactionDetailPage {
       PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
     }
   }
-
-  /*
-  
-  */
 
   private static enterElection(formData: ScheduleFormData, alias: string) {
     if (formData.electionType) {

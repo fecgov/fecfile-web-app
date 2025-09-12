@@ -2,30 +2,19 @@ import { defaultDebtFormData as debtFormData } from '../models/TransactionFormMo
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { F3XSetup, Setup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactFormData } from '../models/ContactFormModel';
 import { ContactListPage } from '../pages/contactListPage';
 import { ContactLookup } from '../pages/contactLookup';
+import { buildDebtOwedByCommittee } from '../requests/library/transactions';
+import { makeTransaction } from '../requests/methods';
+import { ReportListPage } from '../pages/reportListPage';
 
 describe('Debts', () => {
   beforeEach(() => {
     Initialize();
   });
-
-  function setupDebtOwedByCommittee(setup: Setup) {
-    return cy.wrap(F3XSetup(setup)).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
-      StartTransaction.Debts().ByCommittee();
-
-      PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
-      PageUtils.containedOnPage('Debt Owed By Committee');
-      ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
-      TransactionDetailPage.enterLoanFormData(debtFormData);
-      PageUtils.clickButton('Save');
-      return cy.wrap(result);
-    });
-  }
 
   function setupCoordinatedPartyExpenditure(
     organization: ContactFormData,
@@ -47,8 +36,17 @@ describe('Debts', () => {
   }
 
   it('should test Debt Owed By Committee loan', () => {
-    setupDebtOwedByCommittee({ committee: true }).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
+      StartTransaction.Debts().ByCommittee();
+
+      PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
+      PageUtils.containedOnPage('Debt Owed By Committee');
+      ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
+      TransactionDetailPage.enterLoanFormData(debtFormData);
+      PageUtils.clickButton('Save');
+
+      ReportListPage.goToReportList(result.report);
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed By Committee').should('exist');
 
@@ -62,8 +60,8 @@ describe('Debts', () => {
   });
 
   it('should test Owed To Committee loan', () => {
-    setupDebtOwedByCommittee({ committee: true }).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -77,31 +75,45 @@ describe('Debts', () => {
     });
   });
 
-  it('should test Debt Owed By Committee loan - Report debt repayment', () => {
-    ContactListPage.deleteAllContacts();
-    PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
+  describe('test PTY', () => {
+    beforeEach(() => {
+      ContactListPage.deleteAllContacts();
+      PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
+    });
 
-    cy.location('pathname').should('include', '/reports');
-
-    setupDebtOwedByCommittee({
-      candidate: true,
-      organization: true,
-      committee: true,
-    }).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
-      cy.contains('Debt Owed By Committee').should('exist');
-
-      PageUtils.clickElement('loans-and-debts-button');
-      cy.contains('Report debt repayment').click({ force: true });
-      PageUtils.urlCheck('select/disbursement?debt=');
-      cy.contains('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS').should('exist');
-      PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
-      cy.contains('Coordinated Party Expenditure').click({ force: true });
-      setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
-      PageUtils.urlCheck('/list');
-      cy.contains('Coordinated Party Expenditure').should('exist');
-
+    afterEach(() => {
       PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
+    });
+
+    it('should test Debt Owed By Committee loan - Report debt repayment', () => {
+      cy.wrap(
+        DataSetup({
+          candidate: true,
+          organization: true,
+          committee: true,
+        }),
+      ).then((result: any) => {
+        const debt = buildDebtOwedByCommittee(result.committee, result.report, 'TEST DEBT', 6000);
+        makeTransaction(debt, () => {
+          ReportListPage.goToReportList(result.report);
+          cy.contains('Debt Owed By Committee').should('exist');
+
+          PageUtils.clickKababItem(
+            'Debt Owed By Committee',
+            'Report debt repayment',
+            'app-transaction-loans-and-debts',
+          );
+          PageUtils.urlCheck('select/disbursement?debt=');
+          cy.contains('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS').should('exist');
+          PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+          cy.contains('Coordinated Party Expenditure').click({ force: true });
+          setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
+          PageUtils.urlCheck('/list');
+          cy.contains('Coordinated Party Expenditure').should('exist');
+
+          PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
+        });
+      });
     });
   });
 });

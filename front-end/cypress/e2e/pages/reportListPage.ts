@@ -54,10 +54,11 @@ export class ReportListPage {
   }
 
   static editReport(reportName: string, fieldName = 'Edit') {
+    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
     ReportListPage.goToPage();
-    cy.wait(500);
+    cy.wait(`@GetReports`);
+    cy.wait(`@GetReports`);
     PageUtils.clickKababItem(reportName, fieldName);
-    cy.wait(500);
   }
 
   static submitReport(reportName: string) {
@@ -70,5 +71,32 @@ export class ReportListPage {
     PageUtils.clickButton('Submit');
     PageUtils.clickButton('Yes');
     ReportListPage.goToPage();
+  }
+
+  static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+    if (includeReceipts)
+      cy.intercept(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+      ).as('GetReceipts');
+    if (includeLoans)
+      cy.intercept(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+      ).as('GetLoans');
+    if (includeDisbursements)
+      cy.intercept(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+      ).as('GetDisbursements');
+    cy.visit(`/reports/transactions/report/${reportId}/list`);
+    if (includeLoans) cy.wait('@GetLoans');
+    if (includeDisbursements) cy.wait('@GetDisbursements');
+    if (includeReceipts) cy.wait('@GetReceipts');
+
+    // Can go away after double fetch fix
+    if (includeLoans) cy.wait('@GetLoans');
+    if (includeDisbursements) cy.wait('@GetDisbursements');
+    if (includeReceipts) cy.wait('@GetReceipts');
   }
 }
