@@ -1,6 +1,9 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 
+export const candidatePatternMessage =
+  'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
+
 export class Candidate extends BaseModel {
   active_through: number | undefined;
   address_city: string | undefined;

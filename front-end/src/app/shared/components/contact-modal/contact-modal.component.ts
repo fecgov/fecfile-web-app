@@ -24,6 +24,8 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
+import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
 
 @Component({
   selector: 'app-contact-modal',
@@ -41,6 +43,7 @@ import { ContactSearchComponent } from '../contact-search/contact-search.compone
     ButtonDirective,
     Ripple,
     ConfirmDialog,
+    ToUpperDirective,
   ],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {
@@ -77,6 +80,8 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
   candidateDistrictOptions: PrimeOptions = [];
   emptyMessage = 'No data available in table';
 
+  readonly candidatePatternMessage = candidatePatternMessage;
+  readonly committeePatternMessage = committeePatternMessage;
   readonly sortableHeaders: { field: string; label: string }[] = [
     { field: 'transaction_type_identifier', label: 'Type' },
     { field: 'form_type', label: 'Form' },

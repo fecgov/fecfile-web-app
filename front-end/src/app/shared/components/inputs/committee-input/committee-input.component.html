@@ -6,6 +6,7 @@
         <input
           type="text"
           pInputText
+          appToUpper
           id="organization_name"
           [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [class.readonly]="readonly"
@@ -15,6 +16,7 @@
           [form]="form"
           [fieldName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
+          [patternErrorMessage]="patternMessage"
         />
       </div>
     </div>
