@@ -4,7 +4,11 @@ import { PageUtils } from './pageUtils';
 
 export class ReportListPage {
   static goToPage() {
+    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
     cy.visit('/reports');
+    cy.wait('@GetReports');
+    cy.wait('@GetReports');
+    cy.wait('@GetReports');
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
