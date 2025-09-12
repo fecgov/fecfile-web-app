@@ -1,7 +1,7 @@
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import {
   defaultScheduleFormData as defaultTransactionFormData,
@@ -11,9 +11,10 @@ import { faker } from '@faker-js/faker';
 import { makeTransaction } from '../requests/methods';
 import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
+import { ReportListPage } from '../pages/reportListPage';
 
 function setupTransactions(secondSame: boolean) {
-  return cy.wrap(F3XSetup({ individual: true, individual2: true })).then((result: any) => {
+  return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {
     const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', result.individual, result.report);
     const transaction_b = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
@@ -36,7 +37,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('new transaction aggregate', () => {
     setupTransactions(true).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
 
       cy.get(':nth-child(2) > :nth-child(2) > a').click();
       cy.contains('Create a new contact').should('exist');
@@ -75,7 +76,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
@@ -97,7 +98,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change amount', () => {
     setupTransactions(true).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
@@ -117,7 +118,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction date leapfrogging', () => {
     setupTransactions(true).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 
@@ -138,7 +139,7 @@ describe('Tests transaction form aggregate calculation', () => {
     setupTransactions(true).then((result: any) => {
       const transaction_c = buildScheduleA('INDIVIDUAL_RECEIPT', 40.0, '2025-04-20', result.individual, result.report);
       makeTransaction(transaction_c, () => {
-        cy.visit(`/reports/transactions/report/${result.report}/list`);
+        ReportListPage.goToReportList(result.report);
         cy.contains('Transactions in this report').should('exist');
         cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 
@@ -163,8 +164,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
   // TODO makeTransaction the first transactions
   it('existing IE date leapfrogging', () => {
-    cy.wrap(F3XSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       // Create the first Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');

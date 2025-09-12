@@ -5,9 +5,10 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { ContactFormData } from '../models/ContactFormModel';
 import { defaultScheduleFormData, formTransactionDataForSchedule } from '../models/TransactionFormModel';
-import { F3XSetup } from './f3x-setup';
+import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
+import { ReportListPage } from '../pages/reportListPage';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -34,8 +35,8 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
-    cy.wrap(F3XSetup({ individual: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
       const individual: ContactFormData = result.individual;
@@ -74,8 +75,8 @@ describe('Receipt Transactions', () => {
       },
     };
 
-    cy.wrap(F3XSetup({ individual: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().Returned();
 
       const individual: ContactFormData = result.individual;
@@ -110,8 +111,8 @@ describe('Receipt Transactions', () => {
       ...{ purpose_description: '', category_code: '' },
     };
 
-    cy.wrap(F3XSetup({ individual: true, organization: true })).then((result: any) => {
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+    cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().Partnership();
       const org = result.organization;
       const individual = result.individual;
@@ -182,9 +183,9 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a Party Receipt transaction', () => {
-    cy.wrap(F3XSetup({ committee: true })).then((result: any) => {
+    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       const committee = result.committee;
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().RegisteredFilers().Party();
 
       ContactLookup.getCommittee(committee);
@@ -218,9 +219,9 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a Group I transaction', () => {
-    cy.wrap(F3XSetup({ committee: true })).then((result: any) => {
+    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       const committee = result.committee;
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
       ContactLookup.getCommittee(committee);
@@ -253,10 +254,10 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a dual-entry Earmark Receipt transaction', () => {
-    cy.wrap(F3XSetup({ individual: true, committee: true })).then((result: any) => {
+    cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
       const individual = result.individual;
       const committee = result.committee;
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().Earmark();
 
       // Enter STEP ONE transaction
@@ -343,10 +344,10 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a dual-entry PAC Earmark Receipt transaction', () => {
-    cy.wrap(F3XSetup({ individual: true, committee: true })).then((result: any) => {
+    cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
       const committee = result.committee;
       const individual = result.individual;
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().RegisteredFilers().PAC_Earmark();
 
       // Enter STEP ONE transaction
@@ -439,11 +440,11 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
-    cy.wrap(F3XSetup({ individual: true, committee: true, organization: true })).then((result: any) => {
+    cy.wrap(DataSetup({ individual: true, committee: true, organization: true })).then((result: any) => {
       const committee = result.committee;
       const individual = result.individual;
       const organization = result.organization;
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
 
       // Create a Joint Fundraising Transfer
       StartTransaction.Receipts().Transfers().JointFundraising();
@@ -539,9 +540,9 @@ describe('Receipt Transactions', () => {
   });
 
   it('Committee Fields Display Properly', () => {
-    cy.wrap(F3XSetup({ committee: true })).then((result: any) => {
+    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       const committee = result.committee;
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      ReportListPage.goToReportList(result.report);
 
       StartTransaction.Receipts().RegisteredFilers().PAC();
       ContactLookup.getCommittee(committee);

@@ -3,10 +3,10 @@ import { PageUtils } from './pageUtils';
 
 export class UsersPage {
   static goToPage(alias = '') {
-    alias = PageUtils.getAlias(alias);
-    cy.visit('/reports');
-    cy.get('#navbarProfileDropdownMenuLink').click();
-    cy.get(alias).find('.p-popover').contains('Users').click();
+    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/?page=1**').as('GetMembers');
+    cy.visit('/committee/members');
+    cy.wait('@GetMembers');
+    cy.wait('@GetMembers');
   }
 
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {
