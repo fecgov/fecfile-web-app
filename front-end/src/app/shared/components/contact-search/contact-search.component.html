@@ -6,12 +6,16 @@
         [(ngModel)]="manager().contactType"
         inputId="entity_type"
         [options]="manager().contactTypeOptions()"
-        [readonly]="true"
-        styleClass="readonly"
+        [readonly]="contactDropdownReadonly()"
+        [styleClass]="contactDropdownReadonly() ? 'readonly' : ''"
         id="entity_type_dropdown"
         appendTo="body"
       >
-        <ng-template pTemplate="dropdownicon"></ng-template>
+        <ng-template pTemplate="dropdownicon">
+          @if (!contactDropdownReadonly()) {
+            <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="11px" width="11px" />
+          }
+        </ng-template>
       </p-select>
     </div>
 
