@@ -226,6 +226,10 @@
     }
   </form>
 
+  @if (showHistory() && manager().contact().id) {
+    <app-contact-transactions [contactId]="this.manager().contact().id ?? ''" />
+  }
+
   <ng-template #footer>
     <div class="top-border-footer">
       <button

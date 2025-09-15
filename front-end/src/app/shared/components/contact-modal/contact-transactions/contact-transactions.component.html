@@ -1,0 +1,26 @@
+<app-table
+  [(first)]="first"
+  title="Transaction history"
+  sortField="transaction_type_identifier"
+  [items]="items"
+  [(totalItems)]="totalItems"
+  [sortableHeaders]="sortableHeaders"
+  [loading]="loading"
+  [(rowsPerPage)]="rowsPerPage"
+  itemName="transactions"
+  emptyMessage="No data available in table'"
+  (loadTableItems)="loadTableItems($event)"
+>
+  <ng-template #header> </ng-template>
+  <ng-template #body let-transaction>
+    <td>
+      <a [routerLink]="['/reports', 'transactions', 'report', transaction.report_ids[0], 'list', transaction.id]">
+        {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
+      </a>
+    </td>
+    <td>{{ transaction.form_type }}</td>
+    <td>{{ transaction.report_code_label }}</td>
+    <td>{{ transaction.date | date: 'MM/dd/yyyy' }}</td>
+    <td>{{ transaction.amount | currency }}</td>
+  </ng-template>
+</app-table>

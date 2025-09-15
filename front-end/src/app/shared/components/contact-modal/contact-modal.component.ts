@@ -25,6 +25,8 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
 
+import { ContactTransactionComponent } from './contact-transactions/contact-transactions.component';
+
 @Component({
   selector: 'app-contact-modal',
   templateUrl: './contact-modal.component.html',
@@ -41,6 +43,7 @@ import { ContactSearchComponent } from '../contact-search/contact-search.compone
     ButtonDirective,
     Ripple,
     ConfirmDialog,
+    ContactTransactionComponent,
   ],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {
@@ -140,6 +143,11 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       });
 
     this.updateContactType();
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.cmservice.showDialog.set(false);
   }
 
   private reset() {
