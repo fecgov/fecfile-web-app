@@ -100,7 +100,7 @@ describe('SearchableSelectComponent', () => {
     fixture.detectChanges();
 
     expect(pSelectInstance.focusedOptionIndex()).toBe(0);
-    tick(500);
+    tick(1300);
 
     focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'C' }));
     tick();

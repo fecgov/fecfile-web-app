@@ -64,7 +64,7 @@ export class SearchableSelectComponent {
     pSelectInstace.searchTimeout = setTimeout(() => {
       this.searchValue = '';
       pSelectInstace.searchTimeout = null;
-    }, 500);
+    }, 1250);
     if (isCycleTrigger) {
       this.handleCycleSearch(event, char);
       return true;
