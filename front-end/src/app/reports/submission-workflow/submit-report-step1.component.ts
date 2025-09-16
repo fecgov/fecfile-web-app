@@ -15,10 +15,10 @@ import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
 import { RadioButton } from 'primeng/radiobutton';
-import { Select } from 'primeng/select';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../shared/directives/single-click.directive';
+import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-submit-report-step1',
@@ -31,10 +31,10 @@ import { SingleClickDirective } from '../../shared/directives/single-click.direc
     ErrorMessagesComponent,
     FormsModule,
     RadioButton,
-    Select,
     ButtonDirective,
     Ripple,
     SingleClickDirective,
+    SearchableSelectComponent,
   ],
 })
 export class SubmitReportStep1Component extends FormComponent implements OnInit {

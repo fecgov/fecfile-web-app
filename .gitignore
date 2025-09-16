@@ -42,6 +42,8 @@ local_settings.py
 !.vscode/extensions.json
 
 # Cypress
+front-end/cypress/results/
+front-end/cypres/downloads/
 front-end/cypress/screenshots/
 front-end/cypress/videos/
 front-end/cypress/results/

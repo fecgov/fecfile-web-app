@@ -28,7 +28,6 @@ import { MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { Select } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
 import { TextareaModule } from 'primeng/textarea';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
@@ -36,6 +35,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { injectParams } from 'ngxtension/inject-params';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -47,7 +47,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
     SelectButton,
     ErrorMessagesComponent,
     CalendarComponent,
-    Select,
+    SearchableSelectComponent,
     SaveCancelComponent,
     TextareaModule,
     Dialog,

@@ -3,14 +3,22 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { FluidModule } from 'primeng/fluid';
 import { InputText } from 'primeng/inputtext';
-import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionTemplateMapType } from 'app/shared/models';
+import { SearchableSelectComponent } from '../../searchable-select/searchable-select.component';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-address-input',
   templateUrl: './address-input.component.html',
-  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, Select, FluidModule],
+  imports: [
+    ReactiveFormsModule,
+    InputText,
+    ErrorMessagesComponent,
+    SearchableSelectComponent,
+    FluidModule,
+    SelectModule,
+  ],
 })
 export class AddressInputComponent {
   readonly form = input.required<FormGroup>();
