@@ -1,16 +1,19 @@
 import { ContactListPage } from './pages/contactListPage';
-import { LoginPage } from './pages/loginPage';
+import { Initialize, LoginPage } from './pages/loginPage';
 import { PageUtils } from './pages/pageUtils';
 import { defaultFormData as contactFormData } from './models/ContactFormModel';
+import { DataSetup } from './F3X/setup';
+import { ReportListPage } from './pages/reportListPage';
+import { buildScheduleA } from './requests/library/transactions';
+import { makeTransaction } from './requests/methods';
 
 describe('Manage contacts', () => {
   beforeEach(() => {
-    LoginPage.login();
-    ContactListPage.deleteAllContacts();
+    Initialize();
     ContactListPage.goToPage();
   });
 
-  xit('Create an Individual contact', () => {
+  it('Create an Individual contact', () => {
     PageUtils.clickButton('Add contact');
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
@@ -153,8 +156,26 @@ describe('Manage contacts', () => {
     cy.get('#occupation').parent().should('contain', 'This field cannot contain more than 38 alphanumeric characters.');
   });
 
-  xit('Create lookup contact', () => {
-    // Candidate lookup
+  it('should show transactions', () => {
+    cy.intercept(
+      'GET',
+      'http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=10&contact=**',
+    ).as('GetTransactions');
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      ContactListPage.goToPage();
+      const alias = PageUtils.getAlias('');
+      cy.get(alias).contains('a', 'Ant, Accidental').click();
+      cy.wait('@GetTransactions');
+      cy.get(alias).contains('td', 'No data available in table').should('exist');
+      const receipt = buildScheduleA('INDIVIDUAL_RECEIPT', 100.55, '2025-04-12', result.individual, result.report);
+      makeTransaction(receipt, () => {
+        ContactListPage.goToPage();
+        cy.get(alias).contains('a', 'Ant, Accidental').click();
+        cy.wait('@GetTransactions');
+        cy.get(alias).contains('td', 'No data available in table').should('not.exist');
+        cy.get(alias).contains('td', 'Individual Receipt').should('exist');
+      });
+    });
   });
 
   xit('Delete contact', () => {

@@ -10,7 +10,9 @@ import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
   static goToPage() {
+    cy.intercept('GET', 'http://localhost:8080/api/v1/contacts/?**').as('GetContacts');
     cy.visit('/contacts');
+    cy.wait('@GetContacts');
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
