@@ -14,7 +14,6 @@ import { LabelPipe } from '../../shared/pipes/label.pipe';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { SelectModule } from 'primeng/select';
-import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-contact-list',
@@ -32,7 +31,6 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
     LabelPipe,
     SelectModule,
   ],
-  providers: [SearchableSelectComponent],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   protected readonly itemService = inject(ContactService);
