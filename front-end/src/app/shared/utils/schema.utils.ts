@@ -41,6 +41,12 @@ export class SchemaUtils {
     'userCertified',
     'secured',
     'memo_code',
+    'loan_restructured',
+    'line_of_credit',
+    'others_liable',
+    'perfected_interest',
+    'future_income',
+    'collateral',
   ];
   static readonly DATE_FORMAT = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$';
 
