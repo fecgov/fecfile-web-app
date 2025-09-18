@@ -296,6 +296,10 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
   }
 
   public openDialog() {
+    this.loadTransactions({
+      first: 0,
+      rows: this.rowsPerPage,
+    });
     this.resetForm();
     this.form.patchValue(this.contact);
     if (this.contact.id) {
