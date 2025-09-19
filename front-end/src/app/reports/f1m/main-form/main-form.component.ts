@@ -129,6 +129,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
 
+  readonly form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
+
   committeeTypeControl: AbstractControl | null = null;
   statusByControl: SubscriptionFormControl | null = null;
   affiliatedContact: AffiliatedContact = {} as AffiliatedContact;

@@ -50,7 +50,18 @@
     <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted" />
   </div>
 
-  @if (showFilingFrequency) {
+  @if (isLoanAgreement()) {
+    <div class="gray flex py-2" id="loan-agreement-container">
+      <i class="pi pi-info custom-info-icon mx-2"></i>
+      <div class="ghandi text-sm">
+        <span>To submit a Form 99 with a Loan Agreement or Loan Forgiveness attachment, please use the </span>
+        <a href="https://webforms.fec.gov/wfja/form99" target="_blank">Form 99 webform</a>
+        <span> on FEC.gov.</span>
+      </div>
+    </div>
+  }
+
+  @if (showFilingFrequency()) {
     <div class="field w-6">
       <div class="field">
         <label for="filing_frequency">NEW FILING FREQUENCY</label>
