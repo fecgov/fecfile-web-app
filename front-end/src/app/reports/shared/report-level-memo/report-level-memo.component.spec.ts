@@ -12,7 +12,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
@@ -29,7 +28,7 @@ describe('ReportLevelMemoComponent', () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
 
     await TestBed.configureTestingModule({
-      imports: [CardModule, ToastModule, ReactiveFormsModule, ButtonModule, TextareaModule, ReportLevelMemoComponent],
+      imports: [CardModule, ToastModule, ReactiveFormsModule, ButtonModule, ReportLevelMemoComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

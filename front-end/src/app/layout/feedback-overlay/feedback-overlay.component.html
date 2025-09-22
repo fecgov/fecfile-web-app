@@ -30,7 +30,7 @@
                     >WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?
                     <span class="paren-label">(Required)</span></label
                   >
-                  <textarea id="action" [rows]="3" pTextarea [autoResize]="true" formControlName="action"></textarea>
+                  <textarea id="action" [rows]="3" appAutoResize formControlName="action"></textarea>
                   <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted" />
                 </div>
               </div>
@@ -39,13 +39,7 @@
               <div class="col-12">
                 <div class="field">
                   <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
-                  <textarea
-                    id="feedback"
-                    [rows]="3"
-                    pTextarea
-                    [autoResize]="true"
-                    formControlName="feedback"
-                  ></textarea>
+                  <textarea id="feedback" [rows]="3" appAutoResize formControlName="feedback"></textarea>
                   <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
                 </div>
               </div>
@@ -61,7 +55,7 @@
                       Security number.)</span
                     >
                   </label>
-                  <textarea id="about" [rows]="3" pTextarea [autoResize]="true" formControlName="about"></textarea>
+                  <textarea id="about" [rows]="3" appAutoResize formControlName="about"></textarea>
                   <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted" />
                 </div>
               </div>

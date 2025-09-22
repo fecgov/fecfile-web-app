@@ -7,16 +7,22 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { SelectItem } from 'primeng/api';
 import { Select } from 'primeng/select';
-import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { BaseInputComponent } from '../base-input.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
+import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 
 @Component({
   selector: 'app-additional-info-input',
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
-  imports: [ReactiveFormsModule, ErrorMessagesComponent, Select, TextareaModule, DesignatedSubordinateInputComponent],
+  imports: [
+    ReactiveFormsModule,
+    ErrorMessagesComponent,
+    Select,
+    AutoResizeDirective,
+    DesignatedSubordinateInputComponent,
+  ],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
   readonly designatingCommitteeSelect = output<SelectItem<Contact>>();

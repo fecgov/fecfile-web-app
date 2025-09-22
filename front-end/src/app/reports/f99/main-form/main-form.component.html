@@ -68,14 +68,7 @@
 
   <div class="field w-full">
     <label for="message_text">TEXT MESSAGE</label>
-    <textarea
-      id="message_text"
-      [rows]="4"
-      [cols]="30"
-      pTextarea
-      [autoResize]="true"
-      formControlName="message_text"
-    ></textarea>
+    <textarea id="message_text" appAutoResize formControlName="message_text"></textarea>
     <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" />
   </div>
 
