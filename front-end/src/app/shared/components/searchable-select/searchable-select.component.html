@@ -1,0 +1,16 @@
+<p-select
+  #pSelect
+  [options]="options()"
+  [inputId]="inputId()"
+  [readonly]="readonly()"
+  [styleClass]="styleClass()"
+  [autoDisplayFirst]="autoDisplayFirst()"
+  [formControl]="control()"
+  (onChange)="changeOut.emit($event)"
+  (onFocus)="focusOut.emit($event)"
+  (onBlur)="blurOut.emit($event)"
+  (onShow)="showOut.emit($event)"
+  (onHide)="hideOut.emit($event)"
+  fluid
+>
+</p-select>
