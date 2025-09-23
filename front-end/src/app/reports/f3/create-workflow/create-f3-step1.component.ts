@@ -20,7 +20,6 @@ import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'a
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { SelectButton } from 'primeng/selectbutton';
-import { Select } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
@@ -31,6 +30,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { injectParams } from 'ngxtension/inject-params';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
 
 @Component({
   selector: 'app-create-f3-step1',
@@ -42,7 +42,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     SelectButton,
     ErrorMessagesComponent,
     CalendarComponent,
-    Select,
+    SearchableSelectComponent,
     SaveCancelComponent,
     TextareaModule,
   ],

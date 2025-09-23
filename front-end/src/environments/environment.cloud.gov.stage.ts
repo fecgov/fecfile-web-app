@@ -14,7 +14,6 @@ export const environment = {
   loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
   loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
   ffapiTimeoutCookieName: 'ffapi_timeout_stage',
-  ffapiLoginDotGovCookieName: 'ffapi_login_dot_gov',
   sessionIdCookieName: 'sessionid',
   committee_data_source: 'test',
   form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
