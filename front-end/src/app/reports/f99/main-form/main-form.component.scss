@@ -16,6 +16,7 @@
   border-left: 5px solid var(--fec-grey-alt);
   max-width: 360px;
   width: 360px;
+  align-items: center;
 }
 
 @media (min-width: 576px) {
@@ -78,5 +79,4 @@ h2 {
   font-size: 0.75rem;
   height: 1.25rem;
   width: 1.25rem;
-  align-self: center;
 }
