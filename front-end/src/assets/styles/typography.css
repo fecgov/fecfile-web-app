@@ -219,3 +219,6 @@ body {
   }
 }
 /* TYPOGRAHY */
+.ghandi {
+  font-family: var(--gandhi-regular)
+}
