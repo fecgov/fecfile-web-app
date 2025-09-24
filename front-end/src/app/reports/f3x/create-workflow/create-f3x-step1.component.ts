@@ -147,7 +147,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     );
     effectOnceIf(
       () => this.report(),
-      () => this.form.patchValue(this.report()!, { emitEvent: false }),
+      () => this.form.patchValue(this.report()!),
     );
 
     effect(() => {
