@@ -56,7 +56,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    
+
     const textCodeField = this.form.get('text_code') as SubscriptionFormControl;
     textCodeField.addSubscription((textCode) => {
       this.showFilingFrequency = textCode in textCodesWithFilingFrequencies;
