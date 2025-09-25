@@ -3,7 +3,6 @@ import { JsonSchema, validate } from 'fecfile-validate';
 import { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
-import { environment } from 'environments/environment';
 
 export class SchemaUtils {
   /**
