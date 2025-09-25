@@ -39,7 +39,7 @@ export class Form99 extends Report {
   }
 }
 
-let allTextCodes = Object.entries({
+const allTextCodes = Object.entries({
   MST: 'Miscellaneous Report to the FEC',
   MSM: 'Filing Frequency Change Notice',
   MSW: 'Loan Agreement / Loan Forgiveness',

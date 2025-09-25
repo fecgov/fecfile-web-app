@@ -11,7 +11,6 @@ import {
   INDIVIDUAL_FIELDS,
   EMPLOYEE_INFO_FIELDS,
   INDIVIDUAL_COMMITTEE,
-  INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_SINGLE_CONTACT } from '../contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
