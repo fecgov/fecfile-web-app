@@ -61,7 +61,7 @@
       </div>
     }
   </div>
-  <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
+  <p-dialog #dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
     <ng-template #header>
       <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
     </ng-template>
@@ -82,7 +82,7 @@
           class="p-button"
           label="Close"
           styleClass="p-button-link"
-          (click)="closeOutOfDateDialog()"
+          (click)="dialog.close($event)"
           [autofocus]="true"
         ></button>
       </div>

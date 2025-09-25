@@ -56,7 +56,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   readonly coverageThroughDate = computed(() => (this.report() as Form3X)?.coverage_through_date);
 
   memoControl: SubscriptionFormControl<boolean> = new SubscriptionFormControl<boolean>();
-  outOfDateDialogVisible = false;
+  readonly outOfDateDialogVisible = signal(false);
   readonly memoCodeMapOptions = computed(() => {
     const memoCodeMap = this.transactionType()?.memoCodeMap;
     if (memoCodeMap) {
@@ -114,13 +114,9 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
   }
 
-  closeOutOfDateDialog() {
-    this.outOfDateDialogVisible = false;
-  }
-
   onMemoItemClick() {
     if (!this.memoCodeReadOnly() && this.dateIsOutsideReport && !this.memoControl.value) {
-      this.outOfDateDialogVisible = true;
+      this.outOfDateDialogVisible.set(true);
     }
   }
 
@@ -135,7 +131,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
         this.memoControl.updateValueAndValidity();
         this.dateIsOutsideReport = true;
         if (!this.memoControl.value) {
-          this.outOfDateDialogVisible = true;
+          this.outOfDateDialogVisible.set(true);
         }
       } else {
         if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
