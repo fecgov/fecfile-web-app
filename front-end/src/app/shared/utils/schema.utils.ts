@@ -239,5 +239,3 @@ export class SchemaUtils {
     };
   }
 }
-
-export const fecSpec8dot5Released: boolean = environment.fecSpec >= 8.5;

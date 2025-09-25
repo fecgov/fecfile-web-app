@@ -4,7 +4,7 @@ import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.compone
 import { filingFrequencies, Form99, textCodes, textCodesWithFilingFrequencies } from 'app/shared/models/form-99.model';
 import { Report } from 'app/shared/models/report.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
-import { fecSpec8dot5Released, SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { InputText } from 'primeng/inputtext';
@@ -56,14 +56,11 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-
-    // If the FEC spec is 8.5 or later, show filing frequency on certain text codes
-    if (fecSpec8dot5Released) {
-      const textCodeField = this.form.get('text_code') as SubscriptionFormControl;
-      textCodeField.addSubscription((textCode) => {
-        this.showFilingFrequency = textCode in textCodesWithFilingFrequencies;
-      }, this.destroy$);
-    }
+    
+    const textCodeField = this.form.get('text_code') as SubscriptionFormControl;
+    textCodeField.addSubscription((textCode) => {
+      this.showFilingFrequency = textCode in textCodesWithFilingFrequencies;
+    }, this.destroy$);
   }
 
   getReportPayload(): Report {

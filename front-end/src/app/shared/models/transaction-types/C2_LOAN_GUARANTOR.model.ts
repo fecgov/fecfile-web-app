@@ -25,7 +25,6 @@ import {
   ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
-import { fecSpec8dot5Released } from 'app/shared/utils/schema.utils';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   readonly title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
@@ -35,7 +34,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     'amount',
     ...EMPLOYEE_INFO_FIELDS,
     'entity_type',
-    ...(fecSpec8dot5Released ? COM_FIELDS : []),
+    ...COM_FIELDS,
   ];
 
   override readonly contactConfig = STANDARD_SINGLE_CONTACT;
@@ -55,7 +54,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL],
   );
-  readonly contactTypeOptions = fecSpec8dot5Released ? INDIVIDUAL_COMMITTEE : INDIVIDUAL;
+  readonly contactTypeOptions = INDIVIDUAL_COMMITTEE;
   readonly schema = schema;
   override readonly hasAmountInput = true;
   override readonly hasAdditionalInfo = false;
