@@ -11,7 +11,7 @@
           [trueValue]="true"
           [falseValue]="false"
           [readonly]="form.controls[templateMap['memo_code']].disabled"
-          (click)="onMemoItemClick()"
+          (onChange)="onMemoItemClick()"
         />
         <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">
           {{ checkboxLabel() }}
