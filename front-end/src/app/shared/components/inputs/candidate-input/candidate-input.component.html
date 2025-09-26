@@ -3,11 +3,18 @@
     <div class="col-6">
       <div class="field">
         <label for="candidate_id">CANDIDATE ID</label>
-        <input type="text" pInputText id="candidate_id" [formControlName]="templateMap['candidate_fec_id']" />
+        <input
+          type="text"
+          appToUpper
+          pInputText
+          id="candidate_id"
+          [formControlName]="templateMap['candidate_fec_id']"
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_fec_id']"
           [formSubmitted]="formSubmitted"
+          [patternErrorMessage]="patternMessage"
         />
       </div>
     </div>
