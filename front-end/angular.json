@@ -240,7 +240,6 @@
             }
         }
     },
-    "defaultProject": "fecfile-web",
     "schematics": {
         "@schematics/angular:component": {
             "style": "scss"
