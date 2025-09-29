@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
+  selector: 'app-prod-notice',
   template: `<h1>Security notification</h1>
     <hr type="solid" class="top-line" />
     <h2>Warning</h2>
