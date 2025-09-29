@@ -27,6 +27,8 @@ import { ReportContactLookupComponent } from 'app/shared/components/report-conta
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
+import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
 
 @Component({
   selector: 'app-main-form',
@@ -44,6 +46,7 @@ import { ContactManagementService } from 'app/shared/services/contact-management
     SaveCancelComponent,
     ConfirmDialog,
     ContactModalComponent,
+    ToUpperDirective,
   ],
   styleUrl: './main-form.component.scss',
 })
@@ -55,6 +58,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
   protected readonly confirmationService = inject(ConfirmationWrapperService);
 
   readonly f1mCandidateTags = f1mCandidateTags;
+  readonly committeePatternMessage = committeePatternMessage;
+  readonly candidatePatternMessage = candidatePatternMessage;
   readonly formProperties: string[] = [
     'committee_type',
     'filer_committee_id_number',
@@ -128,6 +133,8 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit, 
 
   contactConfigs: { [contactKey: string]: { [formField: string]: string } } = {};
   templateMapConfigs: { [contactKey: string]: TransactionTemplateMapType } = {};
+
+  readonly form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
 
   committeeTypeControl: AbstractControl | null = null;
   statusByControl: SubscriptionFormControl | null = null;

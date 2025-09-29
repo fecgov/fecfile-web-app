@@ -99,22 +99,17 @@ describe('MemoCodeInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should close the dialog box when the method is called', () => {
-    component.closeOutOfDateDialog();
-    expect(component.outOfDateDialogVisible).toBeFalse();
-  });
-
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
     setForm3X();
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.form.get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
 
-    expect(component.outOfDateDialogVisible).toBeTrue();
+    expect(component.outOfDateDialogVisible()).toBeTrue();
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible).toBeTrue();
+    expect(component.outOfDateDialogVisible()).toBeTrue();
   });
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
@@ -122,33 +117,33 @@ describe('MemoCodeInputComponent', () => {
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
     component.form.get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBeFalse();
   });
 
   it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
     setForm3X();
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    component.outOfDateDialogVisible = false;
+    component.outOfDateDialogVisible.set(false);
     component.form.get('memo_code')?.patchValue(true);
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBeFalse();
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
-    component.outOfDateDialogVisible = false;
+    component.outOfDateDialogVisible.set(false);
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBeFalse();
   });
 
   it('should not open the dialog box when same report date is set', () => {
     setForm3X();
 
     component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
-    expect(component.outOfDateDialogVisible).toBeTrue();
+    expect(component.outOfDateDialogVisible()).toBeTrue();
 
-    component.outOfDateDialogVisible = false;
+    component.outOfDateDialogVisible.set(false);
     component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
-    expect(component.outOfDateDialogVisible).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBeFalse();
   });
 
   it('should add and remove the requiredTrue validator when a date is set', () => {
