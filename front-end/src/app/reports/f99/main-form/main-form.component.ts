@@ -4,7 +4,7 @@ import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.compone
 import { filingFrequencies, Form99, textCodes, textCodesWithFilingFrequencies } from 'app/shared/models/form-99.model';
 import { Report } from 'app/shared/models/report.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
-import { fecSpec8dot5Released, SchemaUtils } from 'app/shared/utils/schema.utils';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { InputText } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -62,7 +62,6 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   });
   readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
   readonly showFilingFrequency = computed(() => {
-    if (!fecSpec8dot5Released) return false;
     return this.documentType() in textCodesWithFilingFrequencies;
   });
 
