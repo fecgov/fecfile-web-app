@@ -42,7 +42,7 @@ to start a local server for the application. The front-end can then be accessed 
 
 ### Running end-to-end (E2E) tests
 
-Cypress is used for end-to-end (E2E) tests. [E2E instructions...](https://github.com/fecgov/fecfile-web-app/tree/develop/front-end/cypress#readme)
+Cypress is used for end-to-end (E2E) tests. See [E2E instructions](https://github.com/fecgov/fecfile-web-app/tree/develop/front-end/cypress#readme).
 
 # Deployment (FEC team only)
 
