@@ -24,8 +24,6 @@ Software necessary to run the application locally:
 - node
 - npx
 
-A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment variable. This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies. You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page.
-
 ### Running the Front-End locally
 
 From within the front-end directory, install packages with:
