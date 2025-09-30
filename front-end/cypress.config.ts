@@ -4,16 +4,6 @@ import installLogsPrinter from "cypress-terminal-report/src/installLogsPrinter";
 import cmrPlugin from "cypress-mochawesome-reporter/plugin";
 import cypressSplit from "cypress-split";
 
-type BsObsFn = (
-  on: Cypress.PluginEvents,
-  config: Cypress.PluginConfigOptions
-) => void;
-
-const useBrowserStack =
-  process.env.BROWSERSTACK === "1" ||
-  !!process.env.BROWSERSTACK_USERNAME ||
-  process.env.BROWSERSTACK_OBSERVABILITY === "1";
-
 export default defineConfig({
   projectId: "x5egpz",
   video: false,
@@ -41,44 +31,57 @@ export default defineConfig({
 
   e2e: {
     async setupNodeEvents(on, config) {
-      // 1) Mochawesome reporter plugin
+      // 1) Reporter + split + terminal logs
       cmrPlugin(on);
       cypressSplit(on, config);
-      // 2) cypress-terminal-report: print to console + write artifacts
       installLogsPrinter(on, {
-        printLogsToConsole: "onFail",   // 'always' | 'onFail' | 'never'
+        printLogsToConsole: "onFail",
         printLogsToFile: "onFail",
         outputRoot: `${config.projectRoot}/logs`,
         specRoot: "cypress/e2e",
         outputTarget: {
-          "cypress-logs|json": "json",  // per-spec JSON files
-          "out.html": "html",           // one HTML summary
+          "cypress-logs|json": "json",
+          "out.html": "html",
         },
       });
 
-      // 3) BrowserStack Test Observability (only when enabled)
-      if (useBrowserStack) {
-        try {
-          const mod = await import(
-            "browserstack-cypress-cli/bin/testObservability/plugin"
-          );
-          const bsObs: BsObsFn =
-            ((mod as unknown as { default?: BsObsFn }).default ||
-              (mod as unknown as BsObsFn)) as BsObsFn;
-          bsObs(on, config);
-        } catch (err) {
-          console.warn(
-            "[BS Observability] plugin not found or failed to load. Skipping.",
-            err
-          );
-        }
-      }
+      // 2) Cucumber preprocessor (feature files) with esbuild bundler
+      const { addCucumberPreprocessorPlugin } =
+        await import("@badeball/cypress-cucumber-preprocessor");
+      const createBundler =
+        (await import("@bahmutov/cypress-esbuild-preprocessor")).default;
+      const { createEsbuildPlugin } =
+        await import("@badeball/cypress-cucumber-preprocessor/esbuild");
+
+      await addCucumberPreprocessorPlugin(on, config);
+
+      // Tell the preprocessor where your shared step files live
+      config.env = {
+        ...config.env,
+        stepDefinitions: "cypress/e2e/steps/**/*.ts",
+      };
+
+      on(
+        "file:preprocessor",
+        createBundler({
+          plugins: [createEsbuildPlugin(config)],
+        })
+      );
+      // Bridge process.env → Cypress env (without overriding CLI or cypress.env.json)
+      const fromProc = {
+        EMAIL: process.env.CYPRESS_EMAIL || process.env.EMAIL,
+        PASSWORD: process.env.CYPRESS_PASSWORD || process.env.PASSWORD,
+      };
+      config.env = { ...fromProc, ...config.env }; // CLI/JSON still win if set
 
       return config;
     },
 
-    specPattern: "cypress/e2e/**/*.cy.ts",
-    baseUrl: process.env.CYPRESS_BASE_URL,
+    // Support BOTH .feature and .cy.ts specs
+    specPattern: ["cypress/e2e/**/*.feature", "cypress/e2e/**/*.cy.ts"],
+    supportFile: 'cypress/support/e2e.ts',
+
+    baseUrl: process.env.CYPRESS_BASE_URL || "http://localhost:4200",
     defaultCommandTimeout: 10_000,
     pageLoadTimeout: 120_000,
     retries: { runMode: 2, openMode: 0 }, // overrides top-level

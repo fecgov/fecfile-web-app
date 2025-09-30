@@ -1,0 +1,131 @@
+{
+  "cypress/e2e/F1M/f1m-affiliation.cy.ts": {
+    "Manage reports -> should create form 1m by qualification": [
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 10:30",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 1 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 1 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"d2739b5c-306c-4bff-8e87-c0c057d3ceeb\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"H1AK00001\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"House\",\n  \"first_name\": \"Aleph\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"H\",\n  \"candidate_state\": \"AK\",\n  \"candidate_district\": \"00\",\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-29T10:29:40.586945-04:00\",\n  \"updated\": \"2025-09-29T10:29:40.586962-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"3c20039f-642e-4a26-92e2-66462ef28f60\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"H1AK00002\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"House\",\n  \"first_name\": \"Beth\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"H\",\n  \"candidate_state\": \"AK\",\n  \"candidate_district\": \"00\",\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-29T10:29:40.640667-04:00\",\n  \"updated\": \"2025-09-29T10:29:40.640682-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"95d19f8e-70e9-4d15-bae4-e7be0d5f6e7e\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"P00000001\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"President\",\n  \"first_name\": \"Apple\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"P\",\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-29T10:29:40.680744-04:00\",\n  \"updated\": \"2025-09-29T10:29:40.680755-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"189889b0-8ae2-4ebf-b666-32df2afa296d\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"P00000002\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"President\",\n  \"first_name\": \"Bat\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"P\",\n  \"candidate_state\": null,\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-29T10:29:40.723866-04:00\",\n  \"updated\": \"2025-09-29T10:29:40.723891-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getAllCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/\nStatus: 201\nResponse body: {\n  \"committee_account\": \"c94c5d1a-9e73-464d-ad72-b73b5d8667a9\",\n  \"id\": \"99035af2-eff1-4726-b635-70677a34c63f\",\n  \"type\": \"CAN\",\n  \"candidate_id\": \"S1AK00001\",\n  \"committee_id\": null,\n  \"name\": null,\n  \"last_name\": \"Senate\",\n  \"first_name\": \"Alpha\",\n  \"middle_name\": null,\n  \"prefix\": null,\n  \"suffix\": null,\n  \"street_1\": \"1234 Test Ln\",\n  \"street_2\": null,\n  \"city\": \"Testville\",\n  \"state\": \"AK\",\n  \"zip\": \"12345\",\n  \"employer\": \"E\",\n  \"occupation\": \"O\",\n  \"candidate_office\": \"S\",\n  \"candidate_state\": \"AK\",\n  \"candidate_district\": null,\n  \"telephone\": null,\n  \"country\": \"USA\",\n  \"created\": \"2025-09-29T10:29:40.791234-04:00\",\n  \"updated\": \"2025-09-29T10:29:40.791248-04:00\",\n  \"has_transaction_or_report\": false\n}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "wrap\t{}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **[ Array(5) ]** to have property **length**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **[ Array(5) ]** to have a length of **5**\nActual: \t5\nExpected: \t5",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "then\tfunction(){}",
+        "severity": "error"
+      }
+    ]
+  }
+}
