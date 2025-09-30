@@ -42,7 +42,7 @@ Cypress.Commands.add("openUsersPage", () => {
 
   // 3) Confirm navigation
   cy.location("pathname", { timeout: 5000 }).should("match", /\/committee\/members\b/);
-});
+}); 
 
 
 
