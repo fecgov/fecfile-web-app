@@ -116,6 +116,11 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     if (!reportId) return undefined;
     return this.form3XService.get(reportId);
   });
+  readonly form3x = computed(() => {
+    const report = this.report();
+    if (!report) return undefined;
+    return report as Form3X;
+  });
 
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
   readonly filingFrequency = toSignal(this.form.controls['filing_frequency'].valueChanges);
@@ -162,11 +167,21 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
 
     effect(() => {
       this.filingFrequency();
-      this.form.patchValue({ report_type_category: this.reportTypeCategories[0] });
+      const report = this.form3x();
+      if (this.form.pristine && report) {
+        this.form.patchValue({ report_type_category: report.report_type_category });
+      } else {
+        this.form.patchValue({ report_type_category: this.reportTypeCategories[0] });
+      }
     });
     effect(() => {
       this.reportTypeCategory();
-      this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      const report = this.report();
+      if (this.form.pristine && report) {
+        this.form.patchValue({ report_code: report.report_code });
+      } else {
+        this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      }
     });
   }
 
