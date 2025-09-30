@@ -1,0 +1,371 @@
+{
+  "cypress/e2e/users/users.manage.feature": {
+    "Manage Users Core Happy Paths -> Delete a non-owner user (example #1)": [
+      {
+        "type": "cy:command",
+        "message": "Given \t**I am logged in as an \"owner\"**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\tLogin Through 13:20",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "sessions_manager\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "session\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookies\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Clear page\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/reports/e2e-delete-all-reports/\nStatus: 200\nResponse body: Deleted 0 Reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "getCookie\tcsrftoken",
+        "severity": "success"
+      },
+      {
+        "type": "cy:request",
+        "message": "POST http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/\nStatus: 200\nResponse body: Deleted 0 Contacts",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "And \t**I am on the Users page**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "visit\t/",
+        "severity": "success"
+      },
+      {
+        "type": "cons:info",
+        "message": "[webpack-dev-server] Server started: Hot Module Replacement disabled, Live Reloading enabled, Progress disabled, Overlay enabled.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "findAllByRole\tbutton, {name: /account|profile|menu|user|settings|more/i}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/users/get_current/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cons:log",
+        "message": "Angular is running in development mode.",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/reports",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/?page=1&ordering=form_type&page_size=10\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/reports/form-24/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.cdk-overlay-container, .overlay-container, body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "within\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\tbutton.popover-button, Users",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "location\tpathname",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **/committee/members** to match /\\/committee\\/members\\b/",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "new url\thttp://localhost:4200/committee/members",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/?page=1&ordering=name&page_size=10\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Given \t**the user \"new.user@example.com\" exists in the table**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\ttable, [role=\"table\"], .mat-table, [data-testid=\"users-table\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@table",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ttd,[role=\"cell\"], new.user@example.com",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parents\ttr",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "assert\texpected **<tr.ng-star-inserted>** to exist in the DOM\nActual: \t\"<tr.ng-star-inserted>\"\nExpected: \t\"<tr.ng-star-inserted>\"",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "When \t**I delete the user \"new.user@example.com\"**",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\ttable, [role=\"table\"], .mat-table, [data-testid=\"users-table\"]",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@table",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "contains\ttd,[role=\"cell\"], new.user@example.com",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parents\ttr",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t@row",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "within\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\tspan.pi.pi-ellipsis-v",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "parents\tbutton",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.cdk-overlay-container, .p-overlaypanel, .p-menu, body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\tbutton.table-action-button, button.p-button, button",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "filter\t:visible",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "filter\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t#button-1",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "get\t.p-confirmdialog, .cdk-overlay-container, body",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "find\t.p-confirmdialog-accept-button, button",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "filter\t:visible",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "filter\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "first\t",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "click\t{force: true}",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "DELETE http://localhost:8080/api/v1/committee-members/876b8b20-517f-4ba6-81c4-7ccf82c504d3/remove-member/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:xhr",
+        "message": "GET http://localhost:8080/api/v1/committee-members/?page=1&ordering=name&page_size=10\nStatus: 200",
+        "severity": "success"
+      },
+      {
+        "type": "cy:command",
+        "message": "Then \t**the user \"new.user@example.com\" should not appear in the list**",
+        "severity": "error"
+      }
+    ]
+  }
+}
