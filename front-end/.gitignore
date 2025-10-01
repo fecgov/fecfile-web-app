@@ -41,3 +41,4 @@ Thumbs.db
 
 # Cypress
 cypress/results/
+logs/cypress-logs/
