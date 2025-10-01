@@ -34,8 +34,6 @@ jobs:
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
       - image: cimg/node:lts-browsers
     resource_class: large
@@ -50,8 +48,6 @@ jobs:
             chromedriver --version
           name: Check install
 
-      # If we need to modify the params for install-packages:
-      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
@@ -65,7 +61,6 @@ jobs:
           path: ~/project/front-end/coverage/front-end/lcov-report/
           destination: coverage-report
 
-      # Sonar cloud setup and scanning
       - run:
           name: Create sonar-scanner cache directory if it does not exist
           command: mkdir -p /tmp/cache/scanner
@@ -156,7 +151,7 @@ jobs:
           path: /tmp/cypress/results
           destination: cypress/results
 
-  # NEW: E2E BDD job that runs .feature specs
+  # E2E BDD job that runs .feature specs
   e2e-bdd:
     docker:
       - image: cimg/node:lts-browsers
@@ -245,9 +240,6 @@ jobs:
 
     steps:
       - checkout
-
-      # If we need to modify the params for install-packages:
-      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
@@ -265,11 +257,16 @@ parameters:
   is-triggered-e2e-test:
     type: boolean
     default: false
+  is-triggered-e2e-bdd:            # <— new boolean trigger for BDD workflow
+    type: boolean
+    default: false
 
 workflows:
   primary:
     when:
-      not: << pipeline.parameters.is-triggered-e2e-test >>
+      and:
+        - not: << pipeline.parameters.is-triggered-e2e-test >>
+        - not: << pipeline.parameters.is-triggered-e2e-bdd >>
     jobs:
       - lint
       - test
@@ -282,7 +279,7 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job: # Deploy job even when e2e tests fail
+      - deploy-job:
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
@@ -292,21 +289,22 @@ workflows:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
-  # This job is run when an e2e test is triggered with the
-  # is-triggered-e2e-test parameter via the fecfile-web-api
-  # circleci config file.  It is used to run the e2e tests
-  # when the fecfile-web-api is deployed to dev, stage,
-  # test, or prod.
   triggered-e2e-test:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
 
-  # NEW: Nightly schedule for BDD e2e (.feature) tests
+  # Run only the BDD job when explicitly triggered by the new param
+  triggered-e2e-bdd:
+    when: << pipeline.parameters.is-triggered-e2e-bdd >>
+    jobs:
+      - e2e-bdd
+
+  # Nightly schedule for BDD e2e (.feature) tests
   nightly-bdd:
     triggers:
       - schedule:
-          cron: "0 6 * * *"   # daily at 06:00 UTC
+          cron: "0 6 * * *"
           filters:
             branches:
               only:
