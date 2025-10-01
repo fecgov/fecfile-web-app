@@ -149,11 +149,12 @@ export class PageUtils {
   }
 
   /**
-   * Important note, the identifier must be unique. If there are multiple rows with the same info
-   * it will fail.
-   * Also, the identifier must be directly under the <td>.
-   * Example: <td>text</td> is good, but <td><div>text</div></td> won't work
-   * @param identifier string to identify which Row the kabob is in.
+   * Finds the row containing `identifier` (anywhere in the row),
+   * clicks its kebab ("more actions") button, and returns the active overlay.
+   *
+   * - No longer requires the identifier to be a direct TD child.
+   * - Targets the topmost visible PrimeNG overlay (popover/menu/panel).
+   * - Handles various kebab button markups.
    */
   static getKabob(identifier: string, alias = '') {
     alias = PageUtils.getAlias(alias);
