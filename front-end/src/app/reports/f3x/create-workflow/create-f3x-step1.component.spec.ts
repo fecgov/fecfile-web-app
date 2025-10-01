@@ -111,11 +111,11 @@ describe('CreateF3XStep1Component: Edit', () => {
   const mockReportId = '123';
   const mockReport = Form3X.fromJSON({
     id: mockReportId,
-    filing_frequency: 'Q',
+    filing_frequency: 'M',
     report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
-    report_code: ReportCodes.Q2,
-    coverage_from_date: '2024-04-01',
-    coverage_through_date: '2024-06-30',
+    report_code: ReportCodes.M4,
+    coverage_from_date: '2024-04-05',
+    coverage_through_date: '2024-04-30',
   });
 
   beforeEach(async () => {
@@ -156,8 +156,12 @@ describe('CreateF3XStep1Component: Edit', () => {
     expect(component.reportId()).toBe(mockReportId);
     expect(getSpy).toHaveBeenCalledWith(mockReportId);
     fixture.detectChanges();
-    expect(component.form.get('report_code')?.value).toBe(ReportCodes.Q2);
-    expect(component.form.get('filing_frequency')?.value).toBe('Q');
+    expect(component.form.get('report_code')?.value).toBe(ReportCodes.M4);
+    expect(component.form.get('filing_frequency')?.value).toBe('M');
+    const coverage_from_date: Date = component.form.get('coverage_from_date')!.value;
+    expect(coverage_from_date.getMonth()).toEqual(3); // April
+    expect(coverage_from_date.getDate()).toEqual(5); // 5th
+    expect(coverage_from_date.getFullYear()).toEqual(2024); // 2024
   });
 
   it('should call update method on save', async () => {
@@ -174,27 +178,27 @@ describe('CreateF3XStep1Component: Edit', () => {
   describe('Reactive Logic', () => {
     it('should update reportCodes when filing frequency and category change', () => {
       component.form.patchValue({
-        filing_frequency: 'Q',
+        filing_frequency: 'M',
         report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
       });
       fixture.detectChanges();
-      expect(component.reportCodes()).toContain(ReportCodes.Q1);
-
-      component.form.patchValue({ filing_frequency: 'M' });
-      fixture.detectChanges();
       expect(component.reportCodes()).toContain(ReportCodes.M2);
+
+      component.form.patchValue({ filing_frequency: 'Q' });
+      fixture.detectChanges();
+      expect(component.reportCodes()).toContain(ReportCodes.Q1);
     });
 
     it('should automatically update coverage dates when report code changes', fakeAsync(() => {
-      component.form.get('report_code')?.setValue(ReportCodes.Q2);
+      component.form.get('report_code')?.setValue(ReportCodes.M2);
       tick();
       fixture.detectChanges();
 
       const fromDate = component.form.get('coverage_from_date')?.value;
       const throughDate = component.form.get('coverage_through_date')?.value;
 
-      expect(fromDate.getMonth()).toBe(3); // April
-      expect(throughDate.getMonth()).toBe(5); // June
+      expect(fromDate.getMonth()).toBe(3);
+      expect(throughDate.getMonth()).toBe(3);
     }));
   });
 });

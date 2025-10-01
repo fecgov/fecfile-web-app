@@ -2,7 +2,7 @@ import { PageUtils } from '../../../pages/pageUtils';
 
 export class Disbursements {
   static Contributions() {
-    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
     return Contributions;
   }
 
