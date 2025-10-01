@@ -33,8 +33,9 @@ jobs:
           name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
-
   test:
+    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
+    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
       - image: cimg/node:lts-browsers
     resource_class: large
@@ -49,6 +50,8 @@ jobs:
             chromedriver --version
           name: Check install
 
+      # If we need to modify the params for install-packages:
+      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
@@ -116,7 +119,6 @@ jobs:
             echo $MOCK_OPENFEC
       - run:
           name: start fecfile-web-api
-          working_directory: ~/fecfile-web-api
           command: |
             git checkout ${CIRCLE_BRANCH}
             docker-compose down
@@ -125,7 +127,8 @@ jobs:
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
-              -timeout 60s;
+              -timeout 60s; \
+          working_directory: ~/project/fecfile-web-api
       - run:
           name: execute e2e tests
           command: |
@@ -153,187 +156,62 @@ jobs:
           path: /tmp/cypress/results
           destination: cypress/results
 
-  # New: Cypress directly (feature + TS) — PARALLEL
-  e2e-cypress-parallel:
-    docker:
-      - image: cimg/node:lts-browsers
-    parallelism: 4
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - checkout
-
-      - run:
-          name: clone fecfile-web-api
-          command: |
-            rm -rf ~/fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git ~/fecfile-web-api
-
-      - run:
-          name: start fecfile-web-api (E2E mode)
-          command: |
-            cd ~/fecfile-web-api
-            git checkout ${CIRCLE_BRANCH}
-            docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" \
-            WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
-            API_DOCKERFILE="Dockerfile-e2e" \
-            FECFILE_TEST_DB_NAME="postgres" \
-            DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} \
-            DATABASE_URL=${E2E_DATABASE_URL} \
-            FEC_API=${E2E_FEC_API} \
-            FEC_API_KEY=${E2E_FEC_API_KEY} \
-            MOCK_EFO="True" \
-            E2E_TEST="True" \
-            docker-compose up --build -d
-
-            docker container run --network container:fecfile-api-proxy \
-              docker.io/jwilder/dockerize \
-              -wait http://localhost:8080/devops/status/ \
-              -wait-retry-interval 2s \
-              -timeout 60s
-
-      - run:
-          name: run Cypress (split-aware, parallel)
-          command: |
-            export SPLIT=${CIRCLE_NODE_TOTAL:-1}
-            export SPLIT_INDEX=${CIRCLE_NODE_INDEX:-0}
-
-            docker container run --name fecfile-web-app-e2e-${CIRCLE_NODE_INDEX:-0} \
-              --network container:fecfile-api-proxy \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e SPLIT=$SPLIT -e SPLIT_INDEX=$SPLIT_INDEX \
-              -e CYPRESS_BASE_URL=${CYPRESS_BASE_URL} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
-              -e E2E_TEST=True \
-              cypress/browsers:latest /bin/bash -lc '
-                set -euxo pipefail
-                cd ~
-                git clone https://github.com/fecgov/fecfile-web-app.git
-                cd fecfile-web-app/front-end
-                git checkout ${CIRCLE_BRANCH}
-                npm ci
-                # Runs BOTH .feature and .cy.ts per cypress.config.ts
-                npx cypress run --browser chrome
-              '
-
-      - run:
-          name: stage Cypress artifacts
-          when: always
-          command: |
-            IDX=${CIRCLE_NODE_INDEX:-0}
-            mkdir -p /tmp/cypress/{results,screenshots,videos,logs}
-            docker cp fecfile-web-app-e2e-$IDX:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker cp fecfile-web-app-e2e-$IDX:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker cp fecfile-web-app-e2e-$IDX:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
-            docker cp fecfile-web-app-e2e-$IDX:/root/fecfile-web-app/front-end/logs/. /tmp/cypress/logs || true
-            docker rm -f fecfile-web-app-e2e-$IDX || true
-
-      - store_artifacts:
-          path: /tmp/cypress/results
-          destination: cypress/results
-      - store_artifacts:
-          path: /tmp/cypress/screenshots
-          destination: cypress/screenshots
-      - store_artifacts:
-          path: /tmp/cypress/videos
-          destination: cypress/videos
-      - store_artifacts:
-          path: /tmp/cypress/logs
-          destination: cypress/logs
-
-  # New: Cypress directly (feature + TS) — SOLO (renamed to e2e-bdd)
+  # NEW: E2E BDD job that runs .feature specs
   e2e-bdd:
     docker:
       - image: cimg/node:lts-browsers
-    parallelism: 1
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
-      - checkout
-
       - run:
           name: clone fecfile-web-api
           command: |
-            rm -rf ~/fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git ~/fecfile-web-api
-
+            rm -rf .git fecfile-web-api
+            git clone https://github.com/fecgov/fecfile-web-api.git
+          working_directory: ~
       - run:
-          name: start fecfile-web-api (E2E mode)
+          name: use redis
           command: |
-            cd ~/fecfile-web-api
+            export MOCK_OPENFEC=REDIS
+            echo $MOCK_OPENFEC
+      - run:
+          name: start fecfile-web-api
+          command: |
             git checkout ${CIRCLE_BRANCH}
             docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" \
-            WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
-            API_DOCKERFILE="Dockerfile-e2e" \
-            FECFILE_TEST_DB_NAME="postgres" \
-            DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} \
-            DATABASE_URL=${E2E_DATABASE_URL} \
-            FEC_API=${E2E_FEC_API} \
-            FEC_API_KEY=${E2E_FEC_API_KEY} \
-            MOCK_EFO="True" \
-            E2E_TEST="True" \
-            docker-compose up --build -d
-
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" E2E_TEST="True" docker-compose up --build -d
             docker container run --network container:fecfile-api-proxy \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
-              -timeout 60s
-
+              -timeout 60s; \
+          working_directory: ~/project/fecfile-web-api
       - run:
-          name: run Cypress (solo)
+          name: execute e2e BDD tests (.feature)
           command: |
-            export SPLIT=1
-            export SPLIT_INDEX=0
-
-            docker container run --name fecfile-web-app-e2e-solo \
-              --network container:fecfile-api-proxy \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e SPLIT=$SPLIT -e SPLIT_INDEX=$SPLIT_INDEX \
-              -e CYPRESS_BASE_URL=${CYPRESS_BASE_URL} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
-              -e E2E_TEST=True \
-              cypress/browsers:latest /bin/bash -lc '
-                set -euxo pipefail
-                cd ~
-                git clone https://github.com/fecgov/fecfile-web-app.git
-                cd fecfile-web-app/front-end
-                git checkout ${CIRCLE_BRANCH}
-                npm ci
-                npx cypress run --browser chrome
-              '
-
+            docker container run --name fecfile-web-app-bdd -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
+              cd ~; \
+              git clone https://github.com/fecgov/fecfile-web-app.git; \
+              cd fecfile-web-app/front-end; \
+              git checkout ${CIRCLE_BRANCH}; \
+              npm install; \
+              npx cypress run --headless --browser chrome --spec "cypress/e2e/**/*.feature";'
       - run:
-          name: stage Cypress artifacts
+          name: print api logs
           when: always
           command: |
-            mkdir -p /tmp/cypress/{results,screenshots,videos,logs}
-            docker cp fecfile-web-app-e2e-solo:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker cp fecfile-web-app-e2e-solo:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker cp fecfile-web-app-e2e-solo:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
-            docker cp fecfile-web-app-e2e-solo:/root/fecfile-web-app/front-end/logs/. /tmp/cypress/logs || true
-            docker rm -f fecfile-web-app-e2e-solo || true
-
+            docker logs --tail 100 fecfile-api
+      - run:
+          name: stage BDD test result artifacts
+          when: always
+          command: |
+            rm -rf /tmp/cypress
+            mkdir -p /tmp/cypress/results
+            docker cp fecfile-web-app-bdd:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
+            docker rm fecfile-web-app-bdd
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
-      - store_artifacts:
-          path: /tmp/cypress/screenshots
-          destination: cypress/screenshots
-      - store_artifacts:
-          path: /tmp/cypress/videos
-          destination: cypress/videos
-      - store_artifacts:
-          path: /tmp/cypress/logs
-          destination: cypress/logs
 
   deploy-job:
     docker:
@@ -367,6 +245,9 @@ jobs:
 
     steps:
       - checkout
+
+      # If we need to modify the params for install-packages:
+      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
@@ -397,11 +278,11 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - e2e-cypress-parallel:
+      - e2e-bdd:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job:
+      - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
@@ -412,17 +293,20 @@ workflows:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
-  # is-triggered-e2e-test parameter via the fecfile-web-api config.
+  # is-triggered-e2e-test parameter via the fecfile-web-api
+  # circleci config file.  It is used to run the e2e tests
+  # when the fecfile-web-api is deployed to dev, stage,
+  # test, or prod.
   triggered-e2e-test:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
 
-  # Nightly schedule for e2e-bdd (formerly "solo")
-  e2e-bdd-nightly:
+  # NEW: Nightly schedule for BDD e2e (.feature) tests
+  nightly-bdd:
     triggers:
       - schedule:
-          cron: "0 6 * * *"   # 06:00 UTC = 02:00 AM America/New_York
+          cron: "0 6 * * *"   # daily at 06:00 UTC
           filters:
             branches:
               only:
