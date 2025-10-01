@@ -184,13 +184,27 @@ jobs:
       - run:
           name: execute e2e BDD tests (.feature)
           command: |
-            docker container run --name fecfile-web-app-bdd -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              npx cypress run --headless --browser chrome --spec "cypress/e2e/**/*.feature";'
+            docker container run --name fecfile-web-app-bdd \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              -e CYPRESS_baseUrl=http://127.0.0.1:4200 \
+              --network container:fecfile-api-proxy \
+              cypress/browsers:latest /bin/bash -lc '\
+                set -euo pipefail; \
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm ci; \
+                # Start the Angular dev server on 0.0.0.0:4200 in background
+                npx ng serve --host 0.0.0.0 --port 4200 & \
+                # Wait until it is reachable, then run Cypress
+                npx -y wait-on@7 http://127.0.0.1:4200; \
+                npx cypress run --headless --browser chrome --spec "cypress/e2e/**/*.feature" \
+              '
       - run:
           name: print api logs
           when: always
