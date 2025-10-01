@@ -245,8 +245,8 @@ jobs:
           path: /tmp/cypress/logs
           destination: cypress/logs
 
-  # New: Cypress directly (feature + TS) — SOLO
-  e2e-cypress-solo:
+  # New: Cypress directly (feature + TS) — SOLO (renamed to e2e-bdd)
+  e2e-bdd:
     docker:
       - image: cimg/node:lts-browsers
     parallelism: 1
@@ -384,9 +384,6 @@ parameters:
   is-triggered-e2e-test:
     type: boolean
     default: false
-  run-cypress-solo:
-    type: boolean
-    default: false  # set true to run the solo Cypress workflow
 
 workflows:
   primary:
@@ -415,17 +412,21 @@ workflows:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
-  # is-triggered-e2e-test parameter via the fecfile-web-api
-  # circleci config file. It is used to run the e2e tests
-  # when the fecfile-web-api is deployed to dev, stage,
-  # test, or prod.
+  # is-triggered-e2e-test parameter via the fecfile-web-api config.
   triggered-e2e-test:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
 
-  # Optional workflow to run Cypress solo (trigger by parameter)
-  cypress-solo:
-    when: << pipeline.parameters.run-cypress-solo >>
+  # Nightly schedule for e2e-bdd (formerly "solo")
+  e2e-bdd-nightly:
+    triggers:
+      - schedule:
+          cron: "0 6 * * *"   # 06:00 UTC = 02:00 AM America/New_York
+          filters:
+            branches:
+              only:
+                - develop
+                - main
     jobs:
-      - e2e-cypress-solo
+      - e2e-bdd
