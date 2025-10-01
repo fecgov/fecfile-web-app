@@ -10,6 +10,7 @@ import "cypress-mochawesome-reporter/register";
 import installLogsCollector from "cypress-terminal-report/src/installLogsCollector";
 import "./commands";
 
+
 installLogsCollector({
   collectTypes: [
     "cons:log","cons:info","cons:warn","cons:error",
