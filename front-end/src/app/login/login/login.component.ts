@@ -3,13 +3,11 @@ import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
-import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [NgOptimizedImage],
 })
 export class LoginComponent implements OnInit, AfterViewChecked {
   private readonly store = inject(Store);
@@ -37,6 +35,4 @@ export class LoginComponent implements OnInit, AfterViewChecked {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
   }
-
-  // Recalculate on resize
 }
