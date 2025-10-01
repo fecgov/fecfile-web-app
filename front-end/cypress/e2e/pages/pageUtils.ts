@@ -149,15 +149,14 @@ export class PageUtils {
   }
 
   /**
-   * Finds the row containing `identifier` (anywhere in the row),
-   * clicks its kebab ("more actions") button, and returns the active overlay.
-   *
-   * - No longer requires the identifier to be a direct TD child.
-   * - Targets the topmost visible PrimeNG overlay (popover/menu/panel).
-   * - Handles various kebab button markups.
+   * Important note, the identifier must be unique. If there are multiple rows with the same info
+   * it will fail.
+   * Also, the identifier must be directly under the <td>.
+   * Example: <td>text</td> is good, but <td><div>text</div></td> won't work
+   * @param identifier string to identify which Row the kabob is in.
    */
-  static getKabob(identifier: string, alias = '') {
-    alias = PageUtils.getAlias(alias);
+  static getKabob(identifier: string) {
+    const alias = PageUtils.getAlias('');
     cy.get(alias)
       .contains(identifier)
       .closest('td')
@@ -167,21 +166,15 @@ export class PageUtils {
       .children()
       .first()
       .children()
-      .then(($btn) => {
-        cy.wrap($btn.first()).as('btn');
-        cy.get('@btn').click();
-      });
+      .first()
+      .scrollIntoView()
+      .should('be.visible')
+      .click();
+    return cy.get(alias).find('.p-popover');
   }
 
-  static clickKababItem(identifier: string, item: string, alias = '') {
-    PageUtils.getKabob(identifier, alias);
-    cy.get(PageUtils.getAlias(''))
-      .find('.p-popover')
-      .contains(item)
-      .then(($item) => {
-        cy.wrap($item.first()).as('btn');
-        cy.get('@btn').click();
-      });
+  static clickKababItem(identifier: string, item: string) {
+    PageUtils.getKabob(identifier).contains(item).first().click({ force: true });
   }
 
   static switchCommittee(committeeId: string) {
