@@ -143,76 +143,32 @@ export class PageUtils {
   }
 
   /**
-   * Finds the row containing `identifier` (anywhere in the row),
-   * clicks its kebab ("more actions") button, and returns the active overlay.
-   *
-   * - No longer requires the identifier to be a direct TD child.
-   * - Targets the topmost visible PrimeNG overlay (popover/menu/panel).
-   * - Handles various kebab button markups.
+   * Important note, the identifier must be unique. If there are multiple rows with the same info
+   * it will fail.
+   * Also, the identifier must be directly under the <td>.
+   * Example: <td>text</td> is good, but <td><div>text</div></td> won't work
+   * @param identifier string to identify which Row the kabob is in.
    */
   static getKabob(identifier: string) {
     const alias = PageUtils.getAlias('');
-
-    const OVERLAY_SEL =
-      'div.p-overlay, div.p-overlaypanel, div.p-menu, div.p-popover, [role="menu"]';
-    const KEBAB_BTN_SEL =
-      // common cases first, then fallbacks
-      'app-table-actions-button button, ' +
-      'button[aria-label="More actions"], ' +
-      'button:has(.pi-ellipsis-v), ' + // requires Cypress+jQuery :has (OK)
-      '.pi.pi-ellipsis-v';
-
-    // 1) Locate the row by content anywhere inside it (no direct <td> requirement)
     cy.get(alias)
-      .contains('tr', new RegExp(String(identifier).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), {
-        timeout: 15000,
-      })
-      .should('be.visible')
-      .scrollIntoView()
-      .within(() => {
-        // 2) Click the kebab button inside the row (handle icon-only and various wrappers)
-        cy.get(KEBAB_BTN_SEL)
-          .first()
-          .then(($btn) => {
-            // If we matched the <i.pi-ellipsis-v>, click its nearest button
-            const $clickTarget =
-              $btn.is('button') ? $btn : $btn.closest('button').length ? $btn.closest('button') : $btn;
-
-            cy.wrap($clickTarget)
-              .scrollIntoView()
-              .should('be.visible')
-              .click({ force: true });
-          });
-      });
-
-    // 3) Wait for the topmost overlay to appear and be visible, then return it
-    return cy
-      .get(OVERLAY_SEL, { timeout: 15000 })
-      .should(($els) => {
-        expect($els.length, 'an overlay should mount').to.be.greaterThan(0);
-      })
+      .contains(identifier)
+      .closest('td')
+      .siblings()
       .last()
-      .should('be.visible');
+      .find('app-table-actions-button')
+      .children()
+      .first()
+      .children()
+      .first()
+      .scrollIntoView()
+      .should('be.visible')
+      .click();
+    return cy.get(alias).find('.p-popover');
   }
 
-  /**
-   * Opens the row's kebab and clicks the given menu item by text.
-   * Accepts exact string or a RegExp for flexibility ("Amend" vs "Create amendment").
-   */
-  static clickKababItem(identifier: string, item: string | RegExp) {
-    const MENUITEM_SEL =
-      'li, .p-menuitem, .p-menuitem-link, button, [role="menuitem"], .table-action-button';
-
-    const rx =
-      item instanceof RegExp
-        ? item
-        : new RegExp(`^\\s*${String(item).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i');
-
-    PageUtils.getKabob(identifier).within(() => {
-      cy.contains(MENUITEM_SEL, rx, { timeout: 10000 })
-        .should('be.visible')
-        .click({ force: true });
-    });
+  static clickKababItem(identifier: string, item: string) {
+    PageUtils.getKabob(identifier).contains(item).first().click({ force: true });
   }
 
   static switchCommittee(committeeId: string) {
