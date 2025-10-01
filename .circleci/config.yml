@@ -214,6 +214,7 @@ workflows:
       not: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - lint
+      - test
       - dependency-check
       - e2e-test:
           filters:
@@ -221,9 +222,13 @@ workflows:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
+          requires:
+            - lint
+            - test
+            - dependency-check
           filters:
             branches:
-              only: /feature\/2219|release\/sprint-[\.\d]+|release\/test|main/
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
