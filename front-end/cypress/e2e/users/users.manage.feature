@@ -1,4 +1,4 @@
-Feature: Manage Users, Core Happy Paths
+Feature: Manage Users Core Happy Paths
 
   Background:
     Given I am logged in as an "owner"
