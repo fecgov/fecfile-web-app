@@ -216,35 +216,22 @@ jobs:
 
 
       - run:
-          name: execute e2e BDD tests (.feature)
+          name: execute e2e tests BDD (.feature)
           command: |
-            DOCKER_IMG="cypress/browsers:node-22.6.0-chrome-140-ff-131-edge"
-            docker pull "$DOCKER_IMG"
-            docker container run --name fecfile-web-app-bdd \
-              -e CIRCLE_BRANCH="${CIRCLE_BRANCH}" \
-              -e CYPRESS_EMAIL="${CYPRESS_EMAIL}" \
-              -e CYPRESS_COMMITTEE_ID="${CYPRESS_COMMITTEE_ID}" \
-              -e CYPRESS_PASSWORD="${CYPRESS_PASSWORD}" \
-              -e CYPRESS_FILING_PASSWORD="${CYPRESS_FILING_PASSWORD}" \
-              -e CYPRESS_baseUrl="http://127.0.0.1:4200" \
+            docker container run --name fecfile-web-app-e2e \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
-              "$DOCKER_IMG" /bin/bash -lc '\
-                set -euo pipefail; \
+              cypress/browsers:node-22.20.0-chrome-140.0.7339.207-1-ff-143.0.1-edge-140.0.3485.81-1 /bin/bash -c '\
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
-                git fetch origin --prune; \
-                if git ls-remote --exit-code --heads origin "$CIRCLE_BRANCH" >/dev/null 2>&1; then \
-                  git checkout -B "$CIRCLE_BRANCH" --track "origin/$CIRCLE_BRANCH"; \
-                else \
-                  git checkout develop; \
-                fi; \
-                npm ci; \
-                # Start Angular on 0.0.0.0 so Cypress (same container) can hit it
-                npx ng serve --host 0.0.0.0 --port 4200 & \
-                npx -y wait-on@7 http://127.0.0.1:4200; \
-                # Run only .feature specs via cucumber preprocessor
-                npx cypress run --headless --browser chrome --spec "cypress/e2e/**/*.feature" \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm install; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/**/*.feature" --headless --watch=false --browser chrome; \
               '
 
       - run:
