@@ -1,27 +1,5 @@
-/// <reference types="cypress" />
 
-// ---- Type augmentation (what was in commands.d.ts) --------------------------
-declare global {
-  namespace Cypress {
-    interface Chainable<Subject = any> {
-      /** Types safely, skipping empty/null/undefined input */
-      safeType(value: string | number): Chainable<JQuery<HTMLElement>>;
-      /** Select-all + delete, then types safely */
-      overwrite(value: string | number): Chainable<JQuery<HTMLElement>>;
-      /** Your own auth helper that may exist elsewhere */
-      loginAs(role?: "owner" | "admin" | "regular"): Chainable<void>;
-      /** Opens Users page via the app's UI */
-      openUsersPage(): Chainable<void>;
-      /** Logs in using EMAIL/PASSWORD from Cypress env */
-      loginWithEnv(): Chainable<void>;
-    }
-  }
-}
 
-// Make this file a module so global augmentation is applied.
-export {}
-
-// ---- Implementations (what was in commands.ts) ------------------------------
 import { LoginPage } from "../e2e/pages/loginPage";
 const loginPage = new LoginPage();
 
@@ -55,41 +33,41 @@ Cypress.Commands.add("openUsersPage", () => {
   // Prefer overlay container (Angular CDK) if present, then fall back to document
   const overlayRoot = ".cdk-overlay-container, .overlay-container, body";
 
-  cy.get(overlayRoot, { timeout: 10000 }).within(() => {
-    // Case A: your element exactly as provided
-    cy.contains("button.popover-button", "Users", { matchCase: false }).click({ force: true });
-  });
+  cy.get(overlayRoot, { timeout: 10000 })
+    .within(() => {
+      // Case A: your element exactly as provided
+      cy.contains("button.popover-button", "Users", { matchCase: false })
+        .click({ force: true });
+    });
 
   // 3) Confirm navigation
   cy.location("pathname", { timeout: 5000 }).should("match", /\/committee\/members\b/);
-});
+}); 
 
-// ---- Helpers + command registrations for safeType/overwrite -----------------
+
+
 function safeString(stringVal: string | number | undefined | null): string {
-  if (stringVal === null || stringVal === undefined) return "";
-  return String(stringVal);
+  if (stringVal === null || stringVal === undefined) {
+    return '';
+  } else {
+    return stringVal.toString();
+  }
 }
 
-/** Registers cy.safeType: no-op if the value is empty/null/undefined */
-Cypress.Commands.add(
-  "safeType",
-  { prevSubject: "element" },
-  (subject: JQuery<HTMLElement>, value: string | number) => {
-    const out = safeString(value);
-    const s = cy.wrap(subject);
-    if (out.length) s.type(out);
-    return s;
-  }
-);
+export function safeType(prevSubject: any, stringVal: string | number) {
+  const subject = cy.wrap(prevSubject);
+  const outString: string = safeString(stringVal);
 
-/** Registers cy.overwrite: select-all + delete, then safeType */
-Cypress.Commands.add(
-  "overwrite",
-  { prevSubject: "element" },
-  (subject: JQuery<HTMLElement>, value: string | number) => {
-    const out = safeString(value);
-    const s = cy.wrap(subject).type("{selectall}{del}");
-    if (out.length) s.type(out);
-    return s;
+  if (outString.length != 0) {
+    subject.type(outString);
   }
-);
+
+  return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
+}
+
+export function overwrite(prevSubject: any, stringVal: string | number) {
+  const outString = safeString(stringVal);
+
+  return safeType(prevSubject, '{selectall}{del}' + outString);
+}
+
