@@ -1,11 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { filingFrequencies, Form99, textCodes, textCodesWithFilingFrequencies } from 'app/shared/models/form-99.model';
 import { Report } from 'app/shared/models/report.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
-import { fecSpec8dot5Released, SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { InputText } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -15,6 +14,8 @@ import { ErrorMessagesComponent } from '../../../shared/components/error-message
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-main-form',
@@ -35,7 +36,6 @@ import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   override reportService = inject(Form99Service);
-  protected showFilingFrequency = false;
   readonly formProperties: string[] = [
     'filer_committee_id_number',
     'committee_name',
@@ -54,17 +54,16 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
   readonly textCodes = textCodes;
   readonly filingFrequencies = filingFrequencies;
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-
-    // If the FEC spec is 8.5 or later, show filing frequency on certain text codes
-    if (fecSpec8dot5Released) {
-      const textCodeField = this.form.get('text_code') as SubscriptionFormControl;
-      textCodeField.addSubscription((textCode) => {
-        this.showFilingFrequency = textCode in textCodesWithFilingFrequencies;
-      }, this.destroy$);
-    }
-  }
+  override readonly form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+    updateOn: 'blur',
+  });
+  readonly documentType: Signal<string> = toSignal(this.form.controls['text_code'].valueChanges as Observable<string>, {
+    initialValue: '',
+  });
+  readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
+  readonly showFilingFrequency = computed(() => {
+    return this.documentType() in textCodesWithFilingFrequencies;
+  });
 
   getReportPayload(): Report {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));

@@ -26,6 +26,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Instructions for the starting the End-to-End Tests can be found [Here](cypress/README.md).
 
+## Running the linter
+
+Run `./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0` to execute the linter for your local build.
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

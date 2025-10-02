@@ -53,8 +53,8 @@ describe('Debts', () => {
       PageUtils.clickElement('loans-and-debts-button');
       cy.contains('Report debt repayment').click({ force: true });
       PageUtils.urlCheck('select/disbursement?debt=');
-      cy.contains('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS').should('exist');
-      PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+      cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
+      PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
       cy.contains('Coordinated Party Expenditure').should('not.exist'); // PAC committee
     });
   });
@@ -104,8 +104,8 @@ describe('Debts', () => {
             'app-transaction-loans-and-debts',
           );
           PageUtils.urlCheck('select/disbursement?debt=');
-          cy.contains('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS').should('exist');
-          PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO REGISTERED FILERS');
+          cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
+          PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
           cy.contains('Coordinated Party Expenditure').click({ force: true });
           setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
           PageUtils.urlCheck('/list');
