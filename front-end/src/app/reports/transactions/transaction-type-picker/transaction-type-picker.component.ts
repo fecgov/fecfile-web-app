@@ -89,7 +89,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             Disbursement.OPERATING_EXPENDITURES,
             Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
             Disbursement.OTHER_EXPENDITURES,
-            Disbursement.REFUND,
+            Disbursement.REFUNDS,
             Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
           ];
         } else {
@@ -253,7 +253,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
           ];
           break;
-        case Disbursement.REFUND:
+        case Disbursement.REFUNDS:
           transactionTypes = [
             ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
             ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
