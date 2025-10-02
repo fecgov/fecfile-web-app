@@ -175,26 +175,16 @@ jobs:
 
       - run:
           name: start fecfile-web-api
-          working_directory: ~/fecfile-web-api
           command: |
-            docker-compose down || true
-            DB_DOCKERFILE="Dockerfile-e2e" \
-            WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
-            API_DOCKERFILE="Dockerfile-e2e" \
-            FECFILE_TEST_DB_NAME="postgres" \
-            DJANGO_SECRET_KEY="${E2E_DJANGO_SECRET_KEY}" \
-            DATABASE_URL="${E2E_DATABASE_URL}" \
-            FEC_API="${E2E_FEC_API}" \
-            FEC_API_KEY="${E2E_FEC_API_KEY}" \
-            MOCK_OPENFEC="REDIS" \
-            E2E_TEST="True" \
-            docker-compose up --build -d
-
-            docker container run --rm --network container:fecfile-api-proxy \
+            git checkout ${CIRCLE_BRANCH}
+            docker-compose down
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" E2E_TEST="True" docker-compose up --build -d
+            docker container run --network container:fecfile-api-proxy \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
-              -timeout 120s
+              -timeout 60s; \
+          working_directory: ~/fecfile-web-api
 
       - run:
           name: execute e2e BDD tests (.feature)
