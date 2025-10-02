@@ -7,4 +7,5 @@ applications:
     routes:
       - route: dev.fecfile.fec.gov
     env:
+      FECFILE_APP_URL: https://dev.fecfile.fec.gov
       FECFILE_API_URL: https://dev-api.fecfile.fec.gov
