@@ -176,15 +176,44 @@ jobs:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${CIRCLE_BRANCH}
-            docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} FEC_API=${E2E_FEC_API} FEC_API_KEY=${E2E_FEC_API_KEY} MOCK_EFO="True" E2E_TEST="True" docker-compose up --build -d
+            set -euo pipefail
+
+            # If this directory isn't a git repo (no .git), re-clone exactly where we expect it.
+            if [ ! -d .git ]; then
+              cd ~
+              rm -rf fecfile-web-api
+              git clone https://github.com/fecgov/fecfile-web-api.git
+              cd fecfile-web-api
+            fi
+
+            # Make sure we have remote refs then try the branch; fall back to develop if it doesn't exist here.
+            git fetch origin --prune
+            if git ls-remote --exit-code --heads origin "${CIRCLE_BRANCH}" >/dev/null 2>&1; then
+              git checkout -B "${CIRCLE_BRANCH}" --track "origin/${CIRCLE_BRANCH}"
+            else
+              git checkout develop
+            fi
+
+            docker-compose down || true
+            DB_DOCKERFILE="Dockerfile-e2e" \
+            WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
+            API_DOCKERFILE="Dockerfile-e2e" \
+            FECFILE_TEST_DB_NAME="postgres" \
+            DJANGO_SECRET_KEY="${E2E_DJANGO_SECRET_KEY}" \
+            DATABASE_URL="${E2E_DATABASE_URL}" \
+            FEC_API="${E2E_FEC_API}" \
+            FEC_API_KEY="${E2E_FEC_API_KEY}" \
+            MOCK_EFO="True" \
+            E2E_TEST="True" \
+            docker-compose up --build -d
+
             docker container run --network container:fecfile-api-proxy \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
-              -timeout 60s; \
+              -timeout 60s;
           working_directory: ~/fecfile-web-api
+
 
       - run:
           name: execute e2e BDD tests (.feature)
