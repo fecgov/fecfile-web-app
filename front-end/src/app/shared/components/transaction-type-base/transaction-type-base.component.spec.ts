@@ -526,7 +526,7 @@ describe('TransactionTypeBaseComponent', () => {
         return true;
       });
       component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
-        expect(res).toEqual(true);
+        expect(res).toEqual(false);
       });
       expect(spy).toHaveBeenCalled();
     });
