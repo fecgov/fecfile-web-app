@@ -2,11 +2,11 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { SchAMemo } from './common-types/scha_memo.model';
 
-export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
+export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchAMemo {
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(

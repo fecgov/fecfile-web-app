@@ -3,11 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_AT
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 import { shortenClause } from '../clause';
+import { SchAMemo } from './common-types/scha_memo.model';
 
-export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransactionType {
+export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchAMemo {
   formFields = INDIVIDUAL_FORM_FIELDS;
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(

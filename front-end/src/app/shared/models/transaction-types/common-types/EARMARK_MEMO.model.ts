@@ -1,8 +1,8 @@
 import { COMMITTEE_INDIVIDUAL, INDIVIDUAL_COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { SchATransactionType } from '../../scha-transaction-type.model';
 import { TemplateMapKeyType } from '../../transaction-type.model';
+import { SchAMemo } from './scha_memo.model';
 
-export abstract class EARMARK_MEMO extends SchATransactionType {
+export abstract class EARMARK_MEMO extends SchAMemo {
   formFields = INDIVIDUAL_COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE_INDIVIDUAL;
 

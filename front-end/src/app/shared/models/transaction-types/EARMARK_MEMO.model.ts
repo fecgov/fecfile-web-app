@@ -7,9 +7,6 @@ import { EARMARK_MEMO as CommonEarmarkMemo } from './common-types/EARMARK_MEMO.m
 export class EARMARK_MEMO extends CommonEarmarkMemo {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO);
   schema = schema;
-  override mandatoryFormValues = {
-    [this.templateMap.memo_code]: true,
-  };
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
