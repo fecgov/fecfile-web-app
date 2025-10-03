@@ -123,6 +123,10 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   });
 
   public thisYear = new Date().getFullYear();
+  readonly defaultReportTypeCategory =
+    (this.thisYear % 2 === 0) !== (new Date().getMonth() === 0)
+      ? F3ReportTypeCategories.ELECTION_YEAR
+      : F3ReportTypeCategories.NON_ELECTION_YEAR;
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   readonly reportId = injectParams('reportId');
@@ -134,7 +138,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
 
   constructor() {
     super();
-    this.form.patchValue({ form_type: F3FormTypes.F3N, report_type_category: this.reportTypeCategories[0] });
+    this.form.patchValue({ form_type: F3FormTypes.F3N, report_type_category: this.defaultReportTypeCategory });
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
