@@ -202,3 +202,69 @@ describe('CreateF3XStep1Component: Edit', () => {
     }));
   });
 });
+
+describe('Default Report Type Category Logic', () => {
+  let coverageDateSpy: jasmine.Spy<() => Promise<CoverageDates[]>>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, CreateF3XStep1Component],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideNoopAnimations(),
+        Form3XService,
+        MessageService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of({}),
+            snapshot: { params: of({}) },
+          },
+        },
+        provideMockStore(testMockStore()),
+      ],
+    }).compileComponents();
+
+    router = TestBed.inject(Router);
+    store = TestBed.inject(MockStore);
+    form3XService = TestBed.inject(Form3XService);
+    spyOn(router, 'navigateByUrl').and.stub();
+    spyOn(store, 'dispatch').and.callThrough();
+
+    jasmine.clock().install();
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
+  });
+
+  const setupComponent = () => {
+    fixture = TestBed.createComponent(CreateF3XStep1Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  };
+
+  it('should be ELECTION_YEAR in an even year after January', () => {
+    jasmine.clock().mockDate(new Date(2024, 1, 1));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.ELECTION_YEAR);
+  });
+
+  it('should be ELECTION_YEAR in an odd year during January', () => {
+    jasmine.clock().mockDate(new Date(2025, 0, 15));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.ELECTION_YEAR);
+  });
+
+  it('should be NON_ELECTION_YEAR in an odd year after January', () => {
+    jasmine.clock().mockDate(new Date(2025, 2, 20));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.NON_ELECTION_YEAR);
+  });
+
+  it('should be NON_ELECTION_YEAR in an even year during January', () => {
+    jasmine.clock().mockDate(new Date(2024, 0, 10));
+    setupComponent();
+    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.NON_ELECTION_YEAR);
+  });
+});

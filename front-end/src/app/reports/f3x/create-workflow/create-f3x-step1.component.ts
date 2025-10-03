@@ -63,7 +63,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   readonly reportId = injectParams('reportId');
 
   // CONSTANTS
-  readonly thisYear = new Date().getFullYear();
+  readonly year = new Date().getFullYear();
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   readonly formProperties: string[] = [
@@ -80,6 +80,10 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     updateOn: 'blur',
   });
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
+  readonly defaultReportTypeCategory =
+    (this.year % 2 === 0) !== (new Date().getMonth() === 0)
+      ? F3xReportTypeCategories.ELECTION_YEAR
+      : F3xReportTypeCategories.NON_ELECTION_YEAR;
 
   // Observable to Signals
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
@@ -116,7 +120,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     if (!existingCoverage) return [];
     return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
       const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
-      if (years.includes(this.thisYear)) {
+      if (years.includes(this.year)) {
         return [...codes, coverage.report_code] as ReportCodes[];
       }
       return codes;
@@ -142,7 +146,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
 
     if (!coverageDatesFunction) return undefined;
-    return coverageDatesFunction(this.thisYear, this.isElectionYear(), this.filingFrequency());
+    return coverageDatesFunction(this.year, this.isElectionYear(), this.filingFrequency());
   });
 
   readonly disabledReportCodes = computed(() => {
@@ -204,7 +208,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
       if (this.form.pristine && report) {
         this.form.patchValue({ report_type_category: report.report_type_category });
       } else {
-        this.form.patchValue({ report_type_category: this.reportTypeCategories[0] });
+        this.form.patchValue({ report_type_category: this.defaultReportTypeCategory });
       }
     });
     effect(() => {
