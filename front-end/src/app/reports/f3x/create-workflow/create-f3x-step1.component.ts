@@ -56,14 +56,16 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
   ],
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {
+  // INJECTIONS
   private readonly form3XService = inject(Form3XService);
   protected readonly messageService = inject(MessageService);
   readonly router = inject(Router);
+  readonly reportId = injectParams('reportId');
 
+  // CONSTANTS
   readonly thisYear = new Date().getFullYear();
   readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-
   readonly formProperties: string[] = [
     'filing_frequency',
     'report_type_category',
@@ -74,11 +76,17 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     'state_of_election',
     'form_type',
   ];
-
   readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
     updateOn: 'blur',
   });
+  readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
 
+  // Observable to Signals
+  readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
+  readonly filingFrequency = toSignal(this.form.controls['filing_frequency'].valueChanges);
+  readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
+
+  // Derived Asyncs
   readonly existingCoverage = derivedAsync(async () => {
     const reportId = this.reportId();
     if (reportId && !this.report()) return undefined;
@@ -93,6 +101,16 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     return existingCoverage;
   });
 
+  readonly report = derivedAsync(() => {
+    const reportId = this.reportId();
+    if (!reportId) return undefined;
+    return this.form3XService.get(reportId);
+  });
+
+  // SIGNALS
+  readonly coverageDatesDialogVisible = signal(false);
+
+  // COMPUTED SIGNALS
   readonly usedReportCodes = computed(() => {
     const existingCoverage = this.existingCoverage();
     if (!existingCoverage) return [];
@@ -105,26 +123,14 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }, []);
   });
 
-  readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   private readonly committeeFrequency = computed(() => (this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q'));
 
-  readonly coverageDatesDialogVisible = signal(false);
-
-  readonly reportId = injectParams('reportId');
-  readonly report = derivedAsync(() => {
-    const reportId = this.reportId();
-    if (!reportId) return undefined;
-    return this.form3XService.get(reportId);
-  });
   readonly form3x = computed(() => {
     const report = this.report();
     if (!report) return undefined;
     return report as Form3X;
   });
 
-  readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
-  readonly filingFrequency = toSignal(this.form.controls['filing_frequency'].valueChanges);
-  readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
   private readonly isMonthly = computed(() => this.filingFrequency() === 'M');
 
   private readonly isElectionYear = computed(() => F3xReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
@@ -139,6 +145,33 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     return coverageDatesFunction(this.thisYear, this.isElectionYear(), this.filingFrequency());
   });
 
+  readonly disabledReportCodes = computed(() => {
+    const statusObject = Object.values(ReportCodes).reduce(
+      (accumulator, currentCode) => {
+        accumulator[currentCode] = this.checkDisableReportCode(currentCode);
+        return accumulator;
+      },
+      {} as { [key in ReportCodes]: boolean },
+    );
+
+    return statusObject;
+  });
+
+  readonly reportCodes = computed(() => {
+    const isMonthly = this.isMonthly();
+    switch (this.reportTypeCategory()) {
+      case F3xReportTypeCategories.ELECTION_YEAR:
+        return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
+      case F3xReportTypeCategories.NON_ELECTION_YEAR:
+        return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
+      default:
+        return [];
+    }
+  });
+
+  readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
+
+  // VARIABLES
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   constructor() {
@@ -199,31 +232,10 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
-  readonly reportCodes = computed(() => {
-    const isMonthly = this.isMonthly();
-    switch (this.reportTypeCategory()) {
-      case F3xReportTypeCategories.ELECTION_YEAR:
-        return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
-      case F3xReportTypeCategories.NON_ELECTION_YEAR:
-        return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
-      default:
-        return [];
-    }
-  });
-
-  private getFirstEnabledReportCode() {
-    const report = this.report();
-    if (report && this.reportCodes().includes(report.report_code as ReportCodes)) return report.report_code;
-    return this.reportCodes().find((reportCode) => {
-      return !this.usedReportCodes().includes(reportCode);
-    });
-  }
-
-  readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
-
+  // NON-PRIVATE Functions
   readonly onHide = () => this.store.dispatch(singleClickEnableAction());
 
-  public async save(jump: 'continue' | void) {
+  async save(jump: 'continue' | void) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {
@@ -259,6 +271,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
   }
 
+  // PRIVATE Functions
   private async update(summary: Form3X, reportId: string) {
     summary.id = reportId;
     try {
@@ -273,17 +286,13 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
   }
 
-  readonly disabledReportCodes = computed(() => {
-    const statusObject = Object.values(ReportCodes).reduce(
-      (accumulator, currentCode) => {
-        accumulator[currentCode] = this.checkDisableReportCode(currentCode);
-        return accumulator;
-      },
-      {} as { [key in ReportCodes]: boolean },
-    );
-
-    return statusObject;
-  });
+  private getFirstEnabledReportCode() {
+    const report = this.report();
+    if (report && this.reportCodes().includes(report.report_code as ReportCodes)) return report.report_code;
+    return this.reportCodes().find((reportCode) => {
+      return !this.usedReportCodes().includes(reportCode);
+    });
+  }
 
   private checkDisableReportCode(reportCode: ReportCodes) {
     if (this.report()?.report_code === reportCode) return false;
