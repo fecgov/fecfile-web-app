@@ -20,6 +20,33 @@ let router: Router;
 let form3XService: Form3XService;
 let store: MockStore;
 
+async function setup(params: { reportId?: string }) {
+  await TestBed.configureTestingModule({
+    imports: [ReactiveFormsModule, CreateF3XStep1Component],
+    providers: [
+      provideHttpClient(),
+      provideHttpClientTesting(),
+      provideNoopAnimations(),
+      Form3XService,
+      MessageService,
+      {
+        provide: ActivatedRoute,
+        useValue: {
+          params: of(params),
+          snapshot: { params: of(params) },
+        },
+      },
+      provideMockStore(testMockStore()),
+    ],
+  }).compileComponents();
+
+  router = TestBed.inject(Router);
+  store = TestBed.inject(MockStore);
+  form3XService = TestBed.inject(Form3XService);
+  spyOn(router, 'navigateByUrl').and.stub();
+  spyOn(store, 'dispatch').and.callThrough();
+}
+
 describe('CreateF3XStep1Component: New', () => {
   const mockCoverageDates = [
     {
@@ -31,30 +58,7 @@ describe('CreateF3XStep1Component: New', () => {
 
   let coverageDateSpy: jasmine.Spy<() => Promise<CoverageDates[]>>;
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CreateF3XStep1Component],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideNoopAnimations(),
-        Form3XService,
-        MessageService,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: { params: of({}) },
-          },
-        },
-        provideMockStore(testMockStore()),
-      ],
-    }).compileComponents();
-
-    router = TestBed.inject(Router);
-    store = TestBed.inject(MockStore);
-    form3XService = TestBed.inject(Form3XService);
-    spyOn(router, 'navigateByUrl').and.stub();
-    spyOn(store, 'dispatch').and.callThrough();
+    await setup({});
 
     coverageDateSpy = spyOn(form3XService, 'getF3xCoverageDates').and.resolveTo(mockCoverageDates);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
@@ -119,30 +123,8 @@ describe('CreateF3XStep1Component: Edit', () => {
   });
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CreateF3XStep1Component],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        Form3XService,
-        MessageService,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({ reportId: mockReportId }),
-            snapshot: { params: of({ reportId: mockReportId }) },
-          },
-        },
-        provideMockStore(testMockStore()),
-      ],
-    }).compileComponents();
+    await setup({ reportId: mockReportId });
 
-    router = TestBed.inject(Router);
-    store = TestBed.inject(MockStore);
-    spyOn(router, 'navigateByUrl').and.stub();
-    spyOn(store, 'dispatch').and.callThrough();
-
-    form3XService = TestBed.inject(Form3XService);
     messageService = TestBed.inject(MessageService);
     getSpy = spyOn(form3XService, 'get').and.resolveTo(mockReport);
     messageSpy = spyOn(messageService, 'add');
@@ -204,33 +186,8 @@ describe('CreateF3XStep1Component: Edit', () => {
 });
 
 describe('Default Report Type Category Logic', () => {
-  let coverageDateSpy: jasmine.Spy<() => Promise<CoverageDates[]>>;
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CreateF3XStep1Component],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideNoopAnimations(),
-        Form3XService,
-        MessageService,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: { params: of({}) },
-          },
-        },
-        provideMockStore(testMockStore()),
-      ],
-    }).compileComponents();
-
-    router = TestBed.inject(Router);
-    store = TestBed.inject(MockStore);
-    form3XService = TestBed.inject(Form3XService);
-    spyOn(router, 'navigateByUrl').and.stub();
-    spyOn(store, 'dispatch').and.callThrough();
-
+    await setup({});
     jasmine.clock().install();
   });
 
