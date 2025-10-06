@@ -19,7 +19,14 @@ export class LoginService extends DestroyerComponent {
   public userLoginData = this.store.selectSignal(selectUserLoginData);
 
   readonly userHasProfileData = computed(() => !!this.userLoginData()?.first_name && !!this.userLoginData()?.last_name);
-  readonly userHasConsented = computed(() => !!this.userLoginData()?.security_consented);
+  readonly userHasConsented = computed(() => {
+    const loginData = this.userLoginData();
+    console.log(loginData);
+    return (
+      !!loginData?.security_consented &&
+      loginData?.security_consent_version === loginData?.security_consent_version_at_login
+    );
+  });
 
   public logOut() {
     this.store.dispatch(userLoginDataDiscardedAction());
