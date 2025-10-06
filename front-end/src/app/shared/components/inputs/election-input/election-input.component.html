@@ -3,8 +3,14 @@
     <div class="col-3">
       <div class="field flex flex-column">
         <label for="electionType">{{ labelPrefix() }} ELECTION TYPE</label>
-        <p-select inputId="electionType" [options]="electionTypeOptions" [autoDisplayFirst]="false" class="w-full"
-          appendTo="body" formControlName="electionType">
+        <p-select
+          inputId="electionType"
+          [options]="electionTypeOptions"
+          [autoDisplayFirst]="false"
+          class="w-full"
+          appendTo="body"
+          formControlName="electionType"
+        >
           <ng-template let-electionCode pTemplate="selectedItem">
             <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>
             {{ electionCode?.label.split(' ')[1] }}
@@ -20,21 +26,39 @@
     <div class="col-3">
       <div class="field">
         <label for="electionYear">{{ labelPrefix() }} ELECTION YEAR</label>
-        <input id="electionYear" type="text" pInputText (input)="formatElectionYear($event)"
-          formControlName="electionYear" required />
+        <input
+          id="electionYear"
+          type="text"
+          pInputText
+          (input)="formatElectionYear($event)"
+          formControlName="electionYear"
+          required
+        />
 
-        <app-error-messages [form]="form" fieldName="electionYear" [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field requires a 4-digit year. (YYYY)" />
+        <app-error-messages
+          [form]="form"
+          fieldName="electionYear"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field requires a 4-digit year. (YYYY)"
+        />
       </div>
     </div>
     <div class="col-6">
       <div class="field">
-        <label for="election_other_description">{{ labelPrefix() }} ELECTION DESCRIPTION <span
-            class="paren-label">(REQUIRED IF OTHER)</span></label>
-        <input type="text" pInputText id="election_other_description"
-          [formControlName]="templateMap['election_other_description']" />
-        <app-error-messages [form]="form" [fieldName]="templateMap['election_other_description']"
-          [formSubmitted]="formSubmitted" />
+        <label for="election_other_description"
+          >{{ labelPrefix() }} ELECTION DESCRIPTION <span class="paren-label">(REQUIRED IF OTHER)</span></label
+        >
+        <input
+          type="text"
+          pInputText
+          id="election_other_description"
+          [formControlName]="templateMap['election_other_description']"
+        />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['election_other_description']"
+          [formSubmitted]="formSubmitted"
+        />
       </div>
     </div>
   </div>
