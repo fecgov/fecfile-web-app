@@ -18,13 +18,9 @@
       </ng-template>
       <ng-template pTemplate="right">
         @if (restoreContactsButtonIsVisible) {
-          <button
-            pButton
-            pRipple
-            label="Restore deleted contacts"
-            class="restore-contact-button"
-            (click)="onRestoreClick()"
-          ></button>
+          <button pButton pRipple class="restore-contact-button" (click)="onRestoreClick()">
+            Restore deleted contacts
+          </button>
         }
 
         <button
