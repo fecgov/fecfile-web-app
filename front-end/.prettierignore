@@ -2,3 +2,5 @@
 *.yml
 node_modules
 assets
+cypress.config.ts 
+cypress/
