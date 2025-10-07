@@ -10,6 +10,10 @@ import "cypress-mochawesome-reporter/register";
 import installLogsCollector from "cypress-terminal-report/src/installLogsCollector";
 import "./commands";
 
+beforeEach(() => {
+  cy.clearCookies();      // all domains
+  cy.clearLocalStorage();                 // app storage
+});
 
 installLogsCollector({
   collectTypes: [
@@ -21,6 +25,8 @@ installLogsCollector({
 
 // Attach terminal logs to the Mochawesome report for each finished test
 afterEach(function () {
+  Cypress.session.clearAllSavedSessions();
+  
   const getLogs =
     (globalThis as any)?.Cypress?.TerminalReport?.getLogs as
       | ((fmt?: "txt" | "json" | "html") => string | null)
