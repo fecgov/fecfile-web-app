@@ -123,10 +123,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   });
 
   public thisYear = new Date().getFullYear();
-  readonly defaultReportTypeCategory =
-    (this.thisYear % 2 === 0) !== (new Date().getMonth() === 0)
-      ? F3ReportTypeCategories.ELECTION_YEAR
-      : F3ReportTypeCategories.NON_ELECTION_YEAR;
+  readonly defaultReportTypeCategory = this.getDefaultTypeCategory();
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   readonly reportId = injectParams('reportId');
@@ -220,6 +217,16 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
         detail: 'Contact Updated',
         life: 3000,
       });
+    }
+  }
+
+  private getDefaultTypeCategory() {
+    const isEvenYear = this.thisYear % 2 === 0;
+    const isJanuary = new Date().getMonth() === 0;
+    if ((isEvenYear && isJanuary) || (!isEvenYear && !isJanuary)) {
+      return F3ReportTypeCategories.NON_ELECTION_YEAR;
+    } else {
+      return F3ReportTypeCategories.ELECTION_YEAR;
     }
   }
 }

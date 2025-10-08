@@ -80,10 +80,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     updateOn: 'blur',
   });
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
-  readonly defaultReportTypeCategory =
-    (this.year % 2 === 0) !== (new Date().getMonth() === 0)
-      ? F3xReportTypeCategories.ELECTION_YEAR
-      : F3xReportTypeCategories.NON_ELECTION_YEAR;
+  readonly defaultReportTypeCategory = this.getDefaultTypeCategory();
 
   // Observable to Signals
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
@@ -301,6 +298,27 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   private checkDisableReportCode(reportCode: ReportCodes) {
     if (this.report()?.report_code === reportCode) return false;
     return this.usedReportCodes().includes(reportCode);
+  }
+
+  /**
+   * FECFILE-2500
+   * ELECTION YEAR
+   *   current date is between Feb 1 – Dec 31 of an even-numbered year
+   *   current date is between Jan 1 – Jan 31 of an odd-numbered year
+   *
+   * NON-ELECTION YEAR
+   *   current date is between Feb 1 – Dec 31 of an odd-numbered year
+   *   current date is between Jan 1 – Jan 31 of an even-numbered year
+   * @returns F3xReportTypeCategories
+   */
+  private getDefaultTypeCategory() {
+    const isEvenYear = this.year % 2 === 0;
+    const isJanuary = new Date().getMonth() === 0;
+    if ((isEvenYear && isJanuary) || (!isEvenYear && !isJanuary)) {
+      return F3xReportTypeCategories.NON_ELECTION_YEAR;
+    } else {
+      return F3xReportTypeCategories.ELECTION_YEAR;
+    }
   }
 }
 
