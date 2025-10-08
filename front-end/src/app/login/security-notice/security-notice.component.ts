@@ -16,7 +16,7 @@ import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
 import { NgComponentOutlet } from '@angular/common';
 
-export const SECURITY_CONSENT_VERSION = 8;
+export const SECURITY_CONSENT_VERSION = 1;
 
 @Component({
   selector: 'app-security-notice',
