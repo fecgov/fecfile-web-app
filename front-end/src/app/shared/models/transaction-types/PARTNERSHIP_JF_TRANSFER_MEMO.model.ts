@@ -6,9 +6,9 @@ import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../tran
 import { SubTransactionGroup } from '../transaction-type.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { shortenClause } from '../clause';
-import { SchAMemo } from './common-types/scha_memo.model';
+import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
 
-export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchAMemo {
+export class PARTNERSHIP_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   formFields = ORGANIZATION_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);

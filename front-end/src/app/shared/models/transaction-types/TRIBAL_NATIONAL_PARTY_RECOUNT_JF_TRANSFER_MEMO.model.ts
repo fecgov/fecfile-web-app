@@ -4,9 +4,9 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
-import { SchAMemo } from './common-types/scha_memo.model';
+import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
 
-export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchAMemo {
+export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   formFields = ORGANIZATION_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(

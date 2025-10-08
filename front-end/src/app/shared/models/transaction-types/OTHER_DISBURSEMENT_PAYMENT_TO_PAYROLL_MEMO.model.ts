@@ -7,9 +7,9 @@ import {
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
-import { SchBMemo } from './common-types/schb_memo.model';
+import { SCHEDULE_B_MEMO } from './common-types/SCHEDULE_B_MEMO.model';
 
-export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SchBMemo {
+export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SCHEDULE_B_MEMO {
   formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
   override contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(
