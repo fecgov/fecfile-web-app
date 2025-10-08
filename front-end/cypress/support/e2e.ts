@@ -13,6 +13,10 @@ import "./commands";
 beforeEach(() => {
   cy.clearCookies();      // all domains
   cy.clearLocalStorage();                 // app storage
+  const specId = Cypress.spec?.relative || Cypress.spec?.name || '';
+  if (/\.feature$/i.test(specId)) {
+    Cypress.session.clearAllSavedSessions();
+  }
 });
 
 installLogsCollector({
@@ -25,8 +29,6 @@ installLogsCollector({
 
 // Attach terminal logs to the Mochawesome report for each finished test
 afterEach(function () {
-  Cypress.session.clearAllSavedSessions();
-  
   const getLogs =
     (globalThis as any)?.Cypress?.TerminalReport?.getLogs as
       | ((fmt?: "txt" | "json" | "html") => string | null)
