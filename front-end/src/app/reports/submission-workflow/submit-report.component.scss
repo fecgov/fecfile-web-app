@@ -1,0 +1,126 @@
+#submit-report-container {
+  padding-top: 56px;
+}
+
+h2 {
+  margin-bottom: 32px;
+}
+
+hr {
+  margin: 32px 0;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+:host::ng-deep .p-password-input {
+  padding: 10px 36px 10px 10px !important;
+}
+
+:host::ng-deep .p-password-mask-icon {
+  right: 14px;
+}
+
+@media (min-width: 576px) {
+  #submit-report-container {
+    min-width: 512px;
+    max-width: 512px;
+    width: 512px;
+  }
+}
+
+@media (min-width: 768px) {
+  #submit-report-container {
+    min-width: 704px;
+    max-width: 704px;
+    width: 704px;
+  }
+}
+
+@media (min-width: 1200px) {
+  #submit-report-container {
+    min-width: 852px;
+    max-width: 852px;
+    width: 852px;
+  }
+}
+
+@media (min-width: 1400px) {
+  #submit-report-container {
+    min-width: 1052px;
+    max-width: 1052px;
+    width: 1052px;
+  }
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+label,
+input,
+p,
+:host::ng-deep .p-select .p-select-label {
+  font-size: 14px !important;
+}
+
+:host::ng-deep .p-select {
+  height: 42px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  font-size: 14px !important;
+}
+
+.field-32 {
+  width: 32em;
+  min-width: 32em;
+  max-width: 32em;
+}
+
+.field-28 {
+  width: 28em;
+  min-width: 28em;
+  max-width: 28em;
+}
+
+.field-20 {
+  width: 20em;
+  min-width: 20em;
+  max-width: 20em;
+}
+
+.field-19 {
+  width: 19em;
+  min-width: 19em;
+  max-width: 19em;
+}
+
+.field-18 {
+  width: 18em;
+  min-width: 18em;
+  max-width: 18em;
+}
+
+.field-15 {
+  width: 15em;
+  min-width: 15em;
+  max-width: 15em;
+}
+
+.field-10 {
+  width: 10em;
+  min-width: 10em;
+  max-width: 10em;
+}
+
+.field-9 {
+  width: 9em;
+  min-width: 9em;
+  max-width: 9em;
+}

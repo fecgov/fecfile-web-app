@@ -1,49 +1,68 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
-import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
-import { ApiService } from 'app/shared/services/api.service';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Report } from 'app/shared/models/report.model';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
+import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { passwordValidator } from 'app/shared/utils/validators.utils';
+import {
+  buildGuaranteeUniqueValuesValidator,
+  emailValidator,
+  passwordValidator,
+} from 'app/shared/utils/validators.utils';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { takeUntil } from 'rxjs';
-import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
-import { Password } from 'primeng/password';
-import { Checkbox } from 'primeng/checkbox';
-import { Tooltip } from 'primeng/tooltip';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { CommitteeAccount, Report, Form3X, Form3 } from 'app/shared/models';
+import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
+import { ApiService } from 'app/shared/services/api.service';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { takeUntil } from 'rxjs';
+import { Tooltip } from 'primeng/tooltip';
+import { Checkbox } from 'primeng/checkbox';
+import { Password } from 'primeng/password';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { Form3, Form3X } from 'app/shared/models';
+import { injectRouteData } from 'ngxtension/inject-route-data';
 
 @Component({
-  selector: 'app-submit-report-step2',
-  templateUrl: './submit-report-step2.component.html',
-  styleUrls: ['../styles.scss', './submit-report-step2.component.scss'],
+  selector: 'app-submit-report',
+  templateUrl: './submit-report.component.html',
+  styleUrls: ['./submit-report.component.scss'],
   imports: [
-    Card,
     ReactiveFormsModule,
     InputText,
     ErrorMessagesComponent,
+    FormsModule,
+    ButtonDirective,
+    Ripple,
+    SelectButtonModule,
+    SearchableSelectComponent,
     Password,
     Checkbox,
     Tooltip,
-    ButtonDirective,
-    Ripple,
   ],
 })
-export class SubmitReportStep2Component extends FormComponent implements OnInit {
-  public readonly router = inject(Router);
-  public readonly route = inject(ActivatedRoute);
+export class SubmitReportComponent extends FormComponent implements OnInit {
+  readonly router = inject(Router);
+  readonly confirmationService = inject(ConfirmationService);
+  readonly apiService = inject(ApiService);
+  readonly reportService = inject(ReportService);
   private readonly messageService = inject(MessageService);
-  public readonly confirmationService = inject(ConfirmationService);
-  public readonly apiService = inject(ApiService);
-  public readonly reportService = inject(ReportService);
   readonly formProperties: string[] = [
+    'confirmation_email_1',
+    'confirmation_email_2',
+    'change_of_address',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
     'treasurer_first_name',
     'treasurer_last_name',
     'treasurer_middle_name',
@@ -52,15 +71,23 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     'filingPassword',
     'userCertified',
   ];
-  form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
-    updateOn: 'blur',
-  });
+
   loading: 0 | 1 | 2 = 0;
-  backdoorCodeHelpText =
+  readonly backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
   showBackdoorCode = false;
-  getBackUrl?: (report?: Report) => string;
-  getContinueUrl?: (report?: Report) => string;
+
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+  readonly countryOptions: PrimeOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
+  readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
+    updateOn: 'blur',
+  });
+  readonly changeOfAddressOptions = [
+    { label: 'No', value: false },
+    { label: 'Yes', value: true },
+  ];
+  readonly getBackUrl = injectRouteData<(report?: Report) => string | undefined | null>('getBackUrl');
+  readonly getContinueUrl = injectRouteData<(report?: Report) => string | undefined | null>('getContinueUrl');
 
   constructor() {
     super();
@@ -71,6 +98,21 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
   }
 
   ngOnInit(): void {
+    // Initialize validation tracking of current JSON schema and form data
+    // STEP 1
+    this.form.controls['confirmation_email_1'].addValidators([
+      Validators.required,
+      Validators.maxLength(44),
+      emailValidator,
+      buildGuaranteeUniqueValuesValidator(this.form, 'confirmation_email_1', ['confirmation_email_2'], 'email'),
+    ]);
+    this.form.controls['confirmation_email_2'].addValidators([
+      Validators.maxLength(44),
+      emailValidator,
+      buildGuaranteeUniqueValuesValidator(this.form, 'confirmation_email_2', ['confirmation_email_1'], 'email'),
+    ]);
+
+    // STEP 2
     this.form.addControl('backdoorYesNo', new SubscriptionFormControl<string | null>(null, { updateOn: 'change' }));
 
     // Initialize validation tracking of current JSON schema and form data
@@ -90,13 +132,22 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
           this.form.removeControl('backdoor_code');
         }
       });
-    this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
-      this.getBackUrl = getBackUrl;
-      this.getContinueUrl = getContinueUrl;
-    });
   }
 
   initializeFormWithReport(report: Report, committeeAccount: CommitteeAccount) {
+    // STEP 1
+    const emails = (committeeAccount?.email || '').split(/[;,]+/);
+    this.form.patchValue({
+      change_of_address: false,
+      confirmation_email_1: emails[0],
+      confirmation_email_2: emails[1],
+      ...committeeAccount,
+    });
+    if (report && report['confirmation_email_1']) {
+      this.form.patchValue(report);
+    }
+
+    // STEP 2
     this.form.patchValue({
       treasurer_first_name: committeeAccount?.treasurer_name_1,
       treasurer_last_name: committeeAccount?.treasurer_name_2,
@@ -109,11 +160,12 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     }
   }
 
-  submitClicked(): void {
+  async submitClicked(): Promise<void> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
-    if (this.form.invalid) {
-      printFormErrors(this.form);
+    if (this.form.invalid) printFormErrors(this.form);
+    if (this.form.invalid || this.activeReport() == undefined) {
+      this.store.dispatch(singleClickEnableAction());
       return;
     }
 
@@ -128,7 +180,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
   }
 
   async saveAndSubmit(): Promise<boolean> {
-    await this.saveTreasurerName();
+    await this.updateReport();
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',
@@ -139,13 +191,19 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     return this.submitReport();
   }
 
-  async saveTreasurerName(): Promise<Report | undefined> {
+  async updateReport(): Promise<Report | undefined> {
     this.loading = 1;
-    const payload: Report = getReportFromJSON({
+    const payload = getReportFromJSON({
       ...this.activeReport(),
       ...SchemaUtils.getFormValues(this.form, this.activeReport().schema, this.formProperties),
     });
+
     if (payload instanceof Form3X || payload instanceof Form3) {
+      if (this.form.controls['change_of_address']) {
+        payload.change_of_address = this.form.value.change_of_address;
+        payload.confirmation_email_1 = this.form.value.confirmation_email_1;
+        payload.confirmation_email_2 = this.form.value.confirmation_email_2;
+      }
       payload.qualified_committee = this.committeeAccount().qualified;
       payload.committee_name = this.committeeAccount().name;
       payload.street_1 = this.committeeAccount().street_1;
@@ -168,6 +226,6 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
     };
     await this.apiService.post('/web-services/submit-to-fec/', payload);
     this.loading = 0;
-    return this.router.navigateByUrl(this.getContinueUrl?.(this.activeReport()) || '/reports/');
+    return this.router.navigateByUrl(this.getContinueUrl()?.(this.activeReport()) || '/reports/');
   }
 }
