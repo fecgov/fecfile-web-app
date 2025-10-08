@@ -123,6 +123,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   });
 
   public thisYear = new Date().getFullYear();
+  readonly defaultReportTypeCategory = this.getDefaultTypeCategory();
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
   readonly reportId = injectParams('reportId');
@@ -134,7 +135,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
 
   constructor() {
     super();
-    this.form.patchValue({ form_type: F3FormTypes.F3N, report_type_category: this.reportTypeCategories[0] });
+    this.form.patchValue({ form_type: F3FormTypes.F3N, report_type_category: this.defaultReportTypeCategory });
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([
       Validators.required,
@@ -216,6 +217,16 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
         detail: 'Contact Updated',
         life: 3000,
       });
+    }
+  }
+
+  private getDefaultTypeCategory() {
+    const isEvenYear = this.thisYear % 2 === 0;
+    const isJanuary = new Date().getMonth() === 0;
+    if ((isEvenYear && isJanuary) || (!isEvenYear && !isJanuary)) {
+      return F3ReportTypeCategories.NON_ELECTION_YEAR;
+    } else {
+      return F3ReportTypeCategories.ELECTION_YEAR;
     }
   }
 }
