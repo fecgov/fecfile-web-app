@@ -15,7 +15,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { TransactionContactLookupComponent } from '../../transaction-contact-lookup/transaction-contact-lookup.component';
 import { InputText } from 'primeng/inputtext';
 import { AddressInputComponent } from '../address-input/address-input.component';
-import { TextareaModule } from 'primeng/textarea';
+import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 
 @Component({
   selector: 'app-loan-agreement-input',
@@ -31,7 +31,7 @@ import { TextareaModule } from 'primeng/textarea';
     TransactionContactLookupComponent,
     InputText,
     AddressInputComponent,
-    TextareaModule,
+    AutoResizeDirective,
   ],
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {

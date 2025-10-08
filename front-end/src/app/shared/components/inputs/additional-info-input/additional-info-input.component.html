@@ -17,8 +17,7 @@
             id="purpose_description"
             [rows]="4"
             [cols]="30"
-            pTextarea
-            [autoResize]="true"
+            appAutoResize
             [formControlName]="templateMap['purpose_description']"
             [class.readonly]="isDescriptionSystemGenerated()"
             [readonly]="isDescriptionSystemGenerated()"
@@ -58,8 +57,7 @@
             id="text4000"
             [rows]="5"
             [cols]="30"
-            pTextarea
-            [autoResize]="true"
+            appAutoResize
             [formControlName]="templateMap['text4000']"
           ></textarea>
           <app-error-messages [form]="form" [fieldName]="templateMap['text4000']" [formSubmitted]="formSubmitted" />

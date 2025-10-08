@@ -38,7 +38,6 @@ import { ButtonModule } from 'primeng/button';
 import { NgOptimizedImage } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { PopoverModule } from 'primeng/popover';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -122,7 +121,6 @@ bootstrapApplication(AppComponent, {
       NgOptimizedImage,
       DialogModule,
       InputTextModule,
-      TextareaModule,
       PopoverModule,
       ConfirmDialogModule,
       ToastModule,

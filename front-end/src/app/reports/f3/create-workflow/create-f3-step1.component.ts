@@ -20,7 +20,6 @@ import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'a
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { SelectButton } from 'primeng/selectbutton';
-import { TextareaModule } from 'primeng/textarea';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
@@ -44,7 +43,6 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
     CalendarComponent,
     SearchableSelectComponent,
     SaveCancelComponent,
-    TextareaModule,
   ],
 })
 export class CreateF3Step1Component extends FormComponent implements OnInit {
