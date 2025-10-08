@@ -18,7 +18,11 @@ export const initialState: UserLoginData = {
 
 export const loginReducer = createReducer(
   initialState,
-  on(userLoginDataRetrievedAction, (_state, update) => update.payload),
-  on(userLoginDataUpdatedAction, (_state, update) => update.payload),
+  on(userLoginDataRetrievedAction, (_state, update) => {
+    return { ..._state, ...update.payload };
+  }),
+  on(userLoginDataUpdatedAction, (_state, update) => {
+    return { ..._state, ...update.payload };
+  }),
   on(userLoginDataDiscardedAction, () => initialState),
 );
