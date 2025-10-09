@@ -32,7 +32,7 @@ import { SelectModule } from 'primeng/select';
     SelectModule,
   ],
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
+export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
   contactTypeLabels: LabelList = ContactTypeLabels;
@@ -66,10 +66,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     { field: 'occupation', label: 'Occupation' },
   ];
 
-  ngOnInit() {
-    this.checkForDeletedContacts();
-  }
-
   public async checkForDeletedContacts() {
     const contactListResponse = await this.deletedContactService.getTableData();
     const deletedContactsExist = contactListResponse.count > 0;
@@ -79,7 +75,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     await super.loadTableItems(event);
-
     await this.checkForDeletedContacts();
   }
 

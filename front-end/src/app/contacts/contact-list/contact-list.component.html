@@ -67,4 +67,6 @@
   (savedContact)="saveContact($event)"
 />
 
-<app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />
+@if (restoreDialogIsVisible) {
+  <app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />
+}
