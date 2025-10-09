@@ -77,50 +77,10 @@ p,
   font-size: 14px !important;
 }
 
-.field-32 {
-  width: 32em;
-  min-width: 32em;
-  max-width: 32em;
-}
-
-.field-28 {
-  width: 28em;
-  min-width: 28em;
-  max-width: 28em;
-}
-
-.field-20 {
-  width: 20em;
-  min-width: 20em;
-  max-width: 20em;
-}
-
-.field-19 {
-  width: 19em;
-  min-width: 19em;
-  max-width: 19em;
-}
-
-.field-18 {
-  width: 18em;
-  min-width: 18em;
-  max-width: 18em;
-}
-
-.field-15 {
-  width: 15em;
-  min-width: 15em;
-  max-width: 15em;
-}
-
-.field-10 {
-  width: 10em;
-  min-width: 10em;
-  max-width: 10em;
-}
-
-.field-9 {
-  width: 9em;
-  min-width: 9em;
-  max-width: 9em;
+@for $i from 1 through 32 {
+  .w-#{$i} {
+    width: #{$i}em;
+    min-width: #{$i}em;
+    max-width: #{$i}em;
+  }
 }

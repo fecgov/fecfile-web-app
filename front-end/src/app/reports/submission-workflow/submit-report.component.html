@@ -4,12 +4,12 @@
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <h2>Verify confirmation email addresses</h2>
     <div class="row">
-      <fieldset class="field-28">
+      <fieldset class="w-28">
         <label for="confirmation_email_1"><strong>EMAIL #1</strong></label>
         <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
         <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted" />
       </fieldset>
-      <fieldset class="field-28">
+      <fieldset class="w-28">
         <label for="confirmation_email_2"><strong>EMAIL #2 </strong> <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
         <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted" />
@@ -48,23 +48,23 @@
       </div>
       -->
       <div class="row mt-5">
-        <fieldset class="field-32">
+        <fieldset class="w-32">
           <label for="street_1">STREET ADDRESS</label>
           <input type="text" pInputText id="street_1" formControlName="street_1" />
           <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
         </fieldset>
-        <fieldset class="field-32">
+        <fieldset class="w-32">
           <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="street_2" formControlName="street_2" />
           <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
         </fieldset>
 
-        <fieldset class="field-28">
+        <fieldset class="w-28">
           <label for="city">CITY</label>
           <input type="text" pInputText id="city" formControlName="city" />
           <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
         </fieldset>
-        <fieldset class="field-15">
+        <fieldset class="w-15">
           <label for="state">STATE/PROVINCE</label>
           <app-searchable-select
             inputId="state"
@@ -76,7 +76,7 @@
           />
           <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
         </fieldset>
-        <fieldset class="field-8">
+        <fieldset class="w-9">
           <label for="zip">ZIP/POSTAL CODE</label>
           <input type="text" pInputText id="zip" formControlName="zip" />
           <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
@@ -86,28 +86,28 @@
     <hr type="solid" />
     <h2>Committee treasurer</h2>
     <div class="row">
-      <fieldset class="field-28">
+      <fieldset class="w-28">
         <label for="treasurer_last_name">LAST NAME</label>
         <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
         <app-error-messages [form]="form" fieldName="treasurer_last_name" [formSubmitted]="formSubmitted" />
       </fieldset>
-      <fieldset class="field-19">
+      <fieldset class="w-19">
         <label for="treasurer_first_name">FIRST NAME</label>
         <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
         <app-error-messages [form]="form" fieldName="treasurer_first_name" [formSubmitted]="formSubmitted" />
       </fieldset>
-      <fieldset class="field-19">
+      <fieldset class="w-19">
         <label for="treasurer_middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
         <app-error-messages [form]="form" fieldName="treasurer_middle_name" [formSubmitted]="formSubmitted" />
       </fieldset>
       <div class="row">
-        <fieldset class="field-10">
+        <fieldset class="w-10">
           <label for="treasurer_prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
           <app-error-messages [form]="form" fieldName="treasurer_prefix" [formSubmitted]="formSubmitted" />
         </fieldset>
-        <fieldset class="field-10">
+        <fieldset class="w-10">
           <label for="treasurer_suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
           <app-error-messages [form]="form" fieldName="treasurer_suffix" [formSubmitted]="formSubmitted" />
@@ -125,7 +125,7 @@
       >
     </p>
 
-    <fieldset class="field-20 mb-5">
+    <fieldset class="w-20 mb-5">
       <label for="filingPassword"> ELECTRONIC FILING PASSWORD </label>
       <p-password
         inputId="filingPassword"
@@ -144,28 +144,28 @@
     </fieldset>
 
     @if (activeReport().report_version) {
-      <div class="grid">
-        <div class="col-12">
-          <div class="flex flex-column-row">
-            <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo" />
-            <label for="backdoor-check" class="mb-0 ml-2">
-              ADD A BACKDOOR CODE <span class="paren-label">(OPTIONAL)</span>
-            </label>
-            <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="Do you need to use a backdoor code?"></span>
-            @if (showBackdoorCode) {
-              <div class="grid">
-                <div class="col-4">
-                  <fieldset class="">
-                    <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
-                    <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
-                    <app-error-messages [form]="form" fieldName="backdoor_code" [formSubmitted]="formSubmitted" />
-                  </fieldset>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
+      <div class="field-row mb-5">
+        <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo" />
+        <label for="backdoor-check" class="mb-0 ml-2 cursor-pointer">
+          ADD A BACKDOOR CODE <span class="paren-label">(OPTIONAL)</span>
+        </label>
+        <img
+          alt="i info circle"
+          src="assets/img/i-info-circle.svg"
+          width="16px"
+          class="ml-1"
+          pTooltip="Do you need to use a backdoor code?"
+        />
       </div>
+      @if (showBackdoorCode) {
+        <div class="row mb-5">
+          <fieldset class="w-15">
+            <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
+            <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
+            <app-error-messages [form]="form" fieldName="backdoor_code" [formSubmitted]="formSubmitted" />
+          </fieldset>
+        </div>
+      }
     }
 
     <div class="field-row mb-0" data-cy="userCertified">
@@ -176,24 +176,15 @@
         [trueValue]="true"
         [falseValue]="false"
       />
-      <label for="userCertified" class="ml-2 mb-0">
-        <strong>
-          I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct,
-          and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing
-          this Statement to the penalties of 52 U.S.C. § 30109.
-        </strong>
+      <label for="userCertified" class="ml-2 mb-0 cursor-pointer">
+        I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct,
+        and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing
+        this Statement to the penalties of 52 U.S.C. § 30109.
       </label>
     </div>
     <hr type="solid" class="mb-3" />
     <div class="flex justify-content-between">
-      <button
-        pButton
-        pRipple
-        label="Back"
-        type="button"
-        class="p-button-secondary"
-        (click)="router.navigateByUrl(getBackUrl()?.(activeReport()) || '')"
-      ></button>
+      <button pButton pRipple label="Back" type="button" class="p-button-secondary" [routerLink]="[backUrl()]"></button>
       <button
         pButton
         pRipple

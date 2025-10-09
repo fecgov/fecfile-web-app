@@ -1,6 +1,6 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
@@ -46,6 +46,7 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
     Password,
     Checkbox,
     Tooltip,
+    RouterLink,
   ],
 })
 export class SubmitReportComponent extends FormComponent implements OnInit {
@@ -88,6 +89,8 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
   ];
   readonly getBackUrl = injectRouteData<(report?: Report) => string | undefined | null>('getBackUrl');
   readonly getContinueUrl = injectRouteData<(report?: Report) => string | undefined | null>('getContinueUrl');
+  readonly continueUrl = computed(() => this.getContinueUrl()?.(this.activeReport()) || '/reports/');
+  readonly backUrl = computed(() => this.getBackUrl()?.(this.activeReport()) || '');
 
   constructor() {
     super();
@@ -226,6 +229,6 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     };
     await this.apiService.post('/web-services/submit-to-fec/', payload);
     this.loading = 0;
-    return this.router.navigateByUrl(this.getContinueUrl()?.(this.activeReport()) || '/reports/');
+    return this.router.navigateByUrl(this.continueUrl());
   }
 }
