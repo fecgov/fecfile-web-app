@@ -3,7 +3,6 @@ import { JsonSchema, validate } from 'fecfile-validate';
 import { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
-import { environment } from 'environments/environment';
 
 export class SchemaUtils {
   /**
@@ -41,6 +40,12 @@ export class SchemaUtils {
     'userCertified',
     'secured',
     'memo_code',
+    'loan_restructured',
+    'line_of_credit',
+    'others_liable',
+    'perfected_interest',
+    'future_income',
+    'collateral',
   ];
   static readonly DATE_FORMAT = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$';
 
@@ -239,5 +244,3 @@ export class SchemaUtils {
     };
   }
 }
-
-export const fecSpec8dot5Released: boolean = environment.fecSpec >= 8.5;

@@ -112,7 +112,12 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   private readonly isElectionYear = computed(() => F3ReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
   readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
   private readonly coverages = computed(() => {
+    const report = this.report();
     const coverageDatesFunction = getCoverageDatesFunction(this.reportCode());
+    if (this.form.pristine && report) {
+      return [report.coverageDates!['coverage_from_date'], report.coverageDates!['coverage_through_date']];
+    }
+
     if (!coverageDatesFunction) return undefined;
     return coverageDatesFunction(this.thisYear, this.isElectionYear(), 'Q');
   });
@@ -149,7 +154,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     );
     effectOnceIf(
       () => this.report(),
-      () => this.form.patchValue(this.report()!, { emitEvent: false }),
+      () => this.form.patchValue(this.report()!),
     );
 
     effect(() => {

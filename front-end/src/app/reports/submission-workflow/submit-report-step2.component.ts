@@ -71,7 +71,7 @@ export class SubmitReportStep2Component extends FormComponent implements OnInit 
   }
 
   ngOnInit(): void {
-    this.form.addControl('backdoorYesNo', new SubscriptionFormControl());
+    this.form.addControl('backdoorYesNo', new SubscriptionFormControl<string | null>(null, { updateOn: 'change' }));
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['filingPassword'].addValidators(passwordValidator);

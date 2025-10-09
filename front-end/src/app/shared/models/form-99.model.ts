@@ -2,7 +2,6 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from './base.model';
 import { Report, ReportTypes } from './report.model';
-import { fecSpec8dot5Released } from '../utils/schema.utils';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -40,17 +39,13 @@ export class Form99 extends Report {
   }
 }
 
-let allTextCodes = Object.entries({
+const allTextCodes = Object.entries({
   MST: 'Miscellaneous Report to the FEC',
   MSM: 'Filing Frequency Change Notice',
   MSW: 'Loan Agreement / Loan Forgiveness',
   MSI: 'Disavowal Response',
   MSR: 'Form 3L Filing Frequency Change Notice',
 });
-
-if (!fecSpec8dot5Released) {
-  allTextCodes = allTextCodes.filter(([key]) => key !== 'MSW' && key !== 'MSR');
-}
 
 export const textCodes = allTextCodes.map(([code, label]) => ({
   value: code,

@@ -1,5 +1,4 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -24,7 +23,6 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   abstract getReportPayload(): Report;
   abstract webprintURL: string;
 
-  form: FormGroup = new FormGroup({}, { updateOn: 'blur' });
   reportId?: string;
 
   constructor() {
@@ -40,7 +38,6 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
 
   ngOnInit(): void {
     this.reportId = this.activatedRoute.snapshot.params['reportId'];
-    this.form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), { updateOn: 'blur' });
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 
