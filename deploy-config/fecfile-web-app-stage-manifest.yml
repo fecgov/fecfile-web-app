@@ -7,4 +7,5 @@ applications:
     routes:
       - route: stage.fecfile.fec.gov
     env:
+      FECFILE_APP_URL: https://stage.fecfile.fec.gov
       FECFILE_API_URL: https://stage-api.fecfile.fec.gov

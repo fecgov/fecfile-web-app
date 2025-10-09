@@ -12,8 +12,19 @@
   width: 360px;
 }
 
+#loan-agreement-container {
+  border-left: 5px solid var(--fec-grey-alt);
+  max-width: 360px;
+  width: 360px;
+  align-items: center;
+}
+
 @media (min-width: 576px) {
   #form {
+    max-width: 540px;
+    width: 540px;
+  }
+  #loan-agreement-container {
     max-width: 540px;
     width: 540px;
   }
@@ -24,12 +35,20 @@
     max-width: 720px;
     width: 720px;
   }
+  #loan-agreement-container {
+    max-width: 720px;
+    width: 720px;
+  }
 }
 
 @media (min-width: 992px) {
   #form {
-    max-width: 780.4px;
-    width: 780.4px;
+    max-width: 815px;
+    width: 815px;
+  }
+  #loan-agreement-container {
+    max-width: 815px;
+    width: 815px;
   }
 }
 
@@ -48,4 +67,16 @@ h2 {
   font-size: 24px;
   font-weight: 700;
   line-height: 1.2;
+}
+
+.custom-info-icon {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  height: 1.25rem;
+  width: 1.25rem;
 }
