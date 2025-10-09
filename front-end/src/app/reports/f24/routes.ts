@@ -34,7 +34,7 @@ export const F24_ROUTES: Route[] = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => `/reports/f24/transactions/${report?.id}/list`,
-      getContinueUrl: (report?: Report) => '/reports/f24/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f24/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },

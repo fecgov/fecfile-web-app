@@ -40,12 +40,12 @@ export const F99_ROUTES: Route[] = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f99/edit/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f99/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
   {
-    path: 'submit/step1/:reportId',
+    path: 'submit/:reportId',
     title: 'Submit report',
     component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],

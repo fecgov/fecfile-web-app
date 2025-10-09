@@ -59,7 +59,7 @@ export const F3_ROUTES: Route[] = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f3/detailed-summary/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
@@ -71,7 +71,7 @@ export const F3_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f3/submit/step1/' + report?.id,
+      getNextUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },

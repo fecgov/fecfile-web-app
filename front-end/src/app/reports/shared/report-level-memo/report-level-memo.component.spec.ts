@@ -42,7 +42,7 @@ describe('ReportLevelMemoComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             data: of({
-              getNextUrl: (report?: Report) => `/reports/f3x/submit/step1/${report?.id}`,
+              getNextUrl: (report?: Report) => `/reports/f3x/submit/${report?.id}`,
             }),
           },
         },
@@ -87,7 +87,7 @@ describe('ReportLevelMemoComponent', () => {
     component.assignedMemoText.id = '1';
     await component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
-    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
@@ -105,7 +105,7 @@ describe('ReportLevelMemoComponent', () => {
     component.assignedMemoText.id = undefined;
     await component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
-    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 });

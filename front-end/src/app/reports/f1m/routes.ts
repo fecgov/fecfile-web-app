@@ -34,7 +34,7 @@ export const F1M_ROUTES: Route[] = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f1m/edit/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f1m/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
@@ -46,7 +46,7 @@ export const F1M_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f1m/submit/step1/' + report?.id,
+      getNextUrl: (report?: Report) => '/reports/f1m/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
