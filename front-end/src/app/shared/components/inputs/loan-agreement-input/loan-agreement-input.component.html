@@ -183,9 +183,10 @@
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="location_of_account">LOCATION OF ACCOUNT</label>
+          <span class="span-label" id="location_of_account">LOCATION OF ACCOUNT</span>
           <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
           <app-transaction-contact-lookup
+            aria-labelledby="location_of_account"
             contactProperty="contact_2"
             [transaction]="transaction()"
             [form]="form"
