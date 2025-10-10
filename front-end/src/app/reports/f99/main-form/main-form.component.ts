@@ -10,10 +10,10 @@ import { InputText } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { Select } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
-import { TextareaModule } from 'primeng/textarea';
 import { ErrorMessagesComponent } from '../../../shared/components/error-messages/error-messages.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
+import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 
@@ -28,9 +28,9 @@ import { Observable } from 'rxjs';
     AddressInputComponent,
     Select,
     SaveCancelComponent,
-    TextareaModule,
     RadioButtonModule,
     SelectButton,
+    AutoResizeDirective,
   ],
   providers: [Form99Service],
 })

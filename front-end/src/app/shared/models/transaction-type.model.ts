@@ -91,7 +91,7 @@ export abstract class TransactionType {
   // For some predefined form fields, a mandatory default value can be declared. In which case, the value populates
   // the form field and the field made read-only. Fields defined this way are created as needed for a particular
   // transaction type model and implemented in a particular input component. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
-  mandatoryFormValues: { [field: string]: string | undefined } = {};
+  mandatoryFormValues: { [field: string]: string | boolean | undefined } = {};
 
   // Labels
   abstract title: string;

@@ -3,10 +3,10 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_JF_TRANS
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
 
-export class PARTY_JF_TRANSFER_MEMO extends SchATransactionType {
+export class PARTY_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO);
