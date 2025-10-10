@@ -14,7 +14,7 @@ describe('Amendments', () => {
       ReportListPage.goToReportList(result.report);
       PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
       PageUtils.clickLink('Submit report');
-      PageUtils.urlCheck('/submit/step2');
+      PageUtils.urlCheck('/submit');
       PageUtils.enterValue('#treasurer_last_name', 'TEST');
       PageUtils.enterValue('#treasurer_first_name', 'TEST');
       PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD')); // Insert password from env variable

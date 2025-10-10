@@ -69,13 +69,8 @@ export abstract class AbstractMenuComponent {
       expanded: sidebarState?.section == ReportSidebarSection.SUBMISSION,
       items: [
         {
-          label: 'Confirm information',
-          routerLink: [`/reports/${this.reportString}/submit/step1/${this.activeReport().id}`],
-          visible: isEditable,
-        },
-        {
           label: 'Submit report',
-          routerLink: [`/reports/${this.reportString}/submit/step2/${this.activeReport().id}`],
+          routerLink: [`/reports/${this.reportString}/submit/${this.activeReport().id}`],
           visible: isEditable,
         },
         {
@@ -127,18 +122,10 @@ export abstract class AbstractMenuComponent {
     };
   }
 
-  confirmInformation(isEditable: boolean): MenuItem {
-    return {
-      label: 'Confirm information',
-      routerLink: `/reports/${this.reportString}/submit/step1/${this.activeReport().id}`,
-      visible: isEditable,
-    };
-  }
-
   submitReport(isEditable: boolean): MenuItem {
     return {
       label: 'Submit report',
-      routerLink: `/reports/${this.reportString}/submit/step2/${this.activeReport().id}`,
+      routerLink: `/reports/${this.reportString}/submit/${this.activeReport().id}`,
       visible: isEditable,
     };
   }
@@ -152,7 +139,7 @@ export abstract class AbstractMenuComponent {
   }
 
   submitReportArray(isEditable: boolean): MenuItem[] {
-    return [this.confirmInformation(isEditable), this.submitReport(isEditable), this.reportStatus()];
+    return [this.submitReport(isEditable), this.reportStatus()];
   }
 
   abstract getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[];

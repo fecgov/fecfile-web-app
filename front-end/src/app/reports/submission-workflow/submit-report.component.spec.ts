@@ -1,28 +1,50 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService, QueryParams } from 'app/shared/services/api.service';
-import { ReportService } from 'app/shared/services/report.service';
-import { Confirmation, ConfirmationService, MessageService, SharedModule } from 'primeng/api';
-import { of } from 'rxjs';
-import { SubmitReportStep2Component } from './submit-report-step2.component';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { Form3X, Report } from 'app/shared/models/';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { Confirmation, ConfirmationService, MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { BehaviorSubject } from 'rxjs';
+import { ReportService } from 'app/shared/services/report.service';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
-import { Form3X, Report } from 'app/shared/models';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { SubmitReportComponent } from './submit-report.component';
+import { ApiService, QueryParams } from 'app/shared/services/api.service';
+import { F3X_ROUTES } from '../f3x/routes';
 
-describe('SubmitReportStep2Component', () => {
-  let component: SubmitReportStep2Component;
-  let fixture: ComponentFixture<SubmitReportStep2Component>;
-  let mockRouter: jasmine.SpyObj<Router>;
+const routeDataSubject = new BehaviorSubject<{
+  report: Report;
+  getBackUrl: (report?: Report) => string;
+  getContinueUrl: (report?: Report) => string;
+}>({
+  report: Form3X.fromJSON({
+    report_code: 'Q1',
+    id: '999',
+  }),
+  getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
+  getContinueUrl: (report?: Report) => '/reports/f3x/submit/status/' + report?.id,
+});
+
+const routeMock = {
+  data: routeDataSubject.asObservable(),
+  snapshot: {
+    params: {
+      reportId: '999',
+    },
+  },
+};
+
+describe('SubmitReportComponent', () => {
+  let router: Router;
+  let component: SubmitReportComponent;
+  let fixture: ComponentFixture<SubmitReportComponent>;
   let mockMessageService: jasmine.SpyObj<MessageService>;
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
     mockMessageService = jasmine.createSpyObj('MessageService', ['add']);
 
     await TestBed.configureTestingModule({
@@ -33,13 +55,13 @@ describe('SubmitReportStep2Component', () => {
         CheckboxModule,
         RadioButtonModule,
         SharedModule,
-        SubmitReportStep2Component,
+        SubmitReportComponent,
       ],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         FormBuilder,
-        { provide: Router, useValue: mockRouter },
+        provideRouter(F3X_ROUTES),
         provideMockStore(testMockStore()),
         { provide: MessageService, useValue: mockMessageService },
         ConfirmationService,
@@ -47,19 +69,13 @@ describe('SubmitReportStep2Component', () => {
         ReportService,
         {
           provide: ActivatedRoute,
-          useValue: {
-            data: of({
-              report: Form3X.fromJSON({
-                report_code: 'Q1',
-                id: '999',
-              }),
-            }),
-          },
+          useValue: routeMock,
         },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SubmitReportStep2Component);
+    router = TestBed.inject(Router);
+    fixture = TestBed.createComponent(SubmitReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -94,7 +110,7 @@ describe('SubmitReportStep2Component', () => {
 
   describe('saveAndSubmit', () => {
     let confirmSpy: jasmine.Spy<(confirmation: Confirmation) => ConfirmationService>;
-    let saveTreasurerSpy: jasmine.Spy<() => Promise<Report | undefined>>;
+    let updateReport: jasmine.Spy<() => Promise<Report | undefined>>;
     let submitSpy: jasmine.Spy<() => Promise<boolean>>;
     let reportSpy: jasmine.Spy<(report: Report, fieldsToValidate?: string[]) => Promise<Report>>;
     let apiSpy: jasmine.Spy<{
@@ -113,7 +129,7 @@ describe('SubmitReportStep2Component', () => {
         if (confirmation.accept) confirmation.accept();
         return component.confirmationService;
       });
-      saveTreasurerSpy = spyOn(component, 'saveTreasurerName').and.callThrough();
+      updateReport = spyOn(component, 'updateReport').and.callThrough();
       submitSpy = spyOn(component, 'submitReport').and.callThrough();
       reportSpy = spyOn(component.reportService, 'update').and.returnValue(Promise.resolve(new Form3X()));
       apiSpy = spyOn(component.apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse()));
@@ -130,15 +146,15 @@ describe('SubmitReportStep2Component', () => {
     });
 
     it('should call saveAndSubmit when form is valid', fakeAsync(async () => {
-      component.getContinueUrl = () => `/reports/f3x/submit/status/999/`;
-      const saveSepy = spyOn(component, 'saveAndSubmit').and.callThrough();
+      const saveSpy = spyOn(component, 'saveAndSubmit').and.callThrough();
+      const navSpy = spyOn(router, 'navigateByUrl').and.callThrough();
 
       component.submitClicked();
       tick(100);
       expect(component.form.invalid).toBeFalse();
       expect(confirmSpy).toHaveBeenCalled();
-      expect(saveSepy).toHaveBeenCalled();
-      expect(saveTreasurerSpy).toHaveBeenCalled();
+      expect(saveSpy).toHaveBeenCalled();
+      expect(updateReport).toHaveBeenCalled();
       expect(reportSpy).toHaveBeenCalled();
       expect(submitSpy).toHaveBeenCalled();
       expect(apiSpy).toHaveBeenCalledWith('/web-services/submit-to-fec/', {
@@ -146,7 +162,7 @@ describe('SubmitReportStep2Component', () => {
         password: mockPassword,
         backdoor_code: undefined,
       });
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/status/999/');
+      expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/999');
     }));
   });
 });
