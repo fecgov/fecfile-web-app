@@ -32,6 +32,9 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     super();
     effect(() => {
       this.selectedItems.set([]);
+      if (this.visible()) {
+        this.first.set(0);
+      }
     });
   }
 
