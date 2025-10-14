@@ -53,7 +53,7 @@ export enum ContactFields {
   street_1 = 'Street Address',
   street_2 = 'Apartment, Suite, Etc.',
   city = 'City',
-  state = 'State/TERRITORY',
+  state = 'State/Territory',
   zip = 'Zip/Postal Code',
   employer = 'Employer',
   occupation = 'Occupation',
