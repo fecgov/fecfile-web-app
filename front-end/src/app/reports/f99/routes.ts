@@ -4,9 +4,8 @@ import { MainFormComponent } from './main-form/main-form.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
-import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
+import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
 import { Report } from 'app/shared/models/report.model';
-import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 
 // ROUTING NOTE:
@@ -41,32 +40,19 @@ export const F99_ROUTES: Route[] = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f99/edit/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f99/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
   {
-    path: 'submit/step1/:reportId',
-    title: 'Confirm information',
-    component: SubmitReportStep1Component,
+    path: 'submit/:reportId',
+    title: 'Submit report',
+    component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f99/web-print/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f99/submit/step2/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/step2/:reportId',
-    title: 'Submit report',
-    component: SubmitReportStep2Component,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.SUBMISSION,
-      getBackUrl: (report?: Report) => '/reports/f99/submit/step1/' + report?.id,
       getContinueUrl: (report?: Report) => '/reports/f99/submit/status/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
