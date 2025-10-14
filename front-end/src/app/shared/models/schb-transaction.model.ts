@@ -205,12 +205,12 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   ],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Operating Expenditure'],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Operating Expenditure'],
-  [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID, 'Void of Operating Expenditure'],
+  [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID, 'Operating Expenditure - Void'],
   [ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES, 'Transfers to Affiliates/Other Committees'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE, 'Contribution to Candidate'],
-  [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID, 'Void of Contribution to Candidate'],
+  [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID, 'Contribution to Candidate - Void'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE, 'Contribution to Other Committee'],
-  [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID, 'Void of Contribution to Other Committee'],
+  [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID, 'Contribution to Other Committee - Void'],
   [
     ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
     'Individual Refund - Non-contribution Account',
@@ -241,7 +241,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   ],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Other Disbursement'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID, 'Void of Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID, 'Other Disbursement - Void'],
   [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT, 'Non-contribution Account Disbursement'],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
@@ -328,7 +328,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
     'Payroll Memo for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity Payment'],
+  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, '100% Federal Election Activity Payment - Void'],
   [
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
     'Other Committee Refund - National Party Headquarters Buildings Account',
