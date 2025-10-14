@@ -25,7 +25,10 @@ export class SubscriptionFormControl<TValue = any> extends FormControl {
     if (destroy$ !== undefined) {
       piped = [takeUntil(destroy$), ...piped];
     }
-    return this.valueChanges.pipe(distinctUntilChanged()).pipe(...(piped as [])).subscribe(action);
+    return this.valueChanges
+      .pipe(distinctUntilChanged())
+      .pipe(...(piped as []))
+      .subscribe(action);
   }
 
   copy<T>(value: T, updateOn: 'blur' | 'change' | 'submit' | undefined = 'blur'): SubscriptionFormControl<T> {
