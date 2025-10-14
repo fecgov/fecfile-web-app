@@ -81,7 +81,7 @@
         "@typescript-eslint/eslint-plugin": "8.45.0",
         "@typescript-eslint/parser": "8.45.0",
         "browserstack-cypress-cli": "1.33.0",
-        "cypress": "15.3.0",
+        "cypress": "15.4.0",
         "cypress-mochawesome-reporter": "3.8.4",
         "cypress-multi-reporters": "2.0.5",
         "cypress-split": "1.24.23",
