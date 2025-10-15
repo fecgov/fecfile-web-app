@@ -62,9 +62,20 @@
     <div class="add-contact-container">
       or
       <span [style.verticalAlign]="'middle'"
-        ><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px"
+        ><img
+          (click)="onCreateNewContactSelect()"
+          alt="Plus"
+          src="assets/img/i-plus-circle.svg"
+          height="20px"
+          width="20px"
       /></span>
-      <a (click)="onCreateNewContactSelect()">Create a new contact</a>
+      <a
+        tabindex="0"
+        (click)="onCreateNewContactSelect()"
+        (keydown.enter)="onCreateNewContactSelect()"
+        (keydown.space)="onCreateNewContactSelect()"
+        >Create a new contact</a
+      >
     </div>
   }
 </div>

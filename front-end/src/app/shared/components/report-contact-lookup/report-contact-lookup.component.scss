@@ -1,16 +1,17 @@
 .add-contact-container {
   padding: 0 0 0 10px;
   font-size: 1.2em;
-  font-family: var(--karla-bold);
+  font-family: var(--karla);
   align-content: center;
 }
 
 .add-contact-container span {
   padding: 0 0.3em;
+  cursor: pointer;
 }
 
 .add-contact-container a {
-  border-bottom: none;
+  border-bottom: 1px dotted;
 }
 
 .contact-lookup-container {
