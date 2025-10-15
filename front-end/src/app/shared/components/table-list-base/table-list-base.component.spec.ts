@@ -3,13 +3,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListBaseComponent } from './table-list-base.component';
-
-class TestTableListBaseComponent extends TableListBaseComponent<string> {
-  protected readonly itemService: TestTableListService = TestBed.inject(TestTableListService);
-  protected getEmptyItem(): string {
-    return '';
-  }
-}
+import { Component } from '@angular/core';
+import { TableComponent } from '../table/table.component';
 
 class TestTableListService implements TableListService<string> {
   tableResults: string[] = ['abc', 'def'];
@@ -31,6 +26,28 @@ class TestTableListService implements TableListService<string> {
   }
   async delete(): Promise<null> {
     return null;
+  }
+}
+
+@Component({
+  standalone: true,
+  imports: [TableComponent],
+  template: `<app-table
+    [(first)]="first"
+    [items]="items"
+    [(totalItems)]="totalItems"
+    [loading]="loading"
+    [(rowsPerPage)]="rowsPerPage"
+    [(selectedItems)]="selectedItems"
+    itemName="strings"
+    sortField="sort_name"
+    (loadTableItems)="loadTableItems($event)"
+  />`,
+})
+class TestTableListBaseComponent extends TableListBaseComponent<string> {
+  protected readonly itemService: TestTableListService = TestBed.inject(TestTableListService);
+  protected getEmptyItem(): string {
+    return '';
   }
 }
 
@@ -57,12 +74,11 @@ describe('TableListBaseComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#loadTableItems should load items', () => {
-    component.loadTableItems({}).then(() => {
-      expect(component.items[0]).toBe('abc');
-      expect(component.totalItems()).toBe(2);
-      expect(component.loading).toBe(false);
-    });
+  it('#loadTableItems should load items', async () => {
+    await component.loadTableItems({});
+    expect(component.items[0]).toBe('abc');
+    expect(component.totalItems()).toBe(2);
+    expect(component.loading).toBe(false);
   });
 
   it('#loadTableItems should load default pagerState if no event passed', async () => {
