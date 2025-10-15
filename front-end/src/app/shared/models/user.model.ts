@@ -11,8 +11,8 @@ export type UserLoginData = {
   email?: string;
   consent_for_one_year?: boolean;
   security_consented?: boolean;
-  security_consent_version?: number;
-  security_consent_version_at_login?: number;
+  security_consent_version?: string;
+  security_consent_version_at_login?: string;
   role?: string;
 };
 

@@ -87,7 +87,7 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
         security_consented: true,
-        security_consent_version: SECURITY_CONSENT_VERSION - 1,
+        security_consent_version: SECURITY_CONSENT_VERSION + 'B',
         security_consent_version_at_login: SECURITY_CONSENT_VERSION,
       });
       expect(service.userHasConsented()).toBeFalse();
@@ -102,8 +102,8 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
         security_consented: true,
-        security_consent_version: SECURITY_CONSENT_VERSION - 1,
-        security_consent_version_at_login: SECURITY_CONSENT_VERSION - 1,
+        security_consent_version: SECURITY_CONSENT_VERSION + 'B',
+        security_consent_version_at_login: SECURITY_CONSENT_VERSION + 'B',
       });
       expect(service.userHasConsented()).toBeTrue();
     });
