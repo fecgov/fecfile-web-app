@@ -3,9 +3,16 @@
   <div class="add-contact-container">
     or
     <span [style.verticalAlign]="'middle'"
-      ><img (click)="openDialog()" alt="Plus" src="assets/img/i-plus-circle.svg" height="20px" width="20px"
+      ><img
+        (click)="openDialog()"
+        (keydown.enter)="openDialog()"
+        (keydown.space)="openDialog()"
+        alt="Plus"
+        src="assets/img/i-plus-circle.svg"
+        height="20px"
+        width="20px"
     /></span>
-    <a tabindex="0" (keydown.enter)="openDialog()" (keydown.space)="openDialog()" (click)="openDialog()"
+    <a tabindex="0" (click)="openDialog()" (keydown.enter)="openDialog()" (keydown.space)="openDialog()"
       >Create a new contact</a
     >
   </div>

@@ -64,6 +64,8 @@
       <span [style.verticalAlign]="'middle'"
         ><img
           (click)="onCreateNewContactSelect()"
+          (keydown.enter)="onCreateNewContactSelect()"
+          (keydown.space)="onCreateNewContactSelect()"
           alt="Plus"
           src="assets/img/i-plus-circle.svg"
           height="20px"
