@@ -16,6 +16,8 @@ import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
 import { NgComponentOutlet } from '@angular/common';
 
+export const SECURITY_CONSENT_VERSION = '1';
+
 @Component({
   selector: 'app-security-notice',
   templateUrl: './security-notice.component.html',
@@ -65,13 +67,23 @@ export class SecurityNoticeComponent implements OnInit {
       this.store.dispatch(singleClickEnableAction());
       return;
     }
-    const updatedUserLoginData = { ...this.userLoginData() };
+    const updatedUserLoginData = {
+      ...this.userLoginData(),
+      security_consent_version: SECURITY_CONSENT_VERSION,
+    };
     if (this.form.get('security-consent-annual')?.value) {
       updatedUserLoginData.consent_for_one_year = true;
     }
 
     const retval = await this.usersService.updateCurrentUser(updatedUserLoginData);
-    this.store.dispatch(userLoginDataUpdatedAction({ payload: retval }));
+    this.store.dispatch(
+      userLoginDataUpdatedAction({
+        payload: {
+          ...retval,
+          security_consent_version_at_login: SECURITY_CONSENT_VERSION,
+        },
+      }),
+    );
     this.router.navigate(['/select-committee']);
   }
 }
