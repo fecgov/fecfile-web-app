@@ -64,7 +64,7 @@ function confirmDeletion() {
 
 function openUsersPage() {
   cy.findByRole('button', { name: /account|profile|menu|user/i }).click({ force: true });
-  cy.findByRole('menuitem', { name: /users/i }).click({ force: true });
+  cy.findByRole('button', { name: /users/i }).click({ force: true });
 }
 
 // -------------------- Step Definitions --------------------
@@ -81,14 +81,6 @@ Given(
 
 Given("I am on the Users page", () => {
   cy.visit("/");
-  /*
-  // App nav: account/profile menu → Users
-  cy.findByRole("button", { name: /account|profile|menu|user/i }).click({ force: true });
-  cy.findByRole("menuitem", { name: /users/i }).click({ force: true });
-
-  cy.url().should("match", /\/users\b/);
-  aliasUsersTable();
-  */
   openUsersPage();
 });
 
