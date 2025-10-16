@@ -6,7 +6,6 @@
 declare global {
   namespace Cypress {
     interface Chainable {
-      loginAs(role?: 'owner' | 'regular'): Chainable<void>;
       openUsersPage(): Chainable<void>;
       safeType(value: string | number | null | undefined): Chainable<Subject>;
     }
