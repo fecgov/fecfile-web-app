@@ -48,6 +48,7 @@ describe('SecurityNoticeComponent', () => {
 
   it('should submit', () => {
     const expectedUserLoginData = testUserLoginData();
+    expectedUserLoginData.consent_for_one_year = false;
     const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(Promise.resolve(expectedUserLoginData));
     component.signConsentForm();
 
