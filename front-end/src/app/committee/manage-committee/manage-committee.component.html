@@ -1,3 +1,19 @@
+<ng-template #nameBody let-item> {{ item.name }}{{ isCurrentUser(item) ? ' (You)' : '' }} </ng-template>
+<ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
+<ng-template #statusBody let-item>{{ item.is_active ? 'Active' : 'Pending' }}</ng-template>
+
+<ng-template #actionsBody let-item>
+  @if (canEditMember(item)) {
+    <app-table-actions-button
+      (tableActionClick)="$event.action.action($event.actionItem)"
+      [actionItem]="item"
+      [tableActions]="rowActions"
+      buttonIcon="pi pi-ellipsis-v"
+      buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary p-button-text mr-2"
+    />
+  }
+</ng-template>
+
 <app-table
   [(first)]="first"
   [items]="items"
@@ -8,7 +24,7 @@
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
   [(selectedItems)]="selectedItems"
   itemName="users"
-  [sortableHeaders]="sortableHeaders"
+  [columns]="columns"
   (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
@@ -22,30 +38,6 @@
         }
       </ng-template>
     </p-toolbar>
-  </ng-template>
-  <ng-template #header>
-    @if (isCommitteeAdministrator()) {
-      <th id="buttons" role="columnheader">Actions</th>
-    }
-  </ng-template>
-  <ng-template let-item #body>
-    <td>{{ item.name }}</td>
-    <td>{{ item.email }}</td>
-    <td>{{ getRoleLabel(item.role) }}</td>
-    <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-    @if (isCommitteeAdministrator()) {
-      <td>
-        @if (isNotCurrentUser(item) && canEditMember(item)) {
-          <app-table-actions-button
-            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-            [actionItem]="item"
-            [tableActions]="rowActions"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-          />
-        }
-      </td>
-    }
   </ng-template>
 </app-table>
 

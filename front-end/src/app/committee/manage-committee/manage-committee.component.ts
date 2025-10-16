@@ -1,19 +1,21 @@
-import { Component, computed, inject } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, TemplateRef, viewChild } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
-import { TableComponent } from '../../shared/components/table/table.component';
+import { ColumnDefinition, TableComponent } from '../../shared/components/table/table.component';
 import { Toolbar } from 'primeng/toolbar';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
 import { ButtonDirective } from 'primeng/button';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-manage-committee',
   templateUrl: './manage-committee.component.html',
+  styleUrls: ['./manage-committee.component.scss'],
   imports: [
     TableComponent,
     Toolbar,
@@ -21,9 +23,10 @@ import { ButtonDirective } from 'primeng/button';
     Ripple,
     TableActionsButtonComponent,
     CommitteeMemberDialogComponent,
+    TableModule,
   ],
 })
-export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
+export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements AfterViewInit {
   private readonly store = inject(Store);
   protected readonly itemService = inject(CommitteeMemberService);
   readonly user = this.store.selectSignal(selectUserLoginData);
@@ -39,12 +42,37 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
 
-  readonly sortableHeaders: { field: string; label: string }[] = [
-    { field: 'name', label: 'Name' },
-    { field: 'email', label: 'Email' },
-    { field: 'role', label: 'Role' },
-    { field: 'is_active', label: 'Status' },
-  ];
+  readonly nameBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('nameBody');
+  readonly roleBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('roleBody');
+  readonly statusBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('statusBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('actionsBody');
+
+  columns: ColumnDefinition[] = [];
+
+  override ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+    this.columns = [
+      { field: 'name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
+      { field: 'email', header: 'Email', sortable: true, cssClass: 'email-column' }, // No custom template, just use field
+      { field: 'role', header: 'Role', sortable: true, cssClass: 'role-column', bodyTpl: this.roleBodyTpl() },
+      {
+        field: 'is_active',
+        header: 'Status',
+        sortable: true,
+        cssClass: 'status-column',
+        bodyTpl: this.statusBodyTpl(),
+      },
+    ];
+    if (this.isCommitteeAdministrator()) {
+      this.columns.push({
+        field: 'actions',
+        header: 'Actions',
+        sortable: false,
+        cssClass: 'actions-column',
+        bodyTpl: this.actionsBodyTpl(),
+      });
+    }
+  }
 
   public userAdded(email: string) {
     if (email) {
@@ -58,7 +86,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   }
 
   canEditMember(member: CommitteeMember): boolean {
-    if (!this.isCommitteeAdministrator()) return false;
+    if (this.isCurrentUser(member) || !this.isCommitteeAdministrator()) return false;
     if (!member.isAdmin) return true;
     return this.itemService.adminsSignal().length > 2;
   }
@@ -92,8 +120,8 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     this.member = undefined;
   }
 
-  isNotCurrentUser(member: CommitteeMember): boolean {
-    return member.email.toLowerCase() !== this.currentUserEmail().toLowerCase();
+  isCurrentUser(member: CommitteeMember): boolean {
+    return member.email.toLowerCase() === this.currentUserEmail().toLowerCase();
   }
 
   override async deleteItem(member: CommitteeMember) {

@@ -10,8 +10,10 @@
   width: fit-content;
 }
 
-.left-container {
-  margin-right: 24px;
+.paginator-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
 
 .stacked-paginator {
@@ -38,14 +40,12 @@ h1 {
 }
 
 @media (max-width: 767px) {
-  .responsive-container {
-    flex-direction: column;
+  .paginator-container {
+    flex-direction: column !important;
   }
-}
-
-@media (max-width: 992px) {
-  .left-container {
-    display: block;
+  .paginator-container div:last-child {
+    margin-top: 32px;
+    flex-direction: column-reverse;
   }
 }
 

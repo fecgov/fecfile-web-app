@@ -29,12 +29,14 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
+        <!-- This can go away after full transition to ColumnDefinition method -->
         @if (hasCheckbox()) {
           <th id="header-checkbox" role="columnheader">
             <p-tableHeaderCheckbox ariaLabel="Restore" />
             <span class="sr-only">Restore Checkbox</span>
           </th>
         }
+        <!-- This can go away after full transition to ColumnDefinition method -->
         @if (sortableHeaders()) {
           @for (h of sortableHeaders(); track h) {
             <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
@@ -46,22 +48,50 @@
           }
         }
 
+        @for (col of columns(); track col) {
+          <th
+            [pSortableColumn]="col.sortable ? col.field : undefined"
+            [ngClass]="col.cssClass"
+            [id]="col.field + '-column'"
+          >
+            <div class="flex justify-content-between">
+              <span>{{ col.header }}</span>
+              @if (col.sortable) {
+                <p-sortIcon [field]="col.field" />
+              }
+            </div>
+          </th>
+        }
+
+        <!-- This can go away after full transition to ColumnDefinition method -->
         <ng-container *ngTemplateOutlet="header()!" />
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
+        <!-- This can go away after full transition to ColumnDefinition method -->
         @if (hasCheckbox()) {
           <td>
             <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel()!(item)" />
           </td>
         }
+        @for (col of columns(); track col) {
+          <td [ngClass]="col.cssClass">
+            @if (col.bodyTpl) {
+              <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item }" />
+            } @else {
+              {{ item[col.field] }}
+            }
+          </td>
+        }
+
+        <!-- This can go away after full transition to ColumnDefinition method -->
         <ng-container *ngTemplateOutlet="body()!; context: { $implicit: item }" />
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-      <div class="flex justify-content-between">
-        <div class="responsive-container left-container">
+      <div class="paginator-container">
+        <div class="responsive-container ml-4">
           <span class="paginator-text">Results per page:</span>
           <p-select
             [options]="paginationPageSizeOptions"
