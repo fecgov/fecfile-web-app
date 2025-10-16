@@ -12,6 +12,7 @@
     [currentPageReportTemplate]="currentPageReportTemplate()"
     [sortField]="sortField()"
     [lazy]="true"
+    [lazyLoadOnInit]="false"
     [showCurrentPageReport]="true"
     responsiveLayout="scroll"
     (onLazyLoad)="loadTableItems.emit($event)"

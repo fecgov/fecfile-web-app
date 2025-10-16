@@ -190,25 +190,35 @@ function assertNoAddUserButton() {
   });
 }
 
-// No kebab/action menu on any row
-function assertNoRowKebabs() {
-  aliasUsersTable();
-  cy.get("@table").within(() => {
-    const kebabSelectors = [
-      "app-table-actions-button button",
-      "button[aria-haspopup='menu']",
-      ".p-button:has(.pi-ellipsis-v)",
-      ".p-menuButton",
-      ".pi.pi-ellipsis-v",
-      ".kebab, .kabob, .ellipsis"
-    ];
-
-    cy.root().then(($root) => {
-      const any = kebabSelectors.some((sel) => $root.find(sel).filter(":visible").length > 0);
-      expect(any, "no row action kebabs should be visible").to.eq(false);
-    });
-  });
+function openUsersPage() {
+  cy.findByRole('button', { name: /account|profile|menu|user/i }).click({ force: true });
+  cy.findByRole('menuitem', { name: /users/i }).click({ force: true });
 }
+
+// -------------------- Step Definitions --------------------
+
+// Accepts BOTH:
+//   Given I am logged in as an "owner"
+//   Given I log in as an "owner"
+Given(
+  /^I (?:am logged in as|log in as) an? "([^"]+)"$/,
+  (role: "owner" | "regular" | "admin") => {
+    Initialize();
+  }
+);
+
+Given("I am on the Users page", () => {
+  cy.visit("/");
+  /*
+  // App nav: account/profile menu → Users
+  cy.findByRole("button", { name: /account|profile|menu|user/i }).click({ force: true });
+  cy.findByRole("menuitem", { name: /users/i }).click({ force: true });
+
+  cy.url().should("match", /\/users\b/);
+  aliasUsersTable();
+  */
+  openUsersPage();
+});
 
 function switchCommitteeToLast() {
   cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');

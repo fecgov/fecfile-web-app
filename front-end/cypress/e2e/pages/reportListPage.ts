@@ -7,8 +7,6 @@ export class ReportListPage {
     cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
     cy.visit('/reports');
     cy.wait('@GetReports');
-    cy.wait('@GetReports');
-    cy.wait('@GetReports');
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
@@ -94,11 +92,6 @@ export class ReportListPage {
         `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
       ).as('GetDisbursements');
     cy.visit(`/reports/transactions/report/${reportId}/list`);
-    if (includeLoans) cy.wait('@GetLoans');
-    if (includeDisbursements) cy.wait('@GetDisbursements');
-    if (includeReceipts) cy.wait('@GetReceipts');
-
-    // Can go away after double fetch fix
     if (includeLoans) cy.wait('@GetLoans');
     if (includeDisbursements) cy.wait('@GetDisbursements');
     if (includeReceipts) cy.wait('@GetReceipts');

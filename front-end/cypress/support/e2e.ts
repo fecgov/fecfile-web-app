@@ -10,15 +10,6 @@ import "cypress-mochawesome-reporter/register";
 import installLogsCollector from "cypress-terminal-report/src/installLogsCollector";
 import "./commands";
 
-beforeEach(() => {
-  cy.clearCookies();      // all domains
-  cy.clearLocalStorage();                 // app storage
-  const specId = Cypress.spec?.relative || Cypress.spec?.name || '';
-  if (/\.feature$/i.test(specId)) {
-    Cypress.session.clearAllSavedSessions();
-  }
-});
-
 installLogsCollector({
   collectTypes: [
     "cons:log","cons:info","cons:warn","cons:error",
