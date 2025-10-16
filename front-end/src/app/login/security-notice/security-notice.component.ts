@@ -71,9 +71,8 @@ export class SecurityNoticeComponent implements OnInit {
       ...this.userLoginData(),
       security_consent_version: SECURITY_CONSENT_VERSION,
     };
-    if (this.form.get('security-consent-annual')?.value) {
-      updatedUserLoginData.consent_for_one_year = true;
-    }
+
+    updatedUserLoginData.consent_for_one_year = this.form.get('security-consent-annual')?.value;
 
     const retval = await this.usersService.updateCurrentUser(updatedUserLoginData);
     this.store.dispatch(
