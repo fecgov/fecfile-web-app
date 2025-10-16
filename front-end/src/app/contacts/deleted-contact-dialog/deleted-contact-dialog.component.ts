@@ -1,13 +1,13 @@
-import { ChangeDetectorRef, Component, effect, inject, model, output } from '@angular/core';
+import { Component, effect, inject, model, output } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableComponent } from 'app/shared/components/table/table.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { Dialog } from 'primeng/dialog';
 import { ButtonDirective } from 'primeng/button';
+import { Dialog } from 'primeng/dialog';
 import { Ripple } from 'primeng/ripple';
-import { TableComponent } from 'app/shared/components/table/table.component';
-import { LabelPipe } from 'app/shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-deleted-contact-dialog',
@@ -15,7 +15,6 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
   imports: [Dialog, TableComponent, ButtonDirective, Ripple, LabelPipe],
 })
 export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> {
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
   protected readonly itemService = inject(DeletedContactService);
 
   readonly visible = model(false);
@@ -35,7 +34,6 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
       this.selectedItems.set([]);
       if (this.visible()) {
         this.first.set(0);
-        this.loadTableItems({ first: 0, rows: this.rowsPerPage() });
       }
     });
   }

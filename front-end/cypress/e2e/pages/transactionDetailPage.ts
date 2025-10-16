@@ -310,9 +310,6 @@ export class TransactionDetailPage {
     cy.wait('@GetLoans');
     cy.wait('@GetDisbursements');
     cy.wait('@GetReceipts');
-    cy.wait('@GetLoans');
-    cy.wait('@GetDisbursements');
-    cy.wait('@GetReceipts');
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {
