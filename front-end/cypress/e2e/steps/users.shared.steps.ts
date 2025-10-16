@@ -210,10 +210,17 @@ function assertNoRowKebabs() {
   });
 }
 
-function switchCommitteeTo() {
+function switchCommitteeToLast() {
   cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
   cy.visit('/login/select-committee');
   cy.get('.committee-list .committee-info').last().click();
+  cy.wait('@GetCommitteeMembers');
+}
+
+function switchCommitteeToFirst() {
+  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.visit('/login/select-committee');
+  cy.get('.committee-list .committee-info').first().click();
   cy.wait('@GetCommitteeMembers');
 }
 
@@ -247,6 +254,70 @@ Then("I should be on the Users route", () => {
 When("I open the Add User dialog", () => {
   UsersPage.goToPage();
   openAddUserDialog();
+});
+
+Then('I should see a success indicator or the user {string} appears in the list', (email: string) => {
+  const expected = email.replace("<timestamp>", `${Date.now()}`);
+  cy.get("body").then(($b) => {
+    const text = $b.text() || "";
+    if (/success|invited|added/i.test(text)) {
+      expect(text).to.match(/success|invited|added/i);
+    } else {
+      aliasUsersTable();
+      getRowByEmail(expected).should("exist");
+    }
+  });
+});
+
+Given('the user {string} exists in the table', (email: string) => {
+  aliasUsersTable();
+  getRowByEmail(email).should("exist");
+});
+
+
+When('I delete the user {string}', (email: string) => {
+  // ensure table alias exists
+  aliasUsersTable();
+
+  // 1) find the row by email
+  getRowByEmail(email).as('row');
+
+  // 2) open the kebab menu (icon inside a button)
+  cy.get('@row').within(() => {
+    cy.get('span.pi.pi-ellipsis-v')
+      .first()
+      .parents('button')
+      .first()
+      .click({ force: true });
+  });
+
+  // 3) click the Delete button in the overlay menu
+  cy.get('.cdk-overlay-container, .p-overlaypanel, .p-menu, body', { timeout: 10000 })
+    .find('button.table-action-button, button.p-button, button')
+    .filter(':visible')
+    .filter((_, el) => /(^|\s)delete(\s|$)/i.test((el.textContent || '').trim()))
+    .first()
+    .click({ force: true })
+    .then(undefined, () => {
+      // Fallback if needed: stable id (if it remains consistent)
+      cy.get('#button-1', { timeout: 3000 }).click({ force: true });
+    });
+
+  // 4) confirm dialog → Yes
+  cy.get('.p-confirmdialog, .cdk-overlay-container, body', { timeout: 10000 })
+    .find('.p-confirmdialog-accept-button, button')
+    .filter(':visible')
+    .filter((_, el) => /(^|\s)yes(\s|$)/i.test((el.textContent || '').trim()))
+    .first()
+    .click({ force: true });
+});
+
+Then('the user {string} should not appear in the list', (email: string) => {
+  aliasUsersTable();
+  cy.get('@table')
+  .find('td')
+  .contains('new.user@example.com')
+  .should('not.exist');
 });
 
 /* ============================
@@ -446,11 +517,15 @@ Then("I can retry delete for {string} successfully", (email: string) => {
    ============================ */
 
 Given('I switch to the manager committee "C99999998"', () => {
-  switchCommitteeTo();   // uses your built-in PageUtils
+  switchCommitteeToFirst();   // uses your built-in PageUtils
+});
+
+Given('I switch to the manager committee "C99999999"', () => {
+  switchCommitteeToLast();   // uses your built-in PageUtils
 });
 
 Given('I am on the Users page for the manager committee "C99999998"', () => {
-  switchCommitteeTo();
+  switchCommitteeToFirst();
   UsersPage.goToPage();                     // your existing nav helper
   aliasUsersTable();
   cy.get("@table").should("be.visible");

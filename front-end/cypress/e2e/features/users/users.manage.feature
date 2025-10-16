@@ -2,6 +2,7 @@ Feature: Manage Users Core Happy Paths
 
   Background:
     Given I am logged in as an "owner"
+    Given I switch to the manager committee "C99999999"
     And I am on the Users page
 
   @smoke
@@ -18,7 +19,8 @@ Feature: Manage Users Core Happy Paths
   @core
   Scenario Outline: Add a new user (happy path)
     When I open the Add User dialog
-    And I submit email "<email>"
+    And I fill the invite email "<email>"
+    And I submit the invite
     Then I should see a success indicator or the user "<email>" appears in the list
 
     Examples:

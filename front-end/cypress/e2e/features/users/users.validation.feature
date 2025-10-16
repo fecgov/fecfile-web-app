@@ -4,6 +4,7 @@ Feature: Users – Invite/Delete validation and failure states
 
   Background:
     Given I am logged in as an "owner"
+    Given I switch to the manager committee "C99999999"
     And I am on the Users page
 
   @client @email
