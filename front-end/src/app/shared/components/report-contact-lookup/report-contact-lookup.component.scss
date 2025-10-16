@@ -1,5 +1,5 @@
 .add-contact-container {
-  padding: 0 0 0 10px;
+  padding: 10px 0 0 10px;
   font-size: 1.2em;
   font-family: var(--karla);
   align-content: center;
@@ -10,8 +10,9 @@
   cursor: pointer;
 }
 
-.add-contact-container a {
-  border-bottom: 1px dotted;
+.add-contact-container img {
+  margin-right: 5px;
+  vertical-align: middle;
 }
 
 .contact-lookup-container {

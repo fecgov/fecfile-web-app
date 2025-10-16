@@ -82,10 +82,12 @@
 .add-contact-container span {
   padding: 0 0.3em;
   cursor: pointer;
+  line-height: inherit;
 }
 
-.add-contact-container a {
-  border-bottom: 1px dotted;
+.contact-lookup-container img {
+  margin-right: 5px;
+  vertical-align: middle;
 }
 
 .contact-lookup-container {

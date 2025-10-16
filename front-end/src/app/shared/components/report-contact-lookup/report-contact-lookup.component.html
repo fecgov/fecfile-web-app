@@ -2,19 +2,9 @@
   <app-contact-search [key]="key()" />
   <div class="add-contact-container">
     or
-    <span [style.verticalAlign]="'middle'"
-      ><img
-        tabindex="0"
-        (click)="openDialog()"
-        (keydown.enter)="openDialog()"
-        (keydown.space)="openDialog()"
-        alt="Plus"
-        src="assets/img/i-plus-circle.svg"
-        height="20px"
-        width="20px"
-    /></span>
-    <a tabindex="0" (click)="openDialog()" (keydown.enter)="openDialog()" (keydown.space)="openDialog()"
-      >Create a new contact</a
-    >
+    <span tabindex="0" (click)="openDialog()" (keydown.enter)="openDialog()" (keydown.space)="openDialog()">
+      <img alt="Plus" src="assets/img/i-plus-circle.svg" height="20px" width="20px" />
+      <a>Create a new contact</a>
+    </span>
   </div>
 </div>
