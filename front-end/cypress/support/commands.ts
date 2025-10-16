@@ -6,22 +6,10 @@
 declare global {
   namespace Cypress {
     interface Chainable {
-      openUsersPage(): Chainable<void>;
       safeType(value: string | number | null | undefined): Chainable<Subject>;
     }
   }
 }
-
-
-
-Cypress.Commands.add('openUsersPage', () => {
-// Open account menu → Users
-cy.findByRole('button', { name: /account|profile|menu|user/i }).click({ force: true });
-cy.findByRole('menuitem', { name: /users/i }).click({ force: true });
-});
-
-
-
 
 // ***********************************************
 

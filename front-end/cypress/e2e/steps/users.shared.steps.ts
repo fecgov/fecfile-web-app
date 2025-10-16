@@ -62,6 +62,11 @@ function confirmDeletion() {
   });
 }
 
+function openUsersPage() {
+  cy.findByRole('button', { name: /account|profile|menu|user/i }).click({ force: true });
+  cy.findByRole('menuitem', { name: /users/i }).click({ force: true });
+}
+
 // -------------------- Step Definitions --------------------
 
 // Accepts BOTH:
@@ -84,7 +89,7 @@ Given("I am on the Users page", () => {
   cy.url().should("match", /\/users\b/);
   aliasUsersTable();
   */
-  cy.openUsersPage();
+  openUsersPage();
 });
 
 Then("I should be on the Users route", () => {
