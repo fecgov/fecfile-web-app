@@ -119,7 +119,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     this.form.addControl('backdoorYesNo', new SubscriptionFormControl<string | null>(null, { updateOn: 'change' }));
 
     // Initialize validation tracking of current JSON schema and form data
-    this.form.controls['filingPassword'].addValidators(passwordValidator);
+    this.form.controls['filingPassword'].addValidators(Validators.required);
     this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form
       .get('backdoorYesNo')
