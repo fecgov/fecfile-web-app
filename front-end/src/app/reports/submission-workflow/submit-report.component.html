@@ -135,11 +135,7 @@
         [toggleMask]="true"
         autocomplete="new-password"
       />
-      <app-error-messages
-        [form]="form"
-        fieldName="filingPassword"
-        [formSubmitted]="formSubmitted"
-      />
+      <app-error-messages [form]="form" fieldName="filingPassword" [formSubmitted]="formSubmitted" />
     </fieldset>
 
     @if (activeReport().report_version) {
