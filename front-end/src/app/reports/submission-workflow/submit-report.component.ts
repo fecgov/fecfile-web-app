@@ -11,7 +11,6 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import {
   buildGuaranteeUniqueValuesValidator,
   emailValidator,
-  passwordValidator,
 } from 'app/shared/utils/validators.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
