@@ -47,7 +47,7 @@ describe('FeedbackOverlayComponent', () => {
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
-  it('#save happy path', fakeAsync(() => {
+  it('#save happy path', fakeAsync(async () => {
     const test_action = 'test_action';
     const test_feedback = 'test_feedback';
     const test_about = 'test_about';
@@ -56,7 +56,7 @@ describe('FeedbackOverlayComponent', () => {
     component.form.get('about')?.setValue(test_about);
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
-    component.submitForm();
+    await component.submitForm();
     expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
       jasmine.objectContaining({
         action: test_action,
@@ -68,7 +68,7 @@ describe('FeedbackOverlayComponent', () => {
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.SUCCESS);
   }));
 
-  it('#save error', fakeAsync(() => {
+  it('#save error', fakeAsync(async () => {
     const test_action = 'test_action';
     const test_feedback = 'test_feedback';
     const test_about = 'test_about';
@@ -77,7 +77,7 @@ describe('FeedbackOverlayComponent', () => {
     component.form.get('about')?.setValue(test_about);
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
-    component.submitForm();
+    await component.submitForm();
     expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
       jasmine.objectContaining({
         action: test_action,

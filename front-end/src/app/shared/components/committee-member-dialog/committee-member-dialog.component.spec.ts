@@ -62,7 +62,7 @@ describe('CommitteeMemberDialogComponent', () => {
   it('should add new users', () => {
     const newEmail = 'test_1234321@test.com';
     component.form.get('email')?.setValue(newEmail);
-    component.submit();
+    component.submitForm();
     expect(component.detailVisible()).toBeFalse();
   });
 
@@ -93,7 +93,7 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('submit', () => {
     it('should set formSubmitted to true', () => {
-      component.submit();
+      component.submitForm();
       expect(component.formSubmitted).toBeTrue();
     });
 

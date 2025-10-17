@@ -136,15 +136,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override submit(navigationEvent: NavigationEvent): Promise<void> {
-    // update all contacts with changes from form.
-    if (this.transaction && this.childTransaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
-      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
-    } else {
-      this.store.dispatch(singleClickEnableAction());
-      throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
-    }
-
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
@@ -166,36 +157,44 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override async validateForm() {
+    // update all contacts with changes from form.
+    if (this.transaction && this.childTransaction) {
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+    } else {
+      this.store.dispatch(singleClickEnableAction());
+      throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
+    }
+
     this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
-      this.scrollToError = true;
-      printFormErrors(this.form);
+    let invalid = this.validate(this.form, '0', '');
+    invalid = this.validate(this.childForm, '1', invalid);
+    return this.isValid(invalid);
+  }
+
+  protected validate(form: FormGroup, index: string, invalid: string) {
+    blurActiveInput(form);
+    if (form.invalid) {
+      printFormErrors(form);
+      if (invalid === '') invalid = index;
+    }
+    return index;
+  }
+
+  protected isValid(invalid: string) {
+    if (invalid === '') {
+      this.scrollToError = false;
+      return true;
+    } else {
       this.store.dispatch(singleClickEnableAction());
-      if (this.accordionValue() === '0') {
+      if (this.accordionValue() === invalid) {
         this.scrollToFirstInvalidControl();
       } else {
-        this.accordionValue.set('0');
+        this.scrollToError = true;
+        this.accordionValue.set(invalid);
       }
-
       return false;
     }
-
-    blurActiveInput(this.childForm);
-    if (this.childForm.invalid) {
-      this.scrollToError = true;
-      printFormErrors(this.childForm);
-      this.store.dispatch(singleClickEnableAction());
-      if (this.accordionValue() === '1') {
-        this.scrollToFirstInvalidControl();
-      } else {
-        this.accordionValue.set('1');
-      }
-
-      return false;
-    }
-    this.scrollToError = false;
-    return true;
   }
 
   override async getConfirmations(): Promise<boolean> {

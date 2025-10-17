@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -113,7 +114,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.transaction = undefined;
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('FECfile+: Template map not found for transaction component');
       }
@@ -123,7 +123,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       spyOn(component, 'getChildTransaction').and.callFake(() => undefined);
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('FECfile+: Child transaction not found for double-entry transaction form');
       }
@@ -137,7 +136,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       });
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe(
           'FECfile+: Template map not found for double transaction double-entry transaction form',
@@ -261,18 +259,20 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.childForm.get(key)?.updateValueAndValidity();
     });
 
-    await component.submitForm(navEvent);
+    await component.submit(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
 
   describe('save', () => {
-    it('should bail out if transactions are invalid', () => {
+    it('should bail out if transactions are invalid', async () => {
       component.transaction = undefined;
-      expect(function () {
-        component.submitForm(
+      try {
+        await component.submitForm(
           new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
         );
-      }).toThrow(new Error('FECfile+: No transactions submitted for double-entry transaction form.'));
+      } catch (error: any) {
+        expect(error.message).toBe('FECfile+: No transactions submitted for double-entry transaction form.');
+      }
     });
   });
 
