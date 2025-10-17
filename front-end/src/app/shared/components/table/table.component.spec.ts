@@ -9,6 +9,7 @@ import { Component, signal, viewChild } from '@angular/core';
   template: `<app-table
     [(first)]="first"
     [items]="items"
+    title="Title"
     [(totalItems)]="totalItems"
     [loading]="loading"
     [(rowsPerPage)]="rowsPerPage"

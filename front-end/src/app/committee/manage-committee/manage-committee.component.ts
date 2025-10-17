@@ -4,8 +4,7 @@ import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from '
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
-import { ColumnDefinition, TableComponent } from '../../shared/components/table/table.component';
-import { Toolbar } from 'primeng/toolbar';
+import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
@@ -18,7 +17,6 @@ import { TableModule } from 'primeng/table';
   styleUrls: ['./manage-committee.component.scss'],
   imports: [
     TableComponent,
-    Toolbar,
     ButtonDirective,
     Ripple,
     TableActionsButtonComponent,
@@ -42,12 +40,12 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
 
-  readonly nameBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('nameBody');
-  readonly roleBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('roleBody');
-  readonly statusBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('statusBody');
-  readonly actionsBodyTpl = viewChild.required<TemplateRef<HTMLElement>>('actionsBody');
+  readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('nameBody');
+  readonly roleBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('roleBody');
+  readonly statusBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('statusBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('actionsBody');
 
-  columns: ColumnDefinition[] = [];
+  columns: ColumnDefinition<CommitteeMember>[] = [];
 
   override ngAfterViewInit(): void {
     super.ngAfterViewInit();

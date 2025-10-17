@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
@@ -7,13 +6,18 @@ import { PrimeTemplate } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
+import { Toolbar } from 'primeng/toolbar';
 
-export interface ColumnDefinition {
+export interface ColumnDefinition<T> {
   field: string;
   header: string;
-  cssClass?: string; // <-- Add this for your CSS
+  cssClass?: string;
   sortable?: boolean;
-  bodyTpl?: TemplateRef<any>; // <-- Add this for the custom cell template
+  bodyTpl?: TemplateRef<TableBodyContext<T>>;
+}
+
+export interface TableBodyContext<T> {
+  $implicit: T;
 }
 
 @Component({
@@ -30,10 +34,11 @@ export interface ColumnDefinition {
     Paginator,
     TableSortIconComponent,
     NgClass,
+    Toolbar,
   ],
 })
 export class TableComponent<T> {
-  readonly title = input<string>();
+  readonly title = input.required<string>();
   readonly itemName = input('entries');
   readonly items = input.required<T[]>();
   readonly globalFilterFields = input(['']);
@@ -45,7 +50,7 @@ export class TableComponent<T> {
   readonly sortField = input.required<string>();
   // This can go away after full transition to ColumnDefinition method
   readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
-  readonly columns = input<ColumnDefinition[]>([]);
+  readonly columns = input<ColumnDefinition<T>[]>([]);
   readonly hasCheckbox = input(false);
   readonly checkboxLabel = input<(item: T) => string>();
   readonly emptyMessage = input('No data available in table');
@@ -57,9 +62,9 @@ export class TableComponent<T> {
 
   readonly dt = viewChild.required<Table>('dt');
 
-  readonly caption = contentChild<TemplateRef<any>>('caption');
-  readonly header = contentChild<TemplateRef<any>>('header');
-  readonly body = contentChild<TemplateRef<any>>('body');
+  readonly caption = contentChild<TemplateRef<HTMLElement>>('caption');
+  readonly header = contentChild<TemplateRef<TableBodyContext<T>>>('header');
+  readonly body = contentChild<TemplateRef<TableBodyContext<T>>>('body');
 
   readonly showing = computed(() => {
     return `Showing ${this.from()} to ${this.to()} of ${this.totalItems()} ${this.itemName()}`;

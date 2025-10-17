@@ -1,7 +1,6 @@
 <ng-template #nameBody let-item> {{ item.name }}{{ isCurrentUser(item) ? ' (You)' : '' }} </ng-template>
 <ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
 <ng-template #statusBody let-item>{{ item.is_active ? 'Active' : 'Pending' }}</ng-template>
-
 <ng-template #actionsBody let-item>
   @if (canEditMember(item)) {
     <app-table-actions-button
@@ -17,6 +16,7 @@
 <app-table
   [(first)]="first"
   [items]="items"
+  title="Manage users"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="name"
@@ -28,16 +28,9 @@
   (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
-    <p-toolbar>
-      <ng-template #start>
-        <h1 class="m-0">Manage users</h1>
-      </ng-template>
-      <ng-template #end>
-        @if (isCommitteeAdministrator()) {
-          <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
-        }
-      </ng-template>
-    </p-toolbar>
+    @if (isCommitteeAdministrator()) {
+      <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
+    }
   </ng-template>
 </app-table>
 
