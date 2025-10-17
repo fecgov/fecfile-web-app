@@ -8,10 +8,7 @@ import { getReportFromJSON, ReportService } from 'app/shared/services/report.ser
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import {
-  buildGuaranteeUniqueValuesValidator,
-  emailValidator,
-} from 'app/shared/utils/validators.utils';
+import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
