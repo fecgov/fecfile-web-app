@@ -18,6 +18,7 @@ import { ContactLookup } from '../pages/contactLookup';
 describe('Manage reports', () => {
   beforeEach(() => {
     Initialize();
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 
   it('should create form 1m by affiliation', () => {

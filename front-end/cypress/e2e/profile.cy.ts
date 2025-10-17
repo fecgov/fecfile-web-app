@@ -6,6 +6,7 @@ import { ProfileUserListPage } from './pages/profileUserListPage';
 describe('Manage profile', () => {
   beforeEach(() => {
     LoginPage.login();
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 
   it('Can view the Account Info page', () => {

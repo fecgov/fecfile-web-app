@@ -1,10 +1,12 @@
 import { LoginPage } from './pages/loginPage';
 import { Roles, defaultFormData as userFormData } from './models/UserFormModel';
 import { UsersPage } from './pages/usersPage';
+import { PageUtils } from './pages/pageUtils';
 
 describe('Manage Users', () => {
   beforeEach(() => {
     LoginPage.login();
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 
   it('should create a user', () => {

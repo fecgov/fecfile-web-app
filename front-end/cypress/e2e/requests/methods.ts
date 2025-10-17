@@ -44,14 +44,20 @@ function makeRequestToAPI(
       cookie_obj = { ...cookie_obj, [name]: value };
     });
 
-    cy.request({
-      method: method,
-      url: url,
-      body: body,
+    // cookie_obj is an object like { name: value, csrftoken: '...' }
+    const cookieHeader = Object.entries(cookie_obj)
+      .map(([k, v]) => `${k}=${v}`)
+      .join('; ');
+    const csrf = cookie_obj.csrftoken;
+
+    return cy.request({
+      method,
+      url,
+      body,
       headers: {
-        Cookie: cookie_obj,
-        'x-csrftoken': cookie_obj.csrftoken,
+        Cookie: cookieHeader,
+        ...(csrf ? { 'x-csrftoken': csrf } : {}),
       },
-    }).then(callback);
+    }).then((callback));
   });
 }

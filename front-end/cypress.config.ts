@@ -4,7 +4,7 @@ import cmrPlugin from "cypress-mochawesome-reporter/plugin";
 import cypressSplit from "cypress-split";
 
 export default defineConfig({
-  projectId: "x5egpz",
+  projectId: "6um8hh",
   video: false,
   screenshotsFolder: "cypress/screenshots",
   screenshotOnRunFailure: true,

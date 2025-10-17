@@ -14,6 +14,7 @@ import { ReportListPage } from '../pages/reportListPage';
 describe('Debts', () => {
   beforeEach(() => {
     Initialize();
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 
   function setupCoordinatedPartyExpenditure(
