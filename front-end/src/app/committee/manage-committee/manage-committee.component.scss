@@ -1,10 +1,4 @@
 :host::ng-deep {
-  .p-datatable {
-    min-width: 512px;
-    max-width: 512px;
-    width: 512px;
-  }
-
   .email-column,
   .status-column {
     display: none;
@@ -24,12 +18,6 @@
   }
 
   @media (min-width: 768px) {
-    .p-datatable {
-      min-width: 704px;
-      max-width: 704px;
-      width: 704px;
-    }
-
     .name-column,
     .role-column {
       width: '37.9%';
@@ -77,21 +65,7 @@
     }
   }
 
-  @media (min-width: 1200px) {
-    .p-datatable {
-      min-width: 852px;
-      max-width: 852px;
-      width: 852px;
-    }
-  }
-
   @media (min-width: 1400px) {
-    .p-datatable {
-      min-width: 1052px;
-      max-width: 1052px;
-      width: 1052px;
-    }
-
     .name-column,
     .email-column,
     .role-column {
