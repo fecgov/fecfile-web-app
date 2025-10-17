@@ -67,7 +67,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
   it('should dispatch singleClickEnableAction when form is invalid on save', () => {
     spyOn(store, 'dispatch');
     component.form.get('email')?.setValue('');
-    component.save();
+    component.submitForm();
     expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
   });
 
@@ -78,7 +78,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     const addMemberSpy = spyOn(component.memberService, 'addMember').and.returnValue(
       Promise.resolve(new CommitteeMember()),
     );
-    component.save();
+    component.submitForm();
     tick();
 
     expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', 'COMMITTEE_ADMINISTRATOR' as unknown as typeof Roles);

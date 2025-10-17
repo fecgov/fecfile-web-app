@@ -93,7 +93,7 @@ export abstract class TripleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
   }
 
-  override async save(navigationEvent: NavigationEvent): Promise<void> {
+  override async submit(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction && this.childTransaction_2) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -135,10 +135,17 @@ export abstract class TripleTransactionTypeBaseComponent
     return this.processPayload(payload, navigationEvent);
   }
 
-  override isInvalid(): boolean {
+  override async validateForm() {
+    if (!(await super.validateForm())) return false;
+
     blurActiveInput(this.childForm_2);
-    if (this.childForm_2.invalid) printFormErrors(this.childForm_2);
-    return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
+    if (this.childForm_2.invalid) {
+      printFormErrors(this.childForm_2);
+      this.store.dispatch(singleClickEnableAction());
+      return false;
+    }
+
+    return true;
   }
 
   override async getConfirmations(): Promise<boolean> {

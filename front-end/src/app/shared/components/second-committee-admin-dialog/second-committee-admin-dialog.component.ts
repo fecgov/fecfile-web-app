@@ -6,11 +6,9 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { FormComponent } from '../app-destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { printFormErrors } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-second-committee-admin-dialog',
@@ -34,14 +32,7 @@ export class SecondCommitteeAdminDialogComponent extends FormComponent {
     { updateOn: 'blur' },
   );
 
-  async save() {
-    this.formSubmitted = true;
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  async submit() {
     const email = this.form.get('email')?.value as string;
     const role: Roles = this.form.get('role')?.value;
     const key = getRoleKey(role);

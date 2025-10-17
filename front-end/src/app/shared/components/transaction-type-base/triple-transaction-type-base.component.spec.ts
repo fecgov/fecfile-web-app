@@ -130,7 +130,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.childForm_2.addControl('Test', new SubscriptionFormControl(undefined, Validators.required));
       component.childForm_2.updateValueAndValidity();
       expect(component.childForm_2.invalid).toBeTrue();
-      expect(component.isInvalid()).toBeTrue();
+      expect(component.validateForm()).toBeTrue();
     });
 
     it('should return true if childTransaction_2 is missing', () => {
@@ -141,7 +141,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeFalsy();
-      expect(component.isInvalid()).toBeTrue();
+      expect(component.validateForm()).toBeTrue();
     });
 
     it('should return false in all other cases', () => {
@@ -151,7 +151,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeTruthy();
-      expect(component.isInvalid()).toBeFalse();
+      expect(component.validateForm()).toBeFalse();
     });
   });
 
@@ -233,7 +233,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
       component.transaction = undefined;
 
       await expectAsync(
-        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction)),
+        component.submit(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction)),
       ).toBeRejectedWithError('FECfile+: No transactions submitted for triple-entry transaction form.');
     });
   });

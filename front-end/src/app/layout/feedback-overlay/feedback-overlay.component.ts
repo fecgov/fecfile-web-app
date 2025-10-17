@@ -2,8 +2,6 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { ButtonDirective } from 'primeng/button';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
@@ -55,28 +53,19 @@ export class FeedbackOverlayComponent extends FormComponent {
     this.reset();
   }
 
-  save() {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
+  async submit() {
     const feedback: Feedback = {
       action: this.form.get('action')?.value,
       feedback: this.form.get('feedback')?.value,
       about: this.form.get('about')?.value,
       location: window.location.href,
     };
-    this.feedbackService.submitFeedback(feedback).then(
-      () => {
-        this.submitStatus = this.SubmissionStatesEnum.SUCCESS;
-      },
-      () => {
-        this.submitStatus = this.SubmissionStatesEnum.FAIL;
-      },
-    );
+    try {
+      await this.feedbackService.submitFeedback(feedback);
+      this.submitStatus = this.SubmissionStatesEnum.SUCCESS;
+    } catch {
+      this.submitStatus = this.SubmissionStatesEnum.FAIL;
+    }
   }
 
   reset() {

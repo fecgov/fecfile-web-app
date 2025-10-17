@@ -125,7 +125,7 @@
     </div>
   </div>
 </form>
-<app-save-cancel (save)="save($event)" (cancelForm)="router.navigateByUrl('/reports')" />
+<app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
 <p-dialog
   [(visible)]="coverageDatesDialogVisible"
   [style]="{ width: '30%' }"

@@ -160,13 +160,13 @@ describe('TransactionTypeBaseComponent', () => {
 
     it('should update contacts form if there is a transaction', async () => {
       const contactSpy = spyOn(TransactionContactUtils, 'updateContactsWithForm');
-      await component.save(navEvent);
+      await component.submitForm(navEvent);
       expect(contactSpy).toHaveBeenCalled();
     });
 
     it('should stop processing and throw an error if there is no transaction', async () => {
       component.transaction = undefined;
-      await expectAsync(component.save(navEvent)).toBeRejectedWithError(
+      await expectAsync(component.submitForm(navEvent)).toBeRejectedWithError(
         'FECfile+: No transactions submitted for single-entry transaction form.',
       );
     });

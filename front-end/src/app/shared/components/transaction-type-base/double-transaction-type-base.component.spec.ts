@@ -261,7 +261,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.childForm.get(key)?.updateValueAndValidity();
     });
 
-    await component.save(navEvent);
+    await component.submitForm(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -269,7 +269,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     it('should bail out if transactions are invalid', () => {
       component.transaction = undefined;
       expect(function () {
-        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
+        component.submitForm(
+          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+        );
       }).toThrow(new Error('FECfile+: No transactions submitted for double-entry transaction form.'));
     });
   });

@@ -72,8 +72,7 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
-  async save(): Promise<void> {
-    this.formSubmitted = true;
+  async submit(): Promise<void> {
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
 
     const payload: MemoText = MemoText.fromJSON({

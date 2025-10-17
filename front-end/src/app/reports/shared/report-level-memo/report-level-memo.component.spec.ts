@@ -84,7 +84,7 @@ describe('ReportLevelMemoComponent', () => {
     );
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = '1';
-    await component.save();
+    await component.submitForm();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
@@ -102,7 +102,7 @@ describe('ReportLevelMemoComponent', () => {
     );
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = undefined;
-    await component.save();
+    await component.submitForm();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/reports/f3x/submit/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);

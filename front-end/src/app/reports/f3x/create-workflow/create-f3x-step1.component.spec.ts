@@ -86,7 +86,7 @@ describe('CreateF3XStep1Component: New', () => {
     });
     fixture.detectChanges();
 
-    await component.save('continue');
+    await component.submitForm('continue');
 
     expect(createSpy).toHaveBeenCalled();
     expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/999/list`);
@@ -99,7 +99,7 @@ describe('CreateF3XStep1Component: New', () => {
     await fixture.whenStable();
 
     expect(component.form.valid).toBeFalse();
-    await component.save();
+    await component.submitForm();
 
     expect(component.formSubmitted).toBeTrue();
     expect(createSpy).not.toHaveBeenCalled();
@@ -150,7 +150,7 @@ describe('CreateF3XStep1Component: Edit', () => {
     const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.resolveTo(mockReport);
     component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
 
-    await component.save();
+    await component.submitForm();
 
     expect(updateSpy).toHaveBeenCalled();
     expect(router.navigateByUrl).toHaveBeenCalledWith('/reports');

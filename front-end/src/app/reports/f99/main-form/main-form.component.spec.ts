@@ -105,13 +105,13 @@ describe('MainFormComponent', () => {
 
     component.form.patchValue({ ...f99 });
     expect(component.form.invalid).toBe(false);
-    await component.save();
+    await component.submitForm();
     expect(createSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     component.form.patchValue({ ...f99 });
     component.reportId = '999';
-    await component.save();
+    await component.submitForm();
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   }));

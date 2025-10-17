@@ -14,7 +14,6 @@ import { map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { FormComponent } from '../app-destroyer.component';
@@ -135,7 +134,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     }
   }
 
-  async save(navigationEvent: NavigationEvent): Promise<void> {
+  async submit(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -162,12 +161,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     } else {
       this.store.dispatch(singleClickEnableAction());
     }
-  }
-
-  isInvalid(): boolean {
-    blurActiveInput(this.form);
-    if (this.form.invalid) printFormErrors(this.form);
-    return this.form.invalid || !this.transaction;
   }
 
   async getConfirmations(): Promise<boolean> {
@@ -202,13 +195,11 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     this.formSubmitted = true;
 
     if (navigationEvent.action === NavigationAction.SAVE) {
-      if (this.isInvalid()) {
-        this.store.dispatch(singleClickEnableAction());
-        return;
-      }
+      if (!(await this.validateForm())) return;
+
       const confirmed = await this.getConfirmations();
       // if every confirmation was accepted
-      if (confirmed) await this.save(navigationEvent);
+      if (confirmed) await this.submit(navigationEvent);
       else this.store.dispatch(singleClickEnableAction());
     } else {
       await this.navigateTo(navigationEvent);

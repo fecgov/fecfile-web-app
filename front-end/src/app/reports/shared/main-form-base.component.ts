@@ -58,7 +58,7 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     this.router.navigateByUrl('/reports');
   }
 
-  public async save(jump: 'continue' | void) {
+  override async validateForm(): Promise<boolean> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
 
@@ -70,9 +70,12 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
     if (this.form.invalid) {
       printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
-      return;
+      return false;
     }
+    return true;
+  }
 
+  public async submit(jump: 'continue' | void) {
     const payload: Report = this.getReportPayload();
     let report: Report;
     if (this.reportId) {

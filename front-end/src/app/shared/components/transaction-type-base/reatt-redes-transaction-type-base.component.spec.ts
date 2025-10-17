@@ -109,7 +109,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       );
       const navSpy = spyOn(component, 'navigateTo').and.callFake(async () => true);
       component.ngOnInit();
-      await component.save(
+      await component.submitForm(
         new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
       );
 

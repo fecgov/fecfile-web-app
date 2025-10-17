@@ -5,7 +5,6 @@ import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import {
@@ -13,7 +12,6 @@ import {
   emailValidator,
   passwordValidator,
 } from 'app/shared/utils/validators.utils';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
@@ -163,15 +161,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     }
   }
 
-  async submitClicked(): Promise<void> {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) printFormErrors(this.form);
-    if (this.form.invalid || this.activeReport() == undefined) {
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  async submit(): Promise<void> {
     this.confirmationService.confirm({
       message: this.activeReport().submitAlertText,
       header: 'Are you sure?',

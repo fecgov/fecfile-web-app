@@ -87,7 +87,7 @@ describe('TransactionDetailComponent', () => {
 
   it('#handleNavigate() should not save an invalid record', fakeAsync(() => {
     const navSpy = spyOn(component, 'navigateTo');
-    const saveSpy = spyOn(component, 'save');
+    const saveSpy = spyOn(component, 'submit');
 
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     tick(100);

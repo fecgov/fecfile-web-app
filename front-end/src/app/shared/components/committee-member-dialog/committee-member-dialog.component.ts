@@ -84,12 +84,12 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     this.form.get('role')?.setValue(roleOption);
   }
 
-  public submit() {
+  submit(): Promise<void> {
     this.formSubmitted = true;
     if (this.member()) {
-      this.editRole();
+      return this.editRole();
     } else {
-      this.addUser();
+      return this.addUser();
     }
   }
 

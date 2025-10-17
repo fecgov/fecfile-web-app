@@ -187,7 +187,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     return this.usedReportCodes().includes(reportCode);
   }
 
-  async save(jump: 'continue' | void) {
+  async submit(jump: 'continue' | void) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) {

@@ -4,10 +4,8 @@ import { Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Card } from 'primeng/card';
 import { UserLoginData } from 'app/shared/models';
@@ -38,15 +36,7 @@ export class UpdateCurrentUserComponent extends FormComponent {
     });
   }
 
-  async continue() {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  async submit() {
     const updatedUserLoginData = {
       first_name: this.form.get('first_name')?.value,
       last_name: this.form.get('last_name')?.value,

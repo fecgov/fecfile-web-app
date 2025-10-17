@@ -104,7 +104,7 @@ describe('SubmitReportComponent', () => {
   it('should not submit when form is invalid', async () => {
     spyOn(component, 'saveAndSubmit');
     component.form.patchValue({ filingPassword: '', userCertified: false });
-    component.submitClicked();
+    component.submitForm();
     expect(component.saveAndSubmit).not.toHaveBeenCalled();
   });
 
@@ -149,7 +149,7 @@ describe('SubmitReportComponent', () => {
       const saveSpy = spyOn(component, 'saveAndSubmit').and.callThrough();
       const navSpy = spyOn(router, 'navigateByUrl').and.callThrough();
 
-      component.submitClicked();
+      component.submitForm();
       tick(100);
       expect(component.form.invalid).toBeFalse();
       expect(confirmSpy).toHaveBeenCalled();

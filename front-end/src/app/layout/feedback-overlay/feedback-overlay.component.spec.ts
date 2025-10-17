@@ -56,7 +56,7 @@ describe('FeedbackOverlayComponent', () => {
     component.form.get('about')?.setValue(test_about);
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
-    component.save();
+    component.submitForm();
     expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
       jasmine.objectContaining({
         action: test_action,
@@ -77,7 +77,7 @@ describe('FeedbackOverlayComponent', () => {
     component.form.get('about')?.setValue(test_about);
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
-    component.save();
+    component.submitForm();
     expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
       jasmine.objectContaining({
         action: test_action,

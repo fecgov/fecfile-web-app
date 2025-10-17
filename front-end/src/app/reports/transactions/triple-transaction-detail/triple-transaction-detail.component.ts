@@ -24,7 +24,7 @@ export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseC
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
 
     if (this.childTransaction_2 && transactionId && this.childTransaction_2?.id === transactionId) {
-      this.accordion().value.set(2);
+      this.accordionValue.set('2');
     }
   }
 }

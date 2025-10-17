@@ -58,6 +58,10 @@ export class CommitteeInfoComponent extends FormComponent {
     });
   }
 
+  submit(): Promise<void> {
+    throw new Error('Non submittable form');
+  }
+
   /**
    * This sends the user to their Form 1 PDF on fec.gov.
    */

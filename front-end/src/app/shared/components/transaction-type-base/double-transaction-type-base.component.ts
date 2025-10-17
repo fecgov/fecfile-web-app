@@ -1,4 +1,4 @@
-import { Component, effect, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { Component, effect, inject, Injector, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -19,7 +19,6 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
-import { Accordion } from 'primeng/accordion';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -36,7 +35,8 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  readonly accordion = viewChild.required(Accordion);
+  protected readonly injector = inject(Injector);
+  readonly accordionValue = signal('0');
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -46,11 +46,18 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoHasOptional$ = of(false);
 
+  scrollToError = false;
+
   constructor() {
     super();
     effect(() => {
-      this.accordion().value();
-      scrollToTop();
+      this.accordionValue();
+      if (this.scrollToError) {
+        this.scrollToFirstInvalidControl();
+        this.scrollToError = false;
+      } else {
+        scrollToTop();
+      }
     });
   }
 
@@ -102,8 +109,8 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
-      this.accordion().value.set(1);
+    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
+      this.accordionValue.set('1');
     }
   }
 
@@ -128,7 +135,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     })[0];
   }
 
-  override save(navigationEvent: NavigationEvent): Promise<void> {
+  override submit(navigationEvent: NavigationEvent): Promise<void> {
     // update all contacts with changes from form.
     if (this.transaction && this.childTransaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
@@ -158,10 +165,37 @@ export abstract class DoubleTransactionTypeBaseComponent
     return this.processPayload(payload, navigationEvent);
   }
 
-  override isInvalid(): boolean {
+  override async validateForm() {
+    this.formSubmitted = true;
+    blurActiveInput(this.form);
+    if (this.form.invalid) {
+      this.scrollToError = true;
+      printFormErrors(this.form);
+      this.store.dispatch(singleClickEnableAction());
+      if (this.accordionValue() === '0') {
+        this.scrollToFirstInvalidControl();
+      } else {
+        this.accordionValue.set('0');
+      }
+
+      return false;
+    }
+
     blurActiveInput(this.childForm);
-    if (this.childForm.invalid) printFormErrors(this.childForm);
-    return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
+    if (this.childForm.invalid) {
+      this.scrollToError = true;
+      printFormErrors(this.childForm);
+      this.store.dispatch(singleClickEnableAction());
+      if (this.accordionValue() === '1') {
+        this.scrollToFirstInvalidControl();
+      } else {
+        this.accordionValue.set('1');
+      }
+
+      return false;
+    }
+    this.scrollToError = false;
+    return true;
   }
 
   override async getConfirmations(): Promise<boolean> {
