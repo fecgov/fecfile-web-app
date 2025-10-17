@@ -48,8 +48,8 @@ describe('Redesignations', () => {
     Initialize();
   });
 
-  it('should test redesignating a Schedule E contribution in the current report', async () => {
-    cy.wrap(DataSetup({ committee: true, candidate: true, reports: [F3X_Q1, F3X_Q2] })).then((result: any) => {
+  it('should test redesignating a Schedule E contribution in the current report', () => {
+    DataSetup({ committee: true, candidate: true, reports: [F3X_Q1, F3X_Q2] }).then((result) => {
       const transaction = buildContributionToCandidate(
         100.55,
         `${currentYear}-03-27`,
@@ -57,7 +57,9 @@ describe('Redesignations', () => {
         result.report,
         { election_code: 'P2020', support_oppose_code: 'S', date_signed: `${currentYear}-07-09` },
       );
-      makeTransaction(transaction, () => {
+
+      // makeTransaction now returns a chainable
+      makeTransaction(transaction).then(() => {
         ReportListPage.goToReportList(result.report);
         Redesignate();
       });
