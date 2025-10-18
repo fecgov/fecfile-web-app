@@ -73,6 +73,9 @@ export default defineConfig({
     experimentalRunAllSpecs: true,
     experimentalPromptCommand: true,
     baseUrl: process.env.CYPRESS_BASE_URL || "http://localhost:4200",
+    env: {
+      API_ORIGIN: 'http://localhost:8080',
+    },
     defaultCommandTimeout: 10_000,
     pageLoadTimeout: 120_000,
     retries: { runMode: 2, openMode: 0 }, // overrides top-level

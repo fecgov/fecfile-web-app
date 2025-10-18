@@ -26,51 +26,47 @@ export class PageUtils {
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
-    // Open the calendar
     cy.get(alias).find(calendar).first().click();
-    // Always act on the newest visible panel only
-    cy.get('.p-datepicker-panel:visible').last().as('calendarElement');
+    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
 
-    // Pick Year -> Month -> Day, all scoped to this single panel
     PageUtils.pickYear(dateObj.getFullYear());
     PageUtils.pickMonth(dateObj.getMonth());
+
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    // Ensure the overlay is closed before moving on to avoid double panels later
-    cy.get('body').type('{esc}', { force: true });               // nudge close if still open
-    cy.get('.p-datepicker-panel:visible').should('not.exist'); 
+    cy.wait(100);
   }
 
   static pickDay(day: string) {
-    // Single, scoped click (no double-clicking)
+    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
     cy.get('@calendarElement')
-      .find('td:not(.p-disabled):not(.p-datepicker-other-month) > span')
-      .contains(new RegExp(`^\\s*${day}\\s*$`))
-      .click({ force: true });
+      .find('td')
+      .find('span')
+      .not('.p-disabled')
+      .parent()
+      .contains(day)
+      .then(($day) => {
+        cy.wrap($day.parent()).click();
+      });
   }
 
   static pickMonth(month: number) {
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const Month: string = Months[month];
-    cy.get('@calendarElement')
-      .find('.p-datepicker-month')
-      .contains(Month)
-      .click({ force: true });
+    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
   }
 
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    // Open the decade view within the single, scoped panel
-    cy.get('@calendarElement')
-      .find('.p-datepicker-select-year:visible')
-      .first()
-      .should('be.visible')
-      .click({ force: true });
-
-    cy.get('@calendarElement')
-      .find('.p-datepicker-decade')
-      .should('be.visible');
+    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.wait(100);
+    cy.get('@calendarElement').then(($calendarElement) => {
+      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
+        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
+      }
+    });
+    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
 
     const decadeStart: number = currentYear - (currentYear % 10);
     const decadeEnd: number = decadeStart + 9;
@@ -84,30 +80,7 @@ export class PageUtils {
         cy.get('@calendarElement').find('.p-datepicker-next-button').click();
       }
     }
-
-    // Ensure target year is visible even if initial decade math doesn't match current panel view
-    const ensureYearVisible = () =>
-      cy.get('@calendarElement').find('.p-datepicker-year').then(($years) => {
-        const first = Number($years.first().text().trim());
-        const last = Number($years.last().text().trim());
-        if (Number.isFinite(first) && Number.isFinite(last)) {
-          if (year < first) {
-            cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
-            return ensureYearVisible();
-          }
-          if (year > last) {
-            cy.get('@calendarElement').find('.p-datepicker-next-button').click();
-            return ensureYearVisible();
-          }
-        }
-      });
-    ensureYearVisible();
-
-    cy.get('@calendarElement')
-      .find('.p-datepicker-year')
-      .contains(year.toString())
-      .should('be.visible')
-      .click({ force: true });
+    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
 
   static clickSidebarSection(section: string) {
@@ -139,14 +112,22 @@ export class PageUtils {
     cy.get(alias).contains('p-accordion-header', name).click();
   }
 
-  static clickButton(name: string, alias = '', force = false) {
-    alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('button', name).as('btn');
-    if (force) {
-      PageUtils.findAndReturn('button', name).click();
-    } else {
-      cy.get('@btn').click();
-    }
+  static clickButton(
+    label: string,
+    options: Partial<Cypress.ClickOptions & { timeout?: number }> = {}
+  ) {
+    const { timeout = 15000, ...clickOpts } = options;
+
+    // Always resolve the <button> host, not the <span> label inside it.
+    cy.contains('button', new RegExp(`^\\s*${PageUtils.escapeRegExp(label)}\\s*$`, 'i'), { timeout })
+      .scrollIntoView()
+      .should('be.visible')
+      .and('not.be.disabled')
+      .click({ scrollBehavior: 'center', ...clickOpts });
+  }
+
+  private static escapeRegExp(s: string) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   static dateToString(date: Date) {
@@ -173,11 +154,6 @@ export class PageUtils {
 
   static findOnPage(selector: string, value: string) {
     cy.get(selector).contains(value).should('exist');
-  }
-
-  static findAndReturn(selector: string, value: string) {
-    cy.get(selector).contains(value).should('exist').as('foundElement');
-    return cy.get('@foundElement');
   }
 
   static containedOnPage(selector: string) {
@@ -244,4 +220,18 @@ export class PageUtils {
       });
     cy.contains('Welcome to FECfile+').should('not.exist');
   }
+
+  static typeIntoLookup = (text: string) => {
+    // Focus the real input inside the visible #searchBox
+    cy.get('#searchBox:visible').last().within(() => {
+      cy.get('input.p-autocomplete-input, input[role="combobox"], input[type="text"]')
+        .filter(':visible')
+        .first()
+        .should('be.visible')
+        .and('not.be.disabled')
+        .click({ force: true })
+        .type('{selectall}{backspace}')         // clear any residue
+        .type(text, { delay: 0, force: true }); // type the query
+    });
+  };
 }

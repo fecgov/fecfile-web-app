@@ -9,9 +9,9 @@ export class ContactLookup {
       PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias);
       cy.contains('LOOKUP').should('exist');
     }
-    cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
-    cy.contains(name).should('exist');
-    cy.contains(name).click({ force: true });
+    //cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
+    PageUtils.typeIntoLookup(name.slice(0, 3))
+    cy.contains(name).should('exist').click({ force: true });
   }
 
   static getCandidate(

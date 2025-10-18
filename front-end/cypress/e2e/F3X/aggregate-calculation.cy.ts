@@ -82,7 +82,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests changing the second transaction's contact
       cy.get('[id=aggregate]').should('have.value', '$25.00');
-      cy.get('[id="searchBox"]').type('A');
+      //cy.get('[id="searchBox"]').type('A');
+      PageUtils.typeIntoLookup('A');
       cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
       cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
