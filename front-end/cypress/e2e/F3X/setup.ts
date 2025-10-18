@@ -23,6 +23,14 @@ export interface Setup {
 }
 
 type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
+export function addContact(contact: MockContact, results: Results, property: ConType) {
+  return new Cypress.Promise((resolve) => {
+    makeContact(contact, (response) => {
+      results[property] = response.body;
+      resolve();
+    });
+  });
+}
 
 export interface Results {
   organization: any | null;
@@ -35,15 +43,8 @@ export interface Results {
   f24: string | null;
 }
 
-// Helper now returns a Cypress chainable
-export function addContact(contact: MockContact, results: Results, property: ConType) {
-  return makeContact(contact).then((response) => {
-    results[property] = response.body;
-  });
-}
-
-// Main DataSetup returns Chainable<Results> (not a Promise)
-export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> {
+export async function DataSetup(setup: Setup = {}) {
+  // Initialize results object
   const results: Results = {
     organization: null,
     individual: null,
@@ -55,53 +56,68 @@ export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> {
     f24: null,
   };
 
-  // Start a Cypress chain
-  let chain = cy.wrap(null, { log: false });
+  // Create an array of promises
+  const apiCalls = [];
 
+  // Collect API call Chainables based on setup
   if (setup.individual) {
-    chain = chain.then(() => addContact(Individual_A_A, results, 'individual'));
+    apiCalls.push(addContact(Individual_A_A, results, 'individual'));
   }
+
   if (setup.individual2) {
-    chain = chain.then(() => addContact(Individual_B_B, results, 'individual2'));
+    apiCalls.push(addContact(Individual_B_B, results, 'individual2'));
   }
+
   if (setup.organization) {
-    chain = chain.then(() => addContact(Organization_A, results, 'organization'));
+    apiCalls.push(addContact(Organization_A, results, 'organization'));
   }
+
   if (setup.candidate) {
-    chain = chain.then(() => addContact(Candidate_House_A, results, 'candidate'));
+    apiCalls.push(addContact(Candidate_House_A, results, 'candidate'));
   }
+
   if (setup.candidateSenate) {
-    chain = chain.then(() => addContact(Candidate_Senate_A, results, 'candidateSenate'));
+    apiCalls.push(addContact(Candidate_Senate_A, results, 'candidateSenate'));
   }
+
   if (setup.committee) {
-    chain = chain.then(() => addContact(Committee_A, results, 'committee'));
+    apiCalls.push(addContact(Committee_A, results, 'committee'));
   }
 
   if (setup.f24) {
-    chain = chain
-      .then(() => makeF24(F24_24))
-      .then((response) => {
-        results.f24 = response.body.id;
-      });
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeF24(F24_24, (response) => {
+          results.f24 = response.body.id;
+          resolve();
+        });
+      }),
+    );
   }
 
-  if (setup.reports && setup.reports.length) {
+  if (setup.reports) {
     setup.reports.forEach((report, index) => {
-      chain = chain
-        .then(() => makeF3x(report))
-        .then((response) => {
-          if (index === 0) results.report = response.body.id;
-        });
+      apiCalls.push(
+        new Cypress.Promise((resolve) => {
+          makeF3x(report, (response) => {
+            if (index === 0) results.report = response.body.id;
+            resolve();
+          });
+        }),
+      );
     });
   } else {
-    const report = setup.report ?? F3X_Q2;
-    chain = chain
-      .then(() => makeF3x(report))
-      .then((response) => {
-        results.report = response.body.id;
-      });
+    apiCalls.push(
+      new Cypress.Promise((resolve) => {
+        makeF3x(setup.report ?? F3X_Q2, (response) => {
+          results.report = response.body.id;
+          resolve();
+        });
+      }),
+    );
   }
 
-  // Yield the aggregated results to callers
-  return chain.then(() => results);
+  // Combine all the Chainables and return them
+  await Cypress.Promise.all(apiCalls);
+  return results;
 }

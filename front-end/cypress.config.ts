@@ -70,7 +70,8 @@ export default defineConfig({
     // Support BOTH .feature and .cy.ts specs
     specPattern: ["cypress/e2e/features/**/*.feature", "cypress/e2e/**/*.cy.ts"],
     supportFile: 'cypress/support/e2e.ts',
-
+    experimentalRunAllSpecs: true,
+    experimentalPromptCommand: true,
     baseUrl: process.env.CYPRESS_BASE_URL || "http://localhost:4200",
     defaultCommandTimeout: 10_000,
     pageLoadTimeout: 120_000,
