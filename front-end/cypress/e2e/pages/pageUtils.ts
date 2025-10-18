@@ -26,47 +26,51 @@ export class PageUtils {
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
+    // Open the calendar
     cy.get(alias).find(calendar).first().click();
-    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
+    // Always act on the newest visible panel only
+    cy.get('.p-datepicker-panel:visible').last().as('calendarElement');
 
+    // Pick Year -> Month -> Day, all scoped to this single panel
     PageUtils.pickYear(dateObj.getFullYear());
     PageUtils.pickMonth(dateObj.getMonth());
-
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    cy.wait(100);
+    // Ensure the overlay is closed before moving on to avoid double panels later
+    cy.get('body').type('{esc}', { force: true });               // nudge close if still open
+    cy.get('.p-datepicker-panel:visible').should('not.exist'); 
   }
 
   static pickDay(day: string) {
-    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
+    // Single, scoped click (no double-clicking)
     cy.get('@calendarElement')
-      .find('td')
-      .find('span')
-      .not('.p-disabled')
-      .parent()
-      .contains(day)
-      .then(($day) => {
-        cy.wrap($day.parent()).click();
-      });
+      .find('td:not(.p-disabled):not(.p-datepicker-other-month) > span')
+      .contains(new RegExp(`^\\s*${day}\\s*$`))
+      .click({ force: true });
   }
 
   static pickMonth(month: number) {
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const Month: string = Months[month];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
+    cy.get('@calendarElement')
+      .find('.p-datepicker-month')
+      .contains(Month)
+      .click({ force: true });
   }
 
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
-    cy.wait(100);
-    cy.get('@calendarElement').then(($calendarElement) => {
-      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
-      }
-    });
-    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
+    // Open the decade view within the single, scoped panel
+    cy.get('@calendarElement')
+      .find('.p-datepicker-select-year:visible')
+      .first()
+      .should('be.visible')
+      .click({ force: true });
+
+    cy.get('@calendarElement')
+      .find('.p-datepicker-decade')
+      .should('be.visible');
 
     const decadeStart: number = currentYear - (currentYear % 10);
     const decadeEnd: number = decadeStart + 9;
@@ -80,7 +84,30 @@ export class PageUtils {
         cy.get('@calendarElement').find('.p-datepicker-next-button').click();
       }
     }
-    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
+
+    // Ensure target year is visible even if initial decade math doesn't match current panel view
+    const ensureYearVisible = () =>
+      cy.get('@calendarElement').find('.p-datepicker-year').then(($years) => {
+        const first = Number($years.first().text().trim());
+        const last = Number($years.last().text().trim());
+        if (Number.isFinite(first) && Number.isFinite(last)) {
+          if (year < first) {
+            cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
+            return ensureYearVisible();
+          }
+          if (year > last) {
+            cy.get('@calendarElement').find('.p-datepicker-next-button').click();
+            return ensureYearVisible();
+          }
+        }
+      });
+    ensureYearVisible();
+
+    cy.get('@calendarElement')
+      .find('.p-datepicker-year')
+      .contains(year.toString())
+      .should('be.visible')
+      .click({ force: true });
   }
 
   static clickSidebarSection(section: string) {
@@ -115,7 +142,11 @@ export class PageUtils {
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).contains('button', name).as('btn');
-    cy.get('@btn').click({ force });
+    if (force) {
+      PageUtils.findAndReturn('button', name).click();
+    } else {
+      cy.get('@btn').click();
+    }
   }
 
   static dateToString(date: Date) {
@@ -142,6 +173,11 @@ export class PageUtils {
 
   static findOnPage(selector: string, value: string) {
     cy.get(selector).contains(value).should('exist');
+  }
+
+  static findAndReturn(selector: string, value: string) {
+    cy.get(selector).contains(value).should('exist').as('foundElement');
+    return cy.get('@foundElement');
   }
 
   static containedOnPage(selector: string) {
