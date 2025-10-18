@@ -60,10 +60,11 @@ function makeRequestToAPI(
       },
     })
     .then((response) => {
-      // Call any callback for side-effects, but DO NOT return its result (which might be a Promise).
-      if (callback) callback(response);
-      // Yield the response so callers can .then(...) chain on it.
-      return response;
+      // Fire-and-forget: allow the callback to enqueue cy.* but ignore any return value.
+      callback?.(response);
+
+      // IMPORTANT: return a Cypress chainable, not a plain value.
+      return cy.wrap(response);
     });
   });
 }
