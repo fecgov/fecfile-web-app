@@ -85,7 +85,6 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.enterScheduleFormData(negativeAmountFormData, false, '', true, 'contribution_date');
       PageUtils.clickButton('Save');
       cy.contains('Confirm').should('exist');
-      PageUtils.clickButton('Continue', '', true);
 
       cy.get('tr').should('contain', 'Returned/Bounced Receipt');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -201,7 +200,6 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.enterScheduleFormData(localFormTransactionData, false, '', true, 'contribution_date');
       PageUtils.clickButton('Save');
       cy.contains('Confirm').should('exist');
-      PageUtils.clickButton('Continue', '', true);
 
       cy.get('tr').should('contain', 'Party Receipt');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -236,7 +234,6 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', true, 'contribution_date');
       PageUtils.clickButton('Save');
       cy.contains('Confirm').should('exist');
-      PageUtils.clickButton('Continue', '', true);
 
       cy.get('tr').should('contain', 'Refund of Contribution to Other Political Committee');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -293,9 +290,8 @@ describe('Receipt Transactions', () => {
 
       PageUtils.clickButton('Save');
       cy.contains('Confirm').should('exist');
-      PageUtils.clickButton('Continue', '', true);
+      
       cy.contains('Confirm').should('exist').wait(500);
-      PageUtils.clickButton('Continue', '', true);
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -386,9 +382,8 @@ describe('Receipt Transactions', () => {
 
       PageUtils.clickButton('Save');
       cy.contains('Confirm').should('exist');
-      PageUtils.clickButton('Continue', '', true);
+      
       cy.contains('Confirm').should('exist').wait(500);
-      PageUtils.clickButton('Continue', '', true);
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
