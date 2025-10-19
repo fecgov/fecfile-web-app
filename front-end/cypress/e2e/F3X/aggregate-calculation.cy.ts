@@ -153,9 +153,7 @@ describe('Tests transaction form aggregate calculation', () => {
         cy.get('[id=aggregate]').should('have.value', '$200.01');
         PageUtils.clickButton('Save');
         cy.contains('Confirm').should('exist');
-        //PageUtils.clickButton('Continue', '', true);
-        cy.prompt(['click Continue button']);
-        PageUtils.waitForTransactionsList();
+        PageUtils.clickButton('Continue', '', true);
 
         cy.contains('Transactions in this report').should('exist');
         cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
