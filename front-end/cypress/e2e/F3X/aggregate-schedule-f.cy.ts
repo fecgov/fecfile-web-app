@@ -211,7 +211,8 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
       PageUtils.clickButton('Save');
       cy.contains('Confirm').should('exist');
-      PageUtils.clickButton('Continue', '', true);
+      cy.prompt(['click Continue button']);
+      
 
       //cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
       //cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
