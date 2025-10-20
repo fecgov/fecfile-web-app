@@ -148,8 +148,8 @@ describe('CreateF3XStep1Component: Edit', () => {
 
   it('should call update method on save', async () => {
     const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.resolveTo(mockReport);
+    component.form.patchValue({ coverage_from_date: new Date('2024-06-01') });
     component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
-
     await component.submitForm();
 
     expect(updateSpy).toHaveBeenCalled();

@@ -1,6 +1,6 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/report.model';
 import { QueryParams } from 'app/shared/services/api.service';
@@ -32,7 +32,7 @@ import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.mo
 import { LabelPipe } from '../../pipes/label.pipe';
 import { getReportFromJSON } from '../../services/report.service';
 import { TransactionService } from '../../services/transaction.service';
-import { DestroyerComponent } from '../app-destroyer.component';
+import { FormComponent } from '../app-destroyer.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -94,8 +94,7 @@ export class TransactionData {
   ],
   providers: [SearchableSelectComponent],
 })
-export class ContactDialogComponent extends DestroyerComponent implements OnInit {
-  private readonly fb = inject(FormBuilder);
+export class ContactDialogComponent extends FormComponent implements OnInit {
   private readonly contactService = inject(ContactService);
   private readonly transactionService = inject(TransactionService);
   protected readonly confirmationService = inject(ConfirmationService);
@@ -137,7 +136,6 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     ]),
     { updateOn: 'blur' },
   );
-  formSubmitted = false;
 
   isNewItem = true;
   contactType = ContactTypes.INDIVIDUAL;
@@ -356,7 +354,13 @@ export class ContactDialogComponent extends DestroyerComponent implements OnInit
     this.form.patchValue(contact);
   }
 
-  public confirmPropagation() {
+  override async submit(jump: boolean | void): Promise<void> {
+    if (jump === false) return this.saveContact(false);
+    if (this.headerTitle || this.isNewItem) return this.saveContact();
+    return this.confirmPropagation();
+  }
+
+  confirmPropagation() {
     const changes = Object.entries(this.form.controls)
       .map(([field, control]: [string, AbstractControl]) => {
         const contactValue = this.contact[field as keyof Contact];

@@ -53,8 +53,10 @@ export abstract class DoubleTransactionTypeBaseComponent
     effect(() => {
       this.accordionValue();
       if (this.scrollToError) {
-        this.scrollToFirstInvalidControl();
-        this.scrollToError = false;
+        setTimeout(() => {
+          this.scrollToFirstInvalidControl();
+          this.scrollToError = false;
+        }, 50);
       } else {
         scrollToTop();
       }
@@ -167,6 +169,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
 
     this.formSubmitted = true;
+    blurActiveInput(this.form);
     let invalid = this.validate(this.form, '0', '');
     invalid = this.validate(this.childForm, '1', invalid);
     return this.isValid(invalid);
@@ -178,23 +181,27 @@ export abstract class DoubleTransactionTypeBaseComponent
       printFormErrors(form);
       if (invalid === '') invalid = index;
     }
-    return index;
+    return invalid;
   }
 
-  protected isValid(invalid: string) {
-    if (invalid === '') {
-      this.scrollToError = false;
-      return true;
-    } else {
-      this.store.dispatch(singleClickEnableAction());
-      if (this.accordionValue() === invalid) {
-        this.scrollToFirstInvalidControl();
-      } else {
-        this.scrollToError = true;
-        this.accordionValue.set(invalid);
-      }
-      return false;
-    }
+  protected isValid(invalid: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      setTimeout(() => {
+        if (invalid === '') {
+          this.scrollToError = false;
+          return resolve(true);
+        } else {
+          this.store.dispatch(singleClickEnableAction());
+          if (this.accordionValue() === invalid) {
+            this.scrollToFirstInvalidControl();
+          } else {
+            this.scrollToError = true;
+            this.accordionValue.set(invalid);
+          }
+          return resolve(false);
+        }
+      }, 50);
+    });
   }
 
   override async getConfirmations(): Promise<boolean> {

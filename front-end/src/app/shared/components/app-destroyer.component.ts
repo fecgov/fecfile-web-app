@@ -32,23 +32,27 @@ export abstract class FormComponent extends DestroyerComponent {
   protected abstract form: FormGroup;
   formSubmitted = false;
 
-  abstract submit(jump: 'continue' | NavigationEvent | void): Promise<void>;
-  async submitForm(jump: 'continue' | NavigationEvent | void): Promise<void> {
+  abstract submit(jump: 'continue' | NavigationEvent | boolean | void): Promise<void>;
+  async submitForm(jump: 'continue' | NavigationEvent | boolean | void): Promise<void> {
     if (!(await this.validateForm())) return;
     return this.submit(jump);
   }
 
-  validateForm(): boolean | Promise<boolean> {
+  async validateForm(): Promise<boolean> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      this.scrollToFirstInvalidControl();
-      return false;
-    }
+    return new Promise<boolean>((resolve) => {
+      setTimeout(() => {
+        if (this.form.invalid) {
+          printFormErrors(this.form);
+          this.store.dispatch(singleClickEnableAction());
+          this.scrollToFirstInvalidControl();
+          return resolve(false);
+        }
 
-    return true;
+        return resolve(true);
+      }, 50);
+    });
   }
 
   scrollToFirstInvalidControl() {

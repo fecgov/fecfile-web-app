@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SecondCommitteeAdminDialogComponent } from './second-committee-admin-dialog.component';
 import { Store } from '@ngrx/store';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
@@ -64,23 +64,19 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     expect(component.form.invalid).toBeTrue();
   });
 
-  it('should dispatch singleClickEnableAction when form is invalid on save', () => {
+  it('should dispatch singleClickEnableAction when form is invalid on save', async () => {
     spyOn(store, 'dispatch');
     component.form.get('email')?.setValue('');
-    component.submitForm();
+    await component.submitForm();
     expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
   });
 
-  it('should call addMember and show success message on valid form submission', fakeAsync(() => {
+  it('should call addMember and show success message on valid form submission', async () => {
     spyOn(store, 'dispatch');
     component.form.get('email')?.setValue('test@example.com');
     component.form.updateValueAndValidity();
-    const addMemberSpy = spyOn(component.memberService, 'addMember').and.returnValue(
-      Promise.resolve(new CommitteeMember()),
-    );
-    component.submitForm();
-    tick();
-
+    const addMemberSpy = spyOn(component.memberService, 'addMember').and.resolveTo(new CommitteeMember());
+    await component.submitForm();
     expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', 'COMMITTEE_ADMINISTRATOR' as unknown as typeof Roles);
     expect(messageService.add).toHaveBeenCalledWith({
       severity: 'success',
@@ -88,5 +84,5 @@ describe('SecondCommitteeAdminDialogComponent', () => {
       detail: 'Committee Administrator created',
       life: 3000,
     });
-  }));
+  });
 });
