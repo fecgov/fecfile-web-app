@@ -15,16 +15,15 @@ jobs:
       - image: cimg/node:lts-browsers
     resource_class: large
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-
       - run:
           name: Print the linter version
           command: ./node_modules/.bin/eslint --version
           working_directory: ~/project/front-end/
-
       - run:
           name: Run linter
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
@@ -40,7 +39,8 @@ jobs:
       - image: cimg/node:lts-browsers
     resource_class: large
     steps:
-      - checkout
+      - checkout:
+          method: blobless
 
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
@@ -262,7 +262,8 @@ jobs:
       - image: cimg/python:3.13-node
     resource_class: large
     steps:
-      - checkout
+      - checkout:
+          method: blobless
 
       - python/install-packages:
           pkg-manager: pip
@@ -288,7 +289,8 @@ jobs:
       - image: cimg/python:3.13-node
     
     steps:
-      - checkout
+      - checkout:
+          method: blobless
 
       # If we need to modify the params for install-packages:
       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
