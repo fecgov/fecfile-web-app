@@ -76,6 +76,7 @@ export abstract class AbstractMenuComponent {
         {
           label: 'Report status',
           routerLink: [`/reports/${this.reportString}/submit/status/${this.activeReport().id}`],
+          visible: this.activeReport().report_status !== ReportStatus.IN_PROGRESS,
         },
       ],
     } as MenuItem;
@@ -124,7 +125,7 @@ export abstract class AbstractMenuComponent {
 
   submitReport(isEditable: boolean): MenuItem {
     return {
-      label: 'Submit report',
+      label: 'Submit report4',
       routerLink: `/reports/${this.reportString}/submit/${this.activeReport().id}`,
       visible: isEditable,
     };
@@ -132,7 +133,7 @@ export abstract class AbstractMenuComponent {
 
   reportStatus(): MenuItem {
     return {
-      label: 'Report Status',
+      label: 'Report Status333',
       routerLink: `/reports/${this.reportString}/submit/status/${this.activeReport().id}`,
       visible: this.activeReport().report_status !== ReportStatus.IN_PROGRESS,
     };
