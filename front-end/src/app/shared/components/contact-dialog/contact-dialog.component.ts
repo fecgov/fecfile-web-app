@@ -32,7 +32,7 @@ import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.mo
 import { LabelPipe } from '../../pipes/label.pipe';
 import { getReportFromJSON } from '../../services/report.service';
 import { TransactionService } from '../../services/transaction.service';
-import { FormComponent } from '../app-destroyer.component';
+import { FormComponent } from '../form.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';

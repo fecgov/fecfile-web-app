@@ -18,7 +18,7 @@ import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
-import { DestroyerComponent } from '../app-destroyer.component';
+import { DestroyerComponent } from '../destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';

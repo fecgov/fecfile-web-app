@@ -18,7 +18,6 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { blurActiveInput } from 'app/shared/utils/form.utils';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -44,6 +43,11 @@ export abstract class TripleTransactionTypeBaseComponent
   childContactIdMap_2: ContactIdMapType = {};
   childTemplateMap_2: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   memoHasOptional_2$ = of(false);
+
+  constructor() {
+    super();
+    this.forms.push(this.childForm_2);
+  }
 
   override ngOnInit(): void {
     // Initialize primary and secondary forms.
@@ -91,6 +95,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
+    this.forms = [this.form, this.childForm, this.childForm_2];
   }
 
   override async submit(navigationEvent: NavigationEvent): Promise<void> {
@@ -121,8 +126,10 @@ export abstract class TripleTransactionTypeBaseComponent
     return this.processPayload(payload, navigationEvent);
   }
 
-  override async validateForm() {
-    // update all contacts with changes from form.
+  /**
+   * update all contacts with changes from form.
+   */
+  protected override updateContactData() {
     if (this.transaction && this.childTransaction && this.childTransaction_2) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
@@ -135,13 +142,6 @@ export abstract class TripleTransactionTypeBaseComponent
       this.store.dispatch(singleClickEnableAction());
       throw new Error('FECfile+: No transactions submitted for triple-entry transaction form.');
     }
-
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    let invalid = this.validate(this.form, '0', '');
-    invalid = this.validate(this.childForm, '1', invalid);
-    invalid = this.validate(this.childForm_2, '2', invalid);
-    return this.isValid(invalid);
   }
 
   override async getConfirmations(): Promise<boolean> {

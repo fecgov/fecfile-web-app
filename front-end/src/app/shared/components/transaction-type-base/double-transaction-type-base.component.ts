@@ -1,4 +1,4 @@
-import { Component, effect, inject, Injector, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, Injector, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -19,6 +19,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
+import { AccordionPanel } from 'primeng/accordion';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -36,7 +37,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
   protected readonly injector = inject(Injector);
-  readonly accordionValue = signal('0');
+  readonly accordionValue = signal(0);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -47,20 +48,36 @@ export abstract class DoubleTransactionTypeBaseComponent
   childMemoHasOptional$ = of(false);
 
   scrollToError = false;
+  protected readonly animationTime = 50;
+  protected readonly accordionPanels = viewChildren(AccordionPanel);
+  forms: FormGroup[] = [];
 
   constructor() {
     super();
     effect(() => {
-      this.accordionValue();
+      const value = this.accordionValue();
       if (this.scrollToError) {
-        setTimeout(() => {
-          this.scrollToFirstInvalidControl();
-          this.scrollToError = false;
-        }, 50);
+        this.addListener(this.accordionPanels()[value]);
       } else {
         scrollToTop();
       }
     });
+  }
+
+  /**
+   * Will scroll to the first error in the associated panel,
+   * as soon as it's finished opening
+   * @param panel
+   */
+  addListener(panel: AccordionPanel) {
+    panel.el.nativeElement.addEventListener(
+      'transitionend',
+      () => {
+        this.scrollToFirstInvalidControl();
+        this.scrollToError = false;
+      },
+      { once: true },
+    );
   }
 
   override ngOnInit(): void {
@@ -112,8 +129,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
-      this.accordionValue.set('1');
+      this.accordionValue.set(1);
     }
+    this.forms = [this.form, this.childForm];
   }
 
   /**
@@ -158,8 +176,10 @@ export abstract class DoubleTransactionTypeBaseComponent
     return this.processPayload(payload, navigationEvent);
   }
 
-  override async validateForm() {
-    // update all contacts with changes from form.
+  /**
+   * update all contacts with changes from form.
+   */
+  protected updateContactData() {
     if (this.transaction && this.childTransaction) {
       TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
@@ -167,27 +187,36 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.store.dispatch(singleClickEnableAction());
       throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
     }
-
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    let invalid = this.validate(this.form, '0', '');
-    invalid = this.validate(this.childForm, '1', invalid);
-    return this.isValid(invalid);
   }
 
-  protected validate(form: FormGroup, index: string, invalid: string) {
-    blurActiveInput(form);
+  override async validateForm() {
+    this.formSubmitted = true;
+
+    let invalid = -1;
+    this.forms.forEach((form) => blurActiveInput(form));
+    return new Promise<boolean>((resolve) => {
+      setTimeout(() => {
+        this.forms.forEach((form, index) => {
+          invalid = this.validate(form, index, invalid);
+        });
+
+        return resolve(this.isValid(invalid));
+      }, 50);
+    });
+  }
+
+  protected validate(form: FormGroup, index: number, invalid: number = -1) {
     if (form.invalid) {
       printFormErrors(form);
-      if (invalid === '') invalid = index;
+      if (invalid === -1) invalid = index;
     }
     return invalid;
   }
 
-  protected isValid(invalid: string): Promise<boolean> {
+  protected isValid(invalid: number): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       setTimeout(() => {
-        if (invalid === '') {
+        if (invalid === -1) {
           this.scrollToError = false;
           return resolve(true);
         } else {
@@ -200,7 +229,7 @@ export abstract class DoubleTransactionTypeBaseComponent
           }
           return resolve(false);
         }
-      }, 50);
+      }, this.animationTime);
     });
   }
 

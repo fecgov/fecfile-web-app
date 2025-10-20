@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';

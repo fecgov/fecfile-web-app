@@ -24,7 +24,7 @@ export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransact
     super.ngOnInit();
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
     if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
-      this.accordionValue.set('1');
+      this.accordionValue.set(1);
     }
   }
 }

@@ -14,7 +14,7 @@ import {
   TransactionTypeUtils,
   getTransactionTypeClass,
 } from 'app/shared/utils/transaction-type.utils';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';

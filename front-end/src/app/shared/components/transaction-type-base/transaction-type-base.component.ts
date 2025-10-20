@@ -16,7 +16,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
-import { FormComponent } from '../app-destroyer.component';
+import { FormComponent } from '../form.component';
 import {
   TransactionType,
   ContactTypeLabels,

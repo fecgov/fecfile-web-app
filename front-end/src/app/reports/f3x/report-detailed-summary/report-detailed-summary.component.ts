@@ -6,7 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { Card } from 'primeng/card';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { CalculationOverlayComponent } from '../../../shared/components/calculation-overlay/calculation-overlay.component';

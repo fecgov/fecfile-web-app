@@ -4,7 +4,7 @@ import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { FormComponent } from '../app-destroyer.component';
+import { FormComponent } from '../form.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';

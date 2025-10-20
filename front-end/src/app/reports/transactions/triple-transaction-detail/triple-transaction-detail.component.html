@@ -13,9 +13,9 @@
 <p-accordion
   expandIcon="pi pi-angle-right"
   [(value)]="accordionValue"
-  transitionOptions="0ms cubic-bezier(0.86, 0, 0.07, 1)"
+  [transitionOptions]="animationTime + 'ms cubic-bezier(0.86, 0, 0.07, 1)'"
 >
-  <p-accordion-panel value="0">
+  <p-accordion-panel [value]="0">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ transactionType?.accordionTitle }}:</strong>
@@ -51,7 +51,7 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel value="1">
+  <p-accordion-panel [value]="1">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ childTransactionType?.accordionTitle }}:</strong>
@@ -90,7 +90,7 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel value="2">
+  <p-accordion-panel [value]="2">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ childTransactionType_2?.accordionTitle }}:</strong>

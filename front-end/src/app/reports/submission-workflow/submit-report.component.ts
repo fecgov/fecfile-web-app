@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/form.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';

@@ -19,7 +19,7 @@ import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
 import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
-import { DestroyerComponent } from '../app-destroyer.component';
+import { DestroyerComponent } from '../destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',

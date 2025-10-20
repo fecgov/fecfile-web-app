@@ -123,7 +123,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
     });
 
     it('should be invalid if childForm_2 is invalid', async () => {
-      component.childForm = new FormBuilder().group({});
+      component.forms = [component.form, component.childForm, component.childForm_2];
       expect(component.form.invalid).toBeFalse();
       expect(component.childForm.invalid).toBeFalse();
       expect(component.transaction).toBeTruthy();
@@ -135,6 +135,9 @@ describe('TripleTransactionTypeBaseComponent', () => {
     });
 
     it('should be valid in all other cases', async () => {
+      component.form = new FormBuilder().group({});
+      component.childForm_2 = new FormBuilder().group({});
+      component.forms = [component.form, component.childForm, component.childForm_2];
       expect(component.form.invalid).toBeFalse();
       expect(component.childForm.invalid).toBeFalse();
       expect(component.childForm_2.invalid).toBeFalse();

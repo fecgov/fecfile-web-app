@@ -7,8 +7,12 @@
 }
 
 <p class="group-description">{{ transactionType?.description }}</p>
-<p-accordion expandIcon="pi pi-angle-right" [(value)]="accordionValue">
-  <p-accordion-panel value="0">
+<p-accordion
+  expandIcon="pi pi-angle-right"
+  [(value)]="accordionValue"
+  [transitionOptions]="animationTime + 'ms cubic-bezier(0.86, 0, 0.07, 1)'"
+>
+  <p-accordion-panel [value]="0">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ transactionType?.accordionTitle }}:</strong>
@@ -49,7 +53,7 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel value="1">
+  <p-accordion-panel [value]="1">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ childTransactionType?.accordionTitle }}:</strong>
@@ -91,7 +95,7 @@
   </p-accordion-panel>
 
   @if (pullForward) {
-    <p-accordion-panel>
+    <p-accordion-panel [value]="2">
       <p-accordion-header>
         <strong>AUTO-POPULATED:</strong>
         <p class="accordion-subtext">Duplicate of the original transaction</p>

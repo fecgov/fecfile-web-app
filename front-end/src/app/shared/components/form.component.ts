@@ -1,23 +1,12 @@
-import { Component, ElementRef, inject, OnDestroy } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { Subject } from 'rxjs';
 import { blurActiveInput, printFormErrors } from '../utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { NavigationEvent } from '../models';
-
-@Component({
-  template: '',
-})
-export abstract class DestroyerComponent implements OnDestroy {
-  destroy$ = new Subject<undefined>();
-  ngOnDestroy(): void {
-    this.destroy$.next(undefined);
-    this.destroy$.complete();
-  }
-}
+import { DestroyerComponent } from './destroyer.component';
 
 @Component({
   template: '',
@@ -25,7 +14,7 @@ export abstract class DestroyerComponent implements OnDestroy {
 export abstract class FormComponent extends DestroyerComponent {
   protected readonly fb = inject(FormBuilder);
   protected readonly store = inject(Store);
-  private readonly el = inject(ElementRef);
+  protected readonly el = inject(ElementRef);
   protected committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   protected readonly activeReport = this.store.selectSignal(selectActiveReport);
 

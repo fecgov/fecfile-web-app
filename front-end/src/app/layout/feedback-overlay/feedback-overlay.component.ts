@@ -4,7 +4,7 @@ import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { ButtonDirective } from 'primeng/button';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/form.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';

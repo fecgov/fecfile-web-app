@@ -60,6 +60,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
       this.childForm,
       this.childTransaction as SchATransaction | SchBTransaction,
     );
+    this.forms = [this.form, this.childForm];
   }
 
   override async processPayload(
@@ -75,8 +76,8 @@ export abstract class ReattRedesTransactionTypeBaseComponent
   updateElectionData() {
     const schedB = this.childTransaction?.reatt_redes as SchBTransaction;
     if (!schedB) return;
-    const forms = [this.form, this.childForm];
-    forms.forEach((form) => {
+
+    this.forms.forEach((form) => {
       form.get('category_code')?.setValue(schedB.category_code);
       form.get('beneficiary_candidate_fec_id')?.setValue(schedB.beneficiary_candidate_fec_id);
       form.get('beneficiary_candidate_last_name')?.setValue(schedB.beneficiary_candidate_last_name);
