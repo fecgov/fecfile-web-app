@@ -32,6 +32,7 @@ function checkTable(index: number, type: string, containMemo: boolean, value: st
 describe('Receipt Transactions', () => {
   beforeEach(() => {
     Initialize();
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
@@ -279,7 +280,9 @@ describe('Receipt Transactions', () => {
       // Enter STEP TWO transaction
       PageUtils.clickAccordion('STEP TWO');
       cy.get('p-accordion-panel').last().as('stepTwoAccordion');
-      ContactLookup.getCommittee(committee, [], [], '@stepTwoAccordion');
+      cy.get('.p-autocomplete-input').last().type(committee.name.slice(0, 3));
+      cy.contains(committee.name).click({ force: true });
+      //ContactLookup.getCommittee(committee, [], [], '@stepTwoAccordion');
       TransactionDetailPage.enterScheduleFormData(
         transactionFormData,
         true,
@@ -288,7 +291,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save both transactions');
       cy.contains('Confirm').should('exist');
       
       cy.contains('Confirm').should('exist').wait(500);
@@ -380,7 +383,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save both transactions');
       cy.contains('Confirm').should('exist');
       
       cy.contains('Confirm').should('exist').wait(500);

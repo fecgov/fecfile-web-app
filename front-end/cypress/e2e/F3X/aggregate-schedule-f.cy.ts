@@ -30,6 +30,7 @@ function generateReportAndContacts(transData: [number, string, boolean][]) {
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
     Initialize();
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   });
 
   it('sets aggregate to value when no previous', () => {

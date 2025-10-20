@@ -223,8 +223,7 @@ export class PageUtils {
 
   static typeIntoLookup = (text: string) => {
     // Focus the real input inside the visible #searchBox
-    cy.get('#searchBox:visible').last().within(() => {
-      cy.get('input.p-autocomplete-input, input[role="combobox"], input[type="text"]')
+    cy.get('input.p-autocomplete-input')
         .filter(':visible')
         .first()
         .should('be.visible')
@@ -232,6 +231,5 @@ export class PageUtils {
         .click({ force: true })
         .type('{selectall}{backspace}')         // clear any residue
         .type(text, { delay: 0, force: true }); // type the query
-    });
-  };
+  }
 }
