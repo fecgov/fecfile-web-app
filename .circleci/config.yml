@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -219,7 +219,7 @@ workflows:
       - e2e-test:
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+              only: /revert-bdd|develop|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
