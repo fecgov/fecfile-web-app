@@ -255,7 +255,7 @@ export class TransactionDetailPage {
     cy.get(alias).find('#amount').should('have.value', amount);
 
     if (formData.category_code != '') {
-      cy.get(alias).find('[inputid="category_code"]').should('contain', formData.category_code);
+      cy.get(alias).find('[data-cy="category_code"]').should('contain', formData.category_code);
     }
   }
 
@@ -330,7 +330,7 @@ export class TransactionDetailPage {
 
   private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
     if (formData.category_code) {
-      PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
+      PageUtils.dropdownSetValue('[data-cy="category_code"]', formData.category_code, alias);
     }
   }
 

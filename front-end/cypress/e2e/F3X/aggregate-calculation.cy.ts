@@ -82,7 +82,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests changing the second transaction's contact
       cy.get('[id=aggregate]').should('have.value', '$25.00');
-      cy.get('[id="searchBox"]').type('A');
+      cy.get('[id="searchBox"]').first().type('A');
       cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
       cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
@@ -151,8 +151,6 @@ describe('Tests transaction form aggregate calculation', () => {
 
         cy.get('[id=aggregate]').should('have.value', '$200.01');
         PageUtils.clickButton('Save');
-        cy.contains('Confirm').should('exist');
-        PageUtils.clickButton('Continue', '', true);
 
         cy.contains('Transactions in this report').should('exist');
         cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
