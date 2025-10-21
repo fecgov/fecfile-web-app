@@ -26,8 +26,10 @@
           <h2>
             {{ transactionType?.formTitle }}
           </h2>
+          <h3>{{ transactionType?.contactTitle }}</h3>
+        } @else {
+          <h2>{{ transactionType?.contactTitle }}</h2>
         }
-
         <h3>{{ transactionType?.contactTitle }}</h3>
         <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
