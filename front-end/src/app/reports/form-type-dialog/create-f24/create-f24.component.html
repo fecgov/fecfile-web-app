@@ -11,8 +11,23 @@
 
 <div class="w-full field">
   <label for="form24Name">EDIT NAME</label>
-  <input pInputText type="text" [(ngModel)]="form24Name" id="form24Name" />
+  <p-input-group>
+    <div id="f24-input-container">
+      @if (selectedForm24Type()) {
+        <span>{{ selectedForm24Type() }}-Hour:</span>
+      }
+
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="form24Name"
+        id="form24Name"
+        [class]="selectedForm24Type() ? 'pl-1' : ''"
+      />
+    </div>
+  </p-input-group>
+
   @if (!isSubmitDisabled() && form24NameErrors()) {
-    <small class="p-error">{{ this.form24NameErrors() }}</small>
+    <small class="p-error">{{ form24NameErrors() }}</small>
   }
 </div>

@@ -2,3 +2,33 @@
   margin-top: 32px;
   width: fit-content;
 }
+
+#f24-input-container {
+  border: 2px solid var(--fec-grey-alt);
+  display: flex;
+  border-radius: var(--border-radius);
+}
+#f24-input-container:focus-within {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: var(--focus-ring);
+  border-color: var(--p-primary-color);
+}
+
+#f24-input-container:hover {
+  border-color: var(--surface-border);
+}
+
+#f24-input-container > span {
+  border: 0;
+  background: var(--p-content-background);
+  align-content: center;
+  font-weight: bold;
+  padding: 0 0 0 15px;
+  text-wrap-mode: nowrap;
+}
+
+#form24Name {
+  border: 0;
+  box-shadow: none;
+}

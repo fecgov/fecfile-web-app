@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Form24 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -7,10 +7,11 @@ import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { Router } from '@angular/router';
+import { InputGroup } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-create-f24',
-  imports: [InputText, FormsModule, SelectButtonModule],
+  imports: [InputText, FormsModule, SelectButtonModule, InputGroup],
   templateUrl: './create-f24.component.html',
   styleUrl: './create-f24.component.scss',
 })
@@ -27,8 +28,8 @@ export class CreateF24Component {
   });
 
   readonly form24Options = [
-    { label: '24 Hour ', value: '24' },
-    { label: '48 Hour', value: '48' },
+    { label: '24-Hour ', value: '24' },
+    { label: '48-Hour', value: '48' },
   ];
 
   readonly selectedForm24Type = signal<'24' | '48' | null>(null);
@@ -47,13 +48,6 @@ export class CreateF24Component {
   readonly form24Valid = computed(() => this.selectedForm24TypeValid() && this.form24NameValid());
 
   readonly isSubmitDisabled = computed(() => !this.selectedForm24Type());
-
-  constructor() {
-    effect(() => {
-      const type = this.selectedForm24Type();
-      this.form24Name.set(type == null ? '' : `${this.selectedForm24Type()}-HOUR: Report of Independent Expenditure`);
-    });
-  }
 
   async createF24(): Promise<void> {
     const form24 = Form24.fromJSON({
