@@ -28,7 +28,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.candidate) {
-      cy.get('.contact-lookup-container').last().get('[id="searchBox"]').last().type(formData.candidate);
+      cy.get('.contact-lookup-container').last().get('[inputid="searchBox"]').type(formData.candidate);
       cy.contains(formData.candidate).should('exist');
       cy.contains(formData.candidate).click();
     }
