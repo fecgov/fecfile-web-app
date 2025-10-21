@@ -75,3 +75,7 @@ Thumbs.db
 .vscode/settings.json
 front-end/.vscode/launch.json
 front-end/.angular
+
+# Cypress files
+cypress/results/
+logs/
