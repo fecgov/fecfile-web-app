@@ -1,9 +1,9 @@
 #sidebar-container {
   min-height: calc(100vh - 2rem);
   padding-top: 64px;
-  width: 250px;
-  min-width: 250px;
-  max-width: 250px;
+  width: 284px;
+  min-width: 284px;
+  max-width: 284px;
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -53,7 +53,7 @@ app-footer {
 
 .sidebar-content-container {
   min-height: calc(100vh - 2rem);
-  width: calc(100% - 250px);
+  width: calc(100% - 284px);
   display: flex;
   flex-direction: column;
   padding-top: 64px;
