@@ -61,10 +61,15 @@
   @if (showCreateNewContactButton) {
     <div class="add-contact-container">
       or
-      <span [style.verticalAlign]="'middle'"
-        ><img alt="Plus" src="assets/img/new_contact_blue_plus.svg" height="20px" width="20px"
-      /></span>
-      <a (click)="onCreateNewContactSelect()">Create a new contact</a>
+      <span
+        tabindex="0"
+        (click)="onCreateNewContactSelect()"
+        (keydown.enter)="onCreateNewContactSelect()"
+        (keydown.space)="onCreateNewContactSelect()"
+      >
+        <img alt="Plus" src="assets/img/i-plus-circle.svg" height="20px" width="20px" />
+        <a>Create a new contact</a>
+      </span>
     </div>
   }
 </div>
