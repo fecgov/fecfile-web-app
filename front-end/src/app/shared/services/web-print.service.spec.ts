@@ -4,14 +4,14 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3X } from '../models/form-3x.model';
 import { ApiService } from './api.service';
-import { ReportService } from './report.service';
 import { WebPrintService } from './web-print.service';
 import { provideHttpClient } from '@angular/common/http';
+import { ReportService } from './report.service';
 
 describe('WebPrintService', () => {
-  let service: WebPrintService;
+  let service: WebPrintService<Form3X>;
   let apiService: ApiService;
-  let reportService: ReportService;
+  let reportService: ReportService<Form3X>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,7 +21,7 @@ describe('WebPrintService', () => {
     TestBed.inject(HttpTestingController);
     service = TestBed.inject(WebPrintService);
     apiService = TestBed.inject(ApiService);
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(ReportService<Form3X>);
   });
 
   it('should be created', () => {
@@ -36,9 +36,9 @@ describe('WebPrintService', () => {
     });
   });
 
-  it('should get new reports', () => {
-    const reportRequest = spyOn(reportService, 'setActiveReportById').and.returnValue(Promise.resolve(new Form3X()));
-    service.getStatus('1');
+  it('should get new reports', async () => {
+    const reportRequest = spyOn(reportService, 'setActiveReportById').and.resolveTo(new Form3X());
+    await service.getStatus('1');
     expect(reportRequest).toHaveBeenCalledWith('1');
   });
 });

@@ -132,7 +132,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     this.isNewItem = true;
   }
 
-  public editItem(item: T): Promise<boolean> | void {
+  editItem(item: T): Promise<boolean> | void {
     this.item = item;
     this.detailVisible.set(true);
     this.isNewItem = false;
@@ -183,7 +183,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   }
 
   public onRowActionClick(action: TableAction, item: T) {
-    action.action(item);
+    return action.action(item);
   }
 
   /**

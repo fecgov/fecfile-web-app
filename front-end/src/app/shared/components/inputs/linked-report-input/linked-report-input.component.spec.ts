@@ -3,15 +3,16 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { LinkedReportInputComponent } from './linked-report-input.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ReportService } from 'app/shared/services/report.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, Report, UploadSubmission } from 'app/shared/models';
+import { Transaction, Form3X, UploadSubmission } from 'app/shared/models';
 import { Component, viewChild } from '@angular/core';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { provideHttpClient } from '@angular/common/http';
 
-const mockReports: Report[] = [
+const mockReports: Form3X[] = [
   Form3X.fromJSON({
     id: '1',
     coverage_from_date: '2024-01-01',
@@ -87,19 +88,20 @@ describe('LinkedReportInputComponent', () => {
   let host: TestHostComponent;
   let component: LinkedReportInputComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let reportServiceMock: jasmine.SpyObj<ReportService>;
+  let reportServiceMock: jasmine.SpyObj<Form3XService>;
 
   beforeEach(async () => {
-    reportServiceMock = jasmine.createSpyObj('ReportService', ['getAllReports', 'get']);
-    reportServiceMock.getAllReports.and.returnValue(Promise.resolve(mockReports));
+    reportServiceMock = jasmine.createSpyObj('Form3XService', ['getAllReports', 'get']);
+    reportServiceMock.getAllReports.and.resolveTo(mockReports);
     reportServiceMock.get.and.callFake((id: string) => Promise.resolve(mockReports.find((r) => r.id === id)!));
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LinkedReportInputComponent, InputTextModule, ErrorMessagesComponent],
       providers: [
+        provideHttpClient(),
         provideMockStore(testMockStore()),
         FecDatePipe,
-        { provide: ReportService, useValue: reportServiceMock },
+        { provide: Form3XService, useValue: reportServiceMock },
       ],
     }).compileComponents();
 
@@ -116,7 +118,7 @@ describe('LinkedReportInputComponent', () => {
 
   it('should load F3X reports on init', async () => {
     expect(reportServiceMock.getAllReports).toHaveBeenCalled();
-    expect(component.committeeF3xReports()).toEqual(mockReports as Form3X[]);
+    expect(component.committeeF3xReports()).toEqual(mockReports);
   });
 
   it('should set associated F3X based on disbursement date', async () => {

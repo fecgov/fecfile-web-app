@@ -9,7 +9,6 @@ import {
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../services/transaction.service';
-import { ReportService } from '../../services/report.service';
 import { DatePipe } from '@angular/common';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -24,6 +23,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -31,7 +31,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
+  let reportService: Form3XService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,7 +48,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
         TransactionService,
         ConfirmationService,
         FecDatePipe,
-        ReportService,
+        Form3XService,
         TransactionService,
       ],
     }).compileComponents();
@@ -62,7 +62,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
 
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(Form3XService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {

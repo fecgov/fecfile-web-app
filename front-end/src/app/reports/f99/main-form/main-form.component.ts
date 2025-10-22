@@ -2,7 +2,6 @@ import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { filingFrequencies, Form99, textCodes, textCodesWithFilingFrequencies } from 'app/shared/models/form-99.model';
-import { Report } from 'app/shared/models/report.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
@@ -34,7 +33,7 @@ import { Observable } from 'rxjs';
   ],
   providers: [Form99Service],
 })
-export class MainFormComponent extends MainFormBaseComponent implements OnInit {
+export class MainFormComponent extends MainFormBaseComponent<Form99> implements OnInit {
   override reportService = inject(Form99Service);
   readonly formProperties: string[] = [
     'filer_committee_id_number',
@@ -65,7 +64,7 @@ export class MainFormComponent extends MainFormBaseComponent implements OnInit {
     return this.documentType() in textCodesWithFilingFrequencies;
   });
 
-  getReportPayload(): Report {
+  getReportPayload(): Form99 {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
 

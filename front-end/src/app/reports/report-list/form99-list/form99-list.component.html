@@ -1,0 +1,43 @@
+<app-table
+  [(first)]="first"
+  data-cy="form99-list-component"
+  [items]="items"
+  [(totalItems)]="totalItems"
+  [loading]="loading"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
+  itemName="reports"
+  title="Form 99"
+  [sortableHeaders]="sortableHeaders"
+  sortField="report_type"
+  (loadTableItems)="loadTableItems($event)"
+>
+  <ng-template #header>
+    <th id="actions" role="columnheader">Actions</th>
+  </ng-template>
+  <ng-template #body let-item>
+    <td>
+      {{ item.formSubLabel }}
+    </td>
+    <td>
+      @if (item.coverage_from_date || item.coverage_through_date) {
+        {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+      } @else {
+        N/A
+      }
+    </td>
+    <td>{{ item.report_status }}</td>
+    <td>{{ item.version_label }}</td>
+    <td>{{ item.upload_submission?.created | fecDate }}</td>
+    <td>
+      <app-table-actions-button
+        [tableActions]="rowActions"
+        [actionItem]="item"
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+        [buttonAriaLabel]="'edit ' + displayName(item)"
+      />
+    </td>
+  </ng-template>
+</app-table>

@@ -15,7 +15,6 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
@@ -26,6 +25,7 @@ import { DoubleTransactionDetailComponent } from 'app/reports/transactions/doubl
 import { Component, viewChild } from '@angular/core';
 import { Transaction } from 'app/shared/models';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 @Component({
   imports: [DoubleTransactionDetailComponent],
@@ -43,7 +43,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let host: TestHostComponent;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
+  let reportService: Form3XService;
   let testRouter: Router;
   let testTransaction: Transaction;
 
@@ -72,7 +72,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         ConfirmationService,
         ConfirmationWrapperService,
         FecDatePipe,
-        ReportService,
+        Form3XService,
         TransactionService,
       ],
     }).compileComponents();
@@ -90,7 +90,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     testRouter = TestBed.inject(Router);
     transactionService = TestBed.inject(TransactionService);
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(Form3XService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {

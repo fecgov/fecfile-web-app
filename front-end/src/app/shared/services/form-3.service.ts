@@ -2,14 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3CoverageDates, Form3 } from '../models/form-3.model';
-import { Report } from '../models/report.model';
 import { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Form3Service extends ReportService {
+export class Form3Service extends ReportService<Form3> {
   override apiEndpoint = '/reports/form-3';
 
   f3ReportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
@@ -43,7 +42,7 @@ export class Form3Service extends ReportService {
     return this.apiService.get<Form3 | undefined>(`${this.apiEndpoint}/final/?year=${year}`);
   }
 
-  public override fecUpdate(report: Form3, committeeAccount?: CommitteeAccount): Promise<Report> {
+  public override fecUpdate(report: Form3, committeeAccount?: CommitteeAccount): Promise<Form3> {
     const payload: Form3 = Form3.fromJSON({
       ...report,
       qualified_committee: committeeAccount?.qualified,

@@ -2,7 +2,6 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Form99 } from 'app/shared/models/form-99.model';
-import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DividerModule } from 'primeng/divider';
@@ -10,12 +9,13 @@ import { PrintPreviewComponent } from './print-preview.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { ReportService } from 'app/shared/services/report.service';
 
 describe('PrintPreviewComponent', () => {
   let component: PrintPreviewComponent;
   let fixture: ComponentFixture<PrintPreviewComponent>;
-  let reportService: ReportService;
-  let webPrintService: WebPrintService;
+  let reportService: ReportService<Form3X>;
+  let webPrintService: WebPrintService<Form3X>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,8 +31,8 @@ describe('PrintPreviewComponent', () => {
     reportService = TestBed.inject(ReportService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
-    spyOn(reportService, 'update').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
+    spyOn(reportService, 'get').and.resolveTo(Form3X.fromJSON({}));
+    spyOn(reportService, 'update').and.resolveTo(Form3X.fromJSON({}));
     fixture.detectChanges();
   });
 
@@ -97,19 +97,18 @@ describe('PrintPreviewComponent', () => {
     expect(component.printError).toBe('fecfile+ dropped the ball');
   });
 
-  it('#submitPrintJob() calls the service', fakeAsync(() => {
+  it('#submitPrintJob() calls the service', async () => {
     component.report = Form3X.fromJSON({ id: '123' });
     component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.resolveTo({});
     const poll = spyOn(component, 'pollPrintStatus');
-    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => Promise.resolve(component.report));
-    component.submitPrintJob();
+    const update = spyOn(reportService, 'fecUpdate').and.resolveTo(component.report as Form3X);
+    await component.submitPrintJob();
 
-    tick(100);
     expect(update).toHaveBeenCalled();
     expect(submit).toHaveBeenCalled();
     expect(poll).toHaveBeenCalled();
-  }));
+  });
 
   it('#submitPrintJob() calls the service for a non-F3X report', fakeAsync(() => {
     component.report = Form99.fromJSON({ id: '123' });
@@ -128,7 +127,7 @@ describe('PrintPreviewComponent', () => {
     component.pollingTime = 0;
     spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
     const poll = spyOn(component, 'pollPrintStatus');
-    spyOn(reportService, 'fecUpdate').and.returnValue(Promise.resolve(component.report));
+    spyOn(reportService, 'fecUpdate').and.resolveTo(component.report as Form3X);
     component.submitPrintJob();
 
     tick(100);
