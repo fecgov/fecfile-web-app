@@ -66,13 +66,15 @@ describe('Manage Users: Happy Paths', () => {
 
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    invalidEmails.forEach((badEmail) => {
+    for (const badEmail of invalidEmails) {
       cy.get('#email').clear({ force: true }).type(badEmail, { delay: 0 });
       cy.get('[data-cy="membership-submit"]').click();
       cy.get('[data-cy="membership-submit"]').should('be.visible');
-      findEmailError().should('be.visible').and('contain.text', 'This email is invalid');
+      findEmailError()
+        .should('be.visible')
+        .and('contain.text', 'This email is invalid');
       cy.get('#email').clear({ force: true });
-    });
+    }
     cy.get('#email').should('have.value', '');
   });
 
