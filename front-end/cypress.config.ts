@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
-  projectId: '6um8hh',
+  projectId: 'x5egpz',
   video: false,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
@@ -24,11 +24,9 @@ export default defineConfig({
     runMode: 1,
     openMode: 0,
   },
+  experimentalWebKitSupport: true,
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e/**/*.cy.ts', 'cypress/nightly/**/*.cy.ts'],
-    experimentalRunAllSpecs: true,
-    experimentalPromptCommand: true,
-    experimentalWebKitSupport: true,
   },
 });
