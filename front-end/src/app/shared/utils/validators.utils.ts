@@ -21,16 +21,6 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 
 export const percentageValidator = Validators.pattern('^\\d+(\\.\\d{1,5})?%$');
 
-export const passwordValidator = Validators.compose([
-  Validators.required,
-  Validators.minLength(8),
-  Validators.maxLength(16),
-  Validators.pattern('.*[A-Z].*'),
-  Validators.pattern('.*[a-z].*'),
-  Validators.pattern('.*[0-9].*'),
-  Validators.pattern('.*[!@#$%&*()].*'),
-]) as ValidatorFn;
-
 /**
  * buildGuaranteeUniqueValuesValidator
  *
