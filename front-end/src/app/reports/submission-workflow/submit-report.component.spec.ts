@@ -87,7 +87,7 @@ describe('SubmitReportComponent', () => {
   it('should initialize form with proper controls', () => {
     expect(component.form.contains('treasurer_first_name')).toBeTrue();
     expect(component.form.contains('filingPassword')).toBeTrue();
-    expect(component.form.controls['filingPassword'].hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.controls['filingPassword'].hasValidator(Validators.required)).toBeTrue();
   });
 
   it('should add backdoor_code control when backdoorYesNo is true', () => {

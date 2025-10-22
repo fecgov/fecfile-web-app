@@ -7,11 +7,7 @@ import { Report } from 'app/shared/models/report.model';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import {
-  buildGuaranteeUniqueValuesValidator,
-  emailValidator,
-  passwordValidator,
-} from 'app/shared/utils/validators.utils';
+import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
@@ -117,7 +113,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     this.form.addControl('backdoorYesNo', new SubscriptionFormControl<string | null>(null, { updateOn: 'change' }));
 
     // Initialize validation tracking of current JSON schema and form data
-    this.form.controls['filingPassword'].addValidators(passwordValidator);
+    this.form.controls['filingPassword'].addValidators(Validators.required);
     this.form.controls['userCertified'].addValidators(Validators.requiredTrue);
     this.form
       .get('backdoorYesNo')

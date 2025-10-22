@@ -1,6 +1,6 @@
 <div id="submit-report-container">
   <h1>Submit report</h1>
-  <hr type="solid" class="" />
+  <hr type="solid" class="mt-2" />
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <h2>Verify confirmation email addresses</h2>
     <div class="row">
@@ -135,12 +135,7 @@
         [toggleMask]="true"
         autocomplete="new-password"
       />
-      <app-error-messages
-        [form]="form"
-        fieldName="filingPassword"
-        [formSubmitted]="formSubmitted"
-        patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
-      />
+      <app-error-messages [form]="form" fieldName="filingPassword" [formSubmitted]="formSubmitted" />
     </fieldset>
 
     @if (activeReport().report_version) {
