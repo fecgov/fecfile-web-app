@@ -249,6 +249,10 @@ parameters:
     type: boolean
     default: false
 
+  is-nightly-e2e-test:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
@@ -280,6 +284,11 @@ workflows:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
+
+  triggered-nightly-e2e-test:
+    when: << pipeline.parameters.is-nightly-e2e-test >>
+    jobs:
+      - e2e-nightly
 
   nightly:
     triggers:
