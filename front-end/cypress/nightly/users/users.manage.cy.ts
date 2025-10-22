@@ -104,11 +104,11 @@ describe('Manage Users: Happy Paths', () => {
       { ...userFormData, email: 'batch_user2@fec.gov', role: Roles.COMMITTEE_ADMINISTRATOR },
     ];
 
-    users.forEach((user) => {
+    for (const user of users) {
       UsersPage.create(user);
       PageUtils.closeToast();
       UsersPage.assertRow(user);
-    });
+    }
   });
 
   it('should verify results per page dropdown', () => {
@@ -126,11 +126,12 @@ describe('Manage Users: Happy Paths', () => {
 
   it('should delete a user and verify removal from table', () => {
     const emailToDelete = [userFormData.email, 'batch_user1@fec.gov', 'batch_user2@fec.gov', 'manager_user@fec.gov', ];
-    for (let i = 0; i < emailToDelete.length; i++) {
-      cy.intercept('DELETE', '**/committee-members/**').as('DeleteMember');
-      UsersPage.delete(emailToDelete[i]);
+    cy.intercept('DELETE', '**/committee-members/**').as('DeleteMember');
+
+    for (const email of emailToDelete) {
+      UsersPage.delete(email);
       cy.wait('@DeleteMember');
-      cy.get('table tbody tr').contains('td', emailToDelete[i]).should('not.exist');
+      cy.get('table tbody tr').contains('td', email).should('not.exist');
     }
   });
 
