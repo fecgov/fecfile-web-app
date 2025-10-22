@@ -114,13 +114,13 @@ describe('Manage Users: Happy Paths', () => {
     UsersPage.goToPage();
     cy.get('#pn_id_8 > div').as('resultsPerPageDropdown');
     cy.get('@resultsPerPageDropdown').click();
-    PageUtils.dropdownSetValue('#pn_id_8_0', '5');
+    cy.get('#pn_id_8_0').should('be.visible').and('have.text', '5').click();
     cy.get('@resultsPerPageDropdown').click();
-    PageUtils.dropdownSetValue('#pn_id_8_1', '10');
+    cy.get('#pn_id_8_1').should('be.visible').and('have.text', '10').click();
     cy.get('@resultsPerPageDropdown').click();
-    PageUtils.dropdownSetValue('#pn_id_8_2', '15');
+    cy.get('#pn_id_8_2').should('be.visible').and('have.text', '15').click();
     cy.get('@resultsPerPageDropdown').click();
-    PageUtils.dropdownSetValue('#pn_id_8_3', '20');
+    cy.get('#pn_id_8_3').should('be.visible').and('have.text', '20').click();
   });
 
   it('should delete a user and verify removal from table', () => {
