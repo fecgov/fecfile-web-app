@@ -33,25 +33,26 @@ export class CreateF24Component {
   ];
 
   readonly selectedForm24Type = signal<'24' | '48' | null>(null);
+  readonly typeName = computed(() => (this.selectedForm24Type() ? `${this.selectedForm24Type()}-Hour:` : null));
+  readonly fullName = computed(() => (this.typeName() ? `${this.typeName()} ${this.form24Name()}` : this.form24Name()));
   readonly selectedForm24TypeValid = computed(() => this.selectedForm24Type() !== null);
 
   readonly form24Name = signal('');
   readonly form24NameErrors = computed(() => {
-    const name = this.form24Name();
+    const name = this.fullName();
     if (name === '') return 'Name is required';
     const names = this.form24Names.value();
     if (names?.includes(name)) return 'This name is already in use. Please choose a different name.';
     return undefined;
   });
+
   readonly form24NameValid = computed(() => !!this.form24NameErrors());
-
   readonly form24Valid = computed(() => this.selectedForm24TypeValid() && this.form24NameValid());
-
   readonly isSubmitDisabled = computed(() => !this.selectedForm24Type());
 
   async createF24(): Promise<void> {
     const form24 = Form24.fromJSON({
-      name: this.form24Name(),
+      name: this.fullName(),
       report_type_24_48: this.selectedForm24Type(),
       street_1: this.committeeAccount().street_1,
       street_2: this.committeeAccount().street_2,
