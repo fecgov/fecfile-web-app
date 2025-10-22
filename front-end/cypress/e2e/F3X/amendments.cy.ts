@@ -9,21 +9,11 @@ describe('Amendments', () => {
   });
 
   it('should test Create an amendment', () => {
-    const alias = PageUtils.getAlias('');
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
       PageUtils.clickLink('Submit report');
-      PageUtils.urlCheck('/submit');
-      PageUtils.enterValue('#treasurer_last_name', 'TEST');
-      PageUtils.enterValue('#treasurer_first_name', 'TEST');
-      PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD')); // Insert password from env variable
-      cy.get(alias).find('[data-cy="userCertified"]').first().click();
-      PageUtils.clickButton('Submit');
-      PageUtils.findOnPage('div', 'Are you sure?');
-
-      PageUtils.clickButton('Yes');
-      cy.wait(250);
+      PageUtils.submitReportForm();
       ReportListPage.goToPage();
 
       PageUtils.clickKababItem('Q2', 'Amend');

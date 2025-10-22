@@ -85,6 +85,9 @@ describe('Manage reports', () => {
       PageUtils.clickButton('Save and continue');
       cy.get('[data-cy="print-preview"]').should('exist');
 
+      PageUtils.clickSidebarSection('SIGN & SUBMIT');
+      PageUtils.shouldNotHaveSidebarItem('Report Status');
+
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
       const memoText = faker.lorem.sentence({ min: 1, max: 4 });
@@ -95,6 +98,12 @@ describe('Manage reports', () => {
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
       cy.get('[id="text4000"]').should('have.value', memoText);
+
+      // Submit report and verify report status link now available
+      PageUtils.clickSidebarSection('SIGN & SUBMIT');
+      PageUtils.clickSidebarItem('Submit report');
+      PageUtils.submitReportForm();
+      PageUtils.shouldHaveSidebarItem('Report status');
     });
   });
 });
