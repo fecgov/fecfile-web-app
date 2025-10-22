@@ -30,7 +30,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -49,6 +49,7 @@ jobs:
             google-chrome --version
             chromedriver --version
           name: Check install
+
       # If we need to modify the params for install-packages:
       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
@@ -63,6 +64,7 @@ jobs:
       - store_artifacts:
           path: ~/project/front-end/coverage/front-end/lcov-report/
           destination: coverage-report
+
       # Sonar cloud setup and scanning
       - run:
           name: Create sonar-scanner cache directory if it does not exist
@@ -153,110 +155,6 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
-
-  # E2E BDD job that runs .feature specs
-  e2e-bdd:
-    docker:
-      - image: cimg/node:lts-browsers
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: false
-
-      - run:
-          name: clone fecfile-web-api (branch-or-develop)
-          working_directory: ~
-          command: |
-            rm -rf fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git
-            cd fecfile-web-api
-            git fetch origin --prune
-            if git ls-remote --exit-code --heads origin "$CIRCLE_BRANCH" >/dev/null 2>&1; then
-              git checkout -B "$CIRCLE_BRANCH" --track "origin/$CIRCLE_BRANCH"
-            else
-              git checkout develop
-            fi
-
-      - run:
-          name: start fecfile-web-api
-          command: |
-            set -euo pipefail
-
-            # If this directory isn't a git repo (no .git), re-clone exactly where we expect it.
-            if [ ! -d .git ]; then
-              cd ~
-              rm -rf fecfile-web-api
-              git clone https://github.com/fecgov/fecfile-web-api.git
-              cd fecfile-web-api
-            fi
-
-            # Make sure we have remote refs then try the branch; fall back to develop if it doesn't exist here.
-            git fetch origin --prune
-            if git ls-remote --exit-code --heads origin "${CIRCLE_BRANCH}" >/dev/null 2>&1; then
-              git checkout -B "${CIRCLE_BRANCH}" --track "origin/${CIRCLE_BRANCH}"
-            else
-              git checkout develop
-            fi
-
-            docker-compose down || true
-            DB_DOCKERFILE="Dockerfile-e2e" \
-            WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
-            API_DOCKERFILE="Dockerfile-e2e" \
-            FECFILE_TEST_DB_NAME="postgres" \
-            DJANGO_SECRET_KEY="${E2E_DJANGO_SECRET_KEY}" \
-            DATABASE_URL="${E2E_DATABASE_URL}" \
-            FEC_API="${E2E_FEC_API}" \
-            FEC_API_KEY="${E2E_FEC_API_KEY}" \
-            MOCK_EFO="True" \
-            E2E_TEST="True" \
-            docker-compose up --build -d
-
-            docker container run --network container:fecfile-api-proxy \
-              docker.io/jwilder/dockerize \
-              -wait http://localhost:8080/devops/status/ \
-              -wait-retry-interval 2s \
-              -timeout 60s;
-          working_directory: ~/fecfile-web-api
-
-
-      - run:
-          name: execute e2e tests BDD (.feature)
-          command: |
-            docker container run --name fecfile-web-app-e2e \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
-              --network container:fecfile-api-proxy \
-              cypress/browsers:node-22.20.0-chrome-140.0.7339.207-1-ff-143.0.1-edge-140.0.3485.81-1 /bin/bash -c '\
-                cd ~; \
-                git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; \
-                git checkout ${CIRCLE_BRANCH}; \
-                npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/**/*.feature" --headless --watch=false --browser chrome; \
-              '
-
-      - run:
-          name: print api logs
-          when: always
-          command: |
-            docker logs --tail 200 fecfile-api || true
-
-      - run:
-          name: stage BDD test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results
-            docker cp fecfile-web-app-bdd:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker rm -f fecfile-web-app-bdd || true
-
-      - store_artifacts:
-          path: /tmp/cypress/results
-          destination: cypress/results
-
-
   deploy-job:
     docker:
       - image: cimg/python:3.13-node
@@ -286,7 +184,7 @@ jobs:
   dependency-check:
     docker:
       - image: cimg/python:3.13-node
-    
+
     steps:
       - checkout
 
@@ -309,25 +207,16 @@ parameters:
   is-triggered-e2e-test:
     type: boolean
     default: false
-  is-triggered-e2e-bdd:            # <— new boolean trigger for BDD workflow
-    type: boolean
-    default: false
 
 workflows:
   primary:
     when:
-      and:
-        - not: << pipeline.parameters.is-triggered-e2e-test >>
-        - not: << pipeline.parameters.is-triggered-e2e-bdd >>
+      not: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - lint
       - test
       - dependency-check
       - e2e-test:
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - e2e-bdd:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
@@ -350,22 +239,3 @@ workflows:
     when: << pipeline.parameters.is-triggered-e2e-test >>
     jobs:
       - e2e-test
-
-  # Run only the BDD job when explicitly triggered by the new param
-  triggered-e2e-bdd:
-    when: << pipeline.parameters.is-triggered-e2e-bdd >>
-    jobs:
-      - e2e-bdd
-
-  # Nightly schedule for BDD e2e (.feature) tests
-  nightly-bdd:
-    triggers:
-      - schedule:
-          cron: "0 6 * * *"
-          filters:
-            branches:
-              only:
-                - develop
-                - main
-    jobs:
-      - e2e-bdd

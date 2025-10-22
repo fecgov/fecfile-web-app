@@ -35,7 +35,7 @@ export CELERY_WORKER_STORAGE="local"
 
 With the environment variables set, run `ng e2e` (or `npx -p @angular/cli ng e2e`) to execute the end-to-end tests via [Cypress](https://www.cypress.io/).
 
-To run in headless mode, run the command: ng e2e --headless
+To run in headless mode, run the command: `ng e2e --headless`
 
 ## E2E tests in CircleCI
 
