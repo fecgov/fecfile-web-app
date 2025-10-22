@@ -303,6 +303,10 @@ parameters:
     type: boolean
     default: false
 
+  is-browsers-e2e-test:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
@@ -349,10 +353,18 @@ workflows:
     jobs:
       - e2e-test
 
-  triggered-nightly-e2e-test:
+  nightly-e2e-test:
     when: << pipeline.parameters.is-nightly-e2e-test >>
     jobs:
       - e2e-nightly
+
+  browsers-e2e-test:
+    when: << pipeline.parameters.is-browsers-e2e-test >>
+    jobs:
+      - e2e-browsers:
+          matrix:
+            parameters:
+              browser: ["chrome", "firefox", "edge", "webkit"]
 
   nightly:
     triggers:
