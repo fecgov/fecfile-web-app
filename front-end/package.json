@@ -71,7 +71,7 @@
         "@types/node": "20.19.11",
         "@typescript-eslint/eslint-plugin": "8.41.0",
         "@typescript-eslint/parser": "8.41.0",
-        "cypress": "14.5.4",
+        "cypress": "^15.5.0",
         "cypress-mochawesome-reporter": "3.8.4",
         "eslint": "9.34.0",
         "glob": "9.3.5",
