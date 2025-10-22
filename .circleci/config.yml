@@ -255,7 +255,7 @@ jobs:
                 npm ci || npm i; \
                 # Install WebKit runtime only if requested
                 if [ "<< parameters.browser >>" = "webkit" ]; then \
-                  npx playwright install --with-deps webkit; \
+                  npx playwright install-deps webkit; \
                 fi; \
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
                   --spec "cypress/e2e/**/*.cy.ts" \

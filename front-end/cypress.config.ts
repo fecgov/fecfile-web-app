@@ -3,6 +3,7 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: '6um8hh',
+  experimentalWebKitSupport: true,
   video: false,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
@@ -29,6 +30,5 @@ export default defineConfig({
     specPattern: ['cypress/e2e/**/*.cy.ts', 'cypress/nightly/**/*.cy.ts'],
     experimentalRunAllSpecs: true,
     experimentalPromptCommand: true,
-    experimentalWebKitSupport: true,
   },
 });
