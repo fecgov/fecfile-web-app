@@ -66,7 +66,6 @@ describe('Manage Users: Happy Paths', () => {
 
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    cy.wait(150);
     invalidEmails.forEach((badEmail) => {
       cy.get('#email').clear({ force: true }).type(badEmail, { delay: 0 });
       cy.get('[data-cy="membership-submit"]').click();

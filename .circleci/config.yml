@@ -10,7 +10,7 @@ orbs:
 
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
-  test-api:
+  spin-up-api-containers:
     description: "Setup and start fecfile-web-api for E2E tests"
     steps:
       - setup_remote_docker:
@@ -146,7 +146,7 @@ jobs:
     docker:
       - image: cimg/node:lts-browsers
     steps:
-      - test-api
+      - spin-up-api-containers
       - run:
           name: execute e2e tests
           command: |
@@ -174,7 +174,7 @@ jobs:
     docker:
       - image: cimg/node:lts-browsers
     steps:
-      - test-api
+      - spin-up-api-containers
       - run:
           name: execute nightly e2e tests
           command: |
