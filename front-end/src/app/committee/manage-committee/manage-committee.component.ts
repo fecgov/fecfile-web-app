@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, TemplateRef, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { TableActionsButtonComponent } from '../../shared/components/table-actio
 import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
 import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { QueryParams } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-manage-committee',
@@ -46,6 +47,10 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('actionsBody');
 
   columns: ColumnDefinition<CommitteeMember>[] = [];
+
+  override readonly params: Signal<QueryParams> = computed(() => {
+    return { page_size: this.rowsPerPage(), you_first: true };
+  });
 
   override ngAfterViewInit(): void {
     super.ngAfterViewInit();
@@ -145,10 +150,5 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
 
   protected getEmptyItem(): CommitteeMember {
     return new CommitteeMember();
-  }
-
-  override refreshTable(): Promise<void> {
-    this.itemService.getMembers();
-    return super.refreshTable();
   }
 }
