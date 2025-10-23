@@ -1962,7 +1962,9 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-button.p-button-icon-only.p-button-rounded {
   border-radius: 50%;
-  height: 2.357rem;
+  height: 1rem;
+  width: 1rem;
+  padding: 10px;
 }
 .p-button.p-button-sm {
   font-size: 0.875rem;
@@ -2852,19 +2854,21 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-datatable .p-datatable-thead > tr > th {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: 10px;
   border: 1px solid var(--p-content-color);
   border-width: 0 0 1px 0;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   color: var(--p-content-color);
   background: var(--p-content-background);
   transition: box-shadow 0.15s;
 }
 .p-datatable .p-datatable-tfoot > tr > td {
   text-align: left;
-  padding: 1rem 1rem;
+  padding: 10px;
   border: 1px solid var(--surface-border);
   border-width: 1px 0 1px 0;
+  font-size: 14px;
   font-weight: 600;
   color: var(--p-content-color);
   background: var(--p-content-background);
@@ -2911,12 +2915,13 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: var(--p-content-background);
   color: var(--p-content-color);
   transition: box-shadow 0.15s;
+  
 }
 .p-datatable .p-datatable-tbody > tr > td {
   text-align: left;
   border: 1px solid var(--surface-border);
   border-width: 1px 0 0 0;
-  padding: 1rem 1rem;
+  padding: 14px 10px;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
@@ -2983,7 +2988,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   font-weight: 600;
   border-top: 2px solid var(--p-content-color);
   border-bottom: 2px solid var(--p-content-color);
-  padding: 16px 10px;
+  padding: 10px 10px;
 }
 .p-datatable.p-datatable-gridlines .p-paginator-top {
   border-width: 0 1px 0 1px;

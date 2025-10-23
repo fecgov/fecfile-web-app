@@ -1,6 +1,5 @@
 :host::ng-deep {
   .custom-paginator-dropdown {
-    margin-left: 0.5rem !important;
     height: 2.357rem !important;
   }
   .custom-paginator-dropdown > .p-select > .p-select-label {
@@ -65,6 +64,7 @@
   font-family: var(--karla);
   font-size: 1rem;
   font-weight: normal;
+  margin-right: 0.5rem;
 }
 
 h1 {

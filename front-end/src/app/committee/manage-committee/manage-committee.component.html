@@ -1,4 +1,10 @@
-<ng-template #nameBody let-item> {{ item.name }}{{ isCurrentUser(item) ? ' (You)' : '' }} </ng-template>
+<ng-template #nameBody let-item>
+  @if (isCurrentUser(item)) {
+    <b>{{ item.name }}</b> (You)
+  } @else {
+    {{ item.name }}
+  }
+</ng-template>
 <ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
 <ng-template #statusBody let-item>{{ item.is_active ? 'Active' : 'Pending' }}</ng-template>
 <ng-template #actionsBody let-item>
