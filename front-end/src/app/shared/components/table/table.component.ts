@@ -7,6 +7,7 @@ import { Select } from 'primeng/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 import { Toolbar } from 'primeng/toolbar';
+import { TableAction } from '../table-list-base/table-list-base.component';
 
 export interface ColumnDefinition<T> {
   field: string;
@@ -14,10 +15,12 @@ export interface ColumnDefinition<T> {
   cssClass?: string;
   sortable?: boolean;
   bodyTpl?: TemplateRef<TableBodyContext<T>>;
+  actions?: TableAction[];
 }
 
 export interface TableBodyContext<T> {
   $implicit: T;
+  rowActions?: TableAction[];
 }
 
 @Component({

@@ -2,13 +2,12 @@ import { Component, inject } from '@angular/core';
 import { Form1M } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
-import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
-import { FecDatePipe } from '../../../shared/pipes/fec-date.pipe';
 import { Form1MService } from 'app/shared/services/form-1m.service';
+import { SharedTemplatesComponent } from '../shared-templates.component';
 
 @Component({
   selector: 'app-form1m-list',
-  imports: [TableComponent, TableActionsButtonComponent, FecDatePipe],
+  imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form1m-list.component.html',
 })
 export class Form1MListComponent extends AbstractFormListComponent<Form1M> {

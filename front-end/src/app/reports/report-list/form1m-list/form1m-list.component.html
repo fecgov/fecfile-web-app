@@ -1,3 +1,4 @@
+<app-shared-templates />
 <app-table
   [(first)]="first"
   data-cy="form1m-list-component"
@@ -8,28 +9,7 @@
   [(selectedItems)]="selectedItems"
   itemName="reports"
   title="Form 1M"
-  [sortableHeaders]="sortableHeaders"
-  sortField="report_type"
+  [columns]="columns"
+  sortField="report_code_label"
   (loadTableItems)="loadTableItems($event)"
->
-  <ng-template #header>
-    <th id="actions" role="columnheader">Actions</th>
-  </ng-template>
-  <ng-template #body let-item>
-    <td>{{ item.formSubLabel }}</td>
-    <td>&mdash;</td>
-    <td>{{ item.report_status }}</td>
-    <td>{{ item.version_label }}</td>
-    <td>{{ item.upload_submission?.created | fecDate }}</td>
-    <td>
-      <app-table-actions-button
-        [tableActions]="rowActions"
-        [actionItem]="item"
-        (tableActionClick)="$event.action.action($event.actionItem)"
-        buttonIcon="pi pi-ellipsis-v"
-        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-        [buttonAriaLabel]="'edit ' + displayName(item)"
-      />
-    </td>
-  </ng-template>
-</app-table>
+/>

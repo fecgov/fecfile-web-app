@@ -85,7 +85,7 @@
       @for (col of columns(); track col) {
         <td [ngClass]="col.cssClass">
           @if (col.bodyTpl) {
-            <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item }" />
+            <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions }" />
           } @else {
             {{ item[col.field] }}
           }
