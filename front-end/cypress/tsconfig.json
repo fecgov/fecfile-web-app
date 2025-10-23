@@ -1,18 +1,10 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "sourceMap": false,
-    "target": "ES2024",
-    "module": "ESNext",
-    "lib": ["ES2024", "DOM"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "types": [
-      "cypress",
-      "@testing-library/cypress"
-    ],
-    "moduleResolution": "Node"
-  },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"]
+    "extends": "../tsconfig.json",
+    "include": ["**/*.ts", "./support/e2e.ts"],
+    "compilerOptions": {
+        "sourceMap": false,
+        "target": "ES2024",
+        "lib": ["ES2024", "dom"],
+        "types": ["node"]
+    }
 }

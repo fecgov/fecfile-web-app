@@ -1,19 +1,3 @@
-// --- Manage Users helpers ---
-// Types for new commands
-// import type { Chainable } from 'cypress';
-// Use the global Cypress namespace for type declarations below.
-
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      safeType(value: string | number | null | undefined): Chainable<Subject>;
-    }
-  }
-}
-
-// ***********************************************
-
-
 function safeString(stringVal: string | number | undefined | null): string {
   if (stringVal === null || stringVal === undefined) {
     return '';
@@ -22,18 +6,16 @@ function safeString(stringVal: string | number | undefined | null): string {
   }
 }
 
-Cypress.Commands.add(
-  'safeType',
-  { prevSubject: 'element' },
-  (subject: JQuery<HTMLElement>, value: string | number | null | undefined) => {
-    const text = safeString(value);
-    if (text.length) {
-      cy.wrap(subject).type(text);
-    }
-    // Always return the subject so you can keep chaining
-    return cy.wrap(subject);
+export function safeType(prevSubject: any, stringVal: string | number) {
+  const subject = cy.wrap(prevSubject);
+  const outString: string = safeString(stringVal);
+
+  if (outString.length != 0) {
+    subject.type(outString);
   }
-);
+
+  return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
+}
 
 export function overwrite(prevSubject: any, stringVal: string | number) {
   const outString = safeString(stringVal);
