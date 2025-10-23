@@ -38,6 +38,9 @@ export class AutoResizeDirective implements OnInit {
     const scrollableParent = this.getScrollableParent(element);
     const scrollPosition = scrollableParent.scrollTop;
 
+    element.style.height = 'auto';
+    element.style.height = `${element.scrollHeight}px`;
+
     scrollableParent.scrollTop = scrollPosition;
   }
 }
