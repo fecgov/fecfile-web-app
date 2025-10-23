@@ -56,7 +56,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     super.ngAfterViewInit();
     this.columns = [
       { field: 'name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
-      { field: 'email', header: 'Email', sortable: true, cssClass: 'email-column' }, // No custom template, just use field
+      { field: 'email', header: 'Email', sortable: true, cssClass: 'email-column' },
       { field: 'role', header: 'Role', sortable: true, cssClass: 'role-column', bodyTpl: this.roleBodyTpl() },
       {
         field: 'is_active',

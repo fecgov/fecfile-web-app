@@ -87,7 +87,7 @@
           @if (col.bodyTpl) {
             <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item }" />
           } @else {
-            {{ item[col.field] }}
+            <span>{{ item[col.field] }}</span>
           }
         </td>
       }
