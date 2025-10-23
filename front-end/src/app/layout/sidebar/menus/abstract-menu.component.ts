@@ -76,6 +76,7 @@ export abstract class AbstractMenuComponent {
         {
           label: 'Report status',
           routerLink: [`/reports/${this.reportString}/submit/status/${this.activeReport().id}`],
+          visible: this.activeReport().report_status !== ReportStatus.IN_PROGRESS,
         },
       ],
     } as MenuItem;

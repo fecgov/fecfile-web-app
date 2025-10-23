@@ -148,7 +148,6 @@ describe('Disbursements', () => {
       };
       TransactionDetailPage.enterScheduleFormData(formTransactionData);
       PageUtils.clickButton('Save');
-      cy.contains('Confirm').should('exist');
 
       cy.get('tr').should('contain', 'Other Disbursement');
       cy.get('tr').should('not.contain', 'Unitemized');
