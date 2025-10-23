@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -10,11 +10,10 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMember, Roles } from 'app/shared/models';
-import { firstValueFrom, of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { signal } from '@angular/core';
+import { Component, signal, viewChild } from '@angular/core';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',
@@ -25,9 +24,22 @@ const johnSmith = CommitteeMember.fromJSON({
   id: 'TEST',
 });
 
+@Component({
+  imports: [CommitteeMemberDialogComponent],
+  standalone: true,
+  template: `<app-committee-member-dialog [(detailVisible)]="visible" [member]="member" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(CommitteeMemberDialogComponent);
+  visible = false;
+
+  member?: CommitteeMember = undefined;
+}
+
 describe('CommitteeMemberDialogComponent', () => {
   let component: CommitteeMemberDialogComponent;
-  let fixture: ComponentFixture<CommitteeMemberDialogComponent>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
   let testCommitteeService: CommitteeMemberService;
 
   beforeEach(async () => {
@@ -51,8 +63,9 @@ describe('CommitteeMemberDialogComponent', () => {
 
     TestBed.inject(ConfirmationService);
     testCommitteeService = TestBed.inject(CommitteeMemberService);
-    fixture = TestBed.createComponent(CommitteeMemberDialogComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
   });
 
   it('should create', () => {
@@ -66,24 +79,21 @@ describe('CommitteeMemberDialogComponent', () => {
     expect(component.detailVisible()).toBeFalse();
   });
 
-  it('should not add user with pre-existing email', () => {
+  it('should not add user with pre-existing email', fakeAsync(async () => {
     const takenEmail = 'test@test.com';
     const takenEmail2 = 'TeSt@TeSt.CoM'; // Same email but with different case
-    const serviceSpy = spyOn(testCommitteeService, 'getMembers').and.returnValue(
-      firstValueFrom(of([CommitteeMember.fromJSON({ email: takenEmail })])),
-    );
+    spyOn(testCommitteeService, 'getMembers').and.resolveTo([CommitteeMember.fromJSON({ email: takenEmail })]);
+    await testCommitteeService.getMembers();
 
     component.form.get('email')?.patchValue(takenEmail);
-    component.form.updateValueAndValidity();
-
-    expect(serviceSpy).toHaveBeenCalled();
-    expect(component.form.valid).toBeFalse();
+    const valid = await component.validateForm();
+    expect(valid).toBeFalse();
 
     component.form.get('email')?.patchValue(takenEmail2);
     component.form.updateValueAndValidity();
 
     expect(component.form.valid).toBeFalse();
-  });
+  }));
 
   it('should default role to first in list', () => {
     (component.detailVisible as any) = signal<boolean>(true);
@@ -119,9 +129,10 @@ describe('CommitteeMemberDialogComponent', () => {
     });
 
     it('should not proceed if role is invalid', async () => {
+      host.member = CommitteeMember.fromJSON({ role: 'MANAGER', email: 'test@test.com' });
       component.form.get('role')?.setErrors({ required: true });
       spyOn(testCommitteeService, 'update');
-      await component.editRole();
+      await component.submitForm();
       expect(testCommitteeService.update).not.toHaveBeenCalled();
     });
 
@@ -153,7 +164,7 @@ describe('CommitteeMemberDialogComponent', () => {
     it('should not proceed if form is invalid', async () => {
       component.form.get('email')?.setErrors({ required: true });
       spyOn(testCommitteeService, 'addMember');
-      await component.addUser();
+      await component.submitForm();
       expect(testCommitteeService.addMember).not.toHaveBeenCalled();
     });
 
