@@ -13,12 +13,13 @@
 }
 
 .report-info .report-type {
-  font-size: 2.4em;
+  font-size: 36px;
   font-family: var(--gandhi-bold);
+  line-height: 1;
 }
 
 .sub-heading {
-  font-size: 0.8em;
+  font-size: 14px;
 }
 
 ::ng-deep .p-panelmenu-header-action {
@@ -37,8 +38,4 @@
 
 ::ng-deep p-panelmenu > div > div > div > div > a > chevronrighticon > .p-submenu-icon {
   visibility: hidden;
-}
-
-::ng-deep .edit-report-menu-item {
-  padding-left: 16px;
 }
