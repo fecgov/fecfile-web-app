@@ -1,8 +1,3 @@
-// cypress/e2e/helpers/users.helpers.ts
-
-import { PageUtils } from '../../e2e/pages/pageUtils';
-import { UsersPage } from '../../e2e/pages/usersPage';
-
 export class UsersHelpers {
   // ===== Selectors / endpoints =====
   private static readonly INVITE_POST = '**/api/v1/committee-members/**';
@@ -19,10 +14,12 @@ export class UsersHelpers {
     cy.get('@table')
       .find('thead tr th, thead tr td')
       .then(($ths) => {
-        const headers = [...$ths].map((el) => (el as HTMLElement).innerText.trim());
-        cols.forEach((c) =>
-          expect(headers.join(' | ')).to.match(new RegExp(`\\b${c}\\b`, 'i')),
-        );
+        const headers = [...$ths].map((el) => el.innerText.trim());
+        const headerLine = headers.join(' | ');
+
+        for (const c of cols) {
+          expect(headerLine).to.match(new RegExp(`\\b${c}\\b`, 'i'));
+        }
       });
   }
 
@@ -33,7 +30,7 @@ export class UsersHelpers {
 
   static getRowByEmail(email: string) {
     return cy.get('@table').find('tbody tr').filter((_, tr) => {
-      const txt = (tr as HTMLElement).innerText.toLowerCase();
+      const txt = tr.innerText.toLowerCase();
       return txt.includes(email.toLowerCase());
     });
   }

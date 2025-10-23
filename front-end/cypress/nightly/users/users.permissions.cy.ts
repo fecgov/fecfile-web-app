@@ -1,6 +1,3 @@
-// cypress/e2e/users.permission.cy.ts
-/// <reference types="cypress" />
-
 import { PageUtils } from '../../e2e/pages/pageUtils';
 import { UsersPage } from '../../e2e/pages/usersPage';
 import { Initialize } from '../../e2e/pages/loginPage';
