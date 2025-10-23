@@ -1,4 +1,5 @@
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, HostListener, computed, effect, inject, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,8 +19,9 @@ import { Ripple } from 'primeng/ripple';
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../../styles.scss'],
+  styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     ErrorMessagesComponent,
     ButtonDirective,
@@ -36,6 +38,10 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
 
   readonly recTypeFormProperty = 'rec_type';
   readonly text4kFormProperty = 'text4000';
+
+  colClass = 'col-12';
+  private readonly COL6_BREAKPOINT = 1400;
+  private readonly COL8_BREAKPOINT = 1200;
 
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
@@ -70,6 +76,23 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
     this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
     this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
+    this.updateColClass();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateColClass();
+  }
+
+  private updateColClass(): void {
+    const w = window.innerWidth;
+    if (w >= this.COL6_BREAKPOINT) {
+      this.colClass = 'col-6';
+    } else if (w >= this.COL8_BREAKPOINT) {
+      this.colClass = 'col-8';
+    } else {
+      this.colClass = 'col-12';
+    }
   }
 
   async save(): Promise<void> {

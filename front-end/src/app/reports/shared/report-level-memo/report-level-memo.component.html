@@ -1,19 +1,8 @@
-<div class="summary-header">
-  <h1>Report level memo</h1>
-  <div>
-    <span class="bold"
-      >{{ activeReport().formLabel }}
-      @if (activeReport().formSubLabel) {
-        :
-      }
-      {{ activeReport().formSubLabel }}</span
-    >
-  </div>
-</div>
-
+<div class="summary-header"><h1>Report level memo</h1></div>
+<hr type="solid" />
 <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
   <div class="grid">
-    <div class="col-11">
+    <div [ngClass]="colClass">
       <label for="{{ text4kFormProperty }}">
         <strong> ENTER A MEMO RELATED TO THIS FORM {{ activeReport().report_type.slice(1) }} </strong>
         <span class="paren-label">(OPTIONAL)</span>
@@ -30,14 +19,14 @@
       </div>
     </div>
   </div>
-
+  <hr type="solid" />
   <div class="grid">
-    <div class="col-4">
+    <div class="col-4 align-left">
       <div>
         <button
           pButton
           pRipple
-          label="Back"
+          label="See print preview"
           class="p-button-secondary"
           (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReport().id)"
         ></button>
