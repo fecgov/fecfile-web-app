@@ -10,12 +10,15 @@
       data-cy="create-report"
       icon="pi pi-plus"
       class="add-button"
-      (click)="showDialog()"
+      (click)="dialogVisible.set(true)"
     ></button>
   </ng-template>
 </p-toolbar>
 
 <app-form3x-list />
+@if (showForm3) {
+  <app-form3-list />
+}
 <app-form24-list />
 <app-form1m-list />
 <app-form99-list />

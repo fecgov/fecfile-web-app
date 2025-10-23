@@ -8,6 +8,8 @@ import { Form3XListComponent } from './form3x-list/form3x-list.component';
 import { Form99ListComponent } from './form99-list/form99-list.component';
 import { Form1MListComponent } from './form1m-list/form1m-list.component';
 import { Form24ListComponent } from './form24-list/form24-list.component';
+import { environment } from 'environments/environment';
+import { Form3ListComponent } from './form3-list/form3-list.component';
 
 @Component({
   selector: 'app-report-list',
@@ -22,11 +24,12 @@ import { Form24ListComponent } from './form24-list/form24-list.component';
     Form99ListComponent,
     Form1MListComponent,
     Form24ListComponent,
+    Form3ListComponent,
   ],
 })
 export class ReportListComponent {
   readonly dialogVisible = signal(false);
-
+  readonly showForm3 = environment.showForm3;
   /**
    * Get the display name for the contact to show in the table column.
    * @param item
@@ -34,9 +37,5 @@ export class ReportListComponent {
    */
   public displayName(item: Report): string {
     return item.form_type ?? '';
-  }
-
-  public showDialog(): void {
-    this.dialogVisible.set(true);
   }
 }

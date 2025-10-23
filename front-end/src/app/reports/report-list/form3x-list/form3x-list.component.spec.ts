@@ -1,5 +1,4 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-
 import { Form3XListComponent } from './form3x-list.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { of, Subject } from 'rxjs';
@@ -9,7 +8,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormTypeDialogComponent } from 'app/reports/form-type-dialog/form-type-dialog.component';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ReportTypes, ReportStatus, Form3X, F3xFormTypes } from 'app/shared/models';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -152,12 +150,13 @@ describe('Form3XListComponent', () => {
       expect(unamendSpy).toHaveBeenCalled();
     }));
   });
-  it('#onActionClick should route properly', () => {
+  it('#onActionClick should route properly', async () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onRowActionClick(new TableAction('', component.editItem.bind(component)), {
+    await component.editItem({
       id: '888',
       report_type: ReportTypes.F3X,
     } as Form3X);
+
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
   });
 
@@ -165,7 +164,7 @@ describe('Form3XListComponent', () => {
     const generateSpy = spyOn(component.dotFecService, 'generateFecFile');
     const report = { id: '888', report_type: ReportTypes.F3X } as Form3X;
     spyOn(component.itemService, 'update').and.resolveTo(report);
-    await component.onRowActionClick(new TableAction('', component.download.bind(component)), report);
+    await component.download(report);
     expect(generateSpy).toHaveBeenCalledWith(report);
   });
 

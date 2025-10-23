@@ -100,7 +100,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
    * @param item
    * @returns {string} Returns the appropriate name of the contact for display in the table.
    */
-  public displayName(item: T): string {
+  displayName(item: T): string {
     return item.form_type ?? '';
   }
 }
