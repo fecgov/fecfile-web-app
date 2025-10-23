@@ -3,6 +3,7 @@
     [(first)]="first"
     [items]="items"
     [(totalItems)]="totalItems"
+    title=""
     [loading]="loading"
     sortField="sort_name"
     [(rowsPerPage)]="rowsPerPage"
@@ -14,7 +15,6 @@
     [checkboxLabel]="getCheckboxLabel.bind(this)"
     (loadTableItems)="loadTableItems($event)"
   >
-    <ng-template #header> </ng-template>
     <ng-template #body let-item>
       <td>{{ displayName(item) }}</td>
       <td>{{ item.type | label: contactTypeLabels }}</td>

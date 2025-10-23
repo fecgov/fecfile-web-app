@@ -1,3 +1,43 @@
+:host::ng-deep {
+  .custom-paginator-dropdown {
+    height: 2.357rem !important;
+  }
+  .custom-paginator-dropdown > .p-select > .p-select-label {
+    line-height: 1 !important;
+    padding-right: 0 !important;
+  }
+
+  .p-datatable {
+    min-width: 512px;
+    max-width: 512px;
+    width: 512px;
+  }
+
+  @media (min-width: 768px) {
+    .p-datatable {
+      min-width: 704px;
+      max-width: 704px;
+      width: 704px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .p-datatable {
+      min-width: 852px;
+      max-width: 852px;
+      width: 852px;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .p-datatable {
+      min-width: 1052px;
+      max-width: 1052px;
+      width: 1052px;
+    }
+  }
+}
+
 .empty-message {
   height: 64px;
   padding: 0 16px;
@@ -10,27 +50,21 @@
   width: fit-content;
 }
 
-.left-container {
-  margin-right: 24px;
+.paginator-container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
 
 .stacked-paginator {
   flex-direction: column !important;
 }
 
-:host ::ng-deep.custom-paginator-dropdown {
-  margin-left: 0.5rem !important;
-  height: 2.357rem !important;
-}
-:host ::ng-deep.custom-paginator-dropdown > .p-select > .p-select-label {
-  line-height: 1 !important;
-  padding-right: 0 !important;
-}
-
 .paginator-text {
   font-family: var(--karla);
   font-size: 1rem;
   font-weight: normal;
+  margin-right: 0.5rem;
 }
 
 h1 {
@@ -38,14 +72,12 @@ h1 {
 }
 
 @media (max-width: 767px) {
-  .responsive-container {
-    flex-direction: column;
+  .paginator-container {
+    flex-direction: column !important;
   }
-}
-
-@media (max-width: 992px) {
-  .left-container {
-    display: block;
+  .paginator-container div:last-child {
+    margin-top: 32px;
+    flex-direction: column-reverse;
   }
 }
 

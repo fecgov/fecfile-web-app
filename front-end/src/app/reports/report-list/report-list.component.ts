@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 import { Component, signal } from '@angular/core';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
+=======
+import { Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { DotFecService } from 'app/shared/services/dot-fec.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { ButtonDirective } from 'primeng/button';
+>>>>>>> feature/2402
 import { Ripple } from 'primeng/ripple';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { Report } from 'app/shared/models';
@@ -15,6 +25,7 @@ import { Form3ListComponent } from './form3-list/form3-list.component';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
   styleUrls: ['./report-list.component.scss'],
+<<<<<<< HEAD
   imports: [
     FormTypeDialogComponent,
     Toolbar,
@@ -26,6 +37,9 @@ import { Form3ListComponent } from './form3-list/form3-list.component';
     Form24ListComponent,
     Form3ListComponent,
   ],
+=======
+  imports: [TableComponent, ButtonDirective, Ripple, TableActionsButtonComponent, FormTypeDialogComponent, FecDatePipe],
+>>>>>>> feature/2402
 })
 export class ReportListComponent {
   readonly dialogVisible = signal(false);

@@ -1,6 +1,28 @@
+<ng-template #nameBody let-item>
+  @if (isCurrentUser(item)) {
+    <b>{{ item.name }}</b> (You)
+  } @else {
+    {{ item.name }}
+  }
+</ng-template>
+<ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
+<ng-template #statusBody let-item>{{ item.is_active ? 'Active' : 'Pending' }}</ng-template>
+<ng-template #actionsBody let-item>
+  @if (canEditMember(item)) {
+    <app-table-actions-button
+      (tableActionClick)="$event.action.action($event.actionItem)"
+      [actionItem]="item"
+      [tableActions]="rowActions"
+      buttonIcon="pi pi-ellipsis-v"
+      buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary p-button-text mr-2"
+    />
+  }
+</ng-template>
+
 <app-table
   [(first)]="first"
   [items]="items"
+  title="Manage users"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="name"
@@ -8,43 +30,12 @@
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
   [(selectedItems)]="selectedItems"
   itemName="users"
-  [sortableHeaders]="sortableHeaders"
+  [columns]="columns"
   (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
-    <p-toolbar>
-      <ng-template #start>
-        <h1 class="m-0">Manage users</h1>
-      </ng-template>
-      <ng-template #end>
-        @if (isCommitteeAdministrator()) {
-          <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
-        }
-      </ng-template>
-    </p-toolbar>
-  </ng-template>
-  <ng-template #header>
     @if (isCommitteeAdministrator()) {
-      <th id="buttons" role="columnheader">Actions</th>
-    }
-  </ng-template>
-  <ng-template let-item #body>
-    <td>{{ item.name }}</td>
-    <td>{{ item.email }}</td>
-    <td>{{ getRoleLabel(item.role) }}</td>
-    <td>{{ item.is_active ? 'Active' : 'Pending' }}</td>
-    @if (isCommitteeAdministrator()) {
-      <td>
-        @if (isNotCurrentUser(item) && canEditMember(item)) {
-          <app-table-actions-button
-            (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-            [actionItem]="item"
-            [tableActions]="rowActions"
-            buttonIcon="pi pi-ellipsis-v"
-            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-          />
-        }
-      </td>
+      <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
     }
   </ng-template>
 </app-table>

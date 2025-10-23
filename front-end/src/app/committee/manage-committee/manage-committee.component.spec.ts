@@ -131,8 +131,8 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should not be able to remove self from committee', () => {
-    expect(component.isNotCurrentUser(committeeMembers[0])).toBeFalse();
-    expect(component.isNotCurrentUser(committeeMembers[1])).toBeTrue();
+    expect(component.isCurrentUser(committeeMembers[0])).toBeTrue();
+    expect(component.isCurrentUser(committeeMembers[1])).toBeFalse();
   });
 
   it('should not be able to remove committee admin if less than 3 committee admins', () => {
@@ -164,7 +164,7 @@ describe('ManageCommitteeComponent', () => {
     );
     spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
 
-    expect(component.canEditMember(committeeMembers[0])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[0])).toBeFalse();
     expect(component.canEditMember(committeeMembers[1])).toBeTrue();
     expect(component.canEditMember(committeeMembers[2])).toBeTrue();
   });
