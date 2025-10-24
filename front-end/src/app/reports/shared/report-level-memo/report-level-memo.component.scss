@@ -2,67 +2,65 @@ textarea {
   height: 300px;
   min-height: 300px;
   resize: vertical;
-  margin: 8px 0 32px;
-  padding-left: 32px;
-  font-size: 1.4em;
+  margin: 0;
+  font-size: 14px;
 }
 
 label {
-  font-size: 1.4em;
-  margin-top: 16px;
+  font-size: 14px;
 }
 
-hr {
-  margin: 0 0 16px;
+.previous-button {
+  gap: 5px;
 }
 
-.col-4.align-left {
-  padding-left: 0;
-}
-.col-4.align-right {
-  padding-right: 0;
-}
-
-.col-12 {
-  padding: 0;
+.main-content {
+  width: 512px;
+  min-width: 512px;
+  max-width: 512px;
 }
 
-.col-4.align-left button {
-  background: #aeb0b5 url('/assets/img/prev_arrow.svg');
-  background-position: 20px 12px;
-  background-repeat: no-repeat;
-  padding-left: 36px;
-}
-
-.sidebar-content-container {
-  width: 1052px;
-}
-
-@media (min-width: 576px) {
-  .sidebar-content-container {
-    width: 512px;
-  }
+.textarea-container {
+  width: 100%;
+  margin-bottom: 32px;
 }
 
 @media (min-width: 768px) {
-  .sidebar-content-container {
+  .main-content {
     width: 704px;
+    min-width: 704px;
+    max-width: 704px;
   }
 }
 
 @media (min-width: 992px) {
-  .sidebar-content-container {
+  .main-content {
     width: 644px;
+    min-width: 644px;
+    max-width: 644px;
   }
 }
 
 @media (min-width: 1200px) {
-  .sidebar-content-container {
+  .main-content {
     width: 852px;
+    min-width: 852px;
+    max-width: 852px;
+  }
+
+  .textarea-container {
+    width: 66.67%;
   }
 }
 
-.summary-header {
-  margin-top: 64px;
-  margin-bottom: 8px;
+@media (min-width: 1400px) {
+  .main-content {
+    width: 1052px;
+    min-width: 1052px;
+    max-width: 1052px;
+  }
+
+  .textarea-container {
+    width: 50%;
+  }
 }
