@@ -1,10 +1,7 @@
 export class UsersHelpers {
-  // ===== Selectors / endpoints =====
-  private static readonly INVITE_POST = '**/api/v1/committee-members/**';
-  private static readonly DELETE_MEMBER = '**/api/v1/committee-members/**';
-  private static readonly LIST_MEMBERS = '**/api/v1/committee-members**';
-
-  // ===== Table helpers (from earlier) =====
+  static emailInput = () => cy.get("@dialog").find("#email").first();
+  static submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
+  
   static aliasUsersTable() {
     cy.get('table').first().as('table');
   }
@@ -53,6 +50,15 @@ export class UsersHelpers {
       .find('.pi.pi-ellipsis-v, [data-cy="row-kebab"]')
       .should('not.exist');
   }
+  
+  static assertEnabled = ($el: JQuery<HTMLElement>) => {
+      const aria = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
+      const dis = $el.is(":disabled");
+      const cls = $el.hasClass("p-disabled") || $el.hasClass("disabled");
+      expect(!(aria || dis || cls), "button is enabled").to.eq(true);
+  };
 
- 
+  static stubOnce(method: string, url: string, response: Partial<Cypress.StaticResponse>, alias: string) {
+      cy.intercept({ method, url, times: 1 }, response).as(alias);
+  }
 }
