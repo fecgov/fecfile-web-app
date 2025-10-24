@@ -9,22 +9,21 @@ export class UsersHelpers {
     cy.get('table').first().as('table');
   }
 
-  static assertUsersTableColumns(cols: string[]) {
-    UsersHelpers.aliasUsersTable();
+  static assertUsersTableColumns(expected: string[]) {
     cy.get('@table')
-      .find('thead tr th, thead tr td')
-      .then(($ths) => {
-        const headers = [...$ths].map((el) => el.innerText.trim());
-        const headerLine = headers.join(' | ');
-
-        for (const c of cols) {
-          expect(headerLine).to.match(new RegExp(`\\b${c}\\b`, 'i'));
-        }
+      // Use the last header row so multi-row headers don't pollute the list
+      .find('thead tr:last-child > th, thead tr:last-child > td')
+      .should(($cells) => {
+        const actual = [...$cells].map((el) =>
+          el.innerText.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim()
+        );
+  
+        // Exact match: same count, same order, same text.
+        expect(actual, 'table header columns').to.deep.equal(expected);
       });
   }
 
   static assertAtLeastOneUserRow() {
-    UsersHelpers.aliasUsersTable();
     cy.get('@table').find('tbody tr').its('length').should('be.greaterThan', 0);
   }
 
@@ -50,7 +49,6 @@ export class UsersHelpers {
   }
 
   static assertNoRowKebabs() {
-    UsersHelpers.aliasUsersTable();
     cy.get('@table')
       .find('.pi.pi-ellipsis-v, [data-cy="row-kebab"]')
       .should('not.exist');
