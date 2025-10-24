@@ -15,7 +15,7 @@ export class UsersHelpers {
       .find('thead tr:last-child > th, thead tr:last-child > td')
       .should(($cells) => {
         const actual = [...$cells].map((el) =>
-          el.innerText.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim()
+          el.innerText.replaceAll(/\u00A0/g, ' ').replaceAll(/\s+/g, ' ').trim()
         );
   
         // Exact match: same count, same order, same text.
