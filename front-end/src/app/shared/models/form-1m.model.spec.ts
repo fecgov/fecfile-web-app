@@ -12,7 +12,7 @@ describe('Form-1M', () => {
       committee_name: 'foo',
     };
     const form = Form1M.fromJSON(data);
-    expect(form.formLabel).toEqual('FORM 1M');
+    expect(form.formLabel).toEqual('Form 1M');
   });
 
   it('should display "NOTIFICATION OF MULTICANDIDATE STATUS" for sub label', () => {

@@ -2,3 +2,4 @@
 *.yml
 node_modules
 assets
+cypress/
