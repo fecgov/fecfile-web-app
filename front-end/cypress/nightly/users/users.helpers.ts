@@ -1,7 +1,7 @@
 export class UsersHelpers {
-  static emailInput = () => cy.get("@dialog").find("#email").first();
-  static submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
-  
+  static readonly emailInput = () => cy.get("@dialog").find("#email").first();
+  static readonly submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
+
   static aliasUsersTable() {
     cy.get('table').first().as('table');
   }
@@ -51,7 +51,7 @@ export class UsersHelpers {
       .should('not.exist');
   }
   
-  static assertEnabled = ($el: JQuery<HTMLElement>) => {
+  static readonly assertEnabled = ($el: JQuery<HTMLElement>) => {
       const aria = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
       const dis = $el.is(":disabled");
       const cls = $el.hasClass("p-disabled") || $el.hasClass("disabled");
