@@ -1,6 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_MEMOS_FEA';
-import { SchBTransactionType } from '../schb-transaction-type.model';
+import { SCHEDULE_B_MEMO } from './common-types/SCHEDULE_B_MEMO.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
@@ -10,7 +10,7 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
 
-export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
+export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SCHEDULE_B_MEMO {
   formFields = INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   override contactConfig = STANDARD_AND_CANDIDATE;

@@ -117,22 +117,6 @@ describe('Disbursements', () => {
       cy.wait('@GetLoans');
       cy.wait('@GetDisbursements');
       cy.wait('@GetReceipts');
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
-
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
 
       PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
       PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
@@ -164,7 +148,6 @@ describe('Disbursements', () => {
       };
       TransactionDetailPage.enterScheduleFormData(formTransactionData);
       PageUtils.clickButton('Save');
-      cy.contains('Confirm').should('exist');
 
       cy.get('tr').should('contain', 'Other Disbursement');
       cy.get('tr').should('not.contain', 'Unitemized');

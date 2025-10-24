@@ -9,7 +9,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -39,7 +38,6 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
         ButtonModule,
         CheckboxModule,
         InputTextModule,
-        TextareaModule,
         InputNumberModule,
         ConfirmDialogModule,
         ReattRedesTransactionTypeDetailComponent,

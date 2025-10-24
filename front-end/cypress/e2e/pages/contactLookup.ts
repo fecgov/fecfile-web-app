@@ -9,7 +9,7 @@ export class ContactLookup {
       PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias);
       cy.contains('LOOKUP').should('exist');
     }
-    cy.get(alias).find('[id="searchBox"]').type(name.slice(0, 3));
+    cy.get(alias).find('[data-cy="searchBox"]').type(name.slice(0, 3));
     cy.contains(name).should('exist');
     cy.contains(name).click({ force: true });
   }
@@ -36,7 +36,7 @@ export class ContactLookup {
       },
     );
     const candidateSection = cy.get(alias);
-    candidateSection.find('[id="searchBox"]').type(nameEntry);
+    candidateSection.find('[data-cy="searchBox"]').type(nameEntry);
     candidateSection
       .get('.p-autocomplete-list-container')
       .contains(nameEntry)

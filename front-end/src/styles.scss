@@ -570,3 +570,10 @@ legend {
   display: flex;
   justify-content: space-between;
 }
+
+textarea {
+  font-family: var(--karla);
+  font-size: 1rem;
+  font-weight: 400;
+  resize: none;
+}

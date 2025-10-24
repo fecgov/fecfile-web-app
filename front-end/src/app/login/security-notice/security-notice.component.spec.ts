@@ -5,7 +5,7 @@ import { ReportListComponent } from 'app/reports/report-list/report-list.compone
 import { UsersService } from 'app/shared/services/users.service';
 import { testMockStore, testUserLoginData } from 'app/shared/utils/unit-test.utils';
 import { LoginService } from '../../shared/services/login.service';
-import { SecurityNoticeComponent } from './security-notice.component';
+import { SECURITY_CONSENT_VERSION, SecurityNoticeComponent } from './security-notice.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
@@ -57,5 +57,7 @@ describe('SecurityNoticeComponent', () => {
     component.form.get('security-consent-annual')?.setValue(true);
     component.signConsentForm();
     expect(spy).toHaveBeenCalledWith(expectedUserLoginData);
+
+    expect(component.userLoginData().security_consent_version_at_login).toBe(SECURITY_CONSENT_VERSION);
   });
 });

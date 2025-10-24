@@ -6,10 +6,10 @@ import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { Popover, PopoverModule } from 'primeng/popover';
 import { ButtonDirective } from 'primeng/button';
-import { TextareaModule } from 'primeng/textarea';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 
 enum SubmissionStates {
   DRAFT,
@@ -26,8 +26,8 @@ enum SubmissionStates {
     ErrorMessagesComponent,
     SingleClickDirective,
     ButtonDirective,
-    TextareaModule,
     PopoverModule,
+    AutoResizeDirective,
   ],
 })
 export class FeedbackOverlayComponent extends FormComponent {

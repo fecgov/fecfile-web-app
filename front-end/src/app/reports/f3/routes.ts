@@ -4,9 +4,8 @@ import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-lev
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
-import { SubmitReportStep1Component } from '../submission-workflow/submit-report-step1.component';
+import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
 import { Report } from 'app/shared/models/report.model';
-import { SubmitReportStep2Component } from '../submission-workflow/submit-report-step2.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { CreateF3Step1Component } from './create-workflow/create-f3-step1.component';
 import { ReportSummaryComponent } from './report-summary/report-summary.component';
@@ -60,7 +59,7 @@ export const F3_ROUTES: Route[] = [
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f3/detailed-summary/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3/submit/step1/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
@@ -72,32 +71,19 @@ export const F3_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f3/submit/step1/' + report?.id,
+      getNextUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
   {
-    path: 'submit/step1/:reportId',
-    title: 'Confirm information',
-    component: SubmitReportStep1Component,
+    path: 'submit/:reportId',
+    title: 'Submit report',
+    component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f3/memo/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3/submit/step2/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/step2/:reportId',
-    title: 'Submit report',
-    component: SubmitReportStep2Component,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.SUBMISSION,
-      getBackUrl: (report?: Report) => '/reports/f3/submit/step1/' + report?.id,
       getContinueUrl: (report?: Report) => '/reports/f3/submit/status/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
