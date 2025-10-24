@@ -30,16 +30,17 @@ describe("Users: Validation and API failure states", () => {
 
   it('shows inline validation message for invalid emails (multiple cases)', () => {
     const invalidEmails = [
-    'foo',
-    'foo@',
-    '@example.com',
-    'foo@example',
-    'foo@.com',
-    'foo@exa mple.com',
+      'foo',
+      'foo@',
+      '@example.com',
+      'foo@example',
+      'foo@.com',
+      'foo@exa mple.com',
     ];
     // 'foo..bar@example.com' and 'foo@example..com' added back in once change to disallow double dots is implemented
     // '.foo@example.com' needed to be re-added once leading dot validation is implemented
     // 'foo@-example.com' and 'foo@example-.com' to be re-added once leading/trailing hyphen validation is implemented
+    
     const findEmailError = () =>
     cy.get('body')
       .find(
