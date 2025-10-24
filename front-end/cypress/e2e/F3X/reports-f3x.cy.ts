@@ -14,7 +14,7 @@ describe('Manage reports', () => {
   it('Create a Quarterly Election Year report', () => {
     ReportListPage.createF3X();
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'FORM 3X');
+    cy.get('tr').should('contain', 'Form 3X');
     cy.get('tr').should('contain', 'GENERAL (12G)');
     cy.get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
   });
@@ -29,7 +29,7 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'FORM 3X');
+    cy.get('tr').should('contain', 'Form 3X');
     cy.get('tr').should('contain', 'OCTOBER 20 MONTHLY REPORT (M10)');
   });
 
@@ -43,7 +43,7 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'FORM 3X');
+    cy.get('tr').should('contain', 'Form 3X');
     cy.get('tr').should('contain', 'RUNOFF (30R)');
   });
 
@@ -58,7 +58,7 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'FORM 3X');
+    cy.get('tr').should('contain', 'Form 3X');
     cy.get('tr').should('contain', 'JANUARY 31 YEAR-END (YE)');
     cy.get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
   });
