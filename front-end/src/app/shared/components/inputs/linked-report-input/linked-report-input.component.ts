@@ -12,6 +12,12 @@ import { Tooltip } from 'primeng/tooltip';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
+export const LinkedReportTooltipText =
+  'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
+  'To determine coverage dates, calculations rely on an IE’s date of disbursement. If date of disbursement is not ' +
+  'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
+  'corresponding coverage dates.';
+
 @Component({
   selector: 'app-linked-report-input',
   styleUrls: ['./linked-report-input.component.scss'],
@@ -22,15 +28,10 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   private readonly reportService = inject(ReportService);
   private readonly datePipe = inject(FecDatePipe);
 
-  readonly tooltipText =
-    'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
-    'To determine coverage dates, calculations rely on an IE’s date of disbursement. If date of disbursement is not ' +
-    'available, date of dissemination will be used. Before saving this transaction, create a Form 3X with ' +
-    'corresponding coverage dates.';
-
   readonly disbursementDate = signal<Date | undefined>(undefined);
   readonly disseminationDate = signal<Date | undefined>(undefined);
   readonly userTouchedValues = signal(false);
+  readonly tooltipText = LinkedReportTooltipText;
 
   readonly committeeF3xReports = derivedAsync(
     () =>
