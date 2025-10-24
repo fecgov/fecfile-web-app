@@ -13,7 +13,6 @@ import { DividerModule } from 'primeng/divider';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { DoubleTransactionDetailComponent } from './double-transaction-detail.component';
 import { provideHttpClient } from '@angular/common/http';
@@ -41,7 +40,6 @@ describe('DoubleTransactionDetailComponent', () => {
         ButtonModule,
         CheckboxModule,
         InputTextModule,
-        TextareaModule,
         InputNumberModule,
         ConfirmDialogModule,
         DoubleTransactionDetailComponent,

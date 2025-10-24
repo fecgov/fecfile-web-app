@@ -86,7 +86,6 @@ describe('Loans', () => {
       cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
       cy.contains('Loan By Committee').click();
       cy.wait('@GuarantorList');
-      cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
       const alias = PageUtils.getAlias('');
       cy.get(alias).find('.p-confirmdialog-accept-button').click();

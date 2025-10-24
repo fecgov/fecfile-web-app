@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { MonoTypeOperatorFunction, OperatorFunction, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Pipeable = OperatorFunction<any, any> | MonoTypeOperatorFunction<any>;
@@ -25,7 +25,10 @@ export class SubscriptionFormControl<TValue = any> extends FormControl {
     if (destroy$ !== undefined) {
       piped = [takeUntil(destroy$), ...piped];
     }
-    return this.valueChanges.pipe(...(piped as [])).subscribe(action);
+    return this.valueChanges
+      .pipe(distinctUntilChanged())
+      .pipe(...(piped as []))
+      .subscribe(action);
   }
 
   copy<T>(value: T, updateOn: 'blur' | 'change' | 'submit' | undefined = 'blur'): SubscriptionFormControl<T> {

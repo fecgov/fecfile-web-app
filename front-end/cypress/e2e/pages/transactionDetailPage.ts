@@ -28,7 +28,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.candidate) {
-      cy.get('.contact-lookup-container').last().get('[id="searchBox"]').last().type(formData.candidate);
+      cy.get('.contact-lookup-container').last().get('[data-cy="searchBox"]').type(formData.candidate);
       cy.contains(formData.candidate).should('exist');
       cy.contains(formData.candidate).click();
     }
@@ -255,7 +255,7 @@ export class TransactionDetailPage {
     cy.get(alias).find('#amount').should('have.value', amount);
 
     if (formData.category_code != '') {
-      cy.get(alias).find('[inputid="category_code"]').should('contain', formData.category_code);
+      cy.get(alias).find('[data-cy="category_code"]').should('contain', formData.category_code);
     }
   }
 
@@ -310,9 +310,6 @@ export class TransactionDetailPage {
     cy.wait('@GetLoans');
     cy.wait('@GetDisbursements');
     cy.wait('@GetReceipts');
-    cy.wait('@GetLoans');
-    cy.wait('@GetDisbursements');
-    cy.wait('@GetReceipts');
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {
@@ -333,7 +330,7 @@ export class TransactionDetailPage {
 
   private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
     if (formData.category_code) {
-      PageUtils.dropdownSetValue('[inputid="category_code"]', formData.category_code, alias);
+      PageUtils.dropdownSetValue('[data-cy="category_code"]', formData.category_code, alias);
     }
   }
 

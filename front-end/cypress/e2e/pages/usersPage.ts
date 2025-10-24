@@ -6,7 +6,6 @@ export class UsersPage {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/?page=1**').as('GetMembers');
     cy.visit('/committee/members');
     cy.wait('@GetMembers');
-    cy.wait('@GetMembers');
   }
 
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {

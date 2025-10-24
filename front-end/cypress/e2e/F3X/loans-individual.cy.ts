@@ -66,7 +66,6 @@ describe('Loans', () => {
       let alias = PageUtils.getAlias('app-transaction-receipts');
       cy.get(alias).contains('Loan Received from Individual').click();
       cy.wait('@GuarantorList');
-      cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
 
       alias = PageUtils.getAlias('');

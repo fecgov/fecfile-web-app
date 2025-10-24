@@ -22,7 +22,6 @@ import { InputText } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { Select, SelectModule } from 'primeng/select';
 import { SelectButton, SelectButtonModule } from 'primeng/selectbutton';
-import { TextareaModule } from 'primeng/textarea';
 import { MainFormComponent } from './main-form.component';
 
 describe('MainFormComponent', () => {
@@ -64,7 +63,6 @@ describe('MainFormComponent', () => {
         AddressInputComponent,
         Select,
         SaveCancelComponent,
-        TextareaModule,
       ],
       providers: [
         provideHttpClient(),

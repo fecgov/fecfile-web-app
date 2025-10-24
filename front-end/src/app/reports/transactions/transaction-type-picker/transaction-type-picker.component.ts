@@ -89,7 +89,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             Disbursement.OPERATING_EXPENDITURES,
             Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
             Disbursement.OTHER_EXPENDITURES,
-            Disbursement.REFUND,
+            Disbursement.REFUNDS,
             Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
           ];
         } else {
@@ -199,10 +199,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
         case Disbursement.OPERATING_EXPENDITURES:
           transactionTypes = [
             ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+            ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
             ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
             ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
             ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
-            ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
           ];
           break;
         case Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS:
@@ -233,10 +233,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
             ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
             ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+            ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
             ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
             ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
             ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
-            ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
             ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
             ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
             ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
@@ -253,7 +253,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
           ];
           break;
-        case Disbursement.REFUND:
+        case Disbursement.REFUNDS:
           transactionTypes = [
             ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
             ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
@@ -268,10 +268,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
         case Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES:
           transactionTypes = [
             ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
+            ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
             ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
             ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
             ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
-            ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
           ];
           break;
         case LoansAndDebts.LOANS:

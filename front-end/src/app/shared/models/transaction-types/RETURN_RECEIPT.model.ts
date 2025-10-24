@@ -6,12 +6,12 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS,
-  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  INDIVIDUAL_ORGANIZATION,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class RETURN_RECEIPT extends SchATransactionType {
   formFields = INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS;
-  contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
+  contactTypeOptions = INDIVIDUAL_ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
   override negativeAmountValueOnly = true;

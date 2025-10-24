@@ -9,6 +9,7 @@ import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions'
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { LoginService } from './login.service';
 import { provideHttpClient } from '@angular/common/http';
+import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -86,6 +87,38 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
         security_consented: true,
+        security_consent_version: SECURITY_CONSENT_VERSION + 'B',
+        security_consent_version_at_login: SECURITY_CONSENT_VERSION,
+      });
+      expect(service.userHasConsented()).toBeFalse();
+    });
+
+    it('test true security_consented', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consented: true,
+        security_consent_version: SECURITY_CONSENT_VERSION + 'B',
+        security_consent_version_at_login: SECURITY_CONSENT_VERSION + 'B',
+      });
+      expect(service.userHasConsented()).toBeTrue();
+    });
+
+    it('test true security_consented', () => {
+      const one_day_ahead = new Date();
+      one_day_ahead.setDate(one_day_ahead.getDate() + 1);
+
+      store.overrideSelector(selectUserLoginData, {
+        first_name: '',
+        last_name: '',
+        email: '',
+        security_consented: true,
+        security_consent_version: SECURITY_CONSENT_VERSION,
+        security_consent_version_at_login: SECURITY_CONSENT_VERSION,
       });
       expect(service.userHasConsented()).toBeTrue();
     });

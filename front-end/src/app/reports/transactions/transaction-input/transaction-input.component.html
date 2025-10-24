@@ -8,7 +8,7 @@
   <div class="grid">
     <div class="col-12">
       <div class="field">
-        <label for="entity_type">LOOKUP</label>
+        <label for="searchBox">LOOKUP</label>
         <app-transaction-contact-lookup
           id="contact_1_lookup"
           contactProperty="contact_1"
@@ -177,9 +177,10 @@
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <label for="contact_3">LOOKUP </label>
+              <span class="span-label">LOOKUP</span>
               <app-transaction-contact-lookup
                 id="contact_3_lookup"
+                aria-label="contact_3_lookup"
                 contactProperty="contact_3"
                 [transaction]="transaction"
                 [form]="form"
@@ -223,14 +224,15 @@
         <div class="grid candidate_committee_lookup">
           <div class="col-12">
             <div class="field">
-              <label for="contact_2"
+              <span class="span-label"
                 >LOOKUP
                 @if (!transaction?.transactionType?.contact2IsRequired(form)) {
                   <span class="paren-label">(OPTIONAL)</span>
                 }
-              </label>
+              </span>
               <app-transaction-contact-lookup
                 id="contact_2_lookup"
+                aria-labelledby="contact_2_lookup"
                 contactProperty="contact_2"
                 [transaction]="transaction"
                 [form]="form"

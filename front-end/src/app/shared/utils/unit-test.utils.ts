@@ -24,6 +24,7 @@ import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
 import { Form24 } from '../models';
+import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -90,7 +91,13 @@ export function testCommitteeAccount(): CommitteeAccount {
 }
 
 export function testUserLoginData(): UserLoginData {
-  return { first_name: 'test_first_name', last_name: 'test_last_name', email: 'test_email@testhost.com' };
+  return {
+    first_name: 'test_first_name',
+    last_name: 'test_last_name',
+    email: 'test_email@testhost.com',
+    security_consent_version: SECURITY_CONSENT_VERSION,
+    security_consent_version_at_login: SECURITY_CONSENT_VERSION,
+  };
 }
 
 export function testCommitteeAdminLoginData(): UserLoginData {

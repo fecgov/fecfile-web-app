@@ -1,0 +1,86 @@
+#submit-report-container {
+  padding-top: 56px;
+}
+
+h2 {
+  margin-bottom: 32px;
+}
+
+hr {
+  margin: 32px 0;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+:host::ng-deep .p-password-input {
+  padding: 10px 36px 10px 10px !important;
+}
+
+:host::ng-deep .p-password-mask-icon {
+  right: 14px;
+}
+
+@media (min-width: 576px) {
+  #submit-report-container {
+    min-width: 512px;
+    max-width: 512px;
+    width: 512px;
+  }
+}
+
+@media (min-width: 768px) {
+  #submit-report-container {
+    min-width: 704px;
+    max-width: 704px;
+    width: 704px;
+  }
+}
+
+@media (min-width: 1200px) {
+  #submit-report-container {
+    min-width: 852px;
+    max-width: 852px;
+    width: 852px;
+  }
+}
+
+@media (min-width: 1400px) {
+  #submit-report-container {
+    min-width: 1052px;
+    max-width: 1052px;
+    width: 1052px;
+  }
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+label,
+input,
+p,
+:host::ng-deep .p-select .p-select-label {
+  font-size: 14px !important;
+}
+
+:host::ng-deep .p-select {
+  height: 42px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 14px !important;
+}
+
+@for $i from 1 through 32 {
+  .w-#{$i} {
+    width: #{$i}em;
+    min-width: #{$i}em;
+    max-width: #{$i}em;
+  }
+}

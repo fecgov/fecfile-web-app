@@ -1,0 +1,208 @@
+<div id="submit-report-container">
+  <h1>Submit report</h1>
+  <hr type="solid" class="mt-2" />
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <h2>Verify confirmation email addresses</h2>
+    <div class="row">
+      <fieldset class="w-28">
+        <label for="confirmation_email_1"><strong>EMAIL #1</strong></label>
+        <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
+        <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted" />
+      </fieldset>
+      <fieldset class="w-28">
+        <label for="confirmation_email_2"><strong>EMAIL #2 </strong> <span class="paren-label">(OPTIONAL)</span></label>
+        <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
+        <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted" />
+      </fieldset>
+    </div>
+    @if (activeReport().hasChangeOfAddress) {
+      <hr type="solid" />
+      <div class="row">
+        <fieldset>
+          <legend class="p-0 mb-2">
+            <h2>Verify physical address</h2>
+            <span>HAS YOUR ADDRESS CHANGED IN THE LAST 10 DAYS?</span>
+          </legend>
+          <p-selectButton
+            data-cy="change_of_address"
+            [options]="changeOfAddressOptions"
+            [allowEmpty]="false"
+            formControlName="change_of_address"
+          />
+        </fieldset>
+      </div>
+    }
+
+    @if (form.get('change_of_address')?.value) {
+      <!--
+
+        Per a discussion with Mitchell, this section is commented out 
+        pending a later review of the requirements.
+
+      <div class="col-12">
+        Within 10 days of an address change you must notify the FEC by amending your Form 1, in addition to updating
+        your address here.
+        <a href="https://webforms.fec.gov/webforms/form1/index.htm" target="_blank" rel="noopener"
+          >Update your committee address</a
+        >.
+      </div>
+      -->
+      <div class="row mt-5">
+        <fieldset class="w-32">
+          <label for="street_1">STREET ADDRESS</label>
+          <input type="text" pInputText id="street_1" formControlName="street_1" />
+          <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
+        </fieldset>
+        <fieldset class="w-32">
+          <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
+          <input type="text" pInputText id="street_2" formControlName="street_2" />
+          <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
+        </fieldset>
+
+        <fieldset class="w-28">
+          <label for="city">CITY</label>
+          <input type="text" pInputText id="city" formControlName="city" />
+          <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
+        </fieldset>
+        <fieldset class="w-15">
+          <label for="state">STATE/TERRITORY</label>
+          <app-searchable-select
+            inputId="state"
+            formControlName="state"
+            [form]="form"
+            [options]="stateOptions"
+            [autoDisplayFirst]="false"
+            appendTo="body"
+          />
+          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
+        </fieldset>
+        <fieldset class="w-9">
+          <label for="zip">ZIP/POSTAL CODE</label>
+          <input type="text" pInputText id="zip" formControlName="zip" />
+          <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
+        </fieldset>
+      </div>
+    }
+    <hr type="solid" />
+    <h2>Committee treasurer</h2>
+    <div class="row">
+      <fieldset class="w-28">
+        <label for="treasurer_last_name">LAST NAME</label>
+        <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
+        <app-error-messages [form]="form" fieldName="treasurer_last_name" [formSubmitted]="formSubmitted" />
+      </fieldset>
+      <fieldset class="w-19">
+        <label for="treasurer_first_name">FIRST NAME</label>
+        <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
+        <app-error-messages [form]="form" fieldName="treasurer_first_name" [formSubmitted]="formSubmitted" />
+      </fieldset>
+      <fieldset class="w-19">
+        <label for="treasurer_middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
+        <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
+        <app-error-messages [form]="form" fieldName="treasurer_middle_name" [formSubmitted]="formSubmitted" />
+      </fieldset>
+      <div class="row">
+        <fieldset class="w-10">
+          <label for="treasurer_prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
+          <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
+          <app-error-messages [form]="form" fieldName="treasurer_prefix" [formSubmitted]="formSubmitted" />
+        </fieldset>
+        <fieldset class="w-10">
+          <label for="treasurer_suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
+          <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
+          <app-error-messages [form]="form" fieldName="treasurer_suffix" [formSubmitted]="formSubmitted" />
+        </fieldset>
+      </div>
+    </div>
+    <hr type="solid" />
+
+    <h2>Enter password</h2>
+    <p class="mb-5">
+      If you have any questions on how to enroll, confirming your email, two-factor authentication, or your Personal Key
+      please go to the following page:
+      <a href="https://webforms.fec.gov/psa/help.htm" target="_blank" rel="noopener"
+        >FEC Electronic Filing Password Assignment System Help</a
+      >
+    </p>
+
+    <fieldset class="w-20 mb-5">
+      <label for="filingPassword"> ELECTRONIC FILING PASSWORD </label>
+      <p-password
+        inputId="filingPassword"
+        type="password"
+        formControlName="filingPassword"
+        [feedback]="false"
+        [toggleMask]="true"
+        autocomplete="new-password"
+      />
+      <app-error-messages
+        [form]="form"
+        fieldName="filingPassword"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="Must contain at least one upper case letter (A -Z), at least one lower case letter (a - z), at least one digit (0 - 9), and at least one special character ( !@#$%&*() )"
+      />
+    </fieldset>
+
+    @if (activeReport().report_version) {
+      <div class="field-row mb-5">
+        <p-checkbox [binary]="true" inputId="backdoor-check" formControlName="backdoorYesNo" />
+        <label for="backdoor-check" class="mb-0 ml-2 cursor-pointer">
+          ADD A BACKDOOR CODE <span class="paren-label">(OPTIONAL)</span>
+        </label>
+        <img
+          alt="i info circle"
+          src="assets/img/i-info-circle.svg"
+          width="16px"
+          class="ml-1"
+          pTooltip="Do you need to use a backdoor code?"
+        />
+      </div>
+      @if (showBackdoorCode) {
+        <div class="row mb-5">
+          <fieldset class="w-15">
+            <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
+            <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
+            <app-error-messages [form]="form" fieldName="backdoor_code" [formSubmitted]="formSubmitted" />
+          </fieldset>
+        </div>
+      }
+    }
+
+    <div class="field-row mb-0" data-cy="userCertified">
+      <p-checkbox
+        [binary]="true"
+        inputId="userCertified"
+        formControlName="userCertified"
+        [trueValue]="true"
+        [falseValue]="false"
+      />
+      <label for="userCertified" class="ml-2 mb-0 cursor-pointer">
+        I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct,
+        and complete. NOTE: Submission of false, erroneous, or incomplete information may subject the person signing
+        this Statement to the penalties of 52 U.S.C. § 30109.
+      </label>
+    </div>
+    <hr type="solid" class="mb-3" />
+    <div class="flex justify-content-between">
+      <button pButton pRipple label="Back" type="button" class="p-button-secondary" [routerLink]="[backUrl()]"></button>
+      <button
+        pButton
+        pRipple
+        label="Submit"
+        type="submit"
+        class="p-button"
+        (click)="submitClicked()"
+        [disabled]="!form.value.userCertified || loading > 0"
+      ></button>
+    </div>
+    @if (loading > 0) {
+      <div>
+        @if (loading === 1) {
+          <p>Updating treasurer name...</p>
+        } @else if (loading === 2) {
+          <p>Submitting report to the FEC...</p>
+        }
+      </div>
+    }
+  </form>
+</div>

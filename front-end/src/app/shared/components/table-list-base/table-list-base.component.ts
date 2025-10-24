@@ -1,9 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, Component, computed, effect, ElementRef, inject, output, Signal, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  output,
+  Signal,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
+import { TableComponent } from '../table/table.component';
 
 @Component({
   template: '',
@@ -24,6 +36,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   readonly detailVisible = signal(false);
   isNewItem = true;
   readonly first = signal(0);
+  readonly table = viewChild.required(TableComponent);
 
   protected caption?: string;
 
@@ -35,10 +48,12 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
   constructor() {
     effect(() => {
-      this.rowsPerPage();
+      const dt = this.table().dt();
       this.loadTableItems({
-        first: 0,
-        rows: this.rowsPerPage(),
+        first: dt.first ?? 0,
+        rows: dt.rows,
+        sortField: dt.sortField,
+        sortOrder: dt.sortOrder,
       });
     });
   }
@@ -82,6 +97,8 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
         rows: this.rowsPerPage(),
       };
     }
+    if (!this.pagerState!.sortField) this.pagerState!.sortField = this.table().sortField();
+    if (!this.pagerState!.sortOrder) this.pagerState!.sortOrder = 1;
 
     // Calculate the record page number to retrieve from the API.
     const first: number = event.first ?? 0;

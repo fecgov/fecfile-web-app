@@ -326,11 +326,10 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     TransactionContactUtils.clearFormQuinaryContact(this.form, this.transaction, this.contactIdMap['contact_5']);
   }
 
+  // Display optional in label if the control is NOT readonly and DOES NOT have the Required Validator
   getMemoHasOptional$(form: FormGroup, transactionType: TransactionType): Observable<boolean> {
     const memoControl = form.get(transactionType?.templateMap.memo_code);
-    if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) {
-      return of(true);
-    }
+    if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) return of(false);
     return memoControl.valueChanges.pipe(
       map(() => !memoControl.hasValidator(Validators.requiredTrue)),
       startWith(true),

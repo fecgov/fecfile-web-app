@@ -13,7 +13,6 @@ import { DividerModule } from 'primeng/divider';
 import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { TripleTransactionDetailComponent } from './triple-transaction-detail.component';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
@@ -45,7 +44,6 @@ describe('TripleTransactionDetailComponent', () => {
         ButtonModule,
         CheckboxModule,
         InputTextModule,
-        TextareaModule,
         InputNumberModule,
         ConfirmDialogModule,
         TripleTransactionDetailComponent,
