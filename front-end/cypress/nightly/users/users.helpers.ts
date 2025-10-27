@@ -51,7 +51,7 @@ export class UsersHelpers {
       .should('not.exist');
   }
   
-  static readonly assertEnabled = ($el: JQuery<HTMLElement>) => {
+  static readonly assertAriaEnabled = ($el: JQuery<HTMLElement>) => {
       const aria = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
       const dis = $el.is(":disabled");
       const cls = $el.hasClass("p-disabled") || $el.hasClass("disabled");

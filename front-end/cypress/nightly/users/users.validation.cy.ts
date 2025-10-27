@@ -22,7 +22,7 @@ describe("Users: Validation and API failure states", () => {
     cy.get('[data-cy="membership-submit"]').click();
     cy.get('[data-cy="membership-submit"]').should('be.visible');
     cy.get('body')
-      .find("[data-cy='email-error'], [aria-live='assertive'], [role='alert'], .p-message-error, .p-error, .p-inline-message-error")
+      .find(".p-error")
       .first()
       .should('be.visible')
       .and('contain.text', 'This is a required field.');
@@ -40,12 +40,10 @@ describe("Users: Validation and API failure states", () => {
     // 'foo..bar@example.com' and 'foo@example..com' added back in once change to disallow double dots is implemented
     // '.foo@example.com' needed to be re-added once leading dot validation is implemented
     // 'foo@-example.com' and 'foo@example-.com' to be re-added once leading/trailing hyphen validation is implemented
-    
+
     const findEmailError = () =>
     cy.get('body')
-      .find(
-      "[data-cy='email-error'], [aria-live='assertive'], [role='alert'], .p-message-error, .p-error, .p-inline-message-error"
-      )
+      .find(".p-error")
       .first();
 
     UsersPage.goToPage();
@@ -91,12 +89,12 @@ describe("Users: Validation and API failure states", () => {
     PageUtils.clickButton('Add user');
     cy.get(DIALOG).filter(':visible').first().as('dialog');
     UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
-    UsersHelpers.submitBtn().should(($b) => UsersHelpers.assertEnabled($b));
+    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertAriaEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
-    UsersHelpers.submitBtn().should(($b) => UsersHelpers.assertEnabled($b));
+    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertAriaEnabled(membershipSubmitBtn));
     cy.intercept('POST', ADD_MEMBER_POST).as('invite201'); // capture success (no stub)
-    UsersHelpers.submitBtn().should(($b) => UsersHelpers.assertEnabled($b));
+    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertAriaEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
     cy.wait('@GetMembers');
