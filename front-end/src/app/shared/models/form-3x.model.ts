@@ -143,7 +143,7 @@ export class Form3X extends Report {
   }
 
   get formLabel() {
-    return 'FORM 3X';
+    return 'Form 3X';
   }
 
   get formSubLabel() {

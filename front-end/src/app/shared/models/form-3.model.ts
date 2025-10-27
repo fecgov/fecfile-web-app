@@ -127,7 +127,7 @@ export class Form3 extends Report {
   }
 
   get formLabel() {
-    return 'FORM 3';
+    return 'Form 3';
   }
 
   get formSubLabel() {
