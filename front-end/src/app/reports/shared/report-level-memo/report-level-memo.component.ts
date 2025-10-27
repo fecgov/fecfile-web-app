@@ -59,23 +59,6 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
     this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
     this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
-    this.updateColClass();
-  }
-
-  @HostListener('window:resize')
-  onResize(): void {
-    this.updateColClass();
-  }
-
-  private updateColClass(): void {
-    const w = window.innerWidth;
-    if (w >= this.COL6_BREAKPOINT) {
-      this.colClass = 'col-6';
-    } else if (w >= this.COL8_BREAKPOINT) {
-      this.colClass = 'col-8';
-    } else {
-      this.colClass = 'col-12';
-    }
   }
 
   async save(): Promise<void> {
