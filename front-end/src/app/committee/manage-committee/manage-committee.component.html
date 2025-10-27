@@ -1,8 +1,10 @@
 <ng-template #nameBody let-item>
   @if (isCurrentUser(item)) {
-    <b>{{ item.name }}</b> (You)
+    <span>
+      <b>{{ item.name }}</b> (You)
+    </span>
   } @else {
-    {{ item.name }}
+    <span>{{ item.name }}</span>
   }
 </ng-template>
 <ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
