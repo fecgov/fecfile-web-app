@@ -25,7 +25,7 @@
           </h2>
         }
 
-        <h3>{{ transactionType?.contactTitle }}</h3>
+        <h2>{{ transactionType?.contactTitle }}</h2>
         <form [formGroup]="form" [class.ng-submitted]="formSubmitted" id="form">
           <app-transaction-input
             (candidateContactSelect)="updateFormWithCandidateContact($event)"
@@ -67,7 +67,7 @@
           </p>
         }
 
-        <h3>{{ childTransactionType?.contactTitle }}</h3>
+        <h2>{{ childTransactionType?.contactTitle }}</h2>
         <form [formGroup]="childForm" [class.ng-submitted]="formSubmitted" id="childForm">
           @if (childTransaction) {
             <app-transaction-input
@@ -113,7 +113,7 @@
             </div>
           }
 
-          <h3>{{ transaction?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h3>
+          <h2>{{ transaction?.reatt_redes?.transactionType?.contactTitle || 'Contact' }}</h2>
           <form [formGroup]="reattributedData.form" [class.ng-submitted]="formSubmitted" id="pull-forward-form">
             <app-transaction-input
               [contactTypeOptions]="reattributedData.contactTypeOptions"
