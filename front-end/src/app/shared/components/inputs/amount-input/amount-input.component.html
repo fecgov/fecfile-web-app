@@ -68,10 +68,10 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="amount">{{ transactionType()?.amountLabel }}</label>
+        <span id="amount_input_amount_label">{{ transactionType()?.amountLabel }}</span>
         <app-input-number
           #amountInput
-          inputId="amount"
+          aria-labelledby="amount_input_amount_label"
           [formControlName]="templateMap['amount']"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
@@ -90,9 +90,9 @@
     @if (showAggregate) {
       <div class="col-6">
         <div class="field">
-          <label for="aggregate">{{ transactionType()?.aggregateLabel }}</label>
+          <span class="span_label" for="amount_input_aggregate">{{ transactionType()?.aggregateLabel }}</span>
           <app-input-number
-            inputId="aggregate"
+            inputId="amount_input_aggregate"
             [formControlName]="templateMap['aggregate']"
             [readonly]="true"
             inputStyleClass="readonly"

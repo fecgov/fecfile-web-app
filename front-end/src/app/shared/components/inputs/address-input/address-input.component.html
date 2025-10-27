@@ -2,11 +2,11 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="street_1">STREET ADDRESS</label>
+        <span class="span_label" id="address_input_street_1_label">STREET ADDRESS</span>
         <input
           type="text"
           pInputText
-          id="street_1"
+          aria-labelledby="address_input_street_1_label"
           [formControlName]="streetOneFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
@@ -16,11 +16,13 @@
     </div>
     <div class="col-6">
       <div class="field">
-        <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
+        <span class="span_label" id="address_input_street_2_label"
+          >APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></span
+        >
         <input
           type="text"
           pInputText
-          id="street_2"
+          aria-labelledby="address_input_street_2_label"
           [formControlName]="streetTwoFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
@@ -32,11 +34,11 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="city">CITY</label>
+        <span id="address_input_city_label">CITY</span>
         <input
           type="text"
           pInputText
-          id="city"
+          aria-labelledby="address_input_city_label"
           [formControlName]="cityFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
@@ -63,11 +65,11 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="zip">ZIP/POSTAL CODE</label>
+        <span id="address_input_zip_label">ZIP/POSTAL CODE</span>
         <input
           type="text"
           pInputText
-          id="zip"
+          aria-labelledby="address_input_zip_label"
           [formControlName]="zipFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
