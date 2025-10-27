@@ -1,8 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { ReportTypes } from 'app/shared/models/report.model';
-import { ReportService } from 'app/shared/services/report.service';
-import { Form3X } from 'app/shared/models/form-3x.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
@@ -11,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 @Component({
   selector: 'app-linked-report-input',
@@ -19,7 +18,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
   imports: [ReactiveFormsModule, Tooltip, InputText, ErrorMessagesComponent],
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
-  private readonly reportService = inject(ReportService);
+  private readonly form3XService = inject(Form3XService);
   private readonly datePipe = inject(FecDatePipe);
 
   readonly tooltipText =
@@ -32,15 +31,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   readonly disseminationDate = signal<Date | undefined>(undefined);
   readonly userTouchedValues = signal(false);
 
-  readonly committeeF3xReports = derivedAsync(
-    () =>
-      this.reportService.getAllReports().then((reports) => {
-        return reports.filter((report) => {
-          return report.report_type === ReportTypes.F3X;
-        }) as Form3X[];
-      }),
-    { initialValue: [] },
-  );
+  readonly committeeF3xReports = derivedAsync(() => this.form3XService.getAllReports(), { initialValue: [] });
 
   // the form3X that is associated with the transaction on load
   private readonly initialForm3X = derivedAsync(async () => {
@@ -48,7 +39,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     if (!reports) return undefined;
     const report = reports.find((report) => report.report_type === ReportTypes.F3X);
     if (!report?.id) return undefined;
-    return (await this.reportService.get(report.id)) as Form3X;
+    return await this.form3XService.get(report.id);
   });
 
   // the form3X that is associated with the transaction based on

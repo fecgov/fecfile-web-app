@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import { Report, ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/report.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { ReportService } from 'app/shared/services/report.service';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form24, Form3X } from 'app/shared/models';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
@@ -23,7 +25,9 @@ import { derivedAsync } from 'ngxtension/derived-async';
 })
 export class SecondaryReportSelectionDialogComponent {
   public readonly router = inject(Router);
-  readonly reportService = inject(ReportService);
+  private readonly f24Service = inject(Form24Service);
+  private readonly f3xService = inject(Form3XService);
+  readonly reportService = computed(() => (this.isForm24() ? this.f24Service : this.f3xService));
   private readonly transactionService = inject(TransactionService);
   private readonly messageService = inject(MessageService);
 
@@ -34,7 +38,7 @@ export class SecondaryReportSelectionDialogComponent {
   readonly transaction = input<Transaction>();
   readonly dialogVisible = model.required<boolean>();
 
-  readonly selectedReport = model<Report | undefined>();
+  readonly selectedReport = model<Form3X | Form24 | undefined>();
   readonly reloadTables = output<void>();
   readonly create = output<void>();
   readonly dropDownFieldText = computed(() => {
@@ -49,9 +53,9 @@ export class SecondaryReportSelectionDialogComponent {
     async () => {
       const type = this.reportType();
       if (!type) return [];
-      const reports = await this.reportService.getAllReports();
+      const reports = await this.reportService().getAllReports();
       return reports.filter((report) => {
-        return report.report_type === type && report.report_status === ReportStatus.IN_PROGRESS;
+        return report.report_status === ReportStatus.IN_PROGRESS;
       });
     },
     { initialValue: [] },

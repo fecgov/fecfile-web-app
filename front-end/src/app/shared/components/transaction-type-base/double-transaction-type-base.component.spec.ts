@@ -24,7 +24,7 @@ import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
 import { Component, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Form3X, Transaction } from 'app/shared/models';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @Component({
@@ -43,7 +43,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let host: TestHostComponent;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
+  let reportService: ReportService<Form3X>;
   let testRouter: Router;
   let testTransaction: Transaction;
 
@@ -90,7 +90,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     testRouter = TestBed.inject(Router);
     transactionService = TestBed.inject(TransactionService);
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(ReportService<Form3X>);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {

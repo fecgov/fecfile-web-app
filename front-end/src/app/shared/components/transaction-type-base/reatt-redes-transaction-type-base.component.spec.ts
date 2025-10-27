@@ -24,6 +24,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { Form3X } from 'app/shared/models';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -31,7 +32,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
+  let reportService: ReportService<Form3X>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,7 +63,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
 
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(ReportService<Form3X>);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {

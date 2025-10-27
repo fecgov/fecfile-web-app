@@ -14,9 +14,10 @@ describe('Manage reports', () => {
   it('Create a Quarterly Election Year report', () => {
     ReportListPage.createF3X();
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'Form 3X');
-    cy.get('tr').should('contain', 'GENERAL (12G)');
-    cy.get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
+    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.get('@form3xTable').get('tr').should('contain', 'In progress');
+    cy.get('@form3xTable').get('tr').should('contain', 'GENERAL (12G)');
+    cy.get('@form3xTable').get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
   });
 
   it('Create a Monthly Election Year report', () => {
@@ -29,8 +30,8 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'Form 3X');
-    cy.get('tr').should('contain', 'OCTOBER 20 MONTHLY REPORT (M10)');
+    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.get('@form3xTable').get('tr').should('contain', 'OCTOBER 20 MONTHLY REPORT (M10)');
   });
 
   it('Create a Quarterly Non-Election Year report', () => {
@@ -43,8 +44,8 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'Form 3X');
-    cy.get('tr').should('contain', 'RUNOFF (30R)');
+    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.get('@form3xTable').get('tr').should('contain', 'RUNOFF (30R)');
   });
 
   it('Create a Monthly Non-Election Year report', () => {
@@ -58,9 +59,9 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('tr').should('contain', 'Form 3X');
-    cy.get('tr').should('contain', 'JANUARY 31 YEAR-END (YE)');
-    cy.get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
+    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.get('@form3xTable').get('tr').should('contain', 'JANUARY 31 YEAR-END (YE)');
+    cy.get('@form3xTable').get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
   });
 
   it('Create a report error for overlapping coverage dates', () => {
