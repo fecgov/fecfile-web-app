@@ -5470,9 +5470,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-panelmenu .p-panelmenu-content .p-submenu-list:not(.p-panelmenu-root-submenu) {
   padding: 0 0 0 1rem;
 }
-.p-panelmenu .p-panelmenu-panel {
-  margin: 0 0.5rem 0 0.25rem;
-}
 .p-panelmenu .p-panelmenu-panel .p-panelmenu-header > a {
   border-radius: 0;
 }
