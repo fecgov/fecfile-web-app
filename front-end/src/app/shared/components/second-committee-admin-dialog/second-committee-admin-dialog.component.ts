@@ -19,7 +19,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 export class SecondCommitteeAdminDialogComponent extends FormComponent {
   readonly memberService = inject(CommitteeMemberService);
   private readonly messageService = inject(MessageService);
-  private readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
+  readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
   readonly form: FormGroup = new FormGroup(
     {
       role: new SubscriptionFormControl({ value: Roles.COMMITTEE_ADMINISTRATOR, disabled: true }),

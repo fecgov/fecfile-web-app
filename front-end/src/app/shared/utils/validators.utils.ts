@@ -206,7 +206,7 @@ export function buildReattRedesTransactionValidator(
 
 @Injectable({ providedIn: 'root' })
 export class CommitteeMemberEmailValidator implements AsyncValidator {
-  protected readonly committeeMemberService = inject(CommitteeMemberService);
+  readonly committeeMemberService = inject(CommitteeMemberService);
 
   async validate(control: AbstractControl): Promise<ValidationErrors | null> {
     if (control.value) {

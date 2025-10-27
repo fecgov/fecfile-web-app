@@ -73,8 +73,8 @@ describe('SecondCommitteeAdminDialogComponent', () => {
 
   it('should call addMember and show success message on valid form submission', async () => {
     spyOn(store, 'dispatch');
+    spyOn(component.uniqueEmailValidator.committeeMemberService, 'getMembers').and.resolveTo([]);
     component.form.get('email')?.setValue('test@example.com');
-    component.form.updateValueAndValidity();
     const addMemberSpy = spyOn(component.memberService, 'addMember').and.resolveTo(new CommitteeMember());
     await component.submitForm();
     expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', 'COMMITTEE_ADMINISTRATOR' as unknown as typeof Roles);

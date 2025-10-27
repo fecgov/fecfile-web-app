@@ -4,12 +4,9 @@ import { FormComponent } from 'app/shared/components/form.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
-import { firstValueFrom } from 'rxjs';
 @Component({
   template: '',
 })
@@ -56,23 +53,6 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
 
   public goBack() {
     this.router.navigateByUrl('/reports');
-  }
-
-  override async validateForm(): Promise<boolean> {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-
-    // If the form is still processing validity, wait for it to finish
-    if (this.form.pending) {
-      await firstValueFrom(this.form.statusChanges);
-    }
-
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return false;
-    }
-    return true;
   }
 
   public async submit(jump: 'continue' | void) {

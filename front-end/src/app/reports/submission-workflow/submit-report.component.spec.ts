@@ -145,12 +145,12 @@ describe('SubmitReportComponent', () => {
       });
     });
 
-    it('should call saveAndSubmit when form is valid', fakeAsync(async () => {
+    it('should call saveAndSubmit when form is valid', async () => {
       const saveSpy = spyOn(component, 'saveAndSubmit').and.callThrough();
       const navSpy = spyOn(router, 'navigateByUrl').and.callThrough();
 
-      component.submitForm();
-      tick(100);
+      await component.submitForm();
+
       expect(component.form.invalid).toBeFalse();
       expect(confirmSpy).toHaveBeenCalled();
       expect(saveSpy).toHaveBeenCalled();
@@ -162,7 +162,10 @@ describe('SubmitReportComponent', () => {
         password: mockPassword,
         backdoor_code: undefined,
       });
-      expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/999');
-    }));
+      fakeAsync(() => {
+        tick(100);
+        expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/999');
+      });
+    });
   });
 });

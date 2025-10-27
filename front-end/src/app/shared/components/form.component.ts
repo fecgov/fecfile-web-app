@@ -7,6 +7,7 @@ import { blurActiveInput, printFormErrors } from '../utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { NavigationEvent } from '../models';
 import { DestroyerComponent } from './destroyer.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   template: '',
@@ -30,18 +31,17 @@ export abstract class FormComponent extends DestroyerComponent {
   async validateForm(): Promise<boolean> {
     this.formSubmitted = true;
     blurActiveInput(this.form);
-    return new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        if (this.form.invalid) {
-          printFormErrors(this.form);
-          this.store.dispatch(singleClickEnableAction());
-          this.scrollToFirstInvalidControl();
-          return resolve(false);
-        }
 
-        return resolve(true);
-      }, 50);
-    });
+    if (this.form.pending) await firstValueFrom(this.form.statusChanges);
+
+    if (this.form.invalid) {
+      printFormErrors(this.form);
+      this.store.dispatch(singleClickEnableAction());
+      this.scrollToFirstInvalidControl();
+      return false;
+    }
+
+    return true;
   }
 
   scrollToFirstInvalidControl() {
