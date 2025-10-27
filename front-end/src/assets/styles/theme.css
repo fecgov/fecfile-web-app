@@ -6512,8 +6512,10 @@ input {
 }
 
 .p-panelmenu-header-label {
-  font-weight: 700;
+  font-weight: 400;
+  font-size: 14px;
 }
+
 .p-panelmenu-item-link.p-panelmenu-item-link-active {
   font-size: 0.9em;
   font-weight: bolder;
@@ -6529,8 +6531,8 @@ input {
 }
 
 .p-panelmenu-header-link {
-  height: 48px;
-  padding: 0 0 0 20px;
+  height: 36px;
+  padding: 0 0 0 10px;
   align-content: center;
 }
 
