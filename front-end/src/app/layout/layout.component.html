@@ -1,12 +1,7 @@
 <div id="page-container" [class]="[layoutControls().backgroundStyle]">
   <app-banner #bannerRef />
   @if (layoutControls().showHeader) {
-    <div
-      class="header-container"
-      [style]="{
-        paddingBottom: layoutControls().showSidebar ? '64px' : '128px',
-      }"
-    >
+    <div class="header-container">
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
@@ -44,7 +39,7 @@
       id="content-offset"
       #contentOffset
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
-      [style.marginTop]="isCookiesDisabled() ? '100px' : '0px'"
+      [style.marginTop]="isCookiesDisabled() ? '164px' : '64px'"
     >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {
