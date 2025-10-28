@@ -36,7 +36,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  protected readonly injector = inject(Injector);
   readonly accordionValue = signal(0);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;

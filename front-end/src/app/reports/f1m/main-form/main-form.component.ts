@@ -1,4 +1,4 @@
-import { Component, inject, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -50,7 +50,6 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
   styleUrl: './main-form.component.scss',
 })
 export class MainFormComponent extends MainFormBaseComponent implements OnInit, OnDestroy {
-  readonly injector = inject(Injector);
   readonly cmservice = inject(ContactManagementService);
   protected override readonly reportService: Form1MService = inject(Form1MService);
   readonly contactService = inject(ContactService);
