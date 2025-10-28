@@ -89,12 +89,12 @@ describe("Users: Validation and API failure states", () => {
     PageUtils.clickButton('Add user');
     cy.get(DIALOG).filter(':visible').first().as('dialog');
     UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
-    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertAriaEnabled(membershipSubmitBtn));
+    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
-    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertAriaEnabled(membershipSubmitBtn));
+    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     cy.intercept('POST', ADD_MEMBER_POST).as('invite201'); // capture success (no stub)
-    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertAriaEnabled(membershipSubmitBtn));
+    UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
     cy.wait('@GetMembers');

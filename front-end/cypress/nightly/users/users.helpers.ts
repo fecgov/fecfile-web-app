@@ -52,10 +52,10 @@ export class UsersHelpers {
   }
   
   static readonly assertAriaEnabled = ($el: JQuery<HTMLElement>) => {
-      const aria = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
-      const dis = $el.is(":disabled");
-      const cls = $el.hasClass("p-disabled") || $el.hasClass("disabled");
-      expect(!(aria || dis || cls), "button is enabled").to.eq(true);
+      const isAriaDisabled = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
+      const isDisabled = $el.is(":disabled");
+      const hasClass = $el.hasClass("p-disabled") || $el.hasClass("disabled");
+      expect(!(isAriaDisabled || isDisabled || hasClass), "button is enabled").to.eq(true);
   };
 
   static stubOnce(method: string, url: string, response: Partial<Cypress.StaticResponse>, alias: string) {
