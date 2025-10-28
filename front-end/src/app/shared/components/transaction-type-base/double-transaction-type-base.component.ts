@@ -1,5 +1,5 @@
-import { Component, effect, inject, Injector, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { afterNextRender, Component, effect, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
+import { FormControlStatus, FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -192,16 +192,15 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.formSubmitted = true;
 
     let invalid = -1;
-    this.forms.forEach((form) => blurActiveInput(form));
-    return new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        this.forms.forEach((form, index) => {
-          invalid = this.validate(form, index, invalid);
-        });
-
-        return resolve(this.isValid(invalid));
-      }, 50);
+    const promises: Promise<FormControlStatus>[] = [];
+    this.forms.forEach((form) => {
+      blurActiveInput(form);
+      if (form.pending) promises.push(firstValueFrom(form.statusChanges));
     });
+    await Promise.all(promises);
+    this.forms.forEach((form, index) => (invalid = this.validate(form, index, invalid)));
+
+    return this.isValid(invalid);
   }
 
   protected validate(form: FormGroup, index: number, invalid: number = -1) {
@@ -212,24 +211,20 @@ export abstract class DoubleTransactionTypeBaseComponent
     return invalid;
   }
 
-  protected isValid(invalid: number): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        if (invalid === -1) {
-          this.scrollToError = false;
-          return resolve(true);
-        } else {
-          this.store.dispatch(singleClickEnableAction());
-          if (this.accordionValue() === invalid) {
-            this.scrollToFirstInvalidControl();
-          } else {
-            this.scrollToError = true;
-            this.accordionValue.set(invalid);
-          }
-          return resolve(false);
-        }
-      }, this.animationTime);
-    });
+  protected async isValid(invalid: number): Promise<boolean> {
+    if (invalid === -1) {
+      this.scrollToError = false;
+      return true;
+    } else {
+      this.store.dispatch(singleClickEnableAction());
+      if (this.accordionValue() === invalid) {
+        afterNextRender(() => this.scrollToFirstInvalidControl(), { injector: this.injector });
+      } else {
+        this.scrollToError = true;
+        this.accordionValue.set(invalid);
+      }
+      return false;
+    }
   }
 
   override async getConfirmations(): Promise<boolean> {

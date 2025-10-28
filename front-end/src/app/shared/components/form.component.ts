@@ -38,12 +38,7 @@ export abstract class FormComponent extends DestroyerComponent {
     if (this.form.invalid) {
       printFormErrors(this.form);
       this.store.dispatch(singleClickEnableAction());
-      afterNextRender(
-        () => {
-          this.scrollToFirstInvalidControl();
-        },
-        { injector: this.injector },
-      );
+      afterNextRender(() => this.scrollToFirstInvalidControl(), { injector: this.injector });
 
       return false;
     }
