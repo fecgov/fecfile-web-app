@@ -23,13 +23,8 @@
   <div class="grid">
     <div class="col-4">
       <div class="field">
-        <label for="candidate_input_last_name">LAST NAME</label>
-        <input
-          type="text"
-          pInputText
-          id="candidate_input_last_name"
-          [formControlName]="templateMap['candidate_last_name']"
-        />
+        <label for="last_name">LAST NAME</label>
+        <input type="text" pInputText id="last_name" [formControlName]="templateMap['candidate_last_name']" />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_last_name']"

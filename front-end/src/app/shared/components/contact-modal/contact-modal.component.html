@@ -63,8 +63,8 @@
       <div class="grid">
         <div class="col-4">
           <div class="field">
-            <label for="contact_modal_last_name">LAST NAME</label>
-            <input type="text" pInputText id="contact_modal_last_name" formControlName="last_name" />
+            <label for="last_name">LAST NAME</label>
+            <input type="text" pInputText id="last_name" formControlName="last_name" />
             <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
           </div>
         </div>
@@ -123,8 +123,8 @@
     <div class="grid">
       <div class="col-6">
         <div class="field">
-          <span class="span-label" id="contact_modal_street_1">STREET ADDRESS</span>
-          <input type="text" pInputText aria-labelledby="contact_modal_street_1" formControlName="street_1" />
+          <label for="street_1">STREET ADDRESS</label>
+          <input type="text" pInputText id="street_1" formControlName="street_1" />
           <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
         </div>
       </div>

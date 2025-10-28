@@ -6,6 +6,7 @@
           #memoCode
           [binary]="true"
           inputId="memo_code"
+          ariaLabeledBy="memo_code_label"
           [formControlName]="templateMap['memo_code']"
           ariaLabel="have memo item"
           [trueValue]="true"
@@ -13,12 +14,12 @@
           [readonly]="form.controls[templateMap['memo_code']].disabled"
           (onChange)="onMemoItemClick()"
         />
-        <label for="memo_code" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">
+        <span id="memo_code_label" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">
           {{ checkboxLabel() }}
           @if (parenLabel()) {
             <span class="paren-label">{{ parenLabel() }}</span>
           }
-        </label>
+        </span>
         <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
       <div class="col-12">
