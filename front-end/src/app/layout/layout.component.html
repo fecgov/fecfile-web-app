@@ -1,7 +1,12 @@
 <div id="page-container" [class]="[layoutControls().backgroundStyle]">
   <app-banner #bannerRef />
   @if (layoutControls().showHeader) {
-    <div class="header-container" [style]="{ paddingBottom: layoutControls().showSidebar ? '0' : '64px' }">
+    <div
+      class="header-container"
+      [style]="{
+        paddingBottom: layoutControls().showSidebar ? '64px' : '128px',
+      }"
+    >
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
