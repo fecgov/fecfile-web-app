@@ -30,7 +30,7 @@ describe('Manage reports', () => {
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
     cy.get('tr').should('contain', 'Form 3X');
-    cy.get('tr').should('contain', 'OCTOBER 20 MONTHLY REPORT (M10)');
+    cy.get('tr').should('contain', 'OCTOBER 20 MONTHLY (M10)');
   });
 
   it('Create a Quarterly Non-Election Year report', () => {
