@@ -12,10 +12,17 @@ nav {
   border-bottom: 2px solid #e8e8e8;
   padding-left: 32px;
   padding-right: 32px;
+  z-index: 999;
+  position: fixed;
+  top: 30px;
 }
 
 .seal-link {
   padding-left: 0px;
+}
+
+.top-margin-spacer {
+  height: 64px;
 }
 
 :host ::ng-deep .dead-link {
