@@ -1,0 +1,92 @@
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: #212121;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 36px;
+  padding: 0 1rem;
+}
+
+.field {
+  display: grid;
+}
+
+dialog {
+  width: 512px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
+  border: none;
+  margin-top: 15%;
+  overflow: hidden;
+}
+
+.dialog-header {
+  border-bottom: 2px solid #212121;
+  width: 448px;
+  margin: auto;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dialog-body {
+  padding: 64px 16px;
+}
+
+#type-label {
+  display: block;
+}
+
+label,
+#type-label {
+  font-family: var(--karla);
+  font-weight: bold;
+  font-size: 14px;
+  color: #212121;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.dropdown {
+  width: 400px !important;
+}
+
+.option {
+  font-size: 14px;
+  display: flex !important;
+  text-align: left !important;
+  text-wrap-mode: wrap !important;
+}
+
+.option > b {
+  min-width: 65px !important;
+  max-width: 65px !important;
+  width: 65px !important;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: center;
+  border-top: 0;
+  padding-top: 0;
+  padding-bottom: 16px;
+}
+
+.dropdown-menu {
+  position: fixed !important;
+  max-width: 440px;
+}
+
+#close-button {
+  color: #212121;
+  background: transparent;
+  border: none;
+}
+
+.custom-header {
+  width: 500px;
+}

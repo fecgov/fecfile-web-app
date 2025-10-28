@@ -41,6 +41,9 @@
   @if (control?.hasError('isAfter')) {
     <small class="p-error">{{ isAfterMessage }}</small>
   }
+  @if (control?.hasError('duplicateName')) {
+    <small class="p-error">{{ duplicateNameErrorMessage }}</small>
+  }
   @if (
     !control?.hasError('required') &&
     !control?.hasError('minlength') &&

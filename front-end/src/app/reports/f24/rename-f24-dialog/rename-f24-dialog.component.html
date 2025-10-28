@@ -1,0 +1,37 @@
+<p-dialog #dialog [(visible)]="dialogVisible" [style]="{ width: '512px' }" [draggable]="false" closeAriaLabel="Close">
+  <ng-template #header>
+    <div [id]="dialog.ariaLabelledBy">
+      <h1>Edit</h1>
+    </div>
+  </ng-template>
+
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <div class="dialog-body">
+      <div class="dropdown">
+        <label for="name">REPORT NAME</label>
+        <input autofocus type="text" pInputText id="name" formControlName="name" />
+        <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
+      </div>
+    </div>
+    <ng-template #footer>
+      <div class="top-border-footer">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          class="p-button-secondary mr-4"
+          (click)="dialog.close($event)"
+          [autofocus]="true"
+        ></button>
+        <button
+          pButton
+          pRipple
+          [disabled]="!this.form.valid"
+          label="Confirm"
+          class="p-button-primary"
+          (click)="updateName()"
+        ></button>
+      </div>
+    </ng-template>
+  </form>
+</p-dialog>

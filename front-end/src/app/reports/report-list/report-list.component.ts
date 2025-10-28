@@ -1,20 +1,21 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
+import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableComponent } from 'app/shared/components/table/table.component';
+import { Form3X, Report, ReportStatus, ReportTypes } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { PrimeTemplate } from 'primeng/api';
-import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
+import { Toolbar } from 'primeng/toolbar';
 import { FecDatePipe } from '../../shared/pipes/fec-date.pipe';
-import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
-import { TableListBaseComponent, TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { TableComponent } from 'app/shared/components/table/table.component';
-import { ReportStatus, Form3X, Report, ReportTypes } from 'app/shared/models';
-import { ReportService } from 'app/shared/services/report.service';
+import { RenameF24DialogComponent } from '../f24/rename-f24-dialog/rename-f24-dialog.component';
+import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 
 @Component({
   selector: 'app-report-list',
@@ -29,6 +30,7 @@ import { ReportService } from 'app/shared/services/report.service';
     TableActionsButtonComponent,
     FormTypeDialogComponent,
     FecDatePipe,
+    RenameF24DialogComponent,
   ],
 })
 export class ReportListComponent extends TableListBaseComponent<Report> {
@@ -39,6 +41,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
   public readonly dotFecService = inject(DotFecService);
 
   readonly dialogVisible = signal(false);
+  readonly renameF24DialogVisible = signal(false);
   readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   public rowActions: TableAction[] = [
     new TableAction(
@@ -55,6 +58,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
     new TableAction('Delete', this.confirmDelete.bind(this), (report: Report) => report.can_delete),
     new TableAction('Unamend', this.unamendReport.bind(this), (report: Report) => report.can_unamend),
     new TableAction('Download as .fec', this.download.bind(this)),
+    new TableAction('Rename', this.renameForm24.bind(this), (report: Report) => report.report_type === ReportTypes.F24),
   ];
 
   readonly sortableHeaders: { field: string; label: string }[] = [
@@ -117,6 +121,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
       acceptIcon: 'none',
       accept: async () => this.delete(report),
     });
+  }
+
+  public renameForm24(): void {
+    this.renameF24DialogVisible.set(true);
   }
 
   async delete(report: Report) {
