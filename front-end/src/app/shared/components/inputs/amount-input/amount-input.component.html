@@ -30,20 +30,33 @@
           [showErrors]="!templateMap['date2']"
         />
       </div>
-      @if (isF24()) {
-        <div class="col-4">
+      <div class="col-4">
+        @if (isF24()) {
           <app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction()" />
-        </div>
-      }
-      @if (transactionType()?.scheduleId === 'F') {
-        <div class="col-4">
+        } @else if (linked24()) {
+          <div class="field">
+            <label for="linked24" class="flex">
+              <span class="align-content-center">LINKED REPORT</span>
+              <span
+                class="pi pi-info-circle circle-icon-tooltip"
+                pTooltip="{{ tooltipText }}"
+                [tooltipOptions]="{
+                  tooltipPosition: 'top',
+                }"
+              ></span>
+            </label>
+
+            <input type="text" [readonly]="true" class="readonly" pInputText id="linked24" [value]="linked24Label()" />
+          </div>
+        }
+        @if (transactionType()?.scheduleId === 'F') {
           <div class="field">
             <label for="general_election_year">GENERAL ELECTION YEAR</label>
             <input type="text" pInputText id="general_election_year" formControlName="general_election_year" />
             <app-error-messages [form]="form" fieldName="general_election_year" [formSubmitted]="formSubmitted" />
           </div>
-        </div>
-      }
+        }
+      </div>
     </div>
   }
 
@@ -56,7 +69,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
-            [overrideMemoItemHelpText]="memoItemHelpText"
+            [overrideMemoItemHelpText]="memoItemHelpText()"
             [transaction]="transaction()"
             checkboxLabel="MEMO ITEM"
             [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
@@ -73,8 +86,8 @@
           #amountInput
           inputId="amount"
           [formControlName]="templateMap['amount']"
-          [readonly]="contributionAmountReadOnly"
-          inputStyleClass="{{ contributionAmountInputStyleClass }}"
+          [readonly]="contributionAmountReadOnly()"
+          inputStyleClass="{{ contributionAmountInputStyleClass() }}"
           (inputEvent)="onInputAmount()"
         />
 
@@ -87,7 +100,7 @@
         />
       </div>
     </div>
-    @if (showAggregate) {
+    @if (showAggregate()) {
       <div class="col-6">
         <div class="field">
           <label for="aggregate">{{ transactionType()?.aggregateLabel }}</label>
@@ -107,7 +120,7 @@
         </div>
       </div>
     }
-    @if (showCalendarYTD) {
+    @if (showCalendarYTD()) {
       <div class="col-6">
         <div class="field">
           <label for="calendar_ytd">{{ transactionType()?.calendarYTDLabel }}</label>
@@ -127,7 +140,7 @@
         </div>
       </div>
     }
-    @if (showPayeeCandidateYTD) {
+    @if (showPayeeCandidateYTD()) {
       <div class="col-6">
         <div class="field">
           <label for="aggregate_general_elec_expended">AGGREGATE GENERAL ELECTION EXPENDITURE FOR THIS CANDIDATE</label>
