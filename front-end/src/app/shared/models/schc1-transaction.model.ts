@@ -78,11 +78,11 @@ export class SchC1Transaction extends Transaction {
   }
 }
 
-export enum ScheduleC1TransactionGroups {
-  LOAN_AGREEMENTS = 'LOAN AGREEMENTS',
-}
-
-export type ScheduleC1TransactionGroupsType = ScheduleC1TransactionGroups.LOAN_AGREEMENTS;
+export const ScheduleC1TransactionGroups = {
+  LOAN_AGREEMENTS: { type: 'ScheduleC1TransactionGroups', value: 'LOAN AGREEMENTS' },
+};
+export type ScheduleC1TransactionGroupsType =
+  (typeof ScheduleC1TransactionGroups)[keyof typeof ScheduleC1TransactionGroups];
 
 export enum ScheduleC1TransactionTypes {
   C1_LOAN_AGREEMENT = 'C1_LOAN_AGREEMENT',

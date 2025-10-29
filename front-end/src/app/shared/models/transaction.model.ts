@@ -21,7 +21,7 @@ import { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.m
 import { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
 import { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
 import { Form3X, Form24, Form3, Report, ReportTypes } from './.';
-import { Disbursement, LoansAndDebts, Receipt } from './transaction-group';
+import { DisbursementType, LoansAndDebtsType, ReceiptType } from './transaction-group';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -204,9 +204,9 @@ export type TransactionTypes =
   | ScheduleETransactionTypes
   | ScheduleFTransactionTypes;
 export type TransactionGroupTypes =
-  | Receipt
-  | Disbursement
-  | LoansAndDebts
+  | ReceiptType
+  | DisbursementType
+  | LoansAndDebtsType
   | ScheduleC1TransactionGroupsType
   | ScheduleC2TransactionGroupsType;
 

@@ -1,37 +1,28 @@
-export enum Disbursement {
-  OPERATING_EXPENDITURES = 'OPERATING EXPENDITURES',
-  CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS = 'CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS',
-  OTHER_EXPENDITURES = 'OTHER EXPENDITURES',
-  REFUNDS = 'REFUNDS',
-  FEDERAL_ELECTION_ACTIVITY_EXPENDITURES = 'FEDERAL ELECTION ACTIVITY EXPENDITURES',
-  COORDINATED_EXPENDITURES = 'COORDINATED_EXPENDITURES',
-}
+export const Disbursement = {
+  OPERATING_EXPENDITURES: { type: 'Disbursement', value: 'OPERATING EXPENDITURES' },
+  CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS: {
+    type: 'Disbursement',
+    value: 'CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS',
+  },
+  OTHER_EXPENDITURES: { type: 'Disbursement', value: 'OTHER EXPENDITURES' },
+  REFUNDS: { type: 'Disbursement', value: 'REFUNDS' },
+  FEDERAL_ELECTION_ACTIVITY_EXPENDITURES: { type: 'Disbursement', value: 'FEDERAL ELECTION ACTIVITY EXPENDITURES' },
+  COORDINATED_EXPENDITURES: { type: 'Disbursement', value: 'COORDINATED_EXPENDITURES' },
+} as const;
+export type DisbursementType = (typeof Disbursement)[keyof typeof Disbursement];
 
-export type DisbursementType =
-  | Disbursement.OPERATING_EXPENDITURES
-  | Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS
-  | Disbursement.OTHER_EXPENDITURES
-  | Disbursement.REFUNDS
-  | Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES;
+export const LoansAndDebts = {
+  LOANS: { type: 'LoansAndDebts', value: 'LOANS' },
+  DEBTS: { type: 'LoansAndDebts', value: 'DEBTS' },
+};
+export type LoansAndDebtsType = (typeof LoansAndDebts)[keyof typeof LoansAndDebts];
 
-export enum LoansAndDebts {
-  LOANS = 'LOANS',
-  DEBTS = 'DEBTS',
-}
+export const Receipt = {
+  CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS: { type: 'Receipt', value: 'CONTRIBUTIONS FROM INDIVIDUALS/PERSONS' },
+  CONTRIBUTIONS_FROM_REGISTERED_FILERS: { type: 'Receipt', value: 'CONTRIBUTIONS FROM REGISTERED FILERS' },
+  TRANSFERS: { type: 'Receipt', value: 'TRANSFERS' },
+  REFUNDS: { type: 'Receipt', value: 'REFUNDS' },
+  OTHER: { type: 'Receipt', value: 'OTHER' },
+} as const;
 
-export type LoansAndDebtsType = LoansAndDebts.DEBTS | LoansAndDebts.LOANS;
-
-export enum Receipt {
-  CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS = 'CONTRIBUTIONS FROM INDIVIDUALS/PERSONS',
-  CONTRIBUTIONS_FROM_REGISTERED_FILERS = 'CONTRIBUTIONS FROM REGISTERED FILERS',
-  TRANSFERS = 'TRANSFERS',
-  REFUNDS = 'REFUNDS',
-  OTHER = 'OTHER',
-}
-
-export type ReceiptType =
-  | Receipt.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS
-  | Receipt.CONTRIBUTIONS_FROM_REGISTERED_FILERS
-  | Receipt.TRANSFERS
-  | Receipt.REFUNDS
-  | Receipt.OTHER;
+export type ReceiptType = (typeof Receipt)[keyof typeof Receipt];

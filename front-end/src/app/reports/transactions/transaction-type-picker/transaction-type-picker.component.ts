@@ -84,13 +84,20 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           Receipt.OTHER,
         ];
       case 'disbursement':
-        if (this.isF3() || this.isF3X()) {
+        if (this.isF3X()) {
           return [
             Disbursement.OPERATING_EXPENDITURES,
             Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
             Disbursement.OTHER_EXPENDITURES,
             Disbursement.REFUNDS,
             Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+          ];
+        } else if (this.isF3()) {
+          return [
+            Disbursement.OPERATING_EXPENDITURES,
+            Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+            Disbursement.OTHER_EXPENDITURES,
+            Disbursement.REFUNDS,
           ];
         } else {
           return [];
@@ -118,6 +125,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly transactionTypes = computed(() => {
     const groups = this.transactionGroups();
     const typeMap = new Map<TransactionGroupTypes, TransactionTypes[]>();
+    const isF3 = this.isF3();
     groups.forEach((group) => {
       let transactionTypes: TransactionTypes[] = [];
       switch (group) {
@@ -206,64 +214,99 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
           ];
           break;
         case Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS:
-          transactionTypes = [
-            ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
-            ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
-            ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
-            ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
-            ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
-            ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
-            ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
-            ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-            ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
-            ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
-            ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
-          ];
+          if (isF3) {
+            transactionTypes = [
+              ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
+              ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+              ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+            ];
+          } else {
+            transactionTypes = [
+              ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
+              ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
+              ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
+              ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
+              ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
+              ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+              ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
+              ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+              ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+              ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+              ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
+              ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
+              ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+              ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
+              ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+            ];
+          }
+
           break;
         case Disbursement.OTHER_EXPENDITURES:
-          transactionTypes = [
-            ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
-            ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
-            ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
-            ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
-            ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
-            ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
-            ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
-            ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
-            ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
-            ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
-            ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
-            ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
-            ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
-            ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
-            ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
-            ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT,
-            ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
-            ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
-            ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
-            ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
-            ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
-            ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
-            ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
-            ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
-            ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
-          ];
+          if (isF3) {
+            transactionTypes = [
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
+              ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
+              ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
+              ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
+              ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
+              ScheduleBTransactionTypes.DISGORGEMENT,
+            ];
+          } else {
+            transactionTypes = [
+              ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+              ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+              ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+              ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
+              ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
+              ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
+              ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
+              ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
+              ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
+              ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
+              ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
+              ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT,
+              ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
+              ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
+              ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
+              ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+              ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
+              ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+              ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
+              ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
+              ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
+            ];
+          }
           break;
         case Disbursement.REFUNDS:
-          transactionTypes = [
-            ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
-            ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
-            ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
-            ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
-            ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
-            ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
-            ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
-            ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
-          ];
+          if (isF3) {
+            transactionTypes = [
+              ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+              ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+              ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION,
+              ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION_VOID,
+              ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID,
+            ];
+          } else {
+            transactionTypes = [
+              ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+              ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+              ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
+              ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
+              ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
+            ];
+          }
+
           break;
         case Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES:
           transactionTypes = [
