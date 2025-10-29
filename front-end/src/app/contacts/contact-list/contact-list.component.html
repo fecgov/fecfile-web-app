@@ -1,6 +1,7 @@
 <app-table
   [(first)]="first"
   [items]="items"
+  title="Manage contacts"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
   [(totalItems)]="totalItems"
   [loading]="loading"
@@ -12,28 +13,20 @@
   (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
-    <p-toolbar>
-      <ng-template pTemplate="left">
-        <h1 class="m-0">Manage contacts</h1>
-      </ng-template>
-      <ng-template pTemplate="right">
-        @if (restoreContactsButtonIsVisible) {
-          <button pButton pRipple class="restore-contact-button" (click)="onRestoreClick()">
-            Restore deleted contacts
-          </button>
-        }
-
-        <button
-          id="button-contacts-new"
-          pButton
-          pRipple
-          label="Add contact"
-          icon="pi pi-plus"
-          class="add-button"
-          (click)="addItem()"
-        ></button>
-      </ng-template>
-    </p-toolbar>
+    @if (restoreContactsButtonIsVisible) {
+      <button pButton pRipple class="restore-contact-button" (click)="onRestoreClick()">
+        Restore deleted contacts
+      </button>
+    }
+    <button
+      id="button-contacts-new"
+      pButton
+      pRipple
+      label="Add contact"
+      icon="pi pi-plus"
+      class="add-button"
+      (click)="addItem()"
+    ></button>
   </ng-template>
   <ng-template #header>
     <th id="actions" role="columnheader">Actions</th>
