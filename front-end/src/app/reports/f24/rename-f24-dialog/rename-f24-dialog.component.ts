@@ -20,7 +20,15 @@ import { Ripple } from 'primeng/ripple';
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
   styleUrls: ['./rename-f24-dialog.component.scss'],
-  imports: [Ripple, ButtonModule, ReactiveFormsModule, DialogModule, InputText, AutoFocusModule, ErrorMessagesComponent],
+  imports: [
+    Ripple,
+    ButtonModule,
+    ReactiveFormsModule,
+    DialogModule,
+    InputText,
+    AutoFocusModule,
+    ErrorMessagesComponent,
+  ],
 })
 export class RenameF24DialogComponent extends FormComponent {
   protected readonly router = inject(Router);
@@ -37,7 +45,7 @@ export class RenameF24DialogComponent extends FormComponent {
         updateOn: 'blur',
       }),
     },
-    { updateOn: 'blur', },
+    { updateOn: 'blur' },
   );
 
   constructor() {

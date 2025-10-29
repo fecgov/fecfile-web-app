@@ -11,7 +11,6 @@ import { MessageService } from 'primeng/api';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { RenameF24DialogComponent } from './rename-f24-dialog.component';
 
-
 describe('RenameF24DialogComponent', () => {
   let component: RenameF24DialogComponent;
   let fixture: ComponentFixture<RenameF24DialogComponent>;
