@@ -2842,7 +2842,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: #fff;
   color: var(--p-content-color);
   border-bottom: 2px solid #000000;
-  padding: 48px 0 8px 0;
+  padding: 0 0 8px 0;
   font-weight: 600;
 }
 

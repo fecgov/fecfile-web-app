@@ -11,9 +11,3 @@
   border-color: #e8e8e8;
   color: #112e51;
 }
-
-@media (max-width: 992px) {
-  :host ::ng-deep h1 {
-    padding-bottom: 8px !important;
-  }
-}
