@@ -6,9 +6,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Form24, Report } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { F24UniqueNameValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { RenameF24DialogComponent } from './rename-f24-dialog.component';
+
 
 describe('RenameF24DialogComponent', () => {
   let component: RenameF24DialogComponent;
@@ -24,6 +26,7 @@ describe('RenameF24DialogComponent', () => {
         Form24Service,
         provideMockStore(testMockStore()),
         MessageService,
+        F24UniqueNameValidator,
       ],
     }).compileComponents();
 
