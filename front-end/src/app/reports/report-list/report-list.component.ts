@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
-import { Form3X, Report, ReportStatus, ReportTypes } from 'app/shared/models';
+import { Form24, Form3X, Report, ReportStatus, ReportTypes } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -40,6 +40,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
   private readonly form3XService = inject(Form3XService);
   public readonly dotFecService = inject(DotFecService);
 
+  form24ToUpdate?: Form24;
   readonly dialogVisible = signal(false);
   readonly renameF24DialogVisible = signal(false);
   readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
@@ -72,6 +73,15 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
 
   override readonly caption =
     'Data table of all reports created by the committee broken down by form type, report type, coverage date, status, version, Date filed, and actions.';
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.renameF24DialogVisible() === false && this.form24ToUpdate) {
+        this.refreshTable();
+      }
+    });
+  }
 
   protected getEmptyItem(): Report {
     return new Form3X();
@@ -123,7 +133,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
     });
   }
 
-  public renameForm24(): void {
+  public renameForm24(item: Report): void {
+    this.form24ToUpdate = item as Form24;
     this.renameF24DialogVisible.set(true);
   }
 

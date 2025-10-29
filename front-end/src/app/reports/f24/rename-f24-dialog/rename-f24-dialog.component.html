@@ -7,31 +7,25 @@
 
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="dialog-body">
-      <div class="dropdown">
-        <label for="name">REPORT NAME</label>
-        <input autofocus type="text" pInputText id="name" formControlName="name" />
-        <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
-      </div>
+      <label for="name">REPORT NAME</label>
+      <input type="text" pInputText id="name" formControlName="name" />
+      <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
     </div>
-    <ng-template #footer>
-      <div class="top-border-footer">
-        <button
-          pButton
-          pRipple
-          label="Cancel"
-          class="p-button-secondary mr-4"
-          (click)="dialog.close($event)"
-          [autofocus]="true"
-        ></button>
-        <button
-          pButton
-          pRipple
-          [disabled]="!this.form.valid"
-          label="Confirm"
-          class="p-button-primary"
-          (click)="updateName()"
-        ></button>
-      </div>
-    </ng-template>
+    <div class="top-border-footer">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        class="p-button-secondary"
+        (click)="dialog.close($event)"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Confirm"
+        class="p-button-primary"
+        (click)="updateName()"
+      ></button>
+    </div>
   </form>
 </p-dialog>

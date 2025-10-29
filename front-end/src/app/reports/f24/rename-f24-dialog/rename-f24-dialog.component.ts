@@ -1,7 +1,9 @@
-import { Component, inject, input } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, effect, inject, input, model } from '@angular/core';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
-import { Form24 } from 'app/shared/models';
+import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { Form24, Report } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -18,27 +20,34 @@ import { Ripple } from 'primeng/ripple';
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
   styleUrls: ['./rename-f24-dialog.component.scss'],
-  imports: [Ripple, ButtonModule, ReactiveFormsModule, FormsModule, DialogModule, InputText],
+  imports: [Ripple, ButtonModule, ReactiveFormsModule, DialogModule, InputText, ErrorMessagesComponent],
 })
 export class RenameF24DialogComponent extends FormComponent {
+  protected readonly router = inject(Router);
   readonly messageService = inject(MessageService);
   readonly form24Service = inject(Form24Service);
   readonly f24UniqueNameValidator = inject(F24UniqueNameValidator);
-  readonly detailVisible = input(false);
-  readonly f24Report = input.required<Form24>();
-
+  readonly dialogVisible = model(false);
+  readonly f24Report = input<Report | undefined>();
   readonly form: FormGroup = new FormGroup(
     {
       name: new SubscriptionFormControl('', {
         validators: [Validators.required],
         asyncValidators: [this.f24UniqueNameValidator.validate.bind(this.f24UniqueNameValidator)],
-        updateOn: 'change',
+        updateOn: 'blur',
       }),
     },
     { updateOn: 'blur' },
   );
 
-  updateName() {
+  constructor() {
+    super();
+    effect(() => {
+      this.form.get('name')?.setValue((this.f24Report() as Form24)?.name);
+    });
+  }
+
+  async updateName() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -52,16 +61,14 @@ export class RenameF24DialogComponent extends FormComponent {
       ...this.f24Report(),
       name: this.form.get('name')?.value,
     });
-    this.form24Service.update(payload).then(
-      () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Updated',
-          life: 3000,
-        });
-      }
-    );
+    await this.form24Service.update(payload, ['name']);
+    await this.dialogVisible.set(false);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Report Updated',
+      life: 3000,
+    });
   }
 
 }

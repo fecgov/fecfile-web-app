@@ -233,7 +233,7 @@ export class F24UniqueNameValidator implements AsyncValidator {
   async validate(control: AbstractControl): Promise<ValidationErrors | null> {
     if (control.value) {
       const reports = await this.form24Service.getAllReports();
-      const existingNames = reports.map((report) => (report as Form24).name ?? '') ?? [];
+      const existingNames = reports.map((report) => (report as Form24)?.name?.toLowerCase() ?? '') ?? [];
       const newName = control.value?.toLowerCase();
       if (existingNames.includes(newName)) {
         return {
