@@ -13,14 +13,14 @@ import { firstValueFrom } from 'rxjs';
 @Component({
   template: '',
 })
-export abstract class MainFormBaseComponent extends FormComponent implements OnInit {
-  protected abstract reportService: ReportService;
+export abstract class MainFormBaseComponent<T extends Report> extends FormComponent implements OnInit {
+  protected abstract reportService: ReportService<T>;
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   protected readonly activatedRoute = inject(ActivatedRoute);
   abstract readonly formProperties: string[];
   abstract readonly schema: JsonSchema;
-  abstract getReportPayload(): Report;
+  abstract getReportPayload(): T;
   abstract webprintURL: string;
 
   reportId?: string;
@@ -73,8 +73,8 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
       return;
     }
 
-    const payload: Report = this.getReportPayload();
-    let report: Report;
+    const payload: T = this.getReportPayload();
+    let report: T;
     if (this.reportId) {
       payload.id = this.reportId;
       report = await this.reportService.update(payload, this.formProperties);

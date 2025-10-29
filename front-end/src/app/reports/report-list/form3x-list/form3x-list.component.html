@@ -1,0 +1,18 @@
+<ng-template #coverageBody let-item>
+  {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+</ng-template>
+<app-shared-templates />
+<app-table
+  [(first)]="first"
+  data-cy="form3x-list-component"
+  [items]="items"
+  [(totalItems)]="totalItems"
+  [loading]="loading"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
+  itemName="reports"
+  title="Form 3X"
+  [columns]="columns"
+  sortField="report_code_label"
+  (loadTableItems)="loadTableItems($event)"
+/>

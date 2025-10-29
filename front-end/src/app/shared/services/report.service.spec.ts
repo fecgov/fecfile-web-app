@@ -9,7 +9,7 @@ import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
 
 describe('ReportService', () => {
-  let service: ReportService;
+  let service: ReportService<Form3X>;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('ReportService', () => {
       providers: [provideHttpClient(), provideHttpClientTesting(), ReportService, provideMockStore(testMockStore())],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(ReportService);
+    service = TestBed.inject(ReportService<Form3X>);
   });
 
   it('should be created', () => {

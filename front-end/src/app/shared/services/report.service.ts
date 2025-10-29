@@ -13,21 +13,19 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getReportFromJSON(json: any): Report {
-  if (json.report_type) {
-    if (json.report_type === ReportTypes.F3) return Form3.fromJSON(json);
-    if (json.report_type === ReportTypes.F1M) return Form1M.fromJSON(json);
-    if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json);
-    if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json);
-    if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json);
-  }
+export function getReportFromJSON<T extends Report>(json: any): T {
+  if (json.report_type === ReportTypes.F3) return Form3.fromJSON(json) as unknown as T;
+  if (json.report_type === ReportTypes.F1M) return Form1M.fromJSON(json) as unknown as T;
+  if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json) as unknown as T;
+  if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json) as unknown as T;
+  if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json) as unknown as T;
   throw new Error('FECfile+: Cannot get report from JSON');
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReportService implements TableListService<Report> {
+export class ReportService<T extends Report> implements TableListService<Report> {
   protected readonly apiService = inject(ApiService);
   protected readonly store = inject(Store);
   apiEndpoint = '/reports';
@@ -41,43 +39,43 @@ export class ReportService implements TableListService<Report> {
       `${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map((item) => getReportFromJSON(item));
+    response.results = response.results.map((item) => getReportFromJSON<T>(item));
     return response;
   }
 
-  public async getAllReports(): Promise<Report[]> {
-    const rawReports = await this.apiService.get<Report[]>(this.apiEndpoint + '/');
-    return rawReports.map((item) => getReportFromJSON(item));
+  public async getAllReports(): Promise<T[]> {
+    const rawReports = await this.apiService.get<T[]>(this.apiEndpoint + '/');
+    return rawReports.map((item) => getReportFromJSON<T>(item));
   }
 
-  public async get(reportId: string): Promise<Report> {
-    const response = await this.apiService.get<Report>(`${this.apiEndpoint}/${reportId}/`);
-    return getReportFromJSON(response);
+  public async get(reportId: string): Promise<T> {
+    const response = await this.apiService.get<T>(`${this.apiEndpoint}/${reportId}/`);
+    return getReportFromJSON<T>(response);
   }
 
-  public async create(report: Report, fieldsToValidate: string[] = []): Promise<Report> {
+  public async create(report: T, fieldsToValidate: string[] = []): Promise<T> {
     const payload = this.preparePayload(report);
-    const response = await this.apiService.post<Report>(`${this.apiEndpoint}/`, payload, {
+    const response = await this.apiService.post<T>(`${this.apiEndpoint}/`, payload, {
       fields_to_validate: fieldsToValidate.join(','),
     });
-    return getReportFromJSON(response);
+    return getReportFromJSON<T>(response);
   }
 
-  public async update(report: Report, fieldsToValidate: string[] = []): Promise<Report> {
+  public async update(report: T, fieldsToValidate: string[] = []): Promise<T> {
     const payload = this.preparePayload(report);
-    const response = await this.apiService.put<Report>(`${this.apiEndpoint}/${report.id}/`, payload, {
+    const response = await this.apiService.put<T>(`${this.apiEndpoint}/${report.id}/`, payload, {
       fields_to_validate: fieldsToValidate.join(','),
     });
-    return getReportFromJSON(response);
+    return getReportFromJSON<T>(response);
   }
 
   public async updateWithAllowedErrorCodes(
-    report: Report,
+    report: T,
     allowedErrorCodes: number[],
     fieldsToValidate: string[] = [],
-  ): Promise<Report> {
+  ): Promise<T> {
     const payload = this.preparePayload(report);
-    const response = await this.apiService.put<Report>(
+    const response = await this.apiService.put<T>(
       `${this.apiEndpoint}/${report.id}/`,
       payload,
       {
@@ -88,19 +86,19 @@ export class ReportService implements TableListService<Report> {
     if (!response.body) {
       throw new Error();
     }
-    return getReportFromJSON(response.body);
+    return getReportFromJSON<T>(response.body);
   }
 
-  public delete(report: Report): Promise<null> {
+  public delete(report: T): Promise<null> {
     return this.apiService.delete<null>(`${this.apiEndpoint}/${report.id}/`);
   }
 
   /**
    * Pulls the report from the back end, stores it in the ngrx store, and returns the report to the caller.
    * @param reportId
-   * @returns Promise<Report>
+   * @returns Promise<T>
    */
-  async setActiveReportById(reportId: string | undefined): Promise<Report> {
+  async setActiveReportById(reportId: string | undefined): Promise<T> {
     if (!reportId) throw new Error('FECfile+: No Report Id Provided.');
     const report = await this.get(reportId);
     this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
@@ -112,29 +110,29 @@ export class ReportService implements TableListService<Report> {
    * @param report
    * @returns boolean
    */
-  isEditable(report: Report | undefined): boolean {
+  isEditable(report: T | undefined): boolean {
     const uploadSubmission = report?.upload_submission;
     const fecStatus = report?.upload_submission?.fec_status;
     const fecfileTaskState = report?.upload_submission?.fecfile_task_state;
     return !uploadSubmission || fecStatus == 'REJECTED' || fecfileTaskState == 'FAILED';
   }
 
-  public startAmendment(report: Report): Promise<string> {
+  public startAmendment(report: T): Promise<string> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/amend/`, {});
   }
 
-  public startUnamendment(report: Report): Promise<string> {
+  public startUnamendment(report: T): Promise<string> {
     return this.apiService.post(`${this.apiEndpoint}/${report.id}/unamend/`, {});
   }
 
-  preparePayload(item: Report): Record<string, unknown> {
+  preparePayload(item: T): Record<string, unknown> {
     const payload = item.toJson();
     delete payload['schema'];
     return payload;
   }
 
-  public fecUpdate(report: Report, committeeAccount?: CommitteeAccount): Promise<Report> {
-    const payload: Report = getReportFromJSON({
+  public fecUpdate(report: T, committeeAccount?: CommitteeAccount): Promise<T> {
+    const payload: T = getReportFromJSON<T>({
       ...report,
       committee_name: committeeAccount?.name,
       street_1: committeeAccount?.street_1,
