@@ -1,4 +1,4 @@
-<p-dialog #dialog [(visible)]="dialogVisible" [style]="{ width: '512px' }" [draggable]="false" closeAriaLabel="Close">
+<p-dialog #dialog [(visible)]="dialogVisible" (onHide)="onDialogHide()" [style]="{ width: '512px' }" [draggable]="false" closeAriaLabel="Close">
   <ng-template #header>
     <div [id]="dialog.ariaLabelledBy">
       <h1>Create a new report</h1>
