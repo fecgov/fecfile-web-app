@@ -3,7 +3,6 @@ import { Toolbar } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
-import { Report } from 'app/shared/models';
 import { Form3XListComponent } from './form3x-list/form3x-list.component';
 import { Form99ListComponent } from './form99-list/form99-list.component';
 import { Form1MListComponent } from './form1m-list/form1m-list.component';

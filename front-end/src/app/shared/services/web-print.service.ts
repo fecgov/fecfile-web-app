@@ -15,8 +15,8 @@ export class WebPrintService<T extends Report> {
    *
    * @return     {Promise}  The WebPrint status.
    */
-  public getStatus(reportId: string): void {
-    this.reportService.setActiveReportById(reportId);
+  public getStatus(reportId: string): Promise<void> {
+    return this.reportService.setActiveReportById(reportId);
   }
 
   public submitPrintJob(reportId: string): Promise<object> {

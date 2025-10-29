@@ -118,7 +118,7 @@ describe('LinkedReportInputComponent', () => {
 
   it('should load F3X reports on init', async () => {
     expect(reportServiceMock.getAllReports).toHaveBeenCalled();
-    expect(component.committeeF3xReports()).toEqual(mockReports as Form3X[]);
+    expect(component.committeeF3xReports()).toEqual(mockReports);
   });
 
   it('should set associated F3X based on disbursement date', async () => {
