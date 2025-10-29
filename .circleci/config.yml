@@ -253,6 +253,10 @@ parameters:
     type: boolean
     default: false
 
+  is-triggered-unit-test:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
@@ -290,6 +294,15 @@ workflows:
     jobs:
       - e2e-nightly
 
+  triggered-unit-test:
+    when: << pipeline.parameters.is-triggered-unit-test >>
+    jobs:
+      - test:
+          filters:
+            branches:
+              only:
+                - develop
+
   nightly:
     triggers:
       - schedule:
@@ -300,3 +313,4 @@ workflows:
                 - develop
     jobs:
       - e2e-nightly
+      - test

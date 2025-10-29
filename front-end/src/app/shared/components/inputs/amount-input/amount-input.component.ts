@@ -1,27 +1,34 @@
-import { Component, computed, inject, input, Input, OnInit, viewChild } from '@angular/core';
-import { AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
-import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { Component, computed, inject, input, OnInit, viewChild } from '@angular/core';
+import { AbstractControl, ValidationErrors, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes } from 'app/shared/models/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { CalendarComponent } from '../../calendar/calendar.component';
-import { LinkedReportInputComponent } from '../linked-report-input/linked-report-input.component';
+import {
+  LinkedReportInputComponent,
+  LinkedReportTooltipText,
+} from '../linked-report-input/linked-report-input.component';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
 import { InputText } from 'primeng/inputtext';
+import { Form24, ReportTypes } from 'app/shared/models';
+import { TooltipModule } from 'primeng/tooltip';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   selector: 'app-amount-input',
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
   imports: [
+    FormsModule,
     ReactiveFormsModule,
     InputText,
     CalendarComponent,
@@ -29,26 +36,44 @@ import { InputText } from 'primeng/inputtext';
     MemoCodeInputComponent,
     InputNumberComponent,
     ErrorMessagesComponent,
+    TooltipModule,
   ],
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly form24Service = inject(Form24Service);
   readonly report = this.store.selectSignal(selectActiveReport);
-  @Input() contributionAmountReadOnly = false;
-  @Input() negativeAmountValueOnly = false;
-  @Input() showAggregate = true;
-  @Input() showCalendarYTD = false;
-  @Input() showPayeeCandidateYTD = false;
-
+  readonly contributionAmountReadOnly = input(false);
+  readonly negativeAmountValueOnly = input(false);
+  readonly showAggregate = input(true);
+  readonly showCalendarYTD = input(false);
+  readonly showPayeeCandidateYTD = input(false);
   readonly memoHasOptional = input(false);
-  @Input() memoItemHelpText: string | undefined;
+  readonly memoItemHelpText = input<string | undefined>();
 
   readonly amountInput = viewChild.required<InputNumber>('amountInput');
   readonly memoCode = viewChild(MemoCodeInputComponent);
+  readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
 
-  dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  contributionAmountInputStyleClass = '';
   readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  readonly isIE = computed(() => {
+    const transactionType = this.transaction()?.transaction_type_identifier;
+    if (!transactionType) return false;
+    return Object.keys(ScheduleETransactionTypes).includes(transactionType);
+  });
+  readonly linked24 = derivedAsync(async () => {
+    if (!this.isIE()) return undefined;
+    const reports = this.transaction()?.reports;
+    const report = reports?.find((report) => report.report_type === ReportTypes.F24);
+    if (!report) return undefined;
+    return (await this.form24Service.get(report.id!)) as Form24;
+  });
+  readonly linked24Label = computed(() => {
+    const report = this.linked24();
+    if (!report) return '';
+    return report.name ?? '';
+  });
+  readonly tooltipText = LinkedReportTooltipText;
 
   protected readonly isLoanRepayment = computed(
     () => !!this.transaction()?.loan_id && this.transactionType()?.scheduleId !== ScheduleIds.C,
@@ -58,10 +83,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    if (this.contributionAmountReadOnly) {
-      this.contributionAmountInputStyleClass = 'readonly';
-    }
-
     // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
     // and set up the "Just checking..." pop-up as needed.
     if (this.templateMap.date && this.templateMap.date2) {
@@ -113,7 +134,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   }
 
   onInputAmount() {
-    if (this.negativeAmountValueOnly) {
+    if (this.negativeAmountValueOnly()) {
       // Automatically convert the amount value to a negative dollar amount.
       const inputValue = this.amountInput().input.nativeElement.value;
       if (inputValue.startsWith('$')) {

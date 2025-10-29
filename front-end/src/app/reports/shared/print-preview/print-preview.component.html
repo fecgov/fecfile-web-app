@@ -1,16 +1,8 @@
-<div class="grid" data-cy="print-preview">
-  <div class="col-12">
-    <h1 class="super-header no-vert-margins">Print preview</h1>
-  </div>
-</div>
-<div class="grid">
-  <div class="col-12">
-    <h2 class="h3 no-vert-margins">
-      <strong>{{ report.formLabel }}:</strong> {{ report.formSubLabel }}
-    </h2>
-    <hr class="black-line" />
-  </div>
-</div>
+<h1 class="super-header" data-cy="print-preview">Print preview</h1>
+<h2 class="h3">
+  <strong>{{ report.formLabel }}:</strong> {{ report.formSubLabel }}
+</h2>
+<hr />
 <p-card>
   <div class="grid">
     @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {

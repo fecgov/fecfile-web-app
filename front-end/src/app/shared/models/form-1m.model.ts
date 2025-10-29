@@ -24,7 +24,7 @@ export class Form1M extends Report {
     'Are you sure you want to submit this form electronically? Please note that you cannot undo this action.';
 
   get formLabel() {
-    return 'FORM 1M';
+    return 'Form 1M';
   }
 
   get formSubLabel() {

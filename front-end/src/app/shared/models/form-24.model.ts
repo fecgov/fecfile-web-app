@@ -17,7 +17,7 @@ export class Form24 extends Report {
   name?: string;
 
   get formLabel() {
-    return 'FORM 24';
+    return 'Form 24';
   }
 
   get formSubLabel() {
