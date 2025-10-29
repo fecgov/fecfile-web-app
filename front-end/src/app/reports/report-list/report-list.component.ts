@@ -78,6 +78,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> {
     super();
     effect(() => {
       if (this.renameF24DialogVisible() === false && this.form24ToUpdate) {
+        this.form24ToUpdate = undefined;
         this.refreshTable();
       }
     });

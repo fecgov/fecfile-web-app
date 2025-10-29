@@ -1,12 +1,14 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ReportService } from 'app/shared/services/report.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { MessageService } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { F24MenuComponent } from './f24-menu.component';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { provideMockStore } from '@ngrx/store/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('F24MenuComponent', () => {
   let component: F24MenuComponent;
@@ -16,6 +18,8 @@ describe('F24MenuComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
+        ReportService,
+        MessageService,
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([

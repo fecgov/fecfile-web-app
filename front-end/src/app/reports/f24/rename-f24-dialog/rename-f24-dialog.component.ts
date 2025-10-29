@@ -42,7 +42,7 @@ export class RenameF24DialogComponent extends FormComponent {
       name: new SubscriptionFormControl('', {
         validators: [Validators.required],
         asyncValidators: [this.f24UniqueNameValidator.validate.bind(this.f24UniqueNameValidator)],
-        updateOn: 'blur',
+        updateOn: 'change',
       }),
     },
     { updateOn: 'blur' },

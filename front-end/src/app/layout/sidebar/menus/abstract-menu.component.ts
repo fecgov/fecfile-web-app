@@ -15,7 +15,7 @@ import { ReportSidebarSection, SidebarState } from '../sidebar.component';
 })
 export abstract class AbstractMenuComponent {
   private readonly store = inject(Store);
-  private readonly reportService = inject(ReportService);
+  protected readonly reportService = inject(ReportService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly activeReport = this.store.selectSignal(selectActiveReport);
