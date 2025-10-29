@@ -4,20 +4,23 @@ import { FormComponent } from 'app/shared/components/form.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
+import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
+import { firstValueFrom } from 'rxjs';
 @Component({
   template: '',
 })
-export abstract class MainFormBaseComponent extends FormComponent implements OnInit {
-  protected abstract reportService: ReportService;
+export abstract class MainFormBaseComponent<T extends Report> extends FormComponent implements OnInit {
+  protected abstract reportService: ReportService<T>;
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   protected readonly activatedRoute = inject(ActivatedRoute);
   abstract readonly formProperties: string[];
   abstract readonly schema: JsonSchema;
-  abstract getReportPayload(): Report;
+  abstract getReportPayload(): T;
   abstract webprintURL: string;
 
   reportId?: string;
@@ -56,8 +59,22 @@ export abstract class MainFormBaseComponent extends FormComponent implements OnI
   }
 
   public async submit(jump: 'continue' | void) {
-    const payload: Report = this.getReportPayload();
-    let report: Report;
+    this.formSubmitted = true;
+    blurActiveInput(this.form);
+
+    // If the form is still processing validity, wait for it to finish
+    if (this.form.pending) {
+      await firstValueFrom(this.form.statusChanges);
+    }
+
+    if (this.form.invalid) {
+      printFormErrors(this.form);
+      this.store.dispatch(singleClickEnableAction());
+      return;
+    }
+
+    const payload: T = this.getReportPayload();
+    let report: T;
     if (this.reportId) {
       payload.id = this.reportId;
       report = await this.reportService.update(payload, this.formProperties);

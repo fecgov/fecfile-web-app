@@ -14,8 +14,8 @@ import { provideRouter } from '@angular/router';
 describe('PrintPreviewComponent', () => {
   let component: PrintPreviewComponent;
   let fixture: ComponentFixture<PrintPreviewComponent>;
-  let reportService: ReportService;
-  let webPrintService: WebPrintService;
+  let reportService: ReportService<Form3X>;
+  let webPrintService: WebPrintService<Form3X>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,11 +28,11 @@ describe('PrintPreviewComponent', () => {
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(PrintPreviewComponent);
-    reportService = TestBed.inject(ReportService);
-    webPrintService = TestBed.inject(WebPrintService);
+    reportService = TestBed.inject(ReportService<Form3X>);
+    webPrintService = TestBed.inject(WebPrintService<Form3X>);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
-    spyOn(reportService, 'update').and.returnValue(Promise.resolve(Form3X.fromJSON({})));
+    spyOn(reportService, 'get').and.resolveTo(Form3X.fromJSON({}));
+    spyOn(reportService, 'update').and.resolveTo(Form3X.fromJSON({}));
     fixture.detectChanges();
   });
 
@@ -100,9 +100,9 @@ describe('PrintPreviewComponent', () => {
   it('#submitPrintJob() calls the service', fakeAsync(() => {
     component.report = Form3X.fromJSON({ id: '123' });
     component.pollingTime = 0;
-    const submit = spyOn(webPrintService, 'submitPrintJob').and.callFake(() => Promise.resolve({}));
+    const submit = spyOn(webPrintService, 'submitPrintJob').and.resolveTo({});
     const poll = spyOn(component, 'pollPrintStatus');
-    const update = spyOn(reportService, 'fecUpdate').and.callFake(() => Promise.resolve(component.report));
+    const update = spyOn(reportService, 'fecUpdate').and.resolveTo(component.report as Form3X);
     component.submitPrintJob();
 
     tick(100);
@@ -128,7 +128,7 @@ describe('PrintPreviewComponent', () => {
     component.pollingTime = 0;
     spyOn(webPrintService, 'submitPrintJob').and.returnValue(Promise.reject('failed'));
     const poll = spyOn(component, 'pollPrintStatus');
-    spyOn(reportService, 'fecUpdate').and.returnValue(Promise.resolve(component.report));
+    spyOn(reportService, 'fecUpdate').and.resolveTo(component.report as Form3X);
     component.submitPrintJob();
 
     tick(100);
