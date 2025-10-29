@@ -1,16 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/app-destroyer.component';
-import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { Report } from 'app/shared/models';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
+import { injectRouteData } from 'ngxtension/inject-route-data';
 import { MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -18,34 +19,21 @@ import { Ripple } from 'primeng/ripple';
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../../styles.scss'],
-  imports: [
-    ReactiveFormsModule,
-    ErrorMessagesComponent,
-    ButtonDirective,
-    Ripple,
-    SingleClickDirective,
-    AutoResizeDirective,
-  ],
+  styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
+  imports: [CommonModule, ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
-  public readonly router = inject(Router);
-  public readonly route = inject(ActivatedRoute);
-  public readonly memoTextService = inject(MemoTextService);
+  readonly router = inject(Router);
+  readonly memoTextService = inject(MemoTextService);
   private readonly messageService = inject(MessageService);
 
   readonly recTypeFormProperty = 'rec_type';
   readonly text4kFormProperty = 'text4000';
-
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
-  committeeAccountIdSignal = computed(() => this.committeeAccount().committee_id);
-  routeDataSignal = toSignal(this.route.data);
-  nextUrlSignal = computed(() => {
-    const getNextUrl = this.routeDataSignal()?.['getNextUrl'];
-    if (!getNextUrl) return '';
-    return getNextUrl(this.activeReport());
-  });
+  readonly committeeAccountId = computed(() => this.committeeAccount().committee_id);
+  readonly getNextUrl = injectRouteData<(report?: Report) => string | undefined | null>('getNextUrl');
+  readonly nextUrl = computed(() => this.getNextUrl()?.(this.activeReport()) || '');
 
   assignedMemoText: MemoText = new MemoText();
 
@@ -84,7 +72,6 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
 
     if (this.assignedMemoText.id) {
       await this.memoTextService.update(payload, this.formProperties);
-      this.router.navigateByUrl(this.nextUrlSignal());
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -93,7 +80,6 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
       });
     } else {
       await this.memoTextService.create(payload, this.formProperties);
-      this.router.navigateByUrl(this.nextUrlSignal());
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -101,5 +87,7 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
         life: 3000,
       });
     }
+
+    this.router.navigateByUrl(this.nextUrl());
   }
 }

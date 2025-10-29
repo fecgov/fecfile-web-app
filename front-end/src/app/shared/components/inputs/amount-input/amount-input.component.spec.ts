@@ -18,6 +18,7 @@ import { Component, signal, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
+import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   imports: [AmountInputComponent, AsyncPipe],
@@ -33,6 +34,7 @@ import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
     [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
     [transaction]="transaction"
     [memoHasOptional]="(memoHasOptional$ | async)!"
+    [negativeAmountValueOnly]="negativeAmountValueOnly"
   />`,
 })
 class TestHostComponent {
@@ -54,6 +56,7 @@ class TestHostComponent {
   transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
   contributionAmountReadOnly = false;
   memoHasOptional: Observable<boolean> = of(false);
+  negativeAmountValueOnly = false;
 
   component = viewChild.required(AmountInputComponent);
 }
@@ -78,7 +81,7 @@ describe('AmountInputComponent', () => {
         Tooltip,
         InputNumberComponent,
       ],
-      providers: [ConfirmationService, provideMockStore(testMockStore())],
+      providers: [ConfirmationService, provideMockStore(testMockStore()), provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -97,7 +100,6 @@ describe('AmountInputComponent', () => {
   });
 
   it('should not call updateInput when negativeAmountValueOnly is false', () => {
-    component.negativeAmountValueOnly = false;
     fixture.detectChanges();
     const updateInputMethodFalse = spyOn(component.amountInput(), 'updateInput');
     expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
@@ -106,7 +108,7 @@ describe('AmountInputComponent', () => {
   });
 
   it('should call updateInput when negativeAmountValueOnly is true', () => {
-    component.negativeAmountValueOnly = true;
+    host.negativeAmountValueOnly = true;
     fixture.detectChanges();
     const updateInputMethodTrue = spyOn(component.amountInput(), 'updateInput');
     component.onInputAmount();

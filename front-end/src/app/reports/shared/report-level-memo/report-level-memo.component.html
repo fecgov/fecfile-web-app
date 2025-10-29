@@ -1,60 +1,32 @@
-<div class="summary-header">
+<div class="main-content">
   <h1>Report level memo</h1>
-  <div>
-    <span class="bold"
-      >{{ activeReport().formLabel }}
-      @if (activeReport().formSubLabel) {
-        :
-      }
-      {{ activeReport().formSubLabel }}</span
-    >
-  </div>
-</div>
-
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-  <div class="grid">
-    <div class="col-11">
-      <label for="{{ text4kFormProperty }}">
+  <hr type="solid" class="mb-5" />
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <div class="field textarea-container">
+      <label [for]="text4kFormProperty">
         <strong> ENTER A MEMO RELATED TO THIS FORM {{ activeReport().report_type.slice(1) }} </strong>
         <span class="paren-label">(OPTIONAL)</span>
       </label>
-      <div>
-        <textarea
-          id="{{ text4kFormProperty }}"
-          [rows]="20"
-          [cols]="30"
-          appAutoResize
-          formControlName="{{ text4kFormProperty }}"
-        ></textarea>
-        <app-error-messages [form]="form" fieldName="{{ text4kFormProperty }}" [formSubmitted]="formSubmitted" />
-      </div>
+      <textarea
+        [id]="text4kFormProperty"
+        [rows]="12"
+        [cols]="30"
+        appAutoResize
+        [formControlName]="text4kFormProperty"
+      ></textarea>
     </div>
-  </div>
-
-  <div class="grid">
-    <div class="col-4">
-      <div>
-        <button
-          pButton
-          pRipple
-          label="Back"
-          class="p-button-secondary"
-          (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReport().id)"
-        ></button>
-      </div>
+    <hr type="solid" class="mt-0" />
+    <div class="flex justify-content-between">
+      <button
+        pButton
+        pRipple
+        class="p-button-secondary previous-button"
+        (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReport().id)"
+      >
+        <img pButtonIcon alt="Previous Arrow" src="assets/img/prev_arrow.svg" height="14px" />
+        <span pButtonLabel>See print preview</span>
+      </button>
+      <button pButton pRipple appSingleClick label="Save & continue" class="p-button-primary" (click)="save()"></button>
     </div>
-    <div class="col-4"></div>
-    <div class="col-4 align-right">
-      <div>
-        <button
-          pButton
-          pRipple
-          appSingleClick
-          label="Save & continue"
-          class="p-button-primary"
-          (click)="save()"
-        ></button>
-      </div>
-    </div>
-  </div>
-</form>
+  </form>
+</div>

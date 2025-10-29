@@ -27,8 +27,7 @@
             {{ transactionType?.formTitle }}
           </h2>
         }
-
-        <h3>{{ transactionType?.contactTitle }}</h3>
+        <h2>{{ transactionType?.contactTitle }}</h2>
         <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
             [isEditable]="isEditable()"
@@ -66,7 +65,7 @@
           </p>
         }
 
-        <h3>{{ childTransactionType?.contactTitle }}</h3>
+        <h2>{{ childTransactionType?.contactTitle }}</h2>
         <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
             [isEditable]="isEditable()"

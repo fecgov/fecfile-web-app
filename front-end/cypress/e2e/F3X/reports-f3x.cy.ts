@@ -31,7 +31,7 @@ describe('Manage reports', () => {
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
     cy.get('[data-cy="form3x-list-component').as('form3xTable');
-    cy.get('@form3xTable').get('tr').should('contain', 'OCTOBER 20 MONTHLY REPORT (M10)');
+    cy.get('@form3xTable').get('tr').should('contain', 'OCTOBER 20 MONTHLY (M10)');
   });
 
   it('Create a Quarterly Non-Election Year report', () => {
