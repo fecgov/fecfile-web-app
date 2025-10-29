@@ -3,10 +3,10 @@
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="purpose_description">
+          <span class="span-label" id="purpose_description_label">
             {{ transactionType()?.purposeDescripLabel }}
             <span class="paren-label">{{ transactionType()?.generatePurposeDescriptionLabel() }}</span>
-          </label>
+          </span>
           @if (transactionType()?.purposeDescriptionLabelNotice) {
             <em>
               {{ transactionType()?.purposeDescriptionLabelNotice }}
@@ -15,6 +15,7 @@
 
           <textarea
             id="purpose_description"
+            aria-labelledby="purpose_description_label"
             [rows]="4"
             [cols]="30"
             appAutoResize
@@ -47,14 +48,15 @@
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="text4000"
+          <span class="span-label" id="text4000_label"
             >NOTE OR MEMO TEXT
             <span class="paren-label">{{
               transactionType()?.memoTextRequired ? '(REQUIRED)' : '(OPTIONAL)'
-            }}</span></label
+            }}</span></span
           >
           <textarea
             id="text4000"
+            aria-labelledby="text4000_label"
             [rows]="5"
             [cols]="30"
             appAutoResize
