@@ -7,6 +7,7 @@
           type="text"
           pInputText
           appToUpper
+          id="organization_name"
           aria-labelledby="organization_name_label"
           [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [class.readonly]="readonly"
@@ -27,6 +28,7 @@
           <input
             type="text"
             pInputText
+            id="committee_fec_id"
             aria-labelledby="committee_fec_id_label"
             [formControlName]="templateMap['committee_fec_id']"
             [class.readonly]="readonly"

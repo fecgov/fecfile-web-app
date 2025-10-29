@@ -6,6 +6,7 @@
         <input
           type="text"
           pInputText
+          id="last_name"
           aria-labelledby="name_input_last_name_label"
           [formControlName]="lastNameFieldName"
           data-cy="last-name"
@@ -19,6 +20,7 @@
         <input
           type="text"
           pInputText
+          id="first_name"
           aria-labelledby="name_input_first_name_label"
           [formControlName]="firstNameFieldName"
         />
@@ -33,6 +35,7 @@
         <input
           type="text"
           pInputText
+          id="middle_name"
           aria-labelledby="name_input_middle_name_label"
           [formControlName]="middleNameFieldName"
         />
@@ -46,7 +49,13 @@
         <span class="span-label" id="name_input_prefix_label"
           >{{ labelPrefix }} PREFIX <span class="paren-label">(OPTIONAL)</span></span
         >
-        <input type="text" pInputText aria-labelledby="name_input_prefix_label" [formControlName]="prefixFieldName" />
+        <input
+          type="text"
+          pInputText
+          id="prefix"
+          aria-labelledby="name_input_prefix_label"
+          [formControlName]="prefixFieldName"
+        />
         <app-error-messages [form]="form" [fieldName]="prefixFieldName" [formSubmitted]="formSubmitted" />
       </div>
     </div>
@@ -55,7 +64,13 @@
         <span class="span-label" id="name_input_suffix_label"
           >{{ labelPrefix }} SUFFIX <span class="paren-label">(OPTIONAL)</span></span
         >
-        <input type="text" pInputText aria-labelledby="name_input_suffix_label" [formControlName]="suffixFieldName" />
+        <input
+          type="text"
+          pInputText
+          id="suffix"
+          aria-labelledby="name_input_suffix_label"
+          [formControlName]="suffixFieldName"
+        />
         <app-error-messages [form]="form" [fieldName]="suffixFieldName" [formSubmitted]="formSubmitted" />
       </div>
     </div>

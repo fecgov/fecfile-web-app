@@ -71,6 +71,7 @@
         <span class="span-label" id="amount_input_amount_label">{{ transactionType()?.amountLabel }}</span>
         <app-input-number
           #amountInput
+          inputId="amount"
           ariaLabelledBy="amount_input_amount_label"
           [formControlName]="templateMap['amount']"
           [readonly]="contributionAmountReadOnly"
@@ -92,6 +93,7 @@
         <div class="field">
           <span class="span-label" id="amount_input_aggregate_label">{{ transactionType()?.aggregateLabel }}</span>
           <app-input-number
+            inputId="aggregate"
             ariaLabelledBy="amount_input_aggregate_label"
             [formControlName]="templateMap['aggregate']"
             [readonly]="true"

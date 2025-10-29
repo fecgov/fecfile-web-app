@@ -6,6 +6,7 @@
         <input
           type="text"
           pInputText
+          id="street_1"
           aria-labelledby="address_input_street_1_label"
           [formControlName]="streetOneFieldName()"
           [readonly]="readonly()"
@@ -20,6 +21,7 @@
           >APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></span
         >
         <input
+          id="street_2"
           type="text"
           pInputText
           aria-labelledby="address_input_street_2_label"
@@ -38,6 +40,7 @@
         <input
           type="text"
           pInputText
+          id="city"
           aria-labelledby="address_input_city_label"
           [formControlName]="cityFieldName()"
           [readonly]="readonly()"
@@ -67,6 +70,7 @@
       <div class="field">
         <span id="address_input_zip_label">ZIP/POSTAL CODE</span>
         <input
+          id="zip"
           type="text"
           pInputText
           aria-labelledby="address_input_zip_label"
