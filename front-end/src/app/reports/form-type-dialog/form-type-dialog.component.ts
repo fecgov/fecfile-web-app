@@ -58,6 +58,10 @@ export class FormTypeDialogComponent {
    * the next time the dialog opens it's cleared.
    */
   onDialogHide(): void {
+    if (this.isF24()) {
+      this.f24().reset();
+    }
+
     this.selectedType.set(undefined);
   }
 
