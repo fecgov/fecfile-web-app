@@ -54,7 +54,7 @@ describe('Form3X', () => {
       committee_name: 'foo',
     };
     const form3X = Form3X.fromJSON(data);
-    expect(form3X.formLabel).toEqual('FORM 3X');
+    expect(form3X.formLabel).toEqual('Form 3X');
   });
 
   describe('formSubLabel', () => {

@@ -14,10 +14,6 @@ hr {
   opacity: 1;
 }
 
-hr.black-line {
-  color: black;
-}
-
 .grid {
   margin: 0;
 }
@@ -251,6 +247,10 @@ label.disabled {
   }
 }
 
+.p-panelmenu-header[data-p-highlight='true'] .p-panelmenu-header-label {
+  font-weight: 600;
+}
+
 .p-panelmenu .p-panelmenu-header.p-highlight > a {
   background-color: transparent;
   color: white;
@@ -316,7 +316,9 @@ label.disabled {
 
 .p-panelmenu .p-panelmenu-panel {
   margin-bottom: 0;
-  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .p-panelmenu .p-panelmenu-panel:first-of-type {

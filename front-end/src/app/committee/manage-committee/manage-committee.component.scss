@@ -1,0 +1,89 @@
+:host::ng-deep {
+  .email-column,
+  .status-column {
+    display: none;
+  }
+
+  .name-column,
+  .role-column {
+    width: ' 43.2%';
+    min-width: ' 43.2%';
+    max-width: ' 43.2%';
+  }
+
+  .actions-column {
+    width: '13.6%';
+    min-width: '13.6%';
+    max-width: '13.6%';
+  }
+
+  @media (min-width: 768px) {
+    .name-column,
+    .role-column {
+      width: '37.9%';
+      min-width: '37.9%';
+      max-width: '37.9%';
+    }
+
+    .status-column {
+      display: table-cell;
+      width: '14.2%';
+      min-width: '14.2%';
+      max-width: '14.2%';
+    }
+
+    .actions-column {
+      width: '10%';
+      min-width: '10%';
+      max-width: '10%';
+    }
+  }
+
+  @media (min-width: 992px) {
+    .email-column {
+      display: table-cell;
+    }
+
+    .name-column,
+    .email-column,
+    .role-column {
+      width: '26.6%';
+      min-width: '26.6%';
+      max-width: '26.6%';
+    }
+
+    .status-column {
+      width: '11.9%';
+      min-width: '11.9%';
+      max-width: '11.9%';
+    }
+
+    .actions-column {
+      width: '8.3%';
+      min-width: '8.3%';
+      max-width: '8.3%';
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .name-column,
+    .email-column,
+    .role-column {
+      width: '27.8%';
+      min-width: '27.8%';
+      max-width: '27.8%';
+    }
+
+    .status-column {
+      width: '9.9%';
+      min-width: '9.9%';
+      max-width: '9.9%';
+    }
+
+    .actions-column {
+      width: '6.7%';
+      min-width: '6.7%';
+      max-width: '6.7%';
+    }
+  }
+}

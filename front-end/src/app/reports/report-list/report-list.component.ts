@@ -4,8 +4,6 @@ import { Store } from '@ngrx/store';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { PrimeTemplate } from 'primeng/api';
-import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
@@ -20,16 +18,7 @@ import { ReportService } from 'app/shared/services/report.service';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
   styleUrls: ['./report-list.component.scss'],
-  imports: [
-    TableComponent,
-    Toolbar,
-    PrimeTemplate,
-    ButtonDirective,
-    Ripple,
-    TableActionsButtonComponent,
-    FormTypeDialogComponent,
-    FecDatePipe,
-  ],
+  imports: [TableComponent, ButtonDirective, Ripple, TableActionsButtonComponent, FormTypeDialogComponent, FecDatePipe],
 })
 export class ReportListComponent extends TableListBaseComponent<Report> {
   public readonly router = inject(Router);

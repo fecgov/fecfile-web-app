@@ -1,130 +1,166 @@
-<div class="card">
-  <p-table
-    #dt
-    dataKey="id"
-    [(selection)]="selectedItems"
-    [(rows)]="rowsPerPage"
-    [(first)]="first"
-    [value]="items()"
-    [totalRecords]="totalItems()"
-    [loading]="loading()"
-    [globalFilterFields]="globalFilterFields()"
-    [currentPageReportTemplate]="currentPageReportTemplate()"
-    [sortField]="sortField()"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [showCurrentPageReport]="true"
-    responsiveLayout="scroll"
-    (onLazyLoad)="loadTableItems.emit($event)"
-    stripedRows
-    showGridlines
-  >
-    <ng-template pTemplate="caption">
-      @if (title()) {
-        <div class="flex align-items-center justify-content-between">
-          <h2 class="m-0">{{ title() }}</h2>
-        </div>
+<p-table
+  #dt
+  dataKey="id"
+  [(selection)]="selectedItems"
+  [(rows)]="rowsPerPage"
+  [(first)]="first"
+  [value]="items()"
+  [totalRecords]="totalItems()"
+  [loading]="loading()"
+  [globalFilterFields]="globalFilterFields()"
+  [currentPageReportTemplate]="currentPageReportTemplate()"
+  [sortField]="sortField()"
+  [lazy]="true"
+  [lazyLoadOnInit]="false"
+  [showCurrentPageReport]="true"
+  responsiveLayout="scroll"
+  (onLazyLoad)="loadTableItems.emit($event)"
+  stripedRows
+  showGridlines
+>
+  <ng-template pTemplate="caption">
+    @if (caption()) {
+      <p-toolbar>
+        <ng-template pTemplate="left">
+          <h1 class="m-0">{{ title() }}</h1>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <ng-container *ngTemplateOutlet="caption()!" />
+        </ng-template>
+      </p-toolbar>
+    } @else {
+      <div class="flex align-items-center justify-content-between">
+        <h2 class="m-0">{{ title() }}</h2>
+      </div>
+    }
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr role="row">
+      <!-- This can go away after full transition to ColumnDefinition method -->
+      @if (hasCheckbox()) {
+        <th id="header-checkbox" role="columnheader">
+          <p-tableHeaderCheckbox ariaLabel="Restore" />
+          <span class="sr-only">Restore Checkbox</span>
+        </th>
       }
-      <ng-container *ngTemplateOutlet="caption()!" />
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr role="row">
-        @if (hasCheckbox()) {
-          <th id="header-checkbox" role="columnheader">
-            <p-tableHeaderCheckbox ariaLabel="Restore" />
-            <span class="sr-only">Restore Checkbox</span>
+      <!-- This can go away after full transition to ColumnDefinition method -->
+      @if (sortableHeaders()) {
+        @for (h of sortableHeaders(); track h) {
+          <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
+            <div class="flex justify-content-between">
+              <span>{{ h.label }}</span>
+              <p-sortIcon [field]="h.field" />
+            </div>
           </th>
         }
-        @if (sortableHeaders()) {
-          @for (h of sortableHeaders(); track h) {
-            <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
-              <div class="flex justify-content-between">
-                <span>{{ h.label }}</span>
-                <p-sortIcon [field]="h.field" />
-              </div>
-            </th>
-          }
-        }
+      }
 
-        <ng-container *ngTemplateOutlet="header()!" />
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr role="row">
-        @if (hasCheckbox()) {
-          <td>
-            <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel()!(item)" />
-          </td>
-        }
-        <ng-container *ngTemplateOutlet="body()!; context: { $implicit: item }" />
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-      <div class="flex justify-content-between">
-        <div class="responsive-container left-container">
-          <span class="paginator-text">Results per page:</span>
-          <p-select
-            [options]="paginationPageSizeOptions"
-            [(ngModel)]="rowsPerPage"
-            class="custom-paginator-dropdown"
-            appendTo="body"
-          >
-            <ng-template pTemplate="dropdownicon">
-              <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
-            </ng-template>
-          </p-select>
-        </div>
-        <div class="responsive-container">
-          <span class="paginator-text">{{ showing() }}:</span>
-          <p-paginator
-            [rows]="rowsPerPage()"
-            [totalRecords]="totalItems()"
-            [first]="first()"
-            (onPageChange)="changePage($event)"
-          >
-            <ng-template pTemplate="firstpagelinkicon">
-              <img alt="first page icon" src="/assets/img/first_arrow.svg" />
-            </ng-template>
-            <ng-template pTemplate="previouspagelinkicon">
-              <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
-            </ng-template>
-            <ng-template pTemplate="nextpagelinkicon">
-              <img alt="next page icon" src="/assets/img/next_arrow.svg" />
-            </ng-template>
-            <ng-template pTemplate="lastpagelinkicon">
-              <img alt="last page icon" src="/assets/img/last_arrow.svg" />
-            </ng-template>
-          </p-paginator>
-        </div>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="sorticon" let-sortOrder>
-      <app-table-sort-icon [sortOrder]="sortOrder" />
-    </ng-template>
-    <ng-template pTemplate="paginatorleft">
+      @for (col of columns(); track col) {
+        <th
+          [pSortableColumn]="col.sortable ? col.field : undefined"
+          [ngClass]="col.cssClass"
+          [id]="col.field + '-column'"
+        >
+          <div class="flex justify-content-between">
+            <span>{{ col.header }}</span>
+            @if (col.sortable) {
+              <p-sortIcon [field]="col.field" />
+            }
+          </div>
+        </th>
+      }
+
+      <!-- This can go away after full transition to ColumnDefinition method -->
+      <ng-container *ngTemplateOutlet="header()!" />
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr role="row">
+      <!-- This can go away after full transition to ColumnDefinition method -->
+      @if (hasCheckbox()) {
+        <td>
+          <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel()!(item)" />
+        </td>
+      }
+      @for (col of columns(); track col) {
+        <td [ngClass]="col.cssClass">
+          @if (col.bodyTpl) {
+            <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item }" />
+          } @else {
+            <span>{{ item[col.field] }}</span>
+          }
+        </td>
+      }
+
+      <!-- This can go away after full transition to ColumnDefinition method -->
+      <ng-container *ngTemplateOutlet="body()!; context: { $implicit: item }" />
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="paginator-container">
       <div class="responsive-container">
-        <span>Results per table:</span>
-        <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
+        <span class="paginator-text">Results per page:</span>
+        <p-select
+          [options]="paginationPageSizeOptions"
+          [(ngModel)]="rowsPerPage"
+          class="custom-paginator-dropdown"
+          appendTo="body"
+        >
           <ng-template pTemplate="dropdownicon">
             <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
           </ng-template>
         </p-select>
       </div>
-    </ng-template>
-    <ng-template pTemplate="paginatorfirstpagelinkicon">
-      <img alt="first page icon" src="/assets/img/first_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="paginatorpreviouspagelinkicon">
-      <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="paginatornextpagelinkicon">
-      <img alt="next page icon" src="/assets/img/next_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="paginatorlastpagelinkicon">
-      <img alt="last page icon" src="/assets/img/last_arrow.svg" />
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
-    </ng-template>
-  </p-table>
-</div>
+      <div class="responsive-container">
+        <span class="paginator-text">{{ showing() }}:</span>
+        <p-paginator
+          [rows]="rowsPerPage()"
+          [totalRecords]="totalItems()"
+          [first]="first()"
+          (onPageChange)="changePage($event)"
+        >
+          <ng-template pTemplate="firstpagelinkicon">
+            <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+          </ng-template>
+          <ng-template pTemplate="previouspagelinkicon">
+            <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+          </ng-template>
+          <ng-template pTemplate="nextpagelinkicon">
+            <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+          </ng-template>
+          <ng-template pTemplate="lastpagelinkicon">
+            <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+          </ng-template>
+        </p-paginator>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="sorticon" let-sortOrder>
+    <app-table-sort-icon [sortOrder]="sortOrder" />
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <div class="responsive-container">
+      <span>Results per table:</span>
+      <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
+        <ng-template pTemplate="dropdownicon">
+          <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+        </ng-template>
+      </p-select>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="paginatorfirstpagelinkicon">
+    <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+  </ng-template>
+  <ng-template pTemplate="paginatorpreviouspagelinkicon">
+    <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+  </ng-template>
+  <ng-template pTemplate="paginatornextpagelinkicon">
+    <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+  </ng-template>
+  <ng-template pTemplate="paginatorlastpagelinkicon">
+    <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
+  </ng-template>
+</p-table>

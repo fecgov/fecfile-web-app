@@ -1,64 +1,56 @@
-<div class="report-list-container">
-  <app-table
-    [(first)]="first"
-    data-cy="report-list-component"
-    [items]="items"
-    [(totalItems)]="totalItems"
-    [loading]="loading"
-    [(rowsPerPage)]="rowsPerPage"
-    [(selectedItems)]="selectedItems"
-    itemName="reports"
-    [sortableHeaders]="sortableHeaders"
-    sortField="form_type"
-    (loadTableItems)="loadTableItems($event)"
-  >
-    <ng-template #caption>
-      <p-toolbar>
-        <ng-template pTemplate="left">
-          <h1 class="m-0">Manage reports</h1>
-        </ng-template>
-        <ng-template pTemplate="right">
-          <button
-            pButton
-            pRipple
-            label="Create report"
-            data-cy="create-report"
-            icon="pi pi-plus"
-            class="add-button"
-            (click)="showDialog()"
-          ></button>
-        </ng-template>
-      </p-toolbar>
-    </ng-template>
-    <ng-template #header>
-      <th id="actions" role="columnheader">Actions</th>
-    </ng-template>
-    <ng-template #body let-item>
-      <td>{{ item.formLabel }}</td>
-      <td>
-        {{ item.formSubLabel }}
-      </td>
-      <td>
-        @if (item.coverage_from_date || item.coverage_through_date) {
-          {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
-        } @else {
-          N/A
-        }
-      </td>
-      <td>{{ item.report_status }}</td>
-      <td>{{ item.version_label }}</td>
-      <td>{{ item.upload_submission?.created | fecDate }}</td>
-      <td>
-        <app-table-actions-button
-          [tableActions]="rowActions"
-          [actionItem]="item"
-          (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-          buttonIcon="pi pi-ellipsis-v"
-          buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-          [buttonAriaLabel]="'edit ' + displayName(item)"
-        />
-      </td>
-    </ng-template>
-  </app-table>
-</div>
+<app-table
+  [(first)]="first"
+  data-cy="report-list-component"
+  [items]="items"
+  title="Manage reports"
+  [(totalItems)]="totalItems"
+  [loading]="loading"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
+  itemName="reports"
+  [sortableHeaders]="sortableHeaders"
+  sortField="form_type"
+  (loadTableItems)="loadTableItems($event)"
+>
+  <ng-template #caption>
+    <button
+      pButton
+      pRipple
+      label="Create report"
+      data-cy="create-report"
+      icon="pi pi-plus"
+      class="add-button"
+      (click)="showDialog()"
+    ></button>
+  </ng-template>
+  <ng-template #header>
+    <th id="actions" role="columnheader">Actions</th>
+  </ng-template>
+  <ng-template #body let-item>
+    <td>{{ item.formLabel }}</td>
+    <td>
+      {{ item.formSubLabel }}
+    </td>
+    <td>
+      @if (item.coverage_from_date || item.coverage_through_date) {
+        {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+      } @else {
+        N/A
+      }
+    </td>
+    <td>{{ item.report_status }}</td>
+    <td>{{ item.version_label }}</td>
+    <td>{{ item.upload_submission?.created | fecDate }}</td>
+    <td>
+      <app-table-actions-button
+        [tableActions]="rowActions"
+        [actionItem]="item"
+        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+        buttonIcon="pi pi-ellipsis-v"
+        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+        [buttonAriaLabel]="'edit ' + displayName(item)"
+      />
+    </td>
+  </ng-template>
+</app-table>
 <app-form-type-dialog [(dialogVisible)]="dialogVisible" />

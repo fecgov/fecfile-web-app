@@ -1,10 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { PrimeTemplate } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
-import { Toolbar } from 'primeng/toolbar';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
@@ -21,8 +19,6 @@ import { SelectModule } from 'primeng/select';
   styleUrls: ['./contact-list.component.scss'],
   imports: [
     TableComponent,
-    Toolbar,
-    PrimeTemplate,
     ButtonDirective,
     Ripple,
     TableActionsButtonComponent,

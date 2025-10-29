@@ -52,7 +52,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   }
 
   public async getMembers(): Promise<CommitteeMember[]> {
-    const response = await this.apiService.get<Array<CommitteeMember>>(this.endpoint);
+    const response = await this.apiService.get<CommitteeMember[]>(this.endpoint);
     const members = response.map((item) => CommitteeMember.fromJSON(item));
     this.membersSignal.set(members);
     return members;

@@ -265,7 +265,6 @@
           (loadTableItems)="loadTransactions($event)"
           (rowsPerPageChange)="onRowsPerPageChange($event)"
         >
-          <ng-template #header> </ng-template>
           <ng-template #body let-transaction>
             <td>
               <a (click)="openTransaction(transaction)">

@@ -14,11 +14,9 @@
       </div>
       <div class="sidebar-content-container">
         <div class="main-content">
-          <div class="grid">
-            @if (layoutControls().showCommitteeBanner) {
-              <app-committee-banner />
-            }
-          </div>
+          @if (layoutControls().showCommitteeBanner) {
+            <app-committee-banner />
+          }
           <div class="router-outlet">
             <router-outlet></router-outlet>
           </div>
