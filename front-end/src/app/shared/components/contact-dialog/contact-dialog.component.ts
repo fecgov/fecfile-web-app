@@ -354,8 +354,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.form.patchValue(contact);
   }
 
-  override async submit(jump: boolean | void): Promise<void> {
-    if (jump === false) return this.saveContact(false);
+  override async submit(jump: 'continue' | void): Promise<void> {
+    if (jump === 'continue') return this.saveContact(false);
     if (this.headerTitle || this.isNewItem) return this.saveContact();
     return this.confirmPropagation();
   }
