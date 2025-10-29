@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormTypeDialogComponent } from 'app/reports/form-type-dialog/form-type-dialog.component';
-import { ReportTypes, ReportStatus, Form3X, F3xFormTypes } from 'app/shared/models';
+import { ReportTypes, ReportStatus, Form3X } from 'app/shared/models';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { testMockStore, testActiveReport } from 'app/shared/utils/unit-test.utils';
@@ -167,26 +167,6 @@ describe('Form3XListComponent', () => {
     await component.download(report);
     expect(generateSpy).toHaveBeenCalledWith(report);
   });
-
-  it('#displayName should display the item form_type code', () => {
-    const item: Form3X = Form3X.fromJSON({ form_type: F3xFormTypes.F3XT });
-    const name: string = component.displayName(item);
-    expect(name).toBe(F3xFormTypes.F3XT);
-  });
-
-  // it('edit a F24 should go to F24 edit page', () => {
-  //   const navigateSpy = spyOn(router, 'navigateByUrl');
-  //   const item: Form24 = Form24.fromJSON({ id: '99', report_type: ReportTypes.F24 });
-  //   component.editItem(item);
-  //   expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/99/list');
-  // });
-
-  // it('edit a F1M should go to F1M edit page', () => {
-  //   const navigateSpy = spyOn(router, 'navigateByUrl');
-  //   const item: Form1M = Form1M.fromJSON({ id: '99', report_type: ReportTypes.F1M });
-  //   component.editItem(item);
-  //   expect(navigateSpy).toHaveBeenCalledWith('/reports/f1m/edit/99');
-  // });
 
   describe('deleteReport', () => {
     it('should call confirm', () => {

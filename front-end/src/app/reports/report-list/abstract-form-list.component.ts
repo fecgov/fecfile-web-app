@@ -1,4 +1,4 @@
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
@@ -16,6 +16,8 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   readonly dotFecService = inject(DotFecService);
   private readonly store = inject(Store);
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
+
+  override readonly rowsPerPage = signal(5);
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent);
   columns: ColumnDefinition<T>[] = [];
@@ -35,7 +37,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   override ngAfterViewInit(): void {
     this.columns = [
-      { field: 'report_code_label', header: 'Type', sortable: true, cssClass: 'type-column' },
+      { field: 'formSubLabel', header: 'Type', sortable: true, cssClass: 'type-column' },
       { field: 'report_status', header: 'Status', sortable: true, cssClass: 'status-column' },
       { field: 'version_label', header: 'Version', sortable: true, cssClass: 'version-column' },
       {
@@ -113,14 +115,5 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
       detail: 'Report Unamended',
       life: 3000,
     });
-  }
-
-  /**
-   * Get the display name for the contact to show in the table column.
-   * @param item
-   * @returns {string} Returns the appropriate name of the contact for display in the table.
-   */
-  displayName(item: T): string {
-    return item.form_type ?? '';
   }
 }

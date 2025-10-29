@@ -54,11 +54,4 @@ describe('Form24ListComponent', () => {
     component.editItem(item);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/99/list');
   });
-
-  // it('edit a F1M should go to F1M edit page', () => {
-  //   const navigateSpy = spyOn(router, 'navigateByUrl');
-  //   const item: Form1M = Form1M.fromJSON({ id: '99', report_type: ReportTypes.F1M });
-  //   component.editItem(item);
-  //   expect(navigateSpy).toHaveBeenCalledWith('/reports/f1m/edit/99');
-  // });
 });
