@@ -10,6 +10,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { F24UniqueNameValidator } from 'app/shared/utils/validators.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
+import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
@@ -19,7 +20,7 @@ import { Ripple } from 'primeng/ripple';
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
   styleUrls: ['./rename-f24-dialog.component.scss'],
-  imports: [Ripple, ButtonModule, ReactiveFormsModule, DialogModule, InputText, ErrorMessagesComponent],
+  imports: [Ripple, ButtonModule, ReactiveFormsModule, DialogModule, InputText, AutoFocusModule, ErrorMessagesComponent],
 })
 export class RenameF24DialogComponent extends FormComponent {
   protected readonly router = inject(Router);
@@ -36,13 +37,18 @@ export class RenameF24DialogComponent extends FormComponent {
         updateOn: 'blur',
       }),
     },
-    { updateOn: 'blur' },
+    { updateOn: 'blur', },
   );
 
   constructor() {
     super();
     effect(() => {
       this.form.get('name')?.setValue((this.f24Report() as Form24)?.name);
+      if (this.dialogVisible()) {
+        this.form.markAsUntouched();
+        this.form.markAsPristine();
+        this.formSubmitted = false;
+      }
     });
   }
 
@@ -61,7 +67,7 @@ export class RenameF24DialogComponent extends FormComponent {
       name: this.form.get('name')?.value,
     });
     await this.form24Service.update(payload, ['name']);
-    await this.dialogVisible.set(false);
+    this.dialogVisible.set(false);
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',

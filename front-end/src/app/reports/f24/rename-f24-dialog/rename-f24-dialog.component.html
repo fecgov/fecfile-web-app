@@ -5,15 +5,19 @@
     </div>
   </ng-template>
 
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-    <div class="dialog-body">
-      <label for="name">REPORT NAME</label>
-      <input type="text" pInputText id="name" formControlName="name" />
-      <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
-    </div>
-    <div class="top-border-footer">
+  <ng-template #content>
+    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+      <div class="dialog-body">
+        <label for="name">REPORT NAME</label>
+        <input type="text" pInputText id="name" formControlName="name" />
+        <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #footer>
+    <div class="top-border-footer dialog-buttons">
       <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="dialog.close($event)"></button>
       <button pButton pRipple label="Confirm" class="p-button-primary" (click)="updateName()"></button>
     </div>
-  </form>
+  </ng-template>
 </p-dialog>
