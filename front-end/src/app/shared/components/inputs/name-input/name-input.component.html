@@ -2,12 +2,11 @@
   <div class="grid">
     <div class="col-4">
       <div class="field">
-        <span class="span-label" id="name_input_last_name">{{ labelPrefix }} LAST NAME</span>
+        <span class="span-label" id="name_input_last_name_label">{{ labelPrefix }} LAST NAME</span>
         <input
           type="text"
           pInputText
-          aria-labelledby="name_input_last_name"
-          id="name_input_last_name"
+          aria-labelledby="name_input_last_name_label"
           [formControlName]="lastNameFieldName"
           data-cy="last-name"
         />
@@ -16,12 +15,11 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <span class="span-label" id="name_input_first_name">{{ labelPrefix }} FIRST NAME</span>
+        <span class="span-label" id="name_input_first_name_label">{{ labelPrefix }} FIRST NAME</span>
         <input
           type="text"
           pInputText
-          aria-labelledby="name_input_first_name"
-          id="first_name"
+          aria-labelledby="name_input_first_name_label"
           [formControlName]="firstNameFieldName"
         />
         <app-error-messages [form]="form" [fieldName]="firstNameFieldName" [formSubmitted]="formSubmitted" />
@@ -29,14 +27,13 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <span class="span-label" id="name_input_middle_name"
+        <span class="span-label" id="name_input_middle_name_label"
           >{{ labelPrefix }} MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></span
         >
         <input
           type="text"
           pInputText
-          aria-labelledby="name_input_middle_name"
-          id="middle_name"
+          aria-labelledby="name_input_middle_name_label"
           [formControlName]="middleNameFieldName"
         />
         <app-error-messages [form]="form" [fieldName]="middleNameFieldName" [formSubmitted]="formSubmitted" />
@@ -46,31 +43,19 @@
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <span class="span-label" id="name_input_prefix"
+        <span class="span-label" id="name_input_prefix_label"
           >{{ labelPrefix }} PREFIX <span class="paren-label">(OPTIONAL)</span></span
         >
-        <input
-          type="text"
-          pInputText
-          aria-labelledby="name_input_prefix"
-          id="prefix"
-          [formControlName]="prefixFieldName"
-        />
+        <input type="text" pInputText aria-labelledby="name_input_prefix_label" [formControlName]="prefixFieldName" />
         <app-error-messages [form]="form" [fieldName]="prefixFieldName" [formSubmitted]="formSubmitted" />
       </div>
     </div>
     <div class="col-3">
       <div class="field">
-        <span class="span-label" id="name_input_suffix"
+        <span class="span-label" id="name_input_suffix_label"
           >{{ labelPrefix }} SUFFIX <span class="paren-label">(OPTIONAL)</span></span
         >
-        <input
-          type="text"
-          pInputText
-          aria-labelledby="name_input_suffix"
-          id="suffix"
-          [formControlName]="suffixFieldName"
-        />
+        <input type="text" pInputText aria-labelledby="name_input_suffix_label" [formControlName]="suffixFieldName" />
         <app-error-messages [form]="form" [fieldName]="suffixFieldName" [formSubmitted]="formSubmitted" />
       </div>
     </div>
