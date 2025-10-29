@@ -48,7 +48,6 @@ describe('RenameF24DialogComponent', () => {
     expect(component.form.invalid).toBeTrue();
     component.updateName();
     expect(form24Service.update).toHaveBeenCalledTimes(0);
-
   });
 
   it('should not call update with duplicate name', fakeAsync(() => {
@@ -57,7 +56,7 @@ describe('RenameF24DialogComponent', () => {
     testF24Report.name = 'duplicate_name';
     spyOn(form24Service, 'getAllReports').and.returnValue(Promise.resolve([testF24Report] as Report[]));
 
-    component.form.get('name')?.setValue('duplicate_name');;
+    component.form.get('name')?.setValue('duplicate_name');
     tick(1000);
     expect(component.form.invalid).toBeTrue();
     expect(component.form.get('name')?.errors).toEqual({
