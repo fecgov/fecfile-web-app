@@ -15,7 +15,6 @@ import { DialogModule } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 
-
 @Component({
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
@@ -70,5 +69,4 @@ export class RenameF24DialogComponent extends FormComponent {
       life: 3000,
     });
   }
-
 }

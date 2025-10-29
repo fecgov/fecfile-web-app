@@ -12,20 +12,8 @@
       <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
     </div>
     <div class="top-border-footer">
-      <button
-        pButton
-        pRipple
-        label="Cancel"
-        class="p-button-secondary"
-        (click)="dialog.close($event)"
-      ></button>
-      <button
-        pButton
-        pRipple
-        label="Confirm"
-        class="p-button-primary"
-        (click)="updateName()"
-      ></button>
+      <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="dialog.close($event)"></button>
+      <button pButton pRipple label="Confirm" class="p-button-primary" (click)="updateName()"></button>
     </div>
   </form>
 </p-dialog>
