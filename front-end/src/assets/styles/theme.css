@@ -6557,3 +6557,7 @@ input {
   outline: none;
   cursor: pointer;
 }
+
+td {
+  font-size: 14px;
+}
