@@ -2,13 +2,12 @@ import { HttpStatusCode } from '@angular/common/http';
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/form.component';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 import { F3xFormTypes, Form3X } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
@@ -234,15 +233,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   // NON-PRIVATE Functions
   readonly onHide = () => this.store.dispatch(singleClickEnableAction());
 
-  async save(jump: 'continue' | void) {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  async submit(jump: 'continue' | void) {
     const summary: Form3X = Form3X.fromJSON(SchemaUtils.getFormValues(this.form, f3xSchema, this.formProperties));
     summary.filing_frequency = this.form.get('filing_frequency')?.value;
     summary.report_type_category = this.form.get('report_type_category')?.value;

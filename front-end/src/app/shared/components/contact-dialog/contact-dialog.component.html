@@ -297,7 +297,7 @@
             label="Save & continue"
             icon="pi pi-check"
             class="p-button-info"
-            (click)="saveContact()"
+            (click)="submitForm()"
           ></button>
         } @else {
           <button
@@ -307,7 +307,7 @@
             label="Save"
             icon="pi pi-check"
             class="p-button-primary"
-            (click)="isNewItem ? saveContact() : confirmPropagation()"
+            (click)="submitForm()"
           ></button>
           @if (isNewItem) {
             <button
@@ -317,7 +317,7 @@
               label="Save & Add More"
               icon="pi pi-check"
               class="p-button-info"
-              (click)="saveContact(false)"
+              (click)="submitForm('continue')"
             ></button>
           }
         }

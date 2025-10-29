@@ -47,7 +47,7 @@ describe('UpdateCurrentUserComponent', () => {
     component.form.get('first_name')?.setValue('testFirstName');
     component.form.get('email')?.setValue('testEmail');
 
-    component.continue();
+    component.submitForm();
     expect(component.form.valid).toBeTrue();
     expect(component.formSubmitted).toBeTrue();
   }));
