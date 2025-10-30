@@ -579,3 +579,15 @@ textarea {
   font-weight: 400;
   resize: none;
 }
+
+.active-status-circle {
+  font-size: 10px;
+  margin-left: 5px;
+  color: #4aa564;
+}
+
+.inactive-status-circle {
+  font-size: 10px;
+  margin-left: 5px;
+  color: #aeb0b5;
+}
