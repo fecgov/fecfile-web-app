@@ -7,7 +7,6 @@
           inputId="candidate_office"
           [formControlName]="officeFormControlName()"
           [options]="candidateOfficeTypeOptions"
-          [autoDisplayFirst]="false"
           appendTo="body"
         />
         <app-error-messages [form]="form()" [fieldName]="officeFormControlName()" [formSubmitted]="formSubmitted()" />
@@ -21,7 +20,6 @@
           [formControlName]="stateFormControlName()"
           [form]="form()"
           [options]="candidateStateOptions"
-          [autoDisplayFirst]="false"
           [class.disabled]="stateControl()?.disabled"
           appendTo="body"
         />
@@ -46,7 +44,6 @@
             [options]="candidateDistrictOptions"
             [class.disabled]="stateControl()?.disabled"
             appendTo="body"
-            [autoDisplayFirst]="false"
           />
         }
         <app-error-messages [form]="form()" [fieldName]="districtFormControlName()" [formSubmitted]="formSubmitted()" />

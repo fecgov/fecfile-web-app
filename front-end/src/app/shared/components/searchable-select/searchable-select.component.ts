@@ -26,7 +26,6 @@ export class SearchableSelectComponent {
   readonly inputId = input.required<string>();
   readonly formControlName = input.required<string>();
   readonly form = input.required<FormGroup>();
-  readonly autoDisplayFirst = input(true);
   readonly readonly = input(false);
   readonly styleClass = input('');
 

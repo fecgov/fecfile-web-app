@@ -75,7 +75,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
   ngOnChanges(): void {
     if (this.detailVisible()) {
       this.resetForm();
-      this.dialog().nativeElement.showModal();
+      this.dialog().nativeElement.hide();
     }
   }
 

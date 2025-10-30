@@ -75,11 +75,4 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
   update(member: CommitteeMember): Promise<CommitteeMember> {
     return this.apiService.put(`${this.endpoint}${member.id}/`, member);
   }
-
-  async waitForResource<T>(resource: Resource<T>): Promise<void> {
-    resource.reload();
-    while (resource.status() === ResourceStatus.Reloading) {
-      await new Promise((resolve) => setTimeout(resolve, 10));
-    }
-  }
 }
