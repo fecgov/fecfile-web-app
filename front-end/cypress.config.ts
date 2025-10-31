@@ -3,9 +3,9 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: false,
-  videosFolder: 'cypress/videos',
-  screenshotsFolder: 'cypress/screenshots',
+  video: true,
+  videosFolder: 'cypress/results/videos',
+  screenshotsFolder: 'cypress/results/screenshots',
   screenshotOnRunFailure: true,
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
