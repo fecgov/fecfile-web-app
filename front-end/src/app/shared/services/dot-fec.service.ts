@@ -11,7 +11,10 @@ export interface Download {
   id?: string;
   taskId: string;
   isComplete: boolean;
+  // guaranteed unique filename on server
   name: string;
+  // Human-friendly filename for download (e.g. YYYY-MM-DD_SHORTENEDFORMTYPE-FORMNAME)
+  filename: string;
   report: Report;
 }
 
@@ -38,14 +41,40 @@ export class DotFecService {
   }
 
   async generateFecFile(report: Report): Promise<Download> {
-    const response = await this.apiService.post<{ status: string; file_name: string; task_id: string }>(
+    const response = await this.apiService.post<{
+      status: string;
+      file_name: string;
+      task_id: string;
+      form_type: string;
+      form_name: string;
+      report_period?: string;
+    }>(
       `/web-services/dot-fec/`,
       {
         report_id: report.id,
       },
     );
 
-    const download = { taskId: response.task_id, report, name: response.file_name, isComplete: false };
+    // current date as YYYY-MM-DD
+    const dateStr = new Date().toISOString().slice(0, 10);
+
+    // sanitize helper: remove problematic chars and collapse whitespace
+    const sanitize = (s?: string) => (s ? s.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') : '');
+
+    const formTypePart = sanitize(response.form_type);
+    const formNamePart = sanitize(response.form_name);
+    const reportPeriod = response.report_period ? `_${response.report_period}` : '';
+
+    // Compose human-facing filename with date_formtype-formname format
+    const humanFilename = `${dateStr}_${formTypePart}-${formNamePart}${reportPeriod}`;
+
+    const download = {
+      taskId: response.task_id,
+      report,
+      name: response.file_name,
+      filename: humanFilename,
+      isComplete: false,
+    };
     this.downloads().push(download);
 
     return download;
@@ -57,7 +86,7 @@ export class DotFecService {
     const data = window.URL.createObjectURL(newBlob);
     const link = this.renderer.createElement('a');
     this.renderer.setAttribute(link, 'href', data);
-    this.renderer.setAttribute(link, 'download', download.report.id + '.fec');
+    this.renderer.setAttribute(link, 'download', download.filename + '.fec');
     this.renderer.appendChild(document.body, link);
     link.click();
   }
