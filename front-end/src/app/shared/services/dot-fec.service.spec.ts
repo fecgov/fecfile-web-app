@@ -67,7 +67,7 @@ describe('DotFecService', () => {
     service = TestBed.inject(DotFecService);
 
     report = { id: 'a' } as Report;
-    download = { taskId: '1', report, isComplete: false, name: 'Test.fec' };
+    download = { taskId: '1', report, isComplete: false, name: 'Test.fec', filename: 'YYYY-MM-DD_TEST-FORMNAME' };
   });
 
   it('should be created', () => {
