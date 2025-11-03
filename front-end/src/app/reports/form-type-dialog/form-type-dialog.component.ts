@@ -53,6 +53,18 @@ export class FormTypeDialogComponent {
     }
   }
 
+  /**
+   * Called when the dialog is hidden/closed. Reset the selected form type so
+   * the next time the dialog opens it's cleared.
+   */
+  onDialogHide(): void {
+    if (this.isF24()) {
+      this.f24().reset();
+    }
+
+    this.selectedType.set(undefined);
+  }
+
   getFormType(type?: FormTypes): FormType | undefined {
     return type ? FORM_TYPES.get(type) : undefined;
   }

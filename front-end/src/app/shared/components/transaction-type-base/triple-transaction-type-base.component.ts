@@ -18,7 +18,6 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 
 /**
  * This component is to help manage a form that contains 3 transactions that the
@@ -44,6 +43,11 @@ export abstract class TripleTransactionTypeBaseComponent
   childContactIdMap_2: ContactIdMapType = {};
   childTemplateMap_2: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   memoHasOptional_2$ = of(false);
+
+  constructor() {
+    super();
+    this.forms.push(this.childForm_2);
+  }
 
   override ngOnInit(): void {
     // Initialize primary and secondary forms.
@@ -91,23 +95,10 @@ export abstract class TripleTransactionTypeBaseComponent
       this.contactService,
     );
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
+    this.forms = [this.form, this.childForm, this.childForm_2];
   }
 
-  override async save(navigationEvent: NavigationEvent): Promise<void> {
-    // update all contacts with changes from form.
-    if (this.transaction && this.childTransaction && this.childTransaction_2) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
-      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
-      TransactionContactUtils.updateContactsWithForm(
-        this.childTransaction_2,
-        this.childTemplateMap_2,
-        this.childForm_2,
-      );
-    } else {
-      this.store.dispatch(singleClickEnableAction());
-      throw new Error('FECfile+: No transactions submitted for triple-entry transaction form.');
-    }
-
+  override async submit(navigationEvent: NavigationEvent): Promise<void> {
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
@@ -135,10 +126,22 @@ export abstract class TripleTransactionTypeBaseComponent
     return this.processPayload(payload, navigationEvent);
   }
 
-  override isInvalid(): boolean {
-    blurActiveInput(this.childForm_2);
-    if (this.childForm_2.invalid) printFormErrors(this.childForm_2);
-    return super.isInvalid() || this.childForm_2.invalid || !this.childTransaction_2;
+  /**
+   * update all contacts with changes from form.
+   */
+  protected override updateContactData() {
+    if (this.transaction && this.childTransaction && this.childTransaction_2) {
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+      TransactionContactUtils.updateContactsWithForm(
+        this.childTransaction_2,
+        this.childTemplateMap_2,
+        this.childForm_2,
+      );
+    } else {
+      this.store.dispatch(singleClickEnableAction());
+      throw new Error('FECfile+: No transactions submitted for triple-entry transaction form.');
+    }
   }
 
   override async getConfirmations(): Promise<boolean> {

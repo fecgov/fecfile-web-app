@@ -5,7 +5,7 @@ import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
-import { DestroyerComponent } from '../components/app-destroyer.component';
+import { DestroyerComponent } from '../components/destroyer.component';
 import { UsersService } from '../services/users.service';
 
 @Injectable({

@@ -1,18 +1,16 @@
-<div class="grid">
-  <h1 class="col-12 reduce-vert-spacing">{{ title }}</h1>
-  <h3 class="col-12 reduce-vert-spacing">{{ report().formLabel }}: {{ report().formSubLabel }}</h3>
-  <hr class="col-12 reduce-vert-spacing" />
-  <p-card>
-    <h2 class="reduce-vert-spacing">Disbursements</h2>
-    <hr type="solid" />
-    <div class="grid">
-      @for (transactionType of transactionTypes; track transactionType) {
-        <div class="col-12">
-          <a [routerLink]="getRouterLink(transactionType)">
-            {{ transactionType | label: transactionTypeLabels }}
-          </a>
-        </div>
-      }
-    </div>
-  </p-card>
-</div>
+<h1 class="m-0">{{ title }}</h1>
+<h3 class="m-0">{{ report().formLabel }}: {{ report().formSubLabel }}</h3>
+<hr />
+<p-card>
+  <h2 class="m-0">Disbursements</h2>
+  <hr type="solid" />
+  <div class="grid">
+    @for (transactionType of transactionTypes; track transactionType) {
+      <div class="col-12">
+        <a [routerLink]="getRouterLink(transactionType)">
+          {{ transactionType | label: transactionTypeLabels }}
+        </a>
+      </div>
+    }
+  </div>
+</p-card>

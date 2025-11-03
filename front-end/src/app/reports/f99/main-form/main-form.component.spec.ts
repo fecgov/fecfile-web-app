@@ -95,23 +95,19 @@ describe('MainFormComponent', () => {
   });
 
   it('should save', fakeAsync(async () => {
-    const createSpy = spyOn(component.reportService, 'create').and.callFake(
-      async () => await Promise.resolve(Form99.fromJSON({})),
-    );
-    const updateSpy = spyOn(component.reportService, 'update').and.callFake(
-      async () => await Promise.resolve(Form99.fromJSON({})),
-    );
+    const createSpy = spyOn(component.reportService, 'create').and.resolveTo(Form99.fromJSON({}));
+    const updateSpy = spyOn(component.reportService, 'update').and.resolveTo(Form99.fromJSON({}));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.form.patchValue({ ...f99 });
     expect(component.form.invalid).toBe(false);
-    await component.save();
+    await component.submitForm();
     expect(createSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     component.form.patchValue({ ...f99 });
     component.reportId = '999';
-    await component.save();
+    await component.submitForm();
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   }));

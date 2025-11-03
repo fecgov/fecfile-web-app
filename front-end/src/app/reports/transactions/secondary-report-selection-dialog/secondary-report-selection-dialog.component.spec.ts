@@ -5,7 +5,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
-import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
@@ -13,8 +12,9 @@ import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
-import { F24FormTypes, Form24, Form3X, Transaction } from 'app/shared/models';
+import { F24FormTypes, Form24, Transaction } from 'app/shared/models';
 import { of } from 'rxjs';
+import { Form24Service } from 'app/shared/services/form-24.service';
 
 const mockReports = [
   Form24.fromJSON({ id: '1', name: 'test1', created: '2022-12-01', report_status: ReportStatus.IN_PROGRESS }),
@@ -26,7 +26,6 @@ const mockReports = [
     form_type: F24FormTypes.F24A,
     report_status: ReportStatus.IN_PROGRESS,
   }),
-  Form3X.fromJSON({ id: '2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
 ];
 
 @Component({
@@ -56,12 +55,12 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   let messageService: MessageService;
   let transactionService: TransactionService;
   let addSpy: jasmine.Spy<(transaction: Transaction, report: Report) => Promise<HttpResponse<string>>>;
-  let reportServiceMock: jasmine.SpyObj<ReportService>;
+  let reportServiceMock: jasmine.SpyObj<Form24Service>;
   let messageSpy: jasmine.Spy<(message: ToastMessageOptions) => void>;
 
   beforeEach(async () => {
-    reportServiceMock = jasmine.createSpyObj('ReportService', ['getAllReports']);
-    reportServiceMock.getAllReports.and.returnValue(Promise.resolve(mockReports));
+    reportServiceMock = jasmine.createSpyObj('Form24Service', ['getAllReports']);
+    reportServiceMock.getAllReports.and.resolveTo(mockReports);
 
     await TestBed.configureTestingModule({
       imports: [DialogModule, Dialog, SecondaryReportSelectionDialogComponent, LabelPipe],
@@ -74,7 +73,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
             redirectTo: '',
           },
         ]),
-        { provide: ReportService, useValue: reportServiceMock },
+        { provide: Form24Service, useValue: reportServiceMock },
         TransactionService,
         MessageService,
         DatePipe,

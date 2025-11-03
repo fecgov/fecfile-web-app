@@ -11,7 +11,6 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ReportService } from 'app/shared/services/report.service';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -27,11 +26,12 @@ import { TransactionDetailComponent } from './transaction-detail.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
   let fixture: ComponentFixture<TransactionDetailComponent>;
-  let reportService: ReportService;
+  let reportService: Form3XService;
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
 
   beforeAll(async () => {
@@ -65,13 +65,13 @@ describe('TransactionDetailComponent', () => {
         FormBuilder,
         provideMockStore(testMockStore()),
         FecDatePipe,
-        ReportService,
+        Form3XService,
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(Form3XService);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
@@ -87,7 +87,7 @@ describe('TransactionDetailComponent', () => {
 
   it('#handleNavigate() should not save an invalid record', fakeAsync(() => {
     const navSpy = spyOn(component, 'navigateTo');
-    const saveSpy = spyOn(component, 'save');
+    const saveSpy = spyOn(component, 'submit');
 
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     tick(100);
