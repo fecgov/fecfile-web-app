@@ -53,11 +53,13 @@ export class DotFecService {
     const dateStr = new Date().toISOString().slice(0, 10);
 
     // sanitize helper: remove problematic chars and collapse whitespace
-    const sanitize = (s: string) =>
+    const sanitize = (s?: string) =>
       s
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .trim();
+        ? s
+            .replace(/[^\w\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+        : '';
 
     const reportType = sanitize(report.report_type);
     const formName = report.formSubLabel ? sanitize(report.formSubLabel) : sanitize(report.formLabel);
