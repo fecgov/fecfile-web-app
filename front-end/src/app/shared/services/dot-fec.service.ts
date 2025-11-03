@@ -45,28 +45,25 @@ export class DotFecService {
       status: string;
       file_name: string;
       task_id: string;
-      form_type: string;
-      form_name: string;
-      report_period?: string;
-    }>(
-      `/web-services/dot-fec/`,
-      {
-        report_id: report.id,
-      },
-    );
+    }>(`/web-services/dot-fec/`, {
+      report_id: report.id,
+    });
 
     // current date as YYYY-MM-DD
     const dateStr = new Date().toISOString().slice(0, 10);
 
     // sanitize helper: remove problematic chars and collapse whitespace
-    const sanitize = (s?: string) => (s ? s.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '_') : '');
+    const sanitize = (s: string) =>
+      s
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
 
-    const formTypePart = sanitize(response.form_type);
-    const formNamePart = sanitize(response.form_name);
-    const reportPeriod = response.report_period ? `_${response.report_period}` : '';
+    const reportType = sanitize(report.report_type);
+    const formName = report.formSubLabel ? sanitize(report.formSubLabel) : sanitize(report.formLabel);
 
-    // Compose human-facing filename with date_formtype-formname format
-    const humanFilename = `${dateStr}_${formTypePart}-${formNamePart}${reportPeriod}`;
+    // Compose human-facing filename with date_reporttype_formname format
+    const humanFilename = `${dateStr}_${reportType}_${formName}`;
 
     const download = {
       taskId: response.task_id,
