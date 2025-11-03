@@ -1,15 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  computed,
-  ElementRef,
-  inject,
-  input,
-  model,
-  OnChanges,
-  output,
-  ViewChild,
-} from '@angular/core';
+import { Component, computed, inject, input, model, OnChanges, output } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -18,8 +7,6 @@ import { FormComponent } from '../app-destroyer.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { ButtonDirective } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { Roles, CommitteeMember } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
 import { printFormErrors } from 'app/shared/utils/form.utils';

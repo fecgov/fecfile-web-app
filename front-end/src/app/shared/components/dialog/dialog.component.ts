@@ -1,5 +1,4 @@
-import { Component, effect, ElementRef, input, model, output, ViewChild } from '@angular/core';
-import { Form } from '@angular/forms';
+import { AfterViewInit, Component, effect, ElementRef, input, model, output, ViewChild } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 
 @Component({
@@ -8,7 +7,7 @@ import { ButtonDirective } from 'primeng/button';
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss',
 })
-export class DialogComponent {
+export class DialogComponent implements AfterViewInit {
   readonly title = input.required<string>();
   readonly submitLabel = input('Save');
   readonly visible = model.required<boolean>();
