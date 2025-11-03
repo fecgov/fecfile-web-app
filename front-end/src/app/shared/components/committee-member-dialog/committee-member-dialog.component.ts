@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   input,
+  model,
   OnChanges,
   output,
   ViewChild,
@@ -22,14 +23,15 @@ import { Ripple } from 'primeng/ripple';
 import { Roles, CommitteeMember } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
 import { printFormErrors } from 'app/shared/utils/form.utils';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-committee-member-dialog',
   templateUrl: './committee-member-dialog.component.html',
   styleUrls: ['./committee-member-dialog.component.scss'],
-  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, ButtonDirective, Ripple, SelectComponent],
+  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, SelectComponent, DialogComponent],
 })
-export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges, AfterViewInit {
+export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly committeeMemberService = inject(CommitteeMemberService);
   protected readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
@@ -41,12 +43,10 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     };
   });
 
-  readonly detailVisible = input(false);
+  readonly detailVisible = model(false);
   readonly member = input<CommitteeMember>();
-  readonly detailVisibleChange = output<boolean>();
   readonly userAdded = output<string>();
   readonly roleEdited = output<void>();
-  readonly detailClose = output<void>();
 
   readonly form: FormGroup = new FormGroup(
     {
@@ -67,16 +67,9 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     return Roles[member.role as keyof typeof Roles];
   });
 
-  @ViewChild('dialog') dialog?: ElementRef;
-
-  ngAfterViewInit() {
-    this.dialog?.nativeElement.addEventListener('close', () => this.detailClose.emit());
-  }
-
   ngOnChanges(): void {
     if (this.detailVisible()) {
       this.resetForm();
-      this.dialog?.nativeElement.showModal();
     }
   }
 
@@ -104,7 +97,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
       if (this.form.get('role')?.valid) {
         try {
           await this.committeeMemberService.update({ ...this.member(), role } as CommitteeMember);
-          this.dialog?.nativeElement.close();
+          this.detailVisible.set(false);
           this.roleEdited.emit();
           this.resetForm();
         } catch (error) {
@@ -125,7 +118,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     if (this.form.valid && email) {
       try {
         const newUser = await this.committeeMemberService.addMember(email, role);
-        this.dialog?.nativeElement.close();
+        this.detailVisible.set(false);
         this.userAdded.emit(newUser.email);
         this.resetForm();
       } catch (error) {

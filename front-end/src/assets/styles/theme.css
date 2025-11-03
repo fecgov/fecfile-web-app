@@ -668,6 +668,11 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   padding-right: 0;
   padding-left: 1rem;
 }
+
+.dialog-body .p-select-label {
+  padding: 0;
+}
+
 .p-select .p-select-label {
   background: transparent;
   border: 0 none;
@@ -1047,6 +1052,11 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-radius: var(--border-radius);
   height: 3em;
 }
+
+.dialog-body .p-inputtext {
+  height: 36px;
+}
+
 .p-inputtext:enabled:hover {
   border-color: var(--surface-border);
 }
@@ -6447,6 +6457,11 @@ input {
   font-size: 1rem;
   font-weight: normal;
   color: var(--p-content-color);
+}
+
+.dialog-body input {
+  font-size: 14px;
+  padding: 0 10px;
 }
 
 .btn-close {

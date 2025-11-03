@@ -1,0 +1,35 @@
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title">
+  <div class="dialog-header">
+    <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
+    <a (click)="visible.set(false)" aria-label="Cancel">
+      <img src="assets/img/i-x-circle.svg" />
+    </a>
+  </div>
+  <ng-content></ng-content>
+  <div class="dialog-footer">
+    <hr type="solid" />
+    <div class="grid">
+      <div class="col-1 p-0">
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Cancel"
+          class="p-button-secondary"
+          (click)="visible.set(false)"
+        ></button>
+      </div>
+      <div class="col-11 p-0">
+        <button
+          type="submit"
+          data-cy="membership-submit"
+          pButton
+          pRipple
+          [label]="submitLabel()"
+          class="p-button-primary float-right"
+          (click)="submitForm.emit()"
+        ></button>
+      </div>
+    </div>
+  </div>
+</dialog>
