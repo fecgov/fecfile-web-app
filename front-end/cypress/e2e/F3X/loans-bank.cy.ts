@@ -185,7 +185,6 @@ describe('Loans', () => {
       ReportListPage.goToReportList(result.report);
       clickLoan('Edit');
       cy.intercept('GET', '**/api/v1/transactions/?*parent=**&*schedules=C2*').as('GetC2List');
-      
       cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
       cy.wait('@GetC2List');
       cy.contains('Guarantors to loan source').should('exist');
