@@ -1,9 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form24, Report } from 'app/shared/models';
+import { Form24 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F24UniqueNameValidator } from 'app/shared/utils/validators.utils';
@@ -28,7 +28,6 @@ describe('RenameF24DialogComponent', () => {
         F24UniqueNameValidator,
       ],
     }).compileComponents();
-
     fixture = TestBed.createComponent(RenameF24DialogComponent);
     form24Service = TestBed.inject(Form24Service);
     component = fixture.componentInstance;
@@ -40,39 +39,38 @@ describe('RenameF24DialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not call update with no name', () => {
-    spyOn(form24Service, 'update').and.returnValue(Promise.resolve(new Form24() as Report));
-
+  it('should not call update with no name', async () => {
+    spyOn(form24Service, 'update').and.resolveTo(new Form24());
+    spyOn(form24Service, 'getAllReports').and.resolveTo([]);
     component.form.get('name')?.setValue(null);
-    component.form.updateValueAndValidity();
+
+    await component.submitForm();
     expect(component.form.invalid).toBeTrue();
-    component.updateName();
     expect(form24Service.update).toHaveBeenCalledTimes(0);
   });
 
-  it('should not call update with duplicate name', fakeAsync(() => {
-    spyOn(form24Service, 'update').and.returnValue(Promise.resolve(new Form24() as Report));
+  it('should not call update with duplicate name', async () => {
+    spyOn(form24Service, 'update').and.resolveTo(new Form24());
     const testF24Report = new Form24();
     testF24Report.name = 'duplicate_name';
-    spyOn(form24Service, 'getAllReports').and.returnValue(Promise.resolve([testF24Report] as Report[]));
-
+    spyOn(form24Service, 'getAllReports').and.resolveTo([testF24Report]);
     component.form.get('name')?.setValue('duplicate_name');
-    tick(1000);
+
+    await component.submitForm();
     expect(component.form.invalid).toBeTrue();
     expect(component.form.get('name')?.errors).toEqual({
       duplicateName: true,
     });
-    component.updateName();
+
     expect(form24Service.update).toHaveBeenCalledTimes(0);
-  }));
+  });
 
-  it('should call update name with valid name', () => {
-    spyOn(form24Service, 'update').and.returnValue(Promise.resolve(new Form24() as Report));
-
+  it('should call update name with valid name', async () => {
+    spyOn(form24Service, 'update').and.resolveTo(new Form24());
+    spyOn(form24Service, 'getAllReports').and.resolveTo([]);
     component.form.get('name')?.setValue('valid_value');
-    component.form.updateValueAndValidity();
     expect(component.form.invalid).toEqual(false);
-    component.updateName();
+    await component.submitForm();
     expect(form24Service.update).toHaveBeenCalledTimes(1);
   });
 });

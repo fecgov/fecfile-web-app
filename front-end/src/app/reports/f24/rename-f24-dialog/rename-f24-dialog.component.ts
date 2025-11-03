@@ -1,14 +1,12 @@
 import { Component, effect, inject, input, model } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { FormComponent } from 'app/shared/components/form.component';
 import { Form24, Report } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { F24UniqueNameValidator } from 'app/shared/utils/validators.utils';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
@@ -60,16 +58,7 @@ export class RenameF24DialogComponent extends FormComponent {
     });
   }
 
-  async updateName() {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    this.form.updateValueAndValidity();
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  async submit() {
     const payload = Form24.fromJSON({
       ...this.f24Report(),
       name: this.form.get('name')?.value,
