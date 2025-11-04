@@ -250,6 +250,7 @@ jobs:
                   --headless --watch=false \
                   --browser "${BROWSER}"
               '
+
       - run:
           name: Collect artifacts for this browser
           when: always
@@ -260,6 +261,7 @@ jobs:
             mkdir -p "/tmp/cypress/results/${BROWSER}"
             docker cp "fecfile-web-app-e2e-${BROWSER}:/root/fecfile-web-app/front-end/cypress/results/." "/tmp/cypress/results/${BROWSER}" || true
             docker rm -f "fecfile-web-app-e2e-${BROWSER}" || true
+
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -378,11 +380,7 @@ workflows:
   triggered-e2e-cross-browser-test:
     when: << pipeline.parameters.is-triggered-e2e-cross-browser-test >>
     jobs:
-      - e2e-cross-browser :
-          filters:
-            branches:
-              only:
-                - develop
+      - e2e-cross-browser
 
   nightly:
     triggers:
