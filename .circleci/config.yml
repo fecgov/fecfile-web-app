@@ -212,6 +212,7 @@ jobs:
     resource_class: large
     steps:
       - spin-up-api-containers
+
       - run:
           name: Execute cross-browser tests on << parameters.browser >>
           command: |
@@ -223,18 +224,31 @@ jobs:
               -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               -e CYPRESS_EXPERIMENTAL_WEBKIT_SUPPORT=true \
               --network container:fecfile-api-proxy \
-              cypress/browsers:latest /bin/bash -c '\
+              cypress/browsers:latest /bin/bash -lc '\
+                set -euxo pipefail; \
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                [ "<< parameters.browser >>" = "webkit" ] && npm install --save-dev playwright && npx playwright install-deps webkit; \
+                # Install Edge on-demand if requested and not present
+                if [ "<< parameters.browser >>" = "edge" ]; then \
+                  apt-get update && apt-get install -y wget gnupg && \
+                  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+                  echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
+                  apt-get update && apt-get install -y microsoft-edge-stable; \
+                fi; \
+                # Install Playwright + WebKit binary and its deps when needed
+                if [ "<< parameters.browser >>" = "webkit" ]; then \
+                  npm install --save-dev playwright && \
+                  npx playwright install --with-deps webkit; \
+                fi; \
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
                   --spec "<< parameters.spec_glob >>" \
                   --headless \
                   --watch=false \
                   --browser << parameters.browser >>;'
+
       - run:
           name: Stage test result artifacts for << parameters.browser >>
           when: always
@@ -243,6 +257,7 @@ jobs:
             mkdir -p /tmp/cypress/<< parameters.browser >>/results
             docker cp fecfile-web-app-e2e-<< parameters.browser >>:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/<< parameters.browser >>/results || true
             docker rm fecfile-web-app-e2e-<< parameters.browser >> || true
+
       - store_artifacts:
           path: /tmp/cypress/<< parameters.browser >>/results
           destination: cypress/<< parameters.browser >>/results
@@ -333,6 +348,14 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+
+  cross-browser-e2e:
+    jobs:
+      - e2e-cross-browser:
+          name: e2e-<< matrix.browser >>
+          matrix:
+            parameters:
+              browser: ["chrome", "firefox", "edge", "webkit"]
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
