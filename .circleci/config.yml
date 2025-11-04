@@ -208,7 +208,7 @@ jobs:
         default: "cypress/nightly/**/*.cy.ts"
         description: "Cypress spec file pattern"
     docker:
-      - image: cypress/browsers:latest
+      - image: cimg/node:lts-browsers
     resource_class: large
     steps:
       - spin-up-api-containers
