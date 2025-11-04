@@ -3,10 +3,11 @@ dialog::backdrop {
 }
 
 h1 {
-  color: #212121;
+  color: var(--p-content-color);
   font-size: 26px;
   font-family: var(--gandhi-bold);
-  height: 2.2em;
+  height: 26px;
+  margin-bottom: 32px;
   text-align: left;
 }
 
@@ -35,7 +36,7 @@ img {
 dialog {
   padding: 20px 32px;
   width: 512px;
-  background-color: #ffffff;
+  background-color: var(--surface-a);
   border-radius: 4px;
   box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
   border: none;
@@ -61,23 +62,11 @@ dialog {
 .dialog-footer {
   border-top: 0;
   padding-top: 0;
-  margin-top: 16px;
+  margin-top: 32px;
 }
 
 .option {
   font-size: 14px;
-}
-
-// Both of these are necessary to keep the dropdowns displaying consistently
-:host ::ng-deep p-select > div > p-overlay > div {
-  // The first time a dropdown is displayed
-  top: 45px !important;
-  left: 0px !important;
-}
-:host ::ng-deep p-select > div > .p-overlay {
-  // All subsequent times that dropdown is displayed
-  top: 45px !important;
-  left: 0px !important;
 }
 
 .float-right {
@@ -85,7 +74,7 @@ dialog {
 }
 
 #close-button {
-  color: #212121;
+  color: var(--p-content-color);
   background: transparent;
   border: none;
 }

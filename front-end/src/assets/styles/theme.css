@@ -669,10 +669,6 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   padding-left: 1rem;
 }
 
-.dialog-body .p-select-label {
-  padding: 0 10px;
-}
-
 .p-select .p-select-label {
   background: transparent;
   border: 0 none;
@@ -1051,11 +1047,6 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   appearance: none;
   border-radius: var(--border-radius);
   height: 3em;
-}
-
-.dialog-body .p-inputtext {
-  height: 36px;
-  padding: 0 10px;
 }
 
 .p-inputtext:enabled:hover {
@@ -6291,7 +6282,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-tag.p-tag-success {
   background-color: #28a745;
   color: #ffffff;
-}
+} 
 .p-tag.p-tag-info {
   background-color: #17a2b8;
   color: #ffffff;
@@ -6462,7 +6453,6 @@ input {
 
 .dialog-body input {
   font-size: 14px;
-  padding: 0;
 }
 
 .btn-close {

@@ -8,33 +8,19 @@
 >
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="dialog-body">
-      <div class="grid">
-        @if (member()) {
-          <div class="col-12 no-padding">
-            <div class="field">
-              <label class="dialog-label" id="role-label" for="role">CURRENT ROLE</label>
-              <input id="role" [disabled]="true" [value]="role()" />
-            </div>
-          </div>
-        } @else {
-          <div class="col-12 no-padding">
-            <div class="field">
-              <label class="dialog-label" for="email">ENTER EMAIL</label>
-              <input autofocus type="text" pInputText id="email" formControlName="email" />
-              <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
-            </div>
-          </div>
-        }
-        <div class="col-12 no-padding">
-          <app-select
-            class="dialog-label"
-            inputId="role"
-            label="ROLE"
-            [options]="roleOptions"
-            [control]="roleControl"
-          />
+      @if (member()) {
+        <div class="field">
+          <label class="dialog-label" id="role-label" for="role">CURRENT ROLE</label>
+          <input id="role" [disabled]="true" [value]="role()" />
         </div>
-      </div>
+      } @else {
+        <div class="field">
+          <label class="dialog-label" for="email">ENTER EMAIL</label>
+          <input autofocus type="text" pInputText id="email" formControlName="email" />
+          <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
+        </div>
+      }
+      <app-select class="dialog-label" inputId="role" label="ROLE" [options]="roleOptions" [control]="roleControl" />
     </div>
   </form>
 </app-dialog>
