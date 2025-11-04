@@ -244,7 +244,7 @@ jobs:
                   npx playwright install --with-deps webkit; \
                 fi; \
                 # Run Cypress directly (avoid `ng e2e` so WebKit is accepted)
-                npm start
+                npm start; \
                 npx cypress run \
                   --headless \
                   --browser << parameters.browser >> \
