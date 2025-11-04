@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, ElementRef, input, model, output, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, input, model, output, viewChild } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 
 @Component({
@@ -7,28 +7,25 @@ import { ButtonDirective } from 'primeng/button';
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss',
 })
-export class DialogComponent implements AfterViewInit {
+export class DialogComponent {
   readonly title = input.required<string>();
   readonly submitLabel = input('Save');
   readonly visible = model.required<boolean>();
   readonly userAdded = output<string>();
   readonly submitForm = output<void>();
+  readonly detailClose = output<void>();
+
+  readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
   constructor() {
     effect(() => {
       const visible = this.visible();
       if (visible) {
-        this.dialog.nativeElement.showModal();
+        this.dialog().nativeElement.showModal();
       } else {
-        this.dialog.nativeElement.close();
+        this.dialog().nativeElement.close();
+        this.detailClose.emit();
       }
     });
-  }
-
-  readonly detailClose = output<void>();
-  @ViewChild('dialog') dialog!: ElementRef<HTMLDialogElement>;
-
-  ngAfterViewInit() {
-    this.dialog?.nativeElement.addEventListener('close', () => this.detailClose.emit());
   }
 }

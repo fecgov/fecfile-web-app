@@ -670,7 +670,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 
 .dialog-body .p-select-label {
-  padding: 0;
+  padding: 0 10px;
 }
 
 .p-select .p-select-label {
@@ -1055,6 +1055,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 
 .dialog-body .p-inputtext {
   height: 36px;
+  padding: 0 10px;
 }
 
 .p-inputtext:enabled:hover {
@@ -6461,7 +6462,7 @@ input {
 
 .dialog-body input {
   font-size: 14px;
-  padding: 0 10px;
+  padding: 0;
 }
 
 .btn-close {
