@@ -1,27 +1,31 @@
-import { BaseModel } from './base.model';
-import { Contact, ContactTypes } from './contact.model';
-import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
-import { TransactionType } from './transaction-type.model';
-import { Exclude, Type } from 'class-transformer';
-import { SchemaUtils } from '../utils/schema.utils';
-import {
+import type { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.model';
+import type { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
+import type { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
+import type { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+import type { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
+import type { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
+import type {
   SchC1Transaction,
   ScheduleC1TransactionGroupsType,
   ScheduleC1TransactionTypes,
 } from './schc1-transaction.model';
-import {
+import type {
   SchC2Transaction,
   ScheduleC2TransactionGroupsType,
   ScheduleC2TransactionTypes,
 } from './schc2-transaction.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.model';
-import { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
-import { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
-import { Form3X, Form24, Form3, Report, ReportTypes } from './.';
+
+import { BaseModel } from './base.model';
+import { Contact, ContactTypes } from './contact.model';
+import { MemoText } from './memo-text.model';
+import { TransactionType } from './transaction-type.model';
+import { Exclude, Type } from 'class-transformer';
+import { SchemaUtils } from '../utils/schema.utils';
 import { Disbursement, LoansAndDebts, Receipt } from './transaction-group';
+import { ReportTypes, Report } from './report.model';
+import { Form3X } from './form-3x.model';
+import { Form24 } from './form-24.model';
+import { Form3 } from './form-3.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;

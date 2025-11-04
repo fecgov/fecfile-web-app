@@ -2,7 +2,6 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
 import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
@@ -55,6 +54,7 @@ export class SchATransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchATransaction {
+    const { getFromJSON, TransactionTypeUtils } = require('../utils/transaction-type.utils');
     let transaction = plainToInstance(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);

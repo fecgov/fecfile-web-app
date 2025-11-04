@@ -3,7 +3,7 @@
     <div class="col-8">
       <div class="field">
         <label for="amount">ORIGINAL AMOUNT</label>
-        <app-input-number inputId="amount" [formControlName]="templateMap['amount']" />
+        <<p-input-number inputId="amount" [formControlName]="templateMap['amount']" />
         <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
       </div>
     </div>
@@ -52,14 +52,14 @@
           <label for="credit_amount_this_draw"
             >CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span></label
           >
-          <app-input-number inputId="credit_amount_this_draw" formControlName="credit_amount_this_draw" />
+          <<p-input-number inputId="credit_amount_this_draw" formControlName="credit_amount_this_draw" />
           <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-4">
         <div class="field">
           <label for="balance">TOTAL BALANCE</label>
-          <app-input-number inputId="balance" [formControlName]="templateMap['balance']" />
+          <<p-input-number inputId="balance" [formControlName]="templateMap['balance']" />
           <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
         </div>
       </div>
@@ -116,7 +116,7 @@
       <div class="col-4">
         <div class="field">
           <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
-          <app-input-number inputId="collateral_value_amount" formControlName="collateral_value_amount" />
+          <<p-input-number inputId="collateral_value_amount" formControlName="collateral_value_amount" />
           <app-error-messages [form]="form" fieldName="collateral_value_amount" [formSubmitted]="formSubmitted" />
         </div>
       </div>
@@ -165,7 +165,7 @@
       <div class="col-5">
         <div class="field">
           <label for="estimated_value">ESTIMATED VALUE</label>
-          <app-input-number inputId="estimated_value" formControlName="estimated_value" />
+          <<p-input-number inputId="estimated_value" formControlName="estimated_value" />
           <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" />
         </div>
       </div>

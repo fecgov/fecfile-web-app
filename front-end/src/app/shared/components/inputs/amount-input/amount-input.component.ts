@@ -3,7 +3,7 @@ import { AbstractControl, ValidationErrors, ReactiveFormsModule, FormsModule } f
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { InputNumber } from 'primeng/inputnumber';
+import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/form-3x.model';
@@ -13,7 +13,6 @@ import {
   LinkedReportInputComponent,
   LinkedReportTooltipText,
 } from '../linked-report-input/linked-report-input.component';
-import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
@@ -34,9 +33,9 @@ import { derivedAsync } from 'ngxtension/derived-async';
     CalendarComponent,
     LinkedReportInputComponent,
     MemoCodeInputComponent,
-    InputNumberComponent,
     ErrorMessagesComponent,
     TooltipModule,
+    InputNumberModule,
   ],
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit {

@@ -9,7 +9,7 @@ import { SchFTransaction, ScheduleFTransactionTypes } from '../models/schf-trans
 import { ScheduleIds, ScheduleTransaction, TransactionTypes } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
-import { TransactionType } from '../models/transaction-type.model';
+import type { TransactionType } from '../models/transaction-type.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { CONDUIT_EARMARK_RECEIPT } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';

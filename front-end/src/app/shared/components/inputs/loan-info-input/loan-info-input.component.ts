@@ -2,14 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-loan-info-input',
   templateUrl: './loan-info-input.component.html',
-  imports: [ReactiveFormsModule, InputNumberComponent, ErrorMessagesComponent, MemoCodeInputComponent],
+  imports: [ReactiveFormsModule, InputNumberModule, ErrorMessagesComponent, MemoCodeInputComponent],
 })
 export class LoanInfoInputComponent extends BaseInputComponent implements OnInit {
   @Input() readonly = false;

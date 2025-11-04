@@ -2,7 +2,6 @@ import { plainToClass, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchETransaction extends Transaction {
   receipt_line_number: string | undefined;
@@ -73,6 +72,7 @@ export class SchETransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchETransaction {
+    const { getFromJSON, TransactionTypeUtils } = require('../utils/transaction-type.utils');
     const transaction = plainToClass(SchETransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);

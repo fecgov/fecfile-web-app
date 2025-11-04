@@ -2,7 +2,6 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchFTransaction extends Transaction {
   coordinated_expenditures: boolean | undefined;
@@ -49,6 +48,7 @@ export class SchFTransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchFTransaction {
+    const { getFromJSON, TransactionTypeUtils } = require('../utils/transaction-type.utils');
     const transaction = plainToInstance(SchFTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);

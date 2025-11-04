@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import type { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';

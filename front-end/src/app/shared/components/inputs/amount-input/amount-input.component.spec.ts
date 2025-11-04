@@ -11,7 +11,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { AmountInputComponent } from './amount-input.component';
-import { InputNumberComponent } from '../input-number/input-number.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleATransactionTypes, Transaction } from 'app/shared/models';
 import { Component, signal, viewChild } from '@angular/core';
@@ -79,7 +78,6 @@ describe('AmountInputComponent', () => {
         FecDatePipe,
         Dialog,
         Tooltip,
-        InputNumberComponent,
       ],
       providers: [ConfirmationService, provideMockStore(testMockStore()), provideHttpClient()],
     }).compileComponents();

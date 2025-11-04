@@ -1,7 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchC2Transaction extends Transaction {
   guarantor_last_name: string | undefined;
@@ -23,6 +22,7 @@ export class SchC2Transaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchC2Transaction {
+    const { getFromJSON, TransactionTypeUtils } = require('../utils/transaction-type.utils');
     const transaction = plainToClass(SchC2Transaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);

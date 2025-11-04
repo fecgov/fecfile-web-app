@@ -1,7 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchDTransaction extends Transaction {
   entity_type: string | undefined;
@@ -27,6 +26,7 @@ export class SchDTransaction extends Transaction {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchDTransaction {
+    const { getFromJSON, TransactionTypeUtils } = require('../utils/transaction-type.utils');
     const transaction = plainToClass(SchDTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
