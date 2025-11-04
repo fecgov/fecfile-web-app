@@ -226,28 +226,30 @@ jobs:
               --network container:fecfile-api-proxy \
               cypress/browsers:latest /bin/bash -lc '\
                 set -euxo pipefail; \
+                apt-get update && apt-get install -y curl >/dev/null; \
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                # Install Edge on-demand if requested and not present
+                # Edge on-demand (if you keep the generic browsers image)
                 if [ "<< parameters.browser >>" = "edge" ]; then \
                   apt-get update && apt-get install -y wget gnupg && \
                   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
                   echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
                   apt-get update && apt-get install -y microsoft-edge-stable; \
                 fi; \
-                # Install Playwright + WebKit binary and its deps when needed
+                # WebKit runtime + OS deps
                 if [ "<< parameters.browser >>" = "webkit" ]; then \
-                  npm install --save-dev playwright && \
+                  npm i -D playwright && \
                   npx playwright install --with-deps webkit; \
                 fi; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
-                  --spec "<< parameters.spec_glob >>" \
-                  --headless \
-                  --watch=false \
-                  --browser << parameters.browser >>;'
+                # Use ng e2e (keeps devServerTarget) and forward browser to Cypress AFTER `--`
+                if [ "<< parameters.browser >>" = "webkit" ]; then \
+                  ./node_modules/.bin/ng e2e --configuration production -- --browser webkit --headless --spec "<< parameters.spec_glob >>"; \
+                else \
+                  ./node_modules/.bin/ng e2e --configuration production -- --browser << parameters.browser >> --headless --spec "<< parameters.spec_glob >>"; \
+                fi;'
 
       - run:
           name: Stage test result artifacts for << parameters.browser >>
