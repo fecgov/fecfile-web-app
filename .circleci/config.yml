@@ -242,12 +242,10 @@ jobs:
                   npm i -D playwright && npx playwright install --with-deps webkit; \
                 fi; \
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
-                  --configuration production \
-                  -- \
-                  --watch=false \
+                  --spec "<< parameters.spec_glob >>" \
                   --headless \
-                  --browser << parameters.browser >> \
-                  --spec "<< parameters.spec_glob >>";'
+                  --watch=false \
+                  --browser << parameters.browser >>;'
 
       - run:
           name: Stage test result artifacts for << parameters.browser >>
