@@ -13,5 +13,10 @@ export abstract class BaseInputComponent extends DestroyerComponent {
   @Input() formSubmitted = false;
   @Input() templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
-  readonly transactionType = computed(() => this.transaction()?.transactionType);
+  readonly transactionType;
+
+  constructor() {
+    super();
+    this.transactionType = computed(() => this.transaction()?.transactionType);
+  }
 }

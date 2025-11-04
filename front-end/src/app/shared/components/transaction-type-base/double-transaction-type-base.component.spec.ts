@@ -289,7 +289,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       expect(v).toBeFalse();
     });
 
-    fit('should confirm with user', async () => {
+    it('should confirm with user', async () => {
       const confirmSpy = spyOn(component.confirmationService, 'confirmWithUser').and.resolveTo(true);
       await component.getConfirmations();
       expect(confirmSpy).toHaveBeenCalled();

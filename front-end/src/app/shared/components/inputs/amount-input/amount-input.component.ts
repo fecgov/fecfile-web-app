@@ -41,7 +41,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
 export class AmountInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly form24Service = inject(Form24Service);
-  readonly report = this.store.selectSignal(selectActiveReport);
+  readonly report;
   readonly contributionAmountReadOnly = input(false);
   readonly negativeAmountValueOnly = input(false);
   readonly showAggregate = input(true);
@@ -52,34 +52,46 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
 
   readonly amountInput = viewChild.required<InputNumber>('amountInput');
   readonly memoCode = viewChild(MemoCodeInputComponent);
-  readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
+  readonly contributionAmountInputStyleClass;
 
-  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
-  readonly isIE = computed(() => {
-    const transactionType = this.transaction()?.transaction_type_identifier;
-    if (!transactionType) return false;
-    return Object.keys(ScheduleETransactionTypes).includes(transactionType);
-  });
-  readonly linked24 = derivedAsync(async () => {
-    if (!this.isIE()) return undefined;
-    const reports = this.transaction()?.reports;
-    const report = reports?.find((report) => report.report_type === ReportTypes.F24);
-    if (!report) return undefined;
-    return (await this.form24Service.get(report.id!)) as Form24;
-  });
-  readonly linked24Label = computed(() => {
-    const report = this.linked24();
-    if (!report) return '';
-    return report.name ?? '';
-  });
+  readonly isF24;
+  readonly isIE;
+  readonly linked24;
+  readonly linked24Label;
   readonly tooltipText = LinkedReportTooltipText;
 
-  protected readonly isLoanRepayment = computed(
-    () => !!this.transaction()?.loan_id && this.transactionType()?.scheduleId !== ScheduleIds.C,
-  );
-  protected readonly isDebtRepayment = computed(
-    () => !!this.transaction()?.debt_id && this.transactionType()?.scheduleId !== ScheduleIds.D,
-  );
+  protected readonly isLoanRepayment;
+  protected readonly isDebtRepayment;
+
+  constructor() {
+    super();
+    this.report = this.store.selectSignal(selectActiveReport);
+    this.contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
+    this.isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+    this.isIE = computed(() => {
+      const transactionType = this.transaction()?.transaction_type_identifier;
+      if (!transactionType) return false;
+      return Object.keys(ScheduleETransactionTypes).includes(transactionType);
+    });
+    this.linked24 = derivedAsync(async () => {
+      if (!this.isIE()) return undefined;
+      const reports = this.transaction()?.reports;
+      const report = reports?.find((report) => report.report_type === ReportTypes.F24);
+      if (!report) return undefined;
+      return (await this.form24Service.get(report.id!)) as Form24;
+    });
+    this.linked24Label = computed(() => {
+      const report = this.linked24();
+      if (!report) return '';
+      return report.name ?? '';
+    });
+    this.isLoanRepayment = computed(
+      () => !!this.transaction()?.loan_id && this.transactionType()?.scheduleId !== ScheduleIds.C,
+    );
+    this.isDebtRepayment = computed(
+      () => !!this.transaction()?.debt_id && this.transactionType()?.scheduleId !== ScheduleIds.D,
+    );
+  }
 
   ngOnInit(): void {
     // If this is a two-date transaction. Monitor the other date, trigger validation on changes,

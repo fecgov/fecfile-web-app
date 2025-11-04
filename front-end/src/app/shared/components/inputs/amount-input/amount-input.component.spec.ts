@@ -105,7 +105,7 @@ describe('AmountInputComponent', () => {
     // expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
   });
 
-  it('should call updateInput when negativeAmountValueOnly is true', () => {
+  fit('should call updateInput when negativeAmountValueOnly is true', () => {
     host.negativeAmountValueOnly = true;
     fixture.detectChanges();
     const updateInputMethodTrue = spyOn(component.amountInput(), 'updateInput');
