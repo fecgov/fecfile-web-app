@@ -204,12 +204,9 @@ jobs:
     resource_class: large
     environment:
       BROWSERS: "chrome firefox edge webkit"
-      SPEC_GLOB: "cypress/nightly/**/*.cy.ts"   
-      # Pin a browsers image that includes Chrome/Firefox/Edge. WebKit is accessed via Playwright within the test run.
-      CYPRESS_IMAGE: "cypress/browsers:node-20.9.0-chrome-120.0.6099.71-1-ff-120.0-edge-120.0.2210.61-1"
+      SPEC_GLOB: "cypress/nightly/**/*.cy.ts" 
     steps:
       - spin-up-api-containers
-
       - run:
           name: Run Cypress for this node's browser
           command: |
@@ -219,8 +216,8 @@ jobs:
             arr=(${BROWSERS})
             BROWSER=${arr[$CIRCLE_NODE_INDEX]}
             echo "CIRCLE_NODE_INDEX=${CIRCLE_NODE_INDEX} -> BROWSER=${BROWSER}"
-            echo "Using image: ${CYPRESS_IMAGE}"
 
+            # IMPORTANT: IMAGE GOES BEFORE 'bash -lc'
             docker run --name "fecfile-web-app-e2e-${BROWSER}" \
               --network container:fecfile-api-proxy \
               -e BROWSER="${BROWSER}" \
@@ -230,11 +227,11 @@ jobs:
               -e CYPRESS_COMMITTEE_ID="${CYPRESS_COMMITTEE_ID}" \
               -e CYPRESS_PASSWORD="${CYPRESS_PASSWORD}" \
               -e CYPRESS_FILING_PASSWORD="${CYPRESS_FILING_PASSWORD}" \
-              "${CYPRESS_IMAGE}" \
+              cypress/browsers:latest \
               bash -lc '
                 set -euxo pipefail
 
-                # Ensure git exists (some images do, this is a safe fallback)
+                # Safety: ensure git exists (some tags have it; this keeps us resilient)
                 if ! command -v git >/dev/null 2>&1; then
                   apt-get update
                   apt-get install -y --no-install-recommends git ca-certificates
@@ -273,7 +270,6 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
-
 
   deploy-job:
     docker:
