@@ -245,9 +245,9 @@ jobs:
                 fi; \
                 # Use ng e2e (keeps devServerTarget) and forward browser to Cypress AFTER `--`
                 if [ "<< parameters.browser >>" = "webkit" ]; then \
-                  ./node_modules/@angular/cli/bin/ng e2e --configuration production -- --browser webkit --headless --spec "<< parameters.spec_glob >>"; \
+                  node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --configuration production -- --browser webkit --headless --spec "<< parameters.spec_glob >>"; \
                 else \
-                  ./node_modules/@angular/cli/bin/ng e2e --configuration production -- --browser << parameters.browser >> --headless --spec "<< parameters.spec_glob >>"; \
+                  node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --configuration production -- --browser << parameters.browser >> --headless --spec "<< parameters.spec_glob >>"; \
                 fi;'
 
       - run:
