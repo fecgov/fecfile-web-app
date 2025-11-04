@@ -262,7 +262,7 @@ jobs:
     steps:
       - spin-up-api-containers
       - run:
-          name: Execute e2e on webkit (with Playwright deps)
+          name: Execute e2e on webkit (with ng serve in background)
           command: |
             docker container run --name fecfile-web-app-e2e-webkit \
               -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
@@ -282,12 +282,28 @@ jobs:
                 npm ci || npm install; \
                 # Install Playwright WebKit runtime + OS deps for Cypress WebKit
                 npm i -D playwright && npx playwright install --with-deps webkit; \
+                # Start ng serve in the background
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve; \
+                # Wait for the Angular dev server to be ready
+                echo "Waiting for Angular dev server to start..."; \
+                for i in {1..60}; do \
+                  if curl -s http://localhost:4200 > /dev/null; then \
+                    echo "Angular dev server is ready!"; \
+                    break; \
+                  fi; \
+                  echo "Waiting... ($i/60)"; \
+                  sleep 5; \
+                done; \
+                # Run Cypress tests with webkit
                 npx cypress run \
                   --spec "cypress/nightly/**/*.cy.ts" \
                   --headless \
-                  --watch=false \
-                  --browser webkit;'
+                  --browser webkit \
+                  --config baseUrl=http://localhost:4200; \
+                CYPRESS_EXIT_CODE=$?; \
+                # Kill the ng serve process
+                kill $NG_SERVE_PID || true; \
+                exit $CYPRESS_EXIT_CODE;'
       - run:
           name: Stage artifacts (webkit)
           when: always
