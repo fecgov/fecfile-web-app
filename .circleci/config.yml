@@ -198,78 +198,54 @@ jobs:
           destination: cypress/results
 
   e2e-cross-browser:
+    parameters:
+      browser:
+        type: string
+        default: "chrome"
+        description: "Browser to run tests in (chrome, firefox, edge, webkit)"
+      spec_glob:
+        type: string
+        default: "cypress/nightly/**/*.cy.ts"
+        description: "Cypress spec file pattern"
     docker:
-      - image: cimg/node:lts-browsers
-    parallelism: 4
+      - image: cypress/browsers:latest
     resource_class: large
-    environment:
-      BROWSERS: "chrome firefox edge webkit"
-      SPEC_GLOB: "cypress/nightly/**/*.cy.ts" 
     steps:
       - spin-up-api-containers
       - run:
-          name: Run Cypress for this node's browser
+          name: Execute cross-browser tests on << parameters.browser >>
           command: |
-            set -euxo pipefail
-
-            # Map node index to a browser
-            arr=(${BROWSERS})
-            BROWSER=${arr[$CIRCLE_NODE_INDEX]}
-            echo "CIRCLE_NODE_INDEX=${CIRCLE_NODE_INDEX} -> BROWSER=${BROWSER}"
-
-            # IMPORTANT: IMAGE GOES BEFORE 'bash -lc'
-            docker run --name "fecfile-web-app-e2e-${BROWSER}" \
+            docker container run --name fecfile-web-app-e2e-<< parameters.browser >> \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              -e CYPRESS_EXPERIMENTAL_WEBKIT_SUPPORT=true \
               --network container:fecfile-api-proxy \
-              -e BROWSER="${BROWSER}" \
-              -e SPEC_GLOB="${SPEC_GLOB}" \
-              -e CIRCLE_BRANCH="${CIRCLE_BRANCH}" \
-              -e CYPRESS_EMAIL="${CYPRESS_EMAIL}" \
-              -e CYPRESS_COMMITTEE_ID="${CYPRESS_COMMITTEE_ID}" \
-              -e CYPRESS_PASSWORD="${CYPRESS_PASSWORD}" \
-              -e CYPRESS_FILING_PASSWORD="${CYPRESS_FILING_PASSWORD}" \
-              cypress/browsers:latest \
-              bash -lc '
-                set -euxo pipefail
-
-                # Safety: ensure git exists (some tags have it; this keeps us resilient)
-                if ! command -v git >/dev/null 2>&1; then
-                  apt-get update
-                  apt-get install -y --no-install-recommends git ca-certificates
-                fi
-
-                cd ~
-                git clone https://github.com/fecgov/fecfile-web-app.git
-                cd fecfile-web-app/front-end
-                git checkout "${CIRCLE_BRANCH}"
-
-                npm ci || npm install
-
-                # WebKit (experimental): add engine + Linux deps
-                if [ "${BROWSER}" = "webkit" ]; then
-                  npm i -D playwright-webkit
-                  npx playwright install-deps webkit
-                fi
-
+              cypress/browsers:latest /bin/bash -c '\
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm install; \
+                [ "<< parameters.browser >>" = "webkit" ] && npm install --save-dev playwright && npx playwright install-deps webkit; \
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
-                  --spec "${SPEC_GLOB}" \
-                  --headless --watch=false \
-                  --browser "${BROWSER}"
-              '
-
+                  --spec "<< parameters.spec_glob >>" \
+                  --headless \
+                  --watch=false \
+                  --browser << parameters.browser >>;'
       - run:
-          name: Collect artifacts for this browser
+          name: Stage test result artifacts for << parameters.browser >>
           when: always
           command: |
-            set -e
-            arr=(${BROWSERS})
-            BROWSER=${arr[$CIRCLE_NODE_INDEX]}
-            mkdir -p "/tmp/cypress/results/${BROWSER}"
-            docker cp "fecfile-web-app-e2e-${BROWSER}:/root/fecfile-web-app/front-end/cypress/results/." "/tmp/cypress/results/${BROWSER}" || true
-            docker rm -f "fecfile-web-app-e2e-${BROWSER}" || true
-
+            rm -rf /tmp/cypress/<< parameters.browser >>
+            mkdir -p /tmp/cypress/<< parameters.browser >>/results
+            docker cp fecfile-web-app-e2e-<< parameters.browser >>:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/<< parameters.browser >>/results || true
+            docker rm fecfile-web-app-e2e-<< parameters.browser >> || true
       - store_artifacts:
-          path: /tmp/cypress/results
-          destination: cypress/results
+          path: /tmp/cypress/<< parameters.browser >>/results
+          destination: cypress/<< parameters.browser >>/results
 
   deploy-job:
     docker:
@@ -332,7 +308,7 @@ parameters:
     type: boolean
     default: false
 
-  is-triggered-e2e-cross-browser-test:
+  is-e2e-cross-browser-test:
     type: boolean
     default: false
 
@@ -383,7 +359,7 @@ workflows:
                 - develop
 
   triggered-e2e-cross-browser-test:
-    when: << pipeline.parameters.is-triggered-e2e-cross-browser-test >>
+    when: << pipeline.parameters.is-e2e-cross-browser-test >>
     jobs:
       - e2e-cross-browser
 
