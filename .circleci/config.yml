@@ -282,7 +282,8 @@ jobs:
                 npm ci || npm install; \
                 # Install Playwright WebKit runtime + OS deps for Cypress WebKit
                 npm i -D playwright && npx playwright install --with-deps webkit; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve; \
+                npx cypress run \
                   --spec "cypress/nightly/**/*.cy.ts" \
                   --headless \
                   --watch=false \
