@@ -202,7 +202,7 @@ jobs:
       browser:
         type: string
         default: "chrome"
-        description: "Browser to run tests in (chrome, firefox, edge, webkit)"
+        description: "Browser to run tests in (chrome, firefox, edge)"
       spec_glob:
         type: string
         default: "cypress/nightly/**/*.cy.ts"
@@ -236,11 +236,7 @@ jobs:
                   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
                   echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
                   apt-get update && apt-get install -y microsoft-edge-stable; \
-                fi; \
-                # Install Playwright WebKit runtime + OS deps only for WebKit runs
-                if [ "<< parameters.browser >>" = "webkit" ]; then \
-                  npm i -D playwright && npx playwright install --with-deps webkit; \
-                fi; \
+                fi;
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
                   --spec "<< parameters.spec_glob >>" \
                   --headless \
@@ -259,6 +255,49 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/<< parameters.browser >>/results
           destination: cypress/<< parameters.browser >>/results
+
+  e2e-webkit:
+    docker:
+      - image: cimg/node:lts-browsers
+    steps:
+      - spin-up-api-containers
+      - run:
+          name: Execute e2e on webkit (with Playwright deps)
+          command: |
+            docker container run --name fecfile-web-app-e2e-webkit \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              -e CYPRESS_EXPERIMENTAL_WEBKIT_SUPPORT=true \
+              --network container:fecfile-api-proxy \
+              cypress/browsers:latest /bin/bash -lc '\
+                set -euo pipefail; \
+                apt-get update && apt-get install -y curl >/dev/null; \
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm ci || npm install; \
+                # Install Playwright WebKit runtime + OS deps for Cypress WebKit
+                npm i -D playwright && npx playwright install --with-deps webkit; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
+                  --spec "cypress/nightly/**/*.cy.ts" \
+                  --headless \
+                  --watch=false \
+                  --browser webkit;'
+      - run:
+          name: Stage artifacts (webkit)
+          when: always
+          command: |
+            rm -rf /tmp/cypress/webkit
+            mkdir -p /tmp/cypress/webkit/results
+            docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/webkit/results || true
+            docker rm -f fecfile-web-app-e2e-webkit || true
+      - store_artifacts:
+          path: /tmp/cypress/webkit/results
+          destination: cypress/webkit/results
 
   deploy-job:
     docker:
@@ -353,7 +392,8 @@ workflows:
           name: e2e-<< matrix.browser >>
           matrix:
             parameters:
-              browser: ["chrome", "firefox", "edge", "webkit"]
+              browser: ["chrome", "firefox", "edge"]
+      - e2e-webkit
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
