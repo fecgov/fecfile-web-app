@@ -243,9 +243,9 @@ jobs:
                 fi; \
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
                   --configuration production \
+                  -- \
                   --watch=false \
                   --headless \
-                  -- \
                   --browser << parameters.browser >> \
                   --spec "<< parameters.spec_glob >>";'
 
