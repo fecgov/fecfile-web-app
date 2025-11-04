@@ -203,10 +203,13 @@ jobs:
     parallelism: 4
     resource_class: large
     environment:
-      # Order matters: index -> browser mapping (0..3)
       BROWSERS: "chrome firefox edge webkit"
+      SPEC_GLOB: "cypress/nightly/**/*.cy.ts"   
+      # Pin a browsers image that includes Chrome/Firefox/Edge. WebKit is accessed via Playwright within the test run.
+      CYPRESS_IMAGE: "cypress/browsers:node-20.9.0-chrome-120.0.6099.71-1-ff-120.0-edge-120.0.2210.61-1"
     steps:
       - spin-up-api-containers
+
       - run:
           name: Run Cypress for this node's browser
           command: |
@@ -216,37 +219,42 @@ jobs:
             arr=(${BROWSERS})
             BROWSER=${arr[$CIRCLE_NODE_INDEX]}
             echo "CIRCLE_NODE_INDEX=${CIRCLE_NODE_INDEX} -> BROWSER=${BROWSER}"
-
-            # Use a Cypress image that has Chrome/Firefox/Edge preinstalled.
-            # (Latest cypress/browsers images include Edge as well as Chrome/Firefox)
-            CYPRESS_IMAGE="cypress/browsers:latest"
+            echo "Using image: ${CYPRESS_IMAGE}"
 
             docker run --name "fecfile-web-app-e2e-${BROWSER}" \
               --network container:fecfile-api-proxy \
               -e BROWSER="${BROWSER}" \
+              -e SPEC_GLOB="${SPEC_GLOB}" \
               -e CIRCLE_BRANCH="${CIRCLE_BRANCH}" \
               -e CYPRESS_EMAIL="${CYPRESS_EMAIL}" \
               -e CYPRESS_COMMITTEE_ID="${CYPRESS_COMMITTEE_ID}" \
               -e CYPRESS_PASSWORD="${CYPRESS_PASSWORD}" \
               -e CYPRESS_FILING_PASSWORD="${CYPRESS_FILING_PASSWORD}" \
+              "${CYPRESS_IMAGE}" \
               bash -lc '
                 set -euxo pipefail
+
+                # Ensure git exists (some images do, this is a safe fallback)
+                if ! command -v git >/dev/null 2>&1; then
+                  apt-get update
+                  apt-get install -y --no-install-recommends git ca-certificates
+                fi
+
                 cd ~
                 git clone https://github.com/fecgov/fecfile-web-app.git
                 cd fecfile-web-app/front-end
                 git checkout "${CIRCLE_BRANCH}"
 
-                npm install
+                npm ci || npm install
 
-                # WebKit needs the engine + extra Linux deps (Cypress experimental support)
+                # WebKit (experimental): add engine + Linux deps
                 if [ "${BROWSER}" = "webkit" ]; then
-                  npm install --save-dev playwright-webkit
+                  npm i -D playwright-webkit
                   npx playwright install-deps webkit
                 fi
 
-                # Run the Angular builder that drives Cypress and forwards --browser
                 node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e \
-                  --spec "cypress/nightly/**/*.cy.ts" \
+                  --spec "${SPEC_GLOB}" \
                   --headless --watch=false \
                   --browser "${BROWSER}"
               '
@@ -265,6 +273,7 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
+
 
   deploy-job:
     docker:
