@@ -3,13 +3,12 @@ import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { ConfirmationService } from 'primeng/api';
-import { FormComponent } from '../app-destroyer.component';
+import { FormComponent } from '../form.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { Roles, CommitteeMember } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
-import { printFormErrors } from 'app/shared/utils/form.utils';
 import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
@@ -64,13 +63,27 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     this.form.get('role')?.setValue(roleOption);
   }
 
-  public submit() {
+  submit(): Promise<void> {
     this.formSubmitted = true;
     if (this.member()) {
-      this.editRole();
+      return this.editRole();
     } else {
-      this.addUser();
+      return this.addUser();
     }
+  }
+
+  override validateForm(): Promise<boolean> {
+    const member = this.member();
+    if (member) {
+      this.form.controls['email'].setAsyncValidators([]);
+      this.form.controls['email'].setValue(member.email);
+    } else {
+      this.form.controls['email'].setAsyncValidators(
+        this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator),
+      );
+    }
+
+    return super.validateForm();
   }
 
   resetForm() {
@@ -79,40 +92,28 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
   }
 
   async editRole() {
-    if (this.form.get('role')?.valid) {
-      const role = this.form.get('role')?.value;
-      if (this.form.get('role')?.valid) {
-        try {
-          await this.committeeMemberService.update({ ...this.member(), role } as CommitteeMember);
-          this.detailVisible.set(false);
-          this.roleEdited.emit();
-          this.resetForm();
-        } catch (error) {
-          console.error('Error updating member', error);
-        }
-      }
+    const role = this.form.get('role')?.value;
+    try {
+      await this.committeeMemberService.update({ ...this.member(), role } as CommitteeMember);
+      this.detailVisible.set(false);
+      this.roleEdited.emit();
+      this.form.controls['email'].addAsyncValidators(this.uniqueEmailValidator.validate);
+      this.resetForm();
+    } catch (error) {
+      console.error('Error updating member', error);
     }
   }
 
   async addUser() {
     const email = this.form.get('email')?.value as string;
     const role = this.form.get('role')?.value;
-    this.form.updateValueAndValidity();
-    Object.values(this.form.controls).forEach((control) => {
-      control.markAsDirty();
-    });
-
-    if (this.form.valid && email) {
-      try {
-        const newUser = await this.committeeMemberService.addMember(email, role);
-        this.detailVisible.set(false);
-        this.userAdded.emit(newUser.email);
-        this.resetForm();
-      } catch (error) {
-        console.error('Error adding member', error);
-      }
-    } else {
-      printFormErrors(this.form);
+    try {
+      const newUser = await this.committeeMemberService.addMember(email, role);
+      this.detailVisible.set(false);
+      this.userAdded.emit(newUser.email);
+      this.resetForm();
+    } catch (error) {
+      console.error('Error adding member', error);
     }
   }
 }

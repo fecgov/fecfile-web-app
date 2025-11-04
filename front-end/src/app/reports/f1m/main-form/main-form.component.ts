@@ -1,4 +1,4 @@
-import { Component, inject, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
@@ -6,7 +6,6 @@ import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
@@ -50,7 +49,6 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
   styleUrl: './main-form.component.scss',
 })
 export class MainFormComponent extends MainFormBaseComponent<Form1M> implements OnInit, OnDestroy {
-  readonly injector = inject(Injector);
   readonly cmservice = inject(ContactManagementService);
   protected readonly reportService: Form1MService = inject(Form1MService);
   readonly contactService = inject(ContactService);
@@ -247,18 +245,10 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     return Object.assign(this.report, formValues);
   }
 
-  public override async save(jump: 'continue' | void): Promise<void> {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  public override async submit(jump: 'continue' | void): Promise<void> {
     const confirmed = await this.getConfirmations();
     // if every confirmation was accepted
-    if (confirmed) super.save(jump);
+    if (confirmed) super.submit(jump);
     else this.store.dispatch(singleClickEnableAction());
   }
 

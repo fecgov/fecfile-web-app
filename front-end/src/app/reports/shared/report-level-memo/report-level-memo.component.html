@@ -26,7 +26,14 @@
         <img pButtonIcon alt="Previous Arrow" src="assets/img/prev_arrow.svg" height="14px" />
         <span pButtonLabel>See print preview</span>
       </button>
-      <button pButton pRipple appSingleClick label="Save & continue" class="p-button-primary" (click)="save()"></button>
+      <button
+        pButton
+        pRipple
+        appSingleClick
+        label="Save & continue"
+        class="p-button-primary"
+        (click)="submitForm()"
+      ></button>
     </div>
   </form>
 </div>

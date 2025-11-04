@@ -1,5 +1,5 @@
-import { Component, effect, OnDestroy, OnInit, viewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { afterNextRender, Component, effect, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
+import { FormControlStatus, FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
@@ -19,7 +19,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
-import { Accordion } from 'primeng/accordion';
+import { AccordionPanel } from 'primeng/accordion';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -36,7 +36,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  readonly accordion = viewChild.required(Accordion);
+  readonly accordionValue = signal(0);
   childFormProperties: string[] = [];
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
@@ -46,12 +46,37 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   childMemoHasOptional$ = of(false);
 
+  scrollToError = false;
+  protected readonly animationTime = 50;
+  protected readonly accordionPanels = viewChildren(AccordionPanel);
+  forms: FormGroup[] = [];
+
   constructor() {
     super();
     effect(() => {
-      this.accordion().value();
-      scrollToTop();
+      const value = this.accordionValue();
+      if (this.scrollToError) {
+        this.addListener(this.accordionPanels()[value]);
+      } else {
+        scrollToTop();
+      }
     });
+  }
+
+  /**
+   * Will scroll to the first error in the associated panel,
+   * as soon as it's finished opening
+   * @param panel
+   */
+  addListener(panel: AccordionPanel) {
+    panel.el.nativeElement.addEventListener(
+      'transitionend',
+      () => {
+        this.scrollToFirstInvalidControl();
+        this.scrollToError = false;
+      },
+      { once: true },
+    );
   }
 
   override ngOnInit(): void {
@@ -102,9 +127,10 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
     // Determine which accordion pane to open initially based on transaction id in page URL
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId && this.accordion) {
-      this.accordion().value.set(1);
+    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
+      this.accordionValue.set(1);
     }
+    this.forms = [this.form, this.childForm];
   }
 
   /**
@@ -128,16 +154,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     })[0];
   }
 
-  override save(navigationEvent: NavigationEvent): Promise<void> {
-    // update all contacts with changes from form.
-    if (this.transaction && this.childTransaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
-      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
-    } else {
-      this.store.dispatch(singleClickEnableAction());
-      throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
-    }
-
+  override submit(navigationEvent: NavigationEvent): Promise<void> {
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
@@ -158,10 +175,56 @@ export abstract class DoubleTransactionTypeBaseComponent
     return this.processPayload(payload, navigationEvent);
   }
 
-  override isInvalid(): boolean {
-    blurActiveInput(this.childForm);
-    if (this.childForm.invalid) printFormErrors(this.childForm);
-    return super.isInvalid() || this.childForm.invalid || !this.childTransaction;
+  /**
+   * update all contacts with changes from form.
+   */
+  protected updateContactData() {
+    if (this.transaction && this.childTransaction) {
+      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+    } else {
+      this.store.dispatch(singleClickEnableAction());
+      throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
+    }
+  }
+
+  override async validateForm() {
+    this.formSubmitted = true;
+
+    let invalid = -1;
+    const promises: Promise<FormControlStatus>[] = [];
+    this.forms.forEach((form) => {
+      blurActiveInput(form);
+      if (form.pending) promises.push(firstValueFrom(form.statusChanges));
+    });
+    await Promise.all(promises);
+    this.forms.forEach((form, index) => (invalid = this.validate(form, index, invalid)));
+
+    return this.isValid(invalid);
+  }
+
+  protected validate(form: FormGroup, index: number, invalid: number = -1) {
+    if (form.invalid) {
+      printFormErrors(form);
+      if (invalid === -1) invalid = index;
+    }
+    return invalid;
+  }
+
+  protected async isValid(invalid: number): Promise<boolean> {
+    if (invalid === -1) {
+      this.scrollToError = false;
+      return true;
+    } else {
+      this.store.dispatch(singleClickEnableAction());
+      if (this.accordionValue() === invalid) {
+        afterNextRender(() => this.scrollToFirstInvalidControl(), { injector: this.injector });
+      } else {
+        this.scrollToError = true;
+        this.accordionValue.set(invalid);
+      }
+      return false;
+    }
   }
 
   override async getConfirmations(): Promise<boolean> {

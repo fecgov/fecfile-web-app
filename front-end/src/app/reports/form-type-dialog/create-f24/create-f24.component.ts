@@ -46,6 +46,12 @@ export class CreateF24Component {
     return undefined;
   });
 
+  // reset the form fields to their initial state
+  reset(): void {
+    this.form24Name.set('');
+    this.selectedForm24Type.set(null);
+  }
+
   readonly form24NameValid = computed(() => !!this.form24NameErrors());
   readonly form24Valid = computed(() => this.selectedForm24TypeValid() && this.form24NameValid());
   readonly isSubmitDisabled = computed(() => !this.selectedForm24Type());

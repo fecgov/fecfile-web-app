@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormComponent } from 'app/shared/components/form.component';
 import { Router } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { Report } from 'app/shared/models';
@@ -60,8 +60,7 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
-  async save(): Promise<void> {
-    this.formSubmitted = true;
+  async submit(): Promise<void> {
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
 
     const payload: MemoText = MemoText.fromJSON({

@@ -1,15 +1,12 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/form.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/report.model';
 import { ReportService } from 'app/shared/services/report.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
-import { firstValueFrom } from 'rxjs';
 @Component({
   template: '',
 })
@@ -58,21 +55,7 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
     this.router.navigateByUrl('/reports');
   }
 
-  public async save(jump: 'continue' | void) {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-
-    // If the form is still processing validity, wait for it to finish
-    if (this.form.pending) {
-      await firstValueFrom(this.form.statusChanges);
-    }
-
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  public async submit(jump: 'continue' | void) {
     const payload: T = this.getReportPayload();
     let report: T;
     if (this.reportId) {

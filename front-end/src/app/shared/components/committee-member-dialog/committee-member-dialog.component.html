@@ -4,7 +4,7 @@
   [title]="member() ? 'Edit' : 'Add user'"
   [submitLabel]="member() ? 'Change' : 'Add'"
   [(visible)]="detailVisible"
-  (submitForm)="submit()"
+  (submitForm)="submitForm()"
 >
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="dialog-body">

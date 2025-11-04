@@ -2,7 +2,7 @@ import { Component, effect } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { FormComponent } from 'app/shared/components/app-destroyer.component';
+import { FormComponent } from 'app/shared/components/form.component';
 import { environment } from 'environments/environment';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
 import { ButtonModule } from 'primeng/button';
@@ -56,6 +56,10 @@ export class CommitteeInfoComponent extends FormComponent {
       }
       this.form.disable();
     });
+  }
+
+  submit(): Promise<void> {
+    throw new Error('Non submittable form');
   }
 
   /**

@@ -94,12 +94,10 @@ describe('ReportLevelMemoComponent', () => {
       detail: 'Report Memo Updated',
       life: 3000,
     };
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(
-      Promise.resolve(new MemoText()),
-    );
+    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.resolveTo(new MemoText());
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = '1';
-    await component.save();
+    await component.submit();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
 
     expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/999');
@@ -114,12 +112,10 @@ describe('ReportLevelMemoComponent', () => {
       detail: 'Report Memo Created',
       life: 3000,
     };
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(
-      Promise.resolve(new MemoText()),
-    );
+    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.resolveTo(new MemoText());
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = undefined;
-    await component.save();
+    await component.submit();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/999');
     expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
