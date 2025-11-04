@@ -226,30 +226,29 @@ jobs:
               --network container:fecfile-api-proxy \
               cypress/browsers:latest /bin/bash -lc '\
                 set -euxo pipefail; \
-                apt-get update && apt-get install -y curl >/dev/null; \
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                # Edge on-demand (if you keep the generic browsers image)
+                # Install Edge on-demand if requested and not present
                 if [ "<< parameters.browser >>" = "edge" ]; then \
                   apt-get update && apt-get install -y wget gnupg && \
                   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
                   echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list && \
                   apt-get update && apt-get install -y microsoft-edge-stable; \
                 fi; \
-                # WebKit runtime + OS deps
+                # Install Playwright WebKit runtime & OS deps for Cypress WebKit
                 if [ "<< parameters.browser >>" = "webkit" ]; then \
-                  npm i -D playwright && \
+                  npm install --save-dev playwright && \
                   npx playwright install --with-deps webkit; \
                 fi; \
-                # Use ng e2e (keeps devServerTarget) and forward browser to Cypress AFTER `--`
-                if [ "<< parameters.browser >>" = "webkit" ]; then \
-                  ./node_modules/.bin/ng e2e --configuration production -- --browser webkit --headless --spec "<< parameters.spec_glob >>"; \
-                else \
-                  ./node_modules/.bin/ng e2e --configuration production -- --browser << parameters.browser >> --headless --spec "<< parameters.spec_glob >>"; \
-                fi;'
+                # Run Cypress directly (avoid `ng e2e` so WebKit is accepted)
+                npm start
+                npx cypress run \
+                  --headless \
+                  --browser << parameters.browser >> \
+                  --spec "<< parameters.spec_glob >>";'
 
       - run:
           name: Stage test result artifacts for << parameters.browser >>
