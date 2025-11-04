@@ -2,9 +2,11 @@ import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   input,
+  model,
   OnChanges,
   output,
   viewChild,
@@ -28,7 +30,7 @@ import { SelectComponent } from '../select/select.component';
   styleUrls: ['./committee-member-dialog.component.scss'],
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, ButtonDirective, Ripple, SelectComponent],
 })
-export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges, AfterViewInit {
+export class CommitteeMemberDialogComponent extends FormComponent {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly committeeMemberService = inject(CommitteeMemberService);
   protected readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
@@ -40,9 +42,8 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     };
   });
 
-  readonly detailVisible = input(false);
+  readonly detailVisible = model(false);
   readonly member = input<CommitteeMember>();
-  readonly detailVisibleChange = output<boolean>();
   readonly userAdded = output<string>();
   readonly roleEdited = output<void>();
   readonly detailClose = output<void>();
@@ -68,15 +69,16 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
 
   readonly dialog = viewChild.required<ElementRef>('dialog');
 
-  ngAfterViewInit() {
-    this.dialog().nativeElement.addEventListener('close', () => this.detailClose.emit());
-  }
-
-  ngOnChanges(): void {
-    if (this.detailVisible()) {
-      this.resetForm();
-      this.dialog().nativeElement.hide();
-    }
+  constructor() {
+    super();
+    effect(() => {
+      if (this.detailVisible()) {
+        this.dialog().nativeElement.showModal();
+      } else {
+        this.resetForm();
+        this.dialog().nativeElement.close();
+      }
+    });
   }
 
   updateSelected(roleOption: (typeof this.roleOptions)[0]) {

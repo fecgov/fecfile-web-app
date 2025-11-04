@@ -9,11 +9,6 @@
   font-weight: normal;
 }
 
-.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-  transition-duration: 0.15s;
-}
-
 .p-button:disabled {
   border: 2px solid gray;
 }
