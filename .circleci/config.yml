@@ -282,28 +282,52 @@ jobs:
                 npm ci || npm install; \
                 # Install Playwright WebKit runtime + OS deps for Cypress WebKit
                 npm i -D playwright && npx playwright install --with-deps webkit; \
-                # Start ng serve in the background
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve; \
-                # Wait for the Angular dev server to be ready
-                echo "Waiting for Angular dev server to start..."; \
-                for i in {1..60}; do \
-                  if curl -s http://localhost:4200 > /dev/null; then \
-                    echo "Angular dev server is ready!"; \
+                
+                # CRITICAL FIX: Run ng serve in background and wait for it to be ready
+                echo "Starting Angular dev server in background..."; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --host 0.0.0.0 --port 4200 > /tmp/ng-serve.log 2>&1 & \
+                NG_PID=$!; \
+                
+                # Wait for Angular to compile and be ready
+                echo "Waiting for Angular to compile and be ready..."; \
+                MAX_WAIT=300; \
+                WAITED=0; \
+                while [ $WAITED -lt $MAX_WAIT ]; do \
+                  if grep -q "Compiled successfully" /tmp/ng-serve.log 2>/dev/null; then \
+                    echo "Angular compiled successfully! Server is ready."; \
                     break; \
                   fi; \
-                  echo "Waiting... ($i/60)"; \
                   sleep 5; \
+                  WAITED=$((WAITED + 5)); \
+                  echo "Still waiting for Angular to compile... ($WAITED/$MAX_WAIT seconds)"; \
                 done; \
-                # Run Cypress tests with webkit
+                
+                if [ $WAITED -ge $MAX_WAIT ]; then \
+                  echo "ERROR: Angular server failed to start within timeout"; \
+                  echo "ng serve logs:"; \
+                  cat /tmp/ng-serve.log; \
+                  kill $NG_PID 2>/dev/null || true; \
+                  exit 1; \
+                fi; \
+                
+                # Give it a few more seconds to stabilize
+                sleep 5; \
+                
+                # Now run Cypress with WebKit
+                echo "Starting Cypress tests with WebKit browser..."; \
                 npx cypress run \
                   --spec "cypress/nightly/**/*.cy.ts" \
                   --headless \
                   --browser webkit \
                   --config baseUrl=http://localhost:4200; \
-                CYPRESS_EXIT_CODE=$?; \
-                # Kill the ng serve process
-                kill $NG_SERVE_PID || true; \
-                exit $CYPRESS_EXIT_CODE;'
+                CYPRESS_EXIT=$?; \
+                
+                # Clean up: kill the ng serve process
+                echo "Cleaning up ng serve process..."; \
+                kill $NG_PID 2>/dev/null || true; \
+                
+                # Exit with Cypress exit code
+                exit $CYPRESS_EXIT;'
       - run:
           name: Stage artifacts (webkit)
           when: always
