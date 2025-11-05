@@ -17,7 +17,7 @@
         <label for="candidate_state">CANDIDATE STATE</label>
         <app-searchable-select
           inputId="candidate_state"
-          [formControlName]="stateFormControlName()"
+          [controlName]="stateFormControlName()"
           [form]="form()"
           [options]="candidateStateOptions"
           [class.disabled]="stateControl()?.disabled"
