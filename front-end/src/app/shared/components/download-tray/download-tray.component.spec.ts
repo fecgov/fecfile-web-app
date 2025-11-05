@@ -41,7 +41,7 @@ describe('DownloadTrayComponent', () => {
     fixture.detectChanges();
 
     report = { id: 'a' } as Report;
-    download = { taskId: '1', report, isComplete: false, name: 'Test.fec', filename: 'YYYY-MM-DD_TEST-FORMNAME' };
+    download = { taskId: '1', report, isComplete: false, name: 'Test.fec', filename: 'TEST_FORMNAME_YYYY-MM-DD-HHMM' };
   });
 
   it('should create', () => {
