@@ -11,10 +11,7 @@ export interface Download {
   id?: string;
   taskId: string;
   isComplete: boolean;
-  // guaranteed unique filename on server
   name: string;
-  // Human-friendly filename for download (e.g. SHORTENEDFORMTYPE-FORMNAME_YYYY-MM-DD-HHMM)
-  filename: string;
   report: Report;
 }
 
@@ -69,13 +66,12 @@ export class DotFecService {
     const formName = report.formSubLabel ? sanitize(report.formSubLabel) : sanitize(report.formLabel);
 
     // Compose human-facing filename with date_reporttype_formname format
-    const humanFilename = `${reportType}_${formName}_${dateStr}`;
+    const humanFilename = `${reportType}_${formName}_${dateStr}.fec`;
 
     const download = {
       taskId: response.task_id,
       report,
-      name: response.file_name,
-      filename: humanFilename,
+      name: humanFilename,
       isComplete: false,
     };
     this.downloads().push(download);
@@ -89,7 +85,7 @@ export class DotFecService {
     const data = window.URL.createObjectURL(newBlob);
     const link = this.renderer.createElement('a');
     this.renderer.setAttribute(link, 'href', data);
-    this.renderer.setAttribute(link, 'download', download.filename + '.fec');
+    this.renderer.setAttribute(link, 'download', download.name);
     this.renderer.appendChild(document.body, link);
     link.click();
   }
