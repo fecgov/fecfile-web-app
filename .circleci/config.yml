@@ -319,6 +319,7 @@ jobs:
                   --spec "cypress/nightly/**/*.cy.ts" \
                   --headless \
                   --record \
+                  --key f0ce7ede-a176-4d72-8650-756286b47471 \
                   --browser webkit \
                   --config baseUrl=http://localhost:4200; \
                 CYPRESS_EXIT=$?; \
@@ -334,17 +335,13 @@ jobs:
           when: always
           command: |
             rm -rf /tmp/cypress/webkit
-            mkdir -p /tmp/cypress/webkit/{videos,screenshots,results}
+            mkdir -p /tmp/cypress/webkit/{videos,results}
             docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/webkit/videos || true
-            docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/webkit/screenshots || true
             docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/webkit/results || true
             docker rm -f fecfile-web-app-e2e-webkit || true
       - store_artifacts:
           path: /tmp/cypress/webkit/videos
           destination: cypress/webkit/videos
-      - store_artifacts:
-          path: /tmp/cypress/webkit/screenshots
-          destination: cypress/webkit/screenshots
       - store_artifacts:
           path: /tmp/cypress/webkit/results
           destination: cypress/webkit/results
