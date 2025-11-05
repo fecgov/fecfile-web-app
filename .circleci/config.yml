@@ -281,7 +281,7 @@ jobs:
                 git checkout ${CIRCLE_BRANCH}; \
                 npm ci || npm install; \
                 # Install Playwright WebKit runtime + OS deps for Cypress WebKit
-                npm i -D playwright && npm i -D playwright-webkit && npx playwright install --with-deps webkit; \
+                npm i -D playwright && npm i -D playwright-webkit && npx playwright install-deps webkit; \
                 
                 # CRITICAL FIX: Run ng serve in background and wait for it to be ready
                 echo "Starting Angular dev server in background..."; \
@@ -318,6 +318,9 @@ jobs:
                 npx cypress run \
                   --spec "cypress/nightly/**/*.cy.ts" \
                   --headless \
+                  --record \
+                  --video \
+                  --screenshot-on-run-failure \ 
                   --browser webkit \
                   --config baseUrl=http://localhost:4200; \
                 CYPRESS_EXIT=$?; \
@@ -333,9 +336,17 @@ jobs:
           when: always
           command: |
             rm -rf /tmp/cypress/webkit
-            mkdir -p /tmp/cypress/webkit/results
+            mkdir -p /tmp/cypress/webkit/{videos,screenshots,results}
+            docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/webkit/videos || true
+            docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/webkit/screenshots || true
             docker cp fecfile-web-app-e2e-webkit:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/webkit/results || true
             docker rm -f fecfile-web-app-e2e-webkit || true
+      - store_artifacts:
+          path: /tmp/cypress/webkit/videos
+          destination: cypress/webkit/videos
+      - store_artifacts:
+          path: /tmp/cypress/webkit/screenshots
+          destination: cypress/webkit/screenshots
       - store_artifacts:
           path: /tmp/cypress/webkit/results
           destination: cypress/webkit/results
