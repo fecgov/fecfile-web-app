@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+
 import {
   booleanAttribute,
   ChangeDetectorRef,
@@ -13,6 +13,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  DOCUMENT
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { DomHandler } from 'primeng/dom';
