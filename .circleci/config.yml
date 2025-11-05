@@ -281,7 +281,7 @@ jobs:
                 git checkout ${CIRCLE_BRANCH}; \
                 npm ci || npm install; \
                 # Install Playwright WebKit runtime + OS deps for Cypress WebKit
-                npm i -D playwright && npx playwright install --with-deps webkit; \
+                npm i -D playwright && npm i -D playwright-webkit && npx playwright install --with-deps webkit; \
                 
                 # CRITICAL FIX: Run ng serve in background and wait for it to be ready
                 echo "Starting Angular dev server in background..."; \
