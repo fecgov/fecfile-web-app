@@ -13,6 +13,7 @@
 		"cypress_config_file": "./cypress.config.ts"
 	},
 	"testObservability": true,
+	"browserstackAutomation": true,
 	"testObservabilityOptions": {
 		"projectName": "fecfile-web-app",
 		"buildName": "Cypress E2E Cross-Browser Tests",
