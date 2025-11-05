@@ -12,7 +12,7 @@
 	"run_settings": {
 		"cypress_config_file": "./cypress.config.ts"
 	},
-	"testObservability": true,
+	"testObservability": false,
 	"browserstackAutomation": false,
 	"testObservabilityOptions": {
 		"projectName": "fecfile-web-app",

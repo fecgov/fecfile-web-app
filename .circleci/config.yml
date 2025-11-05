@@ -292,14 +292,9 @@ jobs:
                 npm install; \
                 npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 & \
                 npx -y wait-on http://127.0.0.1:4200; \
-                SPEC_GLOB="<< parameters.spec_glob >>"; \
-                SPEC_COUNT=$(find . -path "./${SPEC_GLOB}" -name "*.cy.ts" -type f 2>/dev/null | wc -l); \
-                MAX_PARALLELS=10; \
-                PARALLELS=$((SPEC_COUNT < MAX_PARALLELS ? SPEC_COUNT : MAX_PARALLELS)); \
                 echo "Running $SPEC_COUNT specs with $PARALLELS parallel sessions"; \
                 npx browserstack-cypress run \
-                  --spec "$SPEC_GLOB" \
-                  --parallels $PARALLELS;'
+                  --spec "<< parameters.spec_glob >>"; \
 
       - run:
           name: Stage BrowserStack artifacts
