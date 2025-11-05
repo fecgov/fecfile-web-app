@@ -403,7 +403,7 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
         aria-label="${this.is_active ? 'Active' : 'Inactive'}" 
       ></span>`;
     return {
-      label: `${this.name}${statusCircle}<br>(${this.id})`,
+      label: `${this.name}<br>(${this.id})${statusCircle}`,
       value: this,
     };
   }
