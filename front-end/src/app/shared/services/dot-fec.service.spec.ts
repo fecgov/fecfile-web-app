@@ -86,7 +86,7 @@ describe('DotFecService', () => {
   }));
 
   it('should generate FEC file', async () => {
-    const response = { status: 'testStatus', file_name: 'testFileName', task_id: 'testTaskId' };
+    const response = { status: 'testStatus', task_id: 'testTaskId' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spyOn(apiService, 'post').and.returnValue(Promise.resolve(response) as Promise<any>);
 
