@@ -1,5 +1,3 @@
-import { environment } from 'environments/environment';
-
 export enum FormTypes {
   F1M = 'F1M',
   F3 = 'F3',
@@ -37,6 +35,9 @@ const allFormTypes = new Map<FormTypes, FormType>([
   [FormTypes.F24, new FormType('F24', 'Form 24', '24/48 Hour Report of Independent Expenditure')],
   [FormTypes.F99, new FormType('F99', 'Form 99', 'Miscellaneous Report to FEC', '/reports/f99/create')],
 ]);
-export const FORM_TYPES = environment.showForm3
-  ? allFormTypes
-  : new Map([...allFormTypes.entries()].filter(([formType]) => formType !== FormTypes.F3));
+
+export function getFormTypes(showForm3: boolean): Map<FormTypes, FormType> {
+  return showForm3
+    ? allFormTypes
+    : new Map([...allFormTypes.entries()].filter(([formType]) => formType !== FormTypes.F3));
+}

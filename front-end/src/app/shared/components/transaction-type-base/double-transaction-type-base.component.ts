@@ -190,14 +190,14 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override async validateForm() {
     this.formSubmitted = true;
+    this.updateContactData();
 
     let invalid = -1;
-    const promises: Promise<FormControlStatus>[] = [];
-    this.forms.forEach((form) => {
+    this.forms.forEach(async (form) => {
       blurActiveInput(form);
-      if (form.pending) promises.push(firstValueFrom(form.statusChanges));
+      if (form.pending) await firstValueFrom(form.statusChanges);
     });
-    await Promise.all(promises);
+
     this.forms.forEach((form, index) => (invalid = this.validate(form, index, invalid)));
 
     return this.isValid(invalid);

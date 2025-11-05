@@ -2,7 +2,6 @@ import { Component, computed, inject, Pipe, PipeTransform, signal, viewChild } f
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { Transaction } from '../../../shared/models/transaction.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
@@ -15,6 +14,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ButtonDirective } from 'primeng/button';
 import { SelectReportDialogComponent } from './select-report-dialog/select-report-dialog.component';
 import { SecondaryReportSelectionDialogComponent } from '../secondary-report-selection-dialog/secondary-report-selection-dialog.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({
   selector: 'app-transaction-list',
@@ -130,15 +130,10 @@ export class TransactionListComponent {
   }
 
   refreshTables() {
-    this.receipts().refreshTable();
-    this.disbursements().refreshTable();
-    this.loans().refreshTable();
-  }
-}
-
-@Pipe({ name: 'memoCode' })
-export class MemoCodePipe implements PipeTransform {
-  transform(value: boolean) {
-    return value ? 'Y' : '-';
+    return Promise.all([
+      this.receipts().refreshTable(),
+      this.disbursements().refreshTable(),
+      this.loans().refreshTable(),
+    ]);
   }
 }

@@ -47,7 +47,7 @@ describe('FeedbackOverlayComponent', () => {
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
-  it('#save happy path', fakeAsync(async () => {
+  it('#save happy path', async () => {
     const test_action = 'test_action';
     const test_feedback = 'test_feedback';
     const test_about = 'test_about';
@@ -57,18 +57,16 @@ describe('FeedbackOverlayComponent', () => {
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
     await component.submitForm();
-    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
-      jasmine.objectContaining({
-        action: test_action,
-        feedback: test_feedback,
-        about: test_about,
-      }),
-    );
-    tick(1000);
+    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith({
+      action: test_action,
+      feedback: test_feedback,
+      about: test_about,
+      location: window.location.href,
+    });
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.SUCCESS);
-  }));
+  });
 
-  it('#save error', fakeAsync(async () => {
+  it('#save error', async () => {
     const test_action = 'test_action';
     const test_feedback = 'test_feedback';
     const test_about = 'test_about';
@@ -78,16 +76,14 @@ describe('FeedbackOverlayComponent', () => {
 
     const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
     await component.submitForm();
-    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith(
-      jasmine.objectContaining({
-        action: test_action,
-        feedback: test_feedback,
-        about: test_about,
-      }),
-    );
-    tick(1000);
+    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith({
+      action: test_action,
+      feedback: test_feedback,
+      about: test_about,
+      location: window.location.href,
+    });
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.FAIL);
-  }));
+  });
 
   it('#reset happy path', () => {
     component.reset();

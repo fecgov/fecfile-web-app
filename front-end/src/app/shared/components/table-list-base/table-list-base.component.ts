@@ -16,6 +16,7 @@ import { TableListService } from '../../interfaces/table-list-service.interface'
 import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableComponent } from '../table/table.component';
+import { TableAction } from '../table-actions-button/table-actions';
 
 @Component({
   template: '',
@@ -190,25 +191,4 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
    * Returns and empty instance of the class model being displayed in the table.
    */
   protected abstract getEmptyItem(): T;
-}
-
-export class TableAction {
-  label: string;
-  action: (item?: any) => void | Promise<void> | Promise<boolean>;
-
-  constructor(
-    label: string,
-    action: (item?: any) => void | Promise<void> | Promise<boolean>,
-    isAvailable?: (item?: any) => boolean,
-    isEnabled?: (item?: any) => boolean,
-  ) {
-    this.label = label;
-    this.action = action;
-    this.isAvailable = isAvailable || this.isAvailable;
-    this.isEnabled = isEnabled || this.isEnabled;
-  }
-
-  isAvailable: (item?: any) => boolean = () => true;
-
-  isEnabled: (item?: any) => boolean = () => true;
 }

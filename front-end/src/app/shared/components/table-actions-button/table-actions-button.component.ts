@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { TableAction } from '../table-list-base/table-list-base.component';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Popover, PopoverModule } from 'primeng/popover';
+import { TableAction } from './table-actions';
 
 @Component({
   selector: 'app-table-actions-button',

@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PopoverModule } from 'primeng/popover';
 import { TableActionsButtonComponent } from './table-actions-button.component';
 import { ButtonModule } from 'primeng/button';
-import { TableAction } from '../table-list-base/table-list-base.component';
 import { Report, ReportStatus } from '../../models/report.model';
+import { TableAction } from './table-actions';
 
 describe('TableActionsButtonComponent', () => {
   let component: TableActionsButtonComponent;

@@ -1,13 +1,14 @@
 import { Component, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Report, ReportStatus } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ColumnDefinition } from 'app/shared/components/table/table.component';
 import { SharedTemplatesComponent } from './shared-templates.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({ template: '' })
 export abstract class AbstractFormListComponent<T extends Report> extends TableListBaseComponent<T> {

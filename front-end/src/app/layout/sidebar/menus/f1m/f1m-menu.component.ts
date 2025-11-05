@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.utils';
+import { FormTypes, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
 import { PanelMenu } from 'primeng/panelmenu';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-f1m-menu',
@@ -12,7 +13,7 @@ import { PanelMenu } from 'primeng/panelmenu';
   imports: [PanelMenu],
 })
 export class F1MMenuComponent extends AbstractMenuComponent {
-  readonly subHeading: string = FORM_TYPES.get(FormTypes.F1M)?.description as string;
+  readonly subHeading: string = getFormTypes(environment.showForm3).get(FormTypes.F1M)?.description as string;
   override readonly reportString = 'f1m';
 
   getMenuItems(sidebarState: SidebarState, isEditable: boolean): MenuItem[] {

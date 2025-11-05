@@ -7,7 +7,7 @@ import { Select } from 'primeng/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 import { Toolbar } from 'primeng/toolbar';
-import { TableAction } from '../table-list-base/table-list-base.component';
+import { TableAction } from '../table-actions-button/table-actions';
 
 export interface ColumnDefinition<T> {
   field: string;

@@ -11,6 +11,7 @@ import { ContactTypes, CandidateOfficeTypes, Contact } from '../../models/contac
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { testContact } from 'app/shared/utils/unit-test.utils';
+import { firstValueFrom } from 'rxjs';
 
 describe('ContactModalComponent', () => {
   let component: ContactModalComponent;
@@ -106,12 +107,14 @@ describe('ContactModalComponent', () => {
   it('should save contact if form is valid', async () => {
     component.form.patchValue(testContact());
     component.form.patchValue({ telephone: null });
-
-    fixture.detectChanges();
-    await fixture.whenStable();
+    for (const control in component.form.controls) {
+      if (component.form.controls[control].pending)
+        await firstValueFrom(component.form.controls[control].statusChanges);
+    }
 
     expect(component.form.valid).toBeTrue();
     component.saveContact();
+
     expect(manager.contact().first_name).toEqual('Joe');
     expect(manager.outerContact()).toEqual(manager.contact());
   });

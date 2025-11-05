@@ -27,6 +27,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { firstValueFrom } from 'rxjs';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
@@ -85,15 +86,18 @@ describe('TransactionDetailComponent', () => {
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('#handleNavigate() should not save an invalid record', fakeAsync(() => {
+  it('#handleNavigate() should not save an invalid record', async () => {
     const navSpy = spyOn(component, 'navigateTo');
     const saveSpy = spyOn(component, 'submit');
 
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    tick(100);
-    component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
+    for (const control in component.form.controls) {
+      if (component.form.controls[control].pending)
+        await firstValueFrom(component.form.controls[control].statusChanges);
+    }
+    await component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     expect(navSpy).not.toHaveBeenCalled();
     expect(saveSpy).not.toHaveBeenCalled();
-  }));
+  });
 });

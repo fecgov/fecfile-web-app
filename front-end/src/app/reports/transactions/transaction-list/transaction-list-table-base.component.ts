@@ -1,7 +1,8 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import {
   Report,
   Transaction,

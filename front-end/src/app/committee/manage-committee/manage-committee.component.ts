@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
@@ -11,6 +11,7 @@ import { CommitteeMemberDialogComponent } from '../../shared/components/committe
 import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({
   selector: 'app-manage-committee',
