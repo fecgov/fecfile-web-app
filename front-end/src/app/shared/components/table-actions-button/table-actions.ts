@@ -1,12 +1,12 @@
-export class TableAction {
+export class TableAction<T> {
   label: string;
-  action: (item?: any) => void | Promise<void> | Promise<boolean>;
+  action: (item: T) => void | Promise<void> | Promise<boolean>;
 
   constructor(
     label: string,
-    action: (item?: any) => void | Promise<void> | Promise<boolean>,
-    isAvailable?: (item?: any) => boolean,
-    isEnabled?: (item?: any) => boolean,
+    action: (item: T) => void | Promise<void> | Promise<boolean>,
+    isAvailable?: (item: T) => boolean,
+    isEnabled?: (item: T) => boolean,
   ) {
     this.label = label;
     this.action = action;
@@ -14,7 +14,7 @@ export class TableAction {
     this.isEnabled = isEnabled || this.isEnabled;
   }
 
-  isAvailable: (item?: any) => boolean = () => true;
+  isAvailable: (item: T) => boolean = () => true;
 
-  isEnabled: (item?: any) => boolean = () => true;
+  isEnabled: (item: T) => boolean = () => true;
 }

@@ -20,10 +20,10 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   override readonly rowsPerPage = signal(5);
 
-  readonly sharedTemplate = viewChild.required(SharedTemplatesComponent);
+  readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
   columns: ColumnDefinition<T>[] = [];
 
-  readonly rowActions: TableAction[] = [
+  readonly rowActions: TableAction<T>[] = [
     new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
     new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
     new TableAction(

@@ -45,7 +45,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.INDIVIDUAL,
   ]);
 
-  public rowActions: TableAction[] = [
+  public rowActions: TableAction<Contact>[] = [
     new TableAction('Edit', this.editItem.bind(this)),
     new TableAction(
       'Delete',

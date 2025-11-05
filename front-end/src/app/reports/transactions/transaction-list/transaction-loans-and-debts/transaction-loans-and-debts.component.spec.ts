@@ -129,7 +129,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test createDebtRepaymentMade', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[0];
-    const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE };
+    const transaction = getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
     (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE;
@@ -144,7 +144,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test createDebtRepaymentReceived', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
-    const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE };
+    const transaction = getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE);
     (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE;

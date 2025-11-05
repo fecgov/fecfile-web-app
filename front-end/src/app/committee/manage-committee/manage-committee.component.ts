@@ -33,9 +33,9 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
 
-  protected readonly rowActions: TableAction[] = [
-    new TableAction('Edit Role', this.openEdit.bind(this), undefined),
-    new TableAction('Delete', this.confirmDelete.bind(this)),
+  protected readonly rowActions: TableAction<CommitteeMember>[] = [
+    new TableAction<CommitteeMember>('Edit Role', this.openEdit.bind(this), undefined),
+    new TableAction<CommitteeMember>('Delete', this.confirmDelete.bind(this)),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
@@ -103,7 +103,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     });
   }
 
-  openEdit(member: CommitteeMember) {
+  async openEdit(member: CommitteeMember) {
     this.member = member;
     this.detailVisible.set(true);
   }

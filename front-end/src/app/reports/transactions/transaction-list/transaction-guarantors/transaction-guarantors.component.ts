@@ -49,7 +49,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     }
   }
 
-  override rowActions: TableAction[] = [
+  override rowActions: TableAction<Transaction>[] = [
     new TableAction(
       'View',
       this.editItem.bind(this),

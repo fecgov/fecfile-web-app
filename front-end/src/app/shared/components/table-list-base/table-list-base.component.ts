@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   AfterViewInit,
   Component,
@@ -183,7 +182,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     return this.loadTableItems({} as TableLazyLoadEvent);
   }
 
-  public onRowActionClick(action: TableAction, item: T) {
+  public onRowActionClick(action: TableAction<T>, item: T) {
     action.action(item);
   }
 

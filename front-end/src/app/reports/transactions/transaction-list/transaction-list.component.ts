@@ -1,4 +1,4 @@
-import { Component, computed, inject, Pipe, PipeTransform, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -47,7 +47,7 @@ export class TransactionListComponent {
   };
 
   availableReports: Report[] = [];
-  public tableActions: TableAction[] = [
+  public tableActions: TableAction<Report>[] = [
     new TableAction(
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
@@ -110,7 +110,7 @@ export class TransactionListComponent {
   readonly isForm24 = computed(() => this.report().report_type === ReportTypes.F24);
   readonly isInProgress = computed(() => this.report().report_status === ReportStatus.IN_PROGRESS);
 
-  async createTransactions(transactionCategory: string, report?: Report): Promise<void> {
+  async createTransactions(transactionCategory: string, report: Report): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
@@ -125,7 +125,7 @@ export class TransactionListComponent {
     this.reportSelectionCreateMethod = createMethod;
   }
 
-  public onTableActionClick(action: TableAction, report?: Report) {
+  public onTableActionClick(action: TableAction<Report>, report: Report) {
     action.action(report);
   }
 

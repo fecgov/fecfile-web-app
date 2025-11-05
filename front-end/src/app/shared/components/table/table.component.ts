@@ -15,12 +15,12 @@ export interface ColumnDefinition<T> {
   cssClass?: string;
   sortable?: boolean;
   bodyTpl?: TemplateRef<TableBodyContext<T>>;
-  actions?: TableAction[];
+  actions?: TableAction<T>[];
 }
 
 export interface TableBodyContext<T> {
   $implicit: T;
-  rowActions?: TableAction[];
+  rowActions?: TableAction<T>[];
 }
 
 @Component({

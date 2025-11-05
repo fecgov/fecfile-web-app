@@ -46,7 +46,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
   readonly isForm24 = computed(() => this.report().form_type === FormTypes.F24);
 
-  public rowActions: TableAction[] = [
+  public rowActions: TableAction<Transaction>[] = [
     new TableAction(
       'View',
       this.editItem.bind(this),
@@ -207,7 +207,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     this.rowsPerPage.set(5);
   }
 
-  public onTableActionClick(action: TableAction, report?: Report) {
+  public onTableActionClick(action: TableAction<Report>, report: Report) {
     action.action(report);
   }
 

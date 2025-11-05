@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -17,6 +16,7 @@ import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { Form24 } from 'app/shared/models';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -107,11 +107,11 @@ describe('TransactionListComponent', () => {
     const f3x_params = {
       report_status: ReportStatus.IN_PROGRESS,
       report_type: ReportTypes.F3X,
-    };
+    } as Form3X;
     const f24_params = {
       report_status: ReportStatus.IN_PROGRESS,
       report_type: ReportTypes.F24,
-    };
+    } as Form24;
     expect(component.tableActions[0].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[1].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[2].isAvailable(f3x_params)).toEqual(true);
@@ -121,10 +121,10 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[2].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[3].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[4].isAvailable(f24_params)).toEqual(true);
-    expect(component.tableActions[0].isEnabled({})).toEqual(true);
-    expect(component.tableActions[1].isEnabled({})).toEqual(true);
-    expect(component.tableActions[2].isEnabled({})).toEqual(true);
-    expect(component.tableActions[3].isEnabled({})).toEqual(false);
+    expect(component.tableActions[0].isEnabled(f3x_params)).toEqual(true);
+    expect(component.tableActions[1].isEnabled(f3x_params)).toEqual(true);
+    expect(component.tableActions[2].isEnabled(f3x_params)).toEqual(true);
+    expect(component.tableActions[3].isEnabled(f3x_params)).toEqual(false);
   });
 
   it('should call refreshTable on receipts, disbursements, and loans', async () => {
