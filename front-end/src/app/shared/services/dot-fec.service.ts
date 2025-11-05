@@ -13,7 +13,7 @@ export interface Download {
   isComplete: boolean;
   // guaranteed unique filename on server
   name: string;
-  // Human-friendly filename for download (e.g. YYYY-MM-DD_SHORTENEDFORMTYPE-FORMNAME)
+  // Human-friendly filename for download (e.g. SHORTENEDFORMTYPE-FORMNAME_YYYY-MM-DD-HHMM)
   filename: string;
   report: Report;
 }
@@ -49,8 +49,11 @@ export class DotFecService {
       report_id: report.id,
     });
 
-    // current date as YYYY-MM-DD
-    const dateStr = new Date().toISOString().slice(0, 10);
+    // current date as YYYY-MM-DD-HHMM
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 10) + '-' +
+      now.getHours().toString().padStart(2, '0') +
+      now.getMinutes().toString().padStart(2, '0');
 
     // sanitize helper: remove problematic chars and collapse whitespace
     const sanitize = (s?: string) =>
@@ -65,7 +68,7 @@ export class DotFecService {
     const formName = report.formSubLabel ? sanitize(report.formSubLabel) : sanitize(report.formLabel);
 
     // Compose human-facing filename with date_reporttype_formname format
-    const humanFilename = `${dateStr}_${reportType}_${formName}`;
+    const humanFilename = `${reportType}_${formName}_${dateStr}`;
 
     const download = {
       taskId: response.task_id,
