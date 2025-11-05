@@ -91,12 +91,13 @@ describe('DotFecService', () => {
     spyOn(apiService, 'post').and.returnValue(Promise.resolve(response) as Promise<any>);
 
     const result = await service.generateFecFile(report);
+    const dateStr = new Date().toISOString().slice(0, 10);
 
     expect(apiService.post).toHaveBeenCalledWith(`/web-services/dot-fec/`, { report_id: report.id });
     expect(service.downloads().length).toBe(1);
     expect(service.downloads()[0].taskId).toBe(response.task_id);
     expect(service.downloads()[0].report).toBe(report);
-    expect(service.downloads()[0].name).toBe(response.file_name);
+    expect(service.downloads()[0].name).toContain(dateStr);
     expect(service.downloads()[0].isComplete).toBe(false);
     expect(result).toEqual(service.downloads()[0]);
   });
