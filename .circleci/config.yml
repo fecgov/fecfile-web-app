@@ -319,7 +319,6 @@ jobs:
                   --spec "cypress/nightly/**/*.cy.ts" \
                   --headless \
                   --record \
-                  --video \
                   --screenshot-on-run-failure \ 
                   --browser webkit \
                   --config baseUrl=http://localhost:4200; \
