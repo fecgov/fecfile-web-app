@@ -9,10 +9,6 @@
   font-weight: normal;
 }
 
-.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-  transition-duration: 0.15s;
-}
 
 .p-button:disabled {
   border: 2px solid gray;
@@ -6560,4 +6556,8 @@ input {
 
 td {
   font-size: 14px;
+}
+
+.p-accordionpanel:not(.p-accordionpanel-active):not(.p-disabled) .p-accordionheader:hover .p-accordionheader-toggle-icon {
+  color: var(--p-accordion-header-toggle-icon-color);
 }

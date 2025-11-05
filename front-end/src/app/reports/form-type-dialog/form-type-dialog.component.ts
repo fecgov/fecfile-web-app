@@ -39,7 +39,7 @@ export class FormTypeDialogComponent {
       if (this.isF24()) {
         await this.f24().createF24();
       } else if (this.formType()?.createRoute) {
-        await this.router.navigateByUrl(this.formType()?.createRoute ?? '');
+        this.router.navigateByUrl(this.formType()?.createRoute ?? '');
       }
       this.selectedType.set(undefined);
       this.dialogVisible.set(false);
