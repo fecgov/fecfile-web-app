@@ -289,14 +289,9 @@ jobs:
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
-                npm ci || npm install; \
-                export CYPRESS_BASE_URL="http://bs-local.com:4200"; \
-                npx browserstack-cypress run --sync \
-                  --username "${BROWSERSTACK_USERNAME}" \
-                  --key "${BROWSERSTACK_ACCESS_KEY}" \
-                  --build-name "e2e-webkit-${CIRCLE_BRANCH}" \
-                  --cf browserstack.json \
-                  --specs "<< parameters.spec_glob >>";'
+                npm install; \
+                npx browserstack-cypress run \
+                  --spec "<< parameters.spec_glob >>";'
 
       - run:
           name: Stage BrowserStack artifacts
