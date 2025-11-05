@@ -267,31 +267,39 @@ jobs:
     steps:
       - spin-up-api-containers
       - run:
-          name: Compute spec shard
-          command: |
-            SPECS="$(circleci tests glob 'cypress/nightly/**/*.cy.ts' | circleci tests split --split-by=timings)"
-            echo "$SPECS" > /tmp/specs.txt
-      - run:
           name: Execute Cypress tests on BrowserStack (WebKit)
           command: |
-            : "${BROWSERSTACK_USERNAME:?missing}"; : "${BROWSERSTACK_ACCESS_KEY:?missing}"
+            # Precheck: fail early with a clear message
+            : "${BROWSERSTACK_USERNAME:?Set in CircleCI context 'browserstack'}"
+            : "${BROWSERSTACK_ACCESS_KEY:?Set in CircleCI context 'browserstack'}"
 
             docker container run --name fecfile-web-app-e2e-webkit \
               -e CIRCLE_BRANCH \
-              -e CYPRESS_EMAIL -e CYPRESS_COMMITTEE_ID -e CYPRESS_PASSWORD -e CYPRESS_FILING_PASSWORD \
-              -e BROWSERSTACK_USERNAME -e BROWSERSTACK_ACCESS_KEY \
+              -e CYPRESS_EMAIL \
+              -e CYPRESS_COMMITTEE_ID \
+              -e CYPRESS_PASSWORD \
+              -e CYPRESS_FILING_PASSWORD \
+              -e BROWSERSTACK_USERNAME \
+              -e BROWSERSTACK_ACCESS_KEY \
+              -e CYPRESS_experimentalWebKitSupport=true \
               --network container:fecfile-api-proxy \
-              -v /tmp/specs.txt:/tmp/specs.txt:ro \
               cypress/browsers:latest /bin/bash -lc '\
                 set -euo pipefail; \
-                cd ~; git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; git checkout ${CIRCLE_BRANCH}; \
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 & npx -y wait-on http://127.0.0.1:4200; \
-                SPECS="$(tr "\n" "," </tmp/specs.txt)"; \
+                npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 & \
+                npx -y wait-on http://127.0.0.1:4200; \
+                SPEC_GLOB="<< parameters.spec_glob >>"; \
+                SPEC_COUNT=$(find . -path "./${SPEC_GLOB}" -name "*.cy.ts" -type f 2>/dev/null | wc -l); \
+                MAX_PARALLELS=10; \
+                PARALLELS=$((SPEC_COUNT < MAX_PARALLELS ? SPEC_COUNT : MAX_PARALLELS)); \
+                echo "Running $SPEC_COUNT specs with $PARALLELS parallel sessions"; \
                 npx browserstack-cypress run \
-                  --parallels 1 \
-                  --specs "${SPECS}";'
+                  --spec "$SPEC_GLOB" \
+                  --parallels $PARALLELS;'
 
       - run:
           name: Stage BrowserStack artifacts
@@ -305,7 +313,6 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/webkit/results
           destination: cypress/webkit/results
-
 
   deploy-job:
     docker:
