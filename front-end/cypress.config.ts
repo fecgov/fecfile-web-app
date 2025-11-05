@@ -1,4 +1,6 @@
 import { defineConfig } from 'cypress';
+const browserstackPlugin = require('browserstack-cypress-cli/bin/testObservability/plugin');
+
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
@@ -28,5 +30,9 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e/**/*.cy.ts', 'cypress/nightly/**/*.cy.ts'],
+    setupNodeEvents(on, config) {
+      browserstackPlugin(on, config);
+      return config;
+    },
   },
 });

@@ -1,0 +1,24 @@
+{
+	"auth": {
+		"username": "${BROWSERSTACK_USERNAME}",
+		"access_key": "BROWSERSTACK_ACCESS_KEY"
+	},
+	"browsers": [{
+			"os": "OS X Sonoma",
+			"browser": "webkit",
+			"versions": ["latest"]
+	  }
+	],
+	"run_settings": {
+		"cypress_config_file": "./cypress.config.ts"
+	},
+	"testObservability": true,
+	"testObservabilityOptions": {
+		"projectName": "fecfile-web-app",
+		"buildName": "Cypress E2E Cross-Browser Tests",
+		"buildTag": [
+			"e2e",
+			"nightly"
+		]
+	}
+}
