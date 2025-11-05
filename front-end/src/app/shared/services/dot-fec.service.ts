@@ -48,7 +48,7 @@ export class DotFecService {
       },
     );
 
-    // current date as YYYY-MM-DD-HHMM
+    // current datetime as YYYY-MM-DD-HHMM
     const now = new Date();
     const dateStr =
       now.toISOString().slice(0, 10) +
