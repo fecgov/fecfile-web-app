@@ -56,6 +56,8 @@ function getLoginIntervalString(sessionDur: number): string {
 
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
+
+  // API intercepts used by guards/flows after login
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
@@ -63,34 +65,64 @@ function loginDotGovLogin() {
 
   cy.visit('/');
   cy.get('#loginButton').click();
-  cy.wait('@GetLoggedIn');
-  cy.visit('/login/security-notice');
-  cy.get('#security-consent-annual').click();
-  cy.get('[data-cy="consent-button"]').click();
+
+  // If the click navigates to login.gov (cross-origin), handle it inside cy.origin
+  cy.location('host', { timeout: 30000 }).then((host) => {
+    if (host.endsWith('login.gov') || host.endsWith('secure.login.gov')) {
+      cy.origin('https://secure.login.gov', () => {
+        // Be tolerant: consent may be present or not depending on env. Click if found.
+        cy.document({ log: false }).then((doc) => {
+          const consent = doc.querySelector('#security-consent-annual') as HTMLInputElement | null;
+          if (consent) {
+            cy.get('#security-consent-annual', { timeout: 30000 }).check({ force: true });
+          }
+        });
+
+        // Try common “continue/accept” buttons; keep your app’s data-cy first if present.
+        cy.get('body', { timeout: 30000 })
+          .then(($body) => {
+            const sel =
+              '[data-cy="consent-button"]';
+            if ($body.find(sel).length) {
+              cy.contains(sel, /consent/i).click({ force: true });
+            }
+          });
+      });
+      
+    } else {
+      // Same-origin flow (Chrome/Firefox/Edge)
+      cy.wait('@GetLoggedIn');
+      cy.visit('/login/security-notice');
+      cy.get('#security-consent-annual').click();
+      cy.get('[data-cy="consent-button"]').click();
+    }
+  });
+
+  // Select a committee and finish app-side onboarding
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
 
-  // Wait for the reports page to load
+  // Verify app landed
   cy.contains('Manage reports').should('exist');
 
-  // Creates a second create admin after logging in if necessary
-  cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
+  // Optional second admin creation flow (no-op if element absent)
+  cy.wait('@GetCommitteeMembers');
   cy.get(alias)
     .find('[data-cy="second-committee-email"]')
-    .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
+    .should(Cypress._.noop)
     .then(($email) => {
       if ($email.length) {
-        cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
+        cy.contains('Welcome to FECfile+').should('exist').click(); // focus modal
         cy.wrap($email).should('have.value', '');
-        cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+        cy.wrap($email).clear().type('admin@admin.com');
         cy.wrap($email).should('have.value', 'admin@admin.com');
         cy.wrap($email).click();
         PageUtils.clickButton('Save');
-
         cy.get(alias).find('.p-toast-close-button').click();
       }
     });
+
   cy.contains('Welcome to FECfile+').should('not.exist');
 }
 
