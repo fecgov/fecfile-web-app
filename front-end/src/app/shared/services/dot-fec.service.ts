@@ -41,17 +41,18 @@ export class DotFecService {
   }
 
   async generateFecFile(report: Report): Promise<Download> {
-    const response = await this.apiService.post<{
-      status: string;
-      file_name: string;
-      task_id: string;
-    }>(`/web-services/dot-fec/`, {
-      report_id: report.id,
-    });
+    const response = await this.apiService.post<{ status: string; file_name: string; task_id: string }>(
+      `/web-services/dot-fec/`,
+      {
+        report_id: report.id,
+      },
+    );
 
     // current date as YYYY-MM-DD-HHMM
     const now = new Date();
-    const dateStr = now.toISOString().slice(0, 10) + '-' +
+    const dateStr =
+      now.toISOString().slice(0, 10) +
+      '-' +
       now.getHours().toString().padStart(2, '0') +
       now.getMinutes().toString().padStart(2, '0');
 
