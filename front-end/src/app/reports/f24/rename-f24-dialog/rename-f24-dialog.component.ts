@@ -1,5 +1,5 @@
 import { Component, effect, inject, input, model } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -17,11 +17,12 @@ import { Ripple } from 'primeng/ripple';
 @Component({
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
-  styleUrls: ['./rename-f24-dialog.component.scss'],
+  styleUrls: ['../../styles.scss'],
   imports: [
     Ripple,
     ButtonModule,
     ReactiveFormsModule,
+    FormsModule,
     DialogModule,
     InputText,
     AutoFocusModule,
@@ -37,39 +38,56 @@ export class RenameF24DialogComponent extends FormComponent {
   readonly f24Report = input<Report | undefined>();
   readonly form: FormGroup = new FormGroup(
     {
-      name: new SubscriptionFormControl('', {
-        validators: [Validators.required],
-        asyncValidators: [this.f24UniqueNameValidator.validate.bind(this.f24UniqueNameValidator)],
-        updateOn: 'change',
+      typeName: new SubscriptionFormControl('', {
+      }),
+      form24Name: new SubscriptionFormControl('', {
       }),
     },
-    { updateOn: 'blur' },
+    {
+      asyncValidators: [this.f24UniqueNameValidator.validate.bind(this.f24UniqueNameValidator)],
+      updateOn: 'blur'
+    },
   );
 
   constructor() {
     super();
     effect(() => {
-      this.form.get('name')?.setValue((this.f24Report() as Form24)?.name);
-      if (this.dialogVisible()) {
-        this.form.markAsUntouched();
-        this.form.markAsPristine();
-        this.formSubmitted = false;
+      const f24Report = this.f24Report() as Form24 | undefined;
+      if (f24Report) {
+        const regex = /^(24-Hour:\s|48-Hour:\s)(.*)$/;
+        const match = f24Report.name?.match(regex);
+        if (match) {
+          this.form.get('typeName')?.setValue(match[1]);
+          this.form.get('form24Name')?.setValue(match[2]);
+        } else {
+          this.form.get('typeName')?.setValue('');
+          this.form.get('form24Name')?.setValue('');
+        }
+        if (this.dialogVisible()) {
+          this.form.markAsUntouched();
+          this.form.markAsPristine();
+          this.formSubmitted = false;
+        }
       }
     });
   }
 
   async submit() {
-    const payload = Form24.fromJSON({
-      ...this.f24Report(),
-      name: this.form.get('name')?.value,
-    });
-    await this.form24Service.update(payload, ['name']);
-    this.dialogVisible.set(false);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Report Updated',
-      life: 3000,
-    });
+    const typeName = this.form.get('typeName')?.value;
+    const form24Name = this.form.get('form24Name')?.value;
+    if (!this.form.invalid && typeName && form24Name) {
+      const payload = Form24.fromJSON({
+        ...this.f24Report(),
+        name: `${typeName}${form24Name}`,
+      });
+      await this.form24Service.update(payload, ['name']);
+      this.dialogVisible.set(false);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Updated',
+        life: 3000,
+      });
+    }
   }
 }

@@ -8,9 +8,12 @@
   <ng-template #content>
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="dialog-body">
-        <label for="name">REPORT NAME</label>
-        <input type="text" pInputText id="name" formControlName="name" />
-        <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
+        <label for="form24Name">REPORT NAME</label>
+        <div id="f24-input-container">
+          <span>{{ this.form.get('typeName')?.value }}</span>
+          <input id="form24Name" type="text" class="pl-1" pInputText formControlName="form24Name" />
+        </div>
+        <app-error-messages [form]="form" fieldName="form24Name" [formSubmitted]="formSubmitted" />
       </div>
     </form>
   </ng-template>

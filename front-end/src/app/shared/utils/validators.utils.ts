@@ -15,8 +15,8 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 
   return !!email && !matches
     ? {
-        email: 'invalid',
-      }
+      email: 'invalid',
+    }
     : null;
 }
 
@@ -49,8 +49,8 @@ export function buildGuaranteeUniqueValuesValidator(
 
     return primaryValue && otherValues.includes(primaryValue)
       ? {
-          [key]: 'not-unique',
-        }
+        [key]: 'not-unique',
+      }
       : null;
   };
 }
@@ -231,15 +231,20 @@ export class CommitteeMemberEmailValidator implements AsyncValidator {
 export class F24UniqueNameValidator implements AsyncValidator {
   protected readonly form24Service = inject(Form24Service);
   async validate(control: AbstractControl): Promise<ValidationErrors | null> {
-    if (control.value) {
-      const reports = await this.form24Service.getAllReports();
-      const existingNames = reports.map((report) => (report as Form24)?.name?.toLowerCase() ?? '') ?? [];
-      const newName = control.value?.toLowerCase();
-      if (existingNames.includes(newName)) {
-        return {
-          duplicateName: true,
-        };
+    if (!control.get('typeName')?.value || !control.get('form24Name')?.value) {
+      return {
+        required: true,
       }
+    }
+    const typeName = control.get('typeName')?.value
+    const form24Name = control.get('form24Name')?.value
+    const reports = await this.form24Service.getAllReports();
+    const existingNames = reports.map((report) => (report as Form24)?.name?.toLowerCase() ?? '') ?? [];
+    const newName = (typeName + form24Name).toLowerCase();
+    if (existingNames.includes(newName)) {
+      return {
+        duplicateName: true,
+      };
     }
     return null;
   }
