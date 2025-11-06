@@ -33,6 +33,10 @@ dialog {
   justify-content: space-between;
 }
 
+.dialog-body {
+  padding: 64px 16px;
+}
+
 #type-label {
   display: block;
 }
@@ -48,7 +52,7 @@ label,
 }
 
 .dropdown {
-  width: 450px !important;
+  width: 400px !important;
 }
 
 .option {

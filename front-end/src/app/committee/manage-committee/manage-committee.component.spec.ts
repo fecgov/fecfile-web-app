@@ -102,7 +102,6 @@ describe('ManageCommitteeComponent', () => {
 
   it('should call loadTableItems, show success message, and close detail', () => {
     spyOn(component, 'loadTableItems');
-    spyOn(component, 'detailClose');
     const messageSpy = spyOn(component.messageService, 'add');
 
     component.roleEdited();
@@ -113,15 +112,16 @@ describe('ManageCommitteeComponent', () => {
       summary: 'Successful',
       detail: 'Role Updated',
     });
-    expect(component.detailClose).toHaveBeenCalled();
+    expect(component.detailVisible()).toBeFalse();
   });
 
   it('should close detail and clear member', () => {
     component.member = committeeMembers[0];
     component.detailVisible.set(true);
-    component.detailClose();
-
-    expect(component.detailVisible()).toBeFalse();
+    fixture.detectChanges();
+    expect(component.member).not.toBeUndefined();
+    component.detailVisible.set(false);
+    fixture.detectChanges();
     expect(component.member).toBeUndefined();
   });
 

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, OnChanges, output } from '@angular/core';
+import { Component, computed, effect, inject, input, model, output } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -17,7 +17,7 @@ import { DialogComponent } from '../dialog/dialog.component';
   styleUrls: ['./committee-member-dialog.component.scss'],
   imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent, SelectComponent, DialogComponent],
 })
-export class CommitteeMemberDialogComponent extends FormComponent implements OnChanges {
+export class CommitteeMemberDialogComponent extends FormComponent {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly committeeMemberService = inject(CommitteeMemberService);
   protected readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
@@ -36,7 +36,7 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
 
   readonly form: FormGroup = new FormGroup(
     {
-      role: new SubscriptionFormControl(),
+      role: new SubscriptionFormControl(this.roleOptions[0].value),
       email: new SubscriptionFormControl('', {
         validators: [Validators.required, emailValidator],
         asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
@@ -53,10 +53,11 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
     return Roles[member.role as keyof typeof Roles];
   });
 
-  ngOnChanges(): void {
-    if (this.detailVisible()) {
-      this.resetForm();
-    }
+  constructor() {
+    super();
+    effect(() => {
+      if (!this.detailVisible()) this.resetForm();
+    });
   }
 
   updateSelected(roleOption: (typeof this.roleOptions)[0]) {
@@ -64,7 +65,6 @@ export class CommitteeMemberDialogComponent extends FormComponent implements OnC
   }
 
   submit(): Promise<void> {
-    this.formSubmitted = true;
     if (this.member()) {
       return this.editRole();
     } else {

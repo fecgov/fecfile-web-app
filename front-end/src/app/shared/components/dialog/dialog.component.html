@@ -8,28 +8,24 @@
   <ng-content></ng-content>
   <div class="dialog-footer">
     <hr type="solid" />
-    <div class="grid">
-      <div class="col-1 p-0">
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="Cancel"
-          class="p-button-secondary"
-          (click)="visible.set(false)"
-        ></button>
-      </div>
-      <div class="col-11 p-0">
-        <button
-          type="submit"
-          data-cy="membership-submit"
-          pButton
-          pRipple
-          [label]="submitLabel()"
-          class="p-button-primary float-right"
-          (click)="submitForm.emit()"
-        ></button>
-      </div>
+    <div class="flex justify-content-between">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Cancel"
+        class="p-button-secondary"
+        (click)="visible.set(false)"
+      ></button>
+      <button
+        type="submit"
+        data-cy="membership-submit"
+        pButton
+        pRipple
+        [label]="submitLabel()"
+        class="p-button-primary float-right"
+        (click)="submitForm.emit()"
+      ></button>
     </div>
   </div>
 </dialog>
