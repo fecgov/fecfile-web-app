@@ -12,6 +12,9 @@
 	"run_settings": {
 		"cypress_config_file": "./cypress.config.ts"
 	},
+	"connection_settings": {
+		"local": false
+	},
 	"testObservability": false,
 	"browserstackAutomation": false,
 	"testObservabilityOptions": {
