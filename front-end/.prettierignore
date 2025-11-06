@@ -4,3 +4,4 @@ node_modules
 assets
 cypress/
 cypress.config.ts
+cypress.config.browserstack.ts

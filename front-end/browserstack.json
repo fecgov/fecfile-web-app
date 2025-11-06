@@ -4,7 +4,7 @@
 		"access_key": "${BROWSERSTACK_ACCESS_KEY}"
 	},
 	"browsers": [{
-			"os": "OS X Tahoe",
+			"os": "OS X Ventura",
 			"browser": "webkit",
 			"versions": ["latest"]
 	  }
