@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { isEmpty, omit } from 'lodash';
-import { CoverageDates, Form24 } from '../models';
+import { CoverageDates } from '../models';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
@@ -239,7 +239,7 @@ export class F24UniqueNameValidator implements AsyncValidator {
     const typeName = control.get('typeName')?.value;
     const form24Name = control.get('form24Name')?.value;
     const reports = await this.form24Service.getAllReports();
-    const existingNames = reports.map((report) => (report as Form24)?.name?.toLowerCase() ?? '') ?? [];
+    const existingNames = reports.map((report) => report?.name?.toLowerCase() ?? '') ?? [];
     const newName = (typeName + form24Name).toLowerCase();
     if (existingNames.includes(newName)) {
       return {
