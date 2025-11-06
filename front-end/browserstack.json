@@ -10,7 +10,8 @@
 	  }
 	],
 	"run_settings": {
-		"cypress_config_file": "./cypress.config.ts",
+		"cypress_config_file": "./cypress.config.browserstack.ts",
+		"specs": "cypress/nightly/**/*.cy.ts",
 		"npm_dependencies": {
 			"@angular-devkit/core": "19.2.15",
 			"@angular-eslint/builder": "19.8.1",
