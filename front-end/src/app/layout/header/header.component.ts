@@ -6,6 +6,7 @@ export enum HeaderStyles {
   'DEFAULT',
   'LOGIN',
   'LOGOUT',
+  'ADMIN',
 }
 
 @Component({

@@ -2,7 +2,8 @@ import { HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService } from './api.service';
+import { ApiService, QueryParams } from './api.service';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,16 @@ export class CommitteeAccountService {
     return response.results as CommitteeAccount[];
   }
 
+  public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
+    let parameter_string = `?page=${pageNumber}`;
+    if (ordering?.length > 0) {
+      parameter_string += `&ordering=${ordering}`;
+    }
+    const response = await this.apiService.get<ListRestResponse>(`/committees/all/${parameter_string}`, params);
+    response.results = response.results.map((item) => CommitteeAccount.fromJSON(item));
+    return response;
+  }
+
   public getAvailableCommittee(committeeId: string): Promise<CommitteeAccount> {
     return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
   }
@@ -25,6 +36,10 @@ export class CommitteeAccountService {
 
   public getActiveCommittee(): Promise<CommitteeAccount> {
     return this.apiService.get(`/committees/active/`);
+  }
+
+  public delete(): Promise<null> {
+    return new Promise(() => null);
   }
 
   public async createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {

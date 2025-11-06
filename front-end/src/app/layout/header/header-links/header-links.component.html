@@ -25,6 +25,24 @@
       }
     }
     @case (headerStyles.LOGOUT) {
+      @if (isAdmin()) {
+        <li>
+          <button class="popover-button" (click)="openLink('/admin/', toolsOp)" autofocus>System Administration</button>
+        </li>
+      }
+      <li>
+        <button class="nav-item" (click)="logOut()">Log Out</button>
+      </li>
+    }
+    @case (headerStyles.ADMIN) {
+      <li>
+        <button class="popover-button" (click)="openLink('/login/select-committee/', accountOp)">
+          Switch Committees
+        </button>
+      </li>
+      <li>
+        <button class="popover-button" (click)="openLink('/admin/', toolsOp)" autofocus>System Administration</button>
+      </li>
       <li>
         <button class="nav-item" (click)="logOut()">Log Out</button>
       </li>
@@ -39,6 +57,11 @@
         Update cash on hand
       </button>
     </li>
+    @if (isAdmin()) {
+      <li>
+        <button class="popover-button" (click)="openLink('/admin/', toolsOp)" autofocus>System Administration</button>
+      </li>
+    }
   </ul>
 </p-popover>
 

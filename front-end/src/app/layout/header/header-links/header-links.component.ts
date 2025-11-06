@@ -1,5 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Roles } from 'app/shared/models';
@@ -8,6 +8,7 @@ import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { Popover } from 'primeng/popover';
 import { HeaderStyles } from '../header.component';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 
 @Component({
   selector: 'app-header-links',
@@ -26,6 +27,9 @@ export class HeaderLinksComponent {
   headerStyles = HeaderStyles;
 
   role?: Roles;
+
+  userSignal = this.store.selectSignal(selectUserLoginData);
+  readonly isAdmin = computed(() => this.userSignal().is_staff);
 
   navigateToLoginDotGov() {
     if (this.loginDotGovAuthUrl) {

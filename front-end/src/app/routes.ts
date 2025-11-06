@@ -7,6 +7,7 @@ import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
+import { systemAdminGuard } from './shared/guards/system-admin.guard';
 
 export const ROUTES: Route[] = [
   {
@@ -66,6 +67,11 @@ export const ROUTES: Route[] = [
         path: 'notifications',
         loadChildren: () => import('./notifications/routes').then((mod) => mod.NOTIFICATION_ROUTES),
         canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard, committeeOwnerGuard],
+      },
+      {
+        path: 'admin',
+        loadChildren: () => import('./admin/routes').then((mod) => mod.ADMIN_ROUTES),
+        canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, systemAdminGuard],
       },
     ],
   },

@@ -14,6 +14,7 @@ export type UserLoginData = {
   security_consent_version?: string;
   security_consent_version_at_login?: string;
   role?: string;
+  is_staff?: boolean;
 };
 
 export class User extends BaseModel {
