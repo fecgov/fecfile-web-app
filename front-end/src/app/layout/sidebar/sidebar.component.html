@@ -1,19 +1,17 @@
 <div class="sidebar">
-  @switch (activeReport().report_type) {
-    @case (reportTypes.F3) {
-      <app-f3-menu />
-    }
-    @case (reportTypes.F3X) {
-      <app-f3x-menu />
-    }
-    @case (reportTypes.F99) {
-      <app-f99-menu />
-    }
-    @case (reportTypes.F1M) {
-      <app-f1m-menu />
-    }
-    @case (reportTypes.F24) {
-      <app-f24-menu />
-    }
-  }
+  <div class="report-menu">
+    <div class="report-info">
+      <div class="report-type">{{ formLabel() }}</div>
+      <div class="sub-heading">{{ subHeading() }}</div>
+      @if (hasCoverage()) {
+        <div class="sub-heading">
+          {{ coverageFrom() | fecDate }} — <wbr />
+          {{ coverageThrough() | fecDate }}
+        </div>
+      }
+    </div>
+    <div>
+      <p-panelMenu [model]="items()" [multiple]="false" />
+    </div>
+  </div>
 </div>

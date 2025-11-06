@@ -56,13 +56,11 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
-    this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
+    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
   async submit(): Promise<void> {
-    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
-
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
       ...SchemaUtils.getFormValues(this.form, textSchema, this.formProperties),

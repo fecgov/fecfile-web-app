@@ -15,3 +15,43 @@
 .sidebar-logo {
   border: none;
 }
+
+.report-info {
+  margin-bottom: 64px;
+  font-family: var(--karla);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.report-info .report-type {
+  font-size: 36px;
+  font-family: var(--gandhi-bold);
+  line-height: 1;
+}
+
+.sub-heading {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+::ng-deep {
+  .p-panelmenu-header-action {
+    height: 48px;
+    font-weight: bold;
+    padding-left: 6px;
+  }
+
+  .p-panelmenu-root-list {
+    padding-left: 0px !important;
+  }
+
+  p-panelmenu > div > div > div > div > a > chevrondownicon > .p-submenu-icon {
+    visibility: hidden;
+  }
+
+  p-panelmenu > div > div > div > div > a > chevronrighticon > .p-submenu-icon {
+    visibility: hidden;
+  }
+}

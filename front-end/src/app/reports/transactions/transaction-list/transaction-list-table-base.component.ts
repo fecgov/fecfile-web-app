@@ -16,7 +16,6 @@ import {
 } from 'app/shared/models';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -43,7 +42,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   abstract scheduleTransactionTypeLabels: LabelList;
   paginationPageSizeOptions = [5, 10, 15, 20];
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
-  readonly isForm24 = computed(() => this.report().form_type === FormTypes.F24);
+  readonly isForm24 = computed(() => this.report().form_type === ReportTypes.F24);
 
   public rowActions: TableAction[] = [
     new TableAction(
