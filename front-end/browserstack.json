@@ -1,25 +1,33 @@
 {
-	"auth": {
-		"username": "${BROWSERSTACK_USERNAME}",
-		"access_key": "${BROWSERSTACK_ACCESS_KEY}"
-	},
-	"browsers": [{
-			"os": "OS X Ventura",
-			"browser": "webkit",
-			"versions": ["latest"]
-	  }
-	],
-	"run_settings": {
-		"cypress_config_file": "./cypress.config.browserstack.ts"
-	},
-	"testObservability": true,
-	"browserstackAutomation": true,
-	"testObservabilityOptions": {
-		"projectName": "fecfile-web-app",
-		"buildName": "Cypress E2E Cross-Browser Tests",
-		"buildTag": [
-			"e2e",
-			"nightly"
-		]
-	}
+  "auth": {
+    "username": "${BROWSERSTACK_USERNAME}",
+    "access_key": "${BROWSERSTACK_ACCESS_KEY}"
+  },
+  "browsers": [
+    {
+      "os": "OS X Ventura",
+      "browser": "webkit",
+      "versions": [
+        "latest"
+      ]
+    }
+  ],
+  "run_settings": {
+    "cypress_config_file": "./cypress.config.browserstack.ts",
+    "specs": "cypress/nightly/**/*.cy.ts"
+  },
+  "connection_settings": {
+    "local": true,
+    "local_identifier": "fecfile-browserstack-tunnel"
+  },
+  "testObservability": false,
+  "browserstackAutomation": true,
+  "testObservabilityOptions": {
+    "projectName": "fecfile-web-app",
+    "buildName": "Cypress E2E Cross-Browser Tests",
+    "buildTag": [
+      "e2e",
+      "nightly"
+    ]
+  }
 }
