@@ -15,8 +15,8 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 
   return !!email && !matches
     ? {
-      email: 'invalid',
-    }
+        email: 'invalid',
+      }
     : null;
 }
 
@@ -49,8 +49,8 @@ export function buildGuaranteeUniqueValuesValidator(
 
     return primaryValue && otherValues.includes(primaryValue)
       ? {
-        [key]: 'not-unique',
-      }
+          [key]: 'not-unique',
+        }
       : null;
   };
 }
@@ -234,10 +234,10 @@ export class F24UniqueNameValidator implements AsyncValidator {
     if (!control.get('typeName')?.value || !control.get('form24Name')?.value) {
       return {
         required: true,
-      }
+      };
     }
-    const typeName = control.get('typeName')?.value
-    const form24Name = control.get('form24Name')?.value
+    const typeName = control.get('typeName')?.value;
+    const form24Name = control.get('form24Name')?.value;
     const reports = await this.form24Service.getAllReports();
     const existingNames = reports.map((report) => (report as Form24)?.name?.toLowerCase() ?? '') ?? [];
     const newName = (typeName + form24Name).toLowerCase();

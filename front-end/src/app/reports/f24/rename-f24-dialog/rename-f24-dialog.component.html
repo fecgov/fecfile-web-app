@@ -13,7 +13,7 @@
           <span>{{ this.form.get('typeName')?.value }}</span>
           <input id="form24Name" type="text" class="pl-1" pInputText formControlName="form24Name" />
         </div>
-        <app-error-messages [form]="form" fieldName="form24Name" [formSubmitted]="formSubmitted" />
+        <app-error-messages [form]="formParent" fieldName="form24NameGroup" [formSubmitted]="formSubmitted" />
       </div>
     </form>
   </ng-template>

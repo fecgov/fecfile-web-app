@@ -36,18 +36,19 @@ export class RenameF24DialogComponent extends FormComponent {
   readonly f24UniqueNameValidator = inject(F24UniqueNameValidator);
   readonly dialogVisible = model(false);
   readonly f24Report = input<Report | undefined>();
-  readonly form: FormGroup = new FormGroup(
+  readonly form = new FormGroup(
     {
-      typeName: new SubscriptionFormControl('', {
-      }),
-      form24Name: new SubscriptionFormControl('', {
-      }),
+      typeName: new SubscriptionFormControl(),
+      form24Name: new SubscriptionFormControl(),
     },
     {
       asyncValidators: [this.f24UniqueNameValidator.validate.bind(this.f24UniqueNameValidator)],
-      updateOn: 'blur'
+      updateOn: 'blur',
     },
   );
+  readonly formParent: FormGroup = new FormGroup({
+    form24NameGroup: this.form,
+  });
 
   constructor() {
     super();
