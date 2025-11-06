@@ -4,8 +4,8 @@
 		"access_key": "${BROWSERSTACK_ACCESS_KEY}"
 	},
 	"browsers": [{
-			"os": "OS X Sequoia",
-			"browser": "safari",
+			"os": "OS X Tahoe",
+			"browser": "webkit",
 			"versions": ["latest"]
 	  }
 	],
