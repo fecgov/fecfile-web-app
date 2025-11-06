@@ -28,7 +28,7 @@ export default defineConfig({
   },
   experimentalWebKitSupport: true,
   e2e: {
-    baseUrl: 'http://bs-local.com:4200',
+    baseUrl: 'http://localhost:4200',
     specPattern: 'cypress/nightly/**/*.cy.ts',
     setupNodeEvents(on, config) {
       browserstackPlugin(on, config);

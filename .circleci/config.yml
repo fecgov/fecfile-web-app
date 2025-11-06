@@ -269,7 +269,6 @@ jobs:
       - run:
           name: Execute Cypress tests on BrowserStack (WebKit)
           command: |
-            # Precheck: fail early with a clear message
             : "${BROWSERSTACK_USERNAME:?Set in CircleCI context 'browserstack'}"
             : "${BROWSERSTACK_ACCESS_KEY:?Set in CircleCI context 'browserstack'}"
 
@@ -281,47 +280,26 @@ jobs:
               -e CYPRESS_FILING_PASSWORD \
               -e BROWSERSTACK_USERNAME \
               -e BROWSERSTACK_ACCESS_KEY \
-              -e CYPRESS_experimentalWebKitSupport=true \
               --network container:fecfile-api-proxy \
-              cypress/browsers:latest /bin/bash -lc '\
-                set -euo pipefail; \
-                # Install WebKit dependencies
-                apt-get update && apt-get install -y \
-                  libwoff1 \
-                  libopus0 \
-                  libwebp7 \
-                  libwebpdemux2 \
-                  libenchant-2-2 \
-                  libgudev-1.0-0 \
-                  libsecret-1-0 \
-                  libhyphen0 \
-                  libgdk-pixbuf2.0-0 \
-                  libegl1 \
-                  libnotify4 \
-                  libxslt1.1 \
-                  libevent-2.1-7 \
-                  libgles2 \
-                  libxcomposite1 \
-                  libatk1.0-0 \
-                  libatk-bridge2.0-0 \
-                  libepoxy0 \
-                  libgtk-3-0 \
-                  libharfbuzz-icu0 \
-                  && rm -rf /var/lib/apt/lists/*; \
-                cd ~; \
-                git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; \
-                git checkout ${CIRCLE_BRANCH}; \
-                npm install; \
-                npx playwright install-deps webkit; \
-                npx playwright install webkit; \
-                npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 & \
-                npx -y wait-on http://127.0.0.1:4200; \
-                npx cypress run \
-                  --spec "<< parameters.spec_glob >>" \
-                  --headless \
-                  --browser webkit;
-            '
+              cypress/browsers:latest /bin/bash -lc '
+                set -euo pipefail
+                cd ~
+                git clone https://github.com/fecgov/fecfile-web-app.git
+                cd fecfile-web-app/front-end
+                git checkout "$CIRCLE_BRANCH"
+                npm ci || npm install
+
+                # Start app and wait until reachable
+                npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 &
+                npx -y wait-on http://127.0.0.1:4200
+
+                # Tell BS workers to hit our app through the Local tunnel
+                export CYPRESS_BASE_URL="http://bs-local.com:4200"
+
+                # Run on BrowserStack; browsers are taken from browserstack.json
+                npx browserstack-cypress run --sync \
+                  --specs "<< parameters.spec_glob >>"
+              '
 
       - run:
           name: Stage BrowserStack artifacts
