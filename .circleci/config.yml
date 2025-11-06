@@ -287,17 +287,12 @@ jobs:
                 git clone https://github.com/fecgov/fecfile-web-app.git
                 cd fecfile-web-app/front-end
                 git checkout "$CIRCLE_BRANCH"
-                npm ci || npm install
+                npm install
 
                 # Start app and wait until reachable
                 npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 &
                 npx -y wait-on http://127.0.0.1:4200
                 echo "App is running at http://localhost:4200"; \
-                curl -I http://localhost:4200; \
-                # Tell BS workers to hit our app through the Local tunnel
-                export CYPRESS_BASE_URL="http://bs-local.com:4200"
-
-                # Run on BrowserStack; browsers are taken from browserstack.json
                 npx browserstack-cypress run
               '
 
