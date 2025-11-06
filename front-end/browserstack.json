@@ -1,7 +1,7 @@
 {
 	"auth": {
 		"username": "${BROWSERSTACK_USERNAME}",
-		"access_key": "BROWSERSTACK_ACCESS_KEY"
+		"access_key": "${BROWSERSTACK_ACCESS_KEY}"
 	},
 	"browsers": [{
 			"os": "OS X Tahoe",
@@ -13,10 +13,11 @@
 		"cypress_config_file": "./cypress.config.ts"
 	},
 	"connection_settings": {
-		"local": false
+		"local": true,
+		"local_identifier": "fecfile-browserstack-${CIRCLE_BRANCH}"
 	},
 	"testObservability": false,
-	"browserstackAutomation": false,
+	"browserstackAutomation": true,
 	"testObservabilityOptions": {
 		"projectName": "fecfile-web-app",
 		"buildName": "Cypress E2E Cross-Browser Tests",
