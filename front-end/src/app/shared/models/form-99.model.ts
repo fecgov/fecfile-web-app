@@ -2,6 +2,8 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from './base.model';
 import { Report, ReportTypes } from './report.model';
+import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -36,6 +38,14 @@ export class Form99 extends Report {
 
   static fromJSON(json: unknown): Form99 {
     return plainToInstance(Form99, json);
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    return [
+      MenuInfo.editReport(sidebarSection, this),
+      MenuInfo.reviewReport(sidebarSection, [MenuInfo.printPreview(this)]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
+    ];
   }
 }
 

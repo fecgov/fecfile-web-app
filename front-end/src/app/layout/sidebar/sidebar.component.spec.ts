@@ -7,12 +7,14 @@ import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
+import { REPORTS_ROUTES } from 'app/reports/routes';
+import { ReportSidebarSection } from './menu-info';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
-  let router: Router;
+  let route: ActivatedRoute;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,14 +22,14 @@ describe('SidebarComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([]),
+        provideRouter(REPORTS_ROUTES),
         provideMockStore(testMockStore()),
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    router = TestBed.inject(Router);
+    route = TestBed.inject(ActivatedRoute);
     fixture = TestBed.createComponent(SidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -37,31 +39,25 @@ describe('SidebarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the sidebar state to TRANSACTIONS', () => {
-    expect(component.items()[1].visible).toBeTrue();
+  it('items() should return report.getMenuItems() based on route data sidebarSection', () => {
+    route.snapshot.data = {
+      sidebarSection: ReportSidebarSection.REVIEW,
+    };
+
+    fixture.detectChanges();
+    const items = component.items();
+
+    expect(items.length).toBeGreaterThan(0);
+    expect(items[0].label).toBeDefined();
   });
 
-  it('should get report from url', () => {
-    router.navigateByUrl('/reports/transactions/report/999/list');
-    expect(component.reportId()).toBe('999');
+  it('formLabel() should come directly from active report', () => {
+    expect(component.formLabel()).toBe('Form 3X');
+    expect(component.subHeading()).toBe('APRIL 15 QUARTERLY REPORT (Q1)');
   });
 
-  xit('should set the sidebar state to REVIEW A REPORT', () => {
-    expect(component.items()[1].expanded).toBeTrue();
+  it('hasCoverage true for F3X', () => {
+    expect(component.hasCoverage()).toBeTrue();
+    expect(component.coverageThrough()!.toISOString().substring(0, 10)).toBe('2022-06-30');
   });
-
-  //   xit('should get report from url', () => {
-  //     router.navigateByUrl('/reports/transactions/report/999/list');
-  //     expect(component.reportId()).toBe('999');
-  //   });
-
-  //   it('should get report from url', () => {
-  //     router.navigateByUrl('/reports/f1m/edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-  //     expect(component.activeReport().id).toBe('999');
-  //   });
-
-  //   xit('should set the sidebar state to REVIEW A REPORT', async () => {
-  //     await router.navigateByUrl('edit/4c0c25c9-6e14-48bc-8758-42ee55599f93');
-  //     expect(component.items()[1].expanded).toBeTrue();
-  //   });
 });

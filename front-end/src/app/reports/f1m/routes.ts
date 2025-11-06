@@ -1,13 +1,13 @@
 import { Route } from '@angular/router';
 import { MainFormComponent } from './main-form/main-form.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guard';
 import { Report } from 'app/shared/models/report.model';
 import { PrintPreviewComponent } from '../shared/print-preview/print-preview.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 export const F1M_ROUTES: Route[] = [
   {

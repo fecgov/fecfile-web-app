@@ -3,19 +3,6 @@
   color: white;
 }
 
-.title {
-  margin-bottom: 4vw;
-}
-
-.title .site-name {
-  font-size: 2.5em;
-  margin: 0;
-}
-
-.sidebar-logo {
-  border: none;
-}
-
 .report-info {
   margin-bottom: 64px;
   font-family: var(--karla);
@@ -34,24 +21,4 @@
 .sub-heading {
   font-size: 14px;
   text-transform: uppercase;
-}
-
-::ng-deep {
-  .p-panelmenu-header-action {
-    height: 48px;
-    font-weight: bold;
-    padding-left: 6px;
-  }
-
-  .p-panelmenu-root-list {
-    padding-left: 0px !important;
-  }
-
-  p-panelmenu > div > div > div > div > a > chevrondownicon > .p-submenu-icon {
-    visibility: hidden;
-  }
-
-  p-panelmenu > div > div > div > div > a > chevronrighticon > .p-submenu-icon {
-    visibility: hidden;
-  }
 }

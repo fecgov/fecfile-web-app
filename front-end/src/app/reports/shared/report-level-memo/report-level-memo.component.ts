@@ -9,7 +9,6 @@ import { Report } from 'app/shared/models';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { injectRouteData } from 'ngxtension/inject-route-data';
 import { MessageService } from 'primeng/api';

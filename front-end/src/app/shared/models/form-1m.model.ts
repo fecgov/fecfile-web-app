@@ -3,6 +3,8 @@ import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { BaseModel } from './base.model';
 import { CandidateOfficeType, Contact } from './contact.model';
 import { Report, ReportTypes } from './report.model';
+import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -117,5 +119,16 @@ export class Form1M extends Report {
 
   static fromJSON(json: unknown): Form1M {
     return plainToInstance(Form1M, json);
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    return [
+      MenuInfo.editReport(sidebarSection, this),
+      MenuInfo.reviewReport(sidebarSection, [
+        MenuInfo.printPreview(this),
+        MenuInfo.addReportLevelMenu(this, isEditable),
+      ]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
+    ];
   }
 }

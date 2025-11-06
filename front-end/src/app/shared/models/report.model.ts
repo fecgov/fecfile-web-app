@@ -5,6 +5,8 @@ import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
 import { ReportCodes } from '../utils/report-code.utils';
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -43,6 +45,7 @@ export abstract class Report extends BaseModel {
   report_code?: string;
   report_code_label?: string;
 
+  abstract getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[];
   abstract get formLabel(): string;
 
   abstract get formSubLabel(): string;

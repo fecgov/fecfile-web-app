@@ -2,6 +2,8 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
+import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -153,5 +155,26 @@ export class Form3X extends Report {
   static fromJSON(json: unknown): Form3X {
     // json['form_type'] = F3xFormTypes.F3XT;
     return plainToInstance(Form3X, json);
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    const transactionItems = [MenuInfo.manageTransactions(this), ...MenuInfo.addTransactions(this)];
+    const menuItems = [
+      MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
+      MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
+      MenuInfo.reviewReport(sidebarSection, [
+        ...MenuInfo.viewSummary(this),
+        MenuInfo.printPreview(this),
+        MenuInfo.addReportLevelMenu(this, isEditable),
+      ]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SUBMIT YOUR REPORT'),
+    ];
+
+    // Add edit report item to menu if the report is in progress or submission failure
+    if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
+      const editReportItem = MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS');
+      menuItems.unshift(editReportItem);
+    }
+    return menuItems;
   }
 }

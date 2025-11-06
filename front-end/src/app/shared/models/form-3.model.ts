@@ -3,6 +3,8 @@ import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3
 import { ReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
+import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export enum F3FormTypes {
   F3N = 'F3N',
@@ -136,5 +138,19 @@ export class Form3 extends Report {
 
   static fromJSON(json: unknown): Form3 {
     return plainToInstance(Form3, json);
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    const transactionItems = [MenuInfo.manageTransactions(this), ...MenuInfo.addTransactions(this)];
+    return [
+      MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
+      MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
+      MenuInfo.reviewReport(sidebarSection, [
+        ...MenuInfo.viewSummary(this),
+        MenuInfo.printPreview(this),
+        MenuInfo.addReportLevelMenu(this, isEditable),
+      ]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SUBMIT YOUR REPORT'),
+    ];
   }
 }

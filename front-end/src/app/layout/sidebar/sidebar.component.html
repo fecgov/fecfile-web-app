@@ -1,17 +1,13 @@
 <div class="sidebar">
-  <div class="report-menu">
-    <div class="report-info">
-      <div class="report-type">{{ formLabel() }}</div>
-      <div class="sub-heading">{{ subHeading() }}</div>
-      @if (hasCoverage()) {
-        <div class="sub-heading">
-          {{ coverageFrom() | fecDate }} — <wbr />
-          {{ coverageThrough() | fecDate }}
-        </div>
-      }
-    </div>
-    <div>
-      <p-panelMenu [model]="items()" [multiple]="false" />
-    </div>
+  <div class="report-info">
+    <div class="report-type">{{ formLabel() }}</div>
+    <div class="sub-heading">{{ subHeading() }}</div>
+    @if (hasCoverage()) {
+      <div class="sub-heading">
+        {{ coverageFrom() | fecDate }} — <wbr />
+        {{ coverageThrough() | fecDate }}
+      </div>
+    }
   </div>
+  <p-panelMenu [model]="items()" [multiple]="false" />
 </div>
