@@ -57,10 +57,6 @@
 			"zone.js": "0.15.1"
 		}
 	},
-	"connection_settings": {
-		"local": true,
-		"local_identifier": "fecfile-browserstack-${CIRCLE_BRANCH}"
-	},
 	"testObservability": false,
 	"browserstackAutomation": true,
 	"testObservabilityOptions": {
