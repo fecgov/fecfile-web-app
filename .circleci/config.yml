@@ -293,7 +293,6 @@ jobs:
                 npx ng serve --host 0.0.0.0 --port 4200 >/tmp/app.log 2>&1 & \
                 npx -y wait-on http://127.0.0.1:4200; \
                 npx browserstack-cypress run \
-                  --browser "webkit@latest:OS X Sequoia" \
                   --spec "<< parameters.spec_glob >>"
             '
 

@@ -4,7 +4,7 @@
 		"access_key": "BROWSERSTACK_ACCESS_KEY"
 	},
 	"browsers": [{
-			"os": "OS X Sonoma",
+			"os": "OS X Tahoe",
 			"browser": "webkit",
 			"versions": ["latest"]
 	  }
@@ -13,7 +13,7 @@
 		"cypress_config_file": "./cypress.config.ts"
 	},
 	"testObservability": false,
-	"browserstackAutomation": false,
+	"browserstackAutomation": true,
 	"testObservabilityOptions": {
 		"projectName": "fecfile-web-app",
 		"buildName": "Cypress E2E Cross-Browser Tests",
