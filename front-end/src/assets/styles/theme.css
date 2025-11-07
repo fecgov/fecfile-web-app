@@ -668,6 +668,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   padding-right: 0;
   padding-left: 1rem;
 }
+
 .p-select .p-select-label {
   background: transparent;
   border: 0 none;
@@ -1047,6 +1048,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-radius: var(--border-radius);
   height: 3em;
 }
+
 .p-inputtext:enabled:hover {
   border-color: var(--surface-border);
 }
@@ -6280,7 +6282,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-tag.p-tag-success {
   background-color: #28a745;
   color: #ffffff;
-}
+} 
 .p-tag.p-tag-info {
   background-color: #17a2b8;
   color: #ffffff;
@@ -6447,6 +6449,10 @@ input {
   font-size: 1rem;
   font-weight: normal;
   color: var(--p-content-color);
+}
+
+.dialog-body input {
+  font-size: 14px;
 }
 
 .btn-close {

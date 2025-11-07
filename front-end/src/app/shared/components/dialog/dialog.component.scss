@@ -1,0 +1,80 @@
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: var(--p-content-color);
+  font-size: 26px;
+  font-family: var(--gandhi-bold);
+  height: 26px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+a {
+  height: 24px;
+  width: 24px;
+  border-bottom: none;
+  z-index: 1000;
+  position: absolute;
+  right: 20px;
+}
+
+img {
+  height: 24px;
+  width: 24px;
+}
+
+.p-select {
+  height: 10px;
+}
+
+.field {
+  display: grid;
+}
+
+dialog {
+  padding: 20px 32px;
+  width: 512px;
+  background-color: var(--surface-a);
+  border-radius: 4px;
+  box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
+  border: none;
+  margin-top: 15%;
+}
+
+.dialog-header {
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.field .dialog-label {
+  font-family: var(--karla);
+  font-weight: bold;
+  font-size: 14px;
+  color: #212121;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  padding-top: 32px;
+}
+
+.dialog-footer {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 32px;
+}
+
+.option {
+  font-size: 14px;
+}
+
+.float-right {
+  float: right;
+}
+
+#close-button {
+  color: var(--p-content-color);
+  background: transparent;
+  border: none;
+}

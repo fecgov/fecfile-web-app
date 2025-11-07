@@ -1,79 +1,11 @@
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-h1 {
-  color: #212121;
-  font-size: 36px;
-  font-weight: bold;
-  line-height: 36px;
-}
-
-.field {
-  display: grid;
-}
-
-dialog {
-  width: 512px;
-  background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
-  border: none;
-  margin-top: 15%;
-}
-
-.dialog-header {
-  border-bottom: 2px solid #212121;
-  width: 448px;
-  margin: auto;
-  padding-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.dialog-body {
-  padding: 64px 16px;
-  margin-left: 25px;
-  margin-right: 25px;
-}
-
-label {
+.dialog-label {
   font-family: var(--karla);
   font-weight: bold;
   font-size: 14px;
   color: #212121;
-  margin-bottom: 5px;
-  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-.dialog-footer {
-  border-top: 0;
-  padding-top: 0;
-  padding-bottom: 16px;
-}
-
-.option {
-  font-size: 14px;
-}
-
-// Both of these are necessary to keep the dropdowns displaying consistently
-:host ::ng-deep p-select > div > p-overlay > div {
-  // The first time a dropdown is displayed
-  top: 45px !important;
-  left: 0px !important;
-}
-:host ::ng-deep p-select > div > .p-overlay {
-  // All subsequent times that dropdown is displayed
-  top: 45px !important;
-  left: 0px !important;
-}
-
-.float-right {
-  float: right;
-}
-
-#close-button {
-  color: #212121;
-  background: transparent;
-  border: none;
+.field {
+  margin-bottom: 32px;
 }
