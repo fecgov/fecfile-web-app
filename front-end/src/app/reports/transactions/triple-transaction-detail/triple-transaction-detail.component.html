@@ -1,4 +1,14 @@
-<h1>{{ transaction?.transactionType?.title }}</h1>
+<div class="flex gap-2">
+  <h1>{{ transaction?.transactionType?.title }}</h1>
+  <img
+    class="cursor-pointer"
+    src="assets/img/i-book.svg"
+    draggable="false"
+    alt="book"
+    (click)="openGlossary()"
+    (keypress)="openGlossary()"
+  />
+</div>
 @if (transactionType?.subTitle) {
   <div>{{ transactionType?.subTitle }}</div>
 }

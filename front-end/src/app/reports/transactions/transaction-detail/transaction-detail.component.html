@@ -1,12 +1,22 @@
-@if (transactionType?.showParentTransactionTitle) {
-  <h1>
-    {{ transaction?.parent_transaction?.transactionType?.title }}
-  </h1>
-}
+<div class="flex gap-2">
+  @if (transactionType?.showParentTransactionTitle) {
+    <h1>
+      {{ transaction?.parent_transaction?.transactionType?.title }}
+    </h1>
+  }
 
-<h1 [class.dark-gray-text]="transactionType?.showParentTransactionTitle">
-  {{ transactionType?.title }}
-</h1>
+  <h1 [class.dark-gray-text]="transactionType?.showParentTransactionTitle">
+    {{ transactionType?.title }}
+  </h1>
+  <img
+    class="cursor-pointer"
+    src="assets/img/i-book.svg"
+    draggable="false"
+    alt="book"
+    (click)="openGlossary()"
+    (keypress)="openGlossary()"
+  />
+</div>
 <hr class="solid" />
 @if (transactionType?.subTitle) {
   <div>{{ transactionType?.subTitle }}</div>

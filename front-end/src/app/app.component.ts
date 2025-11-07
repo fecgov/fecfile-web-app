@@ -6,6 +6,7 @@ import { DownloadTrayComponent } from './shared/components/download-tray/downloa
 import { RouterOutlet } from '@angular/router';
 import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
 import { ButtonModule } from 'primeng/button';
+import { GlossaryComponent } from './shared/components/glossary/glossary.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import { ButtonModule } from 'primeng/button';
     RouterOutlet,
     SecondCommitteeAdminDialogComponent,
     ButtonModule,
+    GlossaryComponent,
   ],
 })
 export class AppComponent implements AfterContentChecked {

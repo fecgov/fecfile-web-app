@@ -29,11 +29,13 @@ import {
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { GlossaryService } from '../glossary/glossary.service';
 
 @Component({
   template: '',
 })
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
+  private readonly glossaryService = inject(GlossaryService);
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
   protected readonly contactService = inject(ContactService);
@@ -367,5 +369,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         fieldControl?.disable();
       }
     });
+  }
+
+  openGlossary() {
+    this.glossaryService.search(this.transactionType?.title ?? '');
   }
 }
