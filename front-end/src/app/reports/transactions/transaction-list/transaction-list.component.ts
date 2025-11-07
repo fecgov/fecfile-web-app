@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { Report, ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { Transaction } from '../../../shared/models/transaction.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';

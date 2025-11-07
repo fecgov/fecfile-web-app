@@ -1,3 +1,14 @@
+export enum Categories {
+  RECEIPT = 'receipt',
+  DISBURSEMENT = 'disbursement',
+  LOANS_AND_DEBTS = 'loans-and-debts',
+}
+
+export interface TypeValuePair {
+  type: string;
+  value: string;
+}
+
 export const Disbursement = {
   OPERATING_EXPENDITURES: { type: 'Disbursement', value: 'OPERATING EXPENDITURES' },
   CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS: {

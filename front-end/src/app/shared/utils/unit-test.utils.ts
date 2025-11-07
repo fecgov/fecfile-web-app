@@ -8,7 +8,7 @@ import { initialState as initUserLoginData } from 'app/store/user-login-data.red
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { Form3X } from '../models/form-3x.model';
+import { Form3X } from '../models/reports/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';

@@ -2,7 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, forwardRef, inject, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';

@@ -1,7 +1,12 @@
-import { plainToInstance, Transform } from 'class-transformer';
+import { Exclude, plainToInstance } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { BaseModel } from './base.model';
-import { Report, ReportStatus, ReportTypes } from './report.model';
+import { ReportTypes } from './report.model';
+import { BaseForm3 } from './base-form-3';
+import { Categories, Disbursement, DisbursementType } from '../transaction-group';
+import { TransactionGroupTypes, TransactionTypes } from '../transaction.model';
+import { ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { ScheduleFTransactionTypes } from '../schf-transaction.model';
+import { ScheduleETransactionTypes } from '../sche-transaction.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -11,26 +16,13 @@ export enum F3xFormTypes {
 
 export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
-export class Form3X extends Report {
+export class Form3X extends BaseForm3 {
   schema = f3xSchema;
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   filing_frequency: string | undefined;
   report_type_category: string | undefined;
-  override hasChangeOfAddress = true;
-  change_of_address: boolean | undefined;
-  election_code: string | undefined;
-  @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
-  state_of_election: string | undefined;
-  @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
-  qualified_committee: boolean | undefined;
-  treasurer_last_name: string | undefined;
-  treasurer_first_name: string | undefined;
-  treasurer_middle_name: string | undefined;
-  treasurer_prefix: string | undefined;
-  treasurer_suffix: string | undefined;
-  @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
+
   L6b_cash_on_hand_beginning_period: number | undefined;
   L6c_total_receipts_period: number | undefined;
   L6d_subtotal_period: number | undefined;
@@ -132,26 +124,131 @@ export class Form3X extends Report {
   L36_total_federal_operating_expenditures_ytd: number | undefined;
   L37_offsets_to_operating_expenditures_ytd: number | undefined;
   L38_net_operating_expenditures_ytd: number | undefined;
-  calculation_status: string | undefined;
 
-  override get coverageDates(): { [date: string]: Date | undefined } {
-    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
-  }
+  constructor() {
+    super();
 
-  override get canAmend(): boolean {
-    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
+    this.transactionGroupCategories = new Map([
+      [Categories.RECEIPT, this.receiptTransactionGroup],
+      [Categories.DISBURSEMENT, this.disbursementTransactionGroup],
+      [Categories.LOANS_AND_DEBTS, this.loanTransactionGroup],
+    ]);
+
+    this.transactionTypeMap = new Map<TransactionGroupTypes, TransactionTypes[]>([
+      ...this.receiptTransactionMap,
+      ...this.disbursementTransactionMap,
+      ...this.loansTransactionMap,
+    ]);
   }
 
   get formLabel() {
     return 'Form 3X';
   }
 
-  get formSubLabel() {
-    return this.report_code_label ?? '';
-  }
-
   static fromJSON(json: unknown): Form3X {
-    // json['form_type'] = F3xFormTypes.F3XT;
     return plainToInstance(Form3X, json);
   }
+
+  @Exclude()
+  private disbursementTransactionGroup = [
+    Disbursement.OPERATING_EXPENDITURES,
+    Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+    Disbursement.OTHER_EXPENDITURES,
+    Disbursement.REFUNDS,
+    Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+  ];
+
+  @Exclude()
+  private disbursementTransactionMap = new Map<DisbursementType, TransactionTypes[]>([
+    [
+      Disbursement.OPERATING_EXPENDITURES,
+      [
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
+      ],
+    ],
+    [
+      Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+      [
+        ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
+        ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
+        ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
+        ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
+        ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
+        ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+        ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+        ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+        ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
+        ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
+        ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
+        ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
+        ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
+      ],
+    ],
+    [
+      Disbursement.OTHER_EXPENDITURES,
+      [
+        ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+        ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+        ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+        ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
+        ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
+        ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
+        ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
+        ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
+        ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
+        ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
+        ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT,
+        ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
+        ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
+        ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
+        ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+        ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
+        ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+        ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
+        ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
+        ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
+      ],
+    ],
+    [
+      Disbursement.REFUNDS,
+      [
+        ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+        ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+        ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
+        ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
+      ],
+    ],
+    [
+      Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+      [
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
+      ],
+    ],
+    [
+      Disbursement.COORDINATED_EXPENDITURES,
+      [
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+      ],
+    ],
+  ]);
 }

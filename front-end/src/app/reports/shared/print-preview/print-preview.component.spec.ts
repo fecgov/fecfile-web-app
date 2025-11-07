@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { Form99 } from 'app/shared/models/form-99.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { Form99 } from 'app/shared/models/reports/form-99.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';

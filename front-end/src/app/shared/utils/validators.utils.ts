@@ -6,7 +6,7 @@ import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { DateUtils } from './date.utils';
 import { isEmpty, omit } from 'lodash';
-import { CoverageDates } from '../models';
+import { CoverageDates } from '../models/reports/base-form-3';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;

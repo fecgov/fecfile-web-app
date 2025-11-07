@@ -1,10 +1,11 @@
-import { plainToClass, Transform, Type } from 'class-transformer';
+import { Exclude, Transform, Type } from 'class-transformer';
 import { JsonSchema } from 'fecfile-validate';
-import { LabelList } from '../utils/label.utils';
-import { BaseModel } from './base.model';
-import { UploadSubmission } from './upload-submission.model';
-import { WebPrintSubmission } from './webprint-submission.model';
-import { ReportCodes } from '../utils/report-code.utils';
+import { LabelList } from '../../utils/label.utils';
+import { BaseModel } from '../base.model';
+import { UploadSubmission } from '../upload-submission.model';
+import { WebPrintSubmission } from '../webprint-submission.model';
+import { Categories, TypeValuePair } from '../transaction-group';
+import { TransactionGroupTypes, TransactionTypes } from '../transaction.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -54,6 +55,11 @@ export abstract class Report extends BaseModel {
   get canAmend() {
     return false;
   }
+
+  @Exclude()
+  transactionGroupCategories = new Map<Categories, TypeValuePair[]>();
+  @Exclude()
+  transactionTypeMap = new Map<TransactionGroupTypes, TransactionTypes[]>();
 }
 
 export enum ReportTypes {
@@ -77,17 +83,4 @@ export enum ReportStatus {
   SUBMIT_PENDING = 'Submission pending',
   SUBMIT_SUCCESS = 'Submission success',
   SUBMIT_FAILURE = 'Submission failure',
-}
-
-export class CoverageDates {
-  @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
-  report_code: ReportCodes | undefined;
-  report_code_label?: string;
-
-  // prettier-ignore
-  static fromJSON(json: any, reportCodeLabel: string): CoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
-    json.report_code_label = reportCodeLabel;
-    return plainToClass(CoverageDates, json);
-  }
 }

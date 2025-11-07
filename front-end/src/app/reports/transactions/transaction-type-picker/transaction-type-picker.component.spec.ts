@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { AccordionModule } from 'primeng/accordion';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
@@ -15,7 +15,7 @@ import { TransactionTypePickerComponent } from './transaction-type-picker.compon
 import { BehaviorSubject, of } from 'rxjs';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';

@@ -1,8 +1,12 @@
-import { plainToClass, plainToInstance, Transform } from 'class-transformer';
+import { Exclude, plainToInstance } from 'class-transformer';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
-import { ReportCodes } from '../utils/report-code.utils';
-import { BaseModel } from './base.model';
-import { Report, ReportStatus, ReportTypes } from './report.model';
+
+import { ReportTypes } from './report.model';
+import { BaseForm3 } from './base-form-3';
+import { Categories, Disbursement, DisbursementType } from '../transaction-group';
+import { ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupTypes, TransactionTypes } from '../transaction.model';
+import { ScheduleFTransactionTypes } from '../schf-transaction.model';
 
 export enum F3FormTypes {
   F3N = 'F3N',
@@ -12,40 +16,12 @@ export enum F3FormTypes {
 
 export type F3FormType = F3FormTypes.F3N | F3FormTypes.F3A | F3FormTypes.F3T;
 
-export class F3CoverageDates {
-  @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
-  report_code: ReportCodes | undefined;
-  report_code_label?: string;
-
-  // prettier-ignore
-  static fromJSON(json: any, reportCodeLabel: string): F3CoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
-    json.report_code_label = reportCodeLabel;
-    return plainToClass(F3CoverageDates, json);
-  }
-}
-
-export class Form3 extends Report {
+export class Form3 extends BaseForm3 {
   schema = f3Schema;
   report_type = ReportTypes.F3;
   form_type = F3FormTypes.F3N;
-  override hasChangeOfAddress = true;
-  change_of_address: boolean | undefined;
   election_state: string | undefined;
   election_district: string | undefined;
-  election_code: string | undefined;
-  @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
-  state_of_election: string | undefined;
-  @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
-  @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
-  qualified_committee: boolean | undefined;
-  treasurer_last_name: string | undefined;
-  treasurer_first_name: string | undefined;
-  treasurer_middle_name: string | undefined;
-  treasurer_prefix: string | undefined;
-  treasurer_suffix: string | undefined;
-  @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-  calculation_status: string | undefined;
 
   L6a_total_contributions_period: number | undefined;
   L6b_total_contribution_refunds_period: number | undefined;
@@ -118,23 +94,99 @@ export class Form3 extends Report {
   L21_other_disbursements_ytd: number | undefined;
   L22_total_disbursements_ytd: number | undefined;
 
-  override get coverageDates(): { [date: string]: Date | undefined } {
-    return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
-  }
+  constructor() {
+    super();
 
-  override get canAmend(): boolean {
-    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
+    this.transactionGroupCategories = new Map([
+      [Categories.RECEIPT, this.receiptTransactionGroup],
+      [Categories.DISBURSEMENT, this.disbursementTransactionGroup],
+      [Categories.LOANS_AND_DEBTS, this.loanTransactionGroup],
+    ]);
+
+    this.transactionTypeMap = new Map<TransactionGroupTypes, TransactionTypes[]>([
+      ...this.receiptTransactionMap,
+      ...this.disbursementTransactionMap,
+      ...this.loansTransactionMap,
+    ]);
   }
 
   get formLabel() {
     return 'Form 3';
   }
 
-  get formSubLabel() {
-    return this.report_code_label ?? '';
-  }
-
   static fromJSON(json: unknown): Form3 {
     return plainToInstance(Form3, json);
   }
+
+  @Exclude()
+  private disbursementTransactionGroup = [
+    Disbursement.OPERATING_EXPENDITURES,
+    Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+    Disbursement.OTHER_EXPENDITURES,
+    Disbursement.REFUNDS,
+  ];
+
+  @Exclude()
+  private disbursementTransactionMap = new Map<DisbursementType, TransactionTypes[]>([
+    [
+      Disbursement.OPERATING_EXPENDITURES,
+      [
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
+        ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
+      ],
+    ],
+    [
+      Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS,
+      [
+        ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+      ],
+    ],
+    [
+      Disbursement.OTHER_EXPENDITURES,
+      [
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+        ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
+        ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
+        ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION,
+        ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION,
+        ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION,
+        ScheduleBTransactionTypes.DISGORGEMENT,
+      ],
+    ],
+    [
+      Disbursement.REFUNDS,
+      [
+        ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+        ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+        ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION,
+        ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION_VOID,
+        ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION,
+        ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID,
+      ],
+    ],
+    [
+      Disbursement.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
+      [
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
+        ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
+      ],
+    ],
+    [
+      Disbursement.COORDINATED_EXPENDITURES,
+      [
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+        ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
+      ],
+    ],
+  ]);
 }

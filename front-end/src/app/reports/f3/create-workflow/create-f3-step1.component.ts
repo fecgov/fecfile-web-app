@@ -69,7 +69,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   readonly existingCoverage = derivedAsync(async () => {
     const reportId = this.reportId();
     if (reportId && !this.report()) return undefined;
-    let existingCoverage = await this.form3Service.getF3CoverageDates();
+    let existingCoverage = await this.form3Service.getCoverageDates();
     if (reportId) {
       existingCoverage = existingCoverage.filter(
         (coverage) => coverage.coverage_from_date?.getTime() !== (this.report() as Form3).coverage_from_date?.getTime(),

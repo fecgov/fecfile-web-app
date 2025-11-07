@@ -4,7 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
-import { Report } from '../models/report.model';
+import { Report } from '../models/reports/report.model';
 import { ApiService } from './api.service';
 import { RendererFactory2 } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';

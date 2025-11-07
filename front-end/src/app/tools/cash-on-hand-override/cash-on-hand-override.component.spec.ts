@@ -7,7 +7,7 @@ import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
 import { CashOnHandOverrideComponent } from './cash-on-hand-override.component';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { provideHttpClient } from '@angular/common/http';
 
 describe('CashOnHandOverrideComponent', () => {
