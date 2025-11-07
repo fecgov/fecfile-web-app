@@ -48,10 +48,6 @@ export abstract class Report extends BaseModel {
 
   abstract get formSubLabel(): string;
 
-  get coverageDates(): { [date: string]: Date | undefined } | undefined {
-    return;
-  }
-
   get canAmend() {
     return false;
   }

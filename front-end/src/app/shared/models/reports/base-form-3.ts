@@ -38,7 +38,7 @@ export abstract class BaseForm3 extends Report {
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
 
-  override get coverageDates(): { [date: string]: Date | undefined } {
+  get coverageDates(): { [date: string]: Date | undefined } {
     return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
   }
 

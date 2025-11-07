@@ -21,8 +21,8 @@ import { Tooltip } from 'primeng/tooltip';
 import { Checkbox } from 'primeng/checkbox';
 import { Password } from 'primeng/password';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { Form3, Form3X } from 'app/shared/models';
 import { injectRouteData } from 'ngxtension/inject-route-data';
+import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
 @Component({
   selector: 'app-submit-report',
@@ -187,7 +187,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
       ...SchemaUtils.getFormValues(this.form, this.activeReport().schema, this.formProperties),
     });
 
-    if (payload instanceof Form3X || payload instanceof Form3) {
+    if (payload instanceof BaseForm3) {
       if (this.form.controls['change_of_address']) {
         payload.change_of_address = this.form.value.change_of_address;
         payload.confirmation_email_1 = this.form.value.confirmation_email_1;
