@@ -5,6 +5,8 @@ import { CommitteesOverviewComponent } from './dashboards/committees-overview/co
 import { EnableUserComponent } from './tools/enable-user/enable-user.component';
 import { DisableUserComponent } from './tools/disable-user/disable-user.component';
 import { AddUserToCommitteeComponent } from './tools/add-user-to-committee/add-user-to-committee.component';
+import { ResetSubmittingReportComponent } from './tools/reset-submitting-report/reset-submitting-report.component';
+import { FailOpenSubmissionsComponent } from './tools/fail-open-submissions/fail-open-submissions.component';
 
 const adminPathData = {
   showUpperFooter: false,
@@ -39,6 +41,20 @@ export const ADMIN_ROUTES: Route[] = [
     path: 'tools/disable-user',
     component: DisableUserComponent,
     title: 'Disable User',
+    pathMatch: 'full',
+    data: adminPathData,
+  },
+  {
+    path: 'tools/reset-submitting-report',
+    component: ResetSubmittingReportComponent,
+    title: 'Reset Submitting Report',
+    pathMatch: 'full',
+    data: adminPathData,
+  },
+  {
+    path: 'tools/fail-open-submissions',
+    component: FailOpenSubmissionsComponent,
+    title: 'Fail Open submissions',
     pathMatch: 'full',
     data: adminPathData,
   },

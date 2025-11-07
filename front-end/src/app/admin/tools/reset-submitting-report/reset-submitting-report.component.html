@@ -1,0 +1,40 @@
+<h1>Reset Submitting Report</h1>
+<h2>Notice: you need a valid uuid for an existing report</h2>
+<div class="management-tool">
+  <hr type="solid" />
+  <form id="form" [formGroup]="form" class="flex">
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="report_id">Report ID</label>
+          <input type="text" pInputText id="report_id" formControlName="report_id" data-cy="report_id" />
+          <app-error-messages [form]="form" fieldName="report_id" />
+        </div>
+      </div>
+    </div>
+  </form>
+  <hr type="solid" />
+  <div class="grid flex justify-content-between">
+    <div class="col-3">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-primary"
+        (click)="router.navigateByUrl('/admin')"
+      ></button>
+    </div>
+    <div class="col-3 flex justify-content-right">
+      <button
+        type="button"
+        pButton
+        pRipple
+        [disabled]="!reportIdFormControl.dirty"
+        label="Submit"
+        class="p-button-primary"
+        (click)="resetSubmittingReport()"
+      ></button>
+    </div>
+  </div>
+</div>

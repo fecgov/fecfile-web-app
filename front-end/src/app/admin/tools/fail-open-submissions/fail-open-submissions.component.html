@@ -1,0 +1,46 @@
+<h1>Fail Open Submissions</h1>
+<h2>Warning: this will set all open report submissions to failed but ONLY ON OUR END</h2>
+<div class="management-tool">
+  <hr type="solid" />
+  <form id="form" [formGroup]="form" class="flex">
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="warning_acknowledged">Please type: "I know what I'm doing"</label>
+          <input
+            type="text"
+            pInputText
+            id="warning_acknowledged"
+            formControlName="warning_acknowledged"
+            data-cy="warning_acknowledged"
+          />
+          <app-error-messages [form]="form" fieldName="warning_acknowledged" />
+        </div>
+      </div>
+    </div>
+  </form>
+  <hr type="solid" />
+  <div class="grid flex justify-content-between">
+    <div class="col-3">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-primary"
+        (click)="router.navigateByUrl('/admin')"
+      ></button>
+    </div>
+    <div class="col-3 flex justify-content-right">
+      <button
+        type="button"
+        pButton
+        pRipple
+        [disabled]="!warningAcknowledgedFormControl.dirty"
+        label="Submit"
+        class="p-button-primary"
+        (click)="failOpenSubmissions()"
+      ></button>
+    </div>
+  </div>
+</div>
