@@ -33,11 +33,10 @@ export class DisableUserComponent extends DestroyerComponent {
       const user_email: string | null = this.userEmailFormControl.value;
       if (user_email !== null) {
         this.adminService.disableUser(user_email).then((response) => {
-          console.log(response);
           this.messageService.add({
             severity: response.success ? 'success' : 'error',
             summary: response.success ? 'Successful' : 'Error',
-            detail: response.success ? 'User disabled' : response.error,
+            detail: response.success ? response.success : response.error,
             life: 3000,
           });
 

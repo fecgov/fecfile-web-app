@@ -17,3 +17,12 @@
 .max-width {
   width: 100%;
 }
+
+.p-disabled,
+.p-component:disabled,
+.p-select:disabled {
+  opacity: 1;
+  background: #f1f1f1;
+  border: 2px solid gray;
+  color: black;
+}

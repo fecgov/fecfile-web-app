@@ -13,7 +13,16 @@
       <div class="col-4">
         <div class="field">
           <label for="committee_id">Committee ID</label>
-          <input type="text" pInputText id="committee_id" formControlName="committee_id" data-cy="committee_id" />
+          <input
+            type="text"
+            pInputText
+            id="committee_id"
+            formControlName="committee_id"
+            data-cy="committee_id"
+            [readOnly]="committeeIdReadOnly"
+            [disabled]="committeeIdReadOnly"
+            [class]="committeeIdReadOnly ? 'p-disabled' : ''"
+          />
           <app-error-messages [form]="form" fieldName="committee_id" patternErrorMessage="Invalid Committe ID" />
         </div>
       </div>

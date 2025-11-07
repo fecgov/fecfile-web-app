@@ -22,6 +22,7 @@ export class AddUserToCommitteeComponent extends DestroyerComponent implements O
   protected readonly activatedRoute = inject(ActivatedRoute);
   private readonly messageService = inject(MessageService);
   public readonly adminService = inject(AdminService);
+  protected committeeIdReadOnly: boolean = false;
   readonly userEmailFormControl = new SubscriptionFormControl<string | null>(null, [
     Validators.required,
     Validators.email,
@@ -47,6 +48,7 @@ export class AddUserToCommitteeComponent extends DestroyerComponent implements O
 
   ngOnInit(): void {
     this.reset_committee_id();
+    this.committeeIdReadOnly = !!this.activatedRoute.snapshot.params['committee_id'];
   }
 
   reset_committee_id() {
