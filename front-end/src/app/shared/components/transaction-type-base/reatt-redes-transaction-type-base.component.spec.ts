@@ -6,7 +6,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../services/transaction.service';
 import { ReportService } from '../../services/report.service';
@@ -24,6 +24,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { Form3X } from 'app/shared/models';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -31,7 +32,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
+  let reportService: ReportService<Form3X>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,7 +63,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
 
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(ReportService<Form3X>);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
@@ -101,21 +102,19 @@ describe('ReattTransactionTypeBaseComponent', () => {
       expect(updateElectionDataSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('should save all transaction', fakeAsync(async () => {
+    it('should save all transaction', async () => {
       if (!component.transaction) throw Error('Bad test setup');
       spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
-      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.callFake(() =>
-        Promise.resolve([testTransaction]),
-      );
-      const navSpy = spyOn(component, 'navigateTo').and.callFake(async () => true);
+      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.resolveTo([testTransaction]);
+      const navSpy = spyOn(component, 'navigateTo').and.resolveTo(true);
       component.ngOnInit();
-      await component.save(
+      await component.submit(
         new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
       );
 
       expect(multiSaveSpy).toHaveBeenCalledTimes(1);
       expect(navSpy).toHaveBeenCalledTimes(1);
-    }));
+    });
   });
 
   describe('updateElectionData', () => {

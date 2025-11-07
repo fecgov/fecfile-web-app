@@ -4,13 +4,11 @@ import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { FormComponent } from '../app-destroyer.component';
+import { FormComponent } from '../form.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { printFormErrors } from 'app/shared/utils/form.utils';
 
 @Component({
   selector: 'app-second-committee-admin-dialog',
@@ -21,7 +19,7 @@ import { printFormErrors } from 'app/shared/utils/form.utils';
 export class SecondCommitteeAdminDialogComponent extends FormComponent {
   readonly memberService = inject(CommitteeMemberService);
   private readonly messageService = inject(MessageService);
-  private readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
+  readonly uniqueEmailValidator = inject(CommitteeMemberEmailValidator);
   readonly form: FormGroup = new FormGroup(
     {
       role: new SubscriptionFormControl({ value: Roles.COMMITTEE_ADMINISTRATOR, disabled: true }),
@@ -34,14 +32,7 @@ export class SecondCommitteeAdminDialogComponent extends FormComponent {
     { updateOn: 'blur' },
   );
 
-  async save() {
-    this.formSubmitted = true;
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
+  async submit() {
     const email = this.form.get('email')?.value as string;
     const role: Roles = this.form.get('role')?.value;
     const key = getRoleKey(role);

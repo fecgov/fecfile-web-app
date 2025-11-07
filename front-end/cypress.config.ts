@@ -24,7 +24,9 @@ export default defineConfig({
     runMode: 1,
     openMode: 0,
   },
+  experimentalWebKitSupport: true,
   e2e: {
     baseUrl: 'http://localhost:4200',
+    specPattern: ['cypress/e2e/**/*.cy.ts', 'cypress/nightly/**/*.cy.ts'],
   },
 });

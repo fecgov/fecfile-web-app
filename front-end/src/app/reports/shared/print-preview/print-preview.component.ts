@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/form-3x.model';
 import { Report } from 'app/shared/models/report.model';
@@ -126,17 +126,15 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       /** Update the report with the committee information
        * this is a must because the .fec requires this information */
       await this.reportService.fecUpdate(this.report, this.committeeAccount);
-      return this.webPrintService.submitPrintJob(this.report.id).then(
-        () => {
-          // Start polling for a completed status
-          this.pollPrintStatus();
-        },
-        () => {
-          // Handles any failure when submitting the print request
-          this.webPrintStage = 'failure';
-          this.printError = 'Failed to compile PDF';
-        },
-      );
+      try {
+        await this.webPrintService.submitPrintJob(this.report.id);
+        // Start polling for a completed status
+        return this.pollPrintStatus();
+      } catch {
+        // Handles any failure when submitting the print request
+        this.webPrintStage = 'failure';
+        this.printError = 'Failed to compile PDF';
+      }
     }
   }
 

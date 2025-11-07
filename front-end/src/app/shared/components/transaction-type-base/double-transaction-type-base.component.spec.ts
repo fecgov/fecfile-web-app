@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -24,7 +25,7 @@ import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
 import { Component, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Form3X, Transaction } from 'app/shared/models';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @Component({
@@ -43,7 +44,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let host: TestHostComponent;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
-  let reportService: ReportService;
+  let reportService: ReportService<Form3X>;
   let testRouter: Router;
   let testTransaction: Transaction;
 
@@ -90,7 +91,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     testRouter = TestBed.inject(Router);
     transactionService = TestBed.inject(TransactionService);
-    reportService = TestBed.inject(ReportService);
+    reportService = TestBed.inject(ReportService<Form3X>);
     spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
@@ -113,7 +114,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.transaction = undefined;
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('FECfile+: Template map not found for transaction component');
       }
@@ -123,7 +123,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       spyOn(component, 'getChildTransaction').and.callFake(() => undefined);
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('FECfile+: Child transaction not found for double-entry transaction form');
       }
@@ -137,7 +136,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       });
       try {
         component.ngOnInit();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe(
           'FECfile+: Template map not found for double transaction double-entry transaction form',
@@ -261,16 +259,20 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       component.childForm.get(key)?.updateValueAndValidity();
     });
 
-    await component.save(navEvent);
+    await component.submit(navEvent);
     expect(apiPostSpy).toHaveBeenCalledTimes(1);
   });
 
   describe('save', () => {
-    it('should bail out if transactions are invalid', () => {
+    it('should bail out if transactions are invalid', async () => {
       component.transaction = undefined;
-      expect(function () {
-        component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction));
-      }).toThrow(new Error('FECfile+: No transactions submitted for double-entry transaction form.'));
+      try {
+        await component.submitForm(
+          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+        );
+      } catch (error: any) {
+        expect(error.message).toBe('FECfile+: No transactions submitted for double-entry transaction form.');
+      }
     });
   });
 

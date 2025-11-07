@@ -93,6 +93,14 @@ export class PageUtils {
     cy.get('@menuItem').click({ force: true });
   }
 
+  static shouldHaveSidebarItem(menuItem: string) {
+    cy.get('p-panelmenu').contains('a', menuItem).should('exist');
+  }
+
+  static shouldNotHaveSidebarItem(menuItem: string) {
+    cy.get('p-panelmenu').contains('a', menuItem).should('not.exist');
+  }
+
   static getAlias(alias = ''): string {
     // Create the alias to limit the scope of the query selectors
     if (!alias) {
@@ -207,5 +215,19 @@ export class PageUtils {
         }
       });
     cy.contains('Welcome to FECfile+').should('not.exist');
+  }
+
+  static submitReportForm() {
+    const alias = PageUtils.getAlias('');
+    PageUtils.urlCheck('/submit');
+    PageUtils.enterValue('#treasurer_last_name', 'TEST');
+    PageUtils.enterValue('#treasurer_first_name', 'TEST');
+    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD')); // Insert password from env variable
+    cy.get(alias).find('[data-cy="userCertified"]').first().click();
+    PageUtils.clickButton('Submit');
+    PageUtils.findOnPage('div', 'Are you sure?');
+
+    PageUtils.clickButton('Yes');
+    cy.wait(250);
   }
 }

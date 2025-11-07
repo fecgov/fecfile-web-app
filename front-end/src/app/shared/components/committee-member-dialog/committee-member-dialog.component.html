@@ -3,7 +3,7 @@
     <h1 class="dialog-title" id="dialog-title">{{ member() ? 'Edit' : 'Add' }} user</h1>
     <button type="button" class="btn-close" (click)="dialog.close()" aria-label="Cancel"></button>
   </div>
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submit()">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" (ngSubmit)="submitForm()">
     <div class="dialog-body">
       <div class="grid">
         @if (member()) {

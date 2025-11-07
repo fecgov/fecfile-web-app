@@ -10,8 +10,8 @@ export class ContactLookup {
       cy.contains('LOOKUP').should('exist');
     }
     cy.get(alias).find('[data-cy="searchBox"]').type(name.slice(0, 3));
-    cy.contains(name).should('exist');
-    cy.contains(name).click({ force: true });
+    cy.contains(name).should('exist').as('contactName');
+    cy.get('@contactName').click({ force: true });
   }
 
   static getCandidate(
