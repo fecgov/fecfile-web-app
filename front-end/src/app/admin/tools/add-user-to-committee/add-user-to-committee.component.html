@@ -1,0 +1,48 @@
+<h1>Add user to committee</h1>
+<div class="management-tool">
+  <hr type="solid" />
+  <form id="form" [formGroup]="form" class="flex">
+    <div class="grid max-width">
+      <div class="col-4">
+        <div class="field">
+          <label for="user_email">User Email</label>
+          <input type="text" pInputText id="user_email" formControlName="user_email" data-cy="user_email" />
+          <app-error-messages [form]="form" fieldName="user_email" emailErrorMessage="Invalid email" />
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="committee_id">Committee ID</label>
+          <input type="text" pInputText id="committee_id" formControlName="committee_id" data-cy="committee_id" />
+          <app-error-messages [form]="form" fieldName="committee_id" patternErrorMessage="Invalid Committe ID" />
+        </div>
+      </div>
+      <div class="col-4">
+        <app-select
+          inputId="role"
+          label="Role"
+          [options]="roleOptions"
+          [control]="roleFormControl"
+          labelClass="role-label"
+        />
+      </div>
+    </div>
+  </form>
+  <hr type="solid" />
+  <div class="grid flex justify-content-between">
+    <div class="col-3">
+      <button type="button" pButton pRipple label="Back" class="p-button-primary" (click)="goBack()"></button>
+    </div>
+    <div class="col-3 flex justify-content-right">
+      <button
+        type="button"
+        pButton
+        pRipple
+        [disabled]="!userEmailFormControl.dirty"
+        label="Submit"
+        class="p-button-primary"
+        (click)="addUserToCommittee()"
+      ></button>
+    </div>
+  </div>
+</div>

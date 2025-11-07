@@ -6,35 +6,28 @@ import { selectUserLoginData } from '../../../store/user-login-data.selectors';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../../../shared/components/table/table.component';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../../shared/components/table-actions-button/table-actions-button.component';
-import { CommitteeMemberDialogComponent } from '../../../shared/components/committee-member-dialog/committee-member-dialog.component';
 import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-committees-overview',
   templateUrl: './committees-overview.component.html',
   styleUrls: ['./committees-overview.component.scss'],
-  imports: [
-    TableComponent,
-    ButtonDirective,
-    Ripple,
-    TableActionsButtonComponent,
-    CommitteeMemberDialogComponent,
-    TableModule,
-  ],
+  imports: [TableComponent, ButtonDirective, Ripple, TableActionsButtonComponent, TableModule],
 })
 export class CommitteesOverviewComponent extends TableListBaseComponent<CommitteeAccount> implements AfterViewInit {
   private readonly store = inject(Store);
+  public readonly router = inject(Router);
   protected readonly itemService = inject(CommitteeAccountService);
   readonly user = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeAccount = this.getEmptyItem();
 
   protected readonly rowActions: TableAction[] = [
-    new TableAction('Edit Role', this.openEdit.bind(this), undefined),
-    new TableAction('Delete', this.confirmDelete.bind(this)),
+    new TableAction('Add User to Committee', this.addUserToCommittee.bind(this), undefined),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
@@ -96,9 +89,8 @@ export class CommitteesOverviewComponent extends TableListBaseComponent<Committe
     });
   }
 
-  openEdit(committee: CommitteeAccount) {
-    this.committee = committee;
-    this.detailVisible.set(true);
+  addUserToCommittee(committee: CommitteeAccount) {
+    this.router.navigateByUrl(`/admin/tools/add-user-to-committee/${committee.committee_id}`);
   }
 
   roleEdited() {

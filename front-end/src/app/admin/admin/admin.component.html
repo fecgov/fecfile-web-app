@@ -1,8 +1,22 @@
 <h1>Admin Panel</h1>
-<hr type="solid" />
-
-<br /><a href="/admin/dashboard/committees-overview">Registered Committees Overview</a>
-
-<br /><a href="/admin/tools/enable-user">Enable User</a>
-
-<br /><a href="/admin/tools/disable-user">Disable User</a>
+<div class="admin-panel">
+  <hr type="solid" />
+  <div class="grid flex justify-content-between">
+    <div class="col-6">
+      <p-card>
+        <ng-template #title>Management Tools</ng-template>
+        @for (item of managementTools; track item) {
+          <br /><a [routerLink]="`/admin/tools/${item[1]}`">{{ item[0] }}</a>
+        }
+      </p-card>
+    </div>
+    <div class="col-6">
+      <p-card>
+        <ng-template #title>Dashboards</ng-template>
+        @for (item of dashboards; track item) {
+          <br /><a [routerLink]="`/admin/dashboards/${item[1]}`">{{ item[0] }}</a>
+        }
+      </p-card>
+    </div>
+  </div>
+</div>

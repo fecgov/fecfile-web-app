@@ -1,3 +1,15 @@
+.management-tool {
+  width: 800px;
+}
+
 .justify-content-right {
-  justify-content: right;
+  justify-content: right !important;
+}
+
+.justify-content-between {
+	justify-content: space-between !important;
+}
+
+.flex {
+  display: flex;
 }

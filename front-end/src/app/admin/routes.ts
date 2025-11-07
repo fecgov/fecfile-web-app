@@ -4,6 +4,7 @@ import { HeaderStyles } from 'app/layout/header/header.component';
 import { CommitteesOverviewComponent } from './dashboards/committees-overview/committees-overview.component';
 import { EnableUserComponent } from './tools/enable-user/enable-user.component';
 import { DisableUserComponent } from './tools/disable-user/disable-user.component';
+import { AddUserToCommitteeComponent } from './tools/add-user-to-committee/add-user-to-committee.component';
 
 const adminPathData = {
   showUpperFooter: false,
@@ -21,7 +22,7 @@ export const ADMIN_ROUTES: Route[] = [
     data: adminPathData,
   },
   {
-    path: 'dashboard/committees-overview',
+    path: 'dashboards/committees-overview',
     component: CommitteesOverviewComponent,
     title: 'Registered Committees Overview',
     pathMatch: 'full',
@@ -40,6 +41,21 @@ export const ADMIN_ROUTES: Route[] = [
     title: 'Disable User',
     pathMatch: 'full',
     data: adminPathData,
+  },
+  {
+    path: 'tools/add-user-to-committee',
+    component: AddUserToCommitteeComponent,
+    title: 'Add User To Committee',
+    pathMatch: 'full',
+    data: adminPathData,
+  },
+  {
+    path: 'tools/add-user-to-committee/:committee_id',
+    component: AddUserToCommitteeComponent,
+    title: 'Add User To Committee',
+    pathMatch: 'full',
+    data: adminPathData,
+    runGuardsAndResolvers: 'always',
   },
   { path: '**', redirectTo: '' },
 ];

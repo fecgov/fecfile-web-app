@@ -16,7 +16,7 @@
 <app-table
   [(first)]="first"
   [items]="items"
-  title="Manage users"
+  title="Registered Committees"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="committee_id"
@@ -27,16 +27,14 @@
   [columns]="columns"
   (loadTableItems)="loadTableItems($event)"
 >
-  <ng-template #caption>
-    @if (isCommitteeAdministrator()) {
-      <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
-    }
-  </ng-template>
 </app-table>
-
-<!--<app-committee-account-dialog
-  (detailClose)="detailClose()"
-  (roleEdited)="roleEdited()"
-  [(detailVisible)]="detailVisible"
-  [committee]="committee"
-/>-->
+<div class="col-3">
+  <button
+    type="button"
+    pButton
+    pRipple
+    label="Back"
+    class="p-button-primary"
+    (click)="router.navigateByUrl('/admin')"
+  ></button>
+</div>

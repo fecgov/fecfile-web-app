@@ -16,7 +16,7 @@ import { ErrorMessagesComponent } from 'app/shared/components/error-messages/err
   imports: [ReactiveFormsModule, ButtonDirective, ErrorMessagesComponent],
 })
 export class DisableUserComponent extends DestroyerComponent {
-  private readonly router = inject(Router);
+  public readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
   public readonly adminService = inject(AdminService);
   readonly userEmailFormControl = new SubscriptionFormControl<string | null>(null, [
