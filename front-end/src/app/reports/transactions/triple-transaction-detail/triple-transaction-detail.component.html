@@ -10,8 +10,12 @@
 }
 
 <p class="group-description">{{ transactionType?.description }}</p>
-<p-accordion expandIcon="pi pi-angle-right" value="0">
-  <p-accordion-panel value="0">
+<p-accordion
+  expandIcon="pi pi-angle-right"
+  [(value)]="accordionValue"
+  [transitionOptions]="animationTime + 'ms cubic-bezier(0.86, 0, 0.07, 1)'"
+>
+  <p-accordion-panel [value]="0">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ transactionType?.accordionTitle }}:</strong>
@@ -27,7 +31,7 @@
             {{ transactionType?.formTitle }}
           </h2>
         }
-        <h3>{{ transactionType?.contactTitle }}</h3>
+        <h2>{{ transactionType?.contactTitle }}</h2>
         <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
             [isEditable]="isEditable()"
@@ -47,7 +51,7 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel value="1">
+  <p-accordion-panel [value]="1">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ childTransactionType?.accordionTitle }}:</strong>
@@ -65,7 +69,7 @@
           </p>
         }
 
-        <h3>{{ childTransactionType?.contactTitle }}</h3>
+        <h2>{{ childTransactionType?.contactTitle }}</h2>
         <form id="childForm" [formGroup]="childForm" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
             [isEditable]="isEditable()"
@@ -86,7 +90,7 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel value="2">
+  <p-accordion-panel [value]="2">
     <p-accordion-header>
       <div class="flex align-items-center">
         <strong>{{ childTransactionType_2?.accordionTitle }}:</strong>
@@ -103,7 +107,7 @@
             <em [innerHtml]="childTransactionType_2?.description"></em>
           </p>
         }
-        <h3>{{ childTransactionType_2?.contactTitle }}</h3>
+        <h2>{{ childTransactionType_2?.contactTitle }}</h2>
         <form id="childForm_2" [formGroup]="childForm_2" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
             [isEditable]="isEditable()"

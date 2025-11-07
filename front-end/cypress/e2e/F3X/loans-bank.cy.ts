@@ -184,9 +184,13 @@ describe('Loans', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       clickLoan('Edit');
-
-      PageUtils.clickButton('Save & add loan guarantor');
-      PageUtils.urlCheck('/C2_LOAN_GUARANTOR');
+      // wait for form to be done (load c2 table)
+      cy.intercept('GET', '**/api/v1/transactions/?*parent=**&*schedules=C2*').as('GetC2List');
+      cy.wait('@GetC2List');
+      cy.get('.p-datatable-mask').should('not.exist');
+      // go to create guarantor
+      cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
+      cy.contains('Guarantors to loan source').should('exist');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);

@@ -2,3 +2,35 @@
   margin-top: 32px;
   width: fit-content;
 }
+
+#f24-input-container {
+  border: 2px solid var(--fec-grey-alt);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: baseline;
+
+  &:focus-within {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: var(--focus-ring);
+    border-color: var(--p-primary-color);
+  }
+
+  &:hover {
+    border-color: var(--surface-border);
+  }
+
+  & > span {
+    border: 0;
+    background: var(--p-content-background);
+    line-height: 1.4rem;
+    font-family: var(--karla-bold);
+    padding: 0 0 0 15px;
+    text-wrap-mode: nowrap;
+  }
+}
+
+#form24Name {
+  border: 0;
+  box-shadow: none;
+}

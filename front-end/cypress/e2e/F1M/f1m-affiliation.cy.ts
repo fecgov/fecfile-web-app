@@ -35,7 +35,7 @@ describe('Manage reports', () => {
       cy.get('[data-cy="affiliated_date_form_f1_filed-error"]').contains('This is a required field.');
       PageUtils.calendarSetValue('[data-cy="affiliated_date_form_f1_filed"]');
       PageUtils.clickButton('Save');
-      cy.get('[data-cy="report-list-component').should('exist');
+      cy.get('[data-cy="form1m-list-component').should('exist');
     });
   });
 
@@ -85,6 +85,9 @@ describe('Manage reports', () => {
       PageUtils.clickButton('Save and continue');
       cy.get('[data-cy="print-preview"]').should('exist');
 
+      PageUtils.clickSidebarSection('SIGN & SUBMIT');
+      PageUtils.shouldNotHaveSidebarItem('Report Status');
+
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
       const memoText = faker.lorem.sentence({ min: 1, max: 4 });
@@ -95,6 +98,12 @@ describe('Manage reports', () => {
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
       cy.get('[id="text4000"]').should('have.value', memoText);
+
+      // Submit report and verify report status link now available
+      PageUtils.clickSidebarSection('SIGN & SUBMIT');
+      PageUtils.clickSidebarItem('Submit report');
+      PageUtils.submitReportForm();
+      PageUtils.shouldHaveSidebarItem('Report status');
     });
   });
 });

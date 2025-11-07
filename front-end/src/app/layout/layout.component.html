@@ -1,7 +1,7 @@
 <div id="page-container" [class]="[layoutControls().backgroundStyle]">
   <app-banner #bannerRef />
   @if (layoutControls().showHeader) {
-    <div class="header-container" [style]="{ paddingBottom: layoutControls().showSidebar ? '0' : '64px' }">
+    <div class="header-container">
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
@@ -9,16 +9,14 @@
   <!--  Begin Sidebar section -->
   @if (layoutControls().showSidebar) {
     <div class="inline-flex w-100">
-      <div class="fec-background-gradient flex-shrink-1" id="sidebar-container">
+      <div class="fec-background-color flex-shrink-1" id="sidebar-container">
         <app-drawer />
       </div>
       <div class="sidebar-content-container">
         <div class="main-content">
-          <div class="grid">
-            @if (layoutControls().showCommitteeBanner) {
-              <app-committee-banner />
-            }
-          </div>
+          @if (layoutControls().showCommitteeBanner) {
+            <app-committee-banner />
+          }
           <div class="router-outlet">
             <router-outlet></router-outlet>
           </div>
@@ -39,7 +37,7 @@
       id="content-offset"
       #contentOffset
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
-      [style.marginTop]="isCookiesDisabled() ? '100px' : '0px'"
+      [style.marginTop]="isCookiesDisabled() ? '164px' : '64px'"
     >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {

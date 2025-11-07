@@ -35,6 +35,7 @@ class TestTableListService implements TableListService<string> {
   template: `<app-table
     [(first)]="first"
     [items]="items"
+    title="Title"
     [(totalItems)]="totalItems"
     [loading]="loading"
     [(rowsPerPage)]="rowsPerPage"
