@@ -1,7 +1,7 @@
 <app-dialog
   tabindex="-1"
   aria-labelledby="dialog-title"
-  [title]="member() ? 'Edit' : 'Add user'"
+  [title]="member() ? 'Edit user' : 'Add user'"
   [submitLabel]="member() ? 'Change' : 'Add'"
   [(visible)]="detailVisible"
   (submitForm)="submitForm()"
