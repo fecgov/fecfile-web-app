@@ -230,31 +230,25 @@
           <h2>Qualification</h2>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-4">
-          <app-calendar
-            fieldName="date_of_51st_contributor"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            label="DATE OF 51<sup>st</sup> CONTRIBUTION"
-          />
-        </div>
-        <div class="col-4">
-          <app-calendar
-            fieldName="date_of_original_registration"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            label="DATE OF ORIGINAL REGISTRATION"
-          />
-        </div>
-        <div class="col-4">
-          <app-calendar
-            fieldName="date_committee_met_requirements"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            label="DATE COMMITTEE MET REQUIREMENTS"
-          />
-        </div>
+      <div class="cal-group">
+        <app-calendar
+          fieldName="date_of_51st_contributor"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="DATE OF 51st CONTRIBUTION"
+        />
+        <app-calendar
+          fieldName="date_of_original_registration"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="DATE OF ORIGINAL REGISTRATION"
+        />
+        <app-calendar
+          fieldName="date_committee_met_requirements"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          label="DATE COMMITTEE MET REQUIREMENTS"
+        />
       </div>
       <div class="grid">
         <div class="col-12">
