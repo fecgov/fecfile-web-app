@@ -4,5 +4,8 @@
     <ng-template #selectedItem let-selectedOption>
       <input type="text" [id]="inputId()" [value]="selectedOption.label" readonly (click)="inputSelect.show()" />
     </ng-template>
+    <ng-template #dropdownicon>
+      <img alt="Dropdown arrow" src="assets/img/i-arrow-down.svg" height="9px" width="10px" />
+    </ng-template>
   </p-select>
 </div>
