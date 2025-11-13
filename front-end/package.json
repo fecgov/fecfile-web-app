@@ -73,6 +73,7 @@
         "@typescript-eslint/parser": "8.41.0",
         "cypress": "^15.5.0",
         "cypress-mochawesome-reporter": "3.8.4",
+        "depcheck": "^1.4.7",
         "eslint": "9.34.0",
         "glob": "9.3.5",
         "jasmine-core": "4.6.1",

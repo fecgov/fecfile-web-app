@@ -71,6 +71,7 @@ jobs:
           name: Run linter
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
+
       - run:
           name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
@@ -97,6 +98,11 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
+
+      - run:
+          name: run depcheck
+          command: depcheck
+          working_directory: ~/project/front-end/
 
       - run:
           name: run unit tests
