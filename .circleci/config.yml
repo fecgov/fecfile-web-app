@@ -100,11 +100,6 @@ jobs:
           app-dir: ~/project/front-end/
 
       - run:
-          name: run depcheck
-          command: depcheck
-          working_directory: ~/project/front-end/
-
-      - run:
           name: run unit tests
           command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
           working_directory: ~/project/front-end/
@@ -241,12 +236,16 @@ jobs:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
       - run:
-          name: Check installed node dependencies
+          name: List installed node dependencies
           command: npm ls --all
           working_directory: ~/project/front-end/
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
+      - run:
+          name: Check for unused dependencies
+          command: npx depcheck
+          working_directory: ~/project/front-end/
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
