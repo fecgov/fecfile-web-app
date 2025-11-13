@@ -43,7 +43,6 @@
         "ngx-cookie-service": "19.1.2",
         "ngx-logger": "5.0.12",
         "ngxtension": "5.1.0",
-        "primeflex": "4.0.0",
         "primeicons": "7.0.0",
         "primeng": "19.1.4"
     },
