@@ -64,12 +64,12 @@ jobs:
 
       - run:
           name: Print the linter version
-          command: npx eslint --version
+          command: ./node_modules/.bin/eslint --version
           working_directory: ~/project/front-end/
 
       - run:
           name: Run linter
-          command: npx eslint "src/**/*.ts" --max-warnings=0
+          command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
 
       - run:

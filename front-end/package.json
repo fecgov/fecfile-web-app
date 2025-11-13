@@ -48,6 +48,11 @@
     },
     "devDependencies": {
         "@angular-devkit/core": "19.2.15",
+        "@angular-eslint/builder": "19.8.1",
+        "@angular-eslint/eslint-plugin": "19.8.1",
+        "@angular-eslint/eslint-plugin-template": "19.8.1",
+        "@angular-eslint/schematics": "19.8.1",
+        "@angular-eslint/template-parser": "19.8.1",
         "@angular/animations": "19.2.14",
         "@angular/cdk": "19.2.18",
         "@angular/common": "19.2.14",
