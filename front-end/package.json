@@ -63,6 +63,8 @@
         "@types/intl-tel-input": "18.1.4",
         "@types/jasmine": "3.10.18",
         "@types/node": "20.19.11",
+        "@typescript-eslint/eslint-plugin": "8.41.0",
+        "@typescript-eslint/parser": "8.41.0",
         "cypress": "^15.5.0",
         "cypress-mochawesome-reporter": "3.8.4",
         "eslint": "9.34.0",
