@@ -8,7 +8,6 @@ export class ContactsHelpers {
     'Actions',
   ] as const;
 
-  /** Assert exact column headers (order + label). */
   static assertColumnHeaders(
     expected: readonly string[] = this.CONTACTS_HEADERS
   ): void {
@@ -47,11 +46,7 @@ export class ContactsHelpers {
   }
 
   static selectResultsPerPage(n: number) {
-    // Find the "Results per page:" control group
-    // It could be a native <select> or a PrimeNG dropdown.
     cy.contains(/results\s*per\s*page:/i).should('exist');
-
-    // Try native <select> first
     cy.contains(/results\s*per\s*page:/i)
       .parent()
       .within(() => {
@@ -60,9 +55,7 @@ export class ContactsHelpers {
             if ($sel.length) {
               cy.wrap($sel).select(String(n), { force: true });
             } else {
-              // Fall back to PrimeNG dropdown
               cy.get('.p-select-dropdown').first().click({ force: true });
-              // panel may render at body root
               cy.get('.p-select-option')
                 .contains(new RegExp(`^\\s*${n}\\s*$`))
                 .click({ force: true });
@@ -70,12 +63,10 @@ export class ContactsHelpers {
           });
       });
 
-    // Wait for table to reflect the new page size
     cy.get('tbody tr').should('exist');
   }
 
   static assertPageReport(start: number, end: number, total: number) {
-    // Handles "Showing X to Y of Z contacts" or "Showing X - Y of Z contacts"
     const rx = new RegExp(
       `showing\\s+${start}\\s*(?:-|to)\\s*${end}\\s+of\\s+${total}\\s+contacts?`,
       'i'
