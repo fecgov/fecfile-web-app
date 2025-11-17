@@ -4,6 +4,10 @@
     "interface": true,
     "type": true
   },
+  "ignoreDependencies": [
+    "primeflex",
+    "primeicons"
+  ],
   "workspaces": {
     "front-end": {
       "entry": [
@@ -16,13 +20,11 @@
         "src/**/*.ts",
         "cypress/e2e/**/*.ts",
         "cypress/support/**/*.ts"
-      ],
-      "ignore": [
-        "dist/**",
-        "coverage/**",
-        "node_modules/**"
       ]
     }
+  },
+  "angular": {
+    "config": ["angular.json"]
   },
   "cypress": {
     "config": ["cypress.config.{js,ts,mjs,cjs}"],
