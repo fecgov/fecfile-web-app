@@ -244,7 +244,7 @@ jobs:
           pip-dependency-file: requirements.txt
       - run:
           name: Check for unused dependencies
-          command: npx depcheck --specials=bin,eslint,mocha,tslint,webpack --skip-missing=true
+          command: npm run knip
           working_directory: ~/project/front-end/
 
 # Invoke jobs via workflows

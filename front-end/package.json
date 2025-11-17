@@ -22,7 +22,8 @@
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "prettier:check:ci": "./node_modules/.bin/prettier --check .",
-        "prettier:fix": "./node_modules/.bin/prettier --write ."
+        "prettier:fix": "./node_modules/.bin/prettier --write .",
+        "knip": "knip"
     },
     "private": true,
     "dependencies": {
@@ -43,6 +44,7 @@
         "ngx-cookie-service": "19.1.2",
         "ngx-logger": "5.0.12",
         "ngxtension": "5.1.0",
+        "primeflex": "4.0.0",
         "primeicons": "7.0.0",
         "primeng": "19.1.4"
     },
@@ -81,6 +83,7 @@
         "karma-jasmine": "4.0.2",
         "karma-jasmine-html-reporter": "1.7.0",
         "karma-spec-reporter": "0.0.33",
+        "knip": "^5.69.1",
         "prettier": "3.6.2",
         "reflect-metadata": "0.2.2",
         "rxjs": "7.8.2",

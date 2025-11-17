@@ -1,0 +1,43 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+  "workspaces": {
+    "front-end": {
+      "entry": [
+        "src/main.ts",
+        "src/test.ts",
+        "src/app/**/*.ts",
+        "src/environments/environment*.ts"
+      ],
+      "project": [
+        "src/**/*.ts",
+        "cypress/e2e/**/*.ts",
+        "cypress/support/**/*.ts"
+      ],
+      "ignore": [
+        "dist/**",
+        "coverage/**",
+        "node_modules/**"
+      ]
+    }
+  },
+  "cypress": {
+    "config": ["cypress.config.{js,ts,mjs,cjs}"],
+    "entry": [
+      "front-end/cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+      "front-end/cypress/support/e2e.{js,jsx,ts,tsx}",
+      "front-end/cypress/support/**/*.{js,ts}",
+      "front-end/cypress/plugins/index.ts"
+    ]
+  },
+  "karma": {
+    "config": ["karma.conf.js"],
+    "entry": [
+      "src/**/*.spec.ts"
+    ]
+  },
+  "tags": ["-lintignore"]
+}
