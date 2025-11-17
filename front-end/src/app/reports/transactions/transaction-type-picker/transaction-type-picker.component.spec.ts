@@ -73,13 +73,13 @@ describe('TransactionTypePickerComponent', () => {
       fixture.detectChanges();
 
       const groups = component.transactionGroups();
-      expect(groups[0]).toBe(Disbursement.OPERATING_EXPENDITURES);
+      expect(groups[0]).toBe(Disbursement[0]);
     });
 
     it('should change for loans and debts category', () => {
       routeParams$.next({ category: 'loans-and-debts' });
       const groups = component.transactionGroups();
-      expect(groups[0]).toBe(LoansAndDebts.LOANS);
+      expect(groups[0]).toBe(LoansAndDebts[0]);
 
       let types = component.transactionTypes().get(groups[0]);
       expect(types![0]).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
@@ -98,13 +98,13 @@ describe('TransactionTypePickerComponent', () => {
 
     it('should limit by PACRestricted if Committee type is PAC', () => {
       routeParams$.next({ category: 'receipt' });
-      const types = component.transactionTypes().get(Receipt.TRANSFERS);
+      const types = component.transactionTypes().get(Receipt[2]);
       expect(types!.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
     });
 
     it('should limit by PTY_ONLY if Committee type is PTY', () => {
       routeParams$.next({ category: 'receipt' });
-      const types = component.transactionTypes().get(Receipt.OTHER);
+      const types = component.transactionTypes().get(Receipt[4]);
       expect(types!.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
     });
   });
@@ -155,11 +155,14 @@ describe('TransactionTypePickerComponent', () => {
       fixture.detectChanges();
       expect(component.isF3()).toBeTrue();
       const groups = component.transactionGroups();
-      expect(groups.length).toBe(4);
+      expect(groups.length).toBe(5);
+      const gf = groups.filter((g) => component.hasTransactions().get(g));
+      gf.forEach((g) => console.log(g.label));
+      expect(gf.length).toBe(4);
       const transTypes = component.transactionTypes();
-      const contributions = transTypes.get(Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS);
+      const contributions = transTypes.get(Disbursement[1]);
       contributions?.forEach((c) => console.log(c));
-      expect(transTypes.get(Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS)?.length).toBe(3);
+      expect(transTypes.get(Disbursement[1])?.length).toBe(3);
     });
   });
 });

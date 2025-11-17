@@ -4,8 +4,7 @@ import { LabelList } from '../../utils/label.utils';
 import { BaseModel } from '../base.model';
 import { UploadSubmission } from '../upload-submission.model';
 import { WebPrintSubmission } from '../webprint-submission.model';
-import { Categories, TypeValuePair } from '../transaction-group';
-import { TransactionGroupTypes, TransactionTypes } from '../transaction.model';
+import { TransactionTypes } from '../transaction.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -53,9 +52,7 @@ export abstract class Report extends BaseModel {
   }
 
   @Exclude()
-  transactionGroupCategories = new Map<Categories, TypeValuePair[]>();
-  @Exclude()
-  transactionTypeMap = new Map<TransactionGroupTypes, TransactionTypes[]>();
+  transactionTypes: TransactionTypes[] = [];
 }
 
 export enum ReportTypes {

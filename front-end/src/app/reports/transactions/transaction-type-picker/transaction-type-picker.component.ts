@@ -24,7 +24,7 @@ import { Accordion, AccordionModule } from 'primeng/accordion';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
 import { environment } from '../../../../environments/environment';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Categories } from 'app/shared/models/transaction-group';
+import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
 import { scrollToTop } from 'app/shared/utils/form.utils';
 
 @Component({
@@ -71,7 +71,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly isF3X = computed(() => this.report().report_type === ReportTypes.F3X);
   readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
 
-  readonly transactionGroups = computed(() => this.report().transactionGroupCategories.get(this.category()) ?? []);
+  readonly transactionGroups = computed(() => CategoryPicker.get(this.category()) ?? []);
 
   constructor() {
     super();
@@ -93,9 +93,12 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
     const typeMap = new Map<TransactionGroupTypes, TransactionTypes[]>();
     const report = this.report();
     groups.forEach((group) => {
-      let transactionTypes = report.transactionTypeMap.get(group) ?? [];
-      if (!this.committeeAccount().isPAC) transactionTypes = transactionTypes.filter((tt) => !PAC_ONLY().includes(tt));
-      if (!this.committeeAccount().isPTY) transactionTypes = transactionTypes.filter((tt) => !PTY_ONLY().includes(tt));
+      const transactionTypes = report.transactionTypes.filter(
+        (t) =>
+          group.transactionTypes.has(t) &&
+          (this.committeeAccount().isPAC || !PAC_ONLY().has(t)) &&
+          (this.committeeAccount().isPTY || !PTY_ONLY().has(t)),
+      );
 
       if (this.debtId()) {
         const debtPaymentLines = [
