@@ -72,7 +72,14 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     return null;
   }
 
-  update(member: CommitteeMember): Promise<CommitteeMember> {
-    return this.apiService.put(`${this.endpoint}${member.id}/`, member);
+  async update(member: CommitteeMember): Promise<CommitteeMember> {
+    const updated = await this.apiService.put<CommitteeMember>(`${this.endpoint}${member.id}/`, member);
+    this.membersSignal.update((members) =>
+      members.map((m) => {
+        if (m.id === updated.id) m = CommitteeMember.fromJSON(updated);
+        return m;
+      }),
+    );
+    return updated;
   }
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -48,6 +48,15 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('actionsBody');
 
   columns: ColumnDefinition<CommitteeMember>[] = [];
+
+  constructor() {
+    super();
+    effect(() => {
+      if (!this.detailVisible()) {
+        this.member = undefined;
+      }
+    });
+  }
 
   override readonly params: Signal<QueryParams> = computed(() => {
     return { page_size: this.rowsPerPage(), you_first: true };
@@ -115,13 +124,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
       summary: 'Successful',
       detail: 'Role Updated',
     });
-
-    this.detailClose();
-  }
-
-  detailClose() {
-    this.detailVisible.set(false);
-    this.member = undefined;
   }
 
   isCurrentUser(member: CommitteeMember): boolean {

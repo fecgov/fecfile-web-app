@@ -7,11 +7,13 @@ import { CommitteeMemberService } from './committee-member.service';
 import { provideHttpClient } from '@angular/common/http';
 import { ListRestResponse, CommitteeMember, Roles } from '../models';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { ApiService, QueryParams } from './api.service';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;
   let httpTestingController: HttpTestingController;
   let mockStore: MockStore;
+  let apiService: ApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,11 +21,13 @@ describe('CommitteeMemberService', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         CommitteeMemberService,
+        ApiService,
         provideMockStore(testMockStore()),
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(CommitteeMemberService);
+    apiService = TestBed.inject(ApiService);
     mockStore = TestBed.inject(MockStore);
   });
 
@@ -111,5 +115,18 @@ describe('CommitteeMemberService', () => {
     ]);
 
     expect(service.needsSecondAdmin()).toBeFalse();
+  });
+
+  it('should update the member signal when updating', async () => {
+    const member = CommitteeMember.fromJSON({ id: '1', email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' });
+    service.membersSignal.set([member]);
+    expect(service.membersSignal()[0].role).toBe('COMMITTEE_ADMINISTRATOR');
+    const apiSpy: jasmine.Spy<{
+      <CommitteeMember>(endpoint: string, payload: unknown, queryParams?: QueryParams): Promise<CommitteeMember>;
+    }> = spyOn(apiService, 'put');
+    apiSpy.and.resolveTo({ id: '1', email: 'admin1@test.com', role: 'MANAGER' } as CommitteeMember);
+
+    await service.update({ ...member, role: 'MANAGER' } as CommitteeMember);
+    expect(service.membersSignal()[0].role).toBe('MANAGER');
   });
 });

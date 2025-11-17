@@ -662,8 +662,9 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 .p-select-label {
   padding-right: 0;
-  padding-left: 1rem;
+  padding-left: 10px;
 }
+
 .p-select .p-select-label {
   background: transparent;
   border: 0 none;
@@ -1043,6 +1044,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-radius: var(--border-radius);
   height: 3em;
 }
+
 .p-inputtext:enabled:hover {
   border-color: var(--surface-border);
 }
@@ -1062,6 +1064,10 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 .p-inputtext.p-inputtext-lg {
   font-size: 1.25rem;
   padding: 0.625rem 0.9375rem;
+}
+.dialog-body .p-inputtext {
+  height: 36px;
+  padding: 10px 10px;
 }
 
 .p-float-label > label {
@@ -6276,7 +6282,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-tag.p-tag-success {
   background-color: #28a745;
   color: #ffffff;
-}
+} 
 .p-tag.p-tag-info {
   background-color: #17a2b8;
   color: #ffffff;
@@ -6445,6 +6451,10 @@ input {
   color: var(--p-content-color);
 }
 
+.dialog-body input {
+  font-size: 14px;
+}
+
 .btn-close {
   box-sizing: content-box;
   width: 1em;
@@ -6552,6 +6562,7 @@ input {
   border: none;
   outline: none;
   cursor: pointer;
+  padding: 0;
 }
 
 td {
