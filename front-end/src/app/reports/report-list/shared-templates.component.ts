@@ -1,15 +1,14 @@
-import { Component, inject, TemplateRef, viewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, output, TemplateRef, viewChild } from '@angular/core';
 import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
 import { TableBodyContext } from 'app/shared/components/table/table.component';
-import { Report, ReportStatus } from 'app/shared/models';
+import { Report } from 'app/shared/models';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 @Component({
   selector: 'app-shared-templates',
   template: `
     <ng-template #reportNameBody let-item>
-      <a (click)="this.editItem(item)">{{ item.formSubLabel }}</a>
+      <a (click)="this.reportNameClick.emit(item)">{{ item.formSubLabel }}</a>
     </ng-template>
     <ng-template #actionsBody let-item let-actions="rowActions">
       <app-table-actions-button
@@ -27,16 +26,8 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
   imports: [TableActionsButtonComponent, FecDatePipe],
 })
 export class SharedTemplatesComponent<T extends Report> {
-  protected readonly router = inject(Router);
-
+  readonly reportNameClick = output<T>();
   readonly reportNameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('reportNameBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('actionsBody');
   readonly submissionBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('submissionBody');
-
-  async editItem(item: T): Promise<boolean> {
-    if (item.report_status && item.report_status !== ReportStatus.IN_PROGRESS) {
-      return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
-    }
-    return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
-  }
 }
