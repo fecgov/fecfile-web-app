@@ -4,7 +4,6 @@ import { ContactsHelpers } from './contacts.helpers';
 import { PageUtils } from '../../e2e/pages/pageUtils';
 import { defaultFormData as contactFormData } from '../../e2e/models/ContactFormModel';
 
-
 describe('Contacts List (/contacts)', () => {
   beforeEach(() => {
     Initialize();
@@ -15,105 +14,99 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
-    // will check for restore button, see line 96
+    // will check for restore button, see populated test
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('.empty-message', 'No data available in table').should('exist');
   });
 
   it('renders a populated list with correct columns after creating contacts via UI', () => {
     const uid = Cypress._.random(1000, 9999);
-    const makeContact = (overrides: Record<string, any>) => {
-      const formData = { ...contactFormData, ...overrides };
-      PageUtils.clickButton('Add contact');
-      ContactListPage.enterFormData(formData);
-      PageUtils.clickButton('Save');
-      cy.contains('Save').should('not.exist');
+
+    // Individual
+    PageUtils.clickButton('Add contact');
+    const individualFormData = {
+      ...contactFormData,
+      last_name: `IndLn${uid}`,
+      first_name: `IndFn${uid}`,
     };
+    ContactListPage.enterFormData(individualFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Save').should('not.exist');
 
-    const indFirst = `Ind${uid}`;
-    const indLast = `Ln${uid}`;
-    const indDisplay = `${indLast}, ${indFirst}`;
-    makeContact({
-      contact_type: 'Individual',
-      first_name: indFirst,
-      last_name: indLast,
-      street_1: '123 Main St',
-      city: 'Reston',
-      state: 'Virginia',
-      zip: '20190',
-      employer: 'Acme',
-      occupation: 'QA',
-      telephone: '5551234567',
-    });
-
-    const committeeName = `Comm${uid}`;
-    const committeeId = `C${String(uid).padStart(8, '0')}`;
-    makeContact({
-      contact_type: 'Committee',
-      name: committeeName,
-      committee_id: committeeId,
-      street_1: '10 Elm Rd',
-      city: 'Alexandria',
-      state: 'Virginia',
-      zip: '22314',
-      telephone: '5551112222',
-    });
-
-    const candFirst = `Cand${uid}`;
-    const candLast = `Ln${uid}`;
-    const candDisplay = `${candLast}, ${candFirst}`;
+    // Candidate
+    PageUtils.clickButton('Add contact');
     const candidateId = 'H0VA00001';
-    makeContact({
+    const candidateFormData = {
+      ...contactFormData,
       contact_type: 'Candidate',
       candidate_id: candidateId,
       candidate_office: 'House',
       candidate_state: 'Virginia',
       candidate_district: '01',
-      first_name: candFirst,
-      last_name: candLast,
-      street_1: '500 Pine Ave',
-      city: 'Arlington',
-      state: 'Virginia',
-      zip: '22201',
-      employer: 'Self',
-      occupation: 'Candidate',
-      telephone: '5559990000',
-    });
+      last_name: `CandLn${uid}`,
+      first_name: `CandFn${uid}`,
+    };
+    ContactListPage.enterFormData(candidateFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Save').should('not.exist');
 
-    const orgName = `Org${uid}`;
-    makeContact({
+    // Committee 
+    PageUtils.clickButton('Add contact');
+    const committeeName = `Committee ${uid}`;
+    const committeeFormData = {
+      ...contactFormData,
+      contact_type: 'Committee',
+      name: committeeName,
+    };
+    ContactListPage.enterFormData(committeeFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Save').should('not.exist');
+
+    // Organization 
+    PageUtils.clickButton('Add contact');
+    const organizationName = `Organization ${uid}`;
+    const organizationFormData = {
+      ...contactFormData,
       contact_type: 'Organization',
-      name: orgName,
-      street_1: '77 Market St',
-      city: 'Fairfax',
-      state: 'Virginia',
-      zip: '22030',
-      telephone: '5557778888',
-    });
+      name: organizationName,
+    };
+    ContactListPage.enterFormData(organizationFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Save').should('not.exist');
 
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('button,a', 'Restore deleted contacts').should('exist'); //see line 18
+    cy.contains('button,a', 'Restore deleted contacts').should('exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
 
-    const assertRow = (needle: string, expectedType: string, expectedFecId?: string) => {
-      cy.contains('tbody tr', needle, { matchCase: false })
+    const assertRow = (rowText: string, expectedType: string, expectedFecId?: string) => {
+      cy.contains('tbody tr', rowText, { matchCase: false })
         .should('exist')
         .within(() => {
-          cy.get('td').eq(1).invoke('text').then(t => {
-            expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
-          });
-          if (expectedFecId) {
-            cy.get('td').eq(2).invoke('text').then(t => {
-              expect(t.replace(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
+          cy.get('td')
+            .eq(1)
+            .invoke('text')
+            .then((t) => {
+              expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
             });
+
+          if (expectedFecId) {
+            cy.get('td')
+              .eq(2)
+              .invoke('text')
+              .then((t) => {
+                expect(t.replace(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
+              });
           }
         });
     };
-    assertRow(indDisplay, 'Individual');
-    assertRow(committeeName, 'Committee', committeeId);
-    assertRow(candDisplay, 'Candidate', candidateId);
-    assertRow(orgName, 'Organization');
+
+    const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
+    const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
+    assertRow(individualDisplayName, 'Individual');
+    assertRow(candidateDisplayName, 'Candidate', candidateId);
+    assertRow(committeeName, 'Committee');
+    assertRow(organizationName, 'Organization');
   });
 
   it('checks pagination controls empty state', () => {
@@ -137,6 +130,7 @@ describe('Contacts List (/contacts)', () => {
 
   it('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
     cy.intercept('GET', '**/api/v1/contacts**').as('getContacts');
+
     const makeContact = (overrides: Record<string, any>) => {
       const formData = { ...contactFormData, ...overrides };
       PageUtils.clickButton('Add contact');
@@ -189,6 +183,7 @@ describe('Contacts List (/contacts)', () => {
         const expectedRows = Math.max(0, end - start + 1);
         cy.get('tbody tr').should('have.length', expectedRows);
       });
+
       cy.get('.p-paginator').should('exist');
     }
   });
