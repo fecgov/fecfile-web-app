@@ -15,7 +15,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
-    cy.contains('button,a', 'Restore deleted contacts').should('exist');
+    // will check for restore button, see line 96
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('.empty-message', 'No data available in table').should('exist');
   });
@@ -93,6 +93,7 @@ describe('Contacts List (/contacts)', () => {
 
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
+    cy.contains('button,a', 'Restore deleted contacts').should('exist'); //see line 18
     cy.get('tbody tr').should('have.length.greaterThan', 3);
 
     const assertRow = (needle: string, expectedType: string, expectedFecId?: string) => {
