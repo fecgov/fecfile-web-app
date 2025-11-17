@@ -17,6 +17,21 @@ $glossary-width: 284px;
     padding: 0 1.5rem !important;
     font-family: var(--karla);
   }
+
+  .p-panel,
+  .p-panel-header,
+  .p-panel-content-container,
+  .p-panel-content {
+    background-color: var(--p-content-color) !important;
+    color: white !important;
+    border: 0 !important;
+    padding: 0 !important;
+    font-size: 14px;
+  }
+
+  .p-panel-content-container {
+    margin-top: 1.5rem;
+  }
 }
 
 .field,
@@ -24,15 +39,23 @@ input {
   font-size: 14px;
 }
 
-.minus-icon-mask {
+.minus-icon-mask,
+.plus-icon-mask {
   background-color: white;
-  width: 16px;
-  height: 16px;
-
-  mask-image: url('/assets/img/i-minus-circle.svg');
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer;
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
+}
+
+.minus-icon-mask {
+  mask-image: url('/assets/img/i-minus-circle.svg');
+}
+
+.plus-icon-mask {
+  mask-image: url('/assets/img/i-plus-circle.svg');
 }
 
 li {
@@ -44,4 +67,9 @@ li {
 
 h1 {
   font-size: 24px;
+}
+
+.collapsible-content {
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
 }

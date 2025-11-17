@@ -8,21 +8,26 @@
       <div class="my-4 flex justify-content-between">
         @if (found()) {
           <span class="font-bold">{{ found() }}</span>
-          <div class="minus-icon-mask"></div>
+          <div [class]="shown() ? 'minus-icon-mask' : 'plus-icon-mask'" (click)="toggle()" (keypress)="toggle()"></div>
         } @else {
           <span>No Results</span>
         }
       </div>
-      <div class="line-height-3">{{ data()[0] }}</div>
-      @if (data().length > 1) {
-        <ul>
-          @for (d of data(); track d; let isFirst = $first) {
-            @if (!isFirst) {
-              <li>{{ d }}</li>
-            }
+      <div #content class="collapsible-content">
+        <div>
+          <div class="line-height-3">{{ data()[0] }}</div>
+          @if (data().length > 1) {
+            <ul>
+              @for (d of data(); track d; let isFirst = $first) {
+                @if (!isFirst) {
+                  <li>{{ d }}</li>
+                }
+              }
+            </ul>
           }
-        </ul>
-      }
+        </div>
+      </div>
+
       <hr class="mt-3 border-top-1" />
     </div>
   </div>
