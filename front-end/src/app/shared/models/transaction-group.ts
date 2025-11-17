@@ -37,3 +37,9 @@ export const Receipt = {
 } as const;
 
 export type ReceiptType = (typeof Receipt)[keyof typeof Receipt];
+
+export const ScheduleC1TransactionGroups = {
+  LOAN_AGREEMENTS: { type: 'ScheduleC1TransactionGroups', value: 'LOAN AGREEMENTS' },
+};
+export type ScheduleC1TransactionGroupsType =
+  (typeof ScheduleC1TransactionGroups)[keyof typeof ScheduleC1TransactionGroups];
