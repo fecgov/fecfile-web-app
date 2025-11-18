@@ -37,8 +37,7 @@
     "entry": [
       "front-end/cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
       "front-end/cypress/support/e2e.{js,jsx,ts,tsx}",
-      "front-end/cypress/support/**/*.{js,ts}",
-      "front-end/cypress/plugins/index.ts"
+      "front-end/cypress/support/**/*.{js,ts}"
     ]
   },
   "karma": {
