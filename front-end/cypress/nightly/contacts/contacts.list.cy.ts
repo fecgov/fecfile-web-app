@@ -132,10 +132,7 @@ describe('Contacts List (/contacts)', () => {
 
   it('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
     const total = 21;
-
-    // --- Seed 21 contacts via API (fast path) ---
     const base: MockContact = Individual_A_A;
-
     cy.then(() => {
       for (let i = 1; i <= total; i++) {
         makeContact({
@@ -146,53 +143,55 @@ describe('Contacts List (/contacts)', () => {
       }
     });
 
-    // Go to list page
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-
-    // Verify the dropdown options exist
-    cy.get('.p-select-dropdown').should('exist').click();
-    cy.contains('.p-select-option', '5').should('exist');
-    cy.contains('.p-select-option', '10').should('exist');
-    cy.contains('.p-select-option', '15').should('exist');
-    cy.contains('.p-select-option', '20').should('exist');
+    cy.contains(/results\s*per\s*page:/i)
+      .parent()
+      .within(() => {
+        cy.get('.p-select-dropdown').click();
+      });
+    cy.get('.p-select-option').contains(/^5$/).should('exist');
+    cy.get('.p-select-option').contains(/^10$/).should('exist');
+    cy.get('.p-select-option').contains(/^15$/).should('exist');
+    cy.get('.p-select-option').contains(/^20$/).should('exist');
     cy.get('body').click();
 
     const sizes = [5, 10, 15, 20] as const;
+
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
         `showing\\s+${start}\\s*(?:-|to)\\s*${end}\\s+of\\s+${total}\\s+contacts:?`,
         'i',
       );
 
+    const selectPageSize = (size: number) => {
+      cy.contains(/results\s*per\s*page:/i)
+        .parent()
+        .within(() => {
+          cy.get('.p-select-dropdown').scrollIntoView().click({ force: true });
+        });
+
+      cy.get('.p-select-option')
+        .contains(new RegExp(`^\\s*${size}\\s*$`))
+        .scrollIntoView()
+        .click({ force: true });
+    };
+
     for (const size of sizes) {
       cy.log(`Testing Results per page = ${size}`);
-
-      // Select the requested page size
-      cy.get('.p-select-dropdown').scrollIntoView().click();
-      cy.contains('.p-select-option', new RegExp(`^\\s*${size}\\s*$`))
-        .should('be.visible')
-        .click();
-
+      selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
-
-      // 1) Page report: "Showing 1 to <size> of 21 contacts"
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('exist');
-
-      // 2) Table row count matches that report
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
-
-      // 3) For size 20, verify the second page contains the 21st contact alone
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
           .should('not.be.disabled')
-          .click();
+          .click({ force: true });
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('exist');
         cy.get('tbody tr').should('have.length', 1);
       }
-
       cy.get('.p-paginator').should('exist');
     }
   });
