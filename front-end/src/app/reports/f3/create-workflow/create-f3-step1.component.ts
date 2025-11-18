@@ -234,8 +234,3 @@ enum F3ReportTypeCategories {
   NON_ELECTION_YEAR = 'Non-Election Year',
   SPECIAL = 'Special',
 }
-
-type F3ReportTypeCategoryType =
-  | F3ReportTypeCategories.ELECTION_YEAR
-  | F3ReportTypeCategories.NON_ELECTION_YEAR
-  | F3ReportTypeCategories.SPECIAL;
