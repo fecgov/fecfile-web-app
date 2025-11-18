@@ -11,7 +11,6 @@ enum CommitteeTypes {
 
 export enum F1MFormTypes {
   F1MN = 'F1MN',
-  F1MA = 'F1MA',
 }
 
 export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
