@@ -110,6 +110,8 @@ describe('ErrorMessagesComponent', () => {
     expect(component.exclusiveMaxErrorMessage).toBe('My custom exclusive max error message');
     component.exclusiveMinErrorMessage = 'My custom exclusive min error message';
     expect(component.exclusiveMinErrorMessage).toBe('My custom exclusive min error message');
+    component.duplicateNameErrorMessage = 'My custom duplicate name error message';
+    expect(component.duplicateNameErrorMessage).toBe('My custom duplicate name error message');
   });
 
   it('should use a form control passed to it before using a named one passed as Input', () => {
