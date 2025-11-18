@@ -6,7 +6,7 @@ import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import {

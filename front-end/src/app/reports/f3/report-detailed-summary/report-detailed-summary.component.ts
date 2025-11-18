@@ -3,7 +3,7 @@ import { BehaviorSubject, delay, of, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Form3 } from 'app/shared/models/form-3.model';
+import { Form3 } from 'app/shared/models/reports/form-3.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';

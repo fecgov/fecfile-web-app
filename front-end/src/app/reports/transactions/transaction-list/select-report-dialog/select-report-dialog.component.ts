@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { Report } from '../../../../shared/models/report.model';
+import { Report } from '../../../../shared/models/reports/report.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
 import { Transaction } from '../../../../shared/models/transaction.model';

@@ -10,7 +10,7 @@ import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-pr
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { AddressInputComponent } from 'app/shared/components/inputs/address-input/address-input.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { Form99 } from 'app/shared/models/form-99.model';
+import { Form99 } from 'app/shared/models/reports/form-99.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form99Service } from 'app/shared/services/form-99.service';

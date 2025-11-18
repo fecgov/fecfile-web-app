@@ -176,6 +176,14 @@ export enum ScheduleBTransactionTypes {
   CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
   LOAN_MADE = 'LOAN_MADE',
   LOAN_REPAYMENT_MADE = 'LOAN_REPAYMENT_MADE',
+  OTHER_FEDERAL_CANDIDATE_CONTRIBUTION = 'OTHER_FEDERAL_CANDIDATE_CONTRIBUTION',
+  OTHER_FEDERAL_COMMITTEE_CONTRIBUTION = 'OTHER_FEDERAL_COMMITTEE_CONTRIBUTION',
+  UNREGISTERED_ORGANIZATION_CONTRIBUTION = 'UNREGISTERED_ORGANIZATION_CONTRIBUTION',
+  DISGORGEMENT = 'DISGORGEMENT',
+  REFUND_UNREGISTERED_RECEIPT_ORGANIZATION = 'REFUND_UNREGISTERED_RECEIPT_ORGANIZATION',
+  REFUND_UNREGISTERED_RECEIPT_ORGANIZATION_VOID = 'REFUND_UNREGISTERED_RECEIPT_ORGANIZATION_VOID',
+  REFUND_FEDERAL_COMMITTEE_CONTRIBUTION = 'REFUND_FEDERAL_COMMITTEE_CONTRIBUTION',
+  REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID = 'REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -353,4 +361,21 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
   [ScheduleBTransactionTypes.LOAN_MADE, 'Loan Made'],
   [ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE, 'Loan Repayment Made'],
+  [ScheduleBTransactionTypes.OTHER_FEDERAL_CANDIDATE_CONTRIBUTION, 'Other Federal Candidate Contribution'],
+  [ScheduleBTransactionTypes.OTHER_FEDERAL_COMMITTEE_CONTRIBUTION, 'Other Federal Committee Contribution'],
+  [ScheduleBTransactionTypes.UNREGISTERED_ORGANIZATION_CONTRIBUTION, 'Unregistered Organization Contribution'],
+  [ScheduleBTransactionTypes.DISGORGEMENT, 'Disgorgement'],
+  [
+    ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION,
+    'Refund of Unregistered Receipt from Organization',
+  ],
+  [
+    ScheduleBTransactionTypes.REFUND_UNREGISTERED_RECEIPT_ORGANIZATION_VOID,
+    'Refund of Unregistered Receipt from Organization - Void',
+  ],
+  [ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION, 'Refund of Federal Committee Contribution'],
+  [
+    ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID,
+    'Refund of Federal Committee Contribution - Void',
+  ],
 ];
