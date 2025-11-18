@@ -15,8 +15,8 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 
   return !!email && !matches
     ? {
-      email: 'invalid',
-    }
+        email: 'invalid',
+      }
     : null;
 }
 
@@ -49,8 +49,8 @@ export function buildGuaranteeUniqueValuesValidator(
 
     return primaryValue && otherValues.includes(primaryValue)
       ? {
-        [key]: 'not-unique',
-      }
+          [key]: 'not-unique',
+        }
       : null;
   };
 }
