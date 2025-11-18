@@ -3,7 +3,7 @@ import { PopoverModule } from 'primeng/popover';
 import { TableActionsButtonComponent } from './table-actions-button.component';
 import { ButtonModule } from 'primeng/button';
 import { TableAction } from '../table-list-base/table-list-base.component';
-import { Report, ReportStatus } from '../../models/report.model';
+import { Report, ReportStatus } from '../../models/reports/report.model';
 
 describe('TableActionsButtonComponent', () => {
   let component: TableActionsButtonComponent;

@@ -1,7 +1,7 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
-import { BaseModel } from './base.model';
-import { CandidateOfficeType, Contact } from './contact.model';
+import { BaseModel } from '../base.model';
+import { CandidateOfficeType, Contact } from '../contact.model';
 import { Report, ReportTypes } from './report.model';
 
 export enum CommitteeTypes {

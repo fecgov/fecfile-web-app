@@ -12,7 +12,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
-import { Form3X } from '../models/form-3x.model';
+import { Form3X } from '../models/reports/form-3x.model';
 import { ScheduleFTransactionTypes, SchFTransaction } from '../models/schf-transaction.model';
 
 describe('TransactionService', () => {

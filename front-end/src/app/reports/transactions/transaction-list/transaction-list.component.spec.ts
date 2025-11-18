@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -14,7 +14,7 @@ import { MemoCodePipe, TransactionListComponent } from './transaction-list.compo
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
-import { ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { provideHttpClient } from '@angular/common/http';

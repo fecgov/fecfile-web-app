@@ -3,7 +3,7 @@ import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@an
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
 import { Contact } from 'app/shared/models/contact.model';
-import { Form1M } from 'app/shared/models/form-1m.model';
+import { Form1M } from 'app/shared/models/reports/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';

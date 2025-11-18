@@ -1,7 +1,7 @@
-import { ReportCodes } from '../utils/report-code.utils';
+import { ReportCodes } from '../../utils/report-code.utils';
 import { F3xFormTypes, Form3X } from './form-3x.model';
-import { UploadSubmission } from './upload-submission.model';
-import { WebPrintSubmission } from './webprint-submission.model';
+import { UploadSubmission } from '../upload-submission.model';
+import { WebPrintSubmission } from '../webprint-submission.model';
 
 describe('Form3X', () => {
   it('should create an instance', () => {

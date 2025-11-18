@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3XMenuComponent } from './menus/f3x/f3x-menu.component';
 import { F99MenuComponent } from './menus/f99/f99-menu.component';
