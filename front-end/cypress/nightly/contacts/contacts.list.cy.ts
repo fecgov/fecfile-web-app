@@ -12,7 +12,7 @@ describe('Contacts List (/contacts)', () => {
     ContactListPage.goToPage();
   });
 
-  xit('shows header, table, Add, and correct column headers (empty state)', () => {
+  it('shows header, table, Add, and correct column headers (empty state)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
@@ -21,7 +21,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('.empty-message', 'No data available in table').should('exist');
   });
 
-  xit('renders a populated list with correct columns after creating contacts via UI', () => {
+  it('renders a populated list with correct columns after creating contacts via UI', () => {
     const uid = Cypress._.random(1000, 9999);
 
     // Individual
@@ -111,7 +111,7 @@ describe('Contacts List (/contacts)', () => {
     assertRow(organizationName, 'Organization');
   });
 
-  xit('checks pagination controls empty state', () => {
+  it('checks pagination controls empty state', () => {
     const paginator = () => cy.get('p-paginator, .p-paginator').first();
 
     cy.contains(/results\s*per\s*page:/i).should('exist');
@@ -150,13 +150,20 @@ describe('Contacts List (/contacts)', () => {
       .within(() => {
         cy.get('.p-select-dropdown').click();
       });
-    cy.get('.p-select-option').contains(/^5$/).should('exist');
-    cy.get('.p-select-option').contains(/^10$/).should('exist');
-    cy.get('.p-select-option').contains(/^15$/).should('exist');
-    cy.get('.p-select-option').contains(/^20$/).should('exist');
+
+    cy.get('.p-select-option').should('have.length.at.least', 4);
+    cy.get('.p-select-option').eq(0).should('contain.text', '5');
+    cy.get('.p-select-option').eq(1).should('contain.text', '10');
+    cy.get('.p-select-option').eq(2).should('contain.text', '15');
+    cy.get('.p-select-option').eq(3).should('contain.text', '20');
     cy.get('body').click();
 
-    const sizes = [5, 10, 15, 20] as const;
+    const pageSizes = [
+      { size: 5, index: 0 },
+      { size: 10, index: 1 },
+      { size: 15, index: 2 },
+      { size: 20, index: 3 },
+    ] as const;
 
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
@@ -164,22 +171,22 @@ describe('Contacts List (/contacts)', () => {
         'i',
       );
 
-    const selectPageSize = (size: number) => {
+    const openPageSizeDropdown = () => {
       cy.contains(/results\s*per\s*page:/i)
         .parent()
         .within(() => {
           cy.get('.p-select-dropdown').scrollIntoView().click({ force: true });
         });
-
-      cy.get('.p-select-option')
-        .contains(new RegExp(`^\\s*${size}\\s*$`))
-        .scrollIntoView()
-        .click({ force: true });
     };
 
-    for (const size of sizes) {
+    for (const { size, index } of pageSizes) {
       cy.log(`Testing Results per page = ${size}`);
-      selectPageSize(size);
+      openPageSizeDropdown();
+      cy.get('.p-select-option')
+        .eq(index)
+        .should('be.visible')
+        .click({ force: true });
+
       const expectedFirstPageRows = Math.min(size, total);
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('exist');
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
@@ -192,6 +199,7 @@ describe('Contacts List (/contacts)', () => {
         cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('exist');
         cy.get('tbody tr').should('have.length', 1);
       }
+
       cy.get('.p-paginator').should('exist');
     }
   });
