@@ -4,7 +4,7 @@ import { BaseModel } from './base.model';
 import { CandidateOfficeType, Contact } from './contact.model';
 import { Report, ReportTypes } from './report.model';
 
-export enum CommitteeTypes {
+enum CommitteeTypes {
   STATE_PTY = 'X',
   OTHER = 'N',
 }

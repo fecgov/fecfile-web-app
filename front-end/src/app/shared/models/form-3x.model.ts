@@ -9,7 +9,7 @@ export enum F3xFormTypes {
   F3XT = 'F3XT',
 }
 
-export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
+type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
 export class Form3X extends Report {
   schema = f3xSchema;

@@ -9,7 +9,7 @@ export type FecApiPagination = {
   pages: number;
 };
 
-export type FecApiPaginatedResponse = {
+type FecApiPaginatedResponse = {
   api_version: string;
   pagination: FecApiPagination;
   results: Candidate[] | CommitteeAccount[] | FecFiling[];

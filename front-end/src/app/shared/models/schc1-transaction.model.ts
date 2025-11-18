@@ -78,7 +78,7 @@ export class SchC1Transaction extends Transaction {
   }
 }
 
-export enum ScheduleC1TransactionGroups {
+enum ScheduleC1TransactionGroups {
   LOAN_AGREEMENTS = 'LOAN AGREEMENTS',
 }
 

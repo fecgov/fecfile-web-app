@@ -106,7 +106,7 @@ export const SAVE_TRIPLE_ENTRY_LIST_CONTROL = new NavigationControl(
   hasNoContact,
 );
 
-export const SAVE_ANOTHER_CONTROL = new NavigationControl(
+const SAVE_ANOTHER_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.ANOTHER,
   'Save & add another',
@@ -115,7 +115,7 @@ export const SAVE_ANOTHER_CONTROL = new NavigationControl(
   isNewTransaction,
 );
 
-export const SAVE_CHILD_CONTROL = new NavigationControl(
+const SAVE_CHILD_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.CHILD,
   'Save & add memo',

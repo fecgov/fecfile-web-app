@@ -10,7 +10,7 @@ export enum F3FormTypes {
   F3T = 'F3T',
 }
 
-export type F3FormType = F3FormTypes.F3N | F3FormTypes.F3A | F3FormTypes.F3T;
+type F3FormType = F3FormTypes.F3N | F3FormTypes.F3A | F3FormTypes.F3T;
 
 export class F3CoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;

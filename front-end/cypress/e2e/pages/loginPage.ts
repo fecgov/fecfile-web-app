@@ -106,7 +106,7 @@ export function Initialize() {
   ContactListPage.deleteAllContacts();
 }
 
-export function setCommitteeType(committeeType = 'O') {
+function setCommitteeType(committeeType = 'O') {
   const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
   if (!fecfile_online_committeeAccount) return;
   const json = JSON.parse(fecfile_online_committeeAccount);

@@ -172,13 +172,13 @@ export function isNewTransaction(transaction?: Transaction): boolean {
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
 }
-export function isExistingTransaction(transaction?: Transaction): boolean {
+function isExistingTransaction(transaction?: Transaction): boolean {
   return !!transaction?.id;
 }
 export function isPulledForwardLoan(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
-export function isLoanRepayment(transaction?: Transaction): boolean {
+function isLoanRepayment(transaction?: Transaction): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId !== ScheduleIds.C;
 }
 export function isDebtRepayment(transaction?: Transaction): boolean {

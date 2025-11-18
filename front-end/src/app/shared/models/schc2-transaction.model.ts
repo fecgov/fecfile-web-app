@@ -40,7 +40,7 @@ export class SchC2Transaction extends Transaction {
   }
 }
 
-export enum ScheduleC2TransactionGroups {
+enum ScheduleC2TransactionGroups {
   LOAN_GUARANTORS = 'LOAN GUARANTORS',
 }
 

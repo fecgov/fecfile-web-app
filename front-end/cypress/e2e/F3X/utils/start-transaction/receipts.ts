@@ -42,7 +42,7 @@ export class Individual {
   }
 }
 
-export class RegisteredFilers {
+class RegisteredFilers {
   static Party() {
     PageUtils.clickLink('Party Receipt');
   }
@@ -56,13 +56,13 @@ export class RegisteredFilers {
   }
 }
 
-export class Refunds {
+class Refunds {
   static ContributionToOtherPoliticalCommittee() {
     PageUtils.clickLink('Refund of Contribution to Other Political Committee');
   }
 }
 
-export class Transfers {
+class Transfers {
   static JointFundraising() {
     PageUtils.clickLink('Joint Fundraising Transfer');
   }

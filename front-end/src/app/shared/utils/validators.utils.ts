@@ -153,7 +153,7 @@ export function buildAfterDateValidator(form: FormGroup, field: string): Validat
   };
 }
 
-export function buildPrefixRequiredValidator(prefix: string): ValidatorFn {
+function buildPrefixRequiredValidator(prefix: string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const failed = control.value.length <= prefix.length;
     return failed ? { required: true } : null;

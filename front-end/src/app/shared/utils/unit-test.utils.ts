@@ -162,7 +162,7 @@ export function testF24() {
   });
 }
 
-export function testNavigationEvent(): NavigationEvent {
+function testNavigationEvent(): NavigationEvent {
   return {
     action: NavigationAction.SAVE,
     destination: NavigationDestination.LIST,

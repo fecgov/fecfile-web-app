@@ -6,5 +6,5 @@ export const setCommitteeAccountDetailsAction = createAction(
   props<{ payload: CommitteeAccount }>(),
 );
 
-export const errorRetrievingAccountDetailsAction = createAction('[Committee Account] Account Loaded Error');
-export const refreshCommitteeAccountDetailsAction = createAction('[Committee Account] Refresh Data');
+const errorRetrievingAccountDetailsAction = createAction('[Committee Account] Account Loaded Error');
+const refreshCommitteeAccountDetailsAction = createAction('[Committee Account] Refresh Data');

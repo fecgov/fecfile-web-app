@@ -7,7 +7,7 @@ export enum Disbursement {
   COORDINATED_EXPENDITURES = 'COORDINATED_EXPENDITURES',
 }
 
-export type DisbursementType =
+type DisbursementType =
   | Disbursement.OPERATING_EXPENDITURES
   | Disbursement.CONTRIBUTIONS_EXPENDITURES_TO_REGISTERED_FILERS
   | Disbursement.OTHER_EXPENDITURES
@@ -19,7 +19,7 @@ export enum LoansAndDebts {
   DEBTS = 'DEBTS',
 }
 
-export type LoansAndDebtsType = LoansAndDebts.DEBTS | LoansAndDebts.LOANS;
+type LoansAndDebtsType = LoansAndDebts.DEBTS | LoansAndDebts.LOANS;
 
 export enum Receipt {
   CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS = 'CONTRIBUTIONS FROM INDIVIDUALS/PERSONS',
@@ -29,7 +29,7 @@ export enum Receipt {
   OTHER = 'OTHER',
 }
 
-export type ReceiptType =
+type ReceiptType =
   | Receipt.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS
   | Receipt.CONTRIBUTIONS_FROM_REGISTERED_FILERS
   | Receipt.TRANSFERS
