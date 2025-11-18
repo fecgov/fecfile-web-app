@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 import { MainFormComponent } from './main-form/main-form.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guard';
-import { Report } from 'app/shared/models/report.model';
+import { Report } from 'app/shared/models/reports/report.model';
 import { PrintPreviewComponent } from '../shared/print-preview/print-preview.component';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';

@@ -8,7 +8,7 @@ import { initialState as initUserLoginData } from 'app/store/user-login-data.red
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { Form3X } from '../models/form-3x.model';
+import { Form3X } from '../models/reports/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
@@ -23,8 +23,9 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
-import { Form24 } from '../models';
+import { Form24, Form3, Report } from '../models';
 import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
+import { DefaultProjectorFn, MemoizedSelector } from '@ngrx/store';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -90,6 +91,20 @@ export function testCommitteeAccount(): CommitteeAccount {
   });
 }
 
+export function testPTY(): CommitteeAccount {
+  const committee = testCommitteeAccount();
+  committee.isPAC = false;
+  committee.isPTY = true;
+  return committee;
+}
+
+export function testPAC(): CommitteeAccount {
+  const committee = testCommitteeAccount();
+  committee.isPAC = true;
+  committee.isPTY = false;
+  return committee;
+}
+
 export function testUserLoginData(): UserLoginData {
   return {
     first_name: 'test_first_name',
@@ -114,6 +129,33 @@ export function testActiveReport(): Form3X {
     coverage_through_date: '2022-06-30',
     form_type: 'F3XN',
     report_type: 'F3X',
+    report_code: 'Q1',
+    report_status: 'In progress',
+    report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
+    upload_submission: UploadSubmission.fromJSON({}),
+    webprint_submission: {
+      fec_email: 'test@test.com',
+      fec_batch_id: '1234',
+      fec_image_url: 'image.test.com',
+      fec_submission_id: 'FEC-1234567',
+      fec_message: 'Message Goes Here',
+      fec_status: 'COMPLETED',
+      fecfile_error: '',
+      fecfile_task_state: 'COMPLETED',
+      id: 0,
+      created: '10/10/2010',
+      updated: '10/12/2010',
+    },
+  });
+}
+
+export function testF3(): Form3 {
+  return Form3.fromJSON({
+    id: '999',
+    coverage_from_date: '2022-05-25',
+    coverage_through_date: '2022-06-30',
+    form_type: 'F3N',
+    report_type: 'F3',
     report_code: 'Q1',
     report_status: 'In progress',
     report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
@@ -169,7 +211,20 @@ export function testNavigationEvent(): NavigationEvent {
   };
 }
 
-export function testMockStore() {
+interface Selector<T> {
+  selector: MemoizedSelector<object, T, DefaultProjectorFn<T>>;
+  value: T;
+}
+
+export function testMockStore(): {
+  initialState: {
+    fecfile_online_committeeAccount: CommitteeAccount;
+    fecfile_online_userLoginData: UserLoginData;
+    fecfile_online_activeReport: Report | undefined;
+    fecfile_online_navigationEvent: NavigationEvent | undefined;
+  };
+  selectors: [Selector<CommitteeAccount>, Selector<UserLoginData>, Selector<Report>, Selector<NavigationEvent>];
+} {
   return {
     initialState: {
       fecfile_online_committeeAccount: initCommitteeAccount,

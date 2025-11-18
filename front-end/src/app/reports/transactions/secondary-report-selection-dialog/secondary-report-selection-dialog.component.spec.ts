@@ -3,7 +3,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { Report, ReportStatus, ReportTypes } from 'app/shared/models/report.model';
+import { Report, ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { DatePipe } from '@angular/common';

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { F3CoverageDates, Form3 } from '../models/form-3.model';
+import { Form3 } from '../models/reports/form-3.model';
 import { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
+import { CoverageDates } from '../models/reports/base-form-3';
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +14,13 @@ export class Form3Service extends ReportService<Form3> {
 
   f3ReportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
 
-  public async getF3CoverageDates(): Promise<F3CoverageDates[]> {
+  public async getCoverageDates(): Promise<CoverageDates[]> {
     const [response, reportCodeLabelMap] = await Promise.all([
-      this.apiService.get<F3CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
+      this.apiService.get<CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
       this.getReportCodeLabelMap(),
     ]);
     return response.map((f3CoverageDate) =>
-      F3CoverageDates.fromJSON(f3CoverageDate, reportCodeLabelMap[f3CoverageDate.report_code!]),
+      CoverageDates.fromJSON(f3CoverageDate, reportCodeLabelMap[f3CoverageDate.report_code!]),
     );
   }
 

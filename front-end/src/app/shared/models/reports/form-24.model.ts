@@ -1,6 +1,6 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
-import { BaseModel } from './base.model';
+import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';

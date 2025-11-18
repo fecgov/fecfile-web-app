@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, model, output, Signal, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/report.model';
+import { ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/reports/report.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form24Service } from 'app/shared/services/form-24.service';

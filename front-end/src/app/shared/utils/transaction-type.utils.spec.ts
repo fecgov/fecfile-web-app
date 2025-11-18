@@ -35,7 +35,7 @@ describe('TransactionTypeUtils', () => {
       ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
       ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     ].forEach((r) => {
-      expect(PAC_ONLY().includes(r));
+      expect(PAC_ONLY().has(r));
     });
   });
 
@@ -45,7 +45,7 @@ describe('TransactionTypeUtils', () => {
       ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
       ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
     ].forEach((r) => {
-      expect(PTY_ONLY().includes(r));
+      expect(PTY_ONLY().has(r));
     });
   });
 

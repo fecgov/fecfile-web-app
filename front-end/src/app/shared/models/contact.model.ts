@@ -398,8 +398,12 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
   }
 
   toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
+    const statusCircle = `<span
+        class="pi pi-circle-on ${this.is_active ? 'active-status-circle' : 'inactive-status-circle'}" 
+        aria-label="${this.is_active ? 'Active' : 'Inactive'}" 
+      ></span>`;
     return {
-      label: `${this.name}<br>(${this.id})`,
+      label: `${this.name}<br>(${this.id})${statusCircle}`,
       value: this,
     };
   }

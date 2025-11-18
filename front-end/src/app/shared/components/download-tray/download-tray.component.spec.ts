@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Subject } from 'rxjs';
 import { DotFecService, Download } from 'app/shared/services/dot-fec.service';
-import { Report } from 'app/shared/models/report.model';
+import { Report } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';

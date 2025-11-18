@@ -7,7 +7,7 @@ import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-lev
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
-import { Report } from 'app/shared/models/report.model';
+import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 

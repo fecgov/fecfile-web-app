@@ -4,7 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
-import { Report } from '../models/report.model';
+import { Report } from '../models/reports/report.model';
 import { ApiService } from './api.service';
 import { RendererFactory2 } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
@@ -86,17 +86,18 @@ describe('DotFecService', () => {
   }));
 
   it('should generate FEC file', async () => {
-    const response = { status: 'testStatus', file_name: 'testFileName', task_id: 'testTaskId' };
+    const response = { status: 'testStatus', task_id: 'testTaskId' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spyOn(apiService, 'post').and.returnValue(Promise.resolve(response) as Promise<any>);
 
     const result = await service.generateFecFile(report);
+    const dateStr = new Date().toISOString().slice(0, 10);
 
     expect(apiService.post).toHaveBeenCalledWith(`/web-services/dot-fec/`, { report_id: report.id });
     expect(service.downloads().length).toBe(1);
     expect(service.downloads()[0].taskId).toBe(response.task_id);
     expect(service.downloads()[0].report).toBe(report);
-    expect(service.downloads()[0].name).toBe(response.file_name);
+    expect(service.downloads()[0].name).toContain(dateStr);
     expect(service.downloads()[0].isComplete).toBe(false);
     expect(result).toEqual(service.downloads()[0]);
   });

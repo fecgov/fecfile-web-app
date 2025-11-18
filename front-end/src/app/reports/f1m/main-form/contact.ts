@@ -1,6 +1,6 @@
 import { AbstractControl, Validators } from '@angular/forms';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { Form1M } from 'app/shared/models/form-1m.model';
+import { Form1M } from 'app/shared/models/reports/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';

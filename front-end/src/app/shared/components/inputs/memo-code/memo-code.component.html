@@ -14,7 +14,7 @@
           [readonly]="form.controls[templateMap['memo_code']].disabled"
           (onChange)="onMemoItemClick()"
         />
-        <span id="memo_code_label" [class.p-disabled]="form.controls[templateMap['memo_code']].disabled" class="ml-2">
+        <span id="memo_code_label" class="ml-2">
           {{ checkboxLabel() }}
           @if (parenLabel()) {
             <span class="paren-label">{{ parenLabel() }}</span>

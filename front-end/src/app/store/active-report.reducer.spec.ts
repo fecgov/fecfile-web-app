@@ -1,7 +1,7 @@
 import { activeReportReducer } from './active-report.reducer';
 import { setActiveReportAction } from './active-report.actions';
 import { userLoginDataDiscardedAction } from './user-login-data.actions';
-import { Form3X } from '../shared/models/form-3x.model';
+import { Form3X } from '../shared/models/reports/form-3x.model';
 
 describe('ActiveReportReducer', () => {
   it('it should store a report', () => {
