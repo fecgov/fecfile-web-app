@@ -3,6 +3,8 @@ import { ContactListPage } from '../../e2e/pages/contactListPage';
 import { ContactsHelpers } from './contacts.helpers';
 import { PageUtils } from '../../e2e/pages/pageUtils';
 import { defaultFormData as contactFormData } from '../../e2e/models/ContactFormModel';
+import { makeContact } from '../../e2e/requests/methods';
+import { Individual_A_A, MockContact } from '../../e2e/requests/library/contacts';
 
 describe('Contacts List (/contacts)', () => {
   beforeEach(() => {
@@ -10,7 +12,7 @@ describe('Contacts List (/contacts)', () => {
     ContactListPage.goToPage();
   });
 
-  it('shows header, table, Add and Restore, and correct column headers (empty state)', () => {
+  it('shows header, table, Add, and correct column headers (empty state)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
@@ -129,23 +131,16 @@ describe('Contacts List (/contacts)', () => {
   });
 
   it('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
-    cy.intercept('GET', '**/api/v1/contacts**').as('getContacts');
-
-    const makeContact = (overrides: Record<string, any>) => {
-      const formData = { ...contactFormData, ...overrides };
-      PageUtils.clickButton('Add contact');
-      ContactListPage.enterFormData(formData);
-      PageUtils.clickButton('Save');
-      cy.contains('Save').should('not.exist');
-    };
-
-    for (let i = 1; i <= 21; i++) {
-      makeContact({
-        contact_type: 'Individual',
-        last_name: `Last${i}`,
-        first_name: `First${i}`,
-      });
-    }
+    const base: MockContact = Individual_A_A;
+    cy.then(() => {
+      for (let i = 1; i <= 21; i++) {
+        makeContact({
+          ...base,
+          last_name: `${base.last_name}${i}`,
+          first_name: `${base.first_name}${i}`,
+        });
+      }
+    });
 
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
@@ -156,34 +151,40 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('.p-select-option', '20').should('exist');
     cy.get('body').click();
 
+    const total = 21;
     const sizes = [5, 10, 15, 20] as const;
+    const pageTextRx = (start: number, end: number) =>
+      new RegExp(
+        `showing\\s+${start}\\s*(?:-|to)\\s*${end}\\s+of\\s+${total}\\s+contacts:?`,
+        'i',
+      );
 
     for (const size of sizes) {
       cy.log(`Testing Results per page = ${size}`);
-      cy.get('.p-select-dropdown').scrollIntoView().click({ force: true });
+      cy.get('.p-select-dropdown').scrollIntoView().click();
       cy.contains('.p-select-option', new RegExp(`^\\s*${size}\\s*$`))
         .should('be.visible')
-        .click({ force: true });
+        .click();
 
-      const rx = /showing\s+(\d+)\s*(?:-|to)\s*(\d+)\s+of\s+21\s+contacts?/i;
-      cy.contains(rx).should(($el) => {
-        const text = ($el as unknown as JQuery<HTMLElement>).text();
-        const m = text.match(rx);
-        expect(m, `could not parse page report from "${text}"`).to.not.be.null;
-        const start = Number(m![1]);
-        const end = Number(m![2]);
-        const expectedRows = Math.max(0, end - start + 1);
-        expect(expectedRows, 'rows per page (from report)').to.be.within(1, size);
-      });
+      cy.get('.p-select-label, .p-select-value')
+        .invoke('text')
+        .should((text) => {
+          expect(text).to.match(new RegExp(`\\b${size}\\b`));
+        });
 
-      cy.contains(rx).invoke('text').then((text) => {
-        const m = text.match(rx)!;
-        const start = Number(m[1]);
-        const end = Number(m[2]);
-        const expectedRows = Math.max(0, end - start + 1);
-        cy.get('tbody tr').should('have.length', expectedRows);
-      });
+      const expectedFirstPageRows = Math.min(size, total);
+      cy.contains(pageTextRx(1, expectedFirstPageRows)).should('exist');
+      cy.get('tbody tr').should('have.length', expectedFirstPageRows);
 
+      if (size === 20) {
+        cy.get('button[aria-label="Next Page"], .p-paginator-next')
+          .first()
+          .should('not.be.disabled')
+          .click();
+
+        cy.contains(pageTextRx(21, 21)).should('exist');
+        cy.get('tbody tr').should('have.length', 1);
+      }
       cy.get('.p-paginator').should('exist');
     }
   });
