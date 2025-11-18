@@ -40,12 +40,6 @@ export class SchC2Transaction extends Transaction {
   }
 }
 
-export const ScheduleC2TransactionGroups = {
-  LOAN_GUARANTORS: { type: 'ScheduleC2TransactionGroups', value: 'LOAN GUARANTORS' },
-};
-export type ScheduleC2TransactionGroupsType =
-  (typeof ScheduleC2TransactionGroups)[keyof typeof ScheduleC2TransactionGroups];
-
 export enum ScheduleC2TransactionTypes {
   C2_LOAN_GUARANTOR = 'C2_LOAN_GUARANTOR',
 }

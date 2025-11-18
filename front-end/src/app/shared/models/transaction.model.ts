@@ -6,11 +6,7 @@ import { Exclude, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
 import { ReportTypes, Report } from './reports/report.model';
 import type { SchC1Transaction, ScheduleC1TransactionTypes } from './schc1-transaction.model';
-import type {
-  SchC2Transaction,
-  ScheduleC2TransactionGroupsType,
-  ScheduleC2TransactionTypes,
-} from './schc2-transaction.model';
+import type { SchC2Transaction, ScheduleC2TransactionTypes } from './schc2-transaction.model';
 import type { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
 import type { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
 import type { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
@@ -211,8 +207,7 @@ export type TransactionGroupTypes =
   | ReceiptType
   | DisbursementType
   | LoansAndDebtsType
-  | ScheduleC1TransactionGroupsType
-  | ScheduleC2TransactionGroupsType;
+  | ScheduleC1TransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
