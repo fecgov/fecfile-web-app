@@ -6,7 +6,7 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService, QueryParams } from './api.service';
 import { CandidateOfficeTypes } from '../models/contact.model';
-import { Report } from '../models/report.model';
+import { Report } from '../models/reports/report.model';
 import { formatDate } from '@angular/common';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 

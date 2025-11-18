@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { isEmpty, omit } from 'lodash';
-import { CoverageDates } from '../models';
+import { CoverageDates } from '../models/reports/base-form-3';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
@@ -15,8 +15,8 @@ export function emailValidator(control: AbstractControl): ValidationErrors | nul
 
   return !!email && !matches
     ? {
-        email: 'invalid',
-      }
+      email: 'invalid',
+    }
     : null;
 }
 
@@ -49,8 +49,8 @@ export function buildGuaranteeUniqueValuesValidator(
 
     return primaryValue && otherValues.includes(primaryValue)
       ? {
-          [key]: 'not-unique',
-        }
+        [key]: 'not-unique',
+      }
       : null;
   };
 }

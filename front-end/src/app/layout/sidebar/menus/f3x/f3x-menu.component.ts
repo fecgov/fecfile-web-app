@@ -2,7 +2,7 @@ import { Component, computed } from '@angular/core';
 import { ReportStatus } from 'app/shared/models';
 import { MenuItem } from 'primeng/api';
 import { PanelMenu } from 'primeng/panelmenu';
-import { Form3X } from '../../../../shared/models/form-3x.model';
+import { Form3X } from '../../../../shared/models/reports/form-3x.model';
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { ReportSidebarSection, SidebarState } from '../../sidebar.component';
 import { AbstractMenuComponent } from '../abstract-menu.component';
