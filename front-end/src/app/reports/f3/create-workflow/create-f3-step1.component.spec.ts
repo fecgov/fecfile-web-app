@@ -43,7 +43,7 @@ describe('CreateF3Step1Component: New', () => {
     fixture = TestBed.createComponent(CreateF3Step1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  };
+  });
 
   it('should create and initialize the form for a new report', () => {
     // the following line is redundant but ensures F3A member is used somewhere in the codebase
