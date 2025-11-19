@@ -49,5 +49,4 @@ describe('CreateF3Step1Component: New', () => {
     // the following line is redundant but ensures F3A member is used somewhere in the codebase
     expect(component.form.get('form_type')?.value).not.toBe(F3FormTypes.F3A);
   });
-
 });
