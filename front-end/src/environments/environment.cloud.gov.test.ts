@@ -21,6 +21,7 @@ export const environment = {
   showSchedF: false,
   disableLogin: false,
   fecSpec: 8.5,
+  showGlossary: false,
 };
 
 /*

@@ -7,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
 import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { GlossaryComponent } from './shared/components/glossary/glossary.component';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ import { GlossaryComponent } from './shared/components/glossary/glossary.compone
 export class AppComponent implements AfterContentChecked {
   protected readonly elementRef = inject(ElementRef);
   readonly confirmDialog = viewChild.required(ConfirmDialog);
+  readonly showGlossary = environment.showGlossary;
 
   ngAfterContentChecked(): void {
     const visible = this.confirmDialog().visible;
