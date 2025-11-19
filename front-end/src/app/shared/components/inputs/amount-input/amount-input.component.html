@@ -41,7 +41,14 @@
             ></span>
           </label>
 
-          <input type="text" [readonly]="true" class="readonly" pInputText id="linked24" [value]="linked24Label()" />
+          <input
+            type="text"
+            [readonly]="true"
+            class="readonly w-30rem"
+            pInputText
+            id="linked24"
+            [value]="linked24Label()"
+          />
         </div>
       }
       @if (transactionType()?.scheduleId === 'F') {
