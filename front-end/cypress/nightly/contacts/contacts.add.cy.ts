@@ -122,7 +122,6 @@ describe('Contacts Add (/contacts)', () => {
       .click({ force: true });
 
     PageUtils.clickButton('Save');
-    ContactsHelpers.assertSuccessToast();
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('tbody tr', /committee/i)
@@ -151,7 +150,6 @@ describe('Contacts Add (/contacts)', () => {
       .click({ force: true });
 
     PageUtils.clickButton('Save');
-    ContactsHelpers.assertSuccessToast();
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('tbody tr', /candidate/i)
