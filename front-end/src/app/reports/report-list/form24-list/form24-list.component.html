@@ -1,4 +1,4 @@
-<app-shared-templates />
+<app-shared-templates (reportNameClick)="this.editItem($event)" />
 <app-table
   [(first)]="first"
   data-cy="form24-list-component"

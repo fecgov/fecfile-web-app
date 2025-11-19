@@ -2,11 +2,11 @@ import { Component, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ColumnDefinition } from 'app/shared/components/table/table.component';
 import { Report, ReportStatus } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { ColumnDefinition } from 'app/shared/components/table/table.component';
 import { SharedTemplatesComponent } from './shared-templates.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
@@ -38,7 +38,13 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   override ngAfterViewInit(): void {
     this.columns = [
-      { field: 'formSubLabel', header: 'Type', sortable: true, cssClass: 'type-column' },
+      {
+        field: 'formSubLabel',
+        header: 'Type',
+        sortable: true,
+        cssClass: 'type-column',
+        bodyTpl: this.sharedTemplate().reportNameBodyTpl(),
+      },
       { field: 'report_status', header: 'Status', sortable: true, cssClass: 'status-column' },
       { field: 'version_label', header: 'Version', sortable: true, cssClass: 'version-column' },
       {

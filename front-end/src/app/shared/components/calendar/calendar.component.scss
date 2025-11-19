@@ -1,0 +1,28 @@
+.calendar-icon-mask {
+  background-color: #aeb0b5;
+  width: 20px;
+  height: 20px;
+  mask-image: url('/assets/img/i-calendar.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+:host ::ng-deep {
+  .p-datepicker-input-icon-container {
+    inset-inline-end: 10px;
+  }
+
+  .p-datepicker:not(.p-datepicker-inline) {
+    border: none;
+  }
+
+  .p-datepicker-input {
+    padding-left: 10px;
+    width: 11em;
+  }
+}
+
+.date-picker-field {
+  width: 11em;
+}

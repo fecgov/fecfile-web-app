@@ -46,7 +46,6 @@
       <div class="election-info col-6 grid">
         <div class="col-12">
           <app-calendar
-            data-cy="date_of_election"
             fieldName="date_of_election"
             [form]="form"
             [formSubmitted]="formSubmitted"
@@ -79,13 +78,9 @@
       <h3 class="m-0">Covering period</h3>
     </div>
   </div>
-  <div class="grid">
-    <div class="col-6">
-      <app-calendar fieldName="coverage_from_date" [form]="form" [formSubmitted]="formSubmitted" label="FROM" />
-    </div>
-    <div class="col-6">
-      <app-calendar fieldName="coverage_through_date" [form]="form" [formSubmitted]="formSubmitted" label="TO" />
-    </div>
+  <div class="flex gap-4">
+    <app-calendar fieldName="coverage_from_date" [form]="form" [formSubmitted]="formSubmitted" label="FROM" />
+    <app-calendar fieldName="coverage_through_date" [form]="form" [formSubmitted]="formSubmitted" label="TO" />
   </div>
 </form>
 <app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
