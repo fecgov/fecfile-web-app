@@ -3,7 +3,6 @@ export * from './cash-on-hand.model';
 export * from './committee-account.model';
 export * from './committee-member.model';
 export * from './contact.model';
-export * from './fec-api.model';
 export * from './fec-filing.model';
 export * from './feedback.model';
 export * from './form-3.model';
