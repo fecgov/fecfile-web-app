@@ -1,4 +1,4 @@
-import { hasNoContact, isNewTransaction, Transaction } from './transaction.model';
+import { hasNoContact, Transaction } from './transaction.model';
 import { TransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
