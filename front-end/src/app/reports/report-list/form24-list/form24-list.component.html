@@ -13,3 +13,5 @@
   sortField="report_code_label"
   (loadTableItems)="loadTableItems($event)"
 />
+
+<app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />
