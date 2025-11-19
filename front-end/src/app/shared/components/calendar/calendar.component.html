@@ -1,4 +1,4 @@
-<div class="field">
+<div class="field date-picker-field">
   <label [for]="fieldName()" [innerHTML]="label()"></label>
   <p-datepicker
     appendTo="body"
@@ -9,7 +9,18 @@
     [name]="fieldName()"
     [formControl]="control()!"
     [attr.data-cy]="fieldName()"
-  />
+    [showIcon]="true"
+    [iconDisplay]="'input'"
+  >
+    <ng-template #inputicon let-clickCallBack="clickCallBack">
+      <div
+        class="calendar-icon-mask"
+        aria-label="Calendar"
+        (click)="clickCallBack($event)"
+        (keypress)="clickCallBack($event)"
+      ></div>
+    </ng-template>
+  </p-datepicker>
   @if (control() && showErrors()) {
     <app-error-messages
       [attr.data-cy]="fieldName() + '-error'"

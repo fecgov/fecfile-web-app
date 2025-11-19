@@ -11,7 +11,7 @@ orbs:
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
   spin-up-api-containers:
-    description: 'Setup and start fecfile-web-api for E2E tests'
+    description: "Setup and start fecfile-web-api for E2E tests"
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -72,7 +72,7 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
       - run:
-          name: 'Run Prettier with project configuration'
+          name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -306,7 +306,7 @@ workflows:
   nightly:
     triggers:
       - schedule:
-          cron: '0 6 * * *' # 06:00 UTC
+          cron: "0 6 * * *" # 06:00 UTC
           filters:
             branches:
               only:
