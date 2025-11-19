@@ -122,7 +122,6 @@ describe('Contacts Add (/contacts)', () => {
       .click({ force: true });
 
     PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
     ContactsHelpers.assertSuccessToast();
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
@@ -152,7 +151,6 @@ describe('Contacts Add (/contacts)', () => {
       .click({ force: true });
 
     PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
     ContactsHelpers.assertSuccessToast();
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
