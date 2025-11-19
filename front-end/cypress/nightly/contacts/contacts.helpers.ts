@@ -73,4 +73,32 @@ export class ContactsHelpers {
     );
     cy.contains(rx).should('exist');
   }
+
+  static assertSuccessToast = () => {
+    cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
+      timeout: 10000,
+    }).should('exist');
+  };
+
+  static assertRow(rowText: string, expectedType: string, expectedFecId?: string) {
+    cy.contains('tbody tr', rowText, { matchCase: false })
+      .should('exist')
+      .within(() => {
+        cy.get('td')
+          .eq(1)
+          .invoke('text')
+          .then((t) => {
+            expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
+          });
+
+        if (expectedFecId) {
+          cy.get('td')
+            .eq(2)
+            .invoke('text')
+            .then((t) => {
+              expect(t.replace(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
+            });
+        }
+      });
+  };
 }
