@@ -82,8 +82,8 @@ jobs:
       - image: cimg/node:lts-browsers
     resource_class: large
     steps:
-      - checkout
-
+      - checkout:
+          method: blobless
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
       - run:
@@ -134,12 +134,7 @@ jobs:
 
             chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
             chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/jre/bin/java
-            $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner \
-            -Dsonar.scm.disabled=true \
-            -Dsonar.c.file.suffixes=- \
-            -Dsonar.cpp.file.suffixes=- \
-            -Dsonar.objc.file.suffixes=- \
-            -Dsonar.exclusions="**/node_modules/**,**/dist/**,**/*.spec.ts"
+            $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
           environment:
             SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
       - save_cache:
