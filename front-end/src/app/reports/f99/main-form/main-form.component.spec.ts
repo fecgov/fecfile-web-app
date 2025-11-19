@@ -4,7 +4,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
@@ -122,7 +122,7 @@ describe('MainFormComponent (showFilingFrequency)', () => {
     await TestBed.configureTestingModule({
       imports: [MainFormComponent, ReactiveFormsModule],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [provideMockStore({}), MessageService],
+      providers: [provideMockStore({}), MessageService, { provide: ActivatedRoute, useValue: {} }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MainFormComponent);
