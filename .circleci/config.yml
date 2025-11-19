@@ -83,7 +83,7 @@ jobs:
     resource_class: large
     steps:
       - checkout:
-          method: blobless
+          method: full
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
       - run:

@@ -5,7 +5,7 @@ import { TableComponent } from 'app/shared/components/table/table.component';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { SharedTemplatesComponent } from '../shared-templates.component';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({
   selector: 'app-form24-list',
