@@ -1,8 +1,8 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Form3, Form3X } from 'app/shared/models';
+import { Form24, Form3, Form3X } from 'app/shared/models';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { FORM_TYPES } from 'app/shared/utils/form-type.utils';
@@ -12,12 +12,13 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ReportSidebarSection } from './menu-info';
+import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 
 @Component({
   selector: 'app-drawer',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  imports: [PanelMenuModule, FecDatePipe],
+  imports: [PanelMenuModule, FecDatePipe, RenameF24DialogComponent],
 })
 export class SidebarComponent {
   private readonly navEnd = toSignal(injectNavigationEnd());
@@ -43,4 +44,22 @@ export class SidebarComponent {
   readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
   readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);
   readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
+
+  readonly renameF24DialogVisible = signal(false);
+  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  form24ToUpdate?: Form24;
+
+  constructor() {
+    effect(() => {
+      if (!this.renameF24DialogVisible() && this.form24ToUpdate) {
+        this.form24ToUpdate = undefined;
+        this.reportService.setActiveReportById(this.report().id);
+      }
+    });
+  }
+
+  public renameForm24(): void {
+    this.form24ToUpdate = this.report() as Form24;
+    this.renameF24DialogVisible.set(true);
+  }
 }

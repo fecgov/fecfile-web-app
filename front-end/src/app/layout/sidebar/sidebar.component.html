@@ -8,6 +8,11 @@
         {{ coverageThrough() | fecDate }}
       </div>
     }
+    @if (isF24()) {
+      <a class="rename-option" (click)="renameForm24()">RENAME</a>
+    }
   </div>
   <p-panelMenu [model]="items()" [multiple]="false" />
 </div>
+
+<app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />

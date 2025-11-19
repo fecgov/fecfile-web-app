@@ -10,6 +10,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { REPORTS_ROUTES } from 'app/reports/routes';
 import { ReportSidebarSection } from './menu-info';
+import { MessageService } from 'primeng/api';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -24,6 +25,7 @@ describe('SidebarComponent', () => {
         provideHttpClientTesting(),
         provideRouter(REPORTS_ROUTES),
         provideMockStore(testMockStore()),
+        MessageService,
       ],
     }).compileComponents();
   });
