@@ -166,9 +166,6 @@ export function getTransactionName(transaction: ScheduleTransaction): string {
   ] as string;
   return orgName;
 }
-export function isNewTransaction(transaction?: Transaction): boolean {
-  return !transaction?.id;
-}
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
 }
