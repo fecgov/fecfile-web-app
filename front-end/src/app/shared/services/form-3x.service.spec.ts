@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { Form3X } from '../models/form-3x.model';
+import { Form3X } from '../models/reports/form-3x.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3XService } from './form-3x.service';
 import { provideHttpClient } from '@angular/common/http';

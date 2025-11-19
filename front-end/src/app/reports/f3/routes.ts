@@ -5,7 +5,7 @@ import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-pr
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
-import { Report } from 'app/shared/models/report.model';
+import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { CreateF3Step1Component } from './create-workflow/create-f3-step1.component';
 import { ReportSummaryComponent } from './report-summary/report-summary.component';

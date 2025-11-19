@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { Report } from '../models/report.model';
+import { Report } from '../models/reports/report.model';
 import { ReportService } from '../services/report.service';
 
 @Injectable({

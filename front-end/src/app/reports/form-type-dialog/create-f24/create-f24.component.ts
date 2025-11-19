@@ -13,7 +13,7 @@ import { InputGroup } from 'primeng/inputgroup';
   selector: 'app-create-f24',
   imports: [InputText, FormsModule, SelectButtonModule, InputGroup],
   templateUrl: './create-f24.component.html',
-  styleUrl: './create-f24.component.scss',
+  styleUrl: '../../styles.scss',
 })
 export class CreateF24Component {
   readonly router = inject(Router);

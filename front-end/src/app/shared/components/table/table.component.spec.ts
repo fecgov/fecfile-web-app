@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Report } from '../../models/report.model';
+import { Report } from '../../models/reports/report.model';
 import { TableComponent } from './table.component';
 import { Component, signal, viewChild } from '@angular/core';
 

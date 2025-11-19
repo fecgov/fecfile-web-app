@@ -6,7 +6,7 @@
   @for (transactionGroup of transactionGroups(); track transactionGroup; let index = $index) {
     @if (hasTransactions().get(transactionGroup)) {
       <p-accordion-panel [value]="index">
-        <p-accordion-header>{{ transactionGroup }}</p-accordion-header>
+        <p-accordion-header>{{ transactionGroup.label }}</p-accordion-header>
         <p-accordion-content class="grid">
           <div class="content-accordion-wrapper">
             @for (transactionType of transactionTypes().get(transactionGroup); track transactionType) {
