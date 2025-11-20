@@ -22,8 +22,8 @@ const scheduleData = {
 function checkTable(index: number, type: string, containMemo: boolean, value: string) {
   cy.get('tbody tr').eq(index).as('row');
 
-  // this block of checks are here to ensure all columns exist, 
-  // but mostly to prove to knip that every part of the TransactionTableColumns enum is used
+  // this block of checks is here to ensure all columns exist
+  // (and to prove to knip that every part of the TransactionTableColumns enum is needed)
   cy.get('@row').find('td').eq(TransactionTableColumns.line_number).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.date).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.amount).should('exist');
