@@ -26,7 +26,8 @@
                     "options": {
                         "aot": true,
                         "outputPath": {
-                          "base": "dist/fecfile-web"
+                          "base": "dist/fecfile-web",
+                          "browser": ""
                         },
                         "index": "src/index.html",
                         "polyfills": ["zone.js", "zone.js/testing", "reflect-metadata"],
