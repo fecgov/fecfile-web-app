@@ -1,5 +1,7 @@
 import { Exclude, Transform, Type } from 'class-transformer';
 import { JsonSchema } from 'fecfile-validate';
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 import { LabelList } from '../../utils/label.utils';
 import { BaseModel } from '../base.model';
 import { UploadSubmission } from '../upload-submission.model';
@@ -43,6 +45,7 @@ export abstract class Report extends BaseModel {
   report_code?: string;
   report_code_label?: string;
 
+  abstract getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[];
   abstract get formLabel(): string;
 
   abstract get formSubLabel(): string;

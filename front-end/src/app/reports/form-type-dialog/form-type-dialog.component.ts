@@ -1,6 +1,6 @@
 import { Component, computed, inject, model, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormType, FormTypes, getFormTypes } from 'app/shared/utils/form-type.utils';
+import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -9,6 +9,7 @@ import { CreateF24Component } from './create-f24/create-f24.component';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
+import { ReportTypes } from 'app/shared/models';
 
 @Component({
   selector: 'app-form-type-dialog',
@@ -19,12 +20,12 @@ import { environment } from 'environments/environment';
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);
   readonly router = inject(Router);
-  readonly formTypeOptions: FormTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
+  readonly formTypeOptions: ReportTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
 
   readonly dialogVisible = model(false);
 
-  readonly selectedType = signal<FormTypes | undefined>(undefined);
-  readonly isF24 = computed(() => this.selectedType() === FormTypes.F24);
+  readonly selectedType = signal<ReportTypes | undefined>(undefined);
+  readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
   readonly isSubmitDisabled = computed(() =>
     this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
@@ -66,7 +67,7 @@ export class FormTypeDialogComponent {
     this.selectedType.set(undefined);
   }
 
-  getFormType(type?: FormTypes): FormType | undefined {
+  getFormType(type?: ReportTypes): FormType | undefined {
     return type ? getFormTypes(environment.showForm3).get(type) : undefined;
   }
 }
