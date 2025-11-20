@@ -1,11 +1,11 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { of } from 'rxjs';
 import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
@@ -127,7 +127,7 @@ describe('MainFormComponent (showFilingFrequency)', () => {
         provideHttpClientTesting(),
         provideMockStore({}),
         MessageService,
-        { provide: ActivatedRoute, useValue: {} },
+        { provide: ActivatedRoute, useValue: { params: of({}) } },
       ],
     }).compileComponents();
 
