@@ -127,7 +127,7 @@ describe('MainFormComponent (showFilingFrequency)', () => {
         provideHttpClientTesting(),
         provideMockStore({}),
         MessageService,
-        { provide: ActivatedRoute, useValue: { params: of({}) } },
+        { provide: ActivatedRoute, useValue: { params: of({}), snapshot: { params: {} } } },
       ],
     }).compileComponents();
 
