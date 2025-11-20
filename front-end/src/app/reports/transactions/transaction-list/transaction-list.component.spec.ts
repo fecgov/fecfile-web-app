@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -10,16 +9,14 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
-import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
+import { TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
-import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
-import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { createSignal } from '@angular/core/primitives/signals';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { Form24 } from 'app/shared/models';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -28,13 +25,7 @@ describe('TransactionListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ToolbarModule,
-        TableModule,
-        ConfirmDialogModule,
-        TransactionListComponent,
-        TransactionLoansAndDebtsComponent,
-      ],
+      imports: [ToolbarModule, TableModule, ConfirmDialogModule, TransactionListComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -116,11 +107,11 @@ describe('TransactionListComponent', () => {
     const f3x_params = {
       report_status: ReportStatus.IN_PROGRESS,
       report_type: ReportTypes.F3X,
-    };
+    } as Form3X;
     const f24_params = {
       report_status: ReportStatus.IN_PROGRESS,
       report_type: ReportTypes.F24,
-    };
+    } as Form24;
     expect(component.tableActions[0].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[1].isAvailable(f3x_params)).toEqual(true);
     expect(component.tableActions[2].isAvailable(f3x_params)).toEqual(true);
@@ -130,25 +121,19 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[2].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[3].isAvailable(f24_params)).toEqual(false);
     expect(component.tableActions[4].isAvailable(f24_params)).toEqual(true);
-    expect(component.tableActions[0].isEnabled({})).toEqual(true);
-    expect(component.tableActions[1].isEnabled({})).toEqual(true);
-    expect(component.tableActions[2].isEnabled({})).toEqual(true);
-    expect(component.tableActions[3].isEnabled({})).toEqual(false);
+    expect(component.tableActions[0].isEnabled(f3x_params)).toEqual(true);
+    expect(component.tableActions[1].isEnabled(f3x_params)).toEqual(true);
+    expect(component.tableActions[2].isEnabled(f3x_params)).toEqual(true);
+    expect(component.tableActions[3].isEnabled(f3x_params)).toEqual(false);
   });
 
-  it('should call refreshTable on receipts, disbursements, and loans', () => {
-    (component.receipts as any) = createSignal({
-      refreshTable: jasmine.createSpy('refreshTable'),
-    } as unknown as TransactionReceiptsComponent);
-    (component.disbursements as any) = createSignal({
-      refreshTable: jasmine.createSpy('refreshTable'),
-    } as unknown as TransactionDisbursementsComponent);
-    (component.loans as any) = createSignal({
-      refreshTable: jasmine.createSpy('refreshTable'),
-    } as unknown as TransactionLoansAndDebtsComponent);
-    component.refreshTables();
-    expect(component.receipts().refreshTable).toHaveBeenCalled();
-    expect(component.disbursements().refreshTable).toHaveBeenCalled();
-    expect(component.loans().refreshTable).toHaveBeenCalled();
+  it('should call refreshTable on receipts, disbursements, and loans', async () => {
+    const receiptSpy = spyOn(component.receipts(), 'refreshTable');
+    const disbursementsSpy = spyOn(component.disbursements(), 'refreshTable');
+    const loanSpy = spyOn(component.loans(), 'refreshTable');
+    await component.refreshTables();
+    expect(receiptSpy).toHaveBeenCalled();
+    expect(disbursementsSpy).toHaveBeenCalled();
+    expect(loanSpy).toHaveBeenCalled();
   });
 });

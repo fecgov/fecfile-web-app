@@ -1,5 +1,5 @@
 import { afterNextRender, Component, effect, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
-import { FormControlStatus, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
@@ -155,6 +155,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override submit(navigationEvent: NavigationEvent): Promise<void> {
+    this.updateContactData();
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
@@ -192,12 +193,11 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.formSubmitted = true;
 
     let invalid = -1;
-    const promises: Promise<FormControlStatus>[] = [];
-    this.forms.forEach((form) => {
+    this.forms.forEach(async (form) => {
       blurActiveInput(form);
-      if (form.pending) promises.push(firstValueFrom(form.statusChanges));
+      if (form.pending) await firstValueFrom(form.statusChanges);
     });
-    await Promise.all(promises);
+
     this.forms.forEach((form, index) => (invalid = this.validate(form, index, invalid)));
 
     return this.isValid(invalid);

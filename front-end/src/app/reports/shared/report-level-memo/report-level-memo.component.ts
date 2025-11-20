@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -19,7 +18,7 @@ import { Ripple } from 'primeng/ripple';
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
+  imports: [ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly router = inject(Router);

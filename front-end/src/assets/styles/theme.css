@@ -9,10 +9,6 @@
   font-weight: normal;
 }
 
-.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-  transition-duration: 0.15s;
-}
 
 .p-button:disabled {
   border: 2px solid gray;
@@ -6524,10 +6520,9 @@ input {
   text-transform: uppercase;
 }
 
-.p-panelmenu-header-link > chevrondownicon,
-.p-panelmenu-header-link > chevronrighticon {
+/* .p-panelmenu-header-link > .p-panelmenu-submenu-icon {
   display: none;
-}
+} */
 
 .p-panelmenu-header-link {
   height: 36px;
@@ -6571,4 +6566,8 @@ input {
 
 td {
   font-size: 14px;
+}
+
+.p-accordionpanel:not(.p-accordionpanel-active):not(.p-disabled) .p-accordionheader:hover .p-accordionheader-toggle-icon {
+  color: var(--p-accordion-header-toggle-icon-color);
 }

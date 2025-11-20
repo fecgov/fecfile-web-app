@@ -23,6 +23,6 @@ describe('SchDTransaction', () => {
       transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
     };
     const transaction: SchDTransaction = SchDTransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchDTransaction');
+    expect(transaction.constructor.name).toBe('_SchDTransaction');
   });
 });

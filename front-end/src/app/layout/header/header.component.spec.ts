@@ -6,10 +6,21 @@ import { HeaderComponent } from './header.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [HeaderComponent],
+  standalone: true,
+  template: `<app-header />`,
+})
+class TestHostComponent {
+  component = viewChild.required(HeaderComponent);
+}
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MenubarModule, HeaderComponent],
@@ -23,8 +34,9 @@ describe('HeaderComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 

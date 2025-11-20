@@ -1,7 +1,6 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, forwardRef, inject, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
@@ -15,7 +14,8 @@ import { TableComponent } from '../../../../shared/components/table/table.compon
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { MemoCodePipe } from '../transaction-list.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 
 @Component({
   selector: 'app-transaction-disbursements',

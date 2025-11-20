@@ -95,11 +95,11 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should have delete', () => {
     (component.reportIsEditable as any) = signal(true);
-    expect(component.rowActions[0].isAvailable()).toEqual(false);
-    expect(component.rowActions[1].isAvailable()).toEqual(true);
-    expect(component.rowActions[2].isAvailable()).toEqual(true);
-    expect(component.rowActions[0].isEnabled({})).toEqual(true);
-    expect(component.rowActions[1].isEnabled({})).toEqual(true);
-    expect(component.rowActions[2].isEnabled({})).toEqual(true);
+    expect(component.rowActions[0].isAvailable(host.loan)).toEqual(false);
+    expect(component.rowActions[1].isAvailable(host.loan)).toEqual(true);
+    expect(component.rowActions[2].isAvailable(host.loan)).toEqual(true);
+    expect(component.rowActions[0].isEnabled(host.loan)).toEqual(true);
+    expect(component.rowActions[1].isEnabled(host.loan)).toEqual(true);
+    expect(component.rowActions[2].isEnabled(host.loan)).toEqual(true);
   });
 });

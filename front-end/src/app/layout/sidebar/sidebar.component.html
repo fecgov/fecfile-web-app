@@ -12,7 +12,9 @@
       <a class="rename-option" (click)="renameForm24()">RENAME</a>
     }
   </div>
-  <p-panelMenu [model]="items()" [multiple]="false" />
+  <p-panelMenu [model]="items()" [multiple]="false">
+    <ng-template #headericon></ng-template>
+  </p-panelMenu>
 </div>
 
 <app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />

@@ -1,4 +1,3 @@
-import { environment } from 'environments/environment';
 import { ReportTypes } from '../models';
 
 export class FormType {
@@ -36,6 +35,9 @@ const allFormTypes = new Map<ReportTypes, FormType>([
   [ReportTypes.F24, new FormType('F24', 'Form 24', '24/48 Hour Report of Independent Expenditure')],
   [ReportTypes.F99, new FormType('F99', 'Form 99', 'Miscellaneous Report to FEC', '/reports/f99/create')],
 ]);
-export const FORM_TYPES = environment.showForm3
-  ? allFormTypes
-  : new Map([...allFormTypes.entries()].filter(([formType]) => formType !== ReportTypes.F3));
+
+export function getFormTypes(showForm3: boolean): Map<ReportTypes, FormType> {
+  return showForm3
+    ? allFormTypes
+    : new Map([...allFormTypes.entries()].filter(([formType]) => formType !== ReportTypes.F3));
+}

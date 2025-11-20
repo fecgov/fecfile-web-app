@@ -1,5 +1,5 @@
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
-import { SchBTransaction } from '../../models/schb-transaction.model';
+import type { SchBTransaction } from '../../models/schb-transaction.model';
 
 export class RedesignatedUtils {
   public static overlayTransactionProperties(transaction: SchBTransaction, activeReportId?: string): SchBTransaction {

@@ -13,7 +13,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     label="test"
     inputId="test"
     [options]="options"
-    formControlName="control"
+    controlName="control"
     [form]="form"
   />`,
 })

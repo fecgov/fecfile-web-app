@@ -240,7 +240,6 @@ export class TransactionDetailPage {
 
     cy.get(alias)
       .find('p-checkbox[inputid="memo_code"]')
-      .find('.p-checkbox')
       .should(formData.memo_code ? 'have.class' : 'not.have.class', 'p-checkbox-checked');
     if (formData.electionType) {
       cy.get(alias).find('[inputid="electionType"]').should('contain', formData.electionType);
@@ -316,7 +315,6 @@ export class TransactionDetailPage {
     if (formData.memo_code) {
       cy.get(alias)
         .find('p-checkbox[inputid="memo_code"]')
-        .find('.p-checkbox')
         .then(($checkbox) => {
           if (!$checkbox.hasClass('p-checkbox-checked')) {
             cy.wrap($checkbox).click();

@@ -31,6 +31,6 @@ describe('SchC2Transaction', () => {
       ],
     };
     const transaction: SchC2Transaction = SchC2Transaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchC2Transaction');
+    expect(transaction.constructor.name).toBe('_SchC2Transaction');
   });
 });
