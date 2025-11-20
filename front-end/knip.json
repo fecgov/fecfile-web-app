@@ -7,6 +7,7 @@
   "ignoreDependencies": [
     "primeflex",
     "primeicons",
+    "cypress-mochawesome-reporter",
     "@angular-eslint/eslint-plugin",
     "@angular-eslint/eslint-plugin-template",
     "@angular-eslint/schematics",
@@ -14,6 +15,7 @@
     "@typescript-eslint/eslint-plugin",
     "@typescript-eslint/parser"
   ],
+  "ignoreUnresolved": ["mochawesome"],
   "workspaces": {
     "front-end": {
       "entry": [
