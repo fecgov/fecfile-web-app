@@ -1,36 +1,30 @@
 $glossary-width: 284px;
 ::ng-deep {
-  .p-drawer {
+  .drawer-container {
     width: $glossary-width;
   }
-  .p-drawer-header {
+  .drawer-header {
     justify-content: right;
     padding: 1rem 2rem !important;
   }
-  .p-drawer-header,
-  .p-drawer-content {
+  .drawer-header,
+  .drawer-content {
     width: $glossary-width;
     background-color: var(--p-content-color) !important;
     color: white;
   }
-  .p-drawer-content {
+  .drawer-content {
     padding: 0 1.5rem !important;
     font-family: var(--karla);
   }
 
-  .p-panel,
-  .p-panel-header,
-  .p-panel-content-container,
-  .p-panel-content {
+  .drawer-container,
+  .drawer-header,
+  .drawer-content {
     background-color: var(--p-content-color) !important;
     color: white !important;
     border: 0 !important;
-    padding: 0 !important;
     font-size: 14px;
-  }
-
-  .p-panel-content-container {
-    margin-top: 1.5rem;
   }
 }
 
