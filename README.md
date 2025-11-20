@@ -18,7 +18,7 @@ The project is hosted on the [cloud.gov](https://cloud.gov/docs/) platform and u
 
 ## Set up
 
-You can find the set up instructions for the frontend of this project in our [wiki](https://github.com/fecgov/fecfile-web-api/wiki/Local-Setup).
+Set up instructions are found in the [wiki](https://github.com/fecgov/fecfile-web-api/wiki/Local-Setup), including [instructions specific to the frontend](https://github.com/fecgov/fecfile-web-api/wiki/Local-setup#running-the-frontend-locally).
 
 ### Running end-to-end (E2E) tests
 
