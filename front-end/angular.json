@@ -26,7 +26,8 @@
                     "options": {
                         "aot": true,
                         "outputPath": {
-                          "base": "dist/fecfile-web"
+                          "base": "dist/fecfile-web",
+                          "browser": ""
                         },
                         "index": "src/index.html",
                         "polyfills": ["zone.js", "zone.js/testing", "reflect-metadata"],
@@ -63,7 +64,8 @@
                                     "with": "src/environments/environment.cloud.gov.prod.ts"
                                 }
                             ],
-                            "outputHashing": "all"
+                            "outputHashing": "all",
+                            "optimization": true
                         },
                         "cloud.gov.test": {
                             "budgets": [
@@ -84,7 +86,8 @@
                                     "with": "src/environments/environment.cloud.gov.test.ts"
                                 }
                             ],
-                            "outputHashing": "all"
+                            "outputHashing": "all",
+                            "optimization": true
                         },
                         "cloud.gov.stage": {
                             "budgets": [
@@ -105,7 +108,8 @@
                                     "with": "src/environments/environment.cloud.gov.stage.ts"
                                 }
                             ],
-                            "outputHashing": "all"
+                            "outputHashing": "all",
+                            "optimization": true
                         },
                         "cloud.gov.dev": {
                             "budgets": [
@@ -127,7 +131,8 @@
                                 }
                             ],
                             "outputHashing": "all",
-                            "sourceMap": true
+                            "sourceMap": true,
+                            "optimization": true
                         },
                         "local": {
                             "budgets": [
@@ -148,13 +153,13 @@
                                     "with": "src/environments/environment.local.ts"
                                 }
                             ],
-                            "optimization": false,
+                            "optimization": true,
                             "extractLicenses": false,
                             "sourceMap": true,
                             "namedChunks": true
                         },
                         "development": {
-                          "optimization": false,
+                          "optimization": true,
                             "extractLicenses": false,
                             "sourceMap": true,
                             "namedChunks": true
