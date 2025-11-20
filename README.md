@@ -36,7 +36,4 @@ See also: [Technical Design](https://github.com/fecgov/fecfile-web-api/wiki/Tech
   - [NGINX](https://github.com/fecgov/fecfile-web-app/blob/develop/deploy-config/front-end-nginx-config/nginx.conf)
   - [local](https://github.com/fecgov/fecfile-web-app/blob/develop/front-end/angular.json)
 
-See [Additional Developer Notes](https://github.com/fecgov/fecfile-web-api/wiki/Additional-Developer-Notes).
-
-
 This project is tested with [BrowserStack](https://browserstack.com).
