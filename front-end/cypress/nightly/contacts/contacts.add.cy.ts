@@ -103,7 +103,7 @@ describe('Contacts Add (/contacts)', () => {
     }
   });
 
-  it('Create a Committee contact via lookup (typeahead)', () => {
+  it('Create a Committee contact via lookup', () => {
     PageUtils.clickButton('Add contact');
     cy.get('#entity_type_dropdown')
       .first()
@@ -112,17 +112,21 @@ describe('Contacts Add (/contacts)', () => {
       .scrollIntoView({ offset: { top: 0, left: 0 } })
       .click();
 
+    cy.intercept('GET', '**/api/v1/contacts/committee/?committee_id=*').as('committeeSearch');
     cy.get('.p-autocomplete-input')
       .should('exist')
-      .clear()
-      .type('ber', { delay: 50 }); // ≥3 chars
+      .type('ber')
+      .then(() => {
+        cy.get('.p-autocomplete-option')
+          .should('have.length.at.least', 1)
+          .first()
+          .click({ force: true });
+      });
 
-    cy.get('.p-autocomplete-option')
-      .first()
-      .click({ force: true });
-
+    cy.wait('@committeeSearch');
+    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
     PageUtils.clickButton('Save');
-    ContactListPage.goToPage();
+    cy.wait('@createContact');
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('tbody tr', /committee/i)
       .should('exist')
@@ -131,7 +135,7 @@ describe('Contacts Add (/contacts)', () => {
       });
   });
 
-  it('Create a Candidate contact via lookup (typeahead)', () => {
+  it('Create a Candidate contact via lookup', () => {
     PageUtils.clickButton('Add contact');
     cy.get('#entity_type_dropdown')
       .first()
@@ -140,17 +144,20 @@ describe('Contacts Add (/contacts)', () => {
       .scrollIntoView({ offset: { top: 0, left: 0 } })
       .click();
 
+    cy.intercept('GET', '**/api/v1/contacts/candidate/?candidate_id=*').as('candidateSearch');
     cy.get('.p-autocomplete-input')
       .should('exist')
-      .clear()
-      .type('ber', { delay: 50 });
-
-    cy.get('.p-autocomplete-option')
-      .first()
-      .click({ force: true });
-
+      .type('ber')
+      .then(() => {
+        cy.get('.p-autocomplete-option')
+          .should('have.length.at.least', 1)
+          .first()
+          .click({ force: true });
+      });
+    cy.wait('@candidateSearch');
+    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
     PageUtils.clickButton('Save');
-    ContactListPage.goToPage();
+    cy.wait('@createContact');
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('tbody tr', /candidate/i)
       .should('exist')
