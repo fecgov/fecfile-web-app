@@ -3,9 +3,9 @@ import { MonoTypeOperatorFunction, OperatorFunction, Subject } from 'rxjs';
 import { takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Pipeable = OperatorFunction<any, any> | MonoTypeOperatorFunction<any>;
+type Pipeable = OperatorFunction<any, any> | MonoTypeOperatorFunction<any>;
 
-export interface Subscription {
+interface Subscription {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   action: (...value: any[]) => void;
   destroy$?: Subject<undefined> | Subject<boolean>;

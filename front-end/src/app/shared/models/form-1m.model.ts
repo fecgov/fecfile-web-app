@@ -14,7 +14,7 @@ export enum F1MFormTypes {
   F1MA = 'F1MA',
 }
 
-export type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
+type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
   schema = f1mSchema;

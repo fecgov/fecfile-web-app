@@ -32,7 +32,7 @@ function addContact(contact: MockContact, results: Results, property: ConType) {
   });
 }
 
-export interface Results {
+interface Results {
   organization: any | null;
   individual: any | null;
   individual2: any | null;

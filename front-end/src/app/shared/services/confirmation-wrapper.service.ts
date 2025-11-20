@@ -4,7 +4,7 @@ import { TransactionContactUtils } from '../components/transaction-type-base/tra
 import { Transaction, Contact, TransactionTemplateMapType, ContactTypes } from '../models';
 import { ConfirmationService } from 'primeng/api';
 
-export type dialogs = 'dialog' | 'childDialog' | 'childDialog_2';
+type dialogs = 'dialog' | 'childDialog' | 'childDialog_2';
 
 @Injectable({
   providedIn: 'root',
