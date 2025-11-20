@@ -163,7 +163,7 @@ describe('Contacts Add (/contacts)', () => {
       .should('exist')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'Candidate');
-        cy.get('td').eq(2).invoke('text').should('match', /\S/); // FEC ID not empty
+        cy.get('td').eq(2).invoke('text').should('match', /\S/);
       });
   });
 
