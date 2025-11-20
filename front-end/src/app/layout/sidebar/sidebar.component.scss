@@ -26,3 +26,9 @@
 .rename-option {
   border-bottom: 1px dotted white;
 }
+
+::ng-deep {
+  ul ul {
+    margin-left: 0 !important;
+  }
+}

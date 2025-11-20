@@ -6520,10 +6520,9 @@ input {
   text-transform: uppercase;
 }
 
-.p-panelmenu-header-link > chevrondownicon,
-.p-panelmenu-header-link > chevronrighticon {
+/* .p-panelmenu-header-link > .p-panelmenu-submenu-icon {
   display: none;
-}
+} */
 
 .p-panelmenu-header-link {
   height: 36px;
