@@ -122,7 +122,13 @@ describe('MainFormComponent (showFilingFrequency)', () => {
     await TestBed.configureTestingModule({
       imports: [MainFormComponent, ReactiveFormsModule],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [provideMockStore({}), MessageService, { provide: ActivatedRoute, useValue: {} }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideMockStore({}),
+        MessageService,
+        { provide: ActivatedRoute, useValue: {} },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MainFormComponent);
