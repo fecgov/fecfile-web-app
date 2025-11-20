@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
-import _ from 'lodash';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
@@ -174,7 +173,7 @@ describe('ReattRedesUtils', () => {
     });
 
     it('should clone ', () => {
-      const cloneSpy = spyOn(_, 'cloneDeep').and.callThrough();
+      const cloneSpy = spyOn(ReattRedesUtils, 'clone').and.callThrough();
       if (!payload.reatt_redes) throw new Error('Bad test setup');
       payload.reatt_redes.memo_text_id = 'TEST';
       const memo = new MemoText();
