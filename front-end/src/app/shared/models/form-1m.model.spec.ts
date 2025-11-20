@@ -36,4 +36,15 @@ describe('Form-1M', () => {
     const form = Form1M.fromJSON(data);
     expect(form.formSubLabel).toEqual('');
   });
+
+  it('should display "Form 1M Amendment" for sub label', () => {
+    const data = {
+      id: '999',
+      form_type: F1MFormTypes.F1MA,
+      committee_name: 'foo',
+      report_code_label: 'Form 1M Amendment',
+    };
+    const form = Form1M.fromJSON(data);
+    expect(form.formSubLabel).toEqual('Form 1M Amendment');
+  });
 });
