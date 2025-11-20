@@ -40,7 +40,7 @@
       {{ item.memo_code | memoCode }}
     </td>
     <td>
-      {{ item[item.transactionType.templateMap.amount] | currency }}
+      {{ item.amount | currency }}
     </td>
     <td>
       {{ formatId(item.transaction_id) }}

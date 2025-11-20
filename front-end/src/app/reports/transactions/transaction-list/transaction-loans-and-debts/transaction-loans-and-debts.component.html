@@ -30,7 +30,7 @@
       {{ item.name }}
     </td>
     <td>
-      {{ item[item.transactionType.templateMap.date] | fecDate }}
+      {{ item.date | fecDate }}
     </td>
     <td>
       {{ item['amount'] | currency }}
