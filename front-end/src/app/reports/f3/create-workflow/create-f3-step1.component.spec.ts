@@ -46,7 +46,10 @@ describe('CreateF3Step1Component: New', () => {
   });
 
   it('should create and initialize the form for a new report', () => {
-    // the following line is redundant but ensures F3A member is used somewhere in the codebase
+    expect(component).toBeTruthy();
+    expect(component.reportId()).toBeNull();
+    // the next line is redundant given the one following it but ensures F3A member is referenced in codebase for knip
     expect(component.form.get('form_type')?.value).not.toBe(F3FormTypes.F3A);
+    expect(component.form.get('form_type')?.value).toBe(F3FormTypes.F3N);
   });
 });
