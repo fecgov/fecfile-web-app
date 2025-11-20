@@ -4,8 +4,8 @@ import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guar
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
-import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the

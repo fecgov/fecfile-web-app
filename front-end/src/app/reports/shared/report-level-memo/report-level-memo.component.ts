@@ -9,7 +9,6 @@ import { Report } from 'app/shared/models';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { injectRouteData } from 'ngxtension/inject-route-data';
 import { MessageService } from 'primeng/api';
@@ -56,13 +55,11 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
-    this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
+    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
   async submit(): Promise<void> {
-    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
-
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
       ...SchemaUtils.getFormValues(this.form, textSchema, this.formProperties),

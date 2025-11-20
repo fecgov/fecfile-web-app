@@ -3,15 +3,26 @@
   color: white;
 }
 
-.title {
-  margin-bottom: 4vw;
+.report-info {
+  margin-bottom: 64px;
+  font-family: var(--karla);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: right;
 }
 
-.title .site-name {
-  font-size: 2.5em;
-  margin: 0;
+.report-info .report-type {
+  font-size: 36px;
+  font-family: var(--gandhi-bold);
+  line-height: 1;
 }
 
-.sidebar-logo {
-  border: none;
+.sub-heading {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.rename-option {
+  border-bottom: 1px dotted white;
 }

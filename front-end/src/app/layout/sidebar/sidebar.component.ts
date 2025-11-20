@@ -1,34 +1,65 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Form24, Form3, Form3X } from 'app/shared/models';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ReportService } from 'app/shared/services/report.service';
+import { FORM_TYPES } from 'app/shared/utils/form-type.utils';
+import { collectRouteData } from 'app/shared/utils/route.utils';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3XMenuComponent } from './menus/f3x/f3x-menu.component';
-import { F99MenuComponent } from './menus/f99/f99-menu.component';
-import { F1MMenuComponent } from './menus/f1m/f1m-menu.component';
-import { F24MenuComponent } from './menus/f24/f24-menu.component';
-import { F3MenuComponent } from './menus/f3/f3-menu.component';
+import { injectNavigationEnd } from 'ngxtension/navigation-end';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { ReportSidebarSection } from './menu-info';
+import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
+
 @Component({
   selector: 'app-drawer',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  imports: [F3MenuComponent, F3XMenuComponent, F99MenuComponent, F1MMenuComponent, F24MenuComponent],
+  imports: [PanelMenuModule, FecDatePipe, RenameF24DialogComponent],
 })
 export class SidebarComponent {
+  private readonly navEnd = toSignal(injectNavigationEnd());
   private readonly store = inject(Store);
-  protected readonly activeReport = this.store.selectSignal(selectActiveReport);
-  readonly reportTypes = ReportTypes;
-}
+  private readonly reportService = inject(ReportService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly report = this.store.selectSignal(selectActiveReport);
 
-export enum ReportSidebarSection {
-  'TRANSACTIONS',
-  'REVIEW',
-  'SUBMISSION',
-  'CREATE',
-}
+  readonly items = computed(() => {
+    this.navEnd();
+    const data = collectRouteData(this.route.snapshot);
+    if (!data) return [];
+    const sidebarState = data['sidebarSection'] as ReportSidebarSection;
+    const isEditable = this.reportService.isEditable(this.report());
+    return this.report().getMenuItems(sidebarState, isEditable);
+  });
 
-export class SidebarState {
-  section: ReportSidebarSection;
-  constructor(section: ReportSidebarSection) {
-    this.section = section;
+  readonly formLabel = computed(() => this.report().formLabel);
+  readonly subHeading = computed(() => {
+    if (this.report().report_type === ReportTypes.F99) return FORM_TYPES.get(ReportTypes.F99)!.description!;
+    return this.report().formSubLabel;
+  });
+  readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
+  readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);
+  readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
+
+  readonly renameF24DialogVisible = signal(false);
+  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  form24ToUpdate?: Form24;
+
+  constructor() {
+    effect(() => {
+      if (!this.renameF24DialogVisible() && this.form24ToUpdate) {
+        this.form24ToUpdate = undefined;
+        this.reportService.setActiveReportById(this.report().id);
+      }
+    });
+  }
+
+  public renameForm24(): void {
+    this.form24ToUpdate = this.report() as Form24;
+    this.renameF24DialogVisible.set(true);
   }
 }
