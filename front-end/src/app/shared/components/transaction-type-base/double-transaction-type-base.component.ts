@@ -155,6 +155,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override submit(navigationEvent: NavigationEvent): Promise<void> {
+    this.updateContactData();
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
@@ -190,7 +191,6 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override async validateForm() {
     this.formSubmitted = true;
-    this.updateContactData();
 
     let invalid = -1;
     this.forms.forEach(async (form) => {
