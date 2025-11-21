@@ -9,6 +9,7 @@ import {
   testMockStore,
   testNavigationEvent,
   testPTY,
+  testPAC,
   testUserLoginData,
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
@@ -109,10 +110,67 @@ describe('TransactionTypePickerComponent', () => {
     });
   });
 
-  describe('f3', () => {
+  describe('f3 PTY', () => {
     const store = testMockStore();
     store.selectors = [
       { selector: selectCommitteeAccount, value: testPTY() },
+      { selector: selectUserLoginData, value: testUserLoginData() },
+      { selector: selectActiveReport, value: testF3() },
+      { selector: selectNavigationEvent, value: testNavigationEvent() },
+    ];
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        providers: [
+          provideHttpClient(),
+          provideHttpClientTesting(),
+          provideRouter([]),
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              snapshot: {
+                data: {
+                  report: Form3.fromJSON({
+                    report_type: ReportTypes.F3,
+                  }),
+                },
+              },
+              params: routeParams$.asObservable(),
+              queryParamMap: of({ get: (key: string) => (key === 'param1' ? 'value1' : undefined) }),
+            },
+          },
+          provideMockStore(store),
+        ],
+      }).compileComponents();
+    });
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(TransactionTypePickerComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should change for disbursement category', () => {
+      spyOn(component, 'showTransaction').and.returnValue(true);
+      routeParams$.next({ category: 'disbursement' });
+      fixture.detectChanges();
+      expect(component.isF3()).toBeTrue();
+      const groups = component.transactionGroups();
+      expect(groups.length).toBe(5);
+      const gf = groups.filter((g) => component.hasTransactions().get(g));
+      gf.forEach((g) => console.log(g.label));
+      expect(gf.length).toBe(4);
+      const transTypes = component.transactionTypes();
+      const contributions = transTypes.get(Disbursement[1]);
+      contributions?.forEach((c) => console.log(c));
+      expect(transTypes.get(Disbursement[1])?.length).toBe(3);
+    });
+  });
+
+  describe('f3 PAC', () => {
+    const store = testMockStore();
+    store.selectors = [
+      { selector: selectCommitteeAccount, value: testPAC() },
       { selector: selectUserLoginData, value: testUserLoginData() },
       { selector: selectActiveReport, value: testF3() },
       { selector: selectNavigationEvent, value: testNavigationEvent() },
