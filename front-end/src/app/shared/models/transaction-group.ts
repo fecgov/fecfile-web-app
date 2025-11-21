@@ -12,7 +12,7 @@ export enum Categories {
   LOANS_AND_DEBTS = 'loans-and-debts',
 }
 
-export interface TransactionGroup {
+interface TransactionGroup {
   label: string;
   transactionTypes: Set<TransactionTypes>;
 }
@@ -217,7 +217,7 @@ export const Receipt: TransactionGroup[] = [
 
 export type ReceiptType = (typeof Receipt)[keyof typeof Receipt];
 
-export const ScheduleC1TransactionGroups = {
+const ScheduleC1TransactionGroups = {
   LOAN_AGREEMENTS: { type: 'ScheduleC1TransactionGroups', label: 'LOAN AGREEMENTS' },
 };
 export type ScheduleC1TransactionGroupsType =
