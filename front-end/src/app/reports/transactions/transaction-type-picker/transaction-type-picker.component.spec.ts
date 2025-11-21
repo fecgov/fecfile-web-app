@@ -14,12 +14,14 @@ import {
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { BehaviorSubject, of } from 'rxjs';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ApiService } from 'app/shared/services/api.service';
 import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
 import { Form3 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -169,10 +171,18 @@ describe('TransactionTypePickerComponent', () => {
 
   describe('f3 PAC', () => {
     const store = testMockStore();
+    const testf3PAC = testF3();
+    (testf3PAC as any).transactionTypes = [
+      ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
+      ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
+      ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
+      ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+      ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
+    ];
     store.selectors = [
       { selector: selectCommitteeAccount, value: testPAC() },
       { selector: selectUserLoginData, value: testUserLoginData() },
-      { selector: selectActiveReport, value: testF3() },
+      { selector: selectActiveReport, value: testf3PAC },
       { selector: selectNavigationEvent, value: testNavigationEvent() },
     ];
     beforeEach(async () => {
@@ -182,6 +192,7 @@ describe('TransactionTypePickerComponent', () => {
           provideHttpClient(),
           provideHttpClientTesting(),
           provideRouter([]),
+          { provide: ApiService, useValue: { get: () => Promise.resolve([]) } },
           {
             provide: ActivatedRoute,
             useValue: {
