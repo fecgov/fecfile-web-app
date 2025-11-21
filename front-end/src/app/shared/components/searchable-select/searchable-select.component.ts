@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, input, viewChild, output, computed, forwardRef } from '@angular/core';
+import { Component, input, viewChild, output, computed } from '@angular/core';
 import { Select, SelectModule, SelectStyle } from 'primeng/select';
-import { FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 
@@ -9,22 +9,14 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
   selector: 'app-searchable-select',
   templateUrl: './searchable-select.component.html',
   imports: [SelectModule, ReactiveFormsModule],
-  providers: [
-    SelectStyle,
-    Select,
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => Select),
-      multi: true,
-    },
-  ],
+  providers: [SelectStyle, Select],
 })
 export class SearchableSelectComponent {
   readonly pSelectInstance = viewChild(Select);
 
   readonly options = input.required<PrimeOptions>();
   readonly inputId = input.required<string>();
-  readonly formControlName = input.required<string>();
+  readonly controlName = input.required<string>();
   readonly form = input.required<FormGroup>();
   readonly autoDisplayFirst = input(true);
   readonly readonly = input(false);
@@ -39,7 +31,7 @@ export class SearchableSelectComponent {
   private lastCycleSearchChar: string = '';
   private currentCycleIndex: number = -1;
 
-  readonly control = computed(() => this.form().get(this.formControlName()) as FormControl);
+  readonly control = computed(() => this.form().get(this.controlName()) as FormControl);
 
   constructor() {
     effectOnceIf(

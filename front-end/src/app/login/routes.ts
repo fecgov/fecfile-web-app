@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 import { CreateCommitteeComponent } from 'app/committee/create-committee/create-committee.component';
 import { SelectCommitteeComponent } from 'app/committee/select-committee/select-committee.component';
-import { HeaderStyles } from 'app/layout/header/header.component';
 import { BackgroundStyles } from 'app/layout/layout.component';
 import { nameGuard } from 'app/shared/guards/name.guard';
 import { loggedInGuard } from 'app/shared/guards/logged-in.guard';
@@ -9,6 +8,7 @@ import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
 import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update-current-user.component';
 import { LoginComponent } from './login/login.component';
 import { SecurityNoticeComponent } from './security-notice/security-notice.component';
+import { HeaderStyles } from 'app/layout/header/header-styles';
 
 export const LOGIN_ROUTES: Route[] = [
   {

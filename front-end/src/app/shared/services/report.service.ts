@@ -3,12 +3,12 @@ import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { Form1M } from '../models/form-1m.model';
-import { Form24 } from '../models/form-24.model';
-import { Form3 } from '../models/form-3.model';
-import { Form3X } from '../models/form-3x.model';
-import { Form99 } from '../models/form-99.model';
-import { Report, ReportTypes } from '../models/report.model';
+import { Form1M } from '../models/reports/form-1m.model';
+import { Form24 } from '../models/reports/form-24.model';
+import { Form3 } from '../models/reports/form-3.model';
+import { Form3X } from '../models/reports/form-3x.model';
+import { Form99 } from '../models/reports/form-99.model';
+import { Report, ReportTypes } from '../models/reports/report.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
 

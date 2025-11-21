@@ -94,7 +94,8 @@ export class PageUtils {
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).should('exist');
+    cy.get('p-panelmenu').as('PanelMenu');
+    cy.get('@PanelMenu').contains('a', menuItem).should('exist');
   }
 
   static shouldNotHaveSidebarItem(menuItem: string) {
@@ -218,6 +219,7 @@ export class PageUtils {
   }
 
   static submitReportForm() {
+    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
@@ -228,6 +230,7 @@ export class PageUtils {
     PageUtils.findOnPage('div', 'Are you sure?');
 
     PageUtils.clickButton('Yes');
-    cy.wait(250);
+
+    cy.wait('@SubmitReport');
   }
 }

@@ -9,10 +9,6 @@
   font-weight: normal;
 }
 
-.p-component-overlay {
-  background-color: rgba(0, 0, 0, 0.4);
-  transition-duration: 0.15s;
-}
 
 .p-button:disabled {
   border: 2px solid gray;
@@ -666,7 +662,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 .p-select-label {
   padding-right: 0;
-  padding-left: 1rem;
+  padding-left: 10px;
 }
 
 .p-select .p-select-label {
@@ -1068,6 +1064,10 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 .p-inputtext.p-inputtext-lg {
   font-size: 1.25rem;
   padding: 0.625rem 0.9375rem;
+}
+.dialog-body .p-inputtext {
+  height: 36px;
+  padding: 10px 10px;
 }
 
 .p-float-label > label {
@@ -6520,10 +6520,9 @@ input {
   text-transform: uppercase;
 }
 
-.p-panelmenu-header-link > chevrondownicon,
-.p-panelmenu-header-link > chevronrighticon {
+/* .p-panelmenu-header-link > .p-panelmenu-submenu-icon {
   display: none;
-}
+} */
 
 .p-panelmenu-header-link {
   height: 36px;
@@ -6562,8 +6561,13 @@ input {
   border: none;
   outline: none;
   cursor: pointer;
+  padding: 0;
 }
 
 td {
   font-size: 14px;
+}
+
+.p-accordionpanel:not(.p-accordionpanel-active):not(.p-disabled) .p-accordionheader:hover .p-accordionheader-toggle-icon {
+  color: var(--p-accordion-header-toggle-icon-color);
 }

@@ -73,7 +73,7 @@ jobs:
           working_directory: ~/project/front-end/
 
       - run:
-          name: 'Run Prettier with project configuration'
+          name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -83,8 +83,8 @@ jobs:
       - image: cimg/node:lts-browsers
     resource_class: large
     steps:
-      - checkout
-
+      - checkout:
+          method: full
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
       - run:
@@ -311,7 +311,7 @@ workflows:
   nightly:
     triggers:
       - schedule:
-          cron: "0 6 * * *"  # 06:00 UTC
+          cron: "0 6 * * *" # 06:00 UTC
           filters:
             branches:
               only:

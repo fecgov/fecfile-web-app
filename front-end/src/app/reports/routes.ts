@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
-import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form1MService } from 'app/shared/services/form-1m.service';
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 export const REPORTS_ROUTES: Route[] = [
   {

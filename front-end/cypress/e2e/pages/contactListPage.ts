@@ -39,7 +39,7 @@ export class ContactListPage {
     cy.get(alias).find('#city').safeType(formData['city']);
     cy.get(alias).find('#zip').safeType(formData['zip']);
     cy.get(alias).find('#telephone').safeType(formData['phone']);
-    PageUtils.dropdownSetValue("p-select[ng-reflect-input-id='state']", formData['state'], alias);
+    PageUtils.dropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
@@ -49,7 +49,7 @@ export class ContactListPage {
 
       if (formData['candidate_office'] != 'Presidential') {
         PageUtils.dropdownSetValue(
-          "p-select[ng-reflect-input-id='candidate_state']",
+          "app-searchable-select[inputid='candidate_state']",
           formData['candidate_state'],
           alias,
         );

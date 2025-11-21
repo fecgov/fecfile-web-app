@@ -40,7 +40,7 @@ describe('ContactManagementService', () => {
 
     service.activeKey.set(key);
     service.showDialog.set(true);
-    TestBed.flushEffects();
+    TestBed.tick();
     expect(manager.contact()).toEqual(emptyContact(manager.contactType()));
   });
 

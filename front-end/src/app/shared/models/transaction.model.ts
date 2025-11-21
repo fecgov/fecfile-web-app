@@ -1,27 +1,27 @@
 import { BaseModel } from './base.model';
 import { Contact, ContactTypes } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
-import {
-  SchC1Transaction,
+import { ReportTypes, Report } from './reports/report.model';
+import type { SchC1Transaction, ScheduleC1TransactionTypes } from './schc1-transaction.model';
+import type { SchC2Transaction, ScheduleC2TransactionTypes } from './schc2-transaction.model';
+import type { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+import type { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
+import type { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
+import type { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.model';
+import type { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
+import type { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
+import type {
+  DisbursementType,
+  LoansAndDebtsType,
+  ReceiptType,
   ScheduleC1TransactionGroupsType,
-  ScheduleC1TransactionTypes,
-} from './schc1-transaction.model';
-import {
-  SchC2Transaction,
-  ScheduleC2TransactionGroupsType,
-  ScheduleC2TransactionTypes,
-} from './schc2-transaction.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.model';
-import { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
-import { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
-import { Form3X, Form24, Form3, Report, ReportTypes } from './.';
-import { Disbursement, LoansAndDebts, Receipt } from './transaction-group';
+} from './transaction-group';
+import type { Form24 } from './reports/form-24.model';
+import type { Form3 } from './reports/form-3.model';
+import type { Form3X } from './reports/form-3x.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -195,11 +195,10 @@ export type TransactionTypes =
   | ScheduleETransactionTypes
   | ScheduleFTransactionTypes;
 export type TransactionGroupTypes =
-  | Receipt
-  | Disbursement
-  | LoansAndDebts
-  | ScheduleC1TransactionGroupsType
-  | ScheduleC2TransactionGroupsType;
+  | ReceiptType
+  | DisbursementType
+  | LoansAndDebtsType
+  | ScheduleC1TransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',

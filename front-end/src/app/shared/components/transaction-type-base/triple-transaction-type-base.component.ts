@@ -99,6 +99,7 @@ export abstract class TripleTransactionTypeBaseComponent
   }
 
   override async submit(navigationEvent: NavigationEvent): Promise<void> {
+    this.updateContactData();
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,

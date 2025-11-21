@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, Resource, ResourceStatus, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService, QueryParams } from './api.service';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
@@ -81,12 +81,5 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
       }),
     );
     return updated;
-  }
-
-  async waitForResource<T>(resource: Resource<T>): Promise<void> {
-    resource.reload();
-    while (resource.status() === ResourceStatus.Reloading) {
-      await new Promise((resolve) => setTimeout(resolve, 10));
-    }
   }
 }
