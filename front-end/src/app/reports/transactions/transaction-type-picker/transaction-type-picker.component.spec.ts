@@ -9,6 +9,7 @@ import {
   testMockStore,
   testNavigationEvent,
   testPTY,
+  testPAC,
   testUserLoginData,
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
@@ -62,6 +63,12 @@ describe('TransactionTypePickerComponent', () => {
       fixture = TestBed.createComponent(TransactionTypePickerComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
+    });
+
+    it('test utility testPAC() returns a PAC committee', () => {
+      const pac = testPAC();
+      expect(pac.isPAC).toBeTrue();
+      expect(pac.isPTY).toBeFalse();
     });
 
     it('should create', () => {
