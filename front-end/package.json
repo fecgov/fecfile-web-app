@@ -20,8 +20,7 @@
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "prettier:check:ci": "./node_modules/.bin/prettier --check .",
-        "prettier:fix": "./node_modules/.bin/prettier --write .",
-        "knip": "knip"
+        "prettier:fix": "./node_modules/.bin/prettier --write ."
     },
     "private": true,
     "dependencies": {
@@ -78,7 +77,6 @@
         "karma-jasmine": "4.0.2",
         "karma-jasmine-html-reporter": "1.7.0",
         "karma-spec-reporter": "0.0.33",
-        "knip": "^5.69.1",
         "prettier": "3.6.2",
         "reflect-metadata": "0.2.2",
         "rxjs": "7.8.2",
