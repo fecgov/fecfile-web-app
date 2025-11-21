@@ -217,9 +217,10 @@ export const Receipt: TransactionGroup[] = [
 
 export type ReceiptType = (typeof Receipt)[keyof typeof Receipt];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- used only for deriving the type below
 const ScheduleC1TransactionGroups = {
   LOAN_AGREEMENTS: { type: 'ScheduleC1TransactionGroups', label: 'LOAN AGREEMENTS' },
-};
+} as const;
 export type ScheduleC1TransactionGroupsType =
   (typeof ScheduleC1TransactionGroups)[keyof typeof ScheduleC1TransactionGroups];
 
