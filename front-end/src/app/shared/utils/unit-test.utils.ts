@@ -204,7 +204,7 @@ export function testF24() {
   });
 }
 
-function testNavigationEvent(): NavigationEvent {
+export function testNavigationEvent(): NavigationEvent {
   return {
     action: NavigationAction.SAVE,
     destination: NavigationDestination.LIST,
