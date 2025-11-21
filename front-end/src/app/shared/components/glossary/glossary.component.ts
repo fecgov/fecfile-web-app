@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { GlossaryService } from './glossary.service';
-import { DrawerModule } from 'primeng/drawer';
+import { DrawerModule, DrawerPassThrough } from 'primeng/drawer';
 import { FormsModule } from '@angular/forms';
 import * as jsonData from './glossary.json';
 import { PanelModule } from 'primeng/panel';
@@ -30,6 +30,13 @@ export class GlossaryComponent {
   readonly shown = signal(true);
 
   readonly content = viewChild.required<ElementRef<HTMLDivElement>>('content');
+
+  readonly pt: DrawerPassThrough = {
+    root: 'drawer-container',
+    header: 'drawer-header',
+    content: 'drawer-content',
+    pcCloseButton: { root: 'text-white' },
+  };
 
   readonly data = computed(() => {
     const searchTerm = this.searchTerm();
