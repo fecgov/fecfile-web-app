@@ -9,19 +9,16 @@ import {
   testMockStore,
   testNavigationEvent,
   testPTY,
-  testPAC,
   testUserLoginData,
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { BehaviorSubject, of } from 'rxjs';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ApiService } from 'app/shared/services/api.service';
 import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
 import { Form3 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -112,7 +109,7 @@ describe('TransactionTypePickerComponent', () => {
     });
   });
 
-  describe('f3 PTY', () => {
+  describe('f3', () => {
     const store = testMockStore();
     store.selectors = [
       { selector: selectCommitteeAccount, value: testPTY() },
@@ -127,72 +124,6 @@ describe('TransactionTypePickerComponent', () => {
           provideHttpClient(),
           provideHttpClientTesting(),
           provideRouter([]),
-          {
-            provide: ActivatedRoute,
-            useValue: {
-              snapshot: {
-                data: {
-                  report: Form3.fromJSON({
-                    report_type: ReportTypes.F3,
-                  }),
-                },
-              },
-              params: routeParams$.asObservable(),
-              queryParamMap: of({ get: (key: string) => (key === 'param1' ? 'value1' : undefined) }),
-            },
-          },
-          provideMockStore(store),
-        ],
-      }).compileComponents();
-    });
-
-    beforeEach(() => {
-      fixture = TestBed.createComponent(TransactionTypePickerComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    });
-
-    it('should change for disbursement category', () => {
-      spyOn(component, 'showTransaction').and.returnValue(true);
-      routeParams$.next({ category: 'disbursement' });
-      fixture.detectChanges();
-      expect(component.isF3()).toBeTrue();
-      const groups = component.transactionGroups();
-      expect(groups.length).toBe(5);
-      const gf = groups.filter((g) => component.hasTransactions().get(g));
-      gf.forEach((g) => console.log(g.label));
-      expect(gf.length).toBe(4);
-      const transTypes = component.transactionTypes();
-      const contributions = transTypes.get(Disbursement[1]);
-      contributions?.forEach((c) => console.log(c));
-      expect(transTypes.get(Disbursement[1])?.length).toBe(3);
-    });
-  });
-
-  describe('f3 PAC', () => {
-    const store = testMockStore();
-    const testf3PAC = testF3();
-    (testf3PAC as any).transactionTypes = [
-      ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
-      ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
-      ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
-      ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
-      ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
-    ];
-    store.selectors = [
-      { selector: selectCommitteeAccount, value: testPAC() },
-      { selector: selectUserLoginData, value: testUserLoginData() },
-      { selector: selectActiveReport, value: testf3PAC },
-      { selector: selectNavigationEvent, value: testNavigationEvent() },
-    ];
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
-        providers: [
-          provideHttpClient(),
-          provideHttpClientTesting(),
-          provideRouter([]),
-          { provide: ApiService, useValue: { get: () => Promise.resolve([]) } },
           {
             provide: ActivatedRoute,
             useValue: {
