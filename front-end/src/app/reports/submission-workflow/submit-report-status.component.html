@@ -1,15 +1,15 @@
 <h1>Report status</h1>
 <span class="subtitle">
-  <strong>{{ activeReport().formLabel }}: </strong>{{ activeReport().formSubLabel }}
+  <strong>{{ report().formLabel }}: </strong>{{ report().formSubLabel }}
 </span>
 <hr type="solid" />
 <div class="flex">
   <div class="col-4 pl-0">
-    @if (reportStatusSignal() === reportStatusEnum.SUBMIT_FAILURE) {
+    @if (reportStatus() === reportStatusEnum.SUBMIT_FAILURE) {
       <h2 class="submission-status-heading">Report submission failed</h2>
       <p class="submission-status-text">Please contact the Electronic Filing Office or visit FEC.gov for help.</p>
-      @if (fecStatusSignal() === 'REJECTED' && fecMessageSignal()) {
-        <p class="error-text">Error Message: {{ fecMessageSignal() }}</p>
+      @if (fecStatus() === 'REJECTED' && fecMessage()) {
+        <p class="error-text">Error Message: {{ fecMessage() }}</p>
       }
       <h3 class="assistance-heading">Need help?</h3>
       <a
@@ -41,10 +41,10 @@
         (click)="backToReports()"
       ></button>
     } @else {
-      @if (reportStatusSignal() === reportStatusEnum.SUBMIT_PENDING) {
+      @if (reportStatus() === reportStatusEnum.SUBMIT_PENDING) {
         <h2 class="submission-status-heading">Report submission pending</h2>
         <p class="submission-status-text">Your submission has been sent to the FEC.</p>
-      } @else if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
+      } @else if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
         <h2 class="submission-status-heading">Report submission received</h2>
         <p class="submission-status-text">Your submission to the FEC has been received.</p>
       } @else {
@@ -54,29 +54,32 @@
       }
       <h3 class="submission-info-heading">Form Type:</h3>
       <p class="submission-info-text">
-        {{ activeReport().formLabel }}
+        {{ report().formLabel }}
       </p>
-      <h3 class="submission-info-heading">Report Type:</h3>
-      <p class="submission-info-text">
-        {{ reportCodeLabelMap ? reportCodeLabelMap[reportCodeSignal()] : '' }}
-      </p>
-      <h3 class="submission-info-heading">Coverage Dates:</h3>
-      @if (coverageDatesSignal()) {
-        <p class="submission-info-text no-wrap">
-          {{ coverageDatesSignal()!['coverage_from_date'] || null | longDate }} —
-          <wbr />
-          {{ coverageDatesSignal()!['coverage_through_date'] || null | longDate }}
+      @if (isBaseF3()) {
+        <h3 class="submission-info-heading">Report Type:</h3>
+        <p class="submission-info-text">
+          {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode()] : '' }}
         </p>
+        <h3 class="submission-info-heading">Coverage Dates:</h3>
+        @if (coverageDates()) {
+          <p class="submission-info-text no-wrap">
+            {{ coverageDates()!['coverage_from_date'] || null | longDate }} —
+            <wbr />
+            {{ coverageDates()!['coverage_through_date'] || null | longDate }}
+          </p>
+        }
       }
+
       <h3 class="submission-info-heading">Confirmation Emails:</h3>
       <p class="submission-info-text word-break">
-        {{ activeReport().confirmation_email_1 }} <br />
-        {{ activeReport().confirmation_email_2 }}
+        {{ report().confirmation_email_1 }} <br />
+        {{ report().confirmation_email_2 }}
       </p>
-      @if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
+      @if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
         <h2 class="submission-info-heading">E-filing ID:</h2>
         <p class="submission-info-text">
-          {{ activeReport().upload_submission?.fec_report_id }}
+          {{ report().upload_submission?.fec_report_id }}
         </p>
       }
       <button
@@ -89,7 +92,7 @@
     }
   </div>
   <div class="col-4 img-container">
-    @if (reportStatusSignal() === reportStatusEnum.SUBMIT_SUCCESS) {
+    @if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
       <img
         class="status-image"
         src="assets/img/report-submission-received.svg"
