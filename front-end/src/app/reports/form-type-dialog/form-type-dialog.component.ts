@@ -1,19 +1,20 @@
 import { Component, computed, inject, model, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FORM_TYPES, FormType, FormTypes } from 'app/shared/utils/form-type.utils';
-import { Ripple } from 'primeng/ripple';
+// import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
 import { CreateF24Component } from './create-f24/create-f24.component';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
-  imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component],
+  imports: [ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
 })
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);

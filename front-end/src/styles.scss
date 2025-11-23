@@ -361,6 +361,14 @@ label.disabled {
   height: 48px;
 }
 
+.dialog-label {
+  font-family: var(--karla);
+  font-weight: bold;
+  font-size: 14px;
+  color: #212121;
+  margin-bottom: 8px;
+}
+
 .dialog-body .dialog-label .p-select {
   height: 36px;
 }

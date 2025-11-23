@@ -1,7 +1,8 @@
 <div class="modal-item-margin field">
-  <span class="span-label">REPORT TYPE</span>
+  <label class="dialog-label">REPORT TYPE</label>
   <p-selectbutton
     inputId="form24Options"
+    id="form24Options"
     [options]="form24Options"
     [(ngModel)]="selectedForm24Type"
     optionLabel="label"
@@ -10,7 +11,7 @@
 </div>
 
 <div class="w-full field">
-  <label for="form24Name">REPORT NAME</label>
+  <label class="dialog-label" for="form24Name">REPORT NAME</label>
   <p-input-group>
     <div id="f24-input-container">
       @if (typeName()) {

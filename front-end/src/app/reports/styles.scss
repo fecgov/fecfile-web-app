@@ -84,8 +84,20 @@ caption {
   padding-right: 0px;
 }
 
+.p-selectbutton {
+  display: flex;
+  width: fit-content;
+  height: 36px;
+}
+
+#form24Options .p-togglebutton-content {
+  font-family: var(--karla-bold);
+  font-size: 14px;
+}
+
 .modal-item-margin {
   margin-top: 32px;
+  margin-bottom: 32px;
   width: fit-content;
 }
 
@@ -93,7 +105,9 @@ caption {
   border: 2px solid var(--fec-grey-alt);
   border-radius: var(--border-radius);
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  width: 448px;
+  height: 36px;
 
   &:focus-within {
     outline: 0 none;
@@ -107,13 +121,51 @@ caption {
   }
 
   & > span {
-    border: 0;
     background: var(--p-content-background);
     line-height: 1.4rem;
     font-family: var(--karla-bold);
-    padding: 0 0 0 15px;
+    padding: 0 0 0 10px;
+    font-size: 14px;
     text-wrap-mode: nowrap;
   }
+}
+
+// #f24-input-container {
+//   border: 2px solid var(--fec-grey-alt);
+//   border-radius: var(--border-radius);
+//   display: flex;
+//   align-items: center;
+//   width: 448px;
+//   height: 36px;
+
+//   &:focus-within {
+//     outline: 0 none;
+//     outline-offset: 0;
+//     box-shadow: var(--focus-ring);
+//     border-color: var(--p-primary-color);
+//   }
+
+//   &:hover {
+//     border-color: var(--surface-border);
+//   }
+
+//   & > span {
+//     background: var(--p-content-background);
+//     line-height: 1.4rem;
+//     font-family: var(--karla-bold);
+//     padding: 0 0 0 10px;
+//     font-size: 14px;
+//     text-wrap-mode: nowrap;
+//   }
+// }
+
+#f24-input-container input {
+  height: 100%;
+  flex: 1 1 auto;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  padding: 0 10px;
 }
 
 #form24Name {
