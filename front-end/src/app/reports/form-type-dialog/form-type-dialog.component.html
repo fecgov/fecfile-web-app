@@ -1,22 +1,16 @@
 <app-dialog
-  #formRef
-  tabindex="-1"
   aria-labelledby="dialog-title"
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
+  (onClose)="onDialogHide()"
   (submitForm)="goToReportForm()"
+  [submitDisabled]="isSubmitDisabled()"
 >
   <div class="dialog-body">
     <div class="dropdown">
       <label class="dialog-label" id="type-label">FORM TYPE</label>
-      <p-select
-        [options]="formTypeOptions"
-        [(ngModel)]="selectedType"
-        (ngModelChange)="selectedType.set($event)"
-        class="w-full"
-        id="typeDropdown"
-      >
+      <p-select [options]="formTypeOptions" [(ngModel)]="selectedType" class="w-full" id="typeDropdown">
         <ng-template #dropdownicon>
           <img alt="Dropdown arrow" src="assets/img/i-arrow-down.svg" height="9px" width="10px" />
         </ng-template>

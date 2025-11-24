@@ -76,6 +76,8 @@ dialog {
   border: none;
 }
 
-// #submitButton:enabled {
-//   background-color: hsl(from #112e51 h s calc(l + 30));
-// }
+.float-right:disabled {
+  background-color: #586d85;
+  color: #ffffff;
+  border: none;
+}

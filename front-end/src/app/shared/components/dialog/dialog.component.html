@@ -1,4 +1,4 @@
-<dialog #dialog tabindex="-1" aria-labelledby="dialog-title">
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="onClose.emit()">
   <div class="dialog-header">
     <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
     <a (click)="visible.set(false)" aria-label="Cancel">
@@ -25,6 +25,7 @@
         [label]="submitLabel()"
         class="p-button-primary float-right"
         (click)="submitForm.emit()"
+        [disabled]="submitDisabled()"
       ></button>
     </div>
   </div>

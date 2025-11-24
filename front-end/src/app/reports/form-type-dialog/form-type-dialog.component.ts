@@ -27,7 +27,7 @@ export class FormTypeDialogComponent {
   readonly isF24 = computed(() => this.selectedType() === FormTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
   readonly isSubmitDisabled = computed(() =>
-    this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
+    this.isF24() ? this.f24().isSubmitDisabled() : !(this.formType()?.createRoute ?? false),
   );
 
   readonly f24 = viewChild.required(CreateF24Component);
@@ -54,16 +54,13 @@ export class FormTypeDialogComponent {
     }
   }
 
-  /**
-   * Called when the dialog is hidden/closed. Reset the selected form type so
-   * the next time the dialog opens it's cleared.
-   */
   onDialogHide(): void {
     if (this.isF24()) {
       this.f24().reset();
     }
 
     this.selectedType.set(undefined);
+    this.dialogVisible.set(false);
   }
 
   getFormType(type?: FormTypes): FormType | undefined {
