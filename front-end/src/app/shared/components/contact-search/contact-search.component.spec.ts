@@ -92,7 +92,7 @@ describe('ContactSearchComponent', () => {
       await component.onDropdownSearch(event);
 
       expect(spy).toHaveBeenCalledWith(searchTerm, '', '');
-      expect(mockResponse.toSelectItemGroups).toHaveBeenCalledWith(component.isBare());
+      expect(mockResponse.toSelectItemGroups).toHaveBeenCalledWith(component.isBare(), searchTerm);
       expect(component.contactLookupList).toEqual([{ label: 'Committees', items: [] }]);
     });
 

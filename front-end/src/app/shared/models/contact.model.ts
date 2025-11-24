@@ -1,6 +1,6 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
-import { LabelList } from '../utils/label.utils';
+import { LabelList, LabelUtils } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
 export enum ContactTypes {
@@ -397,13 +397,15 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
     Object.assign(this, data);
   }
 
-  toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
+  toSelectItem(searchTerm: string): SelectItem<FecApiCommitteeLookupData> {
+    const markedName = LabelUtils.htmlHighlightTerm(this.name, searchTerm);
+    const markedId = LabelUtils.htmlHighlightTerm(this.id, searchTerm);
     const statusCircle = `<span
         class="pi pi-circle-on ${this.is_active ? 'active-status-circle' : 'inactive-status-circle'}" 
         aria-label="${this.is_active ? 'Active' : 'Inactive'}" 
       ></span>`;
     return {
-      label: `${this.name}<br>(${this.id})${statusCircle}`,
+      label: `${markedName}<br>(${markedId})${statusCircle}`,
       value: this,
     };
   }
@@ -432,9 +434,9 @@ export class CommitteeLookupResponse {
     return plainToClass(CommitteeLookupResponse, json);
   }
 
-  toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
+  toSelectItemGroups(includeFecfileResults: boolean, searchTerm: string): SelectItemGroup[] {
     const fecApiSelectItems =
-      this.fec_api_committees?.map((data) => new FecApiCommitteeLookupData(data).toSelectItem()) || [];
+      this.fec_api_committees?.map((data) => new FecApiCommitteeLookupData(data).toSelectItem(searchTerm)) || [];
     const fecfileSelectItems =
       this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [

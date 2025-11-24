@@ -7,12 +7,12 @@ import {
   FecApiCommitteeLookupData,
   FecApiLookupData,
 } from 'app/shared/models/contact.model';
+import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
 import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
-import { ContactManagementService } from 'app/shared/services/contact-management.service';
 
 @Component({
   selector: 'app-contact-search',
@@ -50,7 +50,7 @@ export class ContactSearchComponent {
           this.contactService
             .committeeLookup(searchTerm, this.manager().excludeFecIds(), this.manager().excludeIds())
             .then((response) => {
-              this.contactLookupList = response?.toSelectItemGroups(this.isBare());
+              this.contactLookupList = response?.toSelectItemGroups(this.isBare(), searchTerm);
             });
           break;
         case ContactTypes.INDIVIDUAL:

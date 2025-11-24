@@ -90,7 +90,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
           break;
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(searchTerm, '', '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults);
+            this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults, this.searchTerm);
           });
           break;
         case ContactTypes.INDIVIDUAL:

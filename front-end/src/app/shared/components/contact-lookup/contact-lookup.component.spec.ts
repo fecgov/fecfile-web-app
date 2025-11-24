@@ -199,13 +199,13 @@ describe('ContactLookupComponent', () => {
         await component.onDropdownSearch(testEvent);
         expect(
           JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true)),
+            JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true, 'hi')),
         ).toBeTrue();
         expect(
           JSON.stringify([
             { label: 'There are no matching committee contacts', items: [] },
             { label: 'There are no matching registered committees', items: [] },
-          ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true)),
+          ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true, 'hi')),
         ).toBeTrue();
       });
     });
