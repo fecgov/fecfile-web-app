@@ -33,7 +33,7 @@ function getAuthorizationFields(prefix: string, authorizor: Authorizor) {
   return auth;
 }
 
-export function getContactFields(prefix: string, contact: Contact, contact_number = 1) {
+function getContactFields(prefix: string, contact: Contact, contact_number = 1) {
   return {
     [`${prefix}_first_name`]: contact.first_name,
     [`${prefix}_last_name`]: contact.last_name,
@@ -250,7 +250,7 @@ export function buildContributionToCandidate(
   };
 }
 
-export function buildIndependentExpenditure(
+function buildIndependentExpenditure(
   expenditure_amount: number,
   dates: [string, string],
   contacts: [Contact, Contact],

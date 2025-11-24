@@ -229,13 +229,8 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   }
 }
 
-export enum F3ReportTypeCategories {
+enum F3ReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
   NON_ELECTION_YEAR = 'Non-Election Year',
   SPECIAL = 'Special',
 }
-
-export type F3ReportTypeCategoryType =
-  | F3ReportTypeCategories.ELECTION_YEAR
-  | F3ReportTypeCategories.NON_ELECTION_YEAR
-  | F3ReportTypeCategories.SPECIAL;

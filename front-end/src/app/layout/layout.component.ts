@@ -63,7 +63,7 @@ export class LayoutComponent implements AfterViewChecked {
   }
 }
 
-export class LayoutControls {
+class LayoutControls {
   // Default values
   showUpperFooter = true;
   showHeader = true;

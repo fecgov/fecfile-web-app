@@ -1,4 +1,4 @@
-import { hasNoContact, isNewTransaction, Transaction } from './transaction.model';
+import { hasNoContact, Transaction } from './transaction.model';
 import { TransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
@@ -106,16 +106,7 @@ export const SAVE_TRIPLE_ENTRY_LIST_CONTROL = new NavigationControl(
   hasNoContact,
 );
 
-export const SAVE_ANOTHER_CONTROL = new NavigationControl(
-  NavigationAction.SAVE,
-  NavigationDestination.ANOTHER,
-  'Save & add another',
-  'p-button-info',
-  hasNoContact,
-  isNewTransaction,
-);
-
-export const SAVE_CHILD_CONTROL = new NavigationControl(
+const SAVE_CHILD_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.CHILD,
   'Save & add memo',

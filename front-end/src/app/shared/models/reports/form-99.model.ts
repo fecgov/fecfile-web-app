@@ -9,8 +9,6 @@ export enum F99FormTypes {
   F99 = 'F99',
 }
 
-export type F99FormType = F99FormTypes.F99;
-
 export class Form99 extends Report {
   schema = f99Schema;
   report_type = ReportTypes.F99;

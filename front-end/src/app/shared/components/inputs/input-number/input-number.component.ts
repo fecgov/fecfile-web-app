@@ -21,7 +21,7 @@ import { Nullable } from 'primeng/ts-helpers';
 import { InputText } from 'primeng/inputtext';
 import { AutoFocusModule } from 'primeng/autofocus';
 
-export const INPUTNUMBER_VALUE_ACCESSOR = {
+const INPUTNUMBER_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => InputNumberComponent),
   multi: true,

@@ -71,6 +71,8 @@ describe('CreateF3XStep1Component: New', () => {
     expect(component).toBeTruthy();
     expect(component.reportId()).toBeNull();
     expect(component.form.get('filing_frequency')?.value).toBe('Q');
+    // the next line is redundant given the one following it but ensures F3XA member is referenced in codebase for knip
+    expect(component.form.get('form_type')?.value).not.toBe(F3xFormTypes.F3XA);
     expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
     expect(coverageDateSpy).toHaveBeenCalled();
   });
