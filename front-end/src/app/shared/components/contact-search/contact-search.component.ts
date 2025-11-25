@@ -12,13 +12,12 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
-import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
 
 @Component({
   selector: 'app-contact-search',
   templateUrl: './contact-search.component.html',
   styleUrls: ['./contact-search.component.scss'],
-  imports: [SelectModule, FormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
+  imports: [SelectModule, FormsModule, PrimeTemplate, AutoComplete],
 })
 export class ContactSearchComponent {
   readonly contactService = inject(ContactService);

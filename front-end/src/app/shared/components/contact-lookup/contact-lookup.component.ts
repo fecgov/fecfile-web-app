@@ -18,14 +18,13 @@ import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
 import { DestroyerComponent } from '../destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
-  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
+  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
   public readonly contactService = inject(ContactService);
