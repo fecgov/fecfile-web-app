@@ -23,7 +23,7 @@ export interface Setup {
 }
 
 type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
-export function addContact(contact: MockContact, results: Results, property: ConType) {
+function addContact(contact: MockContact, results: Results, property: ConType) {
   return new Cypress.Promise((resolve) => {
     makeContact(contact, (response) => {
       results[property] = response.body;
@@ -32,7 +32,7 @@ export function addContact(contact: MockContact, results: Results, property: Con
   });
 }
 
-export interface Results {
+interface Results {
   organization: any | null;
   individual: any | null;
   individual2: any | null;

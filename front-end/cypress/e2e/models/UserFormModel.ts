@@ -16,7 +16,7 @@ export enum Roles {
 
 export const defaultFormData: UserFormData = createUser(Roles.COMMITTEE_ADMINISTRATOR);
 
-export function createUser(role: Roles): UserFormData {
+function createUser(role: Roles): UserFormData {
   return {
     email: faker.internet.email(),
     role,

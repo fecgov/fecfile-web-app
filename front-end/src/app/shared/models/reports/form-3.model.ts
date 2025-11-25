@@ -17,8 +17,6 @@ export enum F3FormTypes {
   F3T = 'F3T',
 }
 
-export type F3FormType = F3FormTypes.F3N | F3FormTypes.F3A | F3FormTypes.F3T;
-
 export class Form3 extends BaseForm3 {
   schema = f3Schema;
   report_type = ReportTypes.F3;

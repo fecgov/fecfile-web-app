@@ -1,4 +1,4 @@
-export enum ContactTypes {
+enum ContactTypes {
   CANDIDATE = 'CAN',
   COMMITTEE = 'COM',
   INDIVIDUAL = 'IND',
@@ -44,7 +44,7 @@ export const Individual_B_B: MockContact = {
   ...eo_fields,
 };
 
-export const Individual_C_C: MockContact = {
+const Individual_C_C: MockContact = {
   type: ContactTypes.INDIVIDUAL,
   last_name: 'Cat',
   first_name: 'Careful',
@@ -53,7 +53,7 @@ export const Individual_C_C: MockContact = {
   ...eo_fields,
 };
 
-export const Individual_D_D: MockContact = {
+const Individual_D_D: MockContact = {
   type: ContactTypes.INDIVIDUAL,
   last_name: 'Dog',
   first_name: 'Diggory',
@@ -101,7 +101,7 @@ export const Candidate_Senate_A: MockContact = {
   ...eo_fields,
 };
 
-export const Candidate_Senate_B: MockContact = {
+const Candidate_Senate_B: MockContact = {
   type: ContactTypes.CANDIDATE,
   candidate_id: 'S1AK00002',
   candidate_office: 'S',
@@ -147,7 +147,7 @@ export const Committee_A: MockContact = {
   ...address_fields,
 };
 
-export const Committee_B: MockContact = {
+const Committee_B: MockContact = {
   type: ContactTypes.COMMITTEE,
   committee_id: 'C00000002',
   name: 'Committee B',
@@ -160,7 +160,7 @@ export const Organization_A: MockContact = {
   ...address_fields,
 };
 
-export const Organization_B: MockContact = {
+const Organization_B: MockContact = {
   type: ContactTypes.ORGANIZATION,
   name: 'Organization B',
   ...address_fields,

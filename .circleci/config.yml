@@ -71,6 +71,7 @@ jobs:
           name: Run linter
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
+
       - run:
           name: "Run Prettier with project configuration"
           command: npm run prettier:check:ci
@@ -235,12 +236,16 @@ jobs:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
       - run:
-          name: Check installed node dependencies
+          name: List installed node dependencies
           command: npm ls --all
           working_directory: ~/project/front-end/
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
+      - run:
+          name: Check for unused dependencies
+          command: npx knip
+          working_directory: ~/project/front-end/
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

@@ -10,8 +10,6 @@ export enum F24FormTypes {
   F24A = 'F24A',
 }
 
-export type F24FormType = F24FormTypes.F24N | F24FormTypes.F24A;
-
 export class Form24 extends Report {
   schema = f24Schema;
   report_type = ReportTypes.F24;
