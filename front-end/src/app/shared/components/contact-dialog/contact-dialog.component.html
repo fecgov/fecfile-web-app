@@ -7,6 +7,7 @@
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
     (visibleChange)="closeDialog($event)"
+    closeAriaLabel="closeDialog"
   >
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="grid">
