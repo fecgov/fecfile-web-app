@@ -1,4 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,7 +30,6 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from './contact-lookup.component';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -133,13 +133,13 @@ describe('ContactLookupComponent', () => {
         tick(500);
         expect(
           JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true)),
+            JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true, 'hi')),
         ).toBeTrue();
         expect(
           JSON.stringify([
             { label: 'There are no matching candidate contacts', items: [] },
             { label: 'There are no matching registered candidates', items: [] },
-          ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true)),
+          ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true, 'hi')),
         ).toBeTrue();
       }));
     });
@@ -153,7 +153,7 @@ describe('ContactLookupComponent', () => {
       it('#onDropdownSearch COM undefined fec_api_committees', async () => {
         testCommitteeLookupResponse.fecfile_committees = [
           {
-            id: 123,
+            id: 'testId',
             name: 'testName',
           } as unknown as FecfileCommitteeLookupData,
         ];
@@ -189,7 +189,7 @@ describe('ContactLookupComponent', () => {
         ];
         testCommitteeLookupResponse.fecfile_committees = [
           {
-            id: 123,
+            id: 'testId',
             name: 'testName',
           } as unknown as FecfileCommitteeLookupData,
         ];
@@ -241,7 +241,7 @@ describe('ContactLookupComponent', () => {
         tick(500);
         expect(
           JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testIndividualLookupResponse.toSelectItemGroups()),
+            JSON.stringify(testIndividualLookupResponse.toSelectItemGroups('hi')),
         ).toBeTrue();
         expect(
           JSON.stringify([
@@ -249,7 +249,7 @@ describe('ContactLookupComponent', () => {
               label: 'There are no matching individuals',
               items: [],
             },
-          ]) === JSON.stringify(new IndividualLookupResponse().toSelectItemGroups()),
+          ]) === JSON.stringify(new IndividualLookupResponse().toSelectItemGroups('hi')),
         ).toBeTrue();
       }));
     });
@@ -288,7 +288,7 @@ describe('ContactLookupComponent', () => {
         tick(500);
         expect(
           JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups()),
+            JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups('hi')),
         ).toBeTrue();
         expect(
           JSON.stringify([
@@ -296,7 +296,7 @@ describe('ContactLookupComponent', () => {
               label: 'There are no matching organizations',
               items: [],
             },
-          ]) === JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups()),
+          ]) === JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups('hi')),
         ).toBeTrue();
       }));
     });

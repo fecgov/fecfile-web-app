@@ -328,11 +328,13 @@ export class FecApiCandidateLookupData extends FecApiLookupData {
     Object.assign(this, data);
   }
 
-  toSelectItem(): SelectItem<FecApiCandidateLookupData> {
+  toSelectItem(searchTerm: string): SelectItem<FecApiCandidateLookupData> {
+    const markedName = LabelUtils.htmlHighlightTerm(this.name, searchTerm);
+    const markedId = LabelUtils.htmlHighlightTerm(this.candidate_id, searchTerm);
     return {
       // TODO: Will need to update this to last/first name fields
       // when FEC updates their candidate API to add those fields
-      label: `${this.name}<br>(${this.candidate_id})`,
+      label: `${markedName}<br>(${markedId})`,
       value: this,
     };
   }
@@ -344,9 +346,12 @@ export class FecfileCandidateLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): SelectItem<Contact> {
+  toSelectItem(searchTerm: string): SelectItem<Contact> {
+    const markedLastName = LabelUtils.htmlHighlightTerm(this.last_name, searchTerm);
+    const markedFirstName = LabelUtils.htmlHighlightTerm(this.first_name, searchTerm);
+    const markedId = LabelUtils.htmlHighlightTerm(this.candidate_id, searchTerm);
     return {
-      label: `${this.last_name}, ${this.first_name}<br>(${this.candidate_id})`,
+      label: `${markedLastName}, ${markedFirstName}<br>(${markedId})`,
       value: this,
     };
   }
@@ -361,11 +366,11 @@ export class CandidateLookupResponse {
     return plainToClass(CandidateLookupResponse, json);
   }
 
-  toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
+  toSelectItemGroups(includeFecfileResults: boolean, searchTerm: string): SelectItemGroup[] {
     const fecApiSelectItems =
-      this.fec_api_candidates?.map((data) => new FecApiCandidateLookupData(data).toSelectItem()) || [];
+      this.fec_api_candidates?.map((data) => new FecApiCandidateLookupData(data).toSelectItem(searchTerm)) || [];
     const fecfileSelectItems =
-      this.fecfile_candidates?.map((data) => new FecfileCandidateLookupData(data).toSelectItem()) || [];
+      this.fecfile_candidates?.map((data) => new FecfileCandidateLookupData(data).toSelectItem(searchTerm)) || [];
     return [
       ...(includeFecfileResults
         ? [
@@ -417,9 +422,11 @@ export class FecfileCommitteeLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): SelectItem<Contact> {
+  toSelectItem(searchTerm: string): SelectItem<Contact> {
+    const markedName = LabelUtils.htmlHighlightTerm(this.name, searchTerm);
+    const markedId = LabelUtils.htmlHighlightTerm(this.id, searchTerm);
     return {
-      label: `${this.name}<br>(${this.committee_id})`,
+      label: `${markedName}<br>(${markedId})`,
       value: this,
     };
   }
@@ -438,7 +445,7 @@ export class CommitteeLookupResponse {
     const fecApiSelectItems =
       this.fec_api_committees?.map((data) => new FecApiCommitteeLookupData(data).toSelectItem(searchTerm)) || [];
     const fecfileSelectItems =
-      this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem()) || [];
+      this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem(searchTerm)) || [];
     return [
       ...(includeFecfileResults
         ? [
@@ -466,9 +473,11 @@ export class FecfileIndividualLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): SelectItem<Contact> {
+  toSelectItem(searchTerm: string): SelectItem<Contact> {
+    const markedLastName = LabelUtils.htmlHighlightTerm(this.last_name, searchTerm);
+    const markedFirstName = LabelUtils.htmlHighlightTerm(this.first_name, searchTerm);
     return {
-      label: `${this.last_name}, ${this.first_name}`,
+      label: `${markedLastName}, ${markedFirstName}`,
       value: this,
     };
   }
@@ -482,9 +491,9 @@ export class IndividualLookupResponse {
     return plainToClass(IndividualLookupResponse, json);
   }
 
-  toSelectItemGroups(): SelectItemGroup[] {
+  toSelectItemGroups(searchTerm: string): SelectItemGroup[] {
     const fecfileSelectItems =
-      this.fecfile_individuals?.map((data) => new FecfileIndividualLookupData(data).toSelectItem()) || [];
+      this.fecfile_individuals?.map((data) => new FecfileIndividualLookupData(data).toSelectItem(searchTerm)) || [];
     return [
       {
         label: fecfileSelectItems.length
@@ -502,9 +511,10 @@ export class FecfileOrganizationLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): SelectItem<Contact> {
+  toSelectItem(searchTerm: string): SelectItem<Contact> {
+    const markedName = LabelUtils.htmlHighlightTerm(this.last_name, searchTerm);
     return {
-      label: `${this.name}`,
+      label: `${markedName}`,
       value: this,
     };
   }
@@ -518,9 +528,9 @@ export class OrganizationLookupResponse {
     return plainToClass(OrganizationLookupResponse, json);
   }
 
-  toSelectItemGroups(): SelectItemGroup[] {
+  toSelectItemGroups(searchTerm: string): SelectItemGroup[] {
     const fecfileSelectItems =
-      this.fecfile_organizations?.map((data) => new FecfileOrganizationLookupData(data).toSelectItem()) || [];
+      this.fecfile_organizations?.map((data) => new FecfileOrganizationLookupData(data).toSelectItem(searchTerm)) || [];
     return [
       {
         label: fecfileSelectItems.length

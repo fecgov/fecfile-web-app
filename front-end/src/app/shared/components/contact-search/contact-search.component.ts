@@ -43,7 +43,7 @@ export class ContactSearchComponent {
               this.manager().excludeFecIds(),
               this.manager().excludeIds(),
             )
-          ).toSelectItemGroups(this.isBare());
+          ).toSelectItemGroups(this.isBare(), searchTerm);
           break;
         case ContactTypes.COMMITTEE:
           this.contactService
@@ -54,12 +54,12 @@ export class ContactSearchComponent {
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService.individualLookup(searchTerm, this.manager().excludeIds()).then((response) => {
-            this.contactLookupList = response?.toSelectItemGroups();
+            this.contactLookupList = response?.toSelectItemGroups(searchTerm);
           });
           break;
         case ContactTypes.ORGANIZATION:
           this.contactService.organizationLookup(searchTerm, this.manager().excludeIds()).then((response) => {
-            this.contactLookupList = response?.toSelectItemGroups();
+            this.contactLookupList = response?.toSelectItemGroups(searchTerm);
           });
           break;
       }

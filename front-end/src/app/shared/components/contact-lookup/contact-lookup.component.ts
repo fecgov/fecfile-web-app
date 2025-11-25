@@ -85,7 +85,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
             await this.contactService.candidateLookup(searchTerm, '', '', this.candidateOffice)
-          ).toSelectItemGroups(this.includeFecfileResults);
+          ).toSelectItemGroups(this.includeFecfileResults, searchTerm);
           break;
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(searchTerm, '', '').then((response) => {
@@ -94,12 +94,12 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService.individualLookup(searchTerm, '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups();
+            this.contactLookupList = response.toSelectItemGroups(searchTerm);
           });
           break;
         case ContactTypes.ORGANIZATION:
           this.contactService.organizationLookup(searchTerm, '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups();
+            this.contactLookupList = response.toSelectItemGroups(searchTerm);
           });
           break;
       }
