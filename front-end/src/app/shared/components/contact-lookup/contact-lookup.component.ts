@@ -18,14 +18,13 @@ import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
 import { DestroyerComponent } from '../destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
-  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
+  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete],
 })
 export class ContactLookupComponent extends DestroyerComponent implements OnInit {
   public readonly contactService = inject(ContactService);
@@ -86,21 +85,21 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
             await this.contactService.candidateLookup(searchTerm, '', '', this.candidateOffice)
-          ).toSelectItemGroups(this.includeFecfileResults);
+          ).toSelectItemGroups(this.includeFecfileResults, searchTerm);
           break;
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(searchTerm, '', '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults);
+            this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults, this.searchTerm);
           });
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService.individualLookup(searchTerm, '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups();
+            this.contactLookupList = response.toSelectItemGroups(searchTerm);
           });
           break;
         case ContactTypes.ORGANIZATION:
           this.contactService.organizationLookup(searchTerm, '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups();
+            this.contactLookupList = response.toSelectItemGroups(searchTerm);
           });
           break;
       }
