@@ -24,9 +24,9 @@
   @if (showSearchBoxCallback()) {
     <div class="pl-0">
       <p-autoComplete
-        id="searchBox"
         data-cy="searchBox"
         inputId="searchBox"
+        ariaLabelledBy="contactSearchBoxLabel"
         [formControl]="searchBoxFormControl"
         [group]="true"
         field="label"
