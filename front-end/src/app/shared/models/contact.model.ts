@@ -316,7 +316,7 @@ export const CONTACTS_ONE_THROUGH_FIVE = {
   },
 };
 
-export class FecApiLookupData {}
+export class FecApiLookupData { }
 
 export class FecApiCandidateLookupData extends FecApiLookupData {
   candidate_id: string | undefined;
@@ -374,13 +374,13 @@ export class CandidateLookupResponse {
     return [
       ...(includeFecfileResults
         ? [
-            {
-              label: fecfileSelectItems.length
-                ? 'Select an existing candidate contact:'
-                : 'There are no matching candidate contacts',
-              items: fecfileSelectItems,
-            },
-          ]
+          {
+            label: fecfileSelectItems.length
+              ? 'Select an existing candidate contact:'
+              : 'There are no matching candidate contacts',
+            items: fecfileSelectItems,
+          },
+        ]
         : []),
       {
         label: fecApiSelectItems.length
@@ -449,13 +449,13 @@ export class CommitteeLookupResponse {
     return [
       ...(includeFecfileResults
         ? [
-            {
-              label: fecfileSelectItems.length
-                ? 'Select an existing committee contact:'
-                : 'There are no matching committee contacts',
-              items: fecfileSelectItems,
-            },
-          ]
+          {
+            label: fecfileSelectItems.length
+              ? 'Select an existing committee contact:'
+              : 'There are no matching committee contacts',
+            items: fecfileSelectItems,
+          },
+        ]
         : []),
       {
         label: fecApiSelectItems.length
@@ -512,7 +512,7 @@ export class FecfileOrganizationLookupData extends Contact {
   }
 
   toSelectItem(searchTerm: string): SelectItem<Contact> {
-    const markedName = LabelUtils.htmlHighlightTerm(this.last_name, searchTerm);
+    const markedName = LabelUtils.htmlHighlightTerm(this.name, searchTerm);
     return {
       label: `${markedName}`,
       value: this,
