@@ -144,7 +144,7 @@ describe('Contacts List (/contacts)', () => {
 
     const selectPageSize = (size: number) => {
       openPageSizeDropdown();
-      cy.contains('.p-select-option', new RegExp(`^\\s*${size}\\b`))
+      cy.contains('.p-select-option', new RegExp(String.raw`^\s*${size}\b`))
         .should('be.visible')
         .click({ force: true });
     };
