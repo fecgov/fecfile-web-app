@@ -20,7 +20,6 @@ describe('Contacts Add (/contacts)', () => {
     const individualDisplay = `${individualLast}, ${individualFirst}`;
     const candidateLast = `CandLn${uid}`;
     const candidateFirst = `CandFn${uid}`;
-    const candidateDisplay = `${candidateLast}, ${candidateFirst}`;
     const candidateId = 'H0VA00001';
     const committeeName = `Committee ${uid}`;
     const committeeId = `C${String(uid).padStart(8, '0')}`;
@@ -92,79 +91,36 @@ describe('Contacts Add (/contacts)', () => {
       ContactListPage.enterFormData(formData);
       PageUtils.clickButton('Save');
       cy.contains('Save').should('not.exist');
-      ContactsHelpers.assertSuccessToast();
+      ContactsHelpers.assertSuccessToastMessage();
     }
 
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.get('tbody tr').should('have.length.at.least', cases.length);
     for (const c of cases) {
-      ContactsHelpers.assertRow(c.rowText, c.type, c.fecId);
+      ContactsHelpers.assertRowValues(c.rowText, c.type, c.fecId);
     }
   });
 
   it('Create a Committee contact via lookup', () => {
-    PageUtils.clickButton('Add contact');
-    cy.get('#entity_type_dropdown')
-      .first()
-      .click();
-    cy.contains('.p-select-option', 'Committee')
-      .scrollIntoView({ offset: { top: 0, left: 0 } })
-      .click();
-
-    cy.intercept('GET', '**/api/v1/contacts/committee/?committee_id=*').as('committeeSearch');
-    cy.get('.p-autocomplete-input')
-      .should('exist')
-      .type('ber')
-      .then(() => {
-        cy.get('.p-autocomplete-option')
-          .should('have.length.at.least', 1)
-          .first()
-          .click({ force: true });
-      });
-
-    cy.wait('@committeeSearch');
-    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
-    PageUtils.clickButton('Save');
-    cy.wait('@createContact');
-    ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('tbody tr', /committee/i)
-      .should('exist')
-      .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'Committee');
-      });
+    ContactsHelpers.createContactViaLookup(
+      'Committee',
+      '**/api/v1/contacts/committee/?committee_id=*',
+      /committee/i,
+    ).within(() => {
+      cy.get('td').eq(1).should('contain.text', 'Committee');
+    });
   });
 
   it('Create a Candidate contact via lookup', () => {
-    PageUtils.clickButton('Add contact');
-    cy.get('#entity_type_dropdown')
-      .first()
-      .click();
-    cy.contains('.p-select-option', 'Candidate')
-      .scrollIntoView({ offset: { top: 0, left: 0 } })
-      .click();
-
-    cy.intercept('GET', '**/api/v1/contacts/candidate/?candidate_id=*').as('candidateSearch');
-    cy.get('.p-autocomplete-input')
-      .should('exist')
-      .type('ber')
-      .then(() => {
-        cy.get('.p-autocomplete-option')
-          .should('have.length.at.least', 1)
-          .first()
-          .click({ force: true });
-      });
-    cy.wait('@candidateSearch');
-    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
-    PageUtils.clickButton('Save');
-    cy.wait('@createContact');
-    ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('tbody tr', /candidate/i)
-      .should('exist')
-      .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'Candidate');
-        cy.get('td').eq(2).invoke('text').should('match', /\S/);
-      });
+    ContactsHelpers.createContactViaLookup(
+      'Candidate',
+      '**/api/v1/contacts/candidate/?candidate_id=*',
+      /candidate/i,
+    ).within(() => {
+      cy.get('td').eq(1).should('contain.text', 'Candidate');
+      cy.get('td').eq(2).invoke('text').should('match', /\S/);
+    });
   });
 
   it('Candidate and Committee FEC ID validation fails on bad IDs', () => {
