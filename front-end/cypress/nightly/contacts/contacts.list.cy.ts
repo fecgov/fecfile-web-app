@@ -128,7 +128,7 @@ describe('Contacts List (/contacts)', () => {
 
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
-        `showing\\s+${start}\\s+to\\s+${end}\\s+of\\s+${total}\\s+contacts:?`,
+        String.raw`showing\s+${start}\s+to\s+${end}\s+of\s+${total}\s+contacts:?`,
         'i',
       );
 
