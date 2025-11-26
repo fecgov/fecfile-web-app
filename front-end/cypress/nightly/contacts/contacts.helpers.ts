@@ -77,7 +77,7 @@ export class ContactsHelpers {
     cy.contains(rx).should('exist');
   }
 
-  static assertSuccessToastMessage = () => {
+  static assertSuccessToastMessage() {
     cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
       timeout: 10000,
     }).should('exist');
@@ -99,16 +99,16 @@ export class ContactsHelpers {
             .eq(2)
             .invoke('text')
             .then((t) => {
-              expect(t.replace(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
+              expect(t.replaceAll(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
             });
         }
       });
   };
-  static createContactViaLookup = (
+  static createContactViaLookup(
     entityLabel: 'Committee' | 'Candidate',
     searchEndpoint: string,
     rowMatch: RegExp,
-  ): Cypress.Chainable<JQuery<HTMLElement>> => {
+  ): Cypress.Chainable<JQuery<HTMLElement>> {
     PageUtils.clickButton('Add contact');
     cy.get('#entity_type_dropdown')
       .first()
