@@ -74,13 +74,13 @@ export class ContactsHelpers {
     cy.contains(rx).should('exist');
   }
 
-  static assertSuccessToast = () => {
+  static assertSuccessToastMessage = () => {
     cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
       timeout: 10000,
     }).should('exist');
   };
 
-  static assertRow(rowText: string, expectedType: string, expectedFecId?: string) {
+  static assertRowValues(rowText: string, expectedType: string, expectedFecId?: string) {
     cy.contains('tbody tr', rowText, { matchCase: false })
       .should('exist')
       .within(() => {
