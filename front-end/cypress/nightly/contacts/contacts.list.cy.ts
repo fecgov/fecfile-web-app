@@ -81,34 +81,12 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('button,a', 'Restore deleted contacts').should('exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
 
-    const assertRow = (rowText: string, expectedType: string, expectedFecId?: string) => {
-      cy.contains('tbody tr', rowText, { matchCase: false })
-        .should('exist')
-        .within(() => {
-          cy.get('td')
-            .eq(1)
-            .invoke('text')
-            .then((t) => {
-              expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
-            });
-
-          if (expectedFecId) {
-            cy.get('td')
-              .eq(2)
-              .invoke('text')
-              .then((t) => {
-                expect(t.replace(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
-              });
-          }
-        });
-    };
-
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
-    assertRow(individualDisplayName, 'Individual');
-    assertRow(candidateDisplayName, 'Candidate', candidateId);
-    assertRow(committeeName, 'Committee');
-    assertRow(organizationName, 'Organization');
+    ContactsHelpers.assertRowValues(individualDisplayName, 'Individual');
+    ContactsHelpers.assertRowValues(candidateDisplayName, 'Candidate', candidateId);
+    ContactsHelpers.assertRowValues(committeeName, 'Committee');
+    ContactsHelpers.assertRowValues(organizationName, 'Organization');
   });
 
   it('checks pagination controls empty state', () => {
@@ -196,7 +174,7 @@ describe('Contacts List (/contacts)', () => {
           .should('not.be.disabled')
           .click({ force: true });
 
-        cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('exist');
+        cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
         cy.get('tbody tr').should('have.length', 1);
       }
 
