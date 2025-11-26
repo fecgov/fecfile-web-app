@@ -99,16 +99,12 @@ describe('CreateF3XStep1Component: New', () => {
     const createSpy = spyOn(form3XService, 'create');
     const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes');
 
-    // Wait for all async initialization to complete
+    // wait for all async initialization to complete
     await fixture.whenStable();
     fixture.detectChanges();
 
-    // Now invalidate the form by removing required field
+    // now invalidate the form
     component.form.patchValue({ coverage_from_date: null });
-    component.form.markAsDirty();
-    component.form.controls['coverage_from_date'].markAsTouched();
-    component.form.updateValueAndValidity();
-    fixture.detectChanges();
 
     expect(component.form.valid).toBeFalse();
     await component.submitForm();
