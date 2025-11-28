@@ -239,4 +239,121 @@ describe('Contacts Add (/contacts)', () => {
     PageUtils.clickButton('Cancel');
     cy.contains('Save').should('not.exist');
   });
+
+  it('Save & Add More: chains Individual, Candidate, Committee, and Organization', () => {
+    const uid = Cypress._.random(1000, 9999);
+    const individualLast = `IndLn${uid}`;
+    const individualFirst = `IndFn${uid}`;
+    const individualDisplay = `${individualLast}, ${individualFirst}`;
+    const candidateLast = `CandLn${uid}`;
+    const candidateFirst = `CandFn${uid}`;
+    const candidateId = 'H0VA00001';
+    const committeeName = `Committee ${uid}`;
+    const committeeId = `C${String(uid).padStart(8, '0')}`;
+    const orgName = `Organization ${uid}`;
+
+    type CaseType = 'Individual' | 'Candidate' | 'Committee' | 'Organization';
+    type CaseConfig = {
+      label: string;
+      overrides: Partial<ContactFormData>;
+      rowText: string;
+      type: CaseType;
+      fecId?: string;
+    };
+
+    const cases: CaseConfig[] = [
+      {
+        label: 'Individual',
+        overrides: {
+          contact_type: 'Individual',
+          last_name: individualLast,
+          first_name: individualFirst,
+        },
+        rowText: individualDisplay,
+        type: 'Individual',
+      },
+      {
+        label: 'Candidate',
+        overrides: {
+          contact_type: 'Candidate',
+          last_name: candidateLast,
+          first_name: candidateFirst,
+          candidate_id: candidateId,
+          candidate_office: 'House',
+          candidate_state: 'Virginia',
+          candidate_district: '01',
+        },
+        rowText: candidateId,
+        type: 'Candidate',
+        fecId: candidateId,
+      },
+      {
+        label: 'Committee',
+        overrides: {
+          contact_type: 'Committee',
+          name: committeeName,
+          committee_id: committeeId,
+        },
+        rowText: committeeId,
+        type: 'Committee',
+        fecId: committeeId,
+      },
+      {
+        label: 'Organization',
+        overrides: {
+          contact_type: 'Organization',
+          name: orgName,
+        },
+        rowText: orgName,
+        type: 'Organization',
+      },
+    ];
+
+    cy.intercept(
+      'GET',
+      '**/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
+    ).as('contactsReload');
+
+    cy.get('tbody', { timeout: 10000 })
+      .then(($tbody) => $tbody.find('tr').length)
+      .then((beforeCount) => {
+        PageUtils.clickButton('Add contact');
+        for (const c of cases) {
+          cy.log(`Creating via Save & Add More: ${c.label}`);
+          const formData: ContactFormData = {
+            ...contactFormData,
+            ...c.overrides,
+          };
+          ContactListPage.enterFormData(formData);
+          PageUtils.clickButton('Save & Add More');
+          ContactsHelpers.assertSuccessToastMessage();
+          cy.contains('button', 'Save & Add More').should('exist');
+          cy.contains('button', 'Save').should('exist');
+          if (c.type === 'Individual' || c.type === 'Candidate') {
+            cy.get('#last_name').should('have.value', '');
+            cy.get('#first_name').should('have.value', '');
+          } else {
+            cy.get('#name').should('have.value', '');
+          }
+          cy.get('#street_1').should('have.value', '');
+          cy.get('#city').should('have.value', '');
+          cy.get('#zip').should('have.value', '');
+
+          if (c.type === 'Candidate') {
+            cy.get('#candidate_id').should('have.value', '');
+          }
+          if (c.type === 'Committee') {
+            cy.get('#committee_id').should('have.value', '');
+          }
+        }
+        PageUtils.clickButton('Cancel');
+        cy.contains('Save').should('not.exist');
+        ContactListPage.goToPage();
+        cy.wait('@contactsReload');
+        cy.get('tbody tr').should('have.length', beforeCount + cases.length);
+        for (const c of cases) {
+          ContactsHelpers.assertRowValues(c.rowText, c.type, c.fecId);
+        }
+      });
+  });
 });
