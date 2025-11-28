@@ -1,3 +1,6 @@
+
+import { PageUtils } from '../../e2e/pages/pageUtils';
+
 export class ContactsHelpers {
   static CONTACTS_HEADERS = [
     'Name',
@@ -73,4 +76,64 @@ export class ContactsHelpers {
     );
     cy.contains(rx).should('exist');
   }
+
+  static assertSuccessToastMessage() {
+    cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
+      timeout: 10000,
+    }).should('exist');
+  };
+
+  static assertRowValues(rowText: string, expectedType: string, expectedFecId?: string) {
+    cy.contains('tbody tr', rowText, { matchCase: false })
+      .should('exist')
+      .within(() => {
+        cy.get('td')
+          .eq(1)
+          .invoke('text')
+          .then((t) => {
+            expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
+          });
+
+        if (expectedFecId) {
+          cy.get('td')
+            .eq(2)
+            .invoke('text')
+            .then((t) => {
+              expect(t.replaceAll(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
+            });
+        }
+      });
+  };
+  static createContactViaLookup(
+    entityLabel: 'Committee' | 'Candidate',
+    searchEndpoint: string,
+    rowMatch: RegExp,
+  ): Cypress.Chainable<JQuery<HTMLElement>> {
+    PageUtils.clickButton('Add contact');
+    cy.get('#entity_type_dropdown')
+      .first()
+      .click();
+
+    cy.contains('.p-select-option', entityLabel)
+      .scrollIntoView({ offset: { top: 0, left: 0 } })
+      .click();
+
+    cy.intercept('GET', searchEndpoint).as('entitySearch');
+    cy.get('.p-autocomplete-input')
+      .should('exist')
+      .type('ber');
+
+    cy.get('.p-autocomplete-option')
+      .should('have.length.at.least', 1)
+      .first()
+      .click({ force: true });
+
+    cy.wait('@entitySearch');
+    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
+    PageUtils.clickButton('Save');
+    cy.wait('@createContact');
+
+    ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
+    return cy.contains('tbody tr', rowMatch).should('exist');
+  };
 }
