@@ -265,7 +265,10 @@ parameters:
 workflows:
   primary:
     when:
-      not: << pipeline.parameters.is-triggered-e2e-test >>
+      and:
+        - not: << pipeline.parameters.is-triggered-e2e-test >>
+        - not: << pipeline.parameters.is-nightly-e2e-test >>
+        - not: << pipeline.parameters.is-triggered-unit-test >>
     jobs:
       - lint
       - test
@@ -274,7 +277,7 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job: # Deploy job even when e2e tests fail
+      - deploy-job:
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
