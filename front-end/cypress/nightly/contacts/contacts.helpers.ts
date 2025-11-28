@@ -1,5 +1,15 @@
 
 import { PageUtils } from '../../e2e/pages/pageUtils';
+import { ContactFormData } from '../../e2e/models/ContactFormModel';
+
+export type ContactCaseType = ContactFormData['contact_type'];
+export type ContactCaseConfig = {
+  label: string;
+  overrides: Partial<ContactFormData>;
+  rowText: string;
+  type: ContactCaseType;
+  fecId?: string;
+};
 
 export class ContactsHelpers {
   static CONTACTS_HEADERS = [
@@ -104,6 +114,70 @@ export class ContactsHelpers {
         }
       });
   };
+
+  static buildContactTypeCases(uid: number): ContactCaseConfig[] {
+    const individualLast = `IndLn${uid}`;
+    const individualFirst = `IndFn${uid}`;
+    const individualDisplay = `${individualLast}, ${individualFirst}`;
+
+    const candidateLast = `CandLn${uid}`;
+    const candidateFirst = `CandFn${uid}`;
+    const candidateId = 'H0VA00001';
+
+    const committeeName = `Committee ${uid}`;
+    const committeeId = `C${String(uid).padStart(8, '0')}`;
+
+    const orgName = `Organization ${uid}`;
+
+    return [
+      {
+        label: 'Individual',
+        overrides: {
+          contact_type: 'Individual',
+          last_name: individualLast,
+          first_name: individualFirst,
+        },
+        rowText: individualDisplay,
+        type: 'Individual',
+      },
+      {
+        label: 'Candidate',
+        overrides: {
+          contact_type: 'Candidate',
+          last_name: candidateLast,
+          first_name: candidateFirst,
+          candidate_id: candidateId,
+          candidate_office: 'House',
+          candidate_state: 'Virginia',
+          candidate_district: '01',
+        },
+        rowText: candidateId,
+        type: 'Candidate',
+        fecId: candidateId,
+      },
+      {
+        label: 'Committee',
+        overrides: {
+          contact_type: 'Committee',
+          name: committeeName,
+          committee_id: committeeId,
+        },
+        rowText: committeeId,
+        type: 'Committee',
+        fecId: committeeId,
+      },
+      {
+        label: 'Organization',
+        overrides: {
+          contact_type: 'Organization',
+          name: orgName,
+        },
+        rowText: orgName,
+        type: 'Organization',
+      },
+    ];
+  }
+
   static createContactViaLookup(
     entityLabel: 'Committee' | 'Candidate',
     searchEndpoint: string,
