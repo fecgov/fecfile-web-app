@@ -305,11 +305,7 @@ workflows:
   triggered-unit-test:
     when: << pipeline.parameters.is-triggered-unit-test >>
     jobs:
-      - test:
-          filters:
-            branches:
-              only:
-                - develop
+      - test
 
   nightly:
     triggers:
