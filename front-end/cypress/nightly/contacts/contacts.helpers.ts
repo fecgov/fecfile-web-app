@@ -2,8 +2,8 @@
 import { PageUtils } from '../../e2e/pages/pageUtils';
 import { ContactFormData } from '../../e2e/models/ContactFormModel';
 
-export type ContactCaseType = ContactFormData['contact_type'];
-export type ContactCaseConfig = {
+type ContactCaseType = ContactFormData['contact_type'];
+type ContactCaseConfig = {
   label: string;
   overrides: Partial<ContactFormData>;
   rowText: string;
