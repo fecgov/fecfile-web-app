@@ -98,8 +98,13 @@ describe('CreateF3XStep1Component: New', () => {
   it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
     const createSpy = spyOn(form3XService, 'create');
     const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes');
-    component.form.patchValue({ coverage_from_date: null });
+
+    // wait for all async initialization to complete
     await fixture.whenStable();
+    fixture.detectChanges();
+
+    // now invalidate the form
+    component.form.patchValue({ coverage_from_date: null });
 
     expect(component.form.valid).toBeFalse();
     await component.submitForm();
