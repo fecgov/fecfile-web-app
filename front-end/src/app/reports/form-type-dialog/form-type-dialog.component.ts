@@ -1,7 +1,6 @@
 import { Component, computed, inject, model, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
-import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';

@@ -1,14 +1,13 @@
 .w-full {
   height: 36px;
-  font-size: 14px;
-}
-
-.p-select-overlay {
-  font-family: var(--karla);
-  font-size: 14px;
-  font-weight: normal;
 }
 
 img {
   margin-left: 10px;
+}
+
+:host ::ng-deep {
+  .p-select-list {
+    font-size: 14px;
+  }
 }
