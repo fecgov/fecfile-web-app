@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';

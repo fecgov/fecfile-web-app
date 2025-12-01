@@ -17,16 +17,14 @@
       </div>
       <p-inputGroup class="search-group">
         <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
-        <p-button pButton class="search-button" (click)="search(searchBoxFormControl.value)">
+        <p-button class="search-button" (click)="search(searchBoxFormControl.value)">
           <ng-template pTemplate="iconTemplate">
-            <div>
-              <img
-                alt="Magnifying lens"
-                src="assets/img/contact_lookup_magnifying_glass.svg"
-                width="35px"
-                height="35px"
-              />
-            </div>
+            <img
+              alt="Magnifying lens"
+              src="assets/img/contact_lookup_magnifying_glass.svg"
+              width="35px"
+              height="35px"
+            />
           </ng-template>
         </p-button>
       </p-inputGroup>

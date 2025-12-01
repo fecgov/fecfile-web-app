@@ -88,7 +88,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   readonly existingCoverage = derivedAsync(async () => {
     const reportId = this.reportId();
     if (reportId && !this.report()) return undefined;
-    let existingCoverage = await this.form3XService.getF3xCoverageDates();
+    let existingCoverage = await this.form3XService.getCoverageDates();
     if (reportId) {
       existingCoverage = existingCoverage.filter(
         (coverage) =>
@@ -314,5 +314,4 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
 export enum F3xReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
   NON_ELECTION_YEAR = 'Non-Election Year',
-  SPECIAL = 'Special',
 }

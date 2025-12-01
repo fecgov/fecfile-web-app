@@ -3,7 +3,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { CardModule } from 'primeng/card';
 import { ReportDetailedSummaryComponent } from './report-detailed-summary.component';
 import { ReportService } from 'app/shared/services/report.service';

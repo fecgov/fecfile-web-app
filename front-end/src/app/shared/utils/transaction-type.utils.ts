@@ -433,8 +433,8 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
   return getfromJsonByType(json, transactionType, depth);
 }
 
-export function PTY_ONLY(): TransactionTypes[] {
-  return [
+export function PTY_ONLY(): Set<TransactionTypes> {
+  return new Set([
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
@@ -483,11 +483,11 @@ export function PTY_ONLY(): TransactionTypes[] {
     ScheduleBTransactionTypes.PAC_IN_KIND_OUT,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
-  ];
+  ]);
 }
 
-export function PAC_ONLY(): TransactionTypes[] {
-  return [
+export function PAC_ONLY(): Set<TransactionTypes> {
+  return new Set([
     ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
@@ -498,7 +498,7 @@ export function PAC_ONLY(): TransactionTypes[] {
     ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
-  ];
+  ]);
 }
 
 export function MultipleEntryTransactionTypes(): string[] {

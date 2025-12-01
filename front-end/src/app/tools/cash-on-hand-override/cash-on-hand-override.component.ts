@@ -3,7 +3,7 @@ import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { CashOnHand } from 'app/shared/models/cash-on-hand.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { CashOnHandService } from 'app/shared/services/cash-on-hand-service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';

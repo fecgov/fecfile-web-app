@@ -51,14 +51,14 @@
   cursor: pointer;
 
   .blue-box {
-    padding: 15px;
+    display: flex;
+    min-width: 90px;
+    min-height: 90px;
     background-color: #132947;
     border-radius: 5px 0px 0px 5px;
   }
   .plus {
-    background-color: #ffffff;
-    padding: 13px;
-    border-radius: 100px;
+    margin: auto;
   }
   .create-text {
     padding: 20px;

@@ -14,7 +14,7 @@ import { MemoCodeInputComponent } from './memo-code.component';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';

@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { MainFormComponent } from './main-form/main-form.component';
-import { ReportSidebarSection } from 'app/layout/sidebar/sidebar.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
-import { Report } from 'app/shared/models/report.model';
+import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
+import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the

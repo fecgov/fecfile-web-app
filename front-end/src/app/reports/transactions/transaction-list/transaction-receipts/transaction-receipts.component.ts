@@ -9,7 +9,7 @@ import { CurrencyPipe } from '@angular/common';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
-import { MemoCodePipe } from '../transaction-list.component';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 
 @Component({
   selector: 'app-transaction-receipts',

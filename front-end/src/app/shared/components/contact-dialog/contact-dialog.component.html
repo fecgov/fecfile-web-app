@@ -167,10 +167,9 @@
             <label for="state">STATE/TERRITORY</label>
             <app-searchable-select
               inputId="state"
-              formControlName="state"
+              controlName="state"
               [form]="form"
               [options]="stateOptions"
-              [autoDisplayFirst]="false"
               appendTo="body"
             />
             <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />

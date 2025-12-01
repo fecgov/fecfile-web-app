@@ -1,0 +1,69 @@
+$glossary-width: 284px;
+::ng-deep {
+  .drawer-container {
+    width: $glossary-width;
+  }
+  .drawer-header {
+    justify-content: right;
+    padding: 1rem 2rem !important;
+  }
+  .drawer-header,
+  .drawer-content {
+    width: $glossary-width;
+    background-color: var(--p-content-color) !important;
+    color: white;
+  }
+  .drawer-content {
+    padding: 0 1.5rem !important;
+    font-family: var(--karla);
+  }
+
+  .drawer-container,
+  .drawer-header,
+  .drawer-content {
+    background-color: var(--p-content-color) !important;
+    color: white !important;
+    border: 0 !important;
+    font-size: 14px;
+  }
+}
+
+.field,
+input {
+  font-size: 14px;
+}
+
+.minus-icon-mask,
+.plus-icon-mask {
+  background-color: white;
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.minus-icon-mask {
+  mask-image: url('/assets/img/i-minus-circle.svg');
+}
+
+.plus-icon-mask {
+  mask-image: url('/assets/img/i-plus-circle.svg');
+}
+
+li {
+  list-style: disc;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+.collapsible-content {
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+}

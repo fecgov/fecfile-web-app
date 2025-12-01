@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
@@ -129,7 +129,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test createDebtRepaymentMade', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[0];
-    const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE };
+    const transaction = getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
     (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE;
@@ -144,7 +144,7 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test createDebtRepaymentReceived', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
-    const transaction = { id: 1, transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE };
+    const transaction = getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE);
     (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE;

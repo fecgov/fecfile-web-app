@@ -1,5 +1,5 @@
-import { Component, inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { formatCurrency } from '@angular/common';
+import { Component, inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 
@@ -23,6 +23,18 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
   @Input() uniqueFecIdMessage = 'FEC IDs must be unique';
   @Input() isAfterMessage = 'TO date must fall chronologically after FROM date';
+
+  private _duplicateNameErrorMessage = '';
+  @Input() set duplicateNameErrorMessage(value: string) {
+    this._duplicateNameErrorMessage = value;
+  }
+
+  get duplicateNameErrorMessage(): string {
+    if (this._duplicateNameErrorMessage) {
+      return this._duplicateNameErrorMessage;
+    }
+    return 'This name is already in use. Please choose a different name';
+  }
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {

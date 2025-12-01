@@ -7,18 +7,17 @@ import {
   FecApiCommitteeLookupData,
   FecApiLookupData,
 } from 'app/shared/models/contact.model';
+import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
-import { HighlightTermsPipe } from '../../pipes/highlight-terms.pipe';
-import { ContactManagementService } from 'app/shared/services/contact-management.service';
 
 @Component({
   selector: 'app-contact-search',
   templateUrl: './contact-search.component.html',
   styleUrls: ['./contact-search.component.scss'],
-  imports: [SelectModule, FormsModule, PrimeTemplate, AutoComplete, HighlightTermsPipe],
+  imports: [SelectModule, FormsModule, PrimeTemplate, AutoComplete],
 })
 export class ContactSearchComponent {
   readonly contactService = inject(ContactService);
@@ -44,23 +43,23 @@ export class ContactSearchComponent {
               this.manager().excludeFecIds(),
               this.manager().excludeIds(),
             )
-          ).toSelectItemGroups(this.isBare());
+          ).toSelectItemGroups(this.isBare(), searchTerm);
           break;
         case ContactTypes.COMMITTEE:
           this.contactService
             .committeeLookup(searchTerm, this.manager().excludeFecIds(), this.manager().excludeIds())
             .then((response) => {
-              this.contactLookupList = response?.toSelectItemGroups(this.isBare());
+              this.contactLookupList = response?.toSelectItemGroups(this.isBare(), searchTerm);
             });
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService.individualLookup(searchTerm, this.manager().excludeIds()).then((response) => {
-            this.contactLookupList = response?.toSelectItemGroups();
+            this.contactLookupList = response?.toSelectItemGroups(searchTerm);
           });
           break;
         case ContactTypes.ORGANIZATION:
           this.contactService.organizationLookup(searchTerm, this.manager().excludeIds()).then((response) => {
-            this.contactLookupList = response?.toSelectItemGroups();
+            this.contactLookupList = response?.toSelectItemGroups(searchTerm);
           });
           break;
       }

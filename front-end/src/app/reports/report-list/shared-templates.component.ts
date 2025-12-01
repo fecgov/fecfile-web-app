@@ -1,12 +1,15 @@
-import { Component, TemplateRef, viewChild } from '@angular/core';
+import { Component, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TableBodyContext } from 'app/shared/components/table/table.component';
 import { Report } from 'app/shared/models';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 @Component({
   selector: 'app-shared-templates',
   template: `
+    <ng-template #reportNameBody let-item>
+      <a (click)="this.reportNameClick.emit(item)">{{ item.formSubLabel }}</a>
+    </ng-template>
     <ng-template #actionsBody let-item let-actions="rowActions">
       <app-table-actions-button
         (tableActionClick)="$event.action.action($event.actionItem)"
@@ -23,6 +26,9 @@ import { Report } from 'app/shared/models';
   imports: [TableActionsButtonComponent, FecDatePipe],
 })
 export class SharedTemplatesComponent<T extends Report> {
+  readonly reportNameClick = output<T>();
+  readonly reportNameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('reportNameBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('actionsBody');
-  readonly submissionBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('submissionBody');
+  readonly submissionBodyTpl: Signal<TemplateRef<TableBodyContext<T>>> =
+    viewChild.required<TemplateRef<TableBodyContext<T>>>('submissionBody');
 }

@@ -105,7 +105,7 @@ export class LoanFormData extends ScheduleFormData {
   }
 }
 
-export class DebtFormData extends LoanFormData {}
+class DebtFormData extends LoanFormData {}
 
 export const defaultDebtFormData: DebtFormData = {
   amount: 60000,

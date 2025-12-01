@@ -47,7 +47,7 @@
         </ng-template>
         <ng-template let-contact pTemplate="item">
           <div class="contact-label-container">
-            <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
+            <span [innerHTML]="contact.label" class="contact-label"></span>
             @if (isContact(contact.value)) {
               <span class="in-contacts"> In contacts </span>
             }

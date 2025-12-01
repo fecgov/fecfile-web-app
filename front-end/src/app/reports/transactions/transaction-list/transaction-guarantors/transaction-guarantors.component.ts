@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, computed, inject, input } from '@angular/core';
-import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
@@ -11,6 +10,7 @@ import { TableComponent } from '../../../../shared/components/table/table.compon
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { CurrencyPipe } from '@angular/common';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({
   selector: 'app-transaction-guarantors',
@@ -49,7 +49,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     }
   }
 
-  override rowActions: TableAction[] = [
+  override rowActions: TableAction<Transaction>[] = [
     new TableAction(
       'View',
       this.editItem.bind(this),

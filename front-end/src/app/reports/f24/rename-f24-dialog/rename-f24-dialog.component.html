@@ -1,0 +1,33 @@
+<p-dialog
+  #dialog
+  [(visible)]="dialogVisible"
+  [style]="{ width: '512px' }"
+  [modal]="true"
+  [draggable]="false"
+  closeAriaLabel="Close"
+>
+  <ng-template #header>
+    <div [id]="dialog.ariaLabelledBy">
+      <h1>Edit</h1>
+    </div>
+  </ng-template>
+
+  <ng-template #content>
+    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+      <div class="dialog-body">
+        <label for="form24Name">REPORT NAME</label>
+        <div id="f24-input-container">
+          <span>{{ this.form.get('typeName')?.value }}</span>
+          <input id="form24Name" type="text" class="pl-1" pInputText formControlName="form24Name" />
+        </div>
+        <app-error-messages [form]="formParent" fieldName="form24NameGroup" [formSubmitted]="formSubmitted" />
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #footer>
+    <div class="top-border-footer dialog-buttons">
+      <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="dialog.close($event)"></button>
+      <button pButton pRipple label="Confirm" class="p-button-primary" (click)="submitForm()"></button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -79,6 +79,21 @@ export class LabelUtils {
   public static getStateCodeLabelsWithoutMilitary(): LabelList {
     return StatesCodeLabels.filter((list: string[]) => !['AA', 'AE', 'AP', 'ZZ'].includes(list[0]));
   }
+
+  /**
+   * Returns the html highlighted value with term tokens highlighted.
+   * @returns {string}
+   */
+  public static htmlHighlightTerm(value?: string, term?: string): string | undefined {
+    if (value && term) {
+      const searchRegex = term
+        .split(/[\W]/)
+        .filter((x) => x)
+        .join('|');
+      value = value.replace(new RegExp(searchRegex, 'gi'), (match) => `<mark>${match}</mark>`);
+    }
+    return value;
+  }
 }
 
 export const StatesCodeLabels: LabelList = [

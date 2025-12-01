@@ -361,6 +361,10 @@ label.disabled {
   height: 48px;
 }
 
+.dialog-body .dialog-label .p-select {
+  height: 36px;
+}
+
 .pi-trash {
   cursor: pointer;
 }
@@ -578,4 +582,22 @@ textarea {
   font-size: 1rem;
   font-weight: 400;
   resize: none;
+}
+
+.active-status-circle {
+  font-size: 10px;
+  margin-left: 5px;
+  vertical-align: middle;
+  color: #4aa564;
+}
+
+.inactive-status-circle {
+  font-size: 10px;
+  margin-left: 5px;
+  vertical-align: middle;
+  color: #aeb0b5;
+}
+
+.gap-20px {
+  gap: 20px;
 }

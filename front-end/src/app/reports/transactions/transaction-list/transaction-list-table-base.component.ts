@@ -1,7 +1,8 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import {
   Report,
   Transaction,
@@ -16,7 +17,6 @@ import {
 } from 'app/shared/models';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -43,9 +43,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   abstract scheduleTransactionTypeLabels: LabelList;
   paginationPageSizeOptions = [5, 10, 15, 20];
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
-  readonly isForm24 = computed(() => this.report().form_type === FormTypes.F24);
+  readonly isForm24 = computed(() => this.report().form_type === ReportTypes.F24);
 
-  public rowActions: TableAction[] = [
+  public rowActions: TableAction<Transaction>[] = [
     new TableAction(
       'View',
       this.editItem.bind(this),
@@ -206,7 +206,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     this.rowsPerPage.set(5);
   }
 
-  public onTableActionClick(action: TableAction, report?: Report) {
+  public onTableActionClick(action: TableAction<Report>, report: Report) {
     action.action(report);
   }
 

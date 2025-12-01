@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectorRef,
@@ -13,6 +12,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  DOCUMENT,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import { DomHandler } from 'primeng/dom';
@@ -21,7 +21,7 @@ import { Nullable } from 'primeng/ts-helpers';
 import { InputText } from 'primeng/inputtext';
 import { AutoFocusModule } from 'primeng/autofocus';
 
-export const INPUTNUMBER_VALUE_ACCESSOR = {
+const INPUTNUMBER_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
   useExisting: forwardRef(() => InputNumberComponent),
   multi: true,
@@ -761,7 +761,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
       }
       this.inputEvent.emit({
         originalEvent: event,
-        value: newValue?.toString() ?? '',
+        value: (newValue as number) ?? 0,
         formattedValue: currentValue.toString(),
       });
     }
