@@ -143,10 +143,20 @@ describe('Contacts List (/contacts)', () => {
     };
 
     const selectPageSize = (size: number) => {
+      cy.intercept(
+        'GET',
+        `**/api/v1/contacts/?page=1&ordering=sort_name&page_size=${size}`,
+      ).as('getContactsForPageSize');
+
       openPageSizeDropdown();
-      cy.contains('.p-select-option', new RegExp(String.raw`^\s*${size}\b`))
+      cy.contains(
+        '.p-select-option',
+        new RegExp(String.raw`^\s*${size}\b`),
+      )
         .should('be.visible')
         .click({ force: true });
+
+      cy.wait('@getContactsForPageSize');
     };
 
     openPageSizeDropdown();
@@ -158,7 +168,6 @@ describe('Contacts List (/contacts)', () => {
     cy.get('body').click();
 
     const pageSizes = [5, 10, 15, 20] as const;
-
     for (const size of pageSizes) {
       cy.log(`Testing Results per page = ${size}`);
       selectPageSize(size);
