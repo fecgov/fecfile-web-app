@@ -3,7 +3,7 @@
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
-  (close)="onDialogHide()"
+  (closeDialog)="onDialogHide()"
   (submitForm)="goToReportForm()"
   [submitDisabled]="isSubmitDisabled()"
 >

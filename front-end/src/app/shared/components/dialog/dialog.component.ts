@@ -13,7 +13,7 @@ export class DialogComponent {
   readonly title = input.required<string>();
   readonly submitLabel = input('Save');
   readonly submitForm = output<void>();
-  readonly close = output<void>();
+  readonly closeDialog = output<void>();
 
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
