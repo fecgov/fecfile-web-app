@@ -81,34 +81,12 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('button,a', 'Restore deleted contacts').should('exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
 
-    const assertRow = (rowText: string, expectedType: string, expectedFecId?: string) => {
-      cy.contains('tbody tr', rowText, { matchCase: false })
-        .should('exist')
-        .within(() => {
-          cy.get('td')
-            .eq(1)
-            .invoke('text')
-            .then((t) => {
-              expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
-            });
-
-          if (expectedFecId) {
-            cy.get('td')
-              .eq(2)
-              .invoke('text')
-              .then((t) => {
-                expect(t.replace(/\s+/g, '').toUpperCase()).to.eq(expectedFecId.toUpperCase());
-              });
-          }
-        });
-    };
-
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
-    assertRow(individualDisplayName, 'Individual');
-    assertRow(candidateDisplayName, 'Candidate', candidateId);
-    assertRow(committeeName, 'Committee');
-    assertRow(organizationName, 'Organization');
+    ContactsHelpers.assertRowValues(individualDisplayName, 'Individual');
+    ContactsHelpers.assertRowValues(candidateDisplayName, 'Candidate', candidateId);
+    ContactsHelpers.assertRowValues(committeeName, 'Committee');
+    ContactsHelpers.assertRowValues(organizationName, 'Organization');
   });
 
   it('checks pagination controls empty state', () => {
@@ -133,6 +111,8 @@ describe('Contacts List (/contacts)', () => {
   it('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
     const total = 21;
     const base: MockContact = Individual_A_A;
+
+    // Seed 21 contacts
     cy.then(() => {
       for (let i = 1; i <= total; i++) {
         makeContact({
@@ -145,29 +125,10 @@ describe('Contacts List (/contacts)', () => {
 
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains(/results\s*per\s*page:/i)
-      .parent()
-      .within(() => {
-        cy.get('.p-select-dropdown').click();
-      });
-
-    cy.get('.p-select-option').should('have.length.at.least', 4);
-    cy.get('.p-select-option').eq(0).should('contain.text', '5');
-    cy.get('.p-select-option').eq(1).should('contain.text', '10');
-    cy.get('.p-select-option').eq(2).should('contain.text', '15');
-    cy.get('.p-select-option').eq(3).should('contain.text', '20');
-    cy.get('body').click();
-
-    const pageSizes = [
-      { size: 5, index: 0 },
-      { size: 10, index: 1 },
-      { size: 15, index: 2 },
-      { size: 20, index: 3 },
-    ] as const;
 
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
-        `showing\\s+${start}\\s*(?:-|to)\\s*${end}\\s+of\\s+${total}\\s+contacts:?`,
+        String.raw`showing\s+${start}\s+to\s+${end}\s+of\s+${total}\s+contacts:?`,
         'i',
       );
 
@@ -175,20 +136,45 @@ describe('Contacts List (/contacts)', () => {
       cy.contains(/results\s*per\s*page:/i)
         .parent()
         .within(() => {
-          cy.get('.p-select-dropdown').scrollIntoView().click({ force: true });
+          cy.get('.p-select-dropdown')
+            .scrollIntoView()
+            .click({ force: true });
         });
     };
 
-    for (const { size, index } of pageSizes) {
-      cy.log(`Testing Results per page = ${size}`);
+    const selectPageSize = (size: number) => {
+      cy.intercept(
+        'GET',
+        `**/api/v1/contacts/?page=1&ordering=sort_name&page_size=${size}`,
+      ).as('getContactsForPageSize');
+
       openPageSizeDropdown();
-      cy.get('.p-select-option')
-        .eq(index)
+      cy.contains(
+        '.p-select-option',
+        new RegExp(String.raw`^\s*${size}\b`),
+      )
         .should('be.visible')
         .click({ force: true });
 
+      cy.wait('@getContactsForPageSize');
+    };
+
+    openPageSizeDropdown();
+    cy.get('.p-select-option').should('have.length.at.least', 4);
+    cy.get('.p-select-option').eq(0).should('contain.text', '5');
+    cy.get('.p-select-option').eq(1).should('contain.text', '10');
+    cy.get('.p-select-option').eq(2).should('contain.text', '15');
+    cy.get('.p-select-option').eq(3).should('contain.text', '20');
+    cy.get('body').click();
+
+    const pageSizes = [5, 10, 15, 20] as const;
+    for (const size of pageSizes) {
+      cy.log(`Testing Results per page = ${size}`);
+      selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
-      cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('exist');
+      cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 })
+        .should('be.visible');
+
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
@@ -196,10 +182,11 @@ describe('Contacts List (/contacts)', () => {
           .should('not.be.disabled')
           .click({ force: true });
 
-        cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('exist');
+        cy.contains(pageTextRx(21, 21), { timeout: 15000 })
+          .should('be.visible');
+
         cy.get('tbody tr').should('have.length', 1);
       }
-
       cy.get('.p-paginator').should('exist');
     }
   });
