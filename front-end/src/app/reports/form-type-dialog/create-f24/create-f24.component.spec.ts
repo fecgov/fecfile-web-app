@@ -37,7 +37,7 @@ describe('CreateF24Component', () => {
 
   it('should validate form24Name correctly', () => {
     component.form24Names.set(['24 HOUR TEST']);
-    TestBed.flushEffects();
+    TestBed.tick();
     expect(component.form24Names.value()).toEqual(['24 HOUR TEST']);
 
     // Name is empty

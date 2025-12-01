@@ -1,6 +1,6 @@
 import { Exclude, plainToInstance } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { ReportTypes } from './report.model';
+import { ReportStatus, ReportTypes } from './report.model';
 import { BaseForm3 } from './base-form-3';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { ScheduleFTransactionTypes } from '../schf-transaction.model';
@@ -8,14 +8,14 @@ import { ScheduleETransactionTypes } from '../sche-transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
+import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
   F3XA = 'F3XA',
   F3XT = 'F3XT',
 }
-
-export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
 export class Form3X extends BaseForm3 {
   schema = f3xSchema;
@@ -257,5 +257,26 @@ export class Form3X extends BaseForm3 {
 
   static fromJSON(json: unknown): Form3X {
     return plainToInstance(Form3X, json);
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    const transactionItems = [MenuInfo.manageTransactions(this), ...MenuInfo.addTransactions(this)];
+    const menuItems = [
+      MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
+      MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
+      MenuInfo.reviewReport(sidebarSection, [
+        ...MenuInfo.viewSummary(this),
+        MenuInfo.printPreview(this),
+        MenuInfo.addReportLevelMenu(this, isEditable),
+      ]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SUBMIT YOUR REPORT'),
+    ];
+
+    // Add edit report item to menu if the report is in progress or submission failure
+    if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
+      const editReportItem = MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS');
+      menuItems.unshift(editReportItem);
+    }
+    return menuItems;
   }
 }

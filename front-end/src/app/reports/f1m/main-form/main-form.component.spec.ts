@@ -12,7 +12,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { DividerModule } from 'primeng/divider';
 import { SelectModule } from 'primeng/select';
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/reports/form-1m.model';
@@ -20,6 +20,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { firstValueFrom } from 'rxjs';
 
 describe('MainFormComponent', () => {
   let component: MainFormComponent;
@@ -94,7 +95,7 @@ describe('MainFormComponent', () => {
     expect(component.form.get('statusBy')?.value).toBe('affiliation');
   });
 
-  it('ngOnInit should set form controls', fakeAsync(() => {
+  it('ngOnInit should set form controls', async () => {
     fixture.detectChanges();
     component.form.patchValue({
       committee_type: 'X',
@@ -122,14 +123,17 @@ describe('MainFormComponent', () => {
     component.form.patchValue({ statusBy: 'affiliation' });
     component.form.patchValue({ affiliated_committee_name: '' });
     fixture.detectChanges();
-    expect(component.form.get('affiliated_committee_name')?.valid).toBeFalse();
+    const affiliated = component.form.get('affiliated_committee_name')!;
+    expect(affiliated.valid).toBeFalse();
 
     component.form.patchValue({ statusBy: 'qualification' });
     fixture.detectChanges();
-    tick(100);
-    flush();
-    expect(component.form.get('affiliated_committee_name')?.valid).toBeTrue();
-  }));
+
+    if (affiliated.pending) {
+      await firstValueFrom(affiliated.statusChanges);
+    }
+    expect(affiliated.valid).toBeTrue();
+  });
 
   it('getReportPayload should update and return the report properties', () => {
     fixture.detectChanges();
@@ -204,7 +208,7 @@ describe('MainFormComponent', () => {
   });
 
   // Unit test is broken because of Async problems
-  xit('Exclude ids should prepopulate when editing a F1M', () => {
+  it('Exclude ids should prepopulate when editing a F1M', () => {
     fixture.detectChanges();
     component.ngOnInit();
     expect(component.affiliatedContact.manager.excludeFecIds()).toEqual('C000000005');

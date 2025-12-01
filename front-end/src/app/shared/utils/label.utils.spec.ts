@@ -1,4 +1,4 @@
-import { LabelList, PrimeOptions, LabelUtils, StatesCodeLabels } from './label.utils';
+import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from './label.utils';
 
 describe('LabelUtils', () => {
   it('should create an instance', () => {
@@ -46,5 +46,33 @@ describe('LabelUtils', () => {
     const states: LabelList = LabelUtils.getStateCodeLabelsWithoutMilitary();
     expect(states[2][0]).toBe('AS');
     expect(states[5][0]).toBe('CA'); // This should be AA if military included
+  });
+
+  it('should return value for undefined value', () => {
+    let testValue;
+    const testTerm = 'testTerm';
+    const retval = LabelUtils.htmlHighlightTerm(testValue, testTerm);
+    expect(retval).toEqual(undefined);
+  });
+
+  it('should return value for undefined term', () => {
+    const testValue = 'testValue';
+    let testTerm;
+    const retval = LabelUtils.htmlHighlightTerm(testValue, testTerm);
+    expect(retval).toEqual(testValue);
+  });
+
+  it('test happy path', () => {
+    const testValue =
+      'the TESTterm testValue containing the testTerm ' + 'including The TESTTERM four times the testTERM';
+    const testTerm = 'the testTerm';
+    const expectedRetval =
+      '<mark>the</mark> <mark>TESTterm</mark> ' +
+      'testValue containing <mark>the</mark> <mark>testTerm</mark> ' +
+      'including <mark>The</mark> <mark>TESTTERM</mark> four times ' +
+      '<mark>the</mark> <mark>testTERM</mark>';
+
+    const retval = LabelUtils.htmlHighlightTerm(testValue, testTerm);
+    expect(retval).toEqual(expectedRetval);
   });
 });

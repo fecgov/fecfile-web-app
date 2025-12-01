@@ -1,13 +1,14 @@
 import { Component, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition } from 'app/shared/components/table/table.component';
 import { Report, ReportStatus } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SharedTemplatesComponent } from './shared-templates.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({ template: '' })
 export abstract class AbstractFormListComponent<T extends Report> extends TableListBaseComponent<T> {
@@ -19,10 +20,10 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   override readonly rowsPerPage = signal(5);
 
-  readonly sharedTemplate = viewChild.required(SharedTemplatesComponent);
+  readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
   columns: ColumnDefinition<T>[] = [];
 
-  readonly rowActions: TableAction[] = [
+  readonly rowActions: TableAction<T>[] = [
     new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
     new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
     new TableAction(

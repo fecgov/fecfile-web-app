@@ -38,7 +38,7 @@ describe('SchBTransaction', () => {
       ],
     };
     const transaction: SchBTransaction = SchBTransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchBTransaction');
+    expect(transaction.constructor.name).toBe('_SchBTransaction');
   });
 
   describe('redesignation from json', () => {

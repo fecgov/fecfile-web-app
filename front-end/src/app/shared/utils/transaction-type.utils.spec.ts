@@ -18,15 +18,15 @@ describe('TransactionTypeUtils', () => {
     };
 
     let scheduleObject = getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('SchCTransaction');
+    expect(scheduleObject.constructor.name).toBe('_SchCTransaction');
 
     testJSON.transaction_type_identifier = 'DEBT_OWED_TO_COMMITTEE';
     scheduleObject = getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('SchDTransaction');
+    expect(scheduleObject.constructor.name).toBe('_SchDTransaction');
 
     testJSON.transaction_type_identifier = 'INDEPENDENT_EXPENDITURE';
     scheduleObject = getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('SchETransaction');
+    expect(scheduleObject.constructor.name).toBe('_SchETransaction');
   });
 
   it('should return list of Transaction Types PAC does not need access to', () => {

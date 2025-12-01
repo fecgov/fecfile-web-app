@@ -1,6 +1,6 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
-import { LabelList } from '../utils/label.utils';
+import type { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';

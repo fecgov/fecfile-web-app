@@ -2,13 +2,13 @@ import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
+import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export enum F24FormTypes {
   F24N = 'F24N',
   F24A = 'F24A',
 }
-
-export type F24FormType = F24FormTypes.F24N | F24FormTypes.F24A;
 
 export class Form24 extends Report {
   schema = f24Schema;
@@ -39,5 +39,25 @@ export class Form24 extends Report {
 
   static fromJSON(json: unknown): Form24 {
     return plainToInstance(Form24, json);
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    const transactionItems: MenuItem[] = [
+      MenuInfo.manageTransactions(this),
+      {
+        label: 'Add an independent expenditure',
+        routerLink: `/reports/f24/report/${this.id}/transactions/select/independent-expenditures`,
+      },
+    ];
+
+    return [
+      MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
+      MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
+      MenuInfo.reviewReport(sidebarSection, [
+        MenuInfo.printPreview(this),
+        MenuInfo.addReportLevelMenu(this, isEditable),
+      ]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
+    ];
   }
 }

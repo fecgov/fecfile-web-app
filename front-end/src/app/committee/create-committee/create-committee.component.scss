@@ -18,7 +18,10 @@
     .p-button {
       border: none;
       background-color: #aeb0b5;
-      padding: 0rem 0.6rem;
+      padding: 0rem 20px;
+      width: 61px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
     .p-button:hover {

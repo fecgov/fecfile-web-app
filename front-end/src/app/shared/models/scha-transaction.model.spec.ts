@@ -34,7 +34,7 @@ describe('SchATransaction', () => {
       ],
     };
     const transaction: SchATransaction = SchATransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchATransaction');
+    expect(transaction.constructor.name).toBe('_SchATransaction');
   });
 
   it('Creates a REATTRIBUTED transaction object from JSON', () => {
@@ -51,7 +51,7 @@ describe('SchATransaction', () => {
       },
     };
     const transaction: SchATransaction = SchATransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchATransaction');
+    expect(transaction.constructor.name).toBe('_SchATransaction');
   });
 
   it('Creates a REATTRIBUTION_TO transaction object from JSON', () => {
@@ -60,7 +60,7 @@ describe('SchATransaction', () => {
       reattribution_redesignation_tag: 'REATTRIBUTION_TO',
     };
     const transaction: SchATransaction = SchATransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchATransaction');
+    expect(transaction.constructor.name).toBe('_SchATransaction');
   });
 
   it('Creates a REATTRIBUTION_FROM transaction object from JSON', () => {
@@ -73,6 +73,6 @@ describe('SchATransaction', () => {
       },
     };
     const transaction: SchATransaction = SchATransaction.fromJSON(json);
-    expect(transaction.constructor.name).toBe('SchATransaction');
+    expect(transaction.constructor.name).toBe('_SchATransaction');
   });
 });

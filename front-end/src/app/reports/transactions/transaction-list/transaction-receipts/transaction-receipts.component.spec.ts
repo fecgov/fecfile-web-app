@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -11,10 +11,11 @@ import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
+import { SchATransaction } from 'app/shared/models';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -69,6 +70,7 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('should show the correct row actions', () => {
+    const transaction = getTestIndividualReceipt();
     const viewAction = component.rowActions.find((ra) => ra.label === 'View');
     const editAction = component.rowActions.find((ra) => ra.label === 'Edit');
     const aggregateAction = component.rowActions.find((ra) => ra.label === 'Aggregate');
@@ -77,108 +79,88 @@ describe('TransactionReceiptsComponent', () => {
     const unitemizeAction = component.rowActions.find((ra) => ra.label === 'Unitemize');
     const reattributeAction = component.rowActions.find((ra) => ra.label === 'Reattribute');
     const deleteAction = component.rowActions.find((ra) => ra.label === 'Delete');
-    expect(viewAction?.isAvailable()).toBeTrue();
+    expect(viewAction?.isAvailable(transaction)).toBeTrue();
+    expect(deleteAction?.isAvailable({ ...transaction, can_delete: true } as SchATransaction)).toBeFalse();
+    expect(editAction?.isAvailable(transaction)).toBeFalse();
+    expect(aggregateAction?.isAvailable({ ...transaction, force_unaggregated: true } as SchATransaction)).toBeFalse();
     expect(
-      deleteAction?.isAvailable({
-        can_delete: true,
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      unaggregateAction?.isAvailable({ ...transaction, force_unaggregated: false } as SchATransaction),
     ).toBeFalse();
-    expect(editAction?.isAvailable()).toBeFalse();
-    expect(
-      aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
-    ).toBeFalse();
-    expect(
-      unaggregateAction?.isAvailable({
-        force_unaggregated: false,
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
-    ).toBeFalse();
-    expect(itemizeAction?.isAvailable({ itemized: false })).toBeFalse();
-    expect(unitemizeAction?.isAvailable({ itemized: true })).toBeFalse();
+    expect(itemizeAction?.isAvailable({ ...transaction, itemized: false } as SchATransaction)).toBeFalse();
+    expect(unitemizeAction?.isAvailable({ ...transaction, itemized: true } as SchATransaction)).toBeFalse();
     (component.reportIsEditable as any) = signal(true);
-    expect(viewAction?.isAvailable()).toBeFalse();
-    expect(editAction?.isAvailable()).toBeTrue();
+    expect(viewAction?.isAvailable(transaction)).toBeFalse();
+    expect(editAction?.isAvailable(transaction)).toBeTrue();
     expect(
       deleteAction?.isAvailable({
+        ...transaction,
         can_delete: true,
         transaction_type_identifier: '',
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      } as SchATransaction),
     ).toBeTrue();
     expect(
       deleteAction?.isAvailable({
+        ...transaction,
         can_delete: true,
         transaction_type_identifier: 'LOAN_REPAYMENT_MADE',
         loan_id: 'test',
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      } as SchATransaction),
     ).toBeTrue();
     expect(
       deleteAction?.isAvailable({
+        ...transaction,
         can_delete: true,
         transaction_type_identifier: 'LOAN_RECEIVED_FROM_BANK_RECEIPT',
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      } as SchATransaction),
     ).toBeFalse();
     expect(
       deleteAction?.isAvailable({
+        ...transaction,
         can_delete: true,
         transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
         loan_id: 'test',
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      } as SchATransaction),
     ).toBeFalse();
     expect(
       deleteAction?.isAvailable({
+        ...transaction,
         can_delete: true,
         transaction_type_identifier: undefined,
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      } as SchATransaction),
     ).toBeTrue();
-    expect(
-      aggregateAction?.isAvailable({ force_unaggregated: true, transactionType: { scheduleId: ScheduleIds.A } }),
-    ).toBeTrue();
+    expect(aggregateAction?.isAvailable({ ...transaction, force_unaggregated: true } as SchATransaction)).toBeTrue();
     expect(
       unaggregateAction?.isAvailable({
+        ...transaction,
         force_unaggregated: false,
-        transactionType: { scheduleId: ScheduleIds.A },
-      }),
+      } as SchATransaction),
     ).toBeTrue();
-    expect(itemizeAction?.isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
-      true,
-    );
-    expect(unitemizeAction?.isAvailable({ itemized: true, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
-      true,
-    );
-    expect(reattributeAction?.isAvailable({ itemized: false, transactionType: { scheduleId: ScheduleIds.A } })).toEqual(
-      true,
-    );
-    expect(viewAction?.isEnabled({})).toBeTrue();
-    expect(editAction?.isEnabled({})).toBeTrue();
-    expect(deleteAction?.isEnabled({})).toBeTrue();
-    expect(aggregateAction?.isEnabled({})).toBeTrue();
-    expect(unaggregateAction?.isEnabled({})).toBeTrue();
-    expect(itemizeAction?.isEnabled({})).toBeTrue();
-    expect(unitemizeAction?.isEnabled({})).toBeTrue();
-    expect(reattributeAction?.isEnabled({})).toBeTrue();
+    expect(itemizeAction?.isAvailable({ ...transaction, itemized: false } as SchATransaction)).toEqual(true);
+    expect(unitemizeAction?.isAvailable({ ...transaction, itemized: true } as SchATransaction)).toEqual(true);
+    expect(reattributeAction?.isAvailable({ ...transaction, itemized: false } as SchATransaction)).toEqual(true);
+    expect(viewAction?.isEnabled(transaction)).toBeTrue();
+    expect(editAction?.isEnabled(transaction)).toBeTrue();
+    expect(deleteAction?.isEnabled(transaction)).toBeTrue();
+    expect(aggregateAction?.isEnabled(transaction)).toBeTrue();
+    expect(unaggregateAction?.isEnabled(transaction)).toBeTrue();
+    expect(itemizeAction?.isEnabled(transaction)).toBeTrue();
+    expect(unitemizeAction?.isEnabled(transaction)).toBeTrue();
+    expect(reattributeAction?.isEnabled(transaction)).toBeTrue();
   });
 
-  it('test forceAggregate', fakeAsync(() => {
+  it('test forceAggregate', async () => {
     const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
-    spyOn(testItemService, 'update').and.returnValue(Promise.resolve(testTransaction));
-    component.forceAggregate(testTransaction).then(() => {
-      expect(testTransaction.force_unaggregated).toBe(false);
-    });
-  }));
+    spyOn(testItemService, 'update').and.resolveTo(testTransaction);
+    await component.forceAggregate(testTransaction);
+    expect(testTransaction.force_unaggregated).toBe(false);
+  });
 
-  it('test forceUnaggregate', fakeAsync(() => {
+  it('test forceUnaggregate', async () => {
     const testTransaction: Transaction = { force_aggregated: null } as unknown as Transaction;
     spyOn(testItemService, 'update').and.returnValue(Promise.resolve(testTransaction));
-    component.forceUnaggregate(testTransaction);
-    tick(500);
+    await component.forceUnaggregate(testTransaction);
     expect(testTransaction.force_unaggregated).toBe(true);
-  }));
+  });
 
   it('test forceItemize', fakeAsync(() => {
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
