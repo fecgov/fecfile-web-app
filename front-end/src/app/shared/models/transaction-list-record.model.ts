@@ -14,6 +14,7 @@ export class TransactionListRecord {
   @Transform(BaseModel.dateTransform) date: Date | undefined;
   memo_code: boolean | undefined;
   amount: number | undefined;
+  balance: number | undefined;
   aggregate: number | undefined;
   report_code_label: string | undefined;
 
