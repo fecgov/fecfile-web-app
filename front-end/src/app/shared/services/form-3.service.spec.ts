@@ -51,7 +51,7 @@ describe('Form3Service', () => {
   it('should update report with committee info', async () => {
     const report = Form3.fromJSON({ id: '1' });
     const committeeAccount = CommitteeAccount.fromJSON({ name: 'Committee' });
-    apiService.put.and.returnValue(Promise.resolve(report));
+    (apiService.put as jasmine.Spy).and.returnValue(Promise.resolve(report));
 
     await service.fecUpdate(report, committeeAccount);
     expect(apiService.put).toHaveBeenCalled();
