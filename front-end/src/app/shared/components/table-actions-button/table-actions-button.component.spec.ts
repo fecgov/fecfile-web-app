@@ -1,9 +1,11 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PopoverModule } from 'primeng/popover';
-import { TableActionsButtonComponent } from './table-actions-button.component';
 import { ButtonModule } from 'primeng/button';
-import { TableAction } from './table-actions';
+import { PopoverModule } from 'primeng/popover';
 import { Report, ReportStatus } from '../../models/reports/report.model';
+import { TableAction } from './table-actions';
+import { TableActionsButtonComponent } from './table-actions-button.component';
 
 describe('TableActionsButtonComponent', () => {
   let component: TableActionsButtonComponent<Report>;
@@ -12,7 +14,7 @@ describe('TableActionsButtonComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PopoverModule, ButtonModule, TableActionsButtonComponent],
-      providers: [],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
   });
 
