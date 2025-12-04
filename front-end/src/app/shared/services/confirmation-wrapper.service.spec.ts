@@ -12,10 +12,7 @@ describe('ConfirmationWrapperService', () => {
   beforeEach(() => {
     const spy = jasmine.createSpyObj('ConfirmationService', ['confirm']);
     TestBed.configureTestingModule({
-      providers: [
-        ConfirmationWrapperService,
-        { provide: ConfirmationService, useValue: spy },
-      ],
+      providers: [ConfirmationWrapperService, { provide: ConfirmationService, useValue: spy }],
     });
     service = TestBed.inject(ConfirmationWrapperService);
     confirmationService = TestBed.inject(ConfirmationService) as jasmine.SpyObj<ConfirmationService>;
@@ -29,10 +26,11 @@ describe('ConfirmationWrapperService', () => {
     const form = new FormGroup({});
     const contactConfig = { contact_1: { name: 'name' } };
     const getContact = () => new Contact();
-    const getTemplateMap = (): TransactionTemplateMapType => ({ organization_name: 'name' } as TransactionTemplateMapType);
-    
+    const getTemplateMap = (): TransactionTemplateMapType =>
+      ({ organization_name: 'name' }) as TransactionTemplateMapType;
+
     confirmationService.confirm.and.callFake((config: Confirmation) => config.accept?.());
-    
+
     const result = await service.confirmWithUser(form, contactConfig, getContact, getTemplateMap);
     expect(result).toBeTrue();
   });
@@ -42,12 +40,15 @@ describe('ConfirmationWrapperService', () => {
       last_name: new FormControl('Doe'),
       first_name: new FormControl('John'),
     });
-    const templateMap: TransactionTemplateMapType = { last_name: 'last_name', first_name: 'first_name' } as TransactionTemplateMapType;
+    const templateMap: TransactionTemplateMapType = {
+      last_name: 'last_name',
+      first_name: 'first_name',
+    } as TransactionTemplateMapType;
     const message = service.getCreateTransactionContactConfirmationMessage(
       ContactTypes.INDIVIDUAL,
       form,
       templateMap,
-      'contact_1'
+      'contact_1',
     );
     expect(message).toContain('John');
     expect(message).toContain('Doe');
