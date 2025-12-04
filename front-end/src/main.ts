@@ -44,7 +44,7 @@ import { ToastModule } from 'primeng/toast';
 import { AppComponent } from './app/app.component';
 import { ROUTES } from 'app/routes';
 import { CheckboxModule } from 'primeng/checkbox';
-import Aura from '@primeng/themes/aura';
+import Aura from '@primeuix/themes/aura';
 import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 
 function initializeAppFactory(

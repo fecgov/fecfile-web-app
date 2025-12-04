@@ -2,12 +2,11 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   input,
   Input,
   OnChanges,
   OnDestroy,
-  Optional,
-  Self,
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -18,6 +17,7 @@ import intlTelInput, { Iti } from 'intl-tel-input';
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
+  ngControl = inject(NgControl);
   readonly inputId = input('telephone');
   @Input() disabled = false;
   @Input() labelName = '';
@@ -33,10 +33,8 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   private countryCode: string | undefined;
   private number = '';
 
-  constructor(@Optional() @Self() public ngControl: NgControl) {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    }
+  constructor() {
+    this.ngControl.valueAccessor = this;
   }
 
   ngOnChanges(): void {

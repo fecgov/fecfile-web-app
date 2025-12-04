@@ -6,7 +6,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
 import { BaseInputComponent } from '../base-input.component';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';

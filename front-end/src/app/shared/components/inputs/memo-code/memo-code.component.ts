@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, computed, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';

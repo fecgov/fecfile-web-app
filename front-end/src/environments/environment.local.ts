@@ -17,4 +17,5 @@ export const environment = {
   showSchedF: true,
   disableLogin: false,
   fecSpec: 8.5,
+  showGlossary: true,
 };

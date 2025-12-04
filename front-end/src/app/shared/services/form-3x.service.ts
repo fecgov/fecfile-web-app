@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { Form3X, CoverageDates } from '../models';
+import { Form3X } from '../models';
 import { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
+import { CoverageDates } from '../models/reports/base-form-3';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class Form3XService extends ReportService<Form3X> {
 
   f3xReportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
 
-  public async getF3xCoverageDates(): Promise<CoverageDates[]> {
+  public async getCoverageDates(): Promise<CoverageDates[]> {
     const [response, reportCodeLabelMap] = await Promise.all([
       this.apiService.get<CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
       this.getReportCodeLabelMap(),

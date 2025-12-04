@@ -1,10 +1,11 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, OnInit } from '@angular/core';
 
 @Directive({
   selector: '[appAutoResize]',
 })
 export class AutoResizeDirective implements OnInit {
-  constructor(private elementRef: ElementRef) {}
+  private readonly elementRef = inject(ElementRef);
+  constructor() {}
 
   @HostListener(':input')
   onInput(): void {

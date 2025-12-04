@@ -36,7 +36,7 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <span id="address_input_city_label">CITY</span>
+        <span class="span-label" id="address_input_city_label">CITY</span>
         <input
           type="text"
           pInputText
@@ -51,13 +51,12 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <span id="state-label" class="span-label">STATE/TERRITORY</span>
+        <span class="span-label" id="state-label">STATE/TERRITORY</span>
         <app-searchable-select
           inputId="state"
-          [formControlName]="stateFieldName()"
+          [controlName]="stateFieldName()"
           [form]="form()"
           [options]="stateOptions"
-          [autoDisplayFirst]="false"
           appendTo="body"
           [readonly]="readonly()"
           styleClass="{{ readonly() ? 'readonly' : '' }}"
@@ -68,7 +67,7 @@
     </div>
     <div class="col-3">
       <div class="field">
-        <span id="address_input_zip_label">ZIP/POSTAL CODE</span>
+        <span class="span-label" id="address_input_zip_label">ZIP/POSTAL CODE</span>
         <input
           id="zip"
           type="text"

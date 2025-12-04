@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
@@ -12,6 +12,7 @@ import { LabelPipe } from '../../shared/pipes/label.pipe';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { SelectModule } from 'primeng/select';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({
   selector: 'app-contact-list',
@@ -44,7 +45,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.INDIVIDUAL,
   ]);
 
-  public rowActions: TableAction[] = [
+  public rowActions: TableAction<Contact>[] = [
     new TableAction('Edit', this.editItem.bind(this)),
     new TableAction(
       'Delete',

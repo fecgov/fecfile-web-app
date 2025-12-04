@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -9,7 +8,6 @@ import { Report } from 'app/shared/models';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { injectRouteData } from 'ngxtension/inject-route-data';
 import { MessageService } from 'primeng/api';
@@ -20,7 +18,7 @@ import { Ripple } from 'primeng/ripple';
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
+  imports: [ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly router = inject(Router);
@@ -56,13 +54,11 @@ export class ReportLevelMemoComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group(SchemaUtils.getFormGroupFields(this.formProperties), { updateOn: 'blur' });
-    this.form.addControl(this.recTypeFormProperty, new SubscriptionFormControl());
+    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
     SchemaUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
   async submit(): Promise<void> {
-    this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
-
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
       ...SchemaUtils.getFormValues(this.form, textSchema, this.formProperties),

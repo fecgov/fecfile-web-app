@@ -1,9 +1,9 @@
 import { FormGroup, Validators } from '@angular/forms';
-import { SchBTransaction } from '../../models/schb-transaction.model';
-import { TemplateMapKeyType } from '../../models/transaction-type.model';
+import type { SchBTransaction } from '../../models/schb-transaction.model';
+import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { ReattRedesTypes } from './reatt-redes.utils';
-import { SubscriptionFormControl } from '../subscription-form-control';
+import type { SubscriptionFormControl } from '../subscription-form-control';
 
 export class RedesignationFromUtils {
   private static readOnlyFields = [

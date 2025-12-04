@@ -7,7 +7,7 @@ import { ReportDetailedSummaryComponent } from '../report-detailed-summary/repor
 import { ReportService } from 'app/shared/services/report.service';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { ApiService } from 'app/shared/services/api.service';
-import { Form3X } from 'app/shared/models/form-3x.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';

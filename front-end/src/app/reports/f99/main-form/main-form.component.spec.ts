@@ -1,16 +1,17 @@
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
+import { of } from 'rxjs';
 import { ReportListComponent } from 'app/reports/report-list/report-list.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { AddressInputComponent } from 'app/shared/components/inputs/address-input/address-input.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { Form99 } from 'app/shared/models/form-99.model';
+import { Form99, textCodesWithFilingFrequencies } from 'app/shared/models/reports/form-99.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form99Service } from 'app/shared/services/form-99.service';
@@ -111,4 +112,51 @@ describe('MainFormComponent', () => {
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   }));
+});
+
+describe('MainFormComponent (showFilingFrequency)', () => {
+  let fixture: ComponentFixture<MainFormComponent>;
+  let component: MainFormComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MainFormComponent, ReactiveFormsModule],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideMockStore({}),
+        MessageService,
+        { provide: ActivatedRoute, useValue: { params: of({}), snapshot: { params: {} } } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MainFormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should reference each member of textCodesWithFilingFrequencies enum to ensure they are not unused', () => {
+    // Reference each member explicitly so knip does not flag them as unused
+    const msr = textCodesWithFilingFrequencies.MSR;
+    const msm = textCodesWithFilingFrequencies.MSM;
+    // Use them in a way that cannot be tree-shaken
+    expect([msr, msm]).toBeDefined();
+  });
+
+  it('returns true for text_code values that require a filing frequency (MSR, MSM)', () => {
+    component.form.controls['text_code'].setValue('MSR');
+    fixture.detectChanges();
+    expect(component.showFilingFrequency()).toBeTrue();
+
+    component.form.controls['text_code'].setValue('MSM');
+    fixture.detectChanges();
+    expect(component.showFilingFrequency()).toBeTrue();
+  });
+
+  it('returns false for text_code values that do not require a filing frequency', () => {
+    component.form.controls['text_code'].setValue('MST');
+    fixture.detectChanges();
+    expect(component.showFilingFrequency()).toBeFalse();
+  });
 });

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="Group_1" data-name="Group 1" transform="translate(-256 -302)">
+    <path id="minus" d="M10,20A10,10,0,1,0,0,10,10,10,0,0,0,10,20Zm1.033-9.125H5.953A.938.938,0,1,1,5.953,9h8.255a.938.938,0,1,1,0,1.875Z" transform="translate(256 302)" fill="#fff" fill-rule="evenodd"/>
+    <path id="plus" d="M13.875,10.125h-3.75v3.75a1.125,1.125,0,1,1-2.25,0v-3.75H4.125a1.125,1.125,0,1,1,0-2.25h3.75V4.125a1.125,1.125,0,0,1,2.25,0v3.75h3.75a1.125,1.125,0,1,1,0,2.25Z" transform="translate(257 303)" fill="#35bdbb" fill-rule="evenodd"/>
+  </g>
+</svg>

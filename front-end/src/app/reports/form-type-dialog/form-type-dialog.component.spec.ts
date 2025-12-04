@@ -1,15 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
-import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { FormTypeDialogComponent } from './form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
-import { Form24 } from 'app/shared/models/form-24.model';
-import { Form3X } from 'app/shared/models/form-3x.model';
-import { ReportTypes } from 'app/shared/models/report.model';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
@@ -67,7 +66,7 @@ describe('FormTypeDialogComponent', () => {
   describe('goToReportForm', () => {
     it('should route properly', () => {
       const navigateSpy = spyOn(router, 'navigateByUrl');
-      component.selectedType.set(FormTypes.F3X);
+      component.selectedType.set(ReportTypes.F3X);
       component.goToReportForm();
       expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
     });
@@ -75,14 +74,14 @@ describe('FormTypeDialogComponent', () => {
 
   describe('updateSelected', () => {
     it('should set the selectedType to the provided type', () => {
-      component.selectedType.set(FormTypes.F3X);
-      expect(component.selectedType()).toEqual(FormTypes.F3X);
+      component.selectedType.set(ReportTypes.F3X);
+      expect(component.selectedType()).toEqual(ReportTypes.F3X);
     });
   });
 
   it('should create Form24', () => {
-    component.selectedType.set(FormTypes.F24);
-    expect(component.selectedType()).toEqual(FormTypes.F24);
+    component.selectedType.set(ReportTypes.F24);
+    expect(component.selectedType()).toEqual(ReportTypes.F24);
 
     component.f24().selectedForm24Type.set('48');
 

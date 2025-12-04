@@ -3,7 +3,7 @@ import { FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Report } from 'app/shared/models/report.model';
+import { Report } from 'app/shared/models/reports/report.model';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -21,8 +21,8 @@ import { Tooltip } from 'primeng/tooltip';
 import { Checkbox } from 'primeng/checkbox';
 import { Password } from 'primeng/password';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { Form3, Form3X } from 'app/shared/models';
 import { injectRouteData } from 'ngxtension/inject-route-data';
+import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
 @Component({
   selector: 'app-submit-report',
@@ -187,12 +187,12 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
       ...SchemaUtils.getFormValues(this.form, this.activeReport().schema, this.formProperties),
     });
 
-    if (payload instanceof Form3X || payload instanceof Form3) {
+    if (payload instanceof BaseForm3) {
       if (this.form.controls['change_of_address']) {
         payload.change_of_address = this.form.value.change_of_address;
-        payload.confirmation_email_1 = this.form.value.confirmation_email_1;
-        payload.confirmation_email_2 = this.form.value.confirmation_email_2;
       }
+      payload.confirmation_email_1 = this.form.value.confirmation_email_1;
+      payload.confirmation_email_2 = this.form.value.confirmation_email_2;
       payload.qualified_committee = this.committeeAccount().qualified;
       payload.committee_name = this.committeeAccount().name;
       payload.street_1 = this.committeeAccount().street_1;

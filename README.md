@@ -18,27 +18,7 @@ The project is hosted on the [cloud.gov](https://cloud.gov/docs/) platform and u
 
 ## Set up
 
-### Prerequisites
-
-Software necessary to run the application locally:
-- node
-- npx
-
-### Running the Front-End locally
-
-From within the front-end directory, install packages with:
-
-```
-npm install
-```
-
-and run the application with the command:
-
-```
-npx -p @angular/cli ng serve
-```
-
-to start a local server for the application. The front-end can then be accessed through [your browser at port 4200](http://localhost:4200/).
+Set up instructions are found in the [wiki](https://github.com/fecgov/fecfile-web-api/wiki/Local-Setup), including [instructions specific to the frontend](https://github.com/fecgov/fecfile-web-api/wiki/Local-setup#running-the-frontend-locally).
 
 ### Running end-to-end (E2E) tests
 
@@ -55,8 +35,5 @@ See also: [Technical Design](https://github.com/fecgov/fecfile-web-api/wiki/Tech
 - When making CSP changes, make sure to keep nginx and localhost in sync.
   - [NGINX](https://github.com/fecgov/fecfile-web-app/blob/develop/deploy-config/front-end-nginx-config/nginx.conf)
   - [local](https://github.com/fecgov/fecfile-web-app/blob/develop/front-end/angular.json)
-
-See [Additional Developer Notes](https://github.com/fecgov/fecfile-web-api/wiki/Additional-Developer-Notes).
-
 
 This project is tested with [BrowserStack](https://browserstack.com).

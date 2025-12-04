@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { Report } from '../shared/models/report.model';
+import { Report } from '../shared/models/reports/report.model';
 import { setActiveReportAction } from './active-report.actions';
 import { userLoginDataDiscardedAction } from './user-login-data.actions';
 

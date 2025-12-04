@@ -49,7 +49,7 @@ export class ContactFormData {
   }
 }
 
-export enum ContactType {
+enum ContactType {
   INDIVIDUAL = 'Individual',
   COMMITTEE = 'Committee',
   ORGANIZATION = 'Organization',
@@ -64,7 +64,7 @@ export const candidateFormData: ContactFormData = createContact(ContactType.CAND
 
 export const committeeFormData: ContactFormData = createContact(ContactType.COMMITTEE);
 
-export function createContact(contact_type: ContactType): ContactFormData {
+function createContact(contact_type: ContactType): ContactFormData {
   const office = faker.helpers.arrayElement(['House', 'Presidential', 'Senate']);
   let candidateId = `P${faker.string.numeric(8)}`;
   if (office == 'House')

@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, Renderer2, RendererFactory2, signal, WritableSignal } from '@angular/core';
 import { ApiService } from './api.service';
-import { Report } from '../models/report.model';
+import { Report } from '../models/reports/report.model';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -45,7 +45,35 @@ export class DotFecService {
       },
     );
 
-    const download = { taskId: response.task_id, report, name: response.file_name, isComplete: false };
+    // current datetime as YYYY-MM-DD-HHMM
+    const now = new Date();
+    const dateStr =
+      now.toISOString().split('T')[0] +
+      '-' +
+      now.getHours().toString().padStart(2, '0') +
+      now.getMinutes().toString().padStart(2, '0');
+
+    // sanitize helper: remove problematic chars and collapse whitespace
+    const sanitize = (s?: string) =>
+      s
+        ? s
+            .replace(/[^\w\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+        : '';
+
+    const reportType = sanitize(report.report_type);
+    const formName = report.formSubLabel ? sanitize(report.formSubLabel) : sanitize(report.formLabel);
+
+    // Compose human-facing filename with date_reporttype_formname format
+    const humanFilename = `${reportType}_${formName}_${dateStr}.fec`;
+
+    const download = {
+      taskId: response.task_id,
+      report,
+      name: humanFilename,
+      isComplete: false,
+    };
     this.downloads().push(download);
 
     return download;
@@ -57,7 +85,7 @@ export class DotFecService {
     const data = window.URL.createObjectURL(newBlob);
     const link = this.renderer.createElement('a');
     this.renderer.setAttribute(link, 'href', data);
-    this.renderer.setAttribute(link, 'download', download.report.id + '.fec');
+    this.renderer.setAttribute(link, 'download', download.name);
     this.renderer.appendChild(document.body, link);
     link.click();
   }

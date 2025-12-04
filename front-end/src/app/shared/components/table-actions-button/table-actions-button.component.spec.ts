@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PopoverModule } from 'primeng/popover';
 import { TableActionsButtonComponent } from './table-actions-button.component';
 import { ButtonModule } from 'primeng/button';
-import { TableAction } from '../table-list-base/table-list-base.component';
-import { Report, ReportStatus } from '../../models/report.model';
+import { TableAction } from './table-actions';
+import { Report, ReportStatus } from '../../models/reports/report.model';
 
 describe('TableActionsButtonComponent', () => {
-  let component: TableActionsButtonComponent;
-  let fixture: ComponentFixture<TableActionsButtonComponent>;
+  let component: TableActionsButtonComponent<Report>;
+  let fixture: ComponentFixture<TableActionsButtonComponent<Report>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,7 +17,7 @@ describe('TableActionsButtonComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableActionsButtonComponent);
+    fixture = TestBed.createComponent(TableActionsButtonComponent<Report>);
     component = fixture.componentInstance;
   });
 

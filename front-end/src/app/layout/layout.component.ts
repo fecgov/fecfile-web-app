@@ -3,7 +3,7 @@ import { Component, AfterViewChecked, inject, viewChild, computed, signal } from
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
-import { HeaderStyles, HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -11,6 +11,7 @@ import { CommitteeBannerComponent } from './committee-banner/committee-banner.co
 import { ButtonDirective } from 'primeng/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
+import { HeaderStyles } from './header/header-styles';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -62,7 +63,7 @@ export class LayoutComponent implements AfterViewChecked {
   }
 }
 
-export class LayoutControls {
+class LayoutControls {
   // Default values
   showUpperFooter = true;
   showHeader = true;

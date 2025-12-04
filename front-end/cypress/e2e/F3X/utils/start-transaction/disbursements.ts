@@ -38,7 +38,7 @@ export class Contributions {
   }
 }
 
-export class Federal {
+class Federal {
   static HundredPercentFederalElectionActivityPayment() {
     PageUtils.clickLink('100% Federal Election Activity Payment');
   }
@@ -48,7 +48,7 @@ export class Federal {
   }
 }
 
-export class Other {
+class Other {
   static Other() {
     PageUtils.clickLink('Other Disbursement');
   }

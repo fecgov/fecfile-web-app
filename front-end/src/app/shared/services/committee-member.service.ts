@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, Resource, ResourceStatus, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService, QueryParams } from './api.service';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
@@ -72,14 +72,14 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
     return null;
   }
 
-  update(member: CommitteeMember): Promise<CommitteeMember> {
-    return this.apiService.put(`${this.endpoint}${member.id}/`, member);
-  }
-
-  async waitForResource<T>(resource: Resource<T>): Promise<void> {
-    resource.reload();
-    while (resource.status() === ResourceStatus.Reloading) {
-      await new Promise((resolve) => setTimeout(resolve, 10));
-    }
+  async update(member: CommitteeMember): Promise<CommitteeMember> {
+    const updated = await this.apiService.put<CommitteeMember>(`${this.endpoint}${member.id}/`, member);
+    this.membersSignal.update((members) =>
+      members.map((m) => {
+        if (m.id === updated.id) m = CommitteeMember.fromJSON(updated);
+        return m;
+      }),
+    );
+    return updated;
   }
 }

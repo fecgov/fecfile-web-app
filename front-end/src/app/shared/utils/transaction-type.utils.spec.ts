@@ -18,15 +18,15 @@ describe('TransactionTypeUtils', () => {
     };
 
     let scheduleObject = getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('SchCTransaction');
+    expect(scheduleObject.constructor.name).toBe('_SchCTransaction');
 
     testJSON.transaction_type_identifier = 'DEBT_OWED_TO_COMMITTEE';
     scheduleObject = getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('SchDTransaction');
+    expect(scheduleObject.constructor.name).toBe('_SchDTransaction');
 
     testJSON.transaction_type_identifier = 'INDEPENDENT_EXPENDITURE';
     scheduleObject = getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('SchETransaction');
+    expect(scheduleObject.constructor.name).toBe('_SchETransaction');
   });
 
   it('should return list of Transaction Types PAC does not need access to', () => {
@@ -35,7 +35,7 @@ describe('TransactionTypeUtils', () => {
       ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
       ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     ].forEach((r) => {
-      expect(PAC_ONLY().includes(r));
+      expect(PAC_ONLY().has(r));
     });
   });
 
@@ -45,7 +45,7 @@ describe('TransactionTypeUtils', () => {
       ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
       ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
     ].forEach((r) => {
-      expect(PTY_ONLY().includes(r));
+      expect(PTY_ONLY().has(r));
     });
   });
 

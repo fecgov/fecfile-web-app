@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { of } from 'rxjs';
-import { Form3X, F3xFormTypes, Report, CoverageDates } from 'app/shared/models';
+import { Form3X, F3xFormTypes, Report } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
@@ -13,6 +13,7 @@ import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CoverageDates } from 'app/shared/models/reports/base-form-3';
 
 let component: CreateF3XStep1Component;
 let fixture: ComponentFixture<CreateF3XStep1Component>;
@@ -60,7 +61,7 @@ describe('CreateF3XStep1Component: New', () => {
   beforeEach(async () => {
     await setup({});
 
-    coverageDateSpy = spyOn(form3XService, 'getF3xCoverageDates').and.resolveTo(mockCoverageDates);
+    coverageDateSpy = spyOn(form3XService, 'getCoverageDates').and.resolveTo(mockCoverageDates);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -70,6 +71,8 @@ describe('CreateF3XStep1Component: New', () => {
     expect(component).toBeTruthy();
     expect(component.reportId()).toBeNull();
     expect(component.form.get('filing_frequency')?.value).toBe('Q');
+    // the next line is redundant given the one following it but ensures F3XA member is referenced in codebase for knip
+    expect(component.form.get('form_type')?.value).not.toBe(F3xFormTypes.F3XA);
     expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
     expect(coverageDateSpy).toHaveBeenCalled();
   });

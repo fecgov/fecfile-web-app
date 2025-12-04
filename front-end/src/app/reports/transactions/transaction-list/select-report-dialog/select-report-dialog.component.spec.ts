@@ -2,7 +2,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { SelectReportDialogComponent } from './select-report-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testActiveReport, testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
-import { F3xFormTypes, Form3X } from '../../../../shared/models/form-3x.model';
+import { F3xFormTypes, Form3X } from '../../../../shared/models/reports/form-3x.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';

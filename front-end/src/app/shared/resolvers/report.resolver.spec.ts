@@ -5,8 +5,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { Form3XService } from '../services/form-3x.service';
 import { ReportResolver } from './report.resolver';
-import { Report } from '../models/report.model';
-import { Form3X } from '../models/form-3x.model';
+import { Report } from '../models/reports/report.model';
+import { Form3X } from '../models/reports/form-3x.model';
 import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 
