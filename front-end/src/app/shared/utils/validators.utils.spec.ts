@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import {
   emailValidator,
   buildGuaranteeUniqueValuesValidator,
@@ -16,7 +16,8 @@ import { SchATransaction } from '../models/scha-transaction.model';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { Form24Service } from '../services/form-24.service';
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { CommitteeMember } from '../models/committee-member.model';
+import { Form24 } from '../models/reports/form-24.model';
 
 describe('ValidatorsUtils', () => {
   describe('emailValidator', () => {
@@ -191,7 +192,8 @@ describe('ValidatorsUtils', () => {
     });
 
     it('should return error if email is taken', async () => {
-      service.getMembers.and.resolveTo([{ email: 'taken@example.com' } as any]);
+      const member = CommitteeMember.fromJSON({ email: 'taken@example.com' });
+      service.getMembers.and.resolveTo([member]);
       const control = new FormControl('taken@example.com');
       const result = await validator.validate(control);
       expect(result).toEqual({ email: 'taken-in-committee' });
@@ -219,7 +221,8 @@ describe('ValidatorsUtils', () => {
     });
 
     it('should return error if name is duplicate', async () => {
-      service.getAllReports.and.resolveTo([{ name: '24 hourreport' } as any]);
+      const report = Form24.fromJSON({ name: '24 hourreport' });
+      service.getAllReports.and.resolveTo([report]);
       const control = new FormGroup({
         typeName: new FormControl('24 HOUR'),
         form24Name: new FormControl('REPORT'),

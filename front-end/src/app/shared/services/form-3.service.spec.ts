@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3Service } from './form-3.service';
 import { ApiService } from './api.service';
-import { of } from 'rxjs';
 import { Form3 } from '../models/reports/form-3.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 
@@ -52,7 +51,7 @@ describe('Form3Service', () => {
   it('should update report with committee info', async () => {
     const report = Form3.fromJSON({ id: '1' });
     const committeeAccount = CommitteeAccount.fromJSON({ name: 'Committee' });
-    apiService.put.and.returnValue(Promise.resolve(report) as any);
+    apiService.put.and.returnValue(Promise.resolve(report));
 
     await service.fecUpdate(report, committeeAccount);
     expect(apiService.put).toHaveBeenCalled();
