@@ -18,7 +18,6 @@ export class TransactionListRecord {
   aggregate: number | undefined;
   report_code_label: string | undefined;
 
-
   // prettier-ignore
   static fromJSON(json: any): TransactionListRecord { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(TransactionListRecord, json);
