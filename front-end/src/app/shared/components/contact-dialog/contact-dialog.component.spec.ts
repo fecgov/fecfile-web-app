@@ -1,32 +1,29 @@
+import { DatePipe } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
+import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
+import { ListRestResponse } from 'app/shared/models/rest-api.model';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import {
-  getTestTransactionByType,
-  testActiveReport,
+  createTestTransactionListRecord,
   testContact,
   testMockStore,
   testScheduleATransaction,
 } from 'app/shared/utils/unit-test.utils';
+import { Confirmation, ConfirmationService } from 'primeng/api';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
-import { ContactDialogComponent, TransactionData } from './contact-dialog.component';
-import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
-import { Confirmation, ConfirmationService } from 'primeng/api';
-import { DatePipe } from '@angular/common';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { TableLazyLoadEvent } from 'primeng/table';
-import { ListRestResponse } from 'app/shared/models/rest-api.model';
-import { Form24 } from 'app/shared/models/reports/form-24.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ContactDialogComponent } from './contact-dialog.component';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -131,12 +128,15 @@ describe('ContactDialogComponent', () => {
   });
 
   describe('transactions', () => {
-    it('should route to transaction', () => {
+    it('should route to transaction', async () => {
+      const testSchATransaction = testScheduleATransaction();
+      testSchATransaction.id = 'test_id';
+      spyOn(transactionService, 'get').and.returnValue(Promise.resolve(testSchATransaction));
       const spy = spyOn(component.router, 'navigate');
-      const transaction = testScheduleATransaction();
-      component.openTransaction(new TransactionData(transaction));
+      const testTransactionListRecord = createTestTransactionListRecord();
+      await component.openTransaction(testTransactionListRecord);
       expect(spy).toHaveBeenCalledWith([
-        `reports/transactions/report/${transaction.report_ids?.[0]}/list/${transaction.id}`,
+        `reports/transactions/report/${testSchATransaction.report_ids?.[0]}/list/${testSchATransaction.id}`,
       ]);
     });
 
@@ -150,14 +150,12 @@ describe('ContactDialogComponent', () => {
     });
 
     it('should not show Form 24s', async () => {
-      const transaction: SchATransaction = getTestTransactionByType(
-        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-      ) as SchATransaction;
-      transaction.reports = [testActiveReport()];
-      transaction.reports?.push(Form24.fromJSON({ id: '1', report_type: ReportTypes.F24 }));
+      const testReportCodeLabel = 'APRIL 15 QUARTERLY REPORT (Q1)';
+      const transactionListRecord = new TransactionListRecord();
+      transactionListRecord.report_code_label = testReportCodeLabel;
       spyOn(transactionService, 'getTableData').and.returnValue(
         Promise.resolve({
-          results: [transaction],
+          results: [transactionListRecord],
           count: 1,
           pageNumber: 1,
           next: '',
@@ -166,7 +164,7 @@ describe('ContactDialogComponent', () => {
       );
       await component.loadTransactions({ first: 1, rows: 5 } as TableLazyLoadEvent);
 
-      expect(component.transactions[0].report_code_label).toBe('APRIL 15 QUARTERLY REPORT (Q1)');
+      expect(component.transactions[0].report_code_label).toBe(testReportCodeLabel);
     });
 
     describe('loadTransactions', () => {

@@ -33,7 +33,7 @@ export class TableActionsButtonComponent<T> {
 
   async getTableActions(): Promise<TableAction<T>[]> {
     if (!this.actionItem && this.actionItemId && this.getActionItem) {
-      this.actionItem = await this.getActionItem(this.actionItemId)
+      this.actionItem = await this.getActionItem(this.actionItemId);
     }
     return this.tableActions.filter((action) => !action.isAvailable || action.isAvailable(this.actionItem));
   }
