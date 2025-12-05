@@ -28,15 +28,5 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 })
 export class AppComponent {
   protected readonly elementRef = inject(ElementRef);
-  // readonly confirmDialog = viewChild.required(ConfirmDialog);
   readonly showGlossary = environment.showGlossary;
-
-  // ngAfterContentChecked(): void {
-  //   const visible = this.confirmDialog().visible;
-  //   if (!visible) return;
-  //   const closeButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-dialog-close-button');
-  //   if (!closeButton) return;
-  //   if (closeButton.ariaLabel) return;
-  //   closeButton.ariaLabel = 'Close';
-  // }
 }

@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, input, model, output, viewChild } from '@angular/core';
+import { Component, contentChild, effect, ElementRef, input, model, output, signal, viewChild } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 
 @Component({
@@ -15,6 +15,9 @@ export class DialogComponent {
 
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
+  readonly projectedFooter = contentChild('dialogFooterRef');
+  readonly hasCustomFooter = signal(false);
+
   constructor() {
     effect(() => {
       if (this.visible()) {
@@ -22,6 +25,10 @@ export class DialogComponent {
       } else {
         this.dialog().nativeElement.close();
       }
+    });
+
+    effect(() => {
+      this.hasCustomFooter.set(!!this.projectedFooter());
     });
   }
 }

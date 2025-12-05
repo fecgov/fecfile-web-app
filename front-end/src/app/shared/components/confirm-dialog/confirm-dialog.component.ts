@@ -1,11 +1,12 @@
 import { Component, input, signal } from '@angular/core';
 import { Confirmation, ConfirmationService } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
 import { Subscription } from 'rxjs';
 import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [DialogComponent],
+  imports: [DialogComponent, ButtonDirective],
   templateUrl: './confirm-dialog.component.html',
   styleUrl: './confirm-dialog.component.scss',
 })

@@ -5,7 +5,7 @@
   (submitForm)="confirmOption()"
 >
   <p>{{ message }}</p>
-  <ng-container dialog-footer>
+  <ng-container dialog-footer #dialogFooterRef>
     <button pButton class="p-button-secondary" label="Cancel" (click)="cancelOption()"></button>
   </ng-container>
 </app-dialog>
