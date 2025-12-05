@@ -81,7 +81,7 @@ export class ContactsHelpers {
     cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
       timeout: 10000,
     }).should('exist');
-  };
+  }
 
   static assertRowValues(rowText: string, expectedType: string, expectedFecId?: string) {
     cy.contains('tbody tr', rowText, { matchCase: false })
@@ -103,7 +103,8 @@ export class ContactsHelpers {
             });
         }
       });
-  };
+  }
+
   static createContactViaLookup(
     entityLabel: 'Committee' | 'Candidate',
     searchEndpoint: string,
@@ -135,5 +136,32 @@ export class ContactsHelpers {
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     return cy.contains('tbody tr', rowMatch).should('exist');
-  };
+  }
+
+  static confirmContactEdit(
+    displayName?: string,
+    changeMatchers: Array<string | RegExp> = []
+  ): void {
+    // Modal header
+    cy.contains('div', /^\s*Confirm\s*$/i).should('exist');
+
+    // Main explanatory line
+    if (displayName) {
+      cy.contains(
+        `Your suggested changes for ${displayName} will affect all transactions involving this contact.`
+      ).should('exist');
+    } else {
+      cy.contains(/will affect all transactions involving this contact/i).should(
+        'exist'
+      );
+    }
+
+    // Optionally assert individual “Updated X to Y” lines
+    changeMatchers.forEach((matcher) => {
+      cy.contains(matcher).should('exist');
+    });
+
+    // Click Continue
+    PageUtils.clickButton('Continue');
+  }
 }
