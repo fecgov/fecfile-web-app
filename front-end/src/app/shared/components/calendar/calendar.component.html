@@ -1,5 +1,5 @@
 <div class="field date-picker-field">
-  <label [for]="fieldName()" [innerHTML]="label()"></label>
+  <span class="span-label" id="date_picker_label" [innerHTML]="label()"></span>
   <p-datepicker
     appendTo="body"
     (onFocus)="calendarOpened = true"
@@ -11,6 +11,7 @@
     [attr.data-cy]="fieldName()"
     [showIcon]="true"
     [iconDisplay]="'input'"
+    ariaLabelledBy="date_picker_label"
   >
     <ng-template #inputicon let-clickCallBack="clickCallBack">
       <div
