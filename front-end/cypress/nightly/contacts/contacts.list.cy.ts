@@ -143,20 +143,30 @@ describe('Contacts List (/contacts)', () => {
     };
 
     const selectPageSize = (size: number) => {
-      cy.intercept(
-        'GET',
-        `**/api/v1/contacts/?page=1&ordering=sort_name&page_size=${size}`,
-      ).as('getContactsForPageSize');
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/contacts/',
+        query: {
+          page: '1',
+          ordering: 'sort_name',
+          page_size: String(size),
+        },
+      }).as('getContactsForPageSize');
 
       openPageSizeDropdown();
+
       cy.contains(
         '.p-select-option',
         new RegExp(String.raw`^\s*${size}\b`),
       )
         .should('be.visible')
-        .click({ force: true });
+        .click();
 
-      cy.wait('@getContactsForPageSize');
+      cy.contains(/results\s*per\s*page:/i)
+        .parent()
+        .should('contain.text', String(size));
+
+      cy.wait('@getContactsForPageSize', { timeout: 15000 });
     };
 
     openPageSizeDropdown();
@@ -176,6 +186,7 @@ describe('Contacts List (/contacts)', () => {
         .should('be.visible');
 
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
+
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
@@ -190,4 +201,5 @@ describe('Contacts List (/contacts)', () => {
       cy.get('.p-paginator').should('exist');
     }
   });
+
 });
