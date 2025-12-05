@@ -1,20 +1,20 @@
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X, Report } from 'app/shared/models/';
+import { ApiService, QueryParams } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { BehaviorSubject } from 'rxjs';
-import { ReportService } from 'app/shared/services/report.service';
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { SubmitReportComponent } from './submit-report.component';
-import { ApiService, QueryParams } from 'app/shared/services/api.service';
 import { F3X_ROUTES } from '../f3x/routes';
+import { SubmitReportComponent } from './submit-report.component';
 
 const routeDataSubject = new BehaviorSubject<{
   report: Report;
@@ -99,6 +99,20 @@ describe('SubmitReportComponent', () => {
     component.form.get('backdoorYesNo')?.setValue(true);
     component.form.get('backdoorYesNo')?.setValue(false);
     expect(component.form.contains('backdoor_code')).toBeFalse();
+  });
+
+  it('should remove address fields when change_of_address is not true', () => {
+    component.form.get('change_of_address')?.setValue(true);
+    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeTrue();
+
+    component.form.get('change_of_address')?.setValue(false);
+    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeFalse();
   });
 
   it('should not submit when form is invalid', async () => {

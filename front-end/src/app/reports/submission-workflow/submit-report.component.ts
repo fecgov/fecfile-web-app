@@ -1,28 +1,28 @@
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
-import { FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
+import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 import { Report } from 'app/shared/models/reports/report.model';
+import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { InputText } from 'primeng/inputtext';
-import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
-import { ButtonDirective } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
-import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
-import { ApiService } from 'app/shared/services/api.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { takeUntil } from 'rxjs';
-import { Tooltip } from 'primeng/tooltip';
-import { Checkbox } from 'primeng/checkbox';
-import { Password } from 'primeng/password';
-import { SelectButtonModule } from 'primeng/selectbutton';
+import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { injectRouteData } from 'ngxtension/inject-route-data';
-import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonDirective } from 'primeng/button';
+import { Checkbox } from 'primeng/checkbox';
+import { InputText } from 'primeng/inputtext';
+import { Password } from 'primeng/password';
+import { Ripple } from 'primeng/ripple';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { Tooltip } from 'primeng/tooltip';
+import { takeUntil } from 'rxjs';
+import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
 
 @Component({
   selector: 'app-submit-report',
@@ -129,6 +129,26 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
           this.form.removeControl('backdoor_code');
         }
       });
+    this.form
+      .get('change_of_address')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        if (value) {
+          this.form.get('street_1')?.addValidators(Validators.required);
+          this.form.get('city')?.addValidators(Validators.required);
+          this.form.get('state')?.addValidators(Validators.required);
+          this.form.get('zip')?.addValidators(Validators.required);
+        } else {
+          this.form.get('street_1')?.removeValidators(Validators.required);
+          this.form.get('city')?.removeValidators(Validators.required);
+          this.form.get('state')?.removeValidators(Validators.required);
+          this.form.get('zip')?.removeValidators(Validators.required);
+        }
+        this.form.get('street_1')?.updateValueAndValidity();
+        this.form.get('city')?.updateValueAndValidity();
+        this.form.get('state')?.updateValueAndValidity();
+        this.form.get('zip')?.updateValueAndValidity();
+      });
   }
 
   initializeFormWithReport(report: Report, committeeAccount: CommitteeAccount) {
@@ -190,16 +210,22 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     if (payload instanceof BaseForm3) {
       if (this.form.controls['change_of_address']) {
         payload.change_of_address = this.form.value.change_of_address;
+        payload.street_1 = this.form.value.street_1;
+        payload.street_2 = this.form.value.street_2;
+        payload.city = this.form.value.city;
+        payload.state = this.form.value.state;
+        payload.zip = this.form.value.zip;
+      } else {
+        payload.street_1 = this.committeeAccount().street_1;
+        payload.street_2 = this.committeeAccount().street_2;
+        payload.city = this.committeeAccount().city;
+        payload.state = this.committeeAccount().state;
+        payload.zip = this.committeeAccount().zip;
       }
       payload.confirmation_email_1 = this.form.value.confirmation_email_1;
       payload.confirmation_email_2 = this.form.value.confirmation_email_2;
       payload.qualified_committee = this.committeeAccount().qualified;
       payload.committee_name = this.committeeAccount().name;
-      payload.street_1 = this.committeeAccount().street_1;
-      payload.street_2 = this.committeeAccount().street_2;
-      payload.city = this.committeeAccount().city;
-      payload.state = this.committeeAccount().state;
-      payload.zip = this.committeeAccount().zip;
     }
 
     return this.reportService.update(payload, this.formProperties);
