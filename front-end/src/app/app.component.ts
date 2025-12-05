@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, ElementRef, inject } from '@angular/core';
 import { PollerComponent } from './shared/components/poller/poller.component';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Toast } from 'primeng/toast';

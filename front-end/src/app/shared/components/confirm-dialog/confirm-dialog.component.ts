@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { DialogComponent } from '../dialog/dialog.component';
   templateUrl: './confirm-dialog.component.html',
   styleUrl: './confirm-dialog.component.scss',
 })
-export class ConfirmDialogComponent {
+export class ConfirmDialogComponent implements OnInit, OnDestroy {
   readonly key = input<string>();
 
   visible = signal(false);
@@ -19,7 +19,7 @@ export class ConfirmDialogComponent {
 
   private subscription?: Subscription;
 
-  constructor(private confirmationService: ConfirmationService) {}
+  private confirmationService = inject(ConfirmationService);
 
   ngOnInit(): void {
     this.subscription = this.confirmationService.requireConfirmation$.subscribe((conf) => {
@@ -33,7 +33,6 @@ export class ConfirmDialogComponent {
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
-    this.visible.set(false);
   }
 
   cancelOption() {
