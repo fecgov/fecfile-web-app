@@ -1,116 +1,87 @@
 <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-  <h1>FEC Form 3X</h1>
-  <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
-  <hr />
-  @if (userCanSetFilingFrequency) {
-    <div class="grid">
-      <div class="col-12">
-        <h3>Reporting frequency</h3>
-      </div>
+  <div>
+    <h1>Form 3X</h1>
+    <span class="span-label m-0">REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</span>
+    <hr />
+  </div>
+  <h2>Report type</h2>
+  <div class="field">
+    <label for="report_type_category">TIME PERIOD</label>
+    <p-selectButton
+      data-cy="report-type-category"
+      [options]="reportTypeCategories"
+      [allowEmpty]="false"
+      formControlName="report_type_category"
+    />
+    <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" />
+  </div>
 
-      <div class="col-12">
-        <div class="field grid" data-cy="filing_frequency">
-          <div class="col-12">
-            <label for="type">(CHOOSE ONE)</label>
-          </div>
-          <div class="col-12 flex">
-            <p-radioButton inputId="Q" name="filing_frequency" value="Q" formControlName="filing_frequency" />
-            <label for="Q" class="ml-2">QUARTERLY REPORTING</label>
-          </div>
-          <div class="col-12 flex">
-            <p-radioButton inputId="M" name="filing_frequency" value="M" formControlName="filing_frequency" />
-            <label for="M" class="ml-2">MONTHLY REPORTING</label>
-          </div>
+  @if (userCanSetFilingFrequency) {
+    <div class="field">
+      <label for="filing_frequency">REPORTING FREQUENCY</label>
+      <p-selectButton
+        data-cy="filing_frequency"
+        [options]="filingFrequencyOptions"
+        [allowEmpty]="false"
+        formControlName="filing_frequency"
+      />
+      <app-error-messages fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
+    </div>
+  }
+
+  <div class="field" data-cy="report_code">
+    <label for="type">{{ filingFrequencyLabel() }}</label>
+    <div class="flex justify-content-between">
+      @for (reportCodeColumn of reportCodesColumns(); track reportCodeColumn) {
+        <div class="radio-column">
+          @for (reportCode of reportCodeColumn; track reportCode) {
+            <div class="p-field-checkbox flex">
+              <p-radioButton
+                [inputId]="reportCode"
+                name="report_code"
+                [value]="reportCode"
+                [class]="
+                  disabledReportCodes()[reportCode]
+                    ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
+                    : ''
+                "
+                formControlName="report_code"
+              />
+              <label [for]="reportCode" class="ml-2" [class]="disabledReportCodes()[reportCode] ? 'p-disabled' : ''">
+                {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
+              </label>
+            </div>
+          }
         </div>
+      }
+    </div>
+  </div>
+  @if (isElectionReport()) {
+    <div class="flex gap-20px">
+      <app-calendar fieldName="date_of_election" [form]="form" [formSubmitted]="formSubmitted" label="ELECTION ON" />
+      <div class="field flex flex-column" data-cy="state_of_election">
+        <label for="state_of_election">IN THE STATE/TERRITORY OF</label>
+        <app-searchable-select
+          inputId="state_of_election"
+          controlName="state_of_election"
+          [form]="form"
+          [options]="stateOptions"
+          [pt]="{ label: 'w-15em' }"
+          appendTo="body"
+        />
+        <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted" />
       </div>
     </div>
   }
-  <div class="grid">
-    <div class="col-12">
-      <hr />
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      <h3>Report type</h3>
-    </div>
-    <div class="col-6">
-      <div class="field">
-        <label for="report_type_category">TIME PERIOD</label>
-        <p-selectButton
-          data-cy="report-type-category"
-          [options]="reportTypeCategories"
-          [allowEmpty]="false"
-          formControlName="report_type_category"
-        />
-        <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" />
-      </div>
-    </div>
-    <div class="col-6"></div>
-    <div class="col-6">
-      <div class="field grid" data-cy="report_code">
-        <label for="type">(CHOOSE ONE)</label>
-        @for (reportCode of reportCodes(); track reportCode) {
-          <div class="p-field-checkbox col-12 flex">
-            <p-radioButton
-              [inputId]="reportCode"
-              name="report_code"
-              [value]="reportCode"
-              [class]="
-                disabledReportCodes()[reportCode]
-                  ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;'
-                  : ''
-              "
-              formControlName="report_code"
-            />
-            <label [for]="reportCode" class="ml-2" [class]="disabledReportCodes()[reportCode] ? 'p-disabled' : ''">
-              {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
-            </label>
-          </div>
-        }
-      </div>
-    </div>
-    @if (isElectionReport()) {
-      <div class="election-info col-6 grid">
-        <div class="col-12">
-          <app-calendar
-            fieldName="date_of_election"
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            label="ELECTION ON"
-          />
-        </div>
-        <div class="col-12">
-          <div class="field flex flex-column" data-cy="state_of_election">
-            <label for="state_of_election">IN THE STATE/TERRITORY OF</label>
-            <app-searchable-select
-              inputId="state_of_election"
-              controlName="state_of_election"
-              [form]="form"
-              [options]="stateOptions"
-              appendTo="body"
-            />
-            <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted" />
-          </div>
-        </div>
-      </div>
-    }
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      <hr />
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-12">
-      <h3 class="m-0">Covering period</h3>
-    </div>
-  </div>
-  <div class="flex gap-4">
+  <hr class="mt-0" />
+  <h2 class="m-0">Covering period</h2>
+  <div class="flex gap-20px">
     <app-calendar fieldName="coverage_from_date" [form]="form" [formSubmitted]="formSubmitted" label="FROM" />
     <app-calendar fieldName="coverage_through_date" [form]="form" [formSubmitted]="formSubmitted" label="TO" />
   </div>
+  <hr class="mt-0" />
 </form>
+
 <app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
 <p-dialog
   [(visible)]="coverageDatesDialogVisible"

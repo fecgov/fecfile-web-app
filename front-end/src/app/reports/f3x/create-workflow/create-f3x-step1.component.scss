@@ -3,6 +3,12 @@
   color: #999999;
 }
 
+.radio-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 :host ::ng-deep {
   .p-disabled > .p-radiobutton {
     opacity: 0.65;
@@ -30,11 +36,21 @@
     margin-top: 0px;
     margin-bottom: 15px;
   }
+
+  hr,
+  h2,
+  .field {
+    margin-bottom: 0 !important;
+  }
 }
 
 #form {
   max-width: 360px;
   width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 16px;
 }
 
 @media (min-width: 576px) {
