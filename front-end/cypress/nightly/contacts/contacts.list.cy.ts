@@ -12,7 +12,7 @@ describe('Contacts List (/contacts)', () => {
     ContactListPage.goToPage();
   });
 
-  xit('shows header, table, Add, and correct column headers (empty state)', () => {
+  it('shows header, table, Add, and correct column headers (empty state)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
@@ -21,7 +21,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('.empty-message', 'No data available in table').should('exist');
   });
 
-  xit('renders a populated list with correct columns after creating contacts via UI', () => {
+  it('renders a populated list with correct columns after creating contacts via UI', () => {
     const uid = Cypress._.random(1000, 9999);
 
     // Individual
@@ -89,7 +89,7 @@ describe('Contacts List (/contacts)', () => {
     ContactsHelpers.assertRowValues(organizationName, 'Organization');
   });
 
-  xit('checks pagination controls empty state', () => {
+  it('checks pagination controls empty state', () => {
     const paginator = () => cy.get('p-paginator, .p-paginator').first();
 
     cy.contains(/results\s*per\s*page:/i).should('exist');
