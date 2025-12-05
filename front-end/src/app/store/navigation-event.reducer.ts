@@ -6,6 +6,6 @@ export const initialState: NavigationEvent | undefined = undefined;
 
 export const navigationEventReducer = createReducer<NavigationEvent | undefined, Action>(
   initialState,
-  on(navigationEventSetAction, (_state, update) => update),
+  on(navigationEventSetAction, (_state, { action, destination }) => ({ action, destination })),
   on(navigationEventClearAction, () => undefined),
 );
