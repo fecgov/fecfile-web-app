@@ -8,10 +8,12 @@ import { ButtonDirective } from 'primeng/button';
   styleUrl: './dialog.component.scss',
 })
 export class DialogComponent {
+  readonly submitDisabled = input<boolean>();
   readonly visible = model.required<boolean>();
   readonly title = input.required<string>();
   readonly submitLabel = input('Save');
   readonly submitForm = output<void>();
+  readonly closeDialog = output<void>();
 
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
