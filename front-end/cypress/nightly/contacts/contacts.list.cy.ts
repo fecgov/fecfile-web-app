@@ -123,9 +123,15 @@ describe('Contacts List (/contacts)', () => {
       }
     });
 
-    ContactListPage.goToPage();
-    ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
+    cy.intercept('GET', '/api/v1/contacts/**').as('getContacts');
 
+    ContactListPage.goToPage();
+    cy.wait('@getContacts').then(({ request }) => {
+      const url = new URL(request.url);
+      expect(url.searchParams.get('page_size')).to.eq('10');
+    });
+
+    ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
         String.raw`showing\s+${start}\s+to\s+${end}\s+of\s+${total}\s+contacts:?`,
@@ -138,27 +144,8 @@ describe('Contacts List (/contacts)', () => {
         .within(() => {
           cy.get('.p-select-dropdown')
             .scrollIntoView()
-            .click({ force: true });
+            .click();
         });
-    };
-
-    const selectPageSize = (size: number) => {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/contacts/',
-        query: {
-          page: '1',
-          ordering: 'sort_name',
-          page_size: String(size),
-        },
-      }).as('getContactsForPageSize');
-
-      openPageSizeDropdown();
-      cy.contains('.p-select-option', new RegExp(String.raw`^\s*${size}\b`))
-        .should('be.visible')
-        .click();
-
-      cy.wait('@getContactsForPageSize', { timeout: 15000 });
     };
 
     openPageSizeDropdown();
@@ -172,23 +159,32 @@ describe('Contacts List (/contacts)', () => {
     const pageSizes = [5, 10, 15, 20];
     for (const size of pageSizes) {
       cy.log(`Testing Results per page = ${size}`);
-      selectPageSize(size);
+      ContactsHelpers.selectResultsPerPage(size);
+      cy.wait('@getContacts').then(({ request }) => {
+        const url = new URL(request.url);
+        expect(url.searchParams.get('page_size')).to.eq(String(size));
+      });
+
       const expectedFirstPageRows = Math.min(size, total);
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 })
         .should('be.visible');
-
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
-
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
           .should('not.be.disabled')
           .click({ force: true });
 
+        cy.wait('@getContacts').then(({ request }) => {
+          const url = new URL(request.url);
+          expect(url.searchParams.get('page_size')).to.eq('20');
+        });
+
         cy.contains(pageTextRx(21, 21), { timeout: 15000 })
           .should('be.visible');
         cy.get('tbody tr').should('have.length', 1);
       }
+      cy.get('.p-paginator').should('exist');
     }
   });
 });
