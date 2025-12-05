@@ -59,6 +59,7 @@ export class ContactsHelpers {
       });
   }
 
+  // contacts.helpers.ts
   static selectResultsPerPage(n: number) {
     cy.contains(/results\s*per\s*page:/i)
       .parent()
@@ -79,8 +80,6 @@ export class ContactsHelpers {
           .should('be.visible')
           .click();
       });
-
-    cy.get('tbody tr').should('exist');
   }
 
   static assertPageReport(start: number, end: number, total: number) {

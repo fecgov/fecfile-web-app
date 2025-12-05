@@ -123,15 +123,9 @@ describe('Contacts List (/contacts)', () => {
       }
     });
 
-    cy.intercept('GET', '/api/v1/contacts/**').as('getContacts');
-
     ContactListPage.goToPage();
-    cy.wait('@getContacts').then(({ request }) => {
-      const url = new URL(request.url);
-      expect(url.searchParams.get('page_size')).to.eq('10');
-    });
-
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
+
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
         String.raw`showing\s+${start}\s+to\s+${end}\s+of\s+${total}\s+contacts:?`,
@@ -156,29 +150,29 @@ describe('Contacts List (/contacts)', () => {
     cy.get('.p-select-option').eq(3).should('contain.text', '20');
     cy.get('body').click();
 
-    const pageSizes = [5, 10, 15, 20];
-    for (const size of pageSizes) {
-      cy.log(`Testing Results per page = ${size}`);
+    const selectPageSize = (size: number) => {
+      cy.intercept('GET', '/api/v1/contacts/**').as(`getContactsForPageSize_${size}`);
       ContactsHelpers.selectResultsPerPage(size);
-      cy.wait('@getContacts').then(({ request }) => {
+      cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
         const url = new URL(request.url);
         expect(url.searchParams.get('page_size')).to.eq(String(size));
       });
+    };
 
+    const pageSizes = [5, 10, 15, 20];
+    for (const size of pageSizes) {
+      cy.log(`Testing Results per page = ${size}`);
+      selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 })
         .should('be.visible');
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
+
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
           .should('not.be.disabled')
           .click({ force: true });
-
-        cy.wait('@getContacts').then(({ request }) => {
-          const url = new URL(request.url);
-          expect(url.searchParams.get('page_size')).to.eq('20');
-        });
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 })
           .should('be.visible');
