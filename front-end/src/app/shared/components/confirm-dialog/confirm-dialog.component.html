@@ -1,21 +1,11 @@
-<p-confirmDialog [key]="key()" [closable]="false" [modal]="true">
-  <ng-template template="headless" let-confirmation>
-    <app-dialog
-      [visible]="true"
-      [title]="confirmation.header"
-      submitLabel="Confirm"
-      (submitForm)="confirmation.accept()"
-    >
-      <!-- <p>{{ confirmation.message }}</p> -->
-      <ng-container ngProjectAs="footer">
-        <button
-          type="button"
-          pButton
-          class="p-button-secondary"
-          label="Cancel"
-          (click)="confirmation.reject()"
-        ></button>
-      </ng-container>
-    </app-dialog>
-  </ng-template>
-</p-confirmDialog>
+<app-dialog
+  [(visible)]="visible"
+  [title]="confirmation?.header || 'Are you sure?'"
+  submitLabel="Confirm"
+  (submitForm)="confirmOption()"
+>
+  <p>{{ message }}</p>
+  <ng-container dialog-footer>
+    <button pButton class="p-button-secondary" label="Cancel" (click)="cancelOption()"></button>
+  </ng-container>
+</app-dialog>

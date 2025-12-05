@@ -8,6 +8,7 @@ import { SecondCommitteeAdminDialogComponent } from './shared/components/second-
 import { ButtonModule } from 'primeng/button';
 import { GlossaryComponent } from './shared/components/glossary/glossary.component';
 import { environment } from 'environments/environment';
+import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -22,19 +23,20 @@ import { environment } from 'environments/environment';
     SecondCommitteeAdminDialogComponent,
     ButtonModule,
     GlossaryComponent,
+    ConfirmDialogComponent,
   ],
 })
-export class AppComponent implements AfterContentChecked {
+export class AppComponent {
   protected readonly elementRef = inject(ElementRef);
-  readonly confirmDialog = viewChild.required(ConfirmDialog);
+  // readonly confirmDialog = viewChild.required(ConfirmDialog);
   readonly showGlossary = environment.showGlossary;
 
-  ngAfterContentChecked(): void {
-    const visible = this.confirmDialog().visible;
-    if (!visible) return;
-    const closeButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-dialog-close-button');
-    if (!closeButton) return;
-    if (closeButton.ariaLabel) return;
-    closeButton.ariaLabel = 'Close';
-  }
+  // ngAfterContentChecked(): void {
+  //   const visible = this.confirmDialog().visible;
+  //   if (!visible) return;
+  //   const closeButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-dialog-close-button');
+  //   if (!closeButton) return;
+  //   if (closeButton.ariaLabel) return;
+  //   closeButton.ariaLabel = 'Close';
+  // }
 }
