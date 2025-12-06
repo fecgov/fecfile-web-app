@@ -45,6 +45,7 @@ export class ContactsHelpers {
         expect(disabled, `${selector} should be disabled`).to.eq(true);
       });
   }
+
   static assertEnabled(selector: string) {
     cy.get(selector)
       .first()
@@ -58,25 +59,27 @@ export class ContactsHelpers {
       });
   }
 
+  // contacts.helpers.ts
   static selectResultsPerPage(n: number) {
-    cy.contains(/results\s*per\s*page:/i).should('exist');
     cy.contains(/results\s*per\s*page:/i)
       .parent()
       .within(() => {
-        cy.get('.p-select')
-          .then(($sel) => {
-            if ($sel.length) {
-              cy.wrap($sel).select(String(n), { force: true });
-            } else {
-              cy.get('.p-select-dropdown').first().click({ force: true });
-              cy.get('.p-select-option')
-                .contains(new RegExp(`^\\s*${n}\\s*$`))
-                .click({ force: true });
-            }
-          });
+        cy.get('.p-select-dropdown')
+          .first()
+          .scrollIntoView()
+          .click();
       });
 
-    cy.get('tbody tr').should('exist');
+    const optionRegex = new RegExp(`^\\s*${n}\\s*$`);
+    cy.get('body')
+      .find('.p-select-list')
+      .should('be.visible')
+      .last()
+      .within(() => {
+        cy.contains('.p-select-option', optionRegex)
+          .should('be.visible')
+          .click();
+      });
   }
 
   static assertPageReport(start: number, end: number, total: number) {

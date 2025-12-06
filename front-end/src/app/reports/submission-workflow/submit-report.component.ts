@@ -207,7 +207,13 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
       ...SchemaUtils.getFormValues(this.form, this.activeReport().schema, this.formProperties),
     });
 
+    payload.confirmation_email_1 = this.form.value.confirmation_email_1;
+    payload.confirmation_email_2 = this.form.value.confirmation_email_2;
+    payload.committee_name = this.committeeAccount().name;
+
     if (payload instanceof BaseForm3) {
+      payload.qualified_committee = this.committeeAccount().qualified;
+
       if (this.form.controls['change_of_address']) {
         payload.change_of_address = this.form.value.change_of_address;
         payload.street_1 = this.form.value.street_1;

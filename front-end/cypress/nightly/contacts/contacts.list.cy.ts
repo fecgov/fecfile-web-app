@@ -138,25 +138,8 @@ describe('Contacts List (/contacts)', () => {
         .within(() => {
           cy.get('.p-select-dropdown')
             .scrollIntoView()
-            .click({ force: true });
+            .click();
         });
-    };
-
-    const selectPageSize = (size: number) => {
-      cy.intercept(
-        'GET',
-        `**/api/v1/contacts/?page=1&ordering=sort_name&page_size=${size}`,
-      ).as('getContactsForPageSize');
-
-      openPageSizeDropdown();
-      cy.contains(
-        '.p-select-option',
-        new RegExp(String.raw`^\s*${size}\b`),
-      )
-        .should('be.visible')
-        .click({ force: true });
-
-      cy.wait('@getContactsForPageSize');
     };
 
     openPageSizeDropdown();
@@ -167,15 +150,24 @@ describe('Contacts List (/contacts)', () => {
     cy.get('.p-select-option').eq(3).should('contain.text', '20');
     cy.get('body').click();
 
-    const pageSizes = [5, 10, 15, 20] as const;
+    const selectPageSize = (size: number) => {
+      cy.intercept('GET', '/api/v1/contacts/**').as(`getContactsForPageSize_${size}`);
+      ContactsHelpers.selectResultsPerPage(size);
+      cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
+        const url = new URL(request.url);
+        expect(url.searchParams.get('page_size')).to.eq(String(size));
+      });
+    };
+
+    const pageSizes = [5, 10, 15, 20];
     for (const size of pageSizes) {
       cy.log(`Testing Results per page = ${size}`);
       selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 })
         .should('be.visible');
-
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
+
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
@@ -184,7 +176,6 @@ describe('Contacts List (/contacts)', () => {
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 })
           .should('be.visible');
-
         cy.get('tbody tr').should('have.length', 1);
       }
       cy.get('.p-paginator').should('exist');
