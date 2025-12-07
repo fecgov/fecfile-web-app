@@ -214,7 +214,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     if (payload instanceof BaseForm3) {
       payload.qualified_committee = this.committeeAccount().qualified;
 
-      if (this.form.controls['change_of_address']) {
+      if (this.form.value.change_of_address) {
         payload.change_of_address = this.form.value.change_of_address;
         payload.street_1 = this.form.value.street_1;
         payload.street_2 = this.form.value.street_2;
@@ -222,11 +222,11 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
         payload.state = this.form.value.state;
         payload.zip = this.form.value.zip;
       } else {
-        payload.street_1 = this.committeeAccount().street_1;
-        payload.street_2 = this.committeeAccount().street_2;
-        payload.city = this.committeeAccount().city;
-        payload.state = this.committeeAccount().state;
-        payload.zip = this.committeeAccount().zip;
+        payload.street_1 = this.activeReport().street_1 ?? this.committeeAccount().street_1;
+        payload.street_2 = this.activeReport().street_2 ?? this.committeeAccount().street_2;
+        payload.city = this.activeReport().city ?? this.committeeAccount().city;
+        payload.state = this.activeReport().state ?? this.committeeAccount().state;
+        payload.zip = this.activeReport().zip ?? this.committeeAccount().zip;
       }
       payload.confirmation_email_1 = this.form.value.confirmation_email_1;
       payload.confirmation_email_2 = this.form.value.confirmation_email_2;
