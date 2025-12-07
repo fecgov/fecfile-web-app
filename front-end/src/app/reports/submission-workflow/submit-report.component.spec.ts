@@ -44,7 +44,6 @@ describe('SubmitReportComponent', () => {
   let component: SubmitReportComponent;
   let fixture: ComponentFixture<SubmitReportComponent>;
   let mockMessageService: jasmine.SpyObj<MessageService>;
-  let mockStore: MockStore;
 
   beforeEach(async () => {
     mockMessageService = jasmine.createSpyObj('MessageService', ['add']);
@@ -76,7 +75,6 @@ describe('SubmitReportComponent', () => {
       ],
     }).compileComponents();
 
-    mockStore = TestBed.inject(MockStore);
     router = TestBed.inject(Router);
     fixture = TestBed.createComponent(SubmitReportComponent);
     component = fixture.componentInstance;
@@ -159,7 +157,7 @@ describe('SubmitReportComponent', () => {
 
     TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
     TestBed.inject(MockStore).refreshState();
-    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload, formProperties) => {
+    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
       return payload;
     });
 
@@ -192,7 +190,7 @@ describe('SubmitReportComponent', () => {
 
     TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
     TestBed.inject(MockStore).refreshState();
-    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload, formProperties) => {
+    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
       return payload;
     });
 
@@ -225,7 +223,7 @@ describe('SubmitReportComponent', () => {
 
     TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
     TestBed.inject(MockStore).refreshState();
-    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload, formProperties) => {
+    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
       return payload;
     });
 
