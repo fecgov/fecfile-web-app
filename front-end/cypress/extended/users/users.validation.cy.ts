@@ -1,7 +1,7 @@
-import { Initialize } from '../../e2e/pages/loginPage';
-import { Roles, defaultFormData as userFormData } from '../../e2e/models/UserFormModel';
-import { UsersPage } from '../../e2e/pages/usersPage';
-import { PageUtils } from '../../e2e/pages/pageUtils';
+import { Initialize } from '../../e2e-smoke/pages/loginPage';
+import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/UserFormModel';
+import { UsersPage } from '../../e2e-smoke/pages/usersPage';
+import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { UsersHelpers } from './users.helpers';
 
 const ADD_MEMBER_POST = '**/committee-members/add-member/**';
@@ -26,7 +26,7 @@ describe("Users: Validation and API failure states", () => {
       .first()
       .should('be.visible')
       .and('contain.text', 'This is a required field.');
-    });
+  });
 
   it('shows inline validation message for invalid emails (multiple cases)', () => {
     const invalidEmails = [
@@ -42,9 +42,9 @@ describe("Users: Validation and API failure states", () => {
     // 'foo@-example.com' and 'foo@example-.com' to be re-added once leading/trailing hyphen validation is implemented
 
     const findEmailError = () =>
-    cy.get('body')
-      .find(".p-error")
-      .first();
+      cy.get('body')
+        .find(".p-error")
+        .first();
 
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
@@ -53,8 +53,8 @@ describe("Users: Validation and API failure states", () => {
       cy.get('[data-cy="membership-submit"]').click();
       cy.get('[data-cy="membership-submit"]').should('be.visible');
       findEmailError()
-          .should('be.visible')
-          .and('contain.text', 'This email is invalid');
+        .should('be.visible')
+        .and('contain.text', 'This email is invalid');
       cy.get('#email').clear({ force: true });
     }
     cy.get('#email').should('have.value', '');

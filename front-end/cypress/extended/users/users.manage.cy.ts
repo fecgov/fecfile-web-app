@@ -1,7 +1,7 @@
-import { LoginPage } from '../../e2e/pages/loginPage';
-import { Roles, defaultFormData as userFormData } from '../../e2e/models/UserFormModel';
-import { UsersPage } from '../../e2e/pages/usersPage';
-import { PageUtils } from '../../e2e/pages/pageUtils';
+import { LoginPage } from '../../e2e-smoke/pages/loginPage';
+import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/UserFormModel';
+import { UsersPage } from '../../e2e-smoke/pages/usersPage';
+import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 
 describe('Manage Users: Happy Paths', () => {
   beforeEach(() => {
@@ -59,7 +59,7 @@ describe('Manage Users: Happy Paths', () => {
   });
 
   it('should delete a user and verify removal from table', () => {
-    const emailToDelete = [userFormData.email, 'batch_user1@fec.gov', 'batch_user2@fec.gov', 'manager_user@fec.gov', ];
+    const emailToDelete = [userFormData.email, 'batch_user1@fec.gov', 'batch_user2@fec.gov', 'manager_user@fec.gov',];
     cy.intercept('DELETE', '**/committee-members/**').as('DeleteMember');
 
     for (const email of emailToDelete) {

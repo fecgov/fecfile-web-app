@@ -1,6 +1,6 @@
-import { PageUtils } from '../../e2e/pages/pageUtils';
-import { UsersPage } from '../../e2e/pages/usersPage';
-import { Initialize } from '../../e2e/pages/loginPage';
+import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
+import { UsersPage } from '../../e2e-smoke/pages/usersPage';
+import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { UsersHelpers } from './users.helpers';
 
 describe('Users Permissions via Committee Switch RBAC', () => {
