@@ -60,7 +60,7 @@ export class FormTypeDialogComponent {
     return type ? getFormTypes(environment.showForm3).get(type) : undefined;
   }
 
-  consturctor() {
+  constructor() {
     effect(() => {
       if (!this.dialogVisible()) {
         if (this.isF24()) {

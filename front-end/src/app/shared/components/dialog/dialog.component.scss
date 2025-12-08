@@ -76,8 +76,9 @@ dialog {
   border: none;
 }
 
-.float-right:disabled {
-  background-color: #586d85;
+.submit-button:disabled {
+  background: var(--p-button-primary-background);
+  opacity: 30%;
   color: #ffffff;
   border: none;
 }
