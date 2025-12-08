@@ -264,6 +264,10 @@ parameters:
     type: boolean
     default: false
 
+  is-full-nightly:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
@@ -271,6 +275,7 @@ workflows:
         - not: << pipeline.parameters.is-triggered-e2e-test >>
         - not: << pipeline.parameters.is-extended-e2e-test >>
         - not: << pipeline.parameters.is-triggered-unit-test >>
+        - not: << pipeline.parameters.is-full-nightly >>
     jobs:
       - lint
       - test
@@ -307,6 +312,13 @@ workflows:
   triggered-unit-test:
     when: << pipeline.parameters.is-triggered-unit-test >>
     jobs:
+      - test
+
+  full-nightly:
+    when: << pipeline.parameters.is-full-nightly >>
+    jobs:
+      - e2e-test
+      - e2e-extended
       - test
 
   nightly:
