@@ -27,6 +27,6 @@ export default defineConfig({
   experimentalWebKitSupport: true,
   e2e: {
     baseUrl: 'http://localhost:4200',
-    specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/extended/**/*.cy.ts'],
+    specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
   },
 });
