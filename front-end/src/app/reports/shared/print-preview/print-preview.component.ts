@@ -11,17 +11,17 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { takeUntil } from 'rxjs';
-import { Card } from 'primeng/card';
 import { NgOptimizedImage } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
+import { LayoutService } from 'app/layout/layout.service';
 
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
   styleUrls: ['../../styles.scss', './print-preview.component.scss'],
-  imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective],
+  imports: [NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);
@@ -29,6 +29,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   public readonly route = inject(ActivatedRoute);
   private readonly webPrintService = inject(WebPrintService);
   private readonly reportService = inject(ReportService);
+  readonly layoutService = inject(LayoutService);
   report: Report = new Form3X() as unknown as Report;
   committeeAccount?: CommitteeAccount;
   submitDate: Date | undefined;

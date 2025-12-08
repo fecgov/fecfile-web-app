@@ -1,0 +1,22 @@
+@use 'variables' as *;
+
+@mixin breakpoint($size) {
+  // Check if the key exists in the map
+  @if map-has-key($breakpoints, $size) {
+    // Get the pixel value
+    $value: map-get($breakpoints, $size);
+
+    // Output the media query
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$size}.";
+  }
+}
+
+@mixin fixed-width($w) {
+  width: $w;
+  min-width: $w;
+  max-width: $w;
+}

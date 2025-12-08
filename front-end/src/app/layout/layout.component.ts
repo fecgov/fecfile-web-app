@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, AfterViewChecked, inject, viewChild, computed, signal } from '@angular/core';
+import { Component, AfterViewChecked, inject, viewChild, computed, signal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
@@ -12,6 +12,8 @@ import { ButtonDirective } from 'primeng/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { HeaderStyles } from './header/header-styles';
+import { LayoutService } from './layout.service';
+import { environment } from 'environments/environment';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -35,10 +37,13 @@ export enum BackgroundStyles {
   ],
 })
 export class LayoutComponent implements AfterViewChecked {
+  readonly layoutService = inject(LayoutService);
+  private destroyRef = inject(DestroyRef);
   readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
   private readonly route = inject(ActivatedRoute);
   private readonly navEnd = toSignal(injectNavigationEnd());
 
+  readonly isDev = computed(() => environment.showGlossary);
   readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
 
   readonly layoutControls = computed(() => {
@@ -58,8 +63,31 @@ export class LayoutComponent implements AfterViewChecked {
     }
   });
 
+  constructor() {
+    const mobileQuery = window.matchMedia('(max-width: 991.98px)');
+    if (mobileQuery.matches) {
+      this.layoutService.showSidebar.set(false);
+    }
+
+    const listener = (e: MediaQueryListEvent) => {
+      const showing = this.layoutService.showSidebar();
+      if (showing && e.matches) {
+        this.layoutService.showSidebar.set(false);
+      } else if (!showing && !e.matches) {
+        this.layoutService.showSidebar.set(true);
+      }
+    };
+
+    mobileQuery.addEventListener('change', listener);
+    this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
+  }
+
   ngAfterViewChecked(): void {
     this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
+  }
+
+  toggleSidebar() {
+    this.layoutService.showSidebar.update((v) => !v);
   }
 }
 

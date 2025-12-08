@@ -1,115 +1,130 @@
-<h1 class="super-header" data-cy="print-preview">Print preview</h1>
-<h2 class="h3">
-  <strong>{{ report.formLabel }}:</strong> {{ report.formSubLabel }}
-</h2>
-<hr />
-<p-card>
-  <div class="grid">
-    @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
-      <div class="col-12">
-        <h2 class="no-vert-margins">Would you like to compile a print preview?</h2>
-      </div>
-    }
+<div id="print-preview-container" [class.sidebar-version]="layoutService.showSidebar()">
+  <h1 data-cy="print-preview">Print preview</h1>
+  <hr class="mb-5" />
 
-    @if (webPrintStage === 'checking') {
-      <div class="col-12 flex justify-content-center">
-        <div class="fec-loader-div col-12">
-          <img
-            class="image-max-width fec-loader-image top-30"
-            ngSrc="assets/img/fec-loading-flag.gif"
-            draggable="false"
-            alt="The report's web print status is loading..."
-            height="103"
-            width="114"
-          />
-          <h2 class="align-center super-header h1">
-            <br /><br />
-            <strong>Compiling your preview</strong>
-            <br />
-          </h2>
-        </div>
-      </div>
-    } @else {
-      <div class="col-12 align-center">
+  @if (webPrintStage === 'checking') {
+    <div class="flex justify-content-center">
+      <div class="fec-loader-div">
         <img
-          class="image-max-width image-centered-horiz"
-          ngSrc="assets/img/View-print-preview.png"
+          class="image-max-width fec-loader-image top-30"
+          ngSrc="assets/img/fec-loading-flag.gif"
           draggable="false"
-          alt="users investigating a monitor"
-          height="271"
-          width="450"
+          alt="The report's web print status is loading..."
+          height="103"
+          width="114"
         />
+        <h2 class="align-center super-header h1">
+          <br /><br />
+          <strong>Compiling your preview</strong>
+          <br />
+        </h2>
       </div>
-    }
-  </div>
-  <div class="grid">
-    @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
-      @if (webPrintStage === 'failure') {
-        <div class="col-12">
-          <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
-        </div>
-      }
-      <div class="col-5"></div>
-      <div class="col-2">
-        <button
-          pButton
-          pRipple
-          appSingleClick
-          label="Compile PDF"
-          class="p-button-warning button-full-width"
-          (click)="submitPrintJob()"
-        ></button>
+    </div>
+  } @else {
+    <div class="flex">
+      <div class="w-6 gap-5 flex flex-column">
+        @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
+          <div class="flex flex-column">
+            <span class="question-header">Would you like to compile a print preview?</span>
+            <span class="body-text">
+              Review your in-progress report by creating a PDF print preview. This could take a few moments, depending
+              on the size of the report.
+            </span>
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              appSingleClick
+              label="Create PDF print preview"
+              class="p-button-warning"
+              [pt]="{ label: 'font-karla-bold' }"
+              (click)="submitPrintJob()"
+            ></button>
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              appSingleClick
+              label="Continue without reviewing"
+              class="p-button-info"
+              [pt]="{ label: 'font-karla-bold' }"
+              (click)="submitPrintJob()"
+            ></button>
+          </div>
+        } @else {
+          <h2 class="no-vert-margins">YOUR PRINT PREVIEW IS READY!</h2>
+          <span> Download a previous print preview or create a new one to see recent changes. </span>
+          <button
+            pButton
+            pRipple
+            appSingleClick
+            label="Download PDF"
+            class="p-button-warning"
+            (click)="downloadPDF()"
+          ></button>
+          <div class="align-center">{{ submitDate }}</div>
+          <button
+            pButton
+            pRipple
+            appSingleClick
+            label="Compile PDF"
+            class="p-button-warning"
+            (click)="submitPrintJob()"
+          ></button>
+          <span> Make changes to your report? To review recent changes, create a new PDF. </span>
+        }
       </div>
-    }
-    @if (webPrintStage === 'success') {
-      <h2 class="col-12 align-center h1">PDF compiled</h2>
-      <div class="bold col-12 align-center">SUBMITTED ON:</div>
-      <div class="col-12 align-center">{{ submitDate }}</div>
-      <div class="col-3"></div>
-      <div class="col-2">
-        <button
-          pButton
-          pRipple
-          label="Open PDF"
-          class="p-button-info button-full-width"
-          (click)="downloadPDF()"
-        ></button>
+      <div class="w-6">
+        <img ngSrc="assets/img/PDFicon.svg" draggable="false" alt="pdf file" height="284" width="284" />
       </div>
-      <div class="col-2">
-        <p class="align-center"><strong>OR</strong></p>
-      </div>
-      <div class="col-2">
-        <button
-          pButton
-          pRipple
-          appSingleClick
-          label="Compile New PDF"
-          class="p-button-warning button-full-width"
-          (click)="submitPrintJob()"
-        ></button>
-      </div>
-    }
-  </div>
+    </div>
+  }
 
-  <div class="grid">
-    <div class="col-2">
-      <button
-        pButton
-        pRipple
-        label="Back"
-        class="p-button-secondary p-button-outlined button-full-width"
-        (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
-      ></button>
-    </div>
-    <div class="col-7"></div>
-    <div class="col-3">
-      <button
-        pButton
-        pRipple
-        label="Sign & submit report"
-        class="p-button-secondary button-full-width"
-        (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
-      ></button>
-    </div>
+  <!-- @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
+  @if (webPrintStage === 'failure') {
+    <h2 class="align-center">Printing error:<br />{{ printError }}</h2>
+  }
+}
+@if (webPrintStage === 'success') {
+  <h2 class="align-center h1">PDF compiled</h2>
+  <div class="bold align-center">SUBMITTED ON:</div>
+  <div class="align-center">{{ submitDate }}</div>
+
+  <button pButton pRipple label="Open PDF" class="p-button-info button-full-width" (click)="downloadPDF()"></button>
+
+  <p class="align-center"><strong>OR</strong></p>
+
+  <button
+    pButton
+    pRipple
+    appSingleClick
+    label="Compile New PDF"
+    class="p-button-warning button-full-width"
+    (click)="submitPrintJob()"
+  ></button>
+} -->
+  <hr class="mt-5 mb-3" />
+  <div class="flex justify-content-between">
+    <button
+      pButton
+      pRipple
+      class="p-button-secondary icon-gap"
+      (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
+    >
+      <span class="prev-arrow-mask"></span>
+      <span>Review detailed summary page</span>
+    </button>
+
+    <button
+      pButton
+      pRipple
+      class="p-button-primary icon-gap"
+      (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
+    >
+      <span>Sign & submit report</span>
+      <span class="next-arrow-mask"></span>
+    </button>
   </div>
-</p-card>
+</div>

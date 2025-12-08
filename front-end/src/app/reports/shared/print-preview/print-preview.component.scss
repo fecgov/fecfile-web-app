@@ -1,4 +1,61 @@
+@use 'mixins' as *;
+
+.question-header {
+  font-family: var(--karla-bold);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.body-text {
+  font-family: var(--gandhi);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.prev-arrow-mask {
+  background-color: var(--p-content-color);
+  mask-image: url('assets/img/prev_arrow.svg');
+}
+
+.next-arrow-mask {
+  background-color: white;
+  mask-image: url('assets/img/next_arrow.svg');
+}
+
+.prev-arrow-mask,
+.next-arrow-mask {
+  height: 9px;
+  width: 8px;
+}
+
+.icon-gap {
+  gap: 5px;
+}
+
 .top-30 {
   top: 30%;
   margin-bottom: 32px;
+}
+
+#print-preview-container {
+  @include fixed-width(512px);
+
+  @include breakpoint('md') {
+    @include fixed-width(704px);
+  }
+
+  @include breakpoint('lg') {
+    @include fixed-width(852px);
+    &.sidebar-version {
+      @include fixed-width(644px);
+    }
+  }
+
+  @include breakpoint('xl') {
+    @include fixed-width(852px);
+  }
+
+  @include breakpoint('xxl') {
+    @include fixed-width(1052px);
+  }
 }

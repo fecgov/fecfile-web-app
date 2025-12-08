@@ -7,7 +7,7 @@
   }
 
   <!--  Begin Sidebar section -->
-  @if (layoutControls().showSidebar) {
+  @if (layoutControls().showSidebar && layoutService.showSidebar()) {
     <div class="inline-flex w-100">
       <div class="fec-background-color flex-shrink-1" id="sidebar-container">
         <app-drawer />
@@ -69,3 +69,6 @@
 
   <app-feedback-overlay />
 </div>
+@if (isDev()) {
+  <button (click)="toggleSidebar()">Toggle Sidebar</button>
+}
