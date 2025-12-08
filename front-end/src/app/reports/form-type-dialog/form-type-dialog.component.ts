@@ -1,6 +1,7 @@
-import { Component, computed, inject, model, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, model, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
+import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
@@ -15,7 +16,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
-  imports: [ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
+  imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
 })
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);
@@ -28,7 +29,7 @@ export class FormTypeDialogComponent {
   readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
   readonly isSubmitDisabled = computed(() =>
-    this.isF24() ? this.f24().isSubmitDisabled() : !(this.formType()?.createRoute ?? false),
+    this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
   );
 
   readonly f24 = viewChild.required(CreateF24Component);
@@ -55,16 +56,19 @@ export class FormTypeDialogComponent {
     }
   }
 
-  onDialogHide(): void {
-    if (this.isF24()) {
-      this.f24().reset();
-    }
-
-    this.selectedType.set(undefined);
-    this.dialogVisible.set(false);
-  }
-
   getFormType(type?: ReportTypes): FormType | undefined {
     return type ? getFormTypes(environment.showForm3).get(type) : undefined;
+  }
+
+  consturctor() {
+    effect(() => {
+      if (!this.dialogVisible()) {
+        if (this.isF24()) {
+          this.f24().reset();
+          this.selectedType.set(undefined);
+        }
+        this.selectedType.set(undefined);
+      }
+    });
   }
 }
