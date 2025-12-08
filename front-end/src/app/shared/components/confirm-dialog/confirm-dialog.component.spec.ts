@@ -64,13 +64,14 @@ describe('ConfirmDialogComponent', () => {
     component.confirmation = {
       key: 'x',
       message: 'rejectSpy',
+      reject: rejectSpy,
     };
 
     component.visible.set(true);
     component.cancelOption();
 
     expect(rejectSpy).toHaveBeenCalled();
-    expect(component.visible).toBeFalse();
+    expect(component.visible()).toBeFalse();
   });
 
   it('should call accept on confirm', () => {
@@ -79,13 +80,14 @@ describe('ConfirmDialogComponent', () => {
     component.confirmation = {
       key: 'x',
       message: 'acceptSpy',
+      accept: acceptSpy,
     };
 
     component.visible.set(true);
     component.confirmOption();
 
     expect(acceptSpy).toHaveBeenCalled();
-    expect(component.visible).toBeFalse();
+    expect(component.visible()).toBeFalse();
   });
 
   it('should unsubscribe on destroy', () => {
