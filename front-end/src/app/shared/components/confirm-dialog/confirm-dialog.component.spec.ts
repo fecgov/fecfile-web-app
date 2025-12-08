@@ -6,11 +6,11 @@ import { BehaviorSubject } from 'rxjs';
 describe('ConfirmDialogComponent', () => {
   let component: ConfirmDialogComponent;
   let fixture: ComponentFixture<ConfirmDialogComponent>;
-  let confirmation$: BehaviorSubject<Confirmation | undefined>;
-  let confirmationServiceMock: any;
+  let confirmation$: BehaviorSubject<Confirmation | null>;
+  let confirmationServiceMock: Partial<ConfirmationService>;
 
   beforeEach(async () => {
-    confirmation$ = new BehaviorSubject<Confirmation | undefined>(undefined);
+    confirmation$ = new BehaviorSubject<Confirmation | null>(null);
 
     confirmationServiceMock = {
       requireConfirmation$: confirmation$.asObservable(),
@@ -31,7 +31,7 @@ describe('ConfirmDialogComponent', () => {
   });
 
   it('should ignore confirmations with a different key', () => {
-    component.key.set('expected');
+    fixture.componentRef.setInput('key', 'expected');
 
     confirmation$.next({
       key: 'wrong',
@@ -44,7 +44,7 @@ describe('ConfirmDialogComponent', () => {
   });
 
   it('should update state when confirmation key matches', () => {
-    component.key.set('expected');
+    fixture.componentRef.setInput('key', 'expected');
 
     const conf: Confirmation = {
       key: 'expected',
