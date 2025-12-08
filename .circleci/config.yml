@@ -143,7 +143,7 @@ jobs:
           paths:
             - /tmp/cache/scanner
 
-  e2e-test:
+  e2e-smoke:
     docker:
       - image: cimg/node:lts-browsers
     steps:
@@ -252,11 +252,11 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 parameters:
-  is-triggered-e2e-test:
+  is-triggered-e2e-smoke-test:
     type: boolean
     default: false
 
-  is-extended-e2e-test:
+  is-triggered-e2e-extended-test:
     type: boolean
     default: false
 
@@ -264,7 +264,7 @@ parameters:
     type: boolean
     default: false
 
-  is-full-nightly:
+  is-triggered-full-nightly:
     type: boolean
     default: false
 
@@ -272,15 +272,15 @@ workflows:
   primary:
     when:
       and:
-        - not: << pipeline.parameters.is-triggered-e2e-test >>
-        - not: << pipeline.parameters.is-extended-e2e-test >>
+        - not: << pipeline.parameters.is-triggered-e2e-smoke-test >>
+        - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
         - not: << pipeline.parameters.is-triggered-unit-test >>
-        - not: << pipeline.parameters.is-full-nightly >>
+        - not: << pipeline.parameters.is-triggered-full-nightly >>
     jobs:
       - lint
       - test
       - dependency-check
-      - e2e-test:
+      - e2e-smoke:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
@@ -299,13 +299,13 @@ workflows:
   # circleci config file.  It is used to run the e2e tests
   # when the fecfile-web-api is deployed to dev, stage,
   # test, or prod.
-  triggered-e2e-test:
-    when: << pipeline.parameters.is-triggered-e2e-test >>
+  triggered-e2e-smoke-test:
+    when: << pipeline.parameters.is-triggered-e2e-smoke-test >>
     jobs:
-      - e2e-test
+      - e2e-smoke
 
   triggered-extended-e2e-test:
-    when: << pipeline.parameters.is-extended-e2e-test >>
+    when: << pipeline.parameters.is-triggered-e2e-extended-test >>
     jobs:
       - e2e-extended
 
@@ -315,9 +315,9 @@ workflows:
       - test
 
   full-nightly:
-    when: << pipeline.parameters.is-full-nightly >>
+    when: << pipeline.parameters.is-triggered-full-nightly >>
     jobs:
-      - e2e-test
+      - e2e-smoke
       - e2e-extended
       - test
 
@@ -332,6 +332,6 @@ workflows:
                 - release/test
                 - main
     jobs:
-      - e2e-test
+      - e2e-smoke
       - e2e-extended
       - test
