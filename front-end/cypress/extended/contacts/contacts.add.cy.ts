@@ -1,11 +1,11 @@
-import { Initialize } from '../../e2e/pages/loginPage';
-import { ContactListPage } from '../../e2e/pages/contactListPage';
-import { PageUtils } from '../../e2e/pages/pageUtils';
+import { Initialize } from '../../e2e-smoke/pages/loginPage';
+import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
+import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactsHelpers } from './contacts.helpers';
 import {
   defaultFormData as contactFormData,
   ContactFormData,
-} from '../../e2e/models/ContactFormModel';
+} from '../../e2e-smoke/models/ContactFormModel';
 
 describe('Contacts Add (/contacts)', () => {
   beforeEach(() => {

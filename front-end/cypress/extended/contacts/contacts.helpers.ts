@@ -1,6 +1,6 @@
 
-import { PageUtils } from '../../e2e/pages/pageUtils';
-import { ContactFormData } from '../../e2e/models/ContactFormModel';
+import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
+import { ContactFormData } from '../../e2e-smoke/models/ContactFormModel';
 
 type ContactCaseType = ContactFormData['contact_type'];
 type ContactCaseConfig = {
