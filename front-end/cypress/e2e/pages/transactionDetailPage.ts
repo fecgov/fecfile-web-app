@@ -294,6 +294,7 @@ export class TransactionDetailPage {
 
     PageUtils.clickButton('Save & add loan guarantor');
     PageUtils.closeToast();
+    PageUtils.urlCheck('create-sub-transaction/C2_LOAN_GUARANTOR');
     cy.contains('Guarantors to loan source').should('exist');
     ContactLookup.getContact(name);
     cy.get('#amount').safeType(amount);
