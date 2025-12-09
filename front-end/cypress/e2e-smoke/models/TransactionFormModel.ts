@@ -165,7 +165,7 @@ export const defaultLoanFormData: LoanFormData = {
   secured: 'YES',
 };
 
-export const formTransactionDataForScheduleLoan: LoanFormData = {
+const formTransactionDataForScheduleLoan: LoanFormData = {
   ...defaultLoanFormData,
   amount: 200.01,
   category_code: '005 Polling Expenses',
