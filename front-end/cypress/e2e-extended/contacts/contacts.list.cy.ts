@@ -151,7 +151,7 @@ describe('Contacts List (/contacts)', () => {
     cy.get('body').click();
 
     const selectPageSize = (size: number) => {
-      cy.intercept('GET', '/api/v1/contacts/**').as(`getContactsForPageSize_${size}`);
+      cy.intercept('GET', '**/api/v1/contacts/**').as(`getContactsForPageSize_${size}`);
       ContactsHelpers.selectResultsPerPage(size);
       cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
         const url = new URL(request.url);
