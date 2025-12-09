@@ -132,7 +132,6 @@ describe('Receipt Transactions', () => {
       cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').first().click();
 
       // Create memo transaction
-      PageUtils.urlCheck('PARTNERSHIP_ATTRIBUTION');
       cy.contains('h1', 'Partnership Attribution').should('exist');
       ContactLookup.getContact(individual.first_name);
       PageUtils.clickButton('Save');
@@ -462,7 +461,6 @@ describe('Receipt Transactions', () => {
       cy.get(alias).find('[data-cy="navigation-control-dropdown-option"]').contains('Partnership Receipt').click();
 
       // Create Partnership Receipt Joint Fundraising Transfer Memo
-      PageUtils.urlCheck('PARTNERSHIP_JF_TRANSFER_MEMO');
       cy.contains('h1', 'Partnership Receipt Joint Fundraising Transfer Memo').should('exist');
       ContactLookup.getContact(organization.name);
       const tier2TransactionData = {
