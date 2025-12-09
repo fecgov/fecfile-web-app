@@ -1,6 +1,6 @@
 @use 'mixins' as *;
 
-.question-header {
+.body-header {
   font-family: var(--karla-bold);
   font-size: 16px;
   line-height: 24px;
@@ -32,6 +32,21 @@
   gap: 5px;
 }
 
+.inner-body-text {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 18px;
+
+  @include fixed-width(100%);
+
+  @include breakpoint('xl') {
+    @include fixed-width(66.6667%);
+  }
+  @include breakpoint('xxl') {
+    @include fixed-width(50%);
+  }
+}
+
 .top-30 {
   top: 30%;
   margin-bottom: 32px;
@@ -52,10 +67,16 @@
   }
 
   @include breakpoint('xl') {
-    @include fixed-width(852px);
+    &,
+    &.sidebar-version {
+      @include fixed-width(852px);
+    }
   }
 
   @include breakpoint('xxl') {
-    @include fixed-width(1052px);
+    &,
+    &.sidebar-version {
+      @include fixed-width(1052px);
+    }
   }
 }

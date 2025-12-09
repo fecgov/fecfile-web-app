@@ -25,7 +25,7 @@
       <div class="w-6 gap-5 flex flex-column">
         @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
           <div class="flex flex-column">
-            <span class="question-header">Would you like to compile a print preview?</span>
+            <span class="body-header">Would you like to compile a print preview?</span>
             <span class="body-text">
               Review your in-progress report by creating a PDF print preview. This could take a few moments, depending
               on the size of the report.
@@ -54,29 +54,44 @@
             ></button>
           </div>
         } @else {
-          <h2 class="no-vert-margins">YOUR PRINT PREVIEW IS READY!</h2>
-          <span> Download a previous print preview or create a new one to see recent changes. </span>
-          <button
-            pButton
-            pRipple
-            appSingleClick
-            label="Download PDF"
-            class="p-button-warning"
-            (click)="downloadPDF()"
-          ></button>
-          <div class="align-center">{{ submitDate }}</div>
-          <button
-            pButton
-            pRipple
-            appSingleClick
-            label="Compile PDF"
-            class="p-button-warning"
-            (click)="submitPrintJob()"
-          ></button>
-          <span> Make changes to your report? To review recent changes, create a new PDF. </span>
+          <div class="flex flex-column">
+            <span class="body-header">YOUR PRINT PREVIEW IS READY!</span>
+            <span class="body-text">
+              Download a previous print preview or create a new one to see recent changes.
+            </span>
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              appSingleClick
+              label="Download PDF"
+              class="p-button-info m"
+              [pt]="{ label: 'font-karla-bold' }"
+              (click)="downloadPDF()"
+            ></button>
+            <div class="inner-body-text">
+              <span class="font-karla-bold">Last created:&nbsp;</span
+              ><span class="font-karla">{{ formattedDate() }}</span>
+            </div>
+          </div>
+          <div>
+            <button
+              pButton
+              pRipple
+              appSingleClick
+              label="Compile PDF"
+              class="p-button-warning"
+              [pt]="{ label: 'font-karla-bold' }"
+              (click)="submitPrintJob()"
+            ></button>
+            <div class="inner-body-text">
+              <span class="font-karla">Make changes to your report? To review recent changes, create a new PDF. </span>
+            </div>
+          </div>
         }
       </div>
-      <div class="w-6">
+      <div class="w-6 align-content-center">
         <img ngSrc="assets/img/PDFicon.svg" draggable="false" alt="pdf file" height="284" width="284" />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
@@ -11,7 +11,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { takeUntil } from 'rxjs';
-import { NgOptimizedImage } from '@angular/common';
+import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
@@ -21,7 +21,7 @@ import { LayoutService } from 'app/layout/layout.service';
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
   styleUrls: ['../../styles.scss', './print-preview.component.scss'],
-  imports: [NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective],
+  imports: [NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective, DatePipe],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);
@@ -32,7 +32,20 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   readonly layoutService = inject(LayoutService);
   report: Report = new Form3X() as unknown as Report;
   committeeAccount?: CommitteeAccount;
-  submitDate: Date | undefined;
+  readonly submitDate = signal<Date | undefined>(undefined);
+  readonly formattedDate = computed(() => {
+    const date = this.submitDate();
+    if (!date) return '';
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZoneName: 'long',
+    }).format(date);
+  });
   downloadURL = '';
   printError = '';
   pollingTime = 2000;
@@ -96,7 +109,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
         this.store.dispatch(singleClickEnableAction());
         this.webPrintStage = 'success';
         this.downloadURL = report.webprint_submission.fec_image_url;
-        this.submitDate = report.webprint_submission.created;
+        this.submitDate.set(report.webprint_submission.created);
         return;
       }
       // Otherwise the submission is still processing
