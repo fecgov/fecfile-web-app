@@ -1,5 +1,4 @@
 import { ContactFormData } from '../models/ContactFormModel';
-import { MockContact } from '../requests/library/contacts';
 import { PageUtils } from './pageUtils';
 
 export class ContactLookup {
@@ -41,7 +40,7 @@ export class ContactLookup {
       .get('.p-autocomplete-list-container')
       .contains(nameEntry)
       .then(($name) => {
-        $name.click();
+        cy.wrap($name).click();
       });
   }
 

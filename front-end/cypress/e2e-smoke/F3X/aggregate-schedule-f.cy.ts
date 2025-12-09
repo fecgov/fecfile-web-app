@@ -43,7 +43,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       TransactionDetailPage.enterDate(`[data-cy="expenditure_date"]`, new Date(currentYear, 4 - 1, 27));
       cy.get('#general_election_year').safeType(currentYear);
-      cy.get('#amount').safeType(100.0);
+      cy.get('#amount').safeType(100);
       cy.get('#purpose_description').first().safeType('test').blur();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$100.00');
     });
@@ -52,7 +52,7 @@ describe('Tests transaction form aggregate calculation', () => {
   it('new transaction aggregate', () => {
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-16', true],
+      [25, '2025-04-16', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.get(':nth-child(2) > :nth-child(2) > a').click();
@@ -90,7 +90,7 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-16', true],
+      [25, '2025-04-16', true],
     ]).then((result: any) => {
       cy.visit(`/reports/transactions/report/${result.report}/create/COORDINATED_PARTY_EXPENDITURE`);
       ContactLookup.getContact(result.organization.name);
@@ -107,7 +107,7 @@ describe('Tests transaction form aggregate calculation', () => {
   it('new transaction aggregate different election year', () => {
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-16', true],
+      [25, '2025-04-16', true],
     ]).then((result: any) => {
       cy.visit(`/reports/transactions/report/${result.report}/create/COORDINATED_PARTY_EXPENDITURE`);
       cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
@@ -126,7 +126,7 @@ describe('Tests transaction form aggregate calculation', () => {
   it('existing transaction change contact', () => {
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-16', false],
+      [25, '2025-04-16', false],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -142,7 +142,7 @@ describe('Tests transaction form aggregate calculation', () => {
   it('existing transaction change general election year', () => {
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-10', true],
+      [25, '2025-04-10', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -160,7 +160,7 @@ describe('Tests transaction form aggregate calculation', () => {
   it('existing transaction date leapfrogging', () => {
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-16', true],
+      [25, '2025-04-16', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -195,8 +195,8 @@ describe('Tests transaction form aggregate calculation', () => {
   it('leapfrog and contact change', () => {
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
-      [25.0, '2025-04-16', true],
-      [40.0, '2025-04-20', true],
+      [25, '2025-04-16', true],
+      [40, '2025-04-20', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -210,10 +210,6 @@ describe('Tests transaction form aggregate calculation', () => {
 
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
       PageUtils.clickButton('Save');
-
-      //cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      //cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
-      //cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
 
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();

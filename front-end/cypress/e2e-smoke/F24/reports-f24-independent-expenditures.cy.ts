@@ -13,13 +13,11 @@ import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpenditureData: DisbursementFormData = {
   ...defaultTransactionFormData,
-  ...{
-    date2: new Date(currentYear, 4 - 1, 27),
-    supportOpposeCode: 'SUPPORT',
-    signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-    signatoryFirstName: faker.person.firstName(),
-    signatoryLastName: faker.person.lastName(),
-  },
+  date2: new Date(currentYear, 4 - 1, 27),
+  supportOpposeCode: 'SUPPORT',
+  signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
+  signatoryFirstName: faker.person.firstName(),
+  signatoryLastName: faker.person.lastName(),
 };
 
 describe('Form 24 Independent Expenditures', () => {

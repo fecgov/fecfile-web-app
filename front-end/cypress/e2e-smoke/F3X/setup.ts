@@ -33,12 +33,12 @@ function addContact(contact: MockContact, results: Results, property: ConType) {
 }
 
 interface Results {
-  organization: any | null;
-  individual: any | null;
-  individual2: any | null;
-  candidate: any | null;
-  candidateSenate: any | null;
-  committee: any | null;
+  organization: any;
+  individual: any;
+  individual2: any;
+  candidate: any;
+  candidateSenate: any;
+  committee: any;
   report: string;
   f24: string | null;
 }

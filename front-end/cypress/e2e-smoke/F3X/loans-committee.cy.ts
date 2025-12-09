@@ -2,7 +2,6 @@ import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
-import { ContactFormData } from '../models/ContactFormModel';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
@@ -10,9 +9,7 @@ import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
-  ...{
-    purpose_description: undefined,
-  },
+  purpose_description: undefined,
 };
 
 function setupLoanByCommittee() {

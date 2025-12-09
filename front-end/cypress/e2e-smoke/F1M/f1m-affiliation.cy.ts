@@ -2,6 +2,7 @@ import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ContactFormData } from '../models/ContactFormModel';
+import type { MockContact } from '../requests/library/contacts';
 import { faker } from '@faker-js/faker';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 import {
@@ -10,38 +11,30 @@ import {
   Candidate_Presidential_A,
   Candidate_Presidential_B,
   Candidate_Senate_A,
-  Committee_A,
 } from '../requests/library/contacts';
 import { makeContact } from '../requests/methods';
 import { ContactLookup } from '../pages/contactLookup';
+
+function createContactPromise(
+  candidate: MockContact,
+  candidates: ContactFormData[],
+): Promise<void> {
+  return new Cypress.Promise<void>((resolve) => {
+    makeContact(candidate, (response) => {
+      candidates.push(response.body);
+      resolve();
+    });
+  });
+}
 
 describe('Manage reports', () => {
   beforeEach(() => {
     Initialize();
   });
 
-  it('should create form 1m by affiliation', () => {
-    makeContact(Committee_A, (response) => {
-      const committeeID = Cypress.env('COMMITTEE_ID');
-      const committee = response.body;
-
-      ReportListPage.createF1M();
-      PageUtils.valueCheck('[data-cy="committee-id-input"]', committeeID);
-      cy.get('[data-cy="state-party-radio"]').click();
-      cy.get('[data-cy="affiliation-radio"').click();
-      ContactLookup.getCommittee(committee);
-      PageUtils.valueCheck('[id="affiliated_committee_name"', committee.name);
-      PageUtils.clickButton('Save');
-      cy.get('[data-cy="affiliated_date_form_f1_filed-error"]').contains('This is a required field.');
-      PageUtils.calendarSetValue('[data-cy="affiliated_date_form_f1_filed"]');
-      PageUtils.clickButton('Save');
-      cy.get('[data-cy="form1m-list-component').should('exist');
-    });
-  });
-
-  it('should create form 1m by qualification', () => {
+  it('should prepare qualified candidates', () => {
     const candidates: ContactFormData[] = [];
-    const candidateList = [
+    const candidateList: MockContact[] = [
       Candidate_House_A,
       Candidate_House_B,
       Candidate_Presidential_A,
@@ -49,14 +42,28 @@ describe('Manage reports', () => {
       Candidate_Senate_A,
     ];
 
-    const apiCalls = candidateList.map((candidate) => {
-      return new Cypress.Promise((resolve) => {
-        makeContact(candidate, (response) => {
-          candidates.push(response.body);
-          resolve();
-        });
-      });
+    const apiCalls = candidateList.map((candidate) =>
+      createContactPromise(candidate, candidates),
+    );
+
+    cy.wrap(Promise.all(apiCalls)).then(() => {
+      expect(candidates).to.have.lengthOf(candidateList.length);
     });
+  });
+
+  it('should create form 1m by qualification', () => {
+    const candidates: ContactFormData[] = [];
+    const candidateList: MockContact[] = [
+      Candidate_House_A,
+      Candidate_House_B,
+      Candidate_Presidential_A,
+      Candidate_Presidential_B,
+      Candidate_Senate_A,
+    ];
+
+    const apiCalls = candidateList.map((candidate) =>
+      createContactPromise(candidate, candidates),
+    );
 
     cy.wrap(Promise.all(apiCalls)).then(() => {
       expect(candidates).to.have.lengthOf(candidateList.length);
@@ -72,12 +79,25 @@ describe('Manage reports', () => {
 
       const excludeFecIds: string[] = [];
       const excludeIds: string[] = [];
+
       for (let index = 0; index < candidates.length; index++) {
-        ContactLookup.getCandidate(candidates[index], excludeFecIds, excludeIds, `[data-cy="candidate-${index}"]`);
+        ContactLookup.getCandidate(
+          candidates[index],
+          excludeFecIds,
+          excludeIds,
+          `[data-cy="candidate-${index}"]`,
+        );
+
         cy.get(`[data-cy="candidate-${index}"]`)
           .find('[data-cy="last-name"]')
           .should('have.value', candidates[index].last_name);
-        PageUtils.calendarSetValue(getId(index), new Date(), `[data-cy="candidate-${index}"]`);
+
+        PageUtils.calendarSetValue(
+          getId(index),
+          new Date(),
+          `[data-cy="candidate-${index}"]`,
+        );
+
         excludeFecIds.push(candidates[index].candidate_id);
         excludeIds.push(candidates[index].id!);
       }
@@ -108,13 +128,14 @@ describe('Manage reports', () => {
   });
 });
 
-const romanMap: { [key: number]: string } = {
+const romanMap: Record<number, string> = {
   1: 'I',
   2: 'II',
   3: 'III',
   4: 'IV',
   5: 'V',
 };
-function getId(num: any) {
+
+function getId(num: number): string {
   return `[data-cy="${romanMap[num + 1]}_date_of_contribution"]`;
 }

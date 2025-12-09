@@ -9,9 +9,7 @@ import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
-  ...{
-    purpose_description: undefined,
-  },
+  purpose_description: undefined,
 };
 
 function setupLoanReceivedFromIndividual() {
@@ -23,7 +21,26 @@ function setupLoanReceivedFromIndividual() {
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
 
-    cy.wrap(result);
+    return result;
+  });
+}
+
+// pulled out so we don't stack callbacks inside the `it` body
+function verifyLoanReceivedFromIndividualNoDeleteButton() {
+  PageUtils.clickButton('Save both transactions');
+  PageUtils.urlCheck('/list');
+  cy.contains('Loan Received from Individual').should('exist');
+
+  cy.get('app-transaction-receipts').within(() => {
+    cy.contains('Loan Received from Individual')
+      .closest('tr')
+      .find('button')
+      .each(($button) => {
+        const innerHTML = $button.html();
+        if (innerHTML.includes('Delete')) {
+          throw new Error('A button contains "Delete", test failed.');
+        }
+      });
   });
 }
 
@@ -33,22 +50,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received From Individual', () => {
-    setupLoanReceivedFromIndividual().then(() => {
-      PageUtils.clickButton('Save both transactions');
-      PageUtils.urlCheck('/list');
-      cy.contains('Loan Received from Individual').should('exist');
-      cy.get('app-transaction-receipts').within(() => {
-        cy.contains('Loan Received from Individual')
-          .closest('tr')
-          .find('button')
-          .each(($button) => {
-            const innerHTML = $button.html();
-            if (innerHTML.includes('Delete')) {
-              throw new Error('A button contains "Delete", test failed.');
-            }
-          });
-      });
-    });
+    setupLoanReceivedFromIndividual().then(verifyLoanReceivedFromIndividualNoDeleteButton);
   });
 
   it('should test: Loan Guarantors', () => {

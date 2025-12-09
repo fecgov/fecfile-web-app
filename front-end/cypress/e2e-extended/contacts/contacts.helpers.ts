@@ -12,7 +12,7 @@ type ContactCaseConfig = {
 };
 
 export class ContactsHelpers {
-  static CONTACTS_HEADERS = [
+  static readonly CONTACTS_HEADERS = [
     'Name',
     'Type',
     'FEC ID',
@@ -27,7 +27,7 @@ export class ContactsHelpers {
     cy.get('p-table table thead th, table thead th')
       .then(($ths) =>
         Array.from($ths, (th) =>
-          (th.textContent || '').trim().replace(/\s+/g, ' ')
+          (th.textContent || '').trim().replaceAll(/\s+/g, ' ')
         )
       )
       .should('deep.equal', [...expected]);
@@ -70,7 +70,7 @@ export class ContactsHelpers {
           .click();
       });
 
-    const optionRegex = new RegExp(`^\\s*${n}\\s*$`);
+    const optionRegex = new RegExp(String.raw`^\s*${n}\s*$`);
     cy.get('body')
       .find('.p-select-list')
       .should('be.visible')
@@ -84,7 +84,7 @@ export class ContactsHelpers {
 
   static assertPageReport(start: number, end: number, total: number) {
     const rx = new RegExp(
-      `showing\\s+${start}\\s*(?:-|to)\\s*${end}\\s+of\\s+${total}\\s+contacts?`,
+      String.raw`showing\s+${start}\s*(?:-|to)\s*${end}\s+of\s+${total}\s+contacts?`,
       'i'
     );
     cy.contains(rx).should('exist');

@@ -5,7 +5,6 @@ import {
   LoanFormData,
   ScheduleFormData,
 } from '../models/TransactionFormModel';
-import { MockContact } from '../requests/library/contacts';
 import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
 

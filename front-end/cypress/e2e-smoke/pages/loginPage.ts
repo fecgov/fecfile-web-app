@@ -47,11 +47,10 @@ function getLoginIntervalString(sessionDur: number): string {
     minute = 0;
     hour += 1;
   }
-  if (minute !== 0) {
-    return `${hour}:${minute}`;
-  } else {
+  if (minute === 0) {
     return `${hour}:00`;
   }
+  return `${hour}:${minute}`;
 }
 
 function loginDotGovLogin() {

@@ -105,7 +105,7 @@ export class LoanFormData extends ScheduleFormData {
   }
 }
 
-class DebtFormData extends LoanFormData {}
+class DebtFormData extends LoanFormData { }
 
 export const defaultDebtFormData: DebtFormData = {
   amount: 60000,
@@ -165,14 +165,14 @@ export const defaultLoanFormData: LoanFormData = {
   secured: 'YES',
 };
 
-export const formTransactionDataForSchedule: ScheduleFormData = {
+export const formTransactionDataForScheduleLoan: LoanFormData = {
   ...defaultLoanFormData,
-  ...{
-    amount: 200.01,
-    category_code: '005 Polling Expenses',
-    date_incurred: undefined,
-    due_date_setting: undefined,
-    interest_rate_setting: undefined,
-    secured: undefined,
-  },
+  amount: 200.01,
+  category_code: '005 Polling Expenses',
+  date_incurred: undefined,
+  due_date_setting: undefined,
+  interest_rate_setting: undefined,
+  secured: undefined,
 };
+
+export const formTransactionDataForSchedule: ScheduleFormData = formTransactionDataForScheduleLoan;

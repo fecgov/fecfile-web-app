@@ -12,11 +12,9 @@ import { ReportListPage } from '../pages/reportListPage';
 
 const scheduleData = {
   ...defaultScheduleFormData,
-  ...{
-    electionYear: undefined,
-    electionType: undefined,
-    date_received: new Date(currentYear, 4 - 1, 27),
-  },
+  electionYear: undefined,
+  electionType: undefined,
+  date_received: new Date(currentYear, 4 - 1, 27),
 };
 
 function checkTable(index: number, type: string, containMemo: boolean, value: string) {
@@ -30,7 +28,7 @@ function checkTable(index: number, type: string, containMemo: boolean, value: st
   cy.get('@row').find('td').eq(TransactionTableColumns.transaction_id).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.parent_id).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.actions).should('exist');
-  
+
   cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
   cy.get('@row')
     .find('td')
@@ -78,11 +76,9 @@ describe('Receipt Transactions', () => {
   it('Create a Returned/Bounced Receipt transaction with negative only amount', () => {
     const negativeAmountFormData = {
       ...formTransactionDataForSchedule,
-      ...{
-        amount: -100.55,
-        date_received: new Date(currentYear, 4 - 1, 27),
-        category_code: '',
-      },
+      amount: -100.55,
+      date_received: new Date(currentYear, 4 - 1, 27),
+      category_code: '',
     };
 
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
@@ -116,7 +112,8 @@ describe('Receipt Transactions', () => {
   it('Create a Partnership Receipt transaction and memos with correct aggregate values', () => {
     const formTransactionData = {
       ...formTransactionDataForSchedule,
-      ...{ purpose_description: '', category_code: '' },
+      purpose_description: '',
+      category_code: '',
     };
 
     cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
@@ -137,7 +134,9 @@ describe('Receipt Transactions', () => {
       PageUtils.clickButton('Save');
       const memoFormTransactionData = {
         ...formTransactionDataForSchedule,
-        ...{ memo_code: true, purpose_description: '', category_code: '' },
+        memo_code: true,
+        purpose_description: '',
+        category_code: '',
       };
 
       TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
@@ -167,7 +166,7 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...formTransactionData,
-          ...{ purpose_description: 'See Partnership Attribution(s) below' },
+          purpose_description: 'See Partnership Attribution(s) below',
         },
         '',
         '#contribution_date',
@@ -182,7 +181,7 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...memoFormTransactionData,
-          ...{ purpose_description: 'Partnership Attribution' },
+          purpose_description: 'Partnership Attribution',
         },
         '',
         '#contribution_date',
@@ -200,10 +199,8 @@ describe('Receipt Transactions', () => {
 
       const localFormTransactionData = {
         ...formTransactionDataForSchedule,
-        ...{
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
 
       TransactionDetailPage.enterScheduleFormData(localFormTransactionData, false, '', true, 'contribution_date');
@@ -234,10 +231,8 @@ describe('Receipt Transactions', () => {
 
       const transactionFormData = {
         ...formTransactionDataForSchedule,
-        ...{
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', true, 'contribution_date');
       PageUtils.clickButton('Save');
@@ -269,11 +264,9 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(individual.last_name, '@stepOneAccordion');
       const transactionFormData = {
         ...formTransactionDataForSchedule,
-        ...{
-          purpose_description: '',
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(
         transactionFormData,
@@ -321,7 +314,7 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...transactionFormData,
-          ...{ purpose_description: `Earmarked through ${committee['name']}` },
+          purpose_description: `Earmarked through ${committee['name']}`,
         },
         '@stepOneAccordion',
         '#contribution_date',
@@ -335,7 +328,8 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...transactionFormData,
-          ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
+          memo_code: true,
+          purpose_description: 'Total earmarked through conduit.',
         },
         '@stepTwoAccordion',
         '#contribution_date',
@@ -356,11 +350,9 @@ describe('Receipt Transactions', () => {
 
       const transactionFormData = {
         ...formTransactionDataForSchedule,
-        ...{
-          purpose_description: '',
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(
         transactionFormData,
@@ -411,9 +403,7 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...transactionFormData,
-          ...{
-            purpose_description: `Earmarked through ${individual['first_name']} ${individual['last_name']}`,
-          },
+          purpose_description: `Earmarked through ${individual['first_name']} ${individual['last_name']}`,
         },
         '@stepOneAccordion',
         '#contribution_date',
@@ -427,7 +417,8 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...transactionFormData,
-          ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
+          memo_code: true,
+          purpose_description: 'Total earmarked through conduit.',
         },
         '@stepTwoAccordion',
         '#contribution_date',
@@ -449,11 +440,9 @@ describe('Receipt Transactions', () => {
 
       const tier1TransactionData = {
         ...formTransactionDataForSchedule,
-        ...{
-          purpose_description: '',
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(tier1TransactionData, false, '', true, 'contribution_date');
       const alias = PageUtils.getAlias('');
@@ -465,11 +454,9 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(organization.name);
       const tier2TransactionData = {
         ...formTransactionDataForSchedule,
-        ...{
-          purpose_description: '',
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(tier2TransactionData, false, '', true, 'contribution_date');
       cy.get(alias).find('[data-cy="navigation-control-dropdown"]').first().click();
@@ -480,11 +467,9 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(individual.last_name);
       const tier3TransactionData = {
         ...formTransactionDataForSchedule,
-        ...{
-          purpose_description: '',
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(tier3TransactionData, false, '', true, 'contribution_date');
       cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
@@ -523,7 +508,7 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.assertFormData(
         {
           ...tier1TransactionData,
-          ...{ purpose_description: 'Transfer of Joint Fundraising Proceeds' },
+          purpose_description: 'Transfer of Joint Fundraising Proceeds',
         },
         '',
         '#contribution_date',

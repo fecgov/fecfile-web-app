@@ -23,10 +23,8 @@ describe('Manage reports', () => {
   it('Create a Monthly Election Year report', () => {
     const formData = {
       ...defaultForm3XData,
-      ...{
-        filing_frequency: 'M',
-        report_code: 'M10',
-      },
+      filing_frequency: 'M',
+      report_code: 'M10',
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
@@ -37,10 +35,8 @@ describe('Manage reports', () => {
   it('Create a Quarterly Non-Election Year report', () => {
     const formData = {
       ...defaultForm3XData,
-      ...{
-        report_type_category: 'Non-Election Year',
-        report_code: '30R',
-      },
+      report_type_category: 'Non-Election Year',
+      report_code: '30R',
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
@@ -51,11 +47,9 @@ describe('Manage reports', () => {
   it('Create a Monthly Non-Election Year report', () => {
     const formData = {
       ...defaultForm3XData,
-      ...{
-        filing_frequency: 'M',
-        report_type_category: 'Non-Election Year',
-        report_code: 'YE',
-      },
+      filing_frequency: 'M',
+      report_type_category: 'Non-Election Year',
+      report_code: 'YE',
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
@@ -71,16 +65,14 @@ describe('Manage reports', () => {
     // Create report #2
     const formData = {
       ...defaultForm3XData,
-      ...{
-        report_code: '30G',
-      },
+      report_code: '30G',
     };
     ReportListPage.createF3X(formData);
 
     // Check for error messages caused by the overlapping dates
     const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
     cy.get('app-error-messages[data-cy="coverage_from_date-error"]').should('contain', errorMessage);
-    // TODO : https://fecgov.atlassian.net/browse/FECFILE-2661
+    // https://fecgov.atlassian.net/browse/FECFILE-2661
     // This error looks to be behaving very strangely. I feel like it's also behaving odd on develop however...
     // cy.get('app-error-messages[data-cy="coverage_through_date-error"]').should('contain', errorMessage);
   });

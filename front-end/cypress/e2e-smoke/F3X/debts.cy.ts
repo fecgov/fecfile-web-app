@@ -11,29 +11,58 @@ import { buildDebtOwedByCommittee } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
 
+function setupCoordinatedPartyExpenditure(
+  organization: ContactFormData,
+  committee: ContactFormData,
+  candidate: ContactFormData,
+) {
+  PageUtils.urlCheck('COORDINATED_PARTY_EXPENDITURE');
+  PageUtils.containedOnPage('Coordinated Party Expenditure');
+  ContactLookup.getContact(organization.name, '', 'Organization');
+  ContactLookup.getCommittee(committee, [], [], '#contact_3_lookup');
+  ContactLookup.getCandidate(candidate, [], [], '#contact_2_lookup');
+
+  TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
+  cy.get('#general_election_year').safeType(currentYear);
+  cy.get('#amount').safeType(100);
+  cy.get('#purpose_description').first().safeType('test');
+
+  PageUtils.clickButton('Save');
+}
+
+function createDebtRepaymentCallback(result: any) {
+  return () => {
+    ReportListPage.goToReportList(result.report);
+    cy.contains('Debt Owed By Committee').should('exist');
+
+    PageUtils.clickKababItem(
+      'Debt Owed By Committee',
+      'Report debt repayment',
+      'app-transaction-loans-and-debts',
+    );
+    PageUtils.urlCheck('select/disbursement?debt=');
+    cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
+    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
+    cy.contains('Coordinated Party Expenditure').click({ force: true });
+
+    setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
+
+    PageUtils.urlCheck('/list');
+    cy.contains('Coordinated Party Expenditure').should('exist');
+
+    PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
+  };
+}
+
+function handleDebtOwedByCommitteeLoanReportDebtRepayment(result: any) {
+  const debt = buildDebtOwedByCommittee(result.committee, result.report, 'TEST DEBT', 6000);
+  makeTransaction(debt, createDebtRepaymentCallback(result));
+}
+
 describe('Debts', () => {
   beforeEach(() => {
     Initialize();
   });
-
-  function setupCoordinatedPartyExpenditure(
-    organization: ContactFormData,
-    committee: ContactFormData,
-    candidate: ContactFormData,
-  ) {
-    PageUtils.urlCheck('COORDINATED_PARTY_EXPENDITURE');
-    PageUtils.containedOnPage('Coordinated Party Expenditure');
-    ContactLookup.getContact(organization.name, '', 'Organization');
-    ContactLookup.getCommittee(committee, [], [], '#contact_3_lookup');
-    ContactLookup.getCandidate(candidate, [], [], '#contact_2_lookup');
-
-    TransactionDetailPage.enterDate(`[data-cy="expenditure_date"]`, new Date(currentYear, 4 - 1, 27));
-    cy.get('#general_election_year').safeType(currentYear);
-    cy.get('#amount').safeType(100.0);
-    cy.get('#purpose_description').first().safeType('test');
-
-    PageUtils.clickButton('Save');
-  }
 
   it('should test Debt Owed By Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
@@ -92,28 +121,7 @@ describe('Debts', () => {
           organization: true,
           committee: true,
         }),
-      ).then((result: any) => {
-        const debt = buildDebtOwedByCommittee(result.committee, result.report, 'TEST DEBT', 6000);
-        makeTransaction(debt, () => {
-          ReportListPage.goToReportList(result.report);
-          cy.contains('Debt Owed By Committee').should('exist');
-
-          PageUtils.clickKababItem(
-            'Debt Owed By Committee',
-            'Report debt repayment',
-            'app-transaction-loans-and-debts',
-          );
-          PageUtils.urlCheck('select/disbursement?debt=');
-          cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
-          PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
-          cy.contains('Coordinated Party Expenditure').click({ force: true });
-          setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
-          PageUtils.urlCheck('/list');
-          cy.contains('Coordinated Party Expenditure').should('exist');
-
-          PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
-        });
-      });
+      ).then(handleDebtOwedByCommitteeLoanReportDebtRepayment);
     });
   });
 });

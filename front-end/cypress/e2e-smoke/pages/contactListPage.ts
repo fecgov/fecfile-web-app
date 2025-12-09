@@ -108,18 +108,9 @@ export class ContactListPage {
     cy.get(alias).find('#zip').should('have.value', formData['zip']);
 
     if (formData['contact_type'] === 'Candidate') {
-      // cy.get(alias).find('#candidate_id').should('contain', formData['candidate_id']);
       cy.get(alias).find('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
       cy.get(alias).find('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
       cy.get(alias).find('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
-    }
-
-    if (formData['contact_type'] === 'Committee') {
-      // cy.get(alias).find('#committee_id').should('contain', formData['committee_id']);
-    }
-
-    if (['Committee', 'Organization'].includes(formData['contact_type'])) {
-      // cy.get(alias).find('#name').should('contain', formData['name']);
     }
   }
 

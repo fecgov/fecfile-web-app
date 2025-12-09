@@ -15,10 +15,16 @@ import { ReportListPage } from '../pages/reportListPage';
 
 function setupTransactions(secondSame: boolean) {
   return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {
-    const transaction_a = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', result.individual, result.report);
+    const transaction_a = buildScheduleA(
+      'INDIVIDUAL_RECEIPT',
+      200.01,
+      '2025-04-12',
+      result.individual,
+      result.report,
+    );
     const transaction_b = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
-      25.0,
+      25,
       '2025-04-16',
       secondSame ? result.individual : result.individual2,
       result.report,
@@ -137,7 +143,13 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('leapfrog and contact change', () => {
     setupTransactions(true).then((result: any) => {
-      const transaction_c = buildScheduleA('INDIVIDUAL_RECEIPT', 40.0, '2025-04-20', result.individual, result.report);
+      const transaction_c = buildScheduleA(
+        'INDIVIDUAL_RECEIPT',
+        40,
+        '2025-04-20',
+        result.individual,
+        result.report,
+      );
       makeTransaction(transaction_c, () => {
         ReportListPage.goToReportList(result.report);
         cy.contains('Transactions in this report').should('exist');
@@ -160,24 +172,22 @@ describe('Tests transaction form aggregate calculation', () => {
     });
   });
 
-  // TODO makeTransaction the first transactions
   it('existing IE date leapfrogging', () => {
     cy.wrap(DataSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
       ReportListPage.goToReportList(result.report);
+
       // Create the first Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
       const independentExpenditureData: DisbursementFormData = {
         ...defaultTransactionFormData,
-        ...{
-          date_received: new Date(currentYear, 4 - 1, 5),
-          supportOpposeCode: 'SUPPORT',
-          amount: 100,
-          signatoryDateSigned: new Date(currentYear, 4 - 1, 5),
-          signatoryFirstName: faker.person.firstName(),
-          signatoryLastName: faker.person.lastName(),
-        },
+        date_received: new Date(currentYear, 4 - 1, 5),
+        supportOpposeCode: 'SUPPORT',
+        amount: 100,
+        signatoryDateSigned: new Date(currentYear, 4 - 1, 5),
+        signatoryFirstName: faker.person.firstName(),
+        signatoryLastName: faker.person.lastName(),
       };
 
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
@@ -199,14 +209,12 @@ describe('Tests transaction form aggregate calculation', () => {
 
       const independentExpenditureTwoData: DisbursementFormData = {
         ...defaultTransactionFormData,
-        ...{
-          date_received: new Date(currentYear, 4 - 1, 15),
-          supportOpposeCode: 'SUPPORT',
-          amount: 50,
-          signatoryDateSigned: new Date(currentYear, 4 - 1, 15),
-          signatoryFirstName: faker.person.firstName(),
-          signatoryLastName: faker.person.lastName(),
-        },
+        date_received: new Date(currentYear, 4 - 1, 15),
+        supportOpposeCode: 'SUPPORT',
+        amount: 50,
+        signatoryDateSigned: new Date(currentYear, 4 - 1, 15),
+        signatoryFirstName: faker.person.firstName(),
+        signatoryLastName: faker.person.lastName(),
       };
 
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
@@ -228,14 +236,12 @@ describe('Tests transaction form aggregate calculation', () => {
 
       const independentExpenditureThreeData: DisbursementFormData = {
         ...defaultTransactionFormData,
-        ...{
-          date_reveived: new Date(currentYear, 4 - 1, 27),
-          supportOpposeCode: 'SUPPORT',
-          amount: 25,
-          signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-          signatoryFirstName: faker.person.firstName(),
-          signatoryLastName: faker.person.lastName(),
-        },
+        date_received: new Date(currentYear, 4 - 1, 27),
+        supportOpposeCode: 'SUPPORT',
+        amount: 25,
+        signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
+        signatoryFirstName: faker.person.firstName(),
+        signatoryLastName: faker.person.lastName(),
       };
 
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(

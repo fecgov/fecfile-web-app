@@ -9,11 +9,9 @@ import { ReviewReport } from './utils/review-report';
 
 const scheduleData = {
   ...defaultScheduleFormData,
-  ...{
-    electionYear: undefined,
-    electionType: undefined,
-    date_received: new Date(currentYear, 4 - 1, 27),
-  },
+  electionYear: undefined,
+  electionType: undefined,
+  date_received: new Date(currentYear, 4 - 1, 27),
 };
 
 describe('Receipt Transactions', () => {

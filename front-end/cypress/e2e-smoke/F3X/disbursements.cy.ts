@@ -16,13 +16,11 @@ import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
-  ...{
-    date2: new Date(currentYear, 4 - 1, 27),
-    supportOpposeCode: 'SUPPORT',
-    signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-    signatoryFirstName: faker.person.firstName(),
-    signatoryLastName: faker.person.lastName(),
-  },
+  date2: new Date(currentYear, 4 - 1, 27),
+  supportOpposeCode: 'SUPPORT',
+  signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
+  signatoryFirstName: faker.person.firstName(),
+  signatoryLastName: faker.person.lastName(),
 };
 
 describe('Disbursements', () => {
@@ -138,13 +136,11 @@ describe('Disbursements', () => {
 
       const formTransactionData = {
         ...defaultTransactionFormData,
-        ...{
-          amount: 200.01,
-          category_code: '005 Polling Expenses',
-          electionYear: undefined,
-          electionType: undefined,
-          date_received: new Date(currentYear, 4 - 1, 27),
-        },
+        amount: 200.01,
+        category_code: '005 Polling Expenses',
+        electionYear: undefined,
+        electionType: undefined,
+        date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(formTransactionData);
       PageUtils.clickButton('Save');
@@ -173,15 +169,13 @@ describe('Disbursements', () => {
 
       const transactionFormData = {
         ...formTransactionDataForSchedule,
-        ...{
-          electionType: 'General',
-          electionYear: 2024,
-          election_other_description: faker.lorem.sentence({ min: 1, max: 2 }),
-          purpose_description: '',
-          category_code: '',
-          date_received: new Date(currentYear, 4 - 1, 27),
-          memoCode: false,
-        },
+        electionType: 'General',
+        electionYear: 2024,
+        election_other_description: faker.lorem.sentence({ min: 1, max: 2 }),
+        purpose_description: '',
+        category_code: '',
+        date_received: new Date(currentYear, 4 - 1, 27),
+        memoCode: false,
       };
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
       cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
