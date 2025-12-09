@@ -154,6 +154,13 @@ export function buildAfterDateValidator(form: FormGroup, field: string): Validat
   };
 }
 
+export function buildPrefixRequiredValidator(prefix: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const failed = control.value.length <= prefix.length;
+    return failed ? { required: true } : null;
+  };
+}
+
 /**
  * New validation rules for the transaction amount of reattribution from and redesignation from transactions.
  * These rules supplant the original rules for a given transaction.
