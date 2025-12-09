@@ -6,7 +6,6 @@ import {
   buildCorrespondingForm3XValidator,
   buildWithinReportDatesValidator,
   buildAfterDateValidator,
-  buildPrefixRequiredValidator,
   buildReattRedesTransactionValidator,
   CommitteeMemberEmailValidator,
   F24UniqueNameValidator,
@@ -144,20 +143,6 @@ describe('ValidatorsUtils', () => {
       });
       const validator = buildAfterDateValidator(form, 'otherDate');
       const control = new FormControl(new Date('2023-01-31'));
-      expect(validator(control)).toBeNull();
-    });
-  });
-
-  describe('buildPrefixRequiredValidator', () => {
-    it('should return error if value length is less than or equal to prefix length', () => {
-      const validator = buildPrefixRequiredValidator('P');
-      const control = new FormControl('P');
-      expect(validator(control)).toEqual({ required: true });
-    });
-
-    it('should return null if value length is greater than prefix length', () => {
-      const validator = buildPrefixRequiredValidator('P');
-      const control = new FormControl('P123');
       expect(validator(control)).toBeNull();
     });
   });
