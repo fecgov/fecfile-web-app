@@ -13,19 +13,20 @@ const formData = {
 };
 
 function setupLoanReceivedFromIndividual() {
-  return cy.wrap(DataSetup({ individual: true, individual2: true, committee: true })).then((result: any) => {
-    ReportListPage.goToReportList(result.report);
-    StartTransaction.Loans().Individual();
-    PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
-    ContactLookup.getContact(result.individual.last_name);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-
-    return result;
-  });
+  return cy
+    .wrap(DataSetup({ individual: true, individual2: true, committee: true }))
+    .then((result: any) => {
+      ReportListPage.goToReportList(result.report);
+      StartTransaction.Loans().Individual();
+      PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
+      ContactLookup.getContact(result.individual.last_name);
+      formData.date_received = undefined;
+      TransactionDetailPage.enterLoanFormData(formData);
+      cy.wrap(result);
+    });
 }
 
-// pulled out so we don't stack callbacks inside the `it` body
+
 function verifyLoanReceivedFromIndividualNoDeleteButton() {
   PageUtils.clickButton('Save both transactions');
   PageUtils.urlCheck('/list');

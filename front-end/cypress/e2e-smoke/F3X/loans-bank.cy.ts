@@ -74,12 +74,19 @@ function setupLoanFromBank(setup: Setup) {
     ];
 
     const loanAgreement = buildLoanAgreement(loanInfo, organization, authorizors, reportId);
-    const loanReceipt = buildLoanReceipt(loanInfo.loan_amount, loanInfo.loan_incurred_date, organization, reportId);
-    const loanFromBank = buildLoanFromBank(loanInfo, organization, reportId, [loanAgreement, loanReceipt]);
+    const loanReceipt = buildLoanReceipt(
+      loanInfo.loan_amount,
+      loanInfo.loan_incurred_date,
+      organization,
+      reportId,
+    );
+    const loanFromBank = buildLoanFromBank(loanInfo, organization, reportId, [
+      loanAgreement,
+      loanReceipt,
+    ]);
 
     makeTransaction(loanFromBank);
-
-    return result;
+    cy.wrap(result);
   });
 }
 
