@@ -4,6 +4,7 @@
   font-family: var(--karla-bold);
   font-size: 16px;
   line-height: 24px;
+  text-transform: uppercase;
 }
 
 .body-text {
@@ -47,11 +48,6 @@
   }
 }
 
-.top-30 {
-  top: 30%;
-  margin-bottom: 32px;
-}
-
 #print-preview-container {
   @include fixed-width(512px);
 
@@ -78,5 +74,25 @@
     &.sidebar-version {
       @include fixed-width(1052px);
     }
+  }
+}
+
+#left-content {
+  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  @include fixed-width(66.67%);
+
+  @include breakpoint('xl') {
+    @include fixed-width(50%);
+  }
+}
+
+#right-content {
+  align-content: center;
+  @include fixed-width(33.33%);
+
+  @include breakpoint('xl') {
+    @include fixed-width(50%);
   }
 }

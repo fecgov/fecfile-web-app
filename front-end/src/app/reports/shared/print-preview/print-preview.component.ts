@@ -11,7 +11,6 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { takeUntil } from 'rxjs';
-import { DatePipe, NgOptimizedImage } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
@@ -21,7 +20,7 @@ import { LayoutService } from 'app/layout/layout.service';
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
   styleUrls: ['../../styles.scss', './print-preview.component.scss'],
-  imports: [NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective, DatePipe],
+  imports: [ButtonDirective, Ripple, SingleClickDirective],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);
@@ -36,7 +35,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   readonly formattedDate = computed(() => {
     const date = this.submitDate();
     if (!date) return '';
-    return new Intl.DateTimeFormat('en-US', {
+    let dateString = new Intl.DateTimeFormat('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -45,6 +44,14 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       minute: 'numeric',
       timeZoneName: 'long',
     }).format(date);
+    dateString = dateString.replace(/, (\d{1,2}:)/, ', at $1');
+    dateString = dateString.replace(' Standard Time', ' Time');
+    dateString = dateString.replace(' Daylight Time', ' Time');
+    const parts = dateString.split(/( AM | PM )/);
+    if (parts.length === 3) {
+      return `${parts[0]}${parts[1]}(${parts[2].trim()})`;
+    }
+    return dateString;
   });
   downloadURL = '';
   printError = '';
@@ -126,7 +133,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     try {
       const report = await this.reportService.get(this.report.id!);
       this.updatePrintStatus(report);
-      await new Promise((resolve) => setTimeout(resolve, this.pollingTime)); // Replaces `concatMap(timer(...))`
+      await new Promise((resolve) => setTimeout(resolve, this.pollingTime));
       if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
         this.pollPrintStatus();
       }
