@@ -102,21 +102,7 @@ describe('SubmitReportComponent', () => {
     expect(component.form.contains('backdoor_code')).toBeFalse();
   });
 
-  it('should remove address fields when change_of_address is not true', () => {
-    component.form.get('change_of_address')?.setValue(true);
-    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeTrue();
-    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeTrue();
-    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeTrue();
-    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeTrue();
-
-    component.form.get('change_of_address')?.setValue(false);
-    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeFalse();
-    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeFalse();
-    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeFalse();
-    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeFalse();
-  });
-
-  it('should remove address fields when change_of_address is not true', () => {
+  it('should toggle address fields validation on change_of_address toggle', () => {
     component.form.get('change_of_address')?.setValue(true);
     expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeTrue();
     expect(component.form.get('city')?.hasValidator(Validators.required)).toBeTrue();
@@ -170,54 +156,11 @@ describe('SubmitReportComponent', () => {
     expect(retval?.zip).toEqual(component.form.value.zip);
   });
 
-  it('#updateReport should uses report address when change_of_address is false', async () => {
+  it('#updateReport should use committee address when change_of_address is false', async () => {
     const testReport = new Form3X();
-    testReport.street_1 = 'test_street_1';
-    testReport.street_2 = 'test_street_2';
-    testReport.city = 'test_city';
-    testReport.state = 'AL';
-    testReport.zip = '12345';
 
     component.form.patchValue({
       change_of_address: false,
-      street_1: 'new_street_1',
-      street_2: 'new_street_2',
-      city: 'new_city',
-      state: 'NY',
-      zip: '54321',
-    });
-    component.form.updateValueAndValidity();
-
-    TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
-    TestBed.inject(MockStore).refreshState();
-    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
-      return payload;
-    });
-
-    const retval = await component.updateReport();
-    expect(reportServiceUpdateSpy).toHaveBeenCalled();
-    expect(retval?.street_1).toEqual(testReport.street_1);
-    expect(retval?.street_2).toEqual(testReport.street_2);
-    expect(retval?.city).toEqual(testReport.city);
-    expect(retval?.state).toEqual(testReport.state);
-    expect(retval?.zip).toEqual(testReport.zip);
-  });
-
-  it('#updateReport should uses committee address when change_of_address is false and report address not populated', async () => {
-    const testReport = new Form3X();
-    testReport.street_1 = undefined;
-    testReport.street_2 = undefined;
-    testReport.city = undefined;
-    testReport.state = undefined;
-    testReport.zip = undefined;
-
-    component.form.patchValue({
-      change_of_address: false,
-      street_1: 'new_street_1',
-      street_2: 'new_street_2',
-      city: 'new_city',
-      state: 'NY',
-      zip: '54321',
     });
     component.form.updateValueAndValidity();
 

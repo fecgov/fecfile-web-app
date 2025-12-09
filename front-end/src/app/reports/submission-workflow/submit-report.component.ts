@@ -91,6 +91,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     effect(() => {
       SchemaUtils.addJsonSchemaValidators(this.form, this.activeReport().schema, false);
       this.initializeFormWithReport(this.activeReport(), this.committeeAccount());
+      this.form.patchValue({ change_of_address: false });
     });
   }
 
@@ -133,6 +134,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
       .get('change_of_address')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
+        this.initializeFormWithCommitteeAddress(this.committeeAccount());
         if (value) {
           this.form.get('street_1')?.addValidators(Validators.required);
           this.form.get('city')?.addValidators(Validators.required);
@@ -177,6 +179,16 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     }
   }
 
+  initializeFormWithCommitteeAddress(committeeAccount: CommitteeAccount) {
+    this.form.patchValue({
+      street_1: committeeAccount.street_1,
+      street_2: committeeAccount.street_2,
+      city: committeeAccount.city,
+      state: committeeAccount.state,
+      zip: committeeAccount.zip,
+    });
+  }
+
   async submit(): Promise<void> {
     this.confirmationService.confirm({
       message: this.activeReport().submitAlertText,
@@ -213,21 +225,13 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
 
     if (payload instanceof BaseForm3) {
       payload.qualified_committee = this.committeeAccount().qualified;
+      payload.change_of_address = this.form.value.change_of_address;
+      payload.street_1 = this.form.value.street_1;
+      payload.street_2 = this.form.value.street_2;
+      payload.city = this.form.value.city;
+      payload.state = this.form.value.state;
+      payload.zip = this.form.value.zip;
 
-      if (this.form.value.change_of_address) {
-        payload.change_of_address = this.form.value.change_of_address;
-        payload.street_1 = this.form.value.street_1;
-        payload.street_2 = this.form.value.street_2;
-        payload.city = this.form.value.city;
-        payload.state = this.form.value.state;
-        payload.zip = this.form.value.zip;
-      } else {
-        payload.street_1 = this.activeReport().street_1 ?? this.committeeAccount().street_1;
-        payload.street_2 = this.activeReport().street_2 ?? this.committeeAccount().street_2;
-        payload.city = this.activeReport().city ?? this.committeeAccount().city;
-        payload.state = this.activeReport().state ?? this.committeeAccount().state;
-        payload.zip = this.activeReport().zip ?? this.committeeAccount().zip;
-      }
       payload.confirmation_email_1 = this.form.value.confirmation_email_1;
       payload.confirmation_email_2 = this.form.value.confirmation_email_2;
       payload.qualified_committee = this.committeeAccount().qualified;
