@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { fakeAsync, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
+import { CommitteeAccount } from '../models';
 import { Form3X } from '../models/reports/form-3x.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
@@ -108,6 +109,19 @@ describe('ReportService', () => {
     const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/1/?fields_to_validate=`);
     expect(req.request.method).toEqual('PUT');
     req.flush(form3X);
+    httpTestingController.verify();
+  });
+
+  it('#fecUpdate should update report with committee info', async () => {
+    const report = Form3X.fromJSON({ id: '1' });
+    const committeeAccount = CommitteeAccount.fromJSON({ name: 'Committee' });
+
+    service.fecUpdate(report, committeeAccount);
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/reports/1/?fields_to_validate=qualified_committee,committee_name,street_1,street_2,city,state,zip`,
+    );
+    expect(req.request.method).toEqual('PUT');
+    req.flush(report);
     httpTestingController.verify();
   });
 });

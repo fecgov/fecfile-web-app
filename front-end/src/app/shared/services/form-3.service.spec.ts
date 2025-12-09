@@ -1,10 +1,9 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3Service } from './form-3.service';
-import { ApiService } from './api.service';
 import { Form3 } from '../models/reports/form-3.model';
-import { CommitteeAccount } from '../models/committee-account.model';
+import { ApiService } from './api.service';
+import { Form3Service } from './form-3.service';
 
 describe('Form3Service', () => {
   let service: Form3Service;
@@ -46,14 +45,5 @@ describe('Form3Service', () => {
     apiService.get.and.returnValue(Promise.resolve(mockReport));
     const result = await service.getFinalReport(2024);
     expect(result).toBeTruthy();
-  });
-
-  it('should update report with committee info', async () => {
-    const report = Form3.fromJSON({ id: '1' });
-    const committeeAccount = CommitteeAccount.fromJSON({ name: 'Committee' });
-    (apiService.put as jasmine.Spy).and.returnValue(Promise.resolve(report));
-
-    await service.fecUpdate(report, committeeAccount);
-    expect(apiService.put).toHaveBeenCalled();
   });
 });

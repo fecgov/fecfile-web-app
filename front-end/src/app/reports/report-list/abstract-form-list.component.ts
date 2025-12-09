@@ -1,14 +1,14 @@
 import { Component, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition } from 'app/shared/components/table/table.component';
 import { Report, ReportStatus } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
-import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SharedTemplatesComponent } from './shared-templates.component';
-import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({ template: '' })
 export abstract class AbstractFormListComponent<T extends Report> extends TableListBaseComponent<T> {
@@ -98,12 +98,9 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   }
 
   async download(report: T): Promise<void> {
-    const payload = getReportFromJSON<T>({
-      ...report,
-      qualified_committee: this.committeeAccount().qualified,
-    });
-
-    await this.itemService.update(payload, ['qualified_committee']);
+    /** Update the report with the committee information
+     * this is a must because the .fec requires this information */
+    await this.itemService.fecUpdate(report, this.committeeAccount());
     const download = await this.dotFecService.generateFecFile(report);
     return this.dotFecService.checkFecFileTask(download);
   }

@@ -134,6 +134,7 @@ export class ReportService<T extends Report> implements TableListService<Report>
   public fecUpdate(report: T, committeeAccount?: CommitteeAccount): Promise<T> {
     const payload: T = getReportFromJSON<T>({
       ...report,
+      qualified_committee: committeeAccount?.qualified,
       committee_name: committeeAccount?.name,
       street_1: committeeAccount?.street_1,
       street_2: committeeAccount?.street_2,
@@ -141,6 +142,14 @@ export class ReportService<T extends Report> implements TableListService<Report>
       state: committeeAccount?.state,
       zip: committeeAccount?.zip,
     });
-    return this.update(payload, ['committee_name', 'street_1', 'street_2', 'city', 'state', 'zip']);
+    return this.update(payload, [
+      'qualified_committee',
+      'committee_name',
+      'street_1',
+      'street_2',
+      'city',
+      'state',
+      'zip',
+    ]);
   }
 }
