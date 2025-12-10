@@ -15,7 +15,6 @@ import { ButtonDirective } from 'primeng/button';
 import { SelectReportDialogComponent } from './select-report-dialog/select-report-dialog.component';
 import { SecondaryReportSelectionDialogComponent } from '../secondary-report-selection-dialog/secondary-report-selection-dialog.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { ConfirmDialogComponent } from 'app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-transaction-list',
@@ -32,7 +31,6 @@ import { ConfirmDialogComponent } from 'app/shared/components/confirm-dialog/con
     ButtonDirective,
     SelectReportDialogComponent,
     SecondaryReportSelectionDialogComponent,
-    ConfirmDialogComponent,
   ],
 })
 export class TransactionListComponent {

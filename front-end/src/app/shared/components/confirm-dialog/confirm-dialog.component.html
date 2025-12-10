@@ -1,11 +1,9 @@
 <app-dialog
   [(visible)]="visible"
-  [title]="confirmation?.header || 'Are you sure?'"
+  [title]="header()"
   submitLabel="Confirm"
-  (submitForm)="confirmOption()"
+  (confirm)="confirmOption()"
+  (close)="cancelOption()"
 >
-  <p>{{ message }}</p>
-  <ng-container dialog-footer #dialogFooterRef>
-    <button pButton class="p-button-secondary" label="Cancel" (click)="cancelOption()"></button>
-  </ng-container>
+  <p>{{ message() }}</p>
 </app-dialog>

@@ -1,8 +1,9 @@
-import { Component, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Subscription } from 'rxjs';
 import { DialogComponent } from '../dialog/dialog.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -10,38 +11,32 @@ import { DialogComponent } from '../dialog/dialog.component';
   templateUrl: './confirm-dialog.component.html',
   styleUrl: './confirm-dialog.component.scss',
 })
-export class ConfirmDialogComponent implements OnInit, OnDestroy {
+export class ConfirmDialogComponent {
+  readonly header = computed(() => this.confirmation()?.header ?? 'Are you sure?');
+
   readonly key = input<string>();
 
   visible = signal(false);
-  message = '';
-  confirmation?: Confirmation;
-
-  private subscription?: Subscription;
 
   private confirmationService = inject(ConfirmationService);
 
-  ngOnInit(): void {
-    this.subscription = this.confirmationService.requireConfirmation$.subscribe((conf) => {
-      if (conf && conf.key === this.key()) {
-        this.confirmation = conf;
-        this.message = conf.message ?? '';
-        this.visible.set(true);
-      }
+  private readonly _confirmation = toSignal(this.confirmationService.requireConfirmation$);
+  readonly confirmation = computed(() => (this._confirmation()?.key === this.key() ? this._confirmation() : undefined));
+  readonly message = computed(() => this.confirmation()?.message);
+
+  constructor() {
+    effect(() => {
+      if (this.confirmation()) this.visible.set(true);
     });
   }
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
-
   cancelOption() {
-    this.confirmation?.reject?.();
+    this.confirmation()?.reject?.();
     this.visible.set(false);
   }
 
   confirmOption() {
-    this.confirmation?.accept?.();
+    this.confirmation()?.accept?.();
     this.visible.set(false);
   }
 }

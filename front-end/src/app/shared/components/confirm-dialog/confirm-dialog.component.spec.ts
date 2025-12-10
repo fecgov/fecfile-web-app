@@ -89,10 +89,4 @@ describe('ConfirmDialogComponent', () => {
     expect(acceptSpy).toHaveBeenCalled();
     expect(component.visible()).toBeFalse();
   });
-
-  it('should unsubscribe on destroy', () => {
-    const unsubscribeSpy = spyOn(component['subscription']!, 'unsubscribe');
-    component.ngOnDestroy();
-    expect(unsubscribeSpy).toHaveBeenCalled();
-  });
 });
