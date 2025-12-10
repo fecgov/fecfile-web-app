@@ -63,11 +63,8 @@ export class TransactionInputComponent implements OnInit {
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() primaryContactClear = new EventEmitter<void>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() candidateContactClear = new EventEmitter<void>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() secondaryContactClear = new EventEmitter<void>();
   @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() tertiaryContactClear = new EventEmitter<void>();
   @Output() quaternaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() quaternaryContactClear = new EventEmitter<void>();
   @Output() quinaryContactSelect = new EventEmitter<SelectItem<Contact>>();
@@ -116,24 +113,12 @@ export class TransactionInputComponent implements OnInit {
     this.candidateContactSelect.emit(selectItem);
   }
 
-  clearFormCandidateContact() {
-    this.candidateContactClear.emit();
-  }
-
   updateFormWithSecondaryContact(selectItem: SelectItem<Contact>) {
     this.secondaryContactSelect.emit(selectItem);
   }
 
-  clearFormSecondaryContact() {
-    this.secondaryContactClear.emit();
-  }
-
   updateFormWithTertiaryContact(selectItem: SelectItem<Contact>) {
     this.tertiaryContactSelect.emit(selectItem);
-  }
-
-  clearFormTertiaryContact() {
-    this.tertiaryContactClear.emit();
   }
 
   updateFormWithQuaternaryContact(selectItem: SelectItem<Contact>) {
