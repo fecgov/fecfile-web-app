@@ -12,8 +12,7 @@ import { ButtonDirective } from 'primeng/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { HeaderStyles } from './header/header-styles';
-import { LayoutService } from './layout.service';
-import { environment } from 'environments/environment';
+import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -38,12 +37,13 @@ export enum BackgroundStyles {
 })
 export class LayoutComponent implements AfterViewChecked {
   readonly layoutService = inject(LayoutService);
-  private destroyRef = inject(DestroyRef);
-  readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
+  readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
+
+  readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
   private readonly navEnd = toSignal(injectNavigationEnd());
 
-  readonly isDev = computed(() => environment.showGlossary);
   readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
 
   readonly layoutControls = computed(() => {
@@ -64,22 +64,24 @@ export class LayoutComponent implements AfterViewChecked {
   });
 
   constructor() {
-    const mobileQuery = window.matchMedia('(max-width: 991.98px)');
-    if (mobileQuery.matches) {
-      this.layoutService.showSidebar.set(false);
-    }
-
-    const listener = (e: MediaQueryListEvent) => {
-      const showing = this.layoutService.showSidebar();
-      if (showing && e.matches) {
+    if (this.useDynamicSidebar) {
+      const mobileQuery = window.matchMedia('(max-width: 991.98px)');
+      if (mobileQuery.matches) {
         this.layoutService.showSidebar.set(false);
-      } else if (!showing && !e.matches) {
-        this.layoutService.showSidebar.set(true);
       }
-    };
 
-    mobileQuery.addEventListener('change', listener);
-    this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
+      const listener = (e: MediaQueryListEvent) => {
+        const showing = this.layoutService.showSidebar();
+        if (showing && e.matches) {
+          this.layoutService.showSidebar.set(false);
+        } else if (!showing && !e.matches) {
+          this.layoutService.showSidebar.set(true);
+        }
+      };
+
+      mobileQuery.addEventListener('change', listener);
+      this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
+    }
   }
 
   ngAfterViewChecked(): void {
