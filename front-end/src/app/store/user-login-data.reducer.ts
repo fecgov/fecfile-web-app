@@ -20,14 +20,14 @@ export const loginReducer = createReducer(
   initialState,
   on(userLoginDataRetrievedAction, (_state, update) => {
     return {
-      ...update.payload,
       security_consent_version_at_login: _state.security_consent_version_at_login,
+      ...update.payload,
     };
   }),
   on(userLoginDataUpdatedAction, (_state, update) => {
     return {
-      ...update.payload,
       security_consent_version_at_login: _state.security_consent_version_at_login,
+      ...update.payload,
     };
   }),
   on(userLoginDataDiscardedAction, () => initialState),
