@@ -23,7 +23,7 @@ export class DialogComponent {
   readonly title = input.required<string>();
   readonly submitLabel = input('Save');
   readonly confirm = output<void>();
-  readonly cancel = output<void>();
+  readonly reject = output<void>();
 
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
@@ -32,7 +32,7 @@ export class DialogComponent {
 
   close() {
     this.visible.set(false);
-    this.cancel.emit();
+    this.reject.emit();
   }
 
   constructor() {

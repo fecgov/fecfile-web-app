@@ -61,13 +61,16 @@ describe('ConfirmDialogComponent', () => {
   it('should call reject on cancel', () => {
     const rejectSpy = jasmine.createSpy('reject');
 
-    component.confirmation = {
+    fixture.componentRef.setInput('key', 'x');
+
+    confirmation$.next({
       key: 'x',
       message: 'rejectSpy',
       reject: rejectSpy,
-    };
+    });
 
-    component.visible.set(true);
+    expect(component.visible()).toBeTrue();
+
     component.cancelOption();
 
     expect(rejectSpy).toHaveBeenCalled();
@@ -77,13 +80,15 @@ describe('ConfirmDialogComponent', () => {
   it('should call accept on confirm', () => {
     const acceptSpy = jasmine.createSpy('accept');
 
-    component.confirmation = {
+    fixture.componentRef.setInput('key', 'x');
+
+    confirmation$.next({
       key: 'x',
       message: 'acceptSpy',
       accept: acceptSpy,
-    };
+    });
 
-    component.visible.set(true);
+    expect(component.visible()).toBeTrue();
     component.confirmOption();
 
     expect(acceptSpy).toHaveBeenCalled();
