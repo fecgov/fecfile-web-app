@@ -10,6 +10,7 @@ import { getTestTransactionByType, testContact, testScheduleATransaction } from 
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -100,6 +101,16 @@ describe('ContactUtils', () => {
     selectItem.value.type = ContactTypes.ORGANIZATION;
     TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
+  });
+
+  it('test updateFormWithPrimaryContact and clearFormPrimaryContact', () => {
+    const transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
+
+    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, transaction, new Subject<string>());
+    expect(transaction.contact_1).toBeTruthy();
+
+    TransactionContactUtils.clearFormPrimaryContact(form, transaction, new Subject<string>());
+    expect(transaction.contact_1).toBeFalsy();
   });
 
   it('test updateFormWithCandidateContact', () => {
