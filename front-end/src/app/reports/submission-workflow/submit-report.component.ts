@@ -133,9 +133,9 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     this.form
       .get('change_of_address')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
+      .subscribe((changeOfAddress) => {
         this.initializeFormWithCommitteeAddress(this.committeeAccount());
-        if (value) {
+        if (changeOfAddress) {
           this.form.get('street_1')?.addValidators(Validators.required);
           this.form.get('city')?.addValidators(Validators.required);
           this.form.get('state')?.addValidators(Validators.required);
@@ -231,11 +231,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
       payload.city = this.form.value.city;
       payload.state = this.form.value.state;
       payload.zip = this.form.value.zip;
-
-      payload.confirmation_email_1 = this.form.value.confirmation_email_1;
-      payload.confirmation_email_2 = this.form.value.confirmation_email_2;
       payload.qualified_committee = this.committeeAccount().qualified;
-      payload.committee_name = this.committeeAccount().name;
     }
 
     return this.reportService.update(payload, this.formProperties);
