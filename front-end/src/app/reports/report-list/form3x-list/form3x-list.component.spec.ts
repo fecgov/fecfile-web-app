@@ -1,22 +1,23 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { Form3XListComponent } from './form3x-list.component';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { of, Subject } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Actions } from '@ngrx/effects';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { FormTypeDialogComponent } from 'app/reports/form-type-dialog/form-type-dialog.component';
-import { ReportTypes, ReportStatus, Form3X } from 'app/shared/models';
+import { CommitteeAccount, Form3X, ReportStatus, ReportTypes } from 'app/shared/models';
 import { ApiService } from 'app/shared/services/api.service';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { testMockStore, testActiveReport } from 'app/shared/utils/unit-test.utils';
+import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { DialogModule, Dialog } from 'primeng/dialog';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
+import { of, Subject } from 'rxjs';
 import { ReportListComponent } from '../report-list.component';
+import { Form3XListComponent } from './form3x-list.component';
 
 describe('Form3XListComponent', () => {
   let component: Form3XListComponent;
@@ -24,6 +25,7 @@ describe('Form3XListComponent', () => {
   let router: Router;
   let reportService: Form3XService;
   const actions$ = new Subject<{ type: string }>();
+  let store: MockStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -45,6 +47,7 @@ describe('Form3XListComponent', () => {
         },
       ],
     }).compileComponents();
+    store = TestBed.inject(MockStore);
   });
 
   beforeEach(() => {
@@ -161,10 +164,14 @@ describe('Form3XListComponent', () => {
   });
 
   it('#onDownload should open download panel properly', async () => {
+    const testCommitteeAccount = new CommitteeAccount();
+    testCommitteeAccount.id = '12346';
+    store.overrideSelector(selectCommitteeAccount, testCommitteeAccount);
     const generateSpy = spyOn(component.dotFecService, 'generateFecFile');
     const report = { id: '888', report_type: ReportTypes.F3X } as Form3X;
-    spyOn(component.itemService, 'update').and.resolveTo(report);
+    const fecUpdateSpy = spyOn(component.itemService, 'fecUpdate').and.resolveTo(report);
     await component.download(report);
+    expect(fecUpdateSpy).toHaveBeenCalledWith(report, testCommitteeAccount);
     expect(generateSpy).toHaveBeenCalledWith(report);
   });
 
