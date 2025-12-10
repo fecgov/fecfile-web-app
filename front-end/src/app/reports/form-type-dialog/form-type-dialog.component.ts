@@ -65,7 +65,6 @@ export class FormTypeDialogComponent {
       if (!this.dialogVisible()) {
         if (this.isF24()) {
           this.f24().reset();
-          this.selectedType.set(undefined);
         }
         this.selectedType.set(undefined);
       }
