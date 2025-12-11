@@ -45,19 +45,25 @@ describe('Tests transaction form aggregate calculation', () => {
     setupTransactions(true).then((result: any) => {
       ReportListPage.goToReportList(result.report);
 
-      cy.get(':nth-child(2) > :nth-child(2) > a').click();
+      cy.get('.p-datatable-tbody > tr')
+        .eq(1) // 0-based, so 2nd row
+        .find('td')
+        .eq(1) // 2nd cell
+        .find('a')
+        .first()
+        .click();
       cy.contains('Create a new contact').should('exist');
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Tests moving the date to be earlier
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(2025, 3, 10), '');
-      cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
       cy.get('[id=aggregate]').should('have.value', '$25.00');
 
       // Move the date back
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Change the contact
@@ -70,7 +76,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40');
-      cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickButton('Save');
 
@@ -91,7 +97,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[data-cy="searchBox"]').type('A');
       cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
-      cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       PageUtils.clickButton('Save');
@@ -111,7 +117,7 @@ describe('Tests transaction form aggregate calculation', () => {
       // Tests changing the amount
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       cy.get('[id="amount"]').clear().safeType('40');
-      cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
 
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickButton('Save');
@@ -130,7 +136,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       PageUtils.clickButton('Save');
@@ -159,7 +165,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
         // Tests moving the first transaction's date to be later than the second
         TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
-        cy.get('h1').click(); // clicking outside of fields to ensure that the amount field loses focus and updates
+        PageUtils.blurActiveField();
 
         cy.get('[id=aggregate]').should('have.value', '$200.01');
         PageUtils.clickButton('Save');
@@ -198,7 +204,7 @@ describe('Tests transaction form aggregate calculation', () => {
         'date_signed',
       );
 
-      cy.get('h1').click();
+      PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$100.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('exist');
@@ -225,7 +231,7 @@ describe('Tests transaction form aggregate calculation', () => {
         'date_signed',
       );
 
-      cy.get('h1').click();
+      PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('exist');
@@ -252,7 +258,7 @@ describe('Tests transaction form aggregate calculation', () => {
         'date_signed',
       );
 
-      cy.get('h1').click();
+      PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$175.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('exist');
@@ -261,7 +267,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
       cy.contains('Payee').should('exist');
       TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
-      cy.get('h1').click();
+      PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('exist');
