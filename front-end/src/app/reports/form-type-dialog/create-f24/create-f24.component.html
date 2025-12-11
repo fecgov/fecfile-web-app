@@ -1,7 +1,8 @@
 <div class="modal-item-margin field">
-  <span class="span-label">REPORT TYPE</span>
+  <span class="dialog-label" for="form24Options">REPORT TYPE</span>
   <p-selectbutton
     inputId="form24Options"
+    id="form24Options"
     [options]="form24Options"
     [(ngModel)]="selectedForm24Type"
     optionLabel="label"
@@ -10,7 +11,7 @@
 </div>
 
 <div class="w-full field">
-  <label for="form24Name">REPORT NAME</label>
+  <span class="dialog-label" id="form24Name_label">REPORT NAME</span>
   <p-input-group>
     <div id="f24-input-container">
       @if (typeName()) {
@@ -22,6 +23,7 @@
         type="text"
         [(ngModel)]="form24Name"
         id="form24Name"
+        aria-labelledby="form24Name_label"
         [class]="selectedForm24Type() ? 'pl-1' : ''"
       />
     </div>

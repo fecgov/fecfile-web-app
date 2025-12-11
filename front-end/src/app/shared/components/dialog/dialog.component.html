@@ -19,7 +19,8 @@
         pButton
         pRipple
         [label]="submitLabel()"
-        class="p-button-primary float-right"
+        [disabled]="submitDisabled()"
+        class="p-button-primary submit-button"
         (click)="confirm.emit()"
       ></button>
     </div>

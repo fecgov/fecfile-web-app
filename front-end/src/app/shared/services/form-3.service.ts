@@ -46,13 +46,13 @@ export class Form3Service extends ReportService<Form3> {
   public override fecUpdate(report: Form3, committeeAccount?: CommitteeAccount): Promise<Form3> {
     const payload: Form3 = Form3.fromJSON({
       ...report,
-      qualified_committee: committeeAccount?.qualified,
-      committee_name: committeeAccount?.name,
-      street_1: committeeAccount?.street_1,
-      street_2: committeeAccount?.street_2,
-      city: committeeAccount?.city,
-      state: committeeAccount?.state,
-      zip: committeeAccount?.zip,
+      qualified_committee: report.qualified_committee ?? committeeAccount?.qualified,
+      committee_name: report.committee_name ?? committeeAccount?.name,
+      street_1: report.street_1 ?? committeeAccount?.street_1,
+      street_2: report.street_2 ?? committeeAccount?.street_2,
+      city: report.city ?? committeeAccount?.city,
+      state: report.state ?? committeeAccount?.state,
+      zip: report.zip ?? committeeAccount?.zip,
     });
     return this.update(payload, [
       'qualified_committee',
