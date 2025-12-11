@@ -2,7 +2,7 @@
 // `ng build --configuration=cloud.gov.dev` replaces `environment.ts` with `environment.cloud.gov.dev.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const apiUrl = 'https://dev-api.fecfile.fec.gov/api/v1';
+const apiUrl = 'https://load-dev-api.app.cloud.gov/api/v1';
 export const environment = {
   production: false,
   name: 'development',

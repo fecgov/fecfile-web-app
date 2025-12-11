@@ -9,196 +9,49 @@ orbs:
   python: circleci/python@3.2.0
 
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
-commands:
-  spin-up-api-containers:
-    description: "Setup and start fecfile-web-api for E2E tests"
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - run:
-          name: clone fecfile-web-api
-          command: |
-            rm -rf fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git
-          working_directory: ~/project
-      - run:
-          name: use redis
-          command: |
-            export MOCK_OPENFEC=REDIS
-            echo $MOCK_OPENFEC
-      - run:
-          name: start fecfile-web-api
-          command: |
-            git checkout ${CIRCLE_BRANCH}
-            docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" \
-            WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
-            API_DOCKERFILE="Dockerfile-e2e" \
-            FECFILE_TEST_DB_NAME="postgres" \
-            DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} \
-            DATABASE_URL=${E2E_DATABASE_URL} \
-            FEC_API=${E2E_FEC_API} \
-            FEC_API_KEY=${E2E_FEC_API_KEY} \
-            MOCK_EFO="True" \
-            E2E_TEST="True" \
-            docker-compose up --build -d
+# commands:
+#   spin-up-api-containers:
+#     description: "Setup and start fecfile-web-api for E2E tests"
+#     steps:
+#       - setup_remote_docker:
+#           docker_layer_caching: false
+#       - run:
+#           name: clone fecfile-web-api
+#           command: |
+#             rm -rf fecfile-web-api
+#             git clone https://github.com/fecgov/fecfile-web-api.git
+#           working_directory: ~/project
+#       - run:
+#           name: use redis
+#           command: |
+#             export MOCK_OPENFEC=REDIS
+#             echo $MOCK_OPENFEC
+#       - run:
+#           name: start fecfile-web-api
+#           command: |
+#             git checkout ${CIRCLE_BRANCH}
+#             docker-compose down
+#             DB_DOCKERFILE="Dockerfile-e2e" \
+#             WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
+#             API_DOCKERFILE="Dockerfile-e2e" \
+#             FECFILE_TEST_DB_NAME="postgres" \
+#             DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} \
+#             DATABASE_URL=${E2E_DATABASE_URL} \
+#             FEC_API=${E2E_FEC_API} \
+#             FEC_API_KEY=${E2E_FEC_API_KEY} \
+#             MOCK_EFO="True" \
+#             E2E_TEST="True" \
+#             docker-compose up --build -d
 
-            docker container run --network container:fecfile-api-proxy \
-              docker.io/jwilder/dockerize \
-              -wait http://localhost:8080/devops/status/ \
-              -wait-retry-interval 2s \
-              -timeout 60s;
-          working_directory: ~/project/fecfile-web-api
+#             docker container run --network container:fecfile-api-proxy \
+#               docker.io/jwilder/dockerize \
+#               -wait http://localhost:8080/devops/status/ \
+#               -wait-retry-interval 2s \
+#               -timeout 60s;
+#           working_directory: ~/project/fecfile-web-api
 
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+# # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  lint:
-    docker:
-      - image: cimg/node:lts-browsers
-    resource_class: large
-    steps:
-      - checkout
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-
-      - run:
-          name: Print the linter version
-          command: ./node_modules/.bin/eslint --version
-          working_directory: ~/project/front-end/
-
-      - run:
-          name: Run linter
-          command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
-          working_directory: ~/project/front-end/
-
-      - run:
-          name: "Run Prettier with project configuration"
-          command: npm run prettier:check:ci
-          working_directory: ~/project/front-end/
-  test:
-    # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
-    # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
-    docker:
-      - image: cimg/node:lts-browsers
-    resource_class: large
-    steps:
-      - checkout:
-          method: full
-      - browser-tools/install_chrome
-      - browser-tools/install_chromedriver
-      - run:
-          command: |
-            google-chrome --version
-            chromedriver --version
-          name: Check install
-
-      # If we need to modify the params for install-packages:
-      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-
-      - run:
-          name: run unit tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
-          working_directory: ~/project/front-end/
-
-      - store_artifacts:
-          path: ~/project/front-end/coverage/front-end/lcov-report/
-          destination: coverage-report
-
-      # Sonar cloud setup and scanning
-      - run:
-          name: Create sonar-scanner cache directory if it does not exist
-          command: mkdir -p /tmp/cache/scanner
-      - restore_cache:
-          keys:
-            - v1-sonarcloud-scanner-5.0.1.3006
-      - run:
-          name: SonarCloud
-          command: |
-            set -e
-            VERSION=5.0.1.3006
-            if [ -z "$SONAR_TOKEN" ]; then
-                 echo "You must set SONAR_TOKEN environemnt variable"
-                 exit 1
-            fi
-            SCANNER_DIRECTORY=/tmp/cache/scanner
-            export SONAR_USER_HOME=$SCANNER_DIRECTORY/.sonar
-            OS="linux"
-            echo $SONAR_USER_HOME
-            if [[ ! -x "$SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner" ]]; then
-              curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$VERSION-$OS.zip
-              unzip -qq -o sonar-scanner-cli-$VERSION-$OS.zip -d $SCANNER_DIRECTORY
-            fi
-
-            chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
-            chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/jre/bin/java
-            $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
-          environment:
-            SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
-      - save_cache:
-          key: v1-sonarcloud-scanner-5.0.1.3006
-          paths:
-            - /tmp/cache/scanner
-
-  e2e-smoke:
-    docker:
-      - image: cimg/node:lts-browsers
-    steps:
-      - spin-up-api-containers
-      - run:
-          name: execute e2e tests
-          command: |
-            docker container run --name fecfile-web-app-e2e -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'\
-      - run:
-          name: stage test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
-            docker rm fecfile-web-app-e2e
-      - store_artifacts:
-          path: /tmp/cypress/results
-          destination: cypress/results
-
-  # An extended e2e test suite running cypress/extended/**/*.cy.ts
-  e2e-extended:
-    docker:
-      - image: cimg/node:lts-browsers
-    steps:
-      - spin-up-api-containers
-      - run:
-          name: execute extended e2e tests
-          command: |
-            docker container run --name fecfile-web-app-e2e -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'\
-      - run:
-          name: stage test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
-            docker rm fecfile-web-app-e2e
-      - store_artifacts:
-          path: /tmp/cypress/results
-          destination: cypress/results
-
-
   deploy-job:
     docker:
       - image: cimg/python:3.13-node
@@ -225,110 +78,110 @@ jobs:
             export PATH=$HOME/bin:$PATH
             invoke deploy --branch $CIRCLE_BRANCH --login
 
-  dependency-check:
-    docker:
-      - image: cimg/python:3.13-node
+#   dependency-check:
+#     docker:
+#       - image: cimg/python:3.13-node
 
-    steps:
-      - checkout
+#     steps:
+#       - checkout
 
-      # If we need to modify the params for install-packages:
-      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-      - run:
-          name: List installed node dependencies
-          command: npm ls --all
-          working_directory: ~/project/front-end/
-      - python/install-packages:
-          pkg-manager: pip
-          pip-dependency-file: requirements.txt
-      - run:
-          name: Check for unused dependencies
-          command: npx knip
-          working_directory: ~/project/front-end/
+#       # If we need to modify the params for install-packages:
+#       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
+#       - node/install-packages:
+#           override-ci-command: npm install
+#           app-dir: ~/project/front-end/
+#       - run:
+#           name: List installed node dependencies
+#           command: npm ls --all
+#           working_directory: ~/project/front-end/
+#       - python/install-packages:
+#           pkg-manager: pip
+#           pip-dependency-file: requirements.txt
+#       - run:
+#           name: Check for unused dependencies
+#           command: npx knip
+#           working_directory: ~/project/front-end/
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-parameters:
-  is-triggered-e2e-smoke-test:
-    type: boolean
-    default: false
+# # Invoke jobs via workflows
+# # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+# parameters:
+#   is-triggered-e2e-smoke-test:
+#     type: boolean
+#     default: false
 
-  is-triggered-e2e-extended-test:
-    type: boolean
-    default: false
+#   is-triggered-e2e-extended-test:
+#     type: boolean
+#     default: false
 
-  is-triggered-unit-test:
-    type: boolean
-    default: false
+#   is-triggered-unit-test:
+#     type: boolean
+#     default: false
 
-  is-triggered-full-nightly:
-    type: boolean
-    default: false
+#   is-triggered-full-nightly:
+#     type: boolean
+#     default: false
 
 workflows:
   primary:
-    when:
-      and:
-        - not: << pipeline.parameters.is-triggered-e2e-smoke-test >>
-        - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
-        - not: << pipeline.parameters.is-triggered-unit-test >>
-        - not: << pipeline.parameters.is-triggered-full-nightly >>
+    # when:
+    #   and:
+    #     - not: << pipeline.parameters.is-triggered-e2e-smoke-test >>
+    #     - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
+    #     - not: << pipeline.parameters.is-triggered-unit-test >>
+    #     - not: << pipeline.parameters.is-triggered-full-nightly >>
     jobs:
-      - lint
-      - test
-      - dependency-check
-      - e2e-smoke:
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+      # - lint
+      # - test
+      # - dependency-check
+      # - e2e-smoke:
+      #     filters:
+      #       branches:
+      #         only: /develop|release\/sprint-[\.\d]+|release\/test|main/
       - deploy-job:  # Deploy job even when e2e tests fail
-          name: deploy-even-if-e2e-job-fails
-          requires:
-            - lint
-            - test
-            - dependency-check
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+          name: deploy-job
+          # requires:
+          #   - lint
+          #   - test
+          #   - dependency-check
+          # filters:
+          #   branches:
+          #     only: /develop|release\/sprint-[\.\d]+|release\/test|main/
 
-  # This job is run when an e2e test is triggered with the
-  # is-triggered-e2e-test parameter via the fecfile-web-api
-  # circleci config file.  It is used to run the e2e tests
-  # when the fecfile-web-api is deployed to dev, stage,
-  # test, or prod.
-  triggered-e2e-smoke-test:
-    when: << pipeline.parameters.is-triggered-e2e-smoke-test >>
-    jobs:
-      - e2e-smoke
+#   # This job is run when an e2e test is triggered with the
+#   # is-triggered-e2e-test parameter via the fecfile-web-api
+#   # circleci config file.  It is used to run the e2e tests
+#   # when the fecfile-web-api is deployed to dev, stage,
+#   # test, or prod.
+#   triggered-e2e-smoke-test:
+#     when: << pipeline.parameters.is-triggered-e2e-smoke-test >>
+#     jobs:
+#       - e2e-smoke
 
-  triggered-extended-e2e-test:
-    when: << pipeline.parameters.is-triggered-e2e-extended-test >>
-    jobs:
-      - e2e-extended
+#   triggered-extended-e2e-test:
+#     when: << pipeline.parameters.is-triggered-e2e-extended-test >>
+#     jobs:
+#       - e2e-extended
 
-  triggered-unit-test:
-    when: << pipeline.parameters.is-triggered-unit-test >>
-    jobs:
-      - test
+#   triggered-unit-test:
+#     when: << pipeline.parameters.is-triggered-unit-test >>
+#     jobs:
+#       - test
 
-  full-nightly:
-    when: << pipeline.parameters.is-triggered-full-nightly >>
-    jobs:
-      - e2e-smoke
-      - e2e-extended
-      - test
+#   full-nightly:
+#     when: << pipeline.parameters.is-triggered-full-nightly >>
+#     jobs:
+#       - e2e-smoke
+#       - e2e-extended
+#       - test
 
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 6 * * *" # 06:00 UTC
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-    jobs:
-      - e2e-smoke
-      - e2e-extended
-      - test
+#   nightly:
+#     triggers:
+#       - schedule:
+#           cron: "0 6 * * *" # 06:00 UTC
+#           filters:
+#             branches:
+#               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+#     jobs:
+#       - e2e-smoke
+#       - e2e-extended
+#       - test

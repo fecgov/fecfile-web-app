@@ -1,11 +1,11 @@
 applications:
-  - name: fecfile-web-app
+  - name: load-fecfile-web-app
     instances: 2
     memory: 1G
     buildpack: nginx_buildpack
     stack: cflinuxfs4
     routes:
-      - route: dev.fecfile.fec.gov
+      - route: load-dev.app.cloud.gov
     env:
-      FECFILE_APP_URL: https://dev.fecfile.fec.gov
-      FECFILE_API_URL: https://dev-api.fecfile.fec.gov
+      FECFILE_APP_URL: https://load-dev.app.cloud.gov
+      FECFILE_API_URL: https://load-dev-api.app.cloud.gov
