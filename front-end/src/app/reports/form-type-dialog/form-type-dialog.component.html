@@ -3,7 +3,7 @@
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
-  (submitForm)="goToReportForm()"
+  (confirm)="goToReportForm()"
   [submitDisabled]="isSubmitDisabled()"
 >
   <div class="dialog-body">
