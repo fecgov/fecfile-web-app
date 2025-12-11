@@ -123,10 +123,7 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .contains('button', name)
-      .first()
-      .as('btn');
+    cy.get(alias).contains('button', name).as('btn');
     cy.get('@btn').click({ force });
   }
 
@@ -227,16 +224,13 @@ export class PageUtils {
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
+    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD')); // Insert password from env variable
     cy.get(alias).find('[data-cy="userCertified"]').first().click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
-    PageUtils.clickButton('Confirm');
+
+    PageUtils.clickButton('Yes');
+
     cy.wait('@SubmitReport');
   }
-
-  static blurActiveField = () => {
-    cy.get('body').click(0, 0);
-  };
-
 }

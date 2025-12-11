@@ -84,7 +84,9 @@ describe('Loans', () => {
       cy.contains('Loan By Committee').click();
       cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
-      PageUtils.clickButton('Confirm');
+      const alias = PageUtils.getAlias('');
+      cy.get(alias).find('.p-confirmdialog-accept-button').click();
+
       cy.contains(result.individual.last_name).should('not.exist');
     });
   });

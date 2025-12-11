@@ -18,17 +18,15 @@ describe("Users: Validation and API failure states", () => {
   it('shows required inline validation when email is empty', () => {
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    cy.get(DIALOG).filter(':visible').first().as('dialog');
-    UsersHelpers.emailInput().clear({ force: true }).should('have.value', '');
-    UsersHelpers.submitBtn().click();
-    UsersHelpers.submitBtn().should('be.visible');
+    cy.get('#email').clear({ force: true }).should('have.value', '');
+    cy.get('[data-cy="membership-submit"]').click();
+    cy.get('[data-cy="membership-submit"]').should('be.visible');
     cy.get('body')
-      .find('.p-error')
+      .find(".p-error")
       .first()
       .should('be.visible')
       .and('contain.text', 'This is a required field.');
   });
-
 
   it('shows inline validation message for invalid emails (multiple cases)', () => {
     const invalidEmails = [
@@ -50,32 +48,29 @@ describe("Users: Validation and API failure states", () => {
 
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    cy.get(DIALOG).filter(':visible').first().as('dialog');
-
     for (const badEmail of invalidEmails) {
-      UsersHelpers.emailInput().clear({ force: true }).type(badEmail, { delay: 0 });
-      UsersHelpers.submitBtn().click();
-      UsersHelpers.submitBtn().should('be.visible');
+      cy.get('#email').clear({ force: true }).type(badEmail, { delay: 0 });
+      cy.get('[data-cy="membership-submit"]').click();
+      cy.get('[data-cy="membership-submit"]').should('be.visible');
       findEmailError()
         .should('be.visible')
         .and('contain.text', 'This email is invalid');
-
-      UsersHelpers.emailInput().clear({ force: true });
+      cy.get('#email').clear({ force: true });
     }
-    UsersHelpers.emailInput().should('have.value', '');
+    cy.get('#email').should('have.value', '');
   });
 
   it('should verify results per page dropdown', () => {
     UsersPage.goToPage();
-    //cy.get('.p-select-dropdown').as('resultsPerPageDropdown');
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '5').click();
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '10').click();
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '15').click();
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '20').click();
+    cy.get('#pn_id_8 > div').as('resultsPerPageDropdown');
+    cy.get('@resultsPerPageDropdown').click();
+    cy.get('#pn_id_8_0').should('be.visible').and('have.text', '5').click();
+    cy.get('@resultsPerPageDropdown').click();
+    cy.get('#pn_id_8_1').should('be.visible').and('have.text', '10').click();
+    cy.get('@resultsPerPageDropdown').click();
+    cy.get('#pn_id_8_2').should('be.visible').and('have.text', '15').click();
+    cy.get('@resultsPerPageDropdown').click();
+    cy.get('#pn_id_8_3').should('be.visible').and('have.text', '20').click();
   });
 
   it('should verify that toast messages close correctly on all actions', () => {
