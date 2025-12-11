@@ -1,0 +1,9 @@
+<app-dialog
+  [(visible)]="visible"
+  [title]="header()"
+  submitLabel="Confirm"
+  (confirm)="confirmOption()"
+  (close)="cancelOption()"
+>
+  <p>{{ message() }}</p>
+</app-dialog>

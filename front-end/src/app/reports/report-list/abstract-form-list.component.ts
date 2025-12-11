@@ -67,7 +67,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   public confirmDelete(report: T): void {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this report? This action cannot be undone.',
+      message: 'Are you sure you want to delete this report?\n\nThis action cannot be undone.',
       header: 'Hang on...',
       rejectLabel: 'Cancel',
       rejectIcon: 'none',
