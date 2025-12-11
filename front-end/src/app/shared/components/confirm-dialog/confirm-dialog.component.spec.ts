@@ -41,7 +41,7 @@ describe('ConfirmDialogComponent', () => {
     fixture.detectChanges();
 
     expect(component.visible()).toBeFalse();
-    expect(component.message()).toBe('');
+    expect(component.message()).toBeUndefined();
     expect(component.confirmation()).toBeUndefined();
   });
 
