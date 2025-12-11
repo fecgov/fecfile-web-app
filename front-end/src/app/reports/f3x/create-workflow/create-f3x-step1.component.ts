@@ -76,12 +76,17 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
     updateOn: 'blur',
   });
+  readonly filingFrequencyOptions: PrimeOptions = [
+    { label: 'Quarterly', value: 'Q' },
+    { label: 'Monthly', value: 'M' },
+  ];
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   readonly defaultReportTypeCategory = this.getDefaultTypeCategory();
 
   // Observable to Signals
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
   readonly filingFrequency = toSignal(this.form.controls['filing_frequency'].valueChanges);
+  readonly filingFrequencyLabel = computed(() => (this.filingFrequency() === 'M' ? 'MONTHLY' : 'QUARTERLY'));
   readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
 
   // Derived Asyncs
@@ -165,6 +170,26 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
       default:
         return [];
     }
+  });
+
+  readonly reportCodesColumns = computed(() => {
+    const codes = this.reportCodes();
+    const TOTAL_COLUMNS = 3;
+    const result: ReportCodes[][] = [];
+
+    let startIndex = 0;
+
+    for (let i = 0; i < TOTAL_COLUMNS; i++) {
+      const baseSize = Math.floor(codes.length / TOTAL_COLUMNS);
+      const extra = i < codes.length % TOTAL_COLUMNS ? 1 : 0;
+      const colSize = baseSize + extra;
+
+      const chunk = codes.slice(startIndex, startIndex + colSize);
+      result.push(chunk);
+      startIndex += colSize;
+    }
+
+    return result;
   });
 
   readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));

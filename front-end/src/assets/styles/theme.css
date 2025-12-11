@@ -6575,3 +6575,11 @@ td {
 .p-accordionpanel:not(.p-accordionpanel-active):not(.p-disabled) .p-accordionheader:hover .p-accordionheader-toggle-icon {
   color: var(--p-accordion-header-toggle-icon-color);
 }
+
+.p-radiobutton-input {
+  height: 100% !important;
+}
+
+.p-field-checkbox > label:not(.p-disabled) {
+  cursor: pointer;
+}

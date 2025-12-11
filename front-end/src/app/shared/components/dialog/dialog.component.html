@@ -1,31 +1,26 @@
-<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="visible.set(false)">
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()">
   <div class="dialog-header">
     <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
-    <a (click)="visible.set(false)" aria-label="Cancel">
-      <img alt="close dialog" src="assets/img/i-x-circle.svg" />
+    <a (click)="close()" aria-label="Cancel">
+      <img src="assets/img/i-x-circle.svg" />
     </a>
   </div>
   <ng-content></ng-content>
   <div class="dialog-footer">
     <hr type="solid" />
     <div class="flex justify-content-between">
-      <button
-        type="button"
-        pButton
-        pRipple
-        label="Cancel"
-        class="p-button-secondary"
-        (click)="visible.set(false)"
-      ></button>
+      <ng-content select="[dialog-footer]"></ng-content>
+      @if (!hasCustomFooter()) {
+        <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
+      }
       <button
         type="submit"
         data-cy="membership-submit"
         pButton
         pRipple
         [label]="submitLabel()"
-        class="p-button-primary submit-button"
-        (click)="submitForm.emit()"
-        [disabled]="submitDisabled()"
+        class="p-button-primary float-right"
+        (click)="confirm.emit()"
       ></button>
     </div>
   </div>

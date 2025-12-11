@@ -21,16 +21,13 @@ export class SubmitReportStatusComponent implements OnInit {
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   private readonly form3XService = inject(Form3XService);
-  readonly activeReport = this.store.selectSignal(selectActiveReport);
-  readonly reportCodeSignal = computed(() => this.activeReport().report_code as ReportCodes);
-  readonly coverageDatesSignal = computed(() => {
-    const report = this.activeReport();
-    if (![ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)) return undefined;
-    return (report as BaseForm3).coverageDates;
-  });
-  readonly fecStatusSignal = computed(() => this.activeReport().upload_submission?.fec_status);
-  readonly fecMessageSignal = computed(() => this.activeReport().upload_submission?.fec_message);
-  readonly reportStatusSignal = computed(() => this.activeReport().report_status as ReportStatus);
+  readonly report = this.store.selectSignal(selectActiveReport);
+  readonly reportCode = computed(() => this.report().report_code as ReportCodes);
+  readonly isBaseF3 = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
+  readonly coverageDates = computed(() => (this.isBaseF3() ? (this.report() as BaseForm3).coverageDates : undefined));
+  readonly fecStatus = computed(() => this.report().upload_submission?.fec_status);
+  readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
+  readonly reportStatus = computed(() => this.report().report_status as ReportStatus);
 
   reportCodeLabelMap?: { [key in ReportCodes]: string };
 
