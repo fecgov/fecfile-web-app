@@ -1,15 +1,4 @@
-import {
-  Component,
-  computed,
-  contentChild,
-  effect,
-  ElementRef,
-  input,
-  model,
-  output,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, contentChild, effect, ElementRef, input, model, output, viewChild } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 
 @Component({

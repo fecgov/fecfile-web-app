@@ -38,9 +38,11 @@ describe('ConfirmDialogComponent', () => {
       message: 'Should not appear',
     });
 
+    fixture.detectChanges();
+
     expect(component.visible()).toBeFalse();
-    expect(component.message).toBe('');
-    expect(component.confirmation).toBeUndefined();
+    expect(component.message()).toBe('');
+    expect(component.confirmation()).toBeUndefined();
   });
 
   it('should update state when confirmation key matches', () => {
@@ -52,10 +54,11 @@ describe('ConfirmDialogComponent', () => {
     };
 
     confirmation$.next(conf);
+    fixture.detectChanges();
 
     expect(component.visible()).toBeTrue();
-    expect(component.message).toBe('Are you sure?');
-    expect(component.confirmation).toEqual(conf);
+    expect(component.message()).toBe('Are you sure?');
+    expect(component.confirmation()).toEqual(conf);
   });
 
   it('should call reject on cancel', () => {
@@ -68,6 +71,8 @@ describe('ConfirmDialogComponent', () => {
       message: 'rejectSpy',
       reject: rejectSpy,
     });
+
+    fixture.detectChanges();
 
     expect(component.visible()).toBeTrue();
 
@@ -87,6 +92,8 @@ describe('ConfirmDialogComponent', () => {
       message: 'acceptSpy',
       accept: acceptSpy,
     });
+
+    fixture.detectChanges();
 
     expect(component.visible()).toBeTrue();
     component.confirmOption();
