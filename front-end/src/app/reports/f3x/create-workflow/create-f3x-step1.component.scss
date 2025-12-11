@@ -1,12 +1,8 @@
+@use 'mixins' as *;
+
 .p-field-checkbox > .p-disabled {
   opacity: 1;
   color: #999999;
-}
-
-.radio-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 :host ::ng-deep {
@@ -15,26 +11,26 @@
   }
 
   .p-dialog-header {
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
+    padding-top: 0;
+    padding-bottom: 0;
 
-  .p-dialog-header .p-dialog-title {
-    font-family: var(--gandhi-bold);
-    font-size: 28px;
-    color: #212121;
+    .p-dialog-title {
+      font-family: var(--gandhi-bold);
+      font-size: 28px;
+      color: #212121;
+    }
   }
 
   .p-dialog-content {
     padding-left: 16px;
-  }
 
-  .p-dialog-content > p {
-    font-family: var(--karla);
-    color: #212121;
-    line-height: 1;
-    margin-top: 0px;
-    margin-bottom: 15px;
+    > p {
+      font-family: var(--karla);
+      color: #212121;
+      line-height: 1;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
   }
 
   hr,
@@ -45,31 +41,12 @@
 }
 
 #form {
-  max-width: 360px;
-  width: 360px;
+  @include fixed-width(360px);
+
   display: flex;
   flex-direction: column;
   gap: 32px;
   margin-bottom: 16px;
-}
 
-@media (min-width: 576px) {
-  #form {
-    max-width: 540px;
-    width: 540px;
-  }
-}
-
-@media (min-width: 768px) {
-  #form {
-    max-width: 720px;
-    width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
-  #form {
-    max-width: 780.4px;
-    width: 780.4px;
-  }
+  @include standard-container();
 }
