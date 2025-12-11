@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, input, viewChild, output, computed } from '@angular/core';
-import { Select, SelectModule, SelectStyle } from 'primeng/select';
+import { Select, SelectModule, SelectPassThrough, SelectStyle } from 'primeng/select';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -21,6 +21,7 @@ export class SearchableSelectComponent {
   readonly autoDisplayFirst = input(true);
   readonly readonly = input(false);
   readonly styleClass = input('');
+  readonly pt = input<SelectPassThrough>();
 
   readonly changeOut = output<any>();
   readonly focusOut = output<any>();
