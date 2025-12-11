@@ -19,9 +19,7 @@
 }
 
 @mixin standard-container($support-sidebar: false) {
-  @include breakpoint('sm') {
-    @include fixed-width(512px);
-  }
+  @include fixed-width(512px);
 
   @include breakpoint('md') {
     @include fixed-width(704px);
