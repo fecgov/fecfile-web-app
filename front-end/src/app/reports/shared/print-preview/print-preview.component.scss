@@ -49,32 +49,7 @@
 }
 
 #print-preview-container {
-  @include fixed-width(512px);
-
-  @include breakpoint('md') {
-    @include fixed-width(704px);
-  }
-
-  @include breakpoint('lg') {
-    @include fixed-width(852px);
-    &.sidebar-version {
-      @include fixed-width(644px);
-    }
-  }
-
-  @include breakpoint('xl') {
-    &,
-    &.sidebar-version {
-      @include fixed-width(852px);
-    }
-  }
-
-  @include breakpoint('xxl') {
-    &,
-    &.sidebar-version {
-      @include fixed-width(1052px);
-    }
-  }
+  @include standard-container(true);
 }
 
 #left-content {
