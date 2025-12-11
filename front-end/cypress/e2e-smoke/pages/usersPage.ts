@@ -28,22 +28,37 @@ export class UsersPage {
   static create(fd: UserFormData) {
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    cy.wait(150);
-    UsersPage.enterFormData(fd);
-    cy.get('[data-cy="membership-submit"]').click();
+    cy.get('#content-offset app-committee-member-dialog')
+      .filter(':visible')
+      .first()
+      .as('dialog');
+
+    UsersPage.enterFormData(fd, false, '@dialog');
+    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
   }
+
 
   static editRole(fd: UserFormData, alias = '') {
     UsersPage.goToPage();
     PageUtils.clickKababItem(fd.email, 'Edit Role');
-    PageUtils.dropdownSetValue("app-select[inputid='role']", fd['role'], alias);
-    cy.get('[data-cy="membership-submit"]').click();
+    cy.get('#content-offset app-committee-member-dialog')
+      .filter(':visible')
+      .first()
+      .as('dialog');
+
+    PageUtils.dropdownSetValue(
+      "app-select[inputid='role']",
+      fd['role'],
+      '@dialog'
+    );
+    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
   }
 
   static delete(email: string) {
-    const alias = PageUtils.getAlias('');
     UsersPage.goToPage();
     PageUtils.clickKababItem(email, 'Delete');
-    cy.get(alias).find('.p-confirmdialog-accept-button').click();
+    cy.get('app-confirm-dialog')
+      .contains('button', 'Confirm')
+      .click();
   }
 }
