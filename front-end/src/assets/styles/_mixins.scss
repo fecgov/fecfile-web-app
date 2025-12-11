@@ -1,0 +1,61 @@
+@use 'variables' as *;
+
+@mixin breakpoint($size) {
+  @if map-has-key($breakpoints, $size) {
+    $value: map-get($breakpoints, $size);
+
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$size}.";
+  }
+}
+
+@mixin fixed-width($w) {
+  width: $w;
+  min-width: $w;
+  max-width: $w;
+}
+
+@mixin standard-container($support-sidebar: false) {
+  @include breakpoint('sm') {
+    @include fixed-width(512px);
+  }
+
+  @include breakpoint('md') {
+    @include fixed-width(704px);
+  }
+
+  @include breakpoint('lg') {
+    @include fixed-width(852px);
+
+    @if $support-sidebar {
+      &.sidebar-version {
+        @include fixed-width(644px);
+      }
+    }
+  }
+
+  @include breakpoint('xl') {
+    @if $support-sidebar {
+      &,
+      &.sidebar-version {
+        @include fixed-width(852px);
+      }
+    } @else {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    @if $support-sidebar {
+      &,
+      &.sidebar-version {
+        @include fixed-width(1052px);
+      }
+    } @else {
+      @include fixed-width(1052px);
+    }
+  }
+}
