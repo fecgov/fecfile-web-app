@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -58,6 +58,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   protected readonly messageService = inject(MessageService);
   readonly router = inject(Router);
   readonly reportId = injectParams('reportId');
+  private readonly destroyRef = inject(DestroyRef);
 
   // CONSTANTS
   readonly year = new Date().getFullYear();
@@ -172,16 +173,17 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
   });
 
+  readonly numReportCodeColumns = signal(3);
   readonly reportCodesColumns = computed(() => {
     const codes = this.reportCodes();
-    const TOTAL_COLUMNS = 3;
+    const numColumns = this.numReportCodeColumns();
     const result: ReportCodes[][] = [];
 
     let startIndex = 0;
 
-    for (let i = 0; i < TOTAL_COLUMNS; i++) {
-      const baseSize = Math.floor(codes.length / TOTAL_COLUMNS);
-      const extra = i < codes.length % TOTAL_COLUMNS ? 1 : 0;
+    for (let i = 0; i < numColumns; i++) {
+      const baseSize = Math.floor(codes.length / numColumns);
+      const extra = i < codes.length % numColumns ? 1 : 0;
       const colSize = baseSize + extra;
 
       const chunk = codes.slice(startIndex, startIndex + colSize);
@@ -239,6 +241,19 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
       }
     });
+
+    this.detectScreenWidth();
+  }
+
+  private detectScreenWidth() {
+    const mobileQuery = window.matchMedia('(min-width: 992px)');
+    const mediaQueryListener = () => {
+      const isLargeScreen = mobileQuery!.matches;
+      this.numReportCodeColumns.set(isLargeScreen ? 3 : 2);
+    };
+    mediaQueryListener();
+    mobileQuery.addEventListener('change', mediaQueryListener);
+    this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', mediaQueryListener));
   }
 
   ngOnInit(): void {
