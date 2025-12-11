@@ -63,7 +63,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Move the date back
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Change the contact
@@ -76,7 +76,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40');
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickButton('Save');
 
@@ -97,7 +97,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[data-cy="searchBox"]').type('A');
       cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       PageUtils.clickButton('Save');
@@ -117,7 +117,7 @@ describe('Tests transaction form aggregate calculation', () => {
       // Tests changing the amount
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       cy.get('[id="amount"]').clear().safeType('40');
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
 
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickButton('Save');
@@ -136,7 +136,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      PageUtils.blurActiveField();
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       PageUtils.clickButton('Save');
@@ -165,7 +165,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
         // Tests moving the first transaction's date to be later than the second
         TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
-        PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+        PageUtils.blurActiveField();
 
         cy.get('[id=aggregate]').should('have.value', '$200.01');
         PageUtils.clickButton('Save');
