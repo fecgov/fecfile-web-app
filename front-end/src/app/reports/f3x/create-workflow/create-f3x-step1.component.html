@@ -31,9 +31,9 @@
 
   <div class="field" data-cy="report_code">
     <label for="type">{{ filingFrequencyLabel() }}</label>
-    <div class="flex justify-content-between">
+    <div class="flex gap-20px">
       @for (reportCodeColumn of reportCodesColumns(); track reportCodeColumn) {
-        <div class="radio-column">
+        <div class="flex flex-column gap-20px">
           @for (reportCode of reportCodeColumn; track reportCode) {
             <div class="p-field-checkbox flex">
               <p-radioButton
