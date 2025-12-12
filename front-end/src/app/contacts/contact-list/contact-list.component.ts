@@ -3,16 +3,16 @@ import { TableListBaseComponent } from 'app/shared/components/table-list-base/ta
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TableComponent } from '../../shared/components/table/table.component';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
-import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contact-list',
@@ -24,9 +24,10 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
     Ripple,
     TableActionsButtonComponent,
     ContactDialogComponent,
-    DeletedContactDialogComponent,
+    ButtonModule,
     LabelPipe,
     SelectModule,
+    RouterLink,
   ],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
@@ -35,7 +36,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
-  restoreDialogIsVisible = false;
   restoreContactsButtonIsVisible = false;
   searchTerm = '';
 
@@ -105,10 +105,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   public canDeleteItem(item: Contact): boolean {
     return !item.has_transaction_or_report;
-  }
-
-  public onRestoreClick() {
-    this.restoreDialogIsVisible = true;
   }
 
   saveContact(contact: Contact) {

@@ -1,0 +1,32 @@
+<ng-template #nameBody let-item>{{ displayName(item) }}</ng-template>
+<ng-template #typeBody let-item>{{ item.type | label: contactTypeLabels }}</ng-template>
+
+<app-table
+  [(first)]="first"
+  [items]="items"
+  [(totalItems)]="totalItems"
+  title="Restore deleted contacts"
+  [loading]="loading"
+  sortField="sort_name"
+  [(rowsPerPage)]="rowsPerPage"
+  [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+  [(selectedItems)]="selectedItems"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} deleted contacts"
+  [columns]="columns"
+  (loadTableItems)="loadTableItems($event)"
+>
+</app-table>
+
+<div class="flex justify-content-between mt-5">
+  <button pButton pRipple label="Back" type="button" class="p-button-secondary" routerLink="/contacts"></button>
+  <button
+    pButton
+    pRipple
+    label="Restore selected"
+    id="restoreButton"
+    type="submit"
+    class="p-button-primary"
+    (click)="restoreSelected()"
+    [disabled]="selectedItems().length <= 0"
+  ></button>
+</div>
