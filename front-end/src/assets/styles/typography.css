@@ -134,6 +134,13 @@ textarea:focus {
   border-color: #112e51;
   color: #112e51;
 }
+input:not([type="checkbox"]):disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.65;
+  background: #f1f1f1;
+  color: var(--p-content-color);
+}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
