@@ -3,6 +3,7 @@ import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/U
 import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { UsersHelpers } from './users.helpers';
+import { SharedHelpers } from '../utils/shared.helpers';
 
 const ADD_MEMBER_POST = '**/committee-members/add-member/**';
 const LIST_MEMBERS_GET = '**/committee-members/**';
@@ -67,15 +68,7 @@ describe("Users: Validation and API failure states", () => {
 
   it('should verify results per page dropdown', () => {
     UsersPage.goToPage();
-    //cy.get('.p-select-dropdown').as('resultsPerPageDropdown');
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '5').click();
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '10').click();
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '15').click();
-    cy.get('.p-select-dropdown').first().click();
-    cy.contains('.p-select-option', '20').click();
+    SharedHelpers.chooseDefaultResultsPerPageOptions();
   });
 
   it('should verify that toast messages close correctly on all actions', () => {
