@@ -13,7 +13,7 @@
       <h2 class="m-0">Find your committee</h2>
       <div class="search-label">
         <label for="search-input" class="font-karla-bold mb-0 mr-1">COMMITTEE ID</label>
-        <i (click)="showExplanation()" aria-label="explanation">
+        <i (click)="explanationVisible.set(true)" aria-label="explanation">
           <img alt="question mark" src="assets/img/i-question-circle.svg" />
         </i>
       </div>
@@ -70,30 +70,25 @@
   </div>
 </div>
 
-<p-dialog
-  [(visible)]="explanationVisible"
-  [modal]="true"
-  [dismissableMask]="true"
-  [closeOnEscape]="true"
-  [style]="{ width: '40%' }"
-  [draggable]="false"
-  [resizable]="false"
->
-  <ng-template #header>
-    <span class="explanation-header">What am I searching?</span>
-  </ng-template>
-  <p>
+<app-dialog tabindex="-1" aria-labelledby="dialog-title" title="What am I searching?" [(visible)]="explanationVisible">
+  <p id="explanation-text">
     The committee ID lookup searches FEC's global lookup of all committees registered with the Federal Election
     Commission.
-  </p>
-  <p>
+    <br /><br />
     If the system cannot find the committee ID entered, please doublecheck that the ID was entered correctly. Also, if
     the committee was just created and the Form 1 was recently submitted, please wait 24 hours for the database to
     update. For all other questions, don't hesitate to get in touch with FECfile+ technical support for assistance.
   </p>
-  <ng-template #footer>
-    <div class="top-border-footer">
-      <p-button (click)="explanationVisible = false" label="Close" pAutoFocus [autofocus]="true" />
+  <ng-container dialog-footer #dialogFooterRef>
+    <div class="flex justify-content-center">
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Close"
+        class="p-button-primary"
+        (click)="explanationVisible.set(false)"
+      ></button>
     </div>
-  </ng-template>
-</p-dialog>
+  </ng-container>
+</app-dialog>

@@ -57,10 +57,15 @@
     cursor: pointer;
   }
 }
-.explanation-header {
-  font-size: xx-large;
-  font-weight: bolder;
+
+#explanation-text {
+  font-family: var(--karla);
+  font-size: 14px;
+  line-height: 1.3;
+  color: #212121;
+  margin-bottom: 32px;
 }
+
 .committee-card {
   margin: 20px 3px;
   padding: 20px 10px;
