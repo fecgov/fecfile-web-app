@@ -9,21 +9,21 @@
   <ng-content></ng-content>
   <div class="dialog-footer">
     <hr type="solid" />
-    <div class="flex justify-content-between">
-      <ng-content select="[dialog-footer]"></ng-content>
-      @if (!hasCustomFooter()) {
+    <ng-content select="[dialog-footer]"></ng-content>
+    @if (!hasCustomFooter()) {
+      <div class="flex justify-content-between">
         <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
-      }
-      <button
-        type="submit"
-        data-cy="membership-submit"
-        pButton
-        pRipple
-        [label]="submitLabel()"
-        [disabled]="submitDisabled()"
-        class="p-button-primary submit-button"
-        (click)="confirm.emit()"
-      ></button>
-    </div>
+        <button
+          type="submit"
+          data-cy="membership-submit"
+          pButton
+          pRipple
+          [label]="submitLabel()"
+          [disabled]="submitDisabled()"
+          class="p-button-primary submit-button"
+          (click)="confirm.emit()"
+        ></button>
+      </div>
+    }
   </div>
 </dialog>

@@ -62,33 +62,6 @@
       </div>
     }
   </div>
-  <!-- <p-dialog #dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
-    <ng-template #header>
-      <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
-    </ng-template>
-    <p id="out-of-date-dialog-text">
-      <b>
-        {{ coverageDate() | fecDate }}
-      </b>
-      falls outside the report coverages dates of
-      <b> {{ coverageFromDate() | fecDate }}-{{ coverageThroughDate() | fecDate }}</b
-      >. {{ coverageDateQuestion() }} <br /><br />
-      If the date entered is correct, this transaction must be a <b>Memo Item</b>.
-    </p>
-    <div class="grid">
-      <div class="mx-auto">
-        <button
-          pButton
-          id="out-of-date-dialog-button"
-          class="p-button"
-          label="Close"
-          styleClass="p-button-link"
-          (click)="dialog.close($event)"
-          [autofocus]="true"
-        ></button>
-      </div>
-    </div>
-  </p-dialog> -->
 
   <app-dialog
     tabindex="-1"
@@ -105,5 +78,17 @@
       >. {{ coverageDateQuestion() }} <br /><br />
       If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>
+    <ng-container dialog-footer #dialogFooterRef>
+      <div class="flex justify-content-center">
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Close"
+          class="p-button-primary"
+          (click)="outOfDateDialogVisible.set(false)"
+        ></button>
+      </div>
+    </ng-container>
   </app-dialog>
 </div>
