@@ -70,10 +70,7 @@ describe('Loans', () => {
       cy.get(alias).contains('Loan Received from Individual').click();
       cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
-
-      alias = PageUtils.getAlias('');
-      cy.get(alias).find('.p-confirmdialog-accept-button').click();
-
+      PageUtils.clickButton('Confirm');
       cy.contains(result.individual.last_name).should('not.exist');
     });
   });

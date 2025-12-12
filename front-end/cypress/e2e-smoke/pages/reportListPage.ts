@@ -17,7 +17,7 @@ export class ReportListPage {
     }
     cy.get(`[data-cy="${formType}"]`).click();
     if (submit) {
-      cy.get('[data-cy="start-report"]').click();
+      cy.contains('Start building report').click();
     }
   }
 
