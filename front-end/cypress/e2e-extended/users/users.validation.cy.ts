@@ -3,6 +3,7 @@ import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/U
 import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { UsersHelpers } from './users.helpers';
+import { SharedHelpers } from '../utils/shared.helpers';
 
 const ADD_MEMBER_POST = '**/committee-members/add-member/**';
 const LIST_MEMBERS_GET = '**/committee-members/**';
@@ -18,15 +19,17 @@ describe("Users: Validation and API failure states", () => {
   it('shows required inline validation when email is empty', () => {
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    cy.get('#email').clear({ force: true }).should('have.value', '');
-    cy.get('[data-cy="membership-submit"]').click();
-    cy.get('[data-cy="membership-submit"]').should('be.visible');
+    cy.get(DIALOG).filter(':visible').first().as('dialog');
+    UsersHelpers.emailInput().clear({ force: true }).should('have.value', '');
+    UsersHelpers.submitBtn().click();
+    UsersHelpers.submitBtn().should('be.visible');
     cy.get('body')
-      .find(".p-error")
+      .find('.p-error')
       .first()
       .should('be.visible')
       .and('contain.text', 'This is a required field.');
   });
+
 
   it('shows inline validation message for invalid emails (multiple cases)', () => {
     const invalidEmails = [
@@ -48,29 +51,24 @@ describe("Users: Validation and API failure states", () => {
 
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
+    cy.get(DIALOG).filter(':visible').first().as('dialog');
+
     for (const badEmail of invalidEmails) {
-      cy.get('#email').clear({ force: true }).type(badEmail, { delay: 0 });
-      cy.get('[data-cy="membership-submit"]').click();
-      cy.get('[data-cy="membership-submit"]').should('be.visible');
+      UsersHelpers.emailInput().clear({ force: true }).type(badEmail, { delay: 0 });
+      UsersHelpers.submitBtn().click();
+      UsersHelpers.submitBtn().should('be.visible');
       findEmailError()
         .should('be.visible')
         .and('contain.text', 'This email is invalid');
-      cy.get('#email').clear({ force: true });
+
+      UsersHelpers.emailInput().clear({ force: true });
     }
-    cy.get('#email').should('have.value', '');
+    UsersHelpers.emailInput().should('have.value', '');
   });
 
   it('should verify results per page dropdown', () => {
     UsersPage.goToPage();
-    cy.get('#pn_id_8 > div').as('resultsPerPageDropdown');
-    cy.get('@resultsPerPageDropdown').click();
-    cy.get('#pn_id_8_0').should('be.visible').and('have.text', '5').click();
-    cy.get('@resultsPerPageDropdown').click();
-    cy.get('#pn_id_8_1').should('be.visible').and('have.text', '10').click();
-    cy.get('@resultsPerPageDropdown').click();
-    cy.get('#pn_id_8_2').should('be.visible').and('have.text', '15').click();
-    cy.get('@resultsPerPageDropdown').click();
-    cy.get('#pn_id_8_3').should('be.visible').and('have.text', '20').click();
+    SharedHelpers.chooseDefaultResultsPerPageOptions();
   });
 
   it('should verify that toast messages close correctly on all actions', () => {

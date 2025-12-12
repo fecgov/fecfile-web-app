@@ -327,10 +327,7 @@ workflows:
           cron: "0 6 * * *" # 06:00 UTC
           filters:
             branches:
-              only:
-                - develop
-                - release/test
-                - main
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
     jobs:
       - e2e-smoke
       - e2e-extended

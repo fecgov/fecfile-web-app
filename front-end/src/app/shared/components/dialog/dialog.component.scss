@@ -37,6 +37,7 @@ dialog {
   box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
   border: none;
   margin-top: 15%;
+  overflow: visible;
 }
 
 .dialog-header {
@@ -72,5 +73,12 @@ dialog {
 #close-button {
   color: var(--p-content-color);
   background: transparent;
+  border: none;
+}
+
+.submit-button:disabled {
+  background: var(--p-button-primary-background);
+  opacity: 30%;
+  color: #ffffff;
   border: none;
 }

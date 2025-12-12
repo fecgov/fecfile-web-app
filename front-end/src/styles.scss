@@ -361,6 +361,14 @@ label.disabled {
   height: 48px;
 }
 
+.dialog-label {
+  font-family: var(--karla);
+  font-weight: bold;
+  font-size: 14px;
+  color: #212121;
+  margin-bottom: 8px;
+}
+
 .dialog-body .dialog-label .p-select {
   height: 36px;
 }
@@ -600,4 +608,41 @@ textarea {
 
 .gap-20px {
   gap: 20px;
+}
+
+.w-15em {
+  width: 15em;
+  min-width: 15em;
+  max-width: 15em;
+}
+
+.p-select .p-select-dropdown,
+.p-dropdown .p-dropdown-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-select .p-select-dropdown .p-select-dropdown-icon,
+.p-dropdown .p-dropdown-trigger .p-dropdown-trigger-icon,
+.p-select .p-select-dropdown svg,
+.p-dropdown .p-dropdown-trigger svg {
+  display: none !important;
+}
+
+.p-select .p-select-dropdown::after,
+.p-dropdown .p-dropdown-trigger::after {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  background-image: url(./assets/img/i-arrow-down.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }

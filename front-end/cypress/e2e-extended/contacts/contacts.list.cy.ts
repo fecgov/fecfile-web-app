@@ -1,6 +1,7 @@
 import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
 import { ContactsHelpers } from './contacts.helpers';
+import { SharedHelpers } from '../utils/shared.helpers';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { defaultFormData as contactFormData } from '../../e2e-smoke/models/ContactFormModel';
 import { makeContact } from '../../e2e-smoke/requests/methods';
@@ -52,7 +53,7 @@ describe('Contacts List (/contacts)', () => {
     PageUtils.clickButton('Save');
     cy.contains('Save').should('not.exist');
 
-    // Committee 
+    // Committee
     PageUtils.clickButton('Add contact');
     const committeeName = `Committee ${uid}`;
     const committeeFormData = {
@@ -64,7 +65,7 @@ describe('Contacts List (/contacts)', () => {
     PageUtils.clickButton('Save');
     cy.contains('Save').should('not.exist');
 
-    // Organization 
+    // Organization
     PageUtils.clickButton('Add contact');
     const organizationName = `Organization ${uid}`;
     const organizationFormData = {
@@ -75,12 +76,10 @@ describe('Contacts List (/contacts)', () => {
     ContactListPage.enterFormData(organizationFormData);
     PageUtils.clickButton('Save');
     cy.contains('Save').should('not.exist');
-
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('button,a', 'Restore deleted contacts').should('exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
-
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
     ContactsHelpers.assertRowValues(individualDisplayName, 'Individual');
@@ -90,18 +89,15 @@ describe('Contacts List (/contacts)', () => {
   });
 
   it('checks pagination controls empty state', () => {
-    const paginator = () => cy.get('p-paginator, .p-paginator').first();
-
     cy.contains(/results\s*per\s*page:/i).should('exist');
-    cy.get('.p-select-dropdown').click().then(() => {
-      cy.contains('.p-select-option', '5').should('exist');
-      cy.contains('.p-select-option', '10').should('exist');
-      cy.contains('.p-select-option', '15').should('exist');
-      cy.contains('.p-select-option', '20').should('exist');
-    });
-    cy.contains(/showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+contacts?/i).should('exist');
-    paginator().should('exist');
+    SharedHelpers.openResultsPerPage();
+    for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
+      cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
+    }
 
+    PageUtils.blurActiveField();
+    cy.contains(/showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+contacts?/i).should('exist');
+    SharedHelpers.paginator().should('exist');
     ContactsHelpers.assertDisabled('button[aria-label="First Page"], .p-paginator-first');
     ContactsHelpers.assertDisabled('button[aria-label="Previous Page"], .p-paginator-prev');
     ContactsHelpers.assertDisabled('button[aria-label="Next Page"], .p-paginator-next');
@@ -125,57 +121,40 @@ describe('Contacts List (/contacts)', () => {
 
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-
     const pageTextRx = (start: number, end: number) =>
       new RegExp(
         String.raw`showing\s+${start}\s+to\s+${end}\s+of\s+${total}\s+contacts:?`,
         'i',
       );
 
-    const openPageSizeDropdown = () => {
-      cy.contains(/results\s*per\s*page:/i)
-        .parent()
-        .within(() => {
-          cy.get('.p-select-dropdown')
-            .scrollIntoView()
-            .click();
-        });
-    };
-
-    openPageSizeDropdown();
-    cy.get('.p-select-option').should('have.length.at.least', 4);
-    cy.get('.p-select-option').eq(0).should('contain.text', '5');
-    cy.get('.p-select-option').eq(1).should('contain.text', '10');
-    cy.get('.p-select-option').eq(2).should('contain.text', '15');
-    cy.get('.p-select-option').eq(3).should('contain.text', '20');
-    cy.get('body').click();
+    SharedHelpers.openResultsPerPage();
+    for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
+      cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
+    }
+    cy.get('body').click(0, 0);
 
     const selectPageSize = (size: number) => {
-      cy.intercept('GET', '/api/v1/contacts/**').as(`getContactsForPageSize_${size}`);
-      ContactsHelpers.selectResultsPerPage(size);
+      cy.intercept('GET', `**/api/v1/contacts/**page_size=${size}**`).as(`getContactsForPageSize_${size}`);
+      SharedHelpers.chooseResultsPerPage(size);
       cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
         const url = new URL(request.url);
         expect(url.searchParams.get('page_size')).to.eq(String(size));
       });
     };
 
-    const pageSizes = [5, 10, 15, 20];
-    for (const size of pageSizes) {
+    for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
       cy.log(`Testing Results per page = ${size}`);
       selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
-      cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 })
-        .should('be.visible');
+      cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('be.visible');
       cy.get('tbody tr').should('have.length', expectedFirstPageRows);
-
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
           .should('not.be.disabled')
           .click({ force: true });
 
-        cy.contains(pageTextRx(21, 21), { timeout: 15000 })
-          .should('be.visible');
+        cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
         cy.get('tbody tr').should('have.length', 1);
       }
       cy.get('.p-paginator').should('exist');

@@ -24,6 +24,6 @@ describe('UserLoginData Reducer', () => {
     expect(state.first_name).toEqual(data.first_name);
     expect(state.last_name).toEqual(data.last_name);
     expect(state.security_consent_version).toEqual(data.security_consent_version);
-    expect(state.security_consent_version_at_login).toEqual(initialState.security_consent_version_at_login);
+    expect(state.security_consent_version_at_login).toEqual(data.security_consent_version_at_login);
   });
 });
