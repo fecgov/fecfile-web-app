@@ -75,7 +75,11 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
         (coverage) => coverage.coverage_from_date?.getTime() !== (this.report() as Form3).coverage_from_date?.getTime(),
       );
     }
-    this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+    const validator = buildNonOverlappingCoverageValidator(existingCoverage);
+    this.form.controls['coverage_from_date'].addValidators(validator);
+    this.form.controls['coverage_through_date'].addValidators(validator);
+    this.form.controls['coverage_from_date'].updateValueAndValidity({ emitEvent: false });
+    this.form.controls['coverage_through_date'].updateValueAndValidity({ emitEvent: false });
     return existingCoverage;
   });
 
@@ -140,7 +144,10 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
       buildAfterDateValidator(this.form, 'coverage_from_date'),
     ]);
     (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form.controls['coverage_through_date'].updateValueAndValidity();
+      this.form.controls['coverage_through_date'].updateValueAndValidity({ emitEvent: false });
+    });
+    (this.form.controls['coverage_through_date'] as SubscriptionFormControl).addSubscription(() => {
+      this.form.controls['coverage_from_date'].updateValueAndValidity({ emitEvent: false });
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, f3Schema, false);

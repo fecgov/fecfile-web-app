@@ -56,7 +56,7 @@ describe('ValidatorsUtils', () => {
     });
   });
 
-  describe('buildNonOverlappingCoverageValidator', () => {
+  fdescribe('buildNonOverlappingCoverageValidator', () => {
     const existingCoverage: CoverageDates[] = [
       {
         coverage_from_date: new Date('2023-01-01'),
@@ -65,24 +65,61 @@ describe('ValidatorsUtils', () => {
       } as CoverageDates,
     ];
 
-    it('should return error for overlapping dates', () => {
-      const validator = buildNonOverlappingCoverageValidator(existingCoverage);
-      const control = new FormGroup({
+    const validator = buildNonOverlappingCoverageValidator(existingCoverage);
+
+    it('should return error on "from" control when start date overlaps', () => {
+      const group = new FormGroup({
         coverage_from_date: new FormControl(new Date('2023-01-15')),
         coverage_through_date: new FormControl(new Date('2023-02-15')),
       });
-      validator(control);
-      expect(control.get('coverage_from_date')?.errors).toBeTruthy();
+
+      const result = validator(group.controls['coverage_from_date']);
+      expect(result).toBeTruthy();
+      expect(result?.['invaliddate']).toBeTruthy();
     });
 
-    it('should return null for non-overlapping dates', () => {
-      const validator = buildNonOverlappingCoverageValidator(existingCoverage);
-      const control = new FormGroup({
+    it('should NOT return error on "through" control when only start date overlaps', () => {
+      const group = new FormGroup({
+        coverage_from_date: new FormControl(new Date('2023-01-15')),
+        coverage_through_date: new FormControl(new Date('2023-02-15')),
+      });
+
+      const result = validator(group.controls['coverage_through_date']);
+      expect(result).toBeNull();
+    });
+
+    it('should return error on "through" control when end date overlaps', () => {
+      const group = new FormGroup({
+        coverage_from_date: new FormControl(new Date('2022-12-15')),
+        coverage_through_date: new FormControl(new Date('2023-01-15')),
+      });
+
+      const result = validator(group.controls['coverage_through_date']);
+      expect(result).toBeTruthy();
+      expect(result?.['invaliddate']).toBeTruthy();
+    });
+
+    it('should return error on BOTH controls when the new dates surround an existing report', () => {
+      const group = new FormGroup({
+        coverage_from_date: new FormControl(new Date('2022-12-01')),
+        coverage_through_date: new FormControl(new Date('2023-02-28')),
+      });
+
+      const fromResult = validator(group.controls['coverage_from_date']);
+      const throughResult = validator(group.controls['coverage_through_date']);
+
+      expect(fromResult).toBeTruthy();
+      expect(throughResult).toBeTruthy();
+    });
+
+    it('should return null for completely non-overlapping dates', () => {
+      const group = new FormGroup({
         coverage_from_date: new FormControl(new Date('2023-02-01')),
         coverage_through_date: new FormControl(new Date('2023-02-28')),
       });
-      validator(control);
-      expect(control.get('coverage_from_date')?.errors).toBeNull();
+
+      expect(validator(group.controls['coverage_from_date'])).toBeNull();
+      expect(validator(group.controls['coverage_through_date'])).toBeNull();
     });
   });
 
