@@ -631,11 +631,11 @@ textarea {
   display: none !important;
 }
 
-.p-select .p-select-dropdown::after,
-.p-dropdown .p-dropdown-trigger::after {
+.p-select .p-select-dropdown:not(.no-dropdown-icon)::after,
+.p-dropdown:not(.no-dropdown-icon) .p-dropdown-trigger::after {
   content: '';
-  width: 1rem;
-  height: 1rem;
+  width: 10px;
+  height: 10px;
   background-image: url(./assets/img/i-arrow-down.svg);
   background-repeat: no-repeat;
   background-position: center;
