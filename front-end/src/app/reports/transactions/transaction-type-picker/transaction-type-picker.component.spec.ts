@@ -161,7 +161,7 @@ describe('TransactionTypePickerComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should change for disbursement category', async () => {
+    it('should change for disbursement category', () => {
       routeParams$.next({ category: 'disbursement' });
       fixture.detectChanges();
 
