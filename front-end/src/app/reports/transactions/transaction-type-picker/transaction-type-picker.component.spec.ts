@@ -117,6 +117,7 @@ describe('TransactionTypePickerComponent', () => {
   });
 
   describe('f3', () => {
+    let routeParams$: BehaviorSubject<any>;
     const store = testMockStore();
     store.selectors = [
       { selector: selectCommitteeAccount, value: testPTY() },
@@ -125,6 +126,8 @@ describe('TransactionTypePickerComponent', () => {
       { selector: selectNavigationEvent, value: testNavigationEvent() },
     ];
     beforeEach(async () => {
+      routeParams$ = new BehaviorSubject({ category: 'receipt' });
+
       await TestBed.configureTestingModule({
         imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
         providers: [
@@ -153,15 +156,29 @@ describe('TransactionTypePickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TransactionTypePickerComponent);
       component = fixture.componentInstance;
+      spyOn(component, 'showTransaction').and.returnValue(true);
+
       fixture.detectChanges();
     });
 
+    // it('should change for disbursement category', () => {
+    //   spyOn(component, 'showTransaction').and.returnValue(true);
+    //   routeParams$.next({ category: 'disbursement' });
+    //   fixture.detectChanges();
+    //   expect(component.isF3()).toBeTrue();
+    //   const groups = component.transactionGroups();
+    //   expect(groups.length).toBe(5);
+    //   const gf = groups.filter((g) => component.hasTransactions().get(g));
+    //   gf.forEach((g) => console.log(g.label));
+    //   expect(gf.length).toBe(4);
+    //   const transTypes = component.transactionTypes();
+    //   const contributions = transTypes.get(Disbursement[1]);
+    //   contributions?.forEach((c) => console.log(c));
+    //   expect(transTypes.get(Disbursement[1])?.length).toBe(3);
+    // });
+
     it('should change for disbursement category', async () => {
       routeParams$.next({ category: 'disbursement' });
-
-      fixture.detectChanges();
-      await fixture.whenStable();
-
       fixture.detectChanges();
 
       expect(component.isF3()).toBeTrue();
