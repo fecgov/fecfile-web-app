@@ -2923,7 +2923,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   text-align: left;
   border: 1px solid var(--surface-border);
   border-width: 1px 0 0 0;
-  padding: 14px 10px;
+  padding: 10px;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
