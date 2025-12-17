@@ -13,7 +13,13 @@
       <h2 class="m-0">Find your committee</h2>
       <div class="search-label">
         <label for="search-input" class="font-karla-bold mb-0 mr-1">COMMITTEE ID</label>
-        <i (click)="explanationVisible.set(true)" aria-label="explanation">
+        <i
+          tabindex="0"
+          (keydown.enter)="explanationVisible.set(true)"
+          (keydown.space)="explanationVisible.set(true)"
+          (click)="explanationVisible.set(true)"
+          aria-label="explanation"
+        >
           <img alt="question mark" src="assets/img/i-question-circle.svg" />
         </i>
       </div>
@@ -71,10 +77,11 @@
 </div>
 
 <app-dialog tabindex="-1" aria-labelledby="dialog-title" title="What am I searching?" [(visible)]="explanationVisible">
-  <p id="explanation-text">
+  <p>
     The committee ID lookup searches FEC's global lookup of all committees registered with the Federal Election
     Commission.
-    <br /><br />
+  </p>
+  <p class="mb-5">
     If the system cannot find the committee ID entered, please doublecheck that the ID was entered correctly. Also, if
     the committee was just created and the Form 1 was recently submitted, please wait 24 hours for the database to
     update. For all other questions, don't hesitate to get in touch with FECfile+ technical support for assistance.
