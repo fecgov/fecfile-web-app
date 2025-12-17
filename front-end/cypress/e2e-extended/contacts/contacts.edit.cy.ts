@@ -121,7 +121,6 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    //
     // Required field(s) validation (clear and save)
     cy.get('#last_name').clear();
     cy.get('#first_name').clear();
@@ -279,9 +278,10 @@ describe('Contacts Edit', () => {
 
     const newDisplay = `${newLast}, ${newFirst}`;
 
-    const targetCandidateId = Candidate_House_B.candidate_id as string;
-    const targetLast = Candidate_House_B.last_name as string;
-    const targetFirst = Candidate_House_B.first_name as string;
+    const lookupCandidateId = 'H0VA00001';
+    const lookupLast = 'FecApiLnA';
+    const lookupFirst = 'FecApiFnA';
+    const lookupName = `${lookupLast}, ${lookupFirst}`;
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       ContactsHelpers.fieldForLabel(labelRx).within(() => {
@@ -390,32 +390,52 @@ describe('Contacts Edit', () => {
     cy.contains('label', /^Candidate district/i).parent().should('contain.text', newCandDistrict);
 
     // Candidate Lookup: deterministic selection (stubs)
-    let selectedCandidateId = targetCandidateId;
-    let selectedLast = targetLast;
-    let selectedFirst = targetFirst;
-    ContactsHelpers.findExistingFecApiCandidate().then(({ seed, candidate }) => {
-      const candidateId = candidate.candidate_id;
+    let selectedCandidateId = lookupCandidateId;
+    let selectedLast = lookupLast;
+    let selectedFirst = lookupFirst;
+    const lookupCandidate = {
+      candidate_id: lookupCandidateId,
+      office: 'H',
+      name: lookupName,
+    };
+    const lookupCandidateDetails = {
+      candidate_id: lookupCandidateId,
+      candidate_first_name: lookupFirst,
+      candidate_last_name: lookupLast,
+      candidate_middle_name: null,
+      candidate_prefix: null,
+      candidate_suffix: null,
+      address_street_1: '123 FEC API St',
+      address_street_2: null,
+      address_city: 'Richmond',
+      address_state: 'VA',
+      address_zip: '23219',
+      office: 'H',
+      state: 'VA',
+      district: '01',
+      name: lookupName,
+    };
+    const lookupSeed = 'pre';
 
-      cy.intercept('GET', '**/api/v1/contacts/candidate_lookup/**').as('candidateLookup');
-      cy.intercept('GET', '**/api/v1/contacts/candidate/**').as('candidateDetails');
+    ContactsHelpers.stubCandidateLookup(lookupCandidate);
+    ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
 
-      cy.get('input#searchBox')
-        .should('be.visible')
-        .clear()
-        .type(seed, { delay: 50 });
+    cy.get('input#searchBox')
+      .should('be.visible')
+      .clear()
+      .type(lookupSeed, { delay: 50 });
 
-      cy.wait('@candidateLookup');
+    cy.wait('@candidateLookup');
 
-      ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: candidateId });
+    ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: lookupCandidateId });
 
-      cy.wait('@candidateDetails');
+    cy.wait('@candidateDetails');
 
-      cy.get('#candidate_id', { timeout: 20000 })
-        .should('have.value', candidateId)
-        .then(() => {
-          selectedCandidateId = candidateId;
-        });
-    });
+    cy.get('#candidate_id', { timeout: 20000 })
+      .should('have.value', lookupCandidateId)
+      .then(() => {
+        selectedCandidateId = lookupCandidateId;
+      });
 
     ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
     ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
@@ -460,39 +480,60 @@ describe('Contacts Edit', () => {
 
   // CANDIDATE LOOKUP: replace candidate via lookup search and persist new candidate details
   it('allows selecting a new Candidate via lookup and persists updated candidate fields', () => {
-    const targetCandidateId = Candidate_House_B.candidate_id as string;
-    const targetLast = Candidate_House_B.last_name as string;
-    const targetFirst = Candidate_House_B.first_name as string;
-    let selectedCandidateId = targetCandidateId;
-    let selectedLast = targetLast;
-    let selectedFirst = targetFirst;
+    const lookupCandidateId = 'H0VA00002';
+    const lookupLast = 'FecApiLnB';
+    const lookupFirst = 'FecApiFnB';
+    const lookupName = `${lookupLast}, ${lookupFirst}`;
+    let selectedCandidateId = lookupCandidateId;
+    let selectedLast = lookupLast;
+    let selectedFirst = lookupFirst;
 
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    ContactsHelpers.findExistingFecApiCandidate().then(({ seed, candidate }) => {
-      const candidateId = candidate.candidate_id;
+    const lookupCandidate = {
+      candidate_id: lookupCandidateId,
+      office: 'H',
+      name: lookupName,
+    };
+    const lookupCandidateDetails = {
+      candidate_id: lookupCandidateId,
+      candidate_first_name: lookupFirst,
+      candidate_last_name: lookupLast,
+      candidate_middle_name: null,
+      candidate_prefix: null,
+      candidate_suffix: null,
+      address_street_1: '456 FEC API Ave',
+      address_street_2: null,
+      address_city: 'Norfolk',
+      address_state: 'VA',
+      address_zip: '23510',
+      office: 'H',
+      state: 'VA',
+      district: '02',
+      name: lookupName,
+    };
+    const lookupSeed = 'pre';
 
-      cy.intercept('GET', '**/api/v1/contacts/candidate_lookup/**').as('candidateLookup');
-      cy.intercept('GET', '**/api/v1/contacts/candidate/**').as('candidateDetails');
+    ContactsHelpers.stubCandidateLookup(lookupCandidate);
+    ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
 
-      cy.get('input#searchBox')
-        .should('be.visible')
-        .clear()
-        .type(seed, { delay: 50 });
+    cy.get('input#searchBox')
+      .should('be.visible')
+      .clear()
+      .type(lookupSeed, { delay: 50 });
 
-      cy.wait('@candidateLookup');
+    cy.wait('@candidateLookup');
 
-      ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: candidateId });
+    ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: lookupCandidateId });
 
-      cy.wait('@candidateDetails');
+    cy.wait('@candidateDetails');
 
-      cy.get('#candidate_id', { timeout: 20000 })
-        .should('have.value', candidateId)
-        .then(() => {
-          selectedCandidateId = candidateId;
-        });
-    });
+    cy.get('#candidate_id', { timeout: 20000 })
+      .should('have.value', lookupCandidateId)
+      .then(() => {
+        selectedCandidateId = lookupCandidateId;
+      });
 
     ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
     ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);

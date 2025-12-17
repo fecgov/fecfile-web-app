@@ -20,11 +20,6 @@ type TxnHistoryRow = {
 
 type ConfirmChange = string | RegExp;
 
-type LookupPick = {
-  index?: number;
-  match?: string | RegExp;
-};
-
 type FecApiCandidateLookup = {
   seed: string;
   candidate: any;
@@ -220,12 +215,17 @@ export class ContactsHelpers {
       });
   }
 
-  static stubCandidateLookup(candidate: any) {
+  static stubCandidateLookup(
+    candidate: any,
+    opts: { fecfileCandidates?: any[] } = {},
+  ) {
+    const { fecfileCandidates = [] } = opts;
+
     cy.intercept('GET', '**/api/v1/contacts/candidate_lookup/**', {
       statusCode: 200,
       body: {
         fec_api_candidates: [candidate],
-        fecfile_candidates: [candidate],
+        fecfile_candidates: fecfileCandidates,
       },
     }).as('candidateLookup');
   }
@@ -328,7 +328,6 @@ export class ContactsHelpers {
         return found!;
       });
   }
-
 
   static assertColumnHeaders(
     expected: readonly string[] = this.CONTACTS_HEADERS,
