@@ -90,6 +90,80 @@ describe('Contacts Edit', () => {
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
   });
 
+  type CandidateLookupStub = {
+    candidate_id: string;
+    office: string;
+    name: string;
+  };
+
+  type CandidateLookupResult = {
+    candidateId: string;
+    last: string;
+    first: string;
+    display: string;
+  };
+
+  const selectCandidateViaLookup = (
+    lookupCandidate: CandidateLookupStub,
+    lookupCandidateDetails: Record<string, unknown>,
+    seed = 'pre',
+  ): Cypress.Chainable<CandidateLookupResult> => {
+    ContactsHelpers.stubCandidateLookup(lookupCandidate);
+    ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
+
+    cy.get('input#searchBox')
+      .should('be.visible')
+      .clear()
+      .type(seed, { delay: 50 });
+
+    cy.wait('@candidateLookup');
+
+    ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', {
+      match: lookupCandidate.candidate_id,
+    });
+
+    cy.wait('@candidateDetails');
+
+    cy.get('#candidate_id', { timeout: 20000 }).should('have.value', lookupCandidate.candidate_id);
+
+    // Some environments/fixtures don’t reliably backfill names — keep your existing “ensure” behavior.
+    ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
+    ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
+
+    return cy.get('#last_name').invoke('val').then((lastVal) => {
+      const last = (lastVal as string)?.trim() || LOOKUP_CAND_LAST;
+
+      return cy.get('#first_name').invoke('val').then((firstVal) => {
+        const first = (firstVal as string)?.trim() || LOOKUP_CAND_FIRST;
+
+        return {
+          candidateId: lookupCandidate.candidate_id,
+          last,
+          first,
+          display: `${last}, ${first}`,
+        };
+      });
+    });
+  };
+
+  const assertCandidateRowInList = (display: string, candidateId: string) => {
+    cy.contains('tbody tr', display)
+      .should('exist')
+      .within(() => {
+        cy.get('td').eq(1).should('contain.text', 'Candidate');
+        cy.get('td').eq(2).should('contain.text', candidateId);
+      });
+  };
+
+  const reopenAndAssertCandidateBasics = (display: string, candidateId: string, last: string, first: string) => {
+    PageUtils.clickKababItem(display, 'Edit');
+    cy.contains(/Edit Contact/i).should('exist');
+
+    cy.get('#candidate_id').should('have.value', candidateId);
+    cy.get('#last_name').should('have.value', last);
+    cy.get('#first_name').should('have.value', first);
+  };
+
   // INDIVIDUAL: update/check all editable fields, required fields, length validation
   it('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
     const newLast = `${IND_LAST}-Upd`;
@@ -390,14 +464,12 @@ describe('Contacts Edit', () => {
     cy.contains('label', /^Candidate district/i).parent().should('contain.text', newCandDistrict);
 
     // Candidate Lookup: deterministic selection (stubs)
-    let selectedCandidateId = lookupCandidateId;
-    let selectedLast = lookupLast;
-    let selectedFirst = lookupFirst;
     const lookupCandidate = {
       candidate_id: lookupCandidateId,
       office: 'H',
       name: lookupName,
     };
+
     const lookupCandidateDetails = {
       candidate_id: lookupCandidateId,
       candidate_first_name: lookupFirst,
@@ -415,67 +487,18 @@ describe('Contacts Edit', () => {
       district: '01',
       name: lookupName,
     };
-    const lookupSeed = 'pre';
 
-    ContactsHelpers.stubCandidateLookup(lookupCandidate);
-    ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
+    selectCandidateViaLookup(lookupCandidate, lookupCandidateDetails).then(
+      ({ candidateId, last, first, display }) => {
+        ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.get('input#searchBox')
-      .should('be.visible')
-      .clear()
-      .type(lookupSeed, { delay: 50 });
+        ContactsHelpers.assertSuccessToastMessage();
+        cy.contains(/Manage contacts/i).should('exist');
 
-    cy.wait('@candidateLookup');
-
-    ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: lookupCandidateId });
-
-    cy.wait('@candidateDetails');
-
-    cy.get('#candidate_id', { timeout: 20000 })
-      .should('have.value', lookupCandidateId)
-      .then(() => {
-        selectedCandidateId = lookupCandidateId;
-      });
-
-    ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
-    ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
-
-    cy.get('#last_name')
-      .invoke('val')
-      .then((v) => {
-        const val = (v as string)?.trim();
-        if (val) selectedLast = val;
-      });
-
-    cy.get('#first_name')
-      .invoke('val')
-      .then((v) => {
-        const val = (v as string)?.trim();
-        if (val) selectedFirst = val;
-      });
-
-    ContactsHelpers.clickSaveAndHandleConfirm();
-
-    ContactsHelpers.assertSuccessToastMessage();
-    cy.contains(/Manage contacts/i).should('exist');
-
-    cy.then(() => {
-      const newDisplay = `${selectedLast}, ${selectedFirst}`;
-
-      cy.contains('tbody tr', newDisplay)
-        .should('exist')
-        .within(() => {
-          cy.get('td').eq(1).should('contain.text', 'Candidate');
-          cy.get('td').eq(2).should('contain.text', selectedCandidateId);
-        });
-
-      PageUtils.clickKababItem(newDisplay, 'Edit');
-      cy.contains(/Edit Contact/i).should('exist');
-
-      cy.get('#candidate_id').should('have.value', selectedCandidateId);
-      cy.get('#last_name').should('have.value', selectedLast);
-      cy.get('#first_name').should('have.value', selectedFirst);
-    });
+        assertCandidateRowInList(display, candidateId);
+        reopenAndAssertCandidateBasics(display, candidateId, last, first);
+      },
+    );
   });
 
   // CANDIDATE LOOKUP: replace candidate via lookup search and persist new candidate details
@@ -484,9 +507,6 @@ describe('Contacts Edit', () => {
     const lookupLast = 'FecApiLnB';
     const lookupFirst = 'FecApiFnB';
     const lookupName = `${lookupLast}, ${lookupFirst}`;
-    let selectedCandidateId = lookupCandidateId;
-    let selectedLast = lookupLast;
-    let selectedFirst = lookupFirst;
 
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
@@ -496,6 +516,7 @@ describe('Contacts Edit', () => {
       office: 'H',
       name: lookupName,
     };
+
     const lookupCandidateDetails = {
       candidate_id: lookupCandidateId,
       candidate_first_name: lookupFirst,
@@ -513,67 +534,18 @@ describe('Contacts Edit', () => {
       district: '02',
       name: lookupName,
     };
-    const lookupSeed = 'pre';
 
-    ContactsHelpers.stubCandidateLookup(lookupCandidate);
-    ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
+    selectCandidateViaLookup(lookupCandidate, lookupCandidateDetails).then(
+      ({ candidateId, last, first, display }) => {
+        ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.get('input#searchBox')
-      .should('be.visible')
-      .clear()
-      .type(lookupSeed, { delay: 50 });
+        ContactsHelpers.assertSuccessToastMessage();
+        cy.contains(/Manage contacts/i).should('exist');
 
-    cy.wait('@candidateLookup');
-
-    ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: lookupCandidateId });
-
-    cy.wait('@candidateDetails');
-
-    cy.get('#candidate_id', { timeout: 20000 })
-      .should('have.value', lookupCandidateId)
-      .then(() => {
-        selectedCandidateId = lookupCandidateId;
-      });
-
-    ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
-    ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
-
-    cy.get('#last_name')
-      .invoke('val')
-      .then((v) => {
-        const val = (v as string)?.trim();
-        if (val) selectedLast = val;
-      });
-
-    cy.get('#first_name')
-      .invoke('val')
-      .then((v) => {
-        const val = (v as string)?.trim();
-        if (val) selectedFirst = val;
-      });
-
-    ContactsHelpers.clickSaveAndHandleConfirm();
-
-    ContactsHelpers.assertSuccessToastMessage();
-    cy.contains(/Manage contacts/i).should('exist');
-
-    cy.then(() => {
-      const newDisplay = `${selectedLast}, ${selectedFirst}`;
-
-      cy.contains('tbody tr', newDisplay)
-        .should('exist')
-        .within(() => {
-          cy.get('td').eq(1).should('contain.text', 'Candidate');
-          cy.get('td').eq(2).should('contain.text', selectedCandidateId);
-        });
-
-      PageUtils.clickKababItem(newDisplay, 'Edit');
-      cy.contains(/Edit Contact/i).should('exist');
-
-      cy.get('#candidate_id').should('have.value', selectedCandidateId);
-      cy.get('#last_name').should('have.value', selectedLast);
-      cy.get('#first_name').should('have.value', selectedFirst);
-    });
+        assertCandidateRowInList(display, candidateId);
+        reopenAndAssertCandidateBasics(display, candidateId, last, first);
+      },
+    );
   });
 
   // COMMITTEE – required validation, update/check all editable fields
