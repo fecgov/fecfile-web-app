@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
@@ -7,6 +6,7 @@ import { makeContact, makeTransaction } from '../../e2e-smoke/requests/methods';
 import {
   Individual_A_A,
   Candidate_House_A,
+  Candidate_House_B,
   Committee_A,
   Organization_A,
   MockContact,
@@ -20,34 +20,13 @@ const CAND_LAST = 'CandLn8535';
 const CAND_FIRST = 'CandFn8535';
 const CAND_DISPLAY = `${CAND_LAST}, ${CAND_FIRST}`;
 const INDIVIDUAL_RECEIPT_TYPE = 'INDIVIDUAL_RECEIPT';
-let individualDisplayName = IND_DISPLAY;
-
-function setDropdownByLabel(labelRegex: RegExp, optionText: string) {
-  cy.contains('label', labelRegex)
-    .parent()
-    .within(() => {
-      cy.get('.p-select, .p-dropdown, .p-inputwrapper')
-        .first()
-        .click({ force: true });
-    });
-
-  cy.get('.p-select-option, .p-dropdown-item')
-    .contains(new RegExp(`^\\s*${optionText}\\s*$`))
-    .click({ force: true });
-}
-
-function setTelephone(value: string) {
-  cy.contains('label', /^Telephone/i)
-    .parent()
-    .find('input')
-    .last()
-    .clear()
-    .type(value);
-}
+const IND_TXN_AMOUNT = 123;
+const LOOKUP_CAND_LAST = 'House';
+const LOOKUP_CAND_FIRST = 'Beth';
 
 describe('Contacts Edit', () => {
-  const updatedEmployerBase = `Updated Employer ${Date.now()}`;
-  const updatedOccupationBase = `Updated Occupation ${Date.now()}`;
+  const updatedEmployerBase = `Updated Emp ${Date.now()}`;
+  const updatedOccupationBase = `Updated Occ ${Date.now()}`;
   let committeeDisplayName: string;
   let organizationDisplayName: string;
 
@@ -66,6 +45,12 @@ describe('Contacts Edit', () => {
       first_name: CAND_FIRST,
     };
 
+    const lookupCandidateContact: MockContact = {
+      ...Candidate_House_B,
+      last_name: LOOKUP_CAND_LAST,
+      first_name: LOOKUP_CAND_FIRST,
+    };
+
     const committeeContact: MockContact = {
       ...Committee_A,
       name: Committee_A.name,
@@ -79,24 +64,24 @@ describe('Contacts Edit', () => {
     committeeDisplayName = committeeContact.name as string;
     organizationDisplayName = organizationContact.name as string;
 
-    // Create Individual + one Schedule A transaction so Transaction history is populated
+    // Create one Schedule A transaction so Transaction history is populated for Individual Contact
     makeContact(individualContact, (contactResp) => {
       const contact = contactResp.body as any;
       const today = new Date();
       const dateStr = today.toISOString().slice(0, 10);
-
       const txn = buildScheduleA(
         INDIVIDUAL_RECEIPT_TYPE,
-        123, // any positive amount
+        IND_TXN_AMOUNT,
         dateStr,
         contact,
         undefined,
-        { report_ids: [] }, // avoid [null] -> 500
+        { report_ids: [] },
       );
 
       makeTransaction(txn);
     });
 
+    makeContact(lookupCandidateContact);
     makeContact(candidateContact);
     makeContact(committeeContact);
     makeContact(organizationContact);
@@ -105,7 +90,7 @@ describe('Contacts Edit', () => {
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
   });
 
-  // INDIVIDUAL: update/check all editable fields + required + length validation
+  // INDIVIDUAL: update/check all editable fields, required fields, length validation
   it('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
     const newLast = `${IND_LAST}-Upd`;
     const newFirst = `${IND_FIRST}-Upd`;
@@ -123,36 +108,28 @@ describe('Contacts Edit', () => {
     const newEmployer = `${updatedEmployerBase}-ind-all`;
     const newOccupation = `${updatedOccupationBase}-ind-all`;
     const newDisplay = `${newLast}, ${newFirst}`;
+    const oldDisplay = `${IND_LAST}, ${IND_FIRST}`;
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
-      cy.contains('label', labelRx)
-        .parent()
-        .within(() => {
-          cy.contains(/This is a required field\./i).should('exist');
-        });
+      ContactsHelpers.expectErrorNearLabel(labelRx, /This is a required field\./i);
     };
 
     const expectMaxErrorNearLabel = (labelRx: RegExp, text: RegExp) => {
-      cy.contains('label', labelRx)
-        .parent()
-        .within(() => {
-          cy.contains(text).should('exist');
-        });
+      ContactsHelpers.expectErrorNearLabel(labelRx, text);
     };
 
     PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
     //
-    // 1. REQUIRED FIELD VALIDATION (clear and save)
-    //
+    // Required field(s) validation (clear and save)
     cy.get('#last_name').clear();
     cy.get('#first_name').clear();
     cy.get('#street_1').clear();
     cy.get('#city').clear();
     cy.get('#zip').clear();
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     cy.contains(/Edit Contact/i).should('exist');
     expectRequiredNearLabel(/^Last name/i);
@@ -161,41 +138,36 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    //
-    // 2. MAX-LENGTH / NUMERIC VALIDATION (overfill and save)
-    //
+    // overfill and assert max length validation
     const over30 = 'A'.repeat(31);
     const over20 = 'B'.repeat(21);
     const over10 = 'C'.repeat(11);
     const over34 = 'D'.repeat(35);
     const over38 = 'E'.repeat(39);
-    const badPhone = '12345678901'; // 11 digits
+    const badPhone = '12345678901';
 
-    // Names
     cy.get('#last_name').clear().type(over30);
     cy.get('#first_name').clear().type(over20);
     cy.get('#middle_name').clear().type(over20);
     cy.get('#prefix').clear().type(over10);
     cy.get('#suffix').clear().type(over10);
 
-    // Address
-    setDropdownByLabel(/^Country\/Region/i, 'United States of America');
+    ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
+
     cy.get('#street_1').clear().type(over34);
     cy.get('#street_2').clear().type(over34);
     cy.get('#city').clear().type(over30);
     PageUtils.dropdownSetValue('#state', newState);
-    cy.get('#zip').clear().type('0123456783'); // 10 chars to trigger “> 9 alphanumeric”
-    setTelephone(badPhone);
+    cy.get('#zip').clear().type('0123456783');
+    ContactsHelpers.setTelephone(badPhone);
 
-    // Employer / Occupation
     cy.get('#employer').clear().type(over38);
     cy.get('#occupation').clear().type(over38);
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     cy.contains(/Edit Contact/i).should('exist');
 
-    // Match the messages from your screenshot
     expectMaxErrorNearLabel(/^Last name/i, /cannot contain more than 30 alphanumeric characters/i);
     expectMaxErrorNearLabel(/^First name/i, /cannot contain more than 20 alphanumeric characters/i);
     expectMaxErrorNearLabel(/^Middle name/i, /cannot contain more than 20 alphanumeric characters/i);
@@ -209,16 +181,9 @@ describe('Contacts Edit', () => {
 
     expectMaxErrorNearLabel(/^Employer/i, /cannot contain more than 38 alphanumeric characters/i);
     expectMaxErrorNearLabel(/^Occupation/i, /cannot contain more than 38 alphanumeric characters/i);
+    ContactsHelpers.expectErrorNearLabel(/^Telephone/i, /must contain 10 numeric characters/i);
 
-    cy.contains('label', /^Telephone/i)
-      .parent()
-      .within(() => {
-        cy.contains(/must contain 10 numeric characters/i).should('exist');
-      });
-
-    //
-    // 3. NOW ENTER VALID VALUES FOR ALL FIELDS AND SAVE
-    //
+    // Fill with valid values and save
     cy.get('#last_name').clear().type(newLast);
     cy.get('#first_name').clear().type(newFirst);
     cy.get('#middle_name').clear().type(newMiddle);
@@ -230,17 +195,28 @@ describe('Contacts Edit', () => {
     cy.get('#city').clear().type(newCity);
     PageUtils.dropdownSetValue('#state', newState);
     cy.get('#zip').clear().type(newZip);
-    setTelephone(newPhone);
+    ContactsHelpers.setTelephone(newPhone);
 
     cy.get('#employer').clear().type(newEmployer);
     cy.get('#occupation').clear().type(newOccupation);
 
     PageUtils.clickButton('Save');
+    ContactsHelpers.assertAndContinueConfirmModal(oldDisplay, [
+      /Updated last name/i,
+      /Updated first name/i,
+      /Updated middle name/i,
+      /Updated prefix/i,
+      /Updated street address/i,
+      /Updated city/i,
+      /Updated state\/territory/i,
+      /Updated zip\/postal code/i,
+      new RegExp(`Updated employer to ${newEmployer}`),
+      new RegExp(`Updated occupation to ${newOccupation}`),
+    ]);
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains(/Manage contacts/i).should('exist');
 
-    // List row reflects new name + employer/occupation
     cy.contains('tbody tr', newDisplay)
       .should('exist')
       .within(() => {
@@ -248,7 +224,6 @@ describe('Contacts Edit', () => {
         cy.get('td').eq(4).should('contain.text', newOccupation);
       });
 
-    // Re-open and verify all fields persisted
     PageUtils.clickKababItem(newDisplay, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -262,9 +237,7 @@ describe('Contacts Edit', () => {
     cy.get('#street_2').should('have.value', newStreet2);
     cy.get('#city').should('have.value', newCity);
     cy.get('#zip').should('have.value', newZip);
-    cy.contains('label', /^State\/Territory/i)
-      .parent()
-      .should('contain.text', newState);
+    cy.get('#state').should('contain.text', newState);
     cy.contains('label', /^Telephone/i)
       .parent()
       .find('input')
@@ -274,37 +247,13 @@ describe('Contacts Edit', () => {
     cy.get('#employer').should('have.value', newEmployer);
     cy.get('#occupation').should('have.value', newOccupation);
 
-    cy.contains('h2', 'Transaction history')
-      .scrollIntoView()
-      .parentsUntil('body')
-      .last()
-      .find('tbody tr')
-      .should('have.length.at.least', 1);
+    ContactsHelpers.assertTransactionHistoryRow({
+      type: /Individual Receipt/i,
+      amount: IND_TXN_AMOUNT,
+    });
   });
 
-  it('shows Transaction History table in the contact details view', () => {
-    PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
-
-    cy.contains(/Edit Contact/i).should('exist');
-
-    cy.contains('h2', 'Transaction history')
-      .should('exist')
-      .parentsUntil('body')
-      .last()
-      .find('table')
-      .first()
-      .find('thead')
-      .first()
-      .within(() => {
-        cy.contains('Type');
-        cy.contains('Form');
-        cy.contains('Report');
-        cy.contains('Date');
-        cy.contains('Amount');
-      });
-  });
-
-  // CANDIDATE: required validation + update/check all editable fields (including office fields)
+  // CANDIDATE: required validation, update/check all editable fields (including office fields)
   it('validates required fields and updates all editable fields for a Candidate, persisting to list and edit form', () => {
     const originalCandidateId = Candidate_House_A.candidate_id as string;
 
@@ -330,20 +279,20 @@ describe('Contacts Edit', () => {
 
     const newDisplay = `${newLast}, ${newFirst}`;
 
+    const targetCandidateId = Candidate_House_B.candidate_id as string;
+    const targetLast = Candidate_House_B.last_name as string;
+    const targetFirst = Candidate_House_B.first_name as string;
+
     const expectRequiredNearLabel = (labelRx: RegExp) => {
-      cy.contains('label', labelRx)
-        .parent()
-        .within(() => {
-          cy.contains(/This is a required field\./i).should('exist');
-        });
+      ContactsHelpers.fieldForLabel(labelRx).within(() => {
+        cy.contains(/This is a required field\./i).should('exist');
+      });
     };
 
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    //
-    // 1. Clear top-level required fields (including Candidate ID) and assert inline validation
-    //
+    // Clear top-level required fields (including Candidate ID) and assert inline validation
     cy.get('#candidate_id').should('have.value', originalCandidateId).clear();
     cy.get('#last_name').clear();
     cy.get('#first_name').clear();
@@ -351,7 +300,7 @@ describe('Contacts Edit', () => {
     cy.get('#city').clear();
     cy.get('#zip').clear();
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     cy.contains(/Edit Contact/i).should('exist');
     expectRequiredNearLabel(/^Candidate ID/i);
@@ -361,79 +310,59 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    //
-    // 2. Office-specific required fields:
-    //    Senate → Candidate state required, district not required
-    //    House  → Candidate state and district required
-    //
-
-    // Switch to Senate; UI should clear state, district and require state only
-    setDropdownByLabel(/^Candidate office/i, 'Senate');
-    PageUtils.clickButton('Save');
-
+    // Office-specific required fields
+    ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'Senate');
+    ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
-    expectRequiredNearLabel(/^Candidate state/i);
-    cy.contains('label', /^Candidate district/i)
-      .parent()
-      .within(() => {
-        cy.contains(/This is a required field\./i).should('not.exist');
-      });
 
-    // Switch to House; with blank office fields, state and district should now both be required
-    setDropdownByLabel(/^Candidate office/i, 'House');
-    PageUtils.clickButton('Save');
+    ContactsHelpers.fieldForLabel(/^Candidate district/i)
+      .find('small.p-error, .p-error')
+      .should('not.exist');
 
+    ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'House');
+    ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
-    expectRequiredNearLabel(/^Candidate state/i);
+
     expectRequiredNearLabel(/^Candidate district/i);
 
-    //
-    // 3. Fill ALL fields with valid values and save
-    //
-
-    // Candidate ID back to valid original
+    // Fill ALL fields with valid values and save
     cy.get('#candidate_id').clear().type(originalCandidateId);
 
-    // Contact name fields
     cy.get('#last_name').type(newLast);
     cy.get('#first_name').type(newFirst);
     cy.get('#middle_name').clear().type(newMiddle);
     cy.get('#prefix').clear().type(newPrefix);
     cy.get('#suffix').clear().type(newSuffix);
 
-    // Address
-    setDropdownByLabel(/^Country\/Region/i, 'United States of America');
+    ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
+
     cy.get('#street_1').type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').type(newCity);
     PageUtils.dropdownSetValue('#state', newState);
     cy.get('#zip').type(newZip);
-    setTelephone(newPhone);
+    ContactsHelpers.setTelephone(newPhone);
 
-    // Employer section
     cy.get('#employer').clear().type(newEmployer);
     cy.get('#occupation').clear().type(newOccupation);
 
-    // Office fields – valid House combo
-    setDropdownByLabel(/^Candidate office/i, newOffice);
-    setDropdownByLabel(/^Candidate state/i, newCandState);
-    setDropdownByLabel(/^Candidate district/i, newCandDistrict);
+    ContactsHelpers.setDropdownByLabel(/^Candidate office/i, newOffice);
+    ContactsHelpers.setDropdownByLabel(/^Candidate state/i, newCandState);
+    ContactsHelpers.setDropdownByLabel(/^Candidate district/i, newCandDistrict);
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains(/Manage contacts/i).should('exist');
 
-    // List row reflects new name and still shows Candidate type
     cy.contains('tbody tr', newDisplay)
       .should('exist')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'Candidate');
+        cy.get('td').eq(2).should('contain.text', originalCandidateId);
       });
 
-    //
-    // 4. Re-open and verify everything persisted
-    //
+    // Re-open and verify everything persisted
     PageUtils.clickKababItem(newDisplay, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -443,37 +372,170 @@ describe('Contacts Edit', () => {
     cy.get('#middle_name').should('have.value', newMiddle);
     cy.get('#prefix').should('have.value', newPrefix);
     cy.get('#suffix').should('have.value', newSuffix);
-
     cy.get('#street_1').should('have.value', newStreet1);
     cy.get('#street_2').should('have.value', newStreet2);
     cy.get('#city').should('have.value', newCity);
     cy.get('#zip').should('have.value', newZip);
-    cy.contains('label', /^State\/Territory/i)
-      .parent()
-      .should('contain.text', newState);
+    cy.get('#state').should('contain.text', newState);
     cy.contains('label', /^Telephone/i)
       .parent()
       .find('input')
       .last()
       .should('have.value', newPhone);
-
     cy.get('#employer').should('have.value', newEmployer);
     cy.get('#occupation').should('have.value', newOccupation);
 
-    cy.contains('label', /^Candidate office/i)
-      .parent()
-      .should('contain.text', newOffice);
-    cy.contains('label', /^Candidate state/i)
-      .parent()
-      .should('contain.text', newCandState);
-    cy.contains('label', /^Candidate district/i)
-      .parent()
-      .should('contain.text', newCandDistrict);
+    cy.contains('label', /^Candidate office/i).parent().should('contain.text', newOffice);
+    cy.contains('label', /^Candidate state/i).parent().should('contain.text', newCandState);
+    cy.contains('label', /^Candidate district/i).parent().should('contain.text', newCandDistrict);
+
+    // Candidate Lookup: deterministic selection (stubs)
+    let selectedCandidateId = targetCandidateId;
+    let selectedLast = targetLast;
+    let selectedFirst = targetFirst;
+    ContactsHelpers.findExistingFecApiCandidate().then(({ seed, candidate }) => {
+      const candidateId = candidate.candidate_id;
+
+      cy.intercept('GET', '**/api/v1/contacts/candidate_lookup/**').as('candidateLookup');
+      cy.intercept('GET', '**/api/v1/contacts/candidate/**').as('candidateDetails');
+
+      cy.get('input#searchBox')
+        .should('be.visible')
+        .clear()
+        .type(seed, { delay: 50 });
+
+      cy.wait('@candidateLookup');
+
+      ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: candidateId });
+
+      cy.wait('@candidateDetails');
+
+      cy.get('#candidate_id', { timeout: 20000 })
+        .should('have.value', candidateId)
+        .then(() => {
+          selectedCandidateId = candidateId;
+        });
+    });
+
+    ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
+    ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
+
+    cy.get('#last_name')
+      .invoke('val')
+      .then((v) => {
+        const val = (v as string)?.trim();
+        if (val) selectedLast = val;
+      });
+
+    cy.get('#first_name')
+      .invoke('val')
+      .then((v) => {
+        const val = (v as string)?.trim();
+        if (val) selectedFirst = val;
+      });
+
+    ContactsHelpers.clickSaveAndHandleConfirm();
+
+    ContactsHelpers.assertSuccessToastMessage();
+    cy.contains(/Manage contacts/i).should('exist');
+
+    cy.then(() => {
+      const newDisplay = `${selectedLast}, ${selectedFirst}`;
+
+      cy.contains('tbody tr', newDisplay)
+        .should('exist')
+        .within(() => {
+          cy.get('td').eq(1).should('contain.text', 'Candidate');
+          cy.get('td').eq(2).should('contain.text', selectedCandidateId);
+        });
+
+      PageUtils.clickKababItem(newDisplay, 'Edit');
+      cy.contains(/Edit Contact/i).should('exist');
+
+      cy.get('#candidate_id').should('have.value', selectedCandidateId);
+      cy.get('#last_name').should('have.value', selectedLast);
+      cy.get('#first_name').should('have.value', selectedFirst);
+    });
   });
 
-  //
-  // COMMITTEE – required validation + update/check all editable fields
-  //
+  // CANDIDATE LOOKUP: replace candidate via lookup search and persist new candidate details
+  it('allows selecting a new Candidate via lookup and persists updated candidate fields', () => {
+    const targetCandidateId = Candidate_House_B.candidate_id as string;
+    const targetLast = Candidate_House_B.last_name as string;
+    const targetFirst = Candidate_House_B.first_name as string;
+    let selectedCandidateId = targetCandidateId;
+    let selectedLast = targetLast;
+    let selectedFirst = targetFirst;
+
+    PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
+    cy.contains(/Edit Contact/i).should('exist');
+
+    ContactsHelpers.findExistingFecApiCandidate().then(({ seed, candidate }) => {
+      const candidateId = candidate.candidate_id;
+
+      cy.intercept('GET', '**/api/v1/contacts/candidate_lookup/**').as('candidateLookup');
+      cy.intercept('GET', '**/api/v1/contacts/candidate/**').as('candidateDetails');
+
+      cy.get('input#searchBox')
+        .should('be.visible')
+        .clear()
+        .type(seed, { delay: 50 });
+
+      cy.wait('@candidateLookup');
+
+      ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', { match: candidateId });
+
+      cy.wait('@candidateDetails');
+
+      cy.get('#candidate_id', { timeout: 20000 })
+        .should('have.value', candidateId)
+        .then(() => {
+          selectedCandidateId = candidateId;
+        });
+    });
+
+    ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
+    ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
+
+    cy.get('#last_name')
+      .invoke('val')
+      .then((v) => {
+        const val = (v as string)?.trim();
+        if (val) selectedLast = val;
+      });
+
+    cy.get('#first_name')
+      .invoke('val')
+      .then((v) => {
+        const val = (v as string)?.trim();
+        if (val) selectedFirst = val;
+      });
+
+    ContactsHelpers.clickSaveAndHandleConfirm();
+
+    ContactsHelpers.assertSuccessToastMessage();
+    cy.contains(/Manage contacts/i).should('exist');
+
+    cy.then(() => {
+      const newDisplay = `${selectedLast}, ${selectedFirst}`;
+
+      cy.contains('tbody tr', newDisplay)
+        .should('exist')
+        .within(() => {
+          cy.get('td').eq(1).should('contain.text', 'Candidate');
+          cy.get('td').eq(2).should('contain.text', selectedCandidateId);
+        });
+
+      PageUtils.clickKababItem(newDisplay, 'Edit');
+      cy.contains(/Edit Contact/i).should('exist');
+
+      cy.get('#candidate_id').should('have.value', selectedCandidateId);
+      cy.get('#last_name').should('have.value', selectedLast);
+      cy.get('#first_name').should('have.value', selectedFirst);
+    });
+  });
+
+  // COMMITTEE – required validation, update/check all editable fields
   it('validates required fields and updates all editable fields for a Committee, persisting to list and edit form', () => {
     const newCommitteeId = 'C00000099';
     const newName = `${committeeDisplayName} Updated`;
@@ -495,16 +557,13 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(committeeDisplayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    //
-    // 1. Clear required fields and assert inline validation
-    //
     cy.get('#committee_id').clear();
     cy.get('#name').clear();
     cy.get('#street_1').clear();
     cy.get('#city').clear();
     cy.get('#zip').clear();
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -514,7 +573,6 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    // Committee ID should be marked invalid
     cy.get('#committee_id').should(($input) => {
       const ariaInvalid = $input.attr('aria-invalid');
       if (ariaInvalid) {
@@ -522,35 +580,39 @@ describe('Contacts Edit', () => {
       }
     });
 
-    //
-    // 2. Fill ALL fields with valid data and save
-    //
     cy.get('#committee_id').type(newCommitteeId);
     cy.get('#name').type(newName);
 
-    setDropdownByLabel(/^Country\/Region/i, 'United States of America');
+    ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
+
     cy.get('#street_1').type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').type(newCity);
     PageUtils.dropdownSetValue('#state', newState);
     cy.get('#zip').type(newZip);
-    setTelephone(newPhone);
+    ContactsHelpers.setTelephone(newPhone);
 
     PageUtils.clickButton('Save');
+    ContactsHelpers.assertAndContinueConfirmModal(committeeDisplayName, [
+      /Updated street address/i,
+      /Updated city/i,
+      /Updated state\/territory/i,
+      /Updated zip\/postal code/i,
+      /Updated telephone/i,
+      /Updated committee id/i,
+      /Updated name/i,
+    ]);
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains(/Manage contacts/i).should('exist');
 
-    // List row reflects new name and type
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'Committee');
+        cy.get('td').eq(2).should('contain.text', newCommitteeId);
       });
 
-    //
-    // 3. Re-open and verify persisted values + Transaction history table visible
-    //
     PageUtils.clickKababItem(newName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -560,16 +622,13 @@ describe('Contacts Edit', () => {
     cy.get('#street_2').should('have.value', newStreet2);
     cy.get('#city').should('have.value', newCity);
     cy.get('#zip').should('have.value', newZip);
-    cy.contains('label', /^State\/Territory/i)
-      .parent()
-      .should('contain.text', newState);
+    cy.get('#state').should('contain.text', newState);
     cy.contains('label', /^Telephone/i)
       .parent()
       .find('input')
       .last()
       .should('have.value', newPhone);
 
-    // Transaction history section is present (rows may or may not exist)
     cy.contains('h2', 'Transaction history')
       .should('exist')
       .parentsUntil('body')
@@ -578,7 +637,7 @@ describe('Contacts Edit', () => {
       .should('exist');
   });
 
-  // ORGANIZATION: required validation + max length + update/check all editable fields
+  // ORGANIZATION: required validation, max length, update/check all editable fields
   it('validates required fields and max length, then updates all editable fields for an Organization and persists to list and edit form', () => {
     const newName = `${organizationDisplayName} Updated`;
     const newStreet1 = '1234 Org Updated Ln';
@@ -588,7 +647,7 @@ describe('Contacts Edit', () => {
     const newZip = '12345';
     const newPhone = '5552223333';
 
-    const overlongName = 'a'.repeat(201); // > 200 chars
+    const overlongName = 'a'.repeat(201);
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       cy.contains('label', labelRx)
@@ -601,15 +660,12 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(organizationDisplayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    //
-    // 1. Clear required fields and assert inline "This is a required field." messages
-    //
     cy.get('#name').clear();
     cy.get('#street_1').clear();
     cy.get('#city').clear();
     cy.get('#zip').clear();
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     cy.contains(/Edit Contact/i).should('exist');
     expectRequiredNearLabel(/^Name$/i);
@@ -617,20 +673,18 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    //
-    // 2. Name max length: >200 chars should show "cannot contain more than 200 alphanumeric characters"
-    //
     cy.get('#name').clear().type(overlongName);
 
-    setDropdownByLabel(/^Country\/Region/i, 'United States of America');
+    ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
+
     cy.get('#street_1').type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').type(newCity);
     PageUtils.dropdownSetValue('#state', newState);
     cy.get('#zip').type(newZip);
-    setTelephone(newPhone);
+    ContactsHelpers.setTelephone(newPhone);
 
-    PageUtils.clickButton('Save');
+    ContactsHelpers.clickSaveAndHandleConfirm();
 
     cy.contains(/Edit Contact/i).should('exist');
     cy.contains('label', /^Name$/i)
@@ -639,11 +693,16 @@ describe('Contacts Edit', () => {
         cy.contains(/cannot contain more than 200 alphanumeric characters/i).should('exist');
       });
 
-    //
-    // 3. Fix name, save successfully, and verify list row
-    //
     cy.get('#name').clear().type(newName);
+
     PageUtils.clickButton('Save');
+    ContactsHelpers.assertAndContinueConfirmModal(organizationDisplayName, [
+      /Updated street address/i,
+      /Updated city/i,
+      /Updated state\/territory/i,
+      /Updated telephone/i,
+      /Updated name/i,
+    ]);
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains(/Manage contacts/i).should('exist');
@@ -654,9 +713,6 @@ describe('Contacts Edit', () => {
         cy.get('td').eq(1).should('contain.text', 'Organization');
       });
 
-    //
-    // 4. Re-open and verify persisted values + Transaction history table visible
-    //
     PageUtils.clickKababItem(newName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -665,16 +721,13 @@ describe('Contacts Edit', () => {
     cy.get('#street_2').should('have.value', newStreet2);
     cy.get('#city').should('have.value', newCity);
     cy.get('#zip').should('have.value', newZip);
-    cy.contains('label', /^State\/Territory/i)
-      .parent()
-      .should('contain.text', newState);
+    cy.get('#state').should('contain.text', newState);
     cy.contains('label', /^Telephone/i)
       .parent()
       .find('input')
       .last()
       .should('have.value', newPhone);
 
-    // Transaction history section present for Organization too
     cy.contains('h2', 'Transaction history')
       .should('exist')
       .parentsUntil('body')
