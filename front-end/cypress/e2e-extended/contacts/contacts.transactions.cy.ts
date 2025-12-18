@@ -330,7 +330,6 @@ describe('Contacts: Transactions integration', () => {
     });
   });
 
-  const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const clickSaveAndConfirmCreatesNewContact = (
     reportId: string,
     contactTypeLower: 'individual' | 'committee' | 'organization',
@@ -360,10 +359,10 @@ describe('Contacts: Transactions integration', () => {
 
         cy.get('[data-pc-section="message"], .p-confirm-dialog-message')
           .invoke('text')
-          .then((raw) => raw.replace(/\s+/g, ' ').trim())
+          .then((raw) => raw.replaceAll(/\s+/g, ' ').trim())
           .then((text) => {
             const rx = new RegExp(
-              `By saving this transaction, you.?re also creating a new ${contactTypeLower} contact for ${escapeRegExp(
+              String.raw`By saving this transaction, you.?re also creating a new ${contactTypeLower} contact for ${ContactsHelpers.escapeRegExp(
                 contactDisplay,
               )}\\.?$`,
               'i',
@@ -412,14 +411,12 @@ describe('Contacts: Transactions integration', () => {
 
       const scheduleData: ScheduleFormData = {
         ...defaultScheduleFormData,
-        ...{
-          amount: 250.0,
-          electionYear: undefined,
-          electionType: undefined,
-          date_received: new Date(currentYear, 4 - 1, 27),
-          purpose_description: '',
-          memo_text: '',
-        },
+        amount: 250,
+        electionYear: undefined,
+        electionType: undefined,
+        date_received: new Date(currentYear, 4 - 1, 27),
+        purpose_description: '',
+        memo_text: '',
       };
 
       TransactionDetailPage.enterScheduleFormData(
@@ -453,8 +450,8 @@ describe('Contacts: Transactions integration', () => {
         .last()
         .should('be.visible')
         .within(() => {
-          const normalize = (s: string) => s.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
-          const tightenHyphens = (s: string) => normalize(s).replace(/-\s+/g, '-');
+          const normalize = (s: string) => s.replaceAll(/\u00a0/g, ' ').replaceAll(/\s+/g, ' ').trim();
+          const tightenHyphens = (s: string) => normalize(s).replaceAll(/-\s+/g, '-');
           cy.contains(/^Confirm$/).should('exist');
           cy.get('[data-pc-section="message"]')
             .should('be.visible')
@@ -529,13 +526,16 @@ describe('Contacts: Transactions integration', () => {
 
     const selectContactLookupType = (type: 'Individual' | 'Organization' | 'Committee') => {
       cy.get('select').then(($selects) => {
-        const selectEl = [...$selects].find((sel) => {
-          const opts = Array.from((sel as HTMLSelectElement).options).map((o) => o.text.trim());
-          return opts.includes('Individual') && opts.includes('Organization') && opts.includes('Committee');
+        const selectEl = $selects.toArray().find((sel) => {
+          const opts = new Set(
+            Array.from((sel).options, (o) => o.text.trim()),
+          );
+
+          return opts.has('Individual') && opts.has('Organization') && opts.has('Committee');
         });
 
         expect(selectEl, 'Contact Lookup type <select>').to.exist;
-        cy.wrap(selectEl!).select(type);
+        cy.wrap(selectEl).select(type);
       });
     };
 

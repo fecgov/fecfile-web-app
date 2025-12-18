@@ -24,13 +24,13 @@ type FecApiCandidateLookup = {
 };
 
 const normalize = (s: string) =>
-  s.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+  s.replaceAll(/\u00a0/g, ' ').replaceAll(/\s+/g, ' ').trim();
 
 const toRx = (v: string | RegExp) =>
   v instanceof RegExp
     ? v
     : new RegExp(
-      `^\\s*${v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`,
+      String.raw`^\s*${v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\s*$`,
       'i',
     );
 
@@ -52,8 +52,8 @@ export class ContactsHelpers {
 
   static readonly DIALOG = '.p-dialog:visible';
 
-  private static escapeRegExp(s: string) {
-    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  static escapeRegExp(s: string) {
+    return s.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
   }
 
   static fieldForLabel(labelRx: RegExp, root = ContactsHelpers.DIALOG) {
@@ -81,7 +81,7 @@ export class ContactsHelpers {
 
     cy.get('body')
       .find('.p-select-option, .p-dropdown-item')
-      .contains(new RegExp(`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
+      .contains(new RegExp(String.raw`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
       .click({ force: true });
   }
 
@@ -92,7 +92,7 @@ export class ContactsHelpers {
   ) {
     cy.get(root).then(($root) => {
       const has = Array.from($root.find('label')).some((l) =>
-        labelRegex.test((l.textContent || '').replace(/\s+/g, ' ').trim()),
+        labelRegex.test((l.textContent || '').replaceAll(/\s+/g, ' ').trim()),
       );
 
       if (!has) return;
@@ -106,7 +106,7 @@ export class ContactsHelpers {
 
       cy.get('body')
         .find('.p-select-option, .p-dropdown-item')
-        .contains(new RegExp(`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
+        .contains(new RegExp(String.raw`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
         .click({ force: true });
     });
   }
@@ -489,14 +489,15 @@ export class ContactsHelpers {
     const dateRx = row.date ? toRx(row.date) : undefined;
 
     const amountExpected =
-      row.amount !== undefined ? amountToExpected(row.amount) : undefined;
+      row.amount == null ? undefined : amountToExpected(row.amount);
 
-    const amountRx =
-      amountExpected instanceof RegExp
-        ? amountExpected
-        : amountExpected
-          ? toRx(amountExpected)
-          : undefined;
+    let amountRx: RegExp | undefined;
+
+    if (amountExpected instanceof RegExp) {
+      amountRx = amountExpected;
+    } else if (amountExpected !== undefined) {
+      amountRx = toRx(amountExpected);
+    }
 
     const colIds = {
       type: 'transaction_type_identifier-column',
@@ -536,7 +537,9 @@ export class ContactsHelpers {
         const reportIdx = row.report ? getColIndexByThIdOrText($table, colIds.report, 'Report') : -1;
         const dateIdx = row.date ? getColIndexByThIdOrText($table, colIds.date, 'Date') : -1;
         const amountIdx =
-          row.amount !== undefined ? getColIndexByThIdOrText($table, colIds.amount, 'Amount') : -1;
+          row.amount === undefined
+            ? -1
+            : getColIndexByThIdOrText($table, colIds.amount, 'Amount');
 
         const $rows = $table.find('tbody tr');
         expect($rows.length, 'transaction history row count').to.be.greaterThan(0);

@@ -66,7 +66,7 @@ describe('Contacts Edit', () => {
 
     // Create one Schedule A transaction so Transaction history is populated for Individual Contact
     makeContact(individualContact, (contactResp) => {
-      const contact = contactResp.body as any;
+      const contact = contactResp.body;
       const today = new Date();
       const dateStr = today.toISOString().slice(0, 10);
       const txn = buildScheduleA(
@@ -101,6 +101,29 @@ describe('Contacts Edit', () => {
     last: string;
     first: string;
     display: string;
+  };
+
+  type AddressPhoneValues = {
+    street1: string;
+    street2: string;
+    city: string;
+    state: string;
+    zip: string;
+    phone: string;
+  };
+
+  type PersonContactValues = AddressPhoneValues & {
+    last: string;
+    first: string;
+    middle: string;
+    prefix: string;
+    suffix: string;
+    employer: string;
+    occupation: string;
+  };
+
+  type NamedContactValues = AddressPhoneValues & {
+    name: string;
   };
 
   const selectCandidateViaLookup = (
@@ -162,15 +185,6 @@ describe('Contacts Edit', () => {
     cy.get('#first_name').should('have.value', first);
   };
 
-  type AddressPhoneValues = {
-    street1: string;
-    street2: string;
-    city: string;
-    state: string;
-    zip: string;
-    phone: string;
-  };
-
   const assertTelephoneValue = (phone: string) => {
     cy.contains('label', /^Telephone/i)
       .parent()
@@ -197,16 +211,6 @@ describe('Contacts Edit', () => {
       .should('exist');
   };
 
-  type PersonContactValues = AddressPhoneValues & {
-    last: string;
-    first: string;
-    middle: string;
-    prefix: string;
-    suffix: string;
-    employer: string;
-    occupation: string;
-  };
-
   const assertPersonContactFormValues = (v: PersonContactValues) => {
     cy.get('#last_name').should('have.value', v.last);
     cy.get('#first_name').should('have.value', v.first);
@@ -220,14 +224,18 @@ describe('Contacts Edit', () => {
     cy.get('#occupation').should('have.value', v.occupation);
   };
 
-  type NamedContactValues = AddressPhoneValues & {
-    name: string;
-  };
-
   const assertNamedContactFormValuesWithTxn = (v: NamedContactValues) => {
     cy.get('#name').should('have.value', v.name);
     assertAddressAndPhone(v);
     assertTransactionHistoryTableExists();
+  };
+
+  const expectRequiredNearLabel = (labelRx: RegExp) => {
+    cy.contains('label', labelRx)
+      .parent()
+      .within(() => {
+        cy.contains(/This is a required field\./i).should('exist');
+      });
   };
 
   function candidateLookup(lookupCandidateId: string, lookupLast: string, lookupFirst: string, lookupName: string) {
@@ -589,15 +597,6 @@ describe('Contacts Edit', () => {
     const newZip = '05499';
     const newPhone = '5550001111';
 
-
-    const expectRequiredNearLabel = (labelRx: RegExp) => {
-      cy.contains('label', labelRx)
-        .parent()
-        .within(() => {
-          cy.contains(/This is a required field\./i).should('exist');
-        });
-    };
-
     PageUtils.clickKababItem(committeeDisplayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -685,14 +684,6 @@ describe('Contacts Edit', () => {
     const newPhone = '5552223333';
 
     const overlongName = 'a'.repeat(201);
-
-    const expectRequiredNearLabel = (labelRx: RegExp) => {
-      cy.contains('label', labelRx)
-        .parent()
-        .within(() => {
-          cy.contains(/This is a required field\./i).should('exist');
-        });
-    };
 
     PageUtils.clickKababItem(organizationDisplayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
