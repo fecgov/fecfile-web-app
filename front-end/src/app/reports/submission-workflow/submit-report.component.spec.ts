@@ -1,20 +1,21 @@
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Form3X, Report } from 'app/shared/models/';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ApiService, QueryParams } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
+import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Confirmation, ConfirmationService, MessageService, SharedModule } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { BehaviorSubject } from 'rxjs';
-import { ReportService } from 'app/shared/services/report.service';
-import { HttpResponse, provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { SubmitReportComponent } from './submit-report.component';
-import { ApiService, QueryParams } from 'app/shared/services/api.service';
 import { F3X_ROUTES } from '../f3x/routes';
+import { SubmitReportComponent } from './submit-report.component';
 
 const routeDataSubject = new BehaviorSubject<{
   report: Report;
@@ -101,11 +102,82 @@ describe('SubmitReportComponent', () => {
     expect(component.form.contains('backdoor_code')).toBeFalse();
   });
 
+  it('should toggle address fields validation on change_of_address toggle', () => {
+    component.form.get('change_of_address')?.setValue(true);
+    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeTrue();
+
+    component.form.get('change_of_address')?.setValue(false);
+    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeFalse();
+  });
+
   it('should not submit when form is invalid', async () => {
     spyOn(component, 'saveAndSubmit');
     component.form.patchValue({ filingPassword: '', userCertified: false });
     component.submitForm();
     expect(component.saveAndSubmit).not.toHaveBeenCalled();
+  });
+
+  it('#updateReport should uses form address when change_of_address is true', async () => {
+    const testReport = new Form3X();
+    testReport.street_1 = 'test_street_1';
+    testReport.street_2 = 'test_street_2';
+    testReport.city = 'test_city';
+    testReport.state = 'AL';
+    testReport.zip = '12345';
+
+    component.form.patchValue({
+      change_of_address: true,
+      street_1: 'new_street_1',
+      street_2: 'new_street_2',
+      city: 'new_city',
+      state: 'NY',
+      zip: '54321',
+    });
+    component.form.updateValueAndValidity();
+
+    TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
+    TestBed.inject(MockStore).refreshState();
+    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
+      return payload;
+    });
+
+    const retval = await component.updateReport();
+    expect(reportServiceUpdateSpy).toHaveBeenCalled();
+    expect(retval?.street_1).toEqual(component.form.value.street_1);
+    expect(retval?.street_2).toEqual(component.form.value.street_2);
+    expect(retval?.city).toEqual(component.form.value.city);
+    expect(retval?.state).toEqual(component.form.value.state);
+    expect(retval?.zip).toEqual(component.form.value.zip);
+  });
+
+  it('#updateReport should use committee address when change_of_address is false', async () => {
+    const testReport = new Form3X();
+
+    component.form.patchValue({
+      change_of_address: false,
+    });
+    component.form.updateValueAndValidity();
+
+    TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
+    TestBed.inject(MockStore).refreshState();
+    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
+      return payload;
+    });
+
+    const retval = await component.updateReport();
+    const testCommitteeAccountObject = testCommitteeAccount();
+    expect(reportServiceUpdateSpy).toHaveBeenCalled();
+    expect(retval?.street_1).toEqual(testCommitteeAccountObject.street_1);
+    expect(retval?.street_2).toEqual(testCommitteeAccountObject.street_2);
+    expect(retval?.city).toEqual(testCommitteeAccountObject.city);
+    expect(retval?.state).toEqual(testCommitteeAccountObject.state);
+    expect(retval?.zip).toEqual(testCommitteeAccountObject.zip);
   });
 
   describe('saveAndSubmit', () => {

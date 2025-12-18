@@ -1658,6 +1658,10 @@ p-selectbutton.ng-dirty.ng-invalid > .p-selectbutton > .p-button {
   padding: 8px 20px;
 }
 
+#form24Options .p-togglebutton-content {
+  font-size: 14px;
+}
+
 .p-togglebutton {
   padding: 0;
   background: var(--p-content-background);
@@ -6571,3 +6575,13 @@ td {
 .p-accordionpanel:not(.p-accordionpanel-active):not(.p-disabled) .p-accordionheader:hover .p-accordionheader-toggle-icon {
   color: var(--p-accordion-header-toggle-icon-color);
 }
+
+.p-radiobutton-input {
+  height: 100% !important;
+}
+
+.p-field-checkbox > label:not(.p-disabled) {
+  cursor: pointer;
+}
+
+

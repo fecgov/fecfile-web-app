@@ -10,9 +10,8 @@
         styleClass="readonly"
         id="entity_type_dropdown"
         appendTo="body"
-      >
-        <ng-template pTemplate="dropdownicon"></ng-template>
-      </p-select>
+        [pt]="{ dropdown: 'no-dropdown-icon' }"
+      />
     </div>
 
     <div class="pl-0">

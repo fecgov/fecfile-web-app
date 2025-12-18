@@ -9,7 +9,6 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -41,11 +40,11 @@ async function setup(params: { reportId?: string }) {
     ],
   }).compileComponents();
 
-  router = TestBed.inject(Router);
   store = TestBed.inject(MockStore);
+  spyOn(store, 'dispatch').and.callThrough();
+  router = TestBed.inject(Router);
   form3XService = TestBed.inject(Form3XService);
   spyOn(router, 'navigateByUrl').and.stub();
-  spyOn(store, 'dispatch').and.callThrough();
 }
 
 describe('CreateF3XStep1Component: New', () => {
@@ -98,8 +97,13 @@ describe('CreateF3XStep1Component: New', () => {
   it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
     const createSpy = spyOn(form3XService, 'create');
     const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes');
-    component.form.patchValue({ coverage_from_date: null });
+
+    // wait for all async initialization to complete
     await fixture.whenStable();
+    fixture.detectChanges();
+
+    // now invalidate the form
+    component.form.patchValue({ coverage_from_date: null });
 
     expect(component.form.valid).toBeFalse();
     await component.submitForm();
@@ -107,7 +111,10 @@ describe('CreateF3XStep1Component: New', () => {
     expect(component.formSubmitted).toBeTrue();
     expect(createSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
+    expect(store.dispatch).toHaveBeenCalled();
+    const dispatchCall = store.dispatch as jasmine.Spy;
+    const lastCall = dispatchCall.calls.mostRecent();
+    expect(lastCall.args[0].type).toEqual('[SingleClickButtonDisabled] False');
   });
 });
 

@@ -259,7 +259,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public forceItemization(transaction: Transaction, itemized: boolean) {
     this.confirmationService.confirm({
-      key: 'transaction-itemization-dialog',
       message:
         'Changing the itemization status of this transaction will affect its associated transactions (such as memos).',
       header: 'Heads up!',
@@ -346,7 +345,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   public override deleteItem(item: Transaction): void | Promise<void> {
     this.confirmationService.confirm({
-      key: 'transaction-deletion-dialog',
       message:
         'Deleting this transaction will also delete any linked transactions ' +
         '(such as memos, in-kinds, and transfers). Please note that you cannot undo this action.',
