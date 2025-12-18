@@ -38,8 +38,8 @@ const tightenHyphens = (s: string) => normalizeText(s).replaceAll(/-\s+/g, '-');
 
 const hasVisibleDialogMatching = ($body: JQuery<HTMLElement>, rx: RegExp): boolean => {
   const dialogs = $body.find('.p-dialog:visible').toArray();
-  for (let i = 0; i < dialogs.length; i += 1) {
-    const txt = dialogs[i].textContent ?? '';
+  for (const el of dialogs) {
+    const txt = el.textContent ?? '';
     if (rx.test(txt)) return true;
   }
   return false;
@@ -103,9 +103,9 @@ const saveCreateContactDialog = () => {
 
 const findFirstAnchorMatching = ($body: JQuery<HTMLElement>, rx: RegExp): HTMLAnchorElement | null => {
   const anchors = $body.find('a').toArray();
-  for (let i = 0; i < anchors.length; i += 1) {
-    const txt = (anchors[i].textContent || '').trim();
-    if (rx.test(txt)) return anchors[i] as HTMLAnchorElement;
+  for (const a of anchors) {
+    const txt = (a.textContent || '').trim();
+    if (rx.test(txt)) return a as HTMLAnchorElement;
   }
   return null;
 };
@@ -279,22 +279,24 @@ const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems:
   });
 };
 
-// --- helpers for the xit (kept at top-level so lint still passes) ---
-const selectContactLookupType = (type: ContactLookupType) => {
+const REQUIRED_LOOKUP_TYPES = new Set(['Individual', 'Organization', 'Committee']);
+
+const hasAllRequiredLookupTypes = (sel: HTMLSelectElement) => {
+  const opts = new Set(Array.from(sel.options, (o) => o.text.trim()));
+  for (const req of REQUIRED_LOOKUP_TYPES) {
+    if (!opts.has(req)) return false;
+  }
+  return true;
+};
+
+const selectContactLookupType = (type: 'Individual' | 'Organization' | 'Committee') => {
   cy.get('select').then(($selects) => {
-    const selects = $selects.toArray() as HTMLSelectElement[];
     let found: HTMLSelectElement | undefined;
 
-    for (let i = 0; i < selects.length; i += 1) {
-      const sel = selects[i];
-      const opts = new Set<string>();
-
-      for (let j = 0; j < sel.options.length; j += 1) {
-        opts.add(sel.options[j].text.trim());
-      }
-
-      if (opts.has('Individual') && opts.has('Organization') && opts.has('Committee')) {
-        found = sel;
+    for (const el of $selects.toArray()) {
+      if (!(el instanceof HTMLSelectElement)) continue;
+      if (hasAllRequiredLookupTypes(el)) {
+        found = el;
         break;
       }
     }

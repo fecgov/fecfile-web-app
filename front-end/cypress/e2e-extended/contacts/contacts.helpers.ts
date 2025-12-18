@@ -26,11 +26,14 @@ type FecApiCandidateLookup = {
 const normalize = (s: string) =>
   s.replaceAll('\u00a0', ' ').replaceAll(/\s+/g, ' ').trim();
 
+const ESCAPE_RX = /[.*+?^${}()|[\]\\]/g;
+const ESCAPE_REPLACEMENT = String.raw`\$&`;
+
 const toRx = (v: string | RegExp) =>
   v instanceof RegExp
     ? v
     : new RegExp(
-      String.raw`^\s*${v.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)}\s*$`,
+      String.raw`^\s*${v.replaceAll(ESCAPE_RX, ESCAPE_REPLACEMENT)}\s*$`,
       'i',
     );
 
