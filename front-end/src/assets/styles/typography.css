@@ -44,7 +44,7 @@ h6 {
 }
 p {
   color: inherit;
-  font-family: var(--gandhi-regular);
+  font-family: var(--gandhi);
   font-size: 16px;
   margin: 0 0 2.4rem 0;
   max-width: 80rem;
@@ -220,5 +220,5 @@ body {
 }
 /* TYPOGRAHY */
 .ghandi {
-  font-family: var(--gandhi-regular)
+  font-family: var(--gandhi)
 }
