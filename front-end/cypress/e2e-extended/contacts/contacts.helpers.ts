@@ -18,8 +18,6 @@ type TxnHistoryRow = {
   amount?: number | string | RegExp;
 };
 
-type ConfirmChange = string | RegExp;
-
 type FecApiCandidateLookup = {
   seed: string;
   candidate: any;
@@ -81,7 +79,6 @@ export class ContactsHelpers {
       cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click({ force: true });
     });
 
-    // PrimeNG overlays render outside the dialog
     cy.get('body')
       .find('.p-select-option, .p-dropdown-item')
       .contains(new RegExp(`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
@@ -114,48 +111,13 @@ export class ContactsHelpers {
     });
   }
 
-  static assertAndContinueConfirmModal(
-    contactDisplay: string,
-    expectedChanges: ConfirmChange[],
-  ) {
-    cy.get('.p-confirm-dialog, .p-dialog')
-      .filter(':visible')
-      .last()
-      .should('be.visible')
-      .within(() => {
-        cy.contains(/^Confirm$/).should('exist');
-
-        cy.get('[data-pc-section="message"]')
-          .invoke('text')
-          .then((raw) => {
-            const text = normalize(raw);
-            expect(text).to.include(
-              `Your suggested changes for ${contactDisplay} will affect all transactions involving this contact.`,
-            );
-          });
-
-        cy.get('ul.contact-confirm-dialog li')
-          .should('have.length.at.least', expectedChanges.length)
-          .then(($lis) => {
-            const bullets = [...$lis].map((li) => normalize(li.textContent || ''));
-
-            expectedChanges.forEach((expected) => {
-              if (expected instanceof RegExp) {
-                expect(
-                  bullets.some((b) => expected.test(b)),
-                  `expected bullet matching ${expected}`,
-                ).to.eq(true);
-              } else {
-                expect(
-                  bullets.some((b) => b.includes(expected)),
-                  `expected bullet containing "${expected}"`,
-                ).to.eq(true);
-              }
-            });
-          });
-
-        cy.contains('button', /^Continue$/).click();
-      });
+  static assertAndContinueConfirmModal(contactName: string, expectedChanges: Array<string | RegExp> = []) {
+    ContactsHelpers.getVisibleConfirmDialog().within(() => {
+      cy.contains(contactName).should('exist');
+      expectedChanges.forEach((c) => cy.contains(c).should('exist'));
+      cy.contains('button', /Continue/i).click();
+    });
+    cy.contains('.p-dialog-title', /Confirm/i).should('not.exist');
   }
 
   static pickAutocompleteOptionForInput(
@@ -606,14 +568,34 @@ export class ContactsHelpers {
   }
 
   static clickSaveAndHandleConfirm() {
-    PageUtils.clickButton('Save');
+    cy.contains('button', /^Save$/).click();
+
     cy.get('body').then(($body) => {
-      const hasConfirm =
-        $body.find('.p-confirm-dialog:visible, .p-dialog:visible').toArray()
-          .some((el) => /Confirm/i.test(el.textContent ?? ''));
+      const hasConfirm = $body
+        .find('.p-dialog-title')
+        .toArray()
+        .some((el) => /confirm/i.test((el.textContent || '').trim()));
+
       if (hasConfirm) {
-        PageUtils.clickButton('Continue');
+        ContactsHelpers.continueConfirmModal();
       }
     });
   }
+
+  private static getVisibleConfirmDialog() {
+    return cy
+      .contains('.p-dialog-title', /Confirm/i, { timeout: 10000 })
+      .should('be.visible')
+      .closest('.p-confirm-dialog, .p-dialog');
+  }
+
+  static continueConfirmModal() {
+    ContactsHelpers.getVisibleConfirmDialog().within(() => {
+      cy.contains('button', /Continue/i).should('be.enabled').click();
+    });
+
+    cy.contains('.p-dialog-title', /Confirm/i).should('not.exist');
+  }
+
+
 }

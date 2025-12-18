@@ -123,10 +123,8 @@ describe('Contacts Edit', () => {
     });
 
     cy.wait('@candidateDetails');
-
     cy.get('#candidate_id', { timeout: 20000 }).should('have.value', lookupCandidate.candidate_id);
 
-    // Some environments/fixtures don’t reliably backfill names — keep your existing “ensure” behavior.
     ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
     ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
 
@@ -164,6 +162,74 @@ describe('Contacts Edit', () => {
     cy.get('#first_name').should('have.value', first);
   };
 
+  type AddressPhoneValues = {
+    street1: string;
+    street2: string;
+    city: string;
+    state: string;
+    zip: string;
+    phone: string;
+  };
+
+  const assertTelephoneValue = (phone: string) => {
+    cy.contains('label', /^Telephone/i)
+      .parent()
+      .find('input')
+      .last()
+      .should('have.value', phone);
+  };
+
+  const assertAddressAndPhone = (v: AddressPhoneValues) => {
+    cy.get('#street_1').should('have.value', v.street1);
+    cy.get('#street_2').should('have.value', v.street2);
+    cy.get('#city').should('have.value', v.city);
+    cy.get('#zip').should('have.value', v.zip);
+    cy.get('#state').should('contain.text', v.state);
+    assertTelephoneValue(v.phone);
+  };
+
+  const assertTransactionHistoryTableExists = () => {
+    cy.contains('h2', 'Transaction history')
+      .should('exist')
+      .parentsUntil('body')
+      .last()
+      .find('table')
+      .should('exist');
+  };
+
+  type PersonContactValues = AddressPhoneValues & {
+    last: string;
+    first: string;
+    middle: string;
+    prefix: string;
+    suffix: string;
+    employer: string;
+    occupation: string;
+  };
+
+  const assertPersonContactFormValues = (v: PersonContactValues) => {
+    cy.get('#last_name').should('have.value', v.last);
+    cy.get('#first_name').should('have.value', v.first);
+    cy.get('#middle_name').should('have.value', v.middle);
+    cy.get('#prefix').should('have.value', v.prefix);
+    cy.get('#suffix').should('have.value', v.suffix);
+
+    assertAddressAndPhone(v);
+
+    cy.get('#employer').should('have.value', v.employer);
+    cy.get('#occupation').should('have.value', v.occupation);
+  };
+
+  type NamedContactValues = AddressPhoneValues & {
+    name: string;
+  };
+
+  const assertNamedContactFormValuesWithTxn = (v: NamedContactValues) => {
+    cy.get('#name').should('have.value', v.name);
+    assertAddressAndPhone(v);
+    assertTransactionHistoryTableExists();
+  };
+
   // INDIVIDUAL: update/check all editable fields, required fields, length validation
   it('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
     const newLast = `${IND_LAST}-Upd`;
@@ -176,6 +242,7 @@ describe('Contacts Edit', () => {
     const newStreet2 = 'Apt 9';
     const newCity = 'Updatedville';
     const newState = 'Alabama';
+    const newStateAbb = 'AL';
     const newZip = '54321';
     const newPhone = '5551234567';
 
@@ -195,7 +262,6 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    // Required field(s) validation (clear and save)
     cy.get('#last_name').clear();
     cy.get('#first_name').clear();
     cy.get('#street_1').clear();
@@ -211,7 +277,6 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    // overfill and assert max length validation
     const over30 = 'A'.repeat(31);
     const over20 = 'B'.repeat(21);
     const over10 = 'C'.repeat(11);
@@ -256,7 +321,6 @@ describe('Contacts Edit', () => {
     expectMaxErrorNearLabel(/^Occupation/i, /cannot contain more than 38 alphanumeric characters/i);
     ContactsHelpers.expectErrorNearLabel(/^Telephone/i, /must contain 10 numeric characters/i);
 
-    // Fill with valid values and save
     cy.get('#last_name').clear().type(newLast);
     cy.get('#first_name').clear().type(newFirst);
     cy.get('#middle_name').clear().type(newMiddle);
@@ -275,14 +339,16 @@ describe('Contacts Edit', () => {
 
     PageUtils.clickButton('Save');
     ContactsHelpers.assertAndContinueConfirmModal(oldDisplay, [
-      /Updated last name/i,
-      /Updated first name/i,
-      /Updated middle name/i,
-      /Updated prefix/i,
-      /Updated street address/i,
-      /Updated city/i,
-      /Updated state\/territory/i,
-      /Updated zip\/postal code/i,
+      `Updated last name to ${newLast}`,
+      `Updated first name to ${newFirst}`,
+      `Updated middle name to ${newMiddle}`,
+      `Updated prefix to ${newPrefix}`,
+      `Updated suffix to ${newSuffix}`,
+      `Updated street address to ${newStreet1}`,
+      `Updated apartment, suite, etc. to ${newStreet2}`,
+      `Updated city to ${newCity}`,
+      `Updated state/territory to ${newStateAbb}`,
+      `Updated zip/postal code to ${newZip}`,
       new RegExp(`Updated employer to ${newEmployer}`),
       new RegExp(`Updated occupation to ${newOccupation}`),
     ]);
@@ -300,25 +366,21 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(newDisplay, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    cy.get('#last_name').should('have.value', newLast);
-    cy.get('#first_name').should('have.value', newFirst);
-    cy.get('#middle_name').should('have.value', newMiddle);
-    cy.get('#prefix').should('have.value', newPrefix);
-    cy.get('#suffix').should('have.value', newSuffix);
-
-    cy.get('#street_1').should('have.value', newStreet1);
-    cy.get('#street_2').should('have.value', newStreet2);
-    cy.get('#city').should('have.value', newCity);
-    cy.get('#zip').should('have.value', newZip);
-    cy.get('#state').should('contain.text', newState);
-    cy.contains('label', /^Telephone/i)
-      .parent()
-      .find('input')
-      .last()
-      .should('have.value', newPhone);
-
-    cy.get('#employer').should('have.value', newEmployer);
-    cy.get('#occupation').should('have.value', newOccupation);
+    assertPersonContactFormValues({
+      last: newLast,
+      first: newFirst,
+      middle: newMiddle,
+      prefix: newPrefix,
+      suffix: newSuffix,
+      street1: newStreet1,
+      street2: newStreet2,
+      city: newCity,
+      state: newState,
+      zip: newZip,
+      phone: newPhone,
+      employer: newEmployer,
+      occupation: newOccupation,
+    });
 
     ContactsHelpers.assertTransactionHistoryRow({
       type: /Individual Receipt/i,
@@ -366,7 +428,6 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    // Clear top-level required fields (including Candidate ID) and assert inline validation
     cy.get('#candidate_id').should('have.value', originalCandidateId).clear();
     cy.get('#last_name').clear();
     cy.get('#first_name').clear();
@@ -384,7 +445,7 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    // Office-specific required fields
+
     ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'Senate');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
@@ -399,7 +460,7 @@ describe('Contacts Edit', () => {
 
     expectRequiredNearLabel(/^Candidate district/i);
 
-    // Fill ALL fields with valid values and save
+
     cy.get('#candidate_id').clear().type(originalCandidateId);
 
     cy.get('#last_name').type(newLast);
@@ -441,23 +502,21 @@ describe('Contacts Edit', () => {
     cy.contains(/Edit Contact/i).should('exist');
 
     cy.get('#candidate_id').should('have.value', originalCandidateId);
-    cy.get('#last_name').should('have.value', newLast);
-    cy.get('#first_name').should('have.value', newFirst);
-    cy.get('#middle_name').should('have.value', newMiddle);
-    cy.get('#prefix').should('have.value', newPrefix);
-    cy.get('#suffix').should('have.value', newSuffix);
-    cy.get('#street_1').should('have.value', newStreet1);
-    cy.get('#street_2').should('have.value', newStreet2);
-    cy.get('#city').should('have.value', newCity);
-    cy.get('#zip').should('have.value', newZip);
-    cy.get('#state').should('contain.text', newState);
-    cy.contains('label', /^Telephone/i)
-      .parent()
-      .find('input')
-      .last()
-      .should('have.value', newPhone);
-    cy.get('#employer').should('have.value', newEmployer);
-    cy.get('#occupation').should('have.value', newOccupation);
+    assertPersonContactFormValues({
+      last: newLast,
+      first: newFirst,
+      middle: newMiddle,
+      prefix: newPrefix,
+      suffix: newSuffix,
+      street1: newStreet1,
+      street2: newStreet2,
+      city: newCity,
+      state: newState,
+      zip: newZip,
+      phone: newPhone,
+      employer: newEmployer,
+      occupation: newOccupation,
+    });
 
     cy.contains('label', /^Candidate office/i).parent().should('contain.text', newOffice);
     cy.contains('label', /^Candidate state/i).parent().should('contain.text', newCandState);
@@ -556,8 +615,10 @@ describe('Contacts Edit', () => {
     const newStreet2 = 'Suite 101';
     const newCity = 'Burlington';
     const newState = 'Vermont';
+    const newStateAbb = 'VT';
     const newZip = '05499';
     const newPhone = '5550001111';
+
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       cy.contains('label', labelRx)
@@ -607,13 +668,14 @@ describe('Contacts Edit', () => {
 
     PageUtils.clickButton('Save');
     ContactsHelpers.assertAndContinueConfirmModal(committeeDisplayName, [
-      /Updated street address/i,
-      /Updated city/i,
-      /Updated state\/territory/i,
-      /Updated zip\/postal code/i,
-      /Updated telephone/i,
-      /Updated committee id/i,
-      /Updated name/i,
+      `Updated street address to ${newStreet1}`,
+      `Updated apartment, suite, etc. to ${newStreet2}`,
+      `Updated city to ${newCity}`,
+      `Updated state/territory to ${newStateAbb}`,
+      `Updated zip/postal code to ${newZip}`,
+      `Updated telephone to +1 ${newPhone}`,
+      `Updated committee id to ${newCommitteeId}`,
+      `Updated name to ${newName}`,
     ]);
 
     ContactsHelpers.assertSuccessToastMessage();
@@ -630,24 +692,15 @@ describe('Contacts Edit', () => {
     cy.contains(/Edit Contact/i).should('exist');
 
     cy.get('#committee_id').should('have.value', newCommitteeId);
-    cy.get('#name').should('have.value', newName);
-    cy.get('#street_1').should('have.value', newStreet1);
-    cy.get('#street_2').should('have.value', newStreet2);
-    cy.get('#city').should('have.value', newCity);
-    cy.get('#zip').should('have.value', newZip);
-    cy.get('#state').should('contain.text', newState);
-    cy.contains('label', /^Telephone/i)
-      .parent()
-      .find('input')
-      .last()
-      .should('have.value', newPhone);
-
-    cy.contains('h2', 'Transaction history')
-      .should('exist')
-      .parentsUntil('body')
-      .last()
-      .find('table')
-      .should('exist');
+    assertNamedContactFormValuesWithTxn({
+      name: newName,
+      street1: newStreet1,
+      street2: newStreet2,
+      city: newCity,
+      state: newState,
+      zip: newZip,
+      phone: newPhone,
+    });
   });
 
   // ORGANIZATION: required validation, max length, update/check all editable fields
@@ -657,6 +710,7 @@ describe('Contacts Edit', () => {
     const newStreet2 = 'Floor 3';
     const newCity = 'Orgville';
     const newState = 'Alabama';
+    const newStateAbb = 'AL';
     const newZip = '12345';
     const newPhone = '5552223333';
 
@@ -710,11 +764,12 @@ describe('Contacts Edit', () => {
 
     PageUtils.clickButton('Save');
     ContactsHelpers.assertAndContinueConfirmModal(organizationDisplayName, [
-      /Updated street address/i,
-      /Updated city/i,
-      /Updated state\/territory/i,
-      /Updated telephone/i,
-      /Updated name/i,
+      `Updated street address to ${newStreet1}`,
+      `Updated apartment, suite, etc. to ${newStreet2}`,
+      `Updated city to ${newCity}`,
+      `Updated state/territory to ${newStateAbb}`,
+      `Updated telephone to +1 ${newPhone}`,
+      `Updated name to ${newName}`,
     ]);
 
     ContactsHelpers.assertSuccessToastMessage();
@@ -729,23 +784,14 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(newName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    cy.get('#name').should('have.value', newName);
-    cy.get('#street_1').should('have.value', newStreet1);
-    cy.get('#street_2').should('have.value', newStreet2);
-    cy.get('#city').should('have.value', newCity);
-    cy.get('#zip').should('have.value', newZip);
-    cy.get('#state').should('contain.text', newState);
-    cy.contains('label', /^Telephone/i)
-      .parent()
-      .find('input')
-      .last()
-      .should('have.value', newPhone);
-
-    cy.contains('h2', 'Transaction history')
-      .should('exist')
-      .parentsUntil('body')
-      .last()
-      .find('table')
-      .should('exist');
+    assertNamedContactFormValuesWithTxn({
+      name: newName,
+      street1: newStreet1,
+      street2: newStreet2,
+      city: newCity,
+      state: newState,
+      zip: newZip,
+      phone: newPhone,
+    });
   });
 });
