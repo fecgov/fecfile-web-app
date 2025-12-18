@@ -7,6 +7,7 @@
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
     (visibleChange)="closeDialog($event)"
+    closeAriaLabel="closeDialog"
   >
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="grid">
@@ -17,8 +18,9 @@
       <div class="grid">
         <div class="col-10">
           <div class="field">
-            <label for="searchBox">CONTACT TYPE</label>
+            <span class="span-label" id="contact_type_label">CONTACT TYPE</span>
             <app-contact-lookup
+              ariaLabelledBy="contact_type_label"
               [contactTypeOptions]="contactTypeOptions"
               [showSearchBoxCallback]="showSearchBox"
               [showCreateNewContactButton]="false"
@@ -132,8 +134,13 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label for="country">COUNTRY/REGION</label>
-            <p-select inputId="country" formControlName="country" [options]="countryOptions" />
+            <span class="span-label" id="country_region_label">COUNTRY/REGION</span>
+            <p-select
+              inputId="country"
+              aria-labelledby="country_region_label"
+              formControlName="country"
+              [options]="countryOptions"
+            />
           </div>
         </div>
         <div class="col-6"></div>
@@ -164,9 +171,10 @@
         </div>
         <div class="col-3">
           <div class="field">
-            <label for="state">STATE/TERRITORY</label>
+            <span class="span-label" id="state_territory_label">STATE/TERRITORY</span>
             <app-searchable-select
               inputId="state"
+              aria-labelledby="state_territory_label"
               controlName="state"
               [form]="form"
               [options]="stateOptions"

@@ -2,13 +2,14 @@
   <div class="grid">
     <div class="col-3">
       <div class="field flex flex-column">
-        <label for="electionType">{{ labelPrefix() }} ELECTION TYPE</label>
+        <span class="span-label" id="election_type_label">{{ labelPrefix() }} ELECTION TYPE</span>
         <p-select
           inputId="electionType"
           [options]="electionTypeOptions"
           class="w-full"
           appendTo="body"
           formControlName="electionType"
+          ariaLabelledBy="election_type_label"
         >
           <ng-template let-electionCode pTemplate="selectedItem">
             <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>

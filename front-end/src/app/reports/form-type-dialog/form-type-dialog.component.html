@@ -1,24 +1,21 @@
-<p-dialog
-  #dialog
+<app-dialog
+  aria-labelledby="dialog-title"
+  title="Create a new report"
+  submitLabel="Start building report"
   [(visible)]="dialogVisible"
-  (onHide)="onDialogHide()"
-  [style]="{ width: '512px' }"
-  [draggable]="false"
-  closeAriaLabel="Close"
+  (confirm)="goToReportForm()"
+  [submitDisabled]="isSubmitDisabled()"
 >
-  <ng-template #header>
-    <div [id]="dialog.ariaLabelledBy">
-      <h1>Create a new report</h1>
-    </div>
-  </ng-template>
-
   <div class="dialog-body">
     <div class="dropdown">
-      <span id="type-label">FORM TYPE</span>
-      <p-select [options]="formTypeOptions" [(ngModel)]="selectedType" class="w-full" appendTo="body" id="typeDropdown">
-        <ng-template #dropdownicon>
-          <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="8px" width="8px" />
-        </ng-template>
+      <span class="dialog-label" id="type-label">FORM TYPE</span>
+      <p-select
+        aria-labelledby="type-label"
+        [options]="formTypeOptions"
+        [(ngModel)]="selectedType"
+        class="w-full"
+        id="typeDropdown"
+      >
         <ng-template #selectedItem let-selectedOption>
           <span class="option">
             <b>{{ this.formType()?.label }}:</b> {{ this.formType()?.description }}
@@ -35,18 +32,4 @@
       <app-create-f24 />
     </div>
   </div>
-  <ng-template #footer>
-    <div class="flex justify-content-center w-full pb-3">
-      <button
-        id="submit-button"
-        pButton
-        pRipple
-        [disabled]="isSubmitDisabled()"
-        label="Start building report"
-        data-cy="start-report"
-        class="p-button-primary"
-        (click)="goToReportForm()"
-      ></button>
-    </div>
-  </ng-template>
-</p-dialog>
+</app-dialog>
