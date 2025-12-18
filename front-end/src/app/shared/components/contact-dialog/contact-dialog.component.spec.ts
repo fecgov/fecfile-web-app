@@ -15,7 +15,7 @@ import { ContactDialogComponent, TransactionData } from './contact-dialog.compon
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contact.model';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -61,10 +61,10 @@ describe('ContactDialogComponent', () => {
     transactionService = TestBed.inject(TransactionService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
-    component.contact = testContact();
-    component.contactLookup = {
-      contactTypeFormControl: new SubscriptionFormControl(),
-    } as ContactLookupComponent;
+    component.contact.set(testContact());
+    // component.contactLookup = {
+    //   contactTypeFormControl: new SubscriptionFormControl(),
+    // } as ContactLookupComponent;
     component.ngOnInit();
   });
 
@@ -72,24 +72,17 @@ describe('ContactDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return CandidateOfficeTypes when called', () => {
-    component.defaultCandidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
-    component.ngOnInit();
-    component.openDialog();
-    expect(component.CandidateOfficeTypes.HOUSE).toBe(CandidateOfficeTypes.HOUSE);
-  });
-
   it('should open dialog with new or edit contact', () => {
-    component.contact.id = '123';
+    component.contact()!.id = '123';
     component.openDialog();
     expect(component.isNewItem).toBeFalse();
-    expect(component.contactLookup.contactTypeFormControl.disabled).toBeFalse();
+    expect(component.contactLookup().contactTypeFormControl.disabled).toBeFalse();
 
-    component.contact.id = undefined;
+    component.contact()!.id = undefined;
     component.contactTypeOptions = [{ label: 'org', value: 'ORG' }];
-    component.contactLookup.contactTypeFormControl.enable();
+    component.contactLookup().contactTypeFormControl.enable();
     component.openDialog();
-    expect(component.contactLookup.contactTypeFormControl.disabled).toBeFalse();
+    expect(component.contactLookup().contactTypeFormControl.disabled).toBeFalse();
   });
 
   it('should close dialog with flags set', () => {
@@ -122,7 +115,7 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should raise confirmation dialog', () => {
-    component.contact = new Contact();
+    component.contact.set(new Contact());
     const spy = spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
@@ -192,11 +185,10 @@ describe('ContactDialogComponent', () => {
     });
 
     it('should get params', () => {
-      component.rowsPerPage = 5;
-      component.contact.id = '123';
-      const params = component.getParams();
-      expect(params['page_size']).toBe(5);
-      expect(params['contact']).toBe('123');
+      component.rowsPerPage.set(5);
+      component.contact()!.id = '123';
+      expect(component.params()['page_size']).toBe(5);
+      expect(component.params()['contact']).toBe('123');
     });
   });
 });
