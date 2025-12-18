@@ -1,4 +1,4 @@
-import { Component, inject, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from 'app/shared/components/table/table.component';
@@ -21,11 +21,8 @@ export class DeletedContactComponent extends TableListBaseComponent<Contact> {
 
   readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('nameBody');
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('roleBody');
-  columns: ColumnDefinition<Contact>[] = [];
-
-  override ngAfterViewInit(): void {
-    super.ngAfterViewInit();
-    this.columns = [
+  readonly columns: Signal<ColumnDefinition<Contact>[]> = computed(() => {
+    return [
       {
         field: '',
         header: '',
@@ -48,7 +45,7 @@ export class DeletedContactComponent extends TableListBaseComponent<Contact> {
         cssClass: 'occupation-column',
       },
     ];
-  }
+  });
 
   async restoreSelected(): Promise<void> {
     await this.itemService.restore(this.selectedItems());
