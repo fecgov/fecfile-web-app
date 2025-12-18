@@ -24,13 +24,13 @@ type FecApiCandidateLookup = {
 };
 
 const normalize = (s: string) =>
-  s.replaceAll(/\u00a0/g, ' ').replaceAll(/\s+/g, ' ').trim();
+  s.replaceAll('\u00a0', ' ').replaceAll(/\s+/g, ' ').trim();
 
 const toRx = (v: string | RegExp) =>
   v instanceof RegExp
     ? v
     : new RegExp(
-      String.raw`^\s*${v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\s*$`,
+      String.raw`^\s*${v.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)}\s*$`,
       'i',
     );
 
@@ -81,7 +81,12 @@ export class ContactsHelpers {
 
     cy.get('body')
       .find('.p-select-option, .p-dropdown-item')
-      .contains(new RegExp(String.raw`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
+      .contains(
+        new RegExp(
+          String.raw`^\s*${ContactsHelpers.escapeRegExp(optionText)}\s*$`,
+          'i',
+        ),
+      )
       .click({ force: true });
   }
 
