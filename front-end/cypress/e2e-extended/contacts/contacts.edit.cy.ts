@@ -230,6 +230,45 @@ describe('Contacts Edit', () => {
     assertTransactionHistoryTableExists();
   };
 
+  function candidateLookup(lookupCandidateId: string, lookupLast: string, lookupFirst: string, lookupName: string) {
+    // Candidate Lookup: deterministic selection (stubs)
+    const lookupCandidate = {
+      candidate_id: lookupCandidateId,
+      office: 'H',
+      name: lookupName,
+    };
+
+    const lookupCandidateDetails = {
+      candidate_id: lookupCandidateId,
+      candidate_first_name: lookupFirst,
+      candidate_last_name: lookupLast,
+      candidate_middle_name: null,
+      candidate_prefix: null,
+      candidate_suffix: null,
+      address_street_1: '123 FEC API St',
+      address_street_2: null,
+      address_city: 'Richmond',
+      address_state: 'VA',
+      address_zip: '23219',
+      office: 'H',
+      state: 'VA',
+      district: '01',
+      name: lookupName,
+    };
+
+    selectCandidateViaLookup(lookupCandidate, lookupCandidateDetails).then(
+      ({ candidateId, last, first, display }) => {
+        ContactsHelpers.clickSaveAndHandleConfirm();
+
+        ContactsHelpers.assertSuccessToastMessage();
+        cy.contains(/Manage contacts/i).should('exist');
+
+        assertCandidateRowInList(display, candidateId);
+        reopenAndAssertCandidateBasics(display, candidateId, last, first);
+      },
+    );
+  }
+
   // INDIVIDUAL: update/check all editable fields, required fields, length validation
   it('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
     const newLast = `${IND_LAST}-Upd`;
@@ -522,42 +561,7 @@ describe('Contacts Edit', () => {
     cy.contains('label', /^Candidate state/i).parent().should('contain.text', newCandState);
     cy.contains('label', /^Candidate district/i).parent().should('contain.text', newCandDistrict);
 
-    // Candidate Lookup: deterministic selection (stubs)
-    const lookupCandidate = {
-      candidate_id: lookupCandidateId,
-      office: 'H',
-      name: lookupName,
-    };
-
-    const lookupCandidateDetails = {
-      candidate_id: lookupCandidateId,
-      candidate_first_name: lookupFirst,
-      candidate_last_name: lookupLast,
-      candidate_middle_name: null,
-      candidate_prefix: null,
-      candidate_suffix: null,
-      address_street_1: '123 FEC API St',
-      address_street_2: null,
-      address_city: 'Richmond',
-      address_state: 'VA',
-      address_zip: '23219',
-      office: 'H',
-      state: 'VA',
-      district: '01',
-      name: lookupName,
-    };
-
-    selectCandidateViaLookup(lookupCandidate, lookupCandidateDetails).then(
-      ({ candidateId, last, first, display }) => {
-        ContactsHelpers.clickSaveAndHandleConfirm();
-
-        ContactsHelpers.assertSuccessToastMessage();
-        cy.contains(/Manage contacts/i).should('exist');
-
-        assertCandidateRowInList(display, candidateId);
-        reopenAndAssertCandidateBasics(display, candidateId, last, first);
-      },
-    );
+    candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
   });
 
   // CANDIDATE LOOKUP: replace candidate via lookup search and persist new candidate details
@@ -570,41 +574,7 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
 
-    const lookupCandidate = {
-      candidate_id: lookupCandidateId,
-      office: 'H',
-      name: lookupName,
-    };
-
-    const lookupCandidateDetails = {
-      candidate_id: lookupCandidateId,
-      candidate_first_name: lookupFirst,
-      candidate_last_name: lookupLast,
-      candidate_middle_name: null,
-      candidate_prefix: null,
-      candidate_suffix: null,
-      address_street_1: '456 FEC API Ave',
-      address_street_2: null,
-      address_city: 'Norfolk',
-      address_state: 'VA',
-      address_zip: '23510',
-      office: 'H',
-      state: 'VA',
-      district: '02',
-      name: lookupName,
-    };
-
-    selectCandidateViaLookup(lookupCandidate, lookupCandidateDetails).then(
-      ({ candidateId, last, first, display }) => {
-        ContactsHelpers.clickSaveAndHandleConfirm();
-
-        ContactsHelpers.assertSuccessToastMessage();
-        cy.contains(/Manage contacts/i).should('exist');
-
-        assertCandidateRowInList(display, candidateId);
-        reopenAndAssertCandidateBasics(display, candidateId, last, first);
-      },
-    );
+    candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
   });
 
   // COMMITTEE – required validation, update/check all editable fields
