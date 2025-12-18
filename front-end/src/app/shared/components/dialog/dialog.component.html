@@ -1,10 +1,9 @@
 <dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()">
   <div class="dialog-header">
     <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
-    <!-- href="javascript:void(0) to make clickable and tabalble -->
-    <a href="javascript:void(0)" (click)="close()" aria-label="Cancel">
-      <img src="assets/img/i-x-circle.svg" alt="close dialog" />
-    </a>
+    <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
+      <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
+    </button>
   </div>
   <ng-content></ng-content>
   <div class="dialog-footer">
