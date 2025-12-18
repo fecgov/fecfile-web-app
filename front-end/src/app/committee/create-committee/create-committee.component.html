@@ -12,16 +12,10 @@
     <div class="right-side-box">
       <h2 class="m-0">Find your committee</h2>
       <div class="search-label">
-        <label for="search-input" class="font-karla-bold mb-0 mr-1">COMMITTEE ID</label>
-        <i
-          tabindex="0"
-          (keydown.enter)="explanationVisible.set(true)"
-          (keydown.space)="explanationVisible.set(true)"
-          (click)="explanationVisible.set(true)"
-          aria-label="explanation"
-        >
+        <label for="search-input" class="font-karla-bold mr-1 line-height-1">COMMITTEE ID</label>
+        <button class="rounded-image-button" (click)="explanationVisible.set(true)" aria-label="explanation">
           <img alt="question mark" src="assets/img/i-question-circle.svg" />
-        </i>
+        </button>
       </div>
       <p-inputGroup class="search-group">
         <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />

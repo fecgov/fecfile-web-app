@@ -47,14 +47,10 @@
 .search-label {
   padding-top: 25px;
   display: flex;
-  i {
-    border-radius: 10px 10px 10px 10px;
+  margin-bottom: 8px;
+  img {
     height: 16px;
     width: 16px;
-    padding-top: 2px;
-    text-align: center;
-    margin-bottom: 5px;
-    cursor: pointer;
   }
 }
 
