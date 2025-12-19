@@ -56,7 +56,7 @@ describe('ValidatorsUtils', () => {
     });
   });
 
-  fdescribe('buildNonOverlappingCoverageValidator', () => {
+  describe('buildNonOverlappingCoverageValidator', () => {
     const existingCoverage: CoverageDates[] = [
       {
         coverage_from_date: new Date('2023-01-01'),
