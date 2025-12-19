@@ -1,5 +1,19 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  EventEmitter,
+  inject,
+  Input,
+  model,
+  OnInit,
+  Output,
+  Signal,
+  signal,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
@@ -37,7 +51,7 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
-import { TableComponent } from '../table/table.component';
+import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
@@ -100,7 +114,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
   readonly ContactTypes = ContactTypes;
-  @Input() contact: Contact = new Contact();
+  readonly contact = model<Contact>();
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
   @Input() showHistory = false;
@@ -112,8 +126,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   transactions: TransactionData[] = [];
   tableLoading = true;
-  totalTransactions = 0;
-  rowsPerPage = 5;
+  readonly totalTransactions = signal(0);
+  readonly rowsPerPage = signal(5);
+  readonly params: Signal<QueryParams> = computed(() => {
+    return { page_size: this.rowsPerPage(), contact: this.contact()?.id ?? '' };
+  });
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
     ScheduleCTransactionTypeLabels,
@@ -123,7 +140,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     ScheduleETransactionTypeLabels,
   );
 
-  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
+  readonly contactLookup = viewChild.required(ContactLookupComponent);
 
   form: FormGroup = this.fb.group(
     SchemaUtils.getFormGroupFields([
@@ -147,18 +164,56 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
   emptyMessage = 'No data available in table';
 
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'transaction_type_identifier', label: 'Type' },
-    { field: 'form_type', label: 'Form' },
-    { field: 'report_code_label', label: 'Report' },
-    { field: 'date', label: 'Date' },
-    { field: 'amount', label: 'Amount' },
-  ];
+  readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionData>>>('typeBody');
+  readonly dateBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionData>>>('dateBody');
+  readonly amountBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionData>>>('amountBody');
+  readonly columns: Signal<ColumnDefinition<TransactionData>[]> = computed(() => {
+    const type = this.typeBodyTpl();
+    const date = this.dateBodyTpl();
+    const amount = this.amountBodyTpl();
+    if (!type || !date || !amount) return [];
+    return [
+      {
+        field: 'transaction_type_identifier',
+        header: 'Type',
+        sortable: true,
+        cssClass: 'type-column',
+        bodyTpl: type,
+      },
+      { field: 'form_type', header: 'Form', sortable: true, cssClass: 'form-column' },
+      { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
+      {
+        field: 'date',
+        header: 'Date',
+        sortable: true,
+        cssClass: 'date-column',
+        bodyTpl: date,
+      },
+      {
+        field: 'amount',
+        header: 'Amount',
+        sortable: true,
+        cssClass: 'amount-column',
+        bodyTpl: amount,
+      },
+    ];
+  });
 
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
   pagerState?: TableLazyLoadEvent;
+
+  readonly table = viewChild(TableComponent);
+  constructor() {
+    super();
+    effect(() => {
+      this.loadTransactions({
+        first: this.first(),
+        rows: this.rowsPerPage(),
+      });
+    });
+  }
 
   async loadTransactions(event: TableLazyLoadEvent) {
     this.tableLoading = true;
@@ -166,23 +221,27 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     // event is undefined when triggered from the detail page because
     // the detail doesn't know what page we are on. We check the local
     // pagerState variable to retrieve the page state.
+
     if (!!event && 'first' in event) {
       this.pagerState = event;
     } else {
-      event = this.pagerState ?? {
+      this.pagerState = this.pagerState ?? {
         first: 0,
-        rows: this.rowsPerPage,
+        rows: this.rowsPerPage(),
       };
+      event = this.pagerState;
     }
+    if (!this.pagerState!.sortField) this.pagerState!.sortField = this.table()?.sortField();
+    if (!this.pagerState!.sortOrder) this.pagerState!.sortOrder = 1;
 
     // Calculate the record page number to retrieve from the API.
-    const first: number = event.first ?? 0;
-    const rows: number = event.rows ?? this.rowsPerPage;
-    const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = this.getParams();
+    this.first.set(event.first ?? 0);
+
+    const rows: number = event.rows ?? this.rowsPerPage();
+    const pageNumber: number = Math.floor(this.first() / rows) + 1;
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ?? '';
+    let ordering: string | string[] = event.sortField ?? 'transaction_type_identifier';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
@@ -190,9 +249,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     try {
-      const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, params);
+      const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, this.params());
       this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
-      this.totalTransactions = transactionsPage.count;
+      this.totalTransactions.set(transactionsPage.count);
       this.tableLoading = false;
       this.emptyMessage = 'No data available in table';
     } catch {
@@ -256,7 +315,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
-    if (!this.contact) this.contact = new Contact();
+    if (!this.contact()) this.contact.set(new Contact());
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -267,10 +326,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
     switch (contactType) {
       case ContactTypes.CANDIDATE:
-        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
         break;
       case ContactTypes.COMMITTEE:
-        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
         break;
     }
     this.form.updateValueAndValidity();
@@ -292,29 +351,23 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
   }
 
-  /**
-   * Pass the CandidateOfficeTypes enum into the template
-   */
-  public get CandidateOfficeTypes() {
-    return CandidateOfficeTypes;
-  }
-
   public openDialog() {
     this.loadTransactions({
       first: 0,
-      rows: this.rowsPerPage,
+      rows: this.rowsPerPage(),
     });
     this.resetForm();
-    this.form.patchValue(this.contact);
-    if (this.contact.id) {
+    const contact = this.contact()!;
+    this.form.patchValue(contact);
+    if (contact.id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
       // component because the Contact Dialog is hidden and not destroyed on close,
       // so we need to directly update the lookup "type" form control value
-      this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup().contactTypeFormControl.setValue(contact.type);
+      this.contactLookup().contactTypeFormControl.enable();
     } else if (this.contactTypeOptions.length === 1) {
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup().contactTypeFormControl.enable();
     }
     this.dialogVisible = true;
   }
@@ -340,8 +393,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
     this.isNewItem = true;
-    this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
+    this.contactLookup().contactTypeFormControl.enable();
+    this.contactLookup().contactTypeFormControl.setValue(this.contactType);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
@@ -349,7 +402,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   updateContact(contact: Contact) {
-    this.contact = contact;
+    this.contact.set(contact);
     this.contactType = contact.type;
     this.form.patchValue(contact);
   }
@@ -363,14 +416,14 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   confirmPropagation() {
     const changes = Object.entries(this.form.controls)
       .map(([field, control]: [string, AbstractControl]) => {
-        const contactValue = this.contact[field as keyof Contact];
+        const contactValue = this.contact()![field as keyof Contact];
         if (control?.value !== contactValue) {
           return [field, control.value];
         }
         return undefined;
       })
       .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact, changes);
+    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
     this.confirmationService.confirm({
       key: 'contactDialogDialog',
       header: 'Confirm',
@@ -394,7 +447,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     const contact: Contact = Contact.fromJSON({
-      ...this.contact,
+      ...this.contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
     });
     contact.type = this.contactType;
@@ -408,17 +461,5 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   async openTransaction(transaction: TransactionData) {
     await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
-  }
-
-  onRowsPerPageChange(rowsPerPage: number) {
-    this.rowsPerPage = rowsPerPage;
-    this.loadTransactions({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
-  }
-
-  getParams(): QueryParams {
-    return { page_size: this.rowsPerPage, contact: this.contact.id ?? '' };
   }
 }
