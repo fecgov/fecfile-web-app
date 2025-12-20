@@ -127,6 +127,19 @@ export class ContactListPage {
     });
   }
 
+  // Purges all deleted contacts belonging to the logged-in committee
+  static purgeDeletedContacts() {
+    cy.getCookie('csrftoken').then((cookie) => {
+      cy.request({
+        method: 'POST',
+        url: 'http://localhost:8080/api/v1/contacts-deleted/e2e-purge-deleted-contacts/',
+        headers: {
+          'x-csrftoken': cookie?.value,
+        },
+      });
+    });
+  }
+
   static createIndividual(fd = individualContactFormData) {
     fd.contact_type = 'Individual';
     ContactListPage.create(fd);
