@@ -7,7 +7,7 @@ from shutil import copyfile
 from invoke import task
 
 
-APP_NAME = "fecfile-web-app"
+APP_NAME = "load-fecfile-web-app"
 ORG_NAME = "fec-fecfile"
 
 
@@ -48,7 +48,8 @@ DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("test", lambda _, branch: branch == "release/test"),
     ("stage", lambda _, branch: branch.startswith("release/sprint")),
-    ("dev", lambda _, branch: branch == "develop"),
+    # ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "2414-load-test-mirror"),
 )
 
 
@@ -129,7 +130,7 @@ def _do_deploy(ctx, space):
     print(f"new dir {os.getcwd()}")
 
     manifest_filename = os.path.join(
-        orig_directory, "deploy-config", f"{APP_NAME}-{space}-manifest.yml"
+        orig_directory, "deploy-config", f"{space}-manifest.yml"
     )
 
     existing_deploy = ctx.run("cf app {0}".format(APP_NAME), echo=True, warn=True)
