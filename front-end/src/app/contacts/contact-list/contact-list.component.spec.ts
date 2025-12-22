@@ -15,7 +15,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
 import { Contact, ContactTypes } from 'app/shared/models';
-import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -48,7 +47,6 @@ describe('ContactListComponent', () => {
         ConfirmDialogModule,
         ContactListComponent,
         ContactDialogComponent,
-        DeletedContactDialogComponent,
       ],
       providers: [
         provideHttpClient(),
@@ -124,11 +122,6 @@ describe('ContactListComponent', () => {
     item.has_transaction_or_report = true;
     status = component.canDeleteItem(item);
     expect(status).toBeFalse();
-  });
-
-  it('#restoreButton should make dialog visible', () => {
-    component.onRestoreClick();
-    expect(component.restoreDialogIsVisible).toBeTrue();
   });
 
   it('#restoreButton should be visible if there is a deleted contact', async () => {

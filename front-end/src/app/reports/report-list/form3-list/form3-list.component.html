@@ -12,7 +12,7 @@
   [(selectedItems)]="selectedItems"
   itemName="reports"
   title="Form 3"
-  [columns]="columns"
+  [columns]="columns()"
   sortField="report_code_label"
   (loadTableItems)="loadTableItems($event)"
 />

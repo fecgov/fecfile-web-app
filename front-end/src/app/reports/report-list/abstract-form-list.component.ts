@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -21,23 +21,8 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   override readonly rowsPerPage = signal(5);
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
-  columns: ColumnDefinition<T>[] = [];
-
-  readonly rowActions: TableAction<T>[] = [
-    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
-    new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
-    new TableAction(
-      'Review',
-      this.editItem.bind(this),
-      (report: T) => report.report_status !== ReportStatus.IN_PROGRESS,
-    ),
-    new TableAction('Delete', this.confirmDelete.bind(this), (report: T) => report.can_delete),
-    new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
-    new TableAction('Download as .fec', this.download.bind(this)),
-  ];
-
-  override ngAfterViewInit(): void {
-    this.columns = [
+  readonly baseColumns: Signal<ColumnDefinition<T>[]> = computed(() => {
+    return [
       {
         field: 'formSubLabel',
         header: 'Type',
@@ -63,7 +48,20 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
         actions: this.rowActions,
       },
     ];
-  }
+  });
+
+  readonly rowActions: TableAction<T>[] = [
+    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
+    new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
+    new TableAction(
+      'Review',
+      this.editItem.bind(this),
+      (report: T) => report.report_status !== ReportStatus.IN_PROGRESS,
+    ),
+    new TableAction('Delete', this.confirmDelete.bind(this), (report: T) => report.can_delete),
+    new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
+    new TableAction('Download as .fec', this.download.bind(this)),
+  ];
 
   public confirmDelete(report: T): void {
     this.confirmationService.confirm({
