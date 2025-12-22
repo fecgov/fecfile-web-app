@@ -136,4 +136,22 @@ describe('PrintPreviewComponent', () => {
     expect(component.webPrintStage).toBe('failure');
     expect(component.printError).toBe('Failed to compile PDF');
   }));
+
+  it('should format submitDate correctly with "at" and parentheses', () => {
+    const testDate = new Date(2024, 9, 28, 17, 2);
+    component.submitDate.set(testDate);
+
+    const result = component.formattedDate();
+
+    expect(result).toContain('Monday, October 28, 2024');
+    expect(result).toContain(', at 5:02 PM');
+    expect(result).toMatch(/\([a-zA-Z\s]+\)$/);
+    expect(result).not.toContain('Standard Time)');
+    expect(result).not.toContain('Daylight Time)');
+  });
+
+  it('should return an empty string if submitDate is undefined', () => {
+    component.submitDate.set(undefined);
+    expect(component.formattedDate()).toBe('');
+  });
 });

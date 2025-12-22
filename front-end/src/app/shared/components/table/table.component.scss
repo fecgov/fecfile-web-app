@@ -4,6 +4,7 @@
   .custom-paginator-dropdown {
     height: 2.357rem !important;
   }
+
   .custom-paginator-dropdown > .p-select > .p-select-label {
     line-height: 1 !important;
     padding-right: 0 !important;
@@ -30,6 +31,15 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 767.98px) {
+    flex-direction: column !important;
+
+    div:last-child {
+      margin-top: 32px;
+      flex-direction: column-reverse;
+    }
+  }
 }
 
 .stacked-paginator {
@@ -45,16 +55,6 @@
 
 h1 {
   line-height: 1;
-}
-
-@media (max-width: 767.98px) {
-  .paginator-container {
-    flex-direction: column !important;
-  }
-  .paginator-container div:last-child {
-    margin-top: 32px;
-    flex-direction: column-reverse;
-  }
 }
 
 h2 {
