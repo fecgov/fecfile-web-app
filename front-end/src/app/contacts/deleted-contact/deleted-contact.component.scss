@@ -63,4 +63,8 @@
       @include fixed-width(16.8%);
     }
   }
+
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 10px;
+  }
 }
