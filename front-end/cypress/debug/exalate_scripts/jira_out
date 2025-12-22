@@ -1,0 +1,34 @@
+replica.customFields."GitHub Repository"    = issue.customFields."10060"
+
+//This will bring in labels and add spaces back in for GitHub so we don't duplicate labels.
+replica.labels         = issue.labels.collect { it.label = it.label.replace("_", " "); it }
+
+replica.key            = issue.key //this is needed to create the Jira ticket link at the end of the GitHub ticket text
+replica.type           = issue.type //this is needed to add appropriate labels on the GitHub side
+replica.summary        = issue.summary
+
+replica.description = nodeHelper.getHtmlField(issue, "description")
+
+replica.customFields."QA Notes"            = issue.customFields."10056"
+replica.customFields."DEV Notes"           = issue.customFields."10057"
+replica.customFields."Design"              = issue.customFields."10059"
+replica.customFields."PRlink"              = issue.customFields."10066"
+
+replica.status         = issue.status
+replica.assignee       = issue.assignee
+
+replica.comments       = issue.comments
+
+// This is necessary for the link to see Jira images on GitHub.
+replica.customKeys.issueURL  =  "https://fecgov.atlassian.net/browse/" + issue.key
+
+// replica.parentId       = issue.parentId
+// replica.priority       = issue.priority
+// replica.project        = issue.project
+// replica.reporter       = issue.reporter
+// replica.resolution     = issue.resolution
+// replica.created        = issue.created
+// replica.resolutionDate = issue.resolutionDate
+// replica.attachments    = issue.attachments
+
+// Exalate API Reference Documentation: https://docs.exalate.com/docs/exalate-api-reference-documentation

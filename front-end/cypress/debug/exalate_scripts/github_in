@@ -1,0 +1,110 @@
+if (firstSync) {
+  issue.repository  = "fecgov/" + replica.customFields."GitHub Repository".value?.value
+}
+
+issue.labels          = replica.labels
+
+def typeMap = [
+  "Bug" : "Bug",
+  "Defect" : "Defect",
+  "Epic" : "Epic"
+]
+if (!!typeMap[replica.type.name] && !issue.labels.contains(typeMap[replica.type.name])) {
+  issue.labels.add(nodeHelper.getLabel(typeMap[replica.type.name]))
+}
+
+issue.summary         = replica.summary
+
+if (replica.description) {
+    def tempDesc = nodeHelper.toMarkDownFromHtml(replica.description)
+    def descriptions = [tempDesc ]
+    if(replica.customFields."QA Notes") descriptions.add("\n### QA Notes ###\n" + replica.customFields."QA Notes"?.value)
+if(replica.customFields."DEV Notes") descriptions.add("\n### DEV Notes ###\n" + replica.customFields."DEV Notes"?.value)
+if(replica.customFields."Design") descriptions.add("\n### Design ###\n" + replica.customFields."Design"?.value + "\n\n See full ticket and images here: [${replica.key}](${replica.customKeys.issueURL})")
+if (replica.customFields."PRlink"?.value) {
+    descriptions.add("\nPull Request: " + replica.customFields."PRlink"?.value)}
+issue.description = descriptions.join("\n")
+}
+
+def stripHtml(String htmlText) {
+    if(htmlText) htmlText.replaceAll(/<[^>]+>/, '')
+}
+
+issue.description     = stripHtml(issue.description)
+
+//start of image code
+//ensures image from Jira is not repeated twice, and strips out brackets, comma, and extra image stamp
+def jiraImage = /\[\!image.*?\!\]/
+def jiraImageMatches = (issue.description =~ jiraImage)
+if (jiraImageMatches.size() > 0) {
+    for (section in jiraImageMatches) {
+        section  = section [1..-2]
+        def list = section .split(', ')
+        list = list.toUnique()
+        def modifiedSection= list.join(', ')
+        issue.description =  issue.description.replace(section, modifiedSection)
+    }
+}
+
+//the following code block prevents a GitHub original image from breaking
+def githubImage = /!\[Image\]\(.*?\)/
+def matches = (issue.description =~ githubImage)
+if (matches.size() > 0) {
+    for (section in matches) {
+        section = section[9..-2]
+        if (section[0] == '[') {
+            modifiedSection = section[1..-2]
+            def list = modifiedSection.split('\\|')
+            list = list.toUnique()
+            def modifiedSection = list.join(', ')
+            
+             if (list.size() == 1) {
+                modifiedSection = modifiedSection[0..-1]
+            }
+            
+            issue.description =  issue.description.replace(section, modifiedSection)
+        }
+    }
+}
+
+//end of image code
+
+def statusMap = [
+    "Product Backlog"  : "open",
+    "Awaiting Analysis"  : "open",
+    "Awaiting Dev/QA Review"  : "open",
+    "Awaiting Sprint Assignment"  : "open",
+    "Sprint Backlog"  : "open",
+    "In Progress"  : "open",
+    "Code Review"  : "open",
+    "QA Review"  : "open",
+    "Stage Ready"  : "open",
+    "Done"  : "closed"
+  ]
+def remoteStatusName   = replica.status.name
+issue.setStatus(statusMap[remoteStatusName] ?: "Open")
+
+//Note: user map must be updated whenever a new user is added to the project
+def userMap = [
+// "jira username" : "github username"
+// redacted for privacy reasons
+]
+
+if(replica.assignee == null){
+    issue.assignees = []
+} else {
+    def assignee = userMap[replica.assignee?.key]
+    //if you want a default assignee, add ?: "default assignee" at the end of the line above
+    if (assignee) {
+        issue.assignees = [nodeHelper.getUserByUsername(assignee)]
+    } else {
+        debug.error("New user not found on mapping, please add: '${replica.assignee.displayName}' to the userMap")
+    }
+}
+
+issue.created = replica.created
+issue.resolutionDate = replica.resolutionDate
+
+issue.comments        = commentHelper.mergeComments(issue, replica)
+
+// Exalate API Reference Documentation: https://docs.exalate.com/docs/exalate-api-reference-documentation

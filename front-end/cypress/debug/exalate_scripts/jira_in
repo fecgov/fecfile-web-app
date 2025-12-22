@@ -1,0 +1,111 @@
+//Note: user map must be updated whenever a new user is added to the project
+def userMap = [
+// "GitHub Username" : "Jira Email",
+// redacted for privacy
+]
+
+if (firstSync) {
+    issue.projectKey  = "FECFILE"
+
+    // Only set reporter if this issue was created outside of Jira
+    // avoids overwriting reporter if outer system changes it
+    def reporter = userMap[replica.reporter?.displayName]
+    if (reporter) {
+        issue.reporter  = nodeHelper.getUserByEmail(reporter)
+    } else {
+        def defaultReporter = "fecfile-pilot@fec.gov" 
+        issue.reporter = nodeHelper.getUserByEmail(defaultReporter)   
+    }          
+}
+
+issue.customFields."10060".value = replica.customKeys."GitHub Repository"
+
+issue.customFields."10068".value = replica.customKeys.githubIssueUrl
+
+//This will replace spaces with "_" to prevent an error, since Jira labels cannot support spaces.
+issue.labels = replica.labels.collect { it.label = it.label.replace(" ", "_"); it }
+
+//This will create the correct issue type based on the GitHub label. Please make sure letter case in labels match code here!
+if ("bug" in replica.labels*.value) {
+    issue.typeName = "Bug"
+    issue.labels = replica.labels.findAll { label -> label.value != "bug" }
+} else if ("defect" in replica.labels*.value) {
+    issue.typeName = "Defect"
+    issue.labels = replica.labels.findAll { label -> label.value != "defect" }
+} else if ("epic" in replica.labels*.value) {
+    issue.typeName = "Epic"
+    issue.labels = replica.labels.findAll { label -> label.value != "epic" }
+} else {
+    issue.typeName = "Story" // Default issue type
+}
+
+issue.summary      = replica.summary
+
+def stripHtml(String htmlText) {
+    htmlText.replaceAll(/<[^>]+>/, '')
+}
+issue.description = nodeHelper.toMarkDownFromHtml(replica.description)
+issue.customFields."QA Notes"?.value            = replica.customKeys."QA Notes"
+issue.customFields."DEV Notes"?.value           = replica.customKeys."DEV Notes"
+issue.customFields."Design"?.value              = replica.customKeys."Design"
+
+if (issue.customFields."Design"?.value != null) {
+    def hyperlink = /See full ticket and images here: \[FECFILE-.*?\]\(.*\)/
+    def PRlink = /Pull Request: https?:\/\/[^\s]+/
+    issue.customFields."Design"?.value = issue.customFields."Design"?.value.replaceAll(hyperlink, '')
+    issue.customFields."Design"?.value = issue.customFields."Design"?.value.replaceAll(PRlink, '')
+}
+
+def statusMap = [
+  "closed" : "DONE",
+  "open" : "AWAITING ANALYSIS"
+]
+
+if (issue) {
+if (replica.status.name == "closed") {
+        issue.setStatus(statusMap[replica.status.name] ?: replica.status.name)
+    } else {
+        if (replica.status.name == "open" && issue.status?.name == "Done") {
+    issue.setStatus("AWAITING ANALYSIS")
+    }
+}
+}
+
+if(!replica.assignee){
+    issue.assignee = null
+} else {
+    def assignee = userMap[replica.assignee?.displayName]
+    //if you want a default assignee, add ?: "default assignee" at the end of the line above
+    if (assignee) {
+        issue.assignee  = nodeHelper.getUserByEmail(assignee)
+     } else {
+        def defaultAssignee = "fecfile-pilot@fec.gov" 
+        issue.assignee = nodeHelper.getUserByEmail(defaultAssignee)   
+    }      
+}
+
+//when bulk exalating, uncomment the following for dates
+// if(replica.customKeys.Created) {
+//   long timestamp = (long)replica.customKeys.Created
+//   if(timestamp) {
+//     issue.customFields."Original Created Date".value = new Date(timestamp)
+// } }
+
+// if(replica.customKeys.Resolved) {
+//   long timestamp = (long)replica.customKeys.Resolved
+//   if(timestamp) {
+//     issue.customFields."Original Resolution Date".value = new Date(timestamp)
+// } }
+
+
+issue.comments = commentHelper.mergeComments(issue, replica,                     
+                    {
+                       comment ->
+                       comment.body =
+                          "[" + comment.author.displayName + "]" +
+                                  " commented: \n" +
+                          comment.body + "\n"
+                    }
+)
+
+// Exalate API Reference Documentation: https://docs.exalate.com/docs/exalate-api-reference-documentation

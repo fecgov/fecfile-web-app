@@ -1,0 +1,60 @@
+def splitRepo = issue.repository.split("/")
+replica.customKeys."GitHub Repository" = splitRepo[splitRepo.length - 1]
+
+replica.customKeys.githubIssueUrl = "https://github.com/fecgov/" + issue.repository + "/issues/" + issue.key
+
+replica.labels         = issue.labels
+
+replica.summary        = issue.summary
+
+replica.description    = issue.description
+if(replica.description != null) {
+    def descrArray = issue.description.split("###")
+    def description = ""
+    for (int i = 0; i < descrArray.size(); i++) {
+        if (descrArray[i].contains("QA Notes")) {
+            if (descrArray[i].trim().endsWith("QA Notes")) {
+                 if (i + 1 < descrArray.size()) {  // Check if there is a next element
+                    replica.customKeys."QA Notes" = descrArray[++i]  // Safe to increment i
+                }
+            } else {
+                replica.customKeys."QA Notes" = descrArray[i].substring(descrArray[i].indexOf("\n")).trim()
+            }           
+        } else if (descrArray[i].contains("DEV Notes")) {
+            if (descrArray[i].trim().endsWith("DEV Notes")) {
+                if (i + 1 < descrArray.size()) {  // Check if there is a next element
+                    replica.customKeys."DEV Notes" = descrArray[++i]  // Safe to increment i
+                }
+            } else {
+                 replica.customKeys."DEV Notes" = descrArray[i].substring(descrArray[i].indexOf("\n")).trim()
+            }            
+        } else if (descrArray[i].contains("Design")) {
+             if (descrArray[i].trim().endsWith("Design")) {
+                if (i + 1 < descrArray.size()) {  // Check if there is a next element
+                   replica.customKeys."Design" = descrArray[++i]  // Safe to increment i
+                }
+             } else {
+                  replica.customKeys."Design" = descrArray[i].substring(descrArray[i].indexOf("\n")).trim()
+             }
+        } else {
+            description += descrArray[i] + "\n"
+        }
+    }
+    if (description != "") {
+        replica.description = nodeHelper.getHtmlField(description)
+    }
+}
+
+replica.status         = issue.status
+
+replica.assignee       = issue.assignee
+replica.reporter       = issue.reporter
+
+replica.customKeys."AdditionalAssignees" = issue.assignees.collect { it.displayName }
+
+replica.customKeys.Created       =  issue.created
+replica.customKeys.Resolved  = issue.resolutionDate
+
+replica.comments       = issue.comments
+
+// Exalate API Reference Documentation: https://docs.exalate.com/docs/exalate-api-reference-documentation
