@@ -146,7 +146,7 @@ jobs:
   e2e-smoke:
     docker:
       - image: cimg/node:lts-browsers
-    resource_class: xlarge
+    resource_class: large
     parameters:
       video:
         type: boolean
@@ -198,7 +198,7 @@ jobs:
   e2e-extended:
     docker:
       - image: cimg/node:lts-browsers
-    resource_class: xlarge
+    resource_class: large
     parameters:
       video:
         type: boolean
