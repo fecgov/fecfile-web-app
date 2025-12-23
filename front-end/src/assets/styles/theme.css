@@ -6492,7 +6492,7 @@ input {
 }
 
 .p-datatable-table-container {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .pi-sort-down-fill {

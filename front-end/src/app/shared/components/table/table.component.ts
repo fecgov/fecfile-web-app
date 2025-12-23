@@ -56,8 +56,6 @@ export class TableComponent<T> {
   // This can go away after full transition to ColumnDefinition method
   readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
   readonly columns = input<ColumnDefinition<T>[]>([]);
-  readonly hasCheckbox = input(false);
-  readonly checkboxLabel = input<(item: T) => string>();
   readonly emptyMessage = input('No data available in table');
 
   readonly loadTableItems = output<TableLazyLoadEvent>();

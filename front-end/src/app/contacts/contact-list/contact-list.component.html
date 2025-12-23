@@ -33,7 +33,7 @@
 >
   <ng-template #caption>
     @if (restoreContactsButtonIsVisible) {
-      <button pButton pRipple class="restore-contact-button" (click)="onRestoreClick()">
+      <button pButton pRipple class="restore-contact-button" [routerLink]="['deleted']">
         Restore deleted contacts
       </button>
     }
@@ -56,7 +56,3 @@
   [showHistory]="true"
   (savedContact)="saveContact($event)"
 />
-
-@if (restoreDialogIsVisible) {
-  <app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />
-}
