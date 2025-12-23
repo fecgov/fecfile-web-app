@@ -14,7 +14,7 @@ commands:
     description: "Setup and start fecfile-web-api for E2E tests"
     steps:
       - setup_remote_docker:
-          docker_layer_caching: false
+          docker_layer_caching: true
       - run:
           name: clone fecfile-web-api
           command: |
@@ -144,12 +144,13 @@ jobs:
             - /tmp/cache/scanner
 
   e2e-smoke:
+    docker:
+      - image: cimg/node:lts-browsers
+    resource_class: xlarge
     parameters:
       video:
         type: boolean
-        default: true
-    docker:
-      - image: cimg/node:lts-browsers
+        default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
     steps:
@@ -157,13 +158,22 @@ jobs:
       - run:
           name: execute e2e tests
           command: |
-            docker container run --name fecfile-web-app-e2e -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_VIDEO=${CYPRESS_VIDEO} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'\
+            docker container run --name fecfile-web-app-e2e \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              --network container:fecfile-api-proxy \
+              cypress/browsers:latest \
+              /bin/bash -c '\
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm install; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'
       - run:
           name: stage test result artifacts
           when: always
@@ -184,14 +194,15 @@ jobs:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
 
-  # An extended e2e test suite running cypress/extended/**/*.cy.ts
+  # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
+    docker:
+      - image: cimg/node:lts-browsers
+    resource_class: xlarge
     parameters:
       video:
         type: boolean
-        default: true
-    docker:
-      - image: cimg/node:lts-browsers
+        default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
     steps:
@@ -199,13 +210,22 @@ jobs:
       - run:
           name: execute extended e2e tests
           command: |
-            docker container run --name fecfile-web-app-e2e -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_VIDEO=${CYPRESS_VIDEO} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'\
+            docker container run --name fecfile-web-app-e2e \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              --network container:fecfile-api-proxy \
+              cypress/browsers:latest \
+              /bin/bash -c '\
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm install; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'
       - run:
           name: stage test result artifacts
           when: always
@@ -225,7 +245,6 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
-
 
   deploy-job:
     docker:
@@ -298,7 +317,7 @@ parameters:
 
   e2e-video:
     type: boolean
-    default: true
+    default: false
 
 workflows:
   primary:
@@ -313,7 +332,7 @@ workflows:
       - test
       - dependency-check
       - e2e-smoke:
-          video: << pipeline.parameters.e2e-video >>
+          video: << pipeline.parameters.e2e-video >> # Default is false
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
@@ -353,9 +372,9 @@ workflows:
     when: << pipeline.parameters.is-triggered-full-nightly >>
     jobs:
       - e2e-smoke:
-          video: << pipeline.parameters.e2e-video >>
+          video: true
       - e2e-extended:
-          video: << pipeline.parameters.e2e-video >>
+          video: true
       - test
 
   nightly:
@@ -367,7 +386,7 @@ workflows:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
     jobs:
       - e2e-smoke:
-          video: << pipeline.parameters.e2e-video >>
+          video: true
       - e2e-extended:
-          video: << pipeline.parameters.e2e-video >>
+          video: true
       - test
