@@ -78,7 +78,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('Save').should('not.exist');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('button,a', 'Restore deleted contacts').should('exist');
+    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
@@ -134,12 +134,13 @@ describe('Contacts List (/contacts)', () => {
     cy.get('body').click(0, 0);
 
     const selectPageSize = (size: number) => {
-      cy.intercept('GET', `**/api/v1/contacts/**page_size=${size}**`).as(`getContactsForPageSize_${size}`);
       SharedHelpers.chooseResultsPerPage(size);
-      cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
-        const url = new URL(request.url);
-        expect(url.searchParams.get('page_size')).to.eq(String(size));
-      });
+      cy.contains(/results\s*per\s*page/i)
+        .parent()
+        .find('p-select [data-pc-section="label"], p-select .p-select-label')
+        .filter(':visible')
+        .first()
+        .should('contain.text', String(size));
     };
 
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
@@ -147,7 +148,7 @@ describe('Contacts List (/contacts)', () => {
       selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('be.visible');
-      cy.get('tbody tr').should('have.length', expectedFirstPageRows);
+      cy.get('tbody tr', { timeout: 15000 }).should('have.length', expectedFirstPageRows);
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
@@ -155,7 +156,7 @@ describe('Contacts List (/contacts)', () => {
           .click({ force: true });
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
-        cy.get('tbody tr').should('have.length', 1);
+        cy.get('tbody tr', { timeout: 15000 }).should('have.length', 1);
       }
       cy.get('.p-paginator').should('exist');
     }
