@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
-import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts'
+import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
 
 const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
 
