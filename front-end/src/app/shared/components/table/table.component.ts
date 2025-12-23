@@ -16,6 +16,8 @@ export interface ColumnDefinition<T> {
   sortable?: boolean;
   bodyTpl?: TemplateRef<TableBodyContext<T>>;
   actions?: TableAction<T>[];
+  checkbox?: boolean;
+  label?: (item: T) => string;
 }
 
 export interface TableBodyContext<T> {
