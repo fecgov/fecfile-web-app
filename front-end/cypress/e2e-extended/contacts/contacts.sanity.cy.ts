@@ -25,6 +25,7 @@ describe('Contacts Soft and Hard Delete (/contacts)', () => {
           });
         }
     });
+    cy.wait('@getContactsList');  
     const contactDisplayNames = contacts.map(
       (contact, i) => `${contact.last_name}${i}, ${contact.first_name}${i}`,
     );
