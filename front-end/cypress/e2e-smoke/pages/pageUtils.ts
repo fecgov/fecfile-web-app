@@ -235,7 +235,7 @@ export class PageUtils {
     cy.wait('@SubmitReport');
   }
 
-  static blurActiveField = () => {
+  static readonly blurActiveField = () => {
     cy.get('body').click(0, 0);
   };
 

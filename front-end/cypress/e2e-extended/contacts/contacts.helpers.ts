@@ -1,6 +1,9 @@
-
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactFormData } from '../../e2e-smoke/models/ContactFormModel';
+import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
+import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
+import type { F3X } from '../../e2e-smoke/requests/library/reports';
+import type { Contact } from '../../../src/app/shared/models';
 
 type ContactCaseType = ContactFormData['contact_type'];
 type ContactCaseConfig = {
@@ -213,4 +216,355 @@ export class ContactsHelpers {
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     return cy.contains('tbody tr', rowMatch).should('exist');
   };
+}
+
+const CONFIRM_DELETE_TEXT = /Are you sure you want to delete this item\?/i;
+
+export class ContactsDeleteHelpers {
+  static requestWithCookies<T = unknown>(
+    method: string,
+    url: string,
+    body?: Cypress.RequestBody,
+    options: Partial<Cypress.RequestOptions> = {},
+  ): Cypress.Chainable<Cypress.Response<T>> {
+    return cy.getAllCookies().then((cookies: Cypress.Cookie[]) => {
+      const cookieObj: Record<string, string> = {};
+      cookies.forEach((cookie) => {
+        cookieObj[cookie.name] = cookie.value;
+      });
+
+      const cookieHeader = Object.entries(cookieObj)
+        .map(([name, value]) => `${name}=${value}`)
+        .join('; ');
+      const headers: Record<string, string> = { Cookie: cookieHeader };
+      const csrfToken = cookieObj['csrftoken'];
+      if (csrfToken) {
+        headers['x-csrftoken'] = csrfToken;
+      }
+
+      return cy.request<T>({
+        method,
+        url,
+        body,
+        headers,
+        ...options,
+      });
+    });
+  }
+
+  static createContact(contact: MockContact): Cypress.Chainable<Contact> {
+    return ContactsDeleteHelpers.requestWithCookies<Contact>(
+      'POST',
+      'http://localhost:8080/api/v1/contacts/',
+      contact,
+    ).then((response) => response.body);
+  }
+
+  static createReport(report: F3X): Cypress.Chainable<string> {
+    return ContactsDeleteHelpers.requestWithCookies<{ id: string }>(
+      'POST',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      report,
+    ).then((response) => response.body.id);
+  }
+
+  static createLinkedTransaction(
+    contact: Contact,
+    reportId: string,
+    transactionDate: string,
+  ): Cypress.Chainable<Cypress.Response<unknown>> {
+    const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, transactionDate, contact, reportId);
+    return ContactsDeleteHelpers.requestWithCookies(
+      'POST',
+      'http://localhost:8080/api/v1/transactions/',
+      transaction,
+    );
+  }
+
+  static seedContactsWithLinkedTransaction(options: {
+    unlinkedContact: MockContact;
+    linkedContact: MockContact;
+    report: F3X;
+    transactionDate: string;
+  }): Cypress.Chainable<Cypress.Response<unknown>> {
+    const { unlinkedContact, linkedContact, report, transactionDate } = options;
+    return ContactsDeleteHelpers.createContact(unlinkedContact)
+      .then(() => ContactsDeleteHelpers.createContact(linkedContact))
+      .then((linked) =>
+        ContactsDeleteHelpers.createReport(report).then((reportId) =>
+          ContactsDeleteHelpers.createLinkedTransaction(linked, reportId, transactionDate),
+        ),
+      );
+  }
+
+  static isDisabled($el: JQuery<HTMLElement>) {
+    return $el.is(':disabled') || $el.hasClass('p-disabled') || $el.attr('aria-disabled') === 'true';
+  }
+
+  static getDialogByText(text: RegExp) {
+    return cy.contains('dialog, [role="dialog"], .p-dialog', text).should('be.visible');
+  }
+
+  static getConfirmDeleteDialog() {
+    return ContactsDeleteHelpers.getDialogByText(CONFIRM_DELETE_TEXT);
+  }
+
+  static clickConfirmDeleteModalButton(label: 'Cancel' | 'Confirm' | 'No' | 'Close') {
+    const normalized = label === 'No' ? 'Cancel' : label;
+    return ContactsDeleteHelpers.getConfirmDeleteDialog().then(($dialog) => {
+      if (normalized === 'Close') {
+        const $close = $dialog.find('[aria-label="Cancel"]').first();
+        if ($close.length) {
+          return cy.wrap($close).click({ force: true });
+        }
+        throw new Error('Confirm delete dialog close icon not found.');
+      }
+
+      const $button = $dialog
+        .find('button')
+        .filter((_, el) => (el.textContent || '').trim() === normalized)
+        .first();
+      if ($button.length) {
+        return cy.wrap($button).click({ force: true });
+      }
+      if (normalized === 'Cancel') {
+        const $close = $dialog.find('[aria-label="Cancel"]').first();
+        if ($close.length) {
+          return cy.wrap($close).click({ force: true });
+        }
+      }
+      throw new Error(`Confirm delete dialog "${normalized}" button not found.`);
+    });
+  }
+
+  static getRestoreDeletedContactsDialog() {
+    return ContactsDeleteHelpers.getDialogByText(/Restore deleted contacts/i);
+  }
+
+  static getContactRow(contactName: string) {
+    return cy.contains('tbody tr', contactName, { timeout: 15000 }).should('be.visible');
+  }
+
+  static openActionsMenu(contactName: string) {
+    PageUtils.blurActiveField();
+    PageUtils.getKabob(contactName);
+    cy.get('.p-popover').filter(':visible').should('exist');
+    cy.get('.p-popover').filter(':visible').contains('button', /Edit/i).should('be.visible');
+  }
+
+  static findActionButtonInOpenMenu(label: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('body').then(($body) => {
+      const $button = $body
+        .find('.p-popover:visible')
+        .first()
+        .find('button')
+        .filter((_, el) => (el.textContent || '').trim() === label)
+        .first();
+      return $button as JQuery<HTMLElement>;
+    });
+  }
+
+  static expectActionButtonInOpenMenu(label: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return ContactsDeleteHelpers.findActionButtonInOpenMenu(label).then(($button) => {
+      if (!$button.length) {
+        throw new Error(`Expected "${label}" action to be present in the open menu.`);
+      }
+      return cy.wrap($button);
+    });
+  }
+
+  static assertActionButtonEnabled($button: JQuery<HTMLElement>, label = 'Action') {
+    const disabled = ContactsDeleteHelpers.isDisabled($button);
+    expect(disabled, `${label} action should be enabled`).to.eq(false);
+  }
+
+  static assertActionButtonDisabled($button: JQuery<HTMLElement>, label = 'Action') {
+    const disabled = ContactsDeleteHelpers.isDisabled($button);
+    expect(disabled, `${label} action should be disabled`).to.eq(true);
+  }
+
+  static assertConfirmDeleteModalVisible() {
+    ContactsDeleteHelpers.getConfirmDeleteDialog().within(() => {
+      cy.contains(/Confirm/i).should('be.visible');
+      cy.contains(CONFIRM_DELETE_TEXT).should('be.visible');
+      cy.contains('button', /^Cancel$/).should('be.visible');
+      cy.contains('button', /^Confirm$/).should('be.visible');
+    });
+  }
+
+  static assertNoConfirmDeleteModal() {
+    cy.get('body').should(($body) => {
+      const matches = $body
+        .find('dialog, [role="dialog"], .p-dialog')
+        .filter((_, el) => CONFIRM_DELETE_TEXT.test(el.textContent || ''));
+      expect(matches.filter(':visible').length, 'confirm delete dialog visible').to.eq(0);
+    });
+  }
+
+  static confirmDeleteModalIfPresent(action: 'Cancel' | 'Confirm' | 'No' | 'Close' = 'Cancel') {
+    const label = action === 'No' ? 'Cancel' : action;
+    return cy.get('body').then(($body) => {
+      const $dialog = $body
+        .find('dialog, [role="dialog"], .p-dialog')
+        .filter((_, el) => CONFIRM_DELETE_TEXT.test(el.textContent || ''))
+        .filter(':visible')
+        .first();
+      if (!$dialog.length) return;
+      if (label === 'Close') {
+        const $close = $dialog.find('[aria-label="Cancel"]').first();
+        if ($close.length) {
+          return cy.wrap($close).click({ force: true });
+        }
+        throw new Error('Confirm delete dialog close icon not found.');
+      }
+
+      const $button = $dialog
+        .find('button')
+        .filter((_, el) => (el.textContent || '').trim() === label)
+        .first();
+      if ($button.length) {
+        return cy.wrap($button).click({ force: true });
+      }
+      if (label === 'Cancel') {
+        const $close = $dialog.find('[aria-label="Cancel"]').first();
+        if ($close.length) {
+          return cy.wrap($close).click({ force: true });
+        }
+      }
+      throw new Error(`Confirm delete dialog is visible but "${label}" action was not found.`);
+    });
+  }
+
+  static openRestoreDeletedContactsModal() {
+    PageUtils.clickButton('Restore deleted contacts', '', true);
+    const dialog = ContactsDeleteHelpers.getRestoreDeletedContactsDialog();
+    dialog.contains('button', /Restore selected/i).should('be.visible');
+    return dialog;
+  }
+
+  static openRestoreResultsPerPageSelect() {
+    return ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
+      .contains(/Results per page/i)
+      .should('be.visible')
+      .parent()
+      .then(($wrap) => {
+        const $label = $wrap
+          .find('p-select [data-pc-section="label"], p-select .p-select-label')
+          .filter(':visible')
+          .first();
+        if ($label.length) return cy.wrap($label).scrollIntoView().click();
+        const $root = $wrap
+          .find('p-select[data-pc-section="root"], p-select.p-select')
+          .filter(':visible')
+          .first();
+        if ($root.length) return cy.wrap($root).scrollIntoView().click();
+        const $trigger = $wrap.find('.p-select-dropdown, [aria-label="dropdown trigger"]').first();
+        if ($trigger.length) return cy.wrap($trigger).scrollIntoView().click({ force: true });
+        throw new Error('Results-per-page select not found in restore dialog.');
+      });
+  }
+
+  static setRestoreResultsPerPage(value: 20 | 15 | 10 | 5 = 20) {
+    ContactsDeleteHelpers.openRestoreResultsPerPageSelect();
+    cy.get('body')
+      .find('[role="listbox"], .p-select-list')
+      .filter(':visible')
+      .last()
+      .within(() => {
+        cy.contains('[role="option"], .p-select-option', String(value))
+          .should('be.visible')
+          .click();
+      });
+  }
+
+  static selectDeletedContactInRestoreModal(
+    contactName: string,
+    options: { maxPages?: number; waitAlias?: string } = {},
+  ): Cypress.Chainable<JQuery<HTMLElement>> {
+    const maxPages = options.maxPages ?? 25;
+    const waitForPageLoad = (): Cypress.Chainable<any> => {
+      if (options.waitAlias) {
+        return cy.wait(`@${options.waitAlias}`);
+      }
+      return cy.wrap(null, { log: false });
+    };
+    const tryPage = (page: number): Cypress.Chainable<JQuery<HTMLElement>> => {
+      if (page >= maxPages) {
+        throw new Error(
+          `Could not find deleted contact "${contactName}" in Restore modal after checking ${maxPages} pages.`,
+        );
+      }
+
+      return ContactsDeleteHelpers.getRestoreDeletedContactsDialog().then(($dialog) => {
+        const $row = $dialog
+          .find('tbody tr')
+          .filter((_, el) => (el.textContent || '').includes(contactName))
+          .first();
+
+        if ($row.length) {
+          return cy.wrap($row)
+            .within(() => {
+              cy.get('input[type="checkbox"], .p-checkbox-box').first().click({ force: true });
+            })
+            .then(() => $row);
+        }
+
+        const $next = $dialog
+          .find('button[aria-label="Next Page"], .p-paginator-next')
+          .filter(':visible')
+          .first();
+        if (!$next.length || ContactsDeleteHelpers.isDisabled($next)) {
+          throw new Error(`Could not find deleted contact "${contactName}" before last page.`);
+        }
+
+        cy.wrap($next).click({ force: true });
+        return waitForPageLoad().then(() => tryPage(page + 1));
+      });
+    };
+
+    return cy.then(() => tryPage(0));
+  }
+
+  static deleteContact(
+    contactName: string,
+    options: {
+      deleteAlias?: string;
+      contactsGoneAlias?: string | null;
+      listAlias?: string;
+    } = {},
+  ) {
+    const deleteAlias = options.deleteAlias ?? 'deleteContact';
+    const contactsGoneAlias = options.contactsGoneAlias ?? 'contactsGone';
+
+    cy.contains('tbody tr', contactName, { timeout: 15000 }).should('be.visible');
+    PageUtils.clickKababItem(contactName, 'Delete');
+    ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
+    ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
+    cy.wait(`@${deleteAlias}`);
+    if (options.listAlias) {
+      cy.wait(`@${options.listAlias}`);
+    }
+    if (contactsGoneAlias) {
+      cy.wait(`@${contactsGoneAlias}`);
+    }
+    cy.contains('tbody tr', contactName, { timeout: 15000 }).should('not.exist');
+  }
+
+  static restoreContact(contactName: string, options: { listAlias?: string } = {}) {
+    cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
+    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=**').as('getDeletedContacts');
+
+    ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
+      .contains('tbody tr', contactName, { timeout: 15000 })
+      .should('be.visible')
+      .find('.p-checkbox-input')
+      .check({ force: true });
+
+    cy.contains('button,a', 'Restore selected').click();
+    cy.wait('@restoreContact');
+    cy.wait('@getDeletedContacts');
+    if (options.listAlias) {
+      cy.wait(`@${options.listAlias}`);
+    }
+  }
 }

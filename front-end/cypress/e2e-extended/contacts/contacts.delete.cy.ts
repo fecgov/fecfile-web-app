@@ -1,19 +1,56 @@
-
 import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
-import { ContactsHelpers } from './contacts.helpers';
-import { PageUtils, currentYear } from '../../e2e-smoke/pages/pageUtils';
-import { makeContact, makeF3x, makeTransaction } from '../../e2e-smoke/requests/methods';
+import { ContactsDeleteHelpers, ContactsHelpers } from './contacts.helpers';
+import { currentYear } from '../../e2e-smoke/pages/pageUtils';
+import { makeContact } from '../../e2e-smoke/requests/methods';
 import { Individual_A_A, Organization_A } from '../../e2e-smoke/requests/library/contacts';
 import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
-import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
 import { F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
-import type { Contact } from '../../../src/app/shared/models';
 
 const UNLINKED_CONTACT = 'Organization A Updated';
 const LINKED_CONTACT = 'House, Beth';
 const LINKED_TRANSACTION_DATE = `${currentYear}-04-12`;
-const CONFIRM_DELETE_TEXT = /Are you sure you want to delete this item\?/i;
+
+const RUN_LINKED_DELETE_API_TEST =
+  Cypress.env('RUN_LINKED_DELETE_API_TEST') === true ||
+  Cypress.env('RUN_LINKED_DELETE_API_TEST') === 'true';
+
+type ContactListItem = {
+  id: string;
+  name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  has_transaction_or_report?: boolean | null;
+};
+
+type ContactListResponse = {
+  results?: ContactListItem[];
+};
+
+type ReportListItem = {
+  id: string;
+  report_type?: string | null;
+  report_code?: string | null;
+  coverage_from_date?: string | null;
+  coverage_through_date?: string | null;
+  form_type?: string | null;
+};
+
+type ReportListResponse = {
+  results?: ReportListItem[];
+};
+
+type TransactionListItem = {
+  id: string;
+  contact_1_id?: string | null;
+  contact_1?: { first_name?: string | null; last_name?: string | null } | null;
+  contributor_first_name?: string | null;
+  contributor_last_name?: string | null;
+};
+
+type TransactionListResponse = {
+  results?: TransactionListItem[];
+};
 
 const UNLINKED_CONTACT_DATA: MockContact = {
   ...Organization_A,
@@ -26,297 +63,528 @@ const LINKED_CONTACT_DATA: MockContact = {
   first_name: 'Beth',
 };
 
-function createContact(contact: MockContact) {
-  return new Cypress.Promise<Contact>((resolve) => {
-    makeContact(contact, (response) => {
-      resolve(response.body as Contact);
-    });
-  });
-}
-
-function createReport() {
-  return new Cypress.Promise<string>((resolve) => {
-    makeF3x(F3X_Q2, (response) => {
-      resolve(response.body.id);
-    });
-  });
-}
-
-function createLinkedTransaction(contact: Contact, reportId: string) {
-  const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, LINKED_TRANSACTION_DATE, contact, reportId);
-  return new Cypress.Promise<void>((resolve) => {
-    makeTransaction(transaction, () => resolve());
-  });
-}
-
-function seedContactsWithLinkedTransaction() {
-  return createContact(UNLINKED_CONTACT_DATA)
-    .then(() => createContact(LINKED_CONTACT_DATA))
-    .then((linkedContact) =>
-      createReport().then((reportId) => createLinkedTransaction(linkedContact, reportId)),
-    );
-}
-
-function isDisabled($el: JQuery<HTMLElement>) {
-  return $el.is(':disabled') || $el.hasClass('p-disabled') || $el.attr('aria-disabled') === 'true';
-}
-
-function getDialogByText(text: RegExp) {
-  return cy.contains('dialog, [role="dialog"], .p-dialog', text).should('be.visible');
-}
-
-function getConfirmDeleteDialog() {
-  return getDialogByText(CONFIRM_DELETE_TEXT);
-}
-
-function clickConfirmDeleteModalButton(label: 'Cancel' | 'Confirm') {
-  getConfirmDeleteDialog().contains('button', new RegExp(`^${label}$`)).click({ force: true });
-}
-
-function getRestoreDeletedContactsDialog() {
-  return getDialogByText(/Restore deleted contacts/i);
-}
-
-function getContactRow(contactName: string) {
-  return cy.contains('tr', contactName).should('be.visible');
-}
-
-function openActionsMenu(contactName: string) {
-  PageUtils.blurActiveField();
-  PageUtils.getKabob(contactName);
-  cy.get('.p-popover').filter(':visible').should('exist');
-  cy.get('.p-popover').filter(':visible').contains('button', /Edit/i).should('be.visible');
-}
-
-function findActionButtonInOpenMenu(label: string) {
-  return cy.get('body').then(($body) => {
-    const $popover = $body.find('.p-popover:visible').first();
-    const $button = $popover
-      .find('button')
-      .filter((_, el) => (el.textContent || '').trim() === label)
-      .first();
-    return $button.length ? $button : null;
-  });
-}
-
-function expectActionButtonInOpenMenu(label: string) {
-  return findActionButtonInOpenMenu(label).then(($button) => {
-    if (!$button) {
-      throw new Error(`Expected "${label}" action to be present in the open menu.`);
-    }
-    return cy.wrap($button);
-  });
-}
-
-function assertConfirmDeleteModalVisible() {
-  getConfirmDeleteDialog().within(() => {
-    cy.contains(/Confirm/i).should('be.visible');
-    cy.contains(CONFIRM_DELETE_TEXT).should('be.visible');
-    cy.contains('button', /^Cancel$/).should('be.visible');
-    cy.contains('button', /^Confirm$/).should('be.visible');
-  });
-}
-
-function assertNoConfirmDeleteModal() {
-  cy.get('dialog, [role="dialog"], .p-dialog').then(($dialogs) => {
-    const matches = $dialogs.filter((_, el) => CONFIRM_DELETE_TEXT.test(el.textContent || ''));
-    if (!matches.length) return;
-    expect(matches.filter(':visible').length, 'confirm delete dialog visible').to.eq(0);
-  });
-}
-
-function openRestoreDeletedContactsModal() {
-  PageUtils.clickButton('Restore deleted contacts', '', true);
-  const dialog = getRestoreDeletedContactsDialog();
-  dialog.contains('button', /Restore selected/i).should('be.visible');
-  return dialog;
-}
-
-function openRestoreResultsPerPageSelect() {
-  return getRestoreDeletedContactsDialog()
-    .contains(/Results per page/i)
-    .should('be.visible')
-    .parent()
-    .then(($wrap) => {
-      const $label = $wrap
-        .find('p-select [data-pc-section="label"], p-select .p-select-label')
-        .filter(':visible')
-        .first();
-      if ($label.length) return cy.wrap($label).scrollIntoView().click();
-      const $root = $wrap
-        .find('p-select[data-pc-section="root"], p-select.p-select')
-        .filter(':visible')
-        .first();
-      if ($root.length) return cy.wrap($root).scrollIntoView().click();
-      const $trigger = $wrap.find('.p-select-dropdown, [aria-label="dropdown trigger"]').first();
-      if ($trigger.length) return cy.wrap($trigger).scrollIntoView().click({ force: true });
-      throw new Error('Results-per-page select not found in restore dialog.');
-    });
-}
-
-function setRestoreResultsPerPage(value: 20 | 15 | 10 | 5 = 20) {
-  openRestoreResultsPerPageSelect();
-  cy.get('body')
-    .find('[role="listbox"], .p-select-list')
-    .filter(':visible')
-    .last()
-    .within(() => {
-      cy.contains('[role="option"], .p-select-option', String(value))
-        .should('be.visible')
-        .click();
-    });
-}
-
-function selectDeletedContactInRestoreModal(contactName: string) {
-  const maxPages = 25;
-  const tryPage = (page: number) => {
-    if (page >= maxPages) {
-      throw new Error(
-        `Could not find deleted contact "${contactName}" in Restore modal after checking ${maxPages} pages.`,
-      );
-    }
-
-    getRestoreDeletedContactsDialog().then(($dialog) => {
-      const $row = $dialog
-        .find('tbody tr')
-        .filter((_, el) => (el.textContent || '').includes(contactName))
-        .first();
-
-      if ($row.length) {
-        cy.wrap($row).within(() => {
-          cy.get('input[type="checkbox"], .p-checkbox-box').first().click({ force: true });
-        });
-        return;
-      }
-
-      const $next = $dialog
-        .find('button[aria-label="Next Page"], .p-paginator-next')
-        .filter(':visible')
-        .first();
-      if (!$next.length || isDisabled($next)) {
-        throw new Error(`Could not find deleted contact "${contactName}" before last page.`);
-      }
-
-      cy.wrap($next).click({ force: true });
-      tryPage(page + 1);
-    });
-  };
-
-  tryPage(0);
-}
-
 describe('Contacts - delete guard', () => {
   beforeEach(() => {
     Initialize();
-    seedContactsWithLinkedTransaction();
+    cy.intercept('GET', '**/api/v1/contacts/**page_size=**').as('getContactsList');
+    ContactsDeleteHelpers.seedContactsWithLinkedTransaction({
+      unlinkedContact: UNLINKED_CONTACT_DATA,
+      linkedContact: LINKED_CONTACT_DATA,
+      report: F3X_Q2,
+      transactionDate: LINKED_TRANSACTION_DATE,
+    });
     ContactListPage.goToPage();
+    cy.wait('@getContactsList');
   });
 
-  xit('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
-    let deleteRequests = 0;
-    cy.intercept('DELETE', '**/contacts/**', (req) => {
-      deleteRequests += 1;
-      req.continue();
-    }).as('deleteContact');
+  it('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
+    cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
+    cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('getDeletedContacts');
+    cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
 
-    getContactRow(UNLINKED_CONTACT);
-    openActionsMenu(UNLINKED_CONTACT);
-    expectActionButtonInOpenMenu('Delete').should('not.be.disabled').click();
-    assertConfirmDeleteModalVisible();
-    clickConfirmDeleteModalButton('Confirm');
+    ContactsDeleteHelpers.getContactRow(UNLINKED_CONTACT);
+    ContactsDeleteHelpers.openActionsMenu(UNLINKED_CONTACT);
+    ContactsDeleteHelpers.expectActionButtonInOpenMenu('Delete')
+      .should(($button) => {
+        ContactsDeleteHelpers.assertActionButtonEnabled($button, 'Delete');
+      })
+      .click({ force: true });
 
-    cy.then(() => {
-      if (deleteRequests > 0) {
-        cy.wait('@deleteContact').its('response.statusCode').should('be.oneOf', [200, 204]);
-      }
-    });
+    ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
+    ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
+
+    cy.wait('@deleteContact')
+      .its('response.statusCode')
+      .should('be.oneOf', [200, 204]);
+    cy.wait('@getContactsList');
+    cy.wait('@getDeletedContacts');
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains('tr', UNLINKED_CONTACT).should('not.exist');
+    cy.contains('tbody tr', UNLINKED_CONTACT).should('not.exist');
+    cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
 
-    openRestoreDeletedContactsModal();
-    setRestoreResultsPerPage(20);
-    selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
-    cy.contains('button', /Restore selected/i).should('not.be.disabled');
-    cy.contains('button', /Restore selected/i).click({ force: true });
-    cy.contains('button', /Restore selected/i).should('not.exist');
-    ContactsHelpers.assertSuccessToastMessage();
-    cy.contains('tr', UNLINKED_CONTACT).should('be.visible');
-  });
-
-  xit('Linked: delete is not actionable (hidden or disabled); blocked after refresh; cannot bypass via DOM/script clicks', () => {
-    let deleteRequests = 0;
-    cy.intercept('DELETE', '**/contacts/**', (req) => {
-      deleteRequests += 1;
-      req.continue();
-    }).as('deleteContact');
-
-    //linked contact exists
-    getContactRow(LINKED_CONTACT);
-
-    // Open menu and validate Delete is disabled
-    openActionsMenu(LINKED_CONTACT);
-
-    findActionButtonInOpenMenu('Delete').then(($deleteBtn) => {
-      if (!$deleteBtn) {
-        cy.log('Delete option is hidden for linked contact (expected).');
-        return;
-      }
-      cy.wrap($deleteBtn).should('be.disabled');
-
-      // Negative check 1: Force click (Cypress-level bypass)
-      cy.wrap($deleteBtn).click({ force: true });
-      assertConfirmDeleteModalVisible();
-      clickConfirmDeleteModalButton('Cancel');
-      assertNoConfirmDeleteModal();
-    });
-
-    // Negative check 2: DOM/script “enable” attempt (remove disabled attr & click)
-    openActionsMenu(LINKED_CONTACT);
-    findActionButtonInOpenMenu('Delete').then(($deleteBtn) => {
-      if (!$deleteBtn) return;
-      cy.wrap($deleteBtn).invoke('removeAttr', 'disabled').click({ force: true });
-      assertConfirmDeleteModalVisible();
-      clickConfirmDeleteModalButton('Cancel');
-      assertNoConfirmDeleteModal();
-    });
-
-    cy.then(() => {
-      expect(deleteRequests, 'No DELETE calls should be made').to.eq(0);
-    });
-
-    cy.contains('tr', LINKED_CONTACT).should('be.visible');
-    cy.reload();
-    cy.contains(/Manage contacts/i).should('be.visible');
-    getContactRow(LINKED_CONTACT);
-    openActionsMenu(LINKED_CONTACT);
-    findActionButtonInOpenMenu('Delete').then(($deleteBtn) => {
-      if (!$deleteBtn) {
-        cy.log('Delete option remains hidden after refresh (expected).');
-        return;
-      }
-      cy.wrap($deleteBtn).should('be.disabled');
-    });
-  });
-
-  xit('Restore deleted contacts', () => {
-    getContactRow(UNLINKED_CONTACT);
-    openActionsMenu(UNLINKED_CONTACT);
-    expectActionButtonInOpenMenu('Delete').should('not.be.disabled').click();
-    assertConfirmDeleteModalVisible();
-    clickConfirmDeleteModalButton('Confirm');
-    ContactsHelpers.assertSuccessToastMessage();
-    cy.get('.restore-contact-button').should('be.visible');
-    openRestoreDeletedContactsModal();
-    getRestoreDeletedContactsDialog()
-      .contains('.paginator-text', /showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+entries:?/i)
-      .should('exist');
+    ContactsDeleteHelpers.openRestoreDeletedContactsModal();
+    cy.wait('@getDeletedContacts');
     cy.get('#restoreButton').should('be.disabled');
-    selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
+    ContactsDeleteHelpers.selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
     cy.get('#restoreButton').should('not.be.disabled').click();
-    cy.get('#restoreButton').should('not.exist');
+
+    cy.wait('@restoreContact');
+    cy.wait('@getContactsList');
+    cy.wait('@getDeletedContacts');
+
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains('tr', UNLINKED_CONTACT).should('be.visible');
-    cy.contains('button', /Restore deleted contacts/i).should('not.exist');
+    cy.contains('tbody tr', UNLINKED_CONTACT).should('be.visible');
+    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
+  });
+
+  it('Linked: delete is not actionable (hidden or disabled); blocked after refresh; cannot bypass via DOM/script clicks', () => {
+    let deleteRequests = 0;
+    const deleteStatusCodes: number[] = [];
+    const deleteResponses: Array<{ statusCode: number; body: unknown }> = [];
+    const logDeleteResponse = (statusCode: number, body: unknown) => {
+      let bodyPreview = '';
+      try {
+        const serialized = JSON.stringify(body ?? null);
+        bodyPreview = serialized ?? '';
+      } catch (error) {
+        bodyPreview = String(error);
+      }
+      Cypress.log({
+        name: 'deleteContact response',
+        message: `status ${statusCode} body ${bodyPreview.slice(0, 500)}`,
+      });
+    };
+
+    cy.intercept('DELETE', '**/api/v1/contacts/**', (req) => {
+      deleteRequests += 1;
+      req.on('response', (res) => {
+        deleteStatusCodes.push(res.statusCode);
+        deleteResponses.push({ statusCode: res.statusCode, body: res.body });
+        logDeleteResponse(res.statusCode, res.body);
+      });
+      req.continue();
+    }).as('deleteContact');
+
+    const assertLinkedContactIsLinked = (attempt = 1): Cypress.Chainable<null> => {
+      const maxAttempts = 3;
+      return cy
+        .reload()
+        .then(() => cy.wait('@getContactsList'))
+        .then((interception) => {
+          const results = interception.response?.body?.results;
+          const linkedContact = Array.isArray(results)
+            ? results.find((contact) => {
+                const firstName = (contact.first_name || '').trim();
+                const lastName = (contact.last_name || '').trim();
+                const name = (contact.name || '').trim();
+                return (
+                  (firstName === LINKED_CONTACT_DATA.first_name &&
+                    lastName === LINKED_CONTACT_DATA.last_name) ||
+                  name === LINKED_CONTACT
+                );
+              })
+            : null;
+
+          if (linkedContact?.has_transaction_or_report) {
+            return cy.wrap(null, { log: false });
+          }
+
+          if (attempt >= maxAttempts) {
+            const details = linkedContact
+              ? `found but has_transaction_or_report=${linkedContact.has_transaction_or_report}`
+              : 'not found in contacts list response';
+            throw new Error(
+              `Setup error: linked contact "${LINKED_CONTACT}" was ${details} after ${attempt} attempts.`,
+            );
+          }
+
+          cy.log(
+            `Linked contact not marked as linked yet (attempt ${attempt}/${maxAttempts}); retrying.`,
+          );
+          return assertLinkedContactIsLinked(attempt + 1);
+        });
+    };
+
+    const assertDeleteUnavailable = () => {
+      ContactsDeleteHelpers.getContactRow(LINKED_CONTACT);
+      ContactsDeleteHelpers.openActionsMenu(LINKED_CONTACT);
+      return ContactsDeleteHelpers.findActionButtonInOpenMenu('Delete').then(($deleteBtn) => {
+        if (!$deleteBtn.length) {
+          cy.log('Delete option is hidden for linked contact (expected).');
+          return;
+        }
+        ContactsDeleteHelpers.assertActionButtonDisabled($deleteBtn, 'Delete');
+      });
+    };
+
+    assertLinkedContactIsLinked();
+
+    const attemptDelete = (action: 'Cancel' | 'Close' | 'Confirm', assertDisabled = false) => {
+      ContactsDeleteHelpers.getContactRow(LINKED_CONTACT);
+      ContactsDeleteHelpers.openActionsMenu(LINKED_CONTACT);
+      return ContactsDeleteHelpers.findActionButtonInOpenMenu('Delete').then(($deleteBtn) => {
+        if (!$deleteBtn.length) {
+          cy.log('Delete option is hidden for linked contact (expected).');
+          return;
+        }
+        if (assertDisabled) {
+          ContactsDeleteHelpers.assertActionButtonDisabled($deleteBtn, 'Delete');
+        }
+        cy.wrap($deleteBtn).invoke('removeAttr', 'disabled');
+        cy.wrap($deleteBtn).click({ force: true });
+        ContactsDeleteHelpers.confirmDeleteModalIfPresent(action);
+        ContactsDeleteHelpers.assertNoConfirmDeleteModal();
+      });
+    };
+
+    attemptDelete('Cancel', true);
+    attemptDelete('Close');
+
+    cy.then(() => {
+      if (!deleteRequests) {
+        return cy.wrap(null, { log: false });
+      }
+      return cy.wait('@deleteContact', { timeout: 15000 });
+    });
+
+    cy.then(() => {
+      const successResponses = deleteResponses.filter((res) => [200, 204].includes(res.statusCode));
+      if (successResponses.length) {
+        successResponses.forEach((res) => logDeleteResponse(res.statusCode, res.body));
+        throw new Error(
+          `Delete unexpectedly succeeded for linked contact (status ${successResponses
+            .map((res) => res.statusCode)
+            .join(', ')}). Expected 403/409 or no request.`,
+        );
+      }
+      if (deleteResponses.length) {
+        const unexpected = deleteResponses.filter((res) => ![403, 409].includes(res.statusCode));
+        if (unexpected.length) {
+          unexpected.forEach((res) => logDeleteResponse(res.statusCode, res.body));
+          throw new Error(
+            `Unexpected delete response status for linked contact: ${unexpected
+              .map((res) => res.statusCode)
+              .join(', ')}. Expected 403/409.`,
+          );
+        }
+      }
+      if (!deleteStatusCodes.length) {
+        expect(deleteRequests, 'No DELETE calls should be made').to.eq(0);
+      }
+    });
+
+    ContactsDeleteHelpers.getContactRow(LINKED_CONTACT);
+    cy.reload();
+    cy.wait('@getContactsList');
+    assertDeleteUnavailable();
+
+    // Then unlink the transaction w/ contact to allow deletion
+    const fetchLinkedContact = (): Cypress.Chainable<ContactListItem> =>
+      ContactsDeleteHelpers.requestWithCookies<ContactListResponse>(
+        'GET',
+        'http://localhost:8080/api/v1/contacts/?page=1&ordering=sort_name&page_size=50',
+      ).then((response) => {
+        const results = Array.isArray(response.body?.results) ? response.body.results : [];
+        const linkedContact = results.find((contact) => {
+          const firstName = (contact.first_name || '').trim();
+          const lastName = (contact.last_name || '').trim();
+          const name = (contact.name || '').trim();
+          return (
+            (firstName === LINKED_CONTACT_DATA.first_name &&
+              lastName === LINKED_CONTACT_DATA.last_name) ||
+            name === LINKED_CONTACT
+          );
+        });
+
+        if (!linkedContact?.id) {
+          throw new Error(`Unable to locate linked contact "${LINKED_CONTACT}" for cleanup.`);
+        }
+        return cy.wrap(linkedContact, { log: false });
+      });
+
+    const fetchReport = (): Cypress.Chainable<ReportListItem> =>
+      ContactsDeleteHelpers.requestWithCookies<ReportListResponse>(
+        'GET',
+        'http://localhost:8080/api/v1/reports/?page=1&ordering=-coverage_through_date&page_size=25',
+      ).then((response) => {
+        const results = Array.isArray(response.body?.results) ? response.body.results : [];
+        const report = results.find((item) => {
+          const matchesCode = item.report_code === F3X_Q2.report_code;
+          const matchesCoverage =
+            item.coverage_from_date === F3X_Q2.coverage_from_date &&
+            item.coverage_through_date === F3X_Q2.coverage_through_date;
+          return item.report_type === F3X_Q2.report_type && matchesCode && matchesCoverage;
+        });
+
+        if (!report?.id) {
+          throw new Error(`Unable to locate seeded report ${F3X_Q2.report_code} for cleanup.`);
+        }
+        return cy.wrap(report, { log: false });
+      });
+
+    const fetchLinkedTransactionId = (
+      reportId: string,
+      contactId: string,
+    ): Cypress.Chainable<string> =>
+      ContactsDeleteHelpers.requestWithCookies<TransactionListResponse>(
+        'GET',
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&report_id=${reportId}&schedules=A`,
+      ).then((response) => {
+        const results = Array.isArray(response.body?.results) ? response.body.results : [];
+        const transaction = results.find((item) => {
+          if (item.contact_1_id === contactId) return true;
+          const firstName =
+            (item.contact_1?.first_name || item.contributor_first_name || '').trim();
+          const lastName =
+            (item.contact_1?.last_name || item.contributor_last_name || '').trim();
+          return (
+            firstName === LINKED_CONTACT_DATA.first_name &&
+            lastName === LINKED_CONTACT_DATA.last_name
+          );
+        });
+
+        if (!transaction?.id) {
+          throw new Error(
+            `Unable to locate linked transaction for contact "${LINKED_CONTACT}" in report ${reportId}.`,
+          );
+        }
+        return cy.wrap(transaction.id, { log: false });
+      });
+
+    const assertLinkedContactUnlinked = (attempt = 1): Cypress.Chainable<null> => {
+      const maxAttempts = 3;
+      return cy
+        .reload()
+        .then(() => cy.wait('@getContactsList'))
+        .then((interception) => {
+          const results = interception.response?.body?.results;
+          const linkedContact = Array.isArray(results)
+            ? results.find((contact) => {
+                const firstName = (contact.first_name || '').trim();
+                const lastName = (contact.last_name || '').trim();
+                const name = (contact.name || '').trim();
+                return (
+                  (firstName === LINKED_CONTACT_DATA.first_name &&
+                    lastName === LINKED_CONTACT_DATA.last_name) ||
+                  name === LINKED_CONTACT
+                );
+              })
+            : null;
+
+          if (linkedContact && !linkedContact.has_transaction_or_report) {
+            return cy.wrap(null, { log: false });
+          }
+
+          if (attempt >= maxAttempts) {
+            const details = linkedContact
+              ? `found but has_transaction_or_report=${linkedContact.has_transaction_or_report}`
+              : 'not found in contacts list response';
+            throw new Error(
+              `Cleanup error: linked contact "${LINKED_CONTACT}" was ${details} after ${attempt} attempts.`,
+            );
+          }
+
+          cy.log(
+            `Linked contact still marked as linked (attempt ${attempt}/${maxAttempts}); retrying.`,
+          );
+          return assertLinkedContactUnlinked(attempt + 1);
+        });
+    };
+
+    cy.then(() =>
+      fetchLinkedContact().then((linkedContact) =>
+        fetchReport().then((report) =>
+          fetchLinkedTransactionId(report.id, linkedContact.id).then((transactionId) =>
+            ContactsDeleteHelpers.requestWithCookies(
+              'DELETE',
+              `http://localhost:8080/api/v1/transactions/${transactionId}/`,
+            ).then(() =>
+              ContactsDeleteHelpers.requestWithCookies(
+                'DELETE',
+                `http://localhost:8080/api/v1/reports/${report.id}/`,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ).then(() => assertLinkedContactUnlinked());
+
+    ContactsDeleteHelpers.getContactRow(LINKED_CONTACT);
+    ContactsDeleteHelpers.openActionsMenu(LINKED_CONTACT);
+    ContactsDeleteHelpers.expectActionButtonInOpenMenu('Delete')
+      .should(($button) => {
+        ContactsDeleteHelpers.assertActionButtonEnabled($button, 'Delete');
+      })
+      .click({ force: true });
+
+    ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
+    ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
+    cy.wait('@deleteContact')
+      .its('response.statusCode')
+      .should('be.oneOf', [200, 204]);
+    cy.wait('@getContactsList');
+    cy.contains('tbody tr', LINKED_CONTACT).should('not.exist');
+  });
+
+  it('Restore deleted contacts', () => {
+    cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
+    cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('getDeletedContacts');
+    cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
+
+    ContactsDeleteHelpers.getContactRow(UNLINKED_CONTACT);
+    ContactsDeleteHelpers.openActionsMenu(UNLINKED_CONTACT);
+    ContactsDeleteHelpers.expectActionButtonInOpenMenu('Delete')
+      .should(($button) => {
+        ContactsDeleteHelpers.assertActionButtonEnabled($button, 'Delete');
+      })
+      .click({ force: true });
+
+    ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
+    ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
+
+    cy.wait('@deleteContact');
+    cy.wait('@getContactsList');
+    cy.wait('@getDeletedContacts');
+
+    ContactsHelpers.assertSuccessToastMessage();
+    cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
+
+    ContactsDeleteHelpers.openRestoreDeletedContactsModal();
+    cy.wait('@getDeletedContacts');
+    ContactsDeleteHelpers.getRestoreDeletedContactsDialog().within(() => {
+      cy.contains('.paginator-text', /showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+\w+/i).should('exist');
+    });
+    cy.get('#restoreButton').should('be.disabled');
+    ContactsDeleteHelpers.selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
+    cy.get('#restoreButton').should('not.be.disabled').click();
+
+    cy.wait('@restoreContact');
+    cy.wait('@getContactsList');
+    cy.wait('@getDeletedContacts');
+
+    ContactsHelpers.assertSuccessToastMessage();
+    cy.contains('tbody tr', UNLINKED_CONTACT).should('be.visible');
+    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
+  });
+
+  /**
+   * DELETE /api/v1/contacts/:id allows deletion when has_transaction_or_report=true
+   * but should be blocked with 403 or 409 response
+   * needs changes in backend to enforce properly
+   */
+  xit('Linked: API delete is rejected (403/409)', () => {
+    const fetchLinkedContact = (attempt = 1): Cypress.Chainable<ContactListItem> => {
+      const maxAttempts = 3;
+      return ContactsDeleteHelpers.requestWithCookies<ContactListResponse>(
+        'GET',
+        'http://localhost:8080/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
+      ).then((response) => {
+        const results = Array.isArray(response.body?.results) ? response.body.results : [];
+        const linkedContact = results.find((contact) => {
+          const firstName = (contact.first_name || '').trim();
+          const lastName = (contact.last_name || '').trim();
+          const name = (contact.name || '').trim();
+          return (
+            (firstName === LINKED_CONTACT_DATA.first_name &&
+              lastName === LINKED_CONTACT_DATA.last_name) ||
+            name === LINKED_CONTACT
+          );
+        });
+
+        if (linkedContact?.has_transaction_or_report) {
+          return cy.wrap(linkedContact, { log: false });
+        }
+
+        if (attempt >= maxAttempts) {
+          const details = linkedContact
+            ? `found but has_transaction_or_report=${linkedContact.has_transaction_or_report}`
+            : 'not found in contacts list response';
+          throw new Error(
+            `Setup error: linked contact "${LINKED_CONTACT}" was ${details} after ${attempt} attempts.`,
+          );
+        }
+
+        cy.log(
+          `Linked contact not marked as linked yet (attempt ${attempt}/${maxAttempts}); retrying.`,
+        );
+        return fetchLinkedContact(attempt + 1);
+      });
+    };
+
+    return fetchLinkedContact().then((linkedContact) =>
+      ContactsDeleteHelpers.requestWithCookies(
+        'DELETE',
+        `http://localhost:8080/api/v1/contacts/${linkedContact.id}/`,
+        undefined,
+        { failOnStatusCode: false },
+      ).then((response) => {
+        let bodyPreview = '';
+        try {
+          const serialized = JSON.stringify(response.body ?? null);
+          bodyPreview = serialized ?? '';
+        } catch (error) {
+          bodyPreview = String(error);
+        }
+        Cypress.log({
+          name: 'deleteContact api',
+          message: `status ${response.status} body ${bodyPreview.slice(0, 500)}`,
+        });
+        expect(
+          response.status,
+          'DELETE should be blocked for linked contact (expected 403/409)',
+        ).to.be.oneOf([403, 409]);
+      }),
+    );
+  });
+});
+
+describe('Contacts Soft and Hard Delete (/contacts)', () => {
+  beforeEach(() => {
+    Initialize();
+    cy.intercept('GET', '**/api/v1/contacts/**page_size=**').as('getContactsList');
+    ContactListPage.goToPage();
+    cy.wait('@getContactsList');
+  });
+
+  /**
+   * creates three contacts, soft deletes two, verifies Restore deleted contacts button,
+   * doubly verifies the deletion of two contacts, restores one deleted contact
+   * returns to Contact List, verifies un-deleted contact and restored contact are in list
+   * verifies Restore deleted contacts button
+   */
+  it('part1', () => {
+    const contacts: MockContact[] = [Individual_A_A, Individual_A_A, Individual_A_A];
+    cy.contains('button,a', 'Add contact').should('be.visible');
+    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
+    for (const [i, contact] of contacts.entries()) {
+      makeContact({
+        ...contact,
+        last_name: `${contact.last_name}${i}`,
+        first_name: `${contact.first_name}${i}`,
+      });
+    }
+    ContactListPage.goToPage();
+    ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
+    cy.wait('@getContactsList');
+    const contactDisplayNames = contacts.map(
+      (contact, i) => `${contact.last_name}${i}, ${contact.first_name}${i}`,
+    );
+    const contactToDelete = contactDisplayNames[0];
+    const contactToRestore = contactDisplayNames[1];
+    const contactToPreserve = contactDisplayNames[2];
+    cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
+    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=1&ordering=name**').as('contactsGone');
+    ContactsDeleteHelpers.deleteContact(contactToDelete);
+    ContactsDeleteHelpers.deleteContact(contactToRestore);
+    ContactsHelpers.assertSuccessToastMessage();
+    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=1&ordering=sort_name**').as('getDeletedContacts');
+    ContactsDeleteHelpers.openRestoreDeletedContactsModal();
+    cy.wait('@getDeletedContacts');
+    ContactsDeleteHelpers.getRestoreDeletedContactsDialog().should('be.visible');
+    ContactsDeleteHelpers.getRestoreDeletedContactsDialog().within(() => {
+      cy.contains('tbody tr', contactToDelete, { timeout: 15000 }).should('be.visible');
+      cy.contains('tbody tr', contactToRestore, { timeout: 15000 }).should('be.visible');
+      cy.contains('tbody tr', contactToPreserve, { timeout: 15000 }).should('not.exist');
+    });
+    ContactsDeleteHelpers.restoreContact(contactToRestore);
+    ContactListPage.goToPage();
+    cy.wait('@getContactsList');
+    cy.contains('tbody tr', contactToPreserve, { timeout: 15000 }).should('be.visible');
+    cy.contains('tbody tr', contactToRestore, { timeout: 15000 }).should('be.visible');
+    cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
+  });
+
+  /**
+   * triggers beforeEach--> Initialize--> deleteAllContacts()
+   * verifies Restore deleted contacts button is not visible and contacts table is empty
+   */
+  it('part2', () => {
+    cy.contains('button,a', 'Restore deleted contacts')
+      .should('not.exist');
+    cy.contains('.empty-message', 'No data available in table').should('exist');
+    cy.get('.paginator-text')
+      .should('be.visible')
+      .and('contain', 'Showing 0 to 0 of 0 contacts:');
   });
 });
