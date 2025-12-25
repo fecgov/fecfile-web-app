@@ -278,7 +278,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   childClearFormPrimaryContact() {
-    console.log('DID I GET CALLED');
     TransactionContactUtils.clearFormPrimaryContact(
       this.childForm,
       this.childTransaction,

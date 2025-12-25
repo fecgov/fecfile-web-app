@@ -170,7 +170,6 @@ export class TransactionContactUtils {
   }
 
   static clearFormPrimaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
-    console.log('RAN');
     const templateMap = transaction?.transactionType?.templateMap;
     if (!templateMap) return;
     form.get(templateMap.street_1)?.setValue(null);
