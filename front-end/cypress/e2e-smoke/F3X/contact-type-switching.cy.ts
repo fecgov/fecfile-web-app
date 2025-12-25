@@ -1,15 +1,7 @@
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
-import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
-import {
-  defaultScheduleFormData as defaultTransactionFormData,
-  DisbursementFormData,
-} from '../models/TransactionFormModel';
-import { faker } from '@faker-js/faker';
-import { makeTransaction } from '../requests/methods';
-import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 
