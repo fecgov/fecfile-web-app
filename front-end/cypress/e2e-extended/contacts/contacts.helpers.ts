@@ -189,6 +189,81 @@ export class ContactsHelpers {
     searchEndpoint: string,
     rowMatch: RegExp,
   ): Cypress.Chainable<JQuery<HTMLElement>> {
+    const searchTerm = 'ber';
+    const candidateId = 'H0VA00001';
+    const committeeId = 'C00000001';
+    const candidateName = 'Beryl Candidate';
+    const committeeName = 'Beryl Committee';
+    const lookupEndpoint =
+      entityLabel === 'Candidate'
+        ? '**/api/v1/contacts/candidate_lookup/**'
+        : '**/api/v1/contacts/committee_lookup/**';
+
+    if (entityLabel === 'Candidate') {
+      cy.intercept('GET', lookupEndpoint, {
+        statusCode: 200,
+        body: {
+          fec_api_candidates: [
+            {
+              candidate_id: candidateId,
+              name: candidateName,
+              office: 'H',
+            },
+          ],
+          fecfile_candidates: [],
+        },
+      }).as('entityLookup');
+
+      cy.intercept('GET', searchEndpoint, {
+        statusCode: 200,
+        body: {
+          candidate_id: candidateId,
+          name: candidateName,
+          candidate_first_name: 'Beryl',
+          candidate_last_name: 'Candidate',
+          candidate_middle_name: 'Q',
+          candidate_prefix: 'Ms.',
+          candidate_suffix: '',
+          address_street_1: '123 Main St',
+          address_street_2: '',
+          address_city: 'Richmond',
+          address_state: 'VA',
+          address_zip: '23219',
+          office: 'H',
+          state: 'VA',
+          district: '01',
+        },
+      }).as('entityDetails');
+    } else {
+      cy.intercept('GET', lookupEndpoint, {
+        statusCode: 200,
+        body: {
+          fec_api_committees: [
+            {
+              id: committeeId,
+              name: committeeName,
+              is_active: true,
+            },
+          ],
+          fecfile_committees: [],
+        },
+      }).as('entityLookup');
+
+      cy.intercept('GET', searchEndpoint, {
+        statusCode: 200,
+        body: {
+          committee_id: committeeId,
+          name: committeeName,
+          street_1: '456 Main St',
+          street_2: '',
+          city: 'Richmond',
+          state: 'VA',
+          zip: '23219',
+          treasurer_phone: '5555551234',
+        },
+      }).as('entityDetails');
+    }
+
     PageUtils.clickButton('Add contact');
     cy.get('#entity_type_dropdown')
       .first()
@@ -198,17 +273,18 @@ export class ContactsHelpers {
       .scrollIntoView({ offset: { top: 0, left: 0 } })
       .click();
 
-    cy.intercept('GET', searchEndpoint).as('entitySearch');
     cy.get('.p-autocomplete-input')
       .should('exist')
-      .type('ber');
+      .type(searchTerm);
 
-    cy.get('.p-autocomplete-option')
+    cy.wait('@entityLookup');
+    cy.get('body')
+      .find('.p-autocomplete-option')
       .should('have.length.at.least', 1)
       .first()
       .click({ force: true });
 
-    cy.wait('@entitySearch');
+    cy.wait('@entityDetails');
     cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
     PageUtils.clickButton('Save');
     cy.wait('@createContact');
