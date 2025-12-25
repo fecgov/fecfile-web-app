@@ -268,6 +268,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   }
 
   clearFormPrimaryContact() {
+    console.log('RUN??');
     TransactionContactUtils.clearFormPrimaryContact(this.form, this.transaction, this.contactIdMap['contact_1']);
   }
 
