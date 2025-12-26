@@ -1,18 +1,18 @@
 /// <reference types="cypress" />
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
-import path from 'path';
-import { spawn } from 'child_process';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
 
 const HEADER_VALUE_MAX = 200;
 const PYTHON_CANDIDATES = ['python3', 'python'] as const;
 
 const sanitizeHeaderValue = (value: string) =>
   value
-    .replace(/[\r\n]+/g, ' ')
-    .replace(/[\\/]+/g, '_')
-    .replace(/\s+/g, ' ')
+    .replaceAll(/[\r\n]+/g, ' ')
+    .replaceAll(/[\\/]+/g, '_')
+    .replaceAll(/\s+/g, ' ')
     .trim()
     .slice(0, HEADER_VALUE_MAX);
 
@@ -108,14 +108,15 @@ export const silCy = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions,
 ): Cypress.PluginConfigOptions => {
-  const existingRunId = config.env.FECFILE_PROFILE_RUN_ID || process.env.FECFILE_PROFILE_RUN_ID;
+  const existingRunId =
+    config.env["FECFILE_PROFILE_RUN_ID"] || process.env["FECFILE_PROFILE_RUN_ID"];
   const runId = existingRunId || generateRunId();
-  config.env.FECFILE_PROFILE_RUN_ID = runId;
-  process.env.FECFILE_PROFILE_RUN_ID = runId;
+  config.env["FECFILE_PROFILE_RUN_ID"] = runId;
+  process.env["FECFILE_PROFILE_RUN_ID"] = runId;
   console.log(`[profile] FECFILE_PROFILE_RUN_ID=${runId}`);
 
-  const apiRoot = process.env.FECFILE_API_ROOT;
-  const outdir = process.env.FECFILE_SILK_OUTDIR || 'silk';
+  const apiRoot = process.env["FECFILE_API_ROOT"];
+  const outdir = process.env["FECFILE_SILK_OUTDIR"] || "silk";
 
   on('after:spec', (spec: Cypress.Spec) => {
     const group = getSpecGroupName(spec);

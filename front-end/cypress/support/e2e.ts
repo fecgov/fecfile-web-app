@@ -17,9 +17,9 @@ const requestSeqByFallbackKey = new Map<string, number>();
 
 const sanitizeHeaderValue = (value: string) =>
   value
-    .replace(/[\r\n]+/g, ' ')
-    .replace(/[\\/]+/g, '_')
-    .replace(/\s+/g, ' ')
+    .replaceAll(/[\r\n]+/g, ' ')
+    .replaceAll(/[\\/]+/g, '_')
+    .replaceAll(/\s+/g, ' ')
     .trim()
     .slice(0, HEADER_VALUE_MAX);
 
@@ -27,7 +27,7 @@ const getSpecGroup = () =>
   sanitizeHeaderValue(Cypress.spec?.relative || Cypress.spec?.name || 'unknown-spec');
 
 const getCurrentTestTitle = () => {
-  const runnable = Cypress.state('runnable') as any;
+  const runnable = (Cypress as any).state('runnable');
   const test = runnable?.type === 'test' ? runnable : runnable?.ctx?.currentTest;
   if (typeof test?.fullTitle === 'function') {
     return test.fullTitle();
@@ -35,9 +35,10 @@ const getCurrentTestTitle = () => {
   return test?.title || '';
 };
 
-const getTestInstance = () => {
-  const runnable = Cypress.state('runnable') as any;
-  return runnable?.type === 'test' ? runnable : runnable?.ctx?.currentTest;
+const getTestInstance = (): object | null => {
+  const runnable = (Cypress as any).state('runnable');
+  const test = runnable?.type === 'test' ? runnable : runnable?.ctx?.currentTest;
+  return test || null;
 };
 
 const getNextSeq = (testInstance: object | null, fallbackKey: string) => {
@@ -84,7 +85,7 @@ const isApiUrl = (url?: string) => {
     return false;
   }
   try {
-    const baseUrl = Cypress.config('baseUrl') || window.location.origin;
+    const baseUrl = Cypress.config('baseUrl') || globalThis.location.origin;
     const parsed = new URL(url, baseUrl);
     return parsed.pathname.startsWith('/api/');
   } catch {
@@ -108,7 +109,7 @@ Cypress.Commands.overwrite(
     originalFn: (...args: any[]) => Cypress.Chainable<any>,
     ...args: any[]
   ) => {
-    let options: Cypress.RequestOptions;
+    let options: Partial<Cypress.RequestOptions>;
 
     if (typeof args[0] === 'string') {
       if (args.length === 1) {
@@ -123,15 +124,15 @@ Cypress.Commands.overwrite(
         options = { method: args[0], url: args[1], body: args[2] };
       }
     } else {
-      options = { ...(args[0] || {}) };
+      options = { ...(args[0]) };
     }
 
     if (isApiUrl(options.url)) {
       const headers = buildProfileHeaders();
-      options.headers = { ...(options.headers || {}), ...headers };
+      options.headers = { ...(options.headers), ...headers };
     }
 
-    return originalFn(options);
+    return originalFn(options as Cypress.RequestOptions);
   },
 );
 
