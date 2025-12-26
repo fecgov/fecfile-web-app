@@ -1,3 +1,94 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .p-datatable {
+    @include fixed-width(512px);
+    margin: 0 auto;
+    table-layout: fixed;
+  }
+
+  .name-column {
+    @include fixed-width(47%);
+  }
+  .type-column,
+  .fec-id-column {
+    @include fixed-width(19.6%);
+  }
+  .employer-column,
+  .occupation-column {
+    display: none;
+  }
+  .actions-column {
+    @include fixed-width(13.8%);
+  }
+
+  @include breakpoint('md') {
+    .p-datatable {
+      @include fixed-width(704px);
+    }
+
+    .name-column {
+      @include fixed-width(56%);
+    }
+    .type-column,
+    .fec-id-column {
+      @include fixed-width(17%);
+    }
+    .actions-column {
+      @include fixed-width(10%);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .p-datatable {
+      @include fixed-width(825px);
+    }
+
+    .name-column {
+      @include fixed-width(36.6%);
+    }
+    .type-column,
+    .fec-id-column {
+      @include fixed-width(11.7%);
+    }
+    .employer-column,
+    .occupation-column {
+      display: table-cell;
+      @include fixed-width(15.8%);
+    }
+    .actions-column {
+      @include fixed-width(8.4%);
+    }
+  }
+
+  @include breakpoint('xl') {
+    .p-datatable {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .p-datatable {
+      @include fixed-width(1052px);
+    }
+
+    .name-column {
+      @include fixed-width(43.9%);
+    }
+    .type-column,
+    .fec-id-column {
+      @include fixed-width(9.5%);
+    }
+    .employer-column,
+    .occupation-column {
+      @include fixed-width(15.2%);
+    }
+    .actions-column {
+      @include fixed-width(6.7%);
+    }
+  }
+}
+
 .restore-contact-button {
   font-weight: bold;
   color: #212121;
