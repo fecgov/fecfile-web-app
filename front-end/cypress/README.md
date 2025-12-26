@@ -37,6 +37,14 @@ With the environment variables set, run `ng e2e` (or `npx -p @angular/cli ng e2e
 
 To run in headless mode, run the command: `ng e2e --headless`
 
+## Profiling with Silk
+
+For Cypress + Silk profiling (Mode A and Mode B with Locust), see
+[`docs/README.silk.cy.md`](docs/README.silk.cy.md).
+
+For a concise pre-flight checklist and where results are stored, see
+[`docs/README.silk.meta.md`](docs/README.silk.meta.md).
+
 ## E2E tests in CircleCI
 
 A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite when triggered. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
