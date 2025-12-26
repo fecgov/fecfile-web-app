@@ -19,6 +19,7 @@
         "lint": "./node_modules/.bin/eslint 'src/**/*.ts' --max-warnings=0",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
+        "profile:e2e": "node profile-e2e.js",
         "prettier:check:ci": "./node_modules/.bin/prettier --check .",
         "prettier:fix": "./node_modules/.bin/prettier --write ."
     },
