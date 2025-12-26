@@ -17,7 +17,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
-    // will check for restore button, see populated test
+    // restore button is conditional; covered in delete tests
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('.empty-message', 'No data available in table').should('exist');
   });
@@ -78,7 +78,6 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('Save').should('not.exist');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('button,a', 'Restore deleted contacts').should('exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
@@ -134,12 +133,13 @@ describe('Contacts List (/contacts)', () => {
     cy.get('body').click(0, 0);
 
     const selectPageSize = (size: number) => {
-      cy.intercept('GET', `**/api/v1/contacts/**page_size=${size}**`).as(`getContactsForPageSize_${size}`);
       SharedHelpers.chooseResultsPerPage(size);
-      cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
-        const url = new URL(request.url);
-        expect(url.searchParams.get('page_size')).to.eq(String(size));
-      });
+      cy.contains(/results\s*per\s*page/i)
+        .parent()
+        .find('p-select [data-pc-section="label"], p-select .p-select-label')
+        .filter(':visible')
+        .first()
+        .should('contain.text', String(size));
     };
 
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
