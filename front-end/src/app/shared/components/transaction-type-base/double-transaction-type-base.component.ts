@@ -277,6 +277,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
+  childClearFormPrimaryContact() {
+    TransactionContactUtils.clearFormPrimaryContact(
+      this.childForm,
+      this.childTransaction,
+      this.childContactIdMap['contact_1'],
+    );
+  }
+
   updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inherited fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.

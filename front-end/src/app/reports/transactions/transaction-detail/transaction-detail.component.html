@@ -45,6 +45,7 @@
     [contactTypeOptions]="contactTypeOptions"
     [memoHasOptional$]="memoHasOptional$"
     (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+    (primaryContactClear)="clearFormPrimaryContact()"
     (candidateContactSelect)="updateFormWithCandidateContact($event)"
     (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
     (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"

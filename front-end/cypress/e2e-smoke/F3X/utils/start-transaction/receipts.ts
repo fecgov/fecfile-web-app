@@ -20,6 +20,11 @@ export class Receipts {
     PageUtils.clickAccordion('TRANSFERS');
     return Transfers;
   }
+
+  static Other() {
+    PageUtils.clickAccordion("OTHER");
+    return Other;
+  }
 }
 
 export class Individual {
@@ -65,5 +70,23 @@ class Refunds {
 class Transfers {
   static JointFundraising() {
     PageUtils.clickLink('Joint Fundraising Transfer');
+  }
+}
+
+class Other {
+  static OffsetsToOperatingExpenditures() {
+    PageUtils.clickLink("Offsets to Operating Expenditures");
+  }
+  static OtherReceipts() {
+    PageUtils.clickLink("Other Receipts")
+  }
+  static IndividualReceiptNonContributionAccount() {
+    PageUtils.clickLink("Individual Receipt - Non-contribution Account");
+  }
+  static OtherCommitteeReceiptNonContributionAccount() {
+    PageUtils.clickLink("Other Committee Receipt - Non-contribution Account");
+  }
+  static BusinessLaborOrganizationReceiptNonContributionAccount() {
+    PageUtils.clickLink("Business/Labor Organization Receipt - Non-contribution Account");
   }
 }
