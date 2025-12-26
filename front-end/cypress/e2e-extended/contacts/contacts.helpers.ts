@@ -813,7 +813,33 @@ export class ContactsDeleteHelpers {
   }
 
   static getRestoreDeletedContactsDialog() {
-    return ContactsDeleteHelpers.getDialogByText(/Restore deleted contacts/i);
+    const title = /Restore deleted contacts/i;
+    return cy
+      .contains(
+        'dialog, [role="dialog"], .p-dialog, app-deleted-contact, app-table, h1, h2, h3',
+        title,
+        { timeout: 10000 },
+      )
+      .should('be.visible')
+      .then(($el) => {
+        const $dialog = $el.closest('dialog, [role="dialog"], .p-dialog');
+        if ($dialog.length) {
+          return cy.wrap($dialog);
+        }
+        const $page = $el.closest('app-deleted-contact');
+        if ($page.length) {
+          return cy.wrap($page);
+        }
+        const $table = $el.closest('app-table');
+        if ($table.length) {
+          return cy.wrap($table);
+        }
+        const $datatable = $el.closest('.p-datatable');
+        if ($datatable.length) {
+          return cy.wrap($datatable);
+        }
+        return cy.wrap($el);
+      });
   }
 
   static getContactRow(contactName: string) {
@@ -911,7 +937,7 @@ export class ContactsDeleteHelpers {
   }
 
   static openRestoreDeletedContactsModal() {
-    PageUtils.clickButton('Restore deleted contacts', '', true);
+    cy.contains('button,a', 'Restore deleted contacts').should('be.visible').click({ force: true });
     const dialog = ContactsDeleteHelpers.getRestoreDeletedContactsDialog();
     dialog.contains('button', /Restore selected/i).should('be.visible');
     return dialog;

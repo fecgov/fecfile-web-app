@@ -310,10 +310,11 @@ describe('Contacts - delete guard', () => {
     cy.get('#restoreButton').should('not.be.disabled').click();
 
     cy.wait('@restoreContact');
-    cy.wait('@getContactsList');
     cy.wait('@getDeletedContacts');
 
     ContactsHelpers.assertSuccessToastMessage();
+    cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
+    cy.wait('@getContactsList');
     cy.contains('tbody tr', UNLINKED_CONTACT).should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
   });
