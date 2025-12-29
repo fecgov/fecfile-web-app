@@ -93,8 +93,67 @@ const isApiUrl = (url?: string) => {
   }
 };
 
+
+const applyApiAliases = (req: any) => {
+  const url = req.url || '';
+  const method = String(req.method || '').toUpperCase();
+  if (method === 'GET' && url.includes('/api/v1/users/get_current')) {
+    req.alias = 'GetCurrentUser';
+    return;
+  }
+  if (method === 'GET' && url.includes('/api/v1/oidc/login-redirect')) {
+    req.alias = 'GetLoggedIn';
+    return;
+  }
+  if (method === 'GET' && url.includes('/api/v1/reports/')) {
+    req.alias = 'GetReports';
+    return;
+  }
+  if (method === 'GET' && url.includes('/api/v1/transactions/previous/payee-candidate/')) {
+    req.alias = 'GetPrevious';
+    return;
+  }
+  if (
+    method === 'GET' &&
+    /\/api\/v1\/transactions\/[^/?]+\/?$/.test(url)
+  ) {
+    req.alias = 'GetTransaction';
+    return;
+  }
+  if (method === 'GET' && url.includes('/api/v1/transactions/')) {
+    if (url.includes('schedules=A')) {
+      req.alias = 'GetReceipts';
+      return;
+    }
+    if (url.includes('schedules=C,D')) {
+      req.alias = 'GetLoans';
+      return;
+    }
+    if (url.includes('schedules=B,E,F')) {
+      req.alias = 'GetDisbursements';
+      return;
+    }
+    if (url.includes('schedules=C2') && url.includes('parent=')) {
+      req.alias = 'GetC2List';
+      return;
+    }
+  }
+  if (method === 'GET' && url.includes('/api/v1/committees/')) {
+    req.alias = 'GetCommitteeAccounts';
+    return;
+  }
+  if (method === 'POST' && /\/api\/v1\/committees\/[^/]+\/activate\//.test(url)) {
+    req.alias = 'ActivateCommittee';
+    return;
+  }
+  if (method === 'GET' && url.includes('/api/v1/committee-members/')) {
+    req.alias = 'GetCommitteeMembers';
+  }
+};
+
 beforeEach(() => {
   cy.intercept({ url: '**/api/**', middleware: true }, (req) => {
+    applyApiAliases(req);
     const headers = buildProfileHeaders();
     if (Object.keys(headers).length > 0) {
       req.headers = { ...req.headers, ...headers };

@@ -20,10 +20,45 @@ export class F3xCreateReportPage {
 
   static coverageCall() {
     return cy
-      .intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' })
+      .intercept({ method: 'GET', url: '**/api/v1/reports/form-3x/coverage_dates*' }, (req) => {
+        req.continue((res) => {
+          Cypress.log({
+            name: 'coverageDates',
+            message: `${res.statusCode} ${req.url}`,
+          });
+        });
+      })
       .as('coverageDates');
   }
   static waitForCoverage() {
-    cy.wait('@coverageDates'); // the page is ready when coverage_dates has returned
+    const start = Date.now();
+    const timeoutMs = 20000;
+    const inputSelector = '[data-cy="coverage_from_date"] input, [data-cy="coverage_through_date"] input';
+
+    const check = (): Cypress.Chainable<void> =>
+      cy.get('@coverageDates.all').then((calls) => {
+        if (Array.isArray(calls) && calls.length) {
+          const latest = calls[calls.length - 1];
+          const status = latest.response?.statusCode ?? 'no-response';
+          Cypress.log({
+            name: 'coverageDates',
+            message: `${status} ${latest.request.url}`,
+          });
+          return;
+        }
+
+        if (Date.now() - start >= timeoutMs) {
+          Cypress.log({
+            name: 'coverageDates',
+            message: 'no request observed; waiting for coverage inputs',
+          });
+          cy.get(inputSelector, { timeout: 20000 }).should('be.visible');
+          return;
+        }
+
+        return cy.wait(500, { log: false }).then(check);
+      });
+
+    return check(); // the page is ready when coverage_dates has returned or inputs are visible
   }
 }

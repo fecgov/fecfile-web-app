@@ -29,12 +29,7 @@ const formData = {
 
 function clickLoan(button: string, urlCheck = '/list') {
   cy.contains('Loan Received from Bank').last().should('exist');
-  const alias = PageUtils.getAlias('');
-  cy.get(alias)
-    .find("[datatest='" + 'loans-and-debts-button' + "']")
-    .children()
-    .last()
-    .click();
+  PageUtils.clickRowActionButton('Loan Received from Bank', 'loans-and-debts-button', 'app-transaction-loans-and-debts');
   cy.contains(button).click({ force: true });
   PageUtils.urlCheck(urlCheck);
 }
@@ -125,12 +120,17 @@ function handleLoanAgreementSetup(q3: string) {
 
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
 
-    cy.intercept({
-      method: 'Post',
-    }).as('saveNewAgreement');
+    cy.intercept('POST', '**/api/v1/transactions/**').as('saveNewAgreement');
 
     PageUtils.clickButton('Save', '', true);
-    cy.wait('@saveNewAgreement');
+    const saveDeadline = Date.now() + 15000;
+    const waitForSave = (): Cypress.Chainable<void> =>
+      cy.get('@saveNewAgreement.all').then((calls: Cypress.Interception[] = []) => {
+        if (calls.length) return;
+        if (Date.now() >= saveDeadline) return;
+        return cy.wait(250, { log: false }).then(waitForSave);
+      });
+    waitForSave();
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');

@@ -10,7 +10,18 @@ import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
   static goToPage() {
+    cy.intercept('GET', /\/api\/v1\/contacts\/?(\?.*)?$/, (req) => {
+      req.on('response', (res) => {
+        const status = res.statusCode ?? 0;
+        if (status >= 400) {
+          throw new Error(`Contacts list failed with status ${status}`);
+        }
+      });
+    });
     cy.visit('/contacts');
+    cy.contains('Manage contacts', { timeout: 20000 });
+    cy.get('#button-contacts-new', { timeout: 20000 });
+    cy.get('.p-datatable-mask', { timeout: 20000 }).should('not.exist');
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {

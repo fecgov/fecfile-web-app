@@ -8,9 +8,8 @@ describe('Manage Users', () => {
   });
 
   it('should create a user', () => {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetMembers');
     UsersPage.create(userFormData);
-    cy.wait('@GetMembers');
+    cy.wait('@GetCommitteeMembers');
     cy.get('[data-cy="membership-submit"]').should('not.be.visible');
     UsersPage.assertRow(userFormData);
   });

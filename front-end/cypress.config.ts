@@ -19,7 +19,7 @@ export default defineConfig({
     reportFilename: '[status]_[datetime]-[name]',
     overwrite: false,
     html: true,
-    json: false,
+    json: true,
   },
   retries: {
     runMode: 1,

@@ -2,6 +2,7 @@ import { LoginPage } from '../../e2e-smoke/pages/loginPage';
 import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/UserFormModel';
 import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
+import { UsersHelpers } from './users.helpers';
 
 describe('Manage Users: Happy Paths', () => {
   beforeEach(() => {
@@ -10,10 +11,10 @@ describe('Manage Users: Happy Paths', () => {
 
   it('should create a new user as COMMITTEE_ADMINISTRATOR and verify table row', () => {
     const adminUser = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
-    cy.intercept('GET', '**/committee-members/**').as('GetMembers');
+    cy.intercept('GET', '**/committee-members/**').as('GetCommitteeMembers');
 
     UsersPage.create(adminUser);
-    cy.wait('@GetMembers');
+    cy.wait('@GetCommitteeMembers');
 
     PageUtils.closeToast();
     UsersPage.assertRow(adminUser, 'Pending');
@@ -61,6 +62,20 @@ describe('Manage Users: Happy Paths', () => {
   it('should delete a user and verify removal from table', () => {
     const emailToDelete = [userFormData.email, 'batch_user1@fec.gov', 'batch_user2@fec.gov', 'manager_user@fec.gov',];
     cy.intercept('DELETE', '**/committee-members/**').as('DeleteMember');
+
+    const ensureUser = (email: string, role: Roles) => {
+      UsersPage.goToPage();
+      UsersHelpers.getRowByEmail(email).then(($row) => {
+        if ($row.length) return;
+        UsersPage.create({ ...userFormData, email, role });
+        PageUtils.closeToast();
+      });
+    };
+
+    ensureUser(userFormData.email, userFormData.role as Roles);
+    ensureUser('batch_user1@fec.gov', Roles.MANAGER);
+    ensureUser('batch_user2@fec.gov', Roles.COMMITTEE_ADMINISTRATOR);
+    ensureUser('manager_user@fec.gov', Roles.MANAGER);
 
     for (const email of emailToDelete) {
       UsersPage.delete(email);

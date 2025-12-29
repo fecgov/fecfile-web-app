@@ -7,6 +7,19 @@ import {
   ContactFormData,
 } from '../../e2e-smoke/models/ContactFormModel';
 
+const waitForContactsTableReady = () => {
+  cy.get('body').then(($body) => {
+    if ($body.find('.p-datatable-mask').length) {
+      cy.get('.p-datatable-mask', { timeout: 20000 }).should('not.exist');
+    }
+  });
+};
+
+const clickAddContact = () => {
+  waitForContactsTableReady();
+  PageUtils.clickButton('Add contact');
+};
+
 describe('Contacts Add (/contacts)', () => {
   beforeEach(() => {
     Initialize();
@@ -23,7 +36,7 @@ describe('Contacts Add (/contacts)', () => {
         ...contactFormData,
         ...c.overrides,
       };
-      PageUtils.clickButton('Add contact');
+      clickAddContact();
       ContactListPage.enterFormData(formData);
       PageUtils.clickButton('Save');
       cy.contains('Save').should('not.exist');
@@ -60,7 +73,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Candidate and Committee FEC ID validation fails on bad IDs', () => {
-    PageUtils.clickButton('Add contact');
+    clickAddContact();
     ContactListPage.enterFormData({
       ...contactFormData,
       contact_type: 'Candidate',
@@ -79,7 +92,7 @@ describe('Contacts Add (/contacts)', () => {
     PageUtils.clickButton('Cancel');
     cy.contains('Save').should('not.exist');
 
-    PageUtils.clickButton('Add contact');
+    clickAddContact();
     ContactListPage.enterFormData({
       ...contactFormData,
       contact_type: 'Committee',
@@ -107,7 +120,7 @@ describe('Contacts Add (/contacts)', () => {
         ];
 
         for (const contactType of types) {
-          PageUtils.clickButton('Add contact');
+          clickAddContact();
           let formData: ContactFormData = {
             ...contactFormData,
             contact_type: contactType,
@@ -154,7 +167,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Validation: missing required fields shows error messages', () => {
-    PageUtils.clickButton('Add contact');
+    clickAddContact();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '',
@@ -180,15 +193,10 @@ describe('Contacts Add (/contacts)', () => {
     const uid = Cypress._.random(1000, 9999);
     const cases = ContactsHelpers.buildContactTypeCases(uid);
 
-    cy.intercept(
-      'GET',
-      '**/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
-    ).as('contactsReload');
-
     cy.get('tbody', { timeout: 10000 })
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
-        PageUtils.clickButton('Add contact');
+        clickAddContact();
 
         for (const c of cases) {
           cy.log(`Creating via Save & Add More: ${c.label}`);
@@ -226,7 +234,6 @@ describe('Contacts Add (/contacts)', () => {
         cy.contains('Save').should('not.exist');
 
         ContactListPage.goToPage();
-        cy.wait('@contactsReload');
         cy.get('tbody tr').should('have.length', beforeCount + cases.length);
 
         for (const c of cases) {

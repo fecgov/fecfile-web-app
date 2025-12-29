@@ -98,23 +98,7 @@ describe('Disbursements', () => {
         .should('not.contain', 'This is a required field.');
 
       // Add IE to a F24 Report
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
-      ).as('GetReceipts');
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
-      ).as('GetLoans');
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
-      ).as('GetDisbursements');
       ReportListPage.goToReportList(result.report);
-
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
 
       PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
       PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');

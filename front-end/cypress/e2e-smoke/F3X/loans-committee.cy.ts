@@ -55,7 +55,7 @@ describe('Loans', () => {
       PageUtils.urlCheck('/list');
       cy.contains('Loan By Committee').should('exist');
       cy.contains('Loan Made').should('exist');
-      PageUtils.clickElement('loans-and-debts-button');
+      PageUtils.clickRowActionButton('Loan By Committee', 'loans-and-debts-button', 'app-transaction-loans-and-debts');
       cy.contains('Receive loan repayment').click({ force: true });
 
       PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');

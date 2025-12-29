@@ -53,16 +53,150 @@ function getLoginIntervalString(sessionDur: number): string {
   return `${hour}:${minute}`;
 }
 
+function logLocationWithDebug(debugApi: boolean, label: string, prefix: string) {
+  if (!debugApi) {
+    return;
+  }
+  cy.location('href', { timeout: 20000 }).then((href) => {
+    cy.task('debugApi', prefix + ' ' + label + ': ' + href);
+  });
+}
+
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
-  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  const debugApi = Boolean(Cypress.env('DEBUG_API'));
+  const logLocation = (label: string) =>
+    logLocationWithDebug(debugApi, label, '[api] location');
+  if (debugApi) {
+    cy.task('debugApi', '[api] DEBUG_API enabled');
+    const attachLogger = (pattern: string) => {
+      cy.intercept(pattern, (req) => {
+        cy.task('debugApi', '[api] ' + req.method + ' ' + req.url);
+        req.on('response', (res) => {
+          cy.task('debugApi', '[api] ' + res.statusCode + ' ' + req.method + ' ' + req.url);
+        });
+      });
+    };
+    attachLogger('**/api/**');
+    attachLogger('**/oidc/**');
+    cy.intercept(
+      { url: '**/api/v1/reports/**', middleware: true },
+      (req) => {
+        cy.task('debugApi', '[api][reports] ' + req.method + ' ' + req.url);
+        req.on('response', (res) => {
+          cy.task('debugApi', '[api][reports] ' + res.statusCode + ' ' + req.method + ' ' + req.url);
+        });
+        req.continue();
+      },
+    );
+  }
+
+  const isRequestFlowEnabled = () => {
+    const value = Cypress.env('OIDC_REQUEST_FLOW');
+    if (value === true) {
+      return true;
+    }
+    if (value === false || value === undefined || value === null) {
+      return false;
+    }
+    return String(value).toLowerCase() === 'true' || String(value) === '1';
+  };
+  const runOidcRequestFlow = () => {
+    const apiBase =
+      Cypress.env('OIDC_API_BASE') || Cypress.env('API_URL') || 'http://localhost:8080/api/v1';
+    const authUrl = apiBase + '/oidc/authenticate';
+    const logStep = (label: string, status: number, location?: string) => {
+      if (!debugApi) {
+        return;
+      }
+      const locationSuffix = location ? ' -> ' + location : '';
+      cy.task('debugApi', '[api] oidc ' + label + ': ' + status + locationSuffix);
+    };
+    const getLocation = (headers: Record<string, string | string[] | undefined>) => {
+      const location = headers['location'] || headers['Location'];
+      if (typeof location !== 'string' || !location) {
+        throw new Error('Missing OIDC redirect location');
+      }
+      return location;
+    };
+    return cy
+      .request({ url: authUrl, followRedirect: false })
+      .then((res) => {
+        const location = getLocation(res.headers);
+        logStep('authenticate', res.status, location);
+        return cy.request({ url: location, followRedirect: false });
+      })
+      .then((res) => {
+        const location = getLocation(res.headers);
+        logStep('authorize', res.status, location);
+        return cy.request({ url: location, followRedirect: false });
+      })
+      .then((res) => {
+        const location = getLocation(res.headers);
+        logStep('callback', res.status, location);
+        return cy.request({ url: location, followRedirect: false });
+      })
+      .then((res) => {
+        const location = getLocation(res.headers);
+        logStep('login-redirect', res.status, location);
+      });
+  };
 
   cy.visit('/');
-  cy.get('#loginButton').click();
-  cy.wait('@GetLoggedIn');
+  logLocation('before login click');
+  const baseOrigin = new URL(Cypress.config('baseUrl') || 'http://localhost:4200').origin;
+  if (isRequestFlowEnabled()) {
+    if (debugApi) {
+      cy.task('debugApi', '[api] OIDC request flow enabled');
+    }
+    runOidcRequestFlow().then(() => {
+      cy.visit('/');
+    });
+    cy.location('origin', { timeout: 20000 }).should('eq', baseOrigin);
+  } else {
+    cy.get('#loginButton').click();
+    const oidcOrigin = Cypress.env('OIDC_ORIGIN') || 'http://localhost:8080';
+    cy.origin(
+      oidcOrigin,
+      { args: { oidcOrigin } },
+      ({ oidcOrigin }) => {
+        const authorizePath = '/api/v1/mock_oidc_provider/authorize';
+        const callbackPath = '/api/v1/oidc/callback';
+        const debugApi = Boolean(Cypress.env('DEBUG_API'));
+        const logHref = (label: string) => {
+          if (!debugApi) {
+            return;
+          }
+          cy.url({ timeout: 20000 }).then((href) => {
+            cy.task('debugApi', '[api] location ' + label + ': ' + href);
+          });
+        };
+
+        cy.location('origin', { timeout: 20000 }).should('eq', oidcOrigin);
+        logHref('oidc origin');
+        cy.location('pathname', { timeout: 20000 }).then((pathname) => {
+          if (debugApi) {
+            cy.task('debugApi', '[api] oidc pathname: ' + pathname);
+          }
+          if (pathname.includes(authorizePath)) {
+            logHref('oidc authorize');
+            cy.location('pathname', { timeout: 20000 }).should('include', callbackPath);
+            logHref('oidc callback');
+            return;
+          }
+          cy.location('pathname', { timeout: 20000 }).should('include', callbackPath);
+          logHref('oidc callback');
+        });
+      },
+    );
+    cy.location('origin', { timeout: 20000 }).should('eq', baseOrigin);
+  }
+  logLocation('after oidc return');
+  cy.wait('@GetCurrentUser', { timeout: 20000 });
+  cy.window({ timeout: 20000 })
+    .its('localStorage')
+    .invoke('getItem', 'fecfile_online_userLoginData')
+    .should('not.be.null');
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
   cy.get('[data-cy="consent-button"]').click();
@@ -100,6 +234,7 @@ function retrieveAuthToken() {
 }
 
 export function Initialize() {
+  attachTransactionDiagnostics();
   LoginPage.login();
   ReportListPage.deleteAllReports();
   ContactListPage.deleteAllContacts();
@@ -120,4 +255,46 @@ export function setCommitteeToPTY() {
   json.isPAC = false;
   json.isPTY = true;
   localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
+}
+
+function attachTransactionDiagnostics() {
+  const debugApi = Boolean(Cypress.env('DEBUG_API'));
+  if (!debugApi) {
+    return;
+  }
+
+  const log = (message: string) => cy.task('debugApi', message);
+  const normalizeValue = (value: unknown) => (Array.isArray(value) ? value[0] : value);
+  const summarizeBody = (body: unknown) => {
+    try {
+      const text = JSON.stringify(body);
+      return text.length > 1000 ? `${text.slice(0, 1000)}…` : text;
+    } catch (error) {
+      return '[unserializable]';
+    }
+  };
+
+  const logFailure = (req: any, res: any) => {
+    if (res.statusCode < 500) {
+      return;
+    }
+    const reportId = normalizeValue((req.query || {}).report_id) ?? (req.body as any)?.report_id;
+    const schedules = normalizeValue((req.query || {}).schedules);
+    const endpoint = req.url.split('?')[0];
+    log(
+      `[api] transactions ${res.statusCode} ${req.method} ${endpoint} report_id=${reportId ?? 'n/a'} schedules=${schedules ?? 'n/a'}`,
+    );
+    if (req.method === 'POST') {
+      log(`[api] transactions body ${summarizeBody(req.body)}`);
+    }
+  };
+
+  const attach = (method: Cypress.HttpMethod) => {
+    cy.intercept({ method, url: '**/api/v1/transactions/**' }, (req) => {
+      req.continue((res) => logFailure(req, res));
+    });
+  };
+
+  attach('GET');
+  attach('POST');
 }

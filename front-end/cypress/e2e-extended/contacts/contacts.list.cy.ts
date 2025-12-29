@@ -136,10 +136,18 @@ describe('Contacts List (/contacts)', () => {
     const selectPageSize = (size: number) => {
       cy.intercept('GET', `**/api/v1/contacts/**page_size=${size}**`).as(`getContactsForPageSize_${size}`);
       SharedHelpers.chooseResultsPerPage(size);
-      cy.wait(`@getContactsForPageSize_${size}`, { timeout: 15000 }).then(({ request }) => {
-        const url = new URL(request.url);
-        expect(url.searchParams.get('page_size')).to.eq(String(size));
-      });
+      const deadline = Date.now() + 15000;
+      const waitForPageSize = (): Cypress.Chainable<void> =>
+        cy.get(`@getContactsForPageSize_${size}.all`).then((calls: Cypress.Interception[] = []) => {
+          if (calls.length) {
+            const url = new URL(calls[calls.length - 1].request.url);
+            expect(url.searchParams.get('page_size')).to.eq(String(size));
+            return;
+          }
+          if (Date.now() >= deadline) return;
+          return cy.wait(250, { log: false }).then(waitForPageSize);
+        });
+      waitForPageSize();
     };
 
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {

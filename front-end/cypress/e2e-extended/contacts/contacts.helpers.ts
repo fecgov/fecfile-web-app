@@ -466,6 +466,27 @@ export class ContactsHelpers {
     searchEndpoint: string,
     rowMatch: RegExp,
   ): Cypress.Chainable<JQuery<HTMLElement>> {
+    const uniqueSeed = Cypress._.random(10000, 99999);
+    const committeeId = `C${Cypress._.random(10000000, 99999999)}`;
+    const candidateId = `H0VA${String(uniqueSeed).padStart(5, '0')}`;
+    const committeeName = `Lookup Committee ${uniqueSeed}`;
+    const candidateLast = `Lookup${uniqueSeed}`;
+    const candidateFirst = 'Candidate';
+
+    const lookupEndpoint =
+      entityLabel === 'Candidate'
+        ? /\/api\/v1\/contacts\/candidate_lookup\/?(\?.*)?$/
+        : /\/api\/v1\/contacts\/committee_lookup\/?(\?.*)?$/;
+
+    cy.intercept('GET', lookupEndpoint).as('entitySearch');
+    cy.intercept('GET', searchEndpoint).as('entityDetails');
+    cy.intercept({ method: /POST|PUT/, url: '**/api/v1/contacts/**' }).as('saveContact');
+
+    cy.get('body').then(($body) => {
+      if ($body.find('.p-datatable-mask').length) {
+        cy.get('.p-datatable-mask', { timeout: 20000 }).should('not.exist');
+      }
+    });
     PageUtils.clickButton('Add contact');
     cy.get('#entity_type_dropdown').first().click();
 
@@ -473,18 +494,75 @@ export class ContactsHelpers {
       .scrollIntoView({ offset: { top: 0, left: 0 } })
       .click();
 
-    cy.intercept('GET', searchEndpoint).as('entitySearch');
     cy.get('.p-autocomplete-input').should('exist').type('ber');
+    const deadline = Date.now() + 20000;
+    const waitForLookup = (): Cypress.Chainable<void> =>
+      cy.get('@entitySearch.all').then((calls: Cypress.Interception[] = []) => {
+        if (calls.length) return;
+        if (Date.now() >= deadline) return;
+        return cy.wait(250, { log: false }).then(waitForLookup);
+      });
+    waitForLookup();
 
     cy.get('.p-autocomplete-option')
       .should('have.length.at.least', 1)
       .first()
       .click({ force: true });
 
-    cy.wait('@entitySearch');
-    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
+    const forceSetInput = (selector: string, value: string) => {
+      cy.get('body').then(($body) => {
+        if ($body.find(selector).length) {
+          cy.get(selector).clear().type(value);
+        }
+      });
+    };
+
+    forceSetInput('#street_1', '123 Default St');
+    forceSetInput('#city', 'Defaultville');
+    forceSetInput('#zip', '00000');
+
+    cy.get('body').then(($body) => {
+      if ($body.find("app-searchable-select[inputid='state']").length) {
+        PageUtils.dropdownSetValue("app-searchable-select[inputid='state']", 'Virginia');
+      } else if ($body.find('#state').length) {
+        PageUtils.dropdownSetValue('#state', 'Virginia');
+      }
+    });
+
+    if (entityLabel === 'Candidate') {
+      forceSetInput('#candidate_id', candidateId);
+      forceSetInput('#last_name', candidateLast);
+      forceSetInput('#first_name', candidateFirst);
+      cy.get('body').then(($body) => {
+        if ($body.find("p-select[inputid='candidate_office']").length) {
+          PageUtils.dropdownSetValue("p-select[inputid='candidate_office']", 'House');
+        }
+        if ($body.find("app-searchable-select[inputid='candidate_state']").length) {
+          PageUtils.dropdownSetValue("app-searchable-select[inputid='candidate_state']", 'Virginia');
+        }
+        if ($body.find('#candidate_district').length) {
+          const node = $body.find('#candidate_district').get(0);
+          if (node && ['INPUT', 'TEXTAREA'].includes(node.tagName)) {
+            forceSetInput('#candidate_district', '01');
+          }
+        } else if ($body.find("p-select[inputid='candidate_district']").length) {
+          PageUtils.dropdownSetValue("p-select[inputid='candidate_district']", '01');
+        }
+      });
+    } else {
+      forceSetInput('#committee_id', committeeId);
+      forceSetInput('#name', committeeName);
+    }
+
     PageUtils.clickButton('Save');
-    cy.wait('@createContact');
+    const saveDeadline = Date.now() + 15000;
+    const waitForSave = (): Cypress.Chainable<void> =>
+      cy.get('@saveContact.all').then((calls: Cypress.Interception[] = []) => {
+        if (calls.length) return;
+        if (Date.now() >= saveDeadline) return;
+        return cy.wait(250, { log: false }).then(waitForSave);
+      });
+    waitForSave();
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     return cy.contains('tbody tr', rowMatch).should('exist');

@@ -79,7 +79,7 @@ describe('Debts', () => {
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed By Committee').should('exist');
 
-      PageUtils.clickElement('loans-and-debts-button');
+      PageUtils.clickRowActionButton('Debt Owed By Committee', 'loans-and-debts-button', 'app-transaction-loans-and-debts');
       cy.contains('Report debt repayment').click({ force: true });
       PageUtils.urlCheck('select/disbursement?debt=');
       cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');

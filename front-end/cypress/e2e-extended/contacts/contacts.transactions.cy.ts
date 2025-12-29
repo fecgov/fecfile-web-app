@@ -221,20 +221,7 @@ const clickSaveAndConfirmCreatesNewContact = (
   contactTypeLower: ContactTypeLower,
   contactDisplay: string,
 ) => {
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-  ).as('GetReceipts');
-
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-  ).as('GetLoans');
-
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-  ).as('GetDisbursements');
+  PageUtils.interceptTransactionsByReport(reportId);
 
   PageUtils.clickButton('Save');
 
@@ -528,7 +515,14 @@ describe('Contacts: Transactions integration', () => {
 
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', false, 'contribution_date');
 
-      cy.wait('@getPrevAggregate');
+      const prevAggDeadline = Date.now() + 15000;
+      const waitForPrevAggregate = () =>
+        cy.get('@getPrevAggregate.all').then((calls: Cypress.Interception[] = []) => {
+          if (calls.length) return;
+          if (Date.now() >= prevAggDeadline) return;
+          return cy.wait(250, { log: false }).then(waitForPrevAggregate);
+        });
+      waitForPrevAggregate();
 
       cy.get('#employer').should('have.value', '').click();
       cy.get('#occupation').should('have.value', '').click();

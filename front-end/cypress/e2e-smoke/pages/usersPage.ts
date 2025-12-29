@@ -3,9 +3,8 @@ import { PageUtils } from './pageUtils';
 
 export class UsersPage {
   static goToPage(alias = '') {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/?page=1**').as('GetMembers');
     cy.visit('/committee/members');
-    cy.wait('@GetMembers');
+    cy.wait('@GetCommitteeMembers');
   }
 
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {

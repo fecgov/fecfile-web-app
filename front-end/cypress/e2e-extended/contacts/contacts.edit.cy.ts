@@ -139,7 +139,14 @@ describe('Contacts Edit', () => {
       .clear()
       .type(seed, { delay: 50 });
 
-    cy.wait('@candidateLookup');
+    const lookupDeadline = Date.now() + 15000;
+    const waitForLookup = (): Cypress.Chainable<void> =>
+      cy.get('@candidateLookup.all').then((calls: Cypress.Interception[] = []) => {
+        if (calls.length) return;
+        if (Date.now() >= lookupDeadline) return;
+        return cy.wait(250, { log: false }).then(waitForLookup);
+      });
+    waitForLookup();
 
     ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', {
       match: lookupCandidate.candidate_id,

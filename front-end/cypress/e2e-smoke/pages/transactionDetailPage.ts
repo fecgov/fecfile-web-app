@@ -258,18 +258,7 @@ export class TransactionDetailPage {
   }
 
   static clickSave(reportId: string) {
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-    ).as('GetReceipts');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-    ).as('GetLoans');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-    ).as('GetDisbursements');
+    PageUtils.interceptTransactionsByReport(reportId);
     cy.contains(/^Save$/).click();
 
     cy.wait('@GetLoans');
@@ -278,29 +267,23 @@ export class TransactionDetailPage {
   }
 
   static addGuarantor(name: string, amount: number | string, reportId: string) {
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-    ).as('GetReceipts');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-    ).as('GetLoans');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-    ).as('GetDisbursements');
+    PageUtils.interceptTransactionsByReport(reportId);
 
     PageUtils.clickButton('Save & add loan guarantor');
     PageUtils.closeToast();
     cy.contains('Guarantors to loan source').should('exist');
     ContactLookup.getContact(name);
     cy.get('#amount').safeType(amount);
-    cy.intercept({
-      method: 'Post',
-    }).as('saveGuarantor');
+    cy.intercept('POST', '**/api/v1/transactions/**').as('saveGuarantor');
     PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@saveGuarantor');
+    const saveDeadline = Date.now() + 15000;
+    const waitForSave = (): Cypress.Chainable<void> =>
+      cy.get('@saveGuarantor.all').then((calls: Cypress.Interception[] = []) => {
+        if (calls.length) return;
+        if (Date.now() >= saveDeadline) return;
+        return cy.wait(250, { log: false }).then(waitForSave);
+      });
+    waitForSave();
     PageUtils.closeToast();
     PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
     PageUtils.clickButton('Cancel');

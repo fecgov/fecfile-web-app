@@ -70,9 +70,10 @@ describe('Manage reports', () => {
 
       ReportListPage.createF1M();
       PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
-      cy.get('[data-cy="state-party-radio"]').click();
-      cy.get('[data-cy="qualification-radio"]').click();
-      cy.get('[data-cy="qualification-radio"]').click();
+      cy.get('[data-cy="state-party-radio"]').filter(':visible').first().click();
+      const qualificationRadio = () => cy.get('[data-cy="qualification-radio"]').filter(':visible').first();
+      qualificationRadio().click();
+      qualificationRadio().click();
       PageUtils.calendarSetValue('[data-cy="date_of_51st_contributor"]');
       PageUtils.calendarSetValue('[data-cy="date_of_original_registration"]');
       PageUtils.calendarSetValue('[data-cy="date_committee_met_requirements"]');

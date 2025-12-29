@@ -10,6 +10,8 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
     cy.get(alias)
       .find("[datatest='" + elementSelector + "']")
+      .filter(':visible')
+      .first()
       .click();
   }
 
@@ -111,9 +113,90 @@ export class PageUtils {
     return alias;
   }
 
+  static escapeRegExp(value: string) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   static clickLink(name: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('a', name).click();
+    const target = name.replace(/\s+/g, ' ').trim().toLowerCase();
+    const exactMatch = new RegExp(`^\\s*${PageUtils.escapeRegExp(name)}\\s*$`, 'i');
+    cy.get(alias).then(($root) => {
+      const panelMenu = $root.find('p-panelmenu');
+      if (panelMenu.length) {
+        const panelLink = panelMenu.find('a').filter((_, el) => {
+          const text = (el.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+          return text === target && Cypress.$(el).is(':visible');
+        });
+        if (panelLink.length) {
+          cy.wrap(panelLink.first()).click({ force: true });
+          return;
+        }
+      }
+
+      const picker = $root.find('app-transaction-type-picker');
+      if (picker.length) {
+        cy.wrap(picker).contains('a', exactMatch).filter(':visible').first().click({ force: true });
+        return;
+      }
+
+      const f24Picker = $root.find('app-transaction-independent-expenditure-picker');
+      if (f24Picker.length) {
+        cy.wrap(f24Picker).contains('a', exactMatch).filter(':visible').first().click({ force: true });
+        return;
+      }
+
+      cy.wrap($root).contains('a', exactMatch).filter(':visible').first().click({ force: true });
+    });
+  }
+
+  static waitForTransactionTypePicker() {
+    cy.get('app-transaction-type-picker, app-transaction-independent-expenditure-picker', {
+      timeout: 10000,
+    })
+      .should('exist')
+      .then(($picker) => {
+        const accordionPicker = $picker.filter('app-transaction-type-picker').first();
+        if (accordionPicker.length) {
+          cy.wrap(accordionPicker).find('p-accordion-header').should('exist');
+          return;
+        }
+        const f24Picker = $picker.filter('app-transaction-independent-expenditure-picker').first();
+        cy.wrap(f24Picker).find('a').first().should('exist');
+      });
+  }
+
+  static clickRowActionButton(rowText: string, datatest: string, containerSelector = '') {
+    const scope = containerSelector ? cy.get(containerSelector) : cy.get(PageUtils.getAlias(''));
+    scope
+      .contains('tr', rowText)
+      .should('exist')
+      .first()
+      .within(() => {
+        cy.get(`[datatest='${datatest}']`).filter(':visible').first().click();
+      });
+  }
+
+  static interceptTransactionsByReport(
+    reportId: string,
+    includeReceipts = true,
+    includeDisbursements = true,
+    includeLoans = true,
+  ) {
+    cy.intercept('GET', '**/api/v1/transactions/**', (req) => {
+      const reportQuery = req.query?.report_id;
+      const reportQueryValue = Array.isArray(reportQuery) ? reportQuery[0] : reportQuery;
+      if (String(reportQueryValue ?? '') !== String(reportId)) {
+        return;
+      }
+
+      const schedulesQuery = req.query?.schedules;
+      const schedules = Array.isArray(schedulesQuery) ? schedulesQuery.join(',') : schedulesQuery;
+
+      if (includeReceipts && schedules === 'A') req.alias = 'GetReceipts';
+      if (includeLoans && schedules === 'C,D') req.alias = 'GetLoans';
+      if (includeDisbursements && schedules === 'B,E,F') req.alias = 'GetDisbursements';
+    });
   }
 
   static clickAccordion(name: string, alias = '') {

@@ -6,7 +6,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 
 const HEADER_VALUE_MAX = 200;
-const PYTHON_CANDIDATES = ['python3', 'python'] as const;
+const PYTHON_CANDIDATES = ['python3', 'python'];
 
 const sanitizeHeaderValue = (value: string) =>
   value
@@ -52,10 +52,24 @@ const runPython = (pythonBin: string, args: string[], cwd: string) =>
       resolve(result);
     };
 
-    const proc = spawn(pythonBin, args, { cwd, stdio: 'inherit' });
+    const proc = spawn(pythonBin, args, {
+      cwd,
+      stdio: 'inherit',
+      env: { ...process.env, ENABLE_RESTRICTED_COMMANDS: '1' },
+    });
     proc.on('error', (error) => done({ pythonBin, error }));
     proc.on('close', (code) => done({ pythonBin, code: code ?? 1 }));
   });
+
+const getPythonCandidates = () => {
+  const configuredPython = process.env["FECFILE_API_PYTHON"];
+  const candidates: string[] = [];
+  if (configuredPython) {
+    candidates.push(configuredPython);
+  }
+  candidates.push(...PYTHON_CANDIDATES);
+  return candidates;
+};
 
 const maybeExportSilk = async ({
   apiRoot,
@@ -86,7 +100,7 @@ const maybeExportSilk = async ({
     args.push('--group', group);
   }
 
-  for (const pythonBin of PYTHON_CANDIDATES) {
+  for (const pythonBin of getPythonCandidates()) {
     const result = await runPython(pythonBin, args, resolvedApiRoot);
     if (result.error) {
       if ((result.error as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -108,6 +122,13 @@ export const silCy = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions,
 ): Cypress.PluginConfigOptions => {
+  on('task', {
+    debugApi(message: string) {
+      console.log(message);
+      return null;
+    },
+  });
+
   const existingRunId =
     config.env["FECFILE_PROFILE_RUN_ID"] || process.env["FECFILE_PROFILE_RUN_ID"];
   const runId = existingRunId || generateRunId();

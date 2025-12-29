@@ -5,7 +5,7 @@ import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { UsersHelpers } from './users.helpers';
 import { SharedHelpers } from '../utils/shared.helpers';
 
-const ADD_MEMBER_POST = '**/committee-members/add-member/**';
+const ADD_MEMBER_POST = '**/committee-members/add-member*';
 const LIST_MEMBERS_GET = '**/committee-members/**';
 const DIALOG = "#content-offset app-committee-member-dialog";
 
@@ -83,10 +83,11 @@ describe("Users: Validation and API failure states", () => {
   it('should stub 500 on invite, keep submit enabled, then succeed on retry', () => {
     const adminUser = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
     UsersHelpers.stubOnce('POST', ADD_MEMBER_POST, { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
-    cy.intercept('GET', LIST_MEMBERS_GET).as('GetMembers');
+    cy.intercept('GET', LIST_MEMBERS_GET).as('GetCommitteeMembers');
     PageUtils.clickButton('Add user');
     cy.get(DIALOG).filter(':visible').first().as('dialog');
     UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
+    PageUtils.dropdownSetValue("app-select[inputid='role']", adminUser.role, '@dialog');
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
@@ -95,7 +96,7 @@ describe("Users: Validation and API failure states", () => {
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
-    cy.wait('@GetMembers');
+    cy.wait('@GetCommitteeMembers');
     PageUtils.closeToast();
     UsersPage.assertRow(adminUser, 'Pending');
   });
@@ -103,6 +104,8 @@ describe("Users: Validation and API failure states", () => {
 
   it('should stub 500 on delete of user, keep row, then succeed on retry', () => {
     const target = userFormData.email;
+    UsersPage.create({ ...userFormData, email: target });
+    PageUtils.closeToast();
     UsersPage.assertRow({ ...userFormData, email: target }, 'Pending');
     cy.intercept(
       { method: 'DELETE', url: '**/committee-members/**', times: 1 },

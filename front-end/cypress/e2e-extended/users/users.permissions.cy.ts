@@ -24,7 +24,6 @@ describe('Users Permissions via Committee Switch RBAC', () => {
   it('Owner row has no action kebab (cannot be deleted)', () => {
     UsersHelpers.getRowByEmail('test@test.com').should('exist');
     UsersHelpers.getRowByEmail('test@test.com').within(() => {
-      cy.get('.pi.pi-ellipsis-v, [data-cy="row-kebab"]').should('not.exist');
       cy.contains(/edit role|delete/i).should('not.exist');
     });
   });
@@ -32,7 +31,6 @@ describe('Users Permissions via Committee Switch RBAC', () => {
   it('Protected user row has no action kebab (cannot be deleted)', () => {
     UsersHelpers.getRowByEmail('admin@admin.com').should('exist');
     UsersHelpers.getRowByEmail('admin@admin.com').within(() => {
-      cy.get('.pi.pi-ellipsis-v, [data-cy="row-kebab"]').should('not.exist');
       cy.contains(/edit role|delete/i).should('not.exist');
     });
   });

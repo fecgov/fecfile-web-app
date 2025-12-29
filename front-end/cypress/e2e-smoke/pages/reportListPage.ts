@@ -22,13 +22,20 @@ export class ReportListPage {
   }
 
   static deleteAllReports() {
+    const url = 'http://localhost:8080/api/v1/reports/e2e-delete-all-reports/';
     cy.getCookie('csrftoken').then((cookie) => {
       cy.request({
         method: 'POST',
-        url: 'http://localhost:8080/api/v1/reports/e2e-delete-all-reports/',
+        url,
+        failOnStatusCode: false,
         headers: {
           'x-csrftoken': cookie?.value,
         },
+      }).then((response) => {
+        Cypress.log({ name: 'e2e-delete-all-reports', message: `${response.status} ${url}` });
+        if (response.status >= 400) {
+          throw new Error(`e2e-delete-all-reports failed with status ${response.status}`);
+        }
       });
     });
   }
@@ -76,21 +83,7 @@ export class ReportListPage {
   }
 
   static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    if (includeReceipts)
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-      ).as('GetReceipts');
-    if (includeLoans)
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-      ).as('GetLoans');
-    if (includeDisbursements)
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-      ).as('GetDisbursements');
+    PageUtils.interceptTransactionsByReport(reportId, includeReceipts, includeDisbursements, includeLoans);
     cy.visit(`/reports/transactions/report/${reportId}/list`);
     if (includeLoans) cy.wait('@GetLoans');
     if (includeDisbursements) cy.wait('@GetDisbursements');
