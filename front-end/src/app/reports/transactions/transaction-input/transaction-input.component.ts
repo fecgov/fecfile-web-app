@@ -61,6 +61,7 @@ export class TransactionInputComponent implements OnInit {
   @Input() isSingle = false;
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() primaryContactClear = new EventEmitter<void>();
   @Output() candidateContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() secondaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() tertiaryContactSelect = new EventEmitter<SelectItem<Contact>>();
@@ -92,12 +93,20 @@ export class TransactionInputComponent implements OnInit {
   }
 
   contactTypeSelected(contactType: ContactTypes) {
-    this.form.get('entity_type')?.setValue(contactType);
+    const currentType = this.form.get('entity_type')?.value;
+    if (contactType !== currentType) {
+      this.form.get('entity_type')?.setValue(contactType);
+      this.clearFormPrimaryContact();
+    }
   }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
     this.form.get('entity_type')?.setValue(selectItem.value.type);
     this.primaryContactSelect.emit(selectItem);
+  }
+
+  clearFormPrimaryContact() {
+    this.primaryContactClear.emit();
   }
 
   updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
