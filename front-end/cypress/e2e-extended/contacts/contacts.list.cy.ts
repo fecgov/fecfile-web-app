@@ -17,7 +17,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
     cy.get('p-table table, table').first().should('exist');
     cy.contains('button,a', 'Add contact').should('exist');
-    // will check for restore button, see populated test
+    // restore button is conditional; covered in delete tests
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('.empty-message', 'No data available in table').should('exist');
   });
