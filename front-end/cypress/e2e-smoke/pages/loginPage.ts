@@ -55,26 +55,86 @@ function getLoginIntervalString(sessionDur: number): string {
 
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
-  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.intercept('GET', '**/api/v1/committees*').as('GetCommitteeAccounts');
+  cy.intercept('POST', '**/api/v1/committees/*/activate*').as('ActivateCommittee');
+  cy.intercept('GET', '**/api/v1/committee-members*').as('GetCommitteeMembers');
+
+  const debugApi =
+    Cypress.env('DEBUG_API') === true || Cypress.env('DEBUG_API') === 'true' || Cypress.env('DEBUG_API') === '1';
+  const apiLogKey = 'API_LOG_QUEUE';
+  const queueApiLog = (message: string) => {
+    if (!debugApi) return;
+    const logs = (Cypress.env(apiLogKey) as string[] | undefined) ?? [];
+    logs.push(message);
+    Cypress.env(apiLogKey, logs);
+    Cypress.log({ name: 'api', message });
+  };
+  const flushApiLogs = () => {
+    if (!debugApi) return;
+    cy.then(() => {
+      const logs = (Cypress.env(apiLogKey) as string[] | undefined) ?? [];
+      Cypress.env(apiLogKey, []);
+      return logs;
+    }).then((logs) => {
+      let chain = cy.wrap(null, { log: false });
+      logs.forEach((message) => {
+        chain = chain.then(() => cy.task('api:log', message, { log: false }));
+      });
+      return chain;
+    });
+  };
+
+  queueApiLog('[api] DEBUG_API enabled');
+  cy.location('href').then((href) => queueApiLog(`[api] location before login click: ${href}`));
+
+  const oidcRoutes = [
+    { label: 'authenticate', url: '**/api/v1/oidc/authenticate*' },
+    { label: 'authorize', url: '**/api/v1/mock_oidc_provider/authorize*' },
+    { label: 'callback', url: '**/api/v1/oidc/callback*' },
+    { label: 'login-redirect', url: '**/api/v1/oidc/login-redirect*' },
+  ];
+
+  oidcRoutes.forEach(({ label, url }) => {
+    cy.intercept('GET', url, (req) => {
+      req.on('response', (res) => {
+        queueApiLog(
+          `[api] oidc ${label}: ${res.statusCode} -> ${res.headers?.['location'] ?? 'n/a'}`,
+        );
+      });
+    });
+  });
 
   cy.visit('/');
   cy.get('#loginButton').click();
-  cy.wait('@GetLoggedIn');
+
+  queueApiLog('[api] OIDC request flow enabled');
+  cy.origin(
+    'http://localhost:8080',
+    { args: { debugApi } },
+    ({ debugApi }) => {
+      cy.location('href', { timeout: 15000 }).then((href) => {
+        if (debugApi) {
+          Cypress.log({ name: 'api', message: `[api] location during oidc flow: ${href}` });
+        }
+      });
+    },
+  );
+
+  cy.location('href', { timeout: 15000 }).should('include', 'localhost:4200');
+  cy.location('href').then((href) => queueApiLog(`[api] location after oidc return: ${href}`));
+  flushApiLogs();
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
   cy.get('[data-cy="consent-button"]').click();
-  cy.wait('@GetCommitteeAccounts');
+  cy.wait('@GetCommitteeAccounts', { timeout: 15000 });
   cy.get('.committee-list .committee-info').first().click();
-  cy.wait('@ActivateCommittee');
+  cy.wait('@ActivateCommittee', { timeout: 15000 });
 
   // Wait for the reports page to load
   cy.contains('Manage reports').should('exist');
 
   // Creates a second create admin after logging in if necessary
-  cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
+  cy.wait('@GetCommitteeMembers', { timeout: 15000 }); // Wait for the guard request to resolve
   cy.get(alias)
     .find('[data-cy="second-committee-email"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist

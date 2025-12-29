@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { setupSilk } from './cypress.silk';
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
@@ -28,5 +29,8 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
+    setupNodeEvents(on, config) {
+      return setupSilk(on, config);
+    },
   },
 });

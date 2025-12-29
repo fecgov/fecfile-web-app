@@ -29,6 +29,7 @@
         "@angular/router": "20.3.9",
         "@ngrx/effects": "20.1.0",
         "@ngrx/store": "20.1.0",
+        "@primeuix/themes": "1.2.5",
         "@types/lodash": "4.17.20",
         "@types/luxon": "3.7.1",
         "class-transformer": "0.5.1",
@@ -43,7 +44,6 @@
         "primeflex": "4.0.0",
         "primeicons": "7.0.0",
         "primeng": "20.3.0",
-        "@primeuix/themes": "1.2.5",
         "typescript": "5.8.3"
     },
     "devDependencies": {
@@ -67,7 +67,7 @@
         "@eslint/js": "9.34.0",
         "@faker-js/faker": "8.4.1",
         "@types/jasmine": "3.10.18",
-        "@types/node": "20.19.11",
+        "@types/node": "^20.19.11",
         "@typescript-eslint/eslint-plugin": "8.41.0",
         "@typescript-eslint/parser": "8.41.0",
         "cypress": "^15.5.0",

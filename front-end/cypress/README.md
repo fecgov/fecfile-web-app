@@ -37,6 +37,23 @@ With the environment variables set, run `ng e2e` (or `npx -p @angular/cli ng e2e
 
 To run in headless mode, run the command: `ng e2e --headless`
 
+## Silk profiling (optional)
+
+Silk profiling can be enabled for Cypress runs to capture `/api/` performance data.
+
+1. Enable Silk on the API side with `FECFILE_SILK_ENABLED=1` and restart the backend.
+2. Point Cypress at the backend repo by setting `FECFILE_WEB_API_DIR` to the directory that contains
+   `manage.py` (typically `fecfile-web-api/django-backend`).
+3. Run Cypress ` npx ng e2e  --headless --watch=false --browser chrome`
+   A run id is printed at startup and each spec automatically triggers a
+   `python manage.py silk_export` to write artifacts.
+
+Artifacts are written to `silk-artifacts/<run-id>/<spec>/summary.json` with an index at
+`silk-artifacts/<run-id>/index.json` and an overall `silk-artifacts/<run-id>/summary.json`.
+You can override the output directory with `SILK_OUTDIR` or provide a custom run id with
+`SILK_RUN_ID`. If the exporter cannot find Python, set `SILK_PYTHON` (or `PYTHON_BIN`) to
+an absolute path like `/usr/bin/python3`.
+
 ## E2E tests in CircleCI
 
 A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite when triggered. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
