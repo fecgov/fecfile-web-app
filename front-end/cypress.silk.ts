@@ -24,10 +24,7 @@ function sanitizeSpecName(name: string): string {
 
   for (const ch of trimmed) {
     const code = ch.charCodeAt(0);
-    const isAlphaNum =
-      (code >= 48 && code <= 57) ||
-      (code >= 65 && code <= 90) ||
-      (code >= 97 && code <= 122);
+    const isAlphaNum = (code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
     const isAllowed = isAlphaNum || ch === '.' || ch === '_' || ch === '-';
 
     if (isAllowed) {
@@ -50,9 +47,7 @@ function sanitizeSpecName(name: string): string {
 }
 
 function resolveApiDir(config: PluginConfigOptions): string | null {
-  const candidates = [config.env?.FECFILE_WEB_API_DIR, process.env.FECFILE_WEB_API_DIR].filter(
-    Boolean,
-  ) as string[];
+  const candidates = [config.env?.FECFILE_WEB_API_DIR, process.env.FECFILE_WEB_API_DIR].filter(Boolean) as string[];
 
   for (const candidate of candidates) {
     const resolved = path.resolve(candidate);
@@ -64,10 +59,7 @@ function resolveApiDir(config: PluginConfigOptions): string | null {
   return null;
 }
 
-function resolvePythonBin(
-  config: PluginConfigOptions,
-  apiDir: string,
-): string | null {
+function resolvePythonBin(config: PluginConfigOptions, apiDir: string): string | null {
   const apiDirCandidates = [
     path.join(apiDir, '.venv', 'bin', 'python'),
     path.join(apiDir, 'venv', 'bin', 'python'),
@@ -98,9 +90,7 @@ function resolvePythonBin(
     }
   }
 
-  console.warn(
-    '[silk] Skipping export: set SILK_PYTHON or PYTHON_BIN to an absolute python path',
-  );
+  console.warn('[silk] Skipping export: set SILK_PYTHON or PYTHON_BIN to an absolute python path');
   return null;
 }
 
@@ -113,16 +103,10 @@ function pythonHasStructlog(pythonBin: string, apiDir: string): boolean {
   }
 }
 
-function exportSilkArtifacts(
-  runId: string,
-  specName: string,
-  config: PluginConfigOptions,
-) {
+function exportSilkArtifacts(runId: string, specName: string, config: PluginConfigOptions) {
   const apiDir = resolveApiDir(config);
   if (!apiDir) {
-    console.warn(
-      '[silk] Skipping export: set FECFILE_WEB_API_DIR to the backend directory containing manage.py',
-    );
+    console.warn('[silk] Skipping export: set FECFILE_WEB_API_DIR to the backend directory containing manage.py');
     return;
   }
 
@@ -142,11 +126,10 @@ function exportSilkArtifacts(
   }
 
   try {
-    execFileSync(
-      pythonBin,
-      ['manage.py', 'silk_export', '--run-id', runId, '--spec', specName, '--outdir', outDir],
-      { cwd: apiDir, stdio: 'inherit' },
-    );
+    execFileSync(pythonBin, ['manage.py', 'silk_export', '--run-id', runId, '--spec', specName, '--outdir', outDir], {
+      cwd: apiDir,
+      stdio: 'inherit',
+    });
   } catch (error) {
     console.warn('[silk] Export failed:', error);
   }
