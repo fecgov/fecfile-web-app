@@ -8,7 +8,7 @@
 - make sure you're checked out to the same branch name for both `fecfile-web-api` and `fecfile-web-app`, i.e. `feature/0123-identifying-details`
 
 ## Prerequisites
-- Node.js + npm (front-end scripts).
+- Node.js v24 + npm (front-end scripts)
 - Docker + Docker Compose (backend services)
 - Ports `4200` (front-end) and `8080` (API) available
 
