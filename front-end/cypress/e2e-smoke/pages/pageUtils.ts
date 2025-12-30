@@ -13,11 +13,11 @@ export class PageUtils {
       .click();
   }
 
-  static dropdownSetValue(querySelector: string, value: string, alias = '') {
+  static dropdownSetValue(querySelector: string, value: string, alias = '', index=0) {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      cy.get(alias).find(querySelector).first().click();
+      cy.get(alias).find(querySelector).eq(index).click();
       cy.contains('p-selectitem', value)
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
@@ -140,8 +140,12 @@ export class PageUtils {
     );
   }
 
-  static enterValue(fieldName: string, fieldValue: any) {
-    cy.get(fieldName).type(fieldValue);
+  static enterValue(fieldName: string, fieldValue: any, alias='', index=0) {
+    if ( alias.length > 0 ){ 
+      cy.get(alias).find(fieldName).eq(index).type(fieldValue);
+    } else {
+      cy.get(fieldName).eq(index).type(fieldValue);
+    }
   }
 
   static urlCheck(input: string) {
@@ -235,7 +239,7 @@ export class PageUtils {
     cy.wait('@SubmitReport');
   }
 
-  static blurActiveField = () => {
+  static readonly blurActiveField = () => {
     cy.get('body').click(0, 0);
   };
 
