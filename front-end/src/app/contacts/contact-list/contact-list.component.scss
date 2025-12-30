@@ -7,6 +7,12 @@
     table-layout: fixed;
   }
 
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody tr > td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   .name-column {
     @include fixed-width(47%);
   }
