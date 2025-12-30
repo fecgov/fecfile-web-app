@@ -1,3 +1,26 @@
+<ng-template #nameBody let-item>
+  <a (click)="editItem(item)">
+    {{ item.name }}
+  </a>
+</ng-template>
+
+<ng-template #amountBody let-item>
+  <span class="amount-cell">
+    {{ item.amount | currency }}
+  </span>
+</ng-template>
+
+<ng-template #actionsBody let-item>
+  <app-table-actions-button
+    [tableActions]="rowActions"
+    [actionItem]="item"
+    (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+    buttonIcon="pi pi-ellipsis-v"
+    buttonStyleClass="p-button-text"
+    buttonAriaLabel="action"
+  />
+</ng-template>
+
 <app-table
   [(first)]="first"
   title="Guarantors"
@@ -8,35 +31,11 @@
   [(selectedItems)]="selectedItems"
   [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
   sortField="name"
-  [sortableHeaders]="sortableHeaders"
+  [columns]="columns()"
   (loadTableItems)="loadTableItems($event)"
 >
-  <ng-template #header>
-    <th id="buttons" role="columnheader">Actions</th>
-  </ng-template>
-  <ng-template #body let-item>
-    <td>
-      <a (click)="editItem(item)">
-        {{ item.name }}
-      </a>
-    </td>
-    <td>
-      <span class="float-right">
-        {{ item.amount | currency }}
-      </span>
-    </td>
-    <td>
-      <app-table-actions-button
-        [tableActions]="rowActions"
-        [actionItem]="item"
-        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-        buttonIcon="pi pi-ellipsis-v"
-        buttonStyleClass="p-button-text"
-        buttonAriaLabel="action"
-      />
-    </td>
-  </ng-template>
 </app-table>
+
 <p-confirmDialog #deleteDialog [style]="{ width: '450px' }" key="transaction-deletion-dialog" header="Are you sure?">
   <ng-template pTemplate="footer">
     <span class="confirm-footer">

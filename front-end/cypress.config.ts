@@ -1,10 +1,14 @@
+/// <reference types="node" />
 import { defineConfig } from 'cypress';
 import { setupA11yNodeEvents } from './cypress.a11y';
+import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
+
+const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: false,
+  video: videoSetting,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   screenshotOnRunFailure: true,
@@ -33,7 +37,7 @@ export default defineConfig({
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('cypress-mochawesome-reporter/plugin')(on);
       setupA11yNodeEvents(on);
+      CypressConfigHelper.deleteVideoOnSuccess(on);
       return config;
-    },
   },
 });

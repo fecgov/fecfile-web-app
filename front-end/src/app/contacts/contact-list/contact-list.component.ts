@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { TableComponent } from '../../shared/components/table/table.component';
+import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
 import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
@@ -33,6 +33,7 @@ import { RouterLink } from '@angular/router';
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
+
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
@@ -45,6 +46,36 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.INDIVIDUAL,
   ]);
 
+  readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('nameBody');
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('roleBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('actionsBody');
+
+  readonly columns: Signal<ColumnDefinition<Contact>[]> = computed(() => {
+    return [
+      { field: 'sort_name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
+      { field: 'type', header: 'Type', sortable: true, cssClass: 'type-column' },
+      { field: 'sort_fec_id', header: 'FEC ID', sortable: true, cssClass: 'fec-id-column' },
+      {
+        field: 'employer',
+        header: 'Employer',
+        sortable: true,
+        cssClass: 'employer-column',
+      },
+      {
+        field: 'occupation',
+        header: 'Occupation',
+        sortable: true,
+        cssClass: 'occupation-column',
+      },
+      {
+        field: '',
+        header: 'Actions',
+        cssClass: 'actions-column',
+        bodyTpl: this.actionsBodyTpl(),
+      },
+    ];
+  });
+
   public rowActions: TableAction<Contact>[] = [
     new TableAction('Edit', this.editItem.bind(this)),
     new TableAction(
@@ -55,19 +86,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ),
   ];
 
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'sort_name', label: 'Name' },
-    { field: 'type', label: 'Type' },
-    { field: 'sort_fec_id', label: 'FEC ID' },
-    { field: 'employer', label: 'Employer' },
-    { field: 'occupation', label: 'Occupation' },
-  ];
-
   public async checkForDeletedContacts() {
-    const contactListResponse = await this.deletedContactService.getTableData();
-    const deletedContactsExist = contactListResponse.count > 0;
-    this.restoreContactsButtonIsVisible = deletedContactsExist;
-    return deletedContactsExist;
+    const response = await this.deletedContactService.getTableData();
+    this.restoreContactsButtonIsVisible = response.count > 0;
+    return this.restoreContactsButtonIsVisible;
   }
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
@@ -108,26 +130,16 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   saveContact(contact: Contact) {
-    if (contact.id) {
-      this.itemService.update(contact).then(() => {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Updated',
-          life: 3000,
-        });
+    const request = contact.id ? this.itemService.update(contact) : this.itemService.create(contact);
+
+    request.then(() => {
+      this.loadTableItems({});
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: contact.id ? 'Contact Updated' : 'Contact Created',
+        life: 3000,
       });
-    } else {
-      this.itemService.create(contact).then(() => {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Created',
-          life: 3000,
-        });
-      });
-    }
+    });
   }
 }
