@@ -23,7 +23,7 @@ function sanitizeSpecName(name: string): string {
   let lastWasUnderscore = false;
 
   for (const ch of trimmed) {
-    const code = ch.charCodeAt(0);
+    const code = ch.codePointAt(0);
     const isAlphaNum = (code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
     const isAllowed = isAlphaNum || ch === '.' || ch === '_' || ch === '-';
 
