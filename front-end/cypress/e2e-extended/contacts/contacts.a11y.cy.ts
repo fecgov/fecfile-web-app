@@ -94,7 +94,7 @@ describe('Contacts - axe smoke (critical)', () => {
         cy.get('app-table-actions-button button')
           .should('have.attr', 'aria-label')
           .then((label) => {
-            const normalized = String(label ?? '').replaceAll(/\s+/g, ' ').trim();
+            const normalized = (typeof label === 'string' ? label : '').replaceAll(/\s+/g, ' ').trim();
             const expected = `edit ${displayName}`.replaceAll(/\s+/g, ' ').trim();
             expect(normalized.toLowerCase()).to.eq(expected.toLowerCase());
           });
