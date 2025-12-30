@@ -1,9 +1,13 @@
+/// <reference types="node" />
 import { defineConfig } from 'cypress';
+import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
+
+const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: false,
+  video: videoSetting,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   screenshotOnRunFailure: true,
@@ -28,5 +32,8 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
+    setupNodeEvents(on) {
+      CypressConfigHelper.deleteVideoOnSuccess(on);
+    },
   },
 });

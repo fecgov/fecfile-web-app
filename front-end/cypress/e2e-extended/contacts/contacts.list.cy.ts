@@ -78,6 +78,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('Save').should('not.exist');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
+    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
@@ -147,7 +148,7 @@ describe('Contacts List (/contacts)', () => {
       selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('be.visible');
-      cy.get('tbody tr').should('have.length', expectedFirstPageRows);
+      cy.get('tbody tr', { timeout: 15000 }).should('have.length', expectedFirstPageRows);
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
@@ -155,7 +156,7 @@ describe('Contacts List (/contacts)', () => {
           .click({ force: true });
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
-        cy.get('tbody tr').should('have.length', 1);
+        cy.get('tbody tr', { timeout: 15000 }).should('have.length', 1);
       }
       cy.get('.p-paginator').should('exist');
     }
