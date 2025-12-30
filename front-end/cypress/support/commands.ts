@@ -17,70 +17,69 @@ type A11ySummary = {
 function isValidWaiver(value: unknown): value is A11yWaiver {
   if (!value || typeof value !== 'object') return false;
   const v = value as A11yWaiver;
-  return typeof v.reason === 'string' && v.reason.trim().length > 0
-      && typeof v.link === 'string' && v.link.trim().length > 0;
+  return (
+    typeof v.reason === 'string' &&
+    v.reason.trim().length > 0 &&
+    typeof v.link === 'string' &&
+    v.link.trim().length > 0
+  );
 }
 
 function formatViolations(title: string, violations: Result[], waivers?: A11yWaivers): string {
-  const lines: string[] = [];
-  lines.push(`${title}: ${violations.length}`);
+  const lines: string[] = [`${title}: ${violations.length}`];
 
   for (const v of violations) {
     const waiver = waivers?.[v.id];
     const waiverNote = isValidWaiver(waiver) ? ` (WAIVED: ${waiver.reason} | ${waiver.link})` : '';
 
-    lines.push(`\n[${v.id}] impact=${v.impact}${waiverNote}`);
-    lines.push(`help: ${v.help}`);
-    if (v.helpUrl) lines.push(`helpUrl: ${v.helpUrl}`);
-
     const targets = v.nodes
       .slice(0, 8)
       .map((n) => (Array.isArray(n.target) ? n.target.join(', ') : String(n.target)));
 
-    if (targets.length) {
-      lines.push(`targets:\n - ${targets.join('\n - ')}`);
-    }
+    const entryLines = [
+      `\n[${v.id}] impact=${v.impact}${waiverNote}`,
+      `help: ${v.help}`,
+      ...(v.helpUrl ? [`helpUrl: ${v.helpUrl}`] : []),
+      ...(targets.length ? [`targets:\n - ${targets.join('\n - ')}`] : []),
+    ];
+
+    lines.push(...entryLines);
   }
 
   return lines.join('\n');
 }
 
+function getTitlePath(candidate: any): string[] {
+  if (!candidate) return [];
+  if (typeof candidate.titlePath === 'function') {
+    const titlePath = candidate.titlePath();
+    if (Array.isArray(titlePath)) return titlePath;
+  }
+  if (typeof candidate.fullTitle === 'function') return [candidate.fullTitle()];
+  if (candidate.fullTitle) return [candidate.fullTitle];
+  if (candidate.title) return [candidate.title];
+  return [];
+}
+
+function joinTitlePath(parts: string[]): string | null {
+  if (!Array.isArray(parts) || parts.length === 0) return null;
+  const joined = parts.filter(Boolean).join(' > ').trim();
+  return joined || null;
+}
+
 function getCurrentTestId(): string | null {
   try {
-    const runnable = Cypress.state?.('runnable');
-    if (runnable) {
-      const titlePath =
-        typeof (runnable as any).titlePath === 'function'
-          ? (runnable as any).titlePath()
-          : undefined;
-      if (Array.isArray(titlePath) && titlePath.length) {
-        const joined = titlePath.filter(Boolean).join(' > ').trim();
-        if (joined) return joined;
-      }
+    const cypressAny = Cypress as any;
+    const runnable =
+      typeof cypressAny.state === 'function'
+        ? cypressAny.state('runnable')
+        : undefined;
+    const fromRunnable = joinTitlePath(getTitlePath(runnable));
+    if (fromRunnable) return fromRunnable;
 
-      const fullTitle =
-        typeof (runnable as any).fullTitle === 'function'
-          ? (runnable as any).fullTitle()
-          : (runnable as any).fullTitle;
-      if (fullTitle) return String(fullTitle);
-
-      if ((runnable as any).title) return String((runnable as any).title);
-    }
-
-    const runner = Cypress?.mocha?.getRunner?.();
-    const current = runner?.test ?? runner?.suite?.ctx?.currentTest ?? (Cypress as any)?.currentTest;
-    const titlePath =
-      typeof current?.titlePath === 'function'
-        ? current.titlePath()
-        : typeof current?.fullTitle === 'function'
-          ? [current.fullTitle()]
-          : current?.fullTitle
-            ? [current.fullTitle]
-            : current?.title
-              ? [current.title]
-              : [];
-    const joined = Array.isArray(titlePath) ? titlePath.filter(Boolean).join(' > ').trim() : '';
-    return joined || current?.title || null;
+    const runner = cypressAny.mocha?.getRunner?.();
+    const current = runner?.test ?? runner?.suite?.ctx?.currentTest ?? cypressAny.currentTest;
+    return joinTitlePath(getTitlePath(current)) ?? null;
   } catch {
     return null;
   }
@@ -114,7 +113,7 @@ function summarizeViolations(violations: Result[], waivers: A11yWaivers, duratio
     else unwaived.push(v);
   }
 
-  const ruleIds = Array.from(new Set(violations.map((v) => v.id))).sort();
+  const ruleIds = Array.from(new Set(violations.map((v) => v.id))).sort((a, b) => a.localeCompare(b));
   const nodesAffected = violations.reduce((sum, v) => sum + (v.nodes?.length ?? 0), 0);
 
   return {
@@ -143,20 +142,19 @@ function formatSummaryLine(summary: A11ySummary): string {
 }
 
 function isA11ySpec(): boolean {
-  const spec = Cypress.spec;
-  const name = spec?.name || spec?.relative || spec?.fileName || spec?.path || '';
+  const spec = Cypress.spec as { name?: string; relative?: string; fileName?: string } | undefined;
+  const specPath = (Cypress.spec as any)?.path;
+  const name = spec?.name || spec?.relative || spec?.fileName || specPath || '';
   return /a11y/i.test(String(name));
 }
 
 function pushMochawesomeContext(title: string, value: string) {
   if (!isA11ySpec()) return;
-  if (!Cypress.Mochawesome) {
-    Cypress.Mochawesome = {
-      currentAttemptScreenshots: [],
-      attempts: [],
-      context: [],
-    };
-  }
+  Cypress.Mochawesome ??= {
+    currentAttemptScreenshots: [],
+    attempts: [],
+    context: [],
+  };
   Cypress.Mochawesome.context.push({ title, value });
 }
 

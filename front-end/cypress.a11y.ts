@@ -14,12 +14,7 @@ type A11ySummary = {
 type PluginEvents = Cypress.PluginEvents;
 
 const isA11ySpec = (spec: any): boolean => {
-  const name =
-    spec?.name ||
-    spec?.relative ||
-    spec?.fileName ||
-    spec?.path ||
-    '';
+  const name = spec?.name || spec?.relative || spec?.fileName || spec?.path || '';
   return /a11y/i.test(String(name));
 };
 
@@ -29,12 +24,12 @@ const registerA11yNodeEvents = (on: PluginEvents, isEnabled: () => boolean) => {
       if (!isEnabled()) return null;
       // eslint-disable-next-line no-console
       console.log(message);
-      return null;
+      return message;
     },
     'a11y:record'(payload: { testId?: string; summary?: A11ySummary }) {
       if (!isEnabled()) return null;
       if (!payload?.testId || !payload?.summary) return null;
-      return null;
+      return payload;
     },
   });
 };
