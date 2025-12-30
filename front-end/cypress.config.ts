@@ -39,5 +39,6 @@ export default defineConfig({
       setupA11yNodeEvents(on);
       CypressConfigHelper.deleteVideoOnSuccess(on);
       return config;
+    },
   },
 });
