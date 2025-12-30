@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { setupA11yNodeEvents } from './cypress.a11y';
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
@@ -12,7 +13,7 @@ export default defineConfig({
   viewportHeight: 768,
   viewportWidth: 1366,
   chromeWebSecurity: false,
-  reporter: 'mochawesome',
+  reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     reportDir: 'cypress/results',
     reportFilename: '[status]_[datetime]-[name]',
@@ -28,5 +29,11 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
+    setupNodeEvents(on, config) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('cypress-mochawesome-reporter/plugin')(on);
+      setupA11yNodeEvents(on);
+      return config;
+    },
   },
 });
