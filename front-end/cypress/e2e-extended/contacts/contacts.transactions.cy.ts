@@ -29,6 +29,8 @@ type ContactTypeLower = 'individual' | 'committee' | 'organization';
 type ContactLookupType = 'Individual' | 'Organization' | 'Committee';
 type DisbursementDateField = 'expenditure_date' | 'disbursement_date';
 
+const DEFAULT_TIMEOUT = 15000;
+
 const normalizeWhitespace = (s: string) => s.replaceAll(/\s+/g, ' ').trim();
 const normalizeNbsp = (s: string) => s.replaceAll('\u00a0', ' ');
 const normalizeText = (s: string) => normalizeWhitespace(normalizeNbsp(s));
@@ -45,7 +47,7 @@ const hasVisibleDialogMatching = ($body: JQuery<HTMLElement>, rx: RegExp): boole
 
 const getVisibleConfirmDialog = () =>
   cy
-    .contains('.p-dialog-title', /^Confirm$/i, { timeout: 5000 })
+    .contains('.p-dialog-title', /^Confirm$/i, { timeout: DEFAULT_TIMEOUT })
     .should('be.visible')
     .closest('.p-confirm-dialog, .p-dialog');
 
@@ -56,18 +58,18 @@ const openCreateContactModal = (which: CreateContactWhich = 'first') => {
     if ($containers.length > 0) {
       const $target = which === 'last' ? $containers.last() : $containers.first();
       cy.wrap($target)
-        .contains(/Create a new contact/i, { timeout: 5000 })
+        .contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
         .scrollIntoView()
         .click({ force: true });
       return;
     }
 
-    cy.contains(/Create a new contact/i, { timeout: 5000 })
+    cy.contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
       .scrollIntoView()
       .click({ force: true });
   });
 
-  cy.contains('.p-dialog', /Create a new contact/i, { timeout: 5000 })
+  cy.contains('.p-dialog', /Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
     .filter(':visible')
     .should('be.visible')
     .as('createContactDialog');
@@ -94,7 +96,7 @@ const saveCreateContactDialog = () => {
     .should('be.enabled')
     .click({ force: true });
 
-  cy.get('body', { timeout: 5000 }).should(($body) => {
+  cy.get('body', { timeout: DEFAULT_TIMEOUT }).should(($body) => {
     expect(hasVisibleDialogMatching($body, /Create a new contact/i)).to.eq(false);
   });
 };
@@ -154,16 +156,16 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<
 };
 
 const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) => {
-  cy.get('p-panelmenu', { timeout: 5000 }).should('exist');
+  cy.get('p-panelmenu', { timeout: DEFAULT_TIMEOUT }).should('exist');
 
-  cy.contains('a', panelMenuRx, { timeout: 5000 })
+  cy.contains('a', panelMenuRx, { timeout: DEFAULT_TIMEOUT })
     .first()
     .scrollIntoView()
     .click({ force: true });
 
-  cy.url({ timeout: 5000 }).should('include', '/select/');
+  cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', '/select/');
   clickTransactionLinkOnSelectPage(txnLinkRx);
-  cy.url({ timeout: 5000 }).should('include', '/create/');
+  cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', '/create/');
 };
 
 const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField> => {
@@ -177,7 +179,7 @@ const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField
 const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amount: number) => {
   const amountStr = `$${amount.toFixed(2)}`;
 
-  cy.contains('tbody tr', contactDisplay, { timeout: 5000 })
+  cy.contains('tbody tr', contactDisplay, { timeout: DEFAULT_TIMEOUT })
     .should('exist')
     .within(() => {
       cy.get('td').eq(1).invoke('text').should('match', expectedType);
@@ -186,18 +188,10 @@ const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amo
 };
 
 const assertContactsListRow = (name: string, type: string, fecId?: string) => {
-  const typeMap: Record<string, string> = {
-    'Individual': 'IND',
-    'Candidate': 'CAN',
-    'Committee': 'COM',
-    'Organization': 'ORG'
-  };
-  
-  const expectedAbbr = typeMap[type] || type;
-  cy.contains('tbody tr', name, { timeout: 5000 })
+  cy.contains('tbody tr', name, { timeout: DEFAULT_TIMEOUT })
     .should('exist')
     .within(() => {
-      cy.get('td').eq(1).should('contain.text', expectedAbbr);
+      cy.get('td').eq(1).should('contain.text', type);
       if (fecId) cy.get('td').eq(2).should('contain.text', fecId);
     });
 };
@@ -388,17 +382,6 @@ describe('Contacts: Transactions integration', () => {
       cy.contains(/Individual Receipt/i).should('exist');
 
       openCreateContactModal('first');
-      // Ensure we are creating an Individual (UI has switched between #contact_type and #entity_type_dropdown)
-      cy.get('@createContactDialog').then(($dlg) => {
-        const $type = $dlg.find('#entity_type_dropdown, #contact_type, [inputid="entity_type_dropdown"]');
-        if ($type.length === 0) return;
-        cy.wrap($type.first())
-          .invoke('text')
-          .then((txt) => {
-            expect(txt.replace(/\s+/g, ' ').trim()).to.match(/\b(Individual|IND)\b/i);
-          });
-      });
-      
       cy.get('@createContactDialog').find('#last_name').clear().type(individual.last);
       cy.get('@createContactDialog').find('#first_name').clear().type(individual.first);
       fillCommonRequiredAddressInDialog('@createContactDialog', address);
@@ -419,7 +402,7 @@ describe('Contacts: Transactions integration', () => {
       TransactionDetailPage.enterScheduleFormData(indData, false, '', true, 'contribution_date');
       clickSaveAndConfirmCreatesNewContact(rid, 'individual', individual.display);
 
-      cy.url({ timeout: 5000 }).should('include', `/reports/transactions/report/${rid}/list`);
+      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
 
       // TRANSFER
@@ -428,11 +411,7 @@ describe('Contacts: Transactions integration', () => {
       cy.contains('h1', 'Transfer').should('exist');
 
       openCreateContactModal('first');
-      // Verify we are on the Committee form or switch to it if necessary
-      // Note: Transfer usually defaults or requires Committee, but good to check
       cy.get('@createContactDialog').find('#committee_id').clear().type(committee.id);
-      cy.get('@createContactDialog').find('#committee_id').should('have.value', committee.id); // ASSERT VALUE BEFORE SAVE
-
       cy.get('@createContactDialog').find('#name').clear().type(committee.name);
       fillCommonRequiredAddressInDialog('@createContactDialog', address);
       saveCreateContactDialog();
@@ -452,7 +431,7 @@ describe('Contacts: Transactions integration', () => {
       TransactionDetailPage.enterScheduleFormData(transferData, false, '', true, 'contribution_date');
       clickSaveAndConfirmCreatesNewContact(rid, 'committee', committee.display);
 
-      cy.url({ timeout: 5000 }).should('include', `/reports/transactions/report/${rid}/list`);
+      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
 
       // OPERATING EXPENDITURE
@@ -483,16 +462,17 @@ describe('Contacts: Transactions integration', () => {
 
       clickSaveAndConfirmCreatesNewContact(rid, 'organization', organization.display);
 
-      cy.url({ timeout: 5000 }).should('include', `/reports/transactions/report/${rid}/list`);
+      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(organization.display, /Operating Expenditure/i, 40);
 
       // Final verification: Contacts list
       ContactListPage.goToPage();
       ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
 
-      assertContactsListRow(individual.display, 'IND');
-      assertContactsListRow(committee.display, 'COM', committee.id);
-      assertContactsListRow(organization.display, 'ORG');
+      assertContactsListRow(individual.display, 'Individual');
+      assertContactsListRow(committee.display, 'Committee', committee.id);
+      assertContactsListRow(organization.display, 'Organization');
+    });
   });
 
   it('creating an Individual receipt transaction w/ aggregate >$200 updates contact employer and occupation', () => {
@@ -601,8 +581,46 @@ describe('Contacts: Transactions integration', () => {
         report: /JULY 15 QUARTERLY/i,
         date: '04/27/2025',
         amount: /\$250\.00/,
-        });
       });
     });
+  });
+
+  // waiting on bug fix for FECFILE-2685
+  xit('switching Contact Lookup type before first save (Individual → Committee) [OTHER_RECEIPT]', () => {
+    const reportId = '98c197fb-8304-42b2-9963-28ff0905474b';
+    cy.visit(`/reports/transactions/report/${reportId}/create/OTHER_RECEIPT`);
+
+    selectContactLookupType('Individual');
+    cy.contains(/Create a new contact/i).click();
+
+    fillInputByLabel(/LAST NAME/i, 'ABBOTT');
+    fillInputByLabel(/FIRST NAME/i, 'MARTHA');
+    fillInputByLabel(/MIDDLE NAME/i, 'Francis');
+    fillInputByLabel(/PREFIX/i, 'Miss');
+    fillInputByLabel(/SUFFIX/i, 'Sr');
+
+    fillInputByLabel(/STREET ADDRESS/i, '920 MAIN STREET suite');
+    fillInputByLabel(/APARTMENT, SUITE/i, 'Apt B');
+    fillInputByLabel(/^CITY$/i, 'Michigan');
+    selectByLabel(/STATE\/TERRITORY/i, 'Kentucky');
+    fillInputByLabel(/ZIP\/POSTAL CODE/i, '76543');
+
+    selectContactLookupType('Committee');
+
+    cy.contains('label', /COMMITTEE NAME/i).should('be.visible');
+    fillInputByLabel(/COMMITTEE NAME/i, "Testing of Guarantor's");
+    fillInputByLabel(/AMOUNT/i, '100');
+    fillInputByLabel(/DATE RECEIVED/i, '03/31/2024');
+
+    cy.intercept('POST', '**/transactions/**').as('saveTransaction');
+
+    cy.contains('button', /^Save$/).scrollIntoView().click();
+
+    cy.contains(/You suggested changes for/i).should('not.exist');
+    cy.contains(/^Confirm$/i).should('not.exist');
+
+    cy.wait('@saveTransaction')
+      .its('response.statusCode')
+      .should('be.oneOf', [200, 201]);
   });
 });

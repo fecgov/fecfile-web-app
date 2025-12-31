@@ -168,9 +168,12 @@ describe('Contacts Edit', () => {
   };
 
   const assertCandidateRowInList = (display: string, candidateId: string) => {
-    // The list view has historically been a bit flaky about rendering the FEC ID
-    // immediately after saves; fall back to opening Edit if the cell is blank.
-    ContactsHelpers.assertRowValues(display, 'CAN', candidateId);
+    cy.contains('tbody tr', display)
+      .should('exist')
+      .within(() => {
+        cy.get('td').eq(1).should('contain.text', 'Candidate');
+        cy.get('td').eq(2).should('contain.text', candidateId);
+      });
   };
 
   const reopenAndAssertCandidateBasics = (display: string, candidateId: string, last: string, first: string) => {
@@ -231,7 +234,7 @@ describe('Contacts Edit', () => {
     cy.contains('label', labelRx)
       .parent()
       .within(() => {
-        cy.contains(ContactsHelpers.REQUIRED_FIELD_RX).should('exist');
+        cy.contains(/This is a required field\./i).should('exist');
       });
   };
 
@@ -276,11 +279,6 @@ describe('Contacts Edit', () => {
 
   // INDIVIDUAL: update/check all editable fields, required fields, length validation
   it('updates all editable fields for an Individual, enforces required and length validation, and persists to list and edit form', () => {
-    // ... existing test content ...
-    // Note: I'm not repeating the full content of passing tests to save space, 
-    // but in a real file, this would be preserved. 
-    // Assuming implicit preservation or full file replacement:
-    
     const newLast = `${IND_LAST}-Upd`;
     const newFirst = `${IND_FIRST}-Upd`;
     const newMiddle = 'MiddleUpd';
@@ -301,7 +299,7 @@ describe('Contacts Edit', () => {
     const oldDisplay = `${IND_LAST}, ${IND_FIRST}`;
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
-      ContactsHelpers.expectErrorNearLabel(labelRx, ContactsHelpers.REQUIRED_FIELD_RX);
+      ContactsHelpers.expectErrorNearLabel(labelRx, /This is a required field\./i);
     };
 
     const expectMaxErrorNearLabel = (labelRx: RegExp, text: RegExp) => {
@@ -325,8 +323,7 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^Street address/i);
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
-    
-    // ... rest of individual test ...
+
     const over30 = 'A'.repeat(31);
     const over20 = 'B'.repeat(21);
     const over10 = 'C'.repeat(11);
@@ -471,7 +468,7 @@ describe('Contacts Edit', () => {
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       ContactsHelpers.fieldForLabel(labelRx).within(() => {
-        cy.contains(ContactsHelpers.REQUIRED_FIELD_RX).should('exist');
+        cy.contains(/This is a required field\./i).should('exist');
       });
     };
 
@@ -505,9 +502,6 @@ describe('Contacts Edit', () => {
       .should('not.exist');
 
     ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'House');
-    // Important: Wait for angular to update the form status for 'district' to required
-    cy.wait(500); 
-
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -546,7 +540,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newDisplay)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'CAN'); // Updated from 'Candidate'
+        cy.get('td').eq(1).should('contain.text', 'Candidate');
         cy.get('td').eq(2).should('contain.text', originalCandidateId);
       });
 
@@ -659,7 +653,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'COM'); // Updated from 'Committee'
+        cy.get('td').eq(1).should('contain.text', 'Committee');
         cy.get('td').eq(2).should('contain.text', newCommitteeId);
       });
 
@@ -745,7 +739,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'ORG'); // Updated from 'Organization'
+        cy.get('td').eq(1).should('contain.text', 'Organization');
       });
 
     PageUtils.clickKababItem(newName, 'Edit');

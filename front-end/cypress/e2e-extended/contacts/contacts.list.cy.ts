@@ -82,10 +82,10 @@ describe('Contacts List (/contacts)', () => {
     cy.get('tbody tr').should('have.length.greaterThan', 3);
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
-    ContactsHelpers.assertRowValues(individualDisplayName, 'IND');
-    ContactsHelpers.assertRowValues(candidateDisplayName, 'CAN', candidateId);
-    ContactsHelpers.assertRowValues(committeeName, 'COM');
-    ContactsHelpers.assertRowValues(organizationName, 'ORG');
+    ContactsHelpers.assertRowValues(individualDisplayName, 'Individual');
+    ContactsHelpers.assertRowValues(candidateDisplayName, 'Candidate', candidateId);
+    ContactsHelpers.assertRowValues(committeeName, 'Committee');
+    ContactsHelpers.assertRowValues(organizationName, 'Organization');
   });
 
   it('checks pagination controls empty state', () => {

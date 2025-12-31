@@ -39,39 +39,24 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Create a Committee contact via lookup', () => {
-    const uid = Cypress._.random(1000, 9999);
-    const committeeContact: ContactFormData = {
-      ...contactFormData,
-      contact_type: 'Committee',
-      committee_id: `C${String(uid).padStart(8, '0')}`,
-      name: `Lookup Committee ${uid}`,
-    };
-
-    ContactsHelpers.createContactViaLookup('Committee', committeeContact);
-    ContactsHelpers.assertRowValues(
-      committeeContact.name,
+    ContactsHelpers.createContactViaLookup(
       'Committee',
-      committeeContact.committee_id,
-    );
+      '**/api/v1/contacts/committee/?committee_id=*',
+      /committee/i,
+    ).within(() => {
+      cy.get('td').eq(1).should('contain.text', 'Committee');
+    });
   });
 
   it('Create a Candidate contact via lookup', () => {
-    const uid = Cypress._.random(1000, 9999);
-    const candidateId = `H0VA${String(uid).padStart(5, '0')}`;
-    const candidateContact: ContactFormData = {
-      ...contactFormData,
-      contact_type: 'Candidate',
-      candidate_id: candidateId,
-      candidate_office: 'House',
-      candidate_state: 'Virginia',
-      candidate_district: '01',
-      last_name: `LookupCandLn${uid}`,
-      first_name: `LookupCandFn${uid}`,
-    };
-    const display = `${candidateContact.last_name}, ${candidateContact.first_name}`;
-
-    ContactsHelpers.createContactViaLookup('Candidate', candidateContact);
-    ContactsHelpers.assertRowValues(display, 'Candidate', candidateId);
+    ContactsHelpers.createContactViaLookup(
+      'Candidate',
+      '**/api/v1/contacts/candidate/?candidate_id=*',
+      /candidate/i,
+    ).within(() => {
+      cy.get('td').eq(1).should('contain.text', 'Candidate');
+      cy.get('td').eq(2).invoke('text').should('match', /\S/);
+    });
   });
 
   it('Candidate and Committee FEC ID validation fails on bad IDs', () => {
@@ -180,19 +165,13 @@ describe('Contacts Add (/contacts)', () => {
       zip: '',
     });
     PageUtils.clickButton('Save');
-
-    const assertRequired = (sel: string) =>
-      cy.get(sel).parent().invoke('text').should('match', ContactsHelpers.REQUIRED_FIELD_RX);
-    const assertNotRequired = (sel: string) =>
-      cy.get(sel).parent().invoke('text').should('not.match', ContactsHelpers.REQUIRED_FIELD_RX);
-
-    assertRequired('#last_name');
-    assertRequired('#first_name');
-    assertRequired('#street_1');
-    assertNotRequired('#street_2');
-    assertRequired('#city');
-    assertRequired('[inputid="state"]');
-    assertRequired('#zip');
+    cy.get('#last_name').parent().should('contain', 'This is a required field');
+    cy.get('#first_name').parent().should('contain', 'This is a required field');
+    cy.get('#street_1').parent().should('contain', 'This is a required field');
+    cy.get('#street_2').parent().should('not.contain', 'This is a required field');
+    cy.get('#city').parent().should('contain', 'This is a required field');
+    cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
+    cy.get('#zip').parent().should('contain', 'This is a required field');
     PageUtils.clickButton('Cancel');
     cy.contains('Save').should('not.exist');
   });

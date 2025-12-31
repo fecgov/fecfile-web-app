@@ -29,7 +29,7 @@ export class ContactLookup {
       {
         statusCode: 200,
         body: {
-          fec_api_candidates: [contact],
+          fec_api_candidates: [],
           fecfile_candidates: [contact],
         },
       },
@@ -60,7 +60,7 @@ export class ContactLookup {
       {
         statusCode: 200,
         body: {
-          fec_api_committees: [contact],
+          fec_api_committees: [],
           fecfile_committees: [contact],
         },
       },

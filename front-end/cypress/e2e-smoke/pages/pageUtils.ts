@@ -1,85 +1,6 @@
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
-  // Contact type dropdowns sometimes render abbreviations (IND/CAN/COM/ORG)
-  // even when the underlying value passed by tests is the full label.
-  static readonly CONTACT_TYPE_LABEL_TO_ABBR: Record<string, string> = {
-    individual: 'IND',
-    candidate: 'CAN',
-    committee: 'COM',
-    organization: 'ORG',
-  };
-
-  // US states + DC + territories. Used to make dropdown selection resilient
-  // when the UI switches between full names and abbreviations.
-  static readonly REGION_NAME_TO_CODE: Record<string, string> = {
-    Alabama: 'AL',
-    Alaska: 'AK',
-    Arizona: 'AZ',
-    Arkansas: 'AR',
-    California: 'CA',
-    Colorado: 'CO',
-    Connecticut: 'CT',
-    Delaware: 'DE',
-    'District of Columbia': 'DC',
-    Florida: 'FL',
-    Georgia: 'GA',
-    Hawaii: 'HI',
-    Idaho: 'ID',
-    Illinois: 'IL',
-    Indiana: 'IN',
-    Iowa: 'IA',
-    Kansas: 'KS',
-    Kentucky: 'KY',
-    Louisiana: 'LA',
-    Maine: 'ME',
-    Maryland: 'MD',
-    Massachusetts: 'MA',
-    Michigan: 'MI',
-    Minnesota: 'MN',
-    Mississippi: 'MS',
-    Missouri: 'MO',
-    Montana: 'MT',
-    Nebraska: 'NE',
-    Nevada: 'NV',
-    'New Hampshire': 'NH',
-    'New Jersey': 'NJ',
-    'New Mexico': 'NM',
-    'New York': 'NY',
-    'North Carolina': 'NC',
-    'North Dakota': 'ND',
-    Ohio: 'OH',
-    Oklahoma: 'OK',
-    Oregon: 'OR',
-    Pennsylvania: 'PA',
-    'Rhode Island': 'RI',
-    'South Carolina': 'SC',
-    'South Dakota': 'SD',
-    Tennessee: 'TN',
-    Texas: 'TX',
-    Utah: 'UT',
-    Vermont: 'VT',
-    Virginia: 'VA',
-    Washington: 'WA',
-    'West Virginia': 'WV',
-    Wisconsin: 'WI',
-    Wyoming: 'WY',
-
-    // territories
-    'American Samoa': 'AS',
-    Guam: 'GU',
-    'Northern Mariana Islands': 'MP',
-    'Puerto Rico': 'PR',
-    'U.S. Virgin Islands': 'VI',
-  };
-
-  static readonly REGION_CODE_TO_NAME: Record<string, string> = Object.entries(
-    PageUtils.REGION_NAME_TO_CODE,
-  ).reduce((acc, [name, code]) => {
-    acc[code] = name;
-    return acc;
-  }, {} as Record<string, string>);
-
   static closeToast() {
     const alias = PageUtils.getAlias('');
     cy.get(alias).find('.p-toast-close-button').should('exist').click();
@@ -92,156 +13,15 @@ export class PageUtils {
       .click();
   }
 
-  static dropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
+  static dropdownSetValue(querySelector: string, value: string, alias = '', index=0) {
     alias = PageUtils.getAlias(alias);
 
-    const raw = (value ?? '').toString().trim();
-    if (!raw) return;
-
-    const optionSelector = [
-      '.p-select-option',
-      '.p-dropdown-item',
-      '.p-autocomplete-item',
-      '.p-autocomplete-option',
-      'p-selectitem',
-      '.p-selectitem',
-      '[role="option"]',
-    ].join(',');
-
-    const overlaySelector = [
-      '.p-select-overlay:visible',
-      '.p-select-panel:visible',
-      '.p-dropdown-panel:visible',
-      '.p-overlay:visible',
-      '.p-connected-overlay:visible',
-    ].join(',');
-
-    const normalize = (s: string) => s.replaceAll('\u00a0', ' ').replaceAll(/\s+/g, ' ').trim();
-
-    const buildVariants = (sel: string, v: string) => {
-      const variants: string[] = [v];
-      const lower = v.toLowerCase();
-
-      // contact type labels/abbreviations
-      const mappedAbbr = PageUtils.CONTACT_TYPE_LABEL_TO_ABBR[lower];
-      if (mappedAbbr) variants.push(mappedAbbr);
-      const mappedLabel = Object.entries(PageUtils.CONTACT_TYPE_LABEL_TO_ABBR)
-        .find(([, abbr]) => abbr.toLowerCase() === lower)?.[0];
-      if (mappedLabel) variants.push(mappedLabel);
-
-      // state/territory name <-> code
-      const maybeCode = PageUtils.REGION_NAME_TO_CODE[v] || PageUtils.REGION_NAME_TO_CODE[normalize(v)];
-      if (maybeCode) variants.push(maybeCode);
-      const upper = v.toUpperCase();
-      if (upper.length === 2 && PageUtils.REGION_CODE_TO_NAME[upper]) {
-        variants.push(PageUtils.REGION_CODE_TO_NAME[upper]);
-      }
-
-      // If selector looks like it is a state/territory field, prefer also trying the code.
-      const looksLikeRegion = /\bstate\b|territory|region|\[inputid=['"]state['"]\]|#state\b/i.test(sel);
-      if (looksLikeRegion && maybeCode) variants.unshift(maybeCode);
-
-      return Array.from(new Set(variants.filter(Boolean)));
-    };
-
-    const variants = buildVariants(querySelector, raw);
-    const matchers = variants.map((v) => new RegExp(String.raw`\\b${PageUtils.escapeRegExp(v)}\\b`, 'i'));
-
-    cy.get(alias)
-      .find(querySelector)
-      .eq(index)
-      .should('exist')
-      .then(($host) => {
-        const $clickTarget = $host
-          .find(
-            [
-              '[role="combobox"]',
-              '[aria-haspopup="listbox"]',
-              '[data-pc-section="trigger"]',
-              '.p-select',
-              '.p-dropdown',
-              '.p-select-trigger',
-              '.p-dropdown-trigger',
-              '.p-select-dropdown',
-              '.p-dropdown-trigger-icon',
-              '.p-inputwrapper',
-              '[data-pc-section="label"]',
-              '.p-select-label',
-              '.p-dropdown-label',
-            ].join(', '),
-          )
-          .filter(':visible')
-          .first();
-
-        let $target = $clickTarget.length ? $clickTarget : $host;
-        if (!$clickTarget.length && $host.is('input')) {
-          const $closest = $host.closest('app-searchable-select, p-select, .p-select, p-dropdown, .p-dropdown');
-          if ($closest.length) $target = $closest;
-        }
-        const ariaControls =
-          $target.attr('aria-controls') ||
-          $host.find('[aria-controls]').first().attr('aria-controls');
-
-        cy.wrap($target).scrollIntoView().click({ force: true });
-
-        const resolvePanel = () => {
-          if (ariaControls) {
-            return cy
-              .get(`[id="${ariaControls}"]`, { timeout: 10000 })
-              .should('exist')
-              .then(($list) => {
-                const $panel = $list.closest(
-                  '.p-select-overlay, .p-select-panel, .p-dropdown-panel, .p-overlay, .p-connected-overlay',
-                );
-                return cy.wrap($panel.length ? $panel : $list);
-              });
-          }
-          return cy.get(overlaySelector, { timeout: 10000 }).last();
-        };
-
-        resolvePanel().then(($panel) => {
-          // Some selects support filtering; typing makes virtualized lists reliable.
-          const filterSel = [
-            'input.p-select-filter',
-            'input.p-dropdown-filter',
-            'input[role="searchbox"]',
-            'input[aria-label="Search"]',
-          ].join(', ');
-
-          const filterSeed = variants.find((v) => v.length === 2) || raw;
-
-          cy.wrap($panel)
-            .find(filterSel)
-            .filter(':visible')
-            .then(($filter) => {
-              if ($filter.length) {
-                cy.wrap($filter.first()).clear({ force: true }).type(filterSeed, {
-                  force: true,
-                  delay: 20,
-                });
-              }
-            });
-
-          cy.wrap($panel)
-            .find(optionSelector, { timeout: 10000 })
-            .filter(':visible')
-            .should('have.length.greaterThan', 0)
-            .then(($opts) => {
-              const texts = $opts.toArray().map((el) => normalize((el.textContent ?? '') as string));
-              const idx = texts.findIndex((t) => matchers.some((rx) => rx.test(t)));
-
-              if (idx < 0) {
-                const sample = texts.slice(0, 10).join(' | ');
-                throw new Error(
-                  `dropdownSetValue: option not found for "${raw}" (variants=${variants.join(', ')}) in ${querySelector}. ` +
-                    `First options: ${sample}`,
-                );
-              }
-
-              cy.wrap($opts.eq(idx)).scrollIntoView().click({ force: true });
-            });
-        });
-      });
+    if (value) {
+      cy.get(alias).find(querySelector).eq(index).click();
+      cy.contains('p-selectitem', value)
+        .scrollIntoView({ offset: { top: 0, left: 0 } })
+        .click();
+    }
   }
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
@@ -358,10 +138,6 @@ export class PageUtils {
       '/' +
       date.getFullYear()
     );
-  }
-
-  static escapeRegExp(value: string) {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   static enterValue(fieldName: string, fieldValue: any, alias='', index=0) {
