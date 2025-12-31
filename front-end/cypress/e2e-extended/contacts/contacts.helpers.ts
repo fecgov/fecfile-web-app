@@ -1,4 +1,5 @@
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
+import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
 import { ContactFormData } from '../../e2e-smoke/models/ContactFormModel';
 import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
@@ -27,6 +28,13 @@ type FecApiCandidateLookup = {
   candidate: any;
 };
 
+const TYPE_MAPPING: Record<string, string> = {
+  individual: 'IND',
+  candidate: 'CAN',
+  committee: 'COM',
+  organization: 'ORG',
+};
+
 const normalize = (s: string) =>
   s.replaceAll('\u00a0', ' ').replaceAll(/\s+/g, ' ').trim();
 
@@ -48,6 +56,9 @@ const amountToExpected = (v: number | string | RegExp) => {
 };
 
 export class ContactsHelpers {
+  // UI copy has changed over time ("This is a required field", "This field is required", etc.)
+  static readonly REQUIRED_FIELD_RX = /(\brequired\b.*\bfield\b|\bfield\b.*\brequired\b)/i;
+
   static readonly CONTACTS_HEADERS = [
     'Name',
     'Type',
@@ -82,19 +93,14 @@ export class ContactsHelpers {
   }
 
   static setDropdownByLabel(labelRegex: RegExp, optionText: string, root = ContactsHelpers.DIALOG) {
-    ContactsHelpers.fieldForLabel(labelRegex, root).within(() => {
-      cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click({ force: true });
-    });
-
-    cy.get('body')
-      .find('.p-select-option, .p-dropdown-item')
-      .contains(
-        new RegExp(
-          String.raw`^\s*${ContactsHelpers.escapeRegExp(optionText)}\s*$`,
-          'i',
-        ),
-      )
-      .click({ force: true });
+    // Delegate to PageUtils.dropdownSetValue so we consistently handle
+    // PrimeNG p-select vs p-dropdown, overlays, filters, and abbreviations.
+    ContactsHelpers.fieldForLabel(labelRegex, root).as('dropdownField');
+    PageUtils.dropdownSetValue(
+      'app-searchable-select, p-select, .p-select, p-dropdown, .p-dropdown',
+      optionText,
+      '@dropdownField',
+    );
   }
 
   static setDropdownByLabelIfPresent(
@@ -112,14 +118,13 @@ export class ContactsHelpers {
       cy.wrap($root)
         .contains('label', labelRegex)
         .closest('.field, .p-field, div.field')
-        .within(() => {
-          cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click({ force: true });
-        });
+        .as('dropdownField');
 
-      cy.get('body')
-        .find('.p-select-option, .p-dropdown-item')
-        .contains(new RegExp(String.raw`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
-        .click({ force: true });
+      PageUtils.dropdownSetValue(
+        'app-searchable-select, p-select, .p-select, p-dropdown, .p-dropdown',
+        optionText,
+        '@dropdownField',
+      );
     });
   }
 
@@ -379,27 +384,58 @@ export class ContactsHelpers {
     expectedType: string,
     expectedFecId?: string,
   ) {
+    const typeKey = expectedType.trim().toLowerCase();
+    const expectedAbbr = TYPE_MAPPING[typeKey] || expectedType.toUpperCase();
+    const normalizedExpected = expectedType.trim().toUpperCase();
+    const mappedFull =
+      TYPE_MAPPING[typeKey] ??
+      Object.entries(TYPE_MAPPING).find(([, abbr]) => abbr === normalizedExpected)?.[0]?.toUpperCase();
+    const expectedFull = mappedFull || normalizedExpected;
+
+    const resolveIdSelector = () => {
+      if (expectedAbbr === 'CAN' || typeKey === 'candidate') return '#candidate_id';
+      if (expectedAbbr === 'COM' || typeKey === 'committee') return '#committee_id';
+      return undefined;
+    };
+
     cy.contains('tbody tr', rowText, { matchCase: false })
       .should('exist')
-      .within(() => {
-        cy.get('td')
-          .eq(1)
-          .invoke('text')
-          .then((t) => {
-            expect(t.trim().toLowerCase()).to.eq(expectedType.toLowerCase());
-          });
+      .as('contactRow');
 
-        if (expectedFecId) {
-          cy.get('td')
-            .eq(2)
-            .invoke('text')
-            .then((t) => {
-              expect(t.replaceAll(/\s+/g, '').toUpperCase()).to.eq(
-                expectedFecId.toUpperCase(),
-              );
-            });
-        }
+    cy.get('@contactRow')
+      .find('td')
+      .eq(1)
+      .invoke('text')
+      .then((t) => {
+        const cellText = t.trim().toUpperCase();
+        const matches = cellText === expectedAbbr || cellText === expectedFull;
+        expect(matches, `type cell text for ${rowText}`).to.eq(true);
       });
+
+    if (expectedFecId) {
+      cy.get('@contactRow')
+        .find('td')
+        .eq(2)
+        .invoke('text')
+        .then((t) => {
+          const normalized = t.replaceAll(/\s+/g, '').toUpperCase();
+          if (normalized) {
+            expect(normalized).to.eq(expectedFecId.toUpperCase());
+            return;
+          }
+
+          const idSelector = resolveIdSelector();
+          if (!idSelector) return;
+
+          PageUtils.clickKababItem(rowText, 'Edit');
+          cy.contains(/Edit Contact/i).should('exist');
+          cy.get(idSelector).should('have.value', expectedFecId);
+
+          cy.contains('.p-dialog', /Edit Contact/i).as('editDialog');
+          PageUtils.clickButton('Cancel', '@editDialog');
+          cy.contains(/Edit Contact/i).should('not.exist');
+        });
+    }
   }
 
   static buildContactTypeCases(uid: number): ContactCaseConfig[] {
@@ -409,6 +445,7 @@ export class ContactsHelpers {
 
     const candidateLast = `CandLn${uid}`;
     const candidateFirst = `CandFn${uid}`;
+    const candidateDisplay = `${candidateLast}, ${candidateFirst}`;
     const candidateId = 'H0VA00001';
 
     const committeeName = `Committee ${uid}`;
@@ -438,7 +475,7 @@ export class ContactsHelpers {
           candidate_state: 'Virginia',
           candidate_district: '01',
         },
-        rowText: candidateId,
+        rowText: candidateDisplay,
         type: 'Candidate',
         fecId: candidateId,
       },
@@ -449,7 +486,7 @@ export class ContactsHelpers {
           name: committeeName,
           committee_id: committeeId,
         },
-        rowText: committeeId,
+        rowText: committeeName,
         type: 'Committee',
         fecId: committeeId,
       },
@@ -467,109 +504,42 @@ export class ContactsHelpers {
 
   static createContactViaLookup(
     entityLabel: 'Committee' | 'Candidate',
-    searchEndpoint: string,
-    rowMatch: RegExp,
+    contact: ContactFormData,
   ): Cypress.Chainable<JQuery<HTMLElement>> {
-    const searchTerm = 'ber';
-    const candidateId = 'H0VA00001';
-    const committeeId = 'C00000001';
-    const candidateName = 'Beryl Candidate';
-    const committeeName = 'Beryl Committee';
-    const lookupEndpoint =
-      entityLabel === 'Candidate'
-        ? '**/api/v1/contacts/candidate_lookup/**'
-        : '**/api/v1/contacts/committee_lookup/**';
+    PageUtils.clickButton('Add contact');
+    ContactLookup.setType(entityLabel, '#entity_type_dropdown');
 
     if (entityLabel === 'Candidate') {
-      cy.intercept('GET', lookupEndpoint, {
-        statusCode: 200,
-        body: {
-          fec_api_candidates: [
-            {
-              candidate_id: candidateId,
-              name: candidateName,
-              office: 'H',
-            },
-          ],
-          fecfile_candidates: [],
-        },
-      }).as('entityLookup');
-
-      cy.intercept('GET', searchEndpoint, {
-        statusCode: 200,
-        body: {
-          candidate_id: candidateId,
-          name: candidateName,
-          candidate_first_name: 'Beryl',
-          candidate_last_name: 'Candidate',
-          candidate_middle_name: 'Q',
-          candidate_prefix: 'Ms.',
-          candidate_suffix: '',
-          address_street_1: '123 Main St',
-          address_street_2: '',
-          address_city: 'Richmond',
-          address_state: 'VA',
-          address_zip: '23219',
-          office: 'H',
-          state: 'VA',
-          district: '01',
-        },
-      }).as('entityDetails');
+      ContactsHelpers.stubCandidateDetails(contact);
+      ContactLookup.getCandidate(contact, [], []);
     } else {
-      cy.intercept('GET', lookupEndpoint, {
-        statusCode: 200,
-        body: {
-          fec_api_committees: [
-            {
-              id: committeeId,
-              name: committeeName,
-              is_active: true,
-            },
-          ],
-          fecfile_committees: [],
-        },
-      }).as('entityLookup');
+      const committeeId = contact.committee_id ?? '';
+      if (committeeId) {
+        cy.intercept('GET', '**/api/v1/contacts/committee/?committee_id=*', (req) => {
+          const id = (req.query as any)?.committee_id;
+          if (!id || id === committeeId) {
+            req.reply({ statusCode: 200, body: contact });
+          } else {
+            req.continue();
+          }
+        }).as('committeeDetails');
+      }
 
-      cy.intercept('GET', searchEndpoint, {
-        statusCode: 200,
-        body: {
-          committee_id: committeeId,
-          name: committeeName,
-          street_1: '456 Main St',
-          street_2: '',
-          city: 'Richmond',
-          state: 'VA',
-          zip: '23219',
-          treasurer_phone: '5555551234',
-        },
-      }).as('entityDetails');
+      ContactLookup.getCommittee(contact, [], [], '', 'Committee');
     }
 
-    PageUtils.clickButton('Add contact');
-    cy.get('#entity_type_dropdown').first().click();
-
-    cy.contains('.p-select-option', entityLabel)
-      .scrollIntoView({ offset: { top: 0, left: 0 } })
-      .click();
-
-    cy.get('.p-autocomplete-input')
-      .should('exist')
-      .type(searchTerm);
-
-    cy.wait('@entityLookup');
-    cy.get('body')
-      .find('.p-autocomplete-option')
-      .should('have.length.at.least', 1)
-      .first()
-      .click({ force: true });
-
-    cy.wait('@entityDetails');
     cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
     PageUtils.clickButton('Save');
     cy.wait('@createContact');
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    return cy.contains('tbody tr', rowMatch).should('exist');
+
+    const rowText =
+      entityLabel === 'Candidate'
+        ? `${contact.last_name}, ${contact.first_name}`
+        : contact.name ?? '';
+
+    return cy.contains('tbody tr', rowText).should('exist');
   }
 
   static assertTransactionHistoryRow(row: TxnHistoryRow): Cypress.Chainable<void> {

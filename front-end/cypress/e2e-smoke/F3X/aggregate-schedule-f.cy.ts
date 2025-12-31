@@ -65,9 +65,17 @@ describe('Tests transaction form aggregate calculation', () => {
       // Move the date back
       const alias = PageUtils.getAlias('');
       cy.get(alias).find('[data-cy="expenditure_date"]').first().click();
-      cy.get('body').find('.p-datepicker-panel').as('calendarElement');
-      cy.get('@calendarElement').find('[data-date="2025-3-29"]').click('bottom', { force: true });
-      cy.get('@calendarElement').find('[data-date="2025-3-29"]').click('bottom', { force: true });
+      cy.get('body').find('.p-datepicker-panel:visible').as('calendarElement');
+      cy.get('@calendarElement')
+        .find('[data-date="2025-3-29"]')
+        .filter(':visible')
+        .first()
+        .click('bottom', { force: true });
+      cy.get('@calendarElement')
+        .find('[data-date="2025-3-29"]')
+        .filter(':visible')
+        .first()
+        .click('bottom', { force: true });
       cy.get('[id=aggregate_general_elec_expended]').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
