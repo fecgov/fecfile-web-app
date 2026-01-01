@@ -12,8 +12,6 @@ import {
   MockContact,
 } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
-import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
-import { ContactFormData } from '../../e2e-smoke/models/ContactFormModel';
 
 const IND_LAST = 'IndLn8535';
 const IND_FIRST = 'IndFn8535';
