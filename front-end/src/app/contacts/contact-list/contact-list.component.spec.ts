@@ -16,6 +16,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
 import { Contact, ContactTypes } from 'app/shared/models';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -215,7 +216,8 @@ describe('ContactListComponent', () => {
       }),
     );
 
-    await component.loadTableItems({ first: 0, rows: 10 } as any);
+    const event: TableLazyLoadEvent = { first: 0, rows: 10 };
+    await component.loadTableItems(event);
 
     expect(component.restoreContactsButtonIsVisible).toBeTrue();
   });
