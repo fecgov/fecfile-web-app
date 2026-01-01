@@ -250,5 +250,4 @@ describe('ContactListComponent', () => {
     expect(service.create).toHaveBeenCalledTimes(1);
     expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Created');
   });
-
 });
