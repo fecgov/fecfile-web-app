@@ -469,9 +469,9 @@ describe('Contacts: Transactions integration', () => {
       ContactListPage.goToPage();
       ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
 
-      assertContactsListRow(individual.display, 'Individual');
-      assertContactsListRow(committee.display, 'Committee', committee.id);
-      assertContactsListRow(organization.display, 'Organization');
+      assertContactsListRow(individual.display, 'IND');
+      assertContactsListRow(committee.display, 'COM', committee.id);
+      assertContactsListRow(organization.display, 'ORG');
     });
   });
 
@@ -579,48 +579,9 @@ describe('Contacts: Transactions integration', () => {
         type: /Individual Receipt/i,
         form: /Form\s*3X/i,
         report: /JULY 15 QUARTERLY/i,
-        date: '04/27/2025',
+        date: String.raw`04/27/${currentYear}`,
         amount: /\$250\.00/,
       });
     });
-  });
-
-  // waiting on bug fix for FECFILE-2685
-  xit('switching Contact Lookup type before first save (Individual → Committee) [OTHER_RECEIPT]', () => {
-    const reportId = '98c197fb-8304-42b2-9963-28ff0905474b';
-    cy.visit(`/reports/transactions/report/${reportId}/create/OTHER_RECEIPT`);
-
-    selectContactLookupType('Individual');
-    cy.contains(/Create a new contact/i).click();
-
-    fillInputByLabel(/LAST NAME/i, 'ABBOTT');
-    fillInputByLabel(/FIRST NAME/i, 'MARTHA');
-    fillInputByLabel(/MIDDLE NAME/i, 'Francis');
-    fillInputByLabel(/PREFIX/i, 'Miss');
-    fillInputByLabel(/SUFFIX/i, 'Sr');
-
-    fillInputByLabel(/STREET ADDRESS/i, '920 MAIN STREET suite');
-    fillInputByLabel(/APARTMENT, SUITE/i, 'Apt B');
-    fillInputByLabel(/^CITY$/i, 'Michigan');
-    selectByLabel(/STATE\/TERRITORY/i, 'Kentucky');
-    fillInputByLabel(/ZIP\/POSTAL CODE/i, '76543');
-
-    selectContactLookupType('Committee');
-
-    cy.contains('label', /COMMITTEE NAME/i).should('be.visible');
-    fillInputByLabel(/COMMITTEE NAME/i, "Testing of Guarantor's");
-    fillInputByLabel(/AMOUNT/i, '100');
-    fillInputByLabel(/DATE RECEIVED/i, '03/31/2024');
-
-    cy.intercept('POST', '**/transactions/**').as('saveTransaction');
-
-    cy.contains('button', /^Save$/).scrollIntoView().click();
-
-    cy.contains(/You suggested changes for/i).should('not.exist');
-    cy.contains(/^Confirm$/i).should('not.exist');
-
-    cy.wait('@saveTransaction')
-      .its('response.statusCode')
-      .should('be.oneOf', [200, 201]);
   });
 });

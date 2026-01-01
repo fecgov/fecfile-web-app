@@ -62,6 +62,7 @@ describe('Manage contacts', () => {
     const formData = {
       ...contactFormData,
       contact_type: 'Committee',
+      committee_id: 'C00000001',
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
