@@ -16,7 +16,7 @@ export default defineConfig({
   viewportHeight: 768,
   viewportWidth: 1366,
   chromeWebSecurity: false,
-  reporter: 'mochawesome',
+  reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     reportDir: 'cypress/results',
     reportFilename: '[status]_[datetime]-[name]',

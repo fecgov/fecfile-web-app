@@ -56,10 +56,12 @@ describe('Contacts List (/contacts)', () => {
     // Committee
     PageUtils.clickButton('Add contact');
     const committeeName = `Committee ${uid}`;
+    const committeeId = 'C00000001';
     const committeeFormData = {
       ...contactFormData,
       contact_type: 'Committee',
       name: committeeName,
+      committee_id: committeeId,
     };
     ContactListPage.enterFormData(committeeFormData);
     PageUtils.clickButton('Save');
@@ -82,10 +84,10 @@ describe('Contacts List (/contacts)', () => {
     cy.get('tbody tr').should('have.length.greaterThan', 3);
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
-    ContactsHelpers.assertRowValues(individualDisplayName, 'Individual');
-    ContactsHelpers.assertRowValues(candidateDisplayName, 'Candidate', candidateId);
-    ContactsHelpers.assertRowValues(committeeName, 'Committee');
-    ContactsHelpers.assertRowValues(organizationName, 'Organization');
+    ContactsHelpers.assertRowValues(individualDisplayName, 'IND');
+    ContactsHelpers.assertRowValues(candidateDisplayName, 'CAN', candidateId);
+    ContactsHelpers.assertRowValues(committeeName, 'COM', committeeId);
+    ContactsHelpers.assertRowValues(organizationName, 'ORG');
   });
 
   it('checks pagination controls empty state', () => {
@@ -131,7 +133,7 @@ describe('Contacts List (/contacts)', () => {
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
       cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
     }
-    cy.get('body').click(0, 0);
+    PageUtils.blurActiveField();
 
     const selectPageSize = (size: number) => {
       SharedHelpers.chooseResultsPerPage(size);

@@ -12,6 +12,8 @@ import {
   MockContact,
 } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
+import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
+import { ContactFormData } from '../../e2e-smoke/models/ContactFormModel';
 
 const IND_LAST = 'IndLn8535';
 const IND_FIRST = 'IndFn8535';
@@ -171,7 +173,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', display)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'Candidate');
+        cy.get('td').eq(1).should('contain.text', 'CAN');
         cy.get('td').eq(2).should('contain.text', candidateId);
       });
   };
@@ -468,7 +470,7 @@ describe('Contacts Edit', () => {
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       ContactsHelpers.fieldForLabel(labelRx).within(() => {
-        cy.contains(/This is a required field\./i).should('exist');
+        cy.contains('This is a required field.').should('exist');
       });
     };
 
@@ -540,7 +542,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newDisplay)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'Candidate');
+        cy.get('td').eq(1).should('contain.text', 'CAN');
         cy.get('td').eq(2).should('contain.text', originalCandidateId);
       });
 
@@ -583,6 +585,7 @@ describe('Contacts Edit', () => {
     cy.contains(/Edit Contact/i).should('exist');
 
     candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
+    assertCandidateRowInList(lookupName, lookupCandidateId);
   });
 
   // COMMITTEE – required validation, update/check all editable fields
@@ -653,7 +656,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'Committee');
+        cy.get('td').eq(1).should('contain.text', 'COM');
         cy.get('td').eq(2).should('contain.text', newCommitteeId);
       });
 
@@ -739,7 +742,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'Organization');
+        cy.get('td').eq(1).should('contain.text', 'ORG');
       });
 
     PageUtils.clickKababItem(newName, 'Edit');
