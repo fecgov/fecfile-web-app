@@ -5,18 +5,16 @@ import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { TableModule } from 'primeng/table';
+import { TableLazyLoadEvent,TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ContactListComponent } from './contact-list.component';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
 import { Contact, ContactTypes } from 'app/shared/models';
-import { TableLazyLoadEvent } from 'primeng/table';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -49,7 +47,6 @@ describe('ContactListComponent', () => {
         ConfirmDialogModule,
         ContactListComponent,
         ContactDialogComponent,
-        RouterTestingModule,
       ],
       providers: [
         provideHttpClient(),
@@ -60,6 +57,7 @@ describe('ContactListComponent', () => {
         MessageService,
         ContactService,
         provideMockStore(testMockStore()),
+        provideRouter([]),
         {
           provide: ActivatedRoute,
           useValue: {
