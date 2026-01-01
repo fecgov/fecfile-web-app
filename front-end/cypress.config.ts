@@ -17,12 +17,15 @@ export default defineConfig({
   viewportWidth: 1366,
   chromeWebSecurity: false,
   reporter: 'cypress-mochawesome-reporter',
-  reporterOptions: {
-    reportDir: 'cypress/results',
+    reporterOptions: {
+    charts: true,
+    reportPageTitle: `FECFile+ E2E Test Report`,
     reportFilename: '[status]_[datetime]-[name]',
-    overwrite: false,
-    html: true,
-    json: false,
+    reportDir: 'cypress/results',
+    embeddedScreenshots: true,
+    inlineAssets: true,
+    saveAllAttempts: false,
+    videoOnFailOnly: true,
   },
   retries: {
     runMode: 1,
@@ -34,6 +37,8 @@ export default defineConfig({
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
     setupNodeEvents(on) {
       CypressConfigHelper.deleteVideoOnSuccess(on);
+      // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
+      require('cypress-mochawesome-reporter/plugin')(on);
     },
   },
 });

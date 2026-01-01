@@ -1,10 +1,5 @@
 /// <reference path="../../node_modules/cypress/types/index.d.ts" />
-/*
-
-  The index file imports commands and adds them to Cypress
-
-*/
-
+import 'cypress-mochawesome-reporter/register';
 import { safeType, overwrite } from './commands';
 Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
