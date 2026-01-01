@@ -67,7 +67,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get(alias).find('[data-cy="expenditure_date"]').first().click();
       cy.get('body').find('.p-datepicker-panel').as('calendarElement');
       cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
-      //cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
+      cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
       cy.get('[id=aggregate_general_elec_expended]').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
