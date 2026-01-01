@@ -1,9 +1,4 @@
 /// <reference path="../../node_modules/cypress/types/index.d.ts" />
-/*
-
-  The index file imports commands and adds them to Cypress
-
-*/
 import { RunOptions } from 'axe-core';
 import * as commands from './commands';
 import 'cypress-axe';
