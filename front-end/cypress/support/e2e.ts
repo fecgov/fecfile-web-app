@@ -1,16 +1,19 @@
 /// <reference path="../../node_modules/cypress/types/index.d.ts" />
+import { RunOptions } from 'axe-core';
+import * as commands from './commands';
+import 'cypress-axe';
 import 'cypress-mochawesome-reporter/register';
-import { safeType, overwrite } from './commands';
-Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
-Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
+Cypress.Commands.add('safeType', { prevSubject: true }, commands.safeType);
+Cypress.Commands.add('overwrite', { prevSubject: true }, commands.overwrite);
 
 declare global {
   namespace Cypress {
     interface Chainable<Subject = any> {
-      /**
-       * Custom command to select DOM element by data-cy attribute.
-       * @example cy.dataCy('greeting')
-       */
+      checkA11yCritical(
+        context?: any,
+        options?: Partial<RunOptions> & { includedImpacts?: string[] },
+        waivers?: Record<string, { reason: string; link: string }>
+      ): Chainable<void>;
       safeType(value: string | number): Chainable<JQuery<HTMLElement>>;
       overwrite(value: string | number): Chainable<JQuery<HTMLElement>>;
     }

@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { defineConfig } from 'cypress';
+import { setupA11yNodeEvents } from './cypress.a11y';
 import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
 
 const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
@@ -35,10 +36,12 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
-    setupNodeEvents(on) {
-      CypressConfigHelper.deleteVideoOnSuccess(on);
-      // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
+    setupNodeEvents(on, config) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('cypress-mochawesome-reporter/plugin')(on);
+      setupA11yNodeEvents(on);
+      CypressConfigHelper.deleteVideoOnSuccess(on);
+      return config;
     },
   },
 });
