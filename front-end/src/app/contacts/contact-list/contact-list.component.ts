@@ -48,20 +48,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('nameBody');
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('roleBody');
-  readonly fecIdBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('fecIdBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('actionsBody');
 
   readonly columns: Signal<ColumnDefinition<Contact>[]> = computed(() => {
     return [
       { field: 'sort_name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
       { field: 'type', header: 'Type', sortable: true, cssClass: 'type-column' },
-      {
-        field: 'sort_fec_id',
-        header: 'FEC ID',
-        sortable: true,
-        cssClass: 'fec-id-column',
-        bodyTpl: this.fecIdBodyTpl(),
-      },
+      { field: 'sort_fec_id', header: 'FEC ID', sortable: true, cssClass: 'fec-id-column' },
       {
         field: 'employer',
         header: 'Employer',
@@ -130,10 +123,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     } else {
       return item.name || '';
     }
-  }
-
-  public displayFecId(item: Contact): string {
-    return item.candidate_id ?? item.committee_id ?? '';
   }
 
   public canDeleteItem(item: Contact): boolean {

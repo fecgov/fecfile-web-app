@@ -43,7 +43,7 @@ describe('Receipt Transactions', () => {
       cy.get('img.fec-loader-image').should('exist');
 
       // Create transaction
-      const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, `${currentYear}-04-12`, result.individual, result.report);
+      const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, '2025-04-12', result.individual, result.report);
       makeTransaction(transaction, () => {
         // Go to summary and verify summary calc runs
         ReviewReport.Summary();

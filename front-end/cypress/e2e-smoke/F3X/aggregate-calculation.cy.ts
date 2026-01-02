@@ -18,14 +18,14 @@ function setupTransactions(secondSame: boolean) {
     const transaction_a = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
       200.01,
-      `${currentYear}-04-12`,
+      '2025-04-12',
       result.individual,
       result.report,
     );
     const transaction_b = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
       25,
-      `${currentYear}-04-16`,
+      '2025-04-16',
       secondSame ? result.individual : result.individual2,
       result.report,
     );
@@ -57,7 +57,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Tests moving the date to be earlier
-      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 10), '');
+      TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(2025, 3, 10), '');
       PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
       cy.get('[id=aggregate]').should('have.value', '$25.00');
 
@@ -152,7 +152,7 @@ describe('Tests transaction form aggregate calculation', () => {
       const transaction_c = buildScheduleA(
         'INDIVIDUAL_RECEIPT',
         40,
-        `${currentYear}-04-20`,
+        '2025-04-20',
         result.individual,
         result.report,
       );
