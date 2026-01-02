@@ -6,10 +6,6 @@
   {{ item.type | label: contactTypeLabels }}
 </ng-template>
 
-<ng-template #fecIdBody let-item>
-  {{ displayFecId(item) }}
-</ng-template>
-
 <ng-template #actionsBody let-item>
   <app-table-actions-button
     [tableActions]="rowActions"

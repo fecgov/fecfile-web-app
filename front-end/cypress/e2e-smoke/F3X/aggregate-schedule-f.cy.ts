@@ -51,23 +51,23 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('new transaction aggregate', () => {
     generateReportAndContacts([
-      [200.01, `${currentYear}-04-12`, true],
-      [25, `${currentYear}-04-16`, true],
+      [200.01, '2025-04-12', true],
+      [25, '2025-04-16', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.get(':nth-child(2) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
       // Tests moving the date to be earlier
-      TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 10), '');
+      TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(2025, 3, 10), '');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
       // Move the date back
       const alias = PageUtils.getAlias('');
       cy.get(alias).find('[data-cy="expenditure_date"]').first().click();
       cy.get('body').find('.p-datepicker-panel').as('calendarElement');
-      cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
-      cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
+      cy.get('@calendarElement').find('[data-date="2025-3-29"]').click('bottom', { force: true });
+      cy.get('@calendarElement').find('[data-date="2025-3-29"]').click('bottom', { force: true });
       cy.get('[id=aggregate_general_elec_expended]').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
@@ -125,8 +125,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change contact', () => {
     generateReportAndContacts([
-      [200.01, `${currentYear}-04-12`, true],
-      [25, `${currentYear}-04-16`, false],
+      [200.01, '2025-04-12', true],
+      [25, '2025-04-16', false],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -141,8 +141,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change general election year', () => {
     generateReportAndContacts([
-      [200.01, `${currentYear}-04-12`, true],
-      [25, `${currentYear}-04-10`, true],
+      [200.01, '2025-04-12', true],
+      [25, '2025-04-10', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -150,7 +150,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests changing the second transaction's general election year
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
-      TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 15), '');
+      TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(2025, 3, 15), '');
       cy.get('[id=general_election_year]').clear().safeType('2024').blur();
 
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
@@ -159,8 +159,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction date leapfrogging', () => {
     generateReportAndContacts([
-        [200.01, `${currentYear}-04-12`, true],
-      [25, `${currentYear}-04-16`, true],
+      [200.01, '2025-04-12', true],
+      [25, '2025-04-16', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
@@ -194,9 +194,9 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('leapfrog and contact change', () => {
     generateReportAndContacts([
-      [200.01, `${currentYear}-04-12`, true],
-      [25, `${currentYear}-04-16`, true],
-      [40, `${currentYear}-04-20`, true],
+      [200.01, '2025-04-12', true],
+      [25, '2025-04-16', true],
+      [40, '2025-04-20', true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');

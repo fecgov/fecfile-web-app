@@ -3,4 +3,3 @@
 node_modules
 assets
 cypress/
-cypress.config.ts

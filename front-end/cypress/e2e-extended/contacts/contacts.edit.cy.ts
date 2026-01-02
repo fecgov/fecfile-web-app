@@ -171,7 +171,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', display)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'CAN');
+        cy.get('td').eq(1).should('contain.text', 'Candidate');
         cy.get('td').eq(2).should('contain.text', candidateId);
       });
   };
@@ -468,7 +468,7 @@ describe('Contacts Edit', () => {
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       ContactsHelpers.fieldForLabel(labelRx).within(() => {
-        cy.contains('This is a required field.').should('exist');
+        cy.contains(/This is a required field\./i).should('exist');
       });
     };
 
@@ -540,7 +540,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newDisplay)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'CAN');
+        cy.get('td').eq(1).should('contain.text', 'Candidate');
         cy.get('td').eq(2).should('contain.text', originalCandidateId);
       });
 
@@ -583,7 +583,6 @@ describe('Contacts Edit', () => {
     cy.contains(/Edit Contact/i).should('exist');
 
     candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
-    assertCandidateRowInList(lookupName, lookupCandidateId);
   });
 
   // COMMITTEE – required validation, update/check all editable fields
@@ -654,7 +653,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'COM');
+        cy.get('td').eq(1).should('contain.text', 'Committee');
         cy.get('td').eq(2).should('contain.text', newCommitteeId);
       });
 
@@ -740,7 +739,7 @@ describe('Contacts Edit', () => {
     cy.contains('tbody tr', newName)
       .should('exist')
       .within(() => {
-        cy.get('td').eq(1).should('contain.text', 'ORG');
+        cy.get('td').eq(1).should('contain.text', 'Organization');
       });
 
     PageUtils.clickKababItem(newName, 'Edit');

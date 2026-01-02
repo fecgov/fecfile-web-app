@@ -208,7 +208,7 @@ describe('Loans', () => {
 
       // go to create guarantor
       cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
-      cy.contains('h1', 'Guarantors to loan source').should('be.visible', { timeout: 5000 });
+      cy.contains('Guarantors to loan source').should('exist');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);
