@@ -3,7 +3,6 @@
   "ignoreDependencies": [
     "primeflex",
     "primeicons",
-    "cypress-mochawesome-reporter",
     "@angular-eslint/eslint-plugin",
     "@angular-eslint/eslint-plugin-template",
     "@angular-eslint/schematics",
