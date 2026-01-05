@@ -23,6 +23,8 @@ export class LoginPage {
   }
 }
 
+const API_BASE_URL = 'http://localhost:8080';
+
 /**
  * getLoginIntervalString
  *
@@ -53,20 +55,76 @@ function getLoginIntervalString(sessionDur: number): string {
   return `${hour}:${minute}`;
 }
 
+function loginViaApi() {
+  const requestRedirect = (url: string) =>
+    cy.request({
+      method: 'GET',
+      url,
+      followRedirect: false,
+    });
+
+  const resolveUrl = (urlOrPath?: string) => {
+    if (!urlOrPath) throw new Error('Missing redirect location during API login');
+    if (urlOrPath.startsWith('http')) return urlOrPath;
+    return `${API_BASE_URL}${urlOrPath.startsWith('/') ? '' : '/'}${urlOrPath}`;
+  };
+
+  const cookies: string[] = [];
+  const collectCookies = (response: Cypress.Response<any>) => {
+    const raw = response.headers['set-cookie'];
+    if (Array.isArray(raw)) cookies.push(...raw);
+    else if (typeof raw === 'string') cookies.push(raw);
+    return response;
+  };
+
+  const setCookieFromHeader = (cookieHeader: string) => {
+    const parts = cookieHeader.split(';').map((part) => part.trim());
+    const [nameValue, ...attrs] = parts;
+    const [name, ...valueParts] = nameValue.split('=');
+    const value = valueParts.join('=');
+    if (!name) return;
+    const options: Partial<Cypress.SetCookieOptions> = { path: '/', domain: 'localhost' };
+    for (const attr of attrs) {
+      const [rawKey, rawVal] = attr.split('=');
+      const key = rawKey.toLowerCase();
+      if (key === 'path' && rawVal) options.path = rawVal;
+      if (key === 'domain' && rawVal) options.domain = rawVal;
+      if (key === 'secure') options.secure = false;
+      if (key === 'httponly') options.httpOnly = true;
+      if (key === 'samesite' && rawVal) options.sameSite = rawVal as Cypress.SameSiteOptions;
+    }
+    cy.setCookie(name, value, options);
+  };
+
+  return requestRedirect(`${API_BASE_URL}/api/v1/oidc/authenticate`)
+    .then((response) => requestRedirect(resolveUrl(collectCookies(response).headers['location'] as string)))
+    .then((response) => requestRedirect(resolveUrl(collectCookies(response).headers['location'] as string)))
+    .then((response) => {
+      collectCookies(response);
+      return cy.wrap(cookies, { log: false }).each((cookie) => {
+        setCookieFromHeader(String(cookie));
+      });
+    });
+}
+
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
-  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.intercept('GET', '**/api/v1/committees/**').as('GetCommitteeAccounts');
+  cy.intercept('POST', '**/api/v1/committees/*/activate/**').as('ActivateCommittee');
+  cy.intercept('GET', '**/api/v1/committee-members/**').as('GetCommitteeMembers');
+  cy.intercept('GET', '**/api/v1/users/get_current/**').as('GetCurrentUser');
 
+  loginViaApi();
   cy.visit('/');
-  cy.get('#loginButton').click();
-  cy.wait('@GetLoggedIn');
+  cy.wait('@GetCurrentUser', { timeout: 20000 });
+  cy.window({ timeout: 20000 })
+    .its('localStorage')
+    .invoke('getItem', 'fecfile_online_userLoginData')
+    .should('not.be.null');
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
   cy.get('[data-cy="consent-button"]').click();
-  cy.wait('@GetCommitteeAccounts');
+  cy.wait('@GetCommitteeAccounts', { timeout: 20000 });
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
 

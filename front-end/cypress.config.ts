@@ -1,9 +1,11 @@
 /// <reference types="node" />
 import { defineConfig } from 'cypress';
+import * as crypto from 'crypto';
 import { setupA11yNodeEvents } from './cypress.a11y';
 import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
 
 const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
+const generateRunId = () => `silk-e2e-${crypto.randomUUID()}`;
 
 export default defineConfig({
   defaultCommandTimeout: 10000,
@@ -40,6 +42,8 @@ export default defineConfig({
       // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
       require('cypress-mochawesome-reporter/plugin')(on);
       CypressConfigHelper.deleteVideoOnSuccess(on);
+      config.env.silkRunId ??= process.env.CYPRESS_silkRunId ?? generateRunId();
+      console.log(`[silk] Cypress run id: ${config.env.silkRunId}`);
       return config;
     },
   },
