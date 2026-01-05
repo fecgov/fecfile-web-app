@@ -13,13 +13,8 @@
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
       id="entity_type_dropdown"
       appendTo="body"
-    >
-      <ng-template pTemplate="dropdownicon">
-        @if (contactTypeOptions.length > 1) {
-          <img alt="Dropdown arrow" src="assets/img/dropdown_arrow.svg" height="11px" width="11px" />
-        }
-      </ng-template>
-    </p-select>
+      [pt]="{ dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon' }"
+    />
   </div>
   @if (showSearchBoxCallback()) {
     <div class="pl-0">

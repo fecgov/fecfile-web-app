@@ -1,4 +1,73 @@
-.top-30 {
-  top: 30%;
-  margin-bottom: 32px;
+@use 'mixins' as *;
+
+.body-header {
+  font-family: var(--karla-bold);
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+
+.body-text {
+  font-family: var(--gandhi);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.prev-arrow-mask {
+  background-color: var(--p-content-color);
+  mask-image: url('assets/img/prev_arrow.svg');
+}
+
+.next-arrow-mask {
+  background-color: white;
+  mask-image: url('assets/img/next_arrow.svg');
+}
+
+.prev-arrow-mask,
+.next-arrow-mask {
+  height: 9px;
+  width: 8px;
+}
+
+.icon-gap {
+  gap: 5px;
+}
+
+.inner-body-text {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 18px;
+
+  @include fixed-width(100%);
+
+  @include breakpoint('xl') {
+    @include fixed-width(66.6667%);
+  }
+  @include breakpoint('xxl') {
+    @include fixed-width(50%);
+  }
+}
+
+#print-preview-container {
+  @include standard-container(true);
+}
+
+#left-content {
+  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  @include fixed-width(66.67%);
+
+  @include breakpoint('xl') {
+    @include fixed-width(50%);
+  }
+}
+
+#right-content {
+  align-content: center;
+  @include fixed-width(33.33%);
+
+  @include breakpoint('xl') {
+    @include fixed-width(50%);
+  }
 }

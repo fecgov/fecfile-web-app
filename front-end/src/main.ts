@@ -46,6 +46,7 @@ import { ROUTES } from 'app/routes';
 import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeuix/themes/aura';
 import { CookieCheckService } from 'app/shared/services/cookie-check.service';
+import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
 
 function initializeAppFactory(
   loginService: LoginService,
@@ -155,5 +156,6 @@ bootstrapApplication(AppComponent, {
     }),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
+    { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.showGlossary },
   ],
 }).catch((err) => console.log(err));

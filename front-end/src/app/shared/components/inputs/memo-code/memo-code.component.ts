@@ -15,6 +15,7 @@ import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
+import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-memo-code',
@@ -26,6 +27,7 @@ import { BaseInputComponent } from '../base-input.component';
     ErrorMessagesComponent,
     SelectButton,
     Dialog,
+    DialogComponent,
     ButtonDirective,
     FecDatePipe,
     CheckboxModule,

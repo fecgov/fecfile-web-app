@@ -1,3 +1,26 @@
+<ng-template #nameBody let-item>
+  <a (click)="editItem(item)">{{ displayName(item) }}</a>
+</ng-template>
+
+<ng-template #typeBody let-item>
+  {{ item.type | label: contactTypeLabels }}
+</ng-template>
+
+<ng-template #fecIdBody let-item>
+  {{ displayFecId(item) }}
+</ng-template>
+
+<ng-template #actionsBody let-item>
+  <app-table-actions-button
+    [tableActions]="rowActions"
+    [actionItem]="item"
+    (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
+    buttonIcon="pi pi-ellipsis-v"
+    buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+    [buttonAriaLabel]="'edit ' + displayName(item)"
+  />
+</ng-template>
+
 <app-table
   [(first)]="first"
   [items]="items"
@@ -9,12 +32,12 @@
   [(selectedItems)]="selectedItems"
   itemName="contacts"
   sortField="sort_name"
-  [sortableHeaders]="sortableHeaders"
+  [columns]="columns()"
   (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
     @if (restoreContactsButtonIsVisible) {
-      <button pButton pRipple class="restore-contact-button" (click)="onRestoreClick()">
+      <button pButton pRipple class="restore-contact-button" [routerLink]="['deleted']">
         Restore deleted contacts
       </button>
     }
@@ -28,28 +51,6 @@
       (click)="addItem()"
     ></button>
   </ng-template>
-  <ng-template #header>
-    <th id="actions" role="columnheader">Actions</th>
-  </ng-template>
-  <ng-template #body let-item>
-    <td>
-      <a (click)="editItem(item)">{{ displayName(item) }}</a>
-    </td>
-    <td>{{ item.type | label: contactTypeLabels }}</td>
-    <td>{{ item.candidate_id || item.committee_id }}</td>
-    <td>{{ item.employer }}</td>
-    <td>{{ item.occupation }}</td>
-    <td>
-      <app-table-actions-button
-        [tableActions]="rowActions"
-        [actionItem]="item"
-        (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
-        buttonIcon="pi pi-ellipsis-v"
-        buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-        [buttonAriaLabel]="'edit ' + displayName(item)"
-      />
-    </td>
-  </ng-template>
 </app-table>
 
 <app-contact-dialog
@@ -59,7 +60,3 @@
   [showHistory]="true"
   (savedContact)="saveContact($event)"
 />
-
-@if (restoreDialogIsVisible) {
-  <app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible" (contactsRestored)="refreshTable()" />
-}

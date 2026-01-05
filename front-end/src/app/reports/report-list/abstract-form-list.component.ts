@@ -1,14 +1,14 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition } from 'app/shared/components/table/table.component';
 import { Report, ReportStatus } from 'app/shared/models';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
-import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SharedTemplatesComponent } from './shared-templates.component';
-import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
 @Component({ template: '' })
 export abstract class AbstractFormListComponent<T extends Report> extends TableListBaseComponent<T> {
@@ -21,23 +21,8 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   override readonly rowsPerPage = signal(5);
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
-  columns: ColumnDefinition<T>[] = [];
-
-  readonly rowActions: TableAction<T>[] = [
-    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
-    new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
-    new TableAction(
-      'Review',
-      this.editItem.bind(this),
-      (report: T) => report.report_status !== ReportStatus.IN_PROGRESS,
-    ),
-    new TableAction('Delete', this.confirmDelete.bind(this), (report: T) => report.can_delete),
-    new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
-    new TableAction('Download as .fec', this.download.bind(this)),
-  ];
-
-  override ngAfterViewInit(): void {
-    this.columns = [
+  readonly baseColumns: Signal<ColumnDefinition<T>[]> = computed(() => {
+    return [
       {
         field: 'formSubLabel',
         header: 'Type',
@@ -63,11 +48,24 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
         actions: this.rowActions,
       },
     ];
-  }
+  });
+
+  readonly rowActions: TableAction<T>[] = [
+    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
+    new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
+    new TableAction(
+      'Review',
+      this.editItem.bind(this),
+      (report: T) => report.report_status !== ReportStatus.IN_PROGRESS,
+    ),
+    new TableAction('Delete', this.confirmDelete.bind(this), (report: T) => report.can_delete),
+    new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
+    new TableAction('Download as .fec', this.download.bind(this)),
+  ];
 
   public confirmDelete(report: T): void {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this report? This action cannot be undone.',
+      message: 'Are you sure you want to delete this report?\n\nThis action cannot be undone.',
       header: 'Hang on...',
       rejectLabel: 'Cancel',
       rejectIcon: 'none',
@@ -98,12 +96,9 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   }
 
   async download(report: T): Promise<void> {
-    const payload = getReportFromJSON<T>({
-      ...report,
-      qualified_committee: this.committeeAccount().qualified,
-    });
-
-    await this.itemService.update(payload, ['qualified_committee']);
+    /** Update the report with the committee information
+     * this is a must because the .fec requires this information */
+    await this.itemService.fecUpdate(report, this.committeeAccount());
     const download = await this.dotFecService.generateFecFile(report);
     return this.dotFecService.checkFecFileTask(download);
   }

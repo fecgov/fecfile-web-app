@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, model, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { Ripple } from 'primeng/ripple';
@@ -10,12 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import { ReportTypes } from 'app/shared/models';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
-  imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component],
+  imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
 })
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);
@@ -55,19 +56,18 @@ export class FormTypeDialogComponent {
     }
   }
 
-  /**
-   * Called when the dialog is hidden/closed. Reset the selected form type so
-   * the next time the dialog opens it's cleared.
-   */
-  onDialogHide(): void {
-    if (this.isF24()) {
-      this.f24().reset();
-    }
-
-    this.selectedType.set(undefined);
-  }
-
   getFormType(type?: ReportTypes): FormType | undefined {
     return type ? getFormTypes(environment.showForm3).get(type) : undefined;
+  }
+
+  constructor() {
+    effect(() => {
+      if (!this.dialogVisible()) {
+        if (this.isF24()) {
+          this.f24().reset();
+        }
+        this.selectedType.set(undefined);
+      }
+    });
   }
 }

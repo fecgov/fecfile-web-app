@@ -143,60 +143,107 @@ jobs:
           paths:
             - /tmp/cache/scanner
 
-  e2e-test:
+  e2e-smoke:
     docker:
       - image: cimg/node:lts-browsers
+    parameters:
+      video:
+        type: boolean
+        default: false
+    environment:
+      CYPRESS_VIDEO: << parameters.video >>
     steps:
       - spin-up-api-containers
       - run:
           name: execute e2e tests
           command: |
-            docker container run --name fecfile-web-app-e2e -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/**/*.cy.ts" --headless --watch=false --browser chrome;'\
+            docker container run --name fecfile-web-app-e2e \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              --network container:fecfile-api-proxy \
+              cypress/browsers:latest \
+              /bin/bash -c '\
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm install; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'
       - run:
           name: stage test result artifacts
           when: always
           command: |
             rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
+            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
+      - store_artifacts:
+          path: /tmp/cypress/videos
+          destination: cypress/videos
+      - store_artifacts:
+          path: /tmp/cypress/screenshots
+          destination: cypress/screenshots
 
-  # New nightly job running cypress/nightly/**/*.cy.ts
-  e2e-nightly:
+  # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
+  e2e-extended:
     docker:
       - image: cimg/node:lts-browsers
+    parameters:
+      video:
+        type: boolean
+        default: false
+    environment:
+      CYPRESS_VIDEO: << parameters.video >>
     steps:
       - spin-up-api-containers
       - run:
-          name: execute nightly e2e tests
+          name: execute extended e2e tests
           command: |
-            docker container run --name fecfile-web-app-e2e -e CIRCLE_BRANCH=${CIRCLE_BRANCH} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} --network container:fecfile-api-proxy cypress/browsers:latest /bin/bash -c '\
-              cd ~; \
-              git clone https://github.com/fecgov/fecfile-web-app.git; \
-              cd fecfile-web-app/front-end; \
-              git checkout ${CIRCLE_BRANCH}; \
-              npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/nightly/**/*.cy.ts" --headless --watch=false --browser chrome;'\
+            docker container run --name fecfile-web-app-e2e \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+              --network container:fecfile-api-proxy \
+              cypress/browsers:latest \
+              /bin/bash -c '\
+                cd ~; \
+                git clone https://github.com/fecgov/fecfile-web-app.git; \
+                cd fecfile-web-app/front-end; \
+                git checkout ${CIRCLE_BRANCH}; \
+                npm install; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'
       - run:
           name: stage test result artifacts
           when: always
           command: |
             rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
+            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
+      - store_artifacts:
+          path: /tmp/cypress/videos
+          destination: cypress/videos
+      - store_artifacts:
+          path: /tmp/cypress/screenshots
+          destination: cypress/screenshots
+
   deploy-job:
     docker:
       - image: cimg/python:3.13-node
@@ -250,11 +297,11 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 parameters:
-  is-triggered-e2e-test:
+  is-triggered-e2e-smoke-test:
     type: boolean
     default: false
 
-  is-nightly-e2e-test:
+  is-triggered-e2e-extended-test:
     type: boolean
     default: false
 
@@ -262,18 +309,28 @@ parameters:
     type: boolean
     default: false
 
+  is-triggered-full-nightly:
+    type: boolean
+    default: false
+
+  e2e-video:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
       and:
-        - not: << pipeline.parameters.is-triggered-e2e-test >>
-        - not: << pipeline.parameters.is-nightly-e2e-test >>
+        - not: << pipeline.parameters.is-triggered-e2e-smoke-test >>
+        - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
         - not: << pipeline.parameters.is-triggered-unit-test >>
+        - not: << pipeline.parameters.is-triggered-full-nightly >>
     jobs:
       - lint
       - test
       - dependency-check
-      - e2e-test:
+      - e2e-smoke:
+          video: << pipeline.parameters.e2e-video >> # Default is false
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
@@ -292,19 +349,30 @@ workflows:
   # circleci config file.  It is used to run the e2e tests
   # when the fecfile-web-api is deployed to dev, stage,
   # test, or prod.
-  triggered-e2e-test:
-    when: << pipeline.parameters.is-triggered-e2e-test >>
+  triggered-e2e-smoke-test:
+    when: << pipeline.parameters.is-triggered-e2e-smoke-test >>
     jobs:
-      - e2e-test
+      - e2e-smoke:
+          video: << pipeline.parameters.e2e-video >>
 
-  triggered-nightly-e2e-test:
-    when: << pipeline.parameters.is-nightly-e2e-test >>
+  triggered-extended-e2e-test:
+    when: << pipeline.parameters.is-triggered-e2e-extended-test >>
     jobs:
-      - e2e-nightly
+      - e2e-extended:
+          video: << pipeline.parameters.e2e-video >>
 
   triggered-unit-test:
     when: << pipeline.parameters.is-triggered-unit-test >>
     jobs:
+      - test
+
+  full-nightly:
+    when: << pipeline.parameters.is-triggered-full-nightly >>
+    jobs:
+      - e2e-smoke:
+          video: true
+      - e2e-extended:
+          video: true
       - test
 
   nightly:
@@ -313,8 +381,10 @@ workflows:
           cron: "0 6 * * *" # 06:00 UTC
           filters:
             branches:
-              only:
-                - develop
+              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
     jobs:
-      - e2e-nightly
+      - e2e-smoke:
+          video: true
+      - e2e-extended:
+          video: true
       - test

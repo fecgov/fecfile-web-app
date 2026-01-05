@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -58,6 +58,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   protected readonly messageService = inject(MessageService);
   readonly router = inject(Router);
   readonly reportId = injectParams('reportId');
+  private readonly destroyRef = inject(DestroyRef);
 
   // CONSTANTS
   readonly year = new Date().getFullYear();
@@ -76,12 +77,17 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   readonly form: FormGroup = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, f3xSchema), {
     updateOn: 'blur',
   });
+  readonly filingFrequencyOptions: PrimeOptions = [
+    { label: 'Quarterly', value: 'Q' },
+    { label: 'Monthly', value: 'M' },
+  ];
   readonly reportTypeCategories = [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   readonly defaultReportTypeCategory = this.getDefaultTypeCategory();
 
   // Observable to Signals
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
   readonly filingFrequency = toSignal(this.form.controls['filing_frequency'].valueChanges);
+  readonly filingFrequencyLabel = computed(() => (this.filingFrequency() === 'M' ? 'MONTHLY' : 'QUARTERLY'));
   readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
 
   // Derived Asyncs
@@ -95,7 +101,11 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
           coverage.coverage_from_date?.getTime() !== (this.report() as Form3X).coverage_from_date?.getTime(),
       );
     }
-    this.form.addValidators(buildNonOverlappingCoverageValidator(existingCoverage));
+    const validator = buildNonOverlappingCoverageValidator(existingCoverage);
+    this.form.controls['coverage_from_date'].addValidators(validator);
+    this.form.controls['coverage_through_date'].addValidators(validator);
+    this.form.controls['coverage_from_date'].updateValueAndValidity({ emitEvent: false });
+    this.form.controls['coverage_through_date'].updateValueAndValidity({ emitEvent: false });
     return existingCoverage;
   });
 
@@ -167,6 +177,27 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
     }
   });
 
+  readonly numReportCodeColumns = signal(3);
+  readonly reportCodesColumns = computed(() => {
+    const codes = this.reportCodes();
+    const numColumns = this.numReportCodeColumns();
+    const result: ReportCodes[][] = [];
+
+    let startIndex = 0;
+
+    for (let i = 0; i < numColumns; i++) {
+      const baseSize = Math.floor(codes.length / numColumns);
+      const extra = i < codes.length % numColumns ? 1 : 0;
+      const colSize = baseSize + extra;
+
+      const chunk = codes.slice(startIndex, startIndex + colSize);
+      result.push(chunk);
+      startIndex += colSize;
+    }
+
+    return result;
+  });
+
   readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
 
   // VARIABLES
@@ -214,6 +245,19 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
         this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
       }
     });
+
+    this.detectScreenWidth();
+  }
+
+  private detectScreenWidth() {
+    const mobileQuery = window.matchMedia('(min-width: 992px)');
+    const mediaQueryListener = () => {
+      const isLargeScreen = mobileQuery!.matches;
+      this.numReportCodeColumns.set(isLargeScreen ? 3 : 2);
+    };
+    mediaQueryListener();
+    mobileQuery.addEventListener('change', mediaQueryListener);
+    this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', mediaQueryListener));
   }
 
   ngOnInit(): void {
@@ -224,7 +268,10 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
       buildAfterDateValidator(this.form, 'coverage_from_date'),
     ]);
     (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form.controls['coverage_through_date'].updateValueAndValidity();
+      this.form.controls['coverage_through_date'].updateValueAndValidity({ emitEvent: false });
+    });
+    (this.form.controls['coverage_through_date'] as SubscriptionFormControl).addSubscription(() => {
+      this.form.controls['coverage_from_date'].updateValueAndValidity({ emitEvent: false });
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
