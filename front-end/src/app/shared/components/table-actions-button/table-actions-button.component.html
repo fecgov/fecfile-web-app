@@ -7,14 +7,14 @@
     [class.rounded-text]="rounded()"
     [class]="buttonStyleClass()"
     [ariaLabel]="buttonAriaLabel()"
-    (click)="op.toggle($event)"
+    (click)="actionsClicked($event)"
   ></button>
   <p-popover #op>
     <ul class="dropdown-menu">
       @for (action of filteredActions(); track action; let index = $index) {
         <li>
           <button
-            [disabled]="!action.isEnabled(actionItem())"
+            [disabled]="!action.isEnabled(_actionItem()!)"
             pButton
             pRipple
             type="button"

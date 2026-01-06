@@ -1,7 +1,7 @@
 <app-table
   [(first)]="first"
   title="Receipts"
-  [items]="itemList()"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="line_label,created"
@@ -53,7 +53,8 @@
     <td>
       <app-table-actions-button
         [tableActions]="rowActions"
-        [actionItem]="item"
+        [actionItemId]="item.id"
+        [getActionItem]="itemService.get"
         (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="p-button-text"

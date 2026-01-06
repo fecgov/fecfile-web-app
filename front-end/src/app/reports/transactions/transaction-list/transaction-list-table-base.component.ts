@@ -17,11 +17,9 @@ import {
 } from 'app/shared/models';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { derivedAsync } from 'ngxtension/derived-async';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
 const loansDebts = [
@@ -46,15 +44,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   paginationPageSizeOptions = [5, 10, 15, 20];
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
   readonly isForm24 = computed(() => this.report().form_type === ReportTypes.F24);
-
-  readonly itemList = derivedAsync(
-    () => {
-      const items = this.items();
-      const promises = items.map((item) => (this.itemService as TransactionService).get(item.id!));
-      return Promise.all(promises);
-    },
-    { initialValue: [] },
-  );
 
   public rowActions: TableAction<Transaction>[] = [
     new TableAction(

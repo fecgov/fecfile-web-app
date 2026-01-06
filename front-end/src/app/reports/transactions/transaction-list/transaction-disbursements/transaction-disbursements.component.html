@@ -1,7 +1,7 @@
 <app-table
   [(first)]="first"
   title="Disbursements"
-  [items]="itemList()"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   [(rowsPerPage)]="rowsPerPage"
@@ -51,7 +51,8 @@
     <td>
       <app-table-actions-button
         [tableActions]="rowActions"
-        [actionItem]="item"
+        [actionItemId]="item.id"
+        [getActionItem]="itemService.get"
         (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
         buttonIcon="pi pi-ellipsis-v"
         buttonStyleClass="p-button-text"

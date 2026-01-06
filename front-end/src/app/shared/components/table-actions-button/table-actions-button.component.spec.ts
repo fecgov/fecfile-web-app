@@ -62,11 +62,11 @@ describe('TableActionsButtonComponent', () => {
 
     component.tableActionClick.emit({
       action: component.tableActions()[0],
-      actionItem: component.actionItem(),
+      actionItem: component._actionItem()!,
     });
     expect(spy).toHaveBeenCalledOnceWith({
       action: component.tableActions()[0],
-      actionItem: component.actionItem(),
+      actionItem: component._actionItem()!,
     });
   });
 });
