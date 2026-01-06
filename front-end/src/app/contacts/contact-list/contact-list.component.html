@@ -23,7 +23,7 @@
 
 <app-table
   [(first)]="first"
-  [items]="items"
+  [items]="items()"
   title="Manage contacts"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
   [(totalItems)]="totalItems"

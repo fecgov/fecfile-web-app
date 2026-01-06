@@ -1,5 +1,4 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, computed, inject, input, output, viewChild } from '@angular/core';
 import { ApiService } from 'app/shared/services/api.service';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
@@ -10,36 +9,29 @@ import { TableAction } from './table-actions';
   selector: 'app-table-actions-button',
   templateUrl: './table-actions-button.component.html',
   styleUrls: ['./table-actions-button.component.scss'],
-  imports: [ButtonModule, Ripple, PopoverModule, AsyncPipe],
+  imports: [ButtonModule, Ripple, PopoverModule],
 })
 export class TableActionsButtonComponent<T> {
   readonly apiService = inject(ApiService);
-  @ViewChild(Popover) op!: Popover;
-  @Input() tableActions: TableAction<T>[] = [];
-  @Input() actionItem: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  @Input() actionItemId = '';
-  @Input() getActionItem?: (id: string) => Promise<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  @Input() buttonIcon = '';
-  @Input() buttonLabel = '';
-  @Input() buttonStyleClass = '';
-  @Input() buttonAriaLabel = '';
-  @Input() rounded = true;
-  @Output() tableActionClick = new EventEmitter<{ action: TableAction<T>; actionItem: any }>(); // eslint-disable-line @typescript-eslint/no-explicit-any
-  filteredActions?: Promise<TableAction<T>[]>;
+  readonly op = viewChild.required(Popover);
+  readonly tableActions = input<TableAction<T>[]>([]);
+  readonly actionItem = input.required<T>();
+  readonly buttonIcon = input('');
+  readonly buttonLabel = input('');
+  readonly buttonStyleClass = input('');
+  readonly buttonAriaLabel = input('');
+  readonly rounded = input(true);
+  readonly tableActionClick = output<{ action: TableAction<T>; actionItem: T }>();
 
-  actionsClicked() {
-    this.filteredActions = this.getTableActions();
-  }
+  readonly filteredActions = computed(() => {
+    const item = this.actionItem();
+    if (!item) return [];
+    return this.tableActions().filter((action) => !action.isAvailable || action.isAvailable(item));
+  });
 
-  async getTableActions(): Promise<TableAction<T>[]> {
-    if (!this.actionItem && this.actionItemId && this.getActionItem) {
-      this.actionItem = await this.getActionItem(this.actionItemId);
-    }
-    return this.tableActions.filter((action) => !action.isAvailable || action.isAvailable(this.actionItem));
-  }
-
-  performAction(action: TableAction<T>) {
-    this.tableActionClick.emit({ action, actionItem: this.actionItem });
-    this.op.hide();
+  async performAction(action: TableAction<T>) {
+    const actionItem = await this.actionItem();
+    this.tableActionClick.emit({ action, actionItem });
+    this.op().hide();
   }
 }

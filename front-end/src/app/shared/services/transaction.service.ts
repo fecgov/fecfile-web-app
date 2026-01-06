@@ -35,10 +35,10 @@ export class TransactionService implements TableListService<Transaction> {
     return response;
   }
 
-  public async get(id: string): Promise<ScheduleTransaction> {
+  public get = async (id: string): Promise<ScheduleTransaction> => {
     const response = await this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`);
     return getFromJSON(response);
-  }
+  };
 
   public async getPreviousTransactionForAggregate(
     transaction: Transaction | undefined,

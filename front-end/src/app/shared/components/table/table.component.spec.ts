@@ -8,7 +8,7 @@ import { Component, signal, viewChild } from '@angular/core';
   standalone: true,
   template: `<app-table
     [(first)]="first"
-    [items]="items"
+    [items]="items()"
     title="Title"
     [(totalItems)]="totalItems"
     [loading]="loading"
@@ -22,7 +22,7 @@ import { Component, signal, viewChild } from '@angular/core';
 })
 class TestHostComponent {
   component = viewChild.required(TableComponent);
-  items: Report[] = [];
+  readonly items = signal<Report[]>([]);
   readonly rowsPerPage = signal(10);
   totalItems = signal(0);
   loading = true;

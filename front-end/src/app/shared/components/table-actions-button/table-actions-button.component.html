@@ -2,19 +2,19 @@
   <button
     pButton
     pRipple
-    [icon]="buttonIcon"
-    [label]="buttonLabel"
-    [class.rounded-text]="rounded"
-    [class]="buttonStyleClass"
-    [ariaLabel]="buttonAriaLabel"
-    (click)="actionsClicked(); op.toggle($event)"
+    [icon]="buttonIcon()"
+    [label]="buttonLabel()"
+    [class.rounded-text]="rounded()"
+    [class]="buttonStyleClass()"
+    [ariaLabel]="buttonAriaLabel()"
+    (click)="op.toggle($event)"
   ></button>
   <p-popover #op>
     <ul class="dropdown-menu">
-      @for (action of filteredActions | async; track action; let index = $index) {
+      @for (action of filteredActions(); track action; let index = $index) {
         <li>
           <button
-            [disabled]="!action.isEnabled(actionItem)"
+            [disabled]="!action.isEnabled(actionItem())"
             pButton
             pRipple
             type="button"

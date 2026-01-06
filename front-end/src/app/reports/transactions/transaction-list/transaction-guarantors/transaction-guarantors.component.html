@@ -13,8 +13,7 @@
 <ng-template #actionsBody let-item>
   <app-table-actions-button
     [tableActions]="rowActions"
-    [actionItemId]="item.id"
-    [getActionItem]="itemService.get"
+    [actionItem]="item"
     (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
     buttonIcon="pi pi-ellipsis-v"
     buttonStyleClass="p-button-text"
@@ -25,7 +24,7 @@
 <app-table
   [(first)]="first"
   title="Guarantors"
-  [items]="items"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   [(rowsPerPage)]="rowsPerPage"
