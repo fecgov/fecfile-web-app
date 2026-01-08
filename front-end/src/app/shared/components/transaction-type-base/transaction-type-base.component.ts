@@ -267,6 +267,10 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     );
   }
 
+  clearFormPrimaryContact() {
+    TransactionContactUtils.clearFormPrimaryContact(this.form, this.transaction, this.contactIdMap['contact_1']);
+  }
+
   updateFormWithCandidateContact(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.updateFormWithCandidateContact(
       selectItem,

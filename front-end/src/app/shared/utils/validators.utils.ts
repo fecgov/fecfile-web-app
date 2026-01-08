@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { isEmpty, omit } from 'lodash';
 import { CoverageDates } from '../models/reports/base-form-3';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
@@ -57,18 +56,33 @@ export function buildGuaranteeUniqueValuesValidator(
 
 export function buildNonOverlappingCoverageValidator(existingCoverage: CoverageDates[]): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const fromControl = control.get('coverage_from_date');
-    const throughControl = control.get('coverage_through_date');
-    const surrounding = findSurrounding(fromControl?.value, throughControl?.value, existingCoverage);
-    let fromError = validateDateWithinCoverage(existingCoverage, fromControl);
-    let throughError = validateDateWithinCoverage(existingCoverage, throughControl);
+    const group = control.parent;
+    if (!group || !existingCoverage?.length) return null;
+
+    const fromControl = group.get('coverage_from_date');
+    const throughControl = group.get('coverage_through_date');
+
+    if (control !== fromControl && control !== throughControl) return null;
+
+    const fromDate = fromControl?.value;
+    const throughDate = throughControl?.value;
+
+    const surrounding = findSurrounding(fromDate, throughDate, existingCoverage);
+    const fromError = validateDateWithinCoverage(existingCoverage, fromControl);
+    const throughError = validateDateWithinCoverage(existingCoverage, throughControl);
+
     if (surrounding) {
-      fromError = throughError = getCoverageOverlapError(surrounding);
+      return getCoverageOverlapError(surrounding);
     }
-    fromControl?.setErrors(getErrors(fromControl.errors, fromError));
-    throughControl?.setErrors(getErrors(throughControl.errors, throughError));
-    fromControl?.markAsTouched();
-    throughControl?.markAsTouched();
+
+    if (control === fromControl) {
+      return fromError;
+    }
+
+    if (control === throughControl) {
+      return throughError;
+    }
+
     return null;
   };
 }
@@ -83,11 +97,6 @@ function validateDateWithinCoverage(
       ? getCoverageOverlapError(coverage)
       : null;
   }, null);
-}
-
-function getErrors(errors: ValidationErrors | null, newError: ValidationErrors | null): ValidationErrors | null {
-  const otherErrors = !isEmpty(omit(errors, 'invaliddate')) ? omit(errors, 'invaliddate') : null;
-  return otherErrors || newError ? { ...otherErrors, ...newError } : null;
 }
 
 function findSurrounding(from: Date, through: Date, existingCoverage: CoverageDates[]): CoverageDates | undefined {

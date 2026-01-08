@@ -1,18 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { TableComponent } from '../../shared/components/table/table.component';
-import { ButtonDirective } from 'primeng/button';
+import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
+import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
-import { DeletedContactDialogComponent } from '../deleted-contact-dialog/deleted-contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contact-list',
@@ -24,18 +24,19 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
     Ripple,
     TableActionsButtonComponent,
     ContactDialogComponent,
-    DeletedContactDialogComponent,
+    ButtonModule,
     LabelPipe,
     SelectModule,
+    RouterLink,
   ],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
+
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
-  restoreDialogIsVisible = false;
   restoreContactsButtonIsVisible = false;
   searchTerm = '';
 
@@ -44,6 +45,43 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ContactTypes.COMMITTEE,
     ContactTypes.INDIVIDUAL,
   ]);
+
+  readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('nameBody');
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('roleBody');
+  readonly fecIdBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('fecIdBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('actionsBody');
+
+  readonly columns: Signal<ColumnDefinition<Contact>[]> = computed(() => {
+    return [
+      { field: 'sort_name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
+      { field: 'type', header: 'Type', sortable: true, cssClass: 'type-column' },
+      {
+        field: 'sort_fec_id',
+        header: 'FEC ID',
+        sortable: true,
+        cssClass: 'fec-id-column',
+        bodyTpl: this.fecIdBodyTpl(),
+      },
+      {
+        field: 'employer',
+        header: 'Employer',
+        sortable: true,
+        cssClass: 'employer-column',
+      },
+      {
+        field: 'occupation',
+        header: 'Occupation',
+        sortable: true,
+        cssClass: 'occupation-column',
+      },
+      {
+        field: '',
+        header: 'Actions',
+        cssClass: 'actions-column',
+        bodyTpl: this.actionsBodyTpl(),
+      },
+    ];
+  });
 
   public rowActions: TableAction<Contact>[] = [
     new TableAction('Edit', this.editItem.bind(this)),
@@ -55,19 +93,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     ),
   ];
 
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'sort_name', label: 'Name' },
-    { field: 'type', label: 'Type' },
-    { field: 'sort_fec_id', label: 'FEC ID' },
-    { field: 'employer', label: 'Employer' },
-    { field: 'occupation', label: 'Occupation' },
-  ];
-
   public async checkForDeletedContacts() {
-    const contactListResponse = await this.deletedContactService.getTableData();
-    const deletedContactsExist = contactListResponse.count > 0;
-    this.restoreContactsButtonIsVisible = deletedContactsExist;
-    return deletedContactsExist;
+    const response = await this.deletedContactService.getTableData();
+    this.restoreContactsButtonIsVisible = response.count > 0;
+    return this.restoreContactsButtonIsVisible;
   }
 
   public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
@@ -103,35 +132,25 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     }
   }
 
+  public displayFecId(item: Contact): string {
+    return item.candidate_id ?? item.committee_id ?? '';
+  }
+
   public canDeleteItem(item: Contact): boolean {
     return !item.has_transaction_or_report;
   }
 
-  public onRestoreClick() {
-    this.restoreDialogIsVisible = true;
-  }
-
   saveContact(contact: Contact) {
-    if (contact.id) {
-      this.itemService.update(contact).then(() => {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Updated',
-          life: 3000,
-        });
+    const request = contact.id ? this.itemService.update(contact) : this.itemService.create(contact);
+
+    request.then(() => {
+      this.loadTableItems({});
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: contact.id ? 'Contact Updated' : 'Contact Created',
+        life: 3000,
       });
-    } else {
-      this.itemService.create(contact).then(() => {
-        this.loadTableItems({});
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Created',
-          life: 3000,
-        });
-      });
-    }
+    });
   }
 }

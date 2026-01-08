@@ -6,7 +6,6 @@
         <input
           type="text"
           pInputText
-          appToUpper
           id="organization_name"
           aria-labelledby="organization_name_label"
           [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
@@ -17,7 +16,6 @@
           [form]="form"
           [fieldName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
-          [patternErrorMessage]="patternMessage"
         />
       </div>
     </div>
@@ -28,6 +26,7 @@
           <input
             type="text"
             pInputText
+            appToUpper
             id="committee_fec_id"
             aria-labelledby="committee_fec_id_label"
             [formControlName]="templateMap['committee_fec_id']"
@@ -38,6 +37,7 @@
             [form]="form"
             [fieldName]="templateMap['committee_fec_id']"
             [formSubmitted]="formSubmitted"
+            [patternErrorMessage]="patternMessage"
           />
         </div>
       </div>

@@ -1,10 +1,6 @@
 <p-card styleClass="mt-0">
   <div class="summary-header">
     <h1>Detailed summary page</h1>
-    <div>
-      <strong>{{ report.formLabel }}</strong
-      >{{ report.formSubLabel }}
-    </div>
   </div>
   @if (calculationFinished$ | async) {
     <div>

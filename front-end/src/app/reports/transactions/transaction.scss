@@ -1,3 +1,5 @@
+@use 'mixins' as *;
+
 :host ::ng-deep {
   .p-datatable-header {
     padding-top: 48px;
@@ -30,6 +32,80 @@
 
   .p-datatable-tbody tr:nth-child(even) {
     background-color: rgba(220, 220, 220, 0.2);
+  }
+
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .p-datatable {
+    @include fixed-width(512px);
+    margin: 0;
+    table-layout: fixed;
+  }
+
+  .name-column {
+    @include fixed-width(50%);
+  }
+  .amount-column {
+    @include fixed-width(36%);
+  }
+  .actions-column {
+    @include fixed-width(14%);
+  }
+
+  @include breakpoint('md') {
+    .p-datatable {
+      @include fixed-width(704px);
+    }
+
+    .amount-column {
+      @include fixed-width(40%);
+    }
+    .actions-column {
+      @include fixed-width(10%);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .p-datatable {
+      @include fixed-width(644px);
+    }
+
+    .amount-column {
+      @include fixed-width(39%);
+    }
+    .actions-column {
+      @include fixed-width(11%);
+    }
+  }
+
+  @include breakpoint('xl') {
+    .p-datatable {
+      @include fixed-width(852px);
+    }
+
+    .amount-column {
+      @include fixed-width(43.5%);
+    }
+    .actions-column {
+      @include fixed-width(8.5%);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .p-datatable {
+      @include fixed-width(1052px);
+    }
+
+    .amount-column {
+      @include fixed-width(43.2%);
+    }
+    .actions-column {
+      @include fixed-width(6.8%);
+    }
   }
 }
 
