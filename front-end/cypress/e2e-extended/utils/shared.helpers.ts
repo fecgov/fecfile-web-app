@@ -1,5 +1,6 @@
 export class SharedHelpers {
-  static readonly RESULTS_PER_PAGE_SIZES = [5, 10, 15, 20] as const;
+  // had issues with [5, 10, 15, 20] so I changed it to [10, 5, 15, 20] for more reliable results-per-page selection
+  static readonly RESULTS_PER_PAGE_SIZES = [10, 5, 15, 20] as const;
 
   static paginator(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('p-paginator, .p-paginator').first();

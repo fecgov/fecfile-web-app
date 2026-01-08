@@ -13,7 +13,6 @@
   [lazy]="true"
   [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true"
-  responsiveLayout="scroll"
   (onLazyLoad)="loadTableItems.emit($event)"
   stripedRows
   showGridlines
@@ -37,13 +36,6 @@
   <ng-template pTemplate="header">
     <tr role="row">
       <!-- This can go away after full transition to ColumnDefinition method -->
-      @if (hasCheckbox()) {
-        <th id="header-checkbox" role="columnheader">
-          <p-tableHeaderCheckbox ariaLabel="Restore" />
-          <span class="sr-only">Restore Checkbox</span>
-        </th>
-      }
-      <!-- This can go away after full transition to ColumnDefinition method -->
       @if (sortableHeaders()) {
         @for (h of sortableHeaders(); track h) {
           <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
@@ -61,12 +53,17 @@
           [ngClass]="col.cssClass"
           [id]="col.field + '-column'"
         >
-          <div class="flex justify-content-between">
-            <span>{{ col.header }}</span>
-            @if (col.sortable) {
-              <p-sortIcon [field]="col.field" />
-            }
-          </div>
+          @if (col.checkbox) {
+            <p-tableHeaderCheckbox ariaLabel="Restore" />
+            <span class="sr-only">Restore Checkbox</span>
+          } @else {
+            <div class="flex justify-content-between">
+              <span>{{ col.header }}</span>
+              @if (col.sortable) {
+                <p-sortIcon [field]="col.field" />
+              }
+            </div>
+          }
         </th>
       }
 
@@ -77,17 +74,17 @@
   <ng-template pTemplate="body" let-item>
     <tr role="row">
       <!-- This can go away after full transition to ColumnDefinition method -->
-      @if (hasCheckbox()) {
-        <td>
-          <p-tableCheckbox [value]="item" [ariaLabel]="checkboxLabel()!(item)" />
-        </td>
-      }
+
       @for (col of columns(); track col) {
         <td [ngClass]="col.cssClass">
-          @if (col.bodyTpl) {
-            <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions }" />
+          @if (col.checkbox) {
+            <p-tableCheckbox [value]="item" [ariaLabel]="col.label!(item)" />
           } @else {
-            <span>{{ item[col.field] }}</span>
+            @if (col.bodyTpl) {
+              <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions }" />
+            } @else {
+              <span>{{ item[col.field] }}</span>
+            }
           }
         </td>
       }

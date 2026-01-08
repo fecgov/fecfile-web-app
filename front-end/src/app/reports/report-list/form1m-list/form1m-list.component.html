@@ -9,7 +9,7 @@
   [(selectedItems)]="selectedItems"
   itemName="reports"
   title="Form 1M"
-  [columns]="columns"
+  [columns]="baseColumns()"
   sortField="report_code_label"
   (loadTableItems)="loadTableItems($event)"
 />

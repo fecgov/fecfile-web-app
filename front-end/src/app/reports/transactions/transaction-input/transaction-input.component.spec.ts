@@ -52,6 +52,12 @@ describe('TransactionInputComponent', () => {
     expect(component.primaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
   });
 
+  it('clearFormPrimaryContact should call emit', () => {
+    spyOn(component.primaryContactClear, 'emit');
+    component.clearFormPrimaryContact();
+    expect(component.primaryContactClear.emit).toHaveBeenCalled();
+  });
+
   it('updateFormWithSecondaryContact should call emit', () => {
     spyOn(component.secondaryContactSelect, 'emit');
     component.updateFormWithSecondaryContact(selectItem);

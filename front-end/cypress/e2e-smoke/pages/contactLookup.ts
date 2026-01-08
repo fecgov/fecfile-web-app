@@ -2,13 +2,13 @@ import { ContactFormData } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
 
 export class ContactLookup {
-  static getContact(name: string, alias = '', type: string | undefined = undefined) {
+  static getContact(name: string, alias = '', type: string | undefined = undefined, index=0) {
     alias = PageUtils.getAlias(alias);
-    if (type) {
-      PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias);
+    if (type !== undefined) {
+      PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias, index);
       cy.contains('LOOKUP').should('exist');
     }
-    cy.get(alias).find('[data-cy="searchBox"]').type(name.slice(0, 3));
+    cy.get(alias).find('[data-cy="searchBox"]').eq(index).type(name.slice(0, 3));
     cy.contains(name).should('exist').as('contactName');
     cy.get('@contactName').click({ force: true });
   }
@@ -67,5 +67,14 @@ export class ContactLookup {
     );
 
     this.getContact(name, alias, type);
+  }
+
+  static setType(
+    type: "Individual" | "Organization" | "Committee" | "Candidate",
+    querySelector="#entity_type_dropdown",
+    alias='',
+    index=0,
+  ) {
+    PageUtils.dropdownSetValue(querySelector, type, alias, index);
   }
 }
