@@ -1,6 +1,3 @@
-<ng-template #coverageBody let-item>
-  {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
-</ng-template>
 <app-shared-templates (reportNameClick)="this.editItem($event)" />
 <app-table
   [(first)]="first"
