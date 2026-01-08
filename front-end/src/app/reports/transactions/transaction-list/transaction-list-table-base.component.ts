@@ -194,11 +194,11 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'line_label,created', label: 'Line' },
-    { field: 'transaction_type_identifier', label: 'Type' },
-    { field: 'name', label: 'Name' },
-  ];
+  // sortableHeaders: { field: string; label: string }[] = [
+  //   { field: 'line_label,created', label: 'Line' },
+  //   { field: 'transaction_type_identifier', label: 'Type' },
+  //   { field: 'name', label: 'Name' },
+  // ];
 
   reportId: string = this.activatedRoute.snapshot.params['reportId'];
 

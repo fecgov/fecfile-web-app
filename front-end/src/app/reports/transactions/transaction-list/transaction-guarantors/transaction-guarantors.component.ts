@@ -19,7 +19,7 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
 @Component({
   selector: 'app-transaction-guarantors',
   templateUrl: './transaction-guarantors.component.html',
-  styleUrls: ['../../transaction.scss'],
+  styleUrls: ['../../transaction.scss', './transaction-guarantors.component.scss'],
   imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe, ConfirmDialog],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
