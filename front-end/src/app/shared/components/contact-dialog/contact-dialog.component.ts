@@ -432,12 +432,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.resetForm();
   }
 
-  async openTransaction(transactionListRecord: TransactionListRecord) {
-    if (transactionListRecord.id) {
-      const transaction = await this.transactionService.get(transactionListRecord.id);
-      if (transaction.report_ids?.length) {
-        await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
-      }
+  openTransaction(transactionListRecord: TransactionListRecord) {
+    if (transactionListRecord.report_ids?.length) {
+      return this.router.navigate([
+        `reports/transactions/report/${transactionListRecord.report_ids[0]}/list/${transactionListRecord.id}`,
+      ]);
     }
+    return Promise.resolve(false);
   }
 }

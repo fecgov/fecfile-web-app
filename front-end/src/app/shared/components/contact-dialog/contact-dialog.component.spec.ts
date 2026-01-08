@@ -10,12 +10,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import {
-  createTestTransactionListRecord,
-  testContact,
-  testMockStore,
-  testScheduleATransaction,
-} from 'app/shared/utils/unit-test.utils';
+import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
@@ -122,14 +117,12 @@ describe('ContactDialogComponent', () => {
 
   describe('transactions', () => {
     it('should route to transaction', async () => {
-      const testSchATransaction = testScheduleATransaction();
-      testSchATransaction.id = 'test_id';
-      spyOn(transactionService, 'get').and.returnValue(Promise.resolve(testSchATransaction));
       const spy = spyOn(component.router, 'navigate');
       const testTransactionListRecord = createTestTransactionListRecord();
+      testTransactionListRecord.report_ids = ['abc'];
       await component.openTransaction(testTransactionListRecord);
       expect(spy).toHaveBeenCalledWith([
-        `reports/transactions/report/${testSchATransaction.report_ids?.[0]}/list/${testSchATransaction.id}`,
+        `reports/transactions/report/${testTransactionListRecord.report_ids?.[0]}/list/${testTransactionListRecord.id}`,
       ]);
     });
 
