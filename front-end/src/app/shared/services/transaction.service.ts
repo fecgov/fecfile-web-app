@@ -1,14 +1,15 @@
+import { formatDate } from '@angular/common';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { TableListService } from '../interfaces/table-list-service.interface';
+import { CandidateOfficeTypes } from '../models/contact.model';
+import { Report } from '../models/reports/report.model';
 import { ListRestResponse } from '../models/rest-api.model';
+import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService, QueryParams } from './api.service';
-import { CandidateOfficeTypes } from '../models/contact.model';
-import { Report } from '../models/reports/report.model';
-import { formatDate } from '@angular/common';
-import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -29,15 +30,15 @@ export class TransactionService implements TableListService<Transaction> {
       `${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map((item) => getFromJSON(item));
+    response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
     response.pageNumber = pageNumber;
     return response;
   }
 
-  public async get(id: string): Promise<ScheduleTransaction> {
+  public get = async (id: string): Promise<ScheduleTransaction> => {
     const response = await this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`);
     return getFromJSON(response);
-  }
+  };
 
   public async getPreviousTransactionForAggregate(
     transaction: Transaction | undefined,

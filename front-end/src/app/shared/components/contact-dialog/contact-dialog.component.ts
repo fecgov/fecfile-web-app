@@ -16,7 +16,9 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
+import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
@@ -44,44 +46,15 @@ import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { LabelPipe } from '../../pipes/label.pipe';
-import { getReportFromJSON } from '../../services/report.service';
 import { TransactionService } from '../../services/transaction.service';
-import { FormComponent } from '../form.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
+import { FormComponent } from '../form.component';
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
+import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
-import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
-import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
-
-export class TransactionData {
-  id: string;
-  report_ids: string[];
-  form_type = '';
-  report_code_label = '';
-  transaction_type_identifier: string;
-  date: string;
-  amount: string;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(transaction: any) {
-    this.id = transaction.id;
-    this.report_ids = transaction.report_ids;
-    this.date = transaction.date;
-    this.amount = transaction.amount;
-    this.transaction_type_identifier = transaction.transaction_type_identifier;
-
-    transaction.reports.forEach((r: JSON) => {
-      const report = getReportFromJSON(r);
-      if (report.report_type === ReportTypes.F24) return; // We will display the Form 3X version of the transaction #1977
-      this.form_type = report.formLabel;
-      this.report_code_label = report.report_code_label ?? '';
-    });
-  }
-}
 
 @Component({
   selector: 'app-contact-dialog',
@@ -124,7 +97,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
   readonly first = signal(0);
 
-  transactions: TransactionData[] = [];
+  transactions: TransactionListRecord[] = [];
   tableLoading = true;
   readonly totalTransactions = signal(0);
   readonly rowsPerPage = signal(5);
@@ -164,10 +137,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
   emptyMessage = 'No data available in table';
 
-  readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionData>>>('typeBody');
-  readonly dateBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionData>>>('dateBody');
-  readonly amountBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionData>>>('amountBody');
-  readonly columns: Signal<ColumnDefinition<TransactionData>[]> = computed(() => {
+  readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly dateBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('dateBody');
+  readonly amountBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('amountBody');
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => {
     const type = this.typeBodyTpl();
     const date = this.dateBodyTpl();
     const amount = this.amountBodyTpl();
@@ -250,7 +223,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
     try {
       const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, this.params());
-      this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
+      this.transactions = transactionsPage.results;
       this.totalTransactions.set(transactionsPage.count);
       this.tableLoading = false;
       this.emptyMessage = 'No data available in table';
@@ -459,7 +432,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.resetForm();
   }
 
-  async openTransaction(transaction: TransactionData) {
-    await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
+  openTransaction(transactionListRecord: TransactionListRecord) {
+    if (transactionListRecord.report_ids?.length) {
+      return this.router.navigate([
+        `reports/transactions/report/${transactionListRecord.report_ids[0]}/list/${transactionListRecord.id}`,
+      ]);
+    }
+    return Promise.resolve(false);
   }
 }
