@@ -1,14 +1,10 @@
-import { Component, computed, forwardRef, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, forwardRef, inject, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import {
-  ColumnDefinition,
-  TableBodyContext,
-  TableComponent,
-} from '../../../../shared/components/table/table.component';
+import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { CurrencyPipe } from '@angular/common';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
@@ -46,13 +42,7 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
     this.buildLineColumn(this.lineLabelBodyTpl()),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn({ bodyTpl: this.nameBodyTpl() }),
-    {
-      field: 'date',
-      header: 'Date',
-      sortable: true,
-      cssClass: 'date-column',
-      bodyTpl: this.dateBodyTpl(),
-    },
+    this.buildDateColumn(this.dateBodyTpl()),
     {
       field: 'memo_code',
       header: 'Memo',

@@ -1,7 +1,6 @@
 import { Component, computed, inject, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { option } from '@primeuix/themes/aura/autocomplete';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
@@ -196,12 +195,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
-  // sortableHeaders: { field: string; label: string }[] = [
-  //   { field: 'line_label,created', label: 'Line' },
-  //   { field: 'transaction_type_identifier', label: 'Type' },
-  //   { field: 'name', label: 'Name' },
-  // ];
-
   protected buildLineColumn(bodyTpl: TemplateRef<TableBodyContext<Transaction>>): ColumnDefinition<Transaction> {
     return {
       field: 'line-label',
@@ -231,6 +224,23 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       sortable: true,
       cssClass: 'name-column',
       ...(options?.bodyTpl && { bodyTpl: options.bodyTpl }),
+    };
+  }
+
+  protected buildDateColumn(
+    bodyTpl: TemplateRef<TableBodyContext<Transaction>>,
+    options?: {
+      header?: string;
+      field?: keyof Transaction | string;
+      cssClass?: string;
+    },
+  ): ColumnDefinition<Transaction> {
+    return {
+      field: options?.field ?? 'date',
+      header: options?.header ?? 'Date',
+      sortable: true,
+      cssClass: options?.cssClass ?? 'date-column',
+      bodyTpl,
     };
   }
 

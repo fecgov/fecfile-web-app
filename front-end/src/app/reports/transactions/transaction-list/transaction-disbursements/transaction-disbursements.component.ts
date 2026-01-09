@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, forwardRef, inject, output, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, forwardRef, inject, output, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
@@ -10,11 +10,7 @@ import { TransactionSchBService } from 'app/shared/services/transaction-schB.ser
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import {
-  ColumnDefinition,
-  TableBodyContext,
-  TableComponent,
-} from '../../../../shared/components/table/table.component';
+import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
@@ -61,13 +57,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     this.buildLineColumn(this.lineLabelBodyTpl()),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
-    {
-      field: 'date',
-      header: 'Date',
-      sortable: true,
-      cssClass: 'date-column',
-      bodyTpl: this.dateBodyTpl(),
-    },
+    this.buildDateColumn(this.dateBodyTpl()),
     {
       field: 'memo_code',
       header: 'Memo',

@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -7,11 +7,7 @@ import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transac
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
-import {
-  ColumnDefinition,
-  TableBodyContext,
-  TableComponent,
-} from '../../../../shared/components/table/table.component';
+import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { CurrencyPipe } from '@angular/common';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
@@ -45,13 +41,11 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     this.buildLineColumn(this.lineLabelBodyTpl()),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
-    {
+    this.buildDateColumn(this.dateBodyTpl(), {
       field: 'incurred',
       header: 'Incurred',
-      sortable: true,
       cssClass: 'incurred-column',
-      bodyTpl: this.dateBodyTpl(),
-    },
+    }),
     {
       field: 'amount',
       header: 'Amount',
