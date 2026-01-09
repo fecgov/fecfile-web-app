@@ -42,28 +42,10 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
   readonly dateBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('dateBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
 
-  readonly columns: Signal<ColumnDefinition<Transaction>[]> = computed(() => [
-    {
-      field: 'line_label',
-      header: 'Line',
-      sortable: true,
-      cssClass: 'line-column',
-      bodyTpl: this.lineLabelBodyTpl(),
-    },
-    {
-      field: 'transaction_type_identifier',
-      header: 'Type',
-      sortable: true,
-      cssClass: 'type-column',
-      bodyTpl: this.typeBodyTpl(),
-    },
-    {
-      field: 'name',
-      header: 'Name',
-      sortable: true,
-      cssClass: 'name-column',
-      bodyTpl: this.nameBodyTpl(),
-    },
+  readonly columns = computed(() => [
+    this.buildLineColumn(this.lineLabelBodyTpl()),
+    this.buildTypeColumn(this.typeBodyTpl()),
+    this.buildNameColumn({ bodyTpl: this.nameBodyTpl() }),
     {
       field: 'date',
       header: 'Date',

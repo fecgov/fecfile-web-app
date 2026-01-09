@@ -41,27 +41,10 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   readonly dateBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('dateBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
 
-  readonly columns: Signal<ColumnDefinition<Transaction>[]> = computed(() => [
-    {
-      field: 'line_label',
-      header: 'Line',
-      sortable: true,
-      cssClass: 'line-column',
-      bodyTpl: this.lineLabelBodyTpl(),
-    },
-    {
-      field: 'transaction_type_identifier',
-      header: 'Type',
-      sortable: true,
-      cssClass: 'type-column',
-      bodyTpl: this.typeBodyTpl(),
-    },
-    {
-      field: 'name',
-      header: 'Name',
-      sortable: true,
-      cssClass: 'name-column',
-    },
+  readonly columns = computed(() => [
+    this.buildLineColumn(this.lineLabelBodyTpl()),
+    this.buildTypeColumn(this.typeBodyTpl()),
+    this.buildNameColumn(),
     {
       field: 'incurred',
       header: 'Incurred',

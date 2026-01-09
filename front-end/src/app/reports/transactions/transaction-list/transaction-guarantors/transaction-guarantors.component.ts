@@ -33,14 +33,8 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
 
   readonly loan = input<Transaction>();
 
-  readonly columns: Signal<ColumnDefinition<Transaction>[]> = computed(() => [
-    {
-      field: 'name',
-      header: 'Name',
-      sortable: true,
-      cssClass: 'name-column',
-      bodyTpl: this.nameBodyTpl(),
-    },
+  readonly columns = computed(() => [
+    this.buildNameColumn({ bodyTpl: this.nameBodyTpl() }),
     {
       field: 'amount',
       header: 'Guaranteed financial information amount',
