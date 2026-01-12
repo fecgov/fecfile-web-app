@@ -83,7 +83,7 @@
             @if (col.bodyTpl) {
               <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions }" />
             } @else {
-              <span>{{ item[col.field] }}</span>
+              <span>{{ item[col.field] | dynamic: col.pipe : col.pipeArgs }}</span>
             }
           }
         </td>

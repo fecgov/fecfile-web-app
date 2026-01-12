@@ -42,7 +42,7 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
     this.buildLineColumn(this.lineLabelBodyTpl()),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn({ bodyTpl: this.nameBodyTpl() }),
-    this.buildDateColumn(this.dateBodyTpl()),
+    this.buildDateColumn(),
     {
       field: 'memo_code',
       header: 'Memo',

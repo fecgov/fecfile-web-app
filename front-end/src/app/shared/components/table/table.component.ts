@@ -1,13 +1,16 @@
 import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { CurrencyPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { PrimeTemplate } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 import { Toolbar } from 'primeng/toolbar';
 import { TableAction } from '../table-actions-button/table-actions';
+import { DynamicPipe } from 'app/shared/pipes/dynamic-pipe.pipe';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 export interface ColumnDefinition<T> {
   field: string;
@@ -18,6 +21,8 @@ export interface ColumnDefinition<T> {
   actions?: TableAction<T>[];
   checkbox?: boolean;
   label?: (item: T) => string;
+  pipe?: string;
+  pipeArgs?: any;
 }
 
 export interface TableBodyContext<T> {
@@ -40,6 +45,10 @@ export interface TableBodyContext<T> {
     TableSortIconComponent,
     NgClass,
     Toolbar,
+    DynamicPipe,
+    CurrencyPipe,
+    MemoCodePipe,
+    FecDatePipe,
   ],
 })
 export class TableComponent<T> {

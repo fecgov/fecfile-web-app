@@ -19,14 +19,6 @@
   }
 </ng-template>
 
-<ng-template #dateBody let-item>
-  {{ convertToDate(item.date) | fecDate }}
-</ng-template>
-
-<ng-template #amountBody let-item>
-  {{ item[item.transactionType.templateMap.amount] | currency }}
-</ng-template>
-
 <ng-template #actionsBody let-item>
   <app-table-actions-button
     [tableActions]="rowActions"

@@ -41,8 +41,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     this.buildLineColumn(this.lineLabelBodyTpl()),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
-    this.buildDateColumn(this.dateBodyTpl(), {
-      field: 'incurred',
+    this.buildDateColumn({
       header: 'Incurred',
       cssClass: 'incurred-column',
     }),

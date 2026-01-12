@@ -227,20 +227,16 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildDateColumn(
-    bodyTpl: TemplateRef<TableBodyContext<Transaction>>,
-    options?: {
-      header?: string;
-      field?: keyof Transaction | string;
-      cssClass?: string;
-    },
-  ): ColumnDefinition<Transaction> {
+  protected buildDateColumn(options?: {
+    header?: string;
+    field?: keyof Transaction | string;
+    cssClass?: string;
+  }): ColumnDefinition<Transaction> {
     return {
       field: options?.field ?? 'date',
       header: options?.header ?? 'Date',
       sortable: true,
       cssClass: options?.cssClass ?? 'date-column',
-      bodyTpl,
     };
   }
 

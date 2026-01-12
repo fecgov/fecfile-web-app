@@ -1,5 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, computed, forwardRef, inject, output, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, output, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
@@ -11,25 +10,16 @@ import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
-import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-transaction-disbursements',
   templateUrl: './transaction-disbursements.component.html',
   styleUrls: ['../../transaction.scss', './transaction-disbursements.component.scss'],
-  imports: [
-    TableComponent,
-    RouterLink,
-    TableActionsButtonComponent,
-    CurrencyPipe,
-    FecDatePipe,
-    LabelPipe,
-    forwardRef(() => MemoCodePipe),
-  ],
+  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe, CurrencyPipe],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);
@@ -50,14 +40,13 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
   readonly lineLabelBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('lineLabelBody');
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('typeBody');
   readonly dateBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('dateBody');
-  readonly amountBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('amountBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
 
   readonly columns = computed(() => [
     this.buildLineColumn(this.lineLabelBodyTpl()),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
-    this.buildDateColumn(this.dateBodyTpl()),
+    this.buildDateColumn(),
     {
       field: 'memo_code',
       header: 'Memo',
@@ -70,7 +59,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
       header: 'Amount',
       sortable: true,
       cssClass: 'amount-column',
-      bodyTpl: this.amountBodyTpl(),
+      pipe: 'currency',
     },
     {
       field: '',
