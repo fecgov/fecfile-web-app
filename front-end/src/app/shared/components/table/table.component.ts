@@ -8,7 +8,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 import { Toolbar } from 'primeng/toolbar';
 import { TableAction } from '../table-actions-button/table-actions';
-import { DynamicPipe } from 'app/shared/pipes/dynamic-pipe.pipe';
+import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 

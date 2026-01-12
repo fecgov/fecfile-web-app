@@ -47,7 +47,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeuix/themes/aura';
 import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
-import { DynamicPipe } from 'app/shared/pipes/dynamic-pipe.pipe';
+import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 
 function initializeAppFactory(
