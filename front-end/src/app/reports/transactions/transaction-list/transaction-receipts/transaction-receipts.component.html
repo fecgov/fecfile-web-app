@@ -25,10 +25,6 @@
   }}
 </ng-template>
 
-<ng-template #dateBody let-item>
-  {{ item[item.transactionType.templateMap.date] | fecDate }}
-</ng-template>
-
 <ng-template #actionsBody let-item>
   <app-table-actions-button
     [tableActions]="rowActions"
@@ -44,7 +40,7 @@
 <app-table
   [(first)]="first"
   title="Receipts"
-  [items]="items"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="line_label,created"

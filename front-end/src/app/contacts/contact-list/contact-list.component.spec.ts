@@ -128,7 +128,7 @@ describe('ContactListComponent', () => {
 
   it('renders contact row and edit link', async () => {
     const rowContact = testContact();
-    component.items = [rowContact];
+    component.items.set([rowContact]);
     component.totalItems.set(1);
     component.loading = false;
 

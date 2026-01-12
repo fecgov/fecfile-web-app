@@ -6,7 +6,6 @@ import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transacti
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
@@ -29,7 +28,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     ...ScheduleFTransactionTypeLabels,
   ];
   override readonly caption =
-    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
+    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, and Actions.';
 
   readonly requestReportSelection = output<{
     transaction: Transaction;
@@ -91,9 +90,5 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
         () => true,
       ),
     );
-  }
-
-  public convertToDate(date: string) {
-    return DateUtils.convertFecFormatToDate(date) ?? undefined;
   }
 }

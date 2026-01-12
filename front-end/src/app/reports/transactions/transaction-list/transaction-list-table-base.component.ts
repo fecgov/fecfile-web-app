@@ -171,6 +171,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       this.createReattribution.bind(this),
       (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.A &&
+        !transaction.transactionType.negativeAmountValueOnly &&
         !transaction.parent_transaction_id &&
         !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REATTRIBUTION_FROM,
@@ -185,6 +186,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       (transaction: Transaction) =>
         transaction.transactionType.scheduleId === ScheduleIds.B &&
         transaction.transactionType.hasElectionInformation() &&
+        !transaction.transactionType.negativeAmountValueOnly &&
         !transaction.parent_transaction_id &&
         !ReattRedesUtils.isReattRedes(transaction, [
           ReattRedesTypes.REDESIGNATION_FROM,
@@ -237,6 +239,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
       header: options?.header ?? 'Date',
       sortable: true,
       cssClass: options?.cssClass ?? 'date-column',
+      pipe: 'fecDate',
     };
   }
 

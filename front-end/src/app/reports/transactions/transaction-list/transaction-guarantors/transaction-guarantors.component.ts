@@ -56,7 +56,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
 
   override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
     if (!this.loan()?.id) {
-      this.items = [];
+      this.items.set([]);
       this.totalItems.set(0);
       this.loading = false;
       this.cdr.detectChanges();
