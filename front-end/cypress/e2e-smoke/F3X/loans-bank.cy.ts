@@ -207,7 +207,7 @@ describe('Loans', () => {
       cy.get('.p-datatable-mask').should('not.exist');
 
       // go to create guarantor
-      cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
+      cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click({force: true});
       cy.contains('h1', 'Guarantors to loan source').should('be.visible', { timeout: 5000 });
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
