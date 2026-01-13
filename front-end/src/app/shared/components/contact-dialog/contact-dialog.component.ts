@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { reportLabelList } from 'app/shared/models/reports/report.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
@@ -138,13 +139,16 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   emptyMessage = 'No data available in table';
 
   readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly formBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('formBody');
   readonly dateBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('dateBody');
   readonly amountBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('amountBody');
+  readonly reportLabels: LabelList = reportLabelList;
   readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => {
     const type = this.typeBodyTpl();
+    const form = this.formBodyTpl();
     const date = this.dateBodyTpl();
     const amount = this.amountBodyTpl();
-    if (!type || !date || !amount) return [];
+    if (!type || !form || !date || !amount) return [];
     return [
       {
         field: 'transaction_type_identifier',
@@ -153,7 +157,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         cssClass: 'type-column',
         bodyTpl: type,
       },
-      { field: 'form_type', header: 'Form', sortable: true, cssClass: 'form-column' },
+      { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column', bodyTpl: form },
       { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
       {
         field: 'date',

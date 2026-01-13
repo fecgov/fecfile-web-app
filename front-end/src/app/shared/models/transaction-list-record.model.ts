@@ -8,6 +8,7 @@ export class TransactionListRecord {
   transaction_type_identifier: string | undefined;
   back_reference_tran_id_number: string | undefined;
   form_type: string | undefined;
+  report_type: string | undefined;
   transaction_id: string | undefined;
   line_label: string | undefined;
   itemized: boolean | undefined;

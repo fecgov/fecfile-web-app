@@ -376,6 +376,7 @@ export function createTestTransactionListRecord() {
   testTransactionListRecord.id = '123';
   testTransactionListRecord.transaction_type_identifier = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
   testTransactionListRecord.form_type = 'SA15';
+  testTransactionListRecord.report_type = 'F3X';
   testTransactionListRecord.transaction_id = 'AAAAAAAAAAAAAAAAAAA';
   testTransactionListRecord.line_label = 'test_line_label';
   testTransactionListRecord.itemized = true;
