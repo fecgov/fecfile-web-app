@@ -2,6 +2,8 @@ import { Exclude, plainToClass, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { TransactionType } from './transaction-type.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { reportLabelList } from './reports/report.model';
+import { LabelUtils } from '../utils/label.utils';
 
 export class TransactionListRecord {
   id: string | undefined;
@@ -27,20 +29,7 @@ export class TransactionListRecord {
 
   get formTypeLabel(): string {
     if (!this.form_type) return '';
-
-    const labels: Record<string, string> = {
-      F3: 'Form 3',
-      F3X: 'Form 3X',
-      F24: 'Form 24',
-      F5: 'Form 5',
-      F6: 'Form 6',
-      F7: 'Form 7',
-      F13: 'Form 13',
-      F99: 'Form 99',
-      F1M: 'Form 1M',
-    };
-
-    return labels[this.form_type] || this.form_type; // Fallback to code if not found
+    return LabelUtils.get(reportLabelList, this.form_type) || this.form_type;
   }
 
   // prettier-ignore
