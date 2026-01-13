@@ -4,12 +4,6 @@
   </a>
 </ng-template>
 
-<ng-template #amountBody let-item>
-  <span class="amount-cell">
-    {{ item.amount | currency }}
-  </span>
-</ng-template>
-
 <ng-template #actionsBody let-item>
   <app-table-actions-button
     [tableActions]="rowActions"
