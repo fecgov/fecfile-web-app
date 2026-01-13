@@ -52,6 +52,7 @@ export interface TableBodyContext<T> {
     MemoCodePipe,
     FecDatePipe,
   ],
+  providers: [CurrencyPipe, MemoCodePipe, FecDatePipe],
 })
 export class TableComponent<T> {
   readonly title = input.required<string>();
