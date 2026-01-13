@@ -25,6 +25,24 @@ export class TransactionListRecord {
   @Exclude({ toPlainOnly: true })
   transactionType: TransactionType = {} as TransactionType;
 
+  get formTypeLabel(): string {
+    if (!this.form_type) return '';
+
+    const labels: Record<string, string> = {
+      F3: 'Form 3',
+      F3X: 'Form 3X',
+      F24: 'Form 24',
+      F5: 'Form 5',
+      F6: 'Form 6',
+      F7: 'Form 7',
+      F13: 'Form 13',
+      F99: 'Form 99',
+      F1M: 'Form 1M',
+    };
+
+    return labels[this.form_type] || this.form_type; // Fallback to code if not found
+  }
+
   // prettier-ignore
   static fromJSON(json: any): TransactionListRecord { // eslint-disable-line @typescript-eslint/no-explicit-any
     const transactionListRecord =  plainToClass(TransactionListRecord, json);
