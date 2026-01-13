@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { CurrencyPipe } from '@angular/common';
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { MemoCodePipe } from './memo-code.pipe';
 import { FecDatePipe } from './fec-date.pipe';
 
 @Pipe({ name: 'dynamic' })
 export class DynamicPipe implements PipeTransform {
-  constructor(
-    private currencyPipe: CurrencyPipe,
-    private memoCodePipe: MemoCodePipe,
-    private fecDatePipe: FecDatePipe,
-  ) {}
+  private currencyPipe = inject(CurrencyPipe);
+  private memoCodePipe = inject(MemoCodePipe);
+  private fecDatePipe = inject(FecDatePipe);
 
   transform(value: any, pipeType: string | undefined, pipeArgs: any[] = []): any {
     switch (pipeType) {

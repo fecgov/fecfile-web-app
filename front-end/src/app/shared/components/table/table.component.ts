@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
