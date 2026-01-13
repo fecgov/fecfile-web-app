@@ -1,4 +1,100 @@
-:host ::ng-deep {
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .version-column,
+  .status-column,
+  .coverage-column {
+    display: none;
+  }
+
+  .coverage-type-column,
+  .type-column {
+    @include fixed-width(60.5%);
+  }
+
+  .filed-column {
+    @include fixed-width(25.4%);
+  }
+
+  .actions-column {
+    @include fixed-width(14.1%);
+  }
+
+  @include breakpoint('md') {
+    .coverage-type-column,
+    .type-column {
+      @include fixed-width(52.8%);
+    }
+
+    .version-column {
+      display: table-cell;
+      @include fixed-width(18.5%);
+    }
+
+    .filed-column {
+      @include fixed-width(18.5%);
+    }
+
+    .actions-column {
+      @include fixed-width(10.2%);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .coverage-type-column {
+      @include fixed-width(37.5%);
+    }
+
+    .coverage-column {
+      display: table-cell;
+      @include fixed-width(23.7%);
+    }
+
+    .type-column {
+      @include fixed-width(61.2%);
+    }
+
+    .version-column,
+    .filed-column {
+      display: table-cell;
+      @include fixed-width(15.2%);
+    }
+
+    .actions-column {
+      @include fixed-width(8.4%);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .coverage-type-column {
+      @include fixed-width(34.2%);
+    }
+
+    .coverage-column {
+      display: table-cell;
+      @include fixed-width(19%);
+    }
+
+    .type-column {
+      @include fixed-width(53.2%);
+    }
+
+    .status-column {
+      display: table-cell;
+      @include fixed-width(15.2%);
+    }
+
+    .version-column,
+    .filed-column {
+      display: table-cell;
+      @include fixed-width(12.4%);
+    }
+
+    .actions-column {
+      @include fixed-width(6.8%);
+    }
+  }
+
   .p-datatable-header {
     padding-top: 48px;
   }
