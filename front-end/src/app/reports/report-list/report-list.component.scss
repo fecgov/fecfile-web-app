@@ -94,4 +94,8 @@
       @include fixed-width(6.8%);
     }
   }
+
+  .p-datatable-header {
+    padding-top: 48px;
+  }
 }
