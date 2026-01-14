@@ -35,7 +35,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
-import { NgOptimizedImage } from '@angular/common';
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PopoverModule } from 'primeng/popover';
@@ -47,6 +47,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeuix/themes/aura';
 import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
+import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 
 function initializeAppFactory(
   loginService: LoginService,
@@ -149,6 +151,9 @@ bootstrapApplication(AppComponent, {
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
+    DynamicPipe,
+    MemoCodePipe,
+    CurrencyPipe,
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
     provideAppInitializer(() => {
       const initializerFn = initializeAppFactory(inject(LoginService), inject(Router), inject(CookieCheckService));

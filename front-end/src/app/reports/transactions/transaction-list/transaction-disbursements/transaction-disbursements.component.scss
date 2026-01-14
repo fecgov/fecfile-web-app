@@ -1,0 +1,113 @@
+@use 'mixins' as *;
+
+:host ::ng-deep {
+  .p-datatable {
+    @include fixed-width(512px);
+    margin: 0;
+    table-layout: fixed;
+  }
+
+  .line-column {
+    @include fixed-width(14%);
+
+    & > span {
+      white-space: nowrap;
+    }
+  }
+  .type-column,
+  .name-column {
+    @include fixed-width(26.6%);
+  }
+  .date-column,
+  .memo-column {
+    display: none;
+  }
+  .amount-column {
+    @include fixed-width(18.8%);
+  }
+  .actions-column {
+    @include fixed-width(14%);
+  }
+
+  @include breakpoint('md') {
+    .p-datatable {
+      @include fixed-width(704px);
+    }
+
+    .line-column {
+      @include fixed-width(10.2%);
+    }
+    .type-column,
+    .name-column {
+      @include fixed-width(26.2%);
+    }
+    .date-column {
+      display: table-cell;
+      @include fixed-width(13.6%);
+    }
+    .memo-column {
+      display: none;
+    }
+    .amount-column {
+      @include fixed-width(13.6%);
+    }
+    .actions-column {
+      @include fixed-width(10.2%);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .p-datatable {
+      @include fixed-width(852px);
+    }
+
+    .line-column {
+      @include fixed-width(8.5%);
+    }
+    .type-column,
+    .name-column {
+      @include fixed-width(25.2%);
+    }
+    .date-column,
+    .amount-column {
+      @include fixed-width(11.3%);
+    }
+    .memo-column {
+      display: table-cell;
+      @include fixed-width(10%);
+    }
+    .actions-column {
+      @include fixed-width(8.5%);
+    }
+  }
+
+  @include breakpoint('xl') {
+    .p-datatable {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .p-datatable {
+      @include fixed-width(1052px);
+    }
+
+    .line-column {
+      @include fixed-width(6.8%);
+    }
+    .type-column,
+    .name-column {
+      @include fixed-width(30.3%);
+    }
+    .date-column,
+    .amount-column {
+      @include fixed-width(9.1%);
+    }
+    .memo-column {
+      @include fixed-width(7.6%);
+    }
+    .actions-column {
+      @include fixed-width(6.8%);
+    }
+  }
+}

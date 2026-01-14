@@ -1,5 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, forwardRef, inject, output } from '@angular/core';
+import { Component, computed, inject, output, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
@@ -9,26 +8,16 @@ import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import { TableComponent } from '../../../../shared/components/table/table.component';
-import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
+import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 
 @Component({
   selector: 'app-transaction-disbursements',
   templateUrl: './transaction-disbursements.component.html',
-  styleUrls: ['../../transaction.scss'],
-  imports: [
-    TableComponent,
-    RouterLink,
-    TableActionsButtonComponent,
-    CurrencyPipe,
-    FecDatePipe,
-    LabelPipe,
-    forwardRef(() => MemoCodePipe),
-  ],
+  styleUrls: ['../../transaction.scss', './transaction-disbursements.component.scss'],
+  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);
@@ -38,7 +27,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     ...ScheduleFTransactionTypeLabels,
   ];
   override readonly caption =
-    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
+    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, and Actions.';
 
   readonly requestReportSelection = output<{
     transaction: Transaction;
@@ -46,16 +35,32 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     createMethod: () => Promise<void>;
   }>();
 
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('typeBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
+
+  readonly columns = computed(() => [
+    this.buildLineColumn(),
+    this.buildTypeColumn(this.typeBodyTpl()),
+    this.buildNameColumn(),
+    this.buildDateColumn(),
+    {
+      field: 'memo_code',
+      header: 'Memo',
+      sortable: true,
+      cssClass: 'memo-column',
+      pipe: 'memoCode',
+    },
+    this.buildAmountColumn(),
+    {
+      field: '',
+      header: 'Actions',
+      cssClass: 'actions-column',
+      bodyTpl: this.actionsBodyTpl(),
+    },
+  ]);
+
   constructor() {
     super();
-    this.sortableHeaders.push(
-      ...[
-        { field: 'date', label: 'Date' },
-        { field: 'memo_code', label: 'Memo' },
-        { field: 'amount', label: 'Amount' },
-      ],
-    );
-
     this.rowActions.push(
       new TableAction(
         'Add to Form24 Report',

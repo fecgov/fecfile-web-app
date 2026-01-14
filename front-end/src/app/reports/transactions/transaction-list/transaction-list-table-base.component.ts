@@ -1,8 +1,9 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
 import {
   Report,
   Transaction,
@@ -95,7 +96,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === false &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true,
@@ -107,7 +107,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === true &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true,
@@ -196,11 +195,56 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'line_label,created', label: 'Line' },
-    { field: 'transaction_type_identifier', label: 'Type' },
-    { field: 'name', label: 'Name' },
-  ];
+  protected buildLineColumn(): ColumnDefinition<Transaction> {
+    return {
+      field: 'line_label',
+      header: 'Line',
+      sortable: true,
+      cssClass: 'line-column',
+    };
+  }
+
+  protected buildTypeColumn(bodyTpl: TemplateRef<TableBodyContext<Transaction>>): ColumnDefinition<Transaction> {
+    return {
+      field: 'transaction_type_identifier',
+      header: 'Type',
+      sortable: true,
+      cssClass: 'type-column',
+      bodyTpl,
+    };
+  }
+
+  protected buildNameColumn(options?: {
+    bodyTpl: TemplateRef<TableBodyContext<Transaction>>;
+  }): ColumnDefinition<Transaction> {
+    return {
+      field: 'name',
+      header: 'Name',
+      sortable: true,
+      cssClass: 'name-column',
+      ...(options?.bodyTpl && { bodyTpl: options.bodyTpl }),
+    };
+  }
+
+  protected buildDateColumn(options?: { header?: string; cssClass?: string }): ColumnDefinition<Transaction> {
+    return {
+      field: 'date',
+      header: options?.header ?? 'Date',
+      sortable: true,
+      cssClass: options?.cssClass ?? 'date-column',
+      pipe: 'fecDate',
+    };
+  }
+
+  protected buildAmountColumn(options?: { header?: string }): ColumnDefinition<Transaction> {
+    return {
+      field: 'amount',
+      header: options?.header ?? 'Amount',
+      sortable: true,
+      cssClass: 'amount-column',
+      pipe: 'currency',
+    };
+  }
 
   reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
