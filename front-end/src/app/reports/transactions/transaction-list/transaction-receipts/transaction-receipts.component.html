@@ -1,9 +1,3 @@
-<ng-template #lineLabelBody let-item>
-  <span class="no-wrap">
-    {{ item.line_label }}
-  </span>
-</ng-template>
-
 <ng-template #typeBody let-item>
   <a [routerLink]="[item?.id]">
     {{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
@@ -16,13 +10,6 @@
   @if (!item?.itemized) {
     <div><strong>Unitemized</strong></div>
   }
-</ng-template>
-
-<ng-template #nameBody let-item>
-  {{
-    item[item.transactionType.templateMap.organization_name] ||
-      item[item.transactionType.templateMap.last_name] + ', ' + item[item.transactionType.templateMap.first_name]
-  }}
 </ng-template>
 
 <ng-template #actionsBody let-item>

@@ -96,7 +96,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === false &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true,
@@ -108,7 +107,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         transaction.itemized === true &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         ![ScheduleIds.C, ScheduleIds.D].includes(transaction.transactionType.scheduleId),
       () => true,
@@ -197,13 +195,12 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
-  protected buildLineColumn(bodyTpl: TemplateRef<TableBodyContext<Transaction>>): ColumnDefinition<Transaction> {
+  protected buildLineColumn(): ColumnDefinition<Transaction> {
     return {
-      field: 'line-label',
+      field: 'line_label',
       header: 'Line',
       sortable: true,
       cssClass: 'line-column',
-      bodyTpl,
     };
   }
 
@@ -229,17 +226,23 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildDateColumn(options?: {
-    header?: string;
-    field?: keyof Transaction | string;
-    cssClass?: string;
-  }): ColumnDefinition<Transaction> {
+  protected buildDateColumn(options?: { header?: string; cssClass?: string }): ColumnDefinition<Transaction> {
     return {
-      field: options?.field ?? 'date',
+      field: 'date',
       header: options?.header ?? 'Date',
       sortable: true,
       cssClass: options?.cssClass ?? 'date-column',
       pipe: 'fecDate',
+    };
+  }
+
+  protected buildAmountColumn(options?: { header?: string }): ColumnDefinition<Transaction> {
+    return {
+      field: 'amount',
+      header: options?.header ?? 'Amount',
+      sortable: true,
+      cssClass: 'amount-column',
+      pipe: 'currency',
     };
   }
 

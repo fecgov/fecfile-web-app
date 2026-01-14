@@ -8,7 +8,6 @@ import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import { CurrencyPipe } from '@angular/common';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 
@@ -16,7 +15,7 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
   selector: 'app-transaction-guarantors',
   templateUrl: './transaction-guarantors.component.html',
   styleUrls: ['../../transaction.scss', './transaction-guarantors.component.scss'],
-  imports: [TableComponent, TableActionsButtonComponent, CurrencyPipe, ConfirmDialog],
+  imports: [TableComponent, TableActionsButtonComponent, ConfirmDialog],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchC2Service);
@@ -24,20 +23,14 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 
   readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('nameBody');
-  readonly amountBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('amountBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
 
   readonly loan = input<Transaction>();
 
   readonly columns = computed(() => [
     this.buildNameColumn({ bodyTpl: this.nameBodyTpl() }),
-    {
-      field: 'amount',
-      header: 'Guaranteed financial information amount',
-      sortable: true,
-      cssClass: 'amount-column',
-      bodyTpl: this.amountBodyTpl(),
-    },
+    this.buildAmountColumn({ header: 'Guaranteed financial information amount' }),
+
     {
       field: '',
       header: 'Actions',

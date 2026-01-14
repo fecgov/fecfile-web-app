@@ -8,9 +8,7 @@ import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transac
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
-import { CurrencyPipe } from '@angular/common';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { Transaction } from 'app/shared/models';
 
@@ -18,7 +16,7 @@ import { Transaction } from 'app/shared/models';
   selector: 'app-transaction-loans-and-debts',
   templateUrl: './transaction-loans-and-debts.component.html',
   styleUrls: ['../../transaction.scss', './transaction-loans-and-debts.component.scss'],
-  imports: [TableComponent, RouterLink, TableActionsButtonComponent, CurrencyPipe, FecDatePipe, LabelPipe],
+  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchCService);
@@ -32,26 +30,18 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.';
 
-  readonly lineLabelBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('lineLabelBody');
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('typeBody');
-  readonly dateBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('dateBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
 
   readonly columns = computed(() => [
-    this.buildLineColumn(this.lineLabelBodyTpl()),
+    this.buildLineColumn(),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
     this.buildDateColumn({
       header: 'Incurred',
       cssClass: 'incurred-column',
     }),
-    {
-      field: 'amount',
-      header: 'Amount',
-      sortable: true,
-      cssClass: 'amount-column',
-      pipe: 'currency',
-    },
+    this.buildAmountColumn(),
     {
       field: 'balance',
       header: 'Balance',

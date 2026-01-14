@@ -12,13 +12,12 @@ import { TableBodyContext, TableComponent } from '../../../../shared/components/
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-transaction-disbursements',
   templateUrl: './transaction-disbursements.component.html',
   styleUrls: ['../../transaction.scss', './transaction-disbursements.component.scss'],
-  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe, CurrencyPipe],
+  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);
@@ -36,13 +35,11 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     createMethod: () => Promise<void>;
   }>();
 
-  readonly lineLabelBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('lineLabelBody');
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('typeBody');
-  readonly dateBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('dateBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
 
   readonly columns = computed(() => [
-    this.buildLineColumn(this.lineLabelBodyTpl()),
+    this.buildLineColumn(),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
     this.buildDateColumn(),
@@ -53,13 +50,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
       cssClass: 'memo-column',
       pipe: 'memoCode',
     },
-    {
-      field: 'amount',
-      header: 'Amount',
-      sortable: true,
-      cssClass: 'amount-column',
-      pipe: 'currency',
-    },
+    this.buildAmountColumn(),
     {
       field: '',
       header: 'Actions',

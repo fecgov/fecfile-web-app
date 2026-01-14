@@ -15,6 +15,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
 import { Contact, ContactTypes } from 'app/shared/models';
+import { CurrencyPipe } from '@angular/common';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -58,6 +61,9 @@ describe('ContactListComponent', () => {
         ContactService,
         provideMockStore(testMockStore()),
         provideRouter([]),
+        CurrencyPipe,
+        MemoCodePipe,
+        FecDatePipe,
         {
           provide: ActivatedRoute,
           useValue: {

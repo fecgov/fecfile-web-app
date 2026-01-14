@@ -9,6 +9,10 @@
 
   .line-column {
     @include fixed-width(14%);
+
+    & > span {
+      white-space: nowrap;
+    }
   }
   .type-column,
   .name-column {
