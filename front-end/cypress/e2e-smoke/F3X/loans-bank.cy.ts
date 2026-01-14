@@ -199,7 +199,10 @@ describe('Loans', () => {
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
-      cy.intercept('GET', '**/api/v1/transactions/?*parent=**&*schedules=C2*').as('GetC2List');
+      cy.intercept(
+        'GET',
+        /\/api\/v1\/transactions\/\?(?=.*parent=)(?=.*schedules=C2).*/
+      ).as('GetC2List');
       clickLoan('Edit');
     
       // wait for form to be done (load c2 table)
@@ -210,7 +213,7 @@ describe('Loans', () => {
       cy.intercept('PUT', '**/api/v1/transactions/**').as('saveAddGuarantor')
       cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
       cy.wait('@saveAddGuarantor', {timeout: 15000});
-      cy.contains('h1', 'Guarantors to loan source').should('be.visible', { timeout: 15000 });
+      cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);
