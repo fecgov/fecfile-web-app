@@ -153,7 +153,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         cssClass: 'type-column',
         bodyTpl: type,
       },
-      { field: 'formTypeLabel', header: 'Form', sortable: true, cssClass: 'form-column' },
+      { field: 'primary_report_form_type_label', header: 'Form', sortable: true, cssClass: 'form-column' },
       { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
       {
         field: 'date',

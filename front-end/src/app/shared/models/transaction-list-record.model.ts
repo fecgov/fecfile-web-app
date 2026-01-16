@@ -10,6 +10,7 @@ export class TransactionListRecord {
   transaction_type_identifier: string | undefined;
   back_reference_tran_id_number: string | undefined;
   form_type: string | undefined;
+  primary_report_form_type: string | undefined;
   transaction_id: string | undefined;
   line_label: string | undefined;
   itemized: boolean | undefined;
@@ -27,9 +28,9 @@ export class TransactionListRecord {
   @Exclude({ toPlainOnly: true })
   transactionType: TransactionType = {} as TransactionType;
 
-  get formTypeLabel(): string {
-    if (!this.form_type) return '';
-    return LabelUtils.get(reportLabelList, this.form_type) || this.form_type;
+  get primary_report_form_type_label(): string {
+    if (!this.primary_report_form_type) return '';
+    return LabelUtils.get(reportLabelList, this.primary_report_form_type) || this.primary_report_form_type;
   }
 
   // prettier-ignore
