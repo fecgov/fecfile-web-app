@@ -187,18 +187,6 @@ export class TransactionService implements TableListService<Transaction> {
     return transactions;
   }
 
-  public addToReport(transaction: Transaction, report: Report): Promise<HttpResponse<string>> {
-    const payload = {
-      report_id: report.id,
-      transaction_id: transaction.id,
-    };
-    return this.apiService.post<string>(`${transaction.transactionType?.apiEndpoint}/add-to-report/`, payload, {}, [
-      HttpStatusCode.Accepted,
-      HttpStatusCode.NotFound,
-      HttpStatusCode.BadRequest,
-    ]);
-  }
-
   /**
    * Update and prepare a transaction payload as a JSON object to be received by the API.
    * This involves removing excess properties such and transactionType while
