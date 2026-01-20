@@ -99,7 +99,7 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   it('should load items with loan', () => {
-    host.loan = { id: '1' } as Transaction;
+    host.loan = { id: '1' } as TransactionListRecord;
     fixture.detectChanges();
     expect(component).toBeTruthy();
     expect(component.params()['parent']).toEqual('1');

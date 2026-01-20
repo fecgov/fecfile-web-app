@@ -31,7 +31,10 @@ export class SelectReportDialogComponent implements OnInit {
       this.selectReportDialog?.nativeElement.show();
 
       const coverage_through_date = (await this.service.get(this.transaction.id!))?.coverage_through_date;
-      if (!coverage_through_date) return;
+      if (!coverage_through_date) {
+        console.error('No coverage through date found for transaction');
+        return;
+      }
       this.service
         .getFutureReports(coverage_through_date.toString())
         .then((reports) => (this.availableReports = reports));

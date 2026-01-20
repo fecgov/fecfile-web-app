@@ -4,7 +4,6 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { AggregationGroups, Transaction } from '../models/transaction.model';
-import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
@@ -12,7 +11,6 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
-import { Form3X } from '../models/reports/form-3x.model';
 import { ScheduleFTransactionTypes, SchFTransaction } from '../models/schf-transaction.model';
 
 describe('TransactionService', () => {

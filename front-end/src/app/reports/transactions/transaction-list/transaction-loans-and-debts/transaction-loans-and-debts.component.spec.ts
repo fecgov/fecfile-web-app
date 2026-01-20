@@ -1,29 +1,26 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { SchDTransaction, ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
-import { of } from 'rxjs';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { signal } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ReportService } from 'app/shared/services/report.service';
 
 describe('TransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
   let component: TransactionLoansAndDebtsComponent;
+  let reportService: ReportService<Form3X>;
   let router: Router;
 
   beforeEach(async () => {
@@ -48,21 +45,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
             },
           },
         },
-        {
-          provide: TransactionSchCService,
-          useValue: {
-            get: (transactionId: string) =>
-              of(
-                SchC1Transaction.fromJSON({
-                  id: transactionId,
-                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
-                  transactionType: { scheduleId: ScheduleIds.A },
-                }),
-              ),
-            getTableData: () => of([]),
-            update: () => of([]),
-          },
-        },
+        TransactionSchCService,
       ],
     }).compileComponents();
   });
@@ -70,6 +53,8 @@ describe('TransactionLoansAndDebtsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
     router = TestBed.inject(Router);
+    reportService = TestBed.inject(ReportService);
+    spyOn(reportService, 'isEditable').and.returnValue(true);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -111,7 +96,6 @@ describe('TransactionLoansAndDebtsComponent', () => {
       report_code_label: '',
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeFalse();
     transaction.loan_agreement_id = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeTrue();
@@ -136,7 +120,6 @@ describe('TransactionLoansAndDebtsComponent', () => {
       loan_id: 'testLoanId',
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.loan_agreement_id = 'loan agreement id';
     expect(tableAction.isAvailable(transaction)).toBeFalse();
@@ -171,7 +154,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
       memo_code: false,
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    (component.reportIsEditable as any) = signal(true);
+
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE;
     expect(tableAction.isAvailable(transaction)).toBeFalse();
@@ -189,7 +172,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   it('test createDebtRepaymentReceived', () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
     const transaction = {
-      ...(getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE) as SchDTransaction),
+      ...(getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE) as SchDTransaction),
       back_reference_tran_id_number: '1',
       name: 'TEST',
       date: new Date(),
@@ -200,7 +183,6 @@ describe('TransactionLoansAndDebtsComponent', () => {
       memo_code: false,
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    (component.reportIsEditable as any) = signal(true);
     expect(tableAction.isAvailable(transaction)).toBeTrue();
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE;
     expect(tableAction.isAvailable(transaction)).toBeFalse();

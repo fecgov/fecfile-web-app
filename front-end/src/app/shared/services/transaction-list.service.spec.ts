@@ -10,6 +10,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { Form3X } from '../models/reports/form-3x.model';
 import { TransactionListService } from './transaction-list.service';
+import { TransactionListRecord } from '../models/transaction-list-record.model';
 
 describe('TransactionListService', () => {
   let service: TransactionListService;
@@ -69,12 +70,24 @@ describe('TransactionListService', () => {
   describe('delete', () => {
     it('should DELETE a record', () => {
       const mockResponse = null;
-      const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      const a: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
+      const transaction: TransactionListRecord = {
+        ...a,
+        name: 'TEST',
+        date: new Date(),
+        amount: 100,
+        balance: 0,
+        aggregate: 0,
+        report_code_label: '',
+        can_delete: true,
+        force_unaggregated: true,
+        report_type: 'Form 3X',
+      } as unknown as TransactionListRecord;
 
-      service.delete(schATransaction).then(() => {
+      service.delete(transaction).then(() => {
         expect(true).toBeTrue();
       });
 
@@ -87,10 +100,22 @@ describe('TransactionListService', () => {
 
   describe('addToReport', () => {
     it('should add a transaction to a report', fakeAsync(() => {
-      const transaction: SchATransaction = SchATransaction.fromJSON({
+      const a: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       });
+      const transaction: TransactionListRecord = {
+        ...a,
+        name: 'TEST',
+        date: new Date(),
+        amount: 100,
+        balance: 0,
+        aggregate: 0,
+        report_code_label: '',
+        can_delete: true,
+        force_unaggregated: true,
+        report_type: 'Form 3X',
+      } as unknown as TransactionListRecord;
 
       const report: Form3X = Form3X.fromJSON({
         id: '2',
