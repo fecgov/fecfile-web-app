@@ -1,34 +1,35 @@
 <h1>Line 6a override</h1>
-<hr type="solid" />
-<form id="form" [formGroup]="form" class="flex">
-  <div class="col-6 pl-0">
-    <strong>WHAT IS A LINE 6A OVERRIDE?</strong>
-    <p>
-      When there is a discrepancy between the reported cash on hand and the correct cash on hand (bank account balance),
-      committees filing a Form 3X can override the reported cash on hand by manually entering an amount for Line 6(a).
-      If your committee overrides Line 6(a), the cash on hand will be adjusted for any reports in that calendar year
-      (submitted or in-progress) and amendments may need to be submitted. Further, if the cash on hand is overridden on
-      a report from a prior year, reports in subsequent years will also be adjusted and amendments may be needed.
-    </p>
-    <strong>NEED HELP?</strong>
-    <p>
-      If you’re unsure whether an override is the right choice for your committee, please reach out to your assigned
-      campaign finance analyst for guidance.
-    </p>
-  </div>
-  <div class="col-6">
-    <div class="grid">
-      <div class="col-6">
+<hr type="solid" class="top-hr" />
+<form id="form" [formGroup]="form" class="cash-on-hand-override-layout">
+  <div class="cash-on-hand-override-content">
+    <section class="left-content">
+      <strong>WHAT IS A LINE 6A OVERRIDE?</strong>
+      <p>
+        When there is a discrepancy between the reported cash on hand and the correct cash on hand (bank account
+        balance), committees filing a Form 3X can override the reported cash on hand by manually entering an amount for
+        Line 6(a). If your committee overrides Line 6(a), the cash on hand will be adjusted for any reports in that
+        calendar year (submitted or in-progress) and amendments may need to be submitted. Further, if the cash on hand
+        is overridden on a report from a prior year, reports in subsequent years will also be adjusted and amendments
+        may be needed.
+      </p>
+      <strong>NEED HELP?</strong>
+      <p>
+        If you’re unsure whether an override is the right choice for your committee, please reach out to your assigned
+        campaign finance analyst for guidance.
+      </p>
+    </section>
+
+    <section class="right-content">
+      <div class="field-group">
         <app-select
-          label="UPDATING CASH ON HAND JANUARY 1"
+          label="UPDATING CASH ON HAND \n JANUARY 1"
           inputId="year"
           [options]="yearOptions"
           [control]="yearFormControl"
         />
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-6">
+
+      <div class="field-row">
         <div class="field">
           <label for="currentAmount">CURRENT LINE 6A, COLUMN B AMOUNT</label>
           <app-input-number
@@ -38,16 +39,14 @@
             inputStyleClass="readonly"
           />
         </div>
-      </div>
-      <div class="col-6 pl-3">
+
         <div class="field">
           <label for="newAmount">NEW AMOUNT</label>
           <app-input-number inputId="newAmount" formControlName="newAmount" />
         </div>
       </div>
-    </div>
-    <div class="grid justify-content-center">
-      <div class="col-3">
+
+      <div class="button-row">
         <button
           type="button"
           pButton
@@ -58,7 +57,7 @@
           (click)="updateLine6a()"
         ></button>
       </div>
-    </div>
+    </section>
   </div>
-  <hr type="solid" />
 </form>
+<hr type="solid" />

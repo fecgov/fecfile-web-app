@@ -1,0 +1,110 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  display: block;
+
+  .page-title,
+  .section-title {
+    font-family: var(--karla-bold);
+  }
+
+  .top-hr {
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  input {
+    height: 38px;
+  }
+
+  .p-select {
+    height: 38px;
+  }
+
+  .cash-on-hand-override-layout {
+    display: flex;
+    justify-content: center;
+  }
+
+  .cash-on-hand-override-content {
+    @include fixed-width(512px);
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .left-content,
+  .right-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-content {
+    @include fixed-width(66.6667%);
+  }
+
+  .right-content {
+    align-items: flex-start;
+    @include fixed-width(33.3333%);
+  }
+
+  .field-row {
+    display: flex;
+    flex-direction: column;
+    column-gap: 20px;
+    row-gap: 20px;
+  }
+
+  .button-row {
+    margin-top: 1.5rem;
+  }
+
+  @include breakpoint('md') {
+    .cash-on-hand-override-content {
+      @include fixed-width(704px);
+    }
+
+    .left-content {
+      @include fixed-width(66.6667%);
+    }
+
+    .right-content {
+      @include fixed-width(33.3333%);
+    }
+
+    .field-row {
+      flex-direction: row;
+    }
+  }
+
+  @include breakpoint('lg') {
+    .cash-on-hand-override-content {
+      @include fixed-width(852px);
+    }
+
+    .left-content {
+      @include fixed-width(50%);
+    }
+
+    .right-content {
+      align-items: flex-start;
+      @include fixed-width(25%);
+    }
+  }
+
+  @include breakpoint('xl') {
+    .cash-on-hand-override-content {
+      @include fixed-width(1052px);
+    }
+
+    .left-content {
+      @include fixed-width(50%);
+    }
+
+    .right-content {
+      @include fixed-width(25%);
+    }
+  }
+}
