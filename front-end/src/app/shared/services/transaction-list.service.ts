@@ -34,11 +34,26 @@ export class TransactionListService implements TableListService<TransactionListR
     return this.apiService.delete<null>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`);
   }
 
-  public async update(transaction: TransactionListRecord): Promise<TransactionListRecord> {
-    const payload = this.preparePayload(transaction);
-    await this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {});
+  async itemize(transaction: TransactionListRecord, force_itemized: boolean): Promise<string> {
+    return this.apiService.put<string>(
+      `${transaction.transactionType?.apiEndpoint}/${transaction.id}/update-itemization-aggregation/`,
+      {
+        force_itemized,
+        schedule_id: transaction.transactionType.scheduleId,
+        schema_name: transaction.transactionType.getSchemaName(),
+      },
+    );
+  }
 
-    return transaction;
+  async unaggregate(transaction: TransactionListRecord, force_unaggregated: boolean): Promise<string> {
+    return this.apiService.put<string>(
+      `${transaction.transactionType?.apiEndpoint}/${transaction.id}/update-itemization-aggregation/`,
+      {
+        force_unaggregated,
+        schedule_id: transaction.transactionType.scheduleId,
+        schema_name: transaction.transactionType.getSchemaName(),
+      },
+    );
   }
 
   addToReport(transaction: TransactionListRecord, report: Report): Promise<HttpResponse<string>> {
@@ -51,21 +66,5 @@ export class TransactionListService implements TableListService<TransactionListR
       HttpStatusCode.NotFound,
       HttpStatusCode.BadRequest,
     ]);
-  }
-
-  private preparePayload(transaction: TransactionListRecord) {
-    const payload = transaction.toJson();
-
-    // Add flags to the payload used for API processing
-    if (transaction.transactionType?.scheduleId) {
-      payload['schedule_id'] = transaction.transactionType.scheduleId;
-    }
-    if (transaction.transactionType?.getUseParentContact(transaction)) {
-      payload['use_parent_contact'] = transaction.transactionType.getUseParentContact(transaction);
-    }
-
-    delete payload['transactionType'];
-    delete payload['reports'];
-    return payload;
   }
 }

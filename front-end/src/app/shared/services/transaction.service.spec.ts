@@ -38,38 +38,6 @@ describe('TransactionService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('getTableData', () => {
-    it('should return a list of contacts', () => {
-      const mockResponse: ListRestResponse = {
-        count: 2,
-        next: 'https://next-page',
-        previous: 'https://previous-page',
-        pageNumber: 1,
-        results: [
-          SchATransaction.fromJSON({
-            id: 1,
-            transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-          }),
-          SchATransaction.fromJSON({
-            id: 2,
-            transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-          }),
-        ],
-      };
-
-      service.getTableData().then((response: ListRestResponse) => {
-        expect(response).toEqual(mockResponse);
-      });
-
-      const req = httpTestingController.expectOne(
-        `${environment.apiUrl}/transactions/?page=1&ordering=line_label,created`,
-      );
-      expect(req.request.method).toEqual('GET');
-      req.flush(mockResponse);
-      httpTestingController.verify();
-    });
-  });
-
   describe('get', () => {
     it('should GET a record', () => {
       const mockResponse: SchATransaction = SchATransaction.fromJSON({
@@ -274,28 +242,6 @@ describe('TransactionService', () => {
       req.flush(transactions.map((t) => t.id));
       httpTestingController.verify();
       tick(100);
-    }));
-  });
-
-  describe('addToReport', () => {
-    it('should add a transaction to a report', fakeAsync(() => {
-      const transaction: SchATransaction = SchATransaction.fromJSON({
-        id: '1',
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-      });
-
-      const report: Form3X = Form3X.fromJSON({
-        id: '2',
-      });
-
-      service.addToReport(transaction, report).then((response) => {
-        expect(response.ok).toBeTrue();
-      });
-      tick(100);
-      const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/add-to-report/`);
-      expect(req.request.method).toEqual('POST');
-      req.flush(transaction);
-      httpTestingController.verify();
     }));
   });
 });

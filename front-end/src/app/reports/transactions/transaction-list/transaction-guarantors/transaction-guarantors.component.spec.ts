@@ -13,11 +13,11 @@ import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { ScheduleCTransactionTypes } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -26,7 +26,19 @@ import { ScheduleCTransactionTypes } from 'app/shared/models';
 })
 class TestHostComponent {
   component = viewChild.required(TransactionGuarantorsComponent);
-  loan = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+  transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+  loan = {
+    ...this.transaction,
+    name: 'TEST',
+    date: new Date(),
+    amount: 100,
+    balance: 0,
+    aggregate: 0,
+    report_code_label: '',
+    can_delete: true,
+    force_unaggregated: true,
+    report_type: 'Form 3X',
+  } as unknown as TransactionListRecord;
 }
 
 describe('TransactionGuarantorsComponent', () => {

@@ -293,9 +293,16 @@ export abstract class TransactionListTableBaseComponent
     return this.forceUnaggregation(transaction, true);
   }
 
-  public forceUnaggregation(transaction: TransactionListRecord, unaggregated: boolean) {
+  async forceUnaggregation(transaction: TransactionListRecord, unaggregated: boolean) {
     transaction.force_unaggregated = unaggregated;
-    return this.updateItem(transaction);
+    if (this.itemService.unaggregate) {
+      try {
+        await this.itemService.unaggregate(transaction, unaggregated);
+        this.loadTableItems({});
+      } catch (error) {
+        console.error('Error updating item:', error);
+      }
+    }
   }
 
   public forceItemize(transaction: TransactionListRecord): void {
@@ -306,14 +313,17 @@ export abstract class TransactionListTableBaseComponent
     this.forceItemization(transaction, false);
   }
 
-  public forceItemization(transaction: TransactionListRecord, itemized: boolean) {
+  async forceItemization(transaction: TransactionListRecord, itemized: boolean) {
     this.confirmationService.confirm({
       message:
         'Changing the itemization status of this transaction will affect its associated transactions (such as memos).',
       header: 'Heads up!',
-      accept: () => {
+      accept: async () => {
         transaction.force_itemized = itemized;
-        this.updateItem(transaction);
+        if (this.itemService.itemize) {
+          await this.itemService.itemize(transaction, itemized);
+          this.loadTableItems({});
+        }
       },
     });
   }
@@ -359,17 +369,6 @@ export abstract class TransactionListTableBaseComponent
       );
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
-    }
-  }
-
-  public async updateItem(item: TransactionListRecord) {
-    if (this.itemService.update) {
-      try {
-        await this.itemService.update(item);
-        this.loadTableItems({});
-      } catch (error) {
-        console.error('Error updating item:', error);
-      }
     }
   }
 
