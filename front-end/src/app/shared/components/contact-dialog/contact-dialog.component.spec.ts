@@ -8,7 +8,6 @@ import { Contact } from 'app/shared/models/contact.model';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { TransactionService } from 'app/shared/services/transaction.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService } from 'primeng/api';
@@ -19,12 +18,13 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
   let fixture: ComponentFixture<ContactDialogComponent>;
   let testConfirmationService: ConfirmationService;
-  let transactionService: TransactionService;
+  let transactionService: TransactionListService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -50,7 +50,7 @@ describe('ContactDialogComponent', () => {
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
-    transactionService = TestBed.inject(TransactionService);
+    transactionService = TestBed.inject(TransactionListService);
     fixture = TestBed.createComponent(ContactDialogComponent);
     component = fixture.componentInstance;
     component.contact.set(testContact());
