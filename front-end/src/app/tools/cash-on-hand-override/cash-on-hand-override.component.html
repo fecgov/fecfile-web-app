@@ -1,9 +1,10 @@
-<h1>Line 6a override</h1>
+<h1 class="page-title">Line 6a override</h1>
 <hr type="solid" class="top-hr" />
+
 <form id="form" [formGroup]="form" class="form-layout">
   <div class="form-content">
-    <div class="left-content">
-      <strong>WHAT IS A LINE 6A OVERRIDE?</strong>
+    <section class="left-content">
+      <strong class="section-header">WHAT IS A LINE 6A OVERRIDE?</strong>
       <p>
         When there is a discrepancy between the reported cash on hand and the correct cash on hand (bank account
         balance), committees filing a Form 3X can override the reported cash on hand by manually entering an amount for
@@ -12,16 +13,16 @@
         is overridden on a report from a prior year, reports in subsequent years will also be adjusted and amendments
         may be needed.
       </p>
-      <strong>NEED HELP?</strong>
+      <strong class="section-header">NEED HELP?</strong>
       <p>
         If you’re unsure whether an override is the right choice for your committee, please reach out to your assigned
         campaign finance analyst for guidance.
       </p>
-    </div>
+    </section>
 
-    <div class="right-content">
-      <div class="grid">
-        <div class="col-12">
+    <section class="right-content">
+      <div class="right-grid">
+        <div class="field year">
           <app-select
             label="UPDATING CASH ON HAND JANUARY, 1"
             inputId="year"
@@ -29,48 +30,38 @@
             [control]="yearFormControl"
           />
         </div>
-      </div>
 
-      <div class="grid">
-        <div class="col-12">
-          <div class="field">
-            <label for="currentAmount"
-              >CURRENT LINE 6A, <br />
-              COLUMN B AMOUNT</label
-            >
-            <app-input-number
-              inputId="currentAmount"
-              formControlName="currentAmount"
-              [readonly]="true"
-              inputStyleClass="readonly"
-            />
-          </div>
+        <div class="field current">
+          <label for="currentAmount"
+            >CURRENT LINE 6A, <br />
+            COLUMN B AMOUNT</label
+          >
+          <app-input-number
+            inputId="currentAmount"
+            formControlName="currentAmount"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          />
         </div>
 
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <label for="newAmount">NEW AMOUNT</label>
-              <app-input-number inputId="newAmount" formControlName="newAmount" />
-            </div>
-          </div>
+        <div class="field new">
+          <label for="newAmount">NEW AMOUNT</label>
+          <app-input-number inputId="newAmount" formControlName="newAmount" />
         </div>
-      </div>
 
-      <div class="grid justify-content-start">
-        <div class="col-12">
+        <div class="field action">
           <button
             type="button"
             pButton
             pRipple
             [disabled]="!newAmountFormControl.dirty"
-            label="Update LINE 6a"
+            label="Update Line 6a"
             class="p-button-primary"
             (click)="updateLine6a()"
           ></button>
         </div>
       </div>
-    </div>
+    </section>
 
     <div class="space"></div>
   </div>

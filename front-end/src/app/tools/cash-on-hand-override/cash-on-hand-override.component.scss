@@ -3,7 +3,16 @@
 :host::ng-deep {
   display: block;
 
+  .section-header {
+    font-family: var(--karla-bold);
+    margin-bottom: 8px;
+  }
+
   .top-hr {
+    margin-bottom: 20px;
+  }
+
+  p {
     margin-bottom: 20px;
   }
 
@@ -11,12 +20,9 @@
     font-size: 14px;
   }
 
-  input {
-    height: 38px;
-  }
-
+  input,
   .p-select {
-    height: 38px;
+    height: 36px;
   }
 
   .form-layout {
@@ -24,27 +30,45 @@
     justify-content: center;
   }
 
-  .grid {
-    margin-bottom: 20px;
-  }
-
   .form-content {
     @include fixed-width(512px);
-    grid-template-columns: 8fr 4fr;
-    row-gap: 20px;
-    column-gap: 20px;
+    gap: 20px;
     display: grid;
   }
 
-  .section-title {
-  }
-
-  .left-content {
-    grid-column: 1 / -2;
-  }
-
+  .left-content,
   .right-content {
-    grid-column: 1 / -2;
+    width: 100%;
+  }
+
+  .right-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'year current' 'new .' 'action .';
+    gap: 28px;
+  }
+
+  .year {
+    grid-area: year;
+  }
+  .current {
+    grid-area: current;
+  }
+  .new {
+    grid-area: new;
+  }
+  .action {
+    grid-area: action;
+  }
+
+  .action button {
+    width: 140px;
+    min-width: unset;
+  }
+
+  .p-field,
+  .field {
+    margin: 0;
   }
 
   .space {
@@ -65,6 +89,11 @@
       grid-column: 2 / 3;
     }
 
+    .right-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'year' 'current' 'new' 'action';
+    }
+
     .space {
       display: none;
     }
@@ -76,14 +105,6 @@
       grid-template-columns: 6fr 3fr 3fr;
     }
 
-    .left-content {
-      grid-column: 1 / 2;
-    }
-
-    .right-content {
-      grid-column: 2 / 3;
-    }
-
     .space {
       display: block;
     }
@@ -91,8 +112,18 @@
 
   @include breakpoint('xl') {
     .form-content {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .form-content {
       @include fixed-width(1052px);
       grid-template-columns: 6fr 3fr 3fr;
+    }
+
+    .space {
+      display: block;
     }
   }
 }
