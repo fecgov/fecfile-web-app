@@ -59,8 +59,7 @@ export class TableComponent<T> {
   readonly selectedItems = model<T[]>([]);
   readonly currentPageReportTemplate = input('Showing {first} to {last} of {totalRecords} items');
   readonly sortField = input.required<string>();
-  // This can go away after full transition to ColumnDefinition method
-  readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
+  readonly sortOrder = input<string>('asc');
   readonly columns = input<ColumnDefinition<T>[]>([]);
   readonly emptyMessage = input('No data available in table');
 

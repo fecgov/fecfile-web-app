@@ -30,7 +30,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   readonly items = signal<T[]>([]);
   readonly rowsPerPage = signal(10);
   readonly totalItems = signal(0);
-  pagerState: TableLazyLoadEvent | undefined;
+  pagerState: TableLazyLoadEvent = {};
   loading = true;
   readonly selectedItems = signal<T[]>([]);
   readonly detailVisible = signal(false);
@@ -97,8 +97,8 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
         rows: this.rowsPerPage(),
       };
     }
-    if (!this.pagerState!.sortField) this.pagerState!.sortField = this.table().sortField();
-    if (!this.pagerState!.sortOrder) this.pagerState!.sortOrder = 1;
+    if (!this.pagerState.sortField) this.pagerState.sortField = this.table().sortField();
+    this.pagerState.sortOrder = this.table().sortOrder() === 'asc' ? 1 : -1;
 
     // Calculate the record page number to retrieve from the API.
     const first: number = event.first ?? 0;

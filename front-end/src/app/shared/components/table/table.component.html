@@ -10,6 +10,7 @@
   [globalFilterFields]="globalFilterFields()"
   [currentPageReportTemplate]="currentPageReportTemplate()"
   [sortField]="sortField()"
+  [sortOrder]="sortOrder() === 'asc' ? 1 : -1"
   [lazy]="true"
   [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true"
@@ -35,18 +36,6 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr role="row">
-      <!-- This can go away after full transition to ColumnDefinition method -->
-      @if (sortableHeaders()) {
-        @for (h of sortableHeaders(); track h) {
-          <th [pSortableColumn]="h.field" [id]="h.field + '-column'" role="columnheader">
-            <div class="flex justify-content-between">
-              <span>{{ h.label }}</span>
-              <p-sortIcon [field]="h.field" />
-            </div>
-          </th>
-        }
-      }
-
       @for (col of columns(); track col) {
         <th
           [pSortableColumn]="col.sortable ? col.field : undefined"
