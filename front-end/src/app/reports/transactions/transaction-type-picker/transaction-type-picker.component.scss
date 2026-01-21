@@ -1,4 +1,40 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .content-area {
+    @include fixed-width(512px);
+  }
+
+  @include breakpoint('md') {
+    .content-area {
+      @include fixed-width(704px);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .content-area {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xl') {
+    .content-area {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .content-area {
+      @include fixed-width(1052px);
+    }
+  }
+}
+
 .disabled {
   opacity: 0.5;
   user-select: none;
+}
+
+h1 {
+  margin-bottom: 18px;
 }
