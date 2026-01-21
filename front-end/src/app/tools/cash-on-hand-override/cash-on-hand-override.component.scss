@@ -3,11 +3,6 @@
 :host::ng-deep {
   display: block;
 
-  .page-title,
-  .section-title {
-    font-family: var(--karla-bold);
-  }
-
   .top-hr {
     margin-bottom: 20px;
   }
@@ -24,87 +19,80 @@
     height: 38px;
   }
 
-  .cash-on-hand-override-layout {
+  .form-layout {
     display: flex;
     justify-content: center;
   }
 
-  .cash-on-hand-override-content {
-    @include fixed-width(512px);
-    display: flex;
-    flex-wrap: wrap;
+  .grid {
+    margin-bottom: 20px;
   }
 
-  .left-content,
-  .right-content {
-    display: flex;
-    flex-direction: column;
+  .form-content {
+    @include fixed-width(512px);
+    grid-template-columns: 8fr 4fr;
+    row-gap: 20px;
+    column-gap: 20px;
+    display: grid;
+  }
+
+  .section-title {
   }
 
   .left-content {
-    @include fixed-width(66.6667%);
+    grid-column: 1 / -2;
   }
 
   .right-content {
-    align-items: flex-start;
-    @include fixed-width(33.3333%);
+    grid-column: 1 / -2;
   }
 
-  .field-row {
-    display: flex;
-    flex-direction: column;
-    column-gap: 20px;
-    row-gap: 20px;
-  }
-
-  .button-row {
-    margin-top: 1.5rem;
+  .space {
+    display: none;
   }
 
   @include breakpoint('md') {
-    .cash-on-hand-override-content {
+    .form-content {
       @include fixed-width(704px);
+      grid-template-columns: 8fr 4fr;
     }
 
     .left-content {
-      @include fixed-width(66.6667%);
+      grid-column: 1 / 2;
     }
 
     .right-content {
-      @include fixed-width(33.3333%);
+      grid-column: 2 / 3;
     }
 
-    .field-row {
-      flex-direction: row;
+    .space {
+      display: none;
     }
   }
 
   @include breakpoint('lg') {
-    .cash-on-hand-override-content {
+    .form-content {
       @include fixed-width(852px);
+      grid-template-columns: 6fr 3fr 3fr;
     }
 
     .left-content {
-      @include fixed-width(50%);
+      grid-column: 1 / 2;
     }
 
     .right-content {
-      align-items: flex-start;
-      @include fixed-width(25%);
+      grid-column: 2 / 3;
+    }
+
+    .space {
+      display: block;
     }
   }
 
   @include breakpoint('xl') {
-    .cash-on-hand-override-content {
+    .form-content {
       @include fixed-width(1052px);
-    }
-
-    .left-content {
-      @include fixed-width(50%);
-    }
-
-    .right-content {
-      @include fixed-width(25%);
+      grid-template-columns: 6fr 3fr 3fr;
     }
   }
 }
