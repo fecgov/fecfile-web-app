@@ -246,6 +246,24 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
+  protected buildTransactionIdColumn(): ColumnDefinition<Transaction> {
+    return {
+      field: 'transaction_id',
+      header: 'Transaction ID',
+      cssClass: 'transaction-id-column',
+      pipe: 'transactionId',
+    };
+  }
+
+  protected buildAssociatedWithColumn(): ColumnDefinition<Transaction> {
+    return {
+      field: 'back_reference_tran_id_number',
+      header: 'Associated With',
+      cssClass: 'associated-with-column',
+      pipe: 'transactionId',
+    };
+  }
+
   reportId: string = this.activatedRoute.snapshot.params['reportId'];
 
   ngOnInit() {
@@ -368,13 +386,6 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
         console.error('Error updating item:', error);
       }
     }
-  }
-
-  public formatId(id: string | null): string {
-    if (id) {
-      return id.substring(0, 8).toUpperCase();
-    }
-    return '';
   }
 
   private canDelete(transaction: Transaction): boolean {

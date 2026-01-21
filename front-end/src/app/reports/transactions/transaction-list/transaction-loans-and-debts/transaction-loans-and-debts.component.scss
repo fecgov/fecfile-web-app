@@ -21,7 +21,9 @@
     @include fixed-width(18.8%);
   }
   .incurred-column,
-  .balance-column {
+  .balance-column,
+  .transaction-id-column,
+  .associated-with-column {
     display: none;
   }
   .actions-column {
@@ -44,7 +46,9 @@
       display: table-cell;
       @include fixed-width(13.6%);
     }
-    .balance-column {
+    .balance-column,
+    .transaction-id-column,
+    .associated-with-column {
       display: none;
     }
     .amount-column {
@@ -75,6 +79,10 @@
       display: table-cell;
       @include fixed-width(12.2%);
     }
+    .transaction-id-column,
+    .associated-with-column {
+      display: none;
+    }
     .actions-column {
       @include fixed-width(8.5%);
     }
@@ -83,6 +91,10 @@
   @include breakpoint('xl') {
     .p-datatable {
       @include fixed-width(852px);
+    }
+    .transaction-id-column,
+    .associated-with-column {
+      display: none;
     }
   }
 
@@ -104,6 +116,14 @@
     }
     .balance-column {
       @include fixed-width(10%);
+    }
+    .transaction-id-column {
+      display: table-cell;
+      @include fixed-width(12%);
+    }
+    .associated-with-column {
+      display: table-cell;
+      @include fixed-width(13.5%);
     }
     .actions-column {
       @include fixed-width(6.8%);
