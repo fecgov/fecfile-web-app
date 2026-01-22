@@ -19,7 +19,9 @@
     @include fixed-width(26.6%);
   }
   .date-column,
-  .memo-column {
+  .memo-column,
+  .transaction-id-column,
+  .associated-with-column {
     display: none;
   }
   .amount-column {
@@ -45,7 +47,9 @@
       display: table-cell;
       @include fixed-width(13.6%);
     }
-    .memo-column {
+    .memo-column,
+    .transaction-id-column,
+    .associated-with-column {
       display: none;
     }
     .amount-column {
@@ -76,6 +80,10 @@
       display: table-cell;
       @include fixed-width(10%);
     }
+    .transaction-id-column,
+    .associated-with-column {
+      display: none;
+    }
     .actions-column {
       @include fixed-width(8.5%);
     }
@@ -84,6 +92,10 @@
   @include breakpoint('xl') {
     .p-datatable {
       @include fixed-width(852px);
+    }
+    .transaction-id-column,
+    .associated-with-column {
+      display: none;
     }
   }
 
@@ -105,6 +117,14 @@
     }
     .memo-column {
       @include fixed-width(7.6%);
+    }
+    .transaction-id-column {
+      display: table-cell;
+      @include fixed-width(12%);
+    }
+    .associated-with-column {
+      display: table-cell;
+      @include fixed-width(13.5%);
     }
     .actions-column {
       @include fixed-width(6.8%);

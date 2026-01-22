@@ -49,6 +49,8 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
       cssClass: 'balance-column',
       pipe: 'currency',
     },
+    this.buildTransactionIdColumn(),
+    this.buildAssociatedWithColumn(),
     {
       field: '',
       header: 'Actions',
