@@ -1,7 +1,7 @@
 <app-table
   [(first)]="first"
   title="Receipts"
-  [items]="items"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="line_label,created"
@@ -30,13 +30,10 @@
       }
     </td>
     <td>
-      {{
-        item[item.transactionType.templateMap.organization_name] ||
-          item[item.transactionType.templateMap.last_name] + ', ' + item[item.transactionType.templateMap.first_name]
-      }}
+      {{ item.name }}
     </td>
     <td>
-      {{ item[item.transactionType.templateMap.date] | fecDate }}
+      {{ item.date | fecDate }}
     </td>
     <td>
       {{ item.memo_code | memoCode }}

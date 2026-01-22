@@ -146,6 +146,14 @@ describe('TransactionReceiptsComponent', () => {
     expect(itemizeAction?.isEnabled(transaction)).toBeTrue();
     expect(unitemizeAction?.isEnabled(transaction)).toBeTrue();
     expect(reattributeAction?.isEnabled(transaction)).toBeTrue();
+
+    expect(
+      reattributeAction?.isAvailable({
+        ...transaction,
+        itemized: false,
+        transactionType: { ...transaction.transactionType, negativeAmountValueOnly: true },
+      } as SchATransaction),
+    ).toEqual(false);
   });
 
   it('test forceAggregate', async () => {

@@ -36,15 +36,17 @@
       </div>
     </div>
   }
-  <app-yes-no-radio-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
-    controlName="line_of_credit"
-    label="Is there a line of credit? "
-    parenLabel="(OPTIONAL)"
-    ariaLabelYes="There is a line of credit"
-    ariaLabelNo="There is not a line of credit"
-  />
+  <div class="flex p-2">
+    <p-checkbox
+      inputId="line_of_credit"
+      [binary]="true"
+      formControlName="line_of_credit"
+      ariaLabel="This loan has a line of credit"
+    />
+    <label for="line_of_credit" class="mb-0 ml-2 cursor-pointer">
+      This loan has a line of credit <span class="paren-label">(OPTIONAL)</span>
+    </label>
+  </div>
   @if (showLineOfCredit) {
     <div class="grid">
       <div class="col-4">

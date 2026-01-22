@@ -1,7 +1,7 @@
 <app-table
   [(first)]="first"
   title="Disbursements"
-  [items]="items"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   [(rowsPerPage)]="rowsPerPage"
@@ -34,13 +34,13 @@
       {{ item.name }}
     </td>
     <td>
-      {{ convertToDate(item.date) | fecDate }}
+      {{ item.date | fecDate }}
     </td>
     <td>
       {{ item.memo_code | memoCode }}
     </td>
     <td>
-      {{ item[item.transactionType.templateMap.amount] | currency }}
+      {{ item.amount | currency }}
     </td>
     <td>
       {{ formatId(item.transaction_id) }}

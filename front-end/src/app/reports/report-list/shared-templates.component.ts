@@ -10,6 +10,9 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
     <ng-template #reportNameBody let-item>
       <a (click)="this.reportNameClick.emit(item)">{{ item.formSubLabel }}</a>
     </ng-template>
+    <ng-template #coverageBody let-item>
+      {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}
+    </ng-template>
     <ng-template #actionsBody let-item let-actions="rowActions">
       <app-table-actions-button
         (tableActionClick)="$event.action.action($event.actionItem)"
@@ -28,6 +31,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 export class SharedTemplatesComponent<T extends Report> {
   readonly reportNameClick = output<T>();
   readonly reportNameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('reportNameBody');
+  readonly coverageBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('coverageBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<T>>>('actionsBody');
   readonly submissionBodyTpl: Signal<TemplateRef<TableBodyContext<T>>> =
     viewChild.required<TemplateRef<TableBodyContext<T>>>('submissionBody');

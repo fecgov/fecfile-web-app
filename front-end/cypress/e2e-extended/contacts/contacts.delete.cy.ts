@@ -53,6 +53,8 @@ type TransactionListItem = {
   contact_1?: { first_name?: string | null; last_name?: string | null } | null;
   contributor_first_name?: string | null;
   contributor_last_name?: string | null;
+  name?: string | null;
+  report_ids?: string[] | null;
 };
 
 type TransactionListResponse = {
@@ -106,22 +108,28 @@ const requireSeededReport = (results: ReportListItem[] | undefined) => {
   return report;
 };
 
-const isLinkedTransactionMatch = (item: TransactionListItem, contactId: string) => {
+const isLinkedTransactionMatch = (item: TransactionListItem, contactId: string, reportId?: string) => {
   if (item.contact_1_id === contactId) return true;
+  if (reportId && Array.isArray(item.report_ids) && item.report_ids.includes(reportId)) return true;
   const firstName = normalizeText(item.contact_1?.first_name ?? item.contributor_first_name);
   const lastName = normalizeText(item.contact_1?.last_name ?? item.contributor_last_name);
-  return (
+  if (
     firstName === LINKED_CONTACT_DATA.first_name &&
     lastName === LINKED_CONTACT_DATA.last_name
-  );
+  ) {
+    return true;
+  }
+  const name = normalizeText(item.name);
+  return name === LINKED_CONTACT;
 };
 
 const findLinkedTransactionId = (
   results: TransactionListItem[] | undefined,
   contactId: string,
+  reportId?: string,
 ) => {
   if (!Array.isArray(results)) return null;
-  return results.find((item) => isLinkedTransactionMatch(item, contactId))?.id ?? null;
+  return results.find((item) => isLinkedTransactionMatch(item, contactId, reportId))?.id ?? null;
 };
 
 const requireLinkedTransactionId = (
@@ -129,7 +137,7 @@ const requireLinkedTransactionId = (
   contactId: string,
   reportId: string,
 ) => {
-  const transactionId = findLinkedTransactionId(results, contactId);
+  const transactionId = findLinkedTransactionId(results, contactId, reportId);
   if (!transactionId) {
     throw new Error(
       `Unable to locate linked transaction for contact "${LINKED_CONTACT}" in report ${reportId}.`,
@@ -227,7 +235,17 @@ const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
     `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&report_id=${reportId}&schedules=A`,
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
-    return cy.wrap(requireLinkedTransactionId(results, contactId, reportId), { log: false });
+    const transactionId = findLinkedTransactionId(results, contactId, reportId);
+    if (transactionId) {
+      return cy.wrap(transactionId, { log: false });
+    }
+    return ContactsDeleteHelpers.requestWithCookies<TransactionListResponse>(
+      'GET',
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&contact=${contactId}`,
+    ).then((fallback) => {
+      const fallbackResults = Array.isArray(fallback.body?.results) ? fallback.body.results : [];
+      return cy.wrap(requireLinkedTransactionId(fallbackResults, contactId, reportId), { log: false });
+    });
   });
 
 const deleteTransactionAndReport = (transactionId: string, reportId: string) =>

@@ -18,6 +18,7 @@ export class Form24ListComponent extends AbstractFormListComponent<Form24> {
   readonly renameF24DialogVisible = signal(false);
   override readonly caption =
     'Data table of all F24 reports created by the committee broken down by report type, coverage date, status, version, Date filed, and actions.';
+  override readonly includeCoverage = true;
 
   constructor() {
     super();

@@ -3,7 +3,7 @@
   [(selectedItems)]="selectedItems"
   itemName="transactions"
   title="Loans and Debts"
-  [items]="items"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   sortField="line_label,created"
@@ -30,7 +30,7 @@
       {{ item.name }}
     </td>
     <td>
-      {{ item[item.transactionType.templateMap.date] | fecDate }}
+      {{ item.date | fecDate }}
     </td>
     <td>
       {{ item['amount'] | currency }}

@@ -2,14 +2,14 @@
 <app-table
   [(first)]="first"
   data-cy="form99-list-component"
-  [items]="items"
+  [items]="items()"
   [(totalItems)]="totalItems"
   [loading]="loading"
   [(rowsPerPage)]="rowsPerPage"
   [(selectedItems)]="selectedItems"
   itemName="reports"
   title="Form 99"
-  [columns]="baseColumns()"
+  [columns]="columns()"
   sortField="report_code_label"
   (loadTableItems)="loadTableItems($event)"
 />

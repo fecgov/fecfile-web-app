@@ -1,18 +1,18 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { Transaction } from '../models/transaction.model';
-import { TransactionService } from '../services/transaction.service';
-import { TransactionTypeUtils, MultipleEntryTransactionTypes } from '../utils/transaction-type.utils';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
+import { Transaction } from '../models/transaction.model';
+import { TransactionService } from '../services/transaction.service';
 import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
-import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
-import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
-import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
-import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
+import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
+import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
 import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
+import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
+import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
+import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -88,7 +88,10 @@ export class TransactionResolver {
       let page: ListRestResponse | null = null;
       do {
         page = await this.transactionService.getTableData(++pageNumber, '', params);
-        transaction.children?.push(...(page.results as Transaction[]));
+        for (const result of page.results) {
+          const childTransaction = await this.transactionService.get((result as Transaction).id ?? '');
+          transaction.children?.push(childTransaction);
+        }
       } while (page?.next);
       return transaction;
     }
