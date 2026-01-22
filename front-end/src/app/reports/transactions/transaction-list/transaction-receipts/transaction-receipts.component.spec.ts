@@ -218,16 +218,4 @@ describe('TransactionReceiptsComponent', () => {
     component.deleteItem(testTransaction);
     expect(deleteSpy).toHaveBeenCalled();
   });
-
-  describe('format id', () => {
-    it('should return empty string if null id', () => {
-      const str = component.formatId(null);
-      expect(str).toBe('');
-    });
-
-    it('should properly format', () => {
-      const str = component.formatId('abcdefghijklmnopqrstuvwxyz');
-      expect(str).toBe('ABCDEFGH');
-    });
-  });
 });

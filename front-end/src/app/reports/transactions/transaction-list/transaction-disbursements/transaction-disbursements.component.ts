@@ -52,6 +52,8 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
       pipe: 'memoCode',
     },
     this.buildAmountColumn(),
+    this.buildTransactionIdColumn(),
+    this.buildAssociatedWithColumn(),
     {
       field: '',
       header: 'Actions',

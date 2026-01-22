@@ -44,6 +44,8 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
       cssClass: 'aggregate-column',
       pipe: 'currency',
     },
+    this.buildTransactionIdColumn(),
+    this.buildAssociatedWithColumn(),
     {
       field: '',
       header: 'Actions',
