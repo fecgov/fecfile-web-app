@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, computed, inject, input, output, viewChild } from '@angular/core';
+import { ApiService } from 'app/shared/services/api.service';
 import { ButtonModule } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { Popover, PopoverModule } from 'primeng/popover';
+import { Ripple } from 'primeng/ripple';
 import { TableAction } from './table-actions';
 
 @Component({
@@ -11,22 +12,25 @@ import { TableAction } from './table-actions';
   imports: [ButtonModule, Ripple, PopoverModule],
 })
 export class TableActionsButtonComponent<T> {
-  @ViewChild(Popover) op!: Popover;
-  @Input() tableActions: TableAction<T>[] = [];
-  @Input() actionItem: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  @Input() buttonIcon = '';
-  @Input() buttonLabel = '';
-  @Input() buttonStyleClass = '';
-  @Input() buttonAriaLabel = '';
-  @Input() rounded = true;
-  @Output() tableActionClick = new EventEmitter<{ action: TableAction<T>; actionItem: any }>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  readonly apiService = inject(ApiService);
+  readonly op = viewChild.required(Popover);
+  readonly tableActions = input<TableAction<T>[]>([]);
+  readonly actionItem = input.required<T>();
+  readonly buttonIcon = input('');
+  readonly buttonLabel = input('');
+  readonly buttonStyleClass = input('');
+  readonly buttonAriaLabel = input('');
+  readonly rounded = input(true);
+  readonly tableActionClick = output<{ action: TableAction<T>; actionItem: T }>();
 
-  get filteredActions(): TableAction<T>[] {
-    return this.tableActions.filter((action) => !action.isAvailable || action.isAvailable(this.actionItem));
-  }
+  readonly filteredActions = computed(() => {
+    const item = this.actionItem();
+    if (!item) return [];
+    return this.tableActions().filter((action) => !action.isAvailable || action.isAvailable(item));
+  });
 
   performAction(action: TableAction<T>) {
-    this.tableActionClick.emit({ action, actionItem: this.actionItem });
-    this.op.hide();
+    this.tableActionClick.emit({ action, actionItem: this.actionItem() });
+    this.op().hide();
   }
 }

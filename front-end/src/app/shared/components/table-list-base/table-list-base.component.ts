@@ -27,7 +27,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   protected abstract readonly itemService: TableListService<T>;
 
   item!: T;
-  items: T[] = [];
+  readonly items = signal<T[]>([]);
   readonly rowsPerPage = signal(10);
   readonly totalItems = signal(0);
   pagerState: TableLazyLoadEvent | undefined;
@@ -116,9 +116,9 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
     const response = await this.itemService.getTableData(pageNumber, ordering, params);
     try {
-      this.items = [...response.results];
+      this.items.set([...response.results]);
     } catch (err) {
-      this.items = [];
+      this.items.set([]);
       console.log(err);
     }
 
@@ -168,7 +168,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
       obs.push(this.itemService.delete(item));
     });
     await Promise.all(obs);
-    this.items = this.items.filter((item: T) => !this.selectedItems().includes(item));
+    this.items.update((items) => items.filter((item: T) => !this.selectedItems().includes(item)));
     this.selectedItems.set([]);
     this.refreshTable();
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });

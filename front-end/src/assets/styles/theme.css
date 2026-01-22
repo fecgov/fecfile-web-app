@@ -504,7 +504,7 @@ p-checkbox {
 }
 
 .p-checkbox .p-checkbox-box {
-  border: 2px solid var(--fec-grey-alt);
+  border: 2px solid var(--text-color-secondary);
   background: var(--p-content-background);
   width: 20px;
   height: 20px;

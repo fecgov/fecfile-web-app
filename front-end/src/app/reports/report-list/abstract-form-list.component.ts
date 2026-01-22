@@ -21,22 +21,35 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   override readonly rowsPerPage = signal(5);
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
-  readonly baseColumns: Signal<ColumnDefinition<T>[]> = computed(() => {
-    return [
+  readonly includeCoverage: boolean = false;
+  readonly columns: Signal<ColumnDefinition<T>[]> = computed(() => {
+    const columns = [
       {
         field: 'formSubLabel',
         header: 'Type',
         sortable: true,
-        cssClass: 'type-column',
+        cssClass: this.includeCoverage ? 'coverage-type-column' : 'type-column',
         bodyTpl: this.sharedTemplate().reportNameBodyTpl(),
       },
+    ];
+    if (this.includeCoverage) {
+      columns.push({
+        field: 'coverage_through_date',
+        header: 'Coverage',
+        sortable: true,
+        cssClass: 'coverage-column',
+        bodyTpl: this.sharedTemplate().coverageBodyTpl(),
+      });
+    }
+    return [
+      ...columns,
       { field: 'report_status', header: 'Status', sortable: true, cssClass: 'status-column' },
       { field: 'version_label', header: 'Version', sortable: true, cssClass: 'version-column' },
       {
         field: 'upload_submission__created',
         header: 'Filed',
         sortable: true,
-        cssClass: 'submission-column',
+        cssClass: 'filed-column',
         bodyTpl: this.sharedTemplate().submissionBodyTpl(),
       },
       {
