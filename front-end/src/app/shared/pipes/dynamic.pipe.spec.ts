@@ -24,6 +24,7 @@ describe('DynamicPipe', () => {
         { provide: CurrencyPipe, useValue: currencyPipeMock },
         { provide: MemoCodePipe, useValue: memoCodePipeMock },
         { provide: FecDatePipe, useValue: fecDatePipeMock },
+        { provide: TransactionIdPipe, useValue: transactionIdPipeMock },
       ],
     });
     pipe = TestBed.inject(DynamicPipe);
@@ -55,6 +56,15 @@ describe('DynamicPipe', () => {
     const result = pipe.transform(value, 'fecDate');
     expect(result).toBe('01/01/2026');
     expect(fecDatePipeMock.transform).toHaveBeenCalledWith(value);
+  });
+
+  it('Should transform transactionId', () => {
+    const value = '271da73858hj841';
+    transactionIdPipeMock.transform.and.returnValue('271DA738');
+
+    const result = pipe.transform(value, 'transactionId');
+    expect(result).toBe('271DA738');
+    expect(transactionIdPipeMock.transform).toHaveBeenCalledWith(value);
   });
 
   it('Should return the same value when no valid PipeType is provided', () => {
