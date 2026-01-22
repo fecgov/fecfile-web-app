@@ -14,7 +14,7 @@
   [lazy]="true"
   [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true"
-  (onLazyLoad)="loadTableItems.emit($event)"
+  (onSort)="updateSort($event)"
   stripedRows
   showGridlines
 >

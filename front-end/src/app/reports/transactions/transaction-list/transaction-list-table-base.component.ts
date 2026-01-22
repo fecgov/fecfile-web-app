@@ -363,7 +363,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     if (this.itemService.update) {
       try {
         await this.itemService.update(item);
-        this.loadTableItems({});
+        this.loadTableItems();
       } catch (error) {
         console.error('Error updating item:', error);
       }

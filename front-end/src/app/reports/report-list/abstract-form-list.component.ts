@@ -118,12 +118,12 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   async amendReport(report: T) {
     await this.itemService.startAmendment(report);
-    this.loadTableItems({});
+    this.loadTableItems();
   }
 
   async unamendReport(report: T) {
     await this.itemService.startUnamendment(report);
-    this.loadTableItems({});
+    this.loadTableItems();
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',

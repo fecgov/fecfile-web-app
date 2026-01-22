@@ -16,7 +16,6 @@ import { Component, signal, viewChild } from '@angular/core';
     [(selectedItems)]="selectedItems"
     itemName="reports"
     sortField="form_type"
-    (loadTableItems)="loadTableItems($event)"
   />`,
 })
 class TestHostComponent {
