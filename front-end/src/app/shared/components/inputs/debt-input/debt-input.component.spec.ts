@@ -42,7 +42,7 @@ describe('DebtInputComponent', () => {
     function setupAndInitialize(
       beginningBalance: number | undefined,
       paymentAmount: number | undefined,
-      transactionId: string = '123',
+      transactionId: string | undefined = '123',
     ) {
       // Create a mock transaction object with the required properties
       const mockTransaction: Partial<Transaction> & Record<string, unknown> = {
@@ -116,7 +116,7 @@ describe('DebtInputComponent', () => {
     it('should correctly calculate when all values are updated from new transaction', () => {
       // This test simulates updating a debt when creating a new one
       // Setup: beginning balance = 0, payment amount = 0 (new transaction)
-      setupAndInitialize(0, 0, undefined as any);
+      setupAndInitialize(0, 0, undefined);
 
       const incurredAmountControl = component.form.get(component.templateMap.amount);
       const balanceAtCloseControl = component.form.get('balance_at_close');
