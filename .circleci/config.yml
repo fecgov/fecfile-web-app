@@ -192,6 +192,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/results/if-5xx
+          destination: cypress/results/if-5xx
 
   # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
@@ -243,6 +246,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/results/if-5xx
+          destination: cypress/results/if-5xx
 
   update-sprint-schedule:
     docker:
