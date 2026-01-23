@@ -6,7 +6,6 @@ import { TableListBaseComponent } from 'app/shared/components/table-list-base/ta
 import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
 import {
   Report,
-  Transaction,
   ReportTypes,
   ScheduleIds,
   ScheduleCTransactionTypes,
@@ -16,6 +15,7 @@ import {
   ScheduleATransactionTypes,
   ScheduleBTransactionTypes,
 } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -34,7 +34,10 @@ const loansDebts = [
 @Component({
   template: '',
 })
-export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
+export abstract class TransactionListTableBaseComponent
+  extends TableListBaseComponent<TransactionListRecord>
+  implements OnInit
+{
   protected readonly reportService = inject(ReportService);
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
@@ -46,7 +49,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   readonly reportIsEditable = computed(() => this.reportService.isEditable(this.report()));
   readonly isForm24 = computed(() => this.report().form_type === ReportTypes.F24);
 
-  public rowActions: TableAction<Transaction>[] = [
+  public rowActions: TableAction<TransactionListRecord>[] = [
     new TableAction(
       'View',
       this.editItem.bind(this),
@@ -62,17 +65,16 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Delete',
       this.deleteItem.bind(this),
-      (transaction: Transaction) => this.reportIsEditable() && this.canDelete(transaction),
+      (transaction: TransactionListRecord) => this.reportIsEditable() && this.canDelete(transaction),
       () => true,
     ),
     new TableAction(
       'Aggregate',
       this.forceAggregate.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         !!transaction.force_unaggregated &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
       () => true,
@@ -80,11 +82,10 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Unaggregate',
       this.forceUnaggregate.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         !transaction.force_unaggregated &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
-        !transaction.parent_transaction &&
         !transaction.parent_transaction_id &&
         [ScheduleIds.A, ScheduleIds.E].includes(transaction.transactionType.scheduleId),
       () => true,
@@ -92,7 +93,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.itemized === false &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
@@ -103,7 +104,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Unitemize',
       this.forceUnitemize.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.itemized === true &&
         this.reportIsEditable() &&
         this.report().report_type !== ReportTypes.F24 &&
@@ -114,7 +115,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Receive loan repayment',
       this.createLoanRepaymentReceived.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.transaction_type_identifier == ScheduleCTransactionTypes.LOAN_BY_COMMITTEE &&
         this.reportIsEditable(),
       () => true,
@@ -122,7 +123,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Review loan agreement',
       this.editLoanAgreement.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         this.reportIsEditable() &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         !!transaction.loan_agreement_id,
@@ -131,7 +132,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'New loan agreement',
       this.createLoanAgreement.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         this.reportIsEditable() &&
         transaction.transaction_type_identifier === ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK &&
         isPulledForwardLoan(transaction) &&
@@ -141,7 +142,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Make loan repayment',
       this.createLoanRepaymentMade.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         [
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
@@ -151,7 +152,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Report debt repayment',
       this.createDebtRepaymentMade.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE &&
         this.reportIsEditable(),
       () => true,
@@ -159,7 +160,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Report debt repayment',
       this.createDebtRepaymentReceived.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.transaction_type_identifier === ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE &&
         this.reportIsEditable(),
       () => true,
@@ -167,7 +168,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Reattribute',
       this.createReattribution.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.transactionType.scheduleId === ScheduleIds.A &&
         !transaction.transactionType.negativeAmountValueOnly &&
         !transaction.parent_transaction_id &&
@@ -181,7 +182,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     new TableAction(
       'Redesignate',
       this.createRedesignation.bind(this),
-      (transaction: Transaction) =>
+      (transaction: TransactionListRecord) =>
         transaction.transactionType.scheduleId === ScheduleIds.B &&
         transaction.transactionType.hasElectionInformation() &&
         !transaction.transactionType.negativeAmountValueOnly &&
@@ -195,7 +196,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     ),
   ];
 
-  protected buildLineColumn(): ColumnDefinition<Transaction> {
+  protected buildLineColumn(): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'line_label',
       header: 'Line',
@@ -204,7 +205,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildTypeColumn(bodyTpl: TemplateRef<TableBodyContext<Transaction>>): ColumnDefinition<Transaction> {
+  protected buildTypeColumn(
+    bodyTpl: TemplateRef<TableBodyContext<TransactionListRecord>>,
+  ): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'transaction_type_identifier',
       header: 'Type',
@@ -215,8 +218,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   protected buildNameColumn(options?: {
-    bodyTpl: TemplateRef<TableBodyContext<Transaction>>;
-  }): ColumnDefinition<Transaction> {
+    bodyTpl: TemplateRef<TableBodyContext<TransactionListRecord>>;
+  }): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'name',
       header: 'Name',
@@ -226,7 +229,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildDateColumn(options?: { header?: string; cssClass?: string }): ColumnDefinition<Transaction> {
+  protected buildDateColumn(options?: { header?: string; cssClass?: string }): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'date',
       header: options?.header ?? 'Date',
@@ -236,7 +239,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildAmountColumn(options?: { header?: string }): ColumnDefinition<Transaction> {
+  protected buildAmountColumn(options?: { header?: string }): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'amount',
       header: options?.header ?? 'Amount',
@@ -246,7 +249,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildTransactionIdColumn(): ColumnDefinition<Transaction> {
+  protected buildTransactionIdColumn(): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'transaction_id',
       header: 'Transaction ID',
@@ -255,7 +258,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     };
   }
 
-  protected buildAssociatedWithColumn(): ColumnDefinition<Transaction> {
+  protected buildAssociatedWithColumn(): ColumnDefinition<TransactionListRecord> {
     return {
       field: 'back_reference_tran_id_number',
       header: 'Associated With',
@@ -274,8 +277,8 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     action.action(report);
   }
 
-  protected getEmptyItem(): Transaction {
-    return {} as Transaction;
+  protected getEmptyItem(): TransactionListRecord {
+    return {} as TransactionListRecord;
   }
 
   override readonly params = computed(() => {
@@ -284,80 +287,90 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return params;
   });
 
-  override editItem(item: Transaction): Promise<boolean> {
+  override editItem(item: TransactionListRecord): Promise<boolean> {
     return this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${item.id}`);
   }
 
-  public async editLoanAgreement(transaction: Transaction): Promise<boolean> {
+  public async editLoanAgreement(transaction: TransactionListRecord): Promise<boolean> {
     if (transaction.loan_agreement_id)
       return this.router.navigate([`${transaction.loan_agreement_id}`], { relativeTo: this.activatedRoute });
     return false;
   }
 
-  public createLoanAgreement(transaction: Transaction): Promise<boolean> {
+  public createLoanAgreement(transaction: TransactionListRecord): Promise<boolean> {
     return this.router.navigateByUrl(
       `/reports/transactions/report/${this.reportId}/list/${transaction.id}/create-sub-transaction/${ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT}`,
     );
   }
 
-  public forceAggregate(transaction: Transaction): Promise<void> {
+  public forceAggregate(transaction: TransactionListRecord): Promise<void> {
     return this.forceUnaggregation(transaction, false);
   }
 
-  public forceUnaggregate(transaction: Transaction): Promise<void> {
+  public forceUnaggregate(transaction: TransactionListRecord): Promise<void> {
     return this.forceUnaggregation(transaction, true);
   }
 
-  public forceUnaggregation(transaction: Transaction, unaggregated: boolean) {
+  async forceUnaggregation(transaction: TransactionListRecord, unaggregated: boolean) {
     transaction.force_unaggregated = unaggregated;
-    return this.updateItem(transaction);
+    if (this.itemService.unaggregate) {
+      try {
+        await this.itemService.unaggregate(transaction, unaggregated);
+        this.loadTableItems({});
+      } catch (error) {
+        console.error('Error updating item:', error);
+      }
+    }
   }
 
-  public forceItemize(transaction: Transaction): void {
+  public forceItemize(transaction: TransactionListRecord): void {
     this.forceItemization(transaction, true);
   }
 
-  public forceUnitemize(transaction: Transaction): void {
+  public forceUnitemize(transaction: TransactionListRecord): void {
     this.forceItemization(transaction, false);
   }
 
-  public forceItemization(transaction: Transaction, itemized: boolean) {
+  async forceItemization(transaction: TransactionListRecord, itemized: boolean) {
     this.confirmationService.confirm({
       message:
         'Changing the itemization status of this transaction will affect its associated transactions (such as memos).',
       header: 'Heads up!',
-      accept: () => {
+      accept: async () => {
         transaction.force_itemized = itemized;
-        this.updateItem(transaction);
+        if (this.itemService.itemize) {
+          await this.itemService.itemize(transaction, itemized);
+          this.loadTableItems({});
+        }
       },
     });
   }
 
-  public async createLoanRepaymentReceived(transaction: Transaction): Promise<void> {
+  public async createLoanRepaymentReceived(transaction: TransactionListRecord): Promise<void> {
     await this.router.navigateByUrl(
       `/reports/transactions/report/${this.reportId}/create/${ScheduleATransactionTypes.LOAN_REPAYMENT_RECEIVED}?loan=${transaction.id}`,
     );
   }
 
-  public async createDebtRepaymentReceived(transaction: Transaction): Promise<void> {
+  public async createDebtRepaymentReceived(transaction: TransactionListRecord): Promise<void> {
     await this.router.navigateByUrl(
       `/reports/transactions/report/${this.reportId}/select/receipt?debt=${transaction.id}`,
     );
   }
 
-  public async createLoanRepaymentMade(transaction: Transaction): Promise<void> {
+  public async createLoanRepaymentMade(transaction: TransactionListRecord): Promise<void> {
     await this.router.navigateByUrl(
       `/reports/transactions/report/${this.reportId}/create/${ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE}?loan=${transaction.id}`,
     );
   }
 
-  public async createDebtRepaymentMade(transaction: Transaction): Promise<void> {
+  public async createDebtRepaymentMade(transaction: TransactionListRecord): Promise<void> {
     await this.router.navigateByUrl(
       `/reports/transactions/report/${this.reportId}/select/disbursement?debt=${transaction.id}`,
     );
   }
 
-  public async createReattribution(transaction: Transaction): Promise<void> {
+  public async createReattribution(transaction: TransactionListRecord): Promise<void> {
     if (this.reportIsEditable()) {
       await this.router.navigateByUrl(
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
@@ -367,7 +380,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
   }
 
-  public async createRedesignation(transaction: Transaction): Promise<void> {
+  public async createRedesignation(transaction: TransactionListRecord): Promise<void> {
     if (this.reportIsEditable()) {
       await this.router.navigateByUrl(
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
@@ -377,18 +390,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     }
   }
 
-  public async updateItem(item: Transaction) {
-    if (this.itemService.update) {
-      try {
-        await this.itemService.update(item);
-        this.loadTableItems({});
-      } catch (error) {
-        console.error('Error updating item:', error);
-      }
-    }
-  }
-
-  private canDelete(transaction: Transaction): boolean {
+  private canDelete(transaction: TransactionListRecord): boolean {
     if (transaction.transaction_type_identifier) {
       // Shouldn't be able to delete loan receipts
       if (loanReceipts.includes(transaction.transaction_type_identifier)) return false;
@@ -400,7 +402,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
     return !!transaction?.can_delete;
   }
 
-  public override deleteItem(item: Transaction): void | Promise<void> {
+  public override deleteItem(item: TransactionListRecord): void | Promise<void> {
     this.confirmationService.confirm({
       message:
         'Deleting this transaction will also delete any linked transactions ' +

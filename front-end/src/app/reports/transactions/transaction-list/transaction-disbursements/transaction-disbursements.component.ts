@@ -4,7 +4,7 @@ import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
-import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
@@ -12,6 +12,7 @@ import { TableBodyContext, TableComponent } from '../../../../shared/components/
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -30,13 +31,13 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, and Actions.';
 
   readonly requestReportSelection = output<{
-    transaction: Transaction;
+    transaction: TransactionListRecord;
     formType: ReportTypes;
     createMethod: () => Promise<void>;
   }>();
 
-  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('typeBody');
-  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
 
   readonly columns = computed(() => [
     this.buildLineColumn(),
@@ -68,7 +69,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
         'Add to Form24 Report',
         (transaction) => {
           this.requestReportSelection.emit({
-            transaction: transaction as Transaction,
+            transaction: transaction as TransactionListRecord,
             formType: ReportTypes.F24,
             createMethod: this.refreshTable.bind(this),
           });

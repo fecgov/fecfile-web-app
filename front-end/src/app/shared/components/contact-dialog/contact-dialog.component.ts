@@ -46,7 +46,6 @@ import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { LabelPipe } from '../../pipes/label.pipe';
-import { TransactionService } from '../../services/transaction.service';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -55,6 +54,7 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -83,7 +83,7 @@ import { TransactionContactUtils } from '../transaction-type-base/transaction-co
 })
 export class ContactDialogComponent extends FormComponent implements OnInit {
   private readonly contactService = inject(ContactService);
-  private readonly transactionService = inject(TransactionService);
+  private readonly transactionService = inject(TransactionListService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
   readonly ContactTypes = ContactTypes;
@@ -153,7 +153,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         cssClass: 'type-column',
         bodyTpl: type,
       },
-      { field: 'form_type', header: 'Form', sortable: true, cssClass: 'form-column' },
+      { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column' },
       { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
       {
         field: 'date',

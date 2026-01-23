@@ -8,6 +8,7 @@ import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -28,16 +29,15 @@ describe('SelectReportDialogComponent', () => {
     fixture = TestBed.createComponent(SelectReportDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    const data = {
+      id: '999',
+      form_type: F3xFormTypes.F3XT,
+      committee_name: 'foo',
+      coverage_through_date: '2024-04-20',
+    };
 
-    futureSpy = spyOn(service, 'getFutureReports').and.callFake(async () => {
-      const data = {
-        id: '999',
-        form_type: F3xFormTypes.F3XT,
-        committee_name: 'foo',
-        coverage_through_date: '2024-04-20',
-      };
-      return [Form3X.fromJSON(data)];
-    });
+    futureSpy = spyOn(service, 'getFutureReports').and.resolveTo([Form3X.fromJSON(data)]);
+    spyOn(service, 'get').and.resolveTo(Form3X.fromJSON(data));
   });
 
   it('should create', () => {
@@ -46,7 +46,19 @@ describe('SelectReportDialogComponent', () => {
 
   it('should get a list of available reports', fakeAsync(() => {
     component.ngOnInit();
-    ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction(), ReattRedesTypes.REATTRIBUTED]);
+    const transaction: TransactionListRecord = {
+      ...testScheduleATransaction(),
+      name: 'TEST',
+      date: new Date(),
+      amount: 100,
+      balance: 0,
+      aggregate: 0,
+      report_code_label: '',
+      can_delete: true,
+      force_unaggregated: true,
+      report_type: 'Form 3X',
+    } as unknown as TransactionListRecord;
+    ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
     tick(500);
 
     expect(futureSpy).toHaveBeenCalled();
@@ -55,7 +67,19 @@ describe('SelectReportDialogComponent', () => {
 
   it('should clear and close on cancel', async () => {
     component.ngOnInit();
-    ReattRedesUtils.selectReportDialogSubject.next([testScheduleATransaction(), ReattRedesTypes.REATTRIBUTED]);
+    const transaction: TransactionListRecord = {
+      ...testScheduleATransaction(),
+      name: 'TEST',
+      date: new Date(),
+      amount: 100,
+      balance: 0,
+      aggregate: 0,
+      report_code_label: '',
+      can_delete: true,
+      force_unaggregated: true,
+      report_type: 'Form 3X',
+    } as unknown as TransactionListRecord;
+    ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
     expect(component.transaction).toBeTruthy();
 
     component.cancel();
@@ -91,7 +115,18 @@ describe('SelectReportDialogComponent', () => {
     it('should redirect based on the selected report and transaction', async () => {
       const routerSpy = spyOn(component.router, 'navigateByUrl');
       component.ngOnInit();
-      const transaction = testScheduleATransaction();
+      const transaction: TransactionListRecord = {
+        ...testScheduleATransaction(),
+        name: 'TEST',
+        date: new Date(),
+        amount: 100,
+        balance: 0,
+        aggregate: 0,
+        report_code_label: '',
+        can_delete: true,
+        force_unaggregated: true,
+        report_type: 'Form 3X',
+      } as unknown as TransactionListRecord;
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
       component.selectedReport = component.availableReports[0];
       component.selectedReport = testActiveReport();

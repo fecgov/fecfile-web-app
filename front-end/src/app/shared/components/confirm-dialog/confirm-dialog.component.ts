@@ -1,12 +1,11 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { ButtonDirective } from 'primeng/button';
 import { DialogComponent } from '../dialog/dialog.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [DialogComponent, ButtonDirective],
+  imports: [DialogComponent],
   templateUrl: './confirm-dialog.component.html',
   styleUrl: './confirm-dialog.component.scss',
 })
