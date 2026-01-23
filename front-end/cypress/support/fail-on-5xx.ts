@@ -136,7 +136,7 @@ function normalizeHeaders(
     try {
       return JSON.stringify(value);
     } catch {
-      return String(value);
+      return '[unserializable]';
     }
   };
 
