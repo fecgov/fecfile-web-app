@@ -45,6 +45,7 @@ const CORRELATION_HEADER_KEYS = [
 const DEFAULT_WATCH = ['**/transactions/**', '**/api/**'];
 const DEFAULT_IGNORE: string[] = [];
 const DEFAULT_ARTIFACT_DIR = 'cypress/results/if-5xx';
+const ALLOW_5XX_TAG = '@allow-5xx';
 
 let registered = false;
 
@@ -210,6 +211,10 @@ function getSpecName(): string {
   return 'unknown-spec';
 }
 
+function isAllowlistedTest(title: string): boolean {
+  return title.includes(ALLOW_5XX_TAG);
+}
+
 function registerBackendObserver(cfg: FailOn5xxConfig, seen: Backend5xxEvent[]): void {
   // Global observer intercept (does not stub anything)
   // middleware:true ensures this runs early in the intercept chain.
@@ -251,6 +256,7 @@ export function registerFailOn5xx(): void {
 
     const testTitle =
       this.currentTest?.fullTitle?.() ?? this.currentTest?.title ?? 'unknown-test';
+    const allow5xx = isAllowlistedTest(testTitle);
 
     const currentTest = this.currentTest as
       | (Mocha.Runnable & { currentRetry?: () => number })
@@ -277,6 +283,7 @@ export function registerFailOn5xx(): void {
     cy.writeFile(artifactPath, artifact, { log: false }).then(() => {
       // Don’t override a “real” test failure.
       if (this.currentTest?.state !== 'passed') return;
+      if (allow5xx) return;
 
       const lines = [
         `Backend 5xx detected (${seen.length}).`,
