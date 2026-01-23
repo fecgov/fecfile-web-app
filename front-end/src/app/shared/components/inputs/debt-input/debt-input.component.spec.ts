@@ -3,7 +3,7 @@ import { DebtInputComponent } from './debt-input.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Transaction } from 'app/shared/models/transaction.model';
 
@@ -18,9 +18,9 @@ describe('DebtInputComponent', () => {
     });
     fixture = TestBed.createComponent(DebtInputComponent);
     component = fixture.componentInstance;
-    component.templateMap = testTemplateMap();
-    component.form.setControl('loan_balance', new SubscriptionFormControl());
-    component.form.setControl('contribution_amount', new SubscriptionFormControl());
+
+    component.form.setControl('beginning_balance', new SubscriptionFormControl());
+    component.form.setControl('incurred_amount', new SubscriptionFormControl());
     component.form.setControl('payment_amount', new SubscriptionFormControl());
     component.form.setControl('balance_at_close', new SubscriptionFormControl());
   });
@@ -47,7 +47,7 @@ describe('DebtInputComponent', () => {
       // Create a mock transaction object with the required properties
       const mockTransaction: Partial<Transaction> & Record<string, unknown> = {
         id: transactionId,
-        [component.templateMap.balance]: beginningBalance,
+        beginning_balance: beginningBalance,
         payment_amount: paymentAmount,
       };
 
@@ -65,7 +65,7 @@ describe('DebtInputComponent', () => {
       // Expected: balance_at_close = 5000 + 2000 - 1000 = 6000
       setupAndInitialize(5000, 1000);
 
-      const incurredAmountControl = component.form.get(component.templateMap.amount);
+      const incurredAmountControl = component.form.get('incurred_amount');
       incurredAmountControl?.setValue(2000, { emitEvent: true });
       fixture.detectChanges();
 
@@ -79,7 +79,7 @@ describe('DebtInputComponent', () => {
       // Expected: balance_at_close = 1000 + 0 - 0 = 1000
       setupAndInitialize(1000, 0);
 
-      const incurredAmountControl = component.form.get(component.templateMap.amount);
+      const incurredAmountControl = component.form.get('incurred_amount');
       incurredAmountControl?.setValue(0, { emitEvent: true });
       fixture.detectChanges();
 
@@ -91,7 +91,7 @@ describe('DebtInputComponent', () => {
       // Setup: beginning balance = 1000, payment amount = 100
       setupAndInitialize(1000, 100);
 
-      const incurredAmountControl = component.form.get(component.templateMap.amount);
+      const incurredAmountControl = component.form.get('incurred_amount');
       const balanceAtCloseControl = component.form.get('balance_at_close');
 
       // First update: incurred_amount = 500
@@ -118,7 +118,7 @@ describe('DebtInputComponent', () => {
       // Setup: beginning balance = 0, payment amount = 0 (new transaction)
       setupAndInitialize(0, 0, undefined);
 
-      const incurredAmountControl = component.form.get(component.templateMap.amount);
+      const incurredAmountControl = component.form.get('incurred_amount');
       const balanceAtCloseControl = component.form.get('balance_at_close');
 
       // After user enters incurred amount of 10000
@@ -133,7 +133,7 @@ describe('DebtInputComponent', () => {
       // Expected: balance_at_close = 5000 + 1000 - (-500) = 6500
       setupAndInitialize(5000, -500);
 
-      const incurredAmountControl = component.form.get(component.templateMap.amount);
+      const incurredAmountControl = component.form.get('incurred_amount');
       incurredAmountControl?.setValue(1000, { emitEvent: true });
       fixture.detectChanges();
 
