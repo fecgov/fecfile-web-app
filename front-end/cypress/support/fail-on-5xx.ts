@@ -126,9 +126,23 @@ function normalizeHeaders(
   const out: Record<string, string> = {};
   if (!headers) return out;
 
+  const toHeaderValue = (value: unknown): string => {
+    if (Array.isArray(value)) return value.map(String).join(',');
+    if (value == null) return '';
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+      return String(value);
+    }
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  };
+
   for (const [k, v] of Object.entries(headers)) {
     if (v == null) continue;
-    out[k.toLowerCase()] = Array.isArray(v) ? v.map(String).join(',') : String(v);
+    out[k.toLowerCase()] = toHeaderValue(v);
   }
 
   return out;
