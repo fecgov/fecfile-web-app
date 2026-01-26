@@ -3,7 +3,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CardModule } from 'primeng/card';
 import { ReportSummaryComponent } from './report-summary.component';
-import { ReportDetailedSummaryComponent } from '../report-detailed-summary/report-detailed-summary.component';
 import { ReportService } from 'app/shared/services/report.service';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { ApiService } from 'app/shared/services/api.service';
@@ -26,7 +25,7 @@ describe('ReportSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CardModule, ReportDetailedSummaryComponent],
+      imports: [CardModule, ReportSummaryComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -44,7 +43,7 @@ describe('ReportSummaryComponent', () => {
     }).compileComponents();
 
     apiService = TestBed.inject(ApiService);
-    fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
+    fixture = TestBed.createComponent(ReportSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     spyOn(apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse<unknown>()));

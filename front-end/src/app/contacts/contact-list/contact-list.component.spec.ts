@@ -19,6 +19,7 @@ import { CurrencyPipe } from '@angular/common';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
+import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -66,6 +67,7 @@ describe('ContactListComponent', () => {
         MemoCodePipe,
         FecDatePipe,
         TransactionIdPipe,
+        DefaultZeroPipe,
         {
           provide: ActivatedRoute,
           useValue: {

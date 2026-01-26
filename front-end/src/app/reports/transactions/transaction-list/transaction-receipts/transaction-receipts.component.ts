@@ -1,10 +1,14 @@
-import { Component, computed, inject, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  ColumnDefinition,
+  TableBodyContext,
+  TableComponent,
+} from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
@@ -24,7 +28,7 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
 
-  readonly columns = computed(() => [
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => [
     this.buildLineColumn(),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
@@ -34,7 +38,7 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
       header: 'Memo',
       sortable: true,
       cssClass: 'memo-column',
-      pipe: 'memoCode',
+      pipes: ['memoCode'],
     },
     this.buildAmountColumn(),
     {
@@ -42,7 +46,7 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
       header: 'Aggregate',
       sortable: true,
       cssClass: 'aggregate-column',
-      pipe: 'currency',
+      pipes: ['currency'],
     },
     this.buildTransactionIdColumn(),
     this.buildAssociatedWithColumn(),

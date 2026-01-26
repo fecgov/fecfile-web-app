@@ -235,7 +235,7 @@ export abstract class TransactionListTableBaseComponent
       header: options?.header ?? 'Date',
       sortable: true,
       cssClass: options?.cssClass ?? 'date-column',
-      pipe: 'fecDate',
+      pipes: ['fecDate'],
     };
   }
 
@@ -245,7 +245,7 @@ export abstract class TransactionListTableBaseComponent
       header: options?.header ?? 'Amount',
       sortable: true,
       cssClass: 'amount-column',
-      pipe: 'currency',
+      pipes: ['currency'],
     };
   }
 
@@ -254,7 +254,7 @@ export abstract class TransactionListTableBaseComponent
       field: 'transaction_id',
       header: 'Transaction ID',
       cssClass: 'transaction-id-column',
-      pipe: 'transactionId',
+      pipes: ['transactionId'],
     };
   }
 
@@ -263,7 +263,7 @@ export abstract class TransactionListTableBaseComponent
       field: 'back_reference_tran_id_number',
       header: 'Associated With',
       cssClass: 'associated-with-column',
-      pipe: 'transactionId',
+      pipes: ['transactionId'],
     };
   }
 
