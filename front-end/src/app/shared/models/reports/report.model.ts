@@ -29,7 +29,7 @@ export abstract class Report extends BaseModel {
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission: UploadSubmission | undefined;
-  @Transform(({ value }) => statusMap[value] || ReportStatus.IN_PROGRESS)
+
   report_status: ReportStatus | undefined;
   @Type(() => WebPrintSubmission)
   @Transform(WebPrintSubmission.transform)
@@ -81,10 +81,3 @@ export enum ReportStatus {
   SUBMIT_SUCCESS = 'Submission success',
   SUBMIT_FAILURE = 'Submission failure',
 }
-
-const statusMap: { [key: number]: ReportStatus } = {
-  1: ReportStatus.SUBMIT_FAILURE,
-  2: ReportStatus.SUBMIT_PENDING,
-  3: ReportStatus.IN_PROGRESS,
-  4: ReportStatus.SUBMIT_SUCCESS,
-};
