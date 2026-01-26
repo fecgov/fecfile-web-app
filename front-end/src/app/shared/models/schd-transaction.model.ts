@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -20,9 +20,13 @@ export class SchDTransaction extends Transaction {
   creditor_state: string | undefined;
   creditor_zip: string | undefined;
   purpose_of_debt_or_obligation: string | undefined;
+  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
   beginning_balance: number | undefined;
+  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
   incurred_amount: number | undefined;
+  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
   payment_amount: number | undefined;
+  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
   balance_at_close: number | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

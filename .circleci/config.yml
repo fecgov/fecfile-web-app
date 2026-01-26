@@ -192,6 +192,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/results/if-5xx
+          destination: cypress/results/if-5xx
 
   # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
@@ -243,6 +246,19 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/results/if-5xx
+          destination: cypress/results/if-5xx
+
+  update-sprint-schedule:
+    docker:
+      - image: cimg/python:3.13
+    steps:
+      - checkout
+      - run:
+          name: update nightly-latest-sprint schedule to latest release/sprint-*
+          command: |
+            python3 scripts/update_sprint_schedule_trigger.py
 
   deploy-job:
     docker:
@@ -317,6 +333,10 @@ parameters:
     type: boolean
     default: false
 
+  is-triggered-update-sprint-schedule:
+    type: boolean
+    default: false
+
 workflows:
   primary:
     when:
@@ -325,6 +345,7 @@ workflows:
         - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
         - not: << pipeline.parameters.is-triggered-unit-test >>
         - not: << pipeline.parameters.is-triggered-full-nightly >>
+        - not: << pipeline.parameters.is-triggered-update-sprint-schedule >>
     jobs:
       - lint
       - test
@@ -334,7 +355,7 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job:  # Deploy job even when e2e tests fail
+      - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
@@ -375,16 +396,11 @@ workflows:
           video: true
       - test
 
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 6 * * *" # 06:00 UTC
+  update-sprint-schedule:
+    when: << pipeline.parameters.is-triggered-update-sprint-schedule >>
+    jobs:
+      - update-sprint-schedule:
+          context: nightly-schedule-admin
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-    jobs:
-      - e2e-smoke:
-          video: true
-      - e2e-extended:
-          video: true
-      - test
+              only: main

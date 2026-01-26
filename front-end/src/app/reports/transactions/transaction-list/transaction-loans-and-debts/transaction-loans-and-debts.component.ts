@@ -10,7 +10,7 @@ import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transacti
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
-import { Transaction } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',
@@ -30,8 +30,8 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.';
 
-  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('typeBody');
-  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Transaction>>>('actionsBody');
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
 
   readonly columns = computed(() => [
     this.buildLineColumn(),
@@ -49,6 +49,8 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
       cssClass: 'balance-column',
       pipe: 'currency',
     },
+    this.buildTransactionIdColumn(),
+    this.buildAssociatedWithColumn(),
     {
       field: '',
       header: 'Actions',

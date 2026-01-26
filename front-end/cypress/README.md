@@ -272,21 +272,44 @@ Example (from `fecfile-web-app` repo root):
 ```bash
 # from fecfile-web-app
 circleci local execute e2e-smoke
+
 ```
 
+## Fail tests on backend 5xx (E2E)
+
+Cypress includes a support-level tripwire that fails a test if any watched API call (XHR/fetch) returns HTTP 5xx.
+When a 5xx occurs, Cypress writes a JSON artifact under `cypress/artifacts/backend-5xx/` including URL/method/status/timestamp and correlation headers if present.
+
+### Config (defaults live in cypress.config.ts)
+
+- failOn5xx: boolean (default true)
+- failOn5xxWatch: glob patterns (default ["**/transactions/**", "**/api/**"])
+- failOn5xxIgnore: glob patterns
+- failOn5xxArtifactDir: output directory
+
+### Overrides (optional)
+
+- CLI: `--env failOn5xx=false`
+- OS env: `CYPRESS_failOn5xx=false`
+
 ## Troubleshooting
+
 - **404 or 500 on `/api/v1/contacts/e2e-delete-all-contacts/`**: `E2E_TEST` is false. Set it in `fecfile-web-api/.env` or run `E2E_TEST=True docker compose up` from `fecfile-web-api`.
 - **Cypress can't reach `http://localhost:4200`**: the Angular dev server isn't running. Start it with `npm start` or `npm run local` from `fecfile-web-app/front-end`.
 - **Cypress can't reach `http://localhost:8080`**: backend is not running or compose is down. Start it with `docker compose up` from `fecfile-web-api`.
 - **Filing password errors on submit**: set `CYPRESS_FILING_PASSWORD` before running specs that submit reports.
 - **Clear Cypress cache**: from `fecfile-web-app/front-end`
+
   ```bash
   # from fecfile-web-app/front-end
   npx cypress cache prune
+
   ```
+
   (This prunes cached binaries while keeping the active version.)
 
 ## Tips for writing/maintaining tests in this repo
+
 - Put core, critical-path coverage in `cypress/e2e-smoke`.
 - Put longer, task-intensive coverage in `cypress/e2e-extended`
 - Prefer stable selectors (`data-cy`) used throughout existing specs
