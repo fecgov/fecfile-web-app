@@ -14,13 +14,19 @@
 
   .p-accordionpanel {
     border-bottom: 1px solid #121212;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .p-accordionpanel-active > .p-accordionheader {
+    border-bottom: 1px solid #121212;
   }
 
   .p-accordionheader {
     --p-accordion-header-last-bottom-border-radius: 0;
     --p-accordion-header-first-top-border-radius: 0;
     padding: 10px 20px;
-    min-height: 36px;
+    max-height: 36px;
     display: flex;
     align-items: center;
   }
@@ -29,40 +35,40 @@
     display: none;
   }
 
-  .p-accordion-header-link {
-    padding: 0;
-  }
-
-  .p-accordion-content {
-    padding: 0;
-  }
-
-  .content-accordion-wrapper {
-    padding-left: 20px;
+  .accordion-content-wrapper {
+    padding: 14px 0 14px 20px;
     border: none;
   }
 
-  .content-accordion-wrapper a,
-  .content-accordion-wrapper .disabled {
+  .accordion-content-wrapper a,
+  .accordion-content-wrapper .disabled {
     font-size: 14px;
     text-align: left;
   }
 
-  .content-area {
-    @include fixed-width(512px);
+  .transaction-type-wrapper {
+    padding: 8px 0;
   }
 
   .header-label {
-    flex: 1;
+    font-size: 14px;
     text-align: left;
   }
 
+  .accordion-header-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
   .accordion-icon {
-    order: 1;
     width: 20px;
     height: 20px;
     margin-left: auto;
-    margin-right: 20px;
+  }
+
+  .content-area {
+    @include fixed-width(512px);
   }
 
   @include breakpoint('md') {

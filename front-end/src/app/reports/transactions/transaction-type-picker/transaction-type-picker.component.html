@@ -7,18 +7,20 @@
     @for (transactionGroup of transactionGroups(); track transactionGroup; let index = $index) {
       @if (hasTransactions().get(transactionGroup)) {
         <p-accordion-panel [value]="index">
-          <p-accordion-header class="custom-header">
-            <span class="header-label">{{ transactionGroup.label }}</span>
-            <img
-              class="accordion-icon"
-              [src]="active() === index ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
-              alt="toggle icon"
-            />
+          <p-accordion-header>
+            <div class="accordion-header-wrapper">
+              <span class="header-label">{{ transactionGroup.label }}</span>
+              <img
+                class="accordion-icon"
+                [src]="active() === index ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
+                alt="toggle icon"
+              />
+            </div>
           </p-accordion-header>
-          <p-accordion-content class="grid">
-            <div class="content-accordion-wrapper">
+          <p-accordion-content>
+            <div class="accordion-content-wrapper">
               @for (transactionType of transactionTypes().get(transactionGroup); track transactionType) {
-                <div class="col-12">
+                <div class="transaction-type-wrapper">
                   @if (!isTransactionDisabled(transactionType)) {
                     <a
                       [routerLink]="getRouterLink(transactionType)"
