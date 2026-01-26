@@ -19,7 +19,7 @@ Now we use:
 
 1. **Pipeline-parameter gating** so the nightly workflow does **not** run on pushes
 2. **Separate CircleCI schedules** for the static branches
-3. A single schedule named **`nightly-latest-sprint`** that is automatically updated to point at the newest sprint branch via an updater job/script
+3. A single schedule named **`nightly-latest-sprint`** that is manually updated, bi-weekly, to point at the newest sprint branch
 
 ---
 
@@ -37,8 +37,6 @@ CircleCI project slug (used by the updater script / API commands):
 
 - `is-triggered-full-nightly` (boolean, default `false`)
   - enables the `full-nightly` workflow
-- `is-triggered-update-sprint-schedule` (boolean, default `false`)
-  - enables the updater workflow which retargets the latest-sprint schedule
 
 ### Workflows
 
@@ -49,22 +47,6 @@ CircleCI project slug (used by the updater script / API commands):
 - `update-sprint-schedule`
   - runs the updater script to move `nightly-latest-sprint` to the newest sprint branch
 
-### Updater script
-
-Location (relative to repo root):
-
-- `scripts/update_sprint_schedule_trigger.py`
-
-What it does:
-
-1. lists remote branches matching `release/sprint-<integer>` (e.g., `release/sprint-78` & `release/sprint-79`)
-2. picks the **greatest** sprint number
-3. finds the CircleCI schedule named `nightly-latest-sprint`
-4. PATCHes that schedule so `parameters.branch = release/sprint-<latest>`
-
-**Sprint selection rules**
-- deterministic: **greatest integer sprint number wins**
-- **No multi-part versions** supported (e.g., `78.1` is ignored by design)
 
 ---
 
@@ -98,44 +80,9 @@ Create these schedules in CircleCI (example time: **06:00 UTC daily**):
   - `is-triggered-full-nightly: true`
 
 ### 4) `nightly-latest-sprint`
-- Branch: set once initially to the current latest sprint (example: `release/sprint-78`)
+- Branch: set bi-weekly to the current latest sprint (example: `release/sprint-78`)
 - Pipeline parameters:
   - `is-triggered-full-nightly: true`
-
----
-
-## Updater schedule (recommended)
-
-To keep `nightly-latest-sprint` always targeting the newest sprint branch automatically, create:
-
-### 5) `update-nightly-latest-sprint`
-- branch: `main`
-- time: before the nightly window (example: **05:30 UTC daily**)
-- pipeline parameters:
-  - `is-triggered-update-sprint-schedule: true`
-
-**Why run updater on `main`?**
-- the updater is “control-plane” logic: it should run from a stable, protected branch
-- it avoids needing to retarget *the updater* every sprint
-- it ensures the updater always runs the latest script/config version
-
----
-
-## Secrets and context configuration
-
-The updater needs a CircleCI API token with permission to list and patch schedules.
-
-Context name:
-
-- `nightly-schedule-admin`
-
-Environment variables (stored in the context):
-
-- `CIRCLE_TOKEN` (CircleCI personal API token)
-- `CIRCLECI_PROJECT_SLUG` = `gh/fecgov/fecfile-web-app`
-- `CIRCLECI_SPRINT_SCHEDULE_NAME` = `nightly-latest-sprint` (optional; defaults to this)
-
-> Operational note: CircleCI schedules run with an “actor”. That actor must have permission to execute workflows that use restricted contexts; otherwise jobs may fail with “Unauthorized”.
 
 ---
 
@@ -144,14 +91,9 @@ Environment variables (stored in the context):
 When a new sprint branch is created (example: `release/sprint-79`):
 
 1. Wait until the branch is created in GitHub like normal
-2. Let the updater schedule run (next scheduled run), **or** trigger the updater manually:
-   - CircleCI → Run pipeline on branch `main`
-   - pipeline parameter: `is-triggered-update-sprint-schedule=true`
-3. Confirm the updater job logs:
-   - detected sprint branches
-   - picked the greatest sprint number
-   - updated `nightly-latest-sprint` schedule to the new branch
-4. Next nightly window: only the newest sprint branch receives scheduled nightly pipelines
+2. update the `nightly-latest-sprint` schedule trigger
+   - point to new branch, i.e. `release/sprint-79`
+3. Next nightly window: only the newest sprint branch receives scheduled nightly pipelines
 
 ---
 
