@@ -1,0 +1,31 @@
+@use 'mixins' as *;
+
+:host ::ng-deep {
+  .p-toolbar {
+    @include fixed-width(512px);
+  }
+
+  @include breakpoint('md') {
+    .p-toolbar {
+      @include fixed-width(704px);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .p-toolbar {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xl') {
+    .p-toolbar {
+      @include fixed-width(852px);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .p-toolbar {
+      @include fixed-width(1052px);
+    }
+  }
+}
