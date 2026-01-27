@@ -9,7 +9,7 @@ export enum F99FormTypes {
   F99 = 'F99',
 }
 
-export enum textCodes {
+export enum TextCodes {
   MST = 'Miscellaneous Report to the FEC',
   MSM = 'Filing Frequency Change Notice',
   MSW = 'Loan Agreement / Loan Forgiveness',

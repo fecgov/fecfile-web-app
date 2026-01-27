@@ -4,7 +4,7 @@ import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.compone
 import {
   filingFrequencies,
   Form99,
-  textCodes,
+  TextCodes,
   textCodesWithFilingFrequencies,
 } from 'app/shared/models/reports/form-99.model';
 import { Form99Service } from 'app/shared/services/form-99.service';
@@ -20,6 +20,7 @@ import { SaveCancelComponent } from '../../../shared/components/save-cancel/save
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-main-form',
@@ -55,7 +56,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   readonly schema = f99Schema;
   readonly webprintURL = '/reports/f99/web-print/';
 
-  readonly textCodes = Object.values(textCodes);
+  readonly textCodes = LabelUtils.getPrimeOptions(Object.entries(TextCodes));
   readonly filingFrequencies = filingFrequencies;
 
   override readonly form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {
