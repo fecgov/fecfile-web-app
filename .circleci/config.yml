@@ -250,16 +250,6 @@ jobs:
           path: /tmp/cypress/results/if-5xx
           destination: cypress/results/if-5xx
 
-  update-sprint-schedule:
-    docker:
-      - image: cimg/python:3.13
-    steps:
-      - checkout
-      - run:
-          name: update nightly-latest-sprint schedule to latest release/sprint-*
-          command: |
-            python3 scripts/update_sprint_schedule_trigger.py
-
   deploy-job:
     docker:
       - image: cimg/python:3.13-node
@@ -333,10 +323,6 @@ parameters:
     type: boolean
     default: false
 
-  is-triggered-update-sprint-schedule:
-    type: boolean
-    default: false
-
 workflows:
   primary:
     when:
@@ -345,7 +331,6 @@ workflows:
         - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
         - not: << pipeline.parameters.is-triggered-unit-test >>
         - not: << pipeline.parameters.is-triggered-full-nightly >>
-        - not: << pipeline.parameters.is-triggered-update-sprint-schedule >>
     jobs:
       - lint
       - test
@@ -395,12 +380,3 @@ workflows:
       - e2e-extended:
           video: true
       - test
-
-  update-sprint-schedule:
-    when: << pipeline.parameters.is-triggered-update-sprint-schedule >>
-    jobs:
-      - update-sprint-schedule:
-          context: nightly-schedule-admin
-          filters:
-            branches:
-              only: main
