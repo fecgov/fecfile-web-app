@@ -68,7 +68,7 @@
   }
 
   .content-area {
-    @include standard-container;
+    @include standard-container();
   }
 }
 
