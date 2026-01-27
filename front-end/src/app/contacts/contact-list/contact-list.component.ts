@@ -1,7 +1,6 @@
 import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
 import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -99,8 +98,8 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     return this.restoreContactsButtonIsVisible;
   }
 
-  public override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
-    await super.loadTableItems(event);
+  public override async loadTableItems(): Promise<void> {
+    await super.loadTableItems();
     await this.checkForDeletedContacts();
   }
 
@@ -144,7 +143,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     const request = contact.id ? this.itemService.update(contact) : this.itemService.create(contact);
 
     request.then(() => {
-      this.loadTableItems({});
+      this.loadTableItems();
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',

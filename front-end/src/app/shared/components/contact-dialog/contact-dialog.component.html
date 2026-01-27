@@ -1,4 +1,4 @@
-<div [style]="{ display: dialogVisible ? '' : 'none' }" [class.contact-dialog-not-submitted]="!formSubmitted">
+<div [style]="{ display: dialogVisible() ? '' : 'none' }" [class.contact-dialog-not-submitted]="!formSubmitted">
   <p-dialog
     [visible]="detailVisible"
     [style]="{ width: '90%' }"
@@ -268,7 +268,7 @@
       <app-table
         [(first)]="first"
         title="Transaction history"
-        sortField="transaction_type_identifier"
+        [(sortField)]="sortField"
         [items]="transactions"
         [(totalItems)]="totalTransactions"
         [columns]="columns()"
@@ -276,7 +276,6 @@
         [(rowsPerPage)]="rowsPerPage"
         itemName="transactions"
         [emptyMessage]="emptyMessage"
-        (loadTableItems)="loadTransactions($event)"
       />
     }
     <ng-template #footer>

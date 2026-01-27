@@ -1,4 +1,3 @@
-import { ReportCodes } from '../../utils/report-code.utils';
 import { F3xFormTypes, Form3X } from './form-3x.model';
 import { UploadSubmission } from '../upload-submission.model';
 import { WebPrintSubmission } from '../webprint-submission.model';
@@ -55,30 +54,5 @@ describe('Form3X', () => {
     };
     const form3X = Form3X.fromJSON(data);
     expect(form3X.formLabel).toEqual('Form 3X');
-  });
-
-  describe('formSubLabel', () => {
-    it('should return empty string if report_code is undefined', () => {
-      const data = {
-        id: '999',
-        form_type: F3xFormTypes.F3XT,
-        committee_name: 'foo',
-        report_code: undefined,
-      };
-      const form3X = Form3X.fromJSON(data);
-      expect(form3X.formSubLabel).toEqual('');
-    });
-
-    it('should display the appropriate sub label', () => {
-      const data = {
-        id: '999',
-        form_type: F3xFormTypes.F3XT,
-        committee_name: 'foo',
-        report_code: ReportCodes.Q1,
-        report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
-      };
-      const form3X = Form3X.fromJSON(data);
-      expect(form3X.formSubLabel).toEqual('APRIL 15 QUARTERLY REPORT (Q1)');
-    });
   });
 });

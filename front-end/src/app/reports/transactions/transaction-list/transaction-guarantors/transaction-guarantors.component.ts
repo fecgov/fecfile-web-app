@@ -3,7 +3,6 @@ import { TransactionListTableBaseComponent } from '../transaction-list-table-bas
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
@@ -48,14 +47,14 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     return params;
   });
 
-  override async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
+  override async loadTableItems(): Promise<void> {
     if (!this.loan()?.id) {
       this.items.set([]);
       this.totalItems.set(0);
       this.loading = false;
       this.cdr.detectChanges();
     } else {
-      await super.loadTableItems(event);
+      await super.loadTableItems();
     }
   }
 

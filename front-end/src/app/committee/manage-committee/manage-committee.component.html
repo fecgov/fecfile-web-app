@@ -33,7 +33,6 @@
   [(selectedItems)]="selectedItems"
   itemName="users"
   [columns]="columns()"
-  (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
     @if (isCommitteeAdministrator()) {

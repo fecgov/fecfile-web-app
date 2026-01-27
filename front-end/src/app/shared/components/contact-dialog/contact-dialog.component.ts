@@ -35,7 +35,6 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { takeUntil } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
@@ -96,6 +95,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
   readonly first = signal(0);
+  readonly sortField = signal('transaction_type_identifier');
+  readonly sortOrder = signal<'asc' | 'desc'>('asc');
 
   transactions: TransactionListRecord[] = [];
   tableLoading = true;
@@ -134,7 +135,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   countryOptions: PrimeOptions = [];
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
-  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
+  readonly dialogVisible = signal(false);
   emptyMessage = 'No data available in table';
 
   readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
@@ -175,47 +176,40 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
-  pagerState?: TableLazyLoadEvent;
-
   readonly table = viewChild(TableComponent);
   constructor() {
     super();
     effect(() => {
-      this.loadTransactions({
-        first: this.first(),
-        rows: this.rowsPerPage(),
-      });
+      this.rowsPerPage();
+      this.first.set(0);
+    });
+
+    effect(() => {
+      if (!this.dialogVisible()) return;
+      this.sortField();
+      this.sortOrder();
+      this.first();
+      this.rowsPerPage();
+      this.loadTransactions();
     });
   }
 
-  async loadTransactions(event: TableLazyLoadEvent) {
+  async loadTransactions() {
     this.tableLoading = true;
 
     // event is undefined when triggered from the detail page because
     // the detail doesn't know what page we are on. We check the local
     // pagerState variable to retrieve the page state.
 
-    if (!!event && 'first' in event) {
-      this.pagerState = event;
-    } else {
-      this.pagerState = this.pagerState ?? {
-        first: 0,
-        rows: this.rowsPerPage(),
-      };
-      event = this.pagerState;
-    }
-    if (!this.pagerState!.sortField) this.pagerState!.sortField = this.table()?.sortField();
-    if (!this.pagerState!.sortOrder) this.pagerState!.sortOrder = 1;
-
-    // Calculate the record page number to retrieve from the API.
-    this.first.set(event.first ?? 0);
-
-    const rows: number = event.rows ?? this.rowsPerPage();
-    const pageNumber: number = Math.floor(this.first() / rows) + 1;
+    const sortField = this.sortField();
+    const sortOrder = this.sortOrder() === 'asc' ? 1 : -1;
+    const first = this.first();
+    const rows = this.rowsPerPage();
+    const pageNumber: number = Math.floor(first / rows) + 1;
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ?? 'transaction_type_identifier';
-    if (ordering && event.sortOrder === -1) {
+    let ordering: string | string[] = sortField ?? 'transaction_type_identifier';
+    if (ordering && sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
       ordering = `${ordering}`;
@@ -325,10 +319,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   public openDialog() {
-    this.loadTransactions({
-      first: 0,
-      rows: this.rowsPerPage(),
-    });
     this.resetForm();
     const contact = this.contact()!;
     this.form.patchValue(contact);
@@ -342,14 +332,14 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     } else if (this.contactTypeOptions.length === 1) {
       this.contactLookup().contactTypeFormControl.enable();
     }
-    this.dialogVisible = true;
+    this.dialogVisible.set(true);
   }
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
       this.detailVisibleChange.emit(false);
       this.detailVisible = false;
-      this.dialogVisible = false;
+      this.dialogVisible.set(false);
     }
   }
 

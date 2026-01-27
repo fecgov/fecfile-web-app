@@ -18,14 +18,27 @@ import { TransactionListService } from 'app/shared/services/transaction-list.ser
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 const mockReports = [
-  Form24.fromJSON({ id: '1', name: 'test1', created: '2022-12-01', report_status: ReportStatus.IN_PROGRESS }),
-  Form24.fromJSON({ id: '2', name: 'test2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
+  Form24.fromJSON({
+    id: '1',
+    name: 'test1',
+    created: '2022-12-01',
+    report_status: ReportStatus.IN_PROGRESS,
+    report_code_label: 'test1',
+  }),
+  Form24.fromJSON({
+    id: '2',
+    name: 'test2',
+    created: '2022-12-31',
+    report_status: ReportStatus.IN_PROGRESS,
+    report_code_label: 'test2',
+  }),
   Form24.fromJSON({
     id: '3',
     name: 'test3',
     created: '2023-01-15',
     form_type: F24FormTypes.F24A,
     report_status: ReportStatus.IN_PROGRESS,
+    report_code_label: 'test3',
   }),
 ];
 

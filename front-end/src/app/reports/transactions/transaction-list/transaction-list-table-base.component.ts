@@ -316,7 +316,7 @@ export abstract class TransactionListTableBaseComponent
     if (this.itemService.unaggregate) {
       try {
         await this.itemService.unaggregate(transaction, unaggregated);
-        this.loadTableItems({});
+        this.loadTableItems();
       } catch (error) {
         console.error('Error updating item:', error);
       }
@@ -340,7 +340,7 @@ export abstract class TransactionListTableBaseComponent
         transaction.force_itemized = itemized;
         if (this.itemService.itemize) {
           await this.itemService.itemize(transaction, itemized);
-          this.loadTableItems({});
+          this.loadTableItems();
         }
       },
     });
