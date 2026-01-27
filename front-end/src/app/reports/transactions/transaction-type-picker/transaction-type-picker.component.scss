@@ -68,31 +68,7 @@
   }
 
   .content-area {
-    @include fixed-width(512px);
-  }
-
-  @include breakpoint('md') {
-    .content-area {
-      @include fixed-width(704px);
-    }
-  }
-
-  @include breakpoint('lg') {
-    .content-area {
-      @include fixed-width(852px);
-    }
-  }
-
-  @include breakpoint('xl') {
-    .content-area {
-      @include fixed-width(852px);
-    }
-  }
-
-  @include breakpoint('xxl') {
-    .content-area {
-      @include fixed-width(1052px);
-    }
+    @include standard-container;
   }
 }
 
