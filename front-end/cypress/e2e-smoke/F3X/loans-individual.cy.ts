@@ -50,11 +50,11 @@ describe('Loans', () => {
     Initialize();
   });
 
-  xit('should test: Loan Received From Individual', () => {
+  it('should test: Loan Received From Individual', () => {
     setupLoanReceivedFromIndividual().then(verifyLoanReceivedFromIndividualNoDeleteButton);
   });
 
-  xit('should test: Loan Guarantors', () => {
+  it('should test: Loan Guarantors', () => {
     setupLoanReceivedFromIndividual().then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
       cy.contains('Transactions in this report').should('exist');
