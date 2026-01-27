@@ -63,11 +63,14 @@ describe('Loans', () => {
 
   it('should test: Loan By Committee - delete Guarantor', () => {
     setupLoanReceivedFromIndividual().then((result: any) => {
+      // put intercept here so it registers before the addGuarantor call
+      // also changed the endpoint to use a regex to match the schedules parameter order-agnostic
+      cy.intercept('GET', /\/api\/v1\/transactions\/\?(?=.*schedules=C2).*/).as('GuarantorList');
       TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
 
-      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
       let alias = PageUtils.getAlias('app-transaction-receipts');
       cy.get(alias).contains('Loan Received from Individual').click();
+      // there're also `**/transaction/previous/entity/**` calls before this wait that might need to be intercepted/handled
       cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
       PageUtils.clickButton('Confirm');
