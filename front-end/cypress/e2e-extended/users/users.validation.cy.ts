@@ -80,7 +80,7 @@ describe("Users: Validation and API failure states", () => {
     PageUtils.closeToast();
   });
 
-  it('should stub 500 on invite, keep submit enabled, then succeed on retry @allow-5xx', () => {
+  it('should stub 500 on invite, keep submit enabled, then succeed on retry', () => {
     const adminUser = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
     UsersHelpers.stubOnce('POST', ADD_MEMBER_POST, { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
     cy.intercept('GET', LIST_MEMBERS_GET).as('GetMembers');
