@@ -9,6 +9,14 @@ export enum F99FormTypes {
   F99 = 'F99',
 }
 
+export enum textCodes {
+  MST = 'Miscellaneous Report to the FEC',
+  MSM = 'Filing Frequency Change Notice',
+  MSW = 'Loan Agreement / Loan Forgiveness',
+  MSI = 'Disavowal Response',
+  MSR = 'Form 3L Filing Frequency Change Notice',
+}
+
 export class Form99 extends Report {
   schema = f99Schema;
   report_type = ReportTypes.F99;
@@ -18,10 +26,6 @@ export class Form99 extends Report {
 
   get formLabel() {
     return 'Form 99';
-  }
-
-  get formSubLabel() {
-    return textCodes.find(({ value }) => value === this.text_code)?.label ?? 'Miscellaneous Report to the FEC';
   }
 
   treasurer_last_name: string | undefined;
@@ -46,19 +50,6 @@ export class Form99 extends Report {
     ];
   }
 }
-
-const allTextCodes = Object.entries({
-  MST: 'Miscellaneous Report to the FEC',
-  MSM: 'Filing Frequency Change Notice',
-  MSW: 'Loan Agreement / Loan Forgiveness',
-  MSI: 'Disavowal Response',
-  MSR: 'Form 3L Filing Frequency Change Notice',
-});
-
-export const textCodes = allTextCodes.map(([code, label]) => ({
-  value: code,
-  label,
-}));
 
 export enum textCodesWithFilingFrequencies {
   MSR,

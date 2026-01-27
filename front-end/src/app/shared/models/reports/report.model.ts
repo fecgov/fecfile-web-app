@@ -49,8 +49,6 @@ export abstract class Report extends BaseModel {
   abstract getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[];
   abstract get formLabel(): string;
 
-  abstract get formSubLabel(): string;
-
   get canAmend() {
     return false;
   }

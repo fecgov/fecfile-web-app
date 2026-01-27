@@ -55,7 +55,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   readonly schema = f99Schema;
   readonly webprintURL = '/reports/f99/web-print/';
 
-  readonly textCodes = textCodes;
+  readonly textCodes = Object.values(textCodes);
   readonly filingFrequencies = filingFrequencies;
 
   override readonly form = this.fb.group(SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties), {

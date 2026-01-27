@@ -64,7 +64,7 @@ export class SecondaryReportSelectionDialogComponent {
   readonly isForm24 = computed(() => this.reportType() === ReportTypes.F24);
 
   readonly reportLabels: Signal<LabelList> = computed(() =>
-    this.reports().map((report) => [report.id as string, report.formSubLabel]),
+    this.reports().map((report) => [report.id as string, report.report_code_label ?? '']),
   );
   readonly placeholder = computed(() => {
     if (!this.reportType()) return 'Loading report type';

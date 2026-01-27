@@ -25,7 +25,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   readonly columns: Signal<ColumnDefinition<T>[]> = computed(() => {
     const columns = [
       {
-        field: 'formSubLabel',
+        field: 'report_code_label',
         header: 'Type',
         sortable: true,
         cssClass: this.includeCoverage ? 'coverage-type-column' : 'type-column',

@@ -27,25 +27,4 @@ describe('Form99', () => {
     const form = Form99.fromJSON(data);
     expect(form.formLabel).toEqual('Form 99');
   });
-
-  describe('formSubLabel', () => {
-    it('should display the correct labels for each text code', () => {
-      const valueLabelPairs: [string | undefined, string][] = [
-        ['MSI', 'Disavowal Response'],
-        ['MSM', 'Filing Frequency Change Notice'],
-        ['MST', 'Miscellaneous Report to the FEC'],
-        [undefined, 'Miscellaneous Report to the FEC'],
-      ];
-      for (const [textCode, label] of valueLabelPairs) {
-        const data = {
-          id: '999',
-          form_type: F99FormTypes.F99,
-          committee_name: 'foo',
-          text_code: textCode,
-        };
-        const form = Form99.fromJSON(data);
-        expect(form.formSubLabel).toEqual(label);
-      }
-    });
-  });
 });
