@@ -190,8 +190,20 @@ describe('Loans', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       clickLoan('Review loan agreement');
+      cy.intercept('PUT', '**/api/v1/transactions/**').as('SaveTransactions');
+      const reportId = result.report;
+
+      const txList = (s: string) =>
+        new RegExp(String.raw`/api/v1/transactions/\?(?=.*report_id=${reportId})${s}.*`);
+
+      cy.intercept('GET', txList('(?=.*schedules=A)')).as('GetReceiptsAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=.*C)(?=.*schedules=.*D)')).as('GetLoansAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=.*B)(?=.*schedules=.*E)(?=.*schedules=.*F)'))
+        .as('GetDisbursementsAfterSave');
+
       PageUtils.clickButton('Save transactions');
-      PageUtils.urlCheck('/list');
+      cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 20000 });
+      PageUtils.locationCheck('/list');
       cy.contains('Loan Received from Bank').should('exist');
     });
   });
@@ -204,15 +216,15 @@ describe('Loans', () => {
         /\/api\/v1\/transactions\/\?(?=.*parent=)(?=.*schedules=C2).*/
       ).as('GetC2List');
       clickLoan('Edit');
-    
+
       // wait for form to be done (load c2 table)
-      cy.wait('@GetC2List', {timeout: 15000});
+      cy.wait('@GetC2List', { timeout: 15000 });
       cy.get('.p-datatable-mask').should('not.exist');
-    
+
       // go to create guarantor
       cy.intercept('PUT', '**/api/v1/transactions/**').as('saveAddGuarantor')
       cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
-      cy.wait('@saveAddGuarantor', {timeout: 15000});
+      cy.wait('@saveAddGuarantor', { timeout: 15000 });
       cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
