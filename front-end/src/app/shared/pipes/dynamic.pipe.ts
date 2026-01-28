@@ -9,11 +9,11 @@ import { DefaultZeroPipe } from './default-zero.pipe';
 
 @Pipe({ name: 'dynamic' })
 export class DynamicPipe implements PipeTransform {
-  private currencyPipe = inject(CurrencyPipe);
-  private memoCodePipe = inject(MemoCodePipe);
-  private fecDatePipe = inject(FecDatePipe);
-  private transactionIdPipe = inject(TransactionIdPipe);
-  private defaultZeroPipe = inject(DefaultZeroPipe);
+  private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly memoCodePipe = inject(MemoCodePipe);
+  private readonly fecDatePipe = inject(FecDatePipe);
+  private readonly transactionIdPipe = inject(TransactionIdPipe);
+  private readonly defaultZeroPipe = inject(DefaultZeroPipe);
 
   transform(value: any, pipes: string[] | undefined, pipeArgs: any[] = []): any {
     for (const pipe of pipes || []) {
