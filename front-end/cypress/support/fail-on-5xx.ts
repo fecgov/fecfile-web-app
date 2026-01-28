@@ -32,6 +32,25 @@ type InterceptedRequestWithResourceType = InterceptedRequest & {
   resourceType?: string;
 };
 
+type RunnableWithRetry = Mocha.Runnable & { currentRetry?: () => number; type?: string };
+
+type RunnableWithIf5xxState = RunnableWithRetry & {
+  __if5xxWrapped?: boolean;
+  __if5xxArtifactAttempt?: number;
+  __if5xxArtifactPath?: string;
+};
+
+type ArtifactPayload = {
+  spec: string;
+  test: string;
+  attempt: number;
+  failures: Backend5xxEvent[];
+};
+
+type CypressWithState = {
+  state?: (key: string) => unknown;
+};
+
 const CORRELATION_HEADER_KEYS = [
   'x-request-id',
   'x-correlation-id',
@@ -247,18 +266,176 @@ function registerBackendObserver(cfg: FailOn5xxConfig, seen: Backend5xxEvent[]):
   });
 }
 
+function getStateRunnable(): RunnableWithRetry | undefined {
+  // Cypress.state exists at runtime but isn't always in the type defs.
+  const stateFn = (Cypress as unknown as CypressWithState).state;
+  if (typeof stateFn !== 'function') return undefined;
+  return stateFn('runnable') as RunnableWithRetry | undefined;
+}
+
+function getAttemptNumber(test: RunnableWithRetry | undefined): number {
+  const stateRunnable = getStateRunnable();
+
+  // In Cypress command chains, Cypress.state('runnable') is reliably the *test*.
+  // In Mocha hooks it’s often the hook runnable, so only trust it for type === 'test'.
+  if (stateRunnable?.type === 'test' && typeof stateRunnable.currentRetry === 'function') {
+    return stateRunnable.currentRetry() + 1;
+  }
+
+  if (typeof test?.currentRetry === 'function') {
+    return test.currentRetry() + 1;
+  }
+
+  return 1;
+}
+
+function buildArtifactPath(
+  cfg: FailOn5xxConfig,
+  spec: string,
+  testTitle: string,
+  attempt: number
+): string {
+  const ts = new Date().toISOString().replaceAll(/[:.]/g, '-');
+  return [
+    cfg.artifactDir,
+    sanitizePathPart(spec),
+    `${ts}--${sanitizePathPart(testTitle)}--attempt-${attempt}.json`,
+  ].join('/');
+}
+
+function buildTripwireError(failures: Backend5xxEvent[], artifactPath: string): string {
+  const lines = [
+    `Backend 5xx detected (${failures.length}).`,
+    `Artifact: ${artifactPath}`,
+    '',
+    ...failures.map((f) => {
+      const corr = f.correlationHeaders ? ` corr=${JSON.stringify(f.correlationHeaders)}` : '';
+      return `- ${f.statusCode} ${f.method} ${f.url} @ ${f.timestamp}${corr}`;
+    }),
+  ];
+
+  return lines.join('\n');
+}
+
+function getTestTitle(currentTest: RunnableWithIf5xxState | undefined): string {
+  return currentTest?.fullTitle?.() ?? currentTest?.title ?? 'unknown-test';
+}
+
+function buildArtifactPayload(
+  spec: string,
+  testTitle: string,
+  attempt: number,
+  failures: Backend5xxEvent[]
+): ArtifactPayload {
+  return {
+    spec,
+    test: testTitle,
+    attempt,
+    failures,
+  };
+}
+
+function updateArtifactMetadata(
+  currentTest: RunnableWithIf5xxState | undefined,
+  attempt: number,
+  artifactPath: string
+): void {
+  if (!currentTest) return;
+  currentTest.__if5xxArtifactAttempt = attempt;
+  currentTest.__if5xxArtifactPath = artifactPath;
+}
+
+function resetAttemptMetadata(currentTest: RunnableWithIf5xxState | undefined): void {
+  if (!currentTest) return;
+  currentTest.__if5xxArtifactAttempt = undefined;
+  currentTest.__if5xxArtifactPath = undefined;
+}
+
+function finalizeTripwire(
+  currentTest: RunnableWithIf5xxState,
+  attempt: number,
+  artifactPath: string,
+  failures: Backend5xxEvent[],
+  allow5xx: boolean
+): void {
+  updateArtifactMetadata(currentTest, attempt, artifactPath);
+
+  if (allow5xx) return;
+
+  // FAIL HERE (in the test body), so only this `it` fails and Cypress continues
+  throw new Error(buildTripwireError(failures, artifactPath));
+}
+
+function afterTestTripwire(
+  currentTest: RunnableWithIf5xxState,
+  failures: Backend5xxEvent[]
+): Cypress.Chainable | void {
+  const cfgNow = getCfg();
+  if (!cfgNow.enabled || !failures.length) return;
+
+  const spec = getSpecName();
+  const testTitle = getTestTitle(currentTest);
+  const allow5xx = isAllowlistedTest(testTitle);
+  const attempt = getAttemptNumber(currentTest);
+
+  const artifactPath = buildArtifactPath(cfgNow, spec, testTitle, attempt);
+  const artifact = buildArtifactPayload(spec, testTitle, attempt, failures);
+
+  return cy
+    .writeFile(artifactPath, artifact, { log: false })
+    .then(finalizeTripwire.bind(null, currentTest, attempt, artifactPath, failures, allow5xx));
+}
+
+function enqueueAfterTestTripwire(
+  currentTest: RunnableWithIf5xxState,
+  failures: Backend5xxEvent[]
+): void {
+  // Run after all test commands have completed.
+  // If the test failed earlier, Cypress will not execute this.
+  cy.then(afterTestTripwire.bind(null, currentTest, failures));
+}
+
+function createWrappedTestFn(
+  originalFn: (...args: unknown[]) => unknown,
+  currentTest: RunnableWithIf5xxState,
+  failures: Backend5xxEvent[]
+): (this: Mocha.Context, ...args: unknown[]) => unknown {
+  return function (this: Mocha.Context, ...args: unknown[]) {
+    const result = originalFn.apply(this, args);
+
+    enqueueAfterTestTripwire(currentTest, failures);
+
+    return result;
+  };
+}
+
+function wrapTestFnIfNeeded(
+  currentTest: RunnableWithIf5xxState | undefined,
+  failures: Backend5xxEvent[]
+): void {
+  if (!currentTest || currentTest.__if5xxWrapped || typeof currentTest.fn !== 'function') return;
+
+  currentTest.__if5xxWrapped = true;
+
+  const originalFn = currentTest.fn as unknown as (...args: unknown[]) => unknown;
+  currentTest.fn = createWrappedTestFn(originalFn, currentTest, failures);
+}
+
 export function registerFailOn5xx(): void {
   if (registered) return;
   registered = true;
 
-  let seen: Backend5xxEvent[] = [];
+  const seen: Backend5xxEvent[] = [];
 
-  beforeEach(() => {
+  beforeEach(function () {
     const cfg = getCfg();
-    seen = [];
+    seen.length = 0;
+    const currentTest = this.currentTest as RunnableWithIf5xxState | undefined;
+    resetAttemptMetadata(currentTest);
 
     if (!cfg.enabled) return;
 
+    wrapTestFnIfNeeded(currentTest, seen);
     registerBackendObserver(cfg, seen);
   });
 
@@ -267,49 +444,17 @@ export function registerFailOn5xx(): void {
     if (!cfg.enabled || !seen.length) return;
 
     const spec = getSpecName();
+    const currentTest = this.currentTest as RunnableWithIf5xxState | undefined;
+    const testTitle = getTestTitle(currentTest);
+    const attempt = getAttemptNumber(currentTest);
 
-    const testTitle =
-      this.currentTest?.fullTitle?.() ?? this.currentTest?.title ?? 'unknown-test';
-    const allow5xx = isAllowlistedTest(testTitle);
+    if (currentTest?.__if5xxArtifactAttempt === attempt) return;
 
-    const currentTest = this.currentTest as
-      | (Mocha.Runnable & { currentRetry?: () => number })
-      | undefined;
+    const artifactPath = buildArtifactPath(cfg, spec, testTitle, attempt);
+    const artifact = buildArtifactPayload(spec, testTitle, attempt, seen);
 
-    const attempt =
-      (typeof currentTest?.currentRetry === 'function' ? currentTest.currentRetry() : 0) + 1;
-
-    const ts = new Date().toISOString().replaceAll(/[:.]/g, '-');
-
-    const artifactPath = [
-      cfg.artifactDir,
-      sanitizePathPart(spec),
-      `${ts}--${sanitizePathPart(testTitle)}--attempt-${attempt}.json`,
-    ].join('/');
-
-    const artifact = {
-      spec,
-      test: testTitle,
-      attempt,
-      failures: seen,
-    };
-
-    cy.writeFile(artifactPath, artifact, { log: false }).then(() => {
-      // Don’t override a “real” test failure.
-      if (this.currentTest?.state !== 'passed') return;
-      if (allow5xx) return;
-
-      const lines = [
-        `Backend 5xx detected (${seen.length}).`,
-        `Artifact: ${artifactPath}`,
-        '',
-        ...seen.map((f) => {
-          const corr = f.correlationHeaders ? ` corr=${JSON.stringify(f.correlationHeaders)}` : '';
-          return `- ${f.statusCode} ${f.method} ${f.url} @ ${f.timestamp}${corr}`;
-        }),
-      ];
-
-      throw new Error(lines.join('\n'));
-    });
+    cy.writeFile(artifactPath, artifact, { log: false }).then(
+      updateArtifactMetadata.bind(null, currentTest, attempt, artifactPath)
+    );
   });
 }
