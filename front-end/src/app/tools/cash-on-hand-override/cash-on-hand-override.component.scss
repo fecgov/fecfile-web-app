@@ -12,10 +12,6 @@
     margin-bottom: 32px;
   }
 
-  .bottom-hr {
-    margin-top: 32px;
-  }
-
   p {
     margin-bottom: 32px;
   }
@@ -35,14 +31,9 @@
   }
 
   .form-content {
-    @include fixed-width(512px);
+    @include standard-container();
     gap: 20px;
     display: grid;
-  }
-
-  .left-content,
-  .right-content {
-    width: 100%;
   }
 
   .right-grid {
@@ -81,53 +72,18 @@
 
   @include breakpoint('md') {
     .form-content {
-      @include fixed-width(704px);
       grid-template-columns: 8fr 4fr;
-    }
-
-    .left-content {
-      grid-column: 1 / 2;
-    }
-
-    .right-content {
-      grid-column: 2 / 3;
     }
 
     .right-grid {
       grid-template-columns: 1fr;
       grid-template-areas: 'year' 'current' 'new' 'action';
     }
-
-    .space {
-      display: none;
-    }
   }
 
   @include breakpoint('lg') {
     .form-content {
-      @include fixed-width(852px);
       grid-template-columns: 6fr 3fr 3fr;
-    }
-
-    .space {
-      display: block;
-    }
-  }
-
-  @include breakpoint('xl') {
-    .form-content {
-      @include fixed-width(852px);
-    }
-  }
-
-  @include breakpoint('xxl') {
-    .form-content {
-      @include fixed-width(1052px);
-      grid-template-columns: 6fr 3fr 3fr;
-    }
-
-    .space {
-      display: block;
     }
   }
 }
