@@ -21,7 +21,7 @@ export interface ColumnDefinition<T> {
   actions?: TableAction<T>[];
   checkbox?: boolean;
   label?: (item: T) => string;
-  pipe?: string;
+  pipes?: string[];
   pipeArgs?: any[];
 }
 
@@ -81,6 +81,8 @@ export class TableComponent<T> {
   readonly to = computed(() => Math.min(this.first() + this.rowsPerPage(), this.totalItems()));
 
   readonly first = model.required<number>();
+
+  readonly showPaginationControls = input(true);
 
   changePage(value: PaginatorState) {
     this.first.set(value.first ?? 0);

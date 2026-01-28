@@ -1,4 +1,4 @@
-import { Component, computed, inject, output, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
@@ -8,7 +8,11 @@ import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  ColumnDefinition,
+  TableBodyContext,
+  TableComponent,
+} from '../../../../shared/components/table/table.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -39,7 +43,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
 
-  readonly columns = computed(() => [
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => [
     this.buildLineColumn(),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
@@ -49,7 +53,7 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
       header: 'Memo',
       sortable: true,
       cssClass: 'memo-column',
-      pipe: 'memoCode',
+      pipes: ['memoCode'],
     },
     this.buildAmountColumn(),
     this.buildTransactionIdColumn(),

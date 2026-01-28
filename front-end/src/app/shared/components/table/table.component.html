@@ -72,7 +72,7 @@
             @if (col.bodyTpl) {
               <ng-container *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions }" />
             } @else {
-              <span>{{ item[col.field] | dynamic: col.pipe : col.pipeArgs }}</span>
+              <span>{{ item[col.field] | dynamic: col.pipes : col.pipeArgs }}</span>
             }
           }
         </td>
@@ -82,45 +82,47 @@
       <ng-container *ngTemplateOutlet="body()!; context: { $implicit: item }" />
     </tr>
   </ng-template>
-  <ng-template pTemplate="summary">
-    <div class="paginator-container">
-      <div class="responsive-container">
-        <span class="paginator-text">Results per page:</span>
-        <p-select
-          [options]="paginationPageSizeOptions"
-          [(ngModel)]="rowsPerPage"
-          class="custom-paginator-dropdown"
-          appendTo="body"
-        >
-          <ng-template pTemplate="dropdownicon">
-            <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
-          </ng-template>
-        </p-select>
+  @if (showPaginationControls()) {
+    <ng-template pTemplate="summary">
+      <div class="paginator-container">
+        <div class="responsive-container">
+          <span class="paginator-text">Results per page:</span>
+          <p-select
+            [options]="paginationPageSizeOptions"
+            [(ngModel)]="rowsPerPage"
+            class="custom-paginator-dropdown"
+            appendTo="body"
+          >
+            <ng-template pTemplate="dropdownicon">
+              <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+            </ng-template>
+          </p-select>
+        </div>
+        <div class="responsive-container">
+          <span class="paginator-text">{{ showing() }}:</span>
+          <p-paginator
+            [rows]="rowsPerPage()"
+            [totalRecords]="totalItems()"
+            [first]="first()"
+            (onPageChange)="changePage($event)"
+          >
+            <ng-template pTemplate="firstpagelinkicon">
+              <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+            </ng-template>
+            <ng-template pTemplate="previouspagelinkicon">
+              <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+            </ng-template>
+            <ng-template pTemplate="nextpagelinkicon">
+              <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+            </ng-template>
+            <ng-template pTemplate="lastpagelinkicon">
+              <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+            </ng-template>
+          </p-paginator>
+        </div>
       </div>
-      <div class="responsive-container">
-        <span class="paginator-text">{{ showing() }}:</span>
-        <p-paginator
-          [rows]="rowsPerPage()"
-          [totalRecords]="totalItems()"
-          [first]="first()"
-          (onPageChange)="changePage($event)"
-        >
-          <ng-template pTemplate="firstpagelinkicon">
-            <img alt="first page icon" src="/assets/img/first_arrow.svg" />
-          </ng-template>
-          <ng-template pTemplate="previouspagelinkicon">
-            <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
-          </ng-template>
-          <ng-template pTemplate="nextpagelinkicon">
-            <img alt="next page icon" src="/assets/img/next_arrow.svg" />
-          </ng-template>
-          <ng-template pTemplate="lastpagelinkicon">
-            <img alt="last page icon" src="/assets/img/last_arrow.svg" />
-          </ng-template>
-        </p-paginator>
-      </div>
-    </div>
-  </ng-template>
+    </ng-template>
+  }
   <ng-template pTemplate="sorticon" let-sortOrder>
     <app-table-sort-icon [sortOrder]="sortOrder" />
   </ng-template>

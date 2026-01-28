@@ -1,4 +1,4 @@
-import { Component, computed, inject, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -7,7 +7,11 @@ import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transac
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
-import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
+import {
+  ColumnDefinition,
+  TableBodyContext,
+  TableComponent,
+} from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
@@ -33,7 +37,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
 
-  readonly columns = computed(() => [
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => [
     this.buildLineColumn(),
     this.buildTypeColumn(this.typeBodyTpl()),
     this.buildNameColumn(),
@@ -47,7 +51,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
       header: 'Balance',
       sortable: true,
       cssClass: 'balance-column',
-      pipe: 'currency',
+      pipes: ['currency'],
     },
     this.buildTransactionIdColumn(),
     this.buildAssociatedWithColumn(),

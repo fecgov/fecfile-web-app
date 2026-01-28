@@ -50,6 +50,7 @@ import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
 import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
+import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 
 function initializeAppFactory(
   loginService: LoginService,
@@ -156,6 +157,7 @@ bootstrapApplication(AppComponent, {
     MemoCodePipe,
     CurrencyPipe,
     TransactionIdPipe,
+    DefaultZeroPipe,
     { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
     provideAppInitializer(() => {
       const initializerFn = initializeAppFactory(inject(LoginService), inject(Router), inject(CookieCheckService));
