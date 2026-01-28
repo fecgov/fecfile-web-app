@@ -18,7 +18,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
-  styleUrls: ['../transaction.scss'],
+  styleUrls: ['../transaction.scss', './transaction-list.component.scss'],
   imports: [
     Toolbar,
     PrimeTemplate,
