@@ -27,19 +27,12 @@ describe('FormUtils', () => {
       contribution_amount: 50,
     });
 
-    const previous_transaction = SchATransaction.fromJSON({
-      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      contribution_amount: 100,
-      contribution_aggregate: 100,
-    });
-
     TransactionFormUtils.updateAggregate(
       form,
       'aggregate',
       transaction.transactionType.templateMap,
       transaction,
-      previous_transaction,
+      100,
       transaction.contribution_amount as number,
     );
 
@@ -63,19 +56,12 @@ describe('FormUtils', () => {
       expenditure_amount: 50,
     });
 
-    const previous_transaction = SchATransaction.fromJSON({
-      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      contribution_amount: 100,
-      contribution_aggregate: 100,
-    });
-
     TransactionFormUtils.updateAggregate(
       form,
       'aggregate',
       transaction.transactionType.templateMap,
       transaction,
-      previous_transaction,
+      100,
       transaction.expenditure_amount as number,
     );
 
@@ -99,19 +85,12 @@ it('should add the amount for calendar YTD', () => {
     expenditure_amount: 50,
   });
 
-  const previous_transaction = SchETransaction.fromJSON({
-    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-    expenditure_amount: 100,
-    calendar_ytd_per_election_office: 100,
-  });
-
   TransactionFormUtils.updateAggregate(
     form,
     'calendar_ytd',
     transaction.transactionType.templateMap,
     transaction,
-    previous_transaction,
+    100,
     transaction.expenditure_amount as number,
   );
 
@@ -134,19 +113,12 @@ it('should add the amount for payee candidate YTD', () => {
     expenditure_amount: 50,
   });
 
-  const previous_transaction = SchFTransaction.fromJSON({
-    transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-    aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
-    expenditure_amount: 100,
-    aggregate_general_elec_expended: 100,
-  });
-
   TransactionFormUtils.updateAggregate(
     form,
     'aggregate_general_elec_expended',
     transaction.transactionType.templateMap,
     transaction,
-    previous_transaction,
+    100,
     transaction.expenditure_amount as number,
   );
 
