@@ -162,7 +162,7 @@ export class TransactionFormUtils {
     templateMap: TransactionTemplateMapType,
   ) {
     if (!transaction.transactionType.inheritCalendarYTD) {
-      const previous_election$: Observable<Transaction | undefined> =
+      const previous_election$: Observable<number | null> =
         merge(
           (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
           (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
@@ -206,7 +206,7 @@ export class TransactionFormUtils {
       const parent = await component.transactionService.get(transaction.parent_transaction?.id ?? '');
       const inheritedElectionAggregate = (parent as SchETransaction).calendar_ytd_per_election_office;
       if (inheritedElectionAggregate) {
-        this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, undefined, inheritedElectionAggregate);
+        this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, null, inheritedElectionAggregate);
       }
     }
   }
@@ -222,7 +222,7 @@ export class TransactionFormUtils {
     templateMap: TransactionTemplateMapType,
   ) {
     const contactId$ = contactIdMap['contact_2'].asObservable();
-    const previous_expenditure$: Observable<Transaction | undefined> =
+    const previous_expenditure$: Observable<number | null> =
       merge(
         (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
         (form.get(templateMap.general_election_year) as SubscriptionFormControl).valueChanges,
@@ -267,11 +267,10 @@ export class TransactionFormUtils {
     field: TemplateMapKeyType,
     templateMap: TransactionTemplateMapType,
     transaction: Transaction,
-    previousTransaction: Transaction | undefined,
+    previousTransaction: number | null,
     amount: number,
   ) {
-    const key = previousTransaction?.transactionType?.templateMap[field] as keyof ScheduleTransaction;
-    const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
+    const previousAggregate = previousTransaction ?? 0;
     if (transaction.force_unaggregated) {
       form.get(templateMap[field])?.setValue(previousAggregate);
     } else if (transaction.transactionType?.isRefund) {

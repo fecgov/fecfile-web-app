@@ -23,14 +23,14 @@ export class TransactionService {
     transaction: Transaction | undefined,
     contact_1_id: string,
     action_date: Date | string,
-  ): Promise<Transaction | undefined> {
+  ): Promise<number> {
     const actionDateString: string = action_date === '' ? '' : formatDate(action_date, 'yyyy-MM-dd', 'en-US') || '';
     const transaction_id: string = transaction?.id ?? '';
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
     if (transaction && action_date && contact_1_id && aggregation_group) {
-      const response = await this.apiService.get<HttpResponse<Transaction>>(
+      const response = await this.apiService.get<HttpResponse<{ value: number }>>(
         '/transactions/previous/entity/',
         {
           transaction_id,
@@ -41,11 +41,11 @@ export class TransactionService {
         [HttpStatusCode.NotFound],
       );
       if (response.status === HttpStatusCode.NotFound) {
-        return undefined;
+        return 0;
       }
-      return getFromJSON(response.body);
+      return response.body?.value ?? 0;
     }
-    return undefined;
+    return 0;
   }
 
   public async getPreviousTransactionForCalendarYTD(
@@ -56,7 +56,7 @@ export class TransactionService {
     candidate_office: string | undefined,
     candidate_state: string | undefined,
     candidate_district: string | undefined,
-  ): Promise<Transaction | undefined> {
+  ): Promise<number> {
     const actionDateString = this.getActionDateString(disbursement_date, dissemination_date);
 
     const transaction_id: string = transaction?.id ?? '';
@@ -86,17 +86,17 @@ export class TransactionService {
         params['candidate_district'] = candidate_district;
       }
 
-      const response = await this.apiService.get<HttpResponse<Transaction>>(
+      const response = await this.apiService.get<HttpResponse<{ value: number }>>(
         '/transactions/previous/election/',
         params,
         [HttpStatusCode.NotFound],
       );
       if (response.status === HttpStatusCode.NotFound) {
-        return undefined;
+        return 0;
       }
-      return getFromJSON(response.body);
+      return response.body?.value ?? 0;
     }
-    return undefined;
+    return 0;
   }
 
   public async getPreviousTransactionForPayeeCandidate(
@@ -104,7 +104,7 @@ export class TransactionService {
     contact2Id: string | undefined,
     expenditure_date: Date | string,
     general_election_year: string | undefined,
-  ): Promise<Transaction | undefined> {
+  ): Promise<number | null> {
     const actionDateString: string =
       expenditure_date === '' ? '' : formatDate(expenditure_date, 'yyyy-MM-dd', 'en-US') || '';
 
@@ -122,17 +122,17 @@ export class TransactionService {
         general_election_year,
       };
 
-      const response = await this.apiService.get<HttpResponse<Transaction>>(
+      const response = await this.apiService.get<HttpResponse<{ value: number }>>(
         '/transactions/previous/payee-candidate/',
         params,
         [HttpStatusCode.NotFound],
       );
       if (response.status === HttpStatusCode.NotFound) {
-        return undefined;
+        return 0;
       }
-      return getFromJSON(response.body);
+      return response.body?.value ?? 0;
     }
-    return undefined;
+    return 0;
   }
 
   public async create(transaction: Transaction): Promise<Transaction> {
