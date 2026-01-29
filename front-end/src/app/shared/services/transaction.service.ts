@@ -7,6 +7,12 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 
+interface PreviousTransaction {
+  aggregate: number;
+  calendar_ytd_per_election_office: number;
+  aggregate_general_elec_expended: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -30,7 +36,7 @@ export class TransactionService {
       (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
     if (transaction && action_date && contact_1_id && aggregation_group) {
-      const response = await this.apiService.get<HttpResponse<{ value: number }>>(
+      const response = await this.apiService.get<HttpResponse<PreviousTransaction>>(
         '/transactions/previous/entity/',
         {
           transaction_id,
@@ -40,10 +46,8 @@ export class TransactionService {
         },
         [HttpStatusCode.NotFound],
       );
-      if (response.status === HttpStatusCode.NotFound) {
-        return 0;
-      }
-      return response.body?.value ?? 0;
+
+      return response.body?.aggregate ?? 0;
     }
     return 0;
   }
@@ -86,15 +90,12 @@ export class TransactionService {
         params['candidate_district'] = candidate_district;
       }
 
-      const response = await this.apiService.get<HttpResponse<{ value: number }>>(
+      const response = await this.apiService.get<HttpResponse<PreviousTransaction>>(
         '/transactions/previous/election/',
         params,
         [HttpStatusCode.NotFound],
       );
-      if (response.status === HttpStatusCode.NotFound) {
-        return 0;
-      }
-      return response.body?.value ?? 0;
+      return response.body?.calendar_ytd_per_election_office ?? 0;
     }
     return 0;
   }
@@ -122,15 +123,12 @@ export class TransactionService {
         general_election_year,
       };
 
-      const response = await this.apiService.get<HttpResponse<{ value: number }>>(
+      const response = await this.apiService.get<HttpResponse<PreviousTransaction>>(
         '/transactions/previous/payee-candidate/',
         params,
         [HttpStatusCode.NotFound],
       );
-      if (response.status === HttpStatusCode.NotFound) {
-        return 0;
-      }
-      return response.body?.value ?? 0;
+      return response.body?.aggregate_general_elec_expended ?? 0;
     }
     return 0;
   }
