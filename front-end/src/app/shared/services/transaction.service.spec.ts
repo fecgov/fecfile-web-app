@@ -77,7 +77,7 @@ describe('TransactionService', () => {
       httpTestingController.verify();
     });
 
-    it('should return undefined', () => {
+    it('should return 0', () => {
       const mockTransaction: Transaction = TransactionTypeUtils.factory(
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ).getNewTransaction();
@@ -118,7 +118,7 @@ describe('TransactionService', () => {
       httpTestingController.verify();
     });
 
-    it('should return undefined', () => {
+    it('should return 0', () => {
       const mockTransaction: Transaction = TransactionTypeUtils.factory(
         ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
       ).getNewTransaction();
@@ -144,7 +144,7 @@ describe('TransactionService', () => {
   });
 
   describe('getPreviousTransactionForCalendarYTD', () => {
-    it('should return undefined', () => {
+    it('should return 0', () => {
       const mockTransaction: Transaction = TransactionTypeUtils.factory(
         ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
       ).getNewTransaction();
