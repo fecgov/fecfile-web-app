@@ -138,12 +138,14 @@ describe('Receipt Transactions', () => {
         triggerSummaryCalc(reportId);
         waitForReportTotals(reportId, 200.01);
         ReviewReport.Summary();
+        cy.reload();
         assertTotalReceipts('$200.01');
 
         // verify summary totals are unchanged on a repeat visit
         PageUtils.clickSidebarItem('ENTER A TRANSACTION');
         PageUtils.clickSidebarItem('Manage your transactions');
         ReviewReport.Summary();
+        cy.reload();
         assertTotalReceipts('$200.01');
 
         // update transaction
@@ -160,6 +162,7 @@ describe('Receipt Transactions', () => {
         triggerSummaryCalc(reportId);
         waitForReportTotals(reportId, 123.45);
         ReviewReport.Summary();
+        cy.reload();
         assertTotalReceipts('$123.45');
       });
     });
