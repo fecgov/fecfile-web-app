@@ -3,23 +3,22 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
-import { Transaction } from '../../../shared/models/transaction.model';
+
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { Toolbar } from 'primeng/toolbar';
 import { PrimeTemplate } from 'primeng/api';
 import { TableActionsButtonComponent } from '../../../shared/components/table-actions-button/table-actions-button.component';
-import { ConfirmDialog } from 'primeng/confirmdialog';
-import { ButtonDirective } from 'primeng/button';
 import { SelectReportDialogComponent } from './select-report-dialog/select-report-dialog.component';
 import { SecondaryReportSelectionDialogComponent } from '../secondary-report-selection-dialog/secondary-report-selection-dialog.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
-  styleUrls: ['../transaction.scss'],
+  styleUrls: ['../transaction.scss', './transaction-list.component.scss'],
   imports: [
     Toolbar,
     PrimeTemplate,
@@ -27,8 +26,6 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
     TransactionReceiptsComponent,
     TransactionDisbursementsComponent,
     TransactionLoansAndDebtsComponent,
-    ConfirmDialog,
-    ButtonDirective,
     SelectReportDialogComponent,
     SecondaryReportSelectionDialogComponent,
   ],
@@ -41,7 +38,7 @@ export class TransactionListComponent {
 
   readonly reportSelectDialogVisible = signal(false);
   reportSelectFormType?: ReportTypes;
-  reportSelectionTransaction?: Transaction;
+  reportSelectionTransaction?: TransactionListRecord;
   reportSelectionCreateMethod = () => {
     return;
   };
@@ -101,7 +98,7 @@ export class TransactionListComponent {
       () => true,
     ),
   ];
-  transaction?: Transaction;
+  transaction?: TransactionListRecord;
 
   readonly receipts = viewChild.required(TransactionReceiptsComponent);
   readonly disbursements = viewChild.required(TransactionDisbursementsComponent);
@@ -118,7 +115,11 @@ export class TransactionListComponent {
     await this.router.navigateByUrl(`/reports/f24/report/${report?.id}/transactions/select/independent-expenditures`);
   }
 
-  public openSecondaryReportSelectionDialog(transaction: Transaction, formType: ReportTypes, createMethod: () => void) {
+  public openSecondaryReportSelectionDialog(
+    transaction: TransactionListRecord,
+    formType: ReportTypes,
+    createMethod: () => void,
+  ) {
     this.reportSelectDialogVisible.set(true);
     this.reportSelectFormType = formType;
     this.reportSelectionTransaction = transaction;

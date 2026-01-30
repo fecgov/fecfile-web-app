@@ -10,8 +10,7 @@
   itemName="reports"
   title="Form 24"
   [columns]="columns()"
-  sortField="report_code_label"
-  (loadTableItems)="loadTableItems($event)"
+  sortField="report_status"
 />
 
 <app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />

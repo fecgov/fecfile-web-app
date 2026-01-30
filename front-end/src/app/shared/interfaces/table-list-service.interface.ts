@@ -10,4 +10,6 @@ export interface TableListService<T> {
   delete(item: T): Promise<null>;
 
   update?(item: T, fieldsToValidate?: string[]): Promise<T>;
+  itemize?(item: T, force_itemized: boolean): Promise<string>;
+  unaggregate?(item: T, force_unaggregated: boolean): Promise<string>;
 }

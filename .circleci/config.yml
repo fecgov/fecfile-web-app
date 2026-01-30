@@ -192,6 +192,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/results/if-5xx
+          destination: cypress/results/if-5xx
 
   # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
@@ -243,6 +246,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/results/if-5xx
+          destination: cypress/results/if-5xx
 
   deploy-job:
     docker:
@@ -334,7 +340,7 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job:  # Deploy job even when e2e tests fail
+      - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
@@ -368,20 +374,6 @@ workflows:
 
   full-nightly:
     when: << pipeline.parameters.is-triggered-full-nightly >>
-    jobs:
-      - e2e-smoke:
-          video: true
-      - e2e-extended:
-          video: true
-      - test
-
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 6 * * *" # 06:00 UTC
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
     jobs:
       - e2e-smoke:
           video: true

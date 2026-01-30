@@ -33,7 +33,6 @@
   itemName="contacts"
   sortField="sort_name"
   [columns]="columns()"
-  (loadTableItems)="loadTableItems($event)"
 >
   <ng-template #caption>
     @if (restoreContactsButtonIsVisible) {

@@ -6,6 +6,9 @@ import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
 const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
 
 export default defineConfig({
+  env: {
+    ...CypressConfigHelper.failOn5xxDefaults,
+  },
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
   video: videoSetting,

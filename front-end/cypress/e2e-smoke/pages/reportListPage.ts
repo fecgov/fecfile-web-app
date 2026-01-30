@@ -76,21 +76,48 @@ export class ReportListPage {
   }
 
   static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    if (includeReceipts)
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-      ).as('GetReceipts');
-    if (includeLoans)
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-      ).as('GetLoans');
-    if (includeDisbursements)
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-      ).as('GetDisbursements');
+    if (includeReceipts) {
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/transactions/',
+        query: {
+          report_id: reportId,
+          schedules: 'A',
+          page: '1',
+          ordering: 'line_label,created',
+          page_size: '5',
+        },
+      }).as('GetReceipts');
+    }
+
+    if (includeLoans) {
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/transactions/',
+        query: {
+          report_id: reportId,
+          schedules: 'C,D',
+          page: '1',
+          ordering: 'line_label,created',
+          page_size: '5',
+        },
+      }).as('GetLoans');
+    }
+
+    if (includeDisbursements) {
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/transactions/',
+        query: {
+          report_id: reportId,
+          schedules: 'B,E,F',
+          page: '1',
+          ordering: 'line_label,created',
+          page_size: '5',
+        },
+      }).as('GetDisbursements');
+    }
+
     cy.visit(`/reports/transactions/report/${reportId}/list`);
     if (includeLoans) cy.wait('@GetLoans');
     if (includeDisbursements) cy.wait('@GetDisbursements');

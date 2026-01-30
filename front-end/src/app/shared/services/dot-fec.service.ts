@@ -63,7 +63,7 @@ export class DotFecService {
         : '';
 
     const reportType = sanitize(report.report_type);
-    const formName = report.formSubLabel ? sanitize(report.formSubLabel) : sanitize(report.formLabel);
+    const formName = report.report_code_label ? sanitize(report.report_code_label) : sanitize(report.formLabel);
 
     // Compose human-facing filename with date_reporttype_formname format
     const humanFilename = `${reportType}_${formName}_${dateStr}.fec`;

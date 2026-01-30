@@ -1,34 +1,28 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, forwardRef, inject, output } from '@angular/core';
+import { Component, computed, inject, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
-import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import { TableComponent } from '../../../../shared/components/table/table.component';
-import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
+import {
+  ColumnDefinition,
+  TableBodyContext,
+  TableComponent,
+} from '../../../../shared/components/table/table.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-transaction-disbursements',
   templateUrl: './transaction-disbursements.component.html',
-  styleUrls: ['../../transaction.scss'],
-  imports: [
-    TableComponent,
-    RouterLink,
-    TableActionsButtonComponent,
-    CurrencyPipe,
-    FecDatePipe,
-    LabelPipe,
-    forwardRef(() => MemoCodePipe),
-  ],
+  styleUrls: ['../../transaction.scss', './transaction-disbursements.component.scss'],
+  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);
@@ -38,30 +32,48 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     ...ScheduleFTransactionTypeLabels,
   ];
   override readonly caption =
-    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Transaction ID, Associated with, and Actions.';
+    'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, and Actions.';
 
   readonly requestReportSelection = output<{
-    transaction: Transaction;
+    transaction: TransactionListRecord;
     formType: ReportTypes;
     createMethod: () => Promise<void>;
   }>();
 
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
+
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => [
+    this.buildLineColumn(),
+    this.buildTypeColumn(this.typeBodyTpl()),
+    this.buildNameColumn(),
+    this.buildDateColumn(),
+    {
+      field: 'memo_code',
+      header: 'Memo',
+      sortable: true,
+      cssClass: 'memo-column',
+      pipes: ['memoCode'],
+    },
+    this.buildAmountColumn(),
+    this.buildTransactionIdColumn(),
+    this.buildAssociatedWithColumn(),
+    {
+      field: '',
+      header: 'Actions',
+      cssClass: 'actions-column',
+      bodyTpl: this.actionsBodyTpl(),
+    },
+  ]);
+
   constructor() {
     super();
-    this.sortableHeaders.push(
-      ...[
-        { field: 'date', label: 'Date' },
-        { field: 'memo_code', label: 'Memo' },
-        { field: 'amount', label: 'Amount' },
-      ],
-    );
-
     this.rowActions.push(
       new TableAction(
         'Add to Form24 Report',
         (transaction) => {
           this.requestReportSelection.emit({
-            transaction: transaction as Transaction,
+            transaction: transaction as TransactionListRecord,
             formType: ReportTypes.F24,
             createMethod: this.refreshTable.bind(this),
           });
