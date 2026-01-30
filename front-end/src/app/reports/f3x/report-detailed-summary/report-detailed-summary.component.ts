@@ -30,7 +30,6 @@ export class ReportDetailedSummaryComponent {
   private static readonly lastCalcByReportId = new Map<string, number>();
   private readonly refreshedReportIds = new Set<string>();
 
-
   constructor() {
     effect(async () => {
       const report = this.report();
