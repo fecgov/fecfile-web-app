@@ -30,6 +30,8 @@ describe('ReportDetailedSummaryComponent', () => {
       report_type: 'F3X',
       ...overrides,
     });
+  const getLastCalcByReportId = () =>
+    (ReportDetailedSummaryComponent as unknown as { lastCalcByReportId: Map<string, number> }).lastCalcByReportId;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,7 +60,7 @@ describe('ReportDetailedSummaryComponent', () => {
   });
 
   beforeEach(() => {
-    (ReportDetailedSummaryComponent as any).lastCalcByReportId.clear();
+    getLastCalcByReportId().clear();
     postSpy = spyOn(apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse<unknown>()));
     spyOn(reportService, 'setActiveReportById').and.returnValue(Promise.resolve(new Form3X()));
     fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
@@ -84,7 +86,7 @@ describe('ReportDetailedSummaryComponent', () => {
   it('should not recalculate when calculation_status is SUCCEEDED and updated unchanged', fakeAsync(() => {
     const report = buildReport({ calculation_status: 'SUCCEEDED' });
     report.updated = new Date('2024-01-02');
-    (ReportDetailedSummaryComponent as any).lastCalcByReportId.set(report.id, report.updated.getTime());
+    getLastCalcByReportId().set(report.id!, report.updated.getTime());
     store.overrideSelector(selectActiveReport, report);
     store.refreshState();
     fixture.detectChanges();
@@ -95,7 +97,7 @@ describe('ReportDetailedSummaryComponent', () => {
   it('should recalculate when calculation_status is SUCCEEDED and updated changed', fakeAsync(() => {
     const report = buildReport({ calculation_status: 'SUCCEEDED' });
     report.updated = new Date('2024-01-02');
-    (ReportDetailedSummaryComponent as any).lastCalcByReportId.set(report.id, new Date('2024-01-01').getTime());
+    getLastCalcByReportId().set(report.id!, new Date('2024-01-01').getTime());
     store.overrideSelector(selectActiveReport, report);
     store.refreshState();
     fixture.detectChanges();
