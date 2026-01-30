@@ -26,14 +26,30 @@ export class ReportDetailedSummaryComponent {
   readonly activeReport = this.store.selectSignal(selectActiveReport);
   readonly report = computed(() => this.activeReport() as Form3X);
   readonly calculationFinished = computed(() => this.report().calculation_status === 'SUCCEEDED');
+  private readonly lastUpdatedByReportId = new Map<string, number>();
+  private static readonly lastCalcByReportId = new Map<string, number>();
+  private readonly refreshedReportIds = new Set<string>();
+
 
   constructor() {
     effect(async () => {
       const report = this.report();
-      if (!report.calculation_status) {
-        await this.apiService.post(`/web-services/summary/calculate-summary/`, { report_id: report.id });
+      const reportId = report?.id;
+      if (!reportId) return;
+
+      const updatedAt = report.updated?.getTime();
+      const lastCalcAt = ReportDetailedSummaryComponent.lastCalcByReportId.get(reportId);
+      const shouldRecalc = updatedAt !== undefined && updatedAt !== lastCalcAt;
+      if (!report.calculation_status || shouldRecalc) {
+        await this.apiService.post(`/web-services/summary/calculate-summary/`, { report_id: reportId });
+        if (updatedAt !== undefined) {
+          ReportDetailedSummaryComponent.lastCalcByReportId.set(reportId, updatedAt);
+        }
         this.refreshSummary();
-      } else if (report.calculation_status != 'SUCCEEDED') {
+      } else if (report.calculation_status !== 'SUCCEEDED') {
+        this.refreshSummary();
+        return;
+      } else if (!this.refreshedReportIds.has(reportId)) {
         this.refreshSummary();
       }
     });
