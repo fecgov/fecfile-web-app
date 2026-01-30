@@ -7,7 +7,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Dialog } from 'primeng/dialog';
 import { SelectButton } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
 import { takeUntil } from 'rxjs';
@@ -26,7 +25,6 @@ import { DialogComponent } from '../../dialog/dialog.component';
     Tooltip,
     ErrorMessagesComponent,
     SelectButton,
-    Dialog,
     DialogComponent,
     ButtonDirective,
     FecDatePipe,

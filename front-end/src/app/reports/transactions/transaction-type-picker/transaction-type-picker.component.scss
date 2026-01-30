@@ -1,4 +1,82 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .p-accordion {
+    position: relative;
+  }
+
+  .p-accordion::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background-color: #121212;
+  }
+
+  .p-accordionpanel {
+    border-bottom: 1px solid #121212;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .p-accordionpanel-active > .p-accordionheader {
+    border-bottom: 1px solid #121212;
+  }
+
+  .p-accordionheader {
+    --p-accordion-header-last-bottom-border-radius: 0;
+    --p-accordion-header-first-top-border-radius: 0;
+    padding: 10px 20px;
+    max-height: 36px;
+    display: flex;
+    align-items: center;
+  }
+
+  .p-icon {
+    display: none;
+  }
+
+  .accordion-content-wrapper {
+    padding: 14px 0 14px 20px;
+    border: none;
+  }
+
+  .accordion-content-wrapper a,
+  .accordion-content-wrapper .disabled {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .transaction-type-wrapper {
+    padding: 8px 0;
+  }
+
+  .header-label {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .accordion-header-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .accordion-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+  }
+
+  .content-area {
+    @include standard-container();
+  }
+}
+
 .disabled {
   opacity: 0.5;
   user-select: none;
+}
+
+h1 {
+  margin-bottom: 18px;
 }

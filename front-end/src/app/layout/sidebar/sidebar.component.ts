@@ -39,7 +39,7 @@ export class SidebarComponent {
   readonly formLabel = computed(() => this.report().formLabel);
   readonly subHeading = computed(() => {
     if (this.report().report_type === ReportTypes.F99) return getFormTypes(false).get(ReportTypes.F99)!.description!;
-    return this.report().formSubLabel;
+    return this.report().report_code_label;
   });
   readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
   readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);

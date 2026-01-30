@@ -18,6 +18,7 @@ import { printFormErrors } from 'app/shared/utils/form.utils';
 @Component({
   selector: 'app-cash-on-hand-override',
   templateUrl: './cash-on-hand-override.component.html',
+  styleUrls: ['./cash-on-hand-override.component.scss'],
   imports: [ReactiveFormsModule, SelectComponent, InputNumberComponent, ButtonDirective],
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {

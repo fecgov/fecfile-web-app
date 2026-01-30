@@ -13,7 +13,5 @@ export enum TransactionTableColumns {
   memo_code = 4,
   amount = 5,
   aggregate = 6,
-  transaction_id = 7,
-  parent_id = 8,
-  actions = 9,
+  actions = 7,
 }

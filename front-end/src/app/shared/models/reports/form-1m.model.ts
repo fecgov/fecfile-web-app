@@ -29,10 +29,6 @@ export class Form1M extends Report {
     return 'Form 1M';
   }
 
-  get formSubLabel() {
-    return this.report_code_label ?? '';
-  }
-
   committee_type?: CommitteeType;
 
   @Transform(BaseModel.dateTransform) affiliated_date_form_f1_filed?: Date;
