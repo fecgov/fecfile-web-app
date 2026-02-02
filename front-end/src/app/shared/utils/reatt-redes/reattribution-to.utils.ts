@@ -21,7 +21,7 @@ export class ReattributionToUtils {
       title: 'Reattribution',
       subTitle:
         'The portion of an excessive contribution that has been attributed, in writing, to another contributor and signed by both contributors.',
-      accordionTitle: 'ENTER DATA',
+      accordionTitle: 'STEP ONE',
       accordionSubText: 'Reattribute a contribution or a portion of it to a different contributor.',
       formTitle: 'Reattribution to',
       contactTitle: 'Contact',
