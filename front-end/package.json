@@ -37,7 +37,7 @@
         "@types/lodash": "4.17.20",
         "@types/luxon": "3.7.1",
         "class-transformer": "0.5.1",
-        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#52b80f642169eaf391356de224a875c5208b2a75",
+        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#7939bbc7b41067f2310874156cdb0fdadbd0fa33",
         "intl-tel-input": "23.9.3",
         "lodash": "4.17.21",
         "luxon": "3.7.1",
