@@ -7,15 +7,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Form3X } from 'app/shared/models';
-import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-select-report-dialog',
   templateUrl: './select-report-dialog.component.html',
-  styleUrls: ['./select-report-dialog.component.scss', '../../../../shared/components/select/select.component.scss'],
+  styleUrls: ['./select-report-dialog.component.scss'],
   imports: [ReactiveFormsModule, FormsModule, ButtonDirective, Ripple],
 })
 export class SelectReportDialogComponent implements OnInit {
@@ -27,8 +23,6 @@ export class SelectReportDialogComponent implements OnInit {
   transaction?: TransactionListRecord;
   type?: ReattRedesTypes;
   @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
-  readonly store = inject(Store);
-  readonly report = this.store.selectSignal(selectActiveReport);
 
   ngOnInit() {
     ReattRedesUtils.selectReportDialogSubject.subscribe(async (data) => {
@@ -36,12 +30,14 @@ export class SelectReportDialogComponent implements OnInit {
       this.type = data[1];
       this.selectReportDialog?.nativeElement.show();
 
-      const coverage_through_date = DateUtils.convertDateToFecFormat((this.report() as Form3X).coverage_through_date!);
+      const coverage_through_date = (await this.service.get(this.transaction.id!))?.coverage_through_date;
       if (!coverage_through_date) {
         console.error('No coverage through date found for transaction');
         return;
       }
-      this.service.getFutureReports(coverage_through_date).then((reports) => (this.availableReports = reports));
+      this.service
+        .getFutureReports(coverage_through_date.toString())
+        .then((reports) => (this.availableReports = reports));
     });
   }
 
