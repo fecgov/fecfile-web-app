@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  output,
+  contentChild,
+  viewChild,
+  computed,
+  input,
+  model,
+  HostBinding,
+} from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { Table, TableModule } from 'primeng/table';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
@@ -62,6 +72,9 @@ export class TableComponent<T> {
   readonly sortOrder = model<string>('asc');
   readonly columns = input<ColumnDefinition<T>[]>([]);
   readonly emptyMessage = input('No data available in table');
+
+  @HostBinding('attr.title')
+  readonly hostTitle = null;
 
   readonly pageChange = output<PageTransitionEvent>();
 
