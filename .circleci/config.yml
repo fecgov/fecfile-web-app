@@ -334,7 +334,7 @@ workflows:
           filters:
             branches:
               only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job:  # Deploy job even when e2e tests fail
+      - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-even-if-e2e-job-fails
           requires:
             - lint
@@ -368,20 +368,6 @@ workflows:
 
   full-nightly:
     when: << pipeline.parameters.is-triggered-full-nightly >>
-    jobs:
-      - e2e-smoke:
-          video: true
-      - e2e-extended:
-          video: true
-      - test
-
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 6 * * *" # 06:00 UTC
-          filters:
-            branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
     jobs:
       - e2e-smoke:
           video: true
