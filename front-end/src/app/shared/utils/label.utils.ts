@@ -1,5 +1,7 @@
 export type LabelList = string[][];
 export type PrimeOptions = { label: string; value: string }[];
+export type OptionList = [string | boolean | null, string][];
+export type Options = { label: string; value: string | boolean | null }[];
 
 /**
  * Class to provide utilities for options lists
@@ -51,6 +53,13 @@ export class LabelUtils {
         value: item[0],
       }));
     }
+  }
+
+  public static getOptions(labelArrays: OptionList): Options {
+    return labelArrays.map((item: [string | boolean | null, string]) => ({
+      label: item[1],
+      value: item[0],
+    }));
   }
 
   /**
