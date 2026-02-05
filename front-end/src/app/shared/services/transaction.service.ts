@@ -2,38 +2,17 @@ import { formatDate } from '@angular/common';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
-import { TableListService } from '../interfaces/table-list-service.interface';
 import { CandidateOfficeTypes } from '../models/contact.model';
-import { Report } from '../models/reports/report.model';
-import { ListRestResponse } from '../models/rest-api.model';
-import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
-import { ApiService, QueryParams } from './api.service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionService implements TableListService<Transaction> {
+export class TransactionService {
   protected readonly apiService = inject(ApiService);
   tableDataEndpoint = '/transactions';
-
-  public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'line_label,created';
-    }
-    if (ordering === '-line_label,created') {
-      ordering = '-line_label,-created';
-    }
-
-    const response = await this.apiService.get<ListRestResponse>(
-      `${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
-      params,
-    );
-    response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
-    response.pageNumber = pageNumber;
-    return response;
-  }
 
   public get = async (id: string): Promise<ScheduleTransaction> => {
     const response = await this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`);
@@ -185,18 +164,6 @@ export class TransactionService implements TableListService<Transaction> {
 
     transactions.forEach((t, i) => (t.id = ids[i]));
     return transactions;
-  }
-
-  public addToReport(transaction: Transaction, report: Report): Promise<HttpResponse<string>> {
-    const payload = {
-      report_id: report.id,
-      transaction_id: transaction.id,
-    };
-    return this.apiService.post<string>(`${transaction.transactionType?.apiEndpoint}/add-to-report/`, payload, {}, [
-      HttpStatusCode.Accepted,
-      HttpStatusCode.NotFound,
-      HttpStatusCode.BadRequest,
-    ]);
   }
 
   /**

@@ -13,26 +13,6 @@
   line-height: 24px;
 }
 
-.prev-arrow-mask {
-  background-color: var(--p-content-color);
-  mask-image: url('assets/img/prev_arrow.svg');
-}
-
-.next-arrow-mask {
-  background-color: white;
-  mask-image: url('assets/img/next_arrow.svg');
-}
-
-.prev-arrow-mask,
-.next-arrow-mask {
-  height: 9px;
-  width: 8px;
-}
-
-.icon-gap {
-  gap: 5px;
-}
-
 .inner-body-text {
   margin-top: 14px;
   font-size: 14px;

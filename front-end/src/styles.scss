@@ -145,10 +145,6 @@ label.disabled {
   width: 100%;
 }
 
-.image-max-width {
-  max-width: 100%;
-}
-
 .no-padding {
   padding: 0;
 }
@@ -666,4 +662,40 @@ textarea {
   &:focus-visible {
     outline-offset: 3px;
   }
+}
+
+.prev-arrow-mask {
+  background-color: var(--p-content-color);
+  mask-image: url('assets/img/prev_arrow.svg');
+}
+
+.next-arrow-mask {
+  background-color: white;
+  mask-image: url('assets/img/next_arrow.svg');
+}
+
+.prev-arrow-mask,
+.next-arrow-mask {
+  height: 9px;
+  width: 8px;
+}
+
+.icon-gap {
+  gap: 5px;
+}
+
+.fec-loader-div {
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.fec-loader-image {
+  position: relative;
+  transform-origin: 50% 50%;
+  margin-left: auto;
+  margin-right: auto;
 }

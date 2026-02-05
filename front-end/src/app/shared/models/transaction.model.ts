@@ -22,6 +22,7 @@ import type {
 import type { Form24 } from './reports/form-24.model';
 import type { Form3 } from './reports/form-3.model';
 import type { Form3X } from './reports/form-3x.model';
+import { TransactionListRecord } from './transaction-list-record.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -169,7 +170,7 @@ export function getTransactionName(transaction: ScheduleTransaction): string {
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact_1;
 }
-export function isPulledForwardLoan(transaction?: Transaction): boolean {
+export function isPulledForwardLoan(transaction?: Transaction | TransactionListRecord): boolean {
   return !!transaction?.loan_id && transaction.transactionType.scheduleId === ScheduleIds.C;
 }
 export function isDebtRepayment(transaction?: Transaction): boolean {

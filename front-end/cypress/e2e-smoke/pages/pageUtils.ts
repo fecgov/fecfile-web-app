@@ -13,7 +13,7 @@ export class PageUtils {
       .click();
   }
 
-  static dropdownSetValue(querySelector: string, value: string, alias = '', index=0) {
+  static dropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
@@ -140,8 +140,8 @@ export class PageUtils {
     );
   }
 
-  static enterValue(fieldName: string, fieldValue: any, alias='', index=0) {
-    if ( alias.length > 0 ){ 
+  static enterValue(fieldName: string, fieldValue: any, alias = '', index = 0) {
+    if (alias.length > 0) {
       cy.get(alias).find(fieldName).eq(index).type(fieldValue);
     } else {
       cy.get(fieldName).eq(index).type(fieldValue);
@@ -150,6 +150,10 @@ export class PageUtils {
 
   static urlCheck(input: string) {
     cy.url().should('contain', input);
+  }
+
+  static locationCheck(input: string, timeout = 20000) {
+    cy.location('pathname', { timeout }).should('include', input);
   }
 
   static valueCheck(selector: string, input: any) {

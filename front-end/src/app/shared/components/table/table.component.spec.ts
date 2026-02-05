@@ -15,9 +15,7 @@ import { Component, signal, viewChild } from '@angular/core';
     [(rowsPerPage)]="rowsPerPage"
     [(selectedItems)]="selectedItems"
     itemName="reports"
-    [sortableHeaders]="sortableHeaders"
     sortField="form_type"
-    (loadTableItems)="loadTableItems($event)"
   />`,
 })
 class TestHostComponent {
@@ -28,14 +26,6 @@ class TestHostComponent {
   loading = true;
   readonly selectedItems = signal<Report[]>([]);
   readonly first = signal(0);
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'form_type', label: 'Form' },
-    { field: 'report_code_label', label: 'Name' },
-    { field: 'coverage_through_date', label: 'Coverage' },
-    { field: 'report_status', label: 'Status' },
-    { field: 'version_label', label: 'Version' },
-    { field: 'upload_submission__created', label: 'Filed' },
-  ];
 }
 
 describe('TableComponent', () => {

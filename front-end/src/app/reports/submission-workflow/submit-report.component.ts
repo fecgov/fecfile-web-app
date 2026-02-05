@@ -13,7 +13,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildGuaranteeUniqueValuesValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { injectRouteData } from 'ngxtension/inject-route-data';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Checkbox } from 'primeng/checkbox';
 import { InputText } from 'primeng/inputtext';
@@ -48,7 +48,6 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
   readonly confirmationService = inject(ConfirmationService);
   readonly apiService = inject(ApiService);
   readonly reportService = inject(ReportService);
-  private readonly messageService = inject(MessageService);
   readonly formProperties: string[] = [
     'confirmation_email_1',
     'confirmation_email_2',
@@ -202,13 +201,6 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
 
   async saveAndSubmit(): Promise<boolean> {
     await this.updateReport();
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: 'Report Updated',
-      life: 3000,
-    });
-
     return this.submitReport();
   }
 

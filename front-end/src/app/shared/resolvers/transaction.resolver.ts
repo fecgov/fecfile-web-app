@@ -13,12 +13,14 @@ import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { TransactionListService } from '../services/transaction-list.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionResolver {
-  readonly transactionService = inject(TransactionService);
+  readonly service = inject(TransactionService);
+  readonly listService = inject(TransactionListService);
 
   async resolve(route: ActivatedRouteSnapshot): Promise<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -37,7 +39,7 @@ export class TransactionResolver {
     // New
     if (reportId && transactionTypeName) {
       if (parentTransactionId) {
-        const parentTransaction = await this.transactionService.get(String(parentTransactionId));
+        const parentTransaction = await this.service.get(String(parentTransactionId));
         return this.getNewChildTransaction(parentTransaction, transactionTypeName);
       }
       if (debtId) {
@@ -58,7 +60,7 @@ export class TransactionResolver {
   }
 
   async resolveExistingTransactionFromId(transactionId: string): Promise<Transaction | undefined> {
-    const transaction = await this.transactionService.get(String(transactionId));
+    const transaction = await this.service.get(String(transactionId));
     if (
       transaction.transactionType?.isDependentChild(transaction) ||
       ReattRedesUtils.isReattRedes(transaction, [
@@ -87,9 +89,9 @@ export class TransactionResolver {
       let pageNumber = 0;
       let page: ListRestResponse | null = null;
       do {
-        page = await this.transactionService.getTableData(++pageNumber, '', params);
+        page = await this.listService.getTableData(++pageNumber, '', params);
         for (const result of page.results) {
-          const childTransaction = await this.transactionService.get((result as Transaction).id ?? '');
+          const childTransaction = await this.service.get((result as Transaction).id ?? '');
           transaction.children?.push(childTransaction);
         }
       } while (page?.next);
@@ -113,7 +115,7 @@ export class TransactionResolver {
   }
 
   async resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
-    const to = await this.transactionService.get(toId);
+    const to = await this.service.get(toId);
     const repaymentType = TransactionTypeUtils.factory(transactionTypeName);
     const repayment = repaymentType.getNewTransaction();
     if (type === 'loan') {
@@ -129,7 +131,7 @@ export class TransactionResolver {
   }
 
   async resolveNewReattribution(reportId: string, originatingId: string) {
-    const originatingTransaction = await this.transactionService.get(originatingId);
+    const originatingTransaction = await this.service.get(originatingId);
     const reattributed = ReattributedUtils.overlayTransactionProperties(
       originatingTransaction as SchATransaction,
       reportId,
@@ -150,7 +152,7 @@ export class TransactionResolver {
   }
 
   async resolveNewRedesignation(reportId: string, originatingId: string) {
-    const originatingTransaction = await this.transactionService.get(originatingId);
+    const originatingTransaction = await this.service.get(originatingId);
     const redesignated = RedesignatedUtils.overlayTransactionProperties(
       originatingTransaction as SchBTransaction,
       reportId,

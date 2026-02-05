@@ -40,8 +40,4 @@ export abstract class BaseForm3 extends Report {
   override get canAmend(): boolean {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
-
-  get formSubLabel() {
-    return this.report_code_label ?? '';
-  }
 }
