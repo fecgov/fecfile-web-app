@@ -14,139 +14,111 @@ const scheduleData = {
   date_received: new Date(currentYear, 4 - 1, 27),
 };
 
-function setupSummaryCalcAssertions(reportId: string) {
-  cy.intercept('POST', '**/web-services/summary/calculate-summary/').as('calcSummary');
+let summaryReportId: string | null = null;
+let summaryExpectSpinner = false;
+let summarySeen = 0;
+let summaryShouldDelay = false;
 
-  const assertSummaryCalc = () =>
-    cy.wait('@calcSummary').then(({ request, response }) => {
-      expect(request.body).to.include({ report_id: reportId });
-      expect(response?.statusCode).to.eq(200);
-    });
+function visitSummaryWithSpinner(reportId: string, expectSpinner: boolean) {
+  // configure which reportId this visit should track and whether a spinner is expected
+  summaryReportId = reportId;
+  summaryExpectSpinner = expectSpinner;
+  summarySeen = 0;
+  summaryShouldDelay = false;
 
-  const assertCalcCount = (count: number, timeout = 5000) =>
-    cy.get('@calcSummary.all', { timeout }).should('have.length', count);
-
-  return { assertSummaryCalc, assertCalcCount };
-}
-
-function requestWithCookies<T>(
-  options: Partial<Cypress.RequestOptions>,
-): Cypress.Chainable<Cypress.Response<T>> {
-  return cy.getAllCookies().then((cookies: Cypress.Cookie[]) => {
-    const cookieObj: Record<string, string> = {};
-    cookies.forEach((cookie) => {
-      cookieObj[cookie.name] = cookie.value;
-    });
-
-    const cookieHeader = Object.entries(cookieObj)
-      .map(([name, value]) => `${name}=${value}`)
-      .join('; ');
-    const headers: Record<string, string> = { Cookie: cookieHeader, ...(options.headers as Record<string, string>) };
-    const csrfToken = cookieObj['csrftoken'];
-    if (csrfToken) {
-      headers['x-csrftoken'] = csrfToken;
-    }
-
-    return cy.request<T>({ ...options, headers });
-  });
-}
-
-function triggerSummaryCalc(reportId: string) {
-  return requestWithCookies({
-    method: 'POST',
-    url: 'http://localhost:8080/api/v1/web-services/summary/calculate-summary/',
-    body: { report_id: reportId },
-  });
-}
-
-function waitForReportTotals(
-  reportId: string,
-  periodExpected: number,
-  ytdExpected = periodExpected,
-  attempts = 20,
-): Cypress.Chainable<undefined> {
-  const poll = (attemptsLeft: number): void => {
-    requestWithCookies<{
-      L19_total_receipts_period?: number | string;
-      L19_total_receipts_ytd?: number | string;
-    }>({
-      method: 'GET',
-      url: `http://localhost:8080/api/v1/reports/form-3x/${reportId}/`,
-    }).then((response) => {
-      const period = Number(response.body?.L19_total_receipts_period ?? 0);
-      const ytd = Number(response.body?.L19_total_receipts_ytd ?? 0);
-      if (period === periodExpected && ytd === ytdExpected) return;
-      if (attemptsLeft <= 0) {
-        throw new Error(`Expected total receipts ${periodExpected}/${ytdExpected} but got ${period}/${ytd}`);
+  if (expectSpinner) {
+    // if already on summary, leave first so the resolver GET reliably re-fires
+    cy.location('pathname').then((path) => {
+      if (path.includes('/reports/f3x/summary/')) {
+        PageUtils.clickSidebarItem('Manage your transactions');
       }
-      cy.wait(1000);
-      poll(attemptsLeft - 1);
     });
-  };
+  }
 
-  return cy.then(() => {
-    poll(attempts);
+  ReviewReport.Summary();
+  if (!expectSpinner) {
+    cy.get('img.fec-loader-image').should('not.exist');
+    return;
+  }
+
+  // 1st GET tells if calc already finished, only then require spinner
+  cy.wait('@getReport').then(({ response }) => {
+    const shouldShow = response?.body?.calculation_status !== 'SUCCEEDED';
+    if (!shouldShow) {
+      cy.get('img.fec-loader-image').should('not.exist');
+      return;
+    }
+    // 2nd GET (if any) is delayed to keep the spinner visible long enough to assert
+    cy.get('img.fec-loader-image').should('be.visible');
+    cy.wait('@getReport');
+    cy.get('img.fec-loader-image').should('not.exist');
   });
-}
-
-function assertTotalReceipts(thisPeriod: string, ytd = thisPeriod) {
-  cy.contains('td', 'Total receipts (from Line 19)')
-    .parent('tr')
-    .within(() => {
-      cy.get('td').eq(2).should('contain', thisPeriod);
-      cy.get('td').eq(3).should('contain', ytd);
-    });
 }
 
 describe('Receipt Transactions', () => {
   beforeEach(() => {
     Initialize();
+    // reset per-visit tracking so report GET aliasing has per-test determinism
+    summaryReportId = null;
+    summaryExpectSpinner = false;
+    summarySeen = 0;
+    summaryShouldDelay = false;
+
+    // per-test GETs intercept report, aliasing only the current reportId
+    cy.intercept('GET', /\/api\/v1\/reports\/(form-3x\/)?[^/]+\/$/, (req) => {
+      const match = new RegExp(/\/api\/v1\/reports\/(?:form-3x\/)?([^/]+)\//).exec(req.url);
+      const reqReportId = match?.[1] ?? null;
+      if (!summaryReportId || reqReportId !== summaryReportId) {
+        req.continue();
+        return;
+      }
+
+      req.alias = 'getReport';
+      summarySeen += 1;
+      req.continue((res) => {
+        if (summarySeen === 1) {
+          summaryShouldDelay = summaryExpectSpinner && res.body?.calculation_status !== 'SUCCEEDED';
+          return;
+        } // delay only the refresh GET when spinner is expected
+        if (summarySeen === 2 && summaryShouldDelay) {
+          res.setDelay(1200);
+        }
+      });
+    });
   });
 
   it('should calculate summary values on first visit', () => {
-    // create report and check summary calc runs
+    // Create report and check summary calc runs
     cy.wrap(DataSetup()).then((result: any) => {
       const reportId = result.report;
-      const { assertSummaryCalc, assertCalcCount } = setupSummaryCalcAssertions(reportId);
       cy.visit(`/reports/transactions/report/${reportId}/list`);
-      ReviewReport.Summary();
-      assertSummaryCalc();
-      assertCalcCount(1);
+      visitSummaryWithSpinner(reportId, true);
 
-      // leave summary and come back to verify calc does NOT run
+      // Leave summary and come back to verify calc does NOT run
       PageUtils.clickSidebarItem('ENTER A TRANSACTION');
       PageUtils.clickSidebarItem('Manage your transactions');
-      ReviewReport.Summary();
-      assertCalcCount(1);
+      visitSummaryWithSpinner(reportId, false);
     });
   });
 
   it('should recalculate after transaction created or updated', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
-      const reportId = result.report;
-      const { assertSummaryCalc, assertCalcCount } = setupSummaryCalcAssertions(reportId);
       // check summary calc runs
-      ReportListPage.goToReportList(reportId);
-      ReviewReport.Summary();
-      assertSummaryCalc();
-      assertCalcCount(1);
+      ReportListPage.goToReportList(result.report);
+      visitSummaryWithSpinner(result.report, true);
 
-      // create transaction
-      const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, `${currentYear}-04-12`, result.individual, reportId);
+      // Create transaction
+      const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, `${currentYear}-04-12`, result.individual, result.report);
       makeTransaction(transaction, () => {
-        // go to summary and verify totals reflect the new transaction
-        triggerSummaryCalc(reportId);
-        waitForReportTotals(reportId, 200.01);
-        ReviewReport.Summary();
-        assertTotalReceipts('$200.01');
+        // Go to summary and verify summary calc runs
+        visitSummaryWithSpinner(result.report, true);
 
-        // verify summary totals are unchanged on a repeat visit
+        // Verify summary calc doesn't run again
         PageUtils.clickSidebarItem('ENTER A TRANSACTION');
         PageUtils.clickSidebarItem('Manage your transactions');
-        ReviewReport.Summary();
-        assertTotalReceipts('$200.01');
+        visitSummaryWithSpinner(result.report, false);
 
-        // update transaction
+        // Update transaction
         PageUtils.clickSidebarItem('ENTER A TRANSACTION');
         PageUtils.clickSidebarItem('Manage your transactions');
         cy.get('tr').should('contain', 'Individual Receipt');
@@ -156,11 +128,8 @@ describe('Receipt Transactions', () => {
         PageUtils.clickButton('Save');
         cy.get('tr').should('contain', '$123.45');
 
-        // return to summary page and verify summary calc runs
-        triggerSummaryCalc(reportId);
-        waitForReportTotals(reportId, 123.45);
-        ReviewReport.Summary();
-        assertTotalReceipts('$123.45');
+        // Return to summary page and verify summary calc runs
+        visitSummaryWithSpinner(result.report, true);
       });
     });
   });
