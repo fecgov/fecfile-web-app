@@ -1,0 +1,89 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  display: block;
+
+  .section-header {
+    font-family: var(--karla-bold);
+    margin-bottom: 8px;
+  }
+
+  .top-hr {
+    margin-bottom: 32px;
+  }
+
+  p {
+    margin-bottom: 32px;
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  input,
+  .p-select {
+    height: 36px;
+  }
+
+  .form-layout {
+    display: flex;
+    justify-content: center;
+  }
+
+  .form-content {
+    @include standard-container();
+    gap: 20px;
+    display: grid;
+  }
+
+  .right-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'year current' 'new .' 'action .';
+    gap: 28px;
+  }
+
+  .year {
+    grid-area: year;
+  }
+  .current {
+    grid-area: current;
+  }
+  .new {
+    grid-area: new;
+  }
+  .action {
+    grid-area: action;
+  }
+
+  .action button {
+    width: 140px;
+    min-width: unset;
+  }
+
+  .p-field,
+  .field {
+    margin: 0;
+  }
+
+  .space {
+    display: none;
+  }
+
+  @include breakpoint('md') {
+    .form-content {
+      grid-template-columns: 8fr 4fr;
+    }
+
+    .right-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'year' 'current' 'new' 'action';
+    }
+  }
+
+  @include breakpoint('lg') {
+    .form-content {
+      grid-template-columns: 6fr 3fr 3fr;
+    }
+  }
+}

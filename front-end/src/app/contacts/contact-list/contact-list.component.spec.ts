@@ -5,7 +5,7 @@ import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ContactListComponent } from './contact-list.component';
@@ -15,6 +15,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
 import { Contact, ContactTypes } from 'app/shared/models';
+import { CurrencyPipe } from '@angular/common';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
+import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -58,6 +63,11 @@ describe('ContactListComponent', () => {
         ContactService,
         provideMockStore(testMockStore()),
         provideRouter([]),
+        CurrencyPipe,
+        MemoCodePipe,
+        FecDatePipe,
+        TransactionIdPipe,
+        DefaultZeroPipe,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -204,18 +214,17 @@ describe('ContactListComponent', () => {
 
   it('#loadTableItems updates restore button visibility', async () => {
     spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 1,
-        next: '',
-        previous: '',
-        pageNumber: 1,
-        results: [contact],
-      }),
-    );
+    spyOn(deletedContactService, 'getTableData').and.resolveTo({
+      count: 1,
+      next: '',
+      previous: '',
+      pageNumber: 1,
+      results: [contact],
+    });
 
-    const event: TableLazyLoadEvent = { first: 0, rows: 10 };
-    await component.loadTableItems(event);
+    component.first.set(0);
+    component.rowsPerPage.set(10);
+    await component.loadTableItems();
 
     expect(component.restoreContactsButtonIsVisible).toBeTrue();
   });

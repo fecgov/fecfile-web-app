@@ -106,7 +106,7 @@ describe('ManageCommitteeComponent', () => {
 
     component.roleEdited();
 
-    expect(component.loadTableItems).toHaveBeenCalledWith({});
+    expect(component.loadTableItems).toHaveBeenCalledWith();
     expect(messageSpy).toHaveBeenCalledWith({
       severity: 'success',
       summary: 'Successful',

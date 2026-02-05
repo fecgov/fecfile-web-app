@@ -5,26 +5,40 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { Report, ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
-import { TransactionService } from 'app/shared/services/transaction.service';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
-import { F24FormTypes, Form24, Transaction } from 'app/shared/models';
+import { F24FormTypes, Form24 } from 'app/shared/models';
 import { of } from 'rxjs';
 import { Form24Service } from 'app/shared/services/form-24.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 const mockReports = [
-  Form24.fromJSON({ id: '1', name: 'test1', created: '2022-12-01', report_status: ReportStatus.IN_PROGRESS }),
-  Form24.fromJSON({ id: '2', name: 'test2', created: '2022-12-31', report_status: ReportStatus.IN_PROGRESS }),
+  Form24.fromJSON({
+    id: '1',
+    name: 'test1',
+    created: '2022-12-01',
+    report_status: ReportStatus.IN_PROGRESS,
+    report_code_label: 'test1',
+  }),
+  Form24.fromJSON({
+    id: '2',
+    name: 'test2',
+    created: '2022-12-31',
+    report_status: ReportStatus.IN_PROGRESS,
+    report_code_label: 'test2',
+  }),
   Form24.fromJSON({
     id: '3',
     name: 'test3',
     created: '2023-01-15',
     form_type: F24FormTypes.F24A,
     report_status: ReportStatus.IN_PROGRESS,
+    report_code_label: 'test3',
   }),
 ];
 
@@ -43,7 +57,18 @@ class TestHostComponent {
   component = viewChild.required(SecondaryReportSelectionDialogComponent);
   readonly visible = signal(false);
   reportType = ReportTypes.F24;
-  transaction: Transaction = testScheduleATransaction();
+  transaction: TransactionListRecord = {
+    ...testScheduleATransaction(),
+    name: 'TEST',
+    date: new Date(),
+    amount: 100,
+    balance: 0,
+    aggregate: 0,
+    report_code_label: '',
+    can_delete: true,
+    force_unaggregated: true,
+    report_type: 'Form 3X',
+  } as unknown as TransactionListRecord;
   reportSelectionCreateMethod = jasmine.createSpy('create');
   refreshTables = jasmine.createSpy('refreshTables');
 }
@@ -53,8 +78,8 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let host: TestHostComponent;
   let messageService: MessageService;
-  let transactionService: TransactionService;
-  let addSpy: jasmine.Spy<(transaction: Transaction, report: Report) => Promise<HttpResponse<string>>>;
+  let transactionListService: TransactionListService;
+  let addSpy: jasmine.Spy<(transaction: TransactionListRecord, report: Report) => Promise<HttpResponse<string>>>;
   let reportServiceMock: jasmine.SpyObj<Form24Service>;
   let messageSpy: jasmine.Spy<(message: ToastMessageOptions) => void>;
 
@@ -74,7 +99,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
           },
         ]),
         { provide: Form24Service, useValue: reportServiceMock },
-        TransactionService,
+        TransactionListService,
         MessageService,
         DatePipe,
         provideMockStore(testMockStore()),
@@ -95,8 +120,8 @@ describe('SecondaryReportSelectionDialogComponent', () => {
         },
       ],
     }).compileComponents();
-    transactionService = TestBed.inject(TransactionService);
-    addSpy = spyOn(transactionService, 'addToReport');
+    transactionListService = TestBed.inject(TransactionListService);
+    addSpy = spyOn(transactionListService, 'addToReport');
     messageService = TestBed.inject(MessageService);
     messageSpy = spyOn(messageService, 'add');
     fixture = TestBed.createComponent(TestHostComponent);

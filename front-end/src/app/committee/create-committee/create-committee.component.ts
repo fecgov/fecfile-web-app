@@ -9,7 +9,6 @@ import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.ac
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { UsersService } from 'app/shared/services/users.service';
@@ -20,16 +19,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   selector: 'app-create-committee',
   templateUrl: './create-committee.component.html',
   styleUrls: ['./create-committee.component.scss'],
-  imports: [
-    RouterLink,
-    InputGroup,
-    ReactiveFormsModule,
-    PrimeTemplate,
-    Dialog,
-    CheckboxModule,
-    ButtonModule,
-    DialogComponent,
-  ],
+  imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, CheckboxModule, ButtonModule, DialogComponent],
 })
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);

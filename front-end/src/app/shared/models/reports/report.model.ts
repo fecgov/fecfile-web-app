@@ -29,7 +29,8 @@ export abstract class Report extends BaseModel {
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission: UploadSubmission | undefined;
-  report_status: string | undefined;
+
+  report_status: ReportStatus | undefined;
   @Type(() => WebPrintSubmission)
   @Transform(WebPrintSubmission.transform)
   webprint_submission: WebPrintSubmission | undefined;
@@ -47,8 +48,6 @@ export abstract class Report extends BaseModel {
 
   abstract getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[];
   abstract get formLabel(): string;
-
-  abstract get formSubLabel(): string;
 
   get canAmend() {
     return false;

@@ -1,38 +1,34 @@
-@media (min-width: 576px) {
-  .summary-container {
-    min-width: 361px;
-    max-width: 361px;
-    width: 361px;
-  }
-}
+@use 'mixins' as *;
 
-@media (min-width: 625px) {
+:host::ng-deep {
   .summary-container {
-    min-width: 410px;
-    max-width: 410px;
-    width: 410px;
+    @include standard-container();
   }
-}
 
-@media (min-width: 768px) {
-  .summary-container {
-    min-width: 553px;
-    max-width: 553px;
-    width: 553px;
+  h2 {
+    font-family: var(--gandhi-bold);
+    font-weight: bolder;
+    font-size: 24px !important;
   }
-}
 
-@media (min-width: 992px) {
-  .summary-container {
-    min-width: 777px;
-    max-width: 777px;
-    width: 777px;
+  .line-column {
+    display: none;
   }
-}
-@media (min-width: 1200px) {
-  .summary-container {
-    min-width: 985px;
-    max-width: 985px;
-    width: 985px;
+
+  .period-column {
+    @include fixed-width(130px);
+    text-align: right !important;
+  }
+
+  .ytd-column {
+    @include fixed-width(160px);
+    text-align: right !important;
+  }
+
+  @include breakpoint('md') {
+    .line-column {
+      display: table-cell;
+      @include fixed-width(72px);
+    }
   }
 }

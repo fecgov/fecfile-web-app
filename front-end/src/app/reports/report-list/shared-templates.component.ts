@@ -8,7 +8,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
   selector: 'app-shared-templates',
   template: `
     <ng-template #reportNameBody let-item>
-      <a (click)="this.reportNameClick.emit(item)">{{ item.formSubLabel }}</a>
+      <a (click)="this.reportNameClick.emit(item)">{{ item.report_code_label }}</a>
     </ng-template>
     <ng-template #coverageBody let-item>
       {{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}

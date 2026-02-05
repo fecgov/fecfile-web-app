@@ -27,25 +27,4 @@ describe('Form24', () => {
     const form = Form24.fromJSON(data);
     expect(form.formLabel).toEqual('Form 24');
   });
-
-  it('should display empty string for sub label', () => {
-    const data = {
-      id: '999',
-      form_type: F24FormTypes.F24N,
-      committee_name: 'foo',
-    };
-    const form = Form24.fromJSON(data);
-    expect(form.formSubLabel).toEqual('');
-  });
-
-  it('should display name for sub label', () => {
-    const data = {
-      id: '999',
-      form_type: F24FormTypes.F24N,
-      committee_name: 'foo',
-      name: 'Test Form Name',
-    };
-    const form = Form24.fromJSON(data);
-    expect(form.formSubLabel).toEqual('Test Form Name');
-  });
 });

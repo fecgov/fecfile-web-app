@@ -64,14 +64,35 @@ describe('Loans', () => {
   it('should test: Loan By Committee - delete Guarantor', () => {
     setupLoanReceivedFromIndividual().then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
+      const receipts = PageUtils.getAlias('app-transaction-receipts');
 
-      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
-      let alias = PageUtils.getAlias('app-transaction-receipts');
-      cy.get(alias).contains('Loan Received from Individual').click();
-      cy.wait('@GuarantorList');
+      cy.get(receipts)
+        .contains('Loan Received from Individual')
+        .should('be.visible')
+        .click();
+
+      cy.contains('tbody tr', result.individual2.last_name, { timeout: 15000 })
+          .should('be.visible');
+
+      cy.intercept('DELETE', '**/api/v1/transactions/**').as('deleteGuarantor');
+      cy.intercept(
+        'GET',
+        /\/api\/v1\/transactions\/\?page=1&ordering=name&page_size=5&parent=.*&schedules=C2/,
+      ).as('guarantorsReload');
+
       PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
       PageUtils.clickButton('Confirm');
-      cy.contains(result.individual.last_name).should('not.exist');
+
+      cy.wait('@deleteGuarantor')
+        .its('response.statusCode')
+        .should('be.equal', 204);
+
+      cy.wait('@guarantorsReload')
+        .its('response.statusCode')
+        .should('be.equal', 200);
+
+      cy.contains('tbody tr', result.individual2.last_name, { timeout: 15000 })
+          .should('not.exist');
     });
   });
 });
