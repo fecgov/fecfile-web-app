@@ -62,7 +62,13 @@
       </div>
     </div>
     <div class="col-3">
-      <app-select inputId="state" label="STATE/TERRITORY" [options]="stateOptions" [control]="stateControl" />
+      <app-select
+        inputId="state"
+        label="STATE/TERRITORY"
+        [options]="stateOptions"
+        [form]="form"
+        formControlName="state"
+      />
     </div>
     <div class="col-3">
       <div class="field">
@@ -131,7 +137,8 @@
         inputId="treasurer_state"
         label="STATE/TERRITORY"
         [options]="stateOptions"
-        [control]="treasurerStateControl"
+        [form]="form"
+        formControlName="treasurer_state"
       />
     </div>
     <div class="col-3">

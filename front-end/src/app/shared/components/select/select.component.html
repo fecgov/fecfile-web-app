@@ -1,8 +1,14 @@
 <div class="field">
-  <label [class]="labelClass()" [for]="inputId()">{{ label() }}</label>
-  <p-select #inputSelect [formControl]="control()" [options]="options()" [inputId]="inputId()">
-    <ng-template #selectedItem let-selectedOption>
-      <input type="text" [id]="inputId()" [value]="selectedOption.label" readonly (click)="inputSelect.show()" />
-    </ng-template>
-  </p-select>
+  <label [class]="labelClass()" [id]="labelId()" [for]="safeId()">{{ label() }}</label>
+  <select [formControl]="control()" [id]="safeId()" (change)="updateBlur($event)">
+    <button [attr.aria-labelledby]="labelId()">
+      <selectedcontent></selectedcontent>
+    </button>
+    @for (option of options(); track option.value) {
+      <option [value]="option.value">{{ option.label }}</option>
+    }
+  </select>
+  @if (includeErrorMessages()) {
+    <app-error-messages [form]="form()" [fieldName]="formControlName()" [formSubmitted]="formSubmitted()" />
+  }
 </div>
