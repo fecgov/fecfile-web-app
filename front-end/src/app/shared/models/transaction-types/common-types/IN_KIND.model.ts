@@ -12,7 +12,7 @@ export abstract class IN_KIND extends SchATransactionType {
 
   override description =
     'This receipt type automatically creates an associated transaction. Saving an in-kind receipt will automatically create an in-kind out.'; // Prose describing transaction and filling out the form
-  override accordionTitle = 'ENTER DATA'; // Title for accordion handle (does not include subtext)
+  override accordionTitle = 'STEP ONE'; // Title for accordion handle (does not include subtext)
   override accordionSubText = 'Add contact and receipt information'; // Text after title in accordion handle
   override formTitle = undefined; // Title of form within accordion section
   override footer =
