@@ -9,7 +9,6 @@ export class IN_KIND_OUT extends CommonInKindOut {
   override formFields = INDIVIDUAL_B_FORM_FIELDS;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;
-  override showAggregate = true;
   override inheritedFields = [
     'last_name',
     'first_name',
