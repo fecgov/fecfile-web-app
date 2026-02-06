@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
+import { TransactionListService } from './transaction-list.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionSchAService extends TransactionService {
-  override tableDataEndpoint = '/transactions';
-
+export class TransactionSchAService extends TransactionListService {
   override getTableData(
     pageNumber?: number,
     ordering?: string,

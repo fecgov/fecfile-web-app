@@ -7,7 +7,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Dialog } from 'primeng/dialog';
 import { SelectButton } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
 import { takeUntil } from 'rxjs';
@@ -15,6 +14,7 @@ import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
+import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-memo-code',
@@ -25,7 +25,7 @@ import { BaseInputComponent } from '../base-input.component';
     Tooltip,
     ErrorMessagesComponent,
     SelectButton,
-    Dialog,
+    DialogComponent,
     ButtonDirective,
     FecDatePipe,
     CheckboxModule,

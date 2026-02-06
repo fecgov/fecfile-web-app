@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
@@ -11,17 +11,16 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { takeUntil } from 'rxjs';
-import { Card } from 'primeng/card';
-import { NgOptimizedImage } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
+import { LayoutService } from 'app/layout/layout.service';
 
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
   styleUrls: ['../../styles.scss', './print-preview.component.scss'],
-  imports: [Card, NgOptimizedImage, ButtonDirective, Ripple, SingleClickDirective],
+  imports: [ButtonDirective, Ripple, SingleClickDirective],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);
@@ -29,9 +28,31 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   public readonly route = inject(ActivatedRoute);
   private readonly webPrintService = inject(WebPrintService);
   private readonly reportService = inject(ReportService);
+  readonly layoutService = inject(LayoutService);
   report: Report = new Form3X() as unknown as Report;
   committeeAccount?: CommitteeAccount;
-  submitDate: Date | undefined;
+  readonly submitDate = signal<Date | undefined>(undefined);
+  readonly formattedDate = computed(() => {
+    const date = this.submitDate();
+    if (!date) return '';
+    let dateString = new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      timeZoneName: 'long',
+    }).format(date);
+    dateString = dateString.replace(/(\d{4})[\s,]+(?:at\s+)?(\d{1,2}:)/, '$1, at $2');
+    dateString = dateString.replace(' Standard Time', ' Time');
+    dateString = dateString.replace(' Daylight Time', ' Time');
+    const parts = dateString.split(/( AM | PM )/);
+    if (parts.length === 3) {
+      return `${parts[0]}${parts[1]}(${parts[2].trim()})`;
+    }
+    return dateString;
+  });
   downloadURL = '';
   printError = '';
   pollingTime = 2000;
@@ -95,7 +116,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
         this.store.dispatch(singleClickEnableAction());
         this.webPrintStage = 'success';
         this.downloadURL = report.webprint_submission.fec_image_url;
-        this.submitDate = report.webprint_submission.created;
+        this.submitDate.set(report.webprint_submission.created);
         return;
       }
       // Otherwise the submission is still processing
@@ -112,7 +133,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     try {
       const report = await this.reportService.get(this.report.id!);
       this.updatePrintStatus(report);
-      await new Promise((resolve) => setTimeout(resolve, this.pollingTime)); // Replaces `concatMap(timer(...))`
+      await new Promise((resolve) => setTimeout(resolve, this.pollingTime));
       if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
         this.pollPrintStatus();
       }

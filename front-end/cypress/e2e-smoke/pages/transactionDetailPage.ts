@@ -172,7 +172,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.line_of_credit) {
-      cy.get(alias).find('input[name="line_of_credit"]').first().click({ force: true });
+      cy.get(alias).find('input#line_of_credit').first().click({ force: true });
     }
 
     if (formData.others_liable) {

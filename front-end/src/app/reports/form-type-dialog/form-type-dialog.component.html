@@ -16,9 +16,6 @@
         class="w-full"
         id="typeDropdown"
       >
-        <ng-template #dropdownicon>
-          <img alt="Dropdown arrow" src="assets/img/i-arrow-down.svg" height="9px" width="10px" />
-        </ng-template>
         <ng-template #selectedItem let-selectedOption>
           <span class="option">
             <b>{{ this.formType()?.label }}:</b> {{ this.formType()?.description }}

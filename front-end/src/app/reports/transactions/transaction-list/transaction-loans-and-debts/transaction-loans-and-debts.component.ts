@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -7,17 +7,20 @@ import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transac
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
-import { TableComponent } from '../../../../shared/components/table/table.component';
-import { CurrencyPipe } from '@angular/common';
+import {
+  ColumnDefinition,
+  TableBodyContext,
+  TableComponent,
+} from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
-import { FecDatePipe } from '../../../../shared/pipes/fec-date.pipe';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',
   templateUrl: './transaction-loans-and-debts.component.html',
-  styleUrls: ['../../transaction.scss'],
-  imports: [TableComponent, RouterLink, TableActionsButtonComponent, CurrencyPipe, FecDatePipe, LabelPipe],
+  styleUrls: ['../../transaction.scss', './transaction-loans-and-debts.component.scss'],
+  imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchCService);
@@ -31,14 +34,32 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date incurred, Amount, Balance, Transaction ID, Associated with, and Actions.';
 
-  constructor() {
-    super();
-    this.sortableHeaders.push(
-      ...[
-        { field: 'date', label: 'Incurred' },
-        { field: 'amount', label: 'Amount' },
-        { field: 'balance', label: 'Balance' },
-      ],
-    );
-  }
+  readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
+
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => [
+    this.buildLineColumn(),
+    this.buildTypeColumn(this.typeBodyTpl()),
+    this.buildNameColumn(),
+    this.buildDateColumn({
+      header: 'Incurred',
+      cssClass: 'incurred-column',
+    }),
+    this.buildAmountColumn(),
+    {
+      field: 'balance',
+      header: 'Balance',
+      sortable: true,
+      cssClass: 'balance-column',
+      pipes: ['currency'],
+    },
+    this.buildTransactionIdColumn(),
+    this.buildAssociatedWithColumn(),
+    {
+      field: '',
+      header: 'Actions',
+      cssClass: 'actions-column',
+      bodyTpl: this.actionsBodyTpl(),
+    },
+  ]);
 }

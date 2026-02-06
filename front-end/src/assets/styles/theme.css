@@ -504,7 +504,7 @@ p-checkbox {
 }
 
 .p-checkbox .p-checkbox-box {
-  border: 2px solid var(--fec-grey-alt);
+  border: 2px solid var(--text-color-secondary);
   background: var(--p-content-background);
   width: 20px;
   height: 20px;
@@ -2923,7 +2923,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   text-align: left;
   border: 1px solid var(--surface-border);
   border-width: 1px 0 0 0;
-  padding: 14px 10px;
+  padding: 10px;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
@@ -6492,7 +6492,7 @@ input {
 }
 
 .p-datatable-table-container {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .pi-sort-down-fill {

@@ -1,3 +1,69 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .form-column,
+  .date-column {
+    display: none;
+  }
+
+  .type-column {
+    @include fixed-width(35.2%);
+  }
+  .report-column {
+    @include fixed-width(46%);
+  }
+  .amount-column {
+    @include fixed-width(18.8%);
+  }
+
+  @include breakpoint('md') {
+    .type-column {
+      @include fixed-width(40%);
+    }
+
+    .amount-column {
+      @include fixed-width(14%);
+    }
+  }
+
+  @include breakpoint('lg') {
+    .form-column,
+    .date-column {
+      display: table-cell;
+    }
+
+    .type-column {
+      @include fixed-width(31.9%);
+    }
+    .form-column {
+      @include fixed-width(10.5%);
+    }
+    .report-column {
+      @include fixed-width(35%);
+    }
+    .date-column,
+    .amount-column {
+      @include fixed-width(11.3%);
+    }
+  }
+
+  @include breakpoint('xxl') {
+    .type-column {
+      @include fixed-width(35.2%);
+    }
+    .form-column {
+      @include fixed-width(8.5%);
+    }
+    .report-column {
+      @include fixed-width(38.1%);
+    }
+    .date-column,
+    .amount-column {
+      @include fixed-width(9.1%);
+    }
+  }
+}
+
 th {
   border-top: 0 !important;
 }

@@ -1,8 +1,24 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  EventEmitter,
+  inject,
+  Input,
+  model,
+  OnInit,
+  Output,
+  Signal,
+  signal,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
+import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
@@ -19,7 +35,6 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { takeUntil } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
@@ -30,44 +45,15 @@ import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.
 import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { LabelPipe } from '../../pipes/label.pipe';
-import { getReportFromJSON } from '../../services/report.service';
-import { TransactionService } from '../../services/transaction.service';
-import { FormComponent } from '../form.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
+import { FormComponent } from '../form.component';
 import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
-import { TableComponent } from '../table/table.component';
-import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
-import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
-
-export class TransactionData {
-  id: string;
-  report_ids: string[];
-  form_type = '';
-  report_code_label = '';
-  transaction_type_identifier: string;
-  date: string;
-  amount: string;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(transaction: any) {
-    this.id = transaction.id;
-    this.report_ids = transaction.report_ids;
-    this.date = transaction.date;
-    this.amount = transaction.amount;
-    this.transaction_type_identifier = transaction.transaction_type_identifier;
-
-    transaction.reports.forEach((r: JSON) => {
-      const report = getReportFromJSON(r);
-      if (report.report_type === ReportTypes.F24) return; // We will display the Form 3X version of the transaction #1977
-      this.form_type = report.formLabel;
-      this.report_code_label = report.report_code_label ?? '';
-    });
-  }
-}
+import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
+import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -96,11 +82,11 @@ export class TransactionData {
 })
 export class ContactDialogComponent extends FormComponent implements OnInit {
   private readonly contactService = inject(ContactService);
-  private readonly transactionService = inject(TransactionService);
+  private readonly transactionService = inject(TransactionListService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
   readonly ContactTypes = ContactTypes;
-  @Input() contact: Contact = new Contact();
+  readonly contact = model<Contact>();
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() detailVisible = false;
   @Input() showHistory = false;
@@ -109,11 +95,16 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
   readonly first = signal(0);
+  readonly sortField = signal('transaction_type_identifier');
+  readonly sortOrder = signal<'asc' | 'desc'>('asc');
 
-  transactions: TransactionData[] = [];
+  transactions: TransactionListRecord[] = [];
   tableLoading = true;
-  totalTransactions = 0;
-  rowsPerPage = 5;
+  readonly totalTransactions = signal(0);
+  readonly rowsPerPage = signal(5);
+  readonly params: Signal<QueryParams> = computed(() => {
+    return { page_size: this.rowsPerPage(), contact: this.contact()?.id ?? '' };
+  });
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
     ScheduleCTransactionTypeLabels,
@@ -123,7 +114,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     ScheduleETransactionTypeLabels,
   );
 
-  @ViewChild(ContactLookupComponent) contactLookup!: ContactLookupComponent;
+  readonly contactLookup = viewChild.required(ContactLookupComponent);
 
   form: FormGroup = this.fb.group(
     SchemaUtils.getFormGroupFields([
@@ -144,55 +135,90 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   countryOptions: PrimeOptions = [];
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
-  dialogVisible = false; // We need to hide dialog manually so dynamic layout changes are not visible to the user
+  readonly dialogVisible = signal(false);
   emptyMessage = 'No data available in table';
 
-  sortableHeaders: { field: string; label: string }[] = [
-    { field: 'transaction_type_identifier', label: 'Type' },
-    { field: 'form_type', label: 'Form' },
-    { field: 'report_code_label', label: 'Report' },
-    { field: 'date', label: 'Date' },
-    { field: 'amount', label: 'Amount' },
-  ];
+  readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
+  readonly dateBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('dateBody');
+  readonly amountBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('amountBody');
+  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => {
+    const type = this.typeBodyTpl();
+    const date = this.dateBodyTpl();
+    const amount = this.amountBodyTpl();
+    if (!type || !date || !amount) return [];
+    return [
+      {
+        field: 'transaction_type_identifier',
+        header: 'Type',
+        sortable: true,
+        cssClass: 'type-column',
+        bodyTpl: type,
+      },
+      { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column' },
+      { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
+      {
+        field: 'date',
+        header: 'Date',
+        sortable: true,
+        cssClass: 'date-column',
+        bodyTpl: date,
+      },
+      {
+        field: 'amount',
+        header: 'Amount',
+        sortable: true,
+        cssClass: 'amount-column',
+        bodyTpl: amount,
+      },
+    ];
+  });
 
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
-  pagerState?: TableLazyLoadEvent;
+  readonly table = viewChild(TableComponent);
+  constructor() {
+    super();
+    effect(() => {
+      this.rowsPerPage();
+      this.first.set(0);
+    });
 
-  async loadTransactions(event: TableLazyLoadEvent) {
+    effect(() => {
+      if (!this.dialogVisible()) return;
+      this.sortField();
+      this.sortOrder();
+      this.first();
+      this.rowsPerPage();
+      this.loadTransactions();
+    });
+  }
+
+  async loadTransactions() {
     this.tableLoading = true;
 
     // event is undefined when triggered from the detail page because
     // the detail doesn't know what page we are on. We check the local
     // pagerState variable to retrieve the page state.
-    if (!!event && 'first' in event) {
-      this.pagerState = event;
-    } else {
-      event = this.pagerState ?? {
-        first: 0,
-        rows: this.rowsPerPage,
-      };
-    }
 
-    // Calculate the record page number to retrieve from the API.
-    const first: number = event.first ?? 0;
-    const rows: number = event.rows ?? this.rowsPerPage;
+    const sortField = this.sortField();
+    const sortOrder = this.sortOrder() === 'asc' ? 1 : -1;
+    const first = this.first();
+    const rows = this.rowsPerPage();
     const pageNumber: number = Math.floor(first / rows) + 1;
-    const params = this.getParams();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ?? '';
-    if (ordering && event.sortOrder === -1) {
+    let ordering: string | string[] = sortField ?? 'transaction_type_identifier';
+    if (ordering && sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
       ordering = `${ordering}`;
     }
 
     try {
-      const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, params);
-      this.transactions = transactionsPage.results.map((t) => new TransactionData(t));
-      this.totalTransactions = transactionsPage.count;
+      const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, this.params());
+      this.transactions = transactionsPage.results;
+      this.totalTransactions.set(transactionsPage.count);
       this.tableLoading = false;
       this.emptyMessage = 'No data available in table';
     } catch {
@@ -256,7 +282,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
-    if (!this.contact) this.contact = new Contact();
+    if (!this.contact()) this.contact.set(new Contact());
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -267,10 +293,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
     switch (contactType) {
       case ContactTypes.CANDIDATE:
-        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
         break;
       case ContactTypes.COMMITTEE:
-        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact.id));
+        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
         break;
     }
     this.form.updateValueAndValidity();
@@ -292,38 +318,28 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
   }
 
-  /**
-   * Pass the CandidateOfficeTypes enum into the template
-   */
-  public get CandidateOfficeTypes() {
-    return CandidateOfficeTypes;
-  }
-
   public openDialog() {
-    this.loadTransactions({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
     this.resetForm();
-    this.form.patchValue(this.contact);
-    if (this.contact.id) {
+    const contact = this.contact()!;
+    this.form.patchValue(contact);
+    if (contact.id) {
       this.isNewItem = false;
       // Update the value of the Contact Type select box in the Contact Lookup
       // component because the Contact Dialog is hidden and not destroyed on close,
       // so we need to directly update the lookup "type" form control value
-      this.contactLookup.contactTypeFormControl.setValue(this.contact.type);
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup().contactTypeFormControl.setValue(contact.type);
+      this.contactLookup().contactTypeFormControl.enable();
     } else if (this.contactTypeOptions.length === 1) {
-      this.contactLookup.contactTypeFormControl.enable();
+      this.contactLookup().contactTypeFormControl.enable();
     }
-    this.dialogVisible = true;
+    this.dialogVisible.set(true);
   }
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
       this.detailVisibleChange.emit(false);
       this.detailVisible = false;
-      this.dialogVisible = false;
+      this.dialogVisible.set(false);
     }
   }
 
@@ -340,8 +356,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
     this.isNewItem = true;
-    this.contactLookup.contactTypeFormControl.enable();
-    this.contactLookup.contactTypeFormControl.setValue(this.contactType);
+    this.contactLookup().contactTypeFormControl.enable();
+    this.contactLookup().contactTypeFormControl.setValue(this.contactType);
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
@@ -349,7 +365,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   updateContact(contact: Contact) {
-    this.contact = contact;
+    this.contact.set(contact);
     this.contactType = contact.type;
     this.form.patchValue(contact);
   }
@@ -363,14 +379,14 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   confirmPropagation() {
     const changes = Object.entries(this.form.controls)
       .map(([field, control]: [string, AbstractControl]) => {
-        const contactValue = this.contact[field as keyof Contact];
+        const contactValue = this.contact()![field as keyof Contact];
         if (control?.value !== contactValue) {
           return [field, control.value];
         }
         return undefined;
       })
       .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact, changes);
+    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
     this.confirmationService.confirm({
       key: 'contactDialogDialog',
       header: 'Confirm',
@@ -394,7 +410,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     const contact: Contact = Contact.fromJSON({
-      ...this.contact,
+      ...this.contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
     });
     contact.type = this.contactType;
@@ -406,19 +422,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.resetForm();
   }
 
-  async openTransaction(transaction: TransactionData) {
-    await this.router.navigate([`reports/transactions/report/${transaction.report_ids[0]}/list/${transaction.id}`]);
-  }
-
-  onRowsPerPageChange(rowsPerPage: number) {
-    this.rowsPerPage = rowsPerPage;
-    this.loadTransactions({
-      first: 0,
-      rows: this.rowsPerPage,
-    });
-  }
-
-  getParams(): QueryParams {
-    return { page_size: this.rowsPerPage, contact: this.contact.id ?? '' };
+  openTransaction(transactionListRecord: TransactionListRecord) {
+    if (transactionListRecord.report_ids?.length) {
+      return this.router.navigate([
+        `reports/transactions/report/${transactionListRecord.report_ids[0]}/list/${transactionListRecord.id}`,
+      ]);
+    }
+    return Promise.resolve(false);
   }
 }

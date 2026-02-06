@@ -62,10 +62,13 @@
       </div>
     }
   </div>
-  <p-dialog #dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
-    <ng-template #header>
-      <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
-    </ng-template>
+
+  <app-dialog
+    tabindex="-1"
+    aria-labelledby="dialog-title"
+    title="Just checking..."
+    [(visible)]="outOfDateDialogVisible"
+  >
     <p id="out-of-date-dialog-text">
       <b>
         {{ coverageDate() | fecDate }}
@@ -75,18 +78,17 @@
       >. {{ coverageDateQuestion() }} <br /><br />
       If the date entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>
-    <div class="grid">
-      <div class="mx-auto">
+    <ng-container dialog-footer #dialogFooterRef>
+      <div class="flex justify-content-center">
         <button
+          type="button"
           pButton
-          id="out-of-date-dialog-button"
-          class="p-button"
+          pRipple
           label="Close"
-          styleClass="p-button-link"
-          (click)="dialog.close($event)"
-          [autofocus]="true"
+          class="p-button-primary"
+          (click)="outOfDateDialogVisible.set(false)"
         ></button>
       </div>
-    </div>
-  </p-dialog>
+    </ng-container>
+  </app-dialog>
 </div>

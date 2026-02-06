@@ -15,6 +15,7 @@ import {
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
+import { TransactionListRecord } from './transaction-list-record.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
@@ -59,7 +60,7 @@ export abstract class TransactionType {
   hideContactLookup = false; // Set to true to hide the contact lookup for the primary contact
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getUseParentContact = (transaction?: Transaction) => this.useParentContact;
+  getUseParentContact = (transaction?: Transaction | TransactionListRecord) => this.useParentContact;
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
   parentTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the parent, trigger the child to regenerate its description
 

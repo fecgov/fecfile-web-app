@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
@@ -16,6 +16,7 @@ import { TransactionContactLookupComponent } from '../../transaction-contact-loo
 import { InputText } from 'primeng/inputtext';
 import { AddressInputComponent } from '../address-input/address-input.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-loan-agreement-input',
@@ -32,10 +33,11 @@ import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive
     InputText,
     AddressInputComponent,
     AutoResizeDirective,
+    CheckboxModule,
   ],
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
-  @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
+  contactSelect = output<SelectItem<Contact>>();
 
   // Switches to show/hide groups of form input values
   showLoanRestructured = false;

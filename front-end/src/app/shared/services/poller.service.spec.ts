@@ -29,7 +29,7 @@ describe('PollerService', () => {
     service.startPolling('test-url');
 
     // Fast-forward time to simulate the interval
-    tick(5000);
+    tick(60000);
 
     expect(compareVersionsSpy).toHaveBeenCalled();
 

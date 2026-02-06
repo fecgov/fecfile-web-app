@@ -1,13 +1,26 @@
-import { Component, TemplateRef, output, contentChild, viewChild, computed, input, model } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import {
+  Component,
+  TemplateRef,
+  output,
+  contentChild,
+  viewChild,
+  computed,
+  input,
+  model,
+  HostBinding,
+} from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
-import { TableLazyLoadEvent, Table, TableModule, TablePageEvent } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { PrimeTemplate } from 'primeng/api';
+import { PrimeTemplate, SortEvent } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.component';
 import { Toolbar } from 'primeng/toolbar';
 import { TableAction } from '../table-actions-button/table-actions';
+import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 
 export interface ColumnDefinition<T> {
   field: string;
@@ -16,6 +29,10 @@ export interface ColumnDefinition<T> {
   sortable?: boolean;
   bodyTpl?: TemplateRef<TableBodyContext<T>>;
   actions?: TableAction<T>[];
+  checkbox?: boolean;
+  label?: (item: T) => string;
+  pipes?: string[];
+  pipeArgs?: any[];
 }
 
 export interface TableBodyContext<T> {
@@ -38,6 +55,7 @@ export interface TableBodyContext<T> {
     TableSortIconComponent,
     NgClass,
     Toolbar,
+    DynamicPipe,
   ],
 })
 export class TableComponent<T> {
@@ -47,18 +65,17 @@ export class TableComponent<T> {
   readonly globalFilterFields = input(['']);
   readonly totalItems = model.required<number>();
   readonly loading = input.required<boolean>();
-  readonly rowsPerPage = model(5);
+  readonly rowsPerPage = model.required<number>();
   readonly selectedItems = model<T[]>([]);
   readonly currentPageReportTemplate = input('Showing {first} to {last} of {totalRecords} items');
-  readonly sortField = input.required<string>();
-  // This can go away after full transition to ColumnDefinition method
-  readonly sortableHeaders = input<{ field: string; label: string }[]>([]);
+  readonly sortField = model.required<string>();
+  readonly sortOrder = model<string>('asc');
   readonly columns = input<ColumnDefinition<T>[]>([]);
-  readonly hasCheckbox = input(false);
-  readonly checkboxLabel = input<(item: T) => string>();
   readonly emptyMessage = input('No data available in table');
 
-  readonly loadTableItems = output<TableLazyLoadEvent>();
+  @HostBinding('attr.title')
+  readonly hostTitle = null;
+
   readonly pageChange = output<PageTransitionEvent>();
 
   readonly paginationPageSizeOptions = [5, 10, 15, 20];
@@ -78,7 +95,14 @@ export class TableComponent<T> {
 
   readonly first = model.required<number>();
 
+  readonly showPaginationControls = input(true);
+
   changePage(value: PaginatorState) {
-    this.dt().onPageChange(value as TablePageEvent);
+    this.first.set(value.first ?? 0);
+  }
+
+  updateSort(event: SortEvent) {
+    this.sortField.set(event.field || '');
+    this.sortOrder.set(event.order === 1 ? 'asc' : 'desc');
   }
 }

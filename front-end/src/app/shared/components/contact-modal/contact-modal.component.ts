@@ -84,13 +84,6 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
-  readonly sortableHeaders: { field: string; label: string }[] = [
-    { field: 'transaction_type_identifier', label: 'Type' },
-    { field: 'form_type', label: 'Form' },
-    { field: 'report_code_label', label: 'Report' },
-    { field: 'date', label: 'Date' },
-    { field: 'amount', label: 'Amount' },
-  ];
 
   readonly isCandidate = computed(() => this.manager().contactType() === ContactTypes.CANDIDATE);
   readonly isIndividual = computed(() => this.manager().contactType() === ContactTypes.INDIVIDUAL);

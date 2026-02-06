@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchCTransaction } from '../models/schc-transaction.model';
+import { TransactionListService } from './transaction-list.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionSchC2Service extends TransactionService {
-  override tableDataEndpoint = '/transactions';
+export class TransactionSchC2Service extends TransactionListService {
   public transaction?: SchCTransaction;
 
   override getTableData(

@@ -87,11 +87,11 @@ function createContact(contact_type: ContactType): ContactFormData {
     phone: faker.string.numeric(10),
     employer: faker.company.name(),
     occupation: faker.person.jobTitle().slice(0, 37),
-    candidate_id: candidateId,
-    candidate_office: office,
-    candidate_state: faker.location.state(),
-    candidate_district: '01', //because the options are based on state, just pick 01
-    committee_id: `C00${faker.string.numeric(6)}`,
+    candidate_id: contact_type === ContactType.CANDIDATE ? candidateId : '',
+    candidate_office: contact_type === ContactType.CANDIDATE ? office : '',
+    candidate_state: contact_type === ContactType.CANDIDATE ? faker.location.state() : '',
+    candidate_district: contact_type === ContactType.CANDIDATE ? '01' : '', //because the options are based on state, just pick 01
+    committee_id: contact_type === ContactType.COMMITTEE ? `C00${faker.string.numeric(6)}` : '',
     name: faker.company.name(),
   };
 }

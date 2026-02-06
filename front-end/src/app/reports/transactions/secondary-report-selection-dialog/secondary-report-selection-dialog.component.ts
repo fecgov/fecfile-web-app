@@ -2,12 +2,10 @@ import { Component, computed, inject, input, model, output, Signal, viewChild } 
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/reports/report.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { Form24, Form3X } from 'app/shared/models';
-import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -16,6 +14,8 @@ import { Ripple } from 'primeng/ripple';
 import { Select, SelectModule } from 'primeng/select';
 import { Toast } from 'primeng/toast';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',
@@ -28,14 +28,14 @@ export class SecondaryReportSelectionDialogComponent {
   private readonly f24Service = inject(Form24Service);
   private readonly f3xService = inject(Form3XService);
   readonly reportService = computed(() => (this.isForm24() ? this.f24Service : this.f3xService));
-  private readonly transactionService = inject(TransactionService);
+  private readonly transactionService = inject(TransactionListService);
   private readonly messageService = inject(MessageService);
 
   readonly reportTypeLabels = reportLabelList;
 
   readonly select = viewChild.required(Select);
 
-  readonly transaction = input<Transaction>();
+  readonly transaction = input<TransactionListRecord>();
   readonly dialogVisible = model.required<boolean>();
 
   readonly selectedReport = model<Form3X | Form24 | undefined>();
@@ -64,7 +64,7 @@ export class SecondaryReportSelectionDialogComponent {
   readonly isForm24 = computed(() => this.reportType() === ReportTypes.F24);
 
   readonly reportLabels: Signal<LabelList> = computed(() =>
-    this.reports().map((report) => [report.id as string, report.formSubLabel]),
+    this.reports().map((report) => [report.id as string, report.report_code_label ?? '']),
   );
   readonly placeholder = computed(() => {
     if (!this.reportType()) return 'Loading report type';

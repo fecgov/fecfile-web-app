@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -9,17 +9,17 @@ import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.ac
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { UsersService } from 'app/shared/services/users.service';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-create-committee',
   templateUrl: './create-committee.component.html',
   styleUrls: ['./create-committee.component.scss'],
-  imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, Dialog, CheckboxModule, ButtonModule],
+  imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, CheckboxModule, ButtonModule, DialogComponent],
 })
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);
@@ -30,7 +30,7 @@ export class CreateCommitteeComponent {
   private readonly userService = inject(UsersService);
   suggestions?: FecFiling[];
   selectedCommittee?: CommitteeAccount;
-  explanationVisible = false;
+  readonly explanationVisible = signal(false);
   unableToCreateAccount = false;
 
   searchBoxFormControl = new SubscriptionFormControl('');
@@ -74,9 +74,5 @@ export class CreateCommitteeComponent {
     } catch {
       this.handleFailedSearch();
     }
-  }
-
-  showExplanation() {
-    this.explanationVisible = true;
   }
 }

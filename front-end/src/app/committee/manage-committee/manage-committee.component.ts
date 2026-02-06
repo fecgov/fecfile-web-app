@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, effect, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -26,7 +26,7 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
     TableModule,
   ],
 })
-export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> implements AfterViewInit {
+export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
   private readonly store = inject(Store);
   protected readonly itemService = inject(CommitteeMemberService);
   readonly user = this.store.selectSignal(selectUserLoginData);
@@ -47,7 +47,30 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly statusBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('statusBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<CommitteeMember>>>('actionsBody');
 
-  columns: ColumnDefinition<CommitteeMember>[] = [];
+  readonly columns: Signal<ColumnDefinition<CommitteeMember>[]> = computed(() => {
+    const columns = [
+      { field: 'name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
+      { field: 'email', header: 'Email', sortable: true, cssClass: 'email-column' },
+      { field: 'role', header: 'Role', sortable: true, cssClass: 'role-column', bodyTpl: this.roleBodyTpl() },
+      {
+        field: 'is_active',
+        header: 'Status',
+        sortable: true,
+        cssClass: 'status-column',
+        bodyTpl: this.statusBodyTpl(),
+      },
+    ];
+    if (this.isCommitteeAdministrator()) {
+      columns.push({
+        field: 'actions',
+        header: 'Actions',
+        sortable: false,
+        cssClass: 'actions-column',
+        bodyTpl: this.actionsBodyTpl(),
+      });
+    }
+    return columns;
+  });
 
   constructor() {
     super();
@@ -61,31 +84,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   override readonly params: Signal<QueryParams> = computed(() => {
     return { page_size: this.rowsPerPage(), you_first: true };
   });
-
-  override ngAfterViewInit(): void {
-    super.ngAfterViewInit();
-    this.columns = [
-      { field: 'name', header: 'Name', sortable: true, cssClass: 'name-column', bodyTpl: this.nameBodyTpl() },
-      { field: 'email', header: 'Email', sortable: true, cssClass: 'email-column' },
-      { field: 'role', header: 'Role', sortable: true, cssClass: 'role-column', bodyTpl: this.roleBodyTpl() },
-      {
-        field: 'is_active',
-        header: 'Status',
-        sortable: true,
-        cssClass: 'status-column',
-        bodyTpl: this.statusBodyTpl(),
-      },
-    ];
-    if (this.isCommitteeAdministrator()) {
-      this.columns.push({
-        field: 'actions',
-        header: 'Actions',
-        sortable: false,
-        cssClass: 'actions-column',
-        bodyTpl: this.actionsBodyTpl(),
-      });
-    }
-  }
 
   public userAdded(email: string) {
     if (email) {

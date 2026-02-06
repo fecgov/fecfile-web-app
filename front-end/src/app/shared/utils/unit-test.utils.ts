@@ -1,3 +1,5 @@
+import { DefaultProjectorFn, MemoizedSelector } from '@ngrx/store';
+import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
@@ -6,13 +8,15 @@ import { initialState as initNavigationEvent } from 'app/store/navigation-event.
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { Form24, Form3, Report } from '../models';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
-import { Form3X } from '../models/reports/form-3x.model';
 import { MemoText } from '../models/memo-text.model';
+import { Form3X } from '../models/reports/form-3x.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { ScheduleETransactionTypes, SchETransaction } from '../models/sche-transaction.model';
+import { TransactionListRecord } from '../models/transaction-list-record.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -23,9 +27,6 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
-import { Form24, Form3, Report } from '../models';
-import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
-import { DefaultProjectorFn, MemoizedSelector } from '@ngrx/store';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -368,6 +369,25 @@ export function testIndependentExpenditure() {
   return SchETransaction.fromJSON({
     transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
   });
+}
+
+export function createTestTransactionListRecord() {
+  const testTransactionListRecord = new TransactionListRecord();
+  testTransactionListRecord.id = '123';
+  testTransactionListRecord.transaction_type_identifier = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
+  testTransactionListRecord.form_type = 'SA15';
+  testTransactionListRecord.transaction_id = 'AAAAAAAAAAAAAAAAAAA';
+  testTransactionListRecord.line_label = 'test_line_label';
+  testTransactionListRecord.itemized = true;
+  testTransactionListRecord.force_unaggregated = false;
+  testTransactionListRecord.name = 'test_name';
+  testTransactionListRecord.date = new Date('2022-08-11');
+  testTransactionListRecord.memo_code = false;
+  testTransactionListRecord.amount = 100;
+  testTransactionListRecord.balance = 100;
+  testTransactionListRecord.aggregate = 100;
+  testTransactionListRecord.report_code_label = 'test_report_code_label';
+  return testTransactionListRecord;
 }
 
 export function getTestTransactionByType(

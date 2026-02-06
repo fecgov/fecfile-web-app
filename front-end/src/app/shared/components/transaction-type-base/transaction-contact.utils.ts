@@ -169,6 +169,32 @@ export class TransactionContactUtils {
     contactId$.next(contact.id ?? '');
   }
 
+  static clearFormPrimaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!templateMap) return;
+    form.get(templateMap.street_1)?.setValue(null);
+    form.get(templateMap.street_2)?.setValue(null);
+    form.get(templateMap.city)?.setValue(null);
+    form.get(templateMap.state)?.setValue(null);
+    form.get(templateMap.zip)?.setValue(null);
+    form.get(templateMap.committee_fec_id)?.setValue(null);
+    form.get(templateMap.organization_name)?.setValue(null);
+    form.get(templateMap.committee_name)?.setValue(null);
+    form.get(templateMap.last_name)?.setValue(null);
+    form.get(templateMap.first_name)?.setValue(null);
+    form.get(templateMap.middle_name)?.setValue(null);
+    form.get(templateMap.prefix)?.setValue(null);
+    form.get(templateMap.suffix)?.setValue(null);
+    form.get(templateMap.employer)?.setValue(null);
+    form.get(templateMap.occupation)?.setValue(null);
+    if (transaction) {
+      // force serializer to send nulls
+      transaction.contact_1 = null as unknown as undefined;
+      transaction.contact_1_id = null as unknown as undefined;
+    }
+    contactId$.next('');
+  }
+
   /**
    * Update the transaction form values for the second CANDIDATE contact form fields (i.e. 'contact_2')
    * when a user has selected a contact from a contact lookup on the form.

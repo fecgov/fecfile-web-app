@@ -34,7 +34,7 @@ class TestTableListService implements TableListService<string> {
   imports: [TableComponent],
   template: `<app-table
     [(first)]="first"
-    [items]="items"
+    [items]="items()"
     title="Title"
     [(totalItems)]="totalItems"
     [loading]="loading"
@@ -42,7 +42,6 @@ class TestTableListService implements TableListService<string> {
     [(selectedItems)]="selectedItems"
     itemName="strings"
     sortField="sort_name"
-    (loadTableItems)="loadTableItems($event)"
   />`,
 })
 class TestTableListBaseComponent extends TableListBaseComponent<string> {
@@ -76,35 +75,35 @@ describe('TableListBaseComponent', () => {
   });
 
   it('#loadTableItems should load items', async () => {
-    await component.loadTableItems({});
-    expect(component.items[0]).toBe('abc');
+    await component.loadTableItems();
+    expect(component.items()[0]).toBe('abc');
     expect(component.totalItems()).toBe(2);
     expect(component.loading).toBe(false);
   });
 
   it('#loadTableItems should load default pagerState if no event passed', async () => {
-    component.pagerState = {
-      first: 5,
-      rows: 20,
-    };
-    await component.loadTableItems({});
+    component.first.set(5);
+    component.rowsPerPage.set(20);
+    await component.loadTableItems();
     expect(component.loading).toBe(false);
   });
 
   it('#deleteItem should delete an item', async () => {
-    await component.loadTableItems({});
+    await component.loadTableItems();
     await component.deleteItem('abc');
-    expect(component.items.length).toBe(2);
+    expect(component.items().length).toBe(2);
   });
 
   it('#deleteItems should delete items', async () => {
     spyOn(component, 'refreshTable').and.returnValue(Promise.resolve());
-    await component.loadTableItems({ first: 0, rows: 2 });
-    expect(component.items.length).toBe(2);
+    component.first.set(0);
+    component.rowsPerPage.set(2);
+    await component.loadTableItems();
+    expect(component.items().length).toBe(2);
     component.selectedItems.set(['abc']);
     await component.deleteSelectedItemsAccept();
     testTableListService.tableResults = ['def'];
     component.deleteSelectedItemsAccept();
-    expect(component.items.length).toBe(1);
+    expect(component.items().length).toBe(1);
   });
 });

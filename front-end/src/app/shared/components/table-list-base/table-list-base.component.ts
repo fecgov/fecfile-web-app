@@ -10,9 +10,8 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, SortEvent } from 'primeng/api';
 import { TableListService } from '../../interfaces/table-list-service.interface';
-import { TableLazyLoadEvent } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableComponent } from '../table/table.component';
 import { TableAction } from '../table-actions-button/table-actions';
@@ -27,10 +26,10 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   protected abstract readonly itemService: TableListService<T>;
 
   item!: T;
-  items: T[] = [];
+  readonly items = signal<T[]>([]);
   readonly rowsPerPage = signal(10);
   readonly totalItems = signal(0);
-  pagerState: TableLazyLoadEvent | undefined;
+  sort: SortEvent = {};
   loading = true;
   readonly selectedItems = signal<T[]>([]);
   readonly detailVisible = signal(false);
@@ -48,13 +47,17 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
   constructor() {
     effect(() => {
-      const dt = this.table().dt();
-      this.loadTableItems({
-        first: dt.first ?? 0,
-        rows: dt.rows,
-        sortField: dt.sortField,
-        sortOrder: dt.sortOrder,
-      });
+      this.rowsPerPage();
+      this.first.set(0);
+    });
+
+    effect(() => {
+      const table = this.table();
+      table.sortField();
+      table.sortOrder();
+      this.first();
+      this.rowsPerPage();
+      this.loadTableItems();
     });
   }
 
@@ -83,32 +86,20 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
    * Method is called when the table data needs to be refreshed.
    * @param {TableLazyLoadEvent} event
    */
-  public async loadTableItems(event: TableLazyLoadEvent): Promise<void> {
+  public async loadTableItems(): Promise<void> {
     this.loading = true;
+    const table = this.table();
+    const sortField = table.sortField();
+    const sortOrder = table.sortOrder() === 'asc' ? 1 : -1;
+    const first = this.first();
+    const rows = this.rowsPerPage();
 
-    // event is undefined when triggered from the detail page because
-    // the detail doesn't know what page we are on. We check the local
-    // pagerState variable to retrieve the page state.
-    if (!!event && 'first' in event) {
-      this.pagerState = event;
-    } else {
-      event = this.pagerState ?? {
-        first: 0,
-        rows: this.rowsPerPage(),
-      };
-    }
-    if (!this.pagerState!.sortField) this.pagerState!.sortField = this.table().sortField();
-    if (!this.pagerState!.sortOrder) this.pagerState!.sortOrder = 1;
-
-    // Calculate the record page number to retrieve from the API.
-    const first: number = event.first ?? 0;
-    const rows: number = event.rows ?? 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
     const params = this.params();
 
     // Determine query sort ordering
-    let ordering: string | string[] = event.sortField ?? '';
-    if (ordering && event.sortOrder === -1) {
+    let ordering: string | string[] = sortField ?? '';
+    if (ordering && sortOrder === -1) {
       ordering = `-${ordering}`;
     } else {
       ordering = `${ordering}`;
@@ -116,9 +107,9 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
     const response = await this.itemService.getTableData(pageNumber, ordering, params);
     try {
-      this.items = [...response.results];
+      this.items.set([...response.results]);
     } catch (err) {
-      this.items = [];
+      this.items.set([]);
       console.log(err);
     }
 
@@ -168,7 +159,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
       obs.push(this.itemService.delete(item));
     });
     await Promise.all(obs);
-    this.items = this.items.filter((item: T) => !this.selectedItems().includes(item));
+    this.items.update((items) => items.filter((item: T) => !this.selectedItems().includes(item)));
     this.selectedItems.set([]);
     this.refreshTable();
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
@@ -178,8 +169,8 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     this.reloadTables.emit();
   }
 
-  public refreshTable() {
-    return this.loadTableItems({} as TableLazyLoadEvent);
+  refreshTable() {
+    return this.loadTableItems();
   }
 
   public onRowActionClick(action: TableAction<T>, item: T) {

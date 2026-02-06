@@ -84,7 +84,7 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   //   'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
   override accordionTitle = 'STEP TWO';
   override accordionSubText =
-    'Enter contact, loan, terms, collateral, and future income information for the loan agreeement';
+    'Enter contact, loan, terms, collateral, and future income information for the loan agreement';
   override formTitle = 'Receipt';
   override footer =
     'The information in this loan  will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and "Save transactions."';

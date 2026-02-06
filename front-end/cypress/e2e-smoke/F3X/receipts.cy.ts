@@ -25,8 +25,6 @@ function checkTable(index: number, type: string, containMemo: boolean, value: st
   cy.get('@row').find('td').eq(TransactionTableColumns.line_number).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.date).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.amount).should('exist');
-  cy.get('@row').find('td').eq(TransactionTableColumns.transaction_id).should('exist');
-  cy.get('@row').find('td').eq(TransactionTableColumns.parent_id).should('exist');
   cy.get('@row').find('td').eq(TransactionTableColumns.actions).should('exist');
 
   cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);

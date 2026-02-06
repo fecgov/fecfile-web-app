@@ -78,48 +78,52 @@ jobs:
             export PATH=$HOME/bin:$PATH
             invoke deploy --branch $CIRCLE_BRANCH --login
 
-#   dependency-check:
-#     docker:
-#       - image: cimg/python:3.13-node
+  #   dependency-check:
+  #     docker:
+  #       - image: cimg/python:3.13-node
 
-#     steps:
-#       - checkout
+  #     steps:
+  #       - checkout
 
-#       # If we need to modify the params for install-packages:
-#       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-#       - node/install-packages:
-#           override-ci-command: npm install
-#           app-dir: ~/project/front-end/
-#       - run:
-#           name: List installed node dependencies
-#           command: npm ls --all
-#           working_directory: ~/project/front-end/
-#       - python/install-packages:
-#           pkg-manager: pip
-#           pip-dependency-file: requirements.txt
-#       - run:
-#           name: Check for unused dependencies
-#           command: npx knip
-#           working_directory: ~/project/front-end/
+  #       # If we need to modify the params for install-packages:
+  #       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
+  #       - node/install-packages:
+  #           override-ci-command: npm install
+  #           app-dir: ~/project/front-end/
+  #       - run:
+  #           name: List installed node dependencies
+  #           command: npm ls --all
+  #           working_directory: ~/project/front-end/
+  #       - python/install-packages:
+  #           pkg-manager: pip
+  #           pip-dependency-file: requirements.txt
+  #       - run:
+  #           name: Check for unused dependencies
+  #           command: npx knip
+  #           working_directory: ~/project/front-end/
 
-# # Invoke jobs via workflows
-# # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-# parameters:
-#   is-triggered-e2e-smoke-test:
-#     type: boolean
-#     default: false
+  # # Invoke jobs via workflows
+  # # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  # parameters:
+  #   is-triggered-e2e-smoke-test:
+  #     type: boolean
+  #     default: false
 
-#   is-triggered-e2e-extended-test:
-#     type: boolean
-#     default: false
+  #   is-triggered-e2e-extended-test:
+  #     type: boolean
+  #     default: false
 
-#   is-triggered-unit-test:
-#     type: boolean
-#     default: false
+  #   is-triggered-unit-test:
+  #     type: boolean
+  #     default: false
 
-#   is-triggered-full-nightly:
-#     type: boolean
-#     default: false
+  #   is-triggered-full-nightly:
+  #     type: boolean
+  #     default: false
+
+  e2e-video:
+    type: boolean
+    default: false
 
 workflows:
   primary:
@@ -137,7 +141,7 @@ workflows:
       #     filters:
       #       branches:
       #         only: /develop|release\/sprint-[\.\d]+|release\/test|main/
-      - deploy-job:  # Deploy job even when e2e tests fail
+      - deploy-job: # Deploy job even when e2e tests fail
           name: deploy-job
           # requires:
           #   - lint

@@ -9,6 +9,7 @@ import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
 import { cloneDeep } from 'lodash';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -20,9 +21,12 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static readonly selectReportDialogSubject = new Subject<[Transaction, ReattRedesTypes]>();
+  public static readonly selectReportDialogSubject = new Subject<[TransactionListRecord, ReattRedesTypes]>();
 
-  public static isReattRedes(transaction: Transaction | undefined, types: ReattRedesTypes[] = []): boolean {
+  public static isReattRedes(
+    transaction: Transaction | TransactionListRecord | undefined,
+    types: ReattRedesTypes[] = [],
+  ): boolean {
     if (!transaction || !('reattribution_redesignation_tag' in transaction)) return false;
     if (types.length === 0) return !!transaction.reattribution_redesignation_tag;
     return types.includes(transaction.reattribution_redesignation_tag as ReattRedesTypes);
@@ -36,7 +40,7 @@ export class ReattRedesUtils {
     );
   }
 
-  public static isAtAmountLimit(transaction: Transaction | undefined): boolean {
+  public static isAtAmountLimit(transaction: Transaction | TransactionListRecord | undefined): boolean {
     const txn = transaction as SchATransaction | SchBTransaction;
     if (
       ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED, ReattRedesTypes.REDESIGNATED]) &&

@@ -21,7 +21,7 @@
         <select id="report-selector" class="form-select" aria-label="Report selector" [(ngModel)]="selectedReport">
           <option selected></option>
           @for (report of availableReports; track report) {
-            <option [ngValue]="report">{{ report.formLabel }}: {{ report.formSubLabel }}</option>
+            <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
           }
         </select>
       </div>

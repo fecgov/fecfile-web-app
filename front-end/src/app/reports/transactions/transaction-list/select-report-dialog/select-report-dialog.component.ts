@@ -2,11 +2,11 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { Report } from '../../../../shared/models/reports/report.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
-import { Transaction } from '../../../../shared/models/transaction.model';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 @Component({
   selector: 'app-select-report-dialog',
@@ -20,18 +20,21 @@ export class SelectReportDialogComponent implements OnInit {
   availableReports: Report[] = [];
   selectedReport?: Report;
 
-  transaction?: Transaction;
+  transaction?: TransactionListRecord;
   type?: ReattRedesTypes;
   @ViewChild('selectReportDialog') selectReportDialog?: ElementRef<HTMLDialogElement>;
 
   ngOnInit() {
-    ReattRedesUtils.selectReportDialogSubject.subscribe((data) => {
+    ReattRedesUtils.selectReportDialogSubject.subscribe(async (data) => {
       this.transaction = data[0];
       this.type = data[1];
       this.selectReportDialog?.nativeElement.show();
 
-      const coverage_through_date = this.transaction?.getForm3X()?.coverage_through_date;
-      if (!coverage_through_date) return;
+      const coverage_through_date = (await this.service.get(this.transaction.id!))?.coverage_through_date;
+      if (!coverage_through_date) {
+        console.error('No coverage through date found for transaction');
+        return;
+      }
       this.service
         .getFutureReports(coverage_through_date.toString())
         .then((reports) => (this.availableReports = reports));

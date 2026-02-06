@@ -1,7 +1,6 @@
 import { Component, computed, effect, inject, model, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
-import { Ripple } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DialogModule } from 'primeng/dialog';
@@ -16,7 +15,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
-  imports: [Ripple, ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
+  imports: [ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
 })
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);

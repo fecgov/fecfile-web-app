@@ -338,9 +338,9 @@
         </div>
       }
     }
+    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
   </form>
 </div>
 
-<app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
 <p-confirmDialog key="dialog" class="confirm-dialog" />
 <app-contact-modal />

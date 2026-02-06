@@ -13,7 +13,7 @@ describe('Reattribution To', () => {
         origTransaction,
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
-      expect(toTransaction.transactionType.accordionTitle).toBe('ENTER DATA');
+      expect(toTransaction.transactionType.accordionTitle).toBe('STEP ONE');
       expect(toTransaction.fields_to_validate?.includes('memo_code')).toBeFalse();
       expect(toTransaction.reatt_redes_id).toBe(origTransaction.id);
     });

@@ -15,6 +15,7 @@ import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionResolver } from './transaction.resolver';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TransactionListService } from '../services/transaction-list.service';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -26,15 +27,8 @@ describe('TransactionResolver', () => {
       provideHttpClientTesting(),
       provideMockStore(testMockStore()),
       {
-        provide: TransactionService,
+        provide: TransactionListService,
         useValue: {
-          get: async (transactionId: string) =>
-            SchATransaction.fromJSON({
-              id: transactionId,
-              transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-              contact_id: '123',
-              contact_1: Contact.fromJSON({ id: 123 }),
-            }),
           getTableData: async () => {
             return {
               count: 5,
@@ -44,6 +38,18 @@ describe('TransactionResolver', () => {
               results: [],
             };
           },
+        },
+      },
+      {
+        provide: TransactionService,
+        useValue: {
+          get: async (transactionId: string) =>
+            SchATransaction.fromJSON({
+              id: transactionId,
+              transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+              contact_id: '123',
+              contact_1: Contact.fromJSON({ id: 123 }),
+            }),
         },
       },
     ],
@@ -118,7 +124,7 @@ describe('TransactionResolver', () => {
           transactionType: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
         }),
       };
-      spyOn(resolver.transactionService, 'get').and.returnValue(
+      spyOn(resolver.service, 'get').and.returnValue(
         Promise.resolve(
           SchATransaction.fromJSON({
             id: 1,
@@ -142,7 +148,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should add debt to repayment', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchDTransaction.fromJSON({
             id: id,
@@ -172,7 +178,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should add loan to repayment', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchDTransaction.fromJSON({
             id: id,
@@ -202,7 +208,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should add redesignation', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchBTransaction.fromJSON({
             id: id,
@@ -238,7 +244,7 @@ describe('TransactionResolver', () => {
   describe('resolveExistingTransactionFromId', () => {
     it('should return parent transaction if dependent child is requested', async () => {
       let firstCall = true;
-      spyOn(resolver.transactionService, 'get').and.callFake(() => {
+      spyOn(resolver.service, 'get').and.callFake(() => {
         if (firstCall) {
           firstCall = false; // Mark first call as completed
           return Promise.resolve(
@@ -275,7 +281,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should have parent transaction', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -305,7 +311,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should have grandparent transaction ', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -344,7 +350,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should have debt transaction', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -371,7 +377,7 @@ describe('TransactionResolver', () => {
     });
 
     it('should have loan transaction', async () => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -420,7 +426,7 @@ describe('TransactionResolver', () => {
       }),
     };
     beforeEach(() => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -469,7 +475,7 @@ describe('TransactionResolver', () => {
 
   describe('resolveExistingReattribution', async () => {
     beforeEach(() => {
-      spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,

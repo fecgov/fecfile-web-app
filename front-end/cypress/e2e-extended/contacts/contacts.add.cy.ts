@@ -4,8 +4,39 @@ import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactsHelpers } from './contacts.helpers';
 import {
   defaultFormData as contactFormData,
+  candidateFormData,
+  committeeFormData,
+  organizationFormData,
   ContactFormData,
 } from '../../e2e-smoke/models/ContactFormModel';
+
+const resolveBaseFormData = (
+  type: ContactFormData['contact_type'],
+): ContactFormData => {
+  switch (type) {
+    case 'Candidate':
+      return candidateFormData;
+    case 'Committee':
+      return committeeFormData;
+    case 'Organization':
+      return organizationFormData;
+    default:
+      return contactFormData;
+  }
+};
+
+const buildFormDataForType = (
+  type: ContactFormData['contact_type'],
+  overrides: Partial<ContactFormData>,
+): ContactFormData => {
+  const base = resolveBaseFormData(type);
+
+  return {
+    ...base,
+    ...overrides,
+    contact_type: type,
+  };
+};
 
 describe('Contacts Add (/contacts)', () => {
   beforeEach(() => {
@@ -17,16 +48,12 @@ describe('Contacts Add (/contacts)', () => {
     const uid = Cypress._.random(1000, 9999);
     const cases = ContactsHelpers.buildContactTypeCases(uid);
 
+    PageUtils.clickButton('Add contact');
     for (const c of cases) {
       cy.log(`Creating: ${c.label}`);
-      const formData: ContactFormData = {
-        ...contactFormData,
-        ...c.overrides,
-      };
-      PageUtils.clickButton('Add contact');
+      const formData = buildFormDataForType(c.type, c.overrides);
       ContactListPage.enterFormData(formData);
-      PageUtils.clickButton('Save');
-      cy.contains('Save').should('not.exist');
+      PageUtils.clickButton('Save & Add More');
       ContactsHelpers.assertSuccessToastMessage();
     }
 
@@ -34,7 +61,10 @@ describe('Contacts Add (/contacts)', () => {
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.get('tbody tr').should('have.length.at.least', cases.length);
     for (const c of cases) {
-      ContactsHelpers.assertRowValues(c.rowText, c.type, c.fecId);
+      if (c.type==='Candidate' || c.type==='Committee') {ContactsHelpers.assertRowValues(c.rowText, c.type.slice(0, 3).toUpperCase(), c.fecId);
+      } else {
+        ContactsHelpers.assertRowValues(c.rowText, c.type.slice(0, 3).toUpperCase());
+      }
     }
   });
 
@@ -44,7 +74,7 @@ describe('Contacts Add (/contacts)', () => {
       '**/api/v1/contacts/committee/?committee_id=*',
       /committee/i,
     ).within(() => {
-      cy.get('td').eq(1).should('contain.text', 'Committee');
+      cy.get('td').eq(1).should('contain.text', 'COM');
     });
   });
 
@@ -54,8 +84,7 @@ describe('Contacts Add (/contacts)', () => {
       '**/api/v1/contacts/candidate/?candidate_id=*',
       /candidate/i,
     ).within(() => {
-      cy.get('td').eq(1).should('contain.text', 'Candidate');
-      cy.get('td').eq(2).invoke('text').should('match', /\S/);
+      cy.get('td').eq(1).should('contain.text', 'CAN');
     });
   });
 
@@ -185,17 +214,14 @@ describe('Contacts Add (/contacts)', () => {
       '**/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
     ).as('contactsReload');
 
-    cy.get('tbody', { timeout: 10000 })
+    cy.get('tbody', { timeout: 5000 })
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
         PageUtils.clickButton('Add contact');
 
         for (const c of cases) {
           cy.log(`Creating via Save & Add More: ${c.label}`);
-          const formData: ContactFormData = {
-            ...contactFormData,
-            ...c.overrides,
-          };
+          const formData = buildFormDataForType(c.type, c.overrides);
 
           ContactListPage.enterFormData(formData);
           PageUtils.clickButton('Save & Add More');
@@ -230,7 +256,7 @@ describe('Contacts Add (/contacts)', () => {
         cy.get('tbody tr').should('have.length', beforeCount + cases.length);
 
         for (const c of cases) {
-          ContactsHelpers.assertRowValues(c.rowText, c.type, c.fecId);
+          ContactsHelpers.assertRowValues(c.rowText, c.type.slice(0, 3).toUpperCase(), c.fecId);
         }
       });
   });

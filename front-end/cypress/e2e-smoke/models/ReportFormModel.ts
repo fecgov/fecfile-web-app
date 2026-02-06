@@ -20,7 +20,7 @@ export class F3xCreateReportFormData {
   }
 }
 
-export class F24CreateReportFormData {
+class F24CreateReportFormData {
   report_type_24_48: '24' | '48';
 
   constructor(formData: F24CreateReportFormData) {

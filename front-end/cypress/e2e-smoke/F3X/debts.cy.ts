@@ -10,6 +10,8 @@ import { ContactLookup } from '../pages/contactLookup';
 import { buildDebtOwedByCommittee } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
+import { defaultForm3XData } from '../models/ReportFormModel';
+import { defaultScheduleFormData } from '../models/TransactionFormModel'
 
 function setupCoordinatedPartyExpenditure(
   organization: ContactFormData,
@@ -101,6 +103,133 @@ describe('Debts', () => {
       PageUtils.clickButton('Save');
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
+    });
+  });
+
+  it('should test debt carry-forward behavior', () => {
+    cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
+      StartTransaction.Debts().ToCommittee();
+
+      PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
+      PageUtils.containedOnPage('Debt Owed To Committee');
+
+      ContactLookup.getCommittee(result.committee);
+      TransactionDetailPage.enterLoanFormData({
+        ...debtFormData,
+        amount: 10000
+      });
+      PageUtils.clickButton('Save');
+      PageUtils.urlCheck('/list');
+      cy.contains('Debt Owed To Committee').should('exist');
+      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
+        .contains("$10,000.00").should('exist')
+
+      PageUtils.clickKababItem(
+        'Debt Owed To Committee',
+        "Report debt repayment"
+      );
+
+      PageUtils.clickAccordion("CONTRIBUTIONS FROM INDIVIDUALS/PERSONS")
+      PageUtils.clickLink("Individual Receipt");
+      ContactLookup.getContact(result.individual.last_name)
+      TransactionDetailPage.enterScheduleFormData(
+        {
+          ...defaultScheduleFormData,
+          electionType: undefined,
+          electionYear: undefined,
+          amount: 1000,
+        },
+        false,
+        '',
+        true,
+        'contribution_date'
+      )
+      PageUtils.clickButton("Save");
+      PageUtils.urlCheck('/list');
+      cy.contains('Individual Receipt').should('exist');
+      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
+        .contains("$9,000.00").should('exist');
+
+      PageUtils.clickLink("Debt Owed To Committee");
+
+      cy.get('#balance').should('exist').should('have.value', '$0.00');
+      cy.get('#amount').should('have.value', '$10,000.00');
+      cy.get('#payment_amount').should('have.value', '$1,000.00');
+      cy.get('#balance_at_close').should('have.value', '$9,000.00');
+
+      ReportListPage.createF3X({
+        ...defaultForm3XData,
+        filing_frequency: 'Q',
+        report_code: 'Q3',
+        coverage_from_date: new Date(currentYear, 7 - 1, 1),
+        coverage_through_date: new Date(currentYear, 9 - 1, 30),
+      });
+
+      cy.contains("Debt Owed To Committee").should('exist');
+      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
+        .contains("$9,000.00").should('exist');
+
+      PageUtils.clickLink("Debt Owed To Committee");
+
+      cy.get('#amount').should('exist').clear().safeType('2500');
+      PageUtils.clickButton("Save");
+      PageUtils.urlCheck('/list');
+
+      cy.contains("Debt Owed To Committee").should('exist');
+      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
+        .contains("$11,500.00").should('exist');
+
+      PageUtils.clickKababItem(
+        'Debt Owed To Committee',
+        "Report debt repayment"
+      );
+
+      PageUtils.clickAccordion("CONTRIBUTIONS FROM INDIVIDUALS/PERSONS")
+      PageUtils.clickLink("Individual Receipt");
+      ContactLookup.getContact(result.individual.last_name)
+      TransactionDetailPage.enterScheduleFormData(
+        {
+          ...defaultScheduleFormData,
+          electionType: undefined,
+          electionYear: undefined,
+          date_received: new Date(currentYear, 7 - 1, 15),
+          amount: 11500,
+        },
+        false,
+        '',
+        true,
+        'contribution_date'
+      )
+      PageUtils.clickButton("Save");
+      PageUtils.urlCheck('/list');
+      cy.contains("Debt Owed To Committee").should('exist');
+      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
+        .contains("$0.00").should('exist');
+
+      PageUtils.clickLink("Debt Owed To Committee");
+
+      cy.get('#balance').should('exist').should('have.value', '$9,000.00');
+      cy.get('#amount').should('have.value', '$2,500.00');
+      cy.get('#payment_amount').should('have.value', '$11,500.00');
+      cy.get('#balance_at_close').should('have.value', '$0.00');
+
+      cy.intercept(
+        'GET',
+        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=**&schedules=C,D`,
+      ).as('GetLoans');
+
+      ReportListPage.createF3X({
+        ...defaultForm3XData,
+        filing_frequency: 'Q',
+        report_code: 'YE',
+        coverage_from_date: new Date(currentYear, 10 - 1, 1),
+        coverage_through_date: new Date(currentYear, 12 - 1, 31),
+      });
+
+      PageUtils.urlCheck('/list');
+      cy.wait('@GetLoans');
+      cy.contains("Debt Owed To Committee").should('not.exist');
     });
   });
 

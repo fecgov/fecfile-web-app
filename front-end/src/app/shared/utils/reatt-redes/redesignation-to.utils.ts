@@ -27,7 +27,7 @@ export class RedesignationToUtils {
       title: 'Redesignation',
       subTitle:
         'The portion of a contribution that has been designated by the contributor, in writing, to an election other than the one for which the funds were originally given.',
-      accordionTitle: 'ENTER DATA',
+      accordionTitle: 'STEP ONE',
       accordionSubText: 'Redesignate a contribution or a portion of it to a different election.',
       formTitle: 'Redesignation to',
       contactTitle: 'Contact',

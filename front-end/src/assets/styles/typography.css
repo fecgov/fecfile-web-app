@@ -44,7 +44,7 @@ h6 {
 }
 p {
   color: inherit;
-  font-family: var(--gandhi-regular);
+  font-family: var(--gandhi);
   font-size: 16px;
   margin: 0 0 2.4rem 0;
   max-width: 80rem;
@@ -134,6 +134,12 @@ textarea:focus {
   border-color: #112e51;
   color: #112e51;
 }
+input:not([type="checkbox"]):disabled,
+select:disabled,
+textarea:disabled {
+  background: #f1f1f1;
+  color: var(--p-content-color);
+}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -220,5 +226,5 @@ body {
 }
 /* TYPOGRAHY */
 .ghandi {
-  font-family: var(--gandhi-regular)
+  font-family: var(--gandhi)
 }

@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -21,7 +21,47 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   override readonly rowsPerPage = signal(5);
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
-  columns: ColumnDefinition<T>[] = [];
+  readonly includeCoverage: boolean = false;
+  readonly columns: Signal<ColumnDefinition<T>[]> = computed(() => {
+    const columns = [
+      {
+        field: 'report_code_label',
+        header: 'Type',
+        sortable: true,
+        cssClass: this.includeCoverage ? 'coverage-type-column' : 'type-column',
+        bodyTpl: this.sharedTemplate().reportNameBodyTpl(),
+      },
+    ];
+    if (this.includeCoverage) {
+      columns.push({
+        field: 'coverage_through_date',
+        header: 'Coverage',
+        sortable: true,
+        cssClass: 'coverage-column',
+        bodyTpl: this.sharedTemplate().coverageBodyTpl(),
+      });
+    }
+    return [
+      ...columns,
+      { field: 'report_status', header: 'Status', sortable: true, cssClass: 'status-column' },
+      { field: 'version_label', header: 'Version', sortable: true, cssClass: 'version-column' },
+      {
+        field: 'upload_submission__created',
+        header: 'Filed',
+        sortable: true,
+        cssClass: 'filed-column',
+        bodyTpl: this.sharedTemplate().submissionBodyTpl(),
+      },
+      {
+        field: 'actions',
+        header: 'Actions',
+        sortable: false,
+        cssClass: 'actions-column',
+        bodyTpl: this.sharedTemplate().actionsBodyTpl(),
+        actions: this.rowActions,
+      },
+    ];
+  });
 
   readonly rowActions: TableAction<T>[] = [
     new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
@@ -35,35 +75,6 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
     new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
     new TableAction('Download as .fec', this.download.bind(this)),
   ];
-
-  override ngAfterViewInit(): void {
-    this.columns = [
-      {
-        field: 'formSubLabel',
-        header: 'Type',
-        sortable: true,
-        cssClass: 'type-column',
-        bodyTpl: this.sharedTemplate().reportNameBodyTpl(),
-      },
-      { field: 'report_status', header: 'Status', sortable: true, cssClass: 'status-column' },
-      { field: 'version_label', header: 'Version', sortable: true, cssClass: 'version-column' },
-      {
-        field: 'upload_submission__created',
-        header: 'Filed',
-        sortable: true,
-        cssClass: 'submission-column',
-        bodyTpl: this.sharedTemplate().submissionBodyTpl(),
-      },
-      {
-        field: 'actions',
-        header: 'Actions',
-        sortable: false,
-        cssClass: 'actions-column',
-        bodyTpl: this.sharedTemplate().actionsBodyTpl(),
-        actions: this.rowActions,
-      },
-    ];
-  }
 
   public confirmDelete(report: T): void {
     this.confirmationService.confirm({
@@ -107,12 +118,12 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   async amendReport(report: T) {
     await this.itemService.startAmendment(report);
-    this.loadTableItems({});
+    this.loadTableItems();
   }
 
   async unamendReport(report: T) {
     await this.itemService.startUnamendment(report);
-    this.loadTableItems({});
+    this.loadTableItems();
     this.messageService.add({
       severity: 'success',
       summary: 'Successful',

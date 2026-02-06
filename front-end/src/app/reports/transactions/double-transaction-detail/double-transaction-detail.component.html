@@ -23,22 +23,29 @@
 }
 
 <p class="group-description">{{ transactionType?.description }}</p>
-<p-accordion
-  expandIcon="pi pi-angle-right"
-  [(value)]="accordionValue"
-  [transitionOptions]="animationTime + 'ms cubic-bezier(0.86, 0, 0.07, 1)'"
->
-  <p-accordion-panel [value]="0">
+<p-accordion [(value)]="accordionValue" [transitionOptions]="animationTime + 'ms cubic-bezier(0.86, 0, 0.07, 1)'">
+  <p-accordion-panel [value]="0" data-cy="accordion-panel-0">
     <p-accordion-header>
-      <div class="flex align-items-center">
-        <strong>{{ transactionType?.accordionTitle }}:</strong>
-        <p class="accordion-subtext">
-          {{ transactionType?.accordionSubText }}
-        </p>
+      <div class="accordion-header-wrapper">
+        <img class="accordion-number-icon" src="assets/img/ONE-icon.svg" alt="Step one" />
+
+        <div class="accordion-text">
+          <strong>{{ transactionType?.accordionTitle }}</strong>
+          <br />
+          <p class="accordion-subtext">
+            {{ transactionType?.accordionSubText }}
+          </p>
+        </div>
+        <img
+          class="accordion-icon"
+          [src]="accordionValue() === 0 ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
+          alt="toggle icon"
+        />
       </div>
     </p-accordion-header>
+
     <p-accordion-content>
-      <div class="content-accordion-wrapper">
+      <div class="accordion-content-wrapper">
         @if (transactionType?.formTitle) {
           <h2>
             {{ transactionType?.formTitle }}
@@ -54,6 +61,7 @@
             [contactTypeOptions]="contactTypeOptions"
             [memoHasOptional$]="memoHasOptional$"
             (primaryContactSelect)="updateFormWithPrimaryContact($event)"
+            (primaryContactClear)="clearFormPrimaryContact()"
             (candidateContactSelect)="updateFormWithCandidateContact($event)"
             (secondaryContactSelect)="updateFormWithSecondaryContact($event)"
             (tertiaryContactSelect)="updateFormWithTertiaryContact($event)"
@@ -64,17 +72,28 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel [value]="1">
+  <p-accordion-panel [value]="1" data-cy="accordion-panel-1">
     <p-accordion-header>
-      <div class="flex align-items-center">
-        <strong>{{ childTransactionType?.accordionTitle }}:</strong>
-        <p class="accordion-subtext">
-          {{ childTransactionType?.accordionSubText }}
-        </p>
+      <div class="accordion-header-wrapper">
+        <img class="accordion-number-icon" src="assets/img/TWO-icon.svg" alt="Step two" />
+
+        <div class="accordion-text">
+          <strong>{{ childTransactionType?.accordionTitle }}</strong>
+          <br />
+          <p class="accordion-subtext">
+            {{ childTransactionType?.accordionSubText }}
+          </p>
+        </div>
+        <img
+          class="accordion-icon"
+          [src]="accordionValue() === 1 ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
+          alt="toggle icon"
+        />
       </div>
     </p-accordion-header>
+
     <p-accordion-content>
-      <div class="content-accordion-wrapper">
+      <div class="accordion-content-wrapper">
         <h2>{{ childTransaction?.transactionType?.title }}</h2>
         @if (childTransactionType?.description) {
           <p>
@@ -93,6 +112,7 @@
             [memoHasOptional$]="childMemoHasOptional$"
             [contributionAmountReadOnly]="true"
             (primaryContactSelect)="childUpdateFormWithPrimaryContact($event)"
+            (primaryContactClear)="childClearFormPrimaryContact()"
             (candidateContactSelect)="childUpdateFormWithCandidateContact($event)"
             (secondaryContactSelect)="childUpdateFormWithSecondaryContact($event)"
             (tertiaryContactSelect)="childUpdateFormWithTertiaryContact($event)"

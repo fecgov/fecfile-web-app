@@ -20,10 +20,6 @@ export class Form24 extends Report {
     return 'Form 24';
   }
 
-  get formSubLabel() {
-    return this.name ?? '';
-  }
-
   override get canAmend(): boolean {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
