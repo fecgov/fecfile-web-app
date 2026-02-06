@@ -49,7 +49,7 @@ DEPLOY_RULES = (
     ("test", lambda _, branch: branch == "release/test"),
     ("stage", lambda _, branch: branch.startswith("release/sprint")),
     # ("dev", lambda _, branch: branch == "develop"),
-    ("dev", lambda _, branch: branch == "2414-load-test-mirror"),
+    ("dev", lambda _, branch: branch == "test-mirror-feb"),
 )
 
 
