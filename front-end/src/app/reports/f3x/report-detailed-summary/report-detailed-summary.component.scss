@@ -1,3 +1,38 @@
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .summary-container {
+    @include standard-container();
+  }
+
+  h2 {
+    font-family: var(--gandhi-bold);
+    font-weight: bolder;
+    font-size: 24px !important;
+  }
+
+  .line-column {
+    display: none;
+  }
+
+  .period-column {
+    @include fixed-width(130px);
+    text-align: right !important;
+  }
+
+  .ytd-column {
+    @include fixed-width(160px);
+    text-align: right !important;
+  }
+
+  @include breakpoint('md') {
+    .line-column {
+      display: table-cell;
+      @include fixed-width(72px);
+    }
+  }
+}
+
 .parenthesis-text {
   color: grey;
 }

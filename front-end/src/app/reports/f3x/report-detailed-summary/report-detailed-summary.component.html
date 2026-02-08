@@ -1,4 +1,75 @@
-<p-card styleClass="mt-0">
+<ng-template #descriptionTpl let-line>
+  <div
+    [ngClass]="{
+      'indent-1': line.indent === 1,
+      'indent-2': line.indent === 2,
+      bold: line.cssClass?.includes('bold'),
+    }"
+    class="cell-with-overlay"
+  >
+    {{ line.description }}
+    @if (line.overlay) {
+      <app-calculation-overlay>
+        {{ line.overlay }}
+      </app-calculation-overlay>
+    }
+  </div>
+</ng-template>
+
+<div class="summary-container">
+  <h1>Detailed summary page</h1>
+  <hr type="solid" class="mt-2 mb-5" />
+
+  @if (calculationFinished()) {
+    <app-table
+      [(first)]="first"
+      [items]="receiptLines()"
+      title="Receipts"
+      [(totalItems)]="receiptLines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="receiptLines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+  } @else {
+    <div class="fec-loader-div">
+      <img
+        class="max-w-full fec-loader-image"
+        src="assets/img/fec-loading-flag.gif"
+        draggable="false"
+        alt="The report's summary is loading..."
+      />
+    </div>
+  }
+
+  <hr class="mt-0 mb-3" />
+  <div class="flex justify-content-between">
+    <button
+      pButton
+      pRipple
+      class="p-button-secondary icon-gap"
+      (click)="router.navigateByUrl('/reports/f3x/summary/' + report().id)"
+    >
+      <span class="prev-arrow-mask"></span>
+      <span>Review summary page</span>
+    </button>
+    <button
+      pButton
+      pRipple
+      class="p-button-primary icon-gap"
+      (click)="router.navigateByUrl('/reports/f3x/web-print/' + report().id)"
+    >
+      <span>See print preview</span>
+      <span class="next-arrow-mask"></span>
+    </button>
+  </div>
+</div>
+
+<!-- <p-card styleClass="mt-0">
   <div class="summary-header">
     <h1>Detailed summary page</h1>
   </div>
@@ -515,4 +586,4 @@
       </div>
     </div>
   </div>
-</p-card>
+</p-card> -->
