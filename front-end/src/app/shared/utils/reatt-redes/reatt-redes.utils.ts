@@ -21,7 +21,9 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static readonly selectReportDialogSubject = new Subject<[TransactionListRecord, ReattRedesTypes]>();
+  public static readonly selectReportDialogSubject = new Subject<
+    [TransactionListRecord, ReattRedesTypes] | undefined
+  >();
 
   public static isReattRedes(
     transaction: Transaction | TransactionListRecord | undefined,
