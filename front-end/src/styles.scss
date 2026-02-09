@@ -699,3 +699,95 @@ textarea {
   margin-left: auto;
   margin-right: auto;
 }
+
+select,
+::picker(select) {
+  appearance: base-select;
+  top: calc(anchor(bottom) + 1px);
+  max-height: 200px;
+  overflow: auto;
+  border-radius: var(--border-radius);
+}
+
+select {
+  min-width: var(--app-select-min-width, 75px);
+  background: var(--surface-ground);
+  height: var(--app-select-height, 48px);
+  padding: var(--app-select-padding, 8px 10px);
+  line-height: 1.2;
+  transition: 0.4s;
+  border: var(--app-select-border, 2px solid gray);
+  display: flex;
+  align-items: center;
+}
+
+select:not(:disabled) {
+  cursor: pointer;
+  border: var(--app-select-border-disabled, 2px solid var(--fec-grey-alt));
+  background: var(--p-content-background);
+}
+
+select:not(:disabled):hover {
+  border-color: var(--surface-border);
+}
+
+select:not(:disabled):focus,
+select:not(:disabled):focus-within {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: var(--focus-ring);
+  border-color: var(--p-primary-color);
+}
+
+select::picker-icon {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-image: url(./assets/img/i-arrow-down.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+selectedcontent {
+  font-family: var(--karla);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--p-select-selectedcontent-color);
+  padding: var(--p-select-selectedcontent-padding);
+}
+
+selectedcontent .icon {
+  display: none;
+}
+
+option {
+  font-family: var(--karla);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--p-select-option-color);
+  padding: 8px 12px;
+}
+
+option:hover {
+  background: var(--p-select-option-focus-background);
+  color: var(--p-select-option-focus-color);
+}
+
+option:checked {
+  background: var(--p-select-option-selected-focus-background);
+  color: var(--p-select-option-selected-focus-color);
+}
+
+option::checkmark {
+  display: none;
+}
+
+option:first-of-type {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+option:last-of-type {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
