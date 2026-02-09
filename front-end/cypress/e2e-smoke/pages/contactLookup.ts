@@ -1,5 +1,6 @@
 import { ContactFormData } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
+import { ApiUtils } from '../utils/api';
 
 export class ContactLookup {
   static getContact(name: string, alias = '', type: string | undefined = undefined, index=0) {
@@ -24,8 +25,11 @@ export class ContactLookup {
     if (!lastName) return;
     const nameEntry = lastName.slice(0, 3);
     cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+      {
+        method: 'GET',
+        pathname: ApiUtils.apiRoutePathname('/contacts/candidate_lookup/'),
+        query: { q: nameEntry },
+      },
       {
         statusCode: 200,
         body: {
@@ -55,8 +59,11 @@ export class ContactLookup {
     if (!name) return;
     const nameEntry = name.slice(0, 3);
     cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/contacts/committee_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+      {
+        method: 'GET',
+        pathname: ApiUtils.apiRoutePathname('/contacts/committee_lookup/'),
+        query: { q: nameEntry },
+      },
       {
         statusCode: 200,
         body: {

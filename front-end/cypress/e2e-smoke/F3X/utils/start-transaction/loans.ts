@@ -1,15 +1,16 @@
 import { PageUtils } from '../../../pages/pageUtils';
+import { StartTransactionMenu } from './menu';
 
 export class Loans {
   static FromBank() {
-    PageUtils.clickLink('Loan Received from Bank');
+    PageUtils.clickLink(StartTransactionMenu.links.loanReceivedFromBank);
   }
 
   static ByCommittee() {
-    PageUtils.clickLink('Loan By Committee');
+    PageUtils.clickLink(StartTransactionMenu.links.loanByCommittee);
   }
 
   static Individual() {
-    PageUtils.clickLink('Loan Received from Individual');
+    PageUtils.clickLink(StartTransactionMenu.links.loanReceivedFromIndividual);
   }
 }

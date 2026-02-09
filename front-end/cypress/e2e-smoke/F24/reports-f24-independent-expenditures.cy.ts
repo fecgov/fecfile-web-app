@@ -26,7 +26,7 @@ describe('Form 24 Independent Expenditures', () => {
   });
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
-    cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
+    DataSetup({ individual: true, candidate: true, f24: true }).then((result: any) => {
       ReportListPage.goToReportList(result.f24, false, true, false);
       StartTransaction.IndependentExpenditures().IndependentExpenditure();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');

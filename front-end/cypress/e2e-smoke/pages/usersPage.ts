@@ -1,9 +1,14 @@
 import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
+import { ApiUtils } from '../utils/api';
 
 export class UsersPage {
   static goToPage(alias = '') {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/?page=1**').as('GetMembers');
+    cy.intercept({
+      method: 'GET',
+      pathname: ApiUtils.apiRoutePathname('/committee-members/'),
+      query: { page: '1' },
+    }).as('GetMembers');
     cy.visit('/committee/members');
     cy.wait('@GetMembers');
   }

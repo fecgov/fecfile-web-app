@@ -1,36 +1,37 @@
 import { PageUtils } from '../../../pages/pageUtils';
+import { StartTransactionMenu } from './menu';
 
 export class Disbursements {
   static Contributions() {
-    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.contributionsToRegisteredFilers);
     return Contributions;
   }
 
   static Federal() {
-    PageUtils.clickAccordion('FEDERAL ELECTION ACTIVITY EXPENDITURES');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.federalElectionActivityExpenditures);
     return Federal;
   }
 
   static Other() {
-    PageUtils.clickAccordion('OTHER EXPENDITURES');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.otherExpenditures);
     return Other;
   }
 }
 
 export class Contributions {
-  static readonly TO_CANDIDATE = 'Contribution to Candidate';
-  static readonly INDEPENDENT_EXPENDITURE = 'Independent Expenditure';
+  static readonly TO_CANDIDATE = StartTransactionMenu.links.contributionToCandidate;
+  static readonly INDEPENDENT_EXPENDITURE = StartTransactionMenu.links.independentExpenditure;
 
   static ToCandidate() {
     PageUtils.clickLink(Contributions.TO_CANDIDATE);
   }
 
   static CoordinatedPartyExpenditure() {
-    PageUtils.clickLink('Coordinated Party Expenditure');
+    PageUtils.clickLink(StartTransactionMenu.links.coordinatedPartyExpenditure);
   }
 
   static IndependentExpenditureVoid() {
-    PageUtils.clickLink(`${Contributions.INDEPENDENT_EXPENDITURE} - Void`);
+    PageUtils.clickLink(StartTransactionMenu.links.independentExpenditureVoid);
   }
 
   static IndependentExpenditure() {
@@ -40,16 +41,16 @@ export class Contributions {
 
 class Federal {
   static HundredPercentFederalElectionActivityPayment() {
-    PageUtils.clickLink('100% Federal Election Activity Payment');
+    PageUtils.clickLink(StartTransactionMenu.links.hundredPercentFederalElectionActivityPayment);
   }
 
   static CreditCardPayment() {
-    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
+    PageUtils.clickLink(StartTransactionMenu.links.creditCardPaymentForHundredPercentFederalElectionActivity);
   }
 }
 
 class Other {
   static Other() {
-    PageUtils.clickLink('Other Disbursement');
+    PageUtils.clickLink(StartTransactionMenu.links.otherDisbursement);
   }
 }

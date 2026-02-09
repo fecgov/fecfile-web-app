@@ -14,82 +14,38 @@ const scheduleData = {
   date_received: new Date(currentYear, 4 - 1, 27),
 };
 
-let summaryReportId: string | null = null;
-let summaryExpectSpinner = false;
-let summarySeen = 0;
-let summaryShouldDelay = false;
-
 function visitSummaryWithSpinner(reportId: string, expectSpinner: boolean) {
-  // configure which reportId this visit should track and whether a spinner is expected
-  summaryReportId = reportId;
-  summaryExpectSpinner = expectSpinner;
-  summarySeen = 0;
-  summaryShouldDelay = false;
-
-  if (expectSpinner) {
-    // if already on summary, leave first so the resolver GET reliably re-fires
-    cy.location('pathname').then((path) => {
-      if (path.includes('/reports/f3x/summary/')) {
-        PageUtils.clickSidebarItem('Manage your transactions');
-      }
-    });
-  }
+  const getReportAlias = ReviewReport.setupSummarySpinner(reportId, 1200);
 
   ReviewReport.Summary();
+
   if (!expectSpinner) {
-    cy.get('img.fec-loader-image').should('not.exist');
+    ReviewReport.assertSpinnerGone();
     return;
   }
 
-  // 1st GET tells if calc already finished, only then require spinner
-  cy.wait('@getReport').then(({ response }) => {
-    const shouldShow = response?.body?.calculation_status !== 'SUCCEEDED';
-    if (!shouldShow) {
-      cy.get('img.fec-loader-image').should('not.exist');
+  cy.wait(getReportAlias).then(({ response }) => {
+    const shouldShowSpinner = response?.body?.calculation_status !== 'SUCCEEDED';
+    if (!shouldShowSpinner) {
+      ReviewReport.assertSpinnerGone();
       return;
     }
-    // 2nd GET (if any) is delayed to keep the spinner visible long enough to assert
-    cy.get('img.fec-loader-image').should('be.visible');
-    cy.wait('@getReport');
-    cy.get('img.fec-loader-image').should('not.exist');
+
+    ReviewReport.assertSpinnerVisible();
+
+    // Do not require a second alias wait.
+    ReviewReport.assertSpinnerGone(20000);
   });
 }
 
 describe('Receipt Transactions', () => {
   beforeEach(() => {
     Initialize();
-    // reset per-visit tracking so report GET aliasing has per-test determinism
-    summaryReportId = null;
-    summaryExpectSpinner = false;
-    summarySeen = 0;
-    summaryShouldDelay = false;
-
-    // per-test GETs intercept report, aliasing only the current reportId
-    cy.intercept('GET', /\/api\/v1\/reports\/(form-3x\/)?[^/]+\/$/, (req) => {
-      const match = new RegExp(/\/api\/v1\/reports\/(?:form-3x\/)?([^/]+)\//).exec(req.url);
-      const reqReportId = match?.[1] ?? null;
-      if (!summaryReportId || reqReportId !== summaryReportId) {
-        req.continue();
-        return;
-      }
-
-      req.alias = 'getReport';
-      summarySeen += 1;
-      req.continue((res) => {
-        if (summarySeen === 1) {
-          summaryShouldDelay = summaryExpectSpinner && res.body?.calculation_status !== 'SUCCEEDED';
-          return;
-        } // delay only the refresh GET when spinner is expected
-        if (summarySeen === 2 && summaryShouldDelay) {
-          res.setDelay(1200);
-        }
-      });
-    });
   });
 
   it('should calculate summary values on first visit', () => {
     // Create report and check summary calc runs
-    cy.wrap(DataSetup()).then((result: any) => {
+    DataSetup().then((result: any) => {
       const reportId = result.report;
       cy.visit(`/reports/transactions/report/${reportId}/list`);
       visitSummaryWithSpinner(reportId, true);
@@ -102,7 +58,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('should recalculate after transaction created or updated', () => {
-    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+    DataSetup({ individual: true }).then((result: any) => {
       // check summary calc runs
       ReportListPage.goToReportList(result.report);
       visitSummaryWithSpinner(result.report, true);

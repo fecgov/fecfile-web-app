@@ -4,9 +4,10 @@ import {
   Committee_A,
   Individual_A_A,
   Individual_B_B,
-  MockContact,
   Organization_A,
+  withUniqueContactIdentifiers,
 } from '../requests/library/contacts';
+import type { MockContact } from '../requests/library/contacts';
 import { makeContact, makeF24, makeF3x } from '../requests/methods';
 import { F24_24, F3X, F3X_Q2 } from '../requests/library/reports';
 
@@ -20,16 +21,7 @@ export interface Setup {
   report?: F3X;
   reports?: F3X[];
   f24?: boolean;
-}
-
-type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
-function addContact(contact: MockContact, results: Results, property: ConType) {
-  return new Cypress.Promise((resolve) => {
-    makeContact(contact, (response) => {
-      results[property] = response.body;
-      resolve();
-    });
-  });
+  uniqueContactIds?: boolean;
 }
 
 interface Results {
@@ -43,8 +35,12 @@ interface Results {
   f24: string | null;
 }
 
-export async function DataSetup(setup: Setup = {}) {
-  // Initialize results object
+function runIf(condition: boolean | undefined, fn: () => Cypress.Chainable<any>): Cypress.Chainable<any> {
+  if (!condition) return cy.wrap(null, { log: false });
+  return fn();
+}
+
+export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> {
   const results: Results = {
     organization: null,
     individual: null,
@@ -55,69 +51,86 @@ export async function DataSetup(setup: Setup = {}) {
     report: '',
     f24: null,
   };
+  const uniqueSeed = setup.uniqueContactIds
+    ? `${Date.now()}-${Cypress._.random(1, 99999)}`
+    : '';
+  const contactForSetup = (contact: MockContact): MockContact =>
+    setup.uniqueContactIds
+      ? withUniqueContactIdentifiers(contact, uniqueSeed)
+      : contact;
 
-  // Create an array of promises
-  const apiCalls = [];
-
-  // Collect API call Chainables based on setup
-  if (setup.individual) {
-    apiCalls.push(addContact(Individual_A_A, results, 'individual'));
-  }
-
-  if (setup.individual2) {
-    apiCalls.push(addContact(Individual_B_B, results, 'individual2'));
-  }
-
-  if (setup.organization) {
-    apiCalls.push(addContact(Organization_A, results, 'organization'));
-  }
-
-  if (setup.candidate) {
-    apiCalls.push(addContact(Candidate_House_A, results, 'candidate'));
-  }
-
-  if (setup.candidateSenate) {
-    apiCalls.push(addContact(Candidate_Senate_A, results, 'candidateSenate'));
-  }
-
-  if (setup.committee) {
-    apiCalls.push(addContact(Committee_A, results, 'committee'));
-  }
-
-  if (setup.f24) {
-    apiCalls.push(
-      new Cypress.Promise((resolve) => {
-        makeF24(F24_24, (response) => {
-          results.f24 = response.body.id;
-          resolve();
-        });
-      }),
-    );
-  }
-
-  if (setup.reports) {
-    setup.reports.forEach((report, index) => {
-      apiCalls.push(
-        new Cypress.Promise((resolve) => {
+  const createReports = () => {
+    if (setup.reports?.length) {
+      let chain: Cypress.Chainable<any> = cy.wrap(null, { log: false });
+      setup.reports.forEach((report, index) => {
+        chain = chain.then(() =>
           makeF3x(report, (response) => {
             if (index === 0) results.report = response.body.id;
-            resolve();
-          });
-        }),
-      );
-    });
-  } else {
-    apiCalls.push(
-      new Cypress.Promise((resolve) => {
-        makeF3x(setup.report ?? F3X_Q2, (response) => {
-          results.report = response.body.id;
-          resolve();
-        });
-      }),
-    );
-  }
+          }),
+        );
+      });
+      return chain;
+    }
 
-  // Combine all the Chainables and return them
-  await Cypress.Promise.all(apiCalls);
-  return results;
+    return makeF3x(setup.report ?? F3X_Q2, (response) => {
+      results.report = response.body.id;
+    });
+  };
+
+  return cy
+    .wrap(null, { log: false })
+    .then(() =>
+      runIf(setup.individual, () =>
+        makeContact(contactForSetup(Individual_A_A), (response) => {
+          results.individual = response.body;
+        }),
+      ),
+    )
+    .then(() =>
+      runIf(setup.individual2, () =>
+        makeContact(contactForSetup(Individual_B_B), (response) => {
+          results.individual2 = response.body;
+        }),
+      ),
+    )
+    .then(() =>
+      runIf(setup.organization, () =>
+        makeContact(contactForSetup(Organization_A), (response) => {
+          results.organization = response.body;
+        }),
+      ),
+    )
+    .then(() =>
+      runIf(setup.candidate, () =>
+        makeContact(contactForSetup(Candidate_House_A), (response) => {
+          results.candidate = response.body;
+        }),
+      ),
+    )
+    .then(() =>
+      runIf(setup.candidateSenate, () =>
+        makeContact(contactForSetup(Candidate_Senate_A), (response) => {
+          results.candidateSenate = response.body;
+        }),
+      ),
+    )
+    .then(() =>
+      runIf(setup.committee, () =>
+        makeContact(contactForSetup(Committee_A), (response) => {
+          results.committee = response.body;
+        }),
+      ),
+    )
+    .then(() =>
+      runIf(setup.f24, () =>
+        makeF24(F24_24, (response) => {
+          results.f24 = response.body.id;
+        }),
+      ),
+    )
+    .then(() => createReports())
+    .then(() => {
+      expect(results.report, 'created report id').to.not.equal('');
+      return results;
+    });
 }

@@ -8,6 +8,7 @@ import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
+import { ApiUtils } from '../utils/api';
 
 const reattributeData: ScheduleFormData = {
   amount: 100.55,
@@ -22,8 +23,11 @@ const reattributeData: ScheduleFormData = {
 };
 
 function Reattribute(result: any, old = false) {
-  cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**/').as('GetTransaction');
-  PageUtils.clickKababItem(' 11(a)(ii) ', 'Reattribute');
+  cy.intercept({
+    method: 'GET',
+    pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
+  }).as('GetTransaction');
+  PageUtils.clickKababItem('11(a)(ii)', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');

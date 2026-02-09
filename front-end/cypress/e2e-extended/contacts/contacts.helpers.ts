@@ -295,6 +295,7 @@ export class ContactsHelpers {
               found = { seed, candidate: fecApi[0] };
               return false;
             }
+            return undefined;
           });
       })
       .then(() => {

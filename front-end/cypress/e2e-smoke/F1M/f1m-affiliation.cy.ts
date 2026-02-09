@@ -46,7 +46,7 @@ describe('Manage reports', () => {
       createContactPromise(candidate, candidates),
     );
 
-    cy.wrap(Promise.all(apiCalls)).then(() => {
+    cy.then(() => Cypress.Promise.all(apiCalls)).then(() => {
       expect(candidates).to.have.lengthOf(candidateList.length);
     });
   });
@@ -65,7 +65,7 @@ describe('Manage reports', () => {
       createContactPromise(candidate, candidates),
     );
 
-    cy.wrap(Promise.all(apiCalls)).then(() => {
+    cy.then(() => Cypress.Promise.all(apiCalls)).then(() => {
       expect(candidates).to.have.lengthOf(candidateList.length);
 
       ReportListPage.createF1M();

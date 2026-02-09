@@ -41,7 +41,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
-    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+    DataSetup({ individual: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
@@ -79,7 +79,7 @@ describe('Receipt Transactions', () => {
       category_code: '',
     };
 
-    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+    DataSetup({ individual: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().Returned();
 
@@ -114,7 +114,7 @@ describe('Receipt Transactions', () => {
       category_code: '',
     };
 
-    cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
+    DataSetup({ individual: true, organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Individual().Partnership();
       const org = result.organization;
@@ -188,7 +188,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a Party Receipt transaction', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       const committee = result.committee;
       ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().RegisteredFilers().Party();
@@ -220,7 +220,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a Group I transaction', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       const committee = result.committee;
       ReportListPage.goToReportList(result.report);
       StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
@@ -251,7 +251,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a dual-entry Earmark Receipt transaction', () => {
-    cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
+    DataSetup({ individual: true, committee: true }).then((result: any) => {
       const individual = result.individual;
       const committee = result.committee;
       ReportListPage.goToReportList(result.report);
@@ -336,7 +336,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a dual-entry PAC Earmark Receipt transaction', () => {
-    cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
+    DataSetup({ individual: true, committee: true }).then((result: any) => {
       const committee = result.committee;
       const individual = result.individual;
       ReportListPage.goToReportList(result.report);
@@ -425,7 +425,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Create a Joint Fundraising Transfer transaction with Tier 3 child transactions', () => {
-    cy.wrap(DataSetup({ individual: true, committee: true, organization: true })).then((result: any) => {
+    DataSetup({ individual: true, committee: true, organization: true }).then((result: any) => {
       const committee = result.committee;
       const individual = result.individual;
       const organization = result.organization;
@@ -516,7 +516,7 @@ describe('Receipt Transactions', () => {
   });
 
   it('Committee Fields Display Properly', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       const committee = result.committee;
       ReportListPage.goToReportList(result.report);
 

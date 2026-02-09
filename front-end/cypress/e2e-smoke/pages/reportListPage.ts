@@ -1,12 +1,22 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
+import { ApiUtils } from '../utils/api';
+import { Intercepts } from '../utils/intercepts';
+
+type GoToReportListOptions = {
+  waitForLists?: boolean;
+  registerListIntercepts?: boolean;
+  page?: string | number;
+  pageSize?: string | number;
+  ordering?: string;
+};
 
 export class ReportListPage {
   static goToPage() {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
+    Intercepts.reportList('GetReports');
     cy.visit('/reports');
-    cy.wait('@GetReports');
+    cy.wait('@GetReports', { timeout: 20000 });
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
@@ -22,14 +32,9 @@ export class ReportListPage {
   }
 
   static deleteAllReports() {
-    cy.getCookie('csrftoken').then((cookie) => {
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:8080/api/v1/reports/e2e-delete-all-reports/',
-        headers: {
-          'x-csrftoken': cookie?.value,
-        },
-      });
+    return cy.apiRequestWithCookies({
+      method: 'POST',
+      url: ApiUtils.apiPath('/reports/e2e-delete-all-reports/'),
     });
   }
 
@@ -56,10 +61,7 @@ export class ReportListPage {
   }
 
   static editReport(reportName: string, fieldName = 'Edit') {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
     ReportListPage.goToPage();
-    cy.wait(`@GetReports`);
-    cy.wait(`@GetReports`);
     PageUtils.clickKababItem(reportName, fieldName);
   }
 
@@ -75,52 +77,61 @@ export class ReportListPage {
     ReportListPage.goToPage();
   }
 
-  static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    if (includeReceipts) {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules: 'A',
-          page: '1',
-          ordering: 'line_label,created',
-          page_size: '5',
-        },
-      }).as('GetReceipts');
+  static goToReportList(
+    reportId: string,
+    includeReceipts = true,
+    includeDisbursements = true,
+    includeLoans = true,
+    options: GoToReportListOptions = {},
+  ) {
+    const {
+      waitForLists = true,
+      registerListIntercepts = true,
+      page = '1',
+      pageSize = '5',
+      ordering = 'line_label,created',
+    } = options;
+
+    if (registerListIntercepts && includeReceipts) {
+      Intercepts.transactionsList({
+        alias: 'GetReceipts',
+        reportId,
+        schedules: 'A',
+        includePaging: true,
+        page: String(page),
+        pageSize: String(pageSize),
+        ordering,
+      });
     }
 
-    if (includeLoans) {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules: 'C,D',
-          page: '1',
-          ordering: 'line_label,created',
-          page_size: '5',
-        },
-      }).as('GetLoans');
+    if (registerListIntercepts && includeLoans) {
+      Intercepts.transactionsList({
+        alias: 'GetLoans',
+        reportId,
+        schedules: 'C,D',
+        includePaging: true,
+        page: String(page),
+        pageSize: String(pageSize),
+        ordering,
+      });
     }
 
-    if (includeDisbursements) {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules: 'B,E,F',
-          page: '1',
-          ordering: 'line_label,created',
-          page_size: '5',
-        },
-      }).as('GetDisbursements');
+    if (registerListIntercepts && includeDisbursements) {
+      Intercepts.transactionsList({
+        alias: 'GetDisbursements',
+        reportId,
+        schedules: 'B,E,F',
+        includePaging: true,
+        page: String(page),
+        pageSize: String(pageSize),
+        ordering,
+      });
     }
 
     cy.visit(`/reports/transactions/report/${reportId}/list`);
-    if (includeLoans) cy.wait('@GetLoans');
-    if (includeDisbursements) cy.wait('@GetDisbursements');
-    if (includeReceipts) cy.wait('@GetReceipts');
+
+    if (waitForLists && includeLoans) cy.wait('@GetLoans');
+    if (waitForLists && includeDisbursements) cy.wait('@GetDisbursements');
+    if (waitForLists && includeReceipts) cy.wait('@GetReceipts');
   }
 }

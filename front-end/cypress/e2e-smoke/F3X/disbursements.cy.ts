@@ -13,6 +13,7 @@ import { faker } from '@faker-js/faker';
 import { ContactListPage } from '../pages/contactListPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { ContactLookup } from '../pages/contactLookup';
+import { Intercepts } from '../utils/intercepts';
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -29,7 +30,7 @@ describe('Disbursements', () => {
   });
 
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
-    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+    DataSetup({ individual: true }).then((result: any) => {
       setCommitteeToPTY();
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
@@ -47,7 +48,7 @@ describe('Disbursements', () => {
   });
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
-    cy.wrap(DataSetup({ individual: true, candidate: true, organization: true })).then((result: any) => {
+    DataSetup({ individual: true, candidate: true, organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Contributions().IndependentExpenditureVoid();
       ContactLookup.getContact(result.organization.name);
@@ -67,7 +68,7 @@ describe('Disbursements', () => {
   });
 
   it('should be able to link an Independent Expenditure to a Form 24', () => {
-    cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
+    DataSetup({ individual: true, candidate: true, f24: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
@@ -98,23 +99,15 @@ describe('Disbursements', () => {
         .should('not.contain', 'This is a required field.');
 
       // Add IE to a F24 Report
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
-      ).as('GetReceipts');
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
-      ).as('GetLoans');
-      cy.intercept(
-        'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
-      ).as('GetDisbursements');
-      ReportListPage.goToReportList(result.report);
+      Intercepts.transactionsList({ alias: 'GetReceipts', reportId: result.report, schedules: 'A', includePaging: true });
+      Intercepts.transactionsList({ alias: 'GetLoans', reportId: result.report, schedules: 'C,D', includePaging: true });
+      Intercepts.transactionsList({ alias: 'GetDisbursements', reportId: result.report, schedules: 'B,E,F', includePaging: true });
+      ReportListPage.goToReportList(result.report, true, true, true, {
+        registerListIntercepts: false,
+        waitForLists: false,
+      });
 
-      cy.wait('@GetLoans');
-      cy.wait('@GetDisbursements');
-      cy.wait('@GetReceipts');
+      cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 20000 });
 
       PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
       PageUtils.dropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
@@ -129,7 +122,7 @@ describe('Disbursements', () => {
   });
 
   it('Create an Other Disbursement transaction', () => {
-    cy.wrap(DataSetup({ organization: true })).then((result: any) => {
+    DataSetup({ organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Other().Other();
       ContactLookup.getContact(result.organization.name);
@@ -161,7 +154,7 @@ describe('Disbursements', () => {
   });
 
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
-    cy.wrap(DataSetup({ organization: true })).then((result: any) => {
+    DataSetup({ organization: true }).then((result: any) => {
       setCommitteeToPTY();
       ReportListPage.goToReportList(result.report);
       StartTransaction.Disbursements().Federal().CreditCardPayment();

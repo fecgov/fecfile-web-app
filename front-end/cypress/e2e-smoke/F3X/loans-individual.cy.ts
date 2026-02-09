@@ -6,6 +6,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { ApiUtils } from '../utils/api';
 
 const formData = {
   ...defaultLoanFormData,
@@ -13,17 +14,15 @@ const formData = {
 };
 
 function setupLoanReceivedFromIndividual() {
-  return cy
-    .wrap(DataSetup({ individual: true, individual2: true, committee: true }))
-    .then((result: any) => {
-      ReportListPage.goToReportList(result.report);
-      StartTransaction.Loans().Individual();
-      PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
-      ContactLookup.getContact(result.individual.last_name);
-      formData.date_received = undefined;
-      TransactionDetailPage.enterLoanFormData(formData);
-      cy.wrap(result);
-    });
+  return DataSetup({ individual: true, individual2: true, committee: true }).then((result: any) => {
+    ReportListPage.goToReportList(result.report);
+    StartTransaction.Loans().Individual();
+    PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
+    ContactLookup.getContact(result.individual.last_name);
+    formData.date_received = undefined;
+    TransactionDetailPage.enterLoanFormData(formData);
+    return cy.wrap(result, { log: false });
+  });
 }
 
 
@@ -74,20 +73,24 @@ describe('Loans', () => {
       cy.contains('tbody tr', result.individual2.last_name, { timeout: 15000 })
           .should('be.visible');
 
-      cy.intercept('DELETE', '**/api/v1/transactions/**').as('deleteGuarantor');
-      cy.intercept(
-        'GET',
-        /\/api\/v1\/transactions\/\?page=1&ordering=name&page_size=5&parent=.*&schedules=C2/,
-      ).as('guarantorsReload');
+      cy.intercept({
+        method: 'DELETE',
+        pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
+      }).as('DeleteGuarantor');
+      cy.intercept({
+        method: 'GET',
+        pathname: ApiUtils.apiRoutePathname('/transactions/'),
+        query: { schedules: 'C2', parent: /.+/ },
+      }).as('GuarantorsReload');
 
       PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
       PageUtils.clickButton('Confirm');
 
-      cy.wait('@deleteGuarantor')
+      cy.wait('@DeleteGuarantor')
         .its('response.statusCode')
         .should('be.equal', 204);
 
-      cy.wait('@guarantorsReload')
+      cy.wait('@GuarantorsReload')
         .its('response.statusCode')
         .should('be.equal', 200);
 

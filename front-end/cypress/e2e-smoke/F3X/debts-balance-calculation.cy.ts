@@ -13,7 +13,7 @@ describe('Debt Balance at Close Calculation', () => {
   });
 
   it('should calculate balance_at_close = beginning_balance + incurred_amount - payment_amount when creating a debt', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       // Create a debt via the UI
       ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ByCommittee();
@@ -54,7 +54,7 @@ describe('Debt Balance at Close Calculation', () => {
   });
 
   it('should update balance_at_close when modifying incurred_amount', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       // Create a debt via the UI
       ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ByCommittee();

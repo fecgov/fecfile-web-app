@@ -1,3 +1,5 @@
+import type { StaticResponse } from 'cypress/types/net-stubbing';
+
 export class UsersHelpers {
   static readonly emailInput = () => cy.get("@dialog").find("#email").first();
   static readonly submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
@@ -58,7 +60,7 @@ export class UsersHelpers {
       expect(!(isAriaDisabled || isDisabled || hasClass), "button is enabled").to.eq(true);
   };
 
-  static stubOnce(method: string, url: string, response: Partial<Cypress.StaticResponse>, alias: string) {
+  static stubOnce(method: string, url: string, response: Partial<StaticResponse>, alias: string) {
       cy.intercept({ method, url, times: 1 }, response).as(alias);
   }
 }

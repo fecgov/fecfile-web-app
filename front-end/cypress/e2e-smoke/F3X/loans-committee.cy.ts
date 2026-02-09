@@ -6,6 +6,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { ApiUtils } from '../utils/api';
 
 const formData = {
   ...defaultLoanFormData,
@@ -13,7 +14,7 @@ const formData = {
 };
 
 function setupLoanByCommittee() {
-  return cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
+  return DataSetup({ individual: true, committee: true }).then((result: any) => {
     ReportListPage.goToReportList(result.report);
     StartTransaction.Loans().ByCommittee();
     // Search for created committee and enter load data, then add load guarantor
@@ -21,7 +22,7 @@ function setupLoanByCommittee() {
     ContactLookup.getCommittee(result.committee);
     formData.date_received = undefined;
     TransactionDetailPage.enterLoanFormData(formData);
-    return cy.wrap(result);
+    return cy.wrap(result, { log: false });
   });
 }
 
@@ -80,11 +81,20 @@ describe('Loans', () => {
   it('should test: Loan By Committee - delete Guarantor', () => {
     setupLoanByCommittee().then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
-      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
+      cy.intercept({
+        method: 'GET',
+        pathname: ApiUtils.apiRoutePathname('/transactions/'),
+        query: { schedules: 'C2', parent: /.+/ },
+      }).as('GuarantorList');
+      cy.intercept({
+        method: 'DELETE',
+        pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
+      }).as('DeleteGuarantor');
       cy.contains('Loan By Committee').click();
       cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
       PageUtils.clickButton('Confirm');
+      cy.wait('@DeleteGuarantor');
       cy.contains(result.individual.last_name).should('not.exist');
     });
   });

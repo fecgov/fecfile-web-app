@@ -254,6 +254,81 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
   return safeType(prevSubject, '{selectall}{del}' + outString);
 }
 
+type ApiRequestWithCookiesOptions = Partial<Cypress.RequestOptions> & {
+  attachCookieHeader?: boolean;
+};
+
+function hasHeader(headers: Record<string, string>, name: string): boolean {
+  const wanted = name.toLowerCase();
+  return Object.keys(headers).some((key) => key.toLowerCase() === wanted);
+}
+
+function resolveUrl(input: string): URL {
+  const baseUrl = Cypress.config('baseUrl') || 'http://localhost:4200';
+  return new URL(input, baseUrl);
+}
+
+function domainMatches(cookieDomain: string | undefined, hostname: string): boolean {
+  if (!cookieDomain) return false;
+  const normalized = cookieDomain.replace(/^\./, '').toLowerCase();
+  const host = hostname.toLowerCase();
+  return host === normalized || host.endsWith(`.${normalized}`);
+}
+
+function pathMatches(cookiePath: string | undefined, requestPathname: string): boolean {
+  if (!cookiePath) return true;
+  return requestPathname.startsWith(cookiePath);
+}
+
+export class CypressApi {
+  static requestWithCookies<T = unknown>(
+    options: ApiRequestWithCookiesOptions,
+  ): Cypress.Chainable<Cypress.Response<T>> {
+    const requestUrl = String(options.url ?? '');
+    if (!requestUrl) throw new Error('apiRequestWithCookies requires options.url');
+
+    const baseHeaders = { ...(options.headers as Record<string, string> | undefined) };
+
+    const sendRequest = (headers: Record<string, string>) =>
+      cy.request<T>({
+        ...(options as Cypress.RequestOptions),
+        headers,
+      });
+
+    return cy.getCookie('csrftoken').then((csrfCookie) => {
+      const headers = { ...baseHeaders };
+
+      if (csrfCookie?.value && !hasHeader(headers, 'x-csrftoken')) {
+        headers['x-csrftoken'] = csrfCookie.value;
+      }
+
+      // Default: rely on Cypress cookie jar + explicit CSRF header only.
+      if (!options.attachCookieHeader) {
+        return sendRequest(headers);
+      }
+
+      // Optional edge path: attach filtered Cookie header.
+      const targetUrl = resolveUrl(requestUrl);
+      return cy.getAllCookies().then((cookies) => {
+        const cookieHeader = cookies
+          .filter(
+            (cookie) =>
+              domainMatches(cookie.domain, targetUrl.hostname) &&
+              pathMatches(cookie.path, targetUrl.pathname),
+          )
+          .map((cookie) => `${cookie.name}=${cookie.value}`)
+          .join('; ');
+
+        if (cookieHeader && !hasHeader(headers, 'cookie')) {
+          headers['Cookie'] = cookieHeader;
+        }
+
+        return sendRequest(headers);
+      });
+    });
+  }
+}
+
 declare global {
   namespace Cypress {
     interface Cypress {

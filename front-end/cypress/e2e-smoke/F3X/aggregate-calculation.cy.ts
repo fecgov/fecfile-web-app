@@ -14,7 +14,7 @@ import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 
 function setupTransactions(secondSame: boolean) {
-  return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {
+  return DataSetup({ individual: true, individual2: true }).then((result: any) => {
     const transaction_a = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
       200.01,
@@ -29,11 +29,42 @@ function setupTransactions(secondSame: boolean) {
       secondSame ? result.individual : result.individual2,
       result.report,
     );
-    makeTransaction(transaction_a);
-    makeTransaction(transaction_b);
-
-    cy.wrap(result);
+    return makeTransaction(transaction_a).then(() =>
+      makeTransaction(transaction_b).then(() => result),
+    );
   });
+}
+
+function saveAndWaitForTransactionsList(reportId: string) {
+  PageUtils.clickButton('Save');
+  const listPathRegex = new RegExp(`^/reports/transactions/report/${Cypress._.escapeRegExp(reportId)}/list/?$`);
+  cy.location('pathname', { timeout: 20000 }).should('match', listPathRegex);
+  cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
+}
+
+function saveAndReopenCurrentTransaction(reportId: string) {
+  return cy.location('pathname').then((pathname) => {
+    const transactionIdMatch = pathname.match(/\/list\/([^/]+)\/?$/);
+    if (!transactionIdMatch?.[1]) {
+      throw new Error(`Expected transaction detail path ending with /list/<id>, got: ${pathname}`);
+    }
+
+    const transactionId = transactionIdMatch[1];
+    saveAndWaitForTransactionsList(reportId);
+    cy.visit(`/reports/transactions/report/${reportId}/list/${transactionId}`);
+    cy.get('#amount').should('exist');
+  });
+}
+
+function openTransactionFromListByAmount(amount: string) {
+  cy.get('.p-datatable-tbody > tr')
+    .contains('td', amount)
+    .closest('tr')
+    .find('td')
+    .eq(1)
+    .find('a')
+    .first()
+    .click();
 }
 
 describe('Tests transaction form aggregate calculation', () => {
@@ -58,29 +89,30 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the date to be earlier
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 10), '');
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$25.00');
 
       // Move the date back
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      PageUtils.blurActiveField();
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Change the contact
       ContactLookup.getContact(result.individual2.last_name);
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$25.00');
 
       // Change the contact back
       ContactLookup.getContact(result.individual.last_name);
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40');
-      PageUtils.blurActiveField();
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$240.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('exist');
+      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
     });
@@ -97,12 +129,10 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[data-cy="searchBox"]').type('A');
       cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
-      PageUtils.blurActiveField();
-
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$225.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('exist');
+      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$225.01');
     });
@@ -117,12 +147,10 @@ describe('Tests transaction form aggregate calculation', () => {
       // Tests changing the amount
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       cy.get('[id="amount"]').clear().safeType('40');
-      PageUtils.blurActiveField();
-
+      saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$240.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('exist');
+      cy.visit(`/reports/transactions/report/${result.report}/list`);
+      cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
     });
@@ -136,12 +164,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      PageUtils.blurActiveField();
-
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('exist');
+      saveAndWaitForTransactionsList(result.report);
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$225.01');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
     });
@@ -165,12 +188,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
         // Tests moving the first transaction's date to be later than the second
         TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
-        PageUtils.blurActiveField();
-
-        cy.get('[id=aggregate]').should('have.value', '$200.01');
-        PageUtils.clickButton('Save');
-
-        cy.contains('Transactions in this report').should('exist');
+        saveAndWaitForTransactionsList(result.report);
         cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
         cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
         cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
@@ -179,7 +197,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('existing IE date leapfrogging', () => {
-    cy.wrap(DataSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
+    DataSetup({ individual: true, individual2: true, candidate: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
 
       // Create the first Independent Expenditure
@@ -232,7 +250,6 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('exist');
 
@@ -259,20 +276,25 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
+      saveAndWaitForTransactionsList(result.report);
+      openTransactionFromListByAmount('$25.00');
+      cy.contains('Payee').should('exist');
       cy.get('#calendar_ytd').should('have.value', '$175.00');
-      PageUtils.clickButton('Save');
-      cy.contains('Transactions in this report').should('exist');
+      saveAndWaitForTransactionsList(result.report);
 
       // Test aggregation re-calculation from date leapfrogging
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
+      openTransactionFromListByAmount('$100.00');
       cy.contains('Payee').should('exist');
       TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$150.00');
-      PageUtils.clickButton('Save');
-      cy.contains('Transactions in this report').should('exist');
+      saveAndWaitForTransactionsList(result.report);
 
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      openTransactionFromListByAmount('$100.00');
+      cy.contains('Payee').should('exist');
+      cy.get('#calendar_ytd').should('have.value', '$150.00');
+      saveAndWaitForTransactionsList(result.report);
+
+      openTransactionFromListByAmount('$50.00');
       cy.contains('Payee').should('exist');
       cy.get('#calendar_ytd').should('have.value', '$50.00');
     });

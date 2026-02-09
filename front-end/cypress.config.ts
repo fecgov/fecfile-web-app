@@ -8,6 +8,7 @@ const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS
 export default defineConfig({
   env: {
     ...CypressConfigHelper.failOn5xxDefaults,
+    apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:8080/api/v1',
   },
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',

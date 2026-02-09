@@ -187,3 +187,39 @@ export interface MockContact {
   country: string;
   telephone: string | null;
 }
+
+function hashSeed(seed: string): number {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash * 31 + seed.charCodeAt(i)) % 10000;
+  }
+  return hash || 1;
+}
+
+function addOffsetToTrailingDigits(value: string, offset: number): string {
+  const match = value.match(/^(.*?)(\d+)$/);
+  if (!match) return value;
+
+  const prefix = match[1];
+  const digits = match[2];
+  const modulus = 10 ** digits.length;
+  const next = (Number.parseInt(digits, 10) + offset) % modulus;
+  return `${prefix}${next.toString().padStart(digits.length, '0')}`;
+}
+
+export function withUniqueContactIdentifiers(contact: MockContact, seed: string): MockContact {
+  if (!seed) return { ...contact };
+
+  const offset = hashSeed(seed);
+  const updated: MockContact = { ...contact };
+
+  if (updated.candidate_id) {
+    updated.candidate_id = addOffsetToTrailingDigits(updated.candidate_id, offset);
+  }
+
+  if (updated.committee_id) {
+    updated.committee_id = addOffsetToTrailingDigits(updated.committee_id, offset);
+  }
+
+  return updated;
+}

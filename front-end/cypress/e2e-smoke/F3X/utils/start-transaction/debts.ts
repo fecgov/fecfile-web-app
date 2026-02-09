@@ -1,11 +1,12 @@
 import { PageUtils } from '../../../pages/pageUtils';
+import { StartTransactionMenu } from './menu';
 
 export class Debts {
   static ByCommittee() {
-    PageUtils.clickLink('Debt Owed By Committee');
+    PageUtils.clickLink(StartTransactionMenu.links.debtOwedByCommittee);
   }
 
   static ToCommittee() {
-    PageUtils.clickLink('Debt Owed To Committee');
+    PageUtils.clickLink(StartTransactionMenu.links.debtOwedToCommittee);
   }
 }

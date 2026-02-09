@@ -7,6 +7,7 @@ import {
   organizationFormData,
 } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
+import { ApiUtils } from '../utils/api';
 
 export class ContactListPage {
   static goToPage() {
@@ -116,14 +117,9 @@ export class ContactListPage {
 
   //Deletes all contacts belonging to the logged-in committee
   static deleteAllContacts() {
-    cy.getCookie('csrftoken').then((cookie) => {
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:8080/api/v1/contacts/e2e-delete-all-contacts/',
-        headers: {
-          'x-csrftoken': cookie?.value,
-        },
-      });
+    return cy.apiRequestWithCookies({
+      method: 'POST',
+      url: ApiUtils.apiPath('/contacts/e2e-delete-all-contacts/'),
     });
   }
 

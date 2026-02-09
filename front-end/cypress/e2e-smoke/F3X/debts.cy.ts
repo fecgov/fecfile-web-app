@@ -67,7 +67,7 @@ describe('Debts', () => {
   });
 
   it('should test Debt Owed By Committee loan', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ByCommittee();
 
@@ -91,7 +91,7 @@ describe('Debts', () => {
   });
 
   it('should test Owed To Committee loan', () => {
-    cy.wrap(DataSetup({ committee: true })).then((result: any) => {
+    DataSetup({ committee: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ToCommittee();
 
@@ -107,7 +107,7 @@ describe('Debts', () => {
   });
 
   it('should test debt carry-forward behavior', () => {
-    cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
+    DataSetup({ committee: true, individual: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ToCommittee();
 
@@ -235,8 +235,9 @@ describe('Debts', () => {
 
   describe('test PTY', () => {
     beforeEach(() => {
-      ContactListPage.deleteAllContacts();
       PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
+      ReportListPage.deleteAllReports();
+      ContactListPage.deleteAllContacts();
     });
 
     afterEach(() => {
@@ -244,13 +245,12 @@ describe('Debts', () => {
     });
 
     it('should test Debt Owed By Committee loan - Report debt repayment', () => {
-      cy.wrap(
-        DataSetup({
-          candidate: true,
-          organization: true,
-          committee: true,
-        }),
-      ).then(handleDebtOwedByCommitteeLoanReportDebtRepayment);
+      DataSetup({
+        candidate: true,
+        organization: true,
+        committee: true,
+        uniqueContactIds: true,
+      }).then(handleDebtOwedByCommitteeLoanReportDebtRepayment);
     });
   });
 });

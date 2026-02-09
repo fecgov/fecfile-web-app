@@ -1,92 +1,93 @@
 import { PageUtils } from '../../../pages/pageUtils';
+import { StartTransactionMenu } from './menu';
 
 export class Receipts {
   static Individual() {
-    PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.contributionsFromIndividuals);
     return Individual;
   }
 
   static RegisteredFilers() {
-    PageUtils.clickAccordion('CONTRIBUTIONS FROM REGISTERED FILERS');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.contributionsFromRegisteredFilers);
     return RegisteredFilers;
   }
 
   static Refunds() {
-    PageUtils.clickAccordion('REFUNDS');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.refunds);
     return Refunds;
   }
 
   static Transfers() {
-    PageUtils.clickAccordion('TRANSFERS');
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.transfers);
     return Transfers;
   }
 
   static Other() {
-    PageUtils.clickAccordion("OTHER");
+    PageUtils.clickAccordion(StartTransactionMenu.accordion.other);
     return Other;
   }
 }
 
 export class Individual {
-  static readonly INDIVIDUAL_RECEIPT = 'Individual Receipt';
+  static readonly INDIVIDUAL_RECEIPT = StartTransactionMenu.links.individualReceipt;
 
   static IndividualReceipt() {
     PageUtils.clickLink(Individual.INDIVIDUAL_RECEIPT);
   }
 
   static Returned() {
-    PageUtils.clickLink('Returned/Bounced Receipt');
+    PageUtils.clickLink(StartTransactionMenu.links.returnedBouncedReceipt);
   }
 
   static Partnership() {
-    PageUtils.clickLink('Partnership Receipt');
+    PageUtils.clickLink(StartTransactionMenu.links.partnershipReceipt);
   }
 
   static Earmark() {
-    PageUtils.clickLink('Earmark Receipt');
+    PageUtils.clickLink(StartTransactionMenu.links.earmarkReceipt);
   }
 }
 
 class RegisteredFilers {
   static Party() {
-    PageUtils.clickLink('Party Receipt');
+    PageUtils.clickLink(StartTransactionMenu.links.partyReceipt);
   }
 
   static PAC_Earmark() {
-    PageUtils.clickLink('PAC Earmark Receipt');
+    PageUtils.clickLink(StartTransactionMenu.links.pacEarmarkReceipt);
   }
 
   static PAC() {
-    PageUtils.clickLink('PAC Receipt');
+    PageUtils.clickLink(StartTransactionMenu.links.pacReceipt);
   }
 }
 
 class Refunds {
   static ContributionToOtherPoliticalCommittee() {
-    PageUtils.clickLink('Refund of Contribution to Other Political Committee');
+    PageUtils.clickLink(StartTransactionMenu.links.refundContributionToOtherPoliticalCommittee);
   }
 }
 
 class Transfers {
   static JointFundraising() {
-    PageUtils.clickLink('Joint Fundraising Transfer');
+    PageUtils.clickLink(StartTransactionMenu.links.jointFundraisingTransfer);
   }
 }
 
 class Other {
   static OffsetsToOperatingExpenditures() {
-    PageUtils.clickLink("Offsets to Operating Expenditures");
+    PageUtils.clickLink(StartTransactionMenu.links.offsetsToOperatingExpenditures);
   }
   static OtherReceipts() {
-    PageUtils.clickLink("Other Receipts")
+    PageUtils.clickLink(StartTransactionMenu.links.otherReceipts);
   }
   static IndividualReceiptNonContributionAccount() {
-    PageUtils.clickLink("Individual Receipt - Non-contribution Account");
+    PageUtils.clickLink(StartTransactionMenu.links.individualReceiptNonContributionAccount);
   }
   static OtherCommitteeReceiptNonContributionAccount() {
-    PageUtils.clickLink("Other Committee Receipt - Non-contribution Account");
+    PageUtils.clickLink(StartTransactionMenu.links.otherCommitteeReceiptNonContributionAccount);
   }
   static BusinessLaborOrganizationReceiptNonContributionAccount() {
-    PageUtils.clickLink("Business/Labor Organization Receipt - Non-contribution Account");
+    PageUtils.clickLink(StartTransactionMenu.links.businessLaborOrganizationReceiptNonContributionAccount);
   }
 }

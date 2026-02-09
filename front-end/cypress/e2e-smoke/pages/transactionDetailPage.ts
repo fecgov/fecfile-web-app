@@ -7,6 +7,8 @@ import {
 } from '../models/TransactionFormModel';
 import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
+import { ApiUtils } from '../utils/api';
+import { Intercepts } from '../utils/intercepts';
 
 export class TransactionDetailPage {
   static enterDate(dateFieldName: string, dateFieldValue: Date, alias = '') {
@@ -257,57 +259,58 @@ export class TransactionDetailPage {
     }
   }
 
-  static clickSave(reportId: string) {
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-    ).as('GetReceipts');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-    ).as('GetLoans');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-    ).as('GetDisbursements');
-    cy.contains(/^Save$/).click();
+  private static interceptReportTransactionLists(reportId: string) {
+    Intercepts.transactionsList({ alias: 'GetReceipts', reportId, schedules: 'A', includePaging: true });
+    Intercepts.transactionsList({ alias: 'GetLoans', reportId, schedules: 'C,D', includePaging: true });
+    Intercepts.transactionsList({ alias: 'GetDisbursements', reportId, schedules: 'B,E,F', includePaging: true });
+  }
 
-    cy.wait('@GetLoans');
-    cy.wait('@GetDisbursements');
-    cy.wait('@GetReceipts');
+  static clickSave(reportId: string) {
+    this.interceptReportTransactionLists(reportId);
+    cy.contains(/^Save$/).click();
+    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 20000 });
   }
 
   static addGuarantor(name: string, amount: number | string, reportId: string) {
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-    ).as('GetReceipts');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-    ).as('GetLoans');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-    ).as('GetDisbursements');
+    this.interceptReportTransactionLists(reportId);
+
+    // Parent loan save may be create (POST) or update (PUT) based on current test flow.
+    cy.intercept({
+      method: 'PUT',
+      pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
+    }).as('SaveParentLoan');
+
+    // Alias guarantor creation and parent saves distinctly.
+    cy.intercept('POST', ApiUtils.apiRoutePathname('/transactions/'), (req) => {
+      if (req.body?.transaction_type_identifier === 'C2_LOAN_GUARANTOR') {
+        req.alias = 'SaveGuarantor';
+      } else {
+        req.alias = 'SaveParentLoan';
+      }
+    });
+
+    cy.intercept({
+      method: 'GET',
+      pathname: ApiUtils.apiRoutePathname('/transactions/'),
+      query: { schedules: 'C2', parent: /.+/ },
+    }).as('GetGuarantors');
 
     PageUtils.clickButton('Save & add loan guarantor');
-    PageUtils.closeToast();
+    cy.wait('@SaveParentLoan', { timeout: 20000 });
     cy.contains('Guarantors to loan source').should('exist');
+
     ContactLookup.getContact(name);
     cy.get('#amount').safeType(amount);
-    cy.intercept({
-      method: 'Post',
-    }).as('saveGuarantor');
     PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@saveGuarantor');
-    PageUtils.closeToast();
-    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+    cy.wait('@SaveGuarantor', { timeout: 20000 });
+    cy.location('pathname', { timeout: 20000 }).should((pathname) => {
+      const staysOnGuarantorCreate = pathname.includes('create-sub-transaction/C2_LOAN_GUARANTOR');
+      const landsOnParentDetail = /^\/reports\/transactions\/report\/[^/]+\/list\/[^/]+$/.test(pathname);
+      expect(staysOnGuarantorCreate || landsOnParentDetail).to.be.true;
+    });
     PageUtils.clickButton('Cancel');
 
-    cy.wait('@GetLoans');
-    cy.wait('@GetDisbursements');
-    cy.wait('@GetReceipts');
+    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 20000 });
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {

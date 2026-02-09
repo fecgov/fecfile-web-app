@@ -40,7 +40,7 @@ function clickLoan(button: string, urlCheck = '/list') {
 }
 
 function setupLoanFromBank(setup: Setup) {
-  return cy.wrap(DataSetup(setup)).then((result: any) => {
+  return DataSetup(setup).then((result: any) => {
     const organization = result.organization;
     const reportId = result.report;
 
@@ -85,8 +85,7 @@ function setupLoanFromBank(setup: Setup) {
       loanReceipt,
     ]);
 
-    makeTransaction(loanFromBank);
-    cy.wrap(result);
+    return makeTransaction(loanFromBank).then(() => result);
   });
 }
 
@@ -155,7 +154,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan Received from Bank', () => {
-    cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
+    DataSetup({ individual: true, organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       StartTransaction.Loans().FromBank();
 
