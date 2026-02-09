@@ -13,7 +13,6 @@ export class LOAN_MADE extends SchBTransactionType {
   schema = schema;
   override useParentContact = true;
   override doMemoCodeDateCheck = false;
-  override showAggregate = false;
   override inheritedFields = [
     'entity_type',
     'organization_name',
