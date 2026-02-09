@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal, Signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -11,14 +11,18 @@ import { CalculationOverlayComponent } from '../../../shared/components/calculat
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
-import { ColumnDefinition, TableComponent } from 'app/shared/components/table/table.component';
+import { ColumnDefinition, TableBodyContext, TableComponent } from 'app/shared/components/table/table.component';
 import { TableModule } from 'primeng/table';
 
 interface DetailedLineSummary {
   lineNumber: string;
   description: string;
+  descriptionMeta?: string;
   thisPeriod?: number;
   yearToDate?: number;
+  rowClass?: string;
+  bold?: boolean;
+  italic?: boolean;
   cssClass?: string;
   overlay?: string;
   indent?: number;
@@ -48,6 +52,7 @@ export class ReportDetailedSummaryComponent {
   readonly activeReport = this.store.selectSignal(selectActiveReport);
   readonly report = computed(() => this.activeReport() as Form3X);
   readonly calculationFinished = computed(() => this.report().calculation_status === 'SUCCEEDED');
+  readonly descriptionTpl = viewChild.required<TemplateRef<TableBodyContext<DetailedLineSummary>>>('descriptionTpl');
 
   readonly receiptLines = computed(() => {
     const report = this.report();
@@ -55,7 +60,7 @@ export class ReportDetailedSummaryComponent {
       {
         lineNumber: '11',
         description: `CONTRIBUTIONS (OTHER THAN LOANS)`,
-        cssClass: 'gray',
+        bold: true,
       },
       {
         lineNumber: '11(a)',
@@ -64,8 +69,10 @@ export class ReportDetailedSummaryComponent {
       },
       {
         lineNumber: '11(a)(i)',
-        description: 'Itemized (use Schedule A)',
+        description: 'Itemized',
+        descriptionMeta: '(use Schedule A)',
         indent: 2,
+        italic: true,
         thisPeriod: report.L11ai_itemized_period,
         yearToDate: report.L11ai_itemized_ytd,
       },
@@ -74,6 +81,7 @@ export class ReportDetailedSummaryComponent {
         description: 'Unitemized',
         thisPeriod: report.L11aii_unitemized_period,
         indent: 2,
+        italic: true,
         yearToDate: report.L11aii_unitemized_ytd,
       },
       {
@@ -81,6 +89,7 @@ export class ReportDetailedSummaryComponent {
         description: 'Total contributions from individuals/persons other than political committees',
         thisPeriod: report.L11aiii_total_period,
         indent: 2,
+        italic: true,
         overlay: 'Lines 11(a)(i) + 11(a)(ii) = Line 11(a)(iii)',
         yearToDate: report.L11aiii_total_ytd,
       },
@@ -102,79 +111,96 @@ export class ReportDetailedSummaryComponent {
         lineNumber: '11(d)',
         description: 'Total contributions',
         indent: 1,
-        overlay: 'Lines 11(a)(iii) + 11(b) + 11(c) = Line 11(d) (This total will also appear on Line 33).',
+        overlay: 'Lines 11(a)(iii) + 11(b) + 11(c) = Line 11(d)\n(This total will also appear on Line 33).',
         thisPeriod: report.L11d_total_contributions_period,
         yearToDate: report.L11d_total_contributions_ytd,
       },
       {
         lineNumber: '12',
         description: 'TRANSFERS FROM AFFILIATED/OTHER PARTY COMMITTEES',
+        bold: true,
         thisPeriod: report.L12_transfers_from_affiliated_other_party_cmtes_period,
         yearToDate: report.L12_transfers_from_affiliated_other_party_cmtes_ytd,
       },
       {
         lineNumber: '13',
         description: 'ALL LOANS RECEIVED',
+        bold: true,
         thisPeriod: report.L13_all_loans_received_period,
         yearToDate: report.L13_all_loans_received_ytd,
       },
       {
         lineNumber: '14',
         description: 'LOAN REPAYMENTS RECEIVED',
+        bold: true,
         thisPeriod: report.L14_loan_repayments_received_period,
         yearToDate: report.L14_loan_repayments_received_ytd,
       },
       {
         lineNumber: '15',
         description: 'OFFSETS TO OPERATING EXPENDITURES (REFUNDS, REBATES, ETC.)',
-        // Overlay
-        thisPeriod: report.L14_loan_repayments_received_period,
-        yearToDate: report.L14_loan_repayments_received_ytd,
+        bold: true,
+        overlay: '(This total will also appear on Line 37).',
+        thisPeriod: report.L15_offsets_to_operating_expenditures_refunds_period,
+        yearToDate: report.L15_offsets_to_operating_expenditures_refunds_ytd,
       },
       {
         lineNumber: '16',
         description: 'REFUNDS OF CONTRIBUTIONS MADE TO FEDERAL CANDIDATES AND OTHER POLITICAL COMMITTEES',
+        bold: true,
         thisPeriod: report.L16_refunds_of_federal_contributions_period,
         yearToDate: report.L16_refunds_of_federal_contributions_ytd,
       },
       {
         lineNumber: '17',
         description: 'OTHER FEDERAL RECEIPTS (DIVIDENDS, INTEREST, ETC.)',
+        bold: true,
         thisPeriod: report.L17_other_federal_receipts_dividends_period,
         yearToDate: report.L17_other_federal_receipts_dividends_ytd,
       },
       {
         lineNumber: '18',
         description: 'TRANSFERS FROM NON-FEDERAL AND LEVIN FUNDS',
+        bold: true,
         // Gray
       },
       {
         lineNumber: '18(a)',
-        description: 'Non-federal account (from Schedule H3)',
+        description: 'Non-federal account',
+        descriptionMeta: '(from Schedule H3)',
+        indent: 1,
         thisPeriod: report.L18a_transfers_from_nonfederal_account_h3_period,
         yearToDate: report.L18a_transfers_from_nonfederal_account_h3_ytd,
       },
       {
         lineNumber: '18(b)',
-        description: 'Levin funds (from Schedule H5)',
+        description: 'Levin funds',
+        descriptionMeta: '(from Schedule H5)',
+        indent: 1,
         thisPeriod: report.L18b_transfers_from_nonfederal_levin_h5_period,
         yearToDate: report.L18b_transfers_from_nonfederal_levin_h5_ytd,
       },
       {
         lineNumber: '18(c)',
         description: 'Total transfers',
+        indent: 1,
+        overlay: 'Lines 18(a) <b>+</b> 18(b) <b>=</b> Line 18(c)',
         thisPeriod: report.L18c_total_nonfederal_transfers_18a_18b_period,
         yearToDate: report.L18c_total_nonfederal_transfers_18a_18b_ytd,
       },
       {
         lineNumber: '19',
         description: 'TOTAL RECEIPTS',
+        bold: true,
+        overlay: 'Lines 11(d) + 12 + 13 + 14 + 15 + 16 + 17 + 18(c) = Line 19',
         thisPeriod: report.L19_total_receipts_period,
         yearToDate: report.L19_total_receipts_ytd,
       },
       {
         lineNumber: '20',
         description: 'TOTAL FEDERAL RECEIPTS',
+        bold: true,
+        overlay: 'Lines 19 - 18(c) = Line 20',
         thisPeriod: report.L20_total_federal_receipts_period,
         yearToDate: report.L20_total_federal_receipts_ytd,
       },
@@ -189,151 +215,182 @@ export class ReportDetailedSummaryComponent {
       {
         lineNumber: '21',
         description: `OPERATING EXPENDITURE`,
+        bold: true,
       },
       {
         lineNumber: '21(a)',
-        description: 'Allocated Federal/Non-Federal Activity (from Schedule H4)',
+        description: 'Allocated Federal/Non-Federal Activity',
+        descriptionMeta: '(from Schedule H4)',
+        indent: 1,
+        italic: true,
       },
       {
         lineNumber: '21(a)(i)',
         description: 'Federal Share',
+        indent: 2,
         thisPeriod: report.L21ai_federal_share_period,
         yearToDate: report.L21ai_federal_share_ytd,
       },
       {
         lineNumber: '21(a)(ii)',
         description: 'Non-Federal Share',
+        indent: 2,
         thisPeriod: report.L21aii_nonfederal_share_period,
         yearToDate: report.L21aii_nonfederal_share_ytd,
       },
       {
         lineNumber: '21(b)',
         description: 'Other federal operating expenditures',
+        indent: 1,
         thisPeriod: report.L21b_other_federal_operating_expenditures_period,
         yearToDate: report.L21b_other_federal_operating_expenditures_ytd,
       },
       {
         lineNumber: '21(c)',
         description: 'Total operating expenditures',
-        // Overlay
+        indent: 1,
+        overlay: 'Lines 21(a)(i) + 21(a)(ii) + 21(b) = Line 21(c)',
         thisPeriod: report.L21c_total_operating_expenditures_period,
         yearToDate: report.L21c_total_operating_expenditures_ytd,
       },
       {
         lineNumber: '22',
         description: 'TRANSFERS FROM AFFILIATED/OTHER PARTY COMMITTEES',
+        bold: true,
         thisPeriod: report.L22_transfers_to_affiliated_other_party_cmtes_period,
         yearToDate: report.L22_transfers_to_affiliated_other_party_cmtes_ytd,
       },
       {
         lineNumber: '23',
         description: 'CONTRIBUTIONS TO FEDERAL CANDIDATES/COMMITTEES AND OTHER POLITICAL COMMITTEES',
+        bold: true,
         thisPeriod: report.L23_contributions_to_federal_candidates_cmtes_period,
         yearToDate: report.L23_contributions_to_federal_candidates_cmtes_ytd,
       },
       {
         lineNumber: '24',
-        description: 'INDEPENDENT EXPENDITURES (use Schedule E)',
+        description: 'INDEPENDENT EXPENDITURES',
+        descriptionMeta: '(use Schedule E)',
+        bold: true,
         thisPeriod: report.L24_independent_expenditures_period,
         yearToDate: report.L24_independent_expenditures_ytd,
       },
       {
         lineNumber: '25',
-        description: 'COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D)) (use Schedule F)',
+        description: 'COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D))',
+        descriptionMeta: '(use Schedule F)',
+        bold: true,
         thisPeriod: report.L25_coordinated_expend_made_by_party_cmtes_period,
         yearToDate: report.L25_coordinated_expend_made_by_party_cmtes_ytd,
       },
       {
         lineNumber: '26',
         description: 'LOANS REPAYMENTS MADE',
+        bold: true,
         thisPeriod: report.L26_loan_repayments_period,
         yearToDate: report.L26_loan_repayments_made_ytd,
       },
       {
         lineNumber: '27',
         description: 'LOAN MADE',
+        bold: true,
         thisPeriod: report.L27_loans_made_period,
         yearToDate: report.L27_loans_made_ytd,
       },
       {
         lineNumber: '28',
         description: 'REFUNDS OF CONTRIBUTIONS',
+        bold: true,
       },
       {
         lineNumber: '28(a)',
         description: 'Individuals/persons other than political committees',
+        indent: 1,
         thisPeriod: report.L28a_individuals_persons_period,
         yearToDate: report.L28a_individuals_persons_ytd,
       },
       {
         lineNumber: '28(b)',
         description: 'Political Party Committees',
+        indent: 1,
         thisPeriod: report.L28b_political_party_committees_period,
         yearToDate: report.L28b_political_party_committees_ytd,
       },
       {
         lineNumber: '28(c)',
         description: 'Other Political Committees (such as PACs)',
+        indent: 1,
         thisPeriod: report.L28c_other_political_committees_period,
         yearToDate: report.L28c_other_political_committees_ytd,
       },
       {
         lineNumber: '28(d)',
         description: 'Total Contribution Refunds',
-        // Overlay
+        indent: 1,
+        overlay: 'Lines 28(a) + 28(b) + 28(c) = Line 28(d)',
         thisPeriod: report.L28d_total_contributions_refunds_period,
         yearToDate: report.L28d_total_contributions_refunds_ytd,
       },
       {
         lineNumber: '29',
         description: 'OTHER DISBURSEMENTS (INCLUDING NON-FEDERAL DONATIONS)',
+        bold: true,
         thisPeriod: report.L29_other_disbursements_period,
         yearToDate: report.L29_other_disbursements_ytd,
       },
       {
         lineNumber: '30',
         description: 'FEDERAL ELECTION ACTIVITY (52 U.S.C. § 30101(20))',
+        bold: true,
       },
       {
         lineNumber: '30(a)',
-        description: 'Allocated Federal Election Activity (use Schedule H6)',
+        description: 'Allocated Federal Election Activity',
+        descriptionMeta: '(use Schedule H6)',
+        indent: 1,
       },
       {
         lineNumber: '30(a)(i)',
         description: 'Federal share',
+        indent: 2,
         thisPeriod: report.L30ai_shared_federal_activity_h6_fed_share_period,
         yearToDate: report.L30ai_shared_federal_activity_h6_fed_share_ytd,
       },
       {
         lineNumber: '30(a)(ii)',
         description: '"Levin" share',
+        indent: 2,
         thisPeriod: report.L30aii_shared_federal_activity_h6_nonfed_period,
         yearToDate: report.L30aii_shared_federal_activity_h6_nonfed_ytd,
       },
       {
         lineNumber: '30(b)',
         description: 'Federal Election Activity Paid Entirely With Federal Funds',
+        indent: 1,
         thisPeriod: report.L30b_nonallocable_fed_election_activity_period,
         yearToDate: report.L30b_nonallocable_fed_election_activity_ytd,
       },
       {
         lineNumber: '30(c)',
         description: 'Total Federal Election Activity',
-        // Overlay
+        indent: 1,
+        overlay: 'Lines 30(a)(i) + 30(a)(ii) + 30(b) = Line 30(c)',
         thisPeriod: report.L30c_total_federal_election_activity_period,
         yearToDate: report.L30c_total_federal_election_activity_ytd,
       },
       {
         lineNumber: '31',
         description: 'TOTAL DISBURSEMENTS',
-        // Overlay
+        bold: true,
+        overlay: 'Lines 21(c) + 22 + 23 + 24 + 25 + 26 + 27 + 28(d) + 29 + 30(c) = Line 31',
         thisPeriod: report.L31_total_disbursements_period,
         yearToDate: report.L31_total_disbursements_ytd,
       },
       {
         lineNumber: '32',
         description: 'TOTAL FEDERAL DISBURSEMENTS',
-        // Overlay
+        bold: true,
+        overlay: 'Lines 31 - 21(a)(ii) + 30(a)(ii) = Line 32',
         thisPeriod: report.L32_total_federal_disbursements_period,
         yearToDate: report.L32_total_federal_disbursements_ytd,
       },
@@ -348,42 +405,48 @@ export class ReportDetailedSummaryComponent {
       {
         lineNumber: '33',
         description: `TOTAL CONTRIBUTIONS`,
-        // Overlay
+        bold: true,
+        overlay: 'Carried from Line 11(d)',
         thisPeriod: report.L33_total_contributions_period,
         yearToDate: report.L33_total_contributions_ytd,
       },
       {
         lineNumber: '34',
         description: 'TOTAL CONTRIBUTION REFUNDS',
-        // Overlay
+        bold: true,
+        overlay: 'Carried from Line 28(d)',
         thisPeriod: report.L34_total_contribution_refunds_period,
         yearToDate: report.L34_total_contribution_refunds_ytd,
       },
       {
         lineNumber: '35',
         description: 'NET CONTRIBUTIONS (OTHER THAN LOANS)',
-        // Overlay
+        bold: true,
+        overlay: 'Line 33 - 34 = Line 35',
         thisPeriod: report.L35_net_contributions_period,
         yearToDate: report.L35_net_contributions_ytd,
       },
       {
         lineNumber: '36',
         description: 'TOTAL FEDERAL OPERATING EXPENDITURES',
-        // Overlay
+        bold: true,
+        overlay: 'Line 21(a)(i) + 21(b) = Line 36',
         thisPeriod: report.L36_total_federal_operating_expenditures_period,
         yearToDate: report.L36_total_federal_operating_expenditures_ytd,
       },
       {
         lineNumber: '37',
         description: 'OFFSETS TO OPERATING EXPENDITURES',
-        // Overlay
+        bold: true,
+        overlay: 'Carried from Line 15',
         thisPeriod: report.L37_offsets_to_operating_expenditures_period,
         yearToDate: report.L37_offsets_to_operating_expenditures_ytd,
       },
       {
         lineNumber: '38',
         description: 'NET OPERATING EXPENDITURE',
-        // Overlay
+        bold: true,
+        overlay: 'Line 37 - 36 = Line 38',
         thisPeriod: report.L38_net_operating_expenditures_period,
         yearToDate: report.L38_net_operating_expenditures_ytd,
       },
@@ -396,7 +459,7 @@ export class ReportDetailedSummaryComponent {
   readonly columns: Signal<ColumnDefinition<DetailedLineSummary>[]> = computed(() => {
     const columns = [
       { field: 'lineNumber', header: 'Line', cssClass: 'line-column' },
-      { field: 'description', header: 'Description', cssClass: 'description-column' },
+      { field: 'description', header: 'Description', cssClass: 'description-column', bodyTpl: this.descriptionTpl() },
       { field: 'thisPeriod', header: 'This Period', cssClass: 'period-column', pipes: ['currency'] },
       {
         field: 'yearToDate',

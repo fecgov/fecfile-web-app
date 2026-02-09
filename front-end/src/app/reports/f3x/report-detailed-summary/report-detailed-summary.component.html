@@ -1,17 +1,25 @@
-<ng-template #descriptionTpl let-line>
+<ng-template #descriptionTpl let-line="$implicit">
   <div
+    class="cell-with-overlay"
     [ngClass]="{
       'indent-1': line.indent === 1,
       'indent-2': line.indent === 2,
-      bold: line.cssClass?.includes('bold'),
+      bold: line.bold,
+      italic: line.italic,
     }"
-    class="cell-with-overlay"
   >
-    {{ line.description }}
+    <span class="description-text">
+      {{ line.description }}
+      <span class="description-meta">
+        {{ line.descriptionMeta ? line.descriptionMeta : '' }}
+      </span>
+    </span>
     @if (line.overlay) {
-      <app-calculation-overlay>
-        {{ line.overlay }}
-      </app-calculation-overlay>
+      <span class="overlay-content">
+        <app-calculation-overlay>
+          {{ line.overlay }}
+        </app-calculation-overlay>
+      </span>
     }
   </div>
 </ng-template>
@@ -22,6 +30,7 @@
 
   @if (calculationFinished()) {
     <app-table
+      class="has-federal-total"
       [(first)]="first"
       [items]="receiptLines()"
       title="Receipts"
@@ -29,6 +38,37 @@
       [loading]="!calculationFinished()"
       sortField="name"
       [rowsPerPage]="receiptLines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+    <hr class="table-bottom" />
+    <app-table
+      class="has-federal-total"
+      [(first)]="first"
+      [items]="disbursementLines()"
+      title="Disbursements"
+      [(totalItems)]="disbursementLines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="disbursementLines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+    <hr class="table-bottom" />
+    <app-table
+      [(first)]="first"
+      [items]="contributionsExpendituresLines()"
+      title="Net contributions/operating expenditures"
+      [(totalItems)]="contributionsExpendituresLines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="contributionsExpendituresLines().length"
       [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
       itemName="users"
       [columns]="columns()"
