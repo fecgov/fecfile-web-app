@@ -3,12 +3,11 @@ import {
   Component,
   computed,
   effect,
-  EventEmitter,
   inject,
   Input,
   model,
   OnInit,
-  Output,
+  output,
   Signal,
   signal,
   TemplateRef,
@@ -92,8 +91,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   @Input() showHistory = false;
   @Input() headerTitle?: string;
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
-  @Output() readonly detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() readonly savedContact: EventEmitter<Contact> = new EventEmitter<Contact>();
+  readonly detailVisibleChange = output<boolean>();
+  readonly savedContact = output<Contact>();
   readonly first = signal(0);
   readonly sortField = signal('transaction_type_identifier');
   readonly sortOrder = signal<'asc' | 'desc'>('asc');
@@ -102,8 +101,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   tableLoading = true;
   readonly totalTransactions = signal(0);
   readonly rowsPerPage = signal(5);
-  readonly params: Signal<QueryParams> = computed(() => {
-    return { page_size: this.rowsPerPage(), contact: this.contact()?.id ?? '' };
+  readonly params: Signal<QueryParams | undefined> = computed(() => {
+    const contact = this.contact()?.id;
+    if (!contact) return undefined;
+    return { page_size: this.rowsPerPage(), contact };
   });
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
     ScheduleBTransactionTypeLabels,
@@ -195,6 +196,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   async loadTransactions() {
+    const params = this.params();
+    if (!params) return;
     this.tableLoading = true;
 
     // event is undefined when triggered from the detail page because
