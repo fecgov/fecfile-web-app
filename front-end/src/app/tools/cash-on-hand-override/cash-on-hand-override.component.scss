@@ -31,9 +31,9 @@
   }
 
   .form-content {
-    @include standard-container();
     gap: 20px;
     display: grid;
+    @include standard-container();
   }
 
   .right-grid {
