@@ -72,21 +72,77 @@ export class PageUtils {
   }
 
   private static parsePanelMonthYear($panel: JQuery<HTMLElement>): { month: number; year: number } | null {
-    const titleText = ($panel.find('.p-datepicker-title').first().text() || '').replace(/\s+/g, ' ').trim();
-    const titleMatch = titleText.match(/([A-Za-z]+)\s*(\d{4})/);
+    const titleText = ($panel.find('.p-datepicker-title').first().text() || '').trim();
+    const titleParts = titleText
+      .split(' ')
+      .map((part) => part.trim())
+      .filter((part) => part.length > 0);
 
-    if (!titleMatch) {
+    if (titleParts.length < 2) {
       return null;
     }
 
-    const parsedMonth = Date.parse(`${titleMatch[1]} 1, 2000`);
+    const yearText = titleParts[titleParts.length - 1];
+    if (!PageUtils.isAsciiDigits(yearText) || yearText.length !== 4) {
+      return null;
+    }
+
+    const monthLabel = titleParts.slice(0, -1).join(' ');
+    const parsedMonth = Date.parse(`${monthLabel} 1, 2000`);
     if (Number.isNaN(parsedMonth)) {
       return null;
     }
 
     return {
       month: new Date(parsedMonth).getMonth(),
-      year: Number.parseInt(titleMatch[2], 10),
+      year: Number.parseInt(yearText, 10),
+    };
+  }
+
+  private static isAsciiDigits(value: string): boolean {
+    if (!value) {
+      return false;
+    }
+
+    for (let i = 0; i < value.length; i += 1) {
+      const code = value.charCodeAt(i);
+      if (code < 48 || code > 57) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static parseDecadeRange(value: string): { start: number; end: number } | null {
+    const numericChunks: string[] = [];
+    let activeChunk = '';
+
+    for (let i = 0; i < value.length; i += 1) {
+      const character = value.charAt(i);
+      const code = character.charCodeAt(0);
+      const isDigit = code >= 48 && code <= 57;
+
+      if (isDigit) {
+        activeChunk += character;
+      } else if (activeChunk.length > 0) {
+        numericChunks.push(activeChunk);
+        activeChunk = '';
+      }
+    }
+
+    if (activeChunk.length > 0) {
+      numericChunks.push(activeChunk);
+    }
+
+    const fourDigitChunks = numericChunks.filter((chunk) => chunk.length === 4);
+    if (fourDigitChunks.length < 2) {
+      return null;
+    }
+
+    return {
+      start: Number.parseInt(fourDigitChunks[0], 10),
+      end: Number.parseInt(fourDigitChunks[1], 10),
     };
   }
 
@@ -207,12 +263,15 @@ export class PageUtils {
           }
 
           const decadeText = $panel.find('.p-datepicker-decade').first().text().trim();
-          const match = decadeText.match(/(\d{4})\D+(\d{4})/);
+          const decadeRange = PageUtils.parseDecadeRange(decadeText);
 
-          if (match) {
-            const start = Number.parseInt(match[1], 10);
-            const end = Number.parseInt(match[2], 10);
-            const button = year < start ? '.p-datepicker-prev-button' : year > end ? '.p-datepicker-next-button' : '';
+          if (decadeRange) {
+            const button =
+              year < decadeRange.start
+                ? '.p-datepicker-prev-button'
+                : year > decadeRange.end
+                  ? '.p-datepicker-next-button'
+                  : '';
 
             if (button) {
               cy.get('body')

@@ -18,10 +18,18 @@ type TransactionsListInterceptOptions = {
   times?: number;
 };
 
+function stripTrailingSlashes(value: string): string {
+  let normalized = value;
+  while (normalized.endsWith('/')) {
+    normalized = normalized.slice(0, -1);
+  }
+  return normalized;
+}
+
 export class Intercepts {
   static reportList(alias = 'GetReportList', query?: QueryShape, times?: number) {
     const reportsPath = Cypress._.escapeRegExp(
-      ApiUtils.apiRoutePathname('/reports').replace(/\/+$/, ''),
+      stripTrailingSlashes(ApiUtils.apiRoutePathname('/reports')),
     );
     const matcher: RouteMatcher = {
       method: 'GET',

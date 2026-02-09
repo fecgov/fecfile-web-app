@@ -3,7 +3,11 @@ const DEFAULT_API_URL = `${DEFAULT_API_ORIGIN}/api/v1`;
 const DEFAULT_ROUTE_PREFIX = '/api/v1';
 
 function stripTrailingSlashes(value: string): string {
-  return value.replace(/\/+$/, '');
+  let normalized = value;
+  while (normalized.endsWith('/')) {
+    normalized = normalized.slice(0, -1);
+  }
+  return normalized;
 }
 
 function ensureLeadingSlash(value: string): string {

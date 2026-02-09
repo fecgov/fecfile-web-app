@@ -196,12 +196,33 @@ function hashSeed(seed: string): number {
   return hash || 1;
 }
 
-function addOffsetToTrailingDigits(value: string, offset: number): string {
-  const match = value.match(/^(.*?)(\d+)$/);
-  if (!match) return value;
+function splitTrailingDigits(value: string): { prefix: string; digits: string } | null {
+  let splitIndex = value.length;
 
-  const prefix = match[1];
-  const digits = match[2];
+  while (splitIndex > 0) {
+    const code = value.charCodeAt(splitIndex - 1);
+    const isDigit = code >= 48 && code <= 57;
+    if (!isDigit) {
+      break;
+    }
+    splitIndex -= 1;
+  }
+
+  if (splitIndex === value.length) {
+    return null;
+  }
+
+  return {
+    prefix: value.slice(0, splitIndex),
+    digits: value.slice(splitIndex),
+  };
+}
+
+function addOffsetToTrailingDigits(value: string, offset: number): string {
+  const parts = splitTrailingDigits(value);
+  if (!parts) return value;
+
+  const { prefix, digits } = parts;
   const modulus = 10 ** digits.length;
   const next = (Number.parseInt(digits, 10) + offset) % modulus;
   return `${prefix}${next.toString().padStart(digits.length, '0')}`;

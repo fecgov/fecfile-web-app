@@ -12,6 +12,7 @@ import { makeTransaction } from '../requests/methods';
 import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { saveAndReopenCurrentTransaction, saveAndWaitForTransactionsList } from './utils/transaction-list-navigation';
 
 function setupTransactions(secondSame: boolean) {
   return DataSetup({ individual: true, individual2: true }).then((result: any) => {
@@ -35,27 +36,6 @@ function setupTransactions(secondSame: boolean) {
   });
 }
 
-function saveAndWaitForTransactionsList(reportId: string) {
-  PageUtils.clickButton('Save');
-  const listPathRegex = new RegExp(`^/reports/transactions/report/${Cypress._.escapeRegExp(reportId)}/list/?$`);
-  cy.location('pathname', { timeout: 20000 }).should('match', listPathRegex);
-  cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
-}
-
-function saveAndReopenCurrentTransaction(reportId: string) {
-  return cy.location('pathname').then((pathname) => {
-    const transactionIdMatch = pathname.match(/\/list\/([^/]+)\/?$/);
-    if (!transactionIdMatch?.[1]) {
-      throw new Error(`Expected transaction detail path ending with /list/<id>, got: ${pathname}`);
-    }
-
-    const transactionId = transactionIdMatch[1];
-    saveAndWaitForTransactionsList(reportId);
-    cy.visit(`/reports/transactions/report/${reportId}/list/${transactionId}`);
-    cy.get('#amount').should('exist');
-  });
-}
-
 function openTransactionFromListByAmount(amount: string) {
   cy.get('.p-datatable-tbody > tr')
     .contains('td', amount)
@@ -67,6 +47,22 @@ function openTransactionFromListByAmount(amount: string) {
     .click();
 }
 
+function goToTransactionsList(reportId: string) {
+  ReportListPage.goToReportList(reportId);
+  cy.contains('Transactions in this report').should('exist');
+}
+
+function openTransactionFromListByRow(rowNumber: number) {
+  cy.get(`.p-datatable-tbody > :nth-child(${rowNumber}) > :nth-child(2) > a`).click();
+}
+
+function assertFirstTwoRunningTotals(reportId: string, firstTotal: string, secondTotal: string) {
+  cy.visit(`/reports/transactions/report/${reportId}/list`);
+  cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
+  cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', firstTotal);
+  cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', secondTotal);
+}
+
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
     Initialize();
@@ -74,15 +70,8 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('new transaction aggregate', () => {
     setupTransactions(true).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
-
-      cy.get('.p-datatable-tbody > tr')
-        .eq(1) // 0-based, so 2nd row
-        .find('td')
-        .eq(1) // 2nd cell
-        .find('a')
-        .first()
-        .click();
+      goToTransactionsList(result.report);
+      openTransactionFromListByRow(2);
       cy.contains('Create a new contact').should('exist');
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
@@ -111,18 +100,14 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id="amount"]').clear().safeType('40');
       saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$240.01');
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
-      cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
+      assertFirstTwoRunningTotals(result.report, '$200.01', '$240.01');
     });
   });
 
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      goToTransactionsList(result.report);
+      openTransactionFromListByRow(2);
 
       // Tests changing the second transaction's contact
       cy.get('[id=aggregate]').should('have.value', '$25.00');
@@ -131,36 +116,28 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.contains('Ant').click({ force: true });
       saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$225.01');
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
-      cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$225.01');
+      assertFirstTwoRunningTotals(result.report, '$200.01', '$225.01');
     });
   });
 
   it('existing transaction change amount', () => {
     setupTransactions(true).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      goToTransactionsList(result.report);
+      openTransactionFromListByRow(2);
 
       // Tests changing the amount
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       cy.get('[id="amount"]').clear().safeType('40');
       saveAndReopenCurrentTransaction(result.report);
       cy.get('[id=aggregate]').should('have.value', '$240.01');
-      cy.visit(`/reports/transactions/report/${result.report}/list`);
-      cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
+      assertFirstTwoRunningTotals(result.report, '$200.01', '$240.01');
     });
   });
 
   it('existing transaction date leapfrogging', () => {
     setupTransactions(true).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
+      goToTransactionsList(result.report);
+      openTransactionFromListByRow(1);
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');

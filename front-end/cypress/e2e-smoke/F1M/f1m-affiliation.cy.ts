@@ -27,47 +27,35 @@ function createContactPromise(
   });
 }
 
+const qualifiedCandidates: MockContact[] = [
+  Candidate_House_A,
+  Candidate_House_B,
+  Candidate_Presidential_A,
+  Candidate_Presidential_B,
+  Candidate_Senate_A,
+];
+
+function seedQualifiedCandidates(): Cypress.Chainable<ContactFormData[]> {
+  const candidates: ContactFormData[] = [];
+  const apiCalls = qualifiedCandidates.map((candidate) => createContactPromise(candidate, candidates));
+
+  return cy.then(() => Cypress.Promise.all(apiCalls)).then(() => {
+    expect(candidates).to.have.lengthOf(qualifiedCandidates.length);
+    return candidates;
+  });
+}
+
 describe('Manage reports', () => {
   beforeEach(() => {
     Initialize();
   });
 
   it('should prepare qualified candidates', () => {
-    const candidates: ContactFormData[] = [];
-    const candidateList: MockContact[] = [
-      Candidate_House_A,
-      Candidate_House_B,
-      Candidate_Presidential_A,
-      Candidate_Presidential_B,
-      Candidate_Senate_A,
-    ];
-
-    const apiCalls = candidateList.map((candidate) =>
-      createContactPromise(candidate, candidates),
-    );
-
-    cy.then(() => Cypress.Promise.all(apiCalls)).then(() => {
-      expect(candidates).to.have.lengthOf(candidateList.length);
-    });
+    seedQualifiedCandidates();
   });
 
   it('should create form 1m by qualification', () => {
-    const candidates: ContactFormData[] = [];
-    const candidateList: MockContact[] = [
-      Candidate_House_A,
-      Candidate_House_B,
-      Candidate_Presidential_A,
-      Candidate_Presidential_B,
-      Candidate_Senate_A,
-    ];
-
-    const apiCalls = candidateList.map((candidate) =>
-      createContactPromise(candidate, candidates),
-    );
-
-    cy.then(() => Cypress.Promise.all(apiCalls)).then(() => {
-      expect(candidates).to.have.lengthOf(candidateList.length);
-
+    seedQualifiedCandidates().then((candidates) => {
       ReportListPage.createF1M();
       PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
       cy.get('[data-cy="state-party-radio"]').click();

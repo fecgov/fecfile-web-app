@@ -1,5 +1,5 @@
 import { Initialize, setCommitteeToPTY } from '../pages/loginPage';
-import { currentYear, PageUtils } from '../pages/pageUtils';
+import { currentYear } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { makeTransaction } from '../requests/methods';
 import { buildScheduleF } from '../requests/library/transactions';
@@ -8,6 +8,7 @@ import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ApiUtils } from '../utils/api';
+import { saveAndReopenCurrentTransaction, saveAndWaitForTransactionsList } from './utils/transaction-list-navigation';
 
 function generateReportAndContacts(transData: [number, string, boolean][]) {
   return DataSetup({
@@ -32,27 +33,6 @@ function generateReportAndContacts(transData: [number, string, boolean][]) {
     });
 
     return chain.then(() => result);
-  });
-}
-
-function saveAndWaitForTransactionsList(reportId: string) {
-  PageUtils.clickButton('Save');
-  const listPathRegex = new RegExp(`^/reports/transactions/report/${Cypress._.escapeRegExp(reportId)}/list/?$`);
-  cy.location('pathname', { timeout: 20000 }).should('match', listPathRegex);
-  cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
-}
-
-function saveAndReopenCurrentTransaction(reportId: string) {
-  return cy.location('pathname').then((pathname) => {
-    const transactionIdMatch = pathname.match(/\/list\/([^/]+)\/?$/);
-    if (!transactionIdMatch?.[1]) {
-      throw new Error(`Expected transaction detail path ending with /list/<id>, got: ${pathname}`);
-    }
-
-    const transactionId = transactionIdMatch[1];
-    saveAndWaitForTransactionsList(reportId);
-    cy.visit(`/reports/transactions/report/${reportId}/list/${transactionId}`);
-    cy.get('#amount').should('exist');
   });
 }
 
