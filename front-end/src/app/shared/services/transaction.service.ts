@@ -7,11 +7,16 @@ import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/t
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 
-interface PreviousTransaction {
+interface PreviousAggregate {
   aggregate: number;
   calendar_ytd_per_election_office: number;
   aggregate_general_elec_expended: number;
 }
+
+type PreviousAggregateField = keyof Pick<
+  PreviousAggregate,
+  'aggregate' | 'calendar_ytd_per_election_office' | 'aggregate_general_elec_expended'
+>;
 
 @Injectable({
   providedIn: 'root',
@@ -25,34 +30,23 @@ export class TransactionService {
     return getFromJSON(response);
   };
 
-  public async getPreviousTransactionForAggregate(
-    transaction: Transaction | undefined,
+  public async getPreviousEntityAggregate(
+    transaction: Transaction,
     contact_1_id: string,
     action_date: Date | string,
-  ): Promise<number> {
-    const actionDateString: string = action_date === '' ? '' : formatDate(action_date, 'yyyy-MM-dd', 'en-US') || '';
-    const transaction_id: string = transaction?.id ?? '';
-    const aggregation_group: AggregationGroups | undefined =
-      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
+  ): Promise<number | null> {
+    const date = action_date ? formatDate(action_date, 'yyyy-MM-dd', 'en-US') : '';
 
-    if (transaction && action_date && contact_1_id && aggregation_group) {
-      const response = await this.apiService.get<HttpResponse<PreviousTransaction>>(
-        '/transactions/previous/entity/',
-        {
-          transaction_id,
-          contact_1_id,
-          date: actionDateString,
-          aggregation_group,
-        },
-        [HttpStatusCode.NotFound],
-      );
-
-      return response.body?.aggregate ?? 0;
-    }
-    return 0;
+    return this.fetchPreviousAggregate(
+      transaction,
+      '/transactions/previous/entity/',
+      { contact_1_id, date },
+      'aggregate',
+      !!contact_1_id,
+    );
   }
 
-  public async getPreviousTransactionForCalendarYTD(
+  public async getPreviousElectionAggregate(
     transaction: Transaction | undefined,
     disbursement_date: DateType,
     dissemination_date: DateType,
@@ -60,77 +54,37 @@ export class TransactionService {
     candidate_office: string | undefined,
     candidate_state: string | undefined,
     candidate_district: string | undefined,
-  ): Promise<number> {
-    const actionDateString = this.getActionDateString(disbursement_date, dissemination_date);
+  ): Promise<number | null> {
+    const date = this.getActionDateString(disbursement_date, dissemination_date);
+    const hasRequiredState = !!(candidate_state || candidate_office === CandidateOfficeTypes.PRESIDENTIAL);
+    const hasRequiredDistrict = !!(candidate_district || candidate_office !== CandidateOfficeTypes.HOUSE);
+    const isValid = !!(candidate_office && election_code && hasRequiredState && hasRequiredDistrict);
 
-    const transaction_id: string = transaction?.id ?? '';
-    const aggregation_group: AggregationGroups | undefined =
-      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
-
-    if (
-      transaction &&
-      actionDateString &&
-      candidate_office &&
-      aggregation_group &&
-      election_code &&
-      (candidate_state || candidate_office === CandidateOfficeTypes.PRESIDENTIAL) &&
-      (candidate_district || candidate_office !== CandidateOfficeTypes.HOUSE)
-    ) {
-      const params: { [key: string]: string } = {
-        transaction_id,
-        date: actionDateString,
-        aggregation_group,
-        election_code,
-        candidate_office,
-      };
-      if (candidate_state) {
-        params['candidate_state'] = candidate_state;
-      }
-      if (candidate_district) {
-        params['candidate_district'] = candidate_district;
-      }
-
-      const response = await this.apiService.get<HttpResponse<PreviousTransaction>>(
-        '/transactions/previous/election/',
-        params,
-        [HttpStatusCode.NotFound],
-      );
-      return response.body?.calendar_ytd_per_election_office ?? 0;
-    }
-    return 0;
+    return this.fetchPreviousAggregate(
+      transaction,
+      '/transactions/previous/election/',
+      { date, election_code, candidate_office, candidate_state, candidate_district },
+      'calendar_ytd_per_election_office',
+      isValid,
+    );
   }
 
-  public async getPreviousTransactionForPayeeCandidate(
+  public async getPreviousPayeeCandidateAggregate(
     transaction: Transaction | undefined,
     contact2Id: string | undefined,
     expenditure_date: Date | string,
     general_election_year: string | undefined,
   ): Promise<number | null> {
-    const actionDateString: string =
-      expenditure_date === '' ? '' : formatDate(expenditure_date, 'yyyy-MM-dd', 'en-US') || '';
+    const date = expenditure_date ? formatDate(expenditure_date, 'yyyy-MM-dd', 'en-US') : '';
+    const contact_2_id = contact2Id ?? '';
 
-    const transaction_id: string = transaction?.id ?? '';
-    const contact_2_id: string = contact2Id ?? '';
-    const aggregation_group: AggregationGroups | undefined =
-      (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
-
-    if (transaction && actionDateString && contact_2_id && aggregation_group && general_election_year) {
-      const params: { [key: string]: string } = {
-        transaction_id,
-        contact_2_id,
-        date: actionDateString,
-        aggregation_group,
-        general_election_year,
-      };
-
-      const response = await this.apiService.get<HttpResponse<PreviousTransaction>>(
-        '/transactions/previous/payee-candidate/',
-        params,
-        [HttpStatusCode.NotFound],
-      );
-      return response.body?.aggregate_general_elec_expended ?? 0;
-    }
-    return 0;
+    return this.fetchPreviousAggregate(
+      transaction,
+      '/transactions/previous/payee-candidate/',
+      { contact_2_id, date, general_election_year },
+      'aggregate_general_elec_expended',
+      !!(contact_2_id && general_election_year),
+    );
   }
 
   public async create(transaction: Transaction): Promise<Transaction> {
@@ -210,5 +164,28 @@ export class TransactionService {
       actionDateString = dissemination_date ? formatDate(dissemination_date, 'yyyy-MM-dd', 'en-US') : '';
     }
     return actionDateString;
+  }
+
+  private async fetchPreviousAggregate(
+    transaction: Transaction | undefined,
+    endpoint: string,
+    params: Record<string, string | undefined>,
+    resultField: PreviousAggregateField,
+    validationCondition: boolean,
+  ): Promise<number | null> {
+    const transaction_id = transaction?.id ?? '';
+    const aggregation_group = (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
+
+    if (!transaction || !aggregation_group || !params['date'] || !validationCondition) {
+      return null;
+    }
+
+    const response = await this.apiService.get<HttpResponse<PreviousAggregate>>(
+      endpoint,
+      { transaction_id, aggregation_group, ...params },
+      [HttpStatusCode.NotFound],
+    );
+
+    return response.body?.[resultField] ?? null;
   }
 }

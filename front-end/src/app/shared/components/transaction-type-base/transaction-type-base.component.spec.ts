@@ -89,7 +89,7 @@ describe('TransactionTypeBaseComponent', () => {
           useValue: jasmine.createSpyObj('TransactionService', {
             update: of(undefined),
             create: of(undefined),
-            getPreviousTransactionForAggregate: Promise.resolve(undefined),
+            getPreviousEntityAggregate: Promise.resolve(undefined),
           }),
         },
         ConfirmationService,
@@ -621,11 +621,11 @@ describe('TransactionTypeBaseComponent', () => {
 
       form.get('expenditure_amount')?.setValue(25);
       form.get('expenditure_date')?.setValue(new Date('1-1-2013'));
-      expect(transactionServiceSpy.getPreviousTransactionForAggregate).not.toHaveBeenCalled();
+      expect(transactionServiceSpy.getPreviousEntityAggregate).not.toHaveBeenCalled();
 
       contactId$.next('1234-abcd-1234-abcd');
       tick();
-      expect(transactionServiceSpy.getPreviousTransactionForAggregate).toHaveBeenCalled();
+      expect(transactionServiceSpy.getPreviousEntityAggregate).toHaveBeenCalled();
     }));
   });
 });

@@ -118,7 +118,15 @@ export class PageUtils {
 
   static clickAccordion(name: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('p-accordion-header', name).click();
+    const label = name.trim();
+    const exactLabel = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(label)}\s*$`, 'i');
+
+    cy.get(alias)
+      .contains('.accordion-text strong, .header-label', exactLabel, { timeout: 5000 })
+      .first()
+      .closest('p-accordion-header, .p-accordionheader')
+      .should('be.visible')
+      .click();
   }
 
   static clickButton(name: string, alias = '', force = false) {
