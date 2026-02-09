@@ -190,31 +190,42 @@ export interface MockContact {
 
 function hashSeed(seed: string): number {
   let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = (hash * 31 + seed.charCodeAt(i)) % 10000;
+  for (const character of seed) {
+    const code = character.codePointAt(0);
+    if (code === undefined) {
+      continue;
+    }
+
+    hash = (hash * 31 + code) % 10000;
   }
   return hash || 1;
 }
 
 function splitTrailingDigits(value: string): { prefix: string; digits: string } | null {
-  let splitIndex = value.length;
+  const characters = Array.from(value);
+  let splitIndex = characters.length;
 
   while (splitIndex > 0) {
-    const code = value.charCodeAt(splitIndex - 1);
-    const isDigit = code >= 48 && code <= 57;
+    const character = characters.at(splitIndex - 1);
+    if (!character) {
+      break;
+    }
+
+    const code = character.codePointAt(0);
+    const isDigit = code !== undefined && code >= 48 && code <= 57;
     if (!isDigit) {
       break;
     }
     splitIndex -= 1;
   }
 
-  if (splitIndex === value.length) {
+  if (splitIndex === characters.length) {
     return null;
   }
 
   return {
-    prefix: value.slice(0, splitIndex),
-    digits: value.slice(splitIndex),
+    prefix: characters.slice(0, splitIndex).join(''),
+    digits: characters.slice(splitIndex).join(''),
   };
 }
 

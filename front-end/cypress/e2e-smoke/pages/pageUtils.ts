@@ -82,8 +82,8 @@ export class PageUtils {
       return null;
     }
 
-    const yearText = titleParts[titleParts.length - 1];
-    if (!PageUtils.isAsciiDigits(yearText) || yearText.length !== 4) {
+    const yearText = titleParts.at(-1);
+    if (!yearText || !PageUtils.isAsciiDigits(yearText) || yearText.length !== 4) {
       return null;
     }
 
@@ -104,9 +104,9 @@ export class PageUtils {
       return false;
     }
 
-    for (let i = 0; i < value.length; i += 1) {
-      const code = value.charCodeAt(i);
-      if (code < 48 || code > 57) {
+    for (const character of value) {
+      const code = character.codePointAt(0);
+      if (code === undefined || code < 48 || code > 57) {
         return false;
       }
     }
@@ -118,10 +118,9 @@ export class PageUtils {
     const numericChunks: string[] = [];
     let activeChunk = '';
 
-    for (let i = 0; i < value.length; i += 1) {
-      const character = value.charAt(i);
-      const code = character.charCodeAt(0);
-      const isDigit = code >= 48 && code <= 57;
+    for (const character of value) {
+      const code = character.codePointAt(0);
+      const isDigit = code !== undefined && code >= 48 && code <= 57;
 
       if (isDigit) {
         activeChunk += character;
@@ -266,12 +265,12 @@ export class PageUtils {
           const decadeRange = PageUtils.parseDecadeRange(decadeText);
 
           if (decadeRange) {
-            const button =
-              year < decadeRange.start
-                ? '.p-datepicker-prev-button'
-                : year > decadeRange.end
-                  ? '.p-datepicker-next-button'
-                  : '';
+            let button = '';
+            if (year < decadeRange.start) {
+              button = '.p-datepicker-prev-button';
+            } else if (year > decadeRange.end) {
+              button = '.p-datepicker-next-button';
+            }
 
             if (button) {
               cy.get('body')

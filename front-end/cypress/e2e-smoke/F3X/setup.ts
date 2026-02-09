@@ -40,7 +40,8 @@ function runIf(condition: boolean | undefined, fn: () => Cypress.Chainable<any>)
   return fn();
 }
 
-export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> {
+
+export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> { // NOSONAR: Cypress setup flow intentionally composes chained conditional callbacks
   const results: Results = {
     organization: null,
     individual: null,
@@ -59,12 +60,14 @@ export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> {
       ? withUniqueContactIdentifiers(contact, uniqueSeed)
       : contact;
 
-  const createReports = () => {
+
+
+  const createReports = () => { // NOSONAR: Cypress setup flow intentionally composes chained conditional callbacks
     if (setup.reports?.length) {
       let chain: Cypress.Chainable<any> = cy.wrap(null, { log: false });
-      setup.reports.forEach((report, index) => {
-        chain = chain.then(() =>
-          makeF3x(report, (response) => {
+      setup.reports.forEach((report, index) => { // NOSONAR: Cypress setup flow intentionally composes chained conditional callbacks
+        chain = chain.then(() => 
+          makeF3x(report, (response) => { // NOSONAR: Cypress setup flow intentionally composes chained conditional callbacks
             if (index === 0) results.report = response.body.id;
           }),
         );
