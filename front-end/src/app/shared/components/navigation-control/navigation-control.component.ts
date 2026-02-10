@@ -10,15 +10,15 @@ import {
 import { SubTransactionGroup, TransactionType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
+  SchATransaction,
   ScheduleATransactionTypeLabels,
   UnimplementedTypeEntityCategories,
 } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
-import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ButtonModule } from 'primeng/button';
@@ -26,6 +26,7 @@ import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 @Component({
   selector: 'app-navigation-control',
@@ -95,7 +96,7 @@ export class NavigationControlComponent implements OnInit {
     const navigationEvent = new NavigationEvent(
       this.navigationControl?.navigationAction,
       this.navigationControl?.navigationDestination,
-      cloneDeep(this.transaction),
+      this.transaction?.clone(),
       destinationTransactionType,
     );
     this.store.dispatch(navigationEventSetAction(navigationEvent));
@@ -104,7 +105,7 @@ export class NavigationControlComponent implements OnInit {
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
-      const navigationEvent = clone(event.value);
+      const navigationEvent = structuredClone(event.value);
       this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }

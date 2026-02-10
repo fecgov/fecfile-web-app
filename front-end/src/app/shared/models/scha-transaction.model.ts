@@ -1,4 +1,4 @@
-import { plainToInstance, Transform } from 'class-transformer';
+import { instanceToPlain, plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -90,6 +90,11 @@ export class SchATransaction extends Transaction {
 
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+  }
+
+  override clone(): SchATransaction {
+    const plain = instanceToPlain(this);
+    return plainToInstance(SchATransaction, plain);
   }
 }
 

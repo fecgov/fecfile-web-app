@@ -7,6 +7,9 @@ describe('Transaction', () => {
   it('should create an instance', () => {
     // Must extend the abstract class to instantiate it
     class ChildTransaction extends Transaction {
+      override clone(): Transaction {
+        throw new Error('Method not implemented.');
+      }
       apiEndpoint = '/sch-x-transactions';
     }
     expect(new ChildTransaction()).toBeTruthy();

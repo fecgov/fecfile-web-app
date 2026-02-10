@@ -149,6 +149,8 @@ export abstract class Transaction extends BaseModel {
   getForm3(): Form3 | undefined {
     return (this.getReport(ReportTypes.F3) as Form3) ?? undefined;
   }
+
+  abstract clone(): Transaction;
 }
 
 export function getTransactionName(transaction: ScheduleTransaction): string {

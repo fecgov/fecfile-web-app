@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { instanceToPlain, plainToClass, plainToInstance, Transform } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { BaseModel } from './base.model';
@@ -75,6 +75,11 @@ export class SchC1Transaction extends Transaction {
       });
     }
     return transaction;
+  }
+
+  override clone(): SchC1Transaction {
+    const plain = instanceToPlain(this);
+    return plainToInstance(SchC1Transaction, plain);
   }
 }
 

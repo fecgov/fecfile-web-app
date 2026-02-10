@@ -1,4 +1,4 @@
-import { plainToInstance, Transform } from 'class-transformer';
+import { instanceToPlain, plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import type { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -97,6 +97,11 @@ export class SchBTransaction extends Transaction {
       //'beneficiary_committee_name',
       ...super.getFieldsNotToValidate(),
     ];
+  }
+
+  override clone(): SchBTransaction {
+    const plain = instanceToPlain(this);
+    return plainToInstance(SchBTransaction, plain);
   }
 }
 

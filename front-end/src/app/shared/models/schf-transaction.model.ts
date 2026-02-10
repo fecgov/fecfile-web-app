@@ -1,4 +1,4 @@
-import { plainToInstance, Transform } from 'class-transformer';
+import { instanceToPlain, plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -75,6 +75,11 @@ export class SchFTransaction extends Transaction {
       'aggregate_general_elec_expended',
       ...super.getFieldsNotToValidate(),
     ];
+  }
+
+  override clone(): SchFTransaction {
+    const plain = instanceToPlain(this);
+    return plainToInstance(SchFTransaction, plain);
   }
 }
 

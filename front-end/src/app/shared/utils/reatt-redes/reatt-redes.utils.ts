@@ -8,8 +8,8 @@ import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
-import { cloneDeep } from 'lodash';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -113,10 +113,8 @@ export class ReattRedesUtils {
       throw Error('FECfile+: originating transaction type not found.');
     }
 
-    const clone =
-      payload instanceof SchATransaction
-        ? (cloneDeep(payload.reatt_redes) as SchATransaction)
-        : (cloneDeep(payload.reatt_redes) as SchBTransaction);
+    const clone = payload.reatt_redes.clone() as SchATransaction | SchBTransaction;
+
     if (clone.memo_text) {
       clone.memo_text.id = undefined;
       clone.memo_text.report_id = payload.report_ids?.[0];

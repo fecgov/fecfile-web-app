@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { instanceToPlain, plainToClass, plainToInstance, Transform } from 'class-transformer';
 import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -49,6 +49,11 @@ export class SchDTransaction extends Transaction {
 
   override getFieldsNotToValidate(): string[] {
     return ['payment_amount', 'balance_at_close', ...super.getFieldsNotToValidate()];
+  }
+
+  override clone(): SchDTransaction {
+    const plain = instanceToPlain(this);
+    return plainToInstance(SchDTransaction, plain);
   }
 }
 
