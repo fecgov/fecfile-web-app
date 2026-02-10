@@ -18,7 +18,6 @@ export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override showAggregate = false;
   override inheritedFields = [
     ...INDIVIDUAL_FIELDS,
     ...ORG_FIELDS,

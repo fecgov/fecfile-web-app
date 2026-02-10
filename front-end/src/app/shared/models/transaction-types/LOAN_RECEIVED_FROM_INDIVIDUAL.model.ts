@@ -39,7 +39,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
 
   override description = 'Saving a loan received from individual will automatically create a related receipt.';
-  override accordionTitle = 'ENTER DATA';
+  override accordionTitle = 'STEP ONE';
   override accordionSubText = 'Enter lender, loan, and terms information for a loan received from individual';
   override formTitle = undefined;
   override footer =

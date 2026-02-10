@@ -163,7 +163,7 @@ describe('Loans', () => {
       formData.date_received = undefined;
       TransactionDetailPage.enterLoanFormData(formData);
 
-      PageUtils.clickAccordion('STEP TWO:');
+      PageUtils.clickAccordion('STEP TWO');
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
       PageUtils.clickButton('Save transactions');
       PageUtils.urlCheck('/list');

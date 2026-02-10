@@ -614,7 +614,7 @@ export class ContactsHelpers {
     };
 
     return cy
-      .get('app-table[title="Transaction history"]', { timeout: 15000 })
+      .get('app-table[itemname="transactions"]', { timeout: 15000 })
       .should('exist')
       .find('table[role="table"]', { timeout: 15000 })
       .first()

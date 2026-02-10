@@ -12,7 +12,7 @@ export class PollerService {
   versionCheckSubscription?: Subscription;
 
   startPolling(deploymentUrl: string) {
-    this.versionCheckSubscription = interval(5000)
+    this.versionCheckSubscription = interval(60000) // 60 seconds
       .pipe(switchMap(() => this.compareVersions(deploymentUrl)))
       .subscribe();
   }
