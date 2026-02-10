@@ -3,15 +3,18 @@ import { SelectComponent } from './select.component';
 import { Component, viewChild } from '@angular/core';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { FormGroup, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  imports: [SelectComponent],
+  imports: [SelectComponent, ReactiveFormsModule],
   standalone: true,
-  template: `<app-select label="test" inputId="test" [options]="options" [control]="control" />`,
+  template: `<div [formGroup]="form">
+    <app-select label="test" inputId="test" [options]="options" [form]="form" formControlName="testControl" />
+  </div>`,
 })
 class TestHostComponent {
   options: PrimeOptions = [{ label: 'test', value: 'test' }];
-  control = new SubscriptionFormControl();
+  form = new FormGroup({ testControl: new SubscriptionFormControl() });
 
   component = viewChild.required(SelectComponent);
 }
@@ -24,6 +27,7 @@ describe('SelectComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SelectComponent],
+      providers: [NgControl],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -34,5 +38,18 @@ describe('SelectComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should blur on change', (done) => {
+    const selectEl = fixture.nativeElement.querySelector('select');
+    const blurSpy = spyOn(selectEl, 'blur');
+
+    selectEl.dispatchEvent(new Event('change'));
+
+    // Wait for the setTimeout(0)
+    setTimeout(() => {
+      expect(blurSpy).toHaveBeenCalled();
+      done();
+    }, 0);
   });
 });

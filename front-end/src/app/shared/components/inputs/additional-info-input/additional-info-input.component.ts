@@ -6,11 +6,11 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { SelectItem } from 'primeng/api';
-import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { BaseInputComponent } from '../base-input.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
+import { SelectComponent } from '../../select/select.component';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -19,7 +19,7 @@ import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive
   imports: [
     ReactiveFormsModule,
     ErrorMessagesComponent,
-    Select,
+    SelectComponent,
     AutoResizeDirective,
     DesignatedSubordinateInputComponent,
   ],

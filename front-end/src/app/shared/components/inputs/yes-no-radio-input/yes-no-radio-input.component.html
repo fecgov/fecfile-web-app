@@ -1,43 +1,36 @@
-<div [formGroup]="form">
-  <div class="grid">
-    <div class="col-12">
-      <label [for]="controlName()" class="control-label">
-        {{ label() }}
-        @if (parenLabel()) {
-          <span class="paren-label">{{ parenLabel() }}</span>
-        }
-      </label>
-      @if (tooltipText()) {
-        <span
-          class="pi pi-info-circle circle-icon-tooltip"
-          pTooltip="{{ tooltipText() }}"
-          [escape]="tooltipEscape"
-        ></span>
-      }
-    </div>
-  </div>
+<fieldset [formGroup]="form">
+  <legend>
+    {{ label() }}
+    @if (parenLabel()) {
+      <span class="paren-label">{{ parenLabel() }}</span>
+    }
+  </legend>
+  @if (tooltipText()) {
+    <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ tooltipText() }}" [escape]="tooltipEscape"></span>
+  }
+
   <div class="grid">
     <div class="col-1 flex">
       <p-radioButton
         [name]="controlName()"
-        inputId="N"
+        [inputId]="controlName() + '-N'"
         [value]="false"
         [formControlName]="controlName()"
         [ariaLabel]="ariaLabelNo()"
         [class]="radioClass()"
       />
-      <label for="N" class="ml-2">NO</label>
+      <label [for]="controlName() + '-N'" class="ml-2">NO</label>
     </div>
     <div class="col-1 flex">
       <p-radioButton
         [name]="controlName()"
-        inputId="Y"
+        [inputId]="controlName() + '-Y'"
         [value]="true"
         [formControlName]="controlName()"
         [ariaLabel]="ariaLabelYes()"
         [class]="radioClass()"
       />
-      <label for="Y" class="ml-2">YES</label>
+      <label [for]="controlName() + '-Y'" class="ml-2">YES</label>
     </div>
   </div>
   <div class="grid">
@@ -50,4 +43,4 @@
       />
     </div>
   </div>
-</div>
+</fieldset>

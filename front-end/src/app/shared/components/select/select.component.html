@@ -1,8 +1,39 @@
 <div class="field">
-  <label [class]="labelClass()" [for]="inputId()">{{ label() }}</label>
-  <p-select #inputSelect [formControl]="control()" [options]="options()" [inputId]="inputId()">
-    <ng-template #selectedItem let-selectedOption>
-      <input type="text" [id]="inputId()" [value]="selectedOption.label" readonly (click)="inputSelect.show()" />
-    </ng-template>
-  </p-select>
+  <label [class]="labelClass()" [id]="labelId()" [for]="safeId()">
+    {{ label() }}
+    @if (optionalLabel()) {
+      <span class="paren-label">(OPTIONAL)</span>
+    }
+  </label>
+  <div class="select-wrapper">
+    <select
+      #selectElement
+      [formControl]="control()"
+      [id]="safeId()"
+      (change)="handleChange($event)"
+      [disabled]="control().disabled"
+      (blur)="update.emit(control().value)"
+    >
+      <button [attr.aria-labelledby]="labelId()">
+        <selectedcontent #selected></selectedcontent>
+      </button>
+      @for (option of options(); track option.value) {
+        <option [ngValue]="option.value">
+          @if (customTemplate()) {
+            <ng-container *ngTemplateOutlet="customTemplate(); context: { $implicit: option }"></ng-container>
+          } @else {
+            {{ option.label }}
+          }
+        </option>
+      }
+    </select>
+    @if (showClear() && control().value && !control().disabled) {
+      <button type="button" class="select-clear-button" aria-label="Clear selection" (click)="clear($event)">
+        <i class="pi pi-times"></i>
+      </button>
+    }
+  </div>
+  @if (includeErrorMessages()) {
+    <app-error-messages [form]="form()" [fieldName]="formControlName()" [formSubmitted]="formSubmitted()" />
+  }
 </div>
