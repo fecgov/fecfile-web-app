@@ -9,6 +9,7 @@ export class TransactionListRecord extends BaseModel {
   form_type: string | undefined;
   report_type: string | undefined;
   transaction_id: string | undefined;
+  back_reference_tran_id_number?: string;
   line_label: string | undefined;
   itemized: boolean | undefined;
   force_unaggregated: boolean | undefined;
@@ -21,7 +22,6 @@ export class TransactionListRecord extends BaseModel {
   report_code_label: string | undefined;
   report_ids: string[] | undefined;
   parent_transaction_id: string | undefined;
-  parent_transaction: TransactionListRecord | undefined;
   @Type(() => TransactionType)
   @Exclude({ toPlainOnly: true })
   transactionType: TransactionType = {} as TransactionType;
