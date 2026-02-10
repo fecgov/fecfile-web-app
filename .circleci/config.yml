@@ -150,6 +150,10 @@ jobs:
       video:
         type: boolean
         default: false
+      browser:
+        type: enum
+        enum: [chrome, firefox, edge]
+        default: chrome
     environment:
       CYPRESS_VIDEO: << parameters.video >>
     steps:
@@ -160,29 +164,55 @@ jobs:
             docker container run --name fecfile-web-app-e2e \
               -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
               -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_BROWSER=<< parameters.browser >> \
+              -e CYPRESS_SUITE=e2e-smoke \
+              -e CYPRESS_DISABLE_BROWSER_AI=true \
               -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
               -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
               -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
               -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
-              cypress/browsers:latest \
-              /bin/bash -c '\
+              << pipeline.parameters.cypress-browsers-image >> \
+              /bin/bash -eo pipefail -c '\
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'
+                mkdir -p ci; \
+                chrome_version="$(google-chrome --version 2>/dev/null || echo unavailable)"; \
+                firefox_version="$(firefox --version 2>/dev/null || echo unavailable)"; \
+                edge_version="$(microsoft-edge --version 2>/dev/null || microsoft-edge-stable --version 2>/dev/null || echo unavailable)"; \
+                chromedriver_version="$(chromedriver --version 2>/dev/null || echo unavailable)"; \
+                geckodriver_version="$(geckodriver --version 2>/dev/null || echo unavailable)"; \
+                msedgedriver_version="$(msedgedriver --version 2>/dev/null || echo unavailable)"; \
+                cypress_version="$(npx cypress version 2>/dev/null | tr "\n" " " || echo unavailable)"; \
+                { \
+                  echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)"; \
+                  echo "suite=${CYPRESS_SUITE}"; \
+                  echo "requested_browser=${CYPRESS_BROWSER}"; \
+                  echo "node=$(node --version)"; \
+                  echo "npm=$(npm --version)"; \
+                  echo "cypress=${cypress_version}"; \
+                  echo "chrome=${chrome_version}"; \
+                  echo "firefox=${firefox_version}"; \
+                  echo "edge=${edge_version}"; \
+                  echo "chromedriver=${chromedriver_version}"; \
+                  echo "geckodriver=${geckodriver_version}"; \
+                  echo "msedgedriver=${msedgedriver_version}"; \
+                } | tee ci/browser-versions.txt; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser ${CYPRESS_BROWSER};'
       - run:
           name: stage test result artifacts
           when: always
           command: |
             rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots /tmp/cypress/ci
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/ci/. /tmp/cypress/ci || true
+            docker rm fecfile-web-app-e2e || true
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -192,6 +222,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/ci
+          destination: cypress/ci
       - store_artifacts:
           path: /tmp/cypress/results/if-5xx
           destination: cypress/results/if-5xx
@@ -204,6 +237,10 @@ jobs:
       video:
         type: boolean
         default: false
+      browser:
+        type: enum
+        enum: [chrome, firefox, edge]
+        default: chrome
     environment:
       CYPRESS_VIDEO: << parameters.video >>
     steps:
@@ -214,29 +251,55 @@ jobs:
             docker container run --name fecfile-web-app-e2e \
               -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
               -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_BROWSER=<< parameters.browser >> \
+              -e CYPRESS_SUITE=e2e-extended \
+              -e CYPRESS_DISABLE_BROWSER_AI=true \
               -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
               -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
               -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
               -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
-              cypress/browsers:latest \
-              /bin/bash -c '\
+              << pipeline.parameters.cypress-browsers-image >> \
+              /bin/bash -eo pipefail -c '\
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'
+                mkdir -p ci; \
+                chrome_version="$(google-chrome --version 2>/dev/null || echo unavailable)"; \
+                firefox_version="$(firefox --version 2>/dev/null || echo unavailable)"; \
+                edge_version="$(microsoft-edge --version 2>/dev/null || microsoft-edge-stable --version 2>/dev/null || echo unavailable)"; \
+                chromedriver_version="$(chromedriver --version 2>/dev/null || echo unavailable)"; \
+                geckodriver_version="$(geckodriver --version 2>/dev/null || echo unavailable)"; \
+                msedgedriver_version="$(msedgedriver --version 2>/dev/null || echo unavailable)"; \
+                cypress_version="$(npx cypress version 2>/dev/null | tr "\n" " " || echo unavailable)"; \
+                { \
+                  echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)"; \
+                  echo "suite=${CYPRESS_SUITE}"; \
+                  echo "requested_browser=${CYPRESS_BROWSER}"; \
+                  echo "node=$(node --version)"; \
+                  echo "npm=$(npm --version)"; \
+                  echo "cypress=${cypress_version}"; \
+                  echo "chrome=${chrome_version}"; \
+                  echo "firefox=${firefox_version}"; \
+                  echo "edge=${edge_version}"; \
+                  echo "chromedriver=${chromedriver_version}"; \
+                  echo "geckodriver=${geckodriver_version}"; \
+                  echo "msedgedriver=${msedgedriver_version}"; \
+                } | tee ci/browser-versions.txt; \
+                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser ${CYPRESS_BROWSER};'
       - run:
           name: stage test result artifacts
           when: always
           command: |
             rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots /tmp/cypress/ci
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/ci/. /tmp/cypress/ci || true
+            docker rm fecfile-web-app-e2e || true
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -246,6 +309,9 @@ jobs:
       - store_artifacts:
           path: /tmp/cypress/screenshots
           destination: cypress/screenshots
+      - store_artifacts:
+          path: /tmp/cypress/ci
+          destination: cypress/ci
       - store_artifacts:
           path: /tmp/cypress/results/if-5xx
           destination: cypress/results/if-5xx
@@ -319,6 +385,14 @@ parameters:
     type: boolean
     default: false
 
+  is-triggered-cross-browser:
+    type: boolean
+    default: false
+
+  cypress-browsers-image:
+    type: string
+    default: cypress/browsers:node-24.13.0-chrome-144.0.7559.132-1-ff-147.0.3-edge-144.0.3719.104-1
+
   e2e-video:
     type: boolean
     default: false
@@ -331,6 +405,7 @@ workflows:
         - not: << pipeline.parameters.is-triggered-e2e-extended-test >>
         - not: << pipeline.parameters.is-triggered-unit-test >>
         - not: << pipeline.parameters.is-triggered-full-nightly >>
+        - not: << pipeline.parameters.is-triggered-cross-browser >>
     jobs:
       - lint
       - test
@@ -380,3 +455,19 @@ workflows:
       - e2e-extended:
           video: true
       - test
+
+  cross-browser-weekly:
+    when: << pipeline.parameters.is-triggered-cross-browser >>
+    jobs:
+      - e2e-smoke:
+          name: e2e-smoke-<< matrix.browser >>
+          video: true
+          matrix:
+            parameters:
+              browser: [chrome, firefox, edge]
+      - e2e-extended:
+          name: e2e-extended-<< matrix.browser >>
+          video: true
+          matrix:
+            parameters:
+              browser: [chrome, firefox, edge]
