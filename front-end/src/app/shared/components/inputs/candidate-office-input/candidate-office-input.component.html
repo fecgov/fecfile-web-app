@@ -1,35 +1,29 @@
 <div [formGroup]="form()">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
-        <label for="candidate_office">CANDIDATE OFFICE</label>
-        <p-select
-          inputId="candidate_office"
-          [formControlName]="officeFormControlName()"
-          [options]="candidateOfficeTypeOptions"
-          appendTo="body"
-        />
-        <app-error-messages [form]="form()" [fieldName]="officeFormControlName()" [formSubmitted]="formSubmitted()" />
-      </div>
+      <app-select
+        inputId="candidate_office"
+        label="CANDIDATE OFFICE"
+        [options]="candidateOfficeTypeOptions"
+        [form]="form()"
+        [formControlName]="officeFormControlName()"
+        [formSubmitted]="formSubmitted()"
+      />
     </div>
     <div class="col-3">
-      <div class="field">
-        <label for="candidate_state">CANDIDATE STATE</label>
-        <app-searchable-select
-          inputId="candidate_state"
-          [controlName]="stateFormControlName()"
-          [form]="form()"
-          [options]="candidateStateOptions"
-          [class.disabled]="stateControl()?.disabled"
-          appendTo="body"
-        />
-        <app-error-messages [form]="form()" [fieldName]="stateFormControlName()" [formSubmitted]="formSubmitted()" />
-      </div>
+      <app-select
+        inputId="candidate_state"
+        label="CANDIDATE STATE"
+        [options]="candidateStateOptions"
+        [form]="form()"
+        [formControlName]="stateFormControlName()"
+        [formSubmitted]="formSubmitted()"
+      />
     </div>
     <div class="col-3">
-      <div class="field">
-        <label for="candidate_district">CANDIDATE DISTRICT</label>
-        @if (candidateDistrictOptions.length === 1) {
+      @if (candidateDistrictOptions.length === 1) {
+        <div class="field">
+          <label for="candidate_district">CANDIDATE DISTRICT</label>
           <input
             type="text"
             pInputText
@@ -37,17 +31,22 @@
             [formControlName]="districtFormControlName()"
             class="p-disabled"
           />
-        } @else {
-          <p-select
-            inputId="candidate_district"
-            [formControlName]="districtFormControlName()"
-            [options]="candidateDistrictOptions"
-            [class.disabled]="stateControl()?.disabled"
-            appendTo="body"
+          <app-error-messages
+            [form]="form()"
+            [fieldName]="districtFormControlName()"
+            [formSubmitted]="formSubmitted()"
           />
-        }
-        <app-error-messages [form]="form()" [fieldName]="districtFormControlName()" [formSubmitted]="formSubmitted()" />
-      </div>
+        </div>
+      } @else {
+        <app-select
+          inputId="candidate_district"
+          label="CANDIDATE DISTRICT"
+          [options]="candidateDistrictOptions"
+          [form]="form()"
+          [formControlName]="districtFormControlName()"
+          [formSubmitted]="formSubmitted()"
+        />
+      }
     </div>
   </div>
 </div>

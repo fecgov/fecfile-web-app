@@ -4,16 +4,16 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
 import { SearchableSelectComponent } from '../../searchable-select/searchable-select.component';
+import { SelectComponent } from '../../select/select.component';
 
 @Component({
   selector: 'app-candidate-office-input',
   styleUrls: ['./candidate-office-input.component.scss'],
   templateUrl: './candidate-office-input.component.html',
-  imports: [ReactiveFormsModule, Select, ErrorMessagesComponent, InputText, SearchableSelectComponent],
+  imports: [ReactiveFormsModule, SelectComponent, ErrorMessagesComponent, InputText, SearchableSelectComponent],
 })
 export class CandidateOfficeInputComponent implements OnInit {
   readonly transaction = input<Transaction>();
