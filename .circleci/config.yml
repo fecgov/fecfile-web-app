@@ -54,7 +54,7 @@ commands:
 jobs:
   lint:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/node:20.19.6-browsers
     resource_class: large
     steps:
       - checkout
@@ -80,7 +80,7 @@ jobs:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/node:20.19.6-browsers
     resource_class: large
     steps:
       - checkout:
@@ -145,7 +145,7 @@ jobs:
 
   e2e-smoke:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/node:20.19.6-browsers
     parameters:
       video:
         type: boolean
@@ -199,7 +199,7 @@ jobs:
   # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: cimg/node:20.19.6-browsers
     parameters:
       video:
         type: boolean
