@@ -163,9 +163,7 @@ select {
 select::-ms-expand {
   display: none;
 }
-select:hover:not([disabled]) {
-  background-color: #d6d7d9;
-}
+
 textarea {
   resize: vertical;
 }

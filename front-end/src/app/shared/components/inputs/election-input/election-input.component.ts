@@ -4,15 +4,14 @@ import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Select } from 'primeng/select';
-import { PrimeTemplate } from 'primeng/api';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
+import { SelectComponent } from '../../select/select.component';
 
 @Component({
   selector: 'app-election-input',
   templateUrl: './election-input.component.html',
-  imports: [ReactiveFormsModule, Select, PrimeTemplate, ErrorMessagesComponent, InputText],
+  imports: [ReactiveFormsModule, SelectComponent, ErrorMessagesComponent, InputText],
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit {
   readonly labelPrefix = computed(() => this.transactionType()?.electionLabelPrefix ?? '');

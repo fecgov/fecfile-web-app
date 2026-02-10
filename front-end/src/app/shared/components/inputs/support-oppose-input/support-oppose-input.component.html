@@ -1,6 +1,7 @@
-<div [formGroup]="form">
-  <div class="field-row" data-cy="support_oppose_code">
-    <div class="col-2 flex align-items-center">
+<fieldset [formGroup]="form">
+  <legend></legend>
+  <div class="grid" data-cy="support_oppose_code">
+    <div class="col-2 flex radio-wrapper">
       <p-radioButton
         name="support_oppose_code"
         inputId="support"
@@ -10,7 +11,7 @@
       />
       <label for="support" class="ml-2">SUPPORT</label>
     </div>
-    <div class="col-2 flex align-items-center">
+    <div class="col-2 flex radio-wrapper">
       <p-radioButton
         inputId="oppose"
         name="support_oppose_code"
@@ -31,4 +32,4 @@
       />
     </div>
   </div>
-</div>
+</fieldset>

@@ -1,5 +1,9 @@
 @use 'mixins' as *;
 
+app-select {
+  --app-select-height: 36px;
+}
+
 :host::ng-deep {
   display: block;
 

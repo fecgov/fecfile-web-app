@@ -1,3 +1,9 @@
+app-select {
+  --app-select-height: 42px;
+  --app-select-padding: 0 10px;
+  --app-select-border-disabled: 2px solid gray;
+}
+
 .committee-info-footer > .col-12 {
   display: flex;
   justify-content: center;
@@ -16,10 +22,6 @@ input {
 }
 
 :host ::ng-deep {
-  .p-select {
-    height: 42px;
-  }
-
   .p-select > .p-inputtext {
     font-family: var(--karla-bold);
     font-size: 14px;
