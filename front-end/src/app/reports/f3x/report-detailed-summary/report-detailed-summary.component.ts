@@ -5,12 +5,10 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { Card } from 'primeng/card';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { CalculationOverlayComponent } from '../../../shared/components/calculation-overlay/calculation-overlay.component';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
 import { ColumnDefinition, TableBodyContext, TableComponent } from 'app/shared/components/table/table.component';
 import { TableModule } from 'primeng/table';
 
@@ -31,17 +29,7 @@ interface DetailedLineSummary {
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
   styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
-  imports: [
-    Card,
-    CalculationOverlayComponent,
-    ButtonDirective,
-    Ripple,
-    CurrencyPipe,
-    DefaultZeroPipe,
-    TableModule,
-    TableComponent,
-    NgClass,
-  ],
+  imports: [CalculationOverlayComponent, ButtonDirective, Ripple, TableModule, TableComponent, NgClass],
 })
 export class ReportDetailedSummaryComponent {
   private readonly store = inject(Store);

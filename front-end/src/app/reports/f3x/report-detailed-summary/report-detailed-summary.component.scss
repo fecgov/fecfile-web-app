@@ -28,6 +28,10 @@
     font-size: 24px !important;
   }
 
+  .p-datatable-tbody > tr:has(.description-column .bold) > td.line-column {
+    font-family: var(--karla-bold);
+  }
+
   .description-column .bold {
     font-family: var(--karla-bold);
   }
