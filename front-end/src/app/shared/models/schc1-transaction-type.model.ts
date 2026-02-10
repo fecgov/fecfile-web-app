@@ -1,4 +1,3 @@
-import { TransactionListRecord } from './transaction-list-record.model';
 import { STANDARD_CONTROLS } from './transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { isPulledForwardLoan, ScheduleIds, Transaction } from './transaction.model';
@@ -18,7 +17,7 @@ export abstract class SchC1TransactionType extends TransactionType {
   override getFooter = (transaction?: Transaction) =>
     isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.footer;
 
-  override getUseParentContact = (transaction?: Transaction | TransactionListRecord) =>
+  override getUseParentContact = (transaction?: Transaction) =>
     isPulledForwardLoan(transaction?.parent_transaction) ? false : this.useParentContact;
 
   // Mapping of schedule fields to the group input component form templates

@@ -284,6 +284,8 @@ export abstract class TransactionListTableBaseComponent
   override readonly params = computed(() => {
     const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.reportId) params['report_id'] = this.reportId;
+    params['report_type'] = this.report().report_type;
+    params['report_code_label'] = this.report().report_code_label ?? '';
     return params;
   });
 
