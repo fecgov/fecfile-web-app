@@ -20,7 +20,14 @@
           <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
         </div>
       }
-      <app-select inputId="role" label="ROLE" [options]="roleOptions" [form]="form" formControlName="role" />
+      <app-select
+        inputId="role"
+        label="ROLE"
+        [options]="roleOptions"
+        [form]="form"
+        formControlName="role"
+        labelClass="dialog-label"
+      />
     </div>
   </form>
 </app-dialog>

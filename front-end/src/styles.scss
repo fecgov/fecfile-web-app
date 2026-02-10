@@ -706,7 +706,7 @@ select,
 }
 
 select {
-  min-width: var(--app-select-min-width, 75px);
+  min-width: var(--app-select-width, 75px);
   background: var(--surface-ground);
   height: var(--app-select-height, 48px);
   padding: var(--app-select-padding, 8px 10px);
@@ -803,7 +803,7 @@ option {
   width: 100%;
 
   select {
-    width: 100%;
+    width: var(--app-select-width, 100%);
 
     button {
       padding-right: 2.5rem !important;

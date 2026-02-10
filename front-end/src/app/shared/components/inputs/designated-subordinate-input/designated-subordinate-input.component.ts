@@ -13,6 +13,7 @@ import { SelectComponent } from '../../select/select.component';
 @Component({
   selector: 'app-designated-subordinate-input',
   templateUrl: './designated-subordinate-input.component.html',
+  styleUrls: ['./designated-subordinate-input.component.scss'],
   imports: [
     TransactionContactLookupComponent,
     AddressInputComponent,

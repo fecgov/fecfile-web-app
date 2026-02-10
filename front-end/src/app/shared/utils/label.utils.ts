@@ -1,6 +1,6 @@
 export type LabelList = string[][];
 export type PrimeOptions = { label: string; value: string }[];
-export type OptionList = [string | boolean | null, string][];
+type OptionList = [string | boolean | null, string][];
 export type Options = { label: string; value: string | boolean | null }[];
 
 /**

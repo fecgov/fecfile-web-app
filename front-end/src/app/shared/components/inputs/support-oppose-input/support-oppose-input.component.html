@@ -22,11 +22,14 @@
       <label for="oppose" class="ml-2">OPPOSE</label>
     </div>
   </div>
-
-  <app-error-messages
-    [form]="form"
-    fieldName="support_oppose_code"
-    [formSubmitted]="formSubmitted"
-    patternErrorMessage="An answer is required"
-  />
+  <div class="grid">
+    <div class="col-12">
+      <app-error-messages
+        [form]="form"
+        fieldName="support_oppose_code"
+        [formSubmitted]="formSubmitted"
+        patternErrorMessage="An answer is required"
+      />
+    </div>
+  </div>
 </fieldset>
