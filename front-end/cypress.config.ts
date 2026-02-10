@@ -42,6 +42,7 @@ export default defineConfig({
       setupA11yNodeEvents(on);
       // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
       require('cypress-mochawesome-reporter/plugin')(on);
+      CypressConfigHelper.applyCiBrowserHardening(on);
       CypressConfigHelper.deleteVideoOnSuccess(on);
       return config;
     },
