@@ -54,6 +54,7 @@ import { SearchableSelectComponent } from '../searchable-select/searchable-selec
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -112,6 +113,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     ScheduleC2TransactionTypeLabels,
     ScheduleDTransactionTypeLabels,
     ScheduleETransactionTypeLabels,
+    ScheduleFTransactionTypeLabels,
   );
 
   readonly contactLookup = viewChild.required(ContactLookupComponent);
