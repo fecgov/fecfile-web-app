@@ -29,32 +29,4 @@ export class CypressConfigHelper {
       }
     });
   }
-
-  static applyCiBrowserHardening(on: Cypress.PluginEvents) {
-    on('before:browser:launch', (browser, launchOptions) => {
-      const ciHardeningEnabled = process.env['CYPRESS_DISABLE_BROWSER_AI']?.trim().toLowerCase() === 'true';
-      if (!ciHardeningEnabled) {
-        return launchOptions;
-      }
-
-      if (browser.family === 'chromium') {
-        launchOptions.args.push(
-          '--no-first-run',
-          '--no-default-browser-check',
-          '--disable-background-networking',
-          '--disable-component-update',
-          '--disable-field-trial-config',
-          '--disable-features=OptimizationGuideModelDownloading,OptimizationHintsFetching,OptimizationTargetPrediction'
-        );
-      }
-
-      if (browser.family === 'firefox') {
-        launchOptions.preferences = launchOptions.preferences ?? {};
-        launchOptions.preferences['app.normandy.enabled'] = false;
-        launchOptions.preferences['app.shield.optoutstudies.enabled'] = false;
-      }
-
-      return launchOptions;
-    });
-  }
 }
