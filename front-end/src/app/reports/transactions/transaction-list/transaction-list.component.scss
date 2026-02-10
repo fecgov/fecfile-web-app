@@ -1,7 +1,1 @@
-@use 'mixins' as *;
 
-:host ::ng-deep {
-  .p-toolbar {
-    @include standard-container();
-  }
-}

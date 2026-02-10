@@ -9,89 +9,89 @@
 
   .coverage-type-column,
   .type-column {
-    @include fixed-width(60.5%);
+    --col-width: 60.5%;
   }
 
   .filed-column {
-    @include fixed-width(25.4%);
+    --col-width: 25.4%;
   }
 
   .actions-column {
-    @include fixed-width(14.1%);
+    --col-width: 14.1%;
   }
 
-  @include breakpoint('md') {
+  @media (min-width: $md) {
     .coverage-type-column,
     .type-column {
-      @include fixed-width(52.8%);
+      --col-width: 52.8%;
     }
 
     .version-column {
       display: table-cell;
-      @include fixed-width(18.5%);
+      --col-width: 18.5%;
     }
 
     .filed-column {
-      @include fixed-width(18.5%);
+      --col-width: 18.5%;
     }
 
     .actions-column {
-      @include fixed-width(10.2%);
+      --col-width: 10.2%;
     }
   }
 
-  @include breakpoint('lg') {
+  @media (min-width: $lg) {
     .coverage-type-column {
-      @include fixed-width(37.5%);
+      --col-width: 37.5%;
     }
 
     .coverage-column {
       display: table-cell;
-      @include fixed-width(23.7%);
+      --col-width: 23.7%;
     }
 
     .type-column {
-      @include fixed-width(61.2%);
+      --col-width: 61.2%;
     }
 
     .version-column,
     .filed-column {
       display: table-cell;
-      @include fixed-width(15.2%);
+      --col-width: 15.2%;
     }
 
     .actions-column {
-      @include fixed-width(8.4%);
+      --col-width: 8.4%;
     }
   }
 
-  @include breakpoint('xxl') {
+  @media (min-width: $xxl) {
     .coverage-type-column {
-      @include fixed-width(34.2%);
+      --col-width: 34.2%;
     }
 
     .coverage-column {
       display: table-cell;
-      @include fixed-width(19%);
+      --col-width: 19%;
     }
 
     .type-column {
-      @include fixed-width(53.2%);
+      --col-width: 53.2%;
     }
 
     .status-column {
       display: table-cell;
-      @include fixed-width(15.2%);
+      --col-width: 15.2%;
     }
 
     .version-column,
     .filed-column {
       display: table-cell;
-      @include fixed-width(12.4%);
+      --col-width: 12.4%;
     }
 
     .actions-column {
-      @include fixed-width(6.8%);
+      --col-width: 6.8%;
     }
   }
 

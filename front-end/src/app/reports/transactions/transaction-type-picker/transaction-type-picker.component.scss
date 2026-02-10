@@ -1,5 +1,3 @@
-@use 'mixins' as *;
-
 :host::ng-deep {
   .p-accordion {
     position: relative;
@@ -65,10 +63,6 @@
     width: 20px;
     height: 20px;
     margin-left: auto;
-  }
-
-  .content-area {
-    @include standard-container();
   }
 }
 

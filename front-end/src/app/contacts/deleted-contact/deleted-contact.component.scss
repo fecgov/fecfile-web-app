@@ -7,60 +7,60 @@
   }
 
   .checkbox-column {
-    @include fixed-width(10.5%);
+    --col-width: 10.5%;
   }
   .name-column {
-    @include fixed-width(66.1%);
+    --col-width: 66.1%;
   }
 
   .type-column {
-    @include fixed-width(23.4%);
+    --col-width: 23.4%;
   }
 
-  @include breakpoint('md') {
+  @media (min-width: $md) {
     .checkbox-column {
-      @include fixed-width(7.7%);
+      --col-width: 7.7%;
     }
     .name-column {
-      @include fixed-width(75.2%);
+      --col-width: 75.2%;
     }
 
     .type-column {
-      @include fixed-width(17.1%);
+      --col-width: 17.1%;
     }
   }
 
-  @include breakpoint('lg') {
+  @media (min-width: $lg) {
     .checkbox-column {
-      @include fixed-width(6.3%);
+      --col-width: 6.3%;
     }
     .name-column {
-      @include fixed-width(50%);
+      --col-width: 50%;
     }
 
     .type-column {
-      @include fixed-width(14.1%);
+      --col-width: 14.1%;
     }
 
     .employer-column,
     .occupation-column {
       display: table-cell;
-      @include fixed-width(14.8%);
+      --col-width: 14.8%;
     }
   }
 
-  @include breakpoint('xxl') {
+  @media (min-width: $xxl) {
     .checkbox-column {
-      @include fixed-width(5.1%);
+      --col-width: 5.1%;
     }
 
     .type-column {
-      @include fixed-width(11.3%);
+      --col-width: 11.3%;
     }
 
     .employer-column,
     .occupation-column {
-      @include fixed-width(16.8%);
+      --col-width: 16.8%;
     }
   }
 }

@@ -9,10 +9,6 @@
     line-height: 1 !important;
     padding-right: 0 !important;
   }
-
-  .p-datatable {
-    @include standard-container();
-  }
 }
 
 .empty-message {

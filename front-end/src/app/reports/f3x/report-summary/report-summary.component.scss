@@ -1,10 +1,5 @@
 @use 'mixins' as *;
-
 :host::ng-deep {
-  .summary-container {
-    @include standard-container();
-  }
-
   h2 {
     font-family: var(--gandhi-bold);
     font-weight: bolder;
@@ -16,19 +11,19 @@
   }
 
   .period-column {
-    @include fixed-width(130px);
+    --col-width: 130px;
     text-align: right !important;
   }
 
   .ytd-column {
-    @include fixed-width(160px);
+    --col-width: 160px;
     text-align: right !important;
   }
 
-  @include breakpoint('md') {
+  @media (min-width: $md) {
     .line-column {
       display: table-cell;
-      @include fixed-width(72px);
+      --col-width: 72px;
     }
   }
 }

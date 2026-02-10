@@ -18,36 +18,32 @@
   font-size: 14px;
   line-height: 18px;
 
-  @include fixed-width(100%);
+  --col-width: 100%;
 
-  @include breakpoint('xl') {
-    @include fixed-width(66.6667%);
+  @media (min-width: $xl) {
+    --col-width: 66.6667%;
   }
-  @include breakpoint('xxl') {
-    @include fixed-width(50%);
+  @media (min-width: $xxl) {
+    --col-width: 50%;
   }
-}
-
-#print-preview-container {
-  @include standard-container(true);
 }
 
 #left-content {
   gap: 32px;
   display: flex;
   flex-direction: column;
-  @include fixed-width(66.67%);
+  --col-width: 66.6667%;
 
-  @include breakpoint('xl') {
-    @include fixed-width(50%);
+  @media (min-width: $xl) {
+    --col-width: 50%;
   }
 }
 
 #right-content {
   align-content: center;
-  @include fixed-width(33.33%);
+  --col-width: 33.33%;
 
-  @include breakpoint('xl') {
-    @include fixed-width(50%);
+  @media (min-width: $xl) {
+    --col-width: 50%;
   }
 }

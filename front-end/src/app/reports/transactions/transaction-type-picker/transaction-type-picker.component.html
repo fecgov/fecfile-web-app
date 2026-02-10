@@ -2,7 +2,7 @@
 @if (debtId()) {
   <p>Select the proper transaction type below to report this debt repayment.</p>
 }
-<div class="content-area">
+<div class="content-area standard-container">
   <p-accordion [(value)]="active">
     @for (transactionGroup of transactionGroups(); track transactionGroup; let index = $index) {
       @if (hasTransactions().get(transactionGroup)) {

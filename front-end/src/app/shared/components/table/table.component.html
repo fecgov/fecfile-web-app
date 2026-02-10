@@ -40,6 +40,7 @@
         <th
           [pSortableColumn]="col.sortable ? col.field : undefined"
           [ngClass]="col.cssClass"
+          class="column-base"
           [id]="col.field + '-column'"
         >
           @if (col.checkbox) {
@@ -65,7 +66,7 @@
       <!-- This can go away after full transition to ColumnDefinition method -->
 
       @for (col of columns(); track col) {
-        <td [ngClass]="col.cssClass">
+        <td [ngClass]="col.cssClass" class="column-base">
           @if (col.checkbox) {
             <p-tableCheckbox [value]="item" [ariaLabel]="col.label!(item)" />
           } @else {
