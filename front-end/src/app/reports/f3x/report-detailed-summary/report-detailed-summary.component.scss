@@ -11,7 +11,15 @@
 
   .p-datatable .p-datatable-tbody > tr:nth-child(even),
   .p-datatable .p-datatable-tbody > tr:nth-child(odd) {
-    background-color: transparent;
+    background-color: white;
+  }
+
+  .has-federal-total .p-datatable-tbody > tr:last-child {
+    background-color: #d6d7d9 !important;
+  }
+
+  .p-datatable-tbody > tr:has(.numeric-line) {
+    background-color: #f5f5f5 !important;
   }
 
   h2 {
@@ -28,18 +36,6 @@
     font-style: italic;
   }
 
-  .description-meta {
-    color: #777;
-  }
-
-  .p-datatable-tbody > tr .gray {
-    background-color: blue;
-  }
-
-  .has-federal-total .p-datatable-tbody > tr:last-child {
-    background-color: var(--gray-200);
-  }
-
   .line-column {
     display: none;
   }
@@ -47,10 +43,6 @@
   .cell-with-overlay {
     align-items: center;
     gap: 0.25rem;
-  }
-
-  .overlay-content {
-    white-space: pre-line;
   }
 
   .period-column {
@@ -71,11 +63,15 @@
   }
 }
 
+.description-meta {
+  color: #777;
+}
+
+.overlay-content {
+  white-space: pre-line;
+}
+
 .table-bottom {
   margin-top: 0rem;
   margin-bottom: 32px;
-}
-
-.parenthesis-text {
-  color: grey;
 }

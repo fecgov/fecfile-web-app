@@ -20,7 +20,6 @@ interface DetailedLineSummary {
   descriptionMeta?: string;
   thisPeriod?: number;
   yearToDate?: number;
-  rowClass?: string;
   bold?: boolean;
   italic?: boolean;
   cssClass?: string;
@@ -162,7 +161,6 @@ export class ReportDetailedSummaryComponent {
         lineNumber: '18',
         description: 'TRANSFERS FROM NON-FEDERAL AND LEVIN FUNDS',
         bold: true,
-        // Gray
       },
       {
         lineNumber: '18(a)',
@@ -486,5 +484,9 @@ export class ReportDetailedSummaryComponent {
 
   refreshSummary(): void {
     this.reportService.setActiveReportById(this.report().id);
+  }
+
+  isNumericLine(lineNumber: string): boolean {
+    return !!lineNumber && !lineNumber.includes('(');
   }
 }
