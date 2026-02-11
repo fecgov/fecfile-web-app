@@ -15,12 +15,10 @@ import { TableModule } from 'primeng/table';
 interface DetailedLineSummary {
   lineNumber: string;
   description: string;
-  descriptionMeta?: string;
   thisPeriod?: number;
   yearToDate?: number;
   bold?: boolean;
   italic?: boolean;
-  cssClass?: string;
   overlay?: string;
   indent?: number;
 }
@@ -56,8 +54,7 @@ export class ReportDetailedSummaryComponent {
       },
       {
         lineNumber: '11(a)(i)',
-        description: 'Itemized',
-        descriptionMeta: '(use Schedule A)',
+        description: 'Itemized (use Schedule A)',
         indent: 2,
         italic: true,
         thisPeriod: report.L11ai_itemized_period,
@@ -152,16 +149,14 @@ export class ReportDetailedSummaryComponent {
       },
       {
         lineNumber: '18(a)',
-        description: 'Non-federal account',
-        descriptionMeta: '(from Schedule H3)',
+        description: 'Non-federal account (from Schedule H3)',
         indent: 1,
         thisPeriod: report.L18a_transfers_from_nonfederal_account_h3_period,
         yearToDate: report.L18a_transfers_from_nonfederal_account_h3_ytd,
       },
       {
         lineNumber: '18(b)',
-        description: 'Levin funds',
-        descriptionMeta: '(from Schedule H5)',
+        description: 'Levin funds (from Schedule H5)',
         indent: 1,
         thisPeriod: report.L18b_transfers_from_nonfederal_levin_h5_period,
         yearToDate: report.L18b_transfers_from_nonfederal_levin_h5_ytd,
@@ -205,8 +200,7 @@ export class ReportDetailedSummaryComponent {
       },
       {
         lineNumber: '21(a)',
-        description: 'Allocated Federal/Non-Federal Activity',
-        descriptionMeta: '(from Schedule H4)',
+        description: 'Allocated Federal/Non-Federal Activity (from Schedule H4)',
         indent: 1,
         italic: true,
       },
@@ -255,16 +249,14 @@ export class ReportDetailedSummaryComponent {
       },
       {
         lineNumber: '24',
-        description: 'INDEPENDENT EXPENDITURES',
-        descriptionMeta: '(use Schedule E)',
+        description: 'INDEPENDENT EXPENDITURES (use Schedule E)',
         bold: true,
         thisPeriod: report.L24_independent_expenditures_period,
         yearToDate: report.L24_independent_expenditures_ytd,
       },
       {
         lineNumber: '25',
-        description: 'COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D))',
-        descriptionMeta: '(use Schedule F)',
+        description: 'COORDINATED PARTY EXPENDITURES (52 U.S.C. § 30116(D)) (use Schedule F)',
         bold: true,
         thisPeriod: report.L25_coordinated_expend_made_by_party_cmtes_period,
         yearToDate: report.L25_coordinated_expend_made_by_party_cmtes_ytd,
@@ -331,8 +323,7 @@ export class ReportDetailedSummaryComponent {
       },
       {
         lineNumber: '30(a)',
-        description: 'Allocated Federal Election Activity',
-        descriptionMeta: '(use Schedule H6)',
+        description: 'Allocated Federal Election Activity (use Schedule H6)',
         indent: 1,
       },
       {
