@@ -1,18 +1,8 @@
-@use 'mixins' as *;
-
 :host ::ng-deep {
   .p-datatable-header {
     padding-top: 48px;
   }
-  .sub-transaction-dropdown {
-    background-color: #fdb838;
-  }
-
-  .sub-transaction-dropdown-panel {
-    background-color: #f1f1f1;
-    color: #000000;
-  }
-
+ 
   .p-toolbar {
     border-bottom: 2px solid !important;
     padding-bottom: 8px;
@@ -96,45 +86,11 @@
   }
 }
 
-.gandhi-bold {
-  font-family: var(--gandhi-bold);
-  color: #212121;
-}
-
-.size-36 {
-  font-size: 36px;
-}
-
-.size-24 {
-  font-size: 24px;
-}
-
-.subtitle {
-  font-family: var(--karla-bold);
-  font-size: 14px;
-  color: #212121;
-  padding-top: 8px;
-}
-
-.top-margin-32 {
-  margin-top: 32px;
-}
-
 .read-only-tag {
   font-family: var(--karla);
   color: gray;
   text-transform: uppercase;
   margin-bottom: 2.5em;
-}
-
-.confirm-footer {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.float-right {
-  float: right;
 }
 
 hr {
@@ -143,10 +99,6 @@ hr {
   border: 0;
   border-top: 2px solid;
   opacity: 1;
-}
-
-.transaction-type-footer {
-  font-style: italic;
 }
 
 .transaction-list {

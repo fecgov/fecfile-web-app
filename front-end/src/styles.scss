@@ -906,3 +906,17 @@ option {
   min-width: var(--container-width, 100%);
   max-width: var(--container-width, 100%);
 }
+
+.text-black {
+  color: var(--p-content-color);
+}
+
+.flex-w {
+  width: var(--w);
+  min-width: var(--w);
+  max-width: var(--w);
+}
+
+.gandhi-bold {
+  font-family: var(--gandhi-bold);
+}

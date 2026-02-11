@@ -1,41 +1,47 @@
-<div class="login-page container">
+<div class="login-page container p-0 m-auto flex flex-column overflow-visible w-full">
   <div class="text-center top-section">
     @if (disableLogin) {
-      <h1 class="login-box-header header-comming-soon">Coming Soon&nbsp;</h1>
+      <h1 class="header-comming-soon p-0 text-4xl font-karla-bold">Coming Soon&nbsp;</h1>
     }
     <div class="">
-      <h1 class="login-box-header header-filers">Made for filers.&nbsp;</h1>
-      <h1 class="login-box-header header-productivity">Built to work anywhere.</h1>
+      <h1 class="header-filers p-0 text-4xl font-karla-bold text-black">Made for filers.&nbsp;</h1>
+      <h1 class="header-productivity p-0 text-4xl font-karla-bold">Built to work anywhere.</h1>
     </div>
 
-    <p class="description-text">
-      <span class="first-description-text">
-        FECfile+ is free web-based software filers can use for electronic filing.&nbsp;
-      </span>
-      <span class="second-description-text">
-        You and your team can create, review and submit your reports from anywhere.
-      </span>
+    <p class="text-black ghandi text-center mb-5">
+      <span class="block"> FECfile+ is free web-based software filers can use for electronic filing.&nbsp; </span>
+      <span> You and your team can create, review and submit your reports from anywhere. </span>
     </p>
     <div>
       @if (!disableLogin) {
         <div class="button-container">
-          <button (click)="navigateToLoginDotGov()" class="login-button" type="button" id="loginButton">
+          <button
+            (click)="navigateToLoginDotGov()"
+            class="login-button border-round-sm inline-block text-center bg-primary font-karla vertical-align-middle line-height-1 font-semibold text-sm text-white"
+            type="button"
+            id="loginButton"
+          >
             Sign in with Login.gov
           </button>
         </div>
         <div class="">
-          <a class="learn-more-link" href="https://www.login.gov/what-is-login/">Learn more about Login.gov</a>
+          <a
+            class="learn-more-link cursor-pointer font-karla-bold text-sm text-primary"
+            href="https://www.login.gov/what-is-login/"
+            >Learn more about Login.gov</a
+          >
         </div>
       }
     </div>
   </div>
 </div>
-<div id="bottom-section">
-  <div id="blue-background"></div>
-  <div id="img-container">
+<div id="bottom-section" class="flex flex-1 justify-content-center pb-7 relative">
+  <div id="blue-background" class="absolute left-0 right-0"></div>
+  <div id="img-container" class="relative flex justify-content-center mx-0 my-5 w-full">
     <img
       alt="An example of the FECfile+ dashboard"
       id="dashboard-example-img"
+      class="relative flex justify-content-center w-full"
       src="assets/img/dashboard-example.svg"
       priority
     />
