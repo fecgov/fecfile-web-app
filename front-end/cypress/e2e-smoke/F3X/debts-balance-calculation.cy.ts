@@ -15,7 +15,12 @@ describe('Debt Balance at Close Calculation', () => {
   it('should calculate balance_at_close = beginning_balance + incurred_amount - payment_amount when creating a debt', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       // Create a debt via the UI
+      // cy.wait because the DataSetup above is a loose cannon,
+      // causing navigations to occur in the middle of the following
+      // script.  To be addressed in FECFILE-2842
+      cy.wait(500);
       ReportListPage.goToReportList(result.report);
+      
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
@@ -23,7 +28,7 @@ describe('Debt Balance at Close Calculation', () => {
       TransactionDetailPage.enterLoanFormData({
         ...defaultDebtFormData,
         amount: 3000,
-      });
+      }, false, '', "#amount");
       
       // Verify balance_at_close was calculated during form entry: 0 + 3000 - 0 = 3000
       cy.get('#balance_at_close').should('have.value', '$3,000.00');
@@ -56,6 +61,10 @@ describe('Debt Balance at Close Calculation', () => {
   it('should update balance_at_close when modifying incurred_amount', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       // Create a debt via the UI
+      // cy.wait because the DataSetup above is a loose cannon,
+      // causing navigations to occur in the middle of the following
+      // script.  To be addressed in FECFILE-2842
+      cy.wait(500);
       ReportListPage.goToReportList(result.report);
       StartTransaction.Debts().ByCommittee();
 
@@ -64,7 +73,7 @@ describe('Debt Balance at Close Calculation', () => {
       TransactionDetailPage.enterLoanFormData({
         ...defaultDebtFormData,
         amount: 5000,
-      });
+      }, false, '', "#amount");
       
       // Verify initial balance_at_close = 0 + 5000 - 0 = 5000
       cy.get('#balance_at_close').should('have.value', '$5,000.00');
