@@ -134,7 +134,7 @@ function handleLoanAgreementSetup(q3: string) {
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');
-    PageUtils.valueCheck('#amount', '$65,000.00');
+    PageUtils.valueCheck('#loan-agreement-amount', '$65,000.00');
     PageUtils.valueCheck('#loan_incurred_date', `05/27/${currentYear}`);
   };
 }

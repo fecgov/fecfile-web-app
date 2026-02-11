@@ -255,7 +255,7 @@ export class ContactsHelpers {
     this.ensureInputHasValue('#zip', candidate?.zip ?? '00000');
 
     const addrState = this.stateCodeToName(candidate?.state) ?? candidate?.state;
-    if (addrState) PageUtils.dropdownSetValue('#state', addrState);
+    if (addrState) PageUtils.pSelectDropdownSetValue('#state', addrState);
 
     const office = this.officeCodeToLabel(candidate?.candidate_office);
     if (office) this.setDropdownByLabel(/^Candidate office/i, office);
