@@ -3,8 +3,7 @@ import {
   ContributionFormData,
   DisbursementFormData,
   LoanFormData,
-  ScheduleFormData,
-  electionTypeMap
+  ScheduleFormData
 } from '../models/TransactionFormModel';
 import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
