@@ -1,3 +1,5 @@
+[![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fecgov/fecfile-web-app)
+
 ## About this project
 
 The Federal Election Commission (FEC) is the independent regulatory agency
