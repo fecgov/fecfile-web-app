@@ -9,7 +9,6 @@ import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',

@@ -10,11 +10,10 @@ import {
 import { SubTransactionGroup, TransactionType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
-  SchATransaction,
   ScheduleATransactionTypeLabels,
   UnimplementedTypeEntityCategories,
 } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
+import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
@@ -26,7 +25,6 @@ import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
-import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 @Component({
   selector: 'app-navigation-control',
