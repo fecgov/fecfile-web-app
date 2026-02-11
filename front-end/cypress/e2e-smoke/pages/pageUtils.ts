@@ -13,7 +13,31 @@ export class PageUtils {
       .click();
   }
 
-  static dropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
+  static selectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
+    alias = PageUtils.getAlias(alias);
+
+    if (value) {
+      cy.get(alias).find(querySelector).eq(index).find('select').contains('option', value).then(
+        (option) => {
+          cy.get(alias).find(querySelector).eq(index).find('select').select(option.val()!);
+        }
+      );
+    }
+  }
+  
+  static selectDropdownSetValueWithString(querySelector: string, value: string, alias = '', index = 0) {
+    alias = PageUtils.getAlias(alias);
+
+    if (value) {
+      cy.get(alias).find(querySelector).eq(index).find('select').contains('option', value).then(
+        (option) => {
+          cy.get(alias).find(querySelector).eq(index).find('select').select(option.val()!);
+        }
+      );
+    }
+  }
+
+  static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
 
     if (value) {

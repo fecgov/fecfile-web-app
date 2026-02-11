@@ -176,3 +176,13 @@ const formTransactionDataForScheduleLoan: LoanFormData = {
 };
 
 export const formTransactionDataForSchedule: ScheduleFormData = formTransactionDataForScheduleLoan;
+
+export const electionTypeMap: { [key: string]: string } = {
+ 'P': 'Primary (P)',
+ 'G': 'General (G)',
+ 'C': 'Convention (C)',
+ 'R': 'Runoff (R)',
+ 'S': 'Special (S)',
+ 'E': 'Recount (E)',
+ 'O': 'Other (O)',
+};

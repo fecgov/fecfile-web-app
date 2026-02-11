@@ -17,7 +17,7 @@ export class ContactListPage {
     alias = PageUtils.getAlias(alias);
 
     if (!excludeContactType) {
-      PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
+      PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
@@ -39,24 +39,24 @@ export class ContactListPage {
     cy.get(alias).find('#city').safeType(formData['city']);
     cy.get(alias).find('#zip').safeType(formData['zip']);
     cy.get(alias).find('#telephone').safeType(formData['phone']);
-    PageUtils.dropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
+    PageUtils.pSelectDropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
       cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
 
-      PageUtils.dropdownSetValue("p-select[inputid='candidate_office']", formData['candidate_office'], alias);
+      PageUtils.selectDropdownSetValue("app-select[inputid='candidate_office']", formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
-        PageUtils.dropdownSetValue(
-          "app-searchable-select[inputid='candidate_state']",
+        PageUtils.selectDropdownSetValue(
+          "app-select[inputid='candidate_state']",
           formData['candidate_state'],
           alias,
         );
 
         const singleDistrictStates = ['Alaska', 'Delaware', 'North Dakota', 'South Dakota', 'Vermont', 'Wyoming'];
         if (formData['candidate_office'] == 'House' && !singleDistrictStates.includes(formData['candidate_state'])) {
-          PageUtils.dropdownSetValue("p-select[inputid='candidate_district']", formData['candidate_district'], alias);
+          PageUtils.selectDropdownSetValue("app-select[inputid='candidate_district']", formData['candidate_district'], alias);
         }
       }
     }

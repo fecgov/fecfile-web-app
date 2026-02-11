@@ -342,7 +342,7 @@ describe('Contacts Edit', () => {
     cy.get('#street_1').clear().type(over34);
     cy.get('#street_2').clear().type(over34);
     cy.get('#city').clear().type(over30);
-    PageUtils.dropdownSetValue('#state', newState);
+    PageUtils.pSelectDropdownSetValue('#state', newState);
     cy.get('#zip').clear().type('0123456783');
     ContactsHelpers.setTelephone(badPhone);
 
@@ -377,7 +377,7 @@ describe('Contacts Edit', () => {
     cy.get('#street_1').clear().type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').clear().type(newCity);
-    PageUtils.dropdownSetValue('#state', newState);
+    PageUtils.pSelectDropdownSetValue('#state', newState);
     cy.get('#zip').clear().type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
@@ -521,7 +521,7 @@ describe('Contacts Edit', () => {
     cy.get('#street_1').type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').type(newCity);
-    PageUtils.dropdownSetValue('#state', newState);
+    PageUtils.pSelectDropdownSetValue('#state', newState);
     cy.get('#zip').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
@@ -632,7 +632,7 @@ describe('Contacts Edit', () => {
     cy.get('#street_1').type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').type(newCity);
-    PageUtils.dropdownSetValue('#state', newState);
+    PageUtils.pSelectDropdownSetValue('#state', newState);
     cy.get('#zip').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
@@ -709,7 +709,7 @@ describe('Contacts Edit', () => {
     cy.get('#street_1').type(newStreet1);
     cy.get('#street_2').clear().type(newStreet2);
     cy.get('#city').type(newCity);
-    PageUtils.dropdownSetValue('#state', newState);
+    PageUtils.pSelectDropdownSetValue('#state', newState);
     cy.get('#zip').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
