@@ -173,8 +173,8 @@ describe('ContactDialogComponent', () => {
     it('should get params', () => {
       component.rowsPerPage.set(5);
       component.contact()!.id = '123';
-      expect(component.params()['page_size']).toBe(5);
-      expect(component.params()['contact']).toBe('123');
+      expect(component.params()!['page_size']).toBe(5);
+      expect(component.params()!['contact']).toBe('123');
     });
   });
 });
