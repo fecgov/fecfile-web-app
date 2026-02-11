@@ -11,7 +11,7 @@ export class UsersPage {
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find('#email').safeType(formData['email']);
-    cy.get('select[id^="role-"]').select(formData.role);
+    PageUtils.selectDropdownSetValue("app-select[inputid='role']", formData['role'], alias);
   }
 
   static assertRow(formData: UserFormData, status = 'Pending') {
@@ -46,7 +46,11 @@ export class UsersPage {
       .first()
       .as('dialog');
 
-    cy.get('@dialog').get('select[id^="role-"]').select(fd.role);
+    PageUtils.selectDropdownSetValue(
+      "app-select[inputid='role']",
+      fd['role'],
+      '@dialog'
+    );
     cy.get('@dialog').find('[data-cy="membership-submit"]').click();
   }
 
