@@ -129,7 +129,7 @@ export class TransactionDetailPage {
 
     // set interest dropdown and rate
     if (formData.interest_rate_setting) {
-      PageUtils.dropdownSetValue('[inputid="interest_rate_setting"]', formData.interest_rate_setting, alias);
+      cy.get('select[id^="interest_rate_setting-"]').select(formData.interest_rate_setting);
       if (formData.interest_rate) {
         cy.get(alias).find('#interest_rate').safeType(formData.interest_rate);
       }
@@ -141,7 +141,7 @@ export class TransactionDetailPage {
 
     // Set due date dropdown & date
     if (formData.due_date_setting) {
-      PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData.due_date_setting, alias);
+      cy.get('select[id^="due_date_setting-"]').select(formData.due_date_setting);
       if (formData.due_date) {
         PageUtils.calendarSetValue(`[data-cy="${dueDateField}"]`, formData.due_date, alias);
       }
@@ -327,13 +327,13 @@ export class TransactionDetailPage {
 
   private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
     if (formData.category_code) {
-      PageUtils.dropdownSetValue('[data-cy="category_code"]', formData.category_code, alias);
+      cy.get('select[id^="category_code-"]').select(formData.category_code);
     }
   }
 
   private static enterElection(formData: ScheduleFormData, alias: string) {
     if (formData.electionType) {
-      PageUtils.dropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
+        cy.get('select[id^="electionType-"]').select(formData.electionType);
     }
     if (formData.electionYear) {
       cy.get(alias).find('#electionYear').safeType(formData.electionYear);
