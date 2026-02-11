@@ -24,7 +24,7 @@ export class SubmitReportStatusComponent implements OnInit {
   readonly report = this.store.selectSignal(selectActiveReport);
   readonly reportCode = computed(() => this.report().report_code as ReportCodes);
   readonly isBaseF3 = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
-  readonly coverageDates = computed(() => (this.isBaseF3() ? (this.report() as BaseForm3).coverageDates : undefined));
+  readonly coverageDates = computed(() => (this.isBaseF3() ? (this.report() as BaseForm3).coverageDates : null));
   readonly fecStatus = computed(() => this.report().upload_submission?.fec_status);
   readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
   readonly reportStatus = computed(() => this.report().report_status as ReportStatus);

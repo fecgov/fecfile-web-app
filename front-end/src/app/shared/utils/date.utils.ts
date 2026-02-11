@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon';
-
 export class DateUtils {
   /**
    * For given date, convert it to a string that
@@ -7,11 +5,15 @@ export class DateUtils {
    * @param {Date} date
    * @returns {string} FEC formatted date string
    */
-  public static convertDateToFecFormat(date: Date | null) {
+  public static convertDateToFecFormat(date: Date | null): string {
     if (!date) {
-      return date;
+      return '';
     }
-    return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   /**
@@ -19,11 +21,15 @@ export class DateUtils {
    * @param {Date} date
    * @returns {string} mm/dd/yyyy formatted date string
    */
-  public static convertDateToSlashFormat(date: Date | null | undefined) {
+  public static convertDateToSlashFormat(date: Date | null | undefined): string {
     if (!date) {
-      return date;
+      return '';
     }
-    return DateTime.fromJSDate(date).toFormat('MM/dd/yyyy');
+    return new Intl.DateTimeFormat('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    }).format(date);
   }
 
   /**
@@ -31,11 +37,17 @@ export class DateUtils {
    * @param date For given date string YYYYMMDD, return a Date object.
    * @returns {Date}
    */
-  public static convertFecFormatToDate(date: string | null): Date | null {
-    if (!date) {
-      return null;
-    }
-    return DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate();
+  public static convertFecFormatToDate(dateStr: string | null): Date | null {
+    if (!dateStr) return null;
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return null;
+
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+
+    const date = new Date(year, month, day);
+    return isNaN(date.getTime()) ? null : date;
   }
 
   /**

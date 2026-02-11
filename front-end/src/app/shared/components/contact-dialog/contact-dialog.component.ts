@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -73,7 +73,6 @@ import { TransactionListService } from 'app/shared/services/transaction-list.ser
     Ripple,
     ConfirmDialog,
     CurrencyPipe,
-    DatePipe,
     LabelPipe,
     SearchableSelectComponent,
     ToUpperDirective,
