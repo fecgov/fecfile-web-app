@@ -247,29 +247,6 @@ export class ContactsHelpers {
     return m[c] ?? undefined;
   }
 
-  static fillCandidateEditFormFromApi(candidate: any) {
-    this.ensureInputHasValue('#last_name', candidate?.last_name);
-    this.ensureInputHasValue('#first_name', candidate?.first_name);
-    this.ensureInputHasValue('#street_1', candidate?.street_1 ?? '123 Default St');
-    this.ensureInputHasValue('#city', candidate?.city ?? 'Defaultville');
-    this.ensureInputHasValue('#zip', candidate?.zip ?? '00000');
-
-    const addrState = this.stateCodeToName(candidate?.state) ?? candidate?.state;
-    if (addrState) PageUtils.pSelectDropdownSetValue('#state', addrState);
-
-    const office = this.officeCodeToLabel(candidate?.candidate_office);
-    if (office) this.setDropdownByLabel(/^Candidate office/i, office);
-
-    const candState = this.stateCodeToName(candidate?.candidate_state) ?? candidate?.candidate_state;
-    if (candState) this.setDropdownByLabel(/^Candidate state/i, candState);
-
-    if (candidate?.candidate_district) {
-      this.setDropdownByLabel(/^Candidate district/i, String(candidate.candidate_district));
-    }
-
-    this.ensureInputHasValue('#employer', candidate?.employer);
-    this.ensureInputHasValue('#occupation', candidate?.occupation);
-  }
 
   static findExistingFecApiCandidate(
     seeds: readonly string[] = ['pre', 'pres', 'hou', 'smi', 'john', 'mar', 'wil', 'and'],

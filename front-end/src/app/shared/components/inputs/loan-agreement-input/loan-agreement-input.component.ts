@@ -1,4 +1,4 @@
-import { Component, OnInit, output } from '@angular/core';
+import { Component, inject, OnInit, output } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
@@ -17,6 +17,7 @@ import { InputText } from 'primeng/inputtext';
 import { AddressInputComponent } from '../address-input/address-input.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { CheckboxModule } from 'primeng/checkbox';
+import { IdGeneratorService } from 'app/shared/services/id-generator.service';
 
 @Component({
   selector: 'app-loan-agreement-input',
@@ -35,8 +36,10 @@ import { CheckboxModule } from 'primeng/checkbox';
     AutoResizeDirective,
     CheckboxModule,
   ],
+  providers: [IdGeneratorService],
 })
 export class LoanAgreementInputComponent extends BaseInputComponent implements OnInit {
+  readonly idGen = inject(IdGeneratorService);
   contactSelect = output<SelectItem<Contact>>();
 
   // Switches to show/hide groups of form input values
@@ -46,6 +49,12 @@ export class LoanAgreementInputComponent extends BaseInputComponent implements O
   showSecured = false;
   showFutureIncome = false;
   showLocationOfAccount = false;
+
+  readonly loanAgreementAmountId = this.idGen.getIdLabel('loan-agreement-amount');
+  readonly balanceId = this.idGen.getIdLabel('balance');
+  readonly creditAmountThisDrawId = this.idGen.getIdLabel('credit-amount-this-draw');
+  readonly collateralValueAmountId = this.idGen.getIdLabel('collateral-value-amount');
+  readonly estimatedValueId = this.idGen.getIdLabel('estimated-value');
 
   contactTypeOptions: PrimeOptions = getContactTypeOptions(ORGANIZATION); // Options for contact lookup component
 
