@@ -494,7 +494,6 @@ describe('Contacts Edit', () => {
 
 
     cy.get('select[id^="candidate_office-"]').select('Senate');
-    // ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'Senate');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -504,7 +503,6 @@ describe('Contacts Edit', () => {
 
       
     cy.get('select[id^="candidate_office-"]').select('House');
-    // ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'House');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
