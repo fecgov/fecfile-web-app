@@ -20,6 +20,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   templateUrl: './create-committee.component.html',
   styleUrls: ['./create-committee.component.scss'],
   imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, CheckboxModule, ButtonModule, DialogComponent],
+  providers: [MessageService, ConfirmationService],
 })
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);

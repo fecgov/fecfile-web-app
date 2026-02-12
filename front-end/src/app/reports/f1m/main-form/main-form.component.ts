@@ -27,6 +27,7 @@ import { ContactModalComponent } from 'app/shared/components/contact-modal/conta
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-main-form',
@@ -47,6 +48,7 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
     ToUpperDirective,
   ],
   styleUrl: './main-form.component.scss',
+  providers: [MessageService],
 })
 export class MainFormComponent extends MainFormBaseComponent<Form1M> implements OnInit, OnDestroy {
   readonly cmservice = inject(ContactManagementService);

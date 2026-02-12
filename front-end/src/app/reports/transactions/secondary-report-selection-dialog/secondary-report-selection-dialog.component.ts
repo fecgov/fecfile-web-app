@@ -22,6 +22,7 @@ import { TransactionListService } from 'app/shared/services/transaction-list.ser
   templateUrl: './secondary-report-selection-dialog.component.html',
   styleUrls: ['./secondary-report-selection-dialog.component.scss'],
   imports: [ButtonModule, Ripple, Toast, LabelPipe, SelectModule, DialogModule, FormsModule],
+  providers: [MessageService],
 })
 export class SecondaryReportSelectionDialogComponent {
   public readonly router = inject(Router);

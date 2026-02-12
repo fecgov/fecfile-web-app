@@ -4,6 +4,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
 import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-triple-transaction-detail',
@@ -15,6 +16,7 @@ import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/compon
     ReactiveFormsModule,
     TransactionInputComponent,
   ],
+  providers: [MessageService, ConfirmationService],
 })
 export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseComponent implements OnInit {
   override ngOnInit(): void {

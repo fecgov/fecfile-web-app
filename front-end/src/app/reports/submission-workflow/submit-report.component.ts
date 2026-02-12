@@ -42,6 +42,7 @@ import { ErrorMessagesComponent } from '../../shared/components/error-messages/e
     Tooltip,
     RouterLink,
   ],
+  providers: [ConfirmationService],
 })
 export class SubmitReportComponent extends FormComponent implements OnInit {
   readonly router = inject(Router);

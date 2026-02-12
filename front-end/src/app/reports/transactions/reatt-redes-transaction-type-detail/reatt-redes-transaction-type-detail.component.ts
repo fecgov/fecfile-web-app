@@ -4,6 +4,7 @@ import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'pr
 import { Ripple } from 'primeng/ripple';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
 import { ReattRedesTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/reatt-redes-transaction-type-base.component';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-reatt-redes-transaction-type-detail',
@@ -18,6 +19,7 @@ import { ReattRedesTransactionTypeBaseComponent } from 'app/shared/components/tr
     ReactiveFormsModule,
     TransactionInputComponent,
   ],
+  providers: [MessageService, ConfirmationService],
 })
 export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransactionTypeBaseComponent implements OnInit {
   override ngOnInit(): void {

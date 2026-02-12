@@ -4,11 +4,13 @@ import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { SharedTemplatesComponent } from '../shared-templates.component';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-form3-list',
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form3-list.component.html',
+  providers: [MessageService, ConfirmationService],
 })
 export class Form3ListComponent extends AbstractFormListComponent<Form3> {
   readonly itemService = inject(Form3Service);

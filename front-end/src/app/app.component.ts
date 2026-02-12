@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { GlossaryComponent } from './shared/components/glossary/glossary.component';
 import { environment } from 'environments/environment';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
     GlossaryComponent,
     ConfirmDialogComponent,
   ],
+  providers: [MessageService],
 })
 export class AppComponent {
   protected readonly elementRef = inject(ElementRef);

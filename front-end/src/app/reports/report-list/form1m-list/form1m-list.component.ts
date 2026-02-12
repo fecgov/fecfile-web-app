@@ -4,11 +4,13 @@ import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { SharedTemplatesComponent } from '../shared-templates.component';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-form1m-list',
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form1m-list.component.html',
+  providers: [MessageService, ConfirmationService],
 })
 export class Form1MListComponent extends AbstractFormListComponent<Form1M> {
   protected readonly itemService = inject(Form1MService);

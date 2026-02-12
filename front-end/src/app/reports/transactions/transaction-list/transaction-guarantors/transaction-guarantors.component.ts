@@ -10,12 +10,14 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { Transaction } from 'app/shared/models';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-transaction-guarantors',
   templateUrl: './transaction-guarantors.component.html',
   styleUrls: ['../../transaction.scss', './transaction-guarantors.component.scss'],
   imports: [TableComponent, TableActionsButtonComponent, ConfirmDialog],
+  providers: [MessageService, ConfirmationService],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchC2Service);

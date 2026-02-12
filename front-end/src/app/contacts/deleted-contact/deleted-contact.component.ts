@@ -6,6 +6,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 
@@ -14,6 +15,7 @@ import { Ripple } from 'primeng/ripple';
   templateUrl: './deleted-contact.component.html',
   styleUrls: ['./deleted-contact.component.scss'],
   imports: [TableComponent, ButtonDirective, Ripple, LabelPipe, RouterLink],
+  providers: [MessageService, ConfirmationService],
 })
 export class DeletedContactComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(DeletedContactService);

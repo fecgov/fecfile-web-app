@@ -8,6 +8,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   imports: [DialogComponent],
   templateUrl: './confirm-dialog.component.html',
   styleUrl: './confirm-dialog.component.scss',
+  providers: [ConfirmationService],
 })
 export class ConfirmDialogComponent {
   readonly header = computed(() => this.confirmation()?.header ?? 'Are you sure?');

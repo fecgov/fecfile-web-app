@@ -12,6 +12,7 @@ import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-manage-committee',
@@ -25,6 +26,7 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
     CommitteeMemberDialogComponent,
     TableModule,
   ],
+  providers: [MessageService, ConfirmationService],
 })
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
   private readonly store = inject(Store);

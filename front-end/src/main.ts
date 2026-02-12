@@ -3,7 +3,6 @@ import { environment } from './environments/environment';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { CookieService } from 'ngx-cookie-service';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from './app/shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './app/shared/pipes/fec-date.pipe';
@@ -31,19 +30,9 @@ import { navigationEventReducer } from './app/store/navigation-event.reducer';
 import { AppState } from './app/store/app-state.model';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { EffectsModule } from '@ngrx/effects';
-import { MenubarModule } from 'primeng/menubar';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { PanelModule } from 'primeng/panel';
-import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { PopoverModule } from 'primeng/popover';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 import { AppComponent } from './app/app.component';
 import { ROUTES } from 'app/routes';
-import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeuix/themes/aura';
 import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
@@ -119,17 +108,7 @@ bootstrapApplication(AppComponent, {
         { metaReducers },
       ),
       EffectsModule.forRoot([]),
-      MenubarModule,
-      PanelMenuModule,
-      PanelModule,
-      ButtonModule,
       NgOptimizedImage,
-      DialogModule,
-      InputTextModule,
-      PopoverModule,
-      ConfirmDialogModule,
-      ToastModule,
-      CheckboxModule,
     ),
     provideRouter(ROUTES, inMemoryScrollingFeature),
     provideAnimationsAsync(),
@@ -149,8 +128,6 @@ bootstrapApplication(AppComponent, {
       },
     }),
     CookieService,
-    ConfirmationService,
-    MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
     DynamicPipe,

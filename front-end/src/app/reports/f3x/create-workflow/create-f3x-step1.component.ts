@@ -51,6 +51,7 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
     RouterLink,
     Button,
   ],
+  providers: [MessageService],
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {
   // INJECTIONS

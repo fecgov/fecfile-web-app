@@ -9,7 +9,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
+import { ConfirmationService, MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
 import { map, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';

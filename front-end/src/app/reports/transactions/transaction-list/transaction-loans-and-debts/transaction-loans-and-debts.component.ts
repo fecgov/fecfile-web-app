@@ -15,12 +15,14 @@ import {
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',
   templateUrl: './transaction-loans-and-debts.component.html',
   styleUrls: ['../../transaction.scss', './transaction-loans-and-debts.component.scss'],
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
+  providers: [MessageService, ConfirmationService],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchCService);
