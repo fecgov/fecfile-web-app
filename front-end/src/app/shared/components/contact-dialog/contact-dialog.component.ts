@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -76,6 +76,7 @@ import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transacti
     LabelPipe,
     SearchableSelectComponent,
     ToUpperDirective,
+    DatePipe,
   ],
   providers: [SearchableSelectComponent],
 })

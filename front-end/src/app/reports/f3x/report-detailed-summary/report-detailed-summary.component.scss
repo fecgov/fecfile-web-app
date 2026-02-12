@@ -1,10 +1,6 @@
 @use 'mixins' as *;
 
 :host::ng-deep {
-  .summary-container {
-    @include standard-container();
-  }
-
   .p-datatable .p-datatable-tbody > tr:not(:last-child) > td {
     border-bottom: 1px solid black;
   }
@@ -50,19 +46,19 @@
   }
 
   .period-column {
-    @include fixed-width(130px);
+    --col-width: 130px;
     text-align: right !important;
   }
 
   .ytd-column {
-    @include fixed-width(160px);
+    --col-width: 160px;
     text-align: right !important;
   }
 
-  @include breakpoint('md') {
+  @media (min-width: $md) {
     .line-column {
       display: table-cell;
-      @include fixed-width(72px);
+      --col-width: 72px;
     }
   }
 }

@@ -26,7 +26,7 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   private intlTelInput: Iti | undefined;
   private readonly intlTelInputOptions = {
     separateDialCode: true,
-    initialCountry: 'us',
+    initialCountry: 'us' as 'us',
     preferredCountries: ['us'],
     allowDropdown: !this.disabled,
   };
