@@ -92,7 +92,7 @@ export class TransactionDetailPage {
   }
 
   static enterNewLoanAgreementFormData(formData: LoanFormData, alias = '') {
-    this.enterLoanFormData(formData, false, alias, '#loan-agreement-amount');
+    this.enterLoanFormData(formData, false, alias, 'input[id^="loan-agreement-amount-"]');
     this.enterLoanFormDataStepTwo(formData);
   }
 

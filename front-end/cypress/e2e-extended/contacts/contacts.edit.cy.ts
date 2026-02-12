@@ -493,7 +493,7 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
 
-    ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'Senate');
+    cy.get('select[id^="candidate_office-"]').select('Senate');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -501,7 +501,8 @@ describe('Contacts Edit', () => {
       .find('small.p-error, .p-error')
       .should('not.exist');
 
-    ContactsHelpers.setDropdownByLabel(/^Candidate office/i, 'House');
+      
+    cy.get('select[id^="candidate_office-"]').select('House');
     ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
@@ -528,9 +529,9 @@ describe('Contacts Edit', () => {
     cy.get('#employer').clear().type(newEmployer);
     cy.get('#occupation').clear().type(newOccupation);
 
-    ContactsHelpers.setDropdownByLabel(/^Candidate office/i, newOffice);
-    ContactsHelpers.setDropdownByLabel(/^Candidate state/i, newCandState);
-    ContactsHelpers.setDropdownByLabel(/^Candidate district/i, newCandDistrict);
+    cy.get('select[id^="candidate_office-"]').select(newOffice);
+    cy.get('select[id^="candidate_state-"]').select(newCandState);
+    cy.get('select[id^="candidate_district-"]').select(newCandDistrict);
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -565,9 +566,9 @@ describe('Contacts Edit', () => {
       occupation: newOccupation,
     });
 
-    cy.contains('label', /^Candidate office/i).parent().should('contain.text', newOffice);
-    cy.contains('label', /^Candidate state/i).parent().should('contain.text', newCandState);
-    cy.contains('label', /^Candidate district/i).parent().should('contain.text', newCandDistrict);
+    cy.get('select[id^="candidate_office-"]').find('selectedcontent').should('contain.text', newOffice);
+    cy.get('select[id^="candidate_state-"]').find('selectedcontent').should('contain.text', newCandState);
+    cy.get('select[id^="candidate_district-"]').parent().find('selectedcontent').should('contain.text', newCandDistrict);
 
     candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
   });
