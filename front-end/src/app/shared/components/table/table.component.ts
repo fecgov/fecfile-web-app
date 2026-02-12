@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { PaginatorState, Paginator } from 'primeng/paginator';
 import { Table, TableModule } from 'primeng/table';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { CurrencyPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { PrimeTemplate, SortEvent } from 'primeng/api';
 import { Select } from 'primeng/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -21,6 +21,10 @@ import { TableSortIconComponent } from '../table-sort-icon/table-sort-icon.compo
 import { Toolbar } from 'primeng/toolbar';
 import { TableAction } from '../table-actions-button/table-actions';
 import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
+import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
+import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 
 export interface ColumnDefinition<T> {
   field: string;
@@ -57,6 +61,7 @@ export interface TableBodyContext<T> {
     Toolbar,
     DynamicPipe,
   ],
+  providers: [CurrencyPipe, MemoCodePipe, FecDatePipe, TransactionIdPipe, DefaultZeroPipe],
 })
 export class TableComponent<T> {
   readonly title = input.required<string>();

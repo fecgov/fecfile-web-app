@@ -19,14 +19,14 @@
         [formSubmitted]="formSubmitted"
       />
     </div>
-    <div class="col-6">
+    <div class="col-6" data-cy="dueDateInput">
       @switch (dueDateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
-            <label [id]="dueDateLabelId()" [for]="dueDateId()"
+            <label [id]="dueDateId.label" [for]="dueDateId.id"
               >DATE DUE <span class="paren-label">(USER DEFINED)</span></label
             >
-            <input type="text" pInputText [id]="dueDateId()" [formControlName]="templateMap['due_date']" />
+            <input type="text" pInputText [id]="dueDateId.id" [formControlName]="templateMap['due_date']" />
             <app-error-messages [form]="form" [fieldName]="templateMap['due_date']" [formSubmitted]="formSubmitted" />
           </div>
         }
@@ -52,14 +52,14 @@
         [formSubmitted]="formSubmitted"
       />
     </div>
-    <div class="col-6">
+    <div class="col-6" data-cy="interestRateInput">
       @switch (interestRateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
-            <label [id]="interestRateLabelId()" [for]="interestRateId()"
-              >INTEREST RATE <span class="paren-label">(USER DEFINED)</span></label
-            >
-            <input type="text" pInputText [id]="interestRateId()" [formControlName]="templateMap['interest_rate']" />
+            <label [id]="interestRateId.label" [for]="interestRateId.id">
+              INTEREST RATE <span class="paren-label">(USER DEFINED)</span>
+            </label>
+            <input type="text" pInputText [id]="interestRateId.id" [formControlName]="templateMap['interest_rate']" />
             <app-error-messages
               [form]="form"
               [fieldName]="templateMap['interest_rate']"
@@ -69,14 +69,14 @@
         }
         @case (termFieldSettings.EXACT_PERCENTAGE) {
           <div class="field">
-            <label [id]="interestRateLabelId()" [for]="interestRateId()"
-              >EXACT PERCENTAGE <span class="paren-label">(%)</span></label
-            >
+            <label [id]="interestRateId.label" [for]="interestRateId.id">
+              EXACT PERCENTAGE <span class="paren-label">(%)</span>
+            </label>
             <input
               #interestRatePercentage
               type="text"
               pInputText
-              [id]="interestRateId()"
+              [id]="interestRateId.id"
               [formControlName]="templateMap['interest_rate']"
             />
             <app-error-messages

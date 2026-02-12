@@ -11,7 +11,7 @@ export class UsersPage {
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find('#email').safeType(formData['email']);
-    PageUtils.dropdownSetValue("app-select[inputid='role']", formData['role'], alias);
+    PageUtils.selectDropdownSetValue("app-select[inputid='role']", formData['role'], alias);
   }
 
   static assertRow(formData: UserFormData, status = 'Pending') {
@@ -46,7 +46,7 @@ export class UsersPage {
       .first()
       .as('dialog');
 
-    PageUtils.dropdownSetValue(
+    PageUtils.selectDropdownSetValue(
       "app-select[inputid='role']",
       fd['role'],
       '@dialog'

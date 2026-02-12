@@ -1,20 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
+import { IdGeneratorService } from 'app/shared/services/id-generator.service';
 
 @Component({
   selector: 'app-loan-info-input',
   templateUrl: './loan-info-input.component.html',
   imports: [ReactiveFormsModule, InputNumberComponent, ErrorMessagesComponent, MemoCodeInputComponent],
+  providers: [IdGeneratorService],
 })
 export class LoanInfoInputComponent extends BaseInputComponent implements OnInit {
-  @Input() readonly = false;
+  private readonly idGen = inject(IdGeneratorService);
+  readonly readonly = input(false);
+  readonly memoItemHelpText = input<string | undefined>();
 
-  @Input() memoItemHelpText: string | undefined;
+  readonly balanceInputId = this.idGen.getIdLabel('loan-info-balance');
+  readonly paymentToDateInputId = this.idGen.getIdLabel('loan-info-payment-to-date');
 
   ngOnInit(): void {
     // For new create transactions, the PAYMENT TO DATE is initialized to 0

@@ -2,8 +2,8 @@
   <div class="grid">
     <div class="col-8">
       <div class="field">
-        <label for="loan-agreement-amount">ORIGINAL AMOUNT</label>
-        <app-input-number inputId="loan-agreement-amount" [formControlName]="templateMap['amount']" />
+        <label [for]="loanAgreementAmountId.id" [id]="loanAgreementAmountId.label">ORIGINAL AMOUNT</label>
+        <app-input-number [inputId]="loanAgreementAmountId.id" [formControlName]="templateMap['amount']" />
         <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
       </div>
     </div>
@@ -51,17 +51,17 @@
     <div class="grid">
       <div class="col-4">
         <div class="field">
-          <label for="credit_amount_this_draw"
-            >CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span></label
-          >
-          <app-input-number inputId="credit_amount_this_draw" formControlName="credit_amount_this_draw" />
+          <label [for]="creditAmountThisDrawId.id" [id]="creditAmountThisDrawId.label">
+            CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span>
+          </label>
+          <app-input-number [inputId]="creditAmountThisDrawId.id" formControlName="credit_amount_this_draw" />
           <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-4">
         <div class="field">
-          <label for="balance">TOTAL BALANCE</label>
-          <app-input-number inputId="balance" [formControlName]="templateMap['balance']" />
+          <label [id]="balanceId.label" [for]="balanceId.id">TOTAL BALANCE</label>
+          <app-input-number [inputId]="balanceId.id" [formControlName]="templateMap['balance']" />
           <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
         </div>
       </div>
@@ -117,8 +117,8 @@
     <div class="grid">
       <div class="col-4">
         <div class="field">
-          <label for="collateral_value_amount">COLLATERAL AMOUNT</label>
-          <app-input-number inputId="collateral_value_amount" formControlName="collateral_value_amount" />
+          <label [for]="collateralValueAmountId.id" [id]="collateralValueAmountId.label">COLLATERAL AMOUNT</label>
+          <app-input-number [inputId]="collateralValueAmountId.id" formControlName="collateral_value_amount" />
           <app-error-messages [form]="form" fieldName="collateral_value_amount" [formSubmitted]="formSubmitted" />
         </div>
       </div>
@@ -166,8 +166,8 @@
     <div class="grid">
       <div class="col-5">
         <div class="field">
-          <label for="estimated_value">ESTIMATED VALUE</label>
-          <app-input-number inputId="estimated_value" formControlName="estimated_value" />
+          <label [for]="estimatedValueId.id" [id]="estimatedValueId.label">ESTIMATED VALUE</label>
+          <app-input-number [inputId]="estimatedValueId.id" formControlName="estimated_value" />
           <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" />
         </div>
       </div>

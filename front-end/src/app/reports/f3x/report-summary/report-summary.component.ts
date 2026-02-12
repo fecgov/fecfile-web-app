@@ -71,8 +71,8 @@ export class ReportSummaryComponent extends ReportDetailedSummaryComponent {
     return lineSummaries;
   });
 
-  readonly first = signal(0);
-  readonly columns: Signal<ColumnDefinition<LineSummary>[]> = computed(() => {
+  override readonly first = signal(0);
+  override readonly columns: Signal<ColumnDefinition<LineSummary>[]> = computed(() => {
     const columns = [
       { field: 'lineNumber', header: 'Line', cssClass: 'line-column' },
       { field: 'description', header: 'Description', cssClass: 'description-column' },

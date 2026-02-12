@@ -11,7 +11,7 @@ export class F3xCreateReportPage {
 
     if (['12G', '30G', '12P', '12R', '12S', '12C', '30R', '30S'].includes(formData['report_code'])) {
       PageUtils.calendarSetValue('[data-cy="date_of_election"]', new Date(formData['date_of_election']));
-      PageUtils.dropdownSetValue('[data-cy="state_of_election"]', formData['state_of_election']);
+      PageUtils.pSelectDropdownSetValue('[data-cy="state_of_election"]', formData['state_of_election']);
     }
 
     PageUtils.calendarSetValue('[data-cy="coverage_from_date"]', new Date(formData['coverage_from_date']));

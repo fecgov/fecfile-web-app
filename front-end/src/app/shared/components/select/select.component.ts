@@ -13,14 +13,17 @@ import { FormControl, FormGroup, NgControl, ReactiveFormsModule } from '@angular
 import { Options } from 'app/shared/utils/label.utils';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { NgTemplateOutlet } from '@angular/common';
+import { IdGeneratorService } from 'app/shared/services/id-generator.service';
 
 @Component({
   selector: 'app-select',
   imports: [ReactiveFormsModule, ErrorMessagesComponent, NgTemplateOutlet],
+  providers: [IdGeneratorService],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
 })
 export class SelectComponent {
+  private readonly idGen = inject(IdGeneratorService);
   ngControl = inject(NgControl);
   readonly inputId = input.required<string>();
   readonly label = input.required<string>();
@@ -40,10 +43,7 @@ export class SelectComponent {
     }>
   >('optionTemplate');
 
-  private static nextId = 0;
-  private readonly instanceId = SelectComponent.nextId++;
-  readonly safeId = computed(() => `${this.inputId()}-${this.instanceId}`);
-  readonly labelId = computed(() => `${this.safeId()}-label`);
+  readonly selectId = computed(() => this.idGen.getIdLabel(this.inputId()));
 
   readonly selectElement = viewChild.required<ElementRef<HTMLSelectElement>>('selectElement');
   readonly selected = viewChild.required<ElementRef>('selected');

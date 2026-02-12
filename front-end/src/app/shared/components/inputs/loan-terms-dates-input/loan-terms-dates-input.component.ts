@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, computed, inject, OnInit, viewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
@@ -13,6 +13,7 @@ import { DateUtils } from 'app/shared/utils/date.utils';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { SelectComponent } from '../../select/select.component';
+import { IdGeneratorService } from 'app/shared/services/id-generator.service';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -24,8 +25,10 @@ enum LoanTermsFieldSettings {
   selector: 'app-loan-terms-dates-input',
   templateUrl: './loan-terms-dates-input.component.html',
   imports: [ReactiveFormsModule, CalendarComponent, ErrorMessagesComponent, InputText, SelectComponent],
+  providers: [IdGeneratorService],
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
+  private readonly idGen = inject(IdGeneratorService);
   private readonly store = inject(Store);
   readonly interestInput = viewChild<InputText>('interestRatePercentage');
   clearValuesOnChange = true;
@@ -44,12 +47,8 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   readonly report = this.store.selectSignal(selectActiveReport);
 
-  private static nextId = 0;
-  private readonly instanceId = LoanTermsDatesInputComponent.nextId++;
-  readonly dueDateId = computed(() => `due-date-${this.instanceId}`);
-  readonly dueDateLabelId = computed(() => `due-date-label-${this.instanceId}`);
-  readonly interestRateId = computed(() => `interest-rate-${this.instanceId}`);
-  readonly interestRateLabelId = computed(() => `interest-rate-label-${this.instanceId}`);
+  readonly dueDateId = this.idGen.getIdLabel('due-date');
+  readonly interestRateId = this.idGen.getIdLabel('interest-rate');
 
   ngOnInit(): void {
     this.addValidators();

@@ -118,9 +118,10 @@ export class ReportListPage {
       }).as('GetDisbursements');
     }
 
-    cy.visit(`/reports/transactions/report/${reportId}/list`);
+    const visit = cy.visit(`/reports/transactions/report/${reportId}/list`);
     if (includeLoans) cy.wait('@GetLoans');
     if (includeDisbursements) cy.wait('@GetDisbursements');
     if (includeReceipts) cy.wait('@GetReceipts');
+    return visit;
   }
 }
