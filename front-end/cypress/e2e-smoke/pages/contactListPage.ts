@@ -147,7 +147,7 @@ export class ContactListPage {
   private static create(fd: ContactFormData) {
     ContactListPage.goToPage();
     PageUtils.clickButton('Add contact');
-    cy.wait(150);
+    cy.get('app-contact-dialog').should('exist')
     ContactListPage.enterFormData(fd);
     PageUtils.clickButton('Save');
   }

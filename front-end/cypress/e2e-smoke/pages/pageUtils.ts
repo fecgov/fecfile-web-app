@@ -1,3 +1,5 @@
+import { noop } from "rxjs";
+
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
@@ -47,7 +49,7 @@ export class PageUtils {
 
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    cy.wait(100);
+    cy.get(alias).find(calendar).first().blur();
   }
 
   static pickDay(day: string) {
@@ -72,8 +74,9 @@ export class PageUtils {
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
-    cy.wait(100);
+    cy.get('@calendarElement').find('.p-datepicker-select-year')
+      .should('be.visible').click({ force: true }).blur();
+
     cy.get('@calendarElement').then(($calendarElement) => {
       if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
         cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
@@ -229,8 +232,8 @@ export class PageUtils {
     cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
-    cy.wait(1000);
-    this.enterSecondCommitteeEmailIfneeded();
+    cy.contains('Welcome to FECfile+').should('exist').on('uncaught:exception', noop)
+    cy.then(this.enterSecondCommitteeEmailIfneeded)
   }
 
   static enterSecondCommitteeEmailIfneeded() {
