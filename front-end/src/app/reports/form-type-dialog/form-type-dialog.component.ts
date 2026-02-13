@@ -8,8 +8,8 @@ import { CreateF24Component } from './create-f24/create-f24.component';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
-import { ReportTypes } from 'app/shared/models';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 
 @Component({
   selector: 'app-form-type-dialog',

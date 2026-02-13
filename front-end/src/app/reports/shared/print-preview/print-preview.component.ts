@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { Report } from 'app/shared/models/reports/report.model';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';

@@ -24,12 +24,12 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { Form3, F3FormTypes } from 'app/shared/models';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { injectParams } from 'ngxtension/inject-params';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
+import { Form3, F3FormTypes } from 'app/shared/models/reports/form-3.model';
 
 @Component({
   selector: 'app-create-f3-step1',

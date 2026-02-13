@@ -2,7 +2,6 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Form24, Form3, Form3X } from 'app/shared/models';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { collectRouteData } from 'app/shared/utils/route.utils';
@@ -13,6 +12,9 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { ReportSidebarSection } from './menu-info';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 import { getFormTypes } from 'app/shared/utils/form-type.utils';
+import type { Form24 } from 'app/shared/models/reports/form-24.model';
+import type { Form3 } from 'app/shared/models/reports/form-3.model';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 @Component({
   selector: 'app-drawer',

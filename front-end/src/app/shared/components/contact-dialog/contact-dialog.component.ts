@@ -16,7 +16,6 @@ import {
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -54,6 +53,8 @@ import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/tab
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
+import { candidatePatternMessage } from 'app/shared/models/candidate.model';
+import { committeePatternMessage } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-contact-dialog',

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Form3 } from 'app/shared/models';
+import { Form3 } from 'app/shared/models/reports/form-3.model';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
@@ -10,7 +10,7 @@ import { DotFecService } from 'app/shared/services/dot-fec.service';
   selector: 'app-form3-list',
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form3-list.component.html',
-   providers: [DotFecService, Form3Service],
+  providers: [DotFecService, Form3Service],
 })
 export class Form3ListComponent extends AbstractFormListComponent<Form3> {
   readonly itemService = inject(Form3Service);

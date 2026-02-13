@@ -18,10 +18,11 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
 import { InputText } from 'primeng/inputtext';
-import { Form24, ReportTypes } from 'app/shared/models';
 import { TooltipModule } from 'primeng/tooltip';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { derivedAsync } from 'ngxtension/derived-async';
+import type { Form24 } from 'app/shared/models/reports/form-24.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 
 @Component({
   selector: 'app-amount-input',

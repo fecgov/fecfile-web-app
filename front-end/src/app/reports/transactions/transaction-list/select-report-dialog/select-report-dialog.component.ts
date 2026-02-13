@@ -8,10 +8,10 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Form3X } from 'app/shared/models';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { derivedAsync } from 'ngxtension/derived-async';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 @Component({
   selector: 'app-select-report-dialog',

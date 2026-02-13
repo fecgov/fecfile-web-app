@@ -2,12 +2,12 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
 import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { Popover } from 'primeng/popover';
 import { HeaderStyles } from '../header-styles';
+import type { Roles } from 'app/shared/models/role.model';
 
 @Component({
   standalone: true,

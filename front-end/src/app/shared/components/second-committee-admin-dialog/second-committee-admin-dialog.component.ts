@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -9,6 +8,7 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { Roles, getRoleKey } from 'app/shared/models/role.model';
 
 @Component({
   selector: 'app-second-committee-admin-dialog',

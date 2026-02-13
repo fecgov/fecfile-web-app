@@ -1,4 +1,5 @@
-import { Report, ReportStatus } from 'app/shared/models';
+import type { Report } from 'app/shared/models/reports/report.model';
+import { ReportStatus } from 'app/shared/models/reports/report.model';
 import { MenuItem } from 'primeng/api';
 
 export enum ReportSidebarSection {

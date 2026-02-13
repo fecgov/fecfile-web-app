@@ -17,20 +17,18 @@ import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils'
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { FormComponent } from '../form.component';
-import {
-  TransactionType,
-  ContactTypeLabels,
-  ReportTypes,
-  TransactionTemplateMapType,
-  Contact,
-  NavigationAction,
-  NavigationDestination,
-  NavigationEvent,
-} from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { GlossaryService } from '../glossary/glossary.service';
 import { environment } from 'environments/environment';
+import { ContactTypeLabels, Contact } from 'app/shared/models/contact.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
+import {
+  NavigationEvent,
+  NavigationAction,
+  NavigationDestination,
+} from 'app/shared/models/transaction-navigation-controls.model';
+import type { TransactionType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
 @Component({
   template: '',

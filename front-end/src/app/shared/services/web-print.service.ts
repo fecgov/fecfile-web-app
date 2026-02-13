@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { ReportService } from './report.service';
-import { Report } from '../models';
+import type { Report } from '../models/reports/report.model';
 
 @Injectable()
 export class WebPrintService<T extends Report> {

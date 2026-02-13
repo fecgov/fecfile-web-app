@@ -8,7 +8,7 @@ import { initialState as initNavigationEvent } from 'app/store/navigation-event.
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { Form24, Form3, Report } from '../models';
+import type { Report } from '../models/reports/report.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { MemoText } from '../models/memo-text.model';
@@ -27,6 +27,8 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { Form24 } from '../models/reports/form-24.model';
+import { Form3 } from '../models/reports/form-3.model';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({

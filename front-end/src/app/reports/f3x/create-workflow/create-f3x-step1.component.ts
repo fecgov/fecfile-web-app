@@ -6,7 +6,6 @@ import { FormComponent } from 'app/shared/components/form.component';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { F3xFormTypes, Form3X } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
@@ -34,6 +33,7 @@ import { injectParams } from 'ngxtension/inject-params';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
+import { Form3X, F3xFormTypes } from 'app/shared/models/reports/form-3x.model';
 
 @Component({
   selector: 'app-create-f3x-step1',

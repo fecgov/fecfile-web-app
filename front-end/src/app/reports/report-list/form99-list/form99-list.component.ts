@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { Form99 } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { SharedTemplatesComponent } from '../shared-templates.component';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
+import { Form99 } from 'app/shared/models/reports/form-99.model';
 
 @Component({
   selector: 'app-form99-list',

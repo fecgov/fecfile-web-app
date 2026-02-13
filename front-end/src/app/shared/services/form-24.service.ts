@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReportService } from './report.service';
-import type { Form24 } from '../models';
+import type { Form24 } from '../models/reports/form-24.model';
 
 @Injectable()
 export class Form24Service extends ReportService<Form24> {
