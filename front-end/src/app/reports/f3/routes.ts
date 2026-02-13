@@ -40,6 +40,7 @@ export const F3_ROUTES: Route[] = [
     title: 'View summary page',
     component: ReportSummaryComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
@@ -48,6 +49,7 @@ export const F3_ROUTES: Route[] = [
     title: 'View detailed summary page',
     component: ReportDetailedSummaryComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: { sidebarSection: ReportSidebarSection.REVIEW },
     runGuardsAndResolvers: 'always',
   },
@@ -56,6 +58,7 @@ export const F3_ROUTES: Route[] = [
     title: 'Print preview',
     component: PrintPreviewComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f3/detailed-summary/' + report?.id,
@@ -69,6 +72,7 @@ export const F3_ROUTES: Route[] = [
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getNextUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
@@ -81,6 +85,7 @@ export const F3_ROUTES: Route[] = [
     component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f3/memo/' + report?.id,
@@ -93,6 +98,7 @@ export const F3_ROUTES: Route[] = [
     title: 'Report status',
     component: SubmitReportStatusComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },

@@ -29,6 +29,7 @@ export const F99_ROUTES: Route[] = [
     title: 'Edit a report',
     component: MainFormComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: { sidebarSection: ReportSidebarSection.CREATE },
     runGuardsAndResolvers: 'always',
   },
@@ -37,6 +38,7 @@ export const F99_ROUTES: Route[] = [
     title: 'Print preview',
     component: PrintPreviewComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
       getBackUrl: (report?: Report) => '/reports/f99/edit/' + report?.id,
@@ -50,6 +52,7 @@ export const F99_ROUTES: Route[] = [
     component: SubmitReportComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
       getBackUrl: (report?: Report) => '/reports/f99/web-print/' + report?.id,
@@ -62,6 +65,7 @@ export const F99_ROUTES: Route[] = [
     title: 'Report status',
     component: SubmitReportStatusComponent,
     resolve: { report: ReportResolver },
+    providers: [ReportResolver],
     data: { sidebarSection: ReportSidebarSection.SUBMISSION },
     runGuardsAndResolvers: 'always',
   },
