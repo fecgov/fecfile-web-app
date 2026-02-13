@@ -1,4 +1,5 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
+@import 'primeicons/primeicons.css';
 
 p {
   max-width: 100%;
@@ -659,22 +660,6 @@ textarea {
   }
 }
 
-.prev-arrow-mask {
-  background-color: var(--p-content-color);
-  mask-image: url('assets/img/prev_arrow.svg');
-}
-
-.next-arrow-mask {
-  background-color: white;
-  mask-image: url('assets/img/next_arrow.svg');
-}
-
-.prev-arrow-mask,
-.next-arrow-mask {
-  height: 9px;
-  width: 8px;
-}
-
 .icon-gap {
   gap: 5px;
 }
@@ -918,4 +903,35 @@ option {
 
 .gandhi-bold {
   font-family: var(--gandhi-bold);
+}
+
+.icon {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background-color: currentColor;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+.icon-arrow-down {
+  mask: url('/assets/img/i-arrow-down.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/i-arrow-down.svg') no-repeat center;
+}
+
+.icon-arrow-right {
+  mask: url('/assets/img/next_arrow.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/next_arrow.svg') no-repeat center;
+}
+
+.icon-arrow-left {
+  mask: url('/assets/img/prev_arrow.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/prev_arrow.svg') no-repeat center;
+}
+
+.i-plus {
+  width: 16px;
+  height: 16px;
+  mask: url('/assets/img/i-plus.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/i-plus.svg') no-repeat center;
 }

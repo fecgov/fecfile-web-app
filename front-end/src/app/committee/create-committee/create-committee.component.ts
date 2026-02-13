@@ -6,7 +6,7 @@ import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
-import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -19,8 +19,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   selector: 'app-create-committee',
   templateUrl: './create-committee.component.html',
   styleUrls: ['./create-committee.component.scss'],
-  imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, CheckboxModule, ButtonModule, DialogComponent],
-  providers: [MessageService, ConfirmationService],
+  imports: [RouterLink, InputGroup, ReactiveFormsModule, CheckboxModule, ButtonModule, DialogComponent],
 })
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);

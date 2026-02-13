@@ -47,7 +47,6 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
     SearchableSelectComponent,
     ToUpperDirective,
   ],
-  providers: [ConfirmationService],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {
   readonly fb = inject(FormBuilder);

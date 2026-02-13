@@ -7,7 +7,9 @@
   </div>
   <div class="col-6 right-side">
     <div class="go-back">
-      <a routerLink="/login/select-committee"><i class="pi pi-angle-left"></i> GO BACK</a>
+      <a routerLink="/login/select-committee" class="flex align-items-center gap-2 w-max"
+        ><i class="icon icon-arrow-left"></i> GO BACK</a
+      >
     </div>
     <div class="right-side-box">
       <h2 class="m-0">Find your committee</h2>
@@ -43,14 +45,12 @@
               <span class="h5 font-karla-bold mb-0">{{ selectedCommittee.committee_id }}</span>
 
               <p-button
-                class="create-button"
                 label="Create account"
                 styleClass="p-button-primary"
                 (click)="createAccount()"
-                icon="pi pi-angle-right"
+                icon="icon icon-arrow-right"
                 iconPos="right"
-              >
-              </p-button>
+              />
             </div>
           </div>
         }
@@ -82,14 +82,7 @@
   </p>
   <ng-container dialog-footer #dialogFooterRef>
     <div class="flex justify-content-center">
-      <button
-        type="button"
-        pButton
-        pRipple
-        label="Close"
-        class="p-button-primary"
-        (click)="explanationVisible.set(false)"
-      ></button>
+      <p-button label="Close" class="p-button-primary" (click)="explanationVisible.set(false)" />
     </div>
   </ng-container>
 </app-dialog>

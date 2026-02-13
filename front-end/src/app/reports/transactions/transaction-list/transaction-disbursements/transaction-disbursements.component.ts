@@ -17,14 +17,12 @@ import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-transaction-disbursements',
   templateUrl: './transaction-disbursements.component.html',
   styleUrls: ['../../transaction.scss', './transaction-disbursements.component.scss'],
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
-  providers: [MessageService, ConfirmationService],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);

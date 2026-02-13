@@ -5,8 +5,6 @@ import { AccordionModule } from 'primeng/accordion';
 import { Ripple } from 'primeng/ripple';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   selector: 'app-double-transaction-detail',
@@ -19,6 +17,5 @@ import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wra
     ReactiveFormsModule,
     TransactionInputComponent,
   ],
-  providers: [MessageService, ConfirmationService, ConfirmationWrapperService],
 })
 export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseComponent {}

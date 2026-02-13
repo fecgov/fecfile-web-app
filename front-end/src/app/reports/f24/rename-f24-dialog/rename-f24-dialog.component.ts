@@ -28,7 +28,6 @@ import { Ripple } from 'primeng/ripple';
     AutoFocusModule,
     ErrorMessagesComponent,
   ],
-  providers: [MessageService],
 })
 export class RenameF24DialogComponent extends FormComponent {
   protected readonly router = inject(Router);

@@ -16,7 +16,6 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
   imports: [ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
-  providers: [MessageService],
 })
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);

@@ -12,7 +12,6 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { RouterLink } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-contact-list',
@@ -29,7 +28,6 @@ import { MessageService, ConfirmationService } from 'primeng/api';
     SelectModule,
     RouterLink,
   ],
-  providers: [MessageService, ConfirmationService],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);

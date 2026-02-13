@@ -21,7 +21,6 @@ import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-main-form',
@@ -38,7 +37,7 @@ import { MessageService } from 'primeng/api';
     SelectButton,
     AutoResizeDirective,
   ],
-  providers: [Form99Service, MessageService],
+  providers: [Form99Service],
 })
 export class MainFormComponent extends MainFormBaseComponent<Form99> implements OnInit {
   readonly reportService = inject(Form99Service);

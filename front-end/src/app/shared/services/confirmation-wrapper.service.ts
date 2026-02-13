@@ -6,7 +6,9 @@ import { ConfirmationService } from 'primeng/api';
 
 type dialogs = 'dialog' | 'childDialog' | 'childDialog_2';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ConfirmationWrapperService {
   private readonly confirmationService = inject(ConfirmationService);
 

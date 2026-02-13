@@ -62,7 +62,7 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus',
+        'icon i-plus',
         ControlType.BUTTON,
       ),
     ],

@@ -46,7 +46,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus',
+        'icon i-plus',
         ControlType.BUTTON,
       ),
     ],

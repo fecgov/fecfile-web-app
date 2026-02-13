@@ -39,6 +39,7 @@ import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 function initializeAppFactory(
   loginService: LoginService,
@@ -127,6 +128,8 @@ bootstrapApplication(AppComponent, {
       },
     }),
     CookieService,
+    ConfirmationService,
+    MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
     DynamicPipe,

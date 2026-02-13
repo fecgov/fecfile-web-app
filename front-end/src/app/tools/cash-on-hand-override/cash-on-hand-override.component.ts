@@ -20,7 +20,6 @@ import { printFormErrors } from 'app/shared/utils/form.utils';
   templateUrl: './cash-on-hand-override.component.html',
   styleUrls: ['./cash-on-hand-override.component.scss'],
   imports: [ReactiveFormsModule, SelectComponent, InputNumberComponent, ButtonDirective],
-  providers: [MessageService],
 })
 export class CashOnHandOverrideComponent extends DestroyerComponent implements OnInit {
   private readonly router = inject(Router);

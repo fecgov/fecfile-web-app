@@ -19,7 +19,6 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-glossary',
   imports: [DrawerModule, FormsModule, PanelModule, ButtonModule],
-  providers: [],
   templateUrl: './glossary.component.html',
   styleUrl: './glossary.component.scss',
 })

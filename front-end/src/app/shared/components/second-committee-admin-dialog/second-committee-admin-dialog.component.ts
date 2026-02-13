@@ -15,7 +15,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
   templateUrl: './second-committee-admin-dialog.component.html',
   styleUrl: './second-committee-admin-dialog.component.scss',
   imports: [ReactiveFormsModule, DialogModule, ButtonModule, ErrorMessagesComponent],
-  providers: [MessageService],
 })
 export class SecondCommitteeAdminDialogComponent extends FormComponent {
   readonly memberService = inject(CommitteeMemberService);
