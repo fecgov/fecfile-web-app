@@ -395,7 +395,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.confirmationService.confirm({
       key: 'contactDialogDialog',
       header: 'Confirm',
-      icon: 'pi pi-info-circle',
+      icon: 'icon i-info-circle',
       message: changesMessage,
       acceptLabel: 'Continue',
       rejectLabel: 'Cancel',

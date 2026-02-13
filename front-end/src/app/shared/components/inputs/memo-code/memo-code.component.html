@@ -20,7 +20,7 @@
             <span class="paren-label">{{ parenLabel() }}</span>
           }
         </span>
-        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
+        <span class="icon i-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
       <div class="col-12">
         <app-error-messages
@@ -43,13 +43,13 @@
       </div>
       <div class="col-12">
         @if (memoControl.value) {
-          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
+          <span class="icon icon-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM
         }
         @if (memoControl.value !== undefined) {
-          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
+          <span class="icon i-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
         }
       </div>
       <div class="col-12">

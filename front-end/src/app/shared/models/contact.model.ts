@@ -406,7 +406,7 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
     const markedName = LabelUtils.htmlHighlightTerm(this.name, searchTerm);
     const markedId = LabelUtils.htmlHighlightTerm(this.id, searchTerm);
     const statusCircle = `<span
-        class="pi pi-circle-on ${this.is_active ? 'active-status-circle' : 'inactive-status-circle'}" 
+        class="icon i-circle-on ${this.is_active ? 'active-status-circle' : 'inactive-status-circle'}" 
         aria-label="${this.is_active ? 'Active' : 'Inactive'}" 
       ></span>`;
     return {

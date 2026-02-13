@@ -2,11 +2,11 @@
   <div class="mb-7">
     <div class="committee-name">{{ committeeName() }}</div>
     <div class="committee-info" aria-label="Committee Status">
-      <div
-        class="pi pi-circle-on status-circle"
+      <i
+        class="icon i-circle-on status-circle"
         [style.color]="frequencyColor()"
         [attr.aria-label]="committeeStatus()"
-      ></div>
+      ></i>
       <div class="sub-banner-item">{{ committeeFrequency() }}</div>
       |
       <div class="sub-banner-item">{{ committeeTypeLabel() }}</div>

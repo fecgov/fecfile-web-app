@@ -18,7 +18,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
         (tableActionClick)="$event.action.action($event.actionItem)"
         [actionItem]="item"
         [tableActions]="actions"
-        buttonIcon="pi pi-ellipsis-v"
+        buttonIcon="icon i-ellipsis-vertical"
         buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary p-button-text mr-2"
       />
     </ng-template>

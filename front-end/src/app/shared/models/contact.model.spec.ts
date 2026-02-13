@@ -26,7 +26,7 @@ describe('Contact', () => {
       name: 'this_is_a_test_name',
     } as FecApiCommitteeLookupData);
     const expectedRetval = `this_<mark>is_a</mark>_test_name<br>(C99999999)<span
-        class="pi pi-circle-on active-status-circle" 
+        class="icon i-circle-on active-status-circle" 
         aria-label="Active" 
       ></span>`;
 
@@ -42,7 +42,7 @@ describe('Contact', () => {
       name: 'actblue',
     } as FecApiCommitteeLookupData);
     const expectedRetval = `<mark>act</mark>blue<br>(C99999999)<span
-        class="pi pi-circle-on active-status-circle" 
+        class="icon i-circle-on active-status-circle" 
         aria-label="Active" 
       ></span>`;
 

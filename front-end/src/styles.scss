@@ -1,5 +1,4 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
-@import 'primeicons/primeicons.css';
 
 p {
   max-width: 100%;
@@ -914,6 +913,20 @@ option {
   -webkit-mask-size: contain;
 }
 
+.icon-x {
+  width: 12px;
+  height: 12px;
+  mask: url('/assets/img/i-x.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/i-x.svg') no-repeat center;
+}
+
+.icon-check {
+  width: 14px;
+  height: 14px;
+  mask: url('/assets/img/check.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/check.svg') no-repeat center;
+}
+
 .icon-arrow-down {
   mask: url('/assets/img/i-arrow-down.svg') no-repeat center;
   -webkit-mask: url('/assets/img/i-arrow-down.svg') no-repeat center;
@@ -934,4 +947,25 @@ option {
   height: 16px;
   mask: url('/assets/img/i-plus.svg') no-repeat center;
   -webkit-mask: url('/assets/img/i-plus.svg') no-repeat center;
+}
+
+.i-info-circle {
+  width: 20px;
+  height: 20px;
+  mask: url('/assets/img/i-info-circle.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/i-info-circle.svg') no-repeat center;
+}
+
+.i-circle-on {
+  width: 16px;
+  height: 16px;
+  mask: url('/assets/img/i-circle-on.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/i-circle-on.svg') no-repeat center;
+}
+
+.i-ellipsis-vertical {
+  width: 16px;
+  height: 16px;
+  mask: url('/assets/img/i-ellipsis-vertical.svg') no-repeat center;
+  -webkit-mask: url('/assets/img/i-ellipsis-vertical.svg') no-repeat center;
 }
