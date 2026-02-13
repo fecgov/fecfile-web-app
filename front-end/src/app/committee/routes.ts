@@ -1,24 +1,23 @@
 import { Route } from '@angular/router';
-import { ManageCommitteeComponent } from './manage-committee/manage-committee.component';
-import { CommitteeInfoComponent } from './committee-info/committee-info.component';
-import { SelectCommitteeComponent } from './select-committee/select-committee.component';
 
 export const COMMITTEE_ROUTES: Route[] = [
   {
     path: 'members',
-    component: ManageCommitteeComponent,
+    loadComponent: () =>
+      import('./manage-committee/manage-committee.component').then((m) => m.ManageCommitteeComponent),
     title: 'Manage Users',
     pathMatch: 'full',
   },
   {
     path: 'select',
-    component: SelectCommitteeComponent,
+    loadComponent: () =>
+      import('./select-committee/select-committee.component').then((m) => m.SelectCommitteeComponent),
     title: 'Select Committee',
     pathMatch: 'full',
   },
   {
     path: '',
-    component: CommitteeInfoComponent,
+    loadComponent: () => import('./committee-info/committee-info.component').then((m) => m.CommitteeInfoComponent),
     title: 'Committee Info',
     pathMatch: 'full',
   },

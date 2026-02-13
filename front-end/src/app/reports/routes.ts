@@ -1,12 +1,11 @@
 import { Route } from '@angular/router';
-import { ReportListComponent } from './report-list/report-list.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 export const REPORTS_ROUTES: Route[] = [
   {
     path: '',
     title: 'Manage Reports',
-    component: ReportListComponent,
+    loadComponent: () => import('./report-list/report-list.component').then((m) => m.ReportListComponent),
     pathMatch: 'full',
     data: {
       showSidebar: false,

@@ -1,20 +1,15 @@
 import { Route } from '@angular/router';
-import { CreateCommitteeComponent } from 'app/committee/create-committee/create-committee.component';
-import { SelectCommitteeComponent } from 'app/committee/select-committee/select-committee.component';
 import { BackgroundStyles } from 'app/layout/layout.component';
 import { nameGuard } from 'app/shared/guards/name.guard';
-import { loggedInGuard } from 'app/shared/guards/logged-in.guard';
 import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
-import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update-current-user.component';
-import { LoginComponent } from './login/login.component';
-import { SecurityNoticeComponent } from './security-notice/security-notice.component';
 import { HeaderStyles } from 'app/layout/header/header-styles';
+import { loggedInGuard } from 'app/shared/guards/logged-in.guard';
 
 export const LOGIN_ROUTES: Route[] = [
   {
     path: '',
-    component: LoginComponent,
     title: 'FECfile+ Login',
+    loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
     data: {
       showUpperFooter: false,
       showCommitteeBanner: false,
@@ -25,8 +20,8 @@ export const LOGIN_ROUTES: Route[] = [
   },
   {
     path: 'security-notice',
-    component: SecurityNoticeComponent,
     title: 'Security Notice',
+    loadComponent: () => import('./security-notice/security-notice.component').then((m) => m.SecurityNoticeComponent),
     canActivate: [loggedInGuard, nameGuard],
     data: {
       showCommitteeBanner: false,
@@ -38,7 +33,8 @@ export const LOGIN_ROUTES: Route[] = [
   {
     path: 'select-committee',
     title: 'Select Committee',
-    component: SelectCommitteeComponent,
+    loadComponent: () =>
+      import('app/committee/select-committee/select-committee.component').then((m) => m.SelectCommitteeComponent),
     canActivate: [loggedInGuard, nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,
@@ -49,7 +45,8 @@ export const LOGIN_ROUTES: Route[] = [
   {
     path: 'create-committee',
     title: 'Create Committee',
-    component: CreateCommitteeComponent,
+    loadComponent: () =>
+      import('app/committee/create-committee/create-committee.component').then((m) => m.CreateCommitteeComponent),
     canActivate: [loggedInGuard, nameGuard, securityNoticeGuard],
     data: {
       showCommitteeBanner: false,
@@ -60,7 +57,8 @@ export const LOGIN_ROUTES: Route[] = [
   {
     path: 'create-profile',
     title: 'Create Profile',
-    component: UpdateCurrentUserComponent,
+    loadComponent: () =>
+      import('app/users/update-current-user/update-current-user.component').then((m) => m.UpdateCurrentUserComponent),
     canActivate: [loggedInGuard],
     data: {
       showCommitteeBanner: false,

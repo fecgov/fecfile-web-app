@@ -1,20 +1,9 @@
 import { Route } from '@angular/router';
-import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
-import { MainFormComponent } from './main-form/main-form.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
-import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
-import { Report } from 'app/shared/models/reports/report.model';
-import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
+import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { ReportService } from 'app/shared/services/report.service';
-
-// ROUTING NOTE:
-// Due to lifecycle conflict issues between the ReportIsEditableGuard and the
-// ReportResolver, both the guard and the resovler read the :reportId in the URL
-// and put the report for the ID in the ActiveReport value in the ngrx store. As a result:
-// 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
-// 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
+import type { Report } from 'app/shared/models/reports/report.model';
 
 export const F99_ROUTES: Route[] = [
   {
@@ -24,7 +13,7 @@ export const F99_ROUTES: Route[] = [
       {
         path: 'create',
         title: 'Create a report',
-        component: MainFormComponent,
+        loadComponent: () => import('./main-form/main-form.component').then((m) => m.MainFormComponent),
         data: {
           showSidebar: false,
         },
@@ -32,7 +21,7 @@ export const F99_ROUTES: Route[] = [
       {
         path: 'edit/:reportId',
         title: 'Edit a report',
-        component: MainFormComponent,
+        loadComponent: () => import('./main-form/main-form.component').then((m) => m.MainFormComponent),
         resolve: { report: ReportResolver },
         data: { sidebarSection: ReportSidebarSection.CREATE },
         runGuardsAndResolvers: 'always',
@@ -40,7 +29,8 @@ export const F99_ROUTES: Route[] = [
       {
         path: 'web-print/:reportId',
         title: 'Print preview',
-        component: PrintPreviewComponent,
+        loadComponent: () =>
+          import('app/reports/shared/print-preview/print-preview.component').then((m) => m.PrintPreviewComponent),
         resolve: { report: ReportResolver },
         data: {
           sidebarSection: ReportSidebarSection.REVIEW,
@@ -52,10 +42,10 @@ export const F99_ROUTES: Route[] = [
       {
         path: 'submit/:reportId',
         title: 'Submit report',
-        component: SubmitReportComponent,
+        loadComponent: () =>
+          import('../submission-workflow/submit-report.component').then((m) => m.SubmitReportComponent),
         canActivate: [ReportIsEditableGuard],
         resolve: { report: ReportResolver },
-
         data: {
           sidebarSection: ReportSidebarSection.SUBMISSION,
           getBackUrl: (report?: Report) => '/reports/f99/web-print/' + report?.id,
@@ -66,7 +56,8 @@ export const F99_ROUTES: Route[] = [
       {
         path: 'submit/status/:reportId',
         title: 'Report status',
-        component: SubmitReportStatusComponent,
+        loadComponent: () =>
+          import('../submission-workflow/submit-report-status.component').then((m) => m.SubmitReportStatusComponent),
         resolve: { report: ReportResolver },
         data: { sidebarSection: ReportSidebarSection.SUBMISSION },
         runGuardsAndResolvers: 'always',
