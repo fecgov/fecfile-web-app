@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
 import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   selector: 'app-triple-transaction-detail',
@@ -16,7 +17,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
     ReactiveFormsModule,
     TransactionInputComponent,
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, ConfirmationWrapperService],
 })
 export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseComponent implements OnInit {
   override ngOnInit(): void {

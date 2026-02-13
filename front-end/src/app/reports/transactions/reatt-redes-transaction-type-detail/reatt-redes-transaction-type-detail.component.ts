@@ -5,6 +5,7 @@ import { Ripple } from 'primeng/ripple';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
 import { ReattRedesTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/reatt-redes-transaction-type-base.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 
 @Component({
   selector: 'app-reatt-redes-transaction-type-detail',
@@ -19,7 +20,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
     ReactiveFormsModule,
     TransactionInputComponent,
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, ConfirmationWrapperService],
 })
 export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransactionTypeBaseComponent implements OnInit {
   override ngOnInit(): void {
