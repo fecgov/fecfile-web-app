@@ -19,6 +19,7 @@ import { Ripple } from 'primeng/ripple';
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
   imports: [ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
+  providers: [MemoTextService],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly router = inject(Router);

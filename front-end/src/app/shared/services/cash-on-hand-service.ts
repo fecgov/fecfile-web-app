@@ -3,9 +3,7 @@ import { ApiService } from './api.service';
 import { CashOnHand } from '../models/cash-on-hand.model';
 import { HttpResponse } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CashOnHandService {
   private readonly apiService = inject(ApiService);
   readonly apiEndpoint = '/cash_on_hand';

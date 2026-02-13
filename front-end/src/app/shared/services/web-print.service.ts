@@ -3,9 +3,7 @@ import { ApiService } from './api.service';
 import { ReportService } from './report.service';
 import { Report } from '../models';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class WebPrintService<T extends Report> {
   private readonly apiService = inject(ApiService);
   private readonly reportService = inject(ReportService<T>);

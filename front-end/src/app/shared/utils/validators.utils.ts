@@ -229,7 +229,7 @@ export class CommitteeMemberEmailValidator implements AsyncValidator {
   }
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class F24UniqueNameValidator implements AsyncValidator {
   protected readonly form24Service = inject(Form24Service);
   async validate(control: AbstractControl): Promise<ValidationErrors | null> {

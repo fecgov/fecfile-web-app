@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, signal, Signal, TemplateRef, viewC
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { NgClass } from '@angular/common';
@@ -28,6 +28,7 @@ interface DetailedLineSummary {
   templateUrl: './report-detailed-summary.component.html',
   styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
   imports: [CalculationOverlayComponent, ButtonDirective, Ripple, TableModule, TableComponent, NgClass],
+  providers: [ReportService],
 })
 export class ReportDetailedSummaryComponent {
   private readonly store = inject(Store);

@@ -22,9 +22,7 @@ export function getReportFromJSON<T extends Report>(json: any): T {
   throw new Error('FECfile+: Cannot get report from JSON');
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ReportService<T extends Report> implements TableListService<Report> {
   protected readonly apiService = inject(ApiService);
   protected readonly store = inject(Store);

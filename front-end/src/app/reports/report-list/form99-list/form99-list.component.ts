@@ -4,11 +4,13 @@ import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { Form99Service } from 'app/shared/services/form-99.service';
 import { SharedTemplatesComponent } from '../shared-templates.component';
+import { DotFecService } from 'app/shared/services/dot-fec.service';
 
 @Component({
   selector: 'app-form99-list',
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form99-list.component.html',
+  providers: [DotFecService, Form99Service],
 })
 export class Form99ListComponent extends AbstractFormListComponent<Form99> {
   protected readonly itemService = inject(Form99Service);

@@ -13,6 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './download-tray.component.html',
   styleUrls: ['./download-tray.component.scss'],
   imports: [Drawer, PrimeTemplate, ButtonModule, Ripple],
+  providers: [DotFecService],
 })
 export class DownloadTrayComponent {
   readonly router = inject(Router);

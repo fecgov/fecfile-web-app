@@ -21,6 +21,7 @@ import { LayoutService } from 'app/layout/layout.service';
   templateUrl: './print-preview.component.html',
   styleUrls: ['../../styles.scss', './print-preview.component.scss'],
   imports: [ButtonDirective, Ripple, SingleClickDirective],
+  providers: [WebPrintService, ReportService],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);

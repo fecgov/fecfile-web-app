@@ -6,6 +6,9 @@ import { TransactionTypePickerComponent } from './transaction-type-picker/transa
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportService } from 'app/shared/services/report.service';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -16,65 +19,78 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 export const TRANSACTION_ROUTES: Route[] = [
   {
-    path: 'report/:reportId/list',
-    title: 'Manage your transactions',
-    component: TransactionListComponent,
-    resolve: { report: ReportResolver },
-    data: {
-      sidebarSection: ReportSidebarSection.TRANSACTIONS,
-    },
-    runGuardsAndResolvers: 'always',
+    path: '',
+    providers: [
+      ReportService,
+      TransactionService,
+      TransactionListService,
+      ReportResolver,
+      TransactionResolver,
+      ReportIsEditableGuard,
+    ],
+    children: [
+      {
+        path: 'report/:reportId/list',
+        title: 'Manage your transactions',
+        component: TransactionListComponent,
+        resolve: { report: ReportResolver },
+        data: {
+          sidebarSection: ReportSidebarSection.TRANSACTIONS,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'report/:reportId/select/:category',
+        component: TransactionTypePickerComponent,
+        resolve: { report: ReportResolver },
+        canActivate: [ReportIsEditableGuard],
+        data: {
+          sidebarSection: ReportSidebarSection.TRANSACTIONS,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'report/:reportId/create/:transactionType',
+        component: TransactionContainerComponent,
+        resolve: {
+          report: ReportResolver,
+          transaction: TransactionResolver,
+        },
+        data: {
+          sidebarSection: ReportSidebarSection.TRANSACTIONS,
+        },
+        canActivate: [ReportIsEditableGuard],
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'report/:reportId/list/:transactionId',
+        component: TransactionContainerComponent,
+        resolve: {
+          report: ReportResolver,
+          transaction: TransactionResolver,
+        },
+        data: {
+          sidebarSection: ReportSidebarSection.TRANSACTIONS,
+          noComponentReuse: true,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType',
+        component: TransactionContainerComponent,
+        resolve: {
+          report: ReportResolver,
+          transaction: TransactionResolver,
+        },
+        canActivate: [ReportIsEditableGuard],
+        // There is a scenario where a memo is saved and then navigates to create
+        // a sibling transaction of a different transaction type, the below setting ensures
+        // the transaction form components are destroyed and recreated so initialization
+        // of the new transaction form happens correctly.
+        data: { noComponentReuse: true }, // Handled in src/app/custom-route-reuse-strategy.ts
+        runGuardsAndResolvers: 'always',
+      },
+      { path: '**', redirectTo: '' },
+    ],
   },
-  {
-    path: 'report/:reportId/select/:category',
-    component: TransactionTypePickerComponent,
-    resolve: { report: ReportResolver },
-    canActivate: [ReportIsEditableGuard],
-    data: {
-      sidebarSection: ReportSidebarSection.TRANSACTIONS,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'report/:reportId/create/:transactionType',
-    component: TransactionContainerComponent,
-    resolve: {
-      report: ReportResolver,
-      transaction: TransactionResolver,
-    },
-    data: {
-      sidebarSection: ReportSidebarSection.TRANSACTIONS,
-    },
-    canActivate: [ReportIsEditableGuard],
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'report/:reportId/list/:transactionId',
-    component: TransactionContainerComponent,
-    resolve: {
-      report: ReportResolver,
-      transaction: TransactionResolver,
-    },
-    data: {
-      sidebarSection: ReportSidebarSection.TRANSACTIONS,
-      noComponentReuse: true,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType',
-    component: TransactionContainerComponent,
-    resolve: {
-      report: ReportResolver,
-      transaction: TransactionResolver,
-    },
-    canActivate: [ReportIsEditableGuard],
-    // There is a scenario where a memo is saved and then navigates to create
-    // a sibling transaction of a different transaction type, the below setting ensures
-    // the transaction form components are destroyed and recreated so initialization
-    // of the new transaction form happens correctly.
-    data: { noComponentReuse: true }, // Handled in src/app/custom-route-reuse-strategy.ts
-    runGuardsAndResolvers: 'always',
-  },
-  { path: '**', redirectTo: '' },
 ];

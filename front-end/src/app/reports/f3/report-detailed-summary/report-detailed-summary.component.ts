@@ -19,6 +19,7 @@ import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
   templateUrl: './report-detailed-summary.component.html',
   styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
   imports: [Card, CalculationOverlayComponent, ButtonDirective, Ripple, AsyncPipe, CurrencyPipe, DefaultZeroPipe],
+  providers: [ReportService],
 })
 export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);

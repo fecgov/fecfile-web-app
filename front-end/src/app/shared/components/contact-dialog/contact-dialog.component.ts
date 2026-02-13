@@ -78,7 +78,7 @@ import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transacti
     ToUpperDirective,
     DatePipe,
   ],
-  providers: [SearchableSelectComponent],
+  providers: [SearchableSelectComponent, TransactionListService],
 })
 export class ContactDialogComponent extends FormComponent implements OnInit {
   private readonly contactService = inject(ContactService);

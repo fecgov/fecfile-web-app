@@ -44,6 +44,7 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
     SearchableSelectComponent,
     SaveCancelComponent,
   ],
+  providers: [Form3Service],
 })
 export class CreateF3Step1Component extends FormComponent implements OnInit {
   private readonly form3Service = inject(Form3Service);

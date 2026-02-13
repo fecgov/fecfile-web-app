@@ -6,11 +6,13 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
 import { CalculationOverlayComponent } from '../../../shared/components/calculation-overlay/calculation-overlay.component';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   selector: 'app-report-summary',
   templateUrl: './report-summary.component.html',
   styleUrls: ['../../styles.scss', './report-summary.component.scss'],
   imports: [Card, ButtonDirective, Ripple, AsyncPipe, CalculationOverlayComponent, CurrencyPipe, DefaultZeroPipe],
+  providers: [ReportService],
 })
 export class ReportSummaryComponent extends ReportDetailedSummaryComponent implements OnInit {}

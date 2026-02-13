@@ -5,11 +5,13 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 
 import { SharedTemplatesComponent } from '../shared-templates.component';
+import { DotFecService } from 'app/shared/services/dot-fec.service';
 
 @Component({
   selector: 'app-form3x-list',
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form3x-list.component.html',
+  providers: [DotFecService, Form3XService],
 })
 export class Form3XListComponent extends AbstractFormListComponent<Form3X> {
   readonly itemService = inject(Form3XService);

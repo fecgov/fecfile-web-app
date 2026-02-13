@@ -10,6 +10,7 @@ import { SubmitReportComponent } from '../submission-workflow/submit-report.comp
 import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportService } from 'app/shared/services/report.service';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -20,96 +21,97 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 export const F3X_ROUTES: Route[] = [
   {
-    path: 'create/step1',
-    title: 'Create a report',
-    component: CreateF3XStep1Component,
-    runGuardsAndResolvers: 'always',
-    data: {
-      showSidebar: false,
-    },
+    path: '',
+    providers: [ReportResolver, ReportService, ReportIsEditableGuard],
+    children: [
+      {
+        path: 'create/step1',
+        title: 'Create a report',
+        component: CreateF3XStep1Component,
+        runGuardsAndResolvers: 'always',
+        data: {
+          showSidebar: false,
+        },
+      },
+      {
+        path: 'create/step1/:reportId',
+        title: 'Create a report',
+        component: CreateF3XStep1Component,
+        canActivate: [ReportIsEditableGuard],
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'edit/:reportId',
+        title: 'Edit a report',
+        component: CreateF3XStep1Component,
+        resolve: { report: ReportResolver },
+        data: { sidebarSection: ReportSidebarSection.CREATE },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'summary/:reportId',
+        title: 'View summary page',
+        component: ReportSummaryComponent,
+        resolve: { report: ReportResolver },
+        providers: [ReportResolver, ReportService],
+        data: { sidebarSection: ReportSidebarSection.REVIEW },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'detailed-summary/:reportId',
+        title: 'View detailed summary page',
+        component: ReportDetailedSummaryComponent,
+        resolve: { report: ReportResolver },
+        data: { sidebarSection: ReportSidebarSection.REVIEW },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'web-print/:reportId',
+        title: 'Print preview',
+        component: PrintPreviewComponent,
+        resolve: { report: ReportResolver },
+        data: {
+          sidebarSection: ReportSidebarSection.REVIEW,
+          getBackUrl: (report?: Report) => '/reports/f3x/detailed-summary/' + report?.id,
+          getContinueUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'memo/:reportId',
+        title: 'Add a report level memo',
+        component: ReportLevelMemoComponent,
+        canActivate: [ReportIsEditableGuard],
+        resolve: { report: ReportResolver },
+        data: {
+          sidebarSection: ReportSidebarSection.REVIEW,
+          getNextUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'submit/:reportId',
+        title: 'Submit report',
+        component: SubmitReportComponent,
+        canActivate: [ReportIsEditableGuard],
+        resolve: { report: ReportResolver },
+
+        data: {
+          sidebarSection: ReportSidebarSection.SUBMISSION,
+          getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
+          getContinueUrl: (report?: Report) => '/reports/f3x/submit/status/' + report?.id,
+        },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'submit/status/:reportId',
+        title: 'Report status',
+        component: SubmitReportStatusComponent,
+        resolve: { report: ReportResolver },
+        data: { sidebarSection: ReportSidebarSection.SUBMISSION },
+        runGuardsAndResolvers: 'always',
+      },
+      { path: '**', redirectTo: '' },
+    ],
   },
-  {
-    path: 'create/step1/:reportId',
-    title: 'Create a report',
-    component: CreateF3XStep1Component,
-    canActivate: [ReportIsEditableGuard],
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'edit/:reportId',
-    title: 'Edit a report',
-    component: CreateF3XStep1Component,
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: { sidebarSection: ReportSidebarSection.CREATE },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'summary/:reportId',
-    title: 'View summary page',
-    component: ReportSummaryComponent,
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: { sidebarSection: ReportSidebarSection.REVIEW },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'detailed-summary/:reportId',
-    title: 'View detailed summary page',
-    component: ReportDetailedSummaryComponent,
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: { sidebarSection: ReportSidebarSection.REVIEW },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'web-print/:reportId',
-    title: 'Print preview',
-    component: PrintPreviewComponent,
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: {
-      sidebarSection: ReportSidebarSection.REVIEW,
-      getBackUrl: (report?: Report) => '/reports/f3x/detailed-summary/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'memo/:reportId',
-    title: 'Add a report level memo',
-    component: ReportLevelMemoComponent,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: {
-      sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/:reportId',
-    title: 'Submit report',
-    component: SubmitReportComponent,
-    canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: {
-      sidebarSection: ReportSidebarSection.SUBMISSION,
-      getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3x/submit/status/' + report?.id,
-    },
-    runGuardsAndResolvers: 'always',
-  },
-  {
-    path: 'submit/status/:reportId',
-    title: 'Report status',
-    component: SubmitReportStatusComponent,
-    resolve: { report: ReportResolver },
-    providers: [ReportResolver],
-    data: { sidebarSection: ReportSidebarSection.SUBMISSION },
-    runGuardsAndResolvers: 'always',
-  },
-  { path: '**', redirectTo: '' },
 ];

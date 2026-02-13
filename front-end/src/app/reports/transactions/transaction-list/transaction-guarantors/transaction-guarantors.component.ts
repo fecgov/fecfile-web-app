@@ -16,6 +16,7 @@ import { Transaction } from 'app/shared/models';
   templateUrl: './transaction-guarantors.component.html',
   styleUrls: ['../../transaction.scss', './transaction-guarantors.component.scss'],
   imports: [TableComponent, TableActionsButtonComponent, ConfirmDialog],
+  providers: [TransactionSchC2Service]
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchC2Service);

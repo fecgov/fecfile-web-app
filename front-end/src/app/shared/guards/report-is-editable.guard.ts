@@ -2,9 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { ReportService } from '../services/report.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ReportIsEditableGuard {
   private readonly reportService = inject(ReportService);
 

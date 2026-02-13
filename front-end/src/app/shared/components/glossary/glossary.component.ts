@@ -21,6 +21,7 @@ import { ButtonModule } from 'primeng/button';
   imports: [DrawerModule, FormsModule, PanelModule, ButtonModule],
   templateUrl: './glossary.component.html',
   styleUrl: './glossary.component.scss',
+  providers: [GlossaryService],
 })
 export class GlossaryComponent {
   readonly glossaryService = inject(GlossaryService);

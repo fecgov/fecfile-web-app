@@ -27,6 +27,7 @@ enum SubmissionStates {
     PopoverModule,
     AutoResizeDirective,
   ],
+  providers: [FeedbackService],
 })
 export class FeedbackOverlayComponent extends FormComponent {
   public readonly feedbackService = inject(FeedbackService);

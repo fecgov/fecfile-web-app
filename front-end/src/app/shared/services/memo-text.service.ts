@@ -2,9 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { MemoText } from '../models/memo-text.model';
 import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class MemoTextService {
   private readonly apiService = inject(ApiService);
 

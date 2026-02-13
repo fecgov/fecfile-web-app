@@ -19,6 +19,7 @@ import { getFormTypes } from 'app/shared/utils/form-type.utils';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   imports: [PanelMenuModule, FecDatePipe, RenameF24DialogComponent],
+  providers: [ReportService],
 })
 export class SidebarComponent {
   private readonly navEnd = toSignal(injectNavigationEnd());

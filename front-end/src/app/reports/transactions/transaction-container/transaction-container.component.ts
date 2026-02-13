@@ -27,6 +27,7 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
     TransactionNavigationComponent,
     ConfirmDialog,
   ],
+  providers: [ReportService],
 })
 export class TransactionContainerComponent {
   private readonly store = inject(Store);

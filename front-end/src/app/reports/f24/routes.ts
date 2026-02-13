@@ -8,6 +8,7 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportService } from 'app/shared/services/report.service';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -19,7 +20,7 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 export const F24_ROUTES: Route[] = [
   {
     path: '',
-    providers: [ReportResolver],
+    providers: [ReportResolver, ReportService, ReportIsEditableGuard],
     children: [
       {
         path: 'report/:reportId/transactions/select/independent-expenditures',

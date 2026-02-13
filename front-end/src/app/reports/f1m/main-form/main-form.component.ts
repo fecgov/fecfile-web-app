@@ -47,6 +47,7 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
     ToUpperDirective,
   ],
   styleUrl: './main-form.component.scss',
+  providers: [Form1MService],
 })
 export class MainFormComponent extends MainFormBaseComponent<Form1M> implements OnInit, OnDestroy {
   readonly cmservice = inject(ContactManagementService);

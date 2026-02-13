@@ -4,6 +4,7 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ColumnDefinition, TableComponent } from 'app/shared/components/table/table.component';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 interface LineSummary {
   lineNumber: string;
@@ -17,6 +18,7 @@ interface LineSummary {
   templateUrl: './report-summary.component.html',
   styleUrls: ['./report-summary.component.scss'],
   imports: [ButtonDirective, Ripple, TableModule, TableComponent],
+  providers: [Form3XService],
 })
 export class ReportSummaryComponent extends ReportDetailedSummaryComponent {
   readonly lines = computed(() => {

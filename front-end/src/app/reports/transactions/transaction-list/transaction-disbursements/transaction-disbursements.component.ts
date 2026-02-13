@@ -23,6 +23,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
   templateUrl: './transaction-disbursements.component.html',
   styleUrls: ['../../transaction.scss', './transaction-disbursements.component.scss'],
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
+  providers: [TransactionSchBService],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
   override readonly itemService = inject(TransactionSchBService);

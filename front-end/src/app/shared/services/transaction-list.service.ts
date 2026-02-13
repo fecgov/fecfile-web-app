@@ -1,14 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { ListRestResponse } from '../models';
+import type { ListRestResponse } from '../models';
 import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { ApiService, QueryParams } from './api.service';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
-import { Report } from '../models/reports/report.model';
+import type { Report } from '../models/reports/report.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TransactionListService implements TableListService<TransactionListRecord> {
   protected readonly apiService = inject(ApiService);
   tableDataEndpoint = '/transactions';

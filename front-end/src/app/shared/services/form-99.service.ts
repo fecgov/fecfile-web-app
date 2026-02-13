@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ReportService } from './report.service';
-import { Form99 } from '../models';
+import type { Form99 } from '../models';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class Form99Service extends ReportService<Form99> {
   override apiEndpoint = '/reports/form-99';
 }

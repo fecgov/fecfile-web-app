@@ -18,6 +18,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
   templateUrl: './select-report-dialog.component.html',
   styleUrls: ['./select-report-dialog.component.scss'],
   imports: [ReactiveFormsModule, FormsModule, ButtonDirective, Ripple],
+  providers: [Form3XService],
 })
 export class SelectReportDialogComponent {
   public readonly router = inject(Router);

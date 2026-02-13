@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CommitteeAccount } from '../models/committee-account.model';
+import type { CommitteeAccount } from '../models/committee-account.model';
 import { Form3X } from '../models';
-import { ReportCodes } from '../utils/report-code.utils';
+import type { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
 import { CoverageDates } from '../models/reports/base-form-3';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class Form3XService extends ReportService<Form3X> {
   override apiEndpoint = '/reports/form-3x';
 

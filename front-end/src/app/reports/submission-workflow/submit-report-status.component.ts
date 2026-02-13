@@ -15,6 +15,7 @@ import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
   templateUrl: './submit-report-status.component.html',
   styleUrls: ['./submit-report-status.component.scss'],
   imports: [ButtonDirective, Ripple, LongDatePipe],
+  providers: [Form3XService],
 })
 export class SubmitReportStatusComponent implements OnInit {
   reportStatusEnum = ReportStatus;

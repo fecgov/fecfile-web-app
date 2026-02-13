@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, Renderer2, RendererFactory2, signal, WritableSignal } from '@angular/core';
 import { ApiService } from './api.service';
-import { Report } from '../models/reports/report.model';
+import type { Report } from '../models/reports/report.model';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -15,9 +15,7 @@ export interface Download {
   report: Report;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class DotFecService {
   readonly store = inject(Store);
   private readonly apiService = inject(ApiService);

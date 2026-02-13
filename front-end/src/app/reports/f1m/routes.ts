@@ -8,11 +8,12 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportService } from 'app/shared/services/report.service';
 
 export const F1M_ROUTES: Route[] = [
   {
     path: '',
-    providers: [ReportResolver],
+    providers: [ReportResolver, ReportService, ReportIsEditableGuard],
     children: [
       {
         path: 'create/step1',
