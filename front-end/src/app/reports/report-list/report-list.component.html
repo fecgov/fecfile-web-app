@@ -16,6 +16,14 @@
 </p-toolbar>
 <hr class="mb-0" />
 
+@if (showEmptyState()) {
+  <div class="empty-state">
+    <img src="assets/img/searching_image.png" alt="No reports created" />
+    <span class="empty-state-text">No reports yet. Create your first report!</span>
+  </div>
+  <hr type="solid" class="mb-0" />
+}
+
 <app-form3x-list />
 @if (showForm3) {
   <app-form3-list />

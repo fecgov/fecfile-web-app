@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, viewChildren, signal, computed } from '@angular/core';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -29,4 +29,24 @@ import { Form3ListComponent } from './form3-list/form3-list.component';
 export class ReportListComponent {
   readonly dialogVisible = signal(false);
   readonly showForm3 = environment.showForm3;
+
+  readonly form3xList = viewChildren(Form3XListComponent);
+  readonly form3List = viewChildren(Form3ListComponent);
+  readonly form99List = viewChildren(Form99ListComponent);
+  readonly form1mList = viewChildren(Form1MListComponent);
+  readonly form24List = viewChildren(Form24ListComponent);
+
+  readonly showEmptyState = computed(() => {
+    const lists = [
+      ...this.form3xList(),
+      ...this.form3List(),
+      ...this.form99List(),
+      ...this.form1mList(),
+      ...this.form24List(),
+    ];
+
+    if (!lists.length) return false;
+
+    return lists.every((list) => list.totalItems() === 0);
+  });
 }
