@@ -4,6 +4,11 @@ import { ReportListPage } from './reportListPage';
 
 export class LoginPage {
   static login() {
+    cy.intercept('GET', '**/reports/form-3x/**').as('GetForm3X');
+    cy.intercept('GET', '**/reports/form-1m/**').as('GetForm1M');
+    cy.intercept('GET', '**/reports/form-24/**').as('GetForm24');
+    cy.intercept('GET', '**/reports/form-99/**').as('GetForm99');
+
     const sessionDuration = 10; //Login session duration in minutes
     const intervalString = getLoginIntervalString(sessionDuration);
     cy.session(
@@ -20,6 +25,12 @@ export class LoginPage {
     cy.then(() => {
       Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
     });
+
+    cy.visit('/');
+    cy.wait('@GetForm3X');
+    cy.wait('@GetForm1M');
+    cy.wait('@GetForm24');
+    cy.wait('@GetForm99');
   }
 }
 
@@ -55,6 +66,8 @@ function getLoginIntervalString(sessionDur: number): string {
 
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
+
+  // Intercepts for login
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
