@@ -447,7 +447,7 @@ export class PageUtils {
     cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
-    cy.location('pathname', { timeout: 10000 }).should('not.include', '/login/select-committee');
+    cy.location('pathname', { timeout: 7500 }).should('not.include', '/login/select-committee');
     this.enterSecondCommitteeEmailIfneeded();
   }
 

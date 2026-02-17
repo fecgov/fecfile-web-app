@@ -16,7 +16,7 @@ export class ReportListPage {
   static goToPage() {
     Intercepts.reportList('GetReports');
     cy.visit('/reports');
-    cy.wait('@GetReports', { timeout: 20000 });
+    cy.wait('@GetReports', { timeout: 7500 });
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
@@ -128,10 +128,12 @@ export class ReportListPage {
       });
     }
 
-    const visit = cy.visit(`/reports/transactions/report/${reportId}/list`);
-    if (waitForLists && registerListIntercepts && includeLoans) cy.wait('@GetLoans');
-    if (waitForLists && registerListIntercepts && includeDisbursements) cy.wait('@GetDisbursements');
-    if (waitForLists && registerListIntercepts && includeReceipts) cy.wait('@GetReceipts');
+    const visit = cy.visit(`/reports/transactions/report/${reportId}/list`).then(() => {
+      cy.contains('Transactions in this report', { timeout: 7500 }).should('exist');
+    });
+    if (waitForLists && registerListIntercepts && includeLoans) cy.wait('@GetLoans', { timeout: 7500 });
+    if (waitForLists && registerListIntercepts && includeDisbursements) cy.wait('@GetDisbursements', { timeout: 7500 });
+    if (waitForLists && registerListIntercepts && includeReceipts) cy.wait('@GetReceipts', { timeout: 7500 });
     return visit;
   }
 }

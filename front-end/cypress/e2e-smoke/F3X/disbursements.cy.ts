@@ -107,7 +107,7 @@ describe('Disbursements', () => {
         waitForLists: false,
       });
 
-      cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 20000 });
+      cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 7500 });
 
       PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
       PageUtils.pSelectDropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');

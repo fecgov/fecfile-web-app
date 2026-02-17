@@ -537,8 +537,8 @@ describe('Contacts: Transactions integration', () => {
       PageUtils.clickButton('Save');
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
-      cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
-      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+      cy.contains(/employer.*required|this is a required field\./i, { timeout: 7500 }).should('exist');
+      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 7500 }).should('exist');
 
       cy.get('#employer').type(newEmployer);
       cy.get('#occupation').type(newOccupation);

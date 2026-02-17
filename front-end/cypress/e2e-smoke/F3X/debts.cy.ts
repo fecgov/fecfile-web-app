@@ -249,7 +249,6 @@ describe('Debts', () => {
         candidate: true,
         organization: true,
         committee: true,
-        uniqueContactIds: true,
       }).then(handleDebtOwedByCommitteeLoanReportDebtRepayment);
     });
   });

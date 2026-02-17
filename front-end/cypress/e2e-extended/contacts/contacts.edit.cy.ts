@@ -146,7 +146,7 @@ describe('Contacts Edit', () => {
     });
 
     cy.wait('@candidateDetails');
-    cy.get('#candidate_id', { timeout: 20000 }).should('have.value', lookupCandidate.candidate_id);
+    cy.get('#candidate_id', { timeout: 7500 }).should('have.value', lookupCandidate.candidate_id);
 
     ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
     ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);

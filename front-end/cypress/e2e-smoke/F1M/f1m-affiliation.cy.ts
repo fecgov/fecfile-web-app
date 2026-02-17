@@ -50,10 +50,6 @@ describe('Manage reports', () => {
     Initialize();
   });
 
-  it('should prepare qualified candidates', () => {
-    seedQualifiedCandidates();
-  });
-
   it('should create form 1m by qualification', () => {
     seedQualifiedCandidates().then((candidates) => {
       ReportListPage.createF1M();

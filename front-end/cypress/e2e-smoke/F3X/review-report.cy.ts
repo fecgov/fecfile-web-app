@@ -14,17 +14,25 @@ const scheduleData = {
   date_received: new Date(currentYear, 4 - 1, 27),
 };
 
-function visitSummaryWithSpinner(reportId: string, expectSpinner: boolean) {
-  const getReportAlias = ReviewReport.setupSummarySpinner(reportId, 1200);
+let summaryVisitCount = 0;
 
-  ReviewReport.Summary();
+function visitSummaryWithSpinner(reportId: string, expectSpinner: boolean) {
+  let getReportAlias = '';
+  if (expectSpinner) {
+    summaryVisitCount += 1;
+    getReportAlias = ReviewReport.setupSummarySpinner(reportId, 1200, `getReport-${summaryVisitCount}`);
+  }
+
+  // Direct navigation avoids flaky no-op sidebar clicks when already on summary.
+  cy.visit(`/reports/f3x/summary/${reportId}`);
+  PageUtils.locationCheck(`/reports/f3x/summary/${reportId}`);
 
   if (!expectSpinner) {
     ReviewReport.assertSpinnerGone();
     return;
   }
 
-  cy.wait(getReportAlias).then(({ response }) => {
+  cy.wait(getReportAlias, { timeout: 20000 }).then(({ response }) => {
     const shouldShowSpinner = response?.body?.calculation_status !== 'SUCCEEDED';
     if (!shouldShowSpinner) {
       ReviewReport.assertSpinnerGone();

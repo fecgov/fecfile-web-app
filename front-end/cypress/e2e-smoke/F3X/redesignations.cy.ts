@@ -27,7 +27,7 @@ function Redesignate(old = false) {
     selector.select('FORM 3X: JULY 15 QUARTERLY REPORT (Q2)');
     PageUtils.clickButton('Continue');
   }
-  cy.get('#amount', { timeout: 10000 }).should('be.visible');
+  cy.get('#amount', { timeout: 7500 }).should('be.visible');
 
   TransactionDetailPage.enterScheduleFormDataForContribution(
     new ContributionFormData(redesignationData),

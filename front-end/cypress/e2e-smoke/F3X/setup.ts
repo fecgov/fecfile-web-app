@@ -5,9 +5,7 @@ import {
   Individual_A_A,
   Individual_B_B,
   Organization_A,
-  withUniqueContactIdentifiers,
 } from '../requests/library/contacts';
-import type { MockContact } from '../requests/library/contacts';
 import { makeContact, makeF24, makeF3x } from '../requests/methods';
 import { F24_24, F3X, F3X_Q2 } from '../requests/library/reports';
 
@@ -21,7 +19,6 @@ export interface Setup {
   report?: F3X;
   reports?: F3X[];
   f24?: boolean;
-  uniqueContactIds?: boolean;
 }
 
 interface Results {
@@ -35,12 +32,6 @@ interface Results {
   f24: string | null;
 }
 
-function runIf(condition: boolean | undefined, fn: () => Cypress.Chainable<any>): Cypress.Chainable<any> {
-  if (!condition) return cy.wrap(null, { log: false });
-  return fn();
-}
-
-
 export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> { // NOSONAR: Cypress setup flow intentionally composes chained conditional callbacks
   const results: Results = {
     organization: null,
@@ -52,15 +43,6 @@ export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> { // NO
     report: '',
     f24: null,
   };
-  const uniqueSeed = setup.uniqueContactIds
-    ? `${Date.now()}-${Cypress._.random(1, 99999)}`
-    : '';
-  const contactForSetup = (contact: MockContact): MockContact =>
-    setup.uniqueContactIds
-      ? withUniqueContactIdentifiers(contact, uniqueSeed)
-      : contact;
-
-
 
   const createReports = () => { // NOSONAR: Cypress setup flow intentionally composes chained conditional callbacks
     if (setup.reports?.length) {
@@ -80,57 +62,65 @@ export function DataSetup(setup: Setup = {}): Cypress.Chainable<Results> { // NO
     });
   };
 
-  return cy
-    .wrap(null, { log: false })
-    .then(() =>
-      runIf(setup.individual, () =>
-        makeContact(contactForSetup(Individual_A_A), (response) => {
-          results.individual = response.body;
-        }),
-      ),
-    )
-    .then(() =>
-      runIf(setup.individual2, () =>
-        makeContact(contactForSetup(Individual_B_B), (response) => {
-          results.individual2 = response.body;
-        }),
-      ),
-    )
-    .then(() =>
-      runIf(setup.organization, () =>
-        makeContact(contactForSetup(Organization_A), (response) => {
-          results.organization = response.body;
-        }),
-      ),
-    )
-    .then(() =>
-      runIf(setup.candidate, () =>
-        makeContact(contactForSetup(Candidate_House_A), (response) => {
-          results.candidate = response.body;
-        }),
-      ),
-    )
-    .then(() =>
-      runIf(setup.candidateSenate, () =>
-        makeContact(contactForSetup(Candidate_Senate_A), (response) => {
-          results.candidateSenate = response.body;
-        }),
-      ),
-    )
-    .then(() =>
-      runIf(setup.committee, () =>
-        makeContact(contactForSetup(Committee_A), (response) => {
-          results.committee = response.body;
-        }),
-      ),
-    )
-    .then(() =>
-      runIf(setup.f24, () =>
-        makeF24(F24_24, (response) => {
-          results.f24 = response.body.id;
-        }),
-      ),
-    )
+  let chain: Cypress.Chainable<any> = cy.wrap(null, { log: false });
+
+  if (setup.individual) {
+    chain = chain.then(() =>
+      makeContact(Individual_A_A, (response) => {
+        results.individual = response.body;
+      }),
+    );
+  }
+
+  if (setup.individual2) {
+    chain = chain.then(() =>
+      makeContact(Individual_B_B, (response) => {
+        results.individual2 = response.body;
+      }),
+    );
+  }
+
+  if (setup.organization) {
+    chain = chain.then(() =>
+      makeContact(Organization_A, (response) => {
+        results.organization = response.body;
+      }),
+    );
+  }
+
+  if (setup.candidate) {
+    chain = chain.then(() =>
+      makeContact(Candidate_House_A, (response) => {
+        results.candidate = response.body;
+      }),
+    );
+  }
+
+  if (setup.candidateSenate) {
+    chain = chain.then(() =>
+      makeContact(Candidate_Senate_A, (response) => {
+        results.candidateSenate = response.body;
+      }),
+    );
+  }
+
+  if (setup.committee) {
+    chain = chain.then(() =>
+      makeContact(Committee_A, (response) => {
+        results.committee = response.body;
+      }),
+    );
+  }
+
+  if (setup.f24) {
+    chain = chain.then(() =>
+      makeF24(F24_24, (response) => {
+        results.f24 = response.body.id;
+      }),
+    );
+  }
+
+  return chain
     .then(() => createReports())
     .then(() => {
       expect(results.report, 'created report id').to.not.equal('');

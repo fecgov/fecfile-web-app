@@ -58,7 +58,7 @@ function openTransactionFromListByRow(rowNumber: number) {
 
 function assertFirstTwoRunningTotals(reportId: string, firstTotal: string, secondTotal: string) {
   cy.visit(`/reports/transactions/report/${reportId}/list`);
-  cy.contains('Transactions in this report', { timeout: 20000 }).should('exist');
+  cy.contains('Transactions in this report', { timeout: 7500 }).should('exist');
   cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', firstTotal);
   cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', secondTotal);
 }

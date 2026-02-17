@@ -143,7 +143,7 @@ export class ContactListPage {
   private static create(fd: ContactFormData) {
     ContactListPage.goToPage();
     PageUtils.clickButton('Add contact');
-    cy.get('#entity_type_dropdown', { timeout: 10000 }).should('be.visible');
+    cy.get('#entity_type_dropdown', { timeout: 7500 }).should('be.visible');
     ContactListPage.enterFormData(fd);
     PageUtils.clickButton('Save');
   }

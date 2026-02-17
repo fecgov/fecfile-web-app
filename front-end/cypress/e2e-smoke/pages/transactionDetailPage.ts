@@ -284,7 +284,7 @@ export class TransactionDetailPage {
   static clickSave(reportId: string) {
     this.interceptReportTransactionLists(reportId);
     cy.contains(/^Save$/).click();
-    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 20000 });
+    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 7500 });
   }
 
   static addGuarantor(name: string, amount: number | string, reportId: string) {
@@ -312,21 +312,21 @@ export class TransactionDetailPage {
     }).as('GetGuarantors');
 
     PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@SaveParentLoan', { timeout: 20000 });
+    cy.wait('@SaveParentLoan', { timeout: 7500 });
     cy.contains('Guarantors to loan source').should('exist');
 
     ContactLookup.getContact(name);
     cy.get('#amount').safeType(amount);
     PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@SaveGuarantor', { timeout: 20000 });
-    cy.location('pathname', { timeout: 20000 }).should((pathname) => {
+    cy.wait('@SaveGuarantor', { timeout: 7500 });
+    cy.location('pathname', { timeout: 7500 }).should((pathname) => {
       const staysOnGuarantorCreate = pathname.includes('create-sub-transaction/C2_LOAN_GUARANTOR');
       const landsOnParentDetail = /^\/reports\/transactions\/report\/[^/]+\/list\/[^/]+$/.test(pathname);
       expect(staysOnGuarantorCreate || landsOnParentDetail).to.be.true;
     });
     PageUtils.clickButton('Cancel');
 
-    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 20000 });
+    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 7500 });
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {

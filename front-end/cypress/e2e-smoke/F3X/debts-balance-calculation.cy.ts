@@ -32,7 +32,7 @@ function createDebt(result: any, amount: number, expectedBalanceAtClose: string)
 
 function openDebtForEdit(reportId: string) {
   ReportListPage.goToReportList(reportId);
-  cy.contains('Debt Owed By Committee', { timeout: 10000 }).should('exist');
+  cy.contains('Debt Owed By Committee', { timeout: 7500 }).should('exist');
 
   cy.intercept({
     method: 'GET',
@@ -53,7 +53,7 @@ function assertDebtValues(amount: string, balanceAtClose: string, balance = '$0.
 
 function updateAmountAndAssertBalanceAtClose(amount: string, expectedBalanceAtClose: string) {
   cy.get('#amount').clear().safeType(amount).blur();
-  cy.get('#balance_at_close', { timeout: 10000 }).should('have.value', expectedBalanceAtClose);
+  cy.get('#balance_at_close', { timeout: 7500 }).should('have.value', expectedBalanceAtClose);
 }
 
 describe('Debt Balance at Close Calculation', () => {

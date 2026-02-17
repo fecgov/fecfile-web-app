@@ -144,7 +144,7 @@ export class ContactsHelpers {
       '[role="option"]:not(.p-autocomplete-option-group):not([aria-disabled="true"])',
     ].join(',');
 
-    cy.get(inputSelector, { timeout: 20000 })
+    cy.get(inputSelector, { timeout: 7500 })
       .should('be.visible')
       .then(($input) => {
         const id = $input.attr('id');
@@ -153,7 +153,7 @@ export class ContactsHelpers {
 
         expect(listId, 'autocomplete list id').to.exist;
 
-        cy.get(`#${listId!}`, { timeout: 20000 })
+        cy.get(`#${listId!}`, { timeout: 7500 })
           .should('be.visible')
           .then(($list) => {
             const list = () => cy.wrap($list);
@@ -173,7 +173,7 @@ export class ContactsHelpers {
                   : new RegExp(ContactsHelpers.escapeRegExp(match), 'i');
 
               list()
-                .contains(selectableOptionSel, rx, { timeout: 20000 })
+                .contains(selectableOptionSel, rx, { timeout: 7500 })
                 .first()
                 .scrollIntoView()
                 .click({ force: true });
@@ -655,7 +655,7 @@ export class ContactsHelpers {
 
   private static getVisibleConfirmDialog() {
     return cy
-      .contains('.p-dialog-title', /Confirm/i, { timeout: 10000 })
+      .contains('.p-dialog-title', /Confirm/i, { timeout: 7500 })
       .should('be.visible')
       .closest('.p-confirm-dialog, .p-dialog');
   }
@@ -796,7 +796,7 @@ export class ContactsDeleteHelpers {
       .contains(
         'dialog, [role="dialog"], .p-dialog, app-deleted-contact, app-table, h1, h2, h3',
         title,
-        { timeout: 10000 },
+        { timeout: 7500 },
       )
       .should('be.visible')
       .then(($el) => {

@@ -201,7 +201,7 @@ describe('Loans', () => {
         .as('GetDisbursementsAfterSave');
 
       PageUtils.clickButton('Save transactions');
-      cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 20000 });
+      cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 7500 });
       PageUtils.locationCheck('/list');
       cy.contains('Loan Received from Bank').should('exist');
     });
