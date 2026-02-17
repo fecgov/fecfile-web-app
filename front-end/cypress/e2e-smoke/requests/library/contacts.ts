@@ -238,20 +238,3 @@ function addOffsetToTrailingDigits(value: string, offset: number): string {
   const next = (Number.parseInt(digits, 10) + offset) % modulus;
   return `${prefix}${next.toString().padStart(digits.length, '0')}`;
 }
-
-export function withUniqueContactIdentifiers(contact: MockContact, seed: string): MockContact {
-  if (!seed) return { ...contact };
-
-  const offset = hashSeed(seed);
-  const updated: MockContact = { ...contact };
-
-  if (updated.candidate_id) {
-    updated.candidate_id = addOffsetToTrailingDigits(updated.candidate_id, offset);
-  }
-
-  if (updated.committee_id) {
-    updated.committee_id = addOffsetToTrailingDigits(updated.committee_id, offset);
-  }
-
-  return updated;
-}
