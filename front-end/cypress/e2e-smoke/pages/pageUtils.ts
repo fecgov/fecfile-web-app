@@ -43,8 +43,21 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
     const dateString = PageUtils.dateToString(dateObj);
 
-    cy.get(alias).find(calendar).first().as('calendarContainer');
-    cy.get('@calendarContainer').find('input').first().as('calendarInput');
+    cy.get(alias)
+      .find(`${calendar}:visible`)
+      .first()
+      .then(($calendarContainer) => {
+        if ($calendarContainer.is('input')) {
+          cy.wrap($calendarContainer).as('calendarInput');
+          return;
+        }
+
+        cy.wrap($calendarContainer)
+          .find('input:visible')
+          .first()
+          .as('calendarInput');
+      });
+
     cy.get('@calendarInput').click({ force: true });
 
     cy.get('@calendarInput').then(($calendarInput) => {

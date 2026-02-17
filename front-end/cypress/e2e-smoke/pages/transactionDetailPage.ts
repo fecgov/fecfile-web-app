@@ -143,9 +143,25 @@ export class TransactionDetailPage {
 
     // Set due date dropdown & date
     if (formData.due_date_setting) {
-      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.due_date_setting, alias);
+      cy.get(alias)
+        .find('[label="DATE DUE"]:visible')
+        .first()
+        .as('dateDueField');
+
+      cy.get('@dateDueField').find('select').contains('option', formData.due_date_setting).then(
+        (option) => {
+          cy.get('@dateDueField').find('select').select(option.val()!);
+        }
+      );
+
       if (formData.due_date) {
-        PageUtils.calendarSetValue(`[data-cy="dueDateInput"] input`, formData.due_date, alias);
+        cy.get('@dateDueField')
+          .closest('.grid')
+          .find('[data-cy="dueDateInput"]:visible')
+          .first()
+          .as('dueDateFieldContainer');
+
+        PageUtils.calendarSetValue('input', formData.due_date, '@dueDateFieldContainer');
       }
     }
 
