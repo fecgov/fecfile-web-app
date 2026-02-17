@@ -363,7 +363,7 @@ describe('Receipt Transactions', () => {
       // Enter STEP TWO transaction
       PageUtils.clickAccordion('STEP TWO');
       cy.get('p-accordion-panel').last().as('stepTwoAccordion');
-      PageUtils.dropdownSetValue('#entity_type_dropdown', 'Individual', '@stepTwoAccordion');
+      PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', 'Individual', '@stepTwoAccordion');
       ContactLookup.getContact(individual.last_name, '@stepTwoAccordion');
 
       TransactionDetailPage.enterScheduleFormData(

@@ -1,5 +1,5 @@
 <div class="field">
-  <label [class]="labelClass()" [id]="labelId()" [for]="safeId()">
+  <label [class]="labelClass()" [id]="selectId().label" [for]="selectId().id">
     {{ label() }}
     @if (optionalLabel()) {
       <span class="paren-label">(OPTIONAL)</span>
@@ -9,12 +9,12 @@
     <select
       #selectElement
       [formControl]="control()"
-      [id]="safeId()"
+      [id]="selectId().id"
       (change)="handleChange($event)"
       [disabled]="control().disabled"
       (blur)="update.emit(control().value)"
     >
-      <button [attr.aria-labelledby]="labelId()">
+      <button [attr.aria-labelledby]="selectId().label">
         <selectedcontent #selected></selectedcontent>
       </button>
       @for (option of options(); track option.value) {

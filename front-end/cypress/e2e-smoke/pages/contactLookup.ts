@@ -6,7 +6,7 @@ export class ContactLookup {
   static getContact(name: string, alias = '', type: string | undefined = undefined, index=0) {
     alias = PageUtils.getAlias(alias);
     if (type !== undefined) {
-      PageUtils.dropdownSetValue('#entity_type_dropdown', type, alias, index);
+      PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', type, alias, index);
       cy.contains('LOOKUP').should('exist');
     }
     cy.get(alias).find('[data-cy="searchBox"]').eq(index).type(name.slice(0, 3));
@@ -82,6 +82,6 @@ export class ContactLookup {
     alias='',
     index=0,
   ) {
-    PageUtils.dropdownSetValue(querySelector, type, alias, index);
+    PageUtils.pSelectDropdownSetValue(querySelector, type, alias, index);
   }
 }

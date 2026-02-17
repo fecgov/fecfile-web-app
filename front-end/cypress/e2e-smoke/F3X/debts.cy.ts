@@ -74,7 +74,7 @@ describe('Debts', () => {
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
       PageUtils.containedOnPage('Debt Owed By Committee');
       ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
-      TransactionDetailPage.enterLoanFormData(debtFormData);
+      TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
       PageUtils.clickButton('Save');
 
       ReportListPage.goToReportList(result.report);
@@ -99,7 +99,7 @@ describe('Debts', () => {
       PageUtils.containedOnPage('Debt Owed To Committee');
 
       ContactLookup.getCommittee(result.committee);
-      TransactionDetailPage.enterLoanFormData(debtFormData);
+      TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
       PageUtils.clickButton('Save');
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
@@ -118,7 +118,7 @@ describe('Debts', () => {
       TransactionDetailPage.enterLoanFormData({
         ...debtFormData,
         amount: 10000
-      });
+      }, false, '', '#amount');
       PageUtils.clickButton('Save');
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');

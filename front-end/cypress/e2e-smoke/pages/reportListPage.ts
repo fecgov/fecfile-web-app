@@ -128,10 +128,10 @@ export class ReportListPage {
       });
     }
 
-    cy.visit(`/reports/transactions/report/${reportId}/list`);
-
-    if (waitForLists && includeLoans) cy.wait('@GetLoans');
-    if (waitForLists && includeDisbursements) cy.wait('@GetDisbursements');
-    if (waitForLists && includeReceipts) cy.wait('@GetReceipts');
+    const visit = cy.visit(`/reports/transactions/report/${reportId}/list`);
+    if (waitForLists && registerListIntercepts && includeLoans) cy.wait('@GetLoans');
+    if (waitForLists && registerListIntercepts && includeDisbursements) cy.wait('@GetDisbursements');
+    if (waitForLists && registerListIntercepts && includeReceipts) cy.wait('@GetReceipts');
+    return visit;
   }
 }
