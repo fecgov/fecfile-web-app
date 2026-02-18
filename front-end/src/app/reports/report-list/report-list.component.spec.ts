@@ -64,11 +64,11 @@ describe('ReportListComponent', () => {
       totalItems: () => 0,
     } as Form24ListComponent;
 
-    (component.form3xList as any) = [mock3x];
-    (component.form3List as any) = [mock3];
-    (component.form99List as any) = [mock99];
-    (component.form1mList as any) = [mock1m];
-    (component.form24List as any) = [mock24];
+    (component.form3xList as any) = () => [mock3x];
+    (component.form3List as any) = () => [mock3];
+    (component.form99List as any) = () => [mock99];
+    (component.form1mList as any) = () => [mock1m];
+    (component.form24List as any) = () => [mock24];
 
     Object.values(component.tableLoadedStates).forEach((sig) => sig.set(true));
     expect(component.showEmptyState()).toBeTrue();
