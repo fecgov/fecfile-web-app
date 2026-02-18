@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Form3X } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -11,7 +11,7 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form3x-list.component.html',
 })
-export class Form3XListComponent extends AbstractFormListComponent<Form3X> {
+export class Form3XListComponent extends AbstractFormListComponent<Form3X> implements OnInit {
   async ngOnInit() {
     await this.loadTableItems();
     this.loaded.emit();

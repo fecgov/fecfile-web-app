@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Form24 } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
@@ -12,7 +12,7 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
   imports: [TableComponent, SharedTemplatesComponent, RenameF24DialogComponent],
   templateUrl: './form24-list.component.html',
 })
-export class Form24ListComponent extends AbstractFormListComponent<Form24> {
+export class Form24ListComponent extends AbstractFormListComponent<Form24> implements OnInit {
   async ngOnInit() {
     await this.loadTableItems();
     this.loaded.emit();
