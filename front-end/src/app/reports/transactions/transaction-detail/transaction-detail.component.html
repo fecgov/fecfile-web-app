@@ -5,9 +5,6 @@
     </h1>
   }
 
-  <h1 [class.dark-gray-text]="transactionType?.showParentTransactionTitle">
-    {{ transactionType?.title }}
-  </h1>
   @if (showGlossary) {
     <img
       class="cursor-pointer"
@@ -20,6 +17,9 @@
   }
 </div>
 <hr class="solid" />
+<h1 class="mt-5">
+  {{ transactionType?.title }}
+</h1>
 @if (transactionType?.subTitle) {
   <div>{{ transactionType?.subTitle }}</div>
 }
