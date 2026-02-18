@@ -1,11 +1,11 @@
-import { SchATransactionType } from '../../scha-transaction-type.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
-} from '../../transaction-navigation-controls.model';
-import { TemplateMapKeyType } from '../../transaction-type.model';
+} from '../transaction-navigation-controls.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
-export abstract class CONDUIT_EARMARK extends SchATransactionType {
+export abstract class ABSTRACT_CONDUIT_EARMARK extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
   override memoCodeMap = {

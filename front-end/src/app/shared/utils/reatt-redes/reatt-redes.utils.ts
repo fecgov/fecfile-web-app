@@ -1,14 +1,14 @@
 import { FormGroup } from '@angular/forms';
-import { Transaction } from '../../models/transaction.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
-import { SchBTransaction } from '../../models/schb-transaction.model';
+import type { Transaction } from '../../models/transaction.model';
+import type { SchATransaction } from '../../models/scha-transaction.model';
+import type { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
 import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',

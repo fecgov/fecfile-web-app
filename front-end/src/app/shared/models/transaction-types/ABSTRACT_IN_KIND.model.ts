@@ -1,11 +1,11 @@
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { SchATransactionType } from '../../scha-transaction-type.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
-} from '../../transaction-navigation-controls.model';
+} from '../transaction-navigation-controls.model';
 
-export abstract class IN_KIND extends SchATransactionType {
+export abstract class ABSTRACT_IN_KIND extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;

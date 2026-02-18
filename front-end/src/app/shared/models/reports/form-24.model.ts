@@ -1,9 +1,9 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import type { JsonSchema } from 'fecfile-validate';
 
 export enum F24FormTypes {
   F24N = 'F24N',
@@ -11,7 +11,6 @@ export enum F24FormTypes {
 }
 
 export class Form24 extends Report {
-  schema = f24Schema;
   report_type = ReportTypes.F24;
   form_type = F24FormTypes.F24N;
   name?: string;
@@ -55,5 +54,10 @@ export class Form24 extends Report {
       ]),
       MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
     ];
+  }
+
+  async getSchema(): Promise<JsonSchema> {
+    const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/F24');
+    return schema;
   }
 }

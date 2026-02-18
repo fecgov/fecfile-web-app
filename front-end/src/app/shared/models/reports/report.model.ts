@@ -1,12 +1,12 @@
 import { Exclude, Transform, Type } from 'class-transformer';
-import { JsonSchema } from 'fecfile-validate';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
-import { LabelList } from '../../utils/label.utils';
 import { BaseModel } from '../base.model';
 import { UploadSubmission } from '../upload-submission.model';
 import { WebPrintSubmission } from '../webprint-submission.model';
-import { TransactionTypes } from '../transaction.model';
+import type { TransactionTypes } from '../transaction.model';
+import type { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import type { MenuItem } from 'primeng/api';
+import type { LabelList } from '../../utils/label.utils';
+import { JsonSchema } from 'fecfile-validate';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -16,7 +16,6 @@ export abstract class Report extends BaseModel {
   city?: string;
   state?: string;
   zip?: string;
-  abstract schema: JsonSchema;
   abstract report_type: ReportTypes;
   abstract form_type: string;
   hasChangeOfAddress = false;
@@ -48,6 +47,7 @@ export abstract class Report extends BaseModel {
 
   abstract getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[];
   abstract get formLabel(): string;
+  abstract getSchema(): Promise<JsonSchema>;
 
   get canAmend() {
     return false;

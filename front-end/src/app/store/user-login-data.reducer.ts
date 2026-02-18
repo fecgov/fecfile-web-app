@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { UserLoginData } from 'app/shared/models/user.model';
+import type { UserLoginData } from 'app/shared/models/user.model';
 import {
   userLoginDataDiscardedAction,
   userLoginDataRetrievedAction,

@@ -1,14 +1,14 @@
-import { FormGroup } from '@angular/forms';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import type { FormGroup } from '@angular/forms';
+import type { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import type { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import type { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
   TransactionType,
 } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import type { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -27,8 +27,8 @@ import {
   takeUntil,
 } from 'rxjs';
 import { Contact, ContactTypes } from '../../models/contact.model';
-import { ContactIdMapType } from './transaction-contact.utils';
-import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import type { ContactIdMapType } from './transaction-contact.utils';
+import type { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 export type DateType = Date | string | undefined;
 
@@ -280,12 +280,12 @@ export class TransactionFormUtils {
     }
   }
 
-  static getPayloadTransaction(
+  static async getPayloadTransaction(
     transaction: Transaction | undefined,
     activeReportId: string,
     form: FormGroup,
     formProperties: string[],
-  ): Transaction {
+  ): Promise<Transaction> {
     if (!transaction) {
       throw new Error('FECfile+: Payload transaction not found');
     }
@@ -304,7 +304,7 @@ export class TransactionFormUtils {
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
-    const payload: ScheduleTransaction = getFromJSON({
+    const payload: ScheduleTransaction = await getFromJSON({
       ...transaction,
       ...formValues,
     });

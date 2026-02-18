@@ -3,9 +3,9 @@ import { FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
 import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import type { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
-import { Report } from 'app/shared/models/reports/report.model';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { getReportFromJSON, ReportService } from 'app/shared/services/report.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -88,8 +88,9 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
 
   constructor() {
     super();
-    effect(() => {
-      SchemaUtils.addJsonSchemaValidators(this.form, this.activeReport().schema, false);
+    effect(async () => {
+      const schema = await this.activeReport().getSchema();
+      SchemaUtils.addJsonSchemaValidators(this.form, schema, false);
       this.initializeFormWithReport(this.activeReport(), this.committeeAccount());
       this.form.patchValue({ change_of_address: false });
     });
@@ -206,9 +207,10 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
 
   async updateReport(): Promise<Report | undefined> {
     this.loading = 1;
-    const payload = getReportFromJSON({
+    const schema = await this.activeReport().getSchema();
+    const payload = await getReportFromJSON({
       ...this.activeReport(),
-      ...SchemaUtils.getFormValues(this.form, this.activeReport().schema, this.formProperties),
+      ...SchemaUtils.getFormValues(this.form, schema, this.formProperties),
     });
 
     payload.confirmation_email_1 = this.form.value.confirmation_email_1;

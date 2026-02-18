@@ -4,8 +4,8 @@ import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLab
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { INDIVIDUAL_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { IN_KIND_OUT as CommonInKindOut } from './common-types/IN_KIND_OUT.model';
-export class IN_KIND_OUT extends CommonInKindOut {
+import { ABSTRACT_IN_KIND_OUT } from './ABSTRACT_IN_KIND_OUT.model';
+export class IN_KIND_OUT extends ABSTRACT_IN_KIND_OUT {
   override formFields = INDIVIDUAL_B_FORM_FIELDS;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;

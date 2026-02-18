@@ -1,9 +1,9 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { BaseModel } from '../base.model';
 import { Report, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import type { JsonSchema } from 'fecfile-validate';
 
 export enum F99FormTypes {
   F99 = 'F99',
@@ -18,7 +18,6 @@ export enum TextCodes {
 }
 
 export class Form99 extends Report {
-  schema = f99Schema;
   report_type = ReportTypes.F99;
   form_type = F99FormTypes.F99;
   override submitAlertText =
@@ -48,6 +47,11 @@ export class Form99 extends Report {
       MenuInfo.reviewReport(sidebarSection, [MenuInfo.printPreview(this)]),
       MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
     ];
+  }
+
+  async getSchema(): Promise<JsonSchema> {
+    const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/F99');
+    return schema;
   }
 }
 

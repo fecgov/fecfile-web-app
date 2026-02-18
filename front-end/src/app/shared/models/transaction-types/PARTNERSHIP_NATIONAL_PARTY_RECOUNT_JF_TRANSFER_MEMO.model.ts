@@ -5,9 +5,9 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
-import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
+import { ABSTRACT_SCHEDULE_A_MEMO } from './ABSTRACT_SCHEDULE_A_MEMO.model';
 
-export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
+export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends ABSTRACT_SCHEDULE_A_MEMO {
   formFields = ORGANIZATION_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(

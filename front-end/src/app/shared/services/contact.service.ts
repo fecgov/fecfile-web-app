@@ -1,23 +1,19 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
-import { JsonSchema } from 'fecfile-validate';
-import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
-import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
-import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
-import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { TableListService } from '../interfaces/table-list-service.interface';
-import { Candidate } from '../models/candidate.model';
-import { CommitteeAccount } from '../models/committee-account.model';
+import type { AbstractControl } from '@angular/forms';
+import type { JsonSchema } from 'fecfile-validate';
+import type { TableListService } from '../interfaces/table-list-service.interface';
+import type { Candidate } from '../models/candidate.model';
+import type { CommitteeAccount } from '../models/committee-account.model';
+import type { CandidateOfficeType } from '../models/contact.model';
 import {
+  IndividualLookupResponse,
+  OrganizationLookupResponse,
   CandidateLookupResponse,
-  CandidateOfficeType,
   CommitteeLookupResponse,
   Contact,
   ContactTypes,
-  IndividualLookupResponse,
-  OrganizationLookupResponse,
 } from '../models/contact.model';
-import { ListRestResponse } from '../models/rest-api.model';
+import type { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
 
 @Injectable({
@@ -34,18 +30,25 @@ export class ContactService implements TableListService<Contact> {
    * @param {ContactTypes} type
    * @returns {JsonSchema} schema
    */
-  public static getSchemaByType(type: ContactTypes): JsonSchema {
-    let schema: JsonSchema = contactIndividualSchema;
-    if (type === ContactTypes.CANDIDATE) {
-      schema = contactCandidateSchema;
+  public static async getSchemaByType(type: ContactTypes): Promise<JsonSchema> {
+    switch (type) {
+      case ContactTypes.CANDIDATE: {
+        const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/Contact_Candidate');
+        return schema;
+      }
+      case ContactTypes.COMMITTEE: {
+        const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/Contact_Committee');
+        return schema;
+      }
+      case ContactTypes.ORGANIZATION: {
+        const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/Contact_Individual');
+        return schema;
+      }
+      case ContactTypes.INDIVIDUAL: {
+        const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/Contact_Organization');
+        return schema;
+      }
     }
-    if (type === ContactTypes.COMMITTEE) {
-      schema = contactCommitteeSchema;
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      schema = contactOrganizationSchema;
-    }
-    return schema;
   }
 
   public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {

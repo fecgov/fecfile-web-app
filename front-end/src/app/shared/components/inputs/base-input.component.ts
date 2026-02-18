@@ -1,8 +1,8 @@
 import { Component, computed, input, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { TransactionTemplateMapType } from '../../models/transaction-type.model';
 import { DestroyerComponent } from '../destroyer.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
+import type { TransactionTemplateMapType } from '../../models/transaction-type.model';
 
 @Component({
   template: '',

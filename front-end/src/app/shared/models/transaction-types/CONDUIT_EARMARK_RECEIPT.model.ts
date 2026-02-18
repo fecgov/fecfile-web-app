@@ -2,10 +2,10 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMAR
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
+import { ABSTRACT_CONDUIT_EARMARK } from './ABSTRACT_CONDUIT_EARMARK.model';
 import { conduitClause } from '../clause';
 
-export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
+export class CONDUIT_EARMARK_RECEIPT extends ABSTRACT_CONDUIT_EARMARK {
   formFields = INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS;
   contactTypeOptions = INDIVIDUAL;
   title = 'Conduit Earmark';

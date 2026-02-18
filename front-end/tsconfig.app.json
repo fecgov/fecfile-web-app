@@ -9,7 +9,8 @@
   "files": [
     "src/main.ts"
   ],  "include": [
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "src/app/shared/models/transaction-types/**/*.model.ts"
   ]
 ,
 }

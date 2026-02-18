@@ -144,7 +144,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       throw new Error('FECfile+: No transactions submitted for single-entry transaction form.');
     }
 
-    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
+    const payload: Transaction = await TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
       this.form,

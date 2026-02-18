@@ -7,10 +7,10 @@ import {
   COMMITTEE,
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK_OUT as CommonConduitEarmarkOut } from './common-types/CONDUIT_EARMARK_OUT.model';
+import { ABSTRACT_CONDUIT_EARMARK_OUT } from './ABSTRACT_CONDUIT_EARMARK_OUT.model';
 import { conduitClause } from '../clause';
 
-export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
+export class CONDUIT_EARMARK_OUT extends ABSTRACT_CONDUIT_EARMARK_OUT {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   override contactConfig = STANDARD_AND_CANDIDATE;

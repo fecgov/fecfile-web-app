@@ -1,7 +1,7 @@
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import type { SchATransaction } from '../../models/scha-transaction.model';
 import { combineLatest, of } from 'rxjs';
 import { ContactTypes } from '../../models/contact.model';
 

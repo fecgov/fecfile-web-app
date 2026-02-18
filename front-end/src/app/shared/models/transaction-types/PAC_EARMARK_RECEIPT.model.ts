@@ -4,9 +4,9 @@ import { ContactTypes } from '../contact.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK } from './common-types/EARMARK.model';
+import { ABSTRACT_EARMARK } from './ABSTRACT_EARMARK.model';
 
-export class PAC_EARMARK_RECEIPT extends EARMARK {
+export class PAC_EARMARK_RECEIPT extends ABSTRACT_EARMARK {
   override formFields = COMMITTEE_FORM_FIELDS;
   override contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);

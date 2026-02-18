@@ -1,5 +1,4 @@
 import { Exclude, plainToInstance } from 'class-transformer';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ReportStatus, ReportTypes } from './report.model';
 import { BaseForm3 } from './base-form-3';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
@@ -10,6 +9,7 @@ import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import type { JsonSchema } from 'fecfile-validate';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -18,7 +18,6 @@ export enum F3xFormTypes {
 }
 
 export class Form3X extends BaseForm3 {
-  schema = f3xSchema;
   report_type = ReportTypes.F3X;
   form_type = F3xFormTypes.F3XN;
   filing_frequency: string | undefined;
@@ -278,5 +277,10 @@ export class Form3X extends BaseForm3 {
       menuItems.unshift(editReportItem);
     }
     return menuItems;
+  }
+
+  async getSchema(): Promise<JsonSchema> {
+    const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/F3X');
+    return schema;
   }
 }

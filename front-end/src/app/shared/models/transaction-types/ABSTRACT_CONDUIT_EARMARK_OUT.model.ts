@@ -1,7 +1,7 @@
-import { TemplateMapKeyType } from '../../transaction-type.model';
-import { SchBTransactionType } from '../../schb-transaction-type.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
+import { SchBTransactionType } from '../schb-transaction-type.model';
 
-export abstract class CONDUIT_EARMARK_OUT extends SchBTransactionType {
+export abstract class ABSTRACT_CONDUIT_EARMARK_OUT extends SchBTransactionType {
   override isDependentChild = () => true;
   override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
   override hasCandidateCommittee = true;

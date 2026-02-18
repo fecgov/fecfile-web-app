@@ -2,10 +2,10 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_CONDUIT_EA
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { COMMITTEE, COMMITTEE_NO_AGGREGATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
+import { ABSTRACT_CONDUIT_EARMARK } from './ABSTRACT_CONDUIT_EARMARK.model';
 import { conduitClause } from '../clause';
 
-export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
+export class PAC_CONDUIT_EARMARK extends ABSTRACT_CONDUIT_EARMARK {
   formFields = COMMITTEE_NO_AGGREGATE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = 'PAC Conduit Earmark';

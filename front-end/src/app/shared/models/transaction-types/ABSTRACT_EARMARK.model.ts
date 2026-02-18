@@ -1,12 +1,12 @@
 import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
-import { SchATransactionType } from '../../scha-transaction-type.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
-} from '../../transaction-navigation-controls.model';
-import { TemplateMapKeyType } from '../../transaction-type.model';
+} from '../transaction-navigation-controls.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
-export abstract class EARMARK extends SchATransactionType {
+export abstract class ABSTRACT_EARMARK extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFields = INDIVIDUAL_FORM_FIELDS;
   contactTypeOptions = INDIVIDUAL;

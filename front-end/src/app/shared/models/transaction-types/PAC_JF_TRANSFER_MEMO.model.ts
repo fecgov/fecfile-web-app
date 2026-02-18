@@ -4,9 +4,9 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
+import { ABSTRACT_SCHEDULE_A_MEMO } from './ABSTRACT_SCHEDULE_A_MEMO.model';
 
-export class PAC_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
+export class PAC_JF_TRANSFER_MEMO extends ABSTRACT_SCHEDULE_A_MEMO {
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);

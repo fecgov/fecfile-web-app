@@ -41,7 +41,7 @@ export class Form3XService extends ReportService<Form3X> {
     return this.apiService.get<Form3X | undefined>(`${this.apiEndpoint}/final/?year=${year}`);
   }
 
-  public override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Promise<Form3X> {
+  override fecUpdate(report: Form3X, committeeAccount?: CommitteeAccount): Promise<Form3X> {
     const payload: Form3X = Form3X.fromJSON({
       ...report,
       qualified_committee: report.qualified_committee ?? committeeAccount?.qualified,

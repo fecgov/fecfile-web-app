@@ -1,7 +1,7 @@
 import { COMMITTEE, COMMITTEE_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { SCHEDULE_B_MEMO } from './SCHEDULE_B_MEMO.model';
+import { ABSTRACT_SCHEDULE_B_MEMO } from './ABSTRACT_SCHEDULE_B_MEMO.model';
 
-export abstract class IN_KIND_OUT extends SCHEDULE_B_MEMO {
+export abstract class ABSTRACT_IN_KIND_OUT extends ABSTRACT_SCHEDULE_B_MEMO {
   override formFields = COMMITTEE_B_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   override isDependentChild = () => true;

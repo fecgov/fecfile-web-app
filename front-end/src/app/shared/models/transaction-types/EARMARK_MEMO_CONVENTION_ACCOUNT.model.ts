@@ -2,9 +2,9 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
 import { LabelUtils } from '../../utils/label.utils';
-import { EARMARK_MEMO } from './common-types/EARMARK_MEMO.model';
+import { ABSTRACT_EARMARK_MEMO } from './ABSTRACT_EARMARK_MEMO.model';
 
-export class EARMARK_MEMO_CONVENTION_ACCOUNT extends EARMARK_MEMO {
+export class EARMARK_MEMO_CONVENTION_ACCOUNT extends ABSTRACT_EARMARK_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT);
   schema = schema;
 

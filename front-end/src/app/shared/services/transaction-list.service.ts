@@ -23,7 +23,7 @@ export class TransactionListService implements TableListService<TransactionListR
       `${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
+    response.results = await Promise.all(response.results.map((item) => TransactionListRecord.fromJSON(item)));
     response.pageNumber = pageNumber;
     return response;
   }

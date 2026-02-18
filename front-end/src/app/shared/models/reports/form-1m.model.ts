@@ -1,10 +1,10 @@
 import { plainToInstance, Transform } from 'class-transformer';
-import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { BaseModel } from '../base.model';
 import { CandidateOfficeType, Contact } from '../contact.model';
 import { Report, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import type { JsonSchema } from 'fecfile-validate';
 
 enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -19,7 +19,6 @@ export enum F1MFormTypes {
 type CommitteeType = CommitteeTypes.STATE_PTY | CommitteeTypes.OTHER;
 
 export class Form1M extends Report {
-  schema = f1mSchema;
   report_type = ReportTypes.F1M;
   form_type = F1MFormTypes.F1MN;
   override submitAlertText =
@@ -126,5 +125,10 @@ export class Form1M extends Report {
       ]),
       MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
     ];
+  }
+
+  async getSchema(): Promise<JsonSchema> {
+    const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/F1M');
+    return schema;
   }
 }

@@ -39,6 +39,7 @@ import { ReportTypes } from 'app/shared/models/reports/report.model';
     ErrorMessagesComponent,
     TooltipModule,
   ],
+  providers: [Form24Service],
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit {
   private readonly store = inject(Store);

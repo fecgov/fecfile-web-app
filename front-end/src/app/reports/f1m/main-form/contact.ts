@@ -1,12 +1,13 @@
 import { AbstractControl, Validators } from '@angular/forms';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { Form1M } from 'app/shared/models/reports/form-1m.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { ContactTypes } from 'app/shared/models/contact.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildGuaranteeUniqueValuesValidator } from 'app/shared/utils/validators.utils';
 import { MainFormComponent } from './main-form.component';
 import { effect, untracked } from '@angular/core';
-import { ContactManager } from 'app/shared/services/contact-management.service';
+import type { ContactManager } from 'app/shared/services/contact-management.service';
+import type { Contact } from 'app/shared/models/contact.model';
+import type { Form1M } from 'app/shared/models/reports/form-1m.model';
+import type { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
 export type F1MCandidateTag = 'I' | 'II' | 'III' | 'IV' | 'V';
 export const f1mCandidateTags: F1MCandidateTag[] = ['I', 'II', 'III', 'IV', 'V'];

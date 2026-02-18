@@ -1,7 +1,7 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus } from './report.model';
-import { ReportCodes } from 'app/shared/utils/report-code.utils';
+import type { ReportCodes } from 'app/shared/utils/report-code.utils';
 
 export class CoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;

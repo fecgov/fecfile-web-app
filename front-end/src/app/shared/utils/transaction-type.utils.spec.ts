@@ -12,20 +12,20 @@ describe('TransactionTypeUtils', () => {
     }).toThrow(new Error("FECfile+: Class transaction type of 'DOES_NOT_EXIST' is not found"));
   });
 
-  it('should return the correct schedule object given a scheduleId', () => {
+  it('should return the correct schedule object given a scheduleId', async () => {
     const testJSON = {
       transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
     };
 
-    let scheduleObject = getFromJSON(testJSON);
+    let scheduleObject = await getFromJSON(testJSON);
     expect(scheduleObject.constructor.name).toBe('_SchCTransaction');
 
     testJSON.transaction_type_identifier = 'DEBT_OWED_TO_COMMITTEE';
-    scheduleObject = getFromJSON(testJSON);
+    scheduleObject = await getFromJSON(testJSON);
     expect(scheduleObject.constructor.name).toBe('_SchDTransaction');
 
     testJSON.transaction_type_identifier = 'INDEPENDENT_EXPENDITURE';
-    scheduleObject = getFromJSON(testJSON);
+    scheduleObject = await getFromJSON(testJSON);
     expect(scheduleObject.constructor.name).toBe('_SchETransaction');
   });
 
@@ -49,9 +49,9 @@ describe('TransactionTypeUtils', () => {
     });
   });
 
-  it('should remove leading zeroes from Transactions', () => {
+  it('should remove leading zeroes from Transactions', async () => {
     const testJSON = { line_label: '09' };
-    const scheduleObject = getFromJSON(testJSON);
+    const scheduleObject = await getFromJSON(testJSON);
     expect(scheduleObject.line_label).toBe('9');
   });
 });

@@ -60,19 +60,17 @@ export class SchC1Transaction extends Transaction {
   line_of_credit: boolean | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchC1Transaction {
+  static async fromJSON(json: any, depth = 2): Promise<SchC1Transaction> {
     const transaction = plainToClass(SchC1Transaction, json);
     if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      const transactionType = await TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = await getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
+      transaction.children = await Promise.all(transaction.children.map((child) => getFromJSON(child, depth - 1)));
     }
     return transaction;
   }

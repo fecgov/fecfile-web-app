@@ -54,19 +54,17 @@ export class SchATransaction extends Transaction {
   reatt_redes_total?: number; // Amount of total money that has been reattributed for a transaction.
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchATransaction {
+  static async fromJSON(json: any, depth = 2): Promise<SchATransaction> {
     let transaction = plainToInstance(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      const transactionType = await TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = await getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
+      transaction.children = await Promise.all(transaction.children.map((child) => getFromJSON(child, depth - 1)));
     }
     switch (transaction.reattribution_redesignation_tag) {
       case ReattRedesTypes.REATTRIBUTED: {
@@ -83,7 +81,7 @@ export class SchATransaction extends Transaction {
       }
     }
     if (depth > 0 && transaction.reatt_redes) {
-      transaction.reatt_redes = getFromJSON(transaction.reatt_redes, depth - 1);
+      transaction.reatt_redes = await getFromJSON(transaction.reatt_redes, depth - 1);
     }
     return transaction;
   }

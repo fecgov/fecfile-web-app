@@ -4,7 +4,8 @@ import { MemoText } from './memo-text.model';
 import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
-import { ReportTypes, Report } from './reports/report.model';
+import { ReportTypes } from './reports/report.model';
+import type { Report } from './reports/report.model';
 import type { SchC1Transaction, ScheduleC1TransactionTypes } from './schc1-transaction.model';
 import type { SchC2Transaction, ScheduleC2TransactionTypes } from './schc2-transaction.model';
 import type { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
@@ -22,7 +23,7 @@ import type {
 import type { Form24 } from './reports/form-24.model';
 import type { Form3 } from './reports/form-3.model';
 import type { Form3X } from './reports/form-3x.model';
-import { TransactionListRecord } from './transaction-list-record.model';
+import type { TransactionListRecord } from './transaction-list-record.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;

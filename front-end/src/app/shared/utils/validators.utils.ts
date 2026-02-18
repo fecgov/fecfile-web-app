@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidator, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { CoverageDates } from '../models/reports/base-form-3';
-import { SchATransaction } from '../models/scha-transaction.model';
-import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { Form24Service } from '../services/form-24.service';
 import { DateUtils } from './date.utils';
+import type { CoverageDates } from '../models/reports/base-form-3';
+import type { SchATransaction } from '../models/scha-transaction.model';
+import type { SchBTransaction } from '../models/schb-transaction.model';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;

@@ -1,4 +1,4 @@
-import { ListRestResponse } from '../models/rest-api.model';
+import type { ListRestResponse } from '../models/rest-api.model';
 
 export interface TableListService<T> {
   getTableData(

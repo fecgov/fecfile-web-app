@@ -17,7 +17,7 @@ import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { QueryParams } from 'app/shared/services/api.service';
+import type { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -285,7 +285,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    * FormControl elements for the ContactType selected by the user.
    * @param contactType
    */
-  contactTypeChanged(contactType: ContactTypes) {
+  async contactTypeChanged(contactType: ContactTypes) {
     if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
     if (!this.contact()) this.contact.set(new Contact());
@@ -295,7 +295,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
     this.form.get('type')?.setValue(contactType);
 
-    const schema = ContactService.getSchemaByType(contactType);
+    const schema = await ContactService.getSchemaByType(contactType);
     SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
     switch (contactType) {
       case ContactTypes.CANDIDATE:
@@ -406,7 +406,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     });
   }
 
-  public saveContact(closeDialog = true) {
+  async saveContact(closeDialog = true) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -417,7 +417,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
     const contact: Contact = Contact.fromJSON({
       ...this.contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
+      ...SchemaUtils.getFormValues(this.form, await ContactService.getSchemaByType(this.contactType)),
     });
     contact.type = this.contactType;
     this.savedContact.emit(contact);

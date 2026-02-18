@@ -1,5 +1,6 @@
-import { hasNoContact, Transaction } from './transaction.model';
-import { TransactionTypes } from 'app/shared/models/transaction.model';
+import { hasNoContact } from './transaction.model';
+import type { Transaction } from './transaction.model';
+import type { TransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
   CANCEL,

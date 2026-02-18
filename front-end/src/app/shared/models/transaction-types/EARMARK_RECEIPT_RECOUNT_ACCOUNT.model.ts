@@ -3,9 +3,9 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY
 import { ContactTypes } from '../contact.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import { EARMARK } from './common-types/EARMARK.model';
+import { ABSTRACT_EARMARK } from './ABSTRACT_EARMARK.model';
 
-export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends EARMARK {
+export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends ABSTRACT_EARMARK {
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,

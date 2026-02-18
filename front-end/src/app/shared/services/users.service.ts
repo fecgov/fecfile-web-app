@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { UserLoginData } from '../models/user.model';
+import type { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
 
 @Injectable({

@@ -145,7 +145,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.formSubmitted = false;
   }
 
-  private updateContactType() {
+  private async updateContactType() {
     const contactType = this.manager().contactType();
 
     // The type form control is not displayed on the form page because we are
@@ -153,7 +153,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     // we keep the 'type' value on the contact dialog form up-to-date in the background.
     this.form.get('type')?.setValue(contactType);
 
-    const schema = ContactService.getSchemaByType(contactType);
+    const schema = await ContactService.getSchemaByType(contactType);
     SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
     switch (contactType) {
       case ContactTypes.CANDIDATE:
@@ -170,7 +170,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.form.updateValueAndValidity();
   }
 
-  saveContact() {
+  async saveContact() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -182,7 +182,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
 
     const contact: Contact = Contact.fromJSON({
       ...this.manager().contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
+      ...SchemaUtils.getFormValues(this.form, await ContactService.getSchemaByType(this.manager().contactType())),
     });
     contact.type = this.manager().contactType();
     this.manager().contact.set(contact);

@@ -1,15 +1,15 @@
 import { Exclude, plainToInstance } from 'class-transformer';
-import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { ReportTypes } from './report.model';
 import { BaseForm3 } from './base-form-3';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { ScheduleFTransactionTypes } from '../schf-transaction.model';
-import { TransactionTypes } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
+import type { MenuItem } from 'primeng/api';
+import type { TransactionTypes } from '../transaction.model';
+import type { JsonSchema } from 'fecfile-validate';
 
 export enum F3FormTypes {
   F3N = 'F3N',
@@ -18,7 +18,6 @@ export enum F3FormTypes {
 }
 
 export class Form3 extends BaseForm3 {
-  schema = f3Schema;
   report_type = ReportTypes.F3;
   form_type = F3FormTypes.F3N;
   election_state: string | undefined;
@@ -180,5 +179,10 @@ export class Form3 extends BaseForm3 {
       ]),
       MenuInfo.submitReport(sidebarSection, this, isEditable, 'SUBMIT YOUR REPORT'),
     ];
+  }
+
+  async getSchema(): Promise<JsonSchema> {
+    const { schema } = await import('fecfile-validate/fecfile_validate_js/dist/F3');
+    return schema;
   }
 }

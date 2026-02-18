@@ -2,9 +2,9 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_MEMO';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { EARMARK_MEMO as CommonEarmarkMemo } from './common-types/EARMARK_MEMO.model';
+import { ABSTRACT_EARMARK_MEMO } from './ABSTRACT_EARMARK_MEMO.model';
 
-export class EARMARK_MEMO extends CommonEarmarkMemo {
+export class EARMARK_MEMO extends ABSTRACT_EARMARK_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO);
   schema = schema;
 

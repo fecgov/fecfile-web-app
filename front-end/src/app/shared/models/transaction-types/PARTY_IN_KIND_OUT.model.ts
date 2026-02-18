@@ -3,9 +3,9 @@ import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { IN_KIND_OUT } from './common-types/IN_KIND_OUT.model';
+import { ABSTRACT_IN_KIND_OUT } from './ABSTRACT_IN_KIND_OUT.model';
 
-export class PARTY_IN_KIND_OUT extends IN_KIND_OUT {
+export class PARTY_IN_KIND_OUT extends ABSTRACT_IN_KIND_OUT {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.PARTY_IN_KIND_OUT);
   schema = schema;
   override inheritedFields = [

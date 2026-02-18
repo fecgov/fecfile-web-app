@@ -4,7 +4,7 @@ import { ScheduleCTransactionTypes } from './schc-transaction.model';
 import { ScheduleDTransactionTypes } from './schd-transaction.model';
 import { ScheduleETransactionTypes } from './sche-transaction.model';
 import { ScheduleFTransactionTypes } from './schf-transaction.model';
-import { TransactionTypes } from './transaction.model';
+import type { TransactionTypes } from './transaction.model';
 
 export enum Categories {
   RECEIPT = 'receipt',

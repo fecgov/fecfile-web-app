@@ -2,24 +2,35 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { CommitteeAccount } from '../models/committee-account.model';
-import { Form1M } from '../models/reports/form-1m.model';
-import { Form24 } from '../models/reports/form-24.model';
-import { Form3 } from '../models/reports/form-3.model';
-import { Form3X } from '../models/reports/form-3x.model';
-import { Form99 } from '../models/reports/form-99.model';
-import { Report, ReportTypes } from '../models/reports/report.model';
-import { ListRestResponse } from '../models/rest-api.model';
+import { ReportTypes } from '../models/reports/report.model';
+import type { Report } from '../models/reports/report.model';
+import type { ListRestResponse } from '../models/rest-api.model';
+import type { CommitteeAccount } from '../models/committee-account.model';
 import { ApiService, QueryParams } from './api.service';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getReportFromJSON<T extends Report>(json: any): T {
-  if (json.report_type === ReportTypes.F3) return Form3.fromJSON(json) as unknown as T;
-  if (json.report_type === ReportTypes.F1M) return Form1M.fromJSON(json) as unknown as T;
-  if (json.report_type === ReportTypes.F3X) return Form3X.fromJSON(json) as unknown as T;
-  if (json.report_type === ReportTypes.F24) return Form24.fromJSON(json) as unknown as T;
-  if (json.report_type === ReportTypes.F99) return Form99.fromJSON(json) as unknown as T;
-  throw new Error('FECfile+: Cannot get report from JSON');
+export async function getReportFromJSON<T extends Report>(json: { report_type: ReportTypes }): Promise<T> {
+  switch (json.report_type) {
+    case ReportTypes.F3: {
+      const { Form3 } = await import('../models/reports/form-3.model');
+      return Form3.fromJSON(json) as unknown as T;
+    }
+    case ReportTypes.F3X: {
+      const { Form3X } = await import('../models/reports/form-3x.model');
+      return Form3X.fromJSON(json) as unknown as T;
+    }
+    case ReportTypes.F24: {
+      const { Form24 } = await import('../models/reports/form-24.model');
+      return Form24.fromJSON(json) as unknown as T;
+    }
+    case ReportTypes.F1M: {
+      const { Form1M } = await import('../models/reports/form-1m.model');
+      return Form1M.fromJSON(json) as unknown as T;
+    }
+    case ReportTypes.F99: {
+      const { Form99 } = await import('../models/reports/form-99.model');
+      return Form99.fromJSON(json) as unknown as T;
+    }
+  }
 }
 
 @Injectable()
@@ -37,13 +48,13 @@ export class ReportService<T extends Report> implements TableListService<Report>
       `${this.apiEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map((item) => getReportFromJSON<T>(item));
+    response.results = await Promise.all(response.results.map((item) => getReportFromJSON<T>(item)));
     return response;
   }
 
   public async getAllReports(): Promise<T[]> {
     const rawReports = await this.apiService.get<T[]>(this.apiEndpoint + '/');
-    return rawReports.map((item) => getReportFromJSON<T>(item));
+    return Promise.all(rawReports.map((item) => getReportFromJSON<T>(item)));
   }
 
   public async get(reportId: string): Promise<T> {
@@ -99,7 +110,7 @@ export class ReportService<T extends Report> implements TableListService<Report>
   async setActiveReportById(reportId: string | undefined): Promise<T> {
     if (!reportId) throw new Error('FECfile+: No Report Id Provided.');
     const report = await this.get(reportId);
-    this.store.dispatch(setActiveReportAction({ payload: report || new Form3X() }));
+    this.store.dispatch(setActiveReportAction({ payload: report }));
     return report;
   }
 
@@ -129,8 +140,8 @@ export class ReportService<T extends Report> implements TableListService<Report>
     return payload;
   }
 
-  public fecUpdate(report: T, committeeAccount?: CommitteeAccount): Promise<T> {
-    const payload: T = getReportFromJSON<T>({
+  async fecUpdate(report: T, committeeAccount?: CommitteeAccount): Promise<T> {
+    const payload: T = await getReportFromJSON<T>({
       ...report,
       committee_name: report.committee_name ?? committeeAccount?.name,
       street_1: report.street_1 ?? committeeAccount?.street_1,
