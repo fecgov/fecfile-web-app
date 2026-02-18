@@ -11,6 +11,11 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
   templateUrl: './form99-list.component.html',
 })
 export class Form99ListComponent extends AbstractFormListComponent<Form99> {
+  async ngOnInit() {
+    await this.loadTableItems();
+    this.loaded.emit();
+  }
+
   protected readonly itemService = inject(Form99Service);
 
   override readonly caption =

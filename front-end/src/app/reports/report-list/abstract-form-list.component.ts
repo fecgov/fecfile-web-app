@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, signal, viewChild, WritableSignal } from '@angular/core';
+import { Component, computed, inject, output, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -19,10 +19,8 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   override readonly rowsPerPage = signal(5);
-
   override readonly totalItems = signal(0);
-  readonly loading = signal(true);
-
+  readonly loaded = output<void>();
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
   readonly includeCoverage: boolean = false;
@@ -123,6 +121,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   async amendReport(report: T) {
     await this.itemService.startAmendment(report);
     this.loadTableItems();
+    this.loaded.emit();
   }
 
   async unamendReport(report: T) {

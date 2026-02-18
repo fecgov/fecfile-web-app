@@ -13,6 +13,11 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
   templateUrl: './form24-list.component.html',
 })
 export class Form24ListComponent extends AbstractFormListComponent<Form24> {
+  async ngOnInit() {
+    await this.loadTableItems();
+    this.loaded.emit();
+  }
+
   protected readonly itemService = inject(Form24Service);
   form24ToUpdate?: Form24;
   readonly renameF24DialogVisible = signal(false);

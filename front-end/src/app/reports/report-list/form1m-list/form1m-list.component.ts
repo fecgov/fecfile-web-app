@@ -11,6 +11,11 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
   templateUrl: './form1m-list.component.html',
 })
 export class Form1MListComponent extends AbstractFormListComponent<Form1M> {
+  async ngOnInit() {
+    await this.loadTableItems();
+    this.loaded.emit();
+  }
+
   protected readonly itemService = inject(Form1MService);
 
   override readonly caption =

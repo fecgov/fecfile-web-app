@@ -21,15 +21,15 @@
     <img src="assets/img/searching_image.png" alt="No reports created" />
     <span class="empty-state-text">No reports yet. Create your first report!</span>
   </div>
-  <hr type="solid" class="mb-0" />
+  <hr type="solid" class="mb-0 mt-0" />
 }
 
-<app-form3x-list />
+<app-form3x-list (loaded)="tableLoadedStates.form3x.set(true)" />
 @if (showForm3) {
-  <app-form3-list />
+  <app-form3-list (loaded)="tableLoadedStates.form3.set(true)" />
 }
-<app-form24-list />
-<app-form1m-list />
-<app-form99-list />
+<app-form24-list (loaded)="tableLoadedStates.form24.set(true)" />
+<app-form1m-list (loaded)="tableLoadedStates.form1m.set(true)" />
+<app-form99-list (loaded)="tableLoadedStates.form99.set(true)" />
 
 <app-form-type-dialog [(dialogVisible)]="dialogVisible" />

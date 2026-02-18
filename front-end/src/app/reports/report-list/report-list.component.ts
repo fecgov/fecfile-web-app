@@ -27,6 +27,14 @@ import { Form3ListComponent } from './form3-list/form3-list.component';
   ],
 })
 export class ReportListComponent {
+  readonly tableLoadedStates = {
+    form3x: signal(false),
+    form3: signal(false),
+    form99: signal(false),
+    form1m: signal(false),
+    form24: signal(false),
+  };
+
   readonly dialogVisible = signal(false);
   readonly showForm3 = environment.showForm3;
 
@@ -35,6 +43,8 @@ export class ReportListComponent {
   readonly form99List = viewChildren(Form99ListComponent);
   readonly form1mList = viewChildren(Form1MListComponent);
   readonly form24List = viewChildren(Form24ListComponent);
+
+  readonly viewInitialized = signal(false);
 
   readonly showEmptyState = computed(() => {
     const lists = [
@@ -45,7 +55,10 @@ export class ReportListComponent {
       ...this.form24List(),
     ];
 
-    if (!lists.length) return false;
+    if (lists.length === 0) return false;
+
+    const loadedStates = Object.values(this.tableLoadedStates).map((sig) => sig());
+    if (loadedStates.some((loaded) => !loaded)) return false;
 
     return lists.every((list) => list.totalItems() === 0);
   });
