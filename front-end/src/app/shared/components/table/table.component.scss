@@ -1,6 +1,271 @@
-@use 'mixins' as *;
-
 :host::ng-deep {
+  .p-datatable .p-paginator-top {
+    border-radius: 0;
+  }
+  .p-datatable .p-paginator-bottom {
+    border-radius: 0;
+  }
+  .p-datatable .p-datatable-header {
+    background: #fff;
+    color: var(--p-content-color);
+    border-bottom: 2px solid #000000;
+    padding: 0 0 8px 0;
+    font-weight: 600;
+  }
+
+  .p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid var(--p-content-color);
+    border-width: 0 0 1px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--p-content-color);
+    background: var(--p-content-background);
+    transition: box-shadow 0.15s;
+  }
+  .p-datatable .p-datatable-tfoot > tr > td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid var(--surface-border);
+    border-width: 1px 0 1px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--p-content-color);
+    background: var(--p-content-background);
+  }
+  .p-datatable-sortable-column .p-sortable-column-icon {
+    color: #5b616b;
+    margin-left: 0.5rem;
+  }
+  .p-datatable-sortable-column .p-sortable-column-badge {
+    border-radius: 50%;
+    height: 1.143rem;
+    min-width: 1.143rem;
+    line-height: 1.143rem;
+    color: #ffffff;
+    background: var(--p-primary-color);
+    margin-left: 0.5rem;
+  }
+  .p-datatable-sortable-column:not(.p-datatable-column-sorted):hover {
+    background: var(--surface-hover);
+    color: var(--p-content-color);
+  }
+  .p-datatable-sortable-column:not(.p-datatable-column-sorted):hover .p-sortable-column-icon {
+    color: #5b616b;
+  }
+  .p-datatable-sortable-column.p-datatable-column-sorted {
+    background: var(--surface-border) !important;
+    color: var(--p-primary-color) !important;
+  }
+  .p-datatable-sortable-column.p-datatable-column-sorted .p-sortable-column-icon {
+    color: var(--p-primary-color);
+  }
+  .p-datatable-sortable-column.p-datatable-column-sorted:hover {
+    background: var(--surface-hover);
+    color: var(--p-primary-color);
+  }
+  .p-datatable-sortable-column.p-datatable-column-sorted:hover .p-sortable-column-icon {
+    color: var(--p-primary-color);
+  }
+  .p-datatable-sortable-column:focus {
+    box-shadow: inset 0 0 0 0.15rem rgba(38, 143, 255, 0.5);
+    outline: 0 none;
+  }
+  .p-datatable .p-datatable-tbody > tr {
+    background: var(--p-content-background);
+    color: var(--p-content-color);
+    transition: box-shadow 0.15s;
+  }
+  .p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    border: 1px solid var(--surface-border);
+    border-width: 1px 0 0 0;
+    padding: 10px;
+  }
+  .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-save,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel {
+    width: 2rem;
+    height: 2rem;
+    color: #5b616b;
+    border: 0 none;
+    background: transparent;
+    border-radius: 50%;
+    transition: box-shadow 0.15s;
+  }
+  .p-datatable .p-datatable-tbody > tr > td .p-row-toggler:enabled:hover,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init:enabled:hover,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-save:enabled:hover,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel:enabled:hover {
+    color: #5b616b;
+    border-color: transparent;
+    background: transparent;
+  }
+  .p-datatable .p-datatable-tbody > tr > td .p-row-toggler:focus,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init:focus,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-save:focus,
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-cancel:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: var(--focus-ring);
+  }
+  .p-datatable .p-datatable-tbody > tr > td .p-row-editor-save {
+    margin-right: 0.5rem;
+  }
+  .p-datatable .p-datatable-tbody > tr:focus {
+    outline: 0.15rem solid rgba(38, 143, 255, 0.5);
+    outline-offset: 0.15rem;
+  }
+  .p-datatable .p-datatable-tbody > tr.p-highlight {
+    background: var(--p-primary-color);
+    color: #ffffff;
+  }
+  .p-datatable .p-datatable-tbody > tr.p-datatable-dragpoint-top > td {
+    box-shadow: inset 0 2px 0 0 var(--p-primary-color);
+  }
+  .p-datatable .p-datatable-tbody > tr.p-datatable-dragpoint-bottom > td {
+    box-shadow: inset 0 -2px 0 0 var(--p-primary-color);
+  }
+  .p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+    background: var(--surface-hover);
+    color: var(--p-content-color);
+  }
+
+  .p-datatable .p-datatable-loading-icon {
+    font-size: 2rem;
+  }
+  .p-datatable.p-datatable-gridlines .p-datatable-header {
+    border-width: 0;
+  }
+  .p-datatable-tfoot {
+    background: transparent;
+    color: var(--p-content-color);
+    font-weight: 600;
+    border-top: 2px solid var(--p-content-color);
+    border-bottom: 2px solid var(--p-content-color);
+    padding: 10px 10px;
+  }
+  .p-datatable.p-datatable-gridlines .p-paginator-top {
+    border-width: 0 1px 0 1px;
+  }
+  .p-datatable.p-datatable-gridlines .p-paginator-bottom {
+    border-width: 0 1px 1px 1px;
+  }
+  .p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th {
+    border-width: 2px 1px;
+    border-left-color: #f1f1f1;
+    border-right-color: #f1f1f1;
+  }
+
+  .p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td {
+    border-width: 1px;
+    border-color: #f1f1f1;
+  }
+
+  .p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td:first-child,
+  .p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th:first-child {
+    border-left: 0;
+  }
+
+  .p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td:last-child,
+  .p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th:last-child {
+    border-right: 0;
+  }
+
+  .p-datatable.p-datatable-gridlines .p-datatable-tfoot > tr > td {
+    border-width: 1px;
+  }
+  .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+    background: #f8f8f8;
+  }
+  .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even).p-highlight {
+    background: var(--p-primary-color);
+    color: #ffffff;
+  }
+  .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even).p-highlight .p-row-toggler {
+    color: #ffffff;
+  }
+  .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even).p-highlight .p-row-toggler:hover {
+    color: #ffffff;
+  }
+
+  .p-paginator {
+    background: var(--p-content-background);
+    min-width: 167px;
+  }
+
+  .p-paginator .p-paginator-first,
+  .p-paginator .p-paginator-prev,
+  .p-paginator .p-paginator-next,
+  .p-paginator .p-paginator-last {
+    background-color: var(--fec-grey-alt);
+    border: 1px solid var(--surface-border);
+    color: var(--p-content-color);
+    min-width: 2.357rem;
+    height: 2rem;
+    margin: 0 0 0 4px;
+    transition: box-shadow 0.15s;
+    border-radius: 8px;
+  }
+
+  .p-paginator-page {
+    border-radius: 8px !important;
+  }
+
+  .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
+    background: var(--surface-hover);
+    border-color: #8c8e92;
+    color: var(--p-primary-color);
+  }
+
+  .p-paginator .p-select {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 2.357rem;
+  }
+  .p-paginator .p-select .p-select-label {
+    padding-right: 0;
+  }
+  .p-paginator .p-paginator-page-input {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  .p-paginator .p-paginator-page-input .p-inputtext {
+    max-width: 2.357rem;
+  }
+  .p-paginator .p-paginator-current {
+    background-color: #ffffff;
+    color: var(--p-primary-color);
+    min-width: 2.357rem;
+    height: 2.357rem;
+    margin: 0 0 0 -1px;
+    padding: 0 0.5rem;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page {
+    background: var(--p-content-background);
+    border: 1px solid var(--surface-border);
+    min-width: 2.357rem;
+    height: 2rem;
+    margin: 0 0 0 4px;
+    transition: box-shadow 0.15s;
+    color: var(--primary-color);
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page.p-paginator-page-selected {
+    background: var(--p-primary-color);
+    border-color: var(--p-primary-color);
+    color: var(--primary-color-text);
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+    background: var(--surface-hover);
+    border-color: var(--surface-border);
+    color: var(--p-primary-color);
+  }
+
   .custom-paginator-dropdown {
     height: 2.357rem !important;
   }
