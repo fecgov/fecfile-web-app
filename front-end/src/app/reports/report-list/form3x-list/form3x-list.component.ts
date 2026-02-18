@@ -12,7 +12,11 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
   templateUrl: './form3x-list.component.html',
 })
 export class Form3XListComponent extends AbstractFormListComponent<Form3X> implements OnInit {
-  async ngOnInit() {
+  ngOnInit(): void {
+    this.initialize();
+  }
+
+  private async initialize() {
     await this.loadTableItems();
     this.loaded.emit();
   }

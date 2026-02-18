@@ -13,7 +13,11 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
   templateUrl: './form24-list.component.html',
 })
 export class Form24ListComponent extends AbstractFormListComponent<Form24> implements OnInit {
-  async ngOnInit() {
+  ngOnInit(): void {
+    this.initialize();
+  }
+
+  private async initialize() {
     await this.loadTableItems();
     this.loaded.emit();
   }
