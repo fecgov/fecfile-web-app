@@ -192,7 +192,6 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     this.confirmationService.confirm({
       message: this.activeReport().submitAlertText,
       header: 'Are you sure?',
-      icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.saveAndSubmit();
       },

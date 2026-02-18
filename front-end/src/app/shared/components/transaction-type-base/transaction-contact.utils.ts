@@ -83,7 +83,7 @@ export class TransactionContactUtils {
       confirmationService.confirm({
         key: targetDialog,
         header: 'Confirm',
-        icon: 'pi pi-info-circle',
+        icon: 'icon i-info-circle',
         message: message,
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',

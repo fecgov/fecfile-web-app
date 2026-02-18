@@ -113,7 +113,7 @@ const SAVE_CHILD_CONTROL = new NavigationControl(
   'p-button-warning',
   hasNoContact,
   (transaction) => (transaction ? !transaction.reatt_redes : true),
-  'pi pi-plus',
+  'icon i-plus',
   ControlType.DROPDOWN,
 );
 
@@ -182,7 +182,7 @@ export const CHILD_CONTROLS = new TransactionNavigationControls(
       '',
       hasNoContact,
       (transaction) => (transaction ? !transaction.reatt_redes : true),
-      'pi pi-plus',
+      'icon i-plus',
       ControlType.DROPDOWN,
     ),
   ],

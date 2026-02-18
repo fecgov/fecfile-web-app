@@ -1,5 +1,4 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
-@import 'primeicons/primeicons.css';
 
 p {
   max-width: 100%;
@@ -660,22 +659,6 @@ textarea {
   }
 }
 
-.prev-arrow-mask {
-  background-color: var(--p-content-color);
-  mask-image: url('assets/img/prev_arrow.svg');
-}
-
-.next-arrow-mask {
-  background-color: white;
-  mask-image: url('assets/img/next_arrow.svg');
-}
-
-.prev-arrow-mask,
-.next-arrow-mask {
-  height: 9px;
-  width: 8px;
-}
-
 .icon-gap {
   gap: 5px;
 }
@@ -832,4 +815,60 @@ option {
   i {
     font-size: 0.75rem;
   }
+}
+
+.icon {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background-color: currentColor;
+  mask-size: contain;
+}
+
+.i-x {
+  width: 12px;
+  height: 12px;
+  mask: url('./assets/img/i-x.svg') no-repeat center;
+}
+
+.i-check {
+  width: 14px;
+  height: 14px;
+  mask: url('./assets/img/check.svg') no-repeat center;
+}
+
+.i-arrow-down {
+  mask: url('./assets/img/i-arrow-down.svg') no-repeat center;
+}
+
+.i-arrow-right {
+  mask: url('./assets/img/next_arrow.svg') no-repeat center;
+}
+
+.i-arrow-left {
+  mask: url('./assets/img/prev_arrow.svg') no-repeat center;
+}
+
+.i-plus {
+  width: 16px;
+  height: 16px;
+  mask: url('./assets/img/i-plus.svg') no-repeat center;
+}
+
+.i-info-circle {
+  width: 20px;
+  height: 20px;
+  mask: url('./assets/img/i-info-circle.svg') no-repeat center;
+}
+
+.i-circle-on {
+  width: 16px;
+  height: 16px;
+  mask: url('./assets/img/i-circle-on.svg') no-repeat center;
+}
+
+.i-ellipsis-v {
+  width: 16px;
+  height: 16px;
+  mask: url('./assets/img/i-ellipsis-vertical.svg') no-repeat center;
 }

@@ -35,18 +35,18 @@
       pRipple
       class="p-button-secondary icon-gap"
       (click)="router.navigateByUrl('/reports/transactions/report/' + report().id + '/list')"
-    >
-      <span class="prev-arrow-mask"></span>
-      <span>Transactions in this report</span>
-    </button>
+      icon="icon i-arrow-left"
+      iconPos="left"
+      label="Transactions in this report"
+    ></button>
     <button
       pButton
       pRipple
       class="p-button-primary icon-gap"
       (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report().id)"
-    >
-      <span>Review detailed summary page</span>
-      <span class="next-arrow-mask"></span>
-    </button>
+      icon="icon i-arrow-right"
+      iconPos="right"
+      label="Review detailed summary page"
+    ></button>
   </div>
 </div>

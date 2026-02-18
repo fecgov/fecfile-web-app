@@ -46,7 +46,6 @@
         "ngx-logger": "5.0.12",
         "ngxtension": "5.1.0",
         "primeflex": "4.0.0",
-        "primeicons": "7.0.0",
         "primeng": "20.3.0",
         "typescript": "5.8.3"
     },

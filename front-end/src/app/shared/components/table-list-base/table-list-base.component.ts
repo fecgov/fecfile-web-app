@@ -133,7 +133,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this item?',
       header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
+
       accept: () => {
         this.itemService.delete(item).then(() => {
           this.item = this.getEmptyItem();
@@ -148,7 +148,6 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected items?',
       header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
       accept: this.deleteSelectedItemsAccept.bind(this),
     });
   }

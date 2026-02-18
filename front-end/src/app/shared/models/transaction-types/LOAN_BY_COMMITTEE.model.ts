@@ -60,7 +60,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
         'add-button',
         hasNoContact,
         () => true,
-        'pi pi-plus',
+        'icon i-plus',
         ControlType.BUTTON,
       ),
     ],

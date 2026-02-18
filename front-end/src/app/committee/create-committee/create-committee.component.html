@@ -7,7 +7,9 @@
   </div>
   <div class="col-6 right-side">
     <div class="go-back">
-      <a routerLink="/login/select-committee"><i class="pi pi-angle-left"></i> GO BACK</a>
+      <a routerLink="/login/select-committee" class="flex align-items-center gap-2 w-max">
+        <i class="icon i-arrow-left"></i> GO BACK
+      </a>
     </div>
     <div class="right-side-box">
       <h2 class="m-0">Find your committee</h2>
@@ -47,10 +49,9 @@
                 label="Create account"
                 styleClass="p-button-primary"
                 (click)="createAccount()"
-                icon="pi pi-angle-right"
+                icon="icon i-arrow-right"
                 iconPos="right"
-              >
-              </p-button>
+              />
             </div>
           </div>
         }

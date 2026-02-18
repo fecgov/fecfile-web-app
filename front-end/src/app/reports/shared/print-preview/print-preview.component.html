@@ -92,19 +92,19 @@
       pRipple
       class="p-button-secondary icon-gap"
       (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
-    >
-      <span class="prev-arrow-mask"></span>
-      <span>Review detailed summary page</span>
-    </button>
+      label="Review detailed summary page"
+      icon="icon i-arrow-left"
+      iconPos="left"
+    ></button>
 
     <button
       pButton
       pRipple
       class="p-button-primary icon-gap"
       (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
-    >
-      <span>Sign & submit report</span>
-      <span class="next-arrow-mask"></span>
-    </button>
+      label="Sign & submit report"
+      icon="icon i-arrow-right"
+      iconPos="right"
+    ></button>
   </div>
 </div>

@@ -15,7 +15,7 @@
       (tableActionClick)="$event.action.action($event.actionItem)"
       [actionItem]="item"
       [tableActions]="rowActions"
-      buttonIcon="pi pi-ellipsis-v"
+      buttonIcon="icon i-ellipsis-v"
       buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary p-button-text mr-2"
     />
   }
@@ -36,7 +36,7 @@
 >
   <ng-template #caption>
     @if (isCommitteeAdministrator()) {
-      <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
+      <button (click)="addItem()" class="add-button" icon="icon i-plus" label="Add user" pButton pRipple></button>
     }
   </ng-template>
 </app-table>

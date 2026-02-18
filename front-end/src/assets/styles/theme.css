@@ -1968,9 +1968,9 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-button.p-button-icon-only.p-button-rounded {
   border-radius: 50%;
-  height: 1rem;
-  width: 1rem;
-  padding: 10px;
+  height: 16px;
+  width: 20px;
+  padding: 10px 0px;
 }
 .p-button.p-button-sm {
   font-size: 0.875rem;
