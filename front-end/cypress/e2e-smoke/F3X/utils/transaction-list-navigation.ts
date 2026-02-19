@@ -153,7 +153,7 @@ export function saveAndReopenCurrentTransaction(reportId: string, readySelector 
   });
 }
 
-export function withTransactionsList(
+function withTransactionsList(
   reportId: string,
   action: () => void | Cypress.Chainable<unknown>,
   options: TransactionsListOptions = {},
