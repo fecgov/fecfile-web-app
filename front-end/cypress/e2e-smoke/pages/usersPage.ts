@@ -1,6 +1,9 @@
 import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
 import { ApiUtils } from '../utils/api';
+import { SmokeAliases } from '../utils/aliases';
+
+const USERS_PAGE_ALIAS_SOURCE = 'usersPage';
 
 export class UsersPage {
   static goToPage(alias = '') {
@@ -8,9 +11,9 @@ export class UsersPage {
       method: 'GET',
       pathname: ApiUtils.apiRoutePathname('/committee-members/'),
       query: { page: '1' },
-    }).as('GetMembers');
+    }).as(SmokeAliases.network.named('GetMembers', USERS_PAGE_ALIAS_SOURCE));
     cy.visit('/committee/members');
-    cy.wait('@GetMembers');
+    cy.wait(`@${SmokeAliases.network.named('GetMembers', USERS_PAGE_ALIAS_SOURCE)}`);
   }
 
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {

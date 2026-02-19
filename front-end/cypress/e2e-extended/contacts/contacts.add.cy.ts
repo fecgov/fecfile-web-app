@@ -125,7 +125,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Cancel flow: starting Add contact and cancelling does not create rows', () => {
-    cy.get('tbody', { timeout: 7500 })
+    cy.get('tbody')
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
         const types: ContactFormData['contact_type'][] = [
@@ -214,7 +214,7 @@ describe('Contacts Add (/contacts)', () => {
       '**/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
     ).as('contactsReload');
 
-    cy.get('tbody', { timeout: 5000 })
+    cy.get('tbody')
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
         PageUtils.clickButton('Add contact');

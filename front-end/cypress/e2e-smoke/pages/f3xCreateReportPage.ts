@@ -1,6 +1,9 @@
 import { F3xCreateReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 import { ApiUtils } from '../utils/api';
+import { SmokeAliases } from '../utils/aliases';
+
+const F3X_CREATE_REPORT_ALIAS_SOURCE = 'f3xCreateReportPage';
 
 export class F3xCreateReportPage {
   static enterFormData(formData: F3xCreateReportFormData) {
@@ -25,9 +28,9 @@ export class F3xCreateReportPage {
         method: 'GET',
         pathname: ApiUtils.apiRoutePathname('/reports/form-3x/coverage_dates/'),
       })
-      .as('coverageDates');
+      .as(SmokeAliases.network.named('coverageDates', F3X_CREATE_REPORT_ALIAS_SOURCE));
   }
   static waitForCoverage() {
-    cy.wait('@coverageDates'); // the page is ready when coverage_dates has returned
+    cy.wait(`@${SmokeAliases.network.named('coverageDates', F3X_CREATE_REPORT_ALIAS_SOURCE)}`); // the page is ready when coverage_dates has returned
   }
 }

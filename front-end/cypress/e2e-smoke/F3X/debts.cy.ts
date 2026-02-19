@@ -12,6 +12,9 @@ import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel'
+import { SmokeAliases } from '../utils/aliases';
+
+const DEBTS_ALIAS_SOURCE = 'debtsSpec';
 
 function setupCoordinatedPartyExpenditure(
   organization: ContactFormData,
@@ -217,7 +220,7 @@ describe('Debts', () => {
       cy.intercept(
         'GET',
         `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=**&schedules=C,D`,
-      ).as('GetLoans');
+      ).as(SmokeAliases.network.named('GetLoans', DEBTS_ALIAS_SOURCE));
 
       ReportListPage.createF3X({
         ...defaultForm3XData,
@@ -228,7 +231,7 @@ describe('Debts', () => {
       });
 
       PageUtils.urlCheck('/list');
-      cy.wait('@GetLoans');
+      cy.wait(`@${SmokeAliases.network.named('GetLoans', DEBTS_ALIAS_SOURCE)}`);
       cy.contains("Debt Owed To Committee").should('not.exist');
     });
   });

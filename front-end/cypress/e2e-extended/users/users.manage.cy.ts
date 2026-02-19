@@ -3,6 +3,14 @@ import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/U
 import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 
+const closeToastIfPresent = () => {
+  cy.get('body').then(($body) => {
+    if ($body.find('.p-toast-close-button:visible').length > 0) {
+      cy.get('.p-toast-close-button:visible').first().click();
+    }
+  });
+};
+
 describe('Manage Users: Happy Paths', () => {
   beforeEach(() => {
     LoginPage.login();
@@ -15,7 +23,7 @@ describe('Manage Users: Happy Paths', () => {
     UsersPage.create(adminUser);
     cy.wait('@GetMembers');
 
-    PageUtils.closeToast();
+    closeToastIfPresent();
     UsersPage.assertRow(adminUser, 'Pending');
   });
 
@@ -23,7 +31,7 @@ describe('Manage Users: Happy Paths', () => {
     const managerUser = { ...userFormData, email: 'manager_user@fec.gov', role: Roles.MANAGER };
 
     UsersPage.create(managerUser);
-    PageUtils.closeToast();
+    closeToastIfPresent();
     UsersPage.assertRow(managerUser, 'Pending');
   });
 
@@ -53,7 +61,7 @@ describe('Manage Users: Happy Paths', () => {
 
     for (const user of users) {
       UsersPage.create(user);
-      PageUtils.closeToast();
+      closeToastIfPresent();
       UsersPage.assertRow(user);
     }
   });

@@ -1,13 +1,25 @@
 import { ContactListPage } from './contactListPage';
 import { PageUtils } from './pageUtils';
 import { ReportListPage } from './reportListPage';
+import { SmokeAliases } from '../utils/aliases';
+
+const LOGIN_PAGE_ALIAS_SOURCE = 'loginPage';
+const LOGIN_DOT_GOV_ALIAS_SOURCE = 'loginPage.loginDotGovLogin';
 
 export class LoginPage {
   static login() {
-    cy.intercept('GET', '**/reports/form-3x/**').as('GetForm3X');
-    cy.intercept('GET', '**/reports/form-1m/**').as('GetForm1M');
-    cy.intercept('GET', '**/reports/form-24/**').as('GetForm24');
-    cy.intercept('GET', '**/reports/form-99/**').as('GetForm99');
+    cy.intercept('GET', '**/reports/form-3x/**').as(
+      SmokeAliases.network.named('GetForm3X', LOGIN_PAGE_ALIAS_SOURCE),
+    );
+    cy.intercept('GET', '**/reports/form-1m/**').as(
+      SmokeAliases.network.named('GetForm1M', LOGIN_PAGE_ALIAS_SOURCE),
+    );
+    cy.intercept('GET', '**/reports/form-24/**').as(
+      SmokeAliases.network.named('GetForm24', LOGIN_PAGE_ALIAS_SOURCE),
+    );
+    cy.intercept('GET', '**/reports/form-99/**').as(
+      SmokeAliases.network.named('GetForm99', LOGIN_PAGE_ALIAS_SOURCE),
+    );
 
     const sessionDuration = 10; //Login session duration in minutes
     const intervalString = getLoginIntervalString(sessionDuration);
@@ -27,10 +39,10 @@ export class LoginPage {
     });
 
     cy.visit('/');
-    cy.wait('@GetForm3X');
-    cy.wait('@GetForm1M');
-    cy.wait('@GetForm24');
-    cy.wait('@GetForm99');
+    cy.wait(`@${SmokeAliases.network.named('GetForm3X', LOGIN_PAGE_ALIAS_SOURCE)}`);
+    cy.wait(`@${SmokeAliases.network.named('GetForm1M', LOGIN_PAGE_ALIAS_SOURCE)}`);
+    cy.wait(`@${SmokeAliases.network.named('GetForm24', LOGIN_PAGE_ALIAS_SOURCE)}`);
+    cy.wait(`@${SmokeAliases.network.named('GetForm99', LOGIN_PAGE_ALIAS_SOURCE)}`);
   }
 }
 
@@ -68,26 +80,34 @@ function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
 
   // Intercepts for login
-  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
-  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as(
+    SmokeAliases.network.named('GetLoggedIn', LOGIN_DOT_GOV_ALIAS_SOURCE),
+  );
+  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as(
+    SmokeAliases.network.named('GetCommitteeAccounts', LOGIN_DOT_GOV_ALIAS_SOURCE),
+  );
+  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as(
+    SmokeAliases.network.named('ActivateCommittee', LOGIN_DOT_GOV_ALIAS_SOURCE),
+  );
+  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as(
+    SmokeAliases.network.named('GetCommitteeMembers', LOGIN_DOT_GOV_ALIAS_SOURCE),
+  );
 
   cy.visit('/');
   cy.get('#loginButton').click();
-  cy.wait('@GetLoggedIn');
+  cy.wait(`@${SmokeAliases.network.named('GetLoggedIn', LOGIN_DOT_GOV_ALIAS_SOURCE)}`);
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
   cy.get('[data-cy="consent-button"]').click();
-  cy.wait('@GetCommitteeAccounts');
+  cy.wait(`@${SmokeAliases.network.named('GetCommitteeAccounts', LOGIN_DOT_GOV_ALIAS_SOURCE)}`);
   cy.get('.committee-list .committee-info').first().click();
-  cy.wait('@ActivateCommittee');
+  cy.wait(`@${SmokeAliases.network.named('ActivateCommittee', LOGIN_DOT_GOV_ALIAS_SOURCE)}`);
 
   // Wait for the reports page to load
   cy.contains('Manage reports').should('exist');
 
   // Creates a second create admin after logging in if necessary
-  cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
+  cy.wait(`@${SmokeAliases.network.named('GetCommitteeMembers', LOGIN_DOT_GOV_ALIAS_SOURCE)}`); // Wait for the guard request to resolve
   cy.get(alias)
     .find('[data-cy="second-committee-email"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist

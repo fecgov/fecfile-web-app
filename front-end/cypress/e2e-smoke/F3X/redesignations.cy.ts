@@ -1,5 +1,5 @@
 import { Initialize } from '../pages/loginPage';
-import { currentYear, PageUtils } from '../pages/pageUtils';
+import { currentYear } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { DataSetup } from './setup';
 import {
@@ -11,6 +11,7 @@ import { F3X_Q1, F3X_Q2 } from '../requests/library/reports';
 import { buildContributionToCandidate } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
+import { runTransactionMutation } from './utils/transaction-mutations';
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
@@ -20,25 +21,22 @@ const redesignationData: ContributionFormData = {
 };
 
 function Redesignate(old = false) {
-  PageUtils.clickKababItem(Contributions.TO_CANDIDATE, 'Redesignate');
-  const alias = PageUtils.getAlias('');
-  if (old) {
-    const selector = cy.get(alias).find('#report-selector');
-    selector.select('FORM 3X: JULY 15 QUARTERLY REPORT (Q2)');
-    PageUtils.clickButton('Continue');
-  }
-  cy.get('#amount', { timeout: 7500 }).should('be.visible');
-
-  TransactionDetailPage.enterScheduleFormDataForContribution(
-    new ContributionFormData(redesignationData),
-    false,
-    '',
-    'expenditure_date',
+  runTransactionMutation(
+    {
+      transactionLabel: Contributions.TO_CANDIDATE,
+      actionLabel: 'Redesignate',
+      successLabel: Contributions.TO_CANDIDATE,
+      oldReportLabel: old ? 'FORM 3X: JULY 15 QUARTERLY REPORT (Q2)' : undefined,
+    },
+    () => {
+      TransactionDetailPage.enterScheduleFormDataForContribution(
+        new ContributionFormData(redesignationData),
+        false,
+        '',
+        'expenditure_date',
+      );
+    },
   );
-
-  PageUtils.clickButton('Save');
-  PageUtils.urlCheck('/list');
-  cy.contains(Contributions.TO_CANDIDATE).should('exist');
 }
 
 describe('Redesignations', () => {

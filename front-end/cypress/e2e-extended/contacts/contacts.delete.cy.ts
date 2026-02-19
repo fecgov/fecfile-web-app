@@ -410,7 +410,7 @@ describe('Contacts - delete guard', () => {
       if (!deleteRequests) {
         return cy.wrap(null, { log: false });
       }
-      return cy.wait('@deleteContact', { timeout: 15000 });
+      return cy.wait('@deleteContact');
     });
 
     cy.then(() => {
@@ -547,16 +547,16 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
     cy.wait('@getDeletedContacts');
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog().should('be.visible');
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog().within(() => {
-      cy.contains('tbody tr', contactToDelete, { timeout: 15000 }).should('be.visible');
-      cy.contains('tbody tr', contactToRestore, { timeout: 15000 }).should('be.visible');
-      cy.contains('tbody tr', contactToPreserve, { timeout: 15000 }).should('not.exist');
+      cy.contains('tbody tr', contactToDelete).should('be.visible');
+      cy.contains('tbody tr', contactToRestore).should('be.visible');
+      cy.contains('tbody tr', contactToPreserve).should('not.exist');
     });
     ContactsDeleteHelpers.restoreContact(contactToRestore);
     ContactsHelpers.assertSuccessToastMessage();
     ContactListPage.goToPage();
     cy.wait('@getContactsList');
-    cy.contains('tbody tr', contactToPreserve, { timeout: 15000 }).should('be.visible');
-    cy.contains('tbody tr', contactToRestore, { timeout: 15000 }).should('be.visible');
+    cy.contains('tbody tr', contactToPreserve).should('be.visible');
+    cy.contains('tbody tr', contactToRestore).should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
   });
 

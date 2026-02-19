@@ -1,6 +1,13 @@
 import { PageUtils } from '../../pages/pageUtils';
 import { ApiUtils } from '../../utils/api';
 
+type VisitSummaryWithSpinnerOptions = {
+  expectSpinner: boolean;
+  aliasName?: string;
+  spinnerDelayMs?: number;
+  spinnerGoneTimeout?: number;
+};
+
 export class ReviewReport {
   static Summary() {
     PageUtils.clickSidebarItem('REVIEW A REPORT');
@@ -47,6 +54,48 @@ export class ReviewReport {
     );
 
     return `@${alias}`;
+  }
+
+  static visitSummaryWithSpinner(
+    reportId: string,
+    {
+      expectSpinner,
+      aliasName,
+      spinnerDelayMs = 1200,
+      spinnerGoneTimeout = 20000,
+    }: VisitSummaryWithSpinnerOptions,
+  ) {
+    let getReportAlias = '';
+    if (expectSpinner) {
+      getReportAlias = ReviewReport.setupSummarySpinner(
+        reportId,
+        spinnerDelayMs,
+        aliasName ?? 'getReport',
+      );
+    }
+
+    // Direct navigation avoids flaky no-op sidebar clicks when already on summary.
+    cy.visit(`/reports/f3x/summary/${reportId}`);
+    PageUtils.locationCheck(`/reports/f3x/summary/${reportId}`);
+
+    if (!expectSpinner) {
+      ReviewReport.assertSpinnerGone();
+      return;
+    }
+
+    cy.wait(getReportAlias).then(({ response }) => {
+      const shouldShowSpinner = response?.body?.calculation_status !== 'SUCCEEDED';
+      if (!shouldShowSpinner) {
+        ReviewReport.assertSpinnerGone();
+        return;
+      }
+
+      ReviewReport.assertSpinnerVisible();
+
+      // Explicitly prove a second report fetch/recalc cycle occurred.
+      cy.wait(getReportAlias).its('response.statusCode').should('eq', 200);
+      ReviewReport.assertSpinnerGone(spinnerGoneTimeout);
+    });
   }
 
   static assertSpinnerVisible(timeout = 10000) {

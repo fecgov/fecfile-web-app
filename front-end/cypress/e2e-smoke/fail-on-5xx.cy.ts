@@ -1,3 +1,5 @@
+import { SmokeAliases } from './utils/aliases';
+
 type FailOn5xxFailure = {
   timestamp: string;
   method: string;
@@ -23,6 +25,7 @@ const REQUEST_ID = 'if5xx-self-test-req-123';
 
 // A tiny page we control so we don’t depend on app auth/state and don’t create extra API noise.
 const SELF_TEST_PAGE = '/__if5xx-self-test';
+const FAIL_ON_5XX_ALIAS_SOURCE = 'failOn5xxSpec';
 
 // Captured from the tripwire error message on the *failed attempt*.
 let capturedArtifactPath = '';
@@ -103,14 +106,16 @@ describe('failOn5xx tripwire: nightly self-test', () => {
         statusCode,
         headers: { 'x-request-id': REQUEST_ID },
         body: { ok: statusCode < 500, retry },
-      }).as('sentinel');
+      }).as(SmokeAliases.network.named('sentinel', FAIL_ON_5XX_ALIAS_SOURCE));
 
       cy.visit(SELF_TEST_PAGE);
 
       cy.window().then((win) => win.fetch(SENTINEL_PATH));
 
       // this assertion passes both attempts (500 then 200)
-      cy.wait('@sentinel').its('response.statusCode').should('eq', statusCode);
+      cy.wait(`@${SmokeAliases.network.named('sentinel', FAIL_ON_5XX_ALIAS_SOURCE)}`)
+        .its('response.statusCode')
+        .should('eq', statusCode);
     }
   );
 
@@ -124,7 +129,7 @@ describe('failOn5xx tripwire: nightly self-test', () => {
       'self-test artifact should be written under the _self-test dir'
     ).to.include(`${SELF_TEST_ARTIFACT_DIR}/`);
 
-    cy.readFile(capturedArtifactPath, { timeout: 10_000 }).then((raw) => {
+    cy.readFile(capturedArtifactPath).then((raw) => {
       const artifact = raw as FailOn5xxArtifact;
 
       expect(artifact).to.have.property('failures');

@@ -1,53 +1,28 @@
 import { Initialize } from '../pages/loginPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { PageUtils } from '../pages/pageUtils';
-import { ContactFormData } from '../models/ContactFormModel';
-import type { MockContact } from '../requests/library/contacts';
 import { faker } from '@faker-js/faker';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
-import {
-  Candidate_House_A,
-  Candidate_House_B,
-  Candidate_Presidential_A,
-  Candidate_Presidential_B,
-  Candidate_Senate_A,
-} from '../requests/library/contacts';
-import { makeContact } from '../requests/methods';
 import { ContactLookup } from '../pages/contactLookup';
-
-function createContactPromise(
-  candidate: MockContact,
-  candidates: ContactFormData[],
-): Promise<void> {
-  return new Cypress.Promise<void>((resolve) => {
-    makeContact(candidate, (response) => {
-      candidates.push(response.body);
-      resolve();
-    });
-  });
-}
-
-const qualifiedCandidates: MockContact[] = [
-  Candidate_House_A,
-  Candidate_House_B,
-  Candidate_Presidential_A,
-  Candidate_Presidential_B,
-  Candidate_Senate_A,
-];
-
-function seedQualifiedCandidates(): Cypress.Chainable<ContactFormData[]> {
-  const candidates: ContactFormData[] = [];
-  const apiCalls = qualifiedCandidates.map((candidate) => createContactPromise(candidate, candidates));
-
-  return cy.then(() => Cypress.Promise.all(apiCalls)).then(() => {
-    expect(candidates).to.have.lengthOf(qualifiedCandidates.length);
-    return candidates;
-  });
-}
+import {
+  getCandidateContributionDateFieldSelector,
+  qualifiedCandidates,
+  seedQualifiedCandidates,
+} from './utils/candidate-seeding';
 
 describe('Manage reports', () => {
   beforeEach(() => {
     Initialize();
+  });
+
+  it('should seed qualified candidates', () => {
+    seedQualifiedCandidates().then((candidates) => {
+      expect(candidates).to.have.lengthOf(qualifiedCandidates.length);
+      candidates.forEach((candidate) => {
+        expect(candidate.id, 'created candidate id').to.exist;
+        expect(candidate.candidate_id, 'created candidate fec id').to.exist;
+      });
+    });
   });
 
   it('should create form 1m by qualification', () => {
@@ -77,7 +52,7 @@ describe('Manage reports', () => {
           .should('have.value', candidates[index].last_name);
 
         PageUtils.calendarSetValue(
-          getId(index),
+          getCandidateContributionDateFieldSelector(index),
           new Date(),
           `[data-cy="candidate-${index}"]`,
         );
@@ -111,15 +86,3 @@ describe('Manage reports', () => {
     });
   });
 });
-
-const romanMap: Record<number, string> = {
-  1: 'I',
-  2: 'II',
-  3: 'III',
-  4: 'IV',
-  5: 'V',
-};
-
-function getId(num: number): string {
-  return `[data-cy="${romanMap[num + 1]}_date_of_contribution"]`;
-}

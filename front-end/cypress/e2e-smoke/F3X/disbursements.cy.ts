@@ -14,6 +14,7 @@ import { ContactListPage } from '../pages/contactListPage';
 import { ReportListPage } from '../pages/reportListPage';
 import { ContactLookup } from '../pages/contactLookup';
 import { Intercepts } from '../utils/intercepts';
+import { SmokeAliases } from '../utils/aliases';
 
 const independentExpVoidData: DisbursementFormData = {
   ...defaultTransactionFormData,
@@ -23,6 +24,7 @@ const independentExpVoidData: DisbursementFormData = {
   signatoryFirstName: faker.person.firstName(),
   signatoryLastName: faker.person.lastName(),
 };
+const DISBURSEMENTS_ALIAS_SOURCE = 'disbursementsSpec';
 
 describe('Disbursements', () => {
   beforeEach(() => {
@@ -99,15 +101,34 @@ describe('Disbursements', () => {
         .should('not.contain', 'This is a required field.');
 
       // Add IE to a F24 Report
-      Intercepts.transactionsList({ alias: 'GetReceipts', reportId: result.report, schedules: 'A', includePaging: true });
-      Intercepts.transactionsList({ alias: 'GetLoans', reportId: result.report, schedules: 'C,D', includePaging: true });
-      Intercepts.transactionsList({ alias: 'GetDisbursements', reportId: result.report, schedules: 'B,E,F', includePaging: true });
+      Intercepts.transactionsList({
+        alias: SmokeAliases.reportList.receipts(DISBURSEMENTS_ALIAS_SOURCE),
+        reportId: result.report,
+        schedules: 'A',
+        includePaging: true,
+      });
+      Intercepts.transactionsList({
+        alias: SmokeAliases.reportList.loans(DISBURSEMENTS_ALIAS_SOURCE),
+        reportId: result.report,
+        schedules: 'C,D',
+        includePaging: true,
+      });
+      Intercepts.transactionsList({
+        alias: SmokeAliases.reportList.disbursements(DISBURSEMENTS_ALIAS_SOURCE),
+        reportId: result.report,
+        schedules: 'B,E,F',
+        includePaging: true,
+      });
       ReportListPage.goToReportList(result.report, true, true, true, {
         registerListIntercepts: false,
         waitForLists: false,
       });
 
-      cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 7500 });
+      cy.wait([
+        `@${SmokeAliases.reportList.loans(DISBURSEMENTS_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.reportList.disbursements(DISBURSEMENTS_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.reportList.receipts(DISBURSEMENTS_ALIAS_SOURCE)}`,
+      ]);
 
       PageUtils.clickKababItem('Independent Expenditure', 'Add to Form24 Report');
       PageUtils.pSelectDropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');

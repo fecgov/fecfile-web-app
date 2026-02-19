@@ -3,6 +3,9 @@ import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '.
 import { PageUtils } from './pageUtils';
 import { ApiUtils } from '../utils/api';
 import { Intercepts } from '../utils/intercepts';
+import { SmokeAliases } from '../utils/aliases';
+
+const REPORT_LIST_ALIAS_SOURCE = 'reportListPage';
 
 type GoToReportListOptions = {
   waitForLists?: boolean;
@@ -14,9 +17,9 @@ type GoToReportListOptions = {
 
 export class ReportListPage {
   static goToPage() {
-    Intercepts.reportList('GetReports');
+    Intercepts.reportList(SmokeAliases.reportList.reports(REPORT_LIST_ALIAS_SOURCE));
     cy.visit('/reports');
-    cy.wait('@GetReports', { timeout: 7500 });
+    cy.wait(`@${SmokeAliases.reportList.reports(REPORT_LIST_ALIAS_SOURCE)}`);
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
@@ -94,7 +97,7 @@ export class ReportListPage {
 
     if (registerListIntercepts && includeReceipts) {
       Intercepts.transactionsList({
-        alias: 'GetReceipts',
+        alias: SmokeAliases.reportList.receipts(REPORT_LIST_ALIAS_SOURCE),
         reportId,
         schedules: 'A',
         includePaging: true,
@@ -106,7 +109,7 @@ export class ReportListPage {
 
     if (registerListIntercepts && includeLoans) {
       Intercepts.transactionsList({
-        alias: 'GetLoans',
+        alias: SmokeAliases.reportList.loans(REPORT_LIST_ALIAS_SOURCE),
         reportId,
         schedules: 'C,D',
         includePaging: true,
@@ -118,7 +121,7 @@ export class ReportListPage {
 
     if (registerListIntercepts && includeDisbursements) {
       Intercepts.transactionsList({
-        alias: 'GetDisbursements',
+        alias: SmokeAliases.reportList.disbursements(REPORT_LIST_ALIAS_SOURCE),
         reportId,
         schedules: 'B,E,F',
         includePaging: true,
@@ -129,11 +132,17 @@ export class ReportListPage {
     }
 
     const visit = cy.visit(`/reports/transactions/report/${reportId}/list`).then(() => {
-      cy.contains('Transactions in this report', { timeout: 7500 }).should('exist');
+      cy.contains('Transactions in this report').should('exist');
     });
-    if (waitForLists && registerListIntercepts && includeLoans) cy.wait('@GetLoans', { timeout: 7500 });
-    if (waitForLists && registerListIntercepts && includeDisbursements) cy.wait('@GetDisbursements', { timeout: 7500 });
-    if (waitForLists && registerListIntercepts && includeReceipts) cy.wait('@GetReceipts', { timeout: 7500 });
+    if (waitForLists && registerListIntercepts && includeLoans) {
+      cy.wait(`@${SmokeAliases.reportList.loans(REPORT_LIST_ALIAS_SOURCE)}`);
+    }
+    if (waitForLists && registerListIntercepts && includeDisbursements) {
+      cy.wait(`@${SmokeAliases.reportList.disbursements(REPORT_LIST_ALIAS_SOURCE)}`);
+    }
+    if (waitForLists && registerListIntercepts && includeReceipts) {
+      cy.wait(`@${SmokeAliases.reportList.receipts(REPORT_LIST_ALIAS_SOURCE)}`);
+    }
     return visit;
   }
 }

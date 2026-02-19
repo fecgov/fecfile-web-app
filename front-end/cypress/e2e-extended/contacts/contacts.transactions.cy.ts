@@ -10,6 +10,8 @@ import { Individual_A_A, MockContact } from '../../e2e-smoke/requests/library/co
 import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
 import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
 import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
+import { Intercepts } from '../../e2e-smoke/utils/intercepts';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
 
 import {
   defaultScheduleFormData,
@@ -28,8 +30,7 @@ type CreateContactWhich = 'first' | 'last';
 type ContactTypeLower = 'individual' | 'committee' | 'organization';
 type ContactLookupType = 'Individual' | 'Organization' | 'Committee';
 type DisbursementDateField = 'expenditure_date' | 'disbursement_date';
-
-const DEFAULT_TIMEOUT = 15000;
+const CONTACTS_TRANSACTIONS_ALIAS_SOURCE = 'extendedContactsTransactions';
 
 const normalizeWhitespace = (s: string) => s.replaceAll(/\s+/g, ' ').trim();
 const normalizeNbsp = (s: string) => s.replaceAll('\u00a0', ' ');
@@ -47,7 +48,7 @@ const hasVisibleDialogMatching = ($body: JQuery<HTMLElement>, rx: RegExp): boole
 
 const getVisibleConfirmDialog = () =>
   cy
-    .contains('.p-dialog-title', /^Confirm$/i, { timeout: DEFAULT_TIMEOUT })
+    .contains('.p-dialog-title', /^Confirm$/i)
     .should('be.visible')
     .closest('.p-confirm-dialog, .p-dialog');
 
@@ -58,18 +59,18 @@ const openCreateContactModal = (which: CreateContactWhich = 'first') => {
     if ($containers.length > 0) {
       const $target = which === 'last' ? $containers.last() : $containers.first();
       cy.wrap($target)
-        .contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
+        .contains(/Create a new contact/i)
         .scrollIntoView()
         .click({ force: true });
       return;
     }
 
-    cy.contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
+    cy.contains(/Create a new contact/i)
       .scrollIntoView()
       .click({ force: true });
   });
 
-  cy.contains('.p-dialog', /Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('.p-dialog', /Create a new contact/i)
     .filter(':visible')
     .should('be.visible')
     .as('createContactDialog');
@@ -96,7 +97,7 @@ const saveCreateContactDialog = () => {
     .should('be.enabled')
     .click({ force: true });
 
-  cy.get('body', { timeout: DEFAULT_TIMEOUT }).should(($body) => {
+  cy.get('body').should(($body) => {
     expect(hasVisibleDialogMatching($body, /Create a new contact/i)).to.eq(false);
   });
 };
@@ -156,16 +157,16 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<
 };
 
 const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) => {
-  cy.get('p-panelmenu', { timeout: DEFAULT_TIMEOUT }).should('exist');
+  cy.get('p-panelmenu').should('exist');
 
-  cy.contains('a', panelMenuRx, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('a', panelMenuRx)
     .first()
     .scrollIntoView()
     .click({ force: true });
 
-  cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', '/select/');
+  cy.url().should('include', '/select/');
   clickTransactionLinkOnSelectPage(txnLinkRx);
-  cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', '/create/');
+  cy.url().should('include', '/create/');
 };
 
 const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField> => {
@@ -179,7 +180,7 @@ const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField
 const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amount: number) => {
   const amountStr = `$${amount.toFixed(2)}`;
 
-  cy.contains('tbody tr', contactDisplay, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('tbody tr', contactDisplay)
     .should('exist')
     .within(() => {
       cy.get('td').eq(1).invoke('text').should('match', expectedType);
@@ -188,7 +189,7 @@ const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amo
 };
 
 const assertContactsListRow = (name: string, type: string, fecId?: string) => {
-  cy.contains('tbody tr', name, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('tbody tr', name)
     .should('exist')
     .within(() => {
       cy.get('td').eq(1).should('contain.text', type);
@@ -221,20 +222,21 @@ const clickSaveAndConfirmCreatesNewContact = (
   contactTypeLower: ContactTypeLower,
   contactDisplay: string,
 ) => {
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-  ).as('GetReceipts');
-
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-  ).as('GetLoans');
-
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-  ).as('GetDisbursements');
+  Intercepts.transactionsList({
+    alias: SmokeAliases.reportList.receipts(CONTACTS_TRANSACTIONS_ALIAS_SOURCE),
+    reportId,
+    schedules: 'A',
+  });
+  Intercepts.transactionsList({
+    alias: SmokeAliases.reportList.loans(CONTACTS_TRANSACTIONS_ALIAS_SOURCE),
+    reportId,
+    schedules: 'C,D',
+  });
+  Intercepts.transactionsList({
+    alias: SmokeAliases.reportList.disbursements(CONTACTS_TRANSACTIONS_ALIAS_SOURCE),
+    reportId,
+    schedules: 'B,E,F',
+  });
 
   PageUtils.clickButton('Save');
 
@@ -242,9 +244,9 @@ const clickSaveAndConfirmCreatesNewContact = (
 
   PageUtils.clickButton('Continue');
 
-  cy.wait('@GetLoans');
-  cy.wait('@GetDisbursements');
-  cy.wait('@GetReceipts');
+  cy.wait(`@${SmokeAliases.reportList.loans(CONTACTS_TRANSACTIONS_ALIAS_SOURCE)}`);
+  cy.wait(`@${SmokeAliases.reportList.disbursements(CONTACTS_TRANSACTIONS_ALIAS_SOURCE)}`);
+  cy.wait(`@${SmokeAliases.reportList.receipts(CONTACTS_TRANSACTIONS_ALIAS_SOURCE)}`);
 };
 
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
@@ -402,7 +404,7 @@ describe('Contacts: Transactions integration', () => {
       TransactionDetailPage.enterScheduleFormData(indData, false, '', true, 'contribution_date');
       clickSaveAndConfirmCreatesNewContact(rid, 'individual', individual.display);
 
-      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
+      cy.url().should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
 
       // TRANSFER
@@ -431,7 +433,7 @@ describe('Contacts: Transactions integration', () => {
       TransactionDetailPage.enterScheduleFormData(transferData, false, '', true, 'contribution_date');
       clickSaveAndConfirmCreatesNewContact(rid, 'committee', committee.display);
 
-      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
+      cy.url().should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
 
       // OPERATING EXPENDITURE
@@ -462,7 +464,7 @@ describe('Contacts: Transactions integration', () => {
 
       clickSaveAndConfirmCreatesNewContact(rid, 'organization', organization.display);
 
-      cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
+      cy.url().should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(organization.display, /Operating Expenditure/i, 40);
 
       // Final verification: Contacts list
@@ -537,8 +539,8 @@ describe('Contacts: Transactions integration', () => {
       PageUtils.clickButton('Save');
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
-      cy.contains(/employer.*required|this is a required field\./i, { timeout: 7500 }).should('exist');
-      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 7500 }).should('exist');
+      cy.contains(/employer.*required|this is a required field\./i).should('exist');
+      cy.contains(/occupation.*required|this is a required field\./i).should('exist');
 
       cy.get('#employer').type(newEmployer);
       cy.get('#occupation').type(newOccupation);
