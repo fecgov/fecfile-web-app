@@ -1415,6 +1415,10 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
   right: 2.5rem;
 }
 
+.p-radiobutton + label {
+  cursor: pointer;
+}
+
 .p-radiobutton {
   width: 20px;
   height: 20px;
@@ -6576,12 +6580,19 @@ td {
   color: var(--p-accordion-header-toggle-icon-color);
 }
 
+.p-accordionheader > .p-icon {
+    display: none;
+  }
+
 .p-radiobutton-input {
   height: 100% !important;
+  padding: 0;
 }
 
 .p-field-checkbox > label:not(.p-disabled) {
   cursor: pointer;
 }
+
+
 
 

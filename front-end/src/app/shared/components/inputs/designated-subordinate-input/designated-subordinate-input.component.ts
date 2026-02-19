@@ -4,20 +4,21 @@ import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/cont
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
-import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionContactLookupComponent } from '../../transaction-contact-lookup/transaction-contact-lookup.component';
 import { AddressInputComponent } from '../address-input/address-input.component';
 import { BaseInputComponent } from '../base-input.component';
+import { SelectComponent } from '../../select/select.component';
 
 @Component({
   selector: 'app-designated-subordinate-input',
   templateUrl: './designated-subordinate-input.component.html',
+  styleUrls: ['./designated-subordinate-input.component.scss'],
   imports: [
     TransactionContactLookupComponent,
     AddressInputComponent,
     ReactiveFormsModule,
-    Select,
+    SelectComponent,
     ErrorMessagesComponent,
     InputText,
   ],
@@ -29,20 +30,17 @@ export class DesignatedSubordinateInputComponent extends BaseInputComponent {
   @Output() subordinateCommitteeClear = new EventEmitter<void>();
 
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
-  designatedOrSubordinateOptions = LabelUtils.getPrimeOptions([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [null as any, 'Neither'],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [true as any, 'Designating committee'],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [false as any, 'Subordinate committee'],
+  readonly designatedOrSubordinateOptions = LabelUtils.getOptions([
+    [null, 'Neither'],
+    [true, 'Designating committee'],
+    [false, 'Subordinate committee'],
   ]);
 
   onSubordinateCommitteeIdBlur() {
     this.updateSubordinateValueAndValidity();
   }
 
-  onDesignatedOrSubordinateChange(value: boolean | null) {
+  onDesignatedOrSubordinateChange(value: string | boolean | null) {
     if (value === true) {
       this.clearSubordinateCommittee();
     } else if (value === false) {

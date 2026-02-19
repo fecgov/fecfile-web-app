@@ -1,24 +1,16 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <div class="field">
-        <label for="designated_or_subordinate_dropdown">
-          ADD DESIGNATING COMMITTEE OR SUBORDINATE COMMITTEE? <span class="paren-label">(OPTIONAL)</span>
-        </label>
-        <p-select
-          inputId="designated_or_subordinate_dropdown"
-          class="col-4"
-          formControlName="filer_designated_to_make_coordinated_expenditures"
-          [options]="designatedOrSubordinateOptions"
-          appendTo="body"
-          (onChange)="onDesignatedOrSubordinateChange($event.value)"
-        />
-        <app-error-messages
-          [form]="form"
-          fieldName="filer_designated_to_make_coordinated_expenditures"
-          [formSubmitted]="formSubmitted"
-        />
-      </div>
+      <app-select
+        inputId="designated_or_subordinate_dropdown"
+        label="ADD DESIGNATING COMMITTEE OR SUBORDINATE COMMITTEE?"
+        [optionalLabel]="true"
+        [options]="designatedOrSubordinateOptions"
+        [form]="form"
+        formControlName="filer_designated_to_make_coordinated_expenditures"
+        [formSubmitted]="formSubmitted"
+        (update)="onDesignatedOrSubordinateChange($event)"
+      />
     </div>
   </div>
   @if (this.form.get('filer_designated_to_make_coordinated_expenditures')?.value === true) {

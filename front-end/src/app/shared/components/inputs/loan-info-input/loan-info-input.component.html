@@ -2,12 +2,12 @@
   <div class="grid">
     <div class="col-4">
       <div class="field">
-        <label for="amount">ORIGINAL AMOUNT</label>
+        <label for="loan-info-amount">ORIGINAL AMOUNT</label>
         <app-input-number
-          inputId="amount"
+          inputId="loan-info-amount"
           [formControlName]="templateMap['amount']"
-          [inputStyleClass]="readonly ? 'readonly' : ''"
-          [readonly]="readonly"
+          [inputStyleClass]="readonly() ? 'readonly' : ''"
+          [readonly]="readonly()"
         />
         <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
       </div>
@@ -30,9 +30,9 @@
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="balance">BALANCE OUTSTANDING</label>
+        <label [id]="balanceInputId.label" [for]="balanceInputId.id">BALANCE OUTSTANDING</label>
         <app-input-number
-          inputId="balance"
+          [inputId]="balanceInputId.id"
           [formControlName]="templateMap['balance']"
           inputStyleClass="readonly"
           [readonly]="true"
@@ -48,7 +48,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
-          [overrideMemoItemHelpText]="memoItemHelpText"
+          [overrideMemoItemHelpText]="memoItemHelpText()"
           [transaction]="transaction()"
           checkboxLabel="MEMO ITEM "
           parenLabel="(OPTIONAL)"

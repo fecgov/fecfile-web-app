@@ -1,4 +1,4 @@
-<dialog #selectReportDialog>
+<dialog #selectReportDialog (close)="cancel()">
   <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="dialog-content">
       <div class="dialog-header">
@@ -14,19 +14,21 @@
       </div>
       <div class="dialog-body">
         <p>
-          Pick the open report on which you would like to {{ actionLabel }} a contribution or a portion of it to a
-          different {{ actionTargetLabel }}.
+          Pick the open report on which you would like to {{ actionLabel() }} a contribution or a portion of it to a
+          different {{ actionTargetLabel() }}.
         </p>
-        <label for="report-selector">OPEN REPORTS</label>
-        <select id="report-selector" class="form-select" aria-label="Report selector" [(ngModel)]="selectedReport">
-          <option selected></option>
-          @for (report of availableReports; track report) {
+        <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
+        <select id="report-selector" aria-label="Report selector" [(ngModel)]="selectedReport">
+          <button aria-labelledby="report-selector-label">
+            <selectedcontent></selectedcontent>
+          </button>
+          @for (report of availableReports(); track report) {
             <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
           }
         </select>
       </div>
       <div class="dialog-footer">
-        <button pButton pRipple class="p-button-secondary" (click)="cancel()">Cancel</button>
+        <button pButton pRipple class="p-button-secondary" (click)="selectReportDialog.close()">Cancel</button>
         <button
           pButton
           pRipple

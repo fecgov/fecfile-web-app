@@ -40,7 +40,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
 
   override description =
     'This loan type automatically creates an associated transaction. Saving a loan by committee will automatically create an associated disbursement.';
-  override accordionTitle = 'ENTER DATA';
+  override accordionTitle = 'STEP ONE';
   override accordionSubText = 'Enter lendee, loan, and terms information for a loan by committee';
   override formTitle = undefined;
   override footer =

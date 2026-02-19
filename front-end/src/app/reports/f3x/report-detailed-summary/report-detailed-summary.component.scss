@@ -1,3 +1,77 @@
-.parenthesis-text {
-  color: grey;
+@use 'mixins' as *;
+
+:host::ng-deep {
+  .summary-container {
+    @include standard-container();
+  }
+
+  .p-datatable .p-datatable-tbody > tr:not(:last-child) > td {
+    border-bottom: 1px solid black;
+  }
+
+  .p-datatable .p-datatable-tbody > tr:nth-child(even),
+  .p-datatable .p-datatable-tbody > tr:nth-child(odd) {
+    background-color: white;
+  }
+
+  .has-federal-total .p-datatable-tbody > tr:last-child {
+    background-color: #d6d7d9 !important;
+  }
+
+  .p-datatable-tbody > tr:has(.numeric-line) {
+    background-color: #f5f5f5 !important;
+  }
+
+  h2 {
+    font-family: var(--gandhi-bold);
+    font-weight: bolder;
+    font-size: 24px !important;
+  }
+
+  .p-datatable-tbody > tr:has(.description-column .bold) > td.line-column {
+    font-family: var(--karla-bold);
+  }
+
+  .description-column .bold {
+    font-family: var(--karla-bold);
+  }
+
+  .description-column .italic {
+    font-style: italic;
+  }
+
+  .line-column {
+    display: none;
+  }
+
+  .cell-with-overlay {
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .period-column {
+    @include fixed-width(130px);
+    text-align: right !important;
+  }
+
+  .ytd-column {
+    @include fixed-width(160px);
+    text-align: right !important;
+  }
+
+  @include breakpoint('md') {
+    .line-column {
+      display: table-cell;
+      @include fixed-width(72px);
+    }
+  }
+}
+
+.overlay-content {
+  white-space: pre-line;
+}
+
+.table-bottom {
+  margin-top: 0rem;
+  margin-bottom: 32px;
 }

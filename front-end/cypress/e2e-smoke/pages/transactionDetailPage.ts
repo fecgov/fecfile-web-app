@@ -3,7 +3,7 @@ import {
   ContributionFormData,
   DisbursementFormData,
   LoanFormData,
-  ScheduleFormData,
+  ScheduleFormData
 } from '../models/TransactionFormModel';
 import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
@@ -92,7 +92,7 @@ export class TransactionDetailPage {
   }
 
   static enterNewLoanAgreementFormData(formData: LoanFormData, alias = '') {
-    this.enterLoanFormData(formData);
+    this.enterLoanFormData(formData, false, alias, 'input[id^="loan-agreement-amount-"]');
     this.enterLoanFormDataStepTwo(formData);
   }
 
@@ -120,18 +120,18 @@ export class TransactionDetailPage {
     formData: LoanFormData,
     readOnlyAmount = false,
     alias = '',
+    amountField = '#loan-info-amount',
     dateField = 'expenditure_date',
-    dueDateField = 'loan_due_date',
     dateIncurredField = 'loan_incurred_date',
   ) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find('#amount').safeType(formData.amount);
+    cy.get(alias).find(amountField).safeType(formData.amount);
 
     // set interest dropdown and rate
     if (formData.interest_rate_setting) {
-      PageUtils.dropdownSetValue('[inputid="interest_rate_setting"]', formData.interest_rate_setting, alias);
+      PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.interest_rate_setting, alias);
       if (formData.interest_rate) {
-        cy.get(alias).find('#interest_rate').safeType(formData.interest_rate);
+        cy.get(alias).find('[data-cy="interestRateInput"]:first').safeType(formData.interest_rate);
       }
     }
 
@@ -141,9 +141,9 @@ export class TransactionDetailPage {
 
     // Set due date dropdown & date
     if (formData.due_date_setting) {
-      PageUtils.dropdownSetValue('[inputid="due_date_setting"]', formData.due_date_setting, alias);
+      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.due_date_setting, alias);
       if (formData.due_date) {
-        PageUtils.calendarSetValue(`[data-cy="${dueDateField}"]`, formData.due_date, alias);
+        PageUtils.calendarSetValue(`[data-cy="dueDateInput"] input`, formData.due_date, alias);
       }
     }
 
@@ -253,7 +253,7 @@ export class TransactionDetailPage {
     cy.get(alias).find('#amount').should('have.value', amount);
 
     if (formData.category_code != '') {
-      cy.get(alias).find('[data-cy="category_code"]').should('contain', formData.category_code);
+      cy.get(alias).find('app-select[inputid="category_code"]').should('contain', formData.category_code);
     }
   }
 
@@ -327,13 +327,13 @@ export class TransactionDetailPage {
 
   private static enterCategoryCode(formData: ScheduleFormData, alias: string) {
     if (formData.category_code) {
-      PageUtils.dropdownSetValue('[data-cy="category_code"]', formData.category_code, alias);
+      PageUtils.selectDropdownSetValue('app-select[inputid="category_code"]', formData.category_code, alias);
     }
   }
 
   private static enterElection(formData: ScheduleFormData, alias: string) {
     if (formData.electionType) {
-      PageUtils.dropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
+      PageUtils.selectDropdownSetValue('[inputid="electionType"]', formData.electionType, alias);
     }
     if (formData.electionYear) {
       cy.get(alias).find('#electionYear').safeType(formData.electionYear);

@@ -134,7 +134,7 @@ function handleLoanAgreementSetup(q3: string) {
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');
-    PageUtils.valueCheck('#amount', '$65,000.00');
+    PageUtils.valueCheck('input[id^="loan-agreement-amount-"]', '$65,000.00');
     PageUtils.valueCheck('#loan_incurred_date', `05/27/${currentYear}`);
   };
 }
@@ -163,7 +163,7 @@ describe('Loans', () => {
       formData.date_received = undefined;
       TransactionDetailPage.enterLoanFormData(formData);
 
-      PageUtils.clickAccordion('STEP TWO:');
+      PageUtils.clickAccordion('STEP TWO');
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
       PageUtils.clickButton('Save transactions');
       PageUtils.urlCheck('/list');
