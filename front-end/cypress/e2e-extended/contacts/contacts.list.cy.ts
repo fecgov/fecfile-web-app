@@ -149,16 +149,16 @@ describe('Contacts List (/contacts)', () => {
       cy.log(`Testing Results per page = ${size}`);
       selectPageSize(size);
       const expectedFirstPageRows = Math.min(size, total);
-      cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('be.visible');
-      cy.get('tbody tr', { timeout: 15000 }).should('have.length', expectedFirstPageRows);
+      cy.contains(pageTextRx(1, expectedFirstPageRows)).should('be.visible');
+      cy.get('tbody tr').should('have.length', expectedFirstPageRows);
       if (size === 20) {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
           .should('not.be.disabled')
           .click({ force: true });
 
-        cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
-        cy.get('tbody tr', { timeout: 15000 }).should('have.length', 1);
+        cy.contains(pageTextRx(21, 21)).should('be.visible');
+        cy.get('tbody tr').should('have.length', 1);
       }
       cy.get('.p-paginator').should('exist');
     }

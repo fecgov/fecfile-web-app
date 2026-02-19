@@ -61,7 +61,7 @@ describe('Contacts - axe smoke (critical)', () => {
     const displayName = `${lastName}, ${firstName}`;
     makeContact(contact);
     visitContactsList();
-    cy.contains('tbody tr', displayName, { timeout: 15000 }).should('be.visible');
+    cy.contains('tbody tr', displayName).should('be.visible');
     getContactsTableContainer().then(checkCritical);
   });
 
@@ -88,7 +88,7 @@ describe('Contacts - axe smoke (critical)', () => {
     const displayName = `${lastName}, ${firstName}`;
     makeContact(contact);
     visitContactsList();
-    cy.contains('tbody tr', displayName, { timeout: 15000 })
+    cy.contains('tbody tr', displayName)
       .should('be.visible')
       .within(() => {
         cy.get('app-table-actions-button button')
@@ -152,7 +152,7 @@ describe('Contacts - axe smoke (critical)', () => {
     });
 
     visitContactsList();
-    cy.contains('tbody tr', displayName, { timeout: 15000 }).should('be.visible');
+    cy.contains('tbody tr', displayName).should('be.visible');
     cy.intercept(
       'GET',
       '**/api/v1/transactions/?page=1&ordering=transaction_type_identifier&page_size=5&contact=*',
@@ -160,7 +160,7 @@ describe('Contacts - axe smoke (critical)', () => {
     PageUtils.clickKababItem(displayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
     cy.wait('@getTransactionHistory');
-    cy.get('app-table[itemname="transactions"]', { timeout: 15000 })
+    cy.get('app-table[itemname="transactions"]')
       .should('exist')
       .scrollIntoView({ offset: { top: -120, left: 0 } })
       .should('be.visible')

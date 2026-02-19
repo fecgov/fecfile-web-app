@@ -1,40 +1,16 @@
 import { Initialize, setCommitteeToPTY } from '../pages/loginPage';
 import { currentYear } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import { makeTransaction } from '../requests/methods';
-import { buildScheduleF } from '../requests/library/transactions';
 import { DataSetup } from './setup';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ApiUtils } from '../utils/api';
 import { saveAndReopenCurrentTransaction, saveAndWaitForTransactionsList } from './utils/transaction-list-navigation';
+import { setupAggregateScheduleFTransactions } from './utils/seed-transactions';
+import { SmokeAliases } from '../utils/aliases';
 
-function generateReportAndContacts(transData: [number, string, boolean][]) {
-  return DataSetup({
-    individual: true,
-    candidate: true,
-    candidateSenate: true,
-    committee: true,
-    organization: true,
-  }).then((result: any) => {
-    let chain: Cypress.Chainable<any> = cy.wrap(null, { log: false });
-
-    transData.forEach((data) => {
-      const transaction = buildScheduleF(
-        data[0],
-        data[1],
-        result.individual,
-        data[2] ? result.candidate : result.candidateSenate,
-        result.committee,
-        result.report,
-      );
-      chain = chain.then(() => makeTransaction(transaction));
-    });
-
-    return chain.then(() => result);
-  });
-}
+const AGGREGATE_SCHEDULE_F_ALIAS_SOURCE = 'aggregateScheduleFSpec';
 
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
@@ -59,7 +35,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('new transaction aggregate', () => {
-    generateReportAndContacts([
+    setupAggregateScheduleFTransactions([
       [200.01, `${currentYear}-04-12`, true],
       [25, `${currentYear}-04-16`, true],
     ]).then((result: any) => {
@@ -98,8 +74,8 @@ describe('Tests transaction form aggregate calculation', () => {
     cy.intercept({
       method: 'GET',
       pathname: ApiUtils.apiRoutePathname('/transactions/previous/payee-candidate/'),
-    }).as('GetPrevious');
-    generateReportAndContacts([
+    }).as(SmokeAliases.network.named('GetPrevious', AGGREGATE_SCHEDULE_F_ALIAS_SOURCE));
+    setupAggregateScheduleFTransactions([
       [200.01, '2025-04-12', true],
       [25, '2025-04-16', true],
     ]).then((result: any) => {
@@ -110,13 +86,13 @@ describe('Tests transaction form aggregate calculation', () => {
       ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
       cy.get('#general_election_year').safeType('2024').blur();
-      cy.wait('@GetPrevious');
+      cy.wait(`@${SmokeAliases.network.named('GetPrevious', AGGREGATE_SCHEDULE_F_ALIAS_SOURCE)}`);
       cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
     });
   });
 
   it('new transaction aggregate different election year', () => {
-    generateReportAndContacts([
+    setupAggregateScheduleFTransactions([
       [200.01, '2025-04-12', true],
       [25, '2025-04-16', true],
     ]).then((result: any) => {
@@ -124,7 +100,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.intercept({
         method: 'GET',
         pathname: ApiUtils.apiRoutePathname('/transactions/previous/payee-candidate/'),
-      }).as('GetPrevious');
+      }).as(SmokeAliases.network.named('GetPrevious', AGGREGATE_SCHEDULE_F_ALIAS_SOURCE));
       ContactLookup.getContact(result.organization.name);
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
       cy.get('#amount').safeType('100').blur();
@@ -132,13 +108,13 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('#general_election_year').safeType('1990').blur();
 
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
-      cy.wait('@GetPrevious');
+      cy.wait(`@${SmokeAliases.network.named('GetPrevious', AGGREGATE_SCHEDULE_F_ALIAS_SOURCE)}`);
       cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
     });
   });
 
   it('existing transaction change contact', () => {
-    generateReportAndContacts([
+    setupAggregateScheduleFTransactions([
       [200.01, `${currentYear}-04-12`, true],
       [25, `${currentYear}-04-16`, false],
     ]).then((result: any) => {
@@ -155,7 +131,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('existing transaction change general election year', () => {
-    generateReportAndContacts([
+    setupAggregateScheduleFTransactions([
       [200.01, `${currentYear}-04-12`, true],
       [25, `${currentYear}-04-10`, true],
     ]).then((result: any) => {
@@ -173,7 +149,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('existing transaction date leapfrogging', () => {
-    generateReportAndContacts([
+    setupAggregateScheduleFTransactions([
       [200.01, `${currentYear}-04-12`, true],
       [25, `${currentYear}-04-16`, true],
     ]).then((result: any) => {
@@ -183,6 +159,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 30), '');
+      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
       saveAndWaitForTransactionsList(result.report);
 
@@ -204,7 +181,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('leapfrog and contact change', () => {
-    generateReportAndContacts([
+    setupAggregateScheduleFTransactions([
       [200.01, `${currentYear}-04-12`, true],
       [25, `${currentYear}-04-16`, true],
       [40, `${currentYear}-04-20`, true],
@@ -218,6 +195,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 29), '');
+      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
 
       saveAndWaitForTransactionsList(result.report);
 

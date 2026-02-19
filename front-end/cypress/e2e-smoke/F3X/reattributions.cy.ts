@@ -1,5 +1,5 @@
 import { Initialize } from '../pages/loginPage';
-import { currentYear, PageUtils } from '../pages/pageUtils';
+import { currentYear } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { DataSetup } from './setup';
 import { ScheduleFormData } from '../models/TransactionFormModel';
@@ -9,6 +9,8 @@ import { ReportListPage } from '../pages/reportListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { ApiUtils } from '../utils/api';
+import { runTransactionMutation } from './utils/transaction-mutations';
+import { SmokeAliases } from '../utils/aliases';
 
 const reattributeData: ScheduleFormData = {
   amount: 100.55,
@@ -21,33 +23,33 @@ const reattributeData: ScheduleFormData = {
   memo_code: false,
   memo_text: '',
 };
+const REATTRIBUTIONS_ALIAS_SOURCE = 'reattributionsSpec';
 
 function Reattribute(result: any, old = false) {
   cy.intercept({
     method: 'GET',
     pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
-  }).as('GetTransaction');
-  PageUtils.clickKababItem('11(a)(ii)', 'Reattribute');
-  const alias = PageUtils.getAlias('');
-  if (old) {
-    const selector = cy.get(alias).find('#report-selector');
-    selector.select('FORM 3X: JULY 15 QUARTERLY REPORT (Q2)');
-    PageUtils.clickButton('Continue');
-  }
-  cy.wait('@GetTransaction');
-
-  ContactLookup.getContact(result.individual.last_name);
-  TransactionDetailPage.enterScheduleFormData(
-    new ScheduleFormData(reattributeData),
-    false,
-    '',
-    true,
-    'contribution_date',
+  }).as(SmokeAliases.network.named('GetTransaction', REATTRIBUTIONS_ALIAS_SOURCE));
+  runTransactionMutation(
+    {
+      transactionLabel: '11(a)(ii)',
+      actionLabel: 'Reattribute',
+      successLabel: Individual.INDIVIDUAL_RECEIPT,
+      oldReportLabel: old ? 'FORM 3X: JULY 15 QUARTERLY REPORT (Q2)' : undefined,
+      readySelector: '',
+    },
+    () => {
+      cy.wait(`@${SmokeAliases.network.named('GetTransaction', REATTRIBUTIONS_ALIAS_SOURCE)}`);
+      ContactLookup.getContact(result.individual.last_name);
+      TransactionDetailPage.enterScheduleFormData(
+        new ScheduleFormData(reattributeData),
+        false,
+        '',
+        true,
+        'contribution_date',
+      );
+    },
   );
-
-  PageUtils.clickButton('Save');
-  PageUtils.urlCheck('/list');
-  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
 
 describe('Reattributions', () => {

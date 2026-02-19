@@ -2,6 +2,9 @@ import { LoginPage } from './pages/loginPage';
 import { PageUtils } from './pages/pageUtils';
 import { ProfileAccountPage } from './pages/profileAccountPage';
 import { ProfileUserListPage } from './pages/profileUserListPage';
+import { SmokeAliases } from './utils/aliases';
+
+const PROFILE_SPEC_ALIAS_SOURCE = 'profileSpec';
 
 describe('Manage profile', () => {
   beforeEach(() => {
@@ -28,7 +31,7 @@ describe('Manage profile', () => {
 
   it('Can navigate to the Profile Account page via the navbar', () => {
     const alias = PageUtils.getAlias('');
-    cy.intercept('/profile').as('account');
+    cy.intercept('/profile').as(SmokeAliases.network.named('account', PROFILE_SPEC_ALIAS_SOURCE));
     cy.visit('/reports');
 
     cy.get('#navbarProfileDropdownMenuLink').click();

@@ -2,6 +2,9 @@ import { LoginPage } from './pages/loginPage';
 import { Roles, defaultFormData as userFormData } from './models/UserFormModel';
 import { UsersPage } from './pages/usersPage';
 import { ApiUtils } from './utils/api';
+import { SmokeAliases } from './utils/aliases';
+
+const USERS_SPEC_ALIAS_SOURCE = 'usersSpec';
 
 describe('Manage Users', () => {
   beforeEach(() => {
@@ -9,9 +12,11 @@ describe('Manage Users', () => {
   });
 
   it('should create a user', () => {
-    cy.intercept('GET', ApiUtils.apiRoutePathname('/committee-members/')).as('GetMembers');
+    cy.intercept('GET', ApiUtils.apiRoutePathname('/committee-members/')).as(
+      SmokeAliases.network.named('GetMembers', USERS_SPEC_ALIAS_SOURCE),
+    );
     UsersPage.create(userFormData);
-    cy.wait('@GetMembers');
+    cy.wait(`@${SmokeAliases.network.named('GetMembers', USERS_SPEC_ALIAS_SOURCE)}`);
     cy.get('[data-cy="membership-submit"]').should('not.be.visible');
     UsersPage.assertRow(userFormData);
   });

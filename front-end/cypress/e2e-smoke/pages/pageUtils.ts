@@ -1,6 +1,8 @@
 import { ApiUtils } from '../utils/api';
+import { SmokeAliases } from '../utils/aliases';
 
 export const currentYear = new Date().getFullYear();
+const PAGE_UTILS_ALIAS_SOURCE = 'pageUtils';
 
 export class PageUtils {
   static closeToast() {
@@ -358,7 +360,7 @@ export class PageUtils {
     const exactLabel = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(label)}\s*$`, 'i');
 
     cy.get(alias)
-      .contains('.accordion-text strong, .header-label', exactLabel, { timeout: 5000 })
+      .contains('.accordion-text strong, .header-label', exactLabel)
       .first()
       .closest('p-accordion-header, .p-accordionheader')
       .should('be.visible')
@@ -443,11 +445,13 @@ export class PageUtils {
   }
 
   static switchCommittee(committeeId: string) {
-    cy.intercept('GET', ApiUtils.apiRoutePathname('/committee-members/')).as('GetCommitteeMembers');
+    cy.intercept('GET', ApiUtils.apiRoutePathname('/committee-members/')).as(
+      SmokeAliases.network.named('GetCommitteeMembers', PAGE_UTILS_ALIAS_SOURCE),
+    );
     cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
-    cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
-    cy.location('pathname', { timeout: 7500 }).should('not.include', '/login/select-committee');
+    cy.wait(`@${SmokeAliases.network.named('GetCommitteeMembers', PAGE_UTILS_ALIAS_SOURCE)}`); // Wait for the guard request to resolve
+    cy.location('pathname').should('not.include', '/login/select-committee');
     this.enterSecondCommitteeEmailIfneeded();
   }
 
@@ -469,7 +473,9 @@ export class PageUtils {
   }
 
   static submitReportForm() {
-    cy.intercept('POST', ApiUtils.apiRoutePathname('/web-services/submit-to-fec/')).as('SubmitReport');
+    cy.intercept('POST', ApiUtils.apiRoutePathname('/web-services/submit-to-fec/')).as(
+      SmokeAliases.network.named('SubmitReport', PAGE_UTILS_ALIAS_SOURCE),
+    );
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
@@ -479,7 +485,7 @@ export class PageUtils {
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
     PageUtils.clickButton('Confirm');
-    cy.wait('@SubmitReport');
+    cy.wait(`@${SmokeAliases.network.named('SubmitReport', PAGE_UTILS_ALIAS_SOURCE)}`);
   }
 
   static readonly blurActiveField = () => {

@@ -3,18 +3,16 @@ import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
-import { DataSetup, Setup } from './setup';
-import { makeF3x, makeTransaction } from '../requests/methods';
+import { DataSetup } from './setup';
+import { makeF3x } from '../requests/methods';
 import { F3X_Q3 } from '../requests/library/reports';
-import {
-  Authorizor,
-  buildLoanAgreement,
-  buildLoanFromBank,
-  buildLoanReceipt,
-  LoanInfo,
-} from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import {
+  assertNoDeleteButtonInTransactionRow,
+  setupLoanFromBank,
+} from './utils/loan-test-helpers';
+import { SmokeAliases } from '../utils/aliases';
 
 const formData = {
   ...defaultLoanFormData,
@@ -26,6 +24,7 @@ const formData = {
   future_income: 'NO',
   date_incurred: new Date(currentYear, 3, 27),
 };
+const LOANS_BANK_ALIAS_SOURCE = 'loansBankSpec';
 
 function clickLoan(button: string, urlCheck = '/list') {
   cy.contains('Loan Received from Bank').last().should('exist');
@@ -37,71 +36,6 @@ function clickLoan(button: string, urlCheck = '/list') {
     .click();
   cy.contains(button).click({ force: true });
   PageUtils.urlCheck(urlCheck);
-}
-
-function setupLoanFromBank(setup: Setup) {
-  return DataSetup(setup).then((result: any) => {
-    const organization = result.organization;
-    const reportId = result.report;
-
-    const loanInfo: LoanInfo = {
-      loan_amount: 60000,
-      loan_incurred_date: `${currentYear}-04-27`,
-      loan_due_date: `${currentYear}-04-27`,
-      loan_interest_rate: '2.3%',
-      secured: false,
-      loan_restructured: false,
-    };
-
-    const authorizors: [Authorizor, Authorizor] = [
-      {
-        last_name: 'LastSenger',
-        first_name: 'FirstSavannah',
-        middle_name: null,
-        prefix: null,
-        suffix: null,
-        date_signed: `${currentYear}-04-27`,
-      },
-      {
-        last_name: 'Leannon',
-        first_name: 'Gina',
-        middle_name: null,
-        prefix: null,
-        suffix: null,
-        date_signed: '2024-04-27',
-        title: 'Legacy',
-      },
-    ];
-
-    const loanAgreement = buildLoanAgreement(loanInfo, organization, authorizors, reportId);
-    const loanReceipt = buildLoanReceipt(
-      loanInfo.loan_amount,
-      loanInfo.loan_incurred_date,
-      organization,
-      reportId,
-    );
-    const loanFromBank = buildLoanFromBank(loanInfo, organization, reportId, [
-      loanAgreement,
-      loanReceipt,
-    ]);
-
-    return makeTransaction(loanFromBank).then(() => result);
-  });
-}
-
-// Helper for the “no Delete button” assertion so it doesn’t deepen nesting in the test.
-function assertNoDeleteButtonInLoanReceivedFromBankRow() {
-  cy.get('app-transaction-receipts').within(() => {
-    cy.contains('Loan Received from Bank')
-      .closest('tr')
-      .find('button')
-      .each(($button) => {
-        const innerHTML = $button.html();
-        if (innerHTML.includes('Delete')) {
-          throw new Error('A button contains "Delete", test failed.');
-        }
-      });
-  });
 }
 
 // Helper to handle result of setupLoanFromBank for the first test
@@ -126,10 +60,10 @@ function handleLoanAgreementSetup(q3: string) {
 
     cy.intercept({
       method: 'Post',
-    }).as('saveNewAgreement');
+    }).as(SmokeAliases.network.named('saveNewAgreement', LOANS_BANK_ALIAS_SOURCE));
 
     PageUtils.clickButton('Save', '', true);
-    cy.wait('@saveNewAgreement');
+    cy.wait(`@${SmokeAliases.network.named('saveNewAgreement', LOANS_BANK_ALIAS_SOURCE)}`);
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');
@@ -168,7 +102,7 @@ describe('Loans', () => {
       PageUtils.urlCheck('/list');
       cy.contains('Loan Received from Bank').should('exist');
 
-      assertNoDeleteButtonInLoanReceivedFromBankRow();
+      assertNoDeleteButtonInTransactionRow('Loan Received from Bank');
     });
   });
 
@@ -189,19 +123,30 @@ describe('Loans', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       clickLoan('Review loan agreement');
-      cy.intercept('PUT', '**/api/v1/transactions/**').as('SaveTransactions');
+      cy.intercept('PUT', '**/api/v1/transactions/**').as(
+        SmokeAliases.network.named('SaveTransactions', LOANS_BANK_ALIAS_SOURCE),
+      );
       const reportId = result.report;
 
       const txList = (s: string) =>
         new RegExp(String.raw`/api/v1/transactions/\?(?=.*report_id=${reportId})${s}.*`);
 
-      cy.intercept('GET', txList('(?=.*schedules=A)')).as('GetReceiptsAfterSave');
-      cy.intercept('GET', txList('(?=.*schedules=.*C)(?=.*schedules=.*D)')).as('GetLoansAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=A)')).as(
+        SmokeAliases.network.named('GetReceiptsAfterSave', LOANS_BANK_ALIAS_SOURCE),
+      );
+      cy.intercept('GET', txList('(?=.*schedules=.*C)(?=.*schedules=.*D)')).as(
+        SmokeAliases.network.named('GetLoansAfterSave', LOANS_BANK_ALIAS_SOURCE),
+      );
       cy.intercept('GET', txList('(?=.*schedules=.*B)(?=.*schedules=.*E)(?=.*schedules=.*F)'))
-        .as('GetDisbursementsAfterSave');
+        .as(SmokeAliases.network.named('GetDisbursementsAfterSave', LOANS_BANK_ALIAS_SOURCE));
 
       PageUtils.clickButton('Save transactions');
-      cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 7500 });
+      cy.wait([
+        `@${SmokeAliases.network.named('SaveTransactions', LOANS_BANK_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.network.named('GetLoansAfterSave', LOANS_BANK_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.network.named('GetDisbursementsAfterSave', LOANS_BANK_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.network.named('GetReceiptsAfterSave', LOANS_BANK_ALIAS_SOURCE)}`,
+      ]);
       PageUtils.locationCheck('/list');
       cy.contains('Loan Received from Bank').should('exist');
     });
@@ -213,18 +158,20 @@ describe('Loans', () => {
       cy.intercept(
         'GET',
         /\/api\/v1\/transactions\/\?(?=.*parent=)(?=.*schedules=C2).*/
-      ).as('GetC2List');
+      ).as(SmokeAliases.network.named('GetC2List', LOANS_BANK_ALIAS_SOURCE));
       clickLoan('Edit');
 
       // wait for form to be done (load c2 table)
-      cy.wait('@GetC2List', { timeout: 15000 });
+      cy.wait(`@${SmokeAliases.network.named('GetC2List', LOANS_BANK_ALIAS_SOURCE)}`);
       cy.get('.p-datatable-mask').should('not.exist');
 
       // go to create guarantor
-      cy.intercept('PUT', '**/api/v1/transactions/**').as('saveAddGuarantor')
+      cy.intercept('PUT', '**/api/v1/transactions/**').as(
+        SmokeAliases.network.named('saveAddGuarantor', LOANS_BANK_ALIAS_SOURCE),
+      )
       cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
-      cy.wait('@saveAddGuarantor', { timeout: 15000 });
-      cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
+      cy.wait(`@${SmokeAliases.network.named('saveAddGuarantor', LOANS_BANK_ALIAS_SOURCE)}`);
+      cy.contains('h1', 'Guarantors to loan source').should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);

@@ -2,30 +2,18 @@ import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { defaultLoanFormData } from '../models/TransactionFormModel';
-import { DataSetup } from './setup';
-import { StartTransaction } from './utils/start-transaction/start-transaction';
-import { ContactLookup } from '../pages/contactLookup';
-import { ReportListPage } from '../pages/reportListPage';
 import { ApiUtils } from '../utils/api';
+import {
+  assertNoDeleteButtonInTransactionRow,
+  setupLoanByCommittee,
+} from './utils/loan-test-helpers';
+import { SmokeAliases } from '../utils/aliases';
 
 const formData = {
   ...defaultLoanFormData,
   purpose_description: undefined,
 };
-
-function setupLoanByCommittee() {
-  return DataSetup({ individual: true, committee: true }).then((result: any) => {
-    ReportListPage.goToReportList(result.report);
-    StartTransaction.Loans().ByCommittee();
-    // Search for created committee and enter load data, then add load guarantor
-    PageUtils.urlCheck('LOAN_BY_COMMITTEE');
-    ContactLookup.getCommittee(result.committee);
-    formData.date_received = undefined;
-    TransactionDetailPage.enterLoanFormData(formData);
-    return cy.wrap(result, { log: false });
-  });
-
-}
+const LOANS_COMMITTEE_ALIAS_SOURCE = 'loansCommitteeSpec';
 
 describe('Loans', () => {
   beforeEach(() => {
@@ -33,26 +21,18 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee', () => {
-    setupLoanByCommittee().then((result: any) => {
+    setupLoanByCommittee(formData).then((result: any) => {
       PageUtils.clickButton('Save both transactions');
       PageUtils.urlCheck('/list');
       cy.contains('Loan By Committee').should('exist');
       cy.contains('Loan Made').should('exist');
-      cy.contains('Loan Made')
-        .closest('tr')
-        .find('button')
-        .each(($button) => {
-          const innerHTML = $button.html();
-          if (innerHTML.includes('Delete')) {
-            throw new Error('A button contains "Delete", test failed.');
-          }
-        });
+      assertNoDeleteButtonInTransactionRow('Loan Made');
     });
   });
 
   it('should test: Loan By Committee - Receive loan repayment', () => {
     // Search for created committee and enter load data, then add load guarantor
-    setupLoanByCommittee().then((result: any) => {
+    setupLoanByCommittee(formData).then((result: any) => {
       PageUtils.clickButton('Save both transactions');
       PageUtils.urlCheck('/list');
       cy.contains('Loan By Committee').should('exist');
@@ -71,7 +51,7 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee - add Guarantor', () => {
-    setupLoanByCommittee().then((result: any) => {
+    setupLoanByCommittee(formData).then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       cy.contains('Loan By Committee').click();
       PageUtils.urlCheck('/list/');
@@ -80,25 +60,24 @@ describe('Loans', () => {
   });
 
   it('should test: Loan By Committee - delete Guarantor', () => {
-    setupLoanByCommittee().then((result: any) => {
-
+    setupLoanByCommittee(formData).then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       
       cy.intercept({
         method: 'GET',
         pathname: ApiUtils.apiRoutePathname('/transactions/'),
         query: { schedules: 'C2', parent: /.+/ },
-      }).as('GuarantorList');
+      }).as(SmokeAliases.network.named('GuarantorList', LOANS_COMMITTEE_ALIAS_SOURCE));
       cy.intercept({
         method: 'DELETE',
         pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
-      }).as('DeleteGuarantor');
+      }).as(SmokeAliases.network.named('DeleteGuarantor', LOANS_COMMITTEE_ALIAS_SOURCE));
       cy.contains('Loan By Committee').click();
       cy.contains('Guarantors').should('exist');
-      cy.wait('@GuarantorList');
+      cy.wait(`@${SmokeAliases.network.named('GuarantorList', LOANS_COMMITTEE_ALIAS_SOURCE)}`);
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
       PageUtils.clickButton('Confirm');
-      cy.wait('@DeleteGuarantor');
+      cy.wait(`@${SmokeAliases.network.named('DeleteGuarantor', LOANS_COMMITTEE_ALIAS_SOURCE)}`);
       cy.contains(result.individual.last_name).should('not.exist');
     });
   });

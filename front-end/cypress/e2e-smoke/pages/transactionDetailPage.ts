@@ -9,6 +9,9 @@ import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
 import { ApiUtils } from '../utils/api';
 import { Intercepts } from '../utils/intercepts';
+import { SmokeAliases } from '../utils/aliases';
+
+const TRANSACTION_DETAIL_ALIAS_SOURCE = 'transactionDetailPage';
 
 export class TransactionDetailPage {
   static enterDate(dateFieldName: string, dateFieldValue: Date, alias = '') {
@@ -276,15 +279,34 @@ export class TransactionDetailPage {
   }
 
   private static interceptReportTransactionLists(reportId: string) {
-    Intercepts.transactionsList({ alias: 'GetReceipts', reportId, schedules: 'A', includePaging: true });
-    Intercepts.transactionsList({ alias: 'GetLoans', reportId, schedules: 'C,D', includePaging: true });
-    Intercepts.transactionsList({ alias: 'GetDisbursements', reportId, schedules: 'B,E,F', includePaging: true });
+    Intercepts.transactionsList({
+      alias: SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE),
+      reportId,
+      schedules: 'A',
+      includePaging: true,
+    });
+    Intercepts.transactionsList({
+      alias: SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE),
+      reportId,
+      schedules: 'C,D',
+      includePaging: true,
+    });
+    Intercepts.transactionsList({
+      alias: SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE),
+      reportId,
+      schedules: 'B,E,F',
+      includePaging: true,
+    });
   }
 
   static clickSave(reportId: string) {
     this.interceptReportTransactionLists(reportId);
     cy.contains(/^Save$/).click();
-    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 7500 });
+    cy.wait([
+      `@${SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+      `@${SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+      `@${SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+    ]);
   }
 
   static addGuarantor(name: string, amount: number | string, reportId: string) {
@@ -294,14 +316,14 @@ export class TransactionDetailPage {
     cy.intercept({
       method: 'PUT',
       pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
-    }).as('SaveParentLoan');
+    }).as(SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE));
 
     // Alias guarantor creation and parent saves distinctly.
     cy.intercept('POST', ApiUtils.apiRoutePathname('/transactions/'), (req) => {
       if (req.body?.transaction_type_identifier === 'C2_LOAN_GUARANTOR') {
-        req.alias = 'SaveGuarantor';
+        req.alias = SmokeAliases.transactionDetail.saveGuarantor(TRANSACTION_DETAIL_ALIAS_SOURCE);
       } else {
-        req.alias = 'SaveParentLoan';
+        req.alias = SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE);
       }
     });
 
@@ -309,24 +331,27 @@ export class TransactionDetailPage {
       method: 'GET',
       pathname: ApiUtils.apiRoutePathname('/transactions/'),
       query: { schedules: 'C2', parent: /.+/ },
-    }).as('GetGuarantors');
+    }).as(SmokeAliases.transactionDetail.getGuarantors(TRANSACTION_DETAIL_ALIAS_SOURCE));
 
     PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@SaveParentLoan', { timeout: 7500 });
+    cy.wait(`@${SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE)}`);
     cy.contains('Guarantors to loan source').should('exist');
 
     ContactLookup.getContact(name);
     cy.get('#amount').safeType(amount);
     PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@SaveGuarantor', { timeout: 7500 });
-    cy.location('pathname', { timeout: 7500 }).should((pathname) => {
+    cy.wait(`@${SmokeAliases.transactionDetail.saveGuarantor(TRANSACTION_DETAIL_ALIAS_SOURCE)}`);
+    cy.location('pathname').should((pathname) => {
       const staysOnGuarantorCreate = pathname.includes('create-sub-transaction/C2_LOAN_GUARANTOR');
-      const landsOnParentDetail = /^\/reports\/transactions\/report\/[^/]+\/list\/[^/]+$/.test(pathname);
-      expect(staysOnGuarantorCreate || landsOnParentDetail).to.be.true;
+      expect(staysOnGuarantorCreate).to.be.true;
     });
     PageUtils.clickButton('Cancel');
 
-    cy.wait(['@GetLoans', '@GetDisbursements', '@GetReceipts'], { timeout: 7500 });
+    cy.wait([
+      `@${SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+      `@${SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+      `@${SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+    ]);
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {

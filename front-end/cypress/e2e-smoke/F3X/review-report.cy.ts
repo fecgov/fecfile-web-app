@@ -1,4 +1,3 @@
-import { defaultScheduleFormData } from '../models/TransactionFormModel';
 import { Initialize } from '../pages/loginPage';
 import { PageUtils, currentYear } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
@@ -6,48 +5,20 @@ import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { DataSetup } from './setup';
 import { ReviewReport } from './utils/review-report';
+import { SmokeAliases } from '../utils/aliases';
 
-const scheduleData = {
-  ...defaultScheduleFormData,
-  electionYear: undefined,
-  electionType: undefined,
-  date_received: new Date(currentYear, 4 - 1, 27),
-};
+const REVIEW_REPORT_ALIAS_SOURCE = 'reviewReportSpec';
 
 let summaryVisitCount = 0;
 
-function visitSummaryWithSpinner(reportId: string, expectSpinner: boolean) {
-  let getReportAlias = '';
-  if (expectSpinner) {
-    summaryVisitCount += 1;
-    getReportAlias = ReviewReport.setupSummarySpinner(reportId, 1200, `getReport-${summaryVisitCount}`);
-  }
-
-  // Direct navigation avoids flaky no-op sidebar clicks when already on summary.
-  cy.visit(`/reports/f3x/summary/${reportId}`);
-  PageUtils.locationCheck(`/reports/f3x/summary/${reportId}`);
-
-  if (!expectSpinner) {
-    ReviewReport.assertSpinnerGone();
-    return;
-  }
-
-  cy.wait(getReportAlias, { timeout: 20000 }).then(({ response }) => {
-    const shouldShowSpinner = response?.body?.calculation_status !== 'SUCCEEDED';
-    if (!shouldShowSpinner) {
-      ReviewReport.assertSpinnerGone();
-      return;
-    }
-
-    ReviewReport.assertSpinnerVisible();
-
-    // Do not require a second alias wait.
-    ReviewReport.assertSpinnerGone(20000);
-  });
+function nextSummaryAlias() {
+  summaryVisitCount += 1;
+  return SmokeAliases.reviewReport.getReport(summaryVisitCount, REVIEW_REPORT_ALIAS_SOURCE);
 }
 
 describe('Receipt Transactions', () => {
   beforeEach(() => {
+    summaryVisitCount = 0;
     Initialize();
   });
 
@@ -56,12 +27,15 @@ describe('Receipt Transactions', () => {
     DataSetup().then((result: any) => {
       const reportId = result.report;
       cy.visit(`/reports/transactions/report/${reportId}/list`);
-      visitSummaryWithSpinner(reportId, true);
+      ReviewReport.visitSummaryWithSpinner(reportId, {
+        expectSpinner: true,
+        aliasName: nextSummaryAlias(),
+      });
 
       // Leave summary and come back to verify calc does NOT run
       PageUtils.clickSidebarItem('ENTER A TRANSACTION');
       PageUtils.clickSidebarItem('Manage your transactions');
-      visitSummaryWithSpinner(reportId, false);
+      ReviewReport.visitSummaryWithSpinner(reportId, { expectSpinner: false });
     });
   });
 
@@ -69,18 +43,24 @@ describe('Receipt Transactions', () => {
     DataSetup({ individual: true }).then((result: any) => {
       // check summary calc runs
       ReportListPage.goToReportList(result.report);
-      visitSummaryWithSpinner(result.report, true);
+      ReviewReport.visitSummaryWithSpinner(result.report, {
+        expectSpinner: true,
+        aliasName: nextSummaryAlias(),
+      });
 
       // Create transaction
       const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, `${currentYear}-04-12`, result.individual, result.report);
       makeTransaction(transaction, () => {
         // Go to summary and verify summary calc runs
-        visitSummaryWithSpinner(result.report, true);
+        ReviewReport.visitSummaryWithSpinner(result.report, {
+          expectSpinner: true,
+          aliasName: nextSummaryAlias(),
+        });
 
         // Verify summary calc doesn't run again
         PageUtils.clickSidebarItem('ENTER A TRANSACTION');
         PageUtils.clickSidebarItem('Manage your transactions');
-        visitSummaryWithSpinner(result.report, false);
+        ReviewReport.visitSummaryWithSpinner(result.report, { expectSpinner: false });
 
         // Update transaction
         PageUtils.clickSidebarItem('ENTER A TRANSACTION');
@@ -93,7 +73,10 @@ describe('Receipt Transactions', () => {
         cy.get('tr').should('contain', '$123.45');
 
         // Return to summary page and verify summary calc runs
-        visitSummaryWithSpinner(result.report, true);
+        ReviewReport.visitSummaryWithSpinner(result.report, {
+          expectSpinner: true,
+          aliasName: nextSummaryAlias(),
+        });
       });
     });
   });
