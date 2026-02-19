@@ -60,7 +60,7 @@
         </p>
         <h3 class="submission-info-heading">Coverage Dates:</h3>
         @if (coverageDates()) {
-          <p class="submission-info-text no-wrap">
+          <p class="submission-info-text">
             {{ coverageDates()!['coverage_from_date'] || null | longDate }} —
             <wbr />
             {{ coverageDates()!['coverage_through_date'] || null | longDate }}

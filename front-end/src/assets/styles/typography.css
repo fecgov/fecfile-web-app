@@ -207,9 +207,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-* {
-  box-sizing: inherit;
-}
 body {
   background-color: #fff;
   margin: 0;

@@ -1,33 +1,5 @@
-.login-box-header {
-  font-family: var(--karla-bold);
-  font-size: 32px;
-  padding: 0px;
-}
-
-.header-filers {
-  color: #212121;
-}
-
-.header-comming-soon {
-  color: #212121;
-}
-
-.header-comming-soon,
-.header-filers,
-.header-productivity {
-  font-size: 36px;
-}
-
 .header-productivity {
   color: #164f85;
-}
-
-.description-text {
-  font-family: var(--gandhi) !important;
-  font-size: 18px !important;
-  color: #212121;
-  text-align: center;
-  margin-bottom: 32px;
 }
 
 .button-container {
@@ -35,78 +7,33 @@
 }
 
 .login-button {
-  color: #ffffff;
-  background-color: #112e51;
-  border-radius: 4px;
-  display: inline-block;
-  font-family: 'karla', Sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
   padding: 8px 20px;
-  text-align: center;
-  vertical-align: middle;
 }
 
 .learn-more-link {
-  font-family: var(--karla-bold);
-  font-size: 14px;
-  color: #112e51;
   border-bottom: 1px dotted #112e51;
-  cursor: pointer;
-  text-decoration: none;
   transition: color 0.1s linear;
 }
 
-.login-page {
-  width: 100%;
+.login-page,
+#img-container {
   max-width: 800px;
-  padding: 0;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  margin: auto;
 }
 
 .top-section {
-  padding-bottom: 32px;
   flex: 0 0 auto;
 }
 
 #bottom-section {
   box-sizing: border-box;
   width: calc(100vw - var(--scrollbar-width));
-  position: relative;
-  padding-bottom: 64px;
-  height: calc(100% - 301px);
-  flex: 1;
-  display: flex;
-  justify-content: center;
+  height: calc(100% - var(--h-offset, 301px));
 }
 
 #blue-background {
   background-color: #0bacfa;
   height: calc(100% - 80px);
-  position: absolute;
   top: 80px;
-  left: 0;
-  right: 0;
-}
-
-#img-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 32px;
-}
-
-#dashboard-example-img {
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
 }
 
 @media (max-width: 767px) {
@@ -127,20 +54,13 @@
 
 @media (min-width: 596px) {
   #bottom-section {
-    height: calc(100% - 274px);
+    --h-offset: 274px;
   }
 }
 
 @media (min-width: 768px) {
   .header-filers {
     display: inline;
-  }
-
-  .first-description-text {
-    display: block;
-  }
-  #bottom-section {
-    height: calc(100% - 274px);
   }
 }
 
@@ -150,7 +70,7 @@
   }
 
   #bottom-section {
-    height: calc(100% - 306px);
+    --h-offset: 306px;
   }
 }
 
@@ -160,6 +80,6 @@
   }
 
   #bottom-section {
-    height: calc(100% - 263px);
+    --h-offset: 263px;
   }
 }

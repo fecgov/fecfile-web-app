@@ -1,63 +1,11 @@
-@use 'mixins' as *;
-
 :host ::ng-deep {
   .p-datatable-header {
-    padding-top: 48px;
-  }
-  .sub-transaction-dropdown {
-    background-color: #fdb838;
-  }
-
-  .sub-transaction-dropdown-panel {
-    background-color: #f1f1f1;
-    color: #000000;
-  }
-
-  .p-toolbar {
-    border-bottom: 2px solid !important;
-    padding-bottom: 8px;
-  }
-
-  .p-datatable-thead > tr > th,
-  .p-datatable-tbody tr:nth-child(odd) {
-    background-color: transparent;
-  }
-  .p-datatable-thead > tr > th.p-highlight {
-    background-color: rgba(70, 71, 73, 0.2);
-  }
-
-  .p-datatable-tbody tr:nth-child(even) {
-    background-color: rgba(220, 220, 220, 0.2);
-  }
-
-  .p-accordion {
-    position: relative;
-  }
-
-  .p-accordion::before {
-    content: '';
-    display: block;
-    height: 2px;
-    background-color: #121212;
-  }
-
-  .p-accordionpanel {
-    border-bottom: 1px solid #121212;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  .p-accordionpanel-active > .p-accordionheader {
-    border-bottom: 1px solid #121212;
+    padding-top: 48px !important;
   }
 
   .p-accordionheader {
-    --p-accordion-header-last-bottom-border-radius: 0;
-    --p-accordion-header-first-top-border-radius: 0;
     padding: 0 20px 0 0;
     min-height: 48px;
-    display: flex;
-    align-items: center;
   }
 
   .accordion-number-icon {
@@ -69,51 +17,11 @@
 
   .accordion-content-wrapper {
     padding: 14px 0;
-    border: none;
-  }
-
-  .accordion-content-wrapper a,
-  .accordion-content-wrapper .disabled {
-    font-size: 14px;
-    text-align: left;
   }
 
   .accordion-header-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
     line-height: 20px;
   }
-
-  .accordion-icon {
-    width: 20px;
-    height: 20px;
-    margin-left: auto;
-  }
-}
-
-.gandhi-bold {
-  font-family: var(--gandhi-bold);
-  color: #212121;
-}
-
-.size-36 {
-  font-size: 36px;
-}
-
-.size-24 {
-  font-size: 24px;
-}
-
-.subtitle {
-  font-family: var(--karla-bold);
-  font-size: 14px;
-  color: #212121;
-  padding-top: 8px;
-}
-
-.top-margin-32 {
-  margin-top: 32px;
 }
 
 .read-only-tag {
@@ -121,32 +29,6 @@
   color: gray;
   text-transform: uppercase;
   margin-bottom: 2.5em;
-}
-
-.confirm-footer {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.float-right {
-  float: right;
-}
-
-hr {
-  margin: 0.5rem 0.5rem 1rem 0;
-  color: inherit;
-  border: 0;
-  border-top: 2px solid;
-  opacity: 1;
-}
-
-.transaction-type-footer {
-  font-style: italic;
-}
-
-.transaction-list {
-  max-width: 1500px;
 }
 
 .candidate_committee_lookup {

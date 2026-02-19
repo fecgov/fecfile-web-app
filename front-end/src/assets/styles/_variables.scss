@@ -150,12 +150,15 @@
   color-scheme: light;
 
   --scrollbar-width: 0px;
-}
 
-$breakpoints: (
-  'sm': 576px,
-  'md': 768px,
-  'lg': 992px,
-  'xl': 1200px,
-  'xxl': 1400px,
-);
+   /* Table+Paginator */
+  --p-datatable-row-striped-background: white;
+  --p-paginator-nav-button-selected-background: var(--p-primary-color);
+  --p-paginator-nav-button-selected-color: var(--primary-color-text);
+  --p-datatable-header-padding: 0 0 8px 0;
+  --p-paginator-background: var(--p-content-background);
+  --p-paginator-nav-button-border-radius: 8px;
+  --p-paginator-nav-button-height: 2rem;
+  --p-paginator-nav-button-width: 2.357rem;
+  --p-paginator-gap:0.5rem;
+}

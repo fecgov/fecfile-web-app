@@ -1,12 +1,12 @@
 <ng-template #descriptionTpl let-line="$implicit">
   <div
-    class="cell-with-overlay"
+    class="flex justify-content-between align-items-center gap-1"
     [ngClass]="{
       'indent-1': line.indent === 1,
       'indent-2': line.indent === 2,
       'numeric-line': isNumericLine(line.lineNumber),
-      bold: line.bold,
-      italic: line.italic,
+      'font-bold': line.bold,
+      'font-italic': line.italic,
     }"
   >
     <span class="description-text">
@@ -22,7 +22,7 @@
   </div>
 </ng-template>
 
-<div class="summary-container">
+<div class="summary-container standard-container">
   <h1>Detailed summary page</h1>
   <hr type="solid" class="mt-2 mb-5" />
 
@@ -42,7 +42,7 @@
       [showPaginationControls]="false"
     >
     </app-table>
-    <hr class="table-bottom" />
+    <hr class="mt-0 mb-5" />
     <app-table
       class="has-federal-total"
       [(first)]="first"
@@ -58,7 +58,7 @@
       [showPaginationControls]="false"
     >
     </app-table>
-    <hr class="table-bottom" />
+    <hr class="mt-0 mb-5" />
     <app-table
       [(first)]="first"
       [items]="contributionsExpendituresLines()"

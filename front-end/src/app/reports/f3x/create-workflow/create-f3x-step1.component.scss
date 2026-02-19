@@ -1,5 +1,3 @@
-@use 'mixins' as *;
-
 .p-field-checkbox > .p-disabled {
   opacity: 1;
   color: #999999;
@@ -45,6 +43,4 @@
   flex-direction: column;
   gap: 32px;
   margin-bottom: 16px;
-
-  @include standard-container();
 }

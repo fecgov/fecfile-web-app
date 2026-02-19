@@ -22,7 +22,7 @@
     @if (caption()) {
       <p-toolbar>
         <ng-template pTemplate="left">
-          <h1 class="m-0">{{ title() }}</h1>
+          <h1 class="m-0 line-height-1">{{ title() }}</h1>
         </ng-template>
         <ng-template pTemplate="right">
           <ng-container *ngTemplateOutlet="caption()!" />
@@ -30,7 +30,7 @@
       </p-toolbar>
     } @else {
       <div class="flex align-items-center justify-content-between">
-        <h2 class="m-0">{{ title() }}</h2>
+        <h2 class="m-0 text-4xl">{{ title() }}</h2>
       </div>
     }
   </ng-template>
@@ -40,6 +40,7 @@
         <th
           [pSortableColumn]="col.sortable ? col.field : undefined"
           [ngClass]="col.cssClass"
+          class="column-base"
           [id]="col.field + '-column'"
         >
           @if (col.checkbox) {
@@ -65,7 +66,7 @@
       <!-- This can go away after full transition to ColumnDefinition method -->
 
       @for (col of columns(); track col) {
-        <td [ngClass]="col.cssClass">
+        <td [ngClass]="col.cssClass" class="column-base">
           @if (col.checkbox) {
             <p-tableCheckbox [value]="item" [ariaLabel]="col.label!(item)" />
           } @else {
@@ -84,9 +85,9 @@
   </ng-template>
   @if (showPaginationControls()) {
     <ng-template pTemplate="summary">
-      <div class="paginator-container">
-        <div class="responsive-container">
-          <span class="paginator-text">Results per page:</span>
+      <div class="paginator-container flex align-items-center justify-content-between">
+        <div class="responsive-container flex flex-row align-items-center">
+          <span class="font-karla text-base font-normal mr-2">Results per page:</span>
           <p-select
             [options]="paginationPageSizeOptions"
             [(ngModel)]="rowsPerPage"
@@ -98,8 +99,8 @@
             </ng-template>
           </p-select>
         </div>
-        <div class="responsive-container">
-          <span class="paginator-text">{{ showing() }}:</span>
+        <div class="responsive-container flex flex-row align-items-center">
+          <span class="font-karla text-base font-normal mr-2">{{ showing() }}:</span>
           <p-paginator
             [rows]="rowsPerPage()"
             [totalRecords]="totalItems()"
@@ -127,7 +128,7 @@
     <app-table-sort-icon [sortOrder]="sortOrder" />
   </ng-template>
   <ng-template pTemplate="paginatorleft">
-    <div class="responsive-container">
+    <div class="responsive-container flex flex-row align-items-center">
       <span>Results per table:</span>
       <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
         <ng-template pTemplate="dropdownicon">
@@ -149,6 +150,6 @@
     <img alt="last page icon" src="/assets/img/last_arrow.svg" />
   </ng-template>
   <ng-template pTemplate="emptymessage">
-    <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>
+    <td colspan="100" class="mx-3 h-4rem py-0 px-3">{{ emptyMessage() }}</td>
   </ng-template>
 </p-table>

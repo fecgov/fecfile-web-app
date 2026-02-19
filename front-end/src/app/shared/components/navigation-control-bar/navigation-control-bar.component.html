@@ -8,7 +8,7 @@
   </div>
   <div class="grid col-6 continue-controls">
     @for (control of getNavigationControls('continue'); track control) {
-      <div class="col-6 align-right">
+      <div class="col-6 text-right">
         <app-navigation-control [navigationControl]="control" [transaction]="transaction" />
       </div>
     }

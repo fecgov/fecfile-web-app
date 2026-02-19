@@ -42,7 +42,7 @@
         </tr>
         <tr>
           <td class="right-border">(a)(iii)</td>
-          <td class="justify-left right-border indent-2 cell-with-overlay">
+          <td class="justify-left right-border indent-2 flex justify-content-between align-items-center gap-1">
             <em>Total of contributions from Individuals</em
             ><app-calculation-overlay
               >Lines 11(a)(i) <b>+</b> 11(a)(ii) <b>=</b> Line 11(a)(iii)</app-calculation-overlay
@@ -75,7 +75,7 @@
         </tr>
         <tr>
           <td class="right-border">(e)</td>
-          <td class="justify-left right-border indent-1 cell-with-overlay">
+          <td class="justify-left right-border indent-1 flex justify-content-between align-items-center gap-1">
             Total contributions (other than loans)
             <app-calculation-overlay> Lines 11(a)(iii) + 11(b) + 11(c) + 11(d)= Line 11(e)</app-calculation-overlay>
           </td>
@@ -134,7 +134,7 @@
         </tr>
         <tr class="dark-gray last">
           <td class="right-border bold">16</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             TOTAL RECEIPTS
             <app-calculation-overlay
               >Lines 11(e) <b>+</b> 12 <b>+</b> 13(c) <b>+</b> 14 <b>+</b> 15 <b>=</b> Line 16 (This total will also
@@ -205,7 +205,7 @@
         </tr>
         <tr class="white">
           <td class="right-border">(c)</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             Total loan repayments
             <app-calculation-overlay>Line 19(a) <b>+</b> 19(b) <b>=</b> Line 19(c)</app-calculation-overlay>
           </td>
@@ -251,7 +251,7 @@
         </tr>
         <tr>
           <td class="right-border">(d)</td>
-          <td class="justify-left right-border indent-1 cell-with-overlay">
+          <td class="justify-left right-border indent-1 flex justify-content-between align-items-center gap-1">
             Total Contribution Refunds
 
             <app-calculation-overlay
@@ -273,7 +273,7 @@
         </tr>
         <tr class="dark-gray last">
           <td class="right-border bold">22</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             TOTAL DISBURSEMENTS
             <app-calculation-overlay
               >Lines 17 <b>-</b> 18 <b>+</b> 19(c)<b>+</b> 20(d)<b>+</b> 21 <b>=</b> Line 22</app-calculation-overlay
@@ -304,28 +304,28 @@
         </tr>
         <tr class="gray">
           <td class="right-border bold">24</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             TOTAL RECEIPTS THIS PERIOD<app-calculation-overlay>Carried from Line 16.</app-calculation-overlay>
           </td>
           <td class="right-border">{{ report.L24_total_receipts_period | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">25</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             SUBTOTAL<app-calculation-overlay>Line 23 <b>+</b> 24 <b>=</b> Line 25</app-calculation-overlay>
           </td>
           <td class="right-border">{{ report.L25_subtotals_period | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">26</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             TOTAL DISBURSEMENTS THIS PERIOD<app-calculation-overlay>Carried from Line 22.</app-calculation-overlay>
           </td>
           <td class="right-border">{{ report.L26_total_disbursements_period | defaultZero | currency }}</td>
         </tr>
         <tr class="gray">
           <td class="right-border bold">27</td>
-          <td class="justify-left right-border bold cell-with-overlay">
+          <td class="justify-left right-border bold flex justify-content-between align-items-center gap-1">
             CASH ON HAND AT CLOSE OF REPORTING PERIOD
             <app-calculation-overlay>Line 25 <b>-</b> 26 <b>=</b> Line 27</app-calculation-overlay>
           </td>
@@ -359,7 +359,7 @@
       </div>
     </div>
     <div class="col-4"></div>
-    <div class="col-4 align-right">
+    <div class="col-4 text-right">
       <div>
         <button
           pButton

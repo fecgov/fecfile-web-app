@@ -2,14 +2,14 @@
 @if (debtId()) {
   <p>Select the proper transaction type below to report this debt repayment.</p>
 }
-<div class="content-area">
+<div class="content-area standard-container">
   <p-accordion [(value)]="active">
     @for (transactionGroup of transactionGroups(); track transactionGroup; let index = $index) {
       @if (hasTransactions().get(transactionGroup)) {
         <p-accordion-panel [value]="index">
           <p-accordion-header>
             <div class="accordion-header-wrapper">
-              <span class="header-label">{{ transactionGroup.label }}</span>
+              <span class="text-sm">{{ transactionGroup.label }}</span>
               <img
                 class="accordion-icon"
                 [src]="active() === index ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
@@ -20,7 +20,7 @@
           <p-accordion-content>
             <div class="accordion-content-wrapper">
               @for (transactionType of transactionTypes().get(transactionGroup); track transactionType) {
-                <div class="transaction-type-wrapper">
+                <div class="px-0 py-2">
                   @if (!isTransactionDisabled(transactionType)) {
                     <a
                       [routerLink]="getRouterLink(transactionType)"

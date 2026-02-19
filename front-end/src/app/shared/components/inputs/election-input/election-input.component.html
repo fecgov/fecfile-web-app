@@ -10,7 +10,7 @@
         [formSubmitted]="formSubmitted"
       >
         <ng-template #optionTemplate let-electionCode>
-          <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>
+          <span class="font-bold">{{ electionCode?.label.split(' ')[0] }}</span>
           &nbsp;{{ electionCode?.label.split(' ')[1] }}
         </ng-template>
       </app-select>
