@@ -23,6 +23,7 @@ function setupLoanByCommittee() {
     TransactionDetailPage.enterLoanFormData(formData);
     return cy.wrap(result);
   });
+
 }
 
 describe('Loans', () => {
@@ -79,9 +80,11 @@ describe('Loans', () => {
 
   it('should test: Loan By Committee - delete Guarantor', () => {
     setupLoanByCommittee().then((result: any) => {
+
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
       cy.contains('Loan By Committee').click();
+      cy.contains('Guarantors').should('exist');
       cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
       PageUtils.clickButton('Confirm');
