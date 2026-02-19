@@ -6,11 +6,15 @@ import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ApiUtils } from '../utils/api';
-import { saveAndReopenCurrentTransaction, saveAndWaitForTransactionsList } from './utils/transaction-list-navigation';
+import { openTransactionFromListByAmount, saveAndWaitForTransactionsList } from './utils/transaction-list-navigation';
 import { setupAggregateScheduleFTransactions } from './utils/seed-transactions';
 import { SmokeAliases } from '../utils/aliases';
 
 const AGGREGATE_SCHEDULE_F_ALIAS_SOURCE = 'aggregateScheduleFSpec';
+
+function reopenScheduleFByAmount(reportId: string, amount: string) {
+  openTransactionFromListByAmount(reportId, amount, { visit: false });
+}
 
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
@@ -40,32 +44,37 @@ describe('Tests transaction form aggregate calculation', () => {
       [25, `${currentYear}-04-16`, true],
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
-      cy.get(':nth-child(2) > :nth-child(2) > a').click();
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
       // Tests moving the date to be earlier
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 10), '');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
       // Move the date back
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 29), '');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
       // Change the candidate contact
       ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
       // Change the contact back
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40').blur();
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$40.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$240.01');
     });
   });
@@ -120,12 +129,13 @@ describe('Tests transaction form aggregate calculation', () => {
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      reopenScheduleFByAmount(result.report, '$25.00');
 
       // Tests changing the second transaction's contact
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
     });
   });
@@ -137,13 +147,14 @@ describe('Tests transaction form aggregate calculation', () => {
     ]).then((result: any) => {
       ReportListPage.goToReportList(result.report);
       cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      reopenScheduleFByAmount(result.report, '$25.00');
 
       // Tests changing the second transaction's general election year
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 15), '');
       cy.get('[id=general_election_year]').clear().safeType('2024').blur();
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleFByAmount(result.report, '$25.00');
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
     });
   });

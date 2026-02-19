@@ -9,6 +9,9 @@ import {
   organizationFormData,
   ContactFormData,
 } from '../../e2e-smoke/models/ContactFormModel';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
+
+const CONTACTS_ADD_ALIAS_SOURCE = 'extendedContactsAdd';
 
 const resolveBaseFormData = (
   type: ContactFormData['contact_type'],
@@ -208,11 +211,15 @@ describe('Contacts Add (/contacts)', () => {
   it('Save & Add More: chains Individual, Candidate, Committee, and Organization', () => {
     const uid = Cypress._.random(1000, 9999);
     const cases = ContactsHelpers.buildContactTypeCases(uid);
+    const contactsReloadAlias = SmokeAliases.network.named(
+      'GetContactsReload',
+      CONTACTS_ADD_ALIAS_SOURCE,
+    );
 
     cy.intercept(
       'GET',
       '**/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
-    ).as('contactsReload');
+    ).as(contactsReloadAlias);
 
     cy.get('tbody')
       .then(($tbody) => $tbody.find('tr').length)
@@ -252,7 +259,7 @@ describe('Contacts Add (/contacts)', () => {
         cy.contains('Save').should('not.exist');
 
         ContactListPage.goToPage();
-        cy.wait('@contactsReload');
+        cy.wait(`@${contactsReloadAlias}`);
         cy.get('tbody tr').should('have.length', beforeCount + cases.length);
 
         for (const c of cases) {

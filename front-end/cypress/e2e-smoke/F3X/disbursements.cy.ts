@@ -134,7 +134,7 @@ describe('Disbursements', () => {
       PageUtils.pSelectDropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
       PageUtils.clickButton('Confirm');
 
-      ReportListPage.goToReportList(result.f24);
+      ReportListPage.goToReportList(result.f24, false, true, false);
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('exist');
       cy.get('#first_name').should('have.value', result.individual.first_name);

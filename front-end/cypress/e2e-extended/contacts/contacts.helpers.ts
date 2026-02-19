@@ -4,6 +4,7 @@ import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
 import type { F3X } from '../../e2e-smoke/requests/library/reports';
 import type { Contact } from '../../../src/app/shared/models';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
 
 type ContactCaseType = ContactFormData['contact_type'];
 type ContactCaseConfig = {
@@ -32,6 +33,11 @@ const normalize = (s: string) =>
 
 const ESCAPE_RX = /[.*+?^${}()|[\]\\]/g;
 const ESCAPE_REPLACEMENT = String.raw`\$&`;
+const CONTACTS_HELPERS_ALIAS_SOURCE = 'extendedContactsHelpers';
+
+function helperAlias(name: string): string {
+  return SmokeAliases.network.named(name, CONTACTS_HELPERS_ALIAS_SOURCE);
+}
 
 const toRx = (v: string | RegExp) =>
   v instanceof RegExp
@@ -192,8 +198,9 @@ export class ContactsHelpers {
   static stubCandidateLookup(
     candidate: any,
     opts: { fecfileCandidates?: any[] } = {},
-  ) {
+  ): string {
     const { fecfileCandidates = [] } = opts;
+    const alias = helperAlias('CandidateLookup');
 
     cy.intercept('GET', '**/api/v1/contacts/candidate_lookup/**', {
       statusCode: 200,
@@ -201,10 +208,14 @@ export class ContactsHelpers {
         fec_api_candidates: [candidate],
         fecfile_candidates: fecfileCandidates,
       },
-    }).as('candidateLookup');
+    }).as(alias);
+
+    return alias;
   }
 
-  static stubCandidateDetails(candidate: any) {
+  static stubCandidateDetails(candidate: any): string {
+    const alias = helperAlias('CandidateDetails');
+
     cy.intercept('GET', '**/api/v1/contacts/candidate/**', (req) => {
       const id = (req.query as any)?.candidate_id;
       if (!id || id === candidate.candidate_id) {
@@ -212,7 +223,9 @@ export class ContactsHelpers {
       } else {
         req.continue();
       }
-    }).as('candidateDetails');
+    }).as(alias);
+
+    return alias;
   }
 
   static ensureInputHasValue(selector: string, value?: string | null) {
@@ -455,6 +468,9 @@ export class ContactsHelpers {
       entityLabel === 'Candidate'
         ? '**/api/v1/contacts/candidate_lookup/**'
         : '**/api/v1/contacts/committee_lookup/**';
+    const entityLookupAlias = helperAlias(`${entityLabel}EntityLookup`);
+    const entityDetailsAlias = helperAlias(`${entityLabel}EntityDetails`);
+    const createContactAlias = helperAlias('CreateContact');
 
     if (entityLabel === 'Candidate') {
       cy.intercept('GET', lookupEndpoint, {
@@ -469,7 +485,7 @@ export class ContactsHelpers {
           ],
           fecfile_candidates: [],
         },
-      }).as('entityLookup');
+      }).as(entityLookupAlias);
 
       cy.intercept('GET', searchEndpoint, {
         statusCode: 200,
@@ -490,7 +506,7 @@ export class ContactsHelpers {
           state: 'VA',
           district: '01',
         },
-      }).as('entityDetails');
+      }).as(entityDetailsAlias);
     } else {
       cy.intercept('GET', lookupEndpoint, {
         statusCode: 200,
@@ -504,7 +520,7 @@ export class ContactsHelpers {
           ],
           fecfile_committees: [],
         },
-      }).as('entityLookup');
+      }).as(entityLookupAlias);
 
       cy.intercept('GET', searchEndpoint, {
         statusCode: 200,
@@ -518,7 +534,7 @@ export class ContactsHelpers {
           zip: '23219',
           treasurer_phone: '5555551234',
         },
-      }).as('entityDetails');
+      }).as(entityDetailsAlias);
     }
 
     PageUtils.clickButton('Add contact');
@@ -532,17 +548,17 @@ export class ContactsHelpers {
       .should('exist')
       .type(searchTerm);
 
-    cy.wait('@entityLookup');
+    cy.wait(`@${entityLookupAlias}`);
     cy.get('body')
       .find('.p-autocomplete-option')
       .should('have.length.at.least', 1)
       .first()
       .click({ force: true });
 
-    cy.wait('@entityDetails');
-    cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
+    cy.wait(`@${entityDetailsAlias}`);
+    cy.intercept('POST', '**/api/v1/contacts/').as(createContactAlias);
     PageUtils.clickButton('Save');
-    cy.wait('@createContact');
+    cy.wait(`@${createContactAlias}`);
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     return cy.contains('tbody tr', rowMatch).should('exist');
@@ -1009,8 +1025,8 @@ export class ContactsDeleteHelpers {
       listAlias?: string;
     } = {},
   ) {
-    const deleteAlias = options.deleteAlias ?? 'deleteContact';
-    const contactsGoneAlias = options.contactsGoneAlias ?? 'contactsGone';
+    const deleteAlias = options.deleteAlias ?? helperAlias('DeleteContact');
+    const contactsGoneAlias = options.contactsGoneAlias ?? helperAlias('ContactsGone');
 
     cy.contains('tbody tr', contactName).should('be.visible');
     PageUtils.clickKababItem(contactName, 'Delete');
@@ -1027,8 +1043,11 @@ export class ContactsDeleteHelpers {
   }
 
   static restoreContact(contactName: string, options: { listAlias?: string } = {}) {
-    cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
-    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=**').as('getDeletedContacts');
+    const restoreAlias = helperAlias('RestoreContact');
+    const getDeletedContactsAlias = helperAlias('GetDeletedContacts');
+
+    cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as(restoreAlias);
+    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=**').as(getDeletedContactsAlias);
 
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
       .contains('tbody tr', contactName)
@@ -1037,8 +1056,8 @@ export class ContactsDeleteHelpers {
       .check({ force: true });
 
     cy.contains('button,a', 'Restore selected').click();
-    cy.wait('@restoreContact');
-    cy.wait('@getDeletedContacts');
+    cy.wait(`@${restoreAlias}`);
+    cy.wait(`@${getDeletedContactsAlias}`);
     if (options.listAlias) {
       cy.wait(`@${options.listAlias}`);
     }

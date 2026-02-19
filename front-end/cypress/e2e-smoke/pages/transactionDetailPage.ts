@@ -278,80 +278,96 @@ export class TransactionDetailPage {
     }
   }
 
-  private static interceptReportTransactionLists(reportId: string) {
+  private static interceptReportTransactionLists(reportId: string, aliasSource: string) {
     Intercepts.transactionsList({
-      alias: SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE),
+      alias: SmokeAliases.reportList.receipts(aliasSource),
       reportId,
       schedules: 'A',
       includePaging: true,
+      times: 1,
     });
     Intercepts.transactionsList({
-      alias: SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE),
+      alias: SmokeAliases.reportList.loans(aliasSource),
       reportId,
       schedules: 'C,D',
       includePaging: true,
+      times: 1,
     });
     Intercepts.transactionsList({
-      alias: SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE),
+      alias: SmokeAliases.reportList.disbursements(aliasSource),
       reportId,
       schedules: 'B,E,F',
       includePaging: true,
+      times: 1,
     });
   }
 
-  static clickSave(reportId: string) {
-    this.interceptReportTransactionLists(reportId);
-    cy.contains(/^Save$/).click();
-    cy.wait([
-      `@${SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
-      `@${SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
-      `@${SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
-    ]);
+  static clickSave(reportId: string, eventLabel = 'Click Save') {
+    return cy.withAliasEvent(eventLabel, () => {
+      this.interceptReportTransactionLists(reportId, TRANSACTION_DETAIL_ALIAS_SOURCE);
+      cy.contains(/^Save$/).click();
+      cy.wait([
+        `@${SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+      ]);
+    });
   }
 
-  static addGuarantor(name: string, amount: number | string, reportId: string) {
-    this.interceptReportTransactionLists(reportId);
+  static addGuarantor(name: string, amount: number | string, reportId: string, eventLabel = 'Add Guarantor') {
+    return cy.withAliasEvent(eventLabel, () => {
+      this.interceptReportTransactionLists(reportId, TRANSACTION_DETAIL_ALIAS_SOURCE);
 
-    // Parent loan save may be create (POST) or update (PUT) based on current test flow.
-    cy.intercept({
-      method: 'PUT',
-      pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
-    }).as(SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE));
+      // Parent loan save may be create (POST) or update (PUT) based on current test flow.
+      cy.intercept({
+        method: 'PUT',
+        pathname: new RegExp(`^${ApiUtils.apiRoutePathname('/transactions/')}[^/]+/$`),
+        times: 1,
+      }).as(SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE));
 
-    // Alias guarantor creation and parent saves distinctly.
-    cy.intercept('POST', ApiUtils.apiRoutePathname('/transactions/'), (req) => {
-      if (req.body?.transaction_type_identifier === 'C2_LOAN_GUARANTOR') {
-        req.alias = SmokeAliases.transactionDetail.saveGuarantor(TRANSACTION_DETAIL_ALIAS_SOURCE);
-      } else {
-        req.alias = SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE);
-      }
+      // Alias guarantor creation and parent saves distinctly.
+      cy.intercept(
+        {
+          method: 'POST',
+          pathname: ApiUtils.apiRoutePathname('/transactions/'),
+          times: 2,
+        },
+        (req) => {
+          if (req.body?.transaction_type_identifier === 'C2_LOAN_GUARANTOR') {
+            req.alias = SmokeAliases.transactionDetail.saveGuarantor(TRANSACTION_DETAIL_ALIAS_SOURCE);
+          } else {
+            req.alias = SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE);
+          }
+        },
+      );
+
+      cy.intercept({
+        method: 'GET',
+        pathname: ApiUtils.apiRoutePathname('/transactions/'),
+        query: { schedules: 'C2', parent: /.+/ },
+        times: 1,
+      }).as(SmokeAliases.transactionDetail.getGuarantors(TRANSACTION_DETAIL_ALIAS_SOURCE));
+
+      PageUtils.clickButton('Save & add loan guarantor');
+      cy.wait(`@${SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE)}`);
+      cy.contains('Guarantors to loan source').should('exist');
+
+      ContactLookup.getContact(name);
+      cy.get('#amount').safeType(amount);
+      PageUtils.clickButton('Save & add loan guarantor');
+      cy.wait(`@${SmokeAliases.transactionDetail.saveGuarantor(TRANSACTION_DETAIL_ALIAS_SOURCE)}`);
+      cy.location('pathname').should((pathname) => {
+        const staysOnGuarantorCreate = pathname.includes('create-sub-transaction/C2_LOAN_GUARANTOR');
+        expect(staysOnGuarantorCreate).to.be.true;
+      });
+      PageUtils.clickButton('Cancel');
+
+      cy.wait([
+        `@${SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+        `@${SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
+      ]);
     });
-
-    cy.intercept({
-      method: 'GET',
-      pathname: ApiUtils.apiRoutePathname('/transactions/'),
-      query: { schedules: 'C2', parent: /.+/ },
-    }).as(SmokeAliases.transactionDetail.getGuarantors(TRANSACTION_DETAIL_ALIAS_SOURCE));
-
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait(`@${SmokeAliases.transactionDetail.saveParentLoan(TRANSACTION_DETAIL_ALIAS_SOURCE)}`);
-    cy.contains('Guarantors to loan source').should('exist');
-
-    ContactLookup.getContact(name);
-    cy.get('#amount').safeType(amount);
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait(`@${SmokeAliases.transactionDetail.saveGuarantor(TRANSACTION_DETAIL_ALIAS_SOURCE)}`);
-    cy.location('pathname').should((pathname) => {
-      const staysOnGuarantorCreate = pathname.includes('create-sub-transaction/C2_LOAN_GUARANTOR');
-      expect(staysOnGuarantorCreate).to.be.true;
-    });
-    PageUtils.clickButton('Cancel');
-
-    cy.wait([
-      `@${SmokeAliases.reportList.loans(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
-      `@${SmokeAliases.reportList.disbursements(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
-      `@${SmokeAliases.reportList.receipts(TRANSACTION_DETAIL_ALIAS_SOURCE)}`,
-    ]);
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {

@@ -4,10 +4,12 @@ import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { UsersHelpers } from './users.helpers';
 import { SharedHelpers } from '../utils/shared.helpers';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
 
 const ADD_MEMBER_POST = '**/committee-members/add-member/**';
 const LIST_MEMBERS_GET = '**/committee-members/**';
 const DIALOG = "#content-offset app-committee-member-dialog";
+const USERS_VALIDATION_ALIAS_SOURCE = 'extendedUsersValidation';
 
 describe("Users: Validation and API failure states", () => {
   beforeEach(() => {
@@ -82,20 +84,28 @@ describe("Users: Validation and API failure states", () => {
 
   it('@allow-5xx should stub 500 on invite, keep submit enabled, then succeed on retry', () => {
     const adminUser = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
-    UsersHelpers.stubOnce('POST', ADD_MEMBER_POST, { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
-    cy.intercept('GET', LIST_MEMBERS_GET).as('GetMembers');
+    const invite500Alias = SmokeAliases.network.named('Invite500', USERS_VALIDATION_ALIAS_SOURCE);
+    const getMembersAlias = SmokeAliases.network.named('GetMembers', USERS_VALIDATION_ALIAS_SOURCE);
+    const invite201Alias = SmokeAliases.network.named('Invite201', USERS_VALIDATION_ALIAS_SOURCE);
+    UsersHelpers.stubOnce(
+      'POST',
+      ADD_MEMBER_POST,
+      { statusCode: 500, body: { message: 'Server error' } },
+      invite500Alias,
+    );
+    cy.intercept('GET', LIST_MEMBERS_GET).as(getMembersAlias);
     PageUtils.clickButton('Add user');
     cy.get(DIALOG).filter(':visible').first().as('dialog');
     UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
-    cy.wait('@invite500').its('response.statusCode').should('eq', 500);
+    cy.wait(`@${invite500Alias}`).its('response.statusCode').should('eq', 500);
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
-    cy.intercept('POST', ADD_MEMBER_POST).as('invite201'); // capture success (no stub)
+    cy.intercept('POST', ADD_MEMBER_POST).as(invite201Alias); // capture success (no stub)
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
-    cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
-    cy.wait('@GetMembers');
+    cy.wait(`@${invite201Alias}`).its('response.statusCode').should('be.oneOf', [200, 201]);
+    cy.wait(`@${getMembersAlias}`);
     PageUtils.closeToast();
     UsersPage.assertRow(adminUser, 'Pending');
   });
@@ -103,16 +113,18 @@ describe("Users: Validation and API failure states", () => {
 
   it('@allow-5xx should stub 500 on delete of user, keep row, then succeed on retry', () => {
     const target = userFormData.email;
+    const delete500Alias = SmokeAliases.network.named('Delete500', USERS_VALIDATION_ALIAS_SOURCE);
+    const deleteOkAlias = SmokeAliases.network.named('DeleteOK', USERS_VALIDATION_ALIAS_SOURCE);
     UsersPage.assertRow({ ...userFormData, email: target }, 'Pending');
     cy.intercept(
       { method: 'DELETE', url: '**/committee-members/**', times: 1 },
       { statusCode: 500, body: { message: 'Server error during delete' } },
-    ).as('Delete500');
+    ).as(delete500Alias);
     UsersPage.delete(target);
-    cy.wait('@Delete500').its('response.statusCode').should('eq', 500);
-    cy.intercept('DELETE', '**/committee-members/**').as('DeleteOK');
+    cy.wait(`@${delete500Alias}`).its('response.statusCode').should('eq', 500);
+    cy.intercept('DELETE', '**/committee-members/**').as(deleteOkAlias);
     UsersPage.delete(target);
-    cy.wait('@DeleteOK').its('response.statusCode').should('be.oneOf', [200, 204]);
+    cy.wait(`@${deleteOkAlias}`).its('response.statusCode').should('be.oneOf', [200, 204]);
     PageUtils.closeToast();
     cy.get('table tbody tr').contains('td', target).should('not.exist');
   });

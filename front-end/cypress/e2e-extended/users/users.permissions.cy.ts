@@ -29,11 +29,27 @@ describe('Users Permissions via Committee Switch RBAC', () => {
     });
   });
 
-  it('Protected user row has no action kebab (cannot be deleted)', () => {
-    UsersHelpers.getRowByEmail('admin@admin.com').should('exist');
-    UsersHelpers.getRowByEmail('admin@admin.com').within(() => {
-      cy.get('.pi.pi-ellipsis-v, [data-cy="row-kebab"]').should('not.exist');
-      cy.contains(/edit role|delete/i).should('not.exist');
-    });
+  it('Protected admin row action kebab follows minimum-admin guard', () => {
+    UsersHelpers.getRowByEmail('admin@admin.com').should('exist').first().as('protectedAdminRow');
+
+    cy.get('@table')
+      .find('tbody tr')
+      .then(($rows) => {
+        const adminCount = [...$rows].filter((row) =>
+          row.innerText.toLowerCase().includes('committee administrator'),
+        ).length;
+
+        if (adminCount > 2) {
+          cy.get('@protectedAdminRow')
+            .find('.pi.pi-ellipsis-v, [data-cy="row-kebab"]')
+            .should('exist');
+          return;
+        }
+
+        cy.get('@protectedAdminRow').within(() => {
+          cy.get('.pi.pi-ellipsis-v, [data-cy="row-kebab"]').should('not.exist');
+          cy.contains(/edit role|delete/i).should('not.exist');
+        });
+      });
   });
 });

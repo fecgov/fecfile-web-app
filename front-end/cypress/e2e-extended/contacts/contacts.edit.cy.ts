@@ -131,21 +131,21 @@ describe('Contacts Edit', () => {
     lookupCandidateDetails: Record<string, unknown>,
     seed = 'pre',
   ): Cypress.Chainable<CandidateLookupResult> => {
-    ContactsHelpers.stubCandidateLookup(lookupCandidate);
-    ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
+    const candidateLookupAlias = ContactsHelpers.stubCandidateLookup(lookupCandidate);
+    const candidateDetailsAlias = ContactsHelpers.stubCandidateDetails(lookupCandidateDetails);
 
     cy.get('input#searchBox')
       .should('be.visible')
       .clear()
       .type(seed, { delay: 50 });
 
-    cy.wait('@candidateLookup');
+    cy.wait(`@${candidateLookupAlias}`);
 
     ContactsHelpers.pickAutocompleteOptionForInput('input#searchBox', {
       match: lookupCandidate.candidate_id,
     });
 
-    cy.wait('@candidateDetails');
+    cy.wait(`@${candidateDetailsAlias}`);
     cy.get('#candidate_id').should('have.value', lookupCandidate.candidate_id);
 
     ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);

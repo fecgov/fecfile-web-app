@@ -1,5 +1,6 @@
 import { PageUtils } from '../../pages/pageUtils';
 import { ApiUtils } from '../../utils/api';
+import { SmokeAliases } from '../../utils/aliases';
 
 type VisitSummaryWithSpinnerOptions = {
   expectSpinner: boolean;
@@ -7,6 +8,8 @@ type VisitSummaryWithSpinnerOptions = {
   spinnerDelayMs?: number;
   spinnerGoneTimeout?: number;
 };
+
+const REVIEW_REPORT_UTILS_ALIAS_SOURCE = 'reviewReportUtils';
 
 export class ReviewReport {
   static Summary() {
@@ -29,7 +32,11 @@ export class ReviewReport {
     PageUtils.clickSidebarItem('Add a report level memo');
   }
 
-  static setupSummarySpinner(reportId: string, delayMs = 1200, alias = 'getReport') {
+  static setupSummarySpinner(
+    reportId: string,
+    delayMs = 1200,
+    alias = SmokeAliases.network.named('GetReport', REVIEW_REPORT_UTILS_ALIAS_SOURCE),
+  ) {
     let requestCount = 0;
     let shouldDelaySecondRequest = false;
 
@@ -37,6 +44,7 @@ export class ReviewReport {
       {
         method: 'GET',
         pathname: ApiUtils.apiRoutePathname(`/reports/form-3x/${reportId}/`),
+        times: 2,
       },
       (req) => {
         req.alias = alias;
@@ -70,7 +78,7 @@ export class ReviewReport {
       getReportAlias = ReviewReport.setupSummarySpinner(
         reportId,
         spinnerDelayMs,
-        aliasName ?? 'getReport',
+        aliasName ?? SmokeAliases.network.named('GetReport', REVIEW_REPORT_UTILS_ALIAS_SOURCE),
       );
     }
 

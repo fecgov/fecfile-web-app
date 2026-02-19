@@ -509,8 +509,16 @@ describe('Contacts: Transactions integration', () => {
       expect(reportId, 'F3X report id should be defined').to.exist;
 
       const rid = reportId as string;
+      const getPrevAggregateAlias = SmokeAliases.network.named(
+        'GetPrevAggregate',
+        CONTACTS_TRANSACTIONS_ALIAS_SOURCE,
+      );
+      const getContactTxnsAlias = SmokeAliases.network.named(
+        'GetContactTransactions',
+        CONTACTS_TRANSACTIONS_ALIAS_SOURCE,
+      );
 
-      cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
+      cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as(getPrevAggregateAlias);
 
       ReportListPage.goToReportList(rid);
       StartTransaction.Receipts().Individual().IndividualReceipt();
@@ -530,7 +538,7 @@ describe('Contacts: Transactions integration', () => {
 
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', false, 'contribution_date');
 
-      cy.wait('@getPrevAggregate');
+      cy.wait(`@${getPrevAggregateAlias}`);
 
       cy.get('#employer').should('have.value', '').click();
       cy.get('#occupation').should('have.value', '').click();
@@ -568,11 +576,11 @@ describe('Contacts: Transactions integration', () => {
           cy.get('td').eq(4).should('contain.text', newOccupation);
         });
 
-      cy.intercept('GET', '**/api/v1/transactions/?**contact=*').as('getContactTxns');
+      cy.intercept('GET', '**/api/v1/transactions/?**contact=*').as(getContactTxnsAlias);
       PageUtils.clickKababItem(displayName, 'Edit');
       cy.contains(/Edit Contact/i).should('exist');
 
-      cy.wait('@getContactTxns');
+      cy.wait(`@${getContactTxnsAlias}`);
 
       cy.get('#employer').should('have.value', newEmployer);
       cy.get('#occupation').should('have.value', newOccupation);

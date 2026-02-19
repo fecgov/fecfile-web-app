@@ -6,10 +6,19 @@ import { makeContact } from '../../e2e-smoke/requests/methods';
 import { Individual_A_A, Organization_A } from '../../e2e-smoke/requests/library/contacts';
 import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
 import { F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
 
 const UNLINKED_CONTACT = 'Organization A Updated';
 const LINKED_CONTACT = 'House, Beth';
 const LINKED_TRANSACTION_DATE = `${currentYear}-04-12`;
+const CONTACTS_DELETE_ALIAS_SOURCE = 'extendedContactsDelete';
+const CONTACTS_DELETE_ALIASES = {
+  getContactsList: SmokeAliases.network.named('GetContactsList', CONTACTS_DELETE_ALIAS_SOURCE),
+  deleteContact: SmokeAliases.network.named('DeleteContact', CONTACTS_DELETE_ALIAS_SOURCE),
+  getDeletedContacts: SmokeAliases.network.named('GetDeletedContacts', CONTACTS_DELETE_ALIAS_SOURCE),
+  restoreContact: SmokeAliases.network.named('RestoreContact', CONTACTS_DELETE_ALIAS_SOURCE),
+  contactsGone: SmokeAliases.network.named('ContactsGone', CONTACTS_DELETE_ALIAS_SOURCE),
+} as const;
 
 const RUN_LINKED_DELETE_API_TEST =
   Cypress.env('RUN_LINKED_DELETE_API_TEST') === true ||
@@ -166,7 +175,7 @@ const waitForLinkedContactStatus = (
   const maxAttempts = options.maxAttempts ?? 3;
   return cy
     .reload()
-    .then(() => cy.wait('@getContactsList'))
+    .then(() => cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`))
     .then((interception) => {
       const linkedContact = findLinkedContact(interception.response?.body?.results);
       const hasLink = Boolean(linkedContact?.has_transaction_or_report);
@@ -290,7 +299,13 @@ const LINKED_CONTACT_DATA: MockContact = {
 describe('Contacts - delete guard', () => {
   beforeEach(() => {
     Initialize();
-    cy.intercept('GET', '**/api/v1/contacts/**page_size=**').as('getContactsList');
+    cy.intercept({
+      method: 'GET',
+      url: '**/api/v1/contacts/**page_size=**',
+      times: 5,
+    }).as(
+      CONTACTS_DELETE_ALIASES.getContactsList,
+    );
     ContactsDeleteHelpers.seedContactsWithLinkedTransaction({
       unlinkedContact: UNLINKED_CONTACT_DATA,
       linkedContact: LINKED_CONTACT_DATA,
@@ -298,41 +313,53 @@ describe('Contacts - delete guard', () => {
       transactionDate: LINKED_TRANSACTION_DATE,
     });
     ContactListPage.goToPage();
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
   });
 
   it('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
-    cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
-    cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('getDeletedContacts');
-    cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
+    cy.intercept({
+      method: 'DELETE',
+      url: '**/api/v1/contacts/**',
+      times: 5,
+    }).as(CONTACTS_DELETE_ALIASES.deleteContact);
+    cy.intercept({
+      method: 'GET',
+      url: '**/api/v1/contacts-deleted/**',
+      times: 5,
+    }).as(CONTACTS_DELETE_ALIASES.getDeletedContacts);
+    cy.intercept({
+      method: 'POST',
+      url: '**/api/v1/contacts-deleted/restore/**',
+      times: 5,
+    }).as(CONTACTS_DELETE_ALIASES.restoreContact);
 
     openDeleteAction(UNLINKED_CONTACT);
 
     ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
     ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
 
-    cy.wait('@deleteContact')
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.deleteContact}`)
       .its('response.statusCode')
       .should('be.oneOf', [200, 204]);
-    cy.wait('@getContactsList');
-    cy.wait('@getDeletedContacts');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getDeletedContacts}`);
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains('tbody tr', UNLINKED_CONTACT).should('not.exist');
     cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
 
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
-    cy.wait('@getDeletedContacts');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getDeletedContacts}`);
     cy.get('#restoreButton').should('be.disabled');
     ContactsDeleteHelpers.selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
     cy.get('#restoreButton').should('not.be.disabled').click();
 
-    cy.wait('@restoreContact');
-    cy.wait('@getDeletedContacts');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.restoreContact}`);
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getDeletedContacts}`);
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
     cy.contains('tbody tr', UNLINKED_CONTACT).should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
   });
@@ -355,15 +382,22 @@ describe('Contacts - delete guard', () => {
       });
     };
 
-    cy.intercept('DELETE', '**/api/v1/contacts/**', (req) => {
-      deleteRequests += 1;
-      req.on('response', (res) => {
-        deleteStatusCodes.push(res.statusCode);
-        deleteResponses.push({ statusCode: res.statusCode, body: res.body });
-        logDeleteResponse(res.statusCode, res.body);
-      });
-      req.continue();
-    }).as('deleteContact');
+    cy.intercept(
+      {
+        method: 'DELETE',
+        url: '**/api/v1/contacts/**',
+        times: 5,
+      },
+      (req) => {
+        deleteRequests += 1;
+        req.on('response', (res) => {
+          deleteStatusCodes.push(res.statusCode);
+          deleteResponses.push({ statusCode: res.statusCode, body: res.body });
+          logDeleteResponse(res.statusCode, res.body);
+        });
+        req.continue();
+      },
+    ).as(CONTACTS_DELETE_ALIASES.deleteContact);
 
     const assertLinkedContactIsLinked = (attempt = 1) =>
       waitForLinkedContactStatus(true, attempt, {
@@ -410,7 +444,7 @@ describe('Contacts - delete guard', () => {
       if (!deleteRequests) {
         return cy.wrap(null, { log: false });
       }
-      return cy.wait('@deleteContact');
+      return cy.wait(`@${CONTACTS_DELETE_ALIASES.deleteContact}`);
     });
 
     cy.then(() => {
@@ -441,7 +475,7 @@ describe('Contacts - delete guard', () => {
 
     ContactsDeleteHelpers.getContactRow(LINKED_CONTACT);
     cy.reload();
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
     assertDeleteUnavailable();
 
     const assertLinkedContactUnlinked = (attempt = 1) =>
@@ -456,10 +490,10 @@ describe('Contacts - delete guard', () => {
 
     ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
     ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
-    cy.wait('@deleteContact')
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.deleteContact}`)
       .its('response.statusCode')
       .should('be.oneOf', [200, 204]);
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
     cy.contains('tbody tr', LINKED_CONTACT).should('not.exist');
   });
 
@@ -506,9 +540,15 @@ describe('Contacts - delete guard', () => {
 describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
   beforeEach(() => {
     Initialize();
-    cy.intercept('GET', '**/api/v1/contacts/**page_size=**').as('getContactsList');
+    cy.intercept({
+      method: 'GET',
+      url: '**/api/v1/contacts/**page_size=**',
+      times: 5,
+    }).as(
+      CONTACTS_DELETE_ALIASES.getContactsList,
+    );
     ContactListPage.goToPage();
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
   });
 
   /**
@@ -530,31 +570,55 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
     }
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
     const contactDisplayNames = contacts.map(
       (contact, i) => `${contact.last_name}${i}, ${contact.first_name}${i}`,
     );
     const contactToDelete = contactDisplayNames[0];
     const contactToRestore = contactDisplayNames[1];
     const contactToPreserve = contactDisplayNames[2];
-    cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
-    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=1&ordering=name**').as('contactsGone');
-    ContactsDeleteHelpers.deleteContact(contactToDelete);
-    ContactsDeleteHelpers.deleteContact(contactToRestore);
+    cy.intercept({
+      method: 'DELETE',
+      url: '**/api/v1/contacts/**',
+      times: 5,
+    }).as(CONTACTS_DELETE_ALIASES.deleteContact);
+    cy.intercept({
+      method: 'GET',
+      url: '**/api/v1/contacts-deleted/?page=1&ordering=name**',
+      times: 5,
+    }).as(
+      CONTACTS_DELETE_ALIASES.contactsGone,
+    );
+    ContactsDeleteHelpers.deleteContact(contactToDelete, {
+      deleteAlias: CONTACTS_DELETE_ALIASES.deleteContact,
+      contactsGoneAlias: CONTACTS_DELETE_ALIASES.contactsGone,
+    });
+    ContactsDeleteHelpers.deleteContact(contactToRestore, {
+      deleteAlias: CONTACTS_DELETE_ALIASES.deleteContact,
+      contactsGoneAlias: CONTACTS_DELETE_ALIASES.contactsGone,
+    });
     ContactsHelpers.assertSuccessToastMessage();
-    cy.intercept('GET', '**/api/v1/contacts-deleted/?page=1&ordering=sort_name**').as('getDeletedContacts');
+    cy.intercept({
+      method: 'GET',
+      url: '**/api/v1/contacts-deleted/?page=1&ordering=sort_name**',
+      times: 5,
+    }).as(
+      CONTACTS_DELETE_ALIASES.getDeletedContacts,
+    );
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
-    cy.wait('@getDeletedContacts');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getDeletedContacts}`);
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog().should('be.visible');
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog().within(() => {
       cy.contains('tbody tr', contactToDelete).should('be.visible');
       cy.contains('tbody tr', contactToRestore).should('be.visible');
       cy.contains('tbody tr', contactToPreserve).should('not.exist');
     });
-    ContactsDeleteHelpers.restoreContact(contactToRestore);
+    ContactsDeleteHelpers.restoreContact(contactToRestore, {
+      listAlias: CONTACTS_DELETE_ALIASES.getContactsList,
+    });
     ContactsHelpers.assertSuccessToastMessage();
     ContactListPage.goToPage();
-    cy.wait('@getContactsList');
+    cy.wait(`@${CONTACTS_DELETE_ALIASES.getContactsList}`);
     cy.contains('tbody tr', contactToPreserve).should('be.visible');
     cy.contains('tbody tr', contactToRestore).should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('be.visible');

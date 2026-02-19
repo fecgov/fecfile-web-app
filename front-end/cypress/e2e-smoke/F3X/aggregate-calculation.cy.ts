@@ -16,10 +16,13 @@ import {
   assertRunningTotals,
   openTransactionFromListByAmount,
   openTransactionFromListByRow,
-  saveAndReopenCurrentTransaction,
   saveAndWaitForTransactionsList,
 } from './utils/transaction-list-navigation';
 import { setupAggregateScheduleATransactions } from './utils/seed-transactions';
+
+function reopenScheduleAByAmount(reportId: string, amount: string) {
+  openTransactionFromListByAmount(reportId, amount, { visit: false });
+}
 
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
@@ -36,27 +39,32 @@ describe('Tests transaction form aggregate calculation', () => {
 
       // Tests moving the date to be earlier
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 10), '');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$25.00');
       cy.get('[id=aggregate]').should('have.value', '$25.00');
 
       // Move the date back
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$25.00');
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Change the contact
       ContactLookup.getContact(result.individual2.last_name);
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$25.00');
       cy.get('[id=aggregate]').should('have.value', '$25.00');
 
       // Change the contact back
       ContactLookup.getContact(result.individual.last_name);
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$25.00');
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$40.00');
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       assertRunningTotals(result.report, ['$200.01', '$240.01']);
     });
@@ -72,7 +80,8 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[data-cy="searchBox"]').type('A');
       cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$25.00');
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       assertRunningTotals(result.report, ['$200.01', '$225.01']);
     });
@@ -86,7 +95,8 @@ describe('Tests transaction form aggregate calculation', () => {
       // Tests changing the amount
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       cy.get('[id="amount"]').clear().safeType('40');
-      saveAndReopenCurrentTransaction(result.report);
+      saveAndWaitForTransactionsList(result.report);
+      reopenScheduleAByAmount(result.report, '$40.00');
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       assertRunningTotals(result.report, ['$200.01', '$240.01']);
     });

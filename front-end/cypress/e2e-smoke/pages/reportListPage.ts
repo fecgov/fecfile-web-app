@@ -13,13 +13,15 @@ type GoToReportListOptions = {
   page?: string | number;
   pageSize?: string | number;
   ordering?: string;
+  aliasScope?: string;
 };
 
 export class ReportListPage {
   static goToPage() {
-    Intercepts.reportList(SmokeAliases.reportList.reports(REPORT_LIST_ALIAS_SOURCE));
+    const reportsAlias = SmokeAliases.reportList.reports(`${REPORT_LIST_ALIAS_SOURCE}_goToPage`);
+    Intercepts.reportList(reportsAlias, undefined, 1);
     cy.visit('/reports');
-    cy.wait(`@${SmokeAliases.reportList.reports(REPORT_LIST_ALIAS_SOURCE)}`);
+    cy.wait(`@${reportsAlias}`);
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
@@ -93,41 +95,49 @@ export class ReportListPage {
       page = '1',
       pageSize = '5',
       ordering = 'line_label,created',
+      aliasScope = 'goToReportList',
     } = options;
+    const aliasSource = `${REPORT_LIST_ALIAS_SOURCE}_${aliasScope}`;
+    const receiptsAlias = SmokeAliases.reportList.receipts(aliasSource);
+    const loansAlias = SmokeAliases.reportList.loans(aliasSource);
+    const disbursementsAlias = SmokeAliases.reportList.disbursements(aliasSource);
 
     if (registerListIntercepts && includeReceipts) {
       Intercepts.transactionsList({
-        alias: SmokeAliases.reportList.receipts(REPORT_LIST_ALIAS_SOURCE),
+        alias: receiptsAlias,
         reportId,
         schedules: 'A',
         includePaging: true,
         page: String(page),
         pageSize: String(pageSize),
         ordering,
+        times: 1,
       });
     }
 
     if (registerListIntercepts && includeLoans) {
       Intercepts.transactionsList({
-        alias: SmokeAliases.reportList.loans(REPORT_LIST_ALIAS_SOURCE),
+        alias: loansAlias,
         reportId,
         schedules: 'C,D',
         includePaging: true,
         page: String(page),
         pageSize: String(pageSize),
         ordering,
+        times: 1,
       });
     }
 
     if (registerListIntercepts && includeDisbursements) {
       Intercepts.transactionsList({
-        alias: SmokeAliases.reportList.disbursements(REPORT_LIST_ALIAS_SOURCE),
+        alias: disbursementsAlias,
         reportId,
         schedules: 'B,E,F',
         includePaging: true,
         page: String(page),
         pageSize: String(pageSize),
         ordering,
+        times: 1,
       });
     }
 
@@ -135,13 +145,13 @@ export class ReportListPage {
       cy.contains('Transactions in this report').should('exist');
     });
     if (waitForLists && registerListIntercepts && includeLoans) {
-      cy.wait(`@${SmokeAliases.reportList.loans(REPORT_LIST_ALIAS_SOURCE)}`);
+      cy.wait(`@${loansAlias}`);
     }
     if (waitForLists && registerListIntercepts && includeDisbursements) {
-      cy.wait(`@${SmokeAliases.reportList.disbursements(REPORT_LIST_ALIAS_SOURCE)}`);
+      cy.wait(`@${disbursementsAlias}`);
     }
     if (waitForLists && registerListIntercepts && includeReceipts) {
-      cy.wait(`@${SmokeAliases.reportList.receipts(REPORT_LIST_ALIAS_SOURCE)}`);
+      cy.wait(`@${receiptsAlias}`);
     }
     return visit;
   }

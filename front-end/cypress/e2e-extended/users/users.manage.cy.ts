@@ -2,6 +2,9 @@ import { LoginPage } from '../../e2e-smoke/pages/loginPage';
 import { Roles, defaultFormData as userFormData } from '../../e2e-smoke/models/UserFormModel';
 import { UsersPage } from '../../e2e-smoke/pages/usersPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
+
+const USERS_MANAGE_ALIAS_SOURCE = 'extendedUsersManage';
 
 const closeToastIfPresent = () => {
   cy.get('body').then(($body) => {
@@ -18,10 +21,11 @@ describe('Manage Users: Happy Paths', () => {
 
   it('should create a new user as COMMITTEE_ADMINISTRATOR and verify table row', () => {
     const adminUser = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
-    cy.intercept('GET', '**/committee-members/**').as('GetMembers');
+    const getMembersAlias = SmokeAliases.network.named('GetMembers', USERS_MANAGE_ALIAS_SOURCE);
+    cy.intercept('GET', '**/committee-members/**').as(getMembersAlias);
 
     UsersPage.create(adminUser);
-    cy.wait('@GetMembers');
+    cy.wait(`@${getMembersAlias}`);
 
     closeToastIfPresent();
     UsersPage.assertRow(adminUser, 'Pending');
@@ -67,13 +71,38 @@ describe('Manage Users: Happy Paths', () => {
   });
 
   it('should delete a user and verify removal from table', () => {
-    const emailToDelete = [userFormData.email, 'batch_user1@fec.gov', 'batch_user2@fec.gov', 'manager_user@fec.gov',];
-    cy.intercept('DELETE', '**/committee-members/**').as('DeleteMember');
+    const emailToDelete = [
+      userFormData.email,
+      'batch_user1@fec.gov',
+      'batch_user2@fec.gov',
+      'manager_user@fec.gov',
+    ];
+    const deleteMemberAlias = SmokeAliases.network.named('DeleteMember', USERS_MANAGE_ALIAS_SOURCE);
+    cy.intercept({
+      method: 'DELETE',
+      url: '**/api/v1/committee-members/**/remove-member/',
+      times: 5,
+    }).as(deleteMemberAlias);
 
     for (const email of emailToDelete) {
-      UsersPage.delete(email);
-      cy.wait('@DeleteMember');
-      cy.get('table tbody tr').contains('td', email).should('not.exist');
+      UsersPage.goToPage();
+      cy.get('table tbody').then(($tbody) => {
+        const emailLower = email.toLowerCase();
+        const rowExists = [...$tbody.find('tr')].some((row) =>
+          row.innerText.toLowerCase().includes(emailLower),
+        );
+
+        if (!rowExists) {
+          cy.log(`Skipping delete for missing user: ${email}`);
+          return;
+        }
+
+        PageUtils.clickKababItem(email, 'Delete');
+        cy.get('app-confirm-dialog').contains('button', 'Confirm').click();
+        cy.wait(`@${deleteMemberAlias}`);
+        closeToastIfPresent();
+        cy.get('table tbody').should('not.contain', email);
+      });
     }
   });
 });

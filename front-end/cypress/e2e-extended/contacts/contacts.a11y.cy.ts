@@ -5,6 +5,7 @@ import { ContactsDeleteHelpers, ContactsHelpers } from './contacts.helpers';
 import { makeContact, makeTransaction } from '../../e2e-smoke/requests/methods';
 import { Individual_A_A, Organization_A, MockContact } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
+import { SmokeAliases } from '../../e2e-smoke/utils/aliases';
 
 // A11Y WAIVERS (must include link)
 const WAIVERS: Record<string, { reason: string; link: string }> = {};
@@ -25,11 +26,31 @@ const WAIVERS: Record<string, { reason: string; link: string }> = {};
   - If the transaction history table markup changes, update the app-table[itemname="transactions"] selector
 */
 
-const CONTACTS_LIST_ALIAS = 'getContactsList';
+const CONTACTS_A11Y_ALIAS_SOURCE = 'extendedContactsA11y';
+const CONTACTS_LIST_ALIAS = SmokeAliases.network.named(
+  'GetContactsList',
+  CONTACTS_A11Y_ALIAS_SOURCE,
+);
+const DELETE_CONTACT_ALIAS = SmokeAliases.network.named(
+  'DeleteContact',
+  CONTACTS_A11Y_ALIAS_SOURCE,
+);
+const CONTACTS_GONE_ALIAS = SmokeAliases.network.named(
+  'GetDeletedContacts',
+  CONTACTS_A11Y_ALIAS_SOURCE,
+);
+const GET_TRANSACTION_HISTORY_ALIAS = SmokeAliases.network.named(
+  'GetTransactionHistory',
+  CONTACTS_A11Y_ALIAS_SOURCE,
+);
 const CONTACTS_LIST_ENDPOINT = '**/api/v1/contacts/**page_size=**';
 
 const visitContactsList = () => {
-  cy.intercept('GET', CONTACTS_LIST_ENDPOINT).as(CONTACTS_LIST_ALIAS);
+  cy.intercept({
+    method: 'GET',
+    url: CONTACTS_LIST_ENDPOINT,
+    times: 5,
+  }).as(CONTACTS_LIST_ALIAS);
   ContactListPage.goToPage();
   cy.wait(`@${CONTACTS_LIST_ALIAS}`);
   ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
@@ -121,12 +142,23 @@ describe('Contacts - axe smoke (critical)', () => {
     makeContact(contact);
     visitContactsList();
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
-    cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
-    cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('contactsGone');
-    ContactsDeleteHelpers.deleteContact(deletedName);
+    cy.intercept({
+      method: 'DELETE',
+      url: '**/api/v1/contacts/**',
+      times: 5,
+    }).as(DELETE_CONTACT_ALIAS);
+    cy.intercept({
+      method: 'GET',
+      url: '**/api/v1/contacts-deleted/**',
+      times: 5,
+    }).as(CONTACTS_GONE_ALIAS);
+    ContactsDeleteHelpers.deleteContact(deletedName, {
+      deleteAlias: DELETE_CONTACT_ALIAS,
+      contactsGoneAlias: CONTACTS_GONE_ALIAS,
+    });
     cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
-    cy.wait('@contactsGone');
+    cy.wait(`@${CONTACTS_GONE_ALIAS}`);
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
       .should('be.visible')
       .then(checkCritical);
@@ -156,10 +188,10 @@ describe('Contacts - axe smoke (critical)', () => {
     cy.intercept(
       'GET',
       '**/api/v1/transactions/?page=1&ordering=transaction_type_identifier&page_size=5&contact=*',
-    ).as('getTransactionHistory');
+    ).as(GET_TRANSACTION_HISTORY_ALIAS);
     PageUtils.clickKababItem(displayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
-    cy.wait('@getTransactionHistory');
+    cy.wait(`@${GET_TRANSACTION_HISTORY_ALIAS}`);
     cy.get('app-table[itemname="transactions"]')
       .should('exist')
       .scrollIntoView({ offset: { top: -120, left: 0 } })

@@ -1,7 +1,25 @@
+import { getActiveAliasEvent } from '../../support/alias-event-context';
+
+function normalizeAliasToken(value: string): string {
+  return value.trim().replaceAll(/[^a-zA-Z0-9_-]+/g, '_');
+}
+
 function withSource(baseAlias: string, source?: string): string {
-  if (!source) return baseAlias;
-  const normalizedSource = source.trim().replaceAll(/[^a-zA-Z0-9_-]+/g, '_');
-  return normalizedSource ? `${baseAlias}__${normalizedSource}` : baseAlias;
+  const parts: string[] = [];
+
+  if (source) {
+    const normalizedSource = normalizeAliasToken(source);
+    if (normalizedSource) parts.push(normalizedSource);
+  }
+
+  const activeEvent = getActiveAliasEvent();
+  if (activeEvent) {
+    const normalizedEvent = normalizeAliasToken(activeEvent);
+    if (normalizedEvent) parts.push(normalizedEvent);
+  }
+
+  if (parts.length < 1) return baseAlias;
+  return `${baseAlias}__${parts.join('_')}`;
 }
 
 export const SmokeAliases = {
