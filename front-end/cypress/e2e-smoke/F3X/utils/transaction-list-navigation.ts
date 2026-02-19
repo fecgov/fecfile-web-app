@@ -68,7 +68,7 @@ function interceptTransactionSave(transactionId?: string): string {
   return alias;
 }
 
-function waitForReadySelector(readySelector: string): Cypress.Chainable<void> {
+function waitForReadySelector(readySelector: string): Cypress.Chainable<JQuery<HTMLElement>> {
   return cy
     .get(readySelector)
     .should('be.visible')
@@ -84,7 +84,7 @@ function reopenTransactionFromList(
   reportId: string,
   transactionId: string,
   readySelector: string,
-): Cypress.Chainable<void> {
+): Cypress.Chainable<JQuery<HTMLElement>> {
   const listPath = transactionsListPath(reportId);
   const transactionLinkSelector = `a[href$="/${transactionId}"], a[href$="/${transactionId}/"]`;
 
