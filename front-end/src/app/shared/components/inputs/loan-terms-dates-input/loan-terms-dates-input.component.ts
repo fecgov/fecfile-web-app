@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
@@ -11,8 +11,9 @@ import { buildWithinReportDatesValidator, percentageValidator } from 'app/shared
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { CalendarComponent } from '../../calendar/calendar.component';
-import { Select } from 'primeng/select';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { SelectComponent } from '../../select/select.component';
+import { IdGeneratorService } from 'app/shared/services/id-generator.service';
 
 enum LoanTermsFieldSettings {
   SPECIFIC_DATE = 'specific-date',
@@ -23,26 +24,31 @@ enum LoanTermsFieldSettings {
 @Component({
   selector: 'app-loan-terms-dates-input',
   templateUrl: './loan-terms-dates-input.component.html',
-  imports: [ReactiveFormsModule, CalendarComponent, Select, ErrorMessagesComponent, InputText],
+  imports: [ReactiveFormsModule, CalendarComponent, ErrorMessagesComponent, InputText, SelectComponent],
+  providers: [IdGeneratorService],
 })
 export class LoanTermsDatesInputComponent extends BaseInputComponent implements OnInit, AfterViewInit {
+  private readonly idGen = inject(IdGeneratorService);
   private readonly store = inject(Store);
-  @ViewChild('interestRatePercentage') interestInput!: InputText;
+  readonly interestInput = viewChild<InputText>('interestRatePercentage');
   clearValuesOnChange = true;
 
   readonly termFieldSettings = LoanTermsFieldSettings;
 
-  dueDateSettingOptions = LabelUtils.getPrimeOptions([
+  readonly dueDateSettingOptions = LabelUtils.getPrimeOptions([
     [LoanTermsFieldSettings.SPECIFIC_DATE, 'Enter a specific date'],
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
-  interestRateSettingOptions = LabelUtils.getPrimeOptions([
+  readonly interestRateSettingOptions = LabelUtils.getPrimeOptions([
     [LoanTermsFieldSettings.EXACT_PERCENTAGE, 'Enter an exact percentage'],
     [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
   ]);
 
   readonly report = this.store.selectSignal(selectActiveReport);
+
+  readonly dueDateId = this.idGen.getIdLabel('due-date');
+  readonly interestRateId = this.idGen.getIdLabel('interest-rate');
 
   ngOnInit(): void {
     this.addValidators();
@@ -122,9 +128,9 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       let textInput!: HTMLInputElement;
       let initialSelectionStart = 0;
       let initialSelectionEnd = 0;
-      if (this.interestInput) {
+      if (this.interestInput()) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        textInput = (this.interestInput as any).nativeElement as HTMLInputElement;
+        textInput = (this.interestInput() as any).nativeElement as HTMLInputElement;
         initialSelectionStart = textInput.selectionStart ?? 0;
         initialSelectionEnd = textInput.selectionEnd ?? 0;
       }

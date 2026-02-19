@@ -22,7 +22,7 @@ const WAIVERS: Record<string, { reason: string; link: string }> = {};
   - If the Manage contacts table is no longer under a p-table with the heading, update getContactsTableContainer()
   - If dialogs change away from .p-dialog, update ContactsHelpers.DIALOG and dialog queries here
   - If the deleted contacts view changes (route/table wrapper), update getRestoreDeletedContactsDialog() usage
-  - If the transaction history table title/markup changes, update the app-table[title="Transaction history"] selector
+  - If the transaction history table markup changes, update the app-table[itemname="transactions"] selector
 */
 
 const CONTACTS_LIST_ALIAS = 'getContactsList';
@@ -160,7 +160,7 @@ describe('Contacts - axe smoke (critical)', () => {
     PageUtils.clickKababItem(displayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
     cy.wait('@getTransactionHistory');
-    cy.get('app-table[title="Transaction history"]', { timeout: 15000 })
+    cy.get('app-table[itemname="transactions"]', { timeout: 15000 })
       .should('exist')
       .scrollIntoView({ offset: { top: -120, left: 0 } })
       .should('be.visible')

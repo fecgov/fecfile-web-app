@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { SelectReportDialogComponent } from './select-report-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testActiveReport, testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
@@ -37,15 +37,13 @@ describe('SelectReportDialogComponent', () => {
     };
 
     futureSpy = spyOn(service, 'getFutureReports').and.resolveTo([Form3X.fromJSON(data)]);
-    spyOn(service, 'get').and.resolveTo(Form3X.fromJSON(data));
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get a list of available reports', fakeAsync(() => {
-    component.ngOnInit();
+  it('should get a list of available reports', fakeAsync(async () => {
     const transaction: TransactionListRecord = {
       ...testScheduleATransaction(),
       name: 'TEST',
@@ -59,14 +57,14 @@ describe('SelectReportDialogComponent', () => {
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
     ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-    tick(500);
-
+    TestBed.tick();
+    await fixture.whenStable();
+    expect(component.transaction()).toBeTruthy();
     expect(futureSpy).toHaveBeenCalled();
-    expect(component.availableReports.length).toBe(1);
+    expect(component.availableReports().length).toBe(1);
   }));
 
   it('should clear and close on cancel', async () => {
-    component.ngOnInit();
     const transaction: TransactionListRecord = {
       ...testScheduleATransaction(),
       name: 'TEST',
@@ -80,41 +78,14 @@ describe('SelectReportDialogComponent', () => {
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
     ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-    expect(component.transaction).toBeTruthy();
+    expect(component.transaction()).toBeTruthy();
 
     component.cancel();
-    expect(component.transaction).toBeFalsy();
+    expect(component.transaction()).toBeFalsy();
   });
 
   describe('reattRedes', () => {
     it("should determine if it's a reattribution of redesignation", () => {
-      component.type = ReattRedesTypes.REATTRIBUTED;
-      expect(component.actionLabel).toBe('reattribute');
-      expect(component.urlParameter).toBe('reattribution');
-      expect(component.actionTargetLabel).toBe('contributor');
-
-      component.type = ReattRedesTypes.REDESIGNATED;
-      expect(component.actionLabel).toBe('redesignate');
-      expect(component.urlParameter).toBe('redesignation');
-      expect(component.actionTargetLabel).toBe('election');
-    });
-  });
-
-  describe('createReattribution', () => {
-    it('should throw error if no base transaction', async () => {
-      component.ngOnInit();
-      component.transaction = undefined;
-      try {
-        expect(component.transaction).toBeFalsy();
-        await component.createReattribution();
-      } catch (error) {
-        expect(error).toEqual(new Error('No base transaction'));
-      }
-    });
-
-    it('should redirect based on the selected report and transaction', async () => {
-      const routerSpy = spyOn(component.router, 'navigateByUrl');
-      component.ngOnInit();
       const transaction: TransactionListRecord = {
         ...testScheduleATransaction(),
         name: 'TEST',
@@ -128,7 +99,44 @@ describe('SelectReportDialogComponent', () => {
         report_type: 'Form 3X',
       } as unknown as TransactionListRecord;
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-      component.selectedReport = component.availableReports[0];
+      expect(component.actionLabel()).toBe('reattribute');
+      expect(component.urlParameter()).toBe('reattribution');
+      expect(component.actionTargetLabel()).toBe('contributor');
+
+      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
+      expect(component.actionLabel()).toBe('redesignate');
+      expect(component.urlParameter()).toBe('redesignation');
+      expect(component.actionTargetLabel()).toBe('election');
+    });
+  });
+
+  describe('createReattribution', () => {
+    it('should throw error if no base transaction', async () => {
+      ReattRedesUtils.selectReportDialogSubject.next(undefined);
+      try {
+        expect(component.transaction()).toBeFalsy();
+        await component.createReattribution();
+      } catch (error) {
+        expect(error).toEqual(new Error('No base transaction'));
+      }
+    });
+
+    it('should redirect based on the selected report and transaction', async () => {
+      const routerSpy = spyOn(component.router, 'navigateByUrl');
+      const transaction: TransactionListRecord = {
+        ...testScheduleATransaction(),
+        name: 'TEST',
+        date: new Date(),
+        amount: 100,
+        balance: 0,
+        aggregate: 0,
+        report_code_label: '',
+        can_delete: true,
+        force_unaggregated: true,
+        report_type: 'Form 3X',
+      } as unknown as TransactionListRecord;
+      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
+      component.selectedReport = component.availableReports()[0];
       component.selectedReport = testActiveReport();
       try {
         await component.createReattribution();
