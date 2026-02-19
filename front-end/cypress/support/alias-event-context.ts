@@ -4,7 +4,7 @@ function toTitleCaseToken(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
 
-export function normalizeAliasEvent(label: string): string {
+function normalizeAliasEvent(label: string): string {
   const normalized = label.trim().replaceAll(/[^a-zA-Z0-9]+/g, ' ');
   if (!normalized) return 'UnknownEvent';
 
