@@ -11,8 +11,9 @@ export class ContactLookup {
     '[role="option"]:not(.p-autocomplete-option-group):not([aria-disabled="true"])',
   ].join(',');
 
+  private static readonly ESCAPE_REGEX= /[.*+?^${}()|[\]\\]/g;
   private static escapeRegExp(value: string): string {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return value.replaceAll(ContactLookup.ESCAPE_REGEX, String.raw`\$&`);
   }
 
   private static typeAutocompleteSearch(
@@ -85,9 +86,6 @@ export class ContactLookup {
   ) {
     const lastName = contact['last_name'];
     if (!lastName) return;
-    void _excludeFecIds;
-    void _excludeIds;
-    void _change;
     alias = PageUtils.getAlias(alias);
     const searchBoxSelector = '[data-cy="searchBox"]';
     const nameEntry = lastName.slice(0, 3);
@@ -123,8 +121,6 @@ export class ContactLookup {
   ) {
     const name = contact['name'];
     if (!name) return;
-    void _excludeFecIds;
-    void _excludeIds;
     const nameEntry = name.slice(0, 3);
     const lookupAlias = SmokeAliases.network.named(
       'CommitteeLookup',

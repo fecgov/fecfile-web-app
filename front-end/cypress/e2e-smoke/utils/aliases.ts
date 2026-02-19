@@ -1,6 +1,6 @@
 function withSource(baseAlias: string, source?: string): string {
   if (!source) return baseAlias;
-  const normalizedSource = source.trim().replace(/[^a-zA-Z0-9_-]+/g, '_');
+  const normalizedSource = source.trim().replaceAll(/[^a-zA-Z0-9_-]+/g, '_');
   return normalizedSource ? `${baseAlias}__${normalizedSource}` : baseAlias;
 }
 
