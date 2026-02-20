@@ -5,24 +5,19 @@ import { TransactionType } from './transaction-type.model';
 import { Exclude, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
 import { ReportTypes, Report } from './reports/report.model';
-import type { SchC1Transaction, ScheduleC1TransactionTypes } from './schc1-transaction.model';
-import type { SchC2Transaction, ScheduleC2TransactionTypes } from './schc2-transaction.model';
-import type { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import type { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import type { SchCTransaction, ScheduleCTransactionTypes } from './schc-transaction.model';
-import type { SchDTransaction, ScheduleDTransactionTypes } from './schd-transaction.model';
-import type { SchETransaction, ScheduleETransactionTypes } from './sche-transaction.model';
-import type { SchFTransaction, ScheduleFTransactionTypes } from './schf-transaction.model';
-import type {
-  DisbursementType,
-  LoansAndDebtsType,
-  ReceiptType,
-  ScheduleC1TransactionGroupsType,
-} from './transaction-group';
+import type { SchC1Transaction } from './schc1-transaction.model';
+import type { SchC2Transaction } from './schc2-transaction.model';
+import type { SchATransaction } from './scha-transaction.model';
+import type { SchBTransaction } from './schb-transaction.model';
+import type { SchCTransaction } from './schc-transaction.model';
+import type { SchDTransaction } from './schd-transaction.model';
+import type { SchETransaction } from './sche-transaction.model';
+import type { SchFTransaction } from './schf-transaction.model';
 import type { Form24 } from './reports/form-24.model';
 import type { Form3 } from './reports/form-3.model';
 import type { Form3X } from './reports/form-3x.model';
-import { TransactionListRecord } from './transaction-list-record.model';
+import type { TransactionListRecord } from './transaction-list-record.model';
+import { ScheduleIds } from './type-enums';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -186,44 +181,3 @@ export type ScheduleTransaction =
   | SchDTransaction
   | SchETransaction
   | SchFTransaction;
-export type TransactionTypes =
-  | ScheduleATransactionTypes
-  | ScheduleBTransactionTypes
-  | ScheduleCTransactionTypes
-  | ScheduleC1TransactionTypes
-  | ScheduleC2TransactionTypes
-  | ScheduleDTransactionTypes
-  | ScheduleETransactionTypes
-  | ScheduleFTransactionTypes;
-export type TransactionGroupTypes =
-  | ReceiptType
-  | DisbursementType
-  | LoansAndDebtsType
-  | ScheduleC1TransactionGroupsType;
-
-export enum AggregationGroups {
-  GENERAL = 'GENERAL',
-  LINE_14 = 'LINE_14',
-  LINE_15 = 'LINE_15',
-  LINE_16 = 'LINE_16',
-  NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
-  NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
-  NATIONAL_PARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
-  OTHER_RECEIPTS = 'OTHER_RECEIPTS',
-  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
-  GENERAL_DISBURSEMENT = 'GENERAL_DISBURSEMENT',
-  INDEPENDENT_EXPENDITURE = 'INDEPENDENT_EXPENDITURE',
-  COORDINATED_PARTY_EXPENDITURES = 'COORDINATED_PARTY_EXPENDITURES',
-}
-
-export enum ScheduleIds {
-  A = 'A',
-  B = 'B',
-  C = 'C',
-  C1 = 'C1',
-  C2 = 'C2',
-  D = 'D',
-  E = 'E',
-  F = 'F',
-}

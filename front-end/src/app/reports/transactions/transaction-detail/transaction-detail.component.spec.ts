@@ -4,7 +4,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
 import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
 import { ContactTypes } from 'app/shared/models/contact.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -28,6 +27,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { firstValueFrom } from 'rxjs';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;

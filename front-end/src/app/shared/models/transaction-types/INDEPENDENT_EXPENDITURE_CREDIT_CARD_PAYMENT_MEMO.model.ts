@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_MEMOS';
 import { SchETransactionType } from '../sche-transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { CHILD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ORG_FIELDS,
@@ -17,6 +16,7 @@ import {
   ORGANIZATION_INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../type-enums';
 
 export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransactionType {
   formFields = [
@@ -46,11 +46,9 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
   override showCalendarYTD = true;
   override inheritCalendarYTD = true;
 
-  getNewTransaction() {
-    return SchETransaction.fromJSON({
-      form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
-      aggregation_group: null,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SE',
+    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+    aggregation_group: null,
+  };
 }

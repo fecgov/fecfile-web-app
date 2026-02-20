@@ -1,5 +1,6 @@
+import { SchATransaction } from './scha-transaction.model';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
-import { ScheduleIds } from './transaction.model';
+import { ScheduleIds } from './type-enums';
 
 export abstract class SchATransactionType extends TransactionType {
   scheduleId = ScheduleIds.A;
@@ -85,4 +86,6 @@ export abstract class SchATransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
+
+  override readonly transactionClass = SchATransaction;
 }

@@ -1,3 +1,4 @@
+import { hydrateTransaction } from '../utils/transaction-type.utils';
 import { SchC2Transaction } from './schc2-transaction.model';
 
 describe('SchC2Transaction', () => {
@@ -5,20 +6,20 @@ describe('SchC2Transaction', () => {
     expect(new SchC2Transaction()).toBeTruthy();
   });
 
-  it('#fromJSON() should return a populated SchC2Transaction instance', () => {
+  it('#fromJSON() should return a populated SchC2Transaction instance', async () => {
     const data = {
       id: '999',
       form_type: 'SC/10',
       guarantor_last_name: 'foo',
     };
-    const transaction: SchC2Transaction = SchC2Transaction.fromJSON(data);
+    const transaction: SchC2Transaction = await hydrateTransaction(data, SchC2Transaction);
     expect(transaction).toBeInstanceOf(SchC2Transaction);
     expect(transaction.id).toBe('999');
     expect(transaction.form_type).toBe('SC/10');
     expect(transaction.guarantor_last_name).toBe('foo');
   });
 
-  it('Creates a transaction object from JSON', () => {
+  it('Creates a transaction object from JSON', async () => {
     const json = {
       transaction_type_identifier: 'RETURN_RECEIPT',
       parent_transaction: {
@@ -30,7 +31,7 @@ describe('SchC2Transaction', () => {
         },
       ],
     };
-    const transaction: SchC2Transaction = SchC2Transaction.fromJSON(json);
+    const transaction: SchC2Transaction = await hydrateTransaction(json, SchC2Transaction);
     expect(transaction.constructor.name).toBe('_SchC2Transaction');
   });
 });

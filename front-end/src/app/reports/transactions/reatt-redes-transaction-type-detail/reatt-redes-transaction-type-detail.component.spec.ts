@@ -15,18 +15,20 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from '../../../shared/utils/unit-test.utils';
 import { FecDatePipe } from '../../../shared/pipes/fec-date.pipe';
-import { ScheduleATransactionTypes } from '../../../shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
   let fixture: ComponentFixture<ReattRedesTransactionTypeDetailComponent>;
-  const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+  let transaction: SchATransaction;
 
   beforeEach(async () => {
+    transaction = (await getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT)) as SchATransaction;
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,

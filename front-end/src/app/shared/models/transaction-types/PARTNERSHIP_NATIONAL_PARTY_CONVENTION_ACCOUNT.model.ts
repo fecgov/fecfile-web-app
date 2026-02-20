@@ -1,10 +1,10 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_PARTNERSHIP_RECEIPTS';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import type { SchATransaction } from '../scha-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes, AggregationGroups } from '../type-enums';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
   formFields = ORGANIZATION_FORM_FIELDS;
@@ -29,11 +29,9 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
     return 'Pres. Nominating Convention Account (Partnership attributions do not meet itemization threshold)';
   }
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA17',
+    transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+  };
 }

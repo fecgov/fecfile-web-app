@@ -1,6 +1,4 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS_RECEIVED';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import {
@@ -9,6 +7,7 @@ import {
   ORG_FIELDS,
   ADDRESS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { AggregationGroups, ScheduleATransactionTypes } from '../type-enums';
 
 export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   override formFields = ORGANIZATION_FORM_FIELDS;
@@ -27,11 +26,9 @@ export class LOAN_RECEIVED_FROM_BANK_RECEIPT extends SchATransactionType {
   title = 'Loan Receipt';
   override contactTitle = 'Lender';
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA13',
-      transaction_type_identifier: ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA13',
+    transaction_type_identifier: ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
+    aggregation_group: AggregationGroups.GENERAL,
+  };
 }

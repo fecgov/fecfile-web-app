@@ -1,8 +1,7 @@
-import { plainToClass, Transform } from 'class-transformer';
-import { AggregationGroups, Transaction } from './transaction.model';
-import { LabelList } from '../utils/label.utils';
+import { Transform } from 'class-transformer';
+import { Transaction } from './transaction.model';
 import { BaseModel } from './base.model';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import type { AggregationGroups } from './type-enums';
 
 export class SchETransaction extends Transaction {
   receipt_line_number: string | undefined;
@@ -70,66 +69,4 @@ export class SchETransaction extends Transaction {
   override getFieldsNotToSave(): string[] {
     return ['calendar_ytd_per_election_office', ...super.getFieldsNotToSave()];
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchETransaction {
-    const transaction = plainToClass(SchETransaction, json);
-    if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-      transaction.setMetaProperties(transactionType);
-    }
-    if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
-    }
-    if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
-    }
-    return transaction;
-  }
 }
-
-export enum ScheduleETransactionTypes {
-  INDEPENDENT_EXPENDITURE = 'INDEPENDENT_EXPENDITURE',
-  INDEPENDENT_EXPENDITURE_VOID = 'INDEPENDENT_EXPENDITURE_VOID',
-  MULTISTATE_INDEPENDENT_EXPENDITURE = 'MULTISTATE_INDEPENDENT_EXPENDITURE',
-  INDEPENDENT_EXPENDITURE_DEBT = 'INDEPENDENT_EXPENDITURE_DEBT',
-  INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT = 'INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT',
-  INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO = 'INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO',
-  INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT = 'INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT',
-  INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO = 'INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO',
-  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL = 'INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL',
-  INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO = 'INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO',
-}
-
-export const ScheduleETransactionTypeLabels: LabelList = [
-  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE, 'Independent Expenditure'],
-  [ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE, 'Multistate Independent Expenditure'],
-  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_DEBT, 'Debt for Independent Expenditure'],
-  [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT,
-    'Credit Card Payment for Independent Expenditure',
-  ],
-  [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
-    'Credit Card Memo for Independent Expenditure',
-  ],
-  [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
-    'Staff Reimbursement for Independent Expenditure',
-  ],
-  [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
-    'Staff Reimbursement Memo for Independent Expenditure',
-  ],
-  [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
-    'Payment to Payroll for Independent Expenditure',
-  ],
-  [
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
-    'Payroll Memo for Independent Expenditure',
-  ],
-  [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID, 'Independent Expenditure - Void'],
-];

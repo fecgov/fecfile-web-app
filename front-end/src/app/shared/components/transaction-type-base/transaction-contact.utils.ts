@@ -1,9 +1,10 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { ScheduleIds } from 'app/shared/models/type-enums';
 
 export class TransactionContactUtils {
   /**

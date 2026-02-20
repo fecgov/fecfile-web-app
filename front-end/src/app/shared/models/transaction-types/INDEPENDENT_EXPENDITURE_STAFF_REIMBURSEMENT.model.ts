@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_PARENTS';
 import { SchETransactionType } from '../sche-transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ADDRESS_FIELDS,
@@ -16,7 +15,7 @@ import {
   INDIVIDUAL_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
-import { AggregationGroups, Transaction } from '../transaction.model';
+import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes, AggregationGroups } from '../type-enums';
 
 export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransactionType {
   formFields = [
@@ -46,15 +45,13 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
   override showCalendarYTD = true;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  override generatePurposeDescription(transaction: Transaction): string {
+  override generatePurposeDescription(): string {
     return 'Reimbursement: See Below';
   }
 
-  getNewTransaction() {
-    return SchETransaction.fromJSON({
-      form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
-      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SE',
+    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
+    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+  };
 }

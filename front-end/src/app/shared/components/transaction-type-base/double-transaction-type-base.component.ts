@@ -154,9 +154,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     })[0];
   }
 
-  override submit(navigationEvent: NavigationEvent): Promise<void> {
+  override async submit(navigationEvent: NavigationEvent): Promise<void> {
     this.updateContactData();
-    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
+    const payload: Transaction = await TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
       this.form,
@@ -164,7 +164,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     );
 
     payload.children = [
-      TransactionFormUtils.getPayloadTransaction(
+      await TransactionFormUtils.getPayloadTransaction(
         this.childTransaction,
         this.activeReportId,
         this.childForm,

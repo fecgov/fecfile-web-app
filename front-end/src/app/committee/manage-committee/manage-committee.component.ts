@@ -8,8 +8,7 @@ import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
 import { ButtonDirective } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { QueryParams } from 'app/shared/services/api.service';
+import type { QueryParams } from 'app/shared/services/api.service';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { CommitteeMember } from 'app/shared/models/committee-member.model';
 import { getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models/role.model';
@@ -18,14 +17,7 @@ import { getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models
   selector: 'app-manage-committee',
   templateUrl: './manage-committee.component.html',
   styleUrls: ['./manage-committee.component.scss'],
-  imports: [
-    TableComponent,
-    ButtonDirective,
-    Ripple,
-    TableActionsButtonComponent,
-    CommitteeMemberDialogComponent,
-    TableModule,
-  ],
+  imports: [TableComponent, ButtonDirective, Ripple, TableActionsButtonComponent, CommitteeMemberDialogComponent],
 })
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
   private readonly store = inject(Store);

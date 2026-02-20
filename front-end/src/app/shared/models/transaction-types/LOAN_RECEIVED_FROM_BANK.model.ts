@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS';
 import { SchCTransactionType } from '../schc-transaction-type.model';
-import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import {
   CANCEL_CONTROL,
   SAVE_TRIPLE_ENTRY_LIST_CONTROL,
@@ -12,7 +11,6 @@ import {
   ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
   COMMON_FIELDS,
   ADDRESS_FIELDS,
@@ -21,8 +19,7 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { ScheduleC1TransactionTypes } from '../schc1-transaction.model';
-import { ScheduleC2TransactionTypes } from '../schc2-transaction.model';
+import { ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes, ScheduleC1TransactionTypes, ScheduleATransactionTypes, ScheduleC2TransactionTypes } from '../type-enums';
 
 export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   override formFields = [
@@ -70,11 +67,9 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
     [SAVE_TRIPLE_ENTRY_LIST_CONTROL],
   );
 
-  getNewTransaction() {
-    return SchCTransaction.fromJSON({
-      form_type: 'SC/10',
-      transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
-      receipt_line_number: '13',
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SC/10',
+    transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+    receipt_line_number: '13',
+  };
 }

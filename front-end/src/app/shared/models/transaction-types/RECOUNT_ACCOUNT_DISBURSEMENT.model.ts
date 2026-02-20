@@ -1,13 +1,12 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/RECOUNT_AND_NP_DISBURSEMENTS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes, AggregationGroups } from '../type-enums';
 
 export class RECOUNT_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
   formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
@@ -17,11 +16,9 @@ export class RECOUNT_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Recount Account: ';
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB29',
-      transaction_type_identifier: ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SB29',
+    transaction_type_identifier: ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
+    aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+  };
 }

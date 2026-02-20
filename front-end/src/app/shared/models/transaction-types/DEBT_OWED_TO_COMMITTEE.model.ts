@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DEBTS';
 import { SchDTransactionType } from '../schd-transaction-type.model';
-import { SchDTransaction, ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   COMMITTEE_ORGANIZATION_INDIVIDUAL,
@@ -9,6 +8,7 @@ import {
   INDIVIDUAL_FIELDS,
   ADDRESS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from '../type-enums';
 
 export class DEBT_OWED_TO_COMMITTEE extends SchDTransactionType {
   formFields = [
@@ -29,10 +29,8 @@ export class DEBT_OWED_TO_COMMITTEE extends SchDTransactionType {
   override hasAmountInput = false;
   override hasDebtInput = true;
 
-  getNewTransaction() {
-    return SchDTransaction.fromJSON({
-      form_type: 'SD9',
-      transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SD9',
+    transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
+  };
 }

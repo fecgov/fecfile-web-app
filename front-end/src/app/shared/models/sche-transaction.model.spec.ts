@@ -1,3 +1,4 @@
+import { hydrateTransaction } from '../utils/transaction-type.utils';
 import { SchETransaction } from './sche-transaction.model';
 
 describe('SchETransaction', () => {
@@ -5,13 +6,13 @@ describe('SchETransaction', () => {
     expect(new SchETransaction()).toBeTruthy();
   });
 
-  it('#fromJSON() should return a populated SchETransaction instance', () => {
+  it('#fromJSON() should return a populated SchETransaction instance', async () => {
     const data = {
       id: '999',
       form_type: 'SE',
       payee_organization_name: 'foo',
     };
-    const transaction: SchETransaction = SchETransaction.fromJSON(data);
+    const transaction: SchETransaction = await hydrateTransaction(data, SchETransaction);
     expect(transaction).toBeInstanceOf(SchETransaction);
     expect(transaction.id).toBe('999');
     expect(transaction.form_type).toBe('SE');

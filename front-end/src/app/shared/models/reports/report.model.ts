@@ -2,11 +2,11 @@ import { Exclude, Transform, Type } from 'class-transformer';
 import { BaseModel } from '../base.model';
 import { UploadSubmission } from '../upload-submission.model';
 import { WebPrintSubmission } from '../webprint-submission.model';
-import type { TransactionTypes } from '../transaction.model';
 import type { JsonSchema } from 'fecfile-validate';
 import type { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import type { MenuItem } from 'primeng/api';
 import type { LabelList } from '../../utils/label.utils';
+import { TransactionTypes } from '../type-enums';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;

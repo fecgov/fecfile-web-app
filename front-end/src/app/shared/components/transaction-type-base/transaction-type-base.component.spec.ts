@@ -17,23 +17,29 @@ import {
 } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { firstValueFrom, of, Subject } from 'rxjs';
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SchATransaction } from '../../models/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
 import { ActivatedRoute, NavigationBehaviorOptions, Router } from '@angular/router';
-import { AggregationGroups, Transaction } from '../../models/transaction.model';
+import { Transaction } from '../../models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { hydrateTransaction } from 'app/shared/utils/transaction-type.utils';
+import {
+  AggregationGroups,
+  ScheduleATransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleETransactionTypes,
+} from 'app/shared/models/type-enums';
 
 let testTransaction: SchATransaction;
 
@@ -178,7 +184,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should set processing to false if no transaction type identifier on payload', async () => {
-      const payload = TransactionFormUtils.getPayloadTransaction(
+      const payload = await TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         '999',
         component.form,
@@ -190,7 +196,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     it('should update data and then set processing to false', async () => {
       component.ngOnInit();
-      const payload = TransactionFormUtils.getPayloadTransaction(
+      const payload = await TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         '999',
         component.form,
@@ -205,7 +211,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.form.addControl('linkedF3xId', new SubscriptionFormControl());
       component.form.get('linkedF3xId')?.setValue('321');
 
-      const payload = TransactionFormUtils.getPayloadTransaction(
+      const payload = await TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         '999',
         component.form,
@@ -234,7 +240,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     it('should return without confirmation if using parent and contact_1', fakeAsync(async () => {
       if (!component.transaction) throw new Error('Bad test');
-      const payload = TransactionFormUtils.getPayloadTransaction(
+      const payload = await TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         '999',
         component.form,
@@ -597,7 +603,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   describe('aggregate calculation', () => {
-    it('should request the previous transaction', fakeAsync(() => {
+    it('should request the previous transaction', fakeAsync(async () => {
       const form = new FormGroup(
         {
           expenditure_amount: new SubscriptionFormControl(),
@@ -608,11 +614,14 @@ describe('TransactionTypeBaseComponent', () => {
       const contactId$ = new Subject<string>();
       const contactIdMap: ContactIdMapType = { contact_1: contactId$ };
 
-      const transaction = SchETransaction.fromJSON({
-        transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-        aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-        expenditure_amount: 50,
-      });
+      const transaction = await hydrateTransaction(
+        {
+          transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+          aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+          expenditure_amount: 50,
+        },
+        SchETransaction,
+      );
 
       TransactionFormUtils.handleShowAggregateValueChanges(component, form, transaction, contactIdMap, {
         amount: 'expenditure_amount',

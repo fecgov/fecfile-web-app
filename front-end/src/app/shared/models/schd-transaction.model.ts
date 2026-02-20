@@ -1,7 +1,6 @@
-import { plainToClass, Transform } from 'class-transformer';
-import { AggregationGroups, Transaction } from './transaction.model';
-import { LabelList } from '../utils/label.utils';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { Transform } from 'class-transformer';
+import { Transaction } from './transaction.model';
+import type { AggregationGroups } from './type-enums';
 
 export class SchDTransaction extends Transaction {
   entity_type: string | undefined;
@@ -29,35 +28,7 @@ export class SchDTransaction extends Transaction {
   @Transform(({ value }) => (value ? parseFloat(value) : undefined))
   balance_at_close: number | undefined;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchDTransaction {
-    const transaction = plainToClass(SchDTransaction, json);
-    if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-      transaction.setMetaProperties(transactionType);
-    }
-    if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
-    }
-    if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
-    }
-    return transaction;
-  }
-
   override getFieldsNotToValidate(): string[] {
     return ['payment_amount', 'balance_at_close', ...super.getFieldsNotToValidate()];
   }
 }
-
-export enum ScheduleDTransactionTypes {
-  DEBT_OWED_BY_COMMITTEE = 'DEBT_OWED_BY_COMMITTEE',
-  DEBT_OWED_TO_COMMITTEE = 'DEBT_OWED_TO_COMMITTEE',
-}
-
-export const ScheduleDTransactionTypeLabels: LabelList = [
-  [ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE, 'Debt Owed By Committee'],
-  [ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE, 'Debt Owed To Committee'],
-];

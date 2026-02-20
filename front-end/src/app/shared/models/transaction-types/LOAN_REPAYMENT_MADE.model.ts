@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_REPAYMENT_MADE';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ORG_FIELDS,
@@ -11,6 +10,7 @@ import {
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
 import { TemplateMapKeyType } from '../transaction-type.model';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../type-enums';
 
 export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
   formFields = [...ADDRESS_FIELDS, ...COMMON_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
@@ -32,10 +32,8 @@ export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
     return 'Loan Repayment';
   }
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB26',
-      transaction_type_identifier: ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SB26',
+    transaction_type_identifier: ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE,
+  };
 }

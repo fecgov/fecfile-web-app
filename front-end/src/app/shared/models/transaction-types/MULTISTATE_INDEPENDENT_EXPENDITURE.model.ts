@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/MULTISTATE_INDEPENDENT_EXPENDITURE';
 import { SchETransactionType } from '../sche-transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
   ORGANIZATION_INDIVIDUAL,
@@ -17,7 +16,7 @@ import {
   CANDIDATE_OFFICE_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
-import { AggregationGroups } from '../transaction.model';
+import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes, AggregationGroups } from '../type-enums';
 
 export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
   formFields = [
@@ -50,11 +49,9 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
     electionType: 'P',
   };
 
-  getNewTransaction() {
-    return SchETransaction.fromJSON({
-      form_type: 'SE',
-      transaction_type_identifier: ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
-      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SE',
+    transaction_type_identifier: ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
+    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+  };
 }

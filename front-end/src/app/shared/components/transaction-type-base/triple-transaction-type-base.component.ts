@@ -100,7 +100,7 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override async submit(navigationEvent: NavigationEvent): Promise<void> {
     this.updateContactData();
-    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
+    const payload: Transaction = await TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.activeReportId,
       this.form,
@@ -108,13 +108,13 @@ export abstract class TripleTransactionTypeBaseComponent
     );
 
     payload.children = [
-      TransactionFormUtils.getPayloadTransaction(
+      await TransactionFormUtils.getPayloadTransaction(
         this.childTransaction,
         this.activeReportId,
         this.childForm,
         this.childFormProperties,
       ),
-      TransactionFormUtils.getPayloadTransaction(
+      await TransactionFormUtils.getPayloadTransaction(
         this.childTransaction_2,
         this.activeReportId,
         this.childForm_2,

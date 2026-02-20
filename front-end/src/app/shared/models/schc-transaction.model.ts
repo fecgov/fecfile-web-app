@@ -1,8 +1,7 @@
-import { plainToClass, Transform } from 'class-transformer';
-import { Transaction, AggregationGroups } from './transaction.model';
-import { LabelList } from '../utils/label.utils';
+import { Transform } from 'class-transformer';
+import { Transaction } from './transaction.model';
 import { BaseModel } from './base.model';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import type { AggregationGroups } from './type-enums';
 
 export class SchCTransaction extends Transaction {
   entity_type: string | undefined;
@@ -53,34 +52,4 @@ export class SchCTransaction extends Transaction {
   override getFieldsNotToSave(): string[] {
     return ['loan_payment_to_date', 'loan_balance', ...super.getFieldsNotToSave()];
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchCTransaction {
-    const transaction = plainToClass(SchCTransaction, json);
-    if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-      transaction.setMetaProperties(transactionType);
-    }
-    if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
-    }
-    if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
-    }
-    return transaction;
-  }
 }
-
-export enum ScheduleCTransactionTypes {
-  LOAN_RECEIVED_FROM_INDIVIDUAL = 'LOAN_RECEIVED_FROM_INDIVIDUAL',
-  LOAN_RECEIVED_FROM_BANK = 'LOAN_RECEIVED_FROM_BANK',
-  LOAN_BY_COMMITTEE = 'LOAN_BY_COMMITTEE',
-}
-
-export const ScheduleCTransactionTypeLabels: LabelList = [
-  [ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL, 'Loan Received from Individual'],
-  [ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK, 'Loan Received from Bank'],
-  [ScheduleCTransactionTypes.LOAN_BY_COMMITTEE, 'Loan By Committee'],
-];

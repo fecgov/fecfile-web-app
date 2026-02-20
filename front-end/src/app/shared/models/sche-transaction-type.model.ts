@@ -1,7 +1,8 @@
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
-import { ScheduleIds } from './transaction.model';
 import { CANDIDATE_FIELDS, hasFields } from '../utils/transaction-type-properties';
 import { FormGroup } from '@angular/forms';
+import { SchETransaction } from './sche-transaction.model';
+import { ScheduleIds } from './type-enums';
 
 export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
@@ -95,4 +96,6 @@ export abstract class SchETransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
+
+  override readonly transactionClass = SchETransaction;
 }

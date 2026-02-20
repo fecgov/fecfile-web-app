@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS';
 import { SchCTransactionType } from '../schc-transaction-type.model';
-import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import {
   CANCEL_CONTROL,
   SAVE_DOUBLE_ENTRY_LIST_CONTROL,
@@ -12,7 +11,6 @@ import {
   ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
-import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import {
   ADDRESS_FIELDS,
   COMMITTEE,
@@ -20,7 +18,12 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { ScheduleC2TransactionTypes } from '../schc2-transaction.model';
+import {
+  ScheduleBTransactionTypes,
+  ScheduleC2TransactionTypes,
+  ScheduleCTransactionTypeLabels,
+  ScheduleCTransactionTypes,
+} from '../type-enums';
 
 export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override formFields = [
@@ -68,11 +71,9 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
     [SAVE_DOUBLE_ENTRY_LIST_CONTROL],
   );
 
-  getNewTransaction() {
-    return SchCTransaction.fromJSON({
-      form_type: 'SC/9',
-      transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-      // until the FEC filing api can accept '27', we cannot send it: receipt_line_number: '27',
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SC/9',
+    transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+    // until the FEC filing api can accept '27', we cannot send it: receipt_line_number: '27',
+  };
 }

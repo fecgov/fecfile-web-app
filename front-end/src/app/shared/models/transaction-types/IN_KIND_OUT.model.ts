@@ -1,10 +1,9 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_OUT';
-import { AggregationGroups } from '../transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { INDIVIDUAL_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { IN_KIND_OUT as CommonInKindOut } from './common-types/IN_KIND_OUT.model';
+import { ABSTRACT_IN_KIND_OUT as CommonInKindOut } from './ABSTRACT_IN_KIND_OUT.model';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes, AggregationGroups } from '../type-enums';
 export class IN_KIND_OUT extends CommonInKindOut {
   override formFields = INDIVIDUAL_B_FORM_FIELDS;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
@@ -26,11 +25,9 @@ export class IN_KIND_OUT extends CommonInKindOut {
     'memo_code',
   ] as TemplateMapKeyType[];
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
-      transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_OUT,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SB21B',
+    transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_OUT,
+    aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+  };
 }

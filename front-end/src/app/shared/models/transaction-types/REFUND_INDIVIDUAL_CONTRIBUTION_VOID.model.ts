@@ -1,13 +1,12 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_REFUNDS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION,
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes, AggregationGroups } from '../type-enums';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
   formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
@@ -18,11 +17,9 @@ export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB28A',
-      transaction_type_identifier: ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
-      aggregation_group: AggregationGroups.GENERAL,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SB28A',
+    transaction_type_identifier: ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+    aggregation_group: AggregationGroups.GENERAL,
+  };
 }

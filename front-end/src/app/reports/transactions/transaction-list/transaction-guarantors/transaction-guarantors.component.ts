@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, computed, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
@@ -10,6 +9,7 @@ import type { TransactionListRecord } from 'app/shared/models/transaction-list-r
 import type { Transaction } from 'app/shared/models/transaction.model';
 import type { LabelList } from 'app/shared/utils/label.utils';
 import type { QueryParams } from 'app/shared/services/api.service';
+import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-transaction-guarantors',

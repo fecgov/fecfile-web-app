@@ -1,8 +1,7 @@
-import { plainToInstance, Transform } from 'class-transformer';
-import { AggregationGroups, Transaction } from './transaction.model';
-import { LabelList } from '../utils/label.utils';
+import { Transform } from 'class-transformer';
+import { Transaction } from './transaction.model';
 import { BaseModel } from './base.model';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import type { AggregationGroups } from './type-enums';
 
 export class SchFTransaction extends Transaction {
   coordinated_expenditures: boolean | undefined;
@@ -47,23 +46,6 @@ export class SchFTransaction extends Transaction {
   memo_code: boolean | undefined;
   memo_text_description: string | undefined;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchFTransaction {
-    const transaction = plainToInstance(SchFTransaction, json);
-    if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-      transaction.setMetaProperties(transactionType);
-    }
-    if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
-    }
-    if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
-    }
-    return transaction;
-  }
   override getFieldsNotToSave(): string[] {
     return ['aggregate_general_elec_expended', ...super.getFieldsNotToSave()];
   }
@@ -77,13 +59,3 @@ export class SchFTransaction extends Transaction {
     ];
   }
 }
-
-export enum ScheduleFTransactionTypes {
-  COORDINATED_PARTY_EXPENDITURE = 'COORDINATED_PARTY_EXPENDITURE',
-  COORDINATED_PARTY_EXPENDITURE_VOID = 'COORDINATED_PARTY_EXPENDITURE_VOID',
-}
-
-export const ScheduleFTransactionTypeLabels: LabelList = [
-  [ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE, 'Coordinated Party Expenditure'],
-  [ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID, 'Void of Coordinated Party Expenditure'],
-];

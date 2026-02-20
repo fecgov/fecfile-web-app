@@ -1,10 +1,10 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RECEIPT';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import type { SchATransaction } from '../scha-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes, AggregationGroups } from '../type-enums';
 
 export class PARTNERSHIP_RECEIPT extends SchATransactionType {
   formFields = ORGANIZATION_FORM_FIELDS;
@@ -22,11 +22,9 @@ export class PARTNERSHIP_RECEIPT extends SchATransactionType {
     return 'Partnership attributions do not meet itemization threshold';
   }
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA11AI',
+    transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
+    aggregation_group: AggregationGroups.GENERAL,
+  };
 }

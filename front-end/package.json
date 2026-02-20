@@ -41,6 +41,7 @@
         "intl-tel-input": "23.9.3",
         "lodash": "4.17.23",
         "luxon": "3.7.1",
+        "madge": "^8.0.0",
         "ngrx-store-localstorage": "20.0.0",
         "ngx-cookie-service": "20.1.1",
         "ngx-logger": "5.0.12",

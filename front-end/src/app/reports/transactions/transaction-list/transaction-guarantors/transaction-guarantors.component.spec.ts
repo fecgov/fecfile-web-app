@@ -17,7 +17,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/type-enums';
 
 @Component({
   imports: [TransactionGuarantorsComponent],

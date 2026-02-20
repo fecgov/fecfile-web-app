@@ -1,11 +1,18 @@
 import { FormGroup } from '@angular/forms';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { AggregationGroups } from 'app/shared/models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { hydrateTransaction } from 'app/shared/utils/transaction-type.utils';
+import {
+  AggregationGroups,
+  ScheduleATransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleETransactionTypes,
+  ScheduleFTransactionTypes,
+} from 'app/shared/models/type-enums';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -14,18 +21,21 @@ describe('FormUtils', () => {
     expect(t).toBeTruthy();
   });
 
-  it('should add the amount for not-refunds', () => {
+  it('should add the amount for not-refunds', async () => {
     const form = new FormGroup({
       contribution_amount: new SubscriptionFormControl(),
       contribution_aggregate: new SubscriptionFormControl(),
       expenditure_amount: new SubscriptionFormControl(),
     });
 
-    const transaction = SchATransaction.fromJSON({
-      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      contribution_amount: 50,
-    });
+    const transaction = await hydrateTransaction(
+      {
+        transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+        aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+        contribution_amount: 50,
+      },
+      SchATransaction,
+    );
 
     TransactionFormUtils.updateAggregate(
       form,
@@ -40,7 +50,7 @@ describe('FormUtils', () => {
     expect(aggregateFormControl.value).toEqual(150);
   });
 
-  it('should add the amount for refunds', () => {
+  it('should add the amount for refunds', async () => {
     const form = new FormGroup(
       {
         contribution_amount: new SubscriptionFormControl(),
@@ -50,11 +60,14 @@ describe('FormUtils', () => {
       { updateOn: 'blur' },
     );
 
-    const transaction = SchBTransaction.fromJSON({
-      transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      expenditure_amount: 50,
-    });
+    const transaction = await hydrateTransaction(
+      {
+        transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
+        aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+        expenditure_amount: 50,
+      },
+      SchBTransaction,
+    );
 
     TransactionFormUtils.updateAggregate(
       form,
@@ -70,7 +83,7 @@ describe('FormUtils', () => {
   });
 });
 
-it('should add the amount for calendar YTD', () => {
+it('should add the amount for calendar YTD', async () => {
   const form = new FormGroup(
     {
       expenditure_amount: new SubscriptionFormControl(),
@@ -79,11 +92,14 @@ it('should add the amount for calendar YTD', () => {
     { updateOn: 'blur' },
   );
 
-  const transaction = SchETransaction.fromJSON({
-    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-    aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
-    expenditure_amount: 50,
-  });
+  const transaction = await hydrateTransaction(
+    {
+      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+      aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
+      expenditure_amount: 50,
+    },
+    SchETransaction,
+  );
 
   TransactionFormUtils.updateAggregate(
     form,
@@ -98,7 +114,7 @@ it('should add the amount for calendar YTD', () => {
   expect(calendarYTDFormControl.value).toEqual(150);
 });
 
-it('should add the amount for payee candidate YTD', () => {
+it('should add the amount for payee candidate YTD', async () => {
   const form = new FormGroup(
     {
       expenditure_amount: new SubscriptionFormControl(),
@@ -107,11 +123,14 @@ it('should add the amount for payee candidate YTD', () => {
     { updateOn: 'blur' },
   );
 
-  const transaction = SchFTransaction.fromJSON({
-    transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-    aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
-    expenditure_amount: 50,
-  });
+  const transaction = await hydrateTransaction(
+    {
+      transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
+      aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,
+      expenditure_amount: 50,
+    },
+    SchFTransaction,
+  );
 
   TransactionFormUtils.updateAggregate(
     form,

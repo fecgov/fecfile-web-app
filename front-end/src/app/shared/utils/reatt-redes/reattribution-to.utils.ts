@@ -1,8 +1,9 @@
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import { TransactionTypes, getTransactionName } from '../../models/transaction.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import { getTransactionName } from '../../models/transaction.model';
+import type { SchATransaction } from '../../models/scha-transaction.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import type { TransactionTypes } from 'app/shared/models/type-enums';
 
 export class ReattributionToUtils {
   public static overlayTransactionProperties(

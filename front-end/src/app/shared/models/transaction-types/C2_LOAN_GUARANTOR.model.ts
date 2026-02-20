@@ -1,9 +1,4 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C2_LOAN_GUARANTOR';
-import {
-  SchC2Transaction,
-  ScheduleC2TransactionTypeLabels,
-  ScheduleC2TransactionTypes,
-} from '../schc2-transaction.model';
 import { SchC2TransactionType } from '../schc2-transaction-type.model';
 import {
   COM_FIELDS,
@@ -24,6 +19,7 @@ import {
   ControlType,
 } from '../transaction-navigation-controls.model';
 import { hasNoContact } from '../transaction.model';
+import { ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes } from '../type-enums';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   readonly title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
@@ -59,10 +55,8 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   override readonly hasAdditionalInfo = false;
   override readonly showAggregate = false;
 
-  getNewTransaction() {
-    return SchC2Transaction.fromJSON({
-      form_type: 'SC2/10',
-      transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SC2/10',
+    transaction_type_identifier: ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR,
+  };
 }

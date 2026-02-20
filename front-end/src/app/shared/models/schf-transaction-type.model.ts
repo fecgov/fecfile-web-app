@@ -1,6 +1,7 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
-import { ScheduleIds } from './transaction.model';
+import { SchFTransaction } from './schf-transaction.model';
+import { ScheduleIds } from './type-enums';
 
 export abstract class SchFTransactionType extends TransactionType {
   scheduleId = ScheduleIds.F;
@@ -94,4 +95,6 @@ export abstract class SchFTransactionType extends TransactionType {
     quinary_state: 'subordinate_state',
     quinary_zip: 'subordinate_zip',
   };
+
+  override readonly transactionClass = SchFTransaction;
 }

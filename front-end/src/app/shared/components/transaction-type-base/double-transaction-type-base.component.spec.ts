@@ -8,8 +8,7 @@ import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ROUTES } from 'app/routes';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -28,6 +27,7 @@ import { Component, viewChild } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleATransactionTypes, ScheduleBTransactionTypes } from 'app/shared/models/type-enums';
 
 @Component({
   imports: [DoubleTransactionDetailComponent],

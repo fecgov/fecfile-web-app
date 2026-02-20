@@ -26,13 +26,12 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { ScheduleCTransactionTypes, SchCTransaction } from 'app/shared/models/schc-transaction.model';
-import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchCTransaction } from 'app/shared/models/schc-transaction.model';
+import { ScheduleATransactionTypes, TransactionTypes, ScheduleCTransactionTypes } from 'app/shared/models/type-enums';
 
-const mockTransaction = getTestTransactionByType(
-  ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-) as SchATransaction;
+let mockTransaction: SchATransaction;
 
 const routeDataSubject = new BehaviorSubject<{ transaction?: Transaction | null }>({ transaction: mockTransaction });
 
@@ -48,7 +47,10 @@ const routeMock = {
   },
 };
 
-describe('TransactionContainerComponent', () => {
+describe('TransactionContainerComponent', async () => {
+  mockTransaction = (await getTestTransactionByType(
+    ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+  )) as SchATransaction;
   let component: TransactionContainerComponent;
   let fixture: ComponentFixture<TransactionContainerComponent>;
   let titleSpy: jasmine.Spy<(newTitle: string) => void>;

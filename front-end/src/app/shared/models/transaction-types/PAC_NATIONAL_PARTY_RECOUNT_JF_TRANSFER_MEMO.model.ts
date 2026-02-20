@@ -1,12 +1,12 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import type { SchATransaction } from '../scha-transaction.model';
 import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
+import { ABSTRACT_SCHEDULE_A_MEMO } from './ABSTRACT_SCHEDULE_A_MEMO.model';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes, AggregationGroups } from '../type-enums';
 
-export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
+export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends ABSTRACT_SCHEDULE_A_MEMO {
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
@@ -23,11 +23,9 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO
     }`;
   }
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA17',
+    transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+  };
 }

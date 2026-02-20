@@ -13,9 +13,9 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { MemoText } from '../models/memo-text.model';
 import { Form3X } from '../models/reports/form-3x.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { ScheduleETransactionTypes, SchETransaction } from '../models/sche-transaction.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
+import { SchETransaction } from '../models/sche-transaction.model';
 import { TransactionListRecord } from '../models/transaction-list-record.model';
 import {
   NavigationAction,
@@ -23,12 +23,19 @@ import {
   NavigationEvent,
 } from '../models/transaction-navigation-controls.model';
 import type { TransactionTemplateMapType } from '../models/transaction-type.model';
-import { AggregationGroups, Transaction, TransactionTypes } from '../models/transaction.model';
+import { Transaction } from '../models/transaction.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 import type { UserLoginData } from '../models/user.model';
-import { TransactionTypeUtils } from './transaction-type.utils';
+import { hydrateTransaction, TransactionTypeUtils } from './transaction-type.utils';
 import { Form24 } from '../models/reports/form-24.model';
 import { Form3 } from '../models/reports/form-3.model';
+import {
+  AggregationGroups,
+  ScheduleATransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleETransactionTypes,
+  TransactionTypes,
+} from '../models/type-enums';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -275,102 +282,114 @@ export function testContact() {
   });
 }
 
-export function getTestIndividualReceipt(): SchATransaction {
-  return SchATransaction.fromJSON({
-    id: '123',
-    transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-    report_ids: ['999'],
-    contribution_amount: '202.2',
-    contribution_date: '2022-02-02',
-    entity_type: ContactTypes.INDIVIDUAL,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contributor_employer: 'employer',
-    contributor_occupation: 'occupation',
-    memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-    contact_1_id: '456',
-    contact_1: Contact.fromJSON({
-      id: 'testId',
-      type: ContactTypes.INDIVIDUAL,
-      last_name: 'testLn1',
-      first_name: 'testFn1',
-      middle_name: 'testMn1',
-      prefix: 'testPrefix1',
-      suffix: 'testSuffix1',
-      employer: 'testEmployer1',
-      occupation: 'testOccupation1',
-      street_1: 'testStreet1',
-      street_2: 'testStreet2',
-      city: 'testCity1',
-      state: 'VA',
-      zip: '12345',
-    }),
-  });
+export function getTestIndividualReceipt(): Promise<SchATransaction> {
+  return hydrateTransaction(
+    {
+      id: '123',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      report_ids: ['999'],
+      contribution_amount: '202.2',
+      contribution_date: '2022-02-02',
+      entity_type: ContactTypes.INDIVIDUAL,
+      contributor_organization_name: 'org name',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contributor_employer: 'employer',
+      contributor_occupation: 'occupation',
+      memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+      contact_1_id: '456',
+      contact_1: Contact.fromJSON({
+        id: 'testId',
+        type: ContactTypes.INDIVIDUAL,
+        last_name: 'testLn1',
+        first_name: 'testFn1',
+        middle_name: 'testMn1',
+        prefix: 'testPrefix1',
+        suffix: 'testSuffix1',
+        employer: 'testEmployer1',
+        occupation: 'testOccupation1',
+        street_1: 'testStreet1',
+        street_2: 'testStreet2',
+        city: 'testCity1',
+        state: 'VA',
+        zip: '12345',
+      }),
+    },
+    SchATransaction,
+  );
 }
 
 export function testScheduleATransaction() {
-  return SchATransaction.fromJSON({
-    form_type: 'SA15',
-    report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
-    transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-    transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    entity_type: ContactTypes.COMMITTEE,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contribution_date: '2022-08-11',
-    contribution_amount: 1,
-    contribution_aggregate: 2,
-    contribution_purpose_descrip: 'JF Memo: test',
-    aggregation_group: AggregationGroups.GENERAL,
-    memo_code: true,
-    donor_committee_fec_id: 'C00000000',
-    reports: [
-      {
-        report_type: 'F3X',
-        report_code: 'Q1',
-        report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
-        coverage_through_date: '2024-04-20',
-      },
-    ],
-  });
+  return hydrateTransaction(
+    {
+      form_type: 'SA15',
+      report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      entity_type: ContactTypes.COMMITTEE,
+      contributor_organization_name: 'org name',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contribution_date: '2022-08-11',
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+      contribution_purpose_descrip: 'JF Memo: test',
+      aggregation_group: AggregationGroups.GENERAL,
+      memo_code: true,
+      donor_committee_fec_id: 'C00000000',
+      reports: [
+        {
+          report_type: 'F3X',
+          report_code: 'Q1',
+          report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
+          coverage_through_date: '2024-04-20',
+        },
+      ],
+    },
+    SchATransaction,
+  );
 }
 
 export function testScheduleBTransaction() {
-  return SchBTransaction.fromJSON({
-    form_type: 'SB21b',
-    report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
-    transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
-    transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    entity_type: ContactTypes.ORGANIZATION,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contribution_date: '2022-08-11',
-    contribution_amount: 1,
-    contribution_aggregate: 2,
-    aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-    reports: [
-      {
-        report_type: 'F3X',
-        report_code: 'Q1',
-        report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
-      },
-    ],
-  });
+  return hydrateTransaction(
+    {
+      form_type: 'SB21b',
+      report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
+      transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      entity_type: ContactTypes.ORGANIZATION,
+      contributor_organization_name: 'org name',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contribution_date: '2022-08-11',
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+      reports: [
+        {
+          report_type: 'F3X',
+          report_code: 'Q1',
+          report_code_label: 'APRIL 15 QUARTERLY REPORT (Q1)',
+        },
+      ],
+    },
+    SchBTransaction,
+  );
 }
 
 export function testIndependentExpenditure() {
-  return SchETransaction.fromJSON({
-    transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-  });
+  return hydrateTransaction(
+    {
+      transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+    },
+    SchETransaction,
+  );
 }
 
 export function createTestTransactionListRecord() {
@@ -392,13 +411,15 @@ export function createTestTransactionListRecord() {
   return testTransactionListRecord;
 }
 
-export function getTestTransactionByType(
+export async function getTestTransactionByType(
   transactionType: TransactionTypes,
   parentTransactionType?: TransactionTypes,
-): Transaction {
-  const transaction = TransactionTypeUtils.factory(transactionType).getNewTransaction();
+): Promise<Transaction> {
+  const transaction = await (await TransactionTypeUtils.factory(transactionType)).getNewTransaction();
   if (parentTransactionType) {
-    transaction.parent_transaction = TransactionTypeUtils.factory(parentTransactionType).getNewTransaction();
+    transaction.parent_transaction = await (
+      await TransactionTypeUtils.factory(parentTransactionType)
+    ).getNewTransaction();
   }
   return transaction;
 }

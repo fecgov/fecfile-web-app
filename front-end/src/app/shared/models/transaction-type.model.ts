@@ -14,7 +14,10 @@ import {
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
-import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
+import { hydrateTransaction } from '../utils/transaction-type.utils';
+import { ClassConstructor } from 'class-transformer';
+import type { AggregationGroups, ScheduleIds, TransactionTypes } from './type-enums';
+import type { Transaction } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
@@ -28,7 +31,7 @@ export abstract class TransactionType {
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
-  abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
+
   synchronizeOrgComNameValues = true; // When the COM name value is saved in the ORG model property per the FEC specification, "true" indicates that it is also copied into the COM model property as well
 
   // Form display settings
@@ -236,6 +239,17 @@ export abstract class TransactionType {
 
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
+
+  abstract readonly initializationData: {
+    form_type: string;
+    transaction_type_identifier: TransactionTypes;
+    aggregation_group?: AggregationGroups | null;
+  };
+  abstract readonly transactionClass: ClassConstructor<Transaction>;
+
+  getNewTransaction() {
+    return hydrateTransaction(this.initializationData, this.transactionClass);
+  }
 }
 
 export enum PurposeDescriptionLabelSuffix {

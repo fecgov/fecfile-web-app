@@ -2,14 +2,16 @@ import { Exclude, plainToInstance } from 'class-transformer';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { ReportTypes } from './report.model';
 import { BaseForm3 } from './base-form-3';
-import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { ScheduleFTransactionTypes } from '../schf-transaction.model';
-import type { TransactionTypes } from '../transaction.model';
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
-import { ScheduleCTransactionTypes } from '../schc-transaction.model';
-import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import type { MenuItem } from 'primeng/api';
+import {
+  TransactionTypes,
+  ScheduleATransactionTypes,
+  ScheduleCTransactionTypes,
+  ScheduleDTransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleFTransactionTypes,
+} from '../type-enums';
 
 export enum F3FormTypes {
   F3N = 'F3N',

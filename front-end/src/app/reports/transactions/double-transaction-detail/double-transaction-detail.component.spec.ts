@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -19,16 +18,19 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('DoubleTransactionDetailComponent', () => {
   let component: DoubleTransactionDetailComponent;
   let fixture: ComponentFixture<DoubleTransactionDetailComponent>;
 
-  const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
-  const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO);
-  transaction.children = [childTransaction];
+  let transaction: Transaction;
 
   beforeEach(async () => {
+    transaction = await getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+    const childTransaction = await getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO);
+    transaction.children = [childTransaction];
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,

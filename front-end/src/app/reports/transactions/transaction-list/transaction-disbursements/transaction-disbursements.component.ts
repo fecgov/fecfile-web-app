@@ -1,10 +1,6 @@
 import { Component, computed, inject, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
-import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
-import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
-import { ScheduleIds } from 'app/shared/models/transaction.model';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
@@ -16,7 +12,13 @@ import {
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import {
+  ScheduleBTransactionTypeLabels,
+  ScheduleETransactionTypeLabels,
+  ScheduleFTransactionTypeLabels,
+  ScheduleIds,
+} from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-transaction-disbursements',

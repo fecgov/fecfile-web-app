@@ -1,7 +1,6 @@
-import { ScheduleATransactionTypes } from './scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { TransactionType } from './transaction-type.model';
-import { ScheduleETransactionTypes } from './sche-transaction.model';
+import { ScheduleATransactionTypes, ScheduleETransactionTypes } from './type-enums';
 
 describe('Transaction Type Model', () => {
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {

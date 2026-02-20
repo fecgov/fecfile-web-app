@@ -5,7 +5,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { Component, inject, viewChild } from '@angular/core';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
 
 @Component({
   imports: [CalendarComponent],

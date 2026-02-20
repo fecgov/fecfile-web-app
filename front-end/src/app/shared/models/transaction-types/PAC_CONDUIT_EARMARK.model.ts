@@ -1,11 +1,12 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_CONDUIT_EARMARKS';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import type { SchATransaction } from '../scha-transaction.model';
+import type { SchBTransaction } from '../schb-transaction.model';
 import { COMMITTEE, COMMITTEE_NO_AGGREGATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
+import { ABSTRACT_CONDUIT_EARMARK } from './ABSTRACT_CONDUIT_EARMARK.model';
 import { conduitClause } from '../clause';
+import { ScheduleBTransactionTypes, ScheduleATransactionTypes } from '../type-enums';
 
-export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
+export class PAC_CONDUIT_EARMARK extends ABSTRACT_CONDUIT_EARMARK {
   formFields = COMMITTEE_NO_AGGREGATE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = 'PAC Conduit Earmark';
@@ -22,11 +23,9 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     return conduitClause(earmarkMemo.payee_organization_name, 'for');
   }
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA11C',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
-      memo_code: false,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA11C',
+    transaction_type_identifier: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
+    memo_code: false,
+  };
 }

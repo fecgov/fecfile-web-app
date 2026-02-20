@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import  { TransactionListRecord } from '../models/transaction-list-record.model';
+import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { ApiService, QueryParams } from './api.service';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import type { Report } from '../models/reports/report.model';
@@ -25,7 +25,7 @@ export class TransactionListService implements TableListService<TransactionListR
       `${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
+    response.results = await Promise.all(response.results.map((item) => TransactionListRecord.fromJSON(item)));
     response.pageNumber = pageNumber;
     return response;
   }

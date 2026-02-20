@@ -1,10 +1,10 @@
 import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
-import type { TransactionTypes } from '../../models/transaction.model';
 import type { SchBTransaction } from '../../models/schb-transaction.model';
 import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
+import type { TransactionTypes } from 'app/shared/models/type-enums';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(

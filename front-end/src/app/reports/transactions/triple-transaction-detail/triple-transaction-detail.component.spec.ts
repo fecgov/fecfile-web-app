@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -15,12 +14,15 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { TripleTransactionDetailComponent } from './triple-transaction-detail.component';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {
+  ScheduleCTransactionTypes,
+  ScheduleC1TransactionTypes,
+  ScheduleATransactionTypes,
+} from 'app/shared/models/type-enums';
 
 describe('TripleTransactionDetailComponent', () => {
   let component: TripleTransactionDetailComponent;

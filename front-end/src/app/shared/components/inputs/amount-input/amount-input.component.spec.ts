@@ -18,8 +18,8 @@ import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { provideHttpClient } from '@angular/common/http';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
 
 @Component({
   imports: [AmountInputComponent, AsyncPipe],
@@ -116,9 +116,9 @@ describe('AmountInputComponent', () => {
     expect(updateInputMethodTrue).toHaveBeenCalled();
   });
 
-  it('should set up the component properly', () => {
+  it('should set up the component properly', async () => {
     fixture.detectChanges();
-    const transaction = getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
+    const transaction = await getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
     const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
     host.transaction = transaction;
     host.templateMap = transaction.transactionType.templateMap;

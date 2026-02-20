@@ -1,7 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CANDIDATE_CONTRIBUTIONS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 import {
@@ -9,6 +8,7 @@ import {
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../type-enums';
 
 export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
@@ -22,10 +22,8 @@ export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override contact2IsRequired = () => true;
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB23',
-      transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SB23',
+    transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
+  };
 }

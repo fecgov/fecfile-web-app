@@ -1,16 +1,23 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
-import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
+import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
+import { SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { SchFTransaction } from 'app/shared/models/schf-transaction.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import {
+  ScheduleATransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleC1TransactionTypes,
+  ScheduleETransactionTypes,
+  ScheduleFTransactionTypes,
+} from 'app/shared/models/type-enums';
 
 describe('ContactUtils', () => {
   let form: FormGroup;

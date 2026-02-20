@@ -3,10 +3,6 @@ import { RouterLink } from '@angular/router';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 import {
   ColumnDefinition,
   TableBodyContext,
@@ -15,6 +11,7 @@ import {
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ScheduleCTransactionTypeLabels, ScheduleC1TransactionTypeLabels, ScheduleC2TransactionTypeLabels, ScheduleDTransactionTypeLabels } from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',

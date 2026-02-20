@@ -3,15 +3,19 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { AggregationGroups, Transaction } from '../models/transaction.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { Transaction } from '../models/transaction.model';
+import { SchATransaction } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
-import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
-import { ScheduleFTransactionTypes } from '../models/schf-transaction.model';
+import {
+  ScheduleATransactionTypes,
+  AggregationGroups,
+  ScheduleFTransactionTypes,
+  ScheduleETransactionTypes,
+} from '../models/type-enums';
 
 describe('TransactionService', () => {
   let service: TransactionService;

@@ -1,12 +1,12 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RECEIPT';
 import { ContactTypes } from '../contact.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { AggregationGroups } from '../transaction.model';
+import type { SchATransaction } from '../scha-transaction.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK } from './common-types/EARMARK.model';
+import { ABSTRACT_EARMARK } from './ABSTRACT_EARMARK.model';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes, AggregationGroups } from '../type-enums';
 
-export class PAC_EARMARK_RECEIPT extends EARMARK {
+export class PAC_EARMARK_RECEIPT extends ABSTRACT_EARMARK {
   override formFields = COMMITTEE_FORM_FIELDS;
   override contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
@@ -30,11 +30,9 @@ export class PAC_EARMARK_RECEIPT extends EARMARK {
     return '';
   }
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA11C',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
-      aggregation_group: AggregationGroups.GENERAL,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA11C',
+    transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
+    aggregation_group: AggregationGroups.GENERAL,
+  };
 }

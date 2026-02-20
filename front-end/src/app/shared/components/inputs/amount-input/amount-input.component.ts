@@ -1,7 +1,6 @@
 import { Component, computed, inject, input, OnInit, viewChild } from '@angular/core';
 import { AbstractControl, ValidationErrors, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
-import { ScheduleIds } from 'app/shared/models/transaction.model';
+import { ScheduleETransactionTypes, ScheduleIds } from 'app/shared/models/type-enums';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
@@ -23,6 +22,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import type { Form24 } from 'app/shared/models/reports/form-24.model';
 import type { Form3X } from 'app/shared/models/reports/form-3x.model';
+import type { SchETransaction } from 'app/shared/models/sche-transaction.model';
 
 @Component({
   selector: 'app-amount-input',

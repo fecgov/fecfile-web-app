@@ -35,13 +35,6 @@ import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
-import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
-import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
-import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.model';
-import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
-import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
@@ -52,9 +45,18 @@ import { SearchableSelectComponent } from '../searchable-select/searchable-selec
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { candidatePatternMessage } from 'app/shared/models/candidate.model';
 import { committeePatternMessage } from 'app/shared/models/committee-account.model';
+import {
+  ScheduleATransactionTypeLabels,
+  ScheduleBTransactionTypeLabels,
+  ScheduleCTransactionTypeLabels,
+  ScheduleC1TransactionTypeLabels,
+  ScheduleC2TransactionTypeLabels,
+  ScheduleDTransactionTypeLabels,
+  ScheduleETransactionTypeLabels,
+  ScheduleFTransactionTypeLabels,
+} from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-contact-dialog',

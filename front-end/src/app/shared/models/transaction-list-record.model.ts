@@ -32,10 +32,10 @@ export class TransactionListRecord extends BaseModel {
   force_itemized?: boolean;
 
   // prettier-ignore
-  static fromJSON(json: any): TransactionListRecord { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static async fromJSON(json: any): Promise<TransactionListRecord> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const transactionListRecord =  plainToClass(TransactionListRecord, json);
     if (transactionListRecord.transaction_type_identifier) {
-      transactionListRecord.transactionType = TransactionTypeUtils.factory(transactionListRecord.transaction_type_identifier);
+      transactionListRecord.transactionType = await TransactionTypeUtils.factory(transactionListRecord.transaction_type_identifier);
     }
     return transactionListRecord;
   }

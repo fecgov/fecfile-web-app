@@ -1,14 +1,14 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import type { SchATransaction } from '../scha-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
-import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { shortenClause } from '../clause';
-import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
+import { ABSTRACT_SCHEDULE_A_MEMO } from './ABSTRACT_SCHEDULE_A_MEMO.model';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes, AggregationGroups } from '../type-enums';
 
-export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
+export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends ABSTRACT_SCHEDULE_A_MEMO {
   formFields = ORGANIZATION_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
@@ -40,11 +40,9 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SCHE
   override purposeDescriptionLabelNotice =
     'If transaction has no associated Partnership memos, reads "Pres. Nominating Convention Account JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "Pres. Nominating Convention Account JF Memo: XX (See Partnership Attribution(s) below)"';
 
-  getNewTransaction() {
-    return SchATransaction.fromJSON({
-      form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SA17',
+    transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+  };
 }

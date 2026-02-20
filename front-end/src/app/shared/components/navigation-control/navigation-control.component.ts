@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 import {
   ControlType,
   NavigationAction,
@@ -9,16 +9,8 @@ import {
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { SubTransactionGroup, TransactionType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import {
-  ScheduleATransactionTypeLabels,
-  UnimplementedTypeEntityCategories,
-} from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
-import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ButtonModule } from 'primeng/button';
@@ -26,6 +18,15 @@ import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
+import { cloneDeep } from 'lodash';
+import {
+  TransactionTypes,
+  UnimplementedTypeEntityCategories,
+  ScheduleATransactionTypeLabels,
+  ScheduleBTransactionTypeLabels,
+  ScheduleC2TransactionTypeLabels,
+  ScheduleETransactionTypeLabels,
+} from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-navigation-control',
@@ -41,14 +42,14 @@ export class NavigationControlComponent implements OnInit {
   public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   dropdownControl = new SubscriptionFormControl('');
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     /**
      * If the navigation control is a dropdown, we need to extract
      * the options from the config in the transaction type
      */
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
       this.controlType = 'dropdown';
-      this.dropdownOptions = this.getOptions(
+      this.dropdownOptions = await this.getOptions(
         this.transaction?.transactionType,
         this.transaction?.parent_transaction?.transactionType,
       );
@@ -104,13 +105,16 @@ export class NavigationControlComponent implements OnInit {
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
-      const navigationEvent = clone(event.value);
+      const navigationEvent = structuredClone(event.value);
       this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig = false): any => {
+  getOptionFromConfig = async (
+    config: SubTransactionGroup | TransactionTypes,
+    isParentConfig = false,
+  ): Promise<any> => {
     /** Interpret config to return either a group of navigation options or a single navigation option
      * If the config is a group, return a group of options, recursively calling getOptionFromConfig
      * If the config is a single transaction type, return a single navigation option
@@ -121,16 +125,18 @@ export class NavigationControlComponent implements OnInit {
       const group = config as SubTransactionGroup;
       return {
         label: group.groupName,
-        items: group.subTransactionTypes.map((type) => this.getOptionFromConfig(type, isParentConfig)),
+        items: await Promise.all(
+          group.subTransactionTypes.map((type) => this.getOptionFromConfig(type, isParentConfig)),
+        ),
       };
     }
     const typeId = config as TransactionTypes;
 
     // Return an unclicable label if the transaction type is not implemented
-    if (!getTransactionTypeClass(typeId)) {
+    if (!(await getTransactionTypeClass(typeId))) {
       return { label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId) };
     }
-    const type = TransactionTypeUtils.factory(typeId);
+    const type = await TransactionTypeUtils.factory(typeId);
 
     // return a single navigation option
     return {
@@ -151,7 +157,7 @@ export class NavigationControlComponent implements OnInit {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): any {
+  async getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): Promise<any> {
     /** Get options for dropdown based on transactionType and parentTransactionType
      * If parentTransactionType is provided, include options from parentTransactionType
      *    options from parent transaction will have the destionaion of ANOTHER
@@ -163,7 +169,7 @@ export class NavigationControlComponent implements OnInit {
      */
     const config = transactionType?.subTransactionConfig;
     const parentConfig = parentTransactionType?.subTransactionConfig;
-    const options = [];
+    const options: Promise<any>[] = [];
     // either flatten an array or add a single config
     if (Array.isArray(parentConfig)) {
       options.push(...parentConfig.map((type) => this.getOptionFromConfig(type, true)));
@@ -176,6 +182,6 @@ export class NavigationControlComponent implements OnInit {
     } else if (config) {
       options.push(this.getOptionFromConfig(config));
     }
-    return options;
+    return Promise.all(options);
   }
 }

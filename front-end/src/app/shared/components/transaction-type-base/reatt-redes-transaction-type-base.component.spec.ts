@@ -1,6 +1,6 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SchATransaction } from '../../models/scha-transaction.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
+import { SchBTransaction } from '../../models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -25,6 +25,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { hydrateTransaction } from 'app/shared/utils/transaction-type.utils';
+import { ScheduleATransactionTypes, ScheduleBTransactionTypes } from 'app/shared/models/type-enums';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -124,7 +126,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       expect(component.childForm.get('election_code')).toBeFalsy();
     });
 
-    it('should update election and candidate data for primary and child forms', () => {
+    it('should update election and candidate data for primary and child forms', async () => {
       const data = {
         id: '999',
         form_type: 'SA11Ai',
@@ -143,10 +145,14 @@ describe('ReattTransactionTypeBaseComponent', () => {
         beneficiary_candidate_district: 'A',
         category_code: 'A',
       };
-      component.transaction = RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
+      component.transaction = RedesignationToUtils.overlayTransactionProperties(
+        await hydrateTransaction(data, SchBTransaction),
+      );
       expect(component.transaction.transactionType.templateMap).toBeTruthy();
-      component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      component.childTransaction.reatt_redes = SchBTransaction.fromJSON(data);
+      component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(
+        await hydrateTransaction(data, SchBTransaction),
+      );
+      component.childTransaction.reatt_redes = await hydrateTransaction(data, SchBTransaction);
       component.childForm.addControl('election_code', new SubscriptionFormControl(''));
       component.childForm.addControl('election_other_description', new SubscriptionFormControl(''));
       component.childForm.addControl('category_code', new SubscriptionFormControl(''));

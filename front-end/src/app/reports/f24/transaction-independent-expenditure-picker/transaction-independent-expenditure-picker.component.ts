@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { Card } from 'primeng/card';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
 import { Disbursement } from 'app/shared/models/transaction-group';
+import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-transaction-independent-expenditure-picker',

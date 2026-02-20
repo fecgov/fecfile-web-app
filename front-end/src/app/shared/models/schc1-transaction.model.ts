@@ -1,8 +1,7 @@
-import { plainToClass, Transform } from 'class-transformer';
-import { LabelList } from '../utils/label.utils';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { AggregationGroups, Transaction } from './transaction.model';
+import { Transaction } from './transaction.model';
+import type { AggregationGroups } from './type-enums';
 
 export class SchC1Transaction extends Transaction {
   lender_organization_name: string | undefined;
@@ -58,30 +57,4 @@ export class SchC1Transaction extends Transaction {
   // The line_of_credit field is strictly to save front-end UI state and is not
   // part of the SchC1 spec
   line_of_credit: boolean | undefined;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchC1Transaction {
-    const transaction = plainToClass(SchC1Transaction, json);
-    if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-      transaction.setMetaProperties(transactionType);
-    }
-    if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
-    }
-    if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
-    }
-    return transaction;
-  }
 }
-
-export enum ScheduleC1TransactionTypes {
-  C1_LOAN_AGREEMENT = 'C1_LOAN_AGREEMENT',
-}
-
-export const ScheduleC1TransactionTypeLabels: LabelList = [
-  [ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT, 'Loan Agreement'],
-];

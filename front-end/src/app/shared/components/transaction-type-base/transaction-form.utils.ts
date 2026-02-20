@@ -280,12 +280,12 @@ export class TransactionFormUtils {
     }
   }
 
-  static getPayloadTransaction(
+  static async getPayloadTransaction(
     transaction: Transaction | undefined,
     activeReportId: string,
     form: FormGroup,
     formProperties: string[],
-  ): Transaction {
+  ): Promise<Transaction> {
     if (!transaction) {
       throw new Error('FECfile+: Payload transaction not found');
     }
@@ -304,7 +304,7 @@ export class TransactionFormUtils {
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
-    const payload: ScheduleTransaction = getFromJSON({
+    const payload: ScheduleTransaction = await getFromJSON({
       ...transaction,
       ...formValues,
     });

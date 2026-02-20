@@ -1,7 +1,5 @@
-import { plainToClass } from 'class-transformer';
-import { Transaction, AggregationGroups } from './transaction.model';
-import { LabelList } from '../utils/label.utils';
-import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { Transaction } from './transaction.model';
+import type { AggregationGroups } from './type-enums';
 
 export class SchC2Transaction extends Transaction {
   guarantor_last_name: string | undefined;
@@ -20,30 +18,4 @@ export class SchC2Transaction extends Transaction {
 
   entity_type: string | undefined;
   aggregation_group: AggregationGroups | undefined;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static fromJSON(json: any, depth = 2): SchC2Transaction {
-    const transaction = plainToClass(SchC2Transaction, json);
-    if (transaction.transaction_type_identifier) {
-      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-      transaction.setMetaProperties(transactionType);
-    }
-    if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
-    }
-    if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function (child) {
-        return getFromJSON(child, depth - 1);
-      });
-    }
-    return transaction;
-  }
 }
-
-export enum ScheduleC2TransactionTypes {
-  C2_LOAN_GUARANTOR = 'C2_LOAN_GUARANTOR',
-}
-
-export const ScheduleC2TransactionTypeLabels: LabelList = [
-  [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR, 'Guarantors to loan source'],
-];

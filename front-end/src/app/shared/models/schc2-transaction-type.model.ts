@@ -1,5 +1,6 @@
+import { SchC2Transaction } from './schc2-transaction.model';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
-import { ScheduleIds } from './transaction.model';
+import { ScheduleIds } from './type-enums';
 
 export abstract class SchC2TransactionType extends TransactionType {
   scheduleId = ScheduleIds.C2;
@@ -81,4 +82,6 @@ export abstract class SchC2TransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
+
+  override readonly transactionClass = SchC2Transaction;
 }

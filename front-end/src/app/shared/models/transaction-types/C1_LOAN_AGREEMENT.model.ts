@@ -11,9 +11,9 @@ import {
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C1_LOAN_AGREEMENT';
 import { STANDARD_AND_SECONDARY } from '../contact.model';
 import { SchC1TransactionType } from '../schc1-transaction-type.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { Transaction, isPulledForwardLoan } from '../transaction.model';
+import { ScheduleC1TransactionTypes } from '../type-enums';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [
@@ -91,10 +91,8 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   title = 'Loan agreement';
   override contactTitle = 'Lender';
 
-  getNewTransaction() {
-    return SchC1Transaction.fromJSON({
-      form_type: 'SC1/10',
-      transaction_type_identifier: ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
-    });
-  }
+  override initializationData = {
+    form_type: 'SC1/10',
+    transaction_type_identifier: ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
+  };
 }

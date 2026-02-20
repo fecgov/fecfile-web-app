@@ -1,5 +1,5 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import type { SchBTransaction } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { ContactTypes, STANDARD_AND_CANDIDATE } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
@@ -7,8 +7,9 @@ import {
   COMMITTEE,
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK_OUT as CommonConduitEarmarkOut } from './common-types/CONDUIT_EARMARK_OUT.model';
+import { ABSTRACT_CONDUIT_EARMARK_OUT as CommonConduitEarmarkOut } from './ABSTRACT_CONDUIT_EARMARK_OUT.model';
 import { conduitClause } from '../clause';
+import { ScheduleBTransactionTypes } from '../type-enums';
 
 export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
@@ -39,10 +40,8 @@ export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
     return conduitClause(conduit, 'from');
   }
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB23',
-      transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT,
-    });
-  }
+  override initializationData = {
+    form_type: 'SB23',
+    transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT,
+  };
 }

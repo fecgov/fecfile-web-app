@@ -14,10 +14,7 @@ import {
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { BehaviorSubject, of } from 'rxjs';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
@@ -26,6 +23,11 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import {
+  ScheduleCTransactionTypes,
+  ScheduleDTransactionTypes,
+  ScheduleATransactionTypes,
+} from 'app/shared/models/type-enums';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;

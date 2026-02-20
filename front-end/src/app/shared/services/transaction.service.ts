@@ -3,9 +3,10 @@ import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { CandidateOfficeTypes } from '../models/contact.model';
-import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
+import { ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
+import { AggregationGroups } from '../models/type-enums';
 
 interface PreviousAggregate {
   aggregate: number;

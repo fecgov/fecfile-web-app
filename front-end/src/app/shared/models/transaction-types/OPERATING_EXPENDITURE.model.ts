@@ -1,13 +1,12 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENTS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes, AggregationGroups } from '../type-enums';
 
 export class OPERATING_EXPENDITURE extends SchBTransactionType {
   formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
@@ -16,11 +15,9 @@ export class OPERATING_EXPENDITURE extends SchBTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  getNewTransaction() {
-    return SchBTransaction.fromJSON({
-      form_type: 'SB21B',
-      transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
-      aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-    });
-  }
+  override readonly initializationData = {
+    form_type: 'SB21B',
+    transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
+    aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+  };
 }

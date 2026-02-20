@@ -3,13 +3,13 @@ import { DatePipe } from '@angular/common';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { SchCTransaction } from 'app/shared/models/schc-transaction.model';
+import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 import { TripleTransactionDetailComponent } from 'app/reports/transactions/triple-transaction-detail/triple-transaction-detail.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
@@ -25,6 +25,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import {
+  ScheduleCTransactionTypes,
+  ScheduleC1TransactionTypes,
+  ScheduleATransactionTypes,
+} from 'app/shared/models/type-enums';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;

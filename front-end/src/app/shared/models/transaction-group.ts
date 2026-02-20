@@ -1,10 +1,12 @@
-import { ScheduleATransactionTypes } from './scha-transaction.model';
-import { ScheduleBTransactionTypes } from './schb-transaction.model';
-import { ScheduleCTransactionTypes } from './schc-transaction.model';
-import { ScheduleDTransactionTypes } from './schd-transaction.model';
-import { ScheduleETransactionTypes } from './sche-transaction.model';
-import { ScheduleFTransactionTypes } from './schf-transaction.model';
-import { TransactionTypes } from './transaction.model';
+import {
+  TransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleFTransactionTypes,
+  ScheduleETransactionTypes,
+  ScheduleCTransactionTypes,
+  ScheduleDTransactionTypes,
+  ScheduleATransactionTypes,
+} from './type-enums';
 
 export enum Categories {
   RECEIPT = 'receipt',
@@ -234,3 +236,9 @@ export const CategoryPicker = new Map<Categories, TransactionGroup[]>([
   [Categories.DISBURSEMENT, Disbursement],
   [Categories.LOANS_AND_DEBTS, LoansAndDebts],
 ]);
+
+export type TransactionGroupTypes =
+  | ReceiptType
+  | DisbursementType
+  | LoansAndDebtsType
+  | ScheduleC1TransactionGroupsType;
