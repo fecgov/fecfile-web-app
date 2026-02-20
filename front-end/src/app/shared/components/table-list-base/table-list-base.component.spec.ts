@@ -37,7 +37,7 @@ class TestTableListService implements TableListService<string> {
     [items]="items()"
     title="Title"
     [(totalItems)]="totalItems"
-    [loading]="loading"
+    [loading]="loading()"
     [(rowsPerPage)]="rowsPerPage"
     [(selectedItems)]="selectedItems"
     itemName="strings"

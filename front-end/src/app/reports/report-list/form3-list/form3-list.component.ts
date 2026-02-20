@@ -10,16 +10,7 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form3-list.component.html',
 })
-export class Form3ListComponent extends AbstractFormListComponent<Form3> implements OnInit {
-  ngOnInit(): void {
-    this.initialize();
-  }
-
-  private async initialize() {
-    await this.loadTableItems();
-    this.loaded.emit();
-  }
-
+export class Form3ListComponent extends AbstractFormListComponent<Form3> {
   readonly itemService = inject(Form3Service);
   override readonly caption =
     'Data table of all F3X reports created by the committee broken down by report type, coverage date, status, version, Date filed, and actions.';

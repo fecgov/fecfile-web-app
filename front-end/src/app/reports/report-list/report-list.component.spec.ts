@@ -12,11 +12,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { ReportListComponent } from './report-list.component';
 import { ScannedActionsSubject } from '@ngrx/store';
-import { Form3XListComponent } from './form3x-list/form3x-list.component';
-import { Form3ListComponent } from './form3-list/form3-list.component';
-import { Form99ListComponent } from './form99-list/form99-list.component';
-import { Form24ListComponent } from './form24-list/form24-list.component';
-import { Form1MListComponent } from './form1m-list/form1m-list.component';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -47,30 +42,48 @@ describe('ReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should showEmptyState correctly', () => {
-    const mock3x: Form3XListComponent = {
-      totalItems: () => 0,
-    } as Form3XListComponent;
-    const mock3: Form3ListComponent = {
-      totalItems: () => 0,
-    } as Form3ListComponent;
-    const mock99: Form99ListComponent = {
-      totalItems: () => 0,
-    } as Form99ListComponent;
-    const mock1m: Form1MListComponent = {
-      totalItems: () => 0,
-    } as Form1MListComponent;
-    const mock24: Form24ListComponent = {
-      totalItems: () => 0,
-    } as Form24ListComponent;
+  it('should showEmptyState when all lists are loaded and empty', () => {
+    const createMockListComponent = (totalItems: number = 0): any => ({
+      loading: () => false,
+      totalItems: () => totalItems,
+    });
 
-    (component.form3xList as any) = () => [mock3x];
-    (component.form3List as any) = () => [mock3];
-    (component.form99List as any) = () => [mock99];
-    (component.form1mList as any) = () => [mock1m];
-    (component.form24List as any) = () => [mock24];
+    (component.form3xList as any) = () => createMockListComponent(0);
+    (component.form3List as any) = () => createMockListComponent(0);
+    (component.form99List as any) = () => createMockListComponent(0);
+    (component.form1mList as any) = () => createMockListComponent(0);
+    (component.form24List as any) = () => createMockListComponent(0);
 
-    Object.values(component.tableLoadedStates).forEach((sig) => sig.set(true));
     expect(component.showEmptyState()).toBeTrue();
+  });
+
+  it('should not showEmptyState when lists are still loading', () => {
+    const createMockListComponent = (loading: boolean): any => ({
+      loading: () => loading,
+      totalItems: () => 0,
+    });
+
+    (component.form3xList as any) = () => createMockListComponent(true);
+    (component.form3List as any) = () => createMockListComponent(false);
+    (component.form99List as any) = () => createMockListComponent(false);
+    (component.form1mList as any) = () => createMockListComponent(false);
+    (component.form24List as any) = () => createMockListComponent(false);
+
+    expect(component.showEmptyState()).toBeFalse();
+  });
+
+  it('should not showEmptyState when lists have items', () => {
+    const createMockListComponent = (totalItems: number): any => ({
+      loading: () => false,
+      totalItems: () => totalItems,
+    });
+
+    (component.form3xList as any) = () => createMockListComponent(5);
+    (component.form3List as any) = () => createMockListComponent(0);
+    (component.form99List as any) = () => createMockListComponent(0);
+    (component.form1mList as any) = () => createMockListComponent(0);
+    (component.form24List as any) = () => createMockListComponent(0);
+
+    expect(component.showEmptyState()).toBeFalse();
   });
 });
