@@ -256,7 +256,14 @@ export class PageUtils {
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
+    cy.env<{ FILING_PASSWORD?: string }>(['FILING_PASSWORD']).then(({ FILING_PASSWORD }) => {
+      if (!FILING_PASSWORD) {
+        throw new Error(
+          'Missing FILING_PASSWORD. Set CYPRESS_FILING_PASSWORD before running report submission tests.',
+        );
+      }
+      PageUtils.enterValue('#filingPassword', FILING_PASSWORD);
+    });
     cy.get(alias).find('[data-cy="userCertified"]').first().click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');

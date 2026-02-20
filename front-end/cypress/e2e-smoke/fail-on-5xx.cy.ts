@@ -44,20 +44,20 @@ function extractArtifactPathFromFailError(err: unknown): string {
 
 // IMPORTANT: sets the artifact dir override at spec-eval time,
 // before any hooks run, so the support-level beforeEach reads it
-const originalArtifactDir = Cypress.env('failOn5xxArtifactDir');
-Cypress.env('failOn5xxArtifactDir', SELF_TEST_ARTIFACT_DIR);
+const originalArtifactDir = Cypress.expose('failOn5xxArtifactDir');
+Cypress.expose('failOn5xxArtifactDir', SELF_TEST_ARTIFACT_DIR);
 
 describe('failOn5xx tripwire: nightly self-test', () => {
   after(() => {
     // restores support-level environment variable value for the retry and the next test
-    Cypress.env('failOn5xxArtifactDir', originalArtifactDir);
+    Cypress.expose('failOn5xxArtifactDir', originalArtifactDir);
   });
 
   it(
     'fails once on a watched 5xx (so Cypress captures failure screenshot), then passes on retry',
     { retries: 1 },
     function () {
-      expect(Cypress.env('failOn5xx'), 'failOn5xx should be enabled').to.eq(true);
+      expect(Cypress.expose('failOn5xx'), 'failOn5xx should be enabled').to.eq(true);
 
       const currentTest = this.currentTest as
         | (Mocha.Runnable & { currentRetry?: () => number })

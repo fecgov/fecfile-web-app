@@ -6,7 +6,11 @@ import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
 const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
 
 export default defineConfig({
+  allowCypressEnv: false,
   env: {
+    ...CypressConfigHelper.failOn5xxDefaults,
+  },
+  expose: {
     ...CypressConfigHelper.failOn5xxDefaults,
   },
   defaultCommandTimeout: 10000,
@@ -39,6 +43,21 @@ export default defineConfig({
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
     setupNodeEvents(on, config) {
+      const resolvedFailOn5xxExpose: Record<string, unknown> = {
+        ...CypressConfigHelper.failOn5xxDefaults,
+      };
+      const env = config.env as Record<string, unknown> | undefined;
+      for (const key of Object.keys(CypressConfigHelper.failOn5xxDefaults)) {
+        const value = env?.[key];
+        if (value !== undefined) {
+          resolvedFailOn5xxExpose[key] = value;
+        }
+      }
+      config.expose = {
+        ...(config.expose ?? {}),
+        ...resolvedFailOn5xxExpose,
+      };
+
       setupA11yNodeEvents(on);
       // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
       require('cypress-mochawesome-reporter/plugin')(on);
