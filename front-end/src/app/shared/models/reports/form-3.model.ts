@@ -4,12 +4,12 @@ import { ReportTypes } from './report.model';
 import { BaseForm3 } from './base-form-3';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { ScheduleFTransactionTypes } from '../schf-transaction.model';
-import { TransactionTypes } from '../transaction.model';
+import type { TransactionTypes } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
+import type { MenuItem } from 'primeng/api';
 
 export enum F3FormTypes {
   F3N = 'F3N',

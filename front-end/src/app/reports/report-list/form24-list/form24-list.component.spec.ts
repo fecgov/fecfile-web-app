@@ -13,8 +13,9 @@ import { DialogModule, Dialog } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ReportListComponent } from '../report-list.component';
-import { ReportTypes, Form24 } from 'app/shared/models';
 import { ScannedActionsSubject } from '@ngrx/store';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 
 describe('Form24ListComponent', () => {
   let component: Form24ListComponent;

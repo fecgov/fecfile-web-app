@@ -1,8 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TransactionContactUtils } from '../components/transaction-type-base/transaction-contact.utils';
-import { Transaction, Contact, TransactionTemplateMapType, ContactTypes } from '../models';
 import { ConfirmationService } from 'primeng/api';
+import { Contact, ContactTypes } from '../models/contact.model';
+import type { TransactionTemplateMapType } from '../models/transaction-type.model';
+import type { Transaction } from '../models/transaction.model';
 
 type dialogs = 'dialog' | 'childDialog' | 'childDialog_2';
 

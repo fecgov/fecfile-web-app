@@ -4,7 +4,7 @@ import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { SchDTransaction } from 'app/shared/models';
+import type { SchDTransaction } from 'app/shared/models/schd-transaction.model';
 
 @Component({
   selector: 'app-debt-input',

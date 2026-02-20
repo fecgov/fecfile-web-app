@@ -1,4 +1,4 @@
-import { getRoleLabel, isCommitteeAdministrator, Roles } from '.';
+import { getRoleLabel, isCommitteeAdministrator, Roles } from './role.model';
 
 describe('Role Utility Functions', () => {
   describe('getRoleLabel', () => {

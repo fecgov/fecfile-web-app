@@ -26,7 +26,8 @@ import { ContactManagementService } from 'app/shared/services/contact-management
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { candidatePatternMessage } from 'app/shared/models/candidate.model';
+import { committeePatternMessage } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-contact-modal',

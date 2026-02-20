@@ -9,11 +9,12 @@ import { CommitteeMemberDialogComponent } from './committee-member-dialog.compon
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMember, Roles } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, signal, viewChild } from '@angular/core';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { Roles } from 'app/shared/models/role.model';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',

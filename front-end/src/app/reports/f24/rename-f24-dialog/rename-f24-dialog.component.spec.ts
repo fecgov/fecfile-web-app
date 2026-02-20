@@ -3,7 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form24 } from 'app/shared/models';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F24UniqueNameValidator } from 'app/shared/utils/validators.utils';

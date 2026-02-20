@@ -25,8 +25,9 @@ import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
 import { Component, viewChild } from '@angular/core';
-import { Form3X, Transaction } from 'app/shared/models';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [DoubleTransactionDetailComponent],

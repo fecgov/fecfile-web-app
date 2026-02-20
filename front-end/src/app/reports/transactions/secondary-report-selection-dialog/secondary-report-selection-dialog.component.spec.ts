@@ -11,11 +11,11 @@ import { MessageService, ToastMessageOptions } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
-import { F24FormTypes, Form24 } from 'app/shared/models';
 import { of } from 'rxjs';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { Form24, F24FormTypes } from 'app/shared/models/reports/form-24.model';
 
 const mockReports = [
   Form24.fromJSON({

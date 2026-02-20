@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { ContactSearchComponent } from './contact-search.component';
-import { CommitteeAccount } from 'app/shared/models';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 @Component({
   imports: [ContactSearchComponent],

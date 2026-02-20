@@ -7,7 +7,7 @@ import { CommitteeMemberService } from '../services/committee-member.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount } from '../models';
+import { CommitteeAccount } from '../models/committee-account.model';
 
 describe('committeeOwnerGuard', () => {
   let mockMemberService: jasmine.SpyObj<CommitteeMemberService>;

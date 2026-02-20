@@ -10,7 +10,7 @@ import { getTestTransactionByType, testContact, testScheduleATransaction } from 
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models';
+import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('ContactUtils', () => {
   let form: FormGroup;

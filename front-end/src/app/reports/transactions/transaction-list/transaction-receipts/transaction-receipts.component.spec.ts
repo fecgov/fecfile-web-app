@@ -16,7 +16,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { ScheduleATransactionTypes } from 'app/shared/models';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;

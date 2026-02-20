@@ -8,7 +8,6 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-
 import { TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -16,7 +15,7 @@ import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.mode
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
-import { Form24 } from 'app/shared/models';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;

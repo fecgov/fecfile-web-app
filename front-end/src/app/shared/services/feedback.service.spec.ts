@@ -23,6 +23,7 @@ describe('FeedbackService', () => {
         ApiService,
         LoginService,
         provideMockStore(testMockStore()),
+        FeedbackService,
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);

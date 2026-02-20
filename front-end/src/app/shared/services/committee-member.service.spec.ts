@@ -5,9 +5,11 @@ import { testCommitteeAdminLoginData, testMockStore } from '../utils/unit-test.u
 import { environment } from '../../../environments/environment';
 import { CommitteeMemberService } from './committee-member.service';
 import { provideHttpClient } from '@angular/common/http';
-import { ListRestResponse, CommitteeMember, Roles } from '../models';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { ApiService, QueryParams } from './api.service';
+import { CommitteeMember } from '../models/committee-member.model';
+import { ListRestResponse } from '../models/rest-api.model';
+import { Roles } from '../models/role.model';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;

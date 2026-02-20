@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
-import { cloneInstance, Transaction } from 'app/shared/models';
+import { cloneInstance, Transaction } from 'app/shared/models/transaction.model';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;

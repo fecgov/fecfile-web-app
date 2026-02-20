@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Contact } from '../../../../src/app/shared/models';
+import type { Contact } from '../../../../src/app/shared/models/contact.model';
 
 export interface LoanInfo {
   loan_amount: number;

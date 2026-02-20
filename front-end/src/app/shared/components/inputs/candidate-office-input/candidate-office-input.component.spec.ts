@@ -9,7 +9,7 @@ import { CandidateOfficeInputComponent } from './candidate-office-input.componen
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testScheduleATransaction, testIndependentExpenditure } from 'app/shared/utils/unit-test.utils';
 import { Component, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
 const testCandidateStateFormControlName = 'testCandidateStateFormControlName';

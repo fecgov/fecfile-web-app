@@ -4,13 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { F3FormTypes } from 'app/shared/models';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { CreateF3Step1Component } from './create-f3-step1.component';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { F3FormTypes } from 'app/shared/models/reports/form-3.model';
 
 let component: CreateF3Step1Component;
 let fixture: ComponentFixture<CreateF3Step1Component>;

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CommitteeAccount } from '../models/committee-account.model';
-import { Form3X } from '../models';
+import type { CommitteeAccount } from '../models/committee-account.model';
 import { ReportCodes } from '../utils/report-code.utils';
 import { ReportService } from './report.service';
 import { CoverageDates } from '../models/reports/base-form-3';
+import { Form3X } from '../models/reports/form-3x.model';
 
 @Injectable({
   providedIn: 'root',

@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { Form3X } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 
 import { SharedTemplatesComponent } from '../shared-templates.component';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 @Component({
   selector: 'app-form3x-list',
