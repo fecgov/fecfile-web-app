@@ -78,14 +78,14 @@ describe('TableListBaseComponent', () => {
     await component.loadTableItems();
     expect(component.items()[0]).toBe('abc');
     expect(component.totalItems()).toBe(2);
-    expect(component.loading).toBe(false);
+    expect(component.loading()).toBe(false);
   });
 
   it('#loadTableItems should load default pagerState if no event passed', async () => {
     component.first.set(5);
     component.rowsPerPage.set(20);
     await component.loadTableItems();
-    expect(component.loading).toBe(false);
+    expect(component.loading()).toBe(false);
   });
 
   it('#deleteItem should delete an item', async () => {
