@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Form3X } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
