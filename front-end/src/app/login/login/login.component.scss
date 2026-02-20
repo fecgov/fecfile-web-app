@@ -36,7 +36,7 @@
 
 .login-button {
   color: #ffffff;
-  background-color: #112e51;
+  background-color: var(--primary-color);
   border-radius: 4px;
   display: inline-block;
   font-family: 'karla', Sans-serif;
@@ -51,8 +51,8 @@
 .learn-more-link {
   font-family: var(--karla-bold);
   font-size: 14px;
-  color: #112e51;
-  border-bottom: 1px dotted #112e51;
+  color: var(--primary-color);
+  border-bottom: 1px dotted var(--primary-color);
   cursor: pointer;
   text-decoration: none;
   transition: color 0.1s linear;

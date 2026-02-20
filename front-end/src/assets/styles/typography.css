@@ -61,7 +61,7 @@ p + h3 {
   margin-top: 2rem;
 }
 a {
-  border-bottom: 1px dotted #112e51;
+  border-bottom: 1px dotted var(--primary-color);
   color: inherit;
   cursor: pointer;
   text-decoration: none;
@@ -131,8 +131,8 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: #112e51;
-  color: #112e51;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 input:not([type="checkbox"]):disabled,
 select:disabled,

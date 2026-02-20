@@ -20,13 +20,13 @@ hr {
 .p-panel .p-panel-header,
 .p-drawer {
   background: #f1f1f1;
-  color: #112e51;
+  color: var(--primary-color);
 }
 
 .p-drawer-header {
   font-family: var(--karla);
   font-weight: bold;
-  color: #112e51;
+  color: var(--primary-color);
   font-size: 16px;
 }
 
@@ -132,7 +132,7 @@ label.disabled {
 }
 
 .fec-background-color {
-  background-color: #112e51;
+  background-color: var(--primary-color);
 }
 
 .radio-button-spacer {
@@ -859,6 +859,7 @@ option {
   width: 20px;
   height: 20px;
   mask: url('./assets/img/i-info-circle.svg') no-repeat center;
+  color: var(--primary-color);
 }
 
 .i-circle-on {
