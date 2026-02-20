@@ -42,7 +42,8 @@ export abstract class TransactionListTableBaseComponent
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
   protected readonly activatedRoute = inject(ActivatedRoute);
-  readonly report = this.store.selectSignal(selectActiveReport);
+  // only signal on new report
+  readonly report = this.store.selectSignal(selectActiveReport, { equal: (a, b) => a?.id === b?.id });
 
   abstract scheduleTransactionTypeLabels: LabelList;
   paginationPageSizeOptions = [5, 10, 15, 20];
