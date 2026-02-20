@@ -13,7 +13,7 @@
               <img
                 class="accordion-icon"
                 [src]="active() === index ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
-                alt="toggle icon"
+                [alt]="active() === index ? 'close content toggle' : 'open content toggle'"
               />
             </div>
           </p-accordion-header>
