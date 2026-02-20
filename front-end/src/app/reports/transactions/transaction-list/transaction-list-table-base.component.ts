@@ -3,24 +3,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
-import {
-  Report,
-  ReportTypes,
-  ScheduleIds,
-  ScheduleCTransactionTypes,
-  isPulledForwardLoan,
-  ScheduleDTransactionTypes,
-  ScheduleC1TransactionTypes,
-  ScheduleATransactionTypes,
-  ScheduleBTransactionTypes,
-} from 'app/shared/models';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { QueryParams } from 'app/shared/services/api.service';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { ScheduleIds, isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { ReportService } from 'app/shared/services/report.service';
-import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import type { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
+import type { Report } from 'app/shared/models/reports/report.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { QueryParams } from 'app/shared/services/api.service';
+import type { LabelList } from 'app/shared/utils/label.utils';
 
 const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
 const loansDebts = [

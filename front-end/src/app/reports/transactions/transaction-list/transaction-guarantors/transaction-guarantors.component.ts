@@ -1,15 +1,15 @@
 import { ChangeDetectorRef, Component, computed, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
-import { QueryParams } from 'app/shared/services/api.service';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { Transaction } from 'app/shared/models';
+import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
+import type { LabelList } from 'app/shared/utils/label.utils';
+import type { QueryParams } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-transaction-guarantors',

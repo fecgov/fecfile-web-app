@@ -1,6 +1,6 @@
 import { Component, computed, inject, resource, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Form24 } from 'app/shared/models';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { InputText } from 'primeng/inputtext';

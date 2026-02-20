@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReportStatus, ReportTypes } from 'app/shared/models';
+import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';

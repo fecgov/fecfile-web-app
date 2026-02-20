@@ -1,7 +1,7 @@
 import { Component, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
 import { TableBodyContext } from 'app/shared/components/table/table.component';
-import { Report } from 'app/shared/models';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 @Component({

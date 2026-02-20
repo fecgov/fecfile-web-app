@@ -1,9 +1,9 @@
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactFormData } from '../../e2e-smoke/models/ContactFormModel';
-import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
+import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
 import type { F3X } from '../../e2e-smoke/requests/library/reports';
-import type { Contact } from '../../../src/app/shared/models';
+import type { Contact } from '../../../src/app/shared/models/contact.model';
 
 type ContactCaseType = ContactFormData['contact_type'];
 type ContactCaseConfig = {

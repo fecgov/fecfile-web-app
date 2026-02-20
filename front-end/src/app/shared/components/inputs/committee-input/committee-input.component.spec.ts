@@ -7,7 +7,8 @@ import { CommitteeInputComponent } from './committee-input.component';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, viewChild } from '@angular/core';
-import { Transaction, ContactTypes } from 'app/shared/models';
+import { ContactTypes } from 'app/shared/models/contact.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [CommitteeInputComponent],

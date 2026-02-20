@@ -5,7 +5,7 @@ import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { CandidateOfficeInputComponent } from '../candidate-office-input/candidate-office-input.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage } from 'app/shared/models';
+import { candidatePatternMessage } from 'app/shared/models/candidate.model';
 
 @Component({
   selector: 'app-candidate-input',

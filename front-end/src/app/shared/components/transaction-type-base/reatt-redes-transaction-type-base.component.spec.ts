@@ -24,7 +24,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { Form3X } from 'app/shared/models';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;

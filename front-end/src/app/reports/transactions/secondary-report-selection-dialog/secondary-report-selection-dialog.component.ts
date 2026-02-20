@@ -5,7 +5,6 @@ import { ReportStatus, ReportTypes, reportLabelList } from 'app/shared/models/re
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
-import { Form24, Form3X } from 'app/shared/models';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -14,8 +13,10 @@ import { Ripple } from 'primeng/ripple';
 import { Select, SelectModule } from 'primeng/select';
 import { Toast } from 'primeng/toast';
 import { derivedAsync } from 'ngxtension/derived-async';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import type { Form24 } from 'app/shared/models/reports/form-24.model';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',

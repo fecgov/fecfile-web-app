@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form3X, MemoText, Report } from 'app/shared/models';
+import { Report } from 'app/shared/models/reports/report.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
@@ -15,6 +15,8 @@ import { ToastModule } from 'primeng/toast';
 import { BehaviorSubject } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
 import { F3X_ROUTES } from 'app/reports/f3x/routes';
+import { MemoText } from 'app/shared/models/memo-text.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 const routeDataSubject = new BehaviorSubject<{
   report: Report;
