@@ -3,6 +3,10 @@
     <h1>
       {{ transaction?.parent_transaction?.transactionType?.title }}
     </h1>
+  } @else {
+    <h1>
+      {{ transactionType?.title }}
+    </h1>
   }
 
   @if (showGlossary) {
@@ -17,9 +21,11 @@
   }
 </div>
 <hr class="solid" />
-<h1 class="mt-5">
-  {{ transactionType?.title }}
-</h1>
+@if (transactionType?.showParentTransactionTitle) {
+  <h1 class="mt-5">
+    {{ transactionType?.title }}
+  </h1>
+}
 @if (transactionType?.subTitle) {
   <div>{{ transactionType?.subTitle }}</div>
 }
