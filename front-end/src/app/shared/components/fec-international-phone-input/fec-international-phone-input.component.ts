@@ -11,6 +11,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import intlTelInput, { Iti } from 'intl-tel-input';
+
+type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
 @Component({
   selector: 'app-fec-international-phone-input',
   templateUrl: './fec-international-phone-input.component.html',
@@ -24,10 +26,10 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
   private intlTelInput: Iti | undefined;
-  private readonly intlTelInputOptions = {
+  private readonly intlTelInputOptions: IntlTelInputOptions = {
     separateDialCode: true,
     initialCountry: 'us',
-    preferredCountries: ['us'],
+    countryOrder: ['us'],
     allowDropdown: !this.disabled,
   };
   private countryCode: string | undefined;

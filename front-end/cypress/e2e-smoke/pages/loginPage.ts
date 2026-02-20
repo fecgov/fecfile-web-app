@@ -35,7 +35,7 @@ export class LoginPage {
 
     //Retrieve the AUTH TOKEN from the created/restored session
     cy.then(() => {
-      Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
+      Cypress.expose({ AUTH_TOKEN: retrieveAuthToken() });
     });
 
     cy.visit('/');

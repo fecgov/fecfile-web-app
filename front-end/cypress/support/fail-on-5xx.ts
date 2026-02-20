@@ -69,7 +69,7 @@ const ALLOW_5XX_TAG = '@allow-5xx';
 let registered = false;
 
 function envBool(name: string, fallback: boolean): boolean {
-  const v = Cypress.env(name);
+  const v = Cypress.expose(name);
 
   if (v == null) return fallback;
   if (typeof v === 'boolean') return v;
@@ -82,7 +82,7 @@ function envBool(name: string, fallback: boolean): boolean {
 }
 
 function envString(name: string, fallback: string): string {
-  const v = Cypress.env(name);
+  const v = Cypress.expose(name);
   if (v == null) return fallback;
 
   const s = String(v).trim();
@@ -95,7 +95,7 @@ function envString(name: string, fallback: string): string {
 // - JSON array string from CI: '["**/api/**","**/transactions/**"]'
 // - single string: "**/api/**"
 function envStringList(name: string, fallback: string[]): string[] {
-  const v = Cypress.env(name);
+  const v = Cypress.expose(name);
   if (v == null) return fallback;
 
   if (Array.isArray(v)) {
