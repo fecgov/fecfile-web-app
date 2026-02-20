@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -12,12 +10,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { ReportListComponent } from './report-list.component';
 import { ScannedActionsSubject } from '@ngrx/store';
-import { Form3XListComponent } from './form3x-list/form3x-list.component';
-import { Form3ListComponent } from './form3-list/form3-list.component';
-import { Form99ListComponent } from './form99-list/form99-list.component';
-import { Form24ListComponent } from './form24-list/form24-list.component';
-import { Form1MListComponent } from './form1m-list/form1m-list.component';
-import { Component } from '@angular/core';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -49,17 +41,31 @@ describe('ReportListComponent', () => {
   });
 
   it('should showEmptyState when all lists are loaded and empty', () => {
-    const createMockListComponent = (totalItems: number = 0): any => ({
+    const mockListComponent = {
       loading: () => false,
-      totalItems: () => totalItems,
-    });
+      totalItems: () => 0,
+    };
 
-    const mockList = createMockListComponent(0);
-    spyOn(component, 'form3xList' as any).and.returnValue(mockList);
-    spyOn(component, 'form3List' as any).and.returnValue(mockList);
-    spyOn(component, 'form99List' as any).and.returnValue(mockList);
-    spyOn(component, 'form1mList' as any).and.returnValue(mockList);
-    spyOn(component, 'form24List' as any).and.returnValue(mockList);
+    Object.defineProperty(component, 'form3xList', {
+      get: () => () => mockListComponent,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form3List', {
+      get: () => () => mockListComponent,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form99List', {
+      get: () => () => mockListComponent,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form1mList', {
+      get: () => () => mockListComponent,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form24List', {
+      get: () => () => mockListComponent,
+      configurable: true,
+    });
 
     expect(component.showEmptyState()).toBeTrue();
   });
@@ -68,11 +74,26 @@ describe('ReportListComponent', () => {
     const mockLoadingList = { loading: () => true, totalItems: () => 0 };
     const mockIdleList = { loading: () => false, totalItems: () => 0 };
 
-    spyOn(component, 'form3xList' as any).and.returnValue(mockLoadingList);
-    spyOn(component, 'form3List' as any).and.returnValue(mockIdleList);
-    spyOn(component, 'form99List' as any).and.returnValue(mockIdleList);
-    spyOn(component, 'form1mList' as any).and.returnValue(mockIdleList);
-    spyOn(component, 'form24List' as any).and.returnValue(mockIdleList);
+    Object.defineProperty(component, 'form3xList', {
+      get: () => () => mockLoadingList,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form3List', {
+      get: () => () => mockIdleList,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form99List', {
+      get: () => () => mockIdleList,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form1mList', {
+      get: () => () => mockIdleList,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form24List', {
+      get: () => () => mockIdleList,
+      configurable: true,
+    });
 
     expect(component.showEmptyState()).toBeFalse();
   });
@@ -81,11 +102,26 @@ describe('ReportListComponent', () => {
     const mockWithItems = { loading: () => false, totalItems: () => 5 };
     const mockEmpty = { loading: () => false, totalItems: () => 0 };
 
-    spyOn(component, 'form3xList' as any).and.returnValue(mockWithItems);
-    spyOn(component, 'form3List' as any).and.returnValue(mockEmpty);
-    spyOn(component, 'form99List' as any).and.returnValue(mockEmpty);
-    spyOn(component, 'form1mList' as any).and.returnValue(mockEmpty);
-    spyOn(component, 'form24List' as any).and.returnValue(mockEmpty);
+    Object.defineProperty(component, 'form3xList', {
+      get: () => () => mockWithItems,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form3List', {
+      get: () => () => mockEmpty,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form99List', {
+      get: () => () => mockEmpty,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form1mList', {
+      get: () => () => mockEmpty,
+      configurable: true,
+    });
+    Object.defineProperty(component, 'form24List', {
+      get: () => () => mockEmpty,
+      configurable: true,
+    });
 
     expect(component.showEmptyState()).toBeFalse();
   });
