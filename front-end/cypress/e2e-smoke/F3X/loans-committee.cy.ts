@@ -73,7 +73,7 @@ describe('Loans', () => {
     setupLoanByCommittee().then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       cy.contains('Loan By Committee').click();
-      PageUtils.urlCheck('/list/');
+      PageUtils.urlCheck('/list');
       cy.contains(result.individual.last_name).should('exist');
     });
   });
