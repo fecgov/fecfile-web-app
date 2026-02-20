@@ -1,18 +1,16 @@
 import { Route } from '@angular/router';
-import { ContactListComponent } from './contact-list/contact-list.component';
-import { DeletedContactComponent } from './deleted-contact/deleted-contact.component';
 
 export const CONTACTS_ROUTES: Route[] = [
   {
     path: '',
     title: 'Manage Contacts',
-    component: ContactListComponent,
+    loadComponent: () => import('./contact-list/contact-list.component').then((m) => m.ContactListComponent),
     pathMatch: 'full',
   },
   {
     path: 'deleted',
     title: 'Restore Deleted Contacts',
-    component: DeletedContactComponent,
+    loadComponent: () => import('./deleted-contact/deleted-contact.component').then((m) => m.DeletedContactComponent),
     pathMatch: 'full',
   },
   { path: '**', redirectTo: '' },

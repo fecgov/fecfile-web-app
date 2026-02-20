@@ -1,4 +1,4 @@
-import { ActivatedRouteSnapshot } from '@angular/router';
+import type { ActivatedRouteSnapshot } from '@angular/router';
 
 export type RouteData = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

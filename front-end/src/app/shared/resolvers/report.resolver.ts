@@ -1,11 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
-import { Report } from '../models/reports/report.model';
 import { ReportService } from '../services/report.service';
+import type { ActivatedRouteSnapshot } from '@angular/router';
+import type { Report } from '../models/reports/report.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ReportResolver {
   private readonly reportService = inject(ReportService);
 
