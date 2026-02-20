@@ -55,10 +55,9 @@ export default defineConfig({
           resolvedFailOn5xxExpose[key] = value;
         }
       }
-      config.expose = {
-        ...(config.expose ?? {}),
-        ...resolvedFailOn5xxExpose,
-      };
+      config.expose = config.expose
+        ? { ...config.expose, ...resolvedFailOn5xxExpose }
+        : { ...resolvedFailOn5xxExpose };
 
       setupA11yNodeEvents(on);
       // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed

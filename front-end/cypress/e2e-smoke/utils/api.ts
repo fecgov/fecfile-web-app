@@ -16,7 +16,7 @@ function ensureLeadingSlash(value: string): string {
 
 export class ApiUtils {
   static apiBaseUrl(): string {
-    const configured = Cypress.env('apiUrl');
+    const configured = Cypress.expose('apiUrl');
     const resolved =
       typeof configured === 'string' && configured.trim().length > 0
         ? configured.trim()

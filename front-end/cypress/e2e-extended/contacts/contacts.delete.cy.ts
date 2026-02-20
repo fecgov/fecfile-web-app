@@ -21,8 +21,8 @@ const CONTACTS_DELETE_ALIASES = {
 } as const;
 
 const RUN_LINKED_DELETE_API_TEST =
-  Cypress.env('RUN_LINKED_DELETE_API_TEST') === true ||
-  Cypress.env('RUN_LINKED_DELETE_API_TEST') === 'true';
+  Cypress.expose('RUN_LINKED_DELETE_API_TEST') === true ||
+  Cypress.expose('RUN_LINKED_DELETE_API_TEST') === 'true';
 
 type ContactListItem = {
   id: string;
