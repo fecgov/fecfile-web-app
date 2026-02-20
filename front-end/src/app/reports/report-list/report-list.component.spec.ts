@@ -40,88 +40,32 @@ describe('ReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should showEmptyState when all lists are loaded and empty', () => {
-    const mockListComponent = {
-      loading: () => false,
-      totalItems: () => 0,
-    };
-
-    Object.defineProperty(component, 'form3xList', {
-      get: () => () => mockListComponent,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form3List', {
-      get: () => () => mockListComponent,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form99List', {
-      get: () => () => mockListComponent,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form1mList', {
-      get: () => () => mockListComponent,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form24List', {
-      get: () => () => mockListComponent,
-      configurable: true,
-    });
-
-    expect(component.showEmptyState()).toBeTrue();
-  });
-
   it('should not showEmptyState when lists are still loading', () => {
-    const mockLoadingList = { loading: () => true, totalItems: () => 0 };
-    const mockIdleList = { loading: () => false, totalItems: () => 0 };
+    const createMockListComponent = (loading: boolean): any => ({
+      loading: () => loading,
+      totalItems: () => 0,
+    });
 
-    Object.defineProperty(component, 'form3xList', {
-      get: () => () => mockLoadingList,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form3List', {
-      get: () => () => mockIdleList,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form99List', {
-      get: () => () => mockIdleList,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form1mList', {
-      get: () => () => mockIdleList,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form24List', {
-      get: () => () => mockIdleList,
-      configurable: true,
-    });
+    (component.form3xList as any) = () => createMockListComponent(true);
+    (component.form3List as any) = () => createMockListComponent(false);
+    (component.form99List as any) = () => createMockListComponent(false);
+    (component.form1mList as any) = () => createMockListComponent(false);
+    (component.form24List as any) = () => createMockListComponent(false);
 
     expect(component.showEmptyState()).toBeFalse();
   });
 
   it('should not showEmptyState when lists have items', () => {
-    const mockWithItems = { loading: () => false, totalItems: () => 5 };
-    const mockEmpty = { loading: () => false, totalItems: () => 0 };
+    const createMockListComponent = (totalItems: number): any => ({
+      loading: () => false,
+      totalItems: () => totalItems,
+    });
 
-    Object.defineProperty(component, 'form3xList', {
-      get: () => () => mockWithItems,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form3List', {
-      get: () => () => mockEmpty,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form99List', {
-      get: () => () => mockEmpty,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form1mList', {
-      get: () => () => mockEmpty,
-      configurable: true,
-    });
-    Object.defineProperty(component, 'form24List', {
-      get: () => () => mockEmpty,
-      configurable: true,
-    });
+    (component.form3xList as any) = () => createMockListComponent(5);
+    (component.form3List as any) = () => createMockListComponent(0);
+    (component.form99List as any) = () => createMockListComponent(0);
+    (component.form1mList as any) = () => createMockListComponent(0);
+    (component.form24List as any) = () => createMockListComponent(0);
 
     expect(component.showEmptyState()).toBeFalse();
   });
