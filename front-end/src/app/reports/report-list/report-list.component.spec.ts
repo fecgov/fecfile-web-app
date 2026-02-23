@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -10,10 +12,27 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
 import { ReportListComponent } from './report-list.component';
 import { ScannedActionsSubject } from '@ngrx/store';
+import { Component, viewChild } from '@angular/core';
 
-describe('ReportListComponent', () => {
+@Component({
+  imports: [ReportListComponent],
+  standalone: true,
+  template: `<app-report-list />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ReportListComponent);
+}
+
+describe('ReportListComponent (with HostComponent)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
   let component: ReportListComponent;
-  let fixture: ComponentFixture<ReportListComponent>;
+  let host: TestHostComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+    }).compileComponents();
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -31,8 +50,9 @@ describe('ReportListComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportListComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
@@ -40,32 +60,45 @@ describe('ReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should not showEmptyState when lists are still loading', () => {
-    const createMockListComponent = (loading: boolean): any => ({
-      loading: () => loading,
-      totalItems: () => 0,
-    });
+  it('should showEmptyState when all lists are loaded and empty', () => {
+    host.component().form3xList()?.loading.set(false);
+    host.component().form3xList()?.totalItems.set(0);
+    host.component().form3List()?.loading.set(false);
+    host.component().form3List()?.totalItems.set(0);
+    host.component().form99List()?.loading.set(false);
+    host.component().form99List()?.totalItems.set(0);
+    host.component().form1mList()?.loading.set(false);
+    host.component().form1mList()?.totalItems.set(0);
+    host.component().form24List()?.loading.set(false);
+    host.component().form24List()?.totalItems.set(0);
 
-    (component.form3xList as any) = () => createMockListComponent(true);
-    (component.form3List as any) = () => createMockListComponent(false);
-    (component.form99List as any) = () => createMockListComponent(false);
-    (component.form1mList as any) = () => createMockListComponent(false);
-    (component.form24List as any) = () => createMockListComponent(false);
+    fixture.detectChanges();
+
+    expect(host.component().showEmptyState()).toBe(true);
+  });
+
+  it('should not showEmptyState when lists are still loading', () => {
+    const mockLoadingList = { loading: () => true, totalItems: () => 0 };
+    const mockIdleList = { loading: () => false, totalItems: () => 0 };
+
+    spyOn(component, 'form3xList' as any).and.returnValue(mockLoadingList);
+    spyOn(component, 'form3List' as any).and.returnValue(mockIdleList);
+    spyOn(component, 'form99List' as any).and.returnValue(mockIdleList);
+    spyOn(component, 'form1mList' as any).and.returnValue(mockIdleList);
+    spyOn(component, 'form24List' as any).and.returnValue(mockIdleList);
 
     expect(component.showEmptyState()).toBeFalse();
   });
 
   it('should not showEmptyState when lists have items', () => {
-    const createMockListComponent = (totalItems: number): any => ({
-      loading: () => false,
-      totalItems: () => totalItems,
-    });
+    const mockWithItems = { loading: () => false, totalItems: () => 5 };
+    const mockEmpty = { loading: () => false, totalItems: () => 0 };
 
-    (component.form3xList as any) = () => createMockListComponent(5);
-    (component.form3List as any) = () => createMockListComponent(0);
-    (component.form99List as any) = () => createMockListComponent(0);
-    (component.form1mList as any) = () => createMockListComponent(0);
-    (component.form24List as any) = () => createMockListComponent(0);
+    spyOn(component, 'form3xList' as any).and.returnValue(mockWithItems);
+    spyOn(component, 'form3List' as any).and.returnValue(mockEmpty);
+    spyOn(component, 'form99List' as any).and.returnValue(mockEmpty);
+    spyOn(component, 'form1mList' as any).and.returnValue(mockEmpty);
+    spyOn(component, 'form24List' as any).and.returnValue(mockEmpty);
 
     expect(component.showEmptyState()).toBeFalse();
   });
