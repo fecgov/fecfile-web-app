@@ -4,8 +4,8 @@ import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { testScheduleBTransaction } from '../utils/unit-test.utils';
 import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
-import { hydrateTransaction } from '../utils/transaction-type.utils';
 import { ScheduleBTransactionTypes } from './type-enums';
+import { TransactionUtils } from '../utils/transaction.utils';
 
 describe('SchBTransaction', () => {
   it('should create an instance', () => {
@@ -24,8 +24,8 @@ describe('SchBTransaction', () => {
         },
       ],
     };
-    const transaction: SchBTransaction = await hydrateTransaction(json, SchBTransaction);
-    expect(transaction.constructor.name).toBe('_SchBTransaction');
+    const transaction: SchBTransaction = await TransactionUtils.hydrateTransaction(json, SchBTransaction);
+    expect(transaction.constructor.name).toBe('SchBTransaction');
   });
 
   describe('redesignation from json', () => {
@@ -44,7 +44,7 @@ describe('SchBTransaction', () => {
           },
         ],
       };
-      await hydrateTransaction(json, SchBTransaction);
+      await TransactionUtils.hydrateTransaction(json, SchBTransaction);
       expect(baseOverlaySpy).toHaveBeenCalledTimes(1);
     });
 
@@ -63,7 +63,7 @@ describe('SchBTransaction', () => {
           },
         ],
       };
-      await hydrateTransaction(json, SchBTransaction);
+      await TransactionUtils.hydrateTransaction(json, SchBTransaction);
       expect(overlaySpy).toHaveBeenCalledTimes(1);
     });
 
@@ -81,7 +81,7 @@ describe('SchBTransaction', () => {
           },
         ],
       };
-      await hydrateTransaction(json, SchBTransaction);
+      await TransactionUtils.hydrateTransaction(json, SchBTransaction);
       expect(overlaySpy).toHaveBeenCalledTimes(1);
     });
 
@@ -99,13 +99,14 @@ describe('SchBTransaction', () => {
           },
         ],
       };
-      await hydrateTransaction(json, SchBTransaction);
+      await TransactionUtils.hydrateTransaction(json, SchBTransaction);
       expect(overlaySpy).toHaveBeenCalledTimes(1);
     });
 
     it('should create REDESIGNATION_TO from json', async () => {
+      const txn = await testScheduleBTransaction();
       const overlaySpy = spyOn(RedesignationToUtils, 'overlayTransactionProperties').and.callFake((trans) => {
-        trans.reatt_redes = testScheduleBTransaction();
+        trans.reatt_redes = txn;
         return trans;
       });
       const json = {
@@ -120,7 +121,7 @@ describe('SchBTransaction', () => {
           },
         ],
       };
-      const transaction = await hydrateTransaction(json, SchBTransaction);
+      const transaction = await TransactionUtils.hydrateTransaction(json, SchBTransaction);
       expect(overlaySpy).toHaveBeenCalledTimes(1);
       expect(transaction.reatt_redes).toBeTruthy();
     });

@@ -18,7 +18,7 @@ describe('TransactionInputComponent', () => {
     value: testContact(),
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TransactionInputComponent],
       providers: [
@@ -31,7 +31,7 @@ describe('TransactionInputComponent', () => {
     });
     fixture = TestBed.createComponent(TransactionInputComponent);
     component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction();
+    component.transaction = await testScheduleATransaction();
     component.transaction.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };

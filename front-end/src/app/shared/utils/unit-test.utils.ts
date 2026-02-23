@@ -23,10 +23,9 @@ import {
   NavigationEvent,
 } from '../models/transaction-navigation-controls.model';
 import type { TransactionTemplateMapType } from '../models/transaction-type.model';
-import { Transaction } from '../models/transaction.model';
+import type { ScheduleTransaction } from '../models/transaction.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 import type { UserLoginData } from '../models/user.model';
-import { hydrateTransaction, TransactionTypeUtils } from './transaction-type.utils';
 import { Form24 } from '../models/reports/form-24.model';
 import { Form3 } from '../models/reports/form-3.model';
 import {
@@ -36,6 +35,7 @@ import {
   ScheduleETransactionTypes,
   TransactionTypes,
 } from '../models/type-enums';
+import { TransactionUtils } from './transaction.utils';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -283,7 +283,7 @@ export function testContact() {
 }
 
 export function getTestIndividualReceipt(): Promise<SchATransaction> {
-  return hydrateTransaction(
+  return TransactionUtils.hydrateTransaction(
     {
       id: '123',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -322,7 +322,7 @@ export function getTestIndividualReceipt(): Promise<SchATransaction> {
 }
 
 export function testScheduleATransaction() {
-  return hydrateTransaction(
+  return TransactionUtils.hydrateTransaction(
     {
       form_type: 'SA15',
       report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
@@ -354,8 +354,8 @@ export function testScheduleATransaction() {
   );
 }
 
-export function testScheduleBTransaction() {
-  return hydrateTransaction(
+export async function testScheduleBTransaction() {
+  return (await TransactionUtils.hydrateTransaction(
     {
       form_type: 'SB21b',
       report_ids: ['3cd741da-aa57-4cc3-8530-667e8b7bad78'],
@@ -380,11 +380,11 @@ export function testScheduleBTransaction() {
       ],
     },
     SchBTransaction,
-  );
+  )) as SchBTransaction;
 }
 
 export function testIndependentExpenditure() {
-  return hydrateTransaction(
+  return TransactionUtils.hydrateTransaction(
     {
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
     },
@@ -412,14 +412,12 @@ export function createTestTransactionListRecord() {
 }
 
 export async function getTestTransactionByType(
-  transactionType: TransactionTypes,
+  transactionTypeIdentifier: TransactionTypes,
   parentTransactionType?: TransactionTypes,
-): Promise<Transaction> {
-  const transaction = await (await TransactionTypeUtils.factory(transactionType)).getNewTransaction();
+): Promise<ScheduleTransaction> {
+  const transaction = await TransactionUtils.createNewTransactionByIdentifier(transactionTypeIdentifier);
   if (parentTransactionType) {
-    transaction.parent_transaction = await (
-      await TransactionTypeUtils.factory(parentTransactionType)
-    ).getNewTransaction();
+    transaction.parent_transaction = await TransactionUtils.createNewTransactionByIdentifier(parentTransactionType);
   }
   return transaction;
 }

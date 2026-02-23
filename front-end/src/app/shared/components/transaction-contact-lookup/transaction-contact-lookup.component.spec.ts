@@ -65,9 +65,9 @@ describe('TransactionContactLookupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create a component for "contact_2" or "contact_3', () => {
+  it('should create a component for "contact_2" or "contact_3', async () => {
     component.contactProperty = 'contact_2';
-    component.transaction = testScheduleATransaction();
+    component.transaction = await testScheduleATransaction();
     component.ngOnInit();
     expect(component.form.get('contact_2_lookup')).toBeTruthy();
 

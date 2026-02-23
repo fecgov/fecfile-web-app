@@ -54,23 +54,30 @@ const mockReports = [
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   component = viewChild.required(SecondaryReportSelectionDialogComponent);
   readonly visible = signal(false);
   reportType = ReportTypes.F24;
-  transaction: TransactionListRecord = {
-    ...testScheduleATransaction(),
-    name: 'TEST',
-    date: new Date(),
-    amount: 100,
-    balance: 0,
-    aggregate: 0,
-    report_code_label: '',
-    can_delete: true,
-    force_unaggregated: true,
-    report_type: 'Form 3X',
-  } as unknown as TransactionListRecord;
+  transaction?: TransactionListRecord;
   reportSelectionCreateMethod = jasmine.createSpy('create');
   refreshTables = jasmine.createSpy('refreshTables');
+
+  constructor() {
+    this.initialized = testScheduleATransaction().then((t) => {
+      this.transaction = {
+        ...t,
+        name: 'TEST',
+        date: new Date(),
+        amount: 100,
+        balance: 0,
+        aggregate: 0,
+        report_code_label: '',
+        can_delete: true,
+        force_unaggregated: true,
+        report_type: 'Form 3X',
+      } as unknown as TransactionListRecord;
+    });
+  }
 }
 
 describe('SecondaryReportSelectionDialogComponent', () => {
@@ -126,6 +133,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     messageSpy = spyOn(messageService, 'add');
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
     fixture.detectChanges();
   });
@@ -160,7 +168,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
     component.selectedReport.set(mockReports[0]);
     await component.linkToSelectedReport();
-    expect(addSpy).toHaveBeenCalledWith(host.transaction, mockReports[0]);
+    expect(addSpy).toHaveBeenCalledWith(host.transaction!, mockReports[0]);
     expect(host.reportSelectionCreateMethod).toHaveBeenCalled();
     expect(host.refreshTables).toHaveBeenCalled();
     expect(host.visible()).toBe(false);

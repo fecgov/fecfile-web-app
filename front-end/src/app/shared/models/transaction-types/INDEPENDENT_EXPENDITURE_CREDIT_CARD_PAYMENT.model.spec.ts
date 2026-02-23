@@ -1,6 +1,7 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT } from './INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleETransactionTypes } from '../type-enums';
 
 describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
   let transactionType: INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT;
@@ -14,14 +15,14 @@ describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
     expect(transactionType.scheduleId).toBe('E');
   });
 
-  it('#factory() should return a SchETransaction', () => {
-    const txn: SchETransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchETransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SE');
     expect(txn.transaction_type_identifier).toBe(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT);
   });
 
-  it('#generatePurposeDescription() should not be defined', () => {
-    const txn: SchETransaction = transactionType.getNewTransaction();
+  it('#generatePurposeDescription() should not be defined', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
 
     expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Credit Card: See Below');
   });

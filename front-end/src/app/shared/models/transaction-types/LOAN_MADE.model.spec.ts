@@ -1,5 +1,6 @@
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { LOAN_MADE } from './LOAN_MADE.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 
 describe('LOAN_MADE', () => {
   let transactionType: LOAN_MADE;
@@ -13,10 +14,10 @@ describe('LOAN_MADE', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchBTransaction', () => {
-    const transaction: SchBTransaction = transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SB27');
-    expect(transaction.transaction_type_identifier).toBe(ScheduleBTransactionTypes.LOAN_MADE);
+  it('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
+    expect(txn.form_type).toBe('SB27');
+    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.LOAN_MADE);
   });
 
   it('#generatePurposeDescription() should generate a string', () => {

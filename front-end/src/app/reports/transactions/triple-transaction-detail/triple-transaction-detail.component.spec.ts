@@ -24,14 +24,14 @@ import {
   ScheduleATransactionTypes,
 } from 'app/shared/models/type-enums';
 
-describe('TripleTransactionDetailComponent', () => {
+describe('TripleTransactionDetailComponent', async () => {
   let component: TripleTransactionDetailComponent;
   let fixture: ComponentFixture<TripleTransactionDetailComponent>;
 
-  const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+  const transaction = await getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
   transaction.children = [
-    getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
-    getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
+    await getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
+    await getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
   ];
 
   beforeEach(async () => {

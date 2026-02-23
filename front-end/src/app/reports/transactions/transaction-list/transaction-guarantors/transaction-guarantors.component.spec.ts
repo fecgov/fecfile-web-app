@@ -12,12 +12,13 @@ import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
-import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -25,20 +26,30 @@ import { ScheduleCTransactionTypes } from 'app/shared/models/type-enums';
   template: `<app-transaction-guarantors [loan]="loan" />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   component = viewChild.required(TransactionGuarantorsComponent);
-  transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
-  loan = {
-    ...this.transaction,
-    name: 'TEST',
-    date: new Date(),
-    amount: 100,
-    balance: 0,
-    aggregate: 0,
-    report_code_label: '',
-    can_delete: true,
-    force_unaggregated: true,
-    report_type: 'Form 3X',
-  } as unknown as TransactionListRecord;
+  transaction?: Transaction;
+  loan?: TransactionListRecord;
+
+  constructor() {
+    this.initialized = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK).then(
+      (transaction) => {
+        this.transaction = transaction;
+        this.loan = {
+          ...this.transaction,
+          name: 'TEST',
+          date: new Date(),
+          amount: 100,
+          balance: 0,
+          aggregate: 0,
+          report_code_label: '',
+          can_delete: true,
+          force_unaggregated: true,
+          report_type: 'Form 3X',
+        } as unknown as TransactionListRecord;
+      },
+    );
+  }
 }
 
 describe('TransactionGuarantorsComponent', () => {
@@ -73,7 +84,7 @@ describe('TransactionGuarantorsComponent', () => {
           useValue: {
             get: (transactionId: string) =>
               of(
-                SchC2Transaction.fromJSON({
+                TransactionUtils.getFromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'LOAN_GUARANTOR',
                 }),
@@ -86,9 +97,10 @@ describe('TransactionGuarantorsComponent', () => {
     }).compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
     fixture.detectChanges();
   });
@@ -107,11 +119,11 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should have delete', () => {
     (component.reportIsEditable as any) = signal(true);
-    expect(component.rowActions[0].isAvailable(host.loan)).toEqual(false);
-    expect(component.rowActions[1].isAvailable(host.loan)).toEqual(true);
-    expect(component.rowActions[2].isAvailable(host.loan)).toEqual(true);
-    expect(component.rowActions[0].isEnabled(host.loan)).toEqual(true);
-    expect(component.rowActions[1].isEnabled(host.loan)).toEqual(true);
-    expect(component.rowActions[2].isEnabled(host.loan)).toEqual(true);
+    expect(component.rowActions[0].isAvailable(host.loan!)).toEqual(false);
+    expect(component.rowActions[1].isAvailable(host.loan!)).toEqual(true);
+    expect(component.rowActions[2].isAvailable(host.loan!)).toEqual(true);
+    expect(component.rowActions[0].isEnabled(host.loan!)).toEqual(true);
+    expect(component.rowActions[1].isEnabled(host.loan!)).toEqual(true);
+    expect(component.rowActions[2].isEnabled(host.loan!)).toEqual(true);
   });
 });

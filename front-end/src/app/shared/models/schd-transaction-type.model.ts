@@ -1,4 +1,3 @@
-import { SchDTransaction } from './schd-transaction.model';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
 import { ScheduleIds } from './type-enums';
 
@@ -85,5 +84,4 @@ export abstract class SchDTransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
-  override readonly transactionClass = SchDTransaction;
 }

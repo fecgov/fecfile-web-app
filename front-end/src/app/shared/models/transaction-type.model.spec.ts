@@ -3,8 +3,8 @@ import { TransactionType } from './transaction-type.model';
 import { ScheduleATransactionTypes, ScheduleETransactionTypes } from './type-enums';
 
 describe('Transaction Type Model', () => {
-  it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
-    const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
+  it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', async () => {
+    const transaction = await getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     if (!transaction.transactionType) throw new Error('FECfile+: transactionType method does not exist');
     // prettier-ignore
     const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -15,8 +15,8 @@ describe('Transaction Type Model', () => {
     expect(originalDescrip).toEqual(modifiedDescrip);
   });
 
-  it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
-    const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
+  it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', async () => {
+    const transaction = await getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     if (!transaction.transactionType) throw new Error('FECfile+: transactionType method does not exist');
     // prettier-ignore
     const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -33,12 +33,12 @@ describe('Transaction Type Model', () => {
     expect(modifiedDescrip?.length).toEqual(100);
   });
 
-  it('form toggle functions to work', () => {
-    let transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
+  it('form toggle functions to work', async () => {
+    let transaction = await getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     expect(transaction.transactionType.hasSignature1()).toBeFalse();
     expect(transaction.transactionType.hasSignature2()).toBeFalse();
     expect(transaction.transactionType.hasSupportOpposeCode()).toBeFalse();
-    transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE);
+    transaction = await getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE);
     expect(transaction.transactionType.hasSignature1()).toBeTrue();
     expect(transaction.transactionType.hasSupportOpposeCode()).toBeTrue();
   });

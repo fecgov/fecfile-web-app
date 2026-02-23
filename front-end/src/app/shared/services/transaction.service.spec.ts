@@ -1,13 +1,10 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { Transaction } from '../models/transaction.model';
-import { SchATransaction } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import {
@@ -16,6 +13,9 @@ import {
   ScheduleFTransactionTypes,
   ScheduleETransactionTypes,
 } from '../models/type-enums';
+import { TransactionUtils } from '../utils/transaction.utils';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { ReportIsEditableGuard } from '../guards/report-is-editable.guard';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -30,6 +30,7 @@ describe('TransactionService', () => {
         TransactionService,
         provideMockStore(testMockStore()),
         DatePipe,
+        ReportIsEditableGuard,
       ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -41,8 +42,8 @@ describe('TransactionService', () => {
   });
 
   describe('get', () => {
-    it('should GET a record', () => {
-      const mockResponse: SchATransaction = SchATransaction.fromJSON({
+    it('should GET a record', async () => {
+      const mockResponse = await TransactionUtils.getFromJSON({
         id: 1,
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
@@ -59,15 +60,15 @@ describe('TransactionService', () => {
   });
 
   describe('getPreviousEntityAggregate', () => {
-    it('should GET previous transaction', () => {
+    it('should GET previous transaction', async () => {
       const mockResponse = {
         aggregate: 1,
         calendar_ytd_per_election_office: 2,
         aggregate_general_elec_expended: 3,
       };
-      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      const mockTransaction = await TransactionUtils.createNewTransactionByIdentifier(
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-      ).getNewTransaction();
+      );
       mockTransaction.id = 'abc';
       service.getPreviousEntityAggregate(mockTransaction, '1', new Date()).then((response) => {
         expect(response).toEqual(mockResponse.aggregate);
@@ -82,9 +83,9 @@ describe('TransactionService', () => {
     });
 
     it('should return null', async () => {
-      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      const mockTransaction = await TransactionUtils.createNewTransactionByIdentifier(
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-      ).getNewTransaction();
+      );
       mockTransaction.id = 'abc';
       const promise = service.getPreviousEntityAggregate(mockTransaction, '1', new Date());
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -106,9 +107,9 @@ describe('TransactionService', () => {
         calendar_ytd_per_election_office: 2,
         aggregate_general_elec_expended: 3,
       };
-      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      const mockTransaction = await TransactionUtils.createNewTransactionByIdentifier(
         ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-      ).getNewTransaction();
+      );
       mockTransaction.id = 'abc';
       service.getPreviousPayeeCandidateAggregate(mockTransaction, '1', new Date(), '2024').then((response) => {
         expect(response).toEqual(mockResponse.aggregate_general_elec_expended);
@@ -123,9 +124,9 @@ describe('TransactionService', () => {
     });
 
     it('should return null', async () => {
-      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      const mockTransaction = await TransactionUtils.createNewTransactionByIdentifier(
         ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-      ).getNewTransaction();
+      );
       mockTransaction.id = 'abc';
       const promise = service.getPreviousPayeeCandidateAggregate(mockTransaction, '1', new Date(), '2024');
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -150,9 +151,9 @@ describe('TransactionService', () => {
 
   describe('getPreviousElectionAggregate', () => {
     it('should return null', async () => {
-      const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      const mockTransaction = await TransactionUtils.createNewTransactionByIdentifier(
         ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-      ).getNewTransaction();
+      );
       mockTransaction.id = 'abc';
       const promise = service.getPreviousElectionAggregate(mockTransaction, new Date(), new Date(), '1', 'A', 'A', 'A');
 
@@ -176,8 +177,8 @@ describe('TransactionService', () => {
   });
 
   describe('create', () => {
-    it('should POST a record', () => {
-      const schATransaction: SchATransaction = SchATransaction.fromJSON({
+    it('should POST a record', async () => {
+      const schATransaction = await TransactionUtils.getFromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
@@ -194,8 +195,8 @@ describe('TransactionService', () => {
   });
 
   describe('update', () => {
-    it('should PUT  a record', () => {
-      const schATransaction: SchATransaction = SchATransaction.fromJSON({
+    it('should PUT  a record', async () => {
+      const schATransaction = await TransactionUtils.getFromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
@@ -212,9 +213,9 @@ describe('TransactionService', () => {
   });
 
   describe('delete', () => {
-    it('should DELETE a record', () => {
+    it('should DELETE a record', async () => {
       const mockResponse = null;
-      const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      const schATransaction = await TransactionUtils.getFromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
@@ -231,33 +232,31 @@ describe('TransactionService', () => {
   });
 
   describe('multiSaveReattRedes', () => {
-    it('should PUT an array of records', fakeAsync(() => {
-      const transactions: SchATransaction[] = [
-        SchATransaction.fromJSON({
-          id: '1',
-          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        }),
-        SchATransaction.fromJSON({
-          id: '2',
-          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        }),
-        SchATransaction.fromJSON({
-          id: '3',
-          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        }),
+    it('should PUT an array of records', fakeAsync(async () => {
+      const transactions = [
+        await TransactionUtils.hydrateTransaction(
+          { id: '1', transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT },
+          SchATransaction,
+        ),
+        await TransactionUtils.hydrateTransaction(
+          { id: '2', transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT },
+          SchATransaction,
+        ),
+        await TransactionUtils.hydrateTransaction(
+          { id: '3', transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT },
+          SchATransaction,
+        ),
       ];
 
-      service.multiSaveReattRedes(transactions).then((response) => {
-        expect(response[0]?.id).toEqual('1');
-        expect(response[1]?.id).toEqual('2');
-        expect(response[2]?.id).toEqual('3');
-      });
-
+      const promise = service.multiSaveReattRedes(transactions);
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/reattribution/`);
       expect(req.request.method).toEqual('PUT');
       req.flush(transactions.map((t) => t.id));
-      httpTestingController.verify();
-      tick(100);
+      const response = await promise;
+
+      expect(response[0]?.id).toEqual('1');
+      expect(response[1]?.id).toEqual('2');
+      expect(response[2]?.id).toEqual('3');
     }));
   });
 });

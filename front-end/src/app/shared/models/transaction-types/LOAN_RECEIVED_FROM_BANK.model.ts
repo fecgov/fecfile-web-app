@@ -19,7 +19,13 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes, ScheduleC1TransactionTypes, ScheduleATransactionTypes, ScheduleC2TransactionTypes } from '../type-enums';
+import {
+  ScheduleCTransactionTypeLabels,
+  ScheduleCTransactionTypes,
+  ScheduleC1TransactionTypes,
+  ScheduleATransactionTypes,
+  ScheduleC2TransactionTypes,
+} from '../type-enums';
 
 export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
   override formFields = [

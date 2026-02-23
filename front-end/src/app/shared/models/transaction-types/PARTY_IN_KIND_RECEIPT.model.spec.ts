@@ -1,11 +1,12 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { SchATransaction } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
 
 describe('PARTY_IN_KIND_RECEIPT', () => {
   let transaction: SchATransaction;
 
-  beforeEach(() => {
-    transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT) as SchATransaction;
+  beforeEach(async () => {
+    transaction = (await getTestTransactionByType(ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT)) as SchATransaction;
   });
 
   it('should create an instance', () => {

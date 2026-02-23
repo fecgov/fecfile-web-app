@@ -44,7 +44,6 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
   override showCalendarYTD = true;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override generatePurposeDescription(): string {
     return 'Reimbursement: See Below';
   }

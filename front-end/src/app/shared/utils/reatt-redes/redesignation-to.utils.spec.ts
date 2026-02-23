@@ -1,15 +1,16 @@
 import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
 import { FormGroup } from '@angular/forms';
 import { RedesignationToUtils } from './redesignation-to.utils';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/type-enums';
 
 describe('RedesignationToUtils', () => {
   describe('overlayTransactionProperties', () => {
-    it('should override default properties', () => {
-      const origTransaction = testScheduleBTransaction();
+    it('should override default properties', async () => {
+      const origTransaction = await testScheduleBTransaction();
       const toTransaction = RedesignationToUtils.overlayTransactionProperties(
-        getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE) as SchBTransaction,
+        (await getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE)) as SchBTransaction,
         origTransaction,
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
@@ -20,8 +21,8 @@ describe('RedesignationToUtils', () => {
   });
 
   describe('overlayForm', () => {
-    it('should update validators and watch for value changes', () => {
-      const transaction = testScheduleBTransaction();
+    it('should update validators and watch for value changes', async () => {
+      const transaction = await testScheduleBTransaction();
       transaction.reatt_redes = {
         id: '999',
         report_id: '999',

@@ -6,6 +6,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { Component, inject, viewChild } from '@angular/core';
 import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [CalendarComponent],
@@ -14,20 +15,29 @@ import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
   template: `<app-calendar [form]="form" [formSubmitted]="formSubmitted" [fieldName]="fieldName" [label]="label" />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   readonly fb = inject(FormBuilder);
-  transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
-  form: FormGroup = this.fb.group(
-    SchemaUtils.getFormGroupFieldsNoBlur(
-      this.transaction.transactionType.getFormControlNames(),
-      this.transaction.transactionType.schema,
-    ),
-    { updateOn: 'blur' },
-  );
+  transaction?: Transaction;
+  form?: FormGroup;
+
   formSubmitted = false;
   fieldName = 'contribution_date';
   label = 'Test Date';
 
   component = viewChild.required(CalendarComponent);
+
+  constructor() {
+    this.initialized = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT).then((transaction) => {
+      this.transaction = transaction;
+      this.form = this.fb.group(
+        SchemaUtils.getFormGroupFieldsNoBlur(
+          transaction.transactionType.getFormControlNames(),
+          transaction.transactionType.schema,
+        ),
+        { updateOn: 'blur' },
+      );
+    });
+  }
 }
 
 describe('CalendarComponent', () => {
@@ -42,6 +52,7 @@ describe('CalendarComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
 
     fixture.detectChanges();

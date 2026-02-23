@@ -61,13 +61,15 @@ describe('TripleTransactionTypeBaseComponent', () => {
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
-    testTransaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction;
-    const child1 = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
+    testTransaction = (await getTestTransactionByType(
+      ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+    )) as SchCTransaction;
+    const child1 = (await getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)) as SchC1Transaction;
     child1.treasurer_first_name = 'treas_fname';
     child1.treasurer_last_name = 'treas_lname';
-    const child2 = getTestTransactionByType(
+    const child2 = (await getTestTransactionByType(
       ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
-    ) as SchATransaction;
+    )) as SchATransaction;
     testTransaction.report_ids = ['123'];
     testTransaction.children = [child1, child2];
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);

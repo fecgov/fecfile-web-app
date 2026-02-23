@@ -10,8 +10,8 @@ import { SubscriptionFormControl } from '../subscription-form-control';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
-    it('should test if transaction is reatt/redes', () => {
-      const txn = getTestIndividualReceipt();
+    it('should test if transaction is reatt/redes', async () => {
+      const txn = await getTestIndividualReceipt();
       let result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
       expect(result).toBeFalse();
       txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
@@ -19,8 +19,8 @@ describe('ReattRedesUtils', () => {
       expect(result).toBeTrue();
     });
 
-    it('should skip types check if no types provided', () => {
-      const txn = getTestIndividualReceipt();
+    it('should skip types check if no types provided', async () => {
+      const txn = await getTestIndividualReceipt();
       txn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
       let result = ReattRedesUtils.isReattRedes(txn);
       expect(result).toBeTrue();
@@ -31,8 +31,8 @@ describe('ReattRedesUtils', () => {
   });
 
   describe('isAtAmountLimit', () => {
-    it('should test if transaction isAtAmountLimit', () => {
-      const txn = getTestIndividualReceipt();
+    it('should test if transaction isAtAmountLimit', async () => {
+      const txn = await getTestIndividualReceipt();
       txn.transaction_id = 'AC9877E1';
       let result = ReattRedesUtils.isAtAmountLimit(txn);
       expect(result).toBeFalse();
@@ -66,9 +66,9 @@ describe('ReattRedesUtils', () => {
     let toTxn: SchATransaction;
     let fromTxn: SchATransaction;
 
-    beforeEach(() => {
-      toTxn = getTestIndividualReceipt();
-      fromTxn = getTestIndividualReceipt();
+    beforeEach(async () => {
+      toTxn = await getTestIndividualReceipt();
+      fromTxn = await getTestIndividualReceipt();
     });
 
     it('should overlay reattribution forms correctly', () => {
@@ -91,12 +91,12 @@ describe('ReattRedesUtils', () => {
   });
 
   describe('getPayloads', () => {
-    it('should reorder payload correctly', () => {
-      const reattributed = getTestIndividualReceipt();
+    it('should reorder payload correctly', async () => {
+      const reattributed = await getTestIndividualReceipt();
       reattributed.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
-      const toTxn = getTestIndividualReceipt();
+      const toTxn = await getTestIndividualReceipt();
       toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
-      const fromTxn = getTestIndividualReceipt();
+      const fromTxn = await getTestIndividualReceipt();
       fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
 
       const payload = toTxn;
@@ -113,10 +113,10 @@ describe('ReattRedesUtils', () => {
     });
   });
 
-  describe('amountValidator', () => {
+  describe('amountValidator', async () => {
     let control: SubscriptionFormControl;
-    const txn = testScheduleATransaction();
-    txn.reatt_redes = testScheduleATransaction();
+    const txn = await testScheduleATransaction();
+    txn.reatt_redes = await testScheduleATransaction();
     (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
     (txn.reatt_redes as SchATransaction).contribution_amount = 100;
 
@@ -158,10 +158,10 @@ describe('ReattRedesUtils', () => {
   describe('getPayload', () => {
     let payload: SchBTransaction;
 
-    beforeEach(() => {
-      payload = testScheduleBTransaction();
+    beforeEach(async () => {
+      payload = await testScheduleBTransaction();
       payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-      payload.reatt_redes = testScheduleBTransaction();
+      payload.reatt_redes = await testScheduleBTransaction();
     });
 
     it('should throw error when originating missing transaction type', () => {

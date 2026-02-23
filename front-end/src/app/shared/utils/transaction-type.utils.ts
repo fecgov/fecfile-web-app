@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ScheduleTransaction, Transaction } from '../models/transaction.model';
-import type { TransactionType } from '../models/transaction-type.model';
-import { ClassConstructor, plainToInstance } from 'class-transformer';
 import {
   TransactionTypes,
   ScheduleATransactionTypes,
   ScheduleBTransactionTypes,
   ScheduleFTransactionTypes,
   ScheduleCTransactionTypes,
-  ScheduleIds,
 } from '../models/type-enums';
+import type { TransactionType } from '../models/transaction-type.model';
 
 export class TransactionTypeUtils {
   static async factory(transactionTypeIdentifier: string): Promise<TransactionType> {
@@ -335,25 +332,6 @@ const TRANSACTION_TYPE_LOADERS: Record<string, () => Promise<any>> = {
     import('../models/transaction-types/COORDINATED_PARTY_EXPENDITURE_VOID.model'),
 };
 
-/**
- * Returns a schedule object of the correct class as discovered by examining
- * the scheduleId of the transaction type.
- *
- * This function is in this file because there is a REFERENCEERROR when it
- * is included in the transaction.model.ts file
- * @param json
- * @param depth
- * @returns
- */
-export async function getFromJSON(json: any, depth = 2): Promise<ScheduleTransaction> {
-  if (json.line_label) json.line_label = json.line_label.replace(/^0+/, '');
-
-  const transactionType = json.transaction_type_identifier
-    ? await TransactionTypeUtils.factory(json.transaction_type_identifier)
-    : undefined;
-  return getfromJsonByType(json, transactionType, depth);
-}
-
 export function PTY_ONLY(): Set<TransactionTypes> {
   return new Set([
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
@@ -442,132 +420,4 @@ export function MultipleEntryTransactionTypes(): string[] {
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
     ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
   ];
-}
-
-async function getfromJsonByType(
-  json: any,
-  transactionType: TransactionType | undefined,
-  depth: number,
-): Promise<ScheduleTransaction> {
-  if (transactionType) {
-    switch (transactionType.scheduleId) {
-      case ScheduleIds.A: {
-        const { SchATransaction } = await import('../models/scha-transaction.model');
-        return hydrateTransaction(json, SchATransaction, depth);
-      }
-      case ScheduleIds.B: {
-        const { SchBTransaction } = await import('../models/schb-transaction.model');
-        return hydrateTransaction(json, SchBTransaction, depth);
-      }
-      case ScheduleIds.C: {
-        const { SchCTransaction } = await import('../models/schc-transaction.model');
-        return hydrateTransaction(json, SchCTransaction, depth);
-      }
-      case ScheduleIds.C1: {
-        const { SchC1Transaction } = await import('../models/schc1-transaction.model');
-        return hydrateTransaction(json, SchC1Transaction, depth);
-      }
-      case ScheduleIds.C2: {
-        const { SchC2Transaction } = await import('../models/schc2-transaction.model');
-        return hydrateTransaction(json, SchC2Transaction, depth);
-      }
-      case ScheduleIds.D: {
-        const { SchDTransaction } = await import('../models/schd-transaction.model');
-        return hydrateTransaction(json, SchDTransaction, depth);
-      }
-      case ScheduleIds.E: {
-        const { SchETransaction } = await import('../models/sche-transaction.model');
-        return hydrateTransaction(json, SchETransaction, depth);
-      }
-      case ScheduleIds.F: {
-        const { SchFTransaction } = await import('../models/schf-transaction.model');
-        return hydrateTransaction(json, SchFTransaction, depth);
-      }
-    }
-  }
-
-  // Default fallback (Schedule A)
-  const { SchATransaction } = await import('../models/scha-transaction.model');
-  return hydrateTransaction(json, SchATransaction, depth);
-}
-
-export async function hydrateTransaction<T extends Transaction>(
-  json: any,
-  cls: ClassConstructor<T>,
-  depth = 2,
-): Promise<T> {
-  let transaction = plainToInstance(cls, json);
-
-  if (transaction.transaction_type_identifier) {
-    const transactionType = await TransactionTypeUtils.factory(transaction.transaction_type_identifier);
-    transaction.setMetaProperties(transactionType);
-  }
-
-  if (depth > 0 && transaction.parent_transaction) {
-    transaction.parent_transaction = await getFromJSON(transaction.parent_transaction, depth - 1);
-  }
-
-  if (depth > 0 && transaction.children) {
-    transaction.children = await Promise.all(transaction.children.map((child) => getFromJSON(child, depth - 1)));
-  }
-
-  if (transaction.transactionType?.scheduleId === ScheduleIds.A) {
-    transaction = await applyReattLogic(transaction as any);
-  } else if (transaction.transactionType?.scheduleId === ScheduleIds.B) {
-    transaction = await applyRedesLogic(transaction as any);
-  }
-
-  if (depth > 0 && transaction.reatt_redes) {
-    transaction.reatt_redes = await getFromJSON(transaction.reatt_redes, depth - 1);
-  }
-
-  return transaction;
-}
-
-async function applyReattLogic(transaction: any): Promise<any> {
-  const tag = transaction.reattribution_redesignation_tag;
-  if (!tag) return transaction;
-
-  const { ReattRedesTypes } = await import('../utils/reatt-redes/reatt-redes.utils');
-
-  switch (tag) {
-    case ReattRedesTypes.REATTRIBUTED: {
-      const { ReattributedUtils } = await import('../utils/reatt-redes/reattributed.utils');
-      return ReattributedUtils.overlayTransactionProperties(transaction);
-    }
-    case ReattRedesTypes.REATTRIBUTION_TO: {
-      const { ReattributionToUtils } = await import('../utils/reatt-redes/reattribution-to.utils');
-      return ReattributionToUtils.overlayTransactionProperties(transaction);
-    }
-    case ReattRedesTypes.REATTRIBUTION_FROM: {
-      const { ReattributionFromUtils } = await import('../utils/reatt-redes/reattribution-from.utils');
-      return ReattributionFromUtils.overlayTransactionProperties(transaction);
-    }
-    default:
-      return transaction;
-  }
-}
-
-async function applyRedesLogic(transaction: any): Promise<any> {
-  const tag = transaction.reattribution_redesignation_tag;
-  if (!tag) return transaction;
-
-  const { ReattRedesTypes } = await import('../utils/reatt-redes/reatt-redes.utils');
-
-  switch (tag) {
-    case ReattRedesTypes.REDESIGNATED: {
-      const { RedesignatedUtils } = await import('../utils/reatt-redes/redesignated.utils');
-      return RedesignatedUtils.overlayTransactionProperties(transaction);
-    }
-    case ReattRedesTypes.REDESIGNATION_TO: {
-      const { RedesignationToUtils } = await import('../utils/reatt-redes/redesignation-to.utils');
-      return RedesignationToUtils.overlayTransactionProperties(transaction);
-    }
-    case ReattRedesTypes.REDESIGNATION_FROM: {
-      const { RedesignationFromUtils } = await import('../utils/reatt-redes/redesignation-from.utils');
-      return RedesignationFromUtils.overlayTransactionProperties(transaction);
-    }
-    default:
-      return transaction;
-  }
 }

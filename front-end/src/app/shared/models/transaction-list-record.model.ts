@@ -1,7 +1,6 @@
-import { Exclude, plainToClass, Transform, Type } from 'class-transformer';
+import { Exclude, Transform, Type } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { TransactionType } from './transaction-type.model';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class TransactionListRecord extends BaseModel {
   id: string | undefined;
@@ -30,13 +29,4 @@ export class TransactionListRecord extends BaseModel {
   debt_id?: string;
   loan_agreement_id?: string;
   force_itemized?: boolean;
-
-  // prettier-ignore
-  static async fromJSON(json: any): Promise<TransactionListRecord> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const transactionListRecord =  plainToClass(TransactionListRecord, json);
-    if (transactionListRecord.transaction_type_identifier) {
-      transactionListRecord.transactionType = await TransactionTypeUtils.factory(transactionListRecord.transaction_type_identifier);
-    }
-    return transactionListRecord;
-  }
 }

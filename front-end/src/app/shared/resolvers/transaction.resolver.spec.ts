@@ -2,10 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact, ContactTypes } from '../models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
 import { Transaction } from '../models/transaction.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
@@ -16,6 +14,13 @@ import { TransactionResolver } from './transaction.resolver';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TransactionListService } from '../services/transaction-list.service';
+import { TransactionUtils } from '../utils/transaction.utils';
+import {
+  ScheduleATransactionTypes,
+  ScheduleDTransactionTypes,
+  ScheduleBTransactionTypes,
+  ScheduleCTransactionTypes,
+} from '../models/type-enums';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -40,11 +45,12 @@ describe('TransactionResolver', () => {
           },
         },
       },
+      TransactionResolver,
       {
         provide: TransactionService,
         useValue: {
           get: async (transactionId: string) =>
-            SchATransaction.fromJSON({
+            TransactionUtils.getFromJSON({
               id: transactionId,
               transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
               contact_id: '123',
@@ -126,7 +132,7 @@ describe('TransactionResolver', () => {
       };
       spyOn(resolver.service, 'get').and.returnValue(
         Promise.resolve(
-          SchATransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: 1,
             report_ids: [1],
             transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
@@ -150,7 +156,7 @@ describe('TransactionResolver', () => {
     it('should add debt to repayment', async () => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchDTransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE,
             transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE),
@@ -180,7 +186,7 @@ describe('TransactionResolver', () => {
     it('should add loan to repayment', async () => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchDTransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
             transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
@@ -210,7 +216,7 @@ describe('TransactionResolver', () => {
     it('should add redesignation', async () => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchBTransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
             transactionType: TransactionTypeUtils.factory(ScheduleBTransactionTypes.OPERATING_EXPENDITURE),
@@ -248,7 +254,7 @@ describe('TransactionResolver', () => {
         if (firstCall) {
           firstCall = false; // Mark first call as completed
           return Promise.resolve(
-            SchATransaction.fromJSON({
+            TransactionUtils.getFromJSON({
               id: 999,
               transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
               transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
@@ -259,7 +265,7 @@ describe('TransactionResolver', () => {
           );
         } else {
           return Promise.resolve(
-            SchATransaction.fromJSON({
+            TransactionUtils.getFromJSON({
               id: 2,
               transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
               transactionType: TransactionTypeUtils.factory(
@@ -283,7 +289,7 @@ describe('TransactionResolver', () => {
     it('should have parent transaction', async () => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchATransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transactionType: TransactionTypeUtils.factory(
               ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
@@ -291,7 +297,7 @@ describe('TransactionResolver', () => {
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
-            parent_transaction: SchATransaction.fromJSON({
+            parent_transaction: TransactionUtils.getFromJSON({
               id: '2',
               transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
               transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
@@ -313,7 +319,7 @@ describe('TransactionResolver', () => {
     it('should have grandparent transaction ', async () => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchATransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
@@ -321,7 +327,7 @@ describe('TransactionResolver', () => {
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-            parent_transaction: SchATransaction.fromJSON({
+            parent_transaction: TransactionUtils.getFromJSON({
               transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
               transactionType: TransactionTypeUtils.factory(
                 ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
@@ -329,7 +335,7 @@ describe('TransactionResolver', () => {
               id: '2',
               contact_id: '123',
               contact_1: Contact.fromJSON({ id: 123 }),
-              parent_transaction: SchATransaction.fromJSON({
+              parent_transaction: TransactionUtils.getFromJSON({
                 id: '1',
                 transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
                 transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER),
@@ -350,15 +356,15 @@ describe('TransactionResolver', () => {
     });
 
     it('should have debt transaction', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      spyOn(resolver.service, 'get').and.callFake(async (id) => {
         return Promise.resolve(
-          SchATransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
             transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
-            debt: SchDTransaction.fromJSON({
+            debt: await TransactionUtils.getFromJSON({
               id: '2',
               transaction_type_identifier: ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE,
               transactionType: TransactionTypeUtils.factory(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE),
@@ -377,23 +383,22 @@ describe('TransactionResolver', () => {
     });
 
     it('should have loan transaction', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
-        return Promise.resolve(
-          SchATransaction.fromJSON({
-            id: id,
-            transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
-            transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
-            contact_id: '123',
-            contact_1: Contact.fromJSON({ id: 123 }),
-            loan: SchCTransaction.fromJSON({
-              id: '2',
-              transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
-              transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_BY_COMMITTEE),
-              contact_id: '123',
-              contact_1: Contact.fromJSON({ id: 123 }),
-            }),
-          }),
-        );
+      spyOn(resolver.service, 'get').and.callFake(async (id) => {
+        const loan = await TransactionUtils.getFromJSON({
+          id: '2',
+          transaction_type_identifier: ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
+          transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_BY_COMMITTEE),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+        });
+        return TransactionUtils.getFromJSON({
+          id: id,
+          transaction_type_identifier: ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+          transactionType: TransactionTypeUtils.factory(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
+          contact_id: '123',
+          contact_1: Contact.fromJSON({ id: 123 }),
+          loan,
+        });
       });
       await expectAsync(
         resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
@@ -428,7 +433,7 @@ describe('TransactionResolver', () => {
     beforeEach(() => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchATransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
@@ -458,14 +463,15 @@ describe('TransactionResolver', () => {
     });
 
     it('should throw error if redesignated does not have transaction_type_identifier', async () => {
+      const txn = (await TransactionUtils.getFromJSON({
+        transaction_type_identifier: undefined,
+        transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
+        contact_id: '123',
+        contact_1: Contact.fromJSON({ id: 123 }),
+      })) as SchATransaction;
       spyOn(ReattributedUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
-        return SchATransaction.fromJSON({
-          id: id,
-          transaction_type_identifier: undefined,
-          transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),
-          contact_id: '123',
-          contact_1: Contact.fromJSON({ id: 123 }),
-        });
+        txn.id = id;
+        return txn;
       });
       await expectAsync(resolver.resolve(route as ActivatedRouteSnapshot)).toBeRejectedWithError(
         'FECfile+: originating reattribution transaction type not found.',
@@ -477,7 +483,7 @@ describe('TransactionResolver', () => {
     beforeEach(() => {
       spyOn(resolver.service, 'get').and.callFake((id) => {
         return Promise.resolve(
-          SchATransaction.fromJSON({
+          TransactionUtils.getFromJSON({
             id: id,
             transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
             transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT),

@@ -1,16 +1,17 @@
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('PARTY_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;
 
-  beforeEach(() => {
-    transaction = TransactionTypeUtils.factory(
+  beforeEach(async () => {
+    transaction = (await TransactionUtils.createNewTransactionByIdentifier(
       ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
-    ).getNewTransaction() as SchATransaction;
-    transaction.parent_transaction = TransactionTypeUtils.factory(
+    )) as SchATransaction;
+    transaction.parent_transaction = (await TransactionUtils.createNewTransactionByIdentifier(
       ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
-    ).getNewTransaction() as SchATransaction;
+    )) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 

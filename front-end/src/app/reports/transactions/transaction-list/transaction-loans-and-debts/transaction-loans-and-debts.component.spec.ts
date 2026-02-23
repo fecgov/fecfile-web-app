@@ -84,10 +84,10 @@ describe('TransactionLoansAndDebtsComponent', () => {
     expect(navigateSpy).toHaveBeenCalled();
   });
 
-  it('test editLoanAgreement', () => {
+  it('test editLoanAgreement', async () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Review loan agreement')[0];
     const transaction = {
-      ...(getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction),
+      ...((await getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK)) as SchCTransaction),
       back_reference_tran_id_number: '1',
       name: 'TEST',
       date: new Date(),
@@ -107,10 +107,10 @@ describe('TransactionLoansAndDebtsComponent', () => {
     expect(navigateSpy).toHaveBeenCalled();
   });
 
-  it('test createLoanAgreement', () => {
+  it('test createLoanAgreement', async () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'New loan agreement')[0];
     const transaction = {
-      ...(getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction),
+      ...((await getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK)) as SchCTransaction),
       back_reference_tran_id_number: '1',
       name: 'TEST',
       date: new Date(),
@@ -141,10 +141,10 @@ describe('TransactionLoansAndDebtsComponent', () => {
     expect(navigateSpy).toHaveBeenCalled();
   });
 
-  it('test createDebtRepaymentMade', () => {
+  it('test createDebtRepaymentMade', async () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[0];
     const transaction = {
-      ...(getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE) as SchDTransaction),
+      ...((await getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE)) as SchDTransaction),
       back_reference_tran_id_number: '1',
       name: 'TEST',
       date: new Date(),
@@ -170,10 +170,10 @@ describe('TransactionLoansAndDebtsComponent', () => {
     expect(navigateSpy).toHaveBeenCalled();
   });
 
-  it('test createDebtRepaymentReceived', () => {
+  it('test createDebtRepaymentReceived', async () => {
     const tableAction = component.rowActions.filter((item) => item.label === 'Report debt repayment')[1];
     const transaction = {
-      ...(getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE) as SchDTransaction),
+      ...((await getTestTransactionByType(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE)) as SchDTransaction),
       back_reference_tran_id_number: '1',
       name: 'TEST',
       date: new Date(),

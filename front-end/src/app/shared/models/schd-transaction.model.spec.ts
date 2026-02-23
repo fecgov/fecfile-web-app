@@ -1,4 +1,4 @@
-import { hydrateTransaction } from '../utils/transaction-type.utils';
+import { TransactionUtils } from '../utils/transaction.utils';
 import { SchDTransaction } from './schd-transaction.model';
 
 describe('SchDTransaction', () => {
@@ -12,7 +12,7 @@ describe('SchDTransaction', () => {
       form_type: 'SD10',
       creditor_organization_name: 'foo',
     };
-    const transaction: SchDTransaction = await hydrateTransaction(data, SchDTransaction);
+    const transaction: SchDTransaction = await TransactionUtils.hydrateTransaction(data, SchDTransaction);
     expect(transaction).toBeInstanceOf(SchDTransaction);
     expect(transaction.id).toBe('999');
     expect(transaction.form_type).toBe('SD10');
@@ -23,7 +23,7 @@ describe('SchDTransaction', () => {
     const json = {
       transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
     };
-    const transaction: SchDTransaction = await hydrateTransaction(json, SchDTransaction);
-    expect(transaction.constructor.name).toBe('_SchDTransaction');
+    const transaction: SchDTransaction = await TransactionUtils.hydrateTransaction(json, SchDTransaction);
+    expect(transaction.constructor.name).toBe('SchDTransaction');
   });
 });

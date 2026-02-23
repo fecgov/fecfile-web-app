@@ -1,11 +1,14 @@
-import { SchCTransaction, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { SchCTransaction } from '../schc-transaction.model';
+import { ScheduleCTransactionTypes } from '../type-enums';
 
 describe('LOAN_RECEIVED_FROM_BANK', () => {
   let transaction: SchCTransaction;
 
-  beforeEach(() => {
-    transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK) as SchCTransaction;
+  beforeEach(async () => {
+    transaction = (await getTestTransactionByType(
+      ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+    )) as SchCTransaction;
   });
 
   it('should create an instance', () => {

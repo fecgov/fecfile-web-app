@@ -28,18 +28,20 @@ import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { firstValueFrom } from 'rxjs';
 import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
   let fixture: ComponentFixture<TransactionDetailComponent>;
   let reportService: Form3XService;
-  const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
+  let transaction: Transaction;
 
   beforeAll(async () => {
     await import(`fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECEIPT.validator`);
   });
 
   beforeEach(async () => {
+    transaction = await getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,

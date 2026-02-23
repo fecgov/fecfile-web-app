@@ -1,4 +1,4 @@
-import { hydrateTransaction } from '../utils/transaction-type.utils';
+import { TransactionUtils } from '../utils/transaction.utils';
 import { SchFTransaction } from './schf-transaction.model';
 
 describe('SchFTransaction', () => {
@@ -14,7 +14,7 @@ describe('SchFTransaction', () => {
       payee_organization_name: 'foo',
       expenditure_date: undefined,
     };
-    const schFTransaction: SchFTransaction = await hydrateTransaction(data, SchFTransaction);
+    const schFTransaction: SchFTransaction = await TransactionUtils.hydrateTransaction(data, SchFTransaction);
     expect(schFTransaction).toBeInstanceOf(SchFTransaction);
     expect(schFTransaction.id).toBe('999');
     expect(schFTransaction.form_type).toBe('SF9999');
@@ -29,7 +29,7 @@ describe('SchFTransaction', () => {
         transaction_type_identifier: 'COORDINATED_PARTY_EXPENDITURE',
       },
     };
-    const transaction: SchFTransaction = await hydrateTransaction(json, SchFTransaction);
-    expect(transaction.constructor.name).toBe('_SchFTransaction');
+    const transaction: SchFTransaction = await TransactionUtils.hydrateTransaction(json, SchFTransaction);
+    expect(transaction.constructor.name).toBe('SchFTransaction');
   });
 });

@@ -16,10 +16,10 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { Component, signal, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
+import { ScheduleATransactionTypes, ScheduleETransactionTypes } from 'app/shared/models/type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 @Component({
   imports: [AmountInputComponent, AsyncPipe],
@@ -39,6 +39,7 @@ import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   form: FormGroup = new FormGroup(
     {
       contribution_date: new SubscriptionFormControl(''),
@@ -54,12 +55,18 @@ class TestHostComponent {
   );
   formSubmitted = false;
   templateMap = testTemplateMap();
-  transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
+  transaction?: Transaction;
   contributionAmountReadOnly = false;
   memoHasOptional: Observable<boolean> = of(false);
   negativeAmountValueOnly = false;
 
   component = viewChild.required(AmountInputComponent);
+
+  constructor() {
+    this.initialized = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT).then((t) => {
+      this.transaction = t;
+    });
+  }
 }
 
 describe('AmountInputComponent', () => {
@@ -88,6 +95,7 @@ describe('AmountInputComponent', () => {
     fixture = TestBed.createComponent(TestHostComponent);
 
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
     fixture.detectChanges();
   });
@@ -118,7 +126,9 @@ describe('AmountInputComponent', () => {
 
   it('should set up the component properly', async () => {
     fixture.detectChanges();
-    const transaction = await getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
+    const transaction = await TransactionUtils.createNewTransactionByIdentifier(
+      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+    );
     const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
     host.transaction = transaction;
     host.templateMap = transaction.transactionType.templateMap;
@@ -134,8 +144,8 @@ describe('AmountInputComponent', () => {
     expect(component.memoCode()?.checkboxLabel()).toBe(checkboxLabel());
   });
 
-  it('should not allow memo item selection for loan repayment', fakeAsync(() => {
-    const transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
+  it('should not allow memo item selection for loan repayment', fakeAsync(async () => {
+    const transaction = await getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
     transaction.loan_id = 'test';
     host.transaction = transaction;
     host.templateMap = transaction.transactionType.templateMap;

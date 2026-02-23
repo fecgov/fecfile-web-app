@@ -765,7 +765,7 @@ export type TransactionTypes =
   | ScheduleETransactionTypes
   | ScheduleFTransactionTypes;
 
-  export enum AggregationGroups {
+export enum AggregationGroups {
   GENERAL = 'GENERAL',
   LINE_14 = 'LINE_14',
   LINE_15 = 'LINE_15',

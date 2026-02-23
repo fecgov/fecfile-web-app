@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from './INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
@@ -13,8 +14,8 @@ describe('INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  xit('#factory() should return a SchBTransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  xit('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT);
   });

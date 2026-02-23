@@ -11,7 +11,12 @@ import {
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { ScheduleCTransactionTypeLabels, ScheduleC1TransactionTypeLabels, ScheduleC2TransactionTypeLabels, ScheduleDTransactionTypeLabels } from 'app/shared/models/type-enums';
+import {
+  ScheduleCTransactionTypeLabels,
+  ScheduleC1TransactionTypeLabels,
+  ScheduleC2TransactionTypeLabels,
+  ScheduleDTransactionTypeLabels,
+} from 'app/shared/models/type-enums';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',

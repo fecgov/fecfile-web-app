@@ -13,7 +13,6 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import {
   BehaviorSubject,
   combineLatestWith,
@@ -29,6 +28,7 @@ import {
 import { Contact, ContactTypes } from '../../models/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 export type DateType = Date | string | undefined;
 
@@ -304,7 +304,7 @@ export class TransactionFormUtils {
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
 
-    const payload: ScheduleTransaction = await getFromJSON({
+    const payload: ScheduleTransaction = await TransactionUtils.getFromJSON({
       ...transaction,
       ...formValues,
     });

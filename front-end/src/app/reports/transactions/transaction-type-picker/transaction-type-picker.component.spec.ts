@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { AccordionModule } from 'primeng/accordion';
@@ -13,7 +12,7 @@ import {
   testUserLoginData,
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, filter, firstValueFrom, of } from 'rxjs';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -28,8 +27,11 @@ import {
   ScheduleDTransactionTypes,
   ScheduleATransactionTypes,
 } from 'app/shared/models/type-enums';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { EnvironmentInjector, runInInjectionContext } from '@angular/core';
 
 describe('TransactionTypePickerComponent', () => {
+  let injector: EnvironmentInjector;
   let component: TransactionTypePickerComponent;
   let fixture: ComponentFixture<TransactionTypePickerComponent>;
 
@@ -37,7 +39,7 @@ describe('TransactionTypePickerComponent', () => {
     const routeParams$ = new BehaviorSubject({ category: 'receipt' });
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        imports: [AccordionModule, TransactionTypePickerComponent],
         providers: [
           provideHttpClient(),
           provideHttpClientTesting(),
@@ -62,6 +64,7 @@ describe('TransactionTypePickerComponent', () => {
     });
 
     beforeEach(() => {
+      injector = TestBed.inject(EnvironmentInjector);
       fixture = TestBed.createComponent(TransactionTypePickerComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -85,15 +88,18 @@ describe('TransactionTypePickerComponent', () => {
       expect(groups[0]).toBe(Disbursement[0]);
     });
 
-    it('should change for loans and debts category', () => {
+    it('should change for loans and debts category', async () => {
       routeParams$.next({ category: 'loans-and-debts' });
+      const typesMap$ = runInInjectionContext(injector, () => toObservable(component.transactionTypes));
+      fixture.detectChanges();
+      await firstValueFrom(typesMap$.pipe(filter((map) => map.size > 0)));
       const groups = component.transactionGroups();
       expect(groups[0]).toBe(LoansAndDebts[0]);
 
       let types = component.transactionTypes().get(groups[0]);
-      expect(types![0]).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
+      expect(types![0].transactionType).toBe(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
       types = component.transactionTypes().get(groups[1]);
-      expect(types![0]).toBe(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
+      expect(types![0].transactionType).toBe(ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE);
     });
 
     it('should set the title correctly', () => {
@@ -105,16 +111,31 @@ describe('TransactionTypePickerComponent', () => {
       expect(component.title()).toEqual('Add loans and debts');
     });
 
-    it('should limit by PACRestricted if Committee type is PAC', () => {
+    it('should limit by PACRestricted if Committee type is PAC', async () => {
       routeParams$.next({ category: 'receipt' });
+      const typesMap$ = runInInjectionContext(injector, () => toObservable(component.transactionTypes));
+      fixture.detectChanges();
+      await firstValueFrom(typesMap$.pipe(filter((map) => map.size > 0)));
       const types = component.transactionTypes().get(Receipt[2]);
-      expect(types!.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
+      expect(
+        types!
+          .map((t) => t.transactionType)
+          .includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY),
+      ).toBeFalse();
     });
 
-    it('should limit by PTY_ONLY if Committee type is PTY', () => {
+    it('should limit by PTY_ONLY if Committee type is PTY', async () => {
       routeParams$.next({ category: 'receipt' });
+      const typesMap$ = runInInjectionContext(injector, () => toObservable(component.transactionTypes));
+      fixture.detectChanges();
+      await firstValueFrom(typesMap$.pipe(filter((map) => map.size > 0)));
       const types = component.transactionTypes().get(Receipt[4]);
-      expect(types!.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
+
+      expect(
+        types!
+          .map((t) => t.transactionType)
+          .includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT),
+      ).toBeFalse();
     });
   });
 
@@ -131,7 +152,7 @@ describe('TransactionTypePickerComponent', () => {
       routeParams$ = new BehaviorSubject({ category: 'receipt' });
 
       await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        imports: [AccordionModule, TransactionTypePickerComponent],
         providers: [
           provideHttpClient(),
           provideHttpClientTesting(),
@@ -163,9 +184,12 @@ describe('TransactionTypePickerComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should change for disbursement category', () => {
+    it('should change for disbursement category', async () => {
       routeParams$.next({ category: 'disbursement' });
+      const componentInjector = fixture.debugElement.injector.get(EnvironmentInjector);
+      const typesMap$ = runInInjectionContext(componentInjector, () => toObservable(component.transactionTypes));
       fixture.detectChanges();
+      await firstValueFrom(typesMap$.pipe(filter((map) => map.size > 0)));
 
       expect(component.isF3()).toBeTrue();
 

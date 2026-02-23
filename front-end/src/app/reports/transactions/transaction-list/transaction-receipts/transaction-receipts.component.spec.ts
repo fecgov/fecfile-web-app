@@ -68,9 +68,9 @@ describe('TransactionReceiptsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show the correct row actions', () => {
+  it('should show the correct row actions', async () => {
     const transaction = {
-      ...getTestIndividualReceipt(),
+      ...(await getTestIndividualReceipt()),
       name: 'TEST',
       date: new Date(),
       amount: 100,

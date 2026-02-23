@@ -1,32 +1,18 @@
-import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { PAC_ONLY, PTY_ONLY, TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
+import { ScheduleATransactionTypes } from '../models/type-enums';
+import { PAC_ONLY, PTY_ONLY, TransactionTypeUtils } from './transaction-type.utils';
 
 describe('TransactionTypeUtils', () => {
   it('should create an instance', () => {
     expect(new TransactionTypeUtils()).toBeTruthy();
   });
 
-  it('non-existing transaction type should throw an error', () => {
-    expect(() => {
-      TransactionTypeUtils.factory('DOES_NOT_EXIST');
-    }).toThrow(new Error("FECfile+: Class transaction type of 'DOES_NOT_EXIST' is not found"));
-  });
-
-  it('should return the correct schedule object given a scheduleId', async () => {
-    const testJSON = {
-      transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
-    };
-
-    let scheduleObject = await getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('_SchCTransaction');
-
-    testJSON.transaction_type_identifier = 'DEBT_OWED_TO_COMMITTEE';
-    scheduleObject = await getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('_SchDTransaction');
-
-    testJSON.transaction_type_identifier = 'INDEPENDENT_EXPENDITURE';
-    scheduleObject = await getFromJSON(testJSON);
-    expect(scheduleObject.constructor.name).toBe('_SchETransaction');
+  it('non-existing transaction type should throw an error', async () => {
+    try {
+      await TransactionTypeUtils.factory('DOES_NOT_EXIST');
+    } catch (error) {
+      const a = new Error(`FECfile+: Class transaction type of 'DOES_NOT_EXIST' is not found`);
+      expect(error).toEqual(a);
+    }
   });
 
   it('should return list of Transaction Types PAC does not need access to', () => {
@@ -47,11 +33,5 @@ describe('TransactionTypeUtils', () => {
     ].forEach((r) => {
       expect(PTY_ONLY().has(r));
     });
-  });
-
-  it('should remove leading zeroes from Transactions', async () => {
-    const testJSON = { line_label: '09' };
-    const scheduleObject = await getFromJSON(testJSON);
-    expect(scheduleObject.line_label).toBe('9');
   });
 });

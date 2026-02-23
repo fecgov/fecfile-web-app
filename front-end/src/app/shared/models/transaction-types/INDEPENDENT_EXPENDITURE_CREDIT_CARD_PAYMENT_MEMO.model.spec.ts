@@ -1,5 +1,6 @@
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 import { INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from './INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
+import { ScheduleETransactionTypes } from '../type-enums';
 
 describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO', () => {
   let transactionType: INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO;
@@ -13,8 +14,8 @@ describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO', () => {
     expect(transactionType.scheduleId).toBe('E');
   });
 
-  it('#factory() should return a SchETransaction', () => {
-    const txn: SchETransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchETransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SE');
     expect(txn.transaction_type_identifier).toBe(
       ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,

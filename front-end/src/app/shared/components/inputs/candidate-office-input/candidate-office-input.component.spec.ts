@@ -28,6 +28,7 @@ const districtFormControlName = 'districtFormControlName';
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   officeFormControlName = testCandidateOfficeFormControlName;
   stateFormControlName = testCandidateStateFormControlName;
   districtFormControlName = districtFormControlName;
@@ -44,8 +45,14 @@ class TestHostComponent {
   });
 
   formSubmitted = false;
-  transaction: Transaction = testScheduleATransaction();
+  transaction?: Transaction;
   component = viewChild.required(CandidateOfficeInputComponent);
+
+  constructor() {
+    this.initialized = testScheduleATransaction().then((t) => {
+      this.transaction = t;
+    });
+  }
 }
 
 describe('CandidateOfficeInputComponent', () => {
@@ -66,6 +73,7 @@ describe('CandidateOfficeInputComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
     fixture.detectChanges();
   });
@@ -113,8 +121,8 @@ describe('CandidateOfficeInputComponent', () => {
     );
   });
 
-  it('adds subscription to election_code for Schedule E transactions', () => {
-    host.transaction = testIndependentExpenditure();
+  it('adds subscription to election_code for Schedule E transactions', async () => {
+    host.transaction = await testIndependentExpenditure();
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -122,8 +130,8 @@ describe('CandidateOfficeInputComponent', () => {
     expect(electionCodeControl!.subscriptions).toHaveSize(1);
   });
 
-  it('updates state availability for SchE transactions in Presidential Primary elections', () => {
-    host.transaction = testIndependentExpenditure();
+  it('updates state availability for SchE transactions in Presidential Primary elections', async () => {
+    host.transaction = await testIndependentExpenditure();
     fixture.detectChanges();
     component.ngOnInit();
 

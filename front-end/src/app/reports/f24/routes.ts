@@ -1,4 +1,3 @@
-
 import { Route } from '@angular/router';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';

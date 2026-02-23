@@ -1,4 +1,3 @@
-import { SchBTransaction } from './schb-transaction.model';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
 import { ScheduleIds } from './type-enums';
 
@@ -86,6 +85,4 @@ export abstract class SchBTransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
-
-  override readonly transactionClass = SchBTransaction;
 }

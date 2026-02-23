@@ -1,16 +1,17 @@
 import { DatePipe } from '@angular/common';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { Form3X } from '../models/reports/form-3x.model';
 import { TransactionListService } from './transaction-list.service';
 import { TransactionListRecord } from '../models/transaction-list-record.model';
+import { TransactionUtils } from '../utils/transaction.utils';
+import { ScheduleATransactionTypes } from '../models/type-enums';
 
 describe('TransactionListService', () => {
   let service: TransactionListService;
@@ -36,18 +37,18 @@ describe('TransactionListService', () => {
   });
 
   describe('getTableData', () => {
-    it('should return a list of contacts', () => {
+    it('should return a list of contacts', async () => {
       const mockResponse: ListRestResponse = {
         count: 2,
         next: 'https://next-page',
         previous: 'https://previous-page',
         pageNumber: 1,
         results: [
-          SchATransaction.fromJSON({
+          await TransactionUtils.getFromJSON({
             id: 1,
             transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
           }),
-          SchATransaction.fromJSON({
+          await TransactionUtils.getFromJSON({
             id: 2,
             transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
           }),
@@ -68,9 +69,9 @@ describe('TransactionListService', () => {
   });
 
   describe('delete', () => {
-    it('should DELETE a record', () => {
+    it('should DELETE a record', async () => {
       const mockResponse = null;
-      const a: SchATransaction = SchATransaction.fromJSON({
+      const a = await TransactionUtils.getFromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       });
@@ -99,8 +100,8 @@ describe('TransactionListService', () => {
   });
 
   describe('addToReport', () => {
-    it('should add a transaction to a report', fakeAsync(() => {
-      const a: SchATransaction = SchATransaction.fromJSON({
+    it('should add a transaction to a report', async () => {
+      const a = await TransactionUtils.getFromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       });
@@ -121,14 +122,14 @@ describe('TransactionListService', () => {
         id: '2',
       });
 
-      service.addToReport(transaction, report).then((response) => {
-        expect(response.ok).toBeTrue();
-      });
-      tick(100);
+      const promise = service.addToReport(transaction, report);
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/add-to-report/`);
       expect(req.request.method).toEqual('POST');
       req.flush(transaction);
+      const response = await promise;
+      expect(response.ok).toBeTrue();
+
       httpTestingController.verify();
-    }));
+    });
   });
 });

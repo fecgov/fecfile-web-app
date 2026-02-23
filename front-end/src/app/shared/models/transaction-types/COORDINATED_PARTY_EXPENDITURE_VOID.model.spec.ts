@@ -1,6 +1,7 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchFTransaction, ScheduleFTransactionTypes } from '../schf-transaction.model';
 import { COORDINATED_PARTY_EXPENDITURE_VOID } from './COORDINATED_PARTY_EXPENDITURE_VOID.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleFTransactionTypes } from '../type-enums';
 
 describe('COORDINATED_PARTY_EXPENDITURE_VOID', () => {
   let transactionType: COORDINATED_PARTY_EXPENDITURE_VOID;
@@ -14,8 +15,8 @@ describe('COORDINATED_PARTY_EXPENDITURE_VOID', () => {
     expect(transactionType.scheduleId).toBe('F');
   });
 
-  it('#factory() should return a SchFTransaction', () => {
-    const txn: SchFTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchFTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SF');
     expect(txn.transaction_type_identifier).toBe(ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID);
   });

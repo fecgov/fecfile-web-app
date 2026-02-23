@@ -1,6 +1,7 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { FEDERAL_ELECTION_ACTIVITY_VOID } from './FEDERAL_ELECTION_ACTIVITY_VOID.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 
 describe('FEDERAL_ELECTION_ACTIVITY_VOID', () => {
   let transactionType: FEDERAL_ELECTION_ACTIVITY_VOID;
@@ -14,8 +15,8 @@ describe('FEDERAL_ELECTION_ACTIVITY_VOID', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchATransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB30B');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID);
   });

@@ -13,21 +13,24 @@ export const F3X_ROUTES: Route[] = [
       {
         path: 'create/step1',
         title: 'Create a report',
-        loadComponent: () => import('./create-workflow/create-f3x-step1.component').then((m) => m.CreateF3XStep1Component),
+        loadComponent: () =>
+          import('./create-workflow/create-f3x-step1.component').then((m) => m.CreateF3XStep1Component),
         runGuardsAndResolvers: 'always',
         data: { showSidebar: false },
       },
       {
         path: 'create/step1/:reportId',
         title: 'Create a report',
-        loadComponent: () => import('./create-workflow/create-f3x-step1.component').then((m) => m.CreateF3XStep1Component),
+        loadComponent: () =>
+          import('./create-workflow/create-f3x-step1.component').then((m) => m.CreateF3XStep1Component),
         canActivate: [ReportIsEditableGuard],
         runGuardsAndResolvers: 'always',
       },
       {
         path: 'edit/:reportId',
         title: 'Edit a report',
-        loadComponent: () => import('./create-workflow/create-f3x-step1.component').then((m) => m.CreateF3XStep1Component),
+        loadComponent: () =>
+          import('./create-workflow/create-f3x-step1.component').then((m) => m.CreateF3XStep1Component),
         resolve: { report: ReportResolver },
         data: { sidebarSection: ReportSidebarSection.CREATE },
         runGuardsAndResolvers: 'always',
@@ -43,7 +46,10 @@ export const F3X_ROUTES: Route[] = [
       {
         path: 'detailed-summary/:reportId',
         title: 'View detailed summary page',
-        loadComponent: () => import('./report-detailed-summary/report-detailed-summary.component').then((m) => m.ReportDetailedSummaryComponent),
+        loadComponent: () =>
+          import('./report-detailed-summary/report-detailed-summary.component').then(
+            (m) => m.ReportDetailedSummaryComponent,
+          ),
         resolve: { report: ReportResolver },
         data: { sidebarSection: ReportSidebarSection.REVIEW },
         runGuardsAndResolvers: 'always',
@@ -51,7 +57,8 @@ export const F3X_ROUTES: Route[] = [
       {
         path: 'web-print/:reportId',
         title: 'Print preview',
-        loadComponent: () => import('app/reports/shared/print-preview/print-preview.component').then((m) => m.PrintPreviewComponent),
+        loadComponent: () =>
+          import('app/reports/shared/print-preview/print-preview.component').then((m) => m.PrintPreviewComponent),
         resolve: { report: ReportResolver },
         data: {
           sidebarSection: ReportSidebarSection.REVIEW,
@@ -63,7 +70,8 @@ export const F3X_ROUTES: Route[] = [
       {
         path: 'memo/:reportId',
         title: 'Add a report level memo',
-        loadComponent: () => import('../shared/report-level-memo/report-level-memo.component').then((m) => m.ReportLevelMemoComponent),
+        loadComponent: () =>
+          import('../shared/report-level-memo/report-level-memo.component').then((m) => m.ReportLevelMemoComponent),
         canActivate: [ReportIsEditableGuard],
         resolve: { report: ReportResolver },
         data: {
@@ -75,7 +83,8 @@ export const F3X_ROUTES: Route[] = [
       {
         path: 'submit/:reportId',
         title: 'Submit report',
-        loadComponent: () => import('../submission-workflow/submit-report.component').then((m) => m.SubmitReportComponent),
+        loadComponent: () =>
+          import('../submission-workflow/submit-report.component').then((m) => m.SubmitReportComponent),
         canActivate: [ReportIsEditableGuard],
         resolve: { report: ReportResolver },
         data: {
@@ -88,7 +97,8 @@ export const F3X_ROUTES: Route[] = [
       {
         path: 'submit/status/:reportId',
         title: 'Report status',
-        loadComponent: () => import('../submission-workflow/submit-report-status.component').then((m) => m.SubmitReportStatusComponent),
+        loadComponent: () =>
+          import('../submission-workflow/submit-report-status.component').then((m) => m.SubmitReportStatusComponent),
         resolve: { report: ReportResolver },
         data: { sidebarSection: ReportSidebarSection.SUBMISSION },
         runGuardsAndResolvers: 'always',

@@ -5,7 +5,6 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { SchFTransaction } from 'app/shared/models/schf-transaction.model';
-import { hydrateTransaction } from 'app/shared/utils/transaction-type.utils';
 import {
   AggregationGroups,
   ScheduleATransactionTypes,
@@ -13,6 +12,7 @@ import {
   ScheduleETransactionTypes,
   ScheduleFTransactionTypes,
 } from 'app/shared/models/type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -28,7 +28,7 @@ describe('FormUtils', () => {
       expenditure_amount: new SubscriptionFormControl(),
     });
 
-    const transaction = await hydrateTransaction(
+    const transaction = await TransactionUtils.hydrateTransaction(
       {
         transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
         aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
@@ -60,7 +60,7 @@ describe('FormUtils', () => {
       { updateOn: 'blur' },
     );
 
-    const transaction = await hydrateTransaction(
+    const transaction = await TransactionUtils.hydrateTransaction(
       {
         transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
         aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
@@ -92,7 +92,7 @@ it('should add the amount for calendar YTD', async () => {
     { updateOn: 'blur' },
   );
 
-  const transaction = await hydrateTransaction(
+  const transaction = await TransactionUtils.hydrateTransaction(
     {
       transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
       aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
@@ -123,7 +123,7 @@ it('should add the amount for payee candidate YTD', async () => {
     { updateOn: 'blur' },
   );
 
-  const transaction = await hydrateTransaction(
+  const transaction = await TransactionUtils.hydrateTransaction(
     {
       transaction_type_identifier: ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
       aggregation_group: AggregationGroups.COORDINATED_PARTY_EXPENDITURES,

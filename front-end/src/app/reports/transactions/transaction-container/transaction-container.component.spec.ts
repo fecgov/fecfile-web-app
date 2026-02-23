@@ -26,31 +26,19 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchCTransaction } from 'app/shared/models/schc-transaction.model';
 import { ScheduleATransactionTypes, TransactionTypes, ScheduleCTransactionTypes } from 'app/shared/models/type-enums';
+import { Transaction } from 'app/shared/models/transaction.model';
 
-let mockTransaction: SchATransaction;
-
-const routeDataSubject = new BehaviorSubject<{ transaction?: Transaction | null }>({ transaction: mockTransaction });
-
-const routeMock = {
-  data: routeDataSubject.asObservable(),
-  snapshot: {
-    queryParamMap: {
-      get: () => 'b49f0957-4404-4237-95ec-0df053083b19',
-    },
-    params: {
-      reportId: '999',
-    },
-  },
-};
+let mockTransaction: Transaction;
+let routeDataSubject: BehaviorSubject<{ transaction?: Transaction | null }>;
 
 describe('TransactionContainerComponent', async () => {
   mockTransaction = (await getTestTransactionByType(
     ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
   )) as SchATransaction;
+  routeDataSubject = new BehaviorSubject<{ transaction?: Transaction | null }>({ transaction: mockTransaction });
   let component: TransactionContainerComponent;
   let fixture: ComponentFixture<TransactionContainerComponent>;
   let titleSpy: jasmine.Spy<(newTitle: string) => void>;
@@ -88,7 +76,17 @@ describe('TransactionContainerComponent', async () => {
         Title,
         {
           provide: ActivatedRoute,
-          useValue: routeMock,
+          useValue: {
+            data: routeDataSubject.asObservable(),
+            snapshot: {
+              queryParamMap: {
+                get: () => 'b49f0957-4404-4237-95ec-0df053083b19',
+              },
+              params: {
+                reportId: '999',
+              },
+            },
+          },
         },
         provideMockStore(testMockStore()),
         FecDatePipe,
@@ -136,13 +134,13 @@ describe('TransactionContainerComponent', async () => {
   });
 
   describe('transactionCardinality', () => {
-    it('should return -1 for a new Re-Att/Re-Des transaction without an ID', () => {
-      const child = getTestTransactionByType(
+    it('should return -1 for a new Re-Att/Re-Des transaction without an ID', async () => {
+      const child = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
-      const reatt = getTestTransactionByType(
+      )) as SchATransaction;
+      const reatt = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
+      )) as SchATransaction;
       reatt.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
       reatt.transactionType.dependentChildTransactionTypes = [reatt.transaction_type_identifier as TransactionTypes];
       reatt.children = [child];
@@ -152,13 +150,13 @@ describe('TransactionContainerComponent', async () => {
       expect(component.transactionCardinality()).toBe(-1);
     });
 
-    it('should return 1 for a pulled forward loan', () => {
-      const originalLoan = getTestTransactionByType(
+    it('should return 1 for a pulled forward loan', async () => {
+      const originalLoan = (await getTestTransactionByType(
         ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
-      ) as SchCTransaction;
-      const loanTransaction = getTestTransactionByType(
+      )) as SchCTransaction;
+      const loanTransaction = (await getTestTransactionByType(
         ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
-      ) as SchCTransaction;
+      )) as SchCTransaction;
       loanTransaction.transactionType.dependentChildTransactionTypes = [
         loanTransaction.transaction_type_identifier as TransactionTypes,
       ];
@@ -169,13 +167,13 @@ describe('TransactionContainerComponent', async () => {
       expect(component.transactionCardinality()).toBe(1);
     });
 
-    it('should return 2 for a transaction with one dependent child', () => {
-      const child = getTestTransactionByType(
+    it('should return 2 for a transaction with one dependent child', async () => {
+      const child = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
-      const parent = getTestTransactionByType(
+      )) as SchATransaction;
+      const parent = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
+      )) as SchATransaction;
       parent.transactionType.dependentChildTransactionTypes = [child.transaction_type_identifier as TransactionTypes];
       parent.children = [child];
       routeDataSubject.next({ transaction: parent });
@@ -183,16 +181,16 @@ describe('TransactionContainerComponent', async () => {
       expect(component.transactionCardinality()).toBe(2);
     });
 
-    it('should return 3 for a transaction with two dependent children', () => {
-      const child = getTestTransactionByType(
+    it('should return 3 for a transaction with two dependent children', async () => {
+      const child = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
-      const child2 = getTestTransactionByType(
+      )) as SchATransaction;
+      const child2 = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
-      const parent = getTestTransactionByType(
+      )) as SchATransaction;
+      const parent = (await getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      ) as SchATransaction;
+      )) as SchATransaction;
       parent.transactionType.dependentChildTransactionTypes = [
         child.transaction_type_identifier as TransactionTypes,
         child2.transaction_type_identifier as TransactionTypes,

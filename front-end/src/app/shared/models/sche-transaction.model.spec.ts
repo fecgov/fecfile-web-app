@@ -1,4 +1,4 @@
-import { hydrateTransaction } from '../utils/transaction-type.utils';
+import { TransactionUtils } from '../utils/transaction.utils';
 import { SchETransaction } from './sche-transaction.model';
 
 describe('SchETransaction', () => {
@@ -12,7 +12,7 @@ describe('SchETransaction', () => {
       form_type: 'SE',
       payee_organization_name: 'foo',
     };
-    const transaction: SchETransaction = await hydrateTransaction(data, SchETransaction);
+    const transaction: SchETransaction = await TransactionUtils.hydrateTransaction(data, SchETransaction);
     expect(transaction).toBeInstanceOf(SchETransaction);
     expect(transaction.id).toBe('999');
     expect(transaction.form_type).toBe('SE');

@@ -21,6 +21,7 @@ describe('FeedbackService', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         ApiService,
+        FeedbackService,
         LoginService,
         provideMockStore(testMockStore()),
       ],

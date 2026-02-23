@@ -25,6 +25,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   form: FormGroup = new FormGroup(
     {
       filer_designated_to_make_coordinated_expenditures: new SubscriptionFormControl(''),
@@ -35,10 +36,14 @@ class TestHostComponent {
   );
   formSubmitted = false;
   templateMap = testTemplateMap();
-  transaction: Transaction = testScheduleATransaction();
+  transaction?: Transaction;
   component = viewChild.required(AdditionalInfoInputComponent);
+
   constructor() {
-    this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
+    this.initialized = testScheduleATransaction().then((t) => {
+      t.transactionType.purposeDescriptionPrefix = 'Prefix: ';
+      this.transaction = t;
+    });
   }
 }
 
@@ -59,6 +64,7 @@ describe('AdditionalInfoInputComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
 
     fixture.detectChanges();
@@ -68,16 +74,16 @@ describe('AdditionalInfoInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a read-only cpd if system generated', () => {
+  it('should have a read-only cpd if system generated', async () => {
     if (host.transaction?.transactionType)
-      host.transaction.transactionType.generatePurposeDescription = () => 'description';
+      host.transaction!.transactionType.generatePurposeDescription = () => 'description';
     fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeTruthy();
   });
 
   it('should have a mutable cpd if not system generated', () => {
-    if (host.transaction?.transactionType) host.transaction.transactionType.generatePurposeDescription = undefined;
+    if (host.transaction?.transactionType) host.transaction!.transactionType.generatePurposeDescription = undefined;
     fixture.detectChanges();
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeFalsy();
@@ -116,7 +122,7 @@ describe('AdditionalInfoInputComponent', () => {
 
   it('should detect memo prefixes', () => {
     expect(component.form.get(host.templateMap.text4000)?.value).toEqual('');
-    host.transaction.memo_text = MemoText.fromJSON({
+    host.transaction!.memo_text = MemoText.fromJSON({
       text_prefix: 'MEMO PREFIX:',
     });
     component.ngOnInit();

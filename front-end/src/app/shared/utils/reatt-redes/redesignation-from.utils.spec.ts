@@ -1,15 +1,17 @@
 import { FormGroup, Validators } from '@angular/forms';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
 import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/type-enums';
+import { TransactionUtils } from '../transaction.utils';
 
 describe('Redesignation From', () => {
   describe('overlayTransactionProperties', () => {
-    it('should override default properties', () => {
-      const transaction = testScheduleBTransaction();
+    it('should override default properties', async () => {
+      const transaction = await testScheduleBTransaction();
       const fromTransaction = RedesignationFromUtils.overlayTransactionProperties(
-        getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE) as SchBTransaction,
+        (await getTestTransactionByType(ScheduleBTransactionTypes.OPERATING_EXPENDITURE)) as SchBTransaction,
         transaction,
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
@@ -20,14 +22,17 @@ describe('Redesignation From', () => {
   });
 
   describe('overlayForm', () => {
-    it('should update validators and watch for value changes', () => {
-      const transaction = testScheduleBTransaction();
+    it('should update validators and watch for value changes', async () => {
+      const transaction = await testScheduleBTransaction();
       transaction.parent_transaction = {
         id: '888',
-        reatt_redes: SchBTransaction.fromJSON({
-          id: '999',
-          expenditure_amount: 100,
-        }),
+        reatt_redes: TransactionUtils.hydrateTransaction(
+          {
+            id: '999',
+            expenditure_amount: 100,
+          },
+          SchBTransaction,
+        ),
       } as unknown as SchBTransaction;
 
       const fromForm = new FormGroup(

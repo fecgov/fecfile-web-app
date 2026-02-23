@@ -1,6 +1,7 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { CONTRIBUTION_TO_CANDIDATE_VOID } from './CONTRIBUTION_TO_CANDIDATE_VOID.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 
 describe('CONTRIBUTION_TO_CANDIDATE_VOID', () => {
   let transactionType: CONTRIBUTION_TO_CANDIDATE_VOID;
@@ -14,8 +15,8 @@ describe('CONTRIBUTION_TO_CANDIDATE_VOID', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchATransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB23');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID);
   });

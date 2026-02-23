@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, inject, Input, OnInit } from '@angular/core';
 import type { Transaction } from 'app/shared/models/transaction.model';
 import {
@@ -27,6 +28,7 @@ import {
   ScheduleC2TransactionTypeLabels,
   ScheduleETransactionTypeLabels,
 } from 'app/shared/models/type-enums';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   selector: 'app-navigation-control',
@@ -39,20 +41,26 @@ export class NavigationControlComponent implements OnInit {
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
   public controlType: 'button' | 'dropdown' = 'button';
-  public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  readonly dropdownOptions = derivedAsync(
+    () => {
+      if (this.navigationControl?.controlType == ControlType.DROPDOWN)
+        return this.getOptions(
+          this.transaction?.transactionType,
+          this.transaction?.parent_transaction?.transactionType,
+        );
+      return [];
+    },
+    { initialValue: [] },
+  );
   dropdownControl = new SubscriptionFormControl('');
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     /**
      * If the navigation control is a dropdown, we need to extract
      * the options from the config in the transaction type
      */
     if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
       this.controlType = 'dropdown';
-      this.dropdownOptions = await this.getOptions(
-        this.transaction?.transactionType,
-        this.transaction?.parent_transaction?.transactionType,
-      );
       /**
        * If the navigation control is a button, we'll just establish
        * the destination in the click handler
@@ -110,7 +118,6 @@ export class NavigationControlComponent implements OnInit {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getOptionFromConfig = async (
     config: SubTransactionGroup | TransactionTypes,
     isParentConfig = false,
@@ -156,8 +163,7 @@ export class NavigationControlComponent implements OnInit {
     };
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): Promise<any> {
+  async getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): Promise<any[]> {
     /** Get options for dropdown based on transactionType and parentTransactionType
      * If parentTransactionType is provided, include options from parentTransactionType
      *    options from parent transaction will have the destionaion of ANOTHER

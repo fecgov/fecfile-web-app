@@ -14,10 +14,14 @@ import {
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
-import { hydrateTransaction } from '../utils/transaction-type.utils';
-import { ClassConstructor } from 'class-transformer';
 import type { AggregationGroups, ScheduleIds, TransactionTypes } from './type-enums';
 import type { Transaction } from './transaction.model';
+
+interface InitializationData {
+  form_type: string;
+  transaction_type_identifier: TransactionTypes;
+  aggregation_group?: AggregationGroups | null;
+}
 
 /**
  * Class that defines the meta data associated with a transaction type.
@@ -240,16 +244,7 @@ export abstract class TransactionType {
   hasAdditionalInfo = true;
   hasLoanAgreement = false;
 
-  abstract readonly initializationData: {
-    form_type: string;
-    transaction_type_identifier: TransactionTypes;
-    aggregation_group?: AggregationGroups | null;
-  };
-  abstract readonly transactionClass: ClassConstructor<Transaction>;
-
-  getNewTransaction() {
-    return hydrateTransaction(this.initializationData, this.transactionClass);
-  }
+  abstract readonly initializationData: InitializationData;
 }
 
 export enum PurposeDescriptionLabelSuffix {

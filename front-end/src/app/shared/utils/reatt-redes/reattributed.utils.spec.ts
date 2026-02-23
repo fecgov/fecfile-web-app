@@ -5,11 +5,11 @@ import { ReattRedesTypes } from './reatt-redes.utils';
 
 describe('Reattributed Utils', () => {
   let payload: SchATransaction;
-  beforeEach(() => {
-    payload = testScheduleATransaction();
+  beforeEach(async () => {
+    payload = await testScheduleATransaction();
     payload.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
 
-    payload.reatt_redes = testScheduleATransaction();
+    payload.reatt_redes = await testScheduleATransaction();
   });
 
   describe('overlayTransactionProperties', () => {

@@ -1,15 +1,16 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../scha-transaction.model';
 import { Transaction } from '../transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   let transaction: Transaction;
 
-  beforeEach(() => {
-    transaction = getTestTransactionByType(
+  beforeEach(async () => {
+    transaction = (await getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
       ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ) as SchATransaction;
+    )) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Committee';
   });
 

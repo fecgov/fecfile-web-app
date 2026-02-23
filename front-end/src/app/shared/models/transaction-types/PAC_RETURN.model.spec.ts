@@ -1,5 +1,6 @@
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
 import { PAC_RETURN } from './PAC_RETURN.model';
 
 describe('PAC_RETURN', () => {
@@ -14,8 +15,8 @@ describe('PAC_RETURN', () => {
     expect(transactionType.scheduleId).toBe('A');
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchATransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SA11C');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RETURN);
   });

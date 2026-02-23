@@ -1,9 +1,10 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../scha-transaction.model';
 import { Transaction } from '../transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { ScheduleATransactionTypes } from '../type-enums';
 
-describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
-  const transaction: Transaction = getTestTransactionByType(
+describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', async () => {
+  const transaction: Transaction = await getTestTransactionByType(
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   );
 

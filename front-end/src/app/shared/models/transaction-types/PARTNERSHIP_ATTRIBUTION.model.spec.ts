@@ -1,5 +1,6 @@
 import { PARTNERSHIP_ATTRIBUTION } from './PARTNERSHIP_ATTRIBUTION.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('PARTNERSHIP_ATTRIBUTION', () => {
   let transactionType: PARTNERSHIP_ATTRIBUTION;
@@ -13,8 +14,8 @@ describe('PARTNERSHIP_ATTRIBUTION', () => {
     expect(transactionType.scheduleId).toBe('A');
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchATransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SA11AI');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   });

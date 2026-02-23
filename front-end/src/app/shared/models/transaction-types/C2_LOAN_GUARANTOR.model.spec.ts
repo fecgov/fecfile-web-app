@@ -1,5 +1,7 @@
 import { C2_LOAN_GUARANTOR } from './C2_LOAN_GUARANTOR.model';
-import { SchC2Transaction, ScheduleC2TransactionTypes } from '../schc2-transaction.model';
+import { SchC2Transaction } from '../schc2-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleC2TransactionTypes } from '../type-enums';
 
 describe('C2_LOAN_GUARANTOR', () => {
   let transactionType: C2_LOAN_GUARANTOR;
@@ -13,8 +15,10 @@ describe('C2_LOAN_GUARANTOR', () => {
     expect(transactionType.scheduleId).toBe('C2');
   });
 
-  it('#factory() should return a SchC2Transaction', () => {
-    const transaction: SchC2Transaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchC2Transaction', async () => {
+    const transaction: SchC2Transaction = (await TransactionUtils.createNewTransaction(
+      transactionType,
+    )) as SchC2Transaction;
     expect(transaction.form_type).toBe('SC2/10');
     expect(transaction.transaction_type_identifier).toBe(ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);
   });

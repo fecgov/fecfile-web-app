@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { REFUND_PARTY_CONTRIBUTION_VOID } from './REFUND_PARTY_CONTRIBUTION_VOID.model';
 
 describe('REFUND_PARTY_CONTRIBUTION_VOID', () => {
@@ -13,8 +14,8 @@ describe('REFUND_PARTY_CONTRIBUTION_VOID', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchBTransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB28B');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID);
   });

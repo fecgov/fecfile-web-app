@@ -1,14 +1,15 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { Transaction } from '../transaction.model';
-import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
+import { SchATransaction } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   let transaction: Transaction;
 
-  beforeEach(() => {
-    transaction = TransactionTypeUtils.factory(
+  beforeEach(async () => {
+    transaction = await TransactionUtils.createNewTransactionByIdentifier(
       ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-    ).getNewTransaction();
+    );
   });
 
   it('should create an instance', () => {

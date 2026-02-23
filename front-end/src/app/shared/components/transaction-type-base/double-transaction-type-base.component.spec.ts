@@ -80,14 +80,16 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     }).compileComponents();
   });
 
-  beforeEach(fakeAsync(() => {
+  beforeEach(fakeAsync(async () => {
     const contact = new Contact();
     contact.name = 'Name';
-    testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    testTransaction = (await getTestTransactionByType(
+      ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
+    )) as SchATransaction;
     testTransaction.contact_1 = contact;
     testTransaction.report_ids = ['123'];
     testTransaction.children = [
-      getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
+      (await getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO)) as SchATransaction,
     ];
 
     testRouter = TestBed.inject(Router);
@@ -160,12 +162,12 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     expect(component.childTransaction?.contact_1?.name).toEqual('Name');
   });
 
-  xit("should auto-generate the child transaction's purpose description", () => {
-    const trans: SchATransaction = getTestTransactionByType(
+  xit("should auto-generate the child transaction's purpose description", async () => {
+    const trans: SchATransaction = (await getTestTransactionByType(
       ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
-    ) as SchATransaction;
+    )) as SchATransaction;
     trans.entity_type = ContactTypes.INDIVIDUAL;
-    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    const childTransaction = await getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT);
     host.transaction = trans;
     spyOn(component, 'getChildTransaction').and.callFake(() => {
       childTransaction.parent_transaction = component.transaction;
@@ -182,11 +184,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     );
   });
 
-  it('should push changes in the parent to the child for inherited fields', () => {
-    host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
-    host.transaction.children = [getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED)];
+  it('should push changes in the parent to the child for inherited fields', async () => {
+    host.transaction = await getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    host.transaction.children = [await getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT)];
     spyOn(component, 'getChildTransaction').and.returnValue(
-      getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED),
+      await getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT),
     );
     component.ngOnInit();
     expect(component.childTransaction?.transactionType?.getInheritedFields(component.childTransaction)).toContain(

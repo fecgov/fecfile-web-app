@@ -1,7 +1,6 @@
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
 import { Transaction, isPulledForwardLoan } from './transaction.model';
 import { TransactionNavigationControls, SAVE_LIST_CONTROL } from './transaction-navigation-controls.model';
-import { SchCTransaction } from './schc-transaction.model';
 import { ScheduleIds } from './type-enums';
 
 export abstract class SchCTransactionType extends TransactionType {
@@ -104,6 +103,4 @@ export abstract class SchCTransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
-
-  override readonly transactionClass = SchCTransaction;
 }

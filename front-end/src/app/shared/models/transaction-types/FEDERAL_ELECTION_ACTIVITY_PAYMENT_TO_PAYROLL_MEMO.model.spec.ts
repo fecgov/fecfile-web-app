@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from './FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO', () => {
@@ -13,8 +14,8 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchBTransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB30B');
     expect(txn.transaction_type_identifier).toBe(
       ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,

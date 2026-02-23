@@ -37,6 +37,7 @@ import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   form = new FormGroup(
     {
       contribution_date: new SubscriptionFormControl(''),
@@ -49,9 +50,15 @@ class TestHostComponent {
   formSubmitted = false;
   templateMap = testTemplateMap();
   memoItemHelpText = '';
-  transaction: Transaction = testScheduleATransaction();
+  transaction?: Transaction;
   memoHasOptional = false;
   component = viewChild.required(MemoCodeInputComponent);
+
+  constructor() {
+    this.initialized = testScheduleATransaction().then((t) => {
+      this.transaction = t;
+    });
+  }
 }
 
 describe('MemoCodeInputComponent', () => {
@@ -88,6 +95,7 @@ describe('MemoCodeInputComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
 
     mockStore = TestBed.inject(MockStore);
@@ -180,8 +188,8 @@ describe('MemoCodeInputComponent', () => {
     expect(component.dateIsOutsideReport).toBeTrue();
   });
 
-  it('should update transaction type identifiers correctly based on the TransactionType', () => {
-    host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+  it('should update transaction type identifiers correctly based on the TransactionType', async () => {
+    host.transaction = await getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     fixture.detectChanges();
     component.ngOnInit();
 
@@ -197,8 +205,8 @@ describe('MemoCodeInputComponent', () => {
     expect(component.transaction()?.transaction_type_identifier).toEqual(falseTTI);
   });
 
-  it('should form the memoCodeMapOptions correctly', () => {
-    host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+  it('should form the memoCodeMapOptions correctly', async () => {
+    host.transaction = await getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     fixture.detectChanges();
     component.ngOnInit();
 

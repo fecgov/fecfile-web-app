@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT } from './NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT.model';
 
 describe('NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT', () => {
@@ -13,8 +14,8 @@ describe('NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchBTransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB21B');
     expect(txn.transaction_type_identifier).toBe(
       ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,

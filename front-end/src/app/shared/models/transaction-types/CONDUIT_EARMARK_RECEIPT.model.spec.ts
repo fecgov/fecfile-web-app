@@ -1,13 +1,16 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../schb-transaction.model';
+import { ScheduleATransactionTypes, ScheduleBTransactionTypes } from '../type-enums';
 
 describe('CONDUIT_EARMARK_RECEIPT', () => {
   let transaction: SchATransaction;
 
-  beforeEach(() => {
-    transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT) as SchATransaction;
+  beforeEach(async () => {
+    transaction = (await getTestTransactionByType(
+      ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
+    )) as SchATransaction;
   });
 
   it('should create an instance', () => {
@@ -25,8 +28,10 @@ describe('CONDUIT_EARMARK_RECEIPT', () => {
     expect(descrip).toBe('');
   });
 
-  it('#generatePurposeDescription() should reflect child', () => {
-    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT) as SchBTransaction;
+  it('#generatePurposeDescription() should reflect child', async () => {
+    const childTransaction = (await getTestTransactionByType(
+      ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT,
+    )) as SchBTransaction;
     childTransaction.entity_type = ContactTypes.COMMITTEE;
     childTransaction.payee_organization_name = 'Joe';
     transaction.children = [childTransaction];
@@ -35,8 +40,10 @@ describe('CONDUIT_EARMARK_RECEIPT', () => {
     expect(descrip).toBe('Earmarked for Joe');
   });
 
-  it('#generatePurposeDescription() should not yield too long of a description', () => {
-    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT) as SchBTransaction;
+  it('#generatePurposeDescription() should not yield too long of a description', async () => {
+    const childTransaction = (await getTestTransactionByType(
+      ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT,
+    )) as SchBTransaction;
     childTransaction.entity_type = ContactTypes.COMMITTEE;
     childTransaction.payee_organization_name =
       'Joe Alibaster Theodore Benjamin Worthington Daniel-Struthing Nilesback Adilade Dourson Schmoe IV';

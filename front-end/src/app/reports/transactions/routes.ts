@@ -29,7 +29,8 @@ export const TRANSACTION_ROUTES: Route[] = [
       {
         path: 'report/:reportId/list',
         title: 'Manage your transactions',
-        loadComponent: () => import('./transaction-list/transaction-list.component').then(m => m.TransactionListComponent),
+        loadComponent: () =>
+          import('./transaction-list/transaction-list.component').then((m) => m.TransactionListComponent),
         resolve: { report: ReportResolver },
         data: {
           sidebarSection: ReportSidebarSection.TRANSACTIONS,
@@ -38,7 +39,10 @@ export const TRANSACTION_ROUTES: Route[] = [
       },
       {
         path: 'report/:reportId/select/:category',
-        loadComponent: () => import('./transaction-type-picker/transaction-type-picker.component').then(m => m.TransactionTypePickerComponent),
+        loadComponent: () =>
+          import('./transaction-type-picker/transaction-type-picker.component').then(
+            (m) => m.TransactionTypePickerComponent,
+          ),
         resolve: { report: ReportResolver },
         canActivate: [ReportIsEditableGuard],
         data: {
@@ -48,7 +52,10 @@ export const TRANSACTION_ROUTES: Route[] = [
       },
       {
         path: 'report/:reportId/create/:transactionType',
-        loadComponent: () => import('./transaction-container/transaction-container.component').then(m => m.TransactionContainerComponent),
+        loadComponent: () =>
+          import('./transaction-container/transaction-container.component').then(
+            (m) => m.TransactionContainerComponent,
+          ),
         resolve: {
           report: ReportResolver,
           transaction: TransactionResolver,
@@ -61,7 +68,10 @@ export const TRANSACTION_ROUTES: Route[] = [
       },
       {
         path: 'report/:reportId/list/:transactionId',
-        loadComponent: () => import('./transaction-container/transaction-container.component').then(m => m.TransactionContainerComponent),
+        loadComponent: () =>
+          import('./transaction-container/transaction-container.component').then(
+            (m) => m.TransactionContainerComponent,
+          ),
         resolve: {
           report: ReportResolver,
           transaction: TransactionResolver,
@@ -74,7 +84,10 @@ export const TRANSACTION_ROUTES: Route[] = [
       },
       {
         path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType',
-        loadComponent: () => import('./transaction-container/transaction-container.component').then(m => m.TransactionContainerComponent),
+        loadComponent: () =>
+          import('./transaction-container/transaction-container.component').then(
+            (m) => m.TransactionContainerComponent,
+          ),
         resolve: {
           report: ReportResolver,
           transaction: TransactionResolver,

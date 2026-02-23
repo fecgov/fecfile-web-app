@@ -1,4 +1,4 @@
-import { hydrateTransaction } from '../utils/transaction-type.utils';
+import { TransactionUtils } from '../utils/transaction.utils';
 import { SchATransaction } from './scha-transaction.model';
 
 describe('SchATransaction', () => {
@@ -14,7 +14,7 @@ describe('SchATransaction', () => {
       contributor_organization_name: 'foo',
       contribution_date: undefined,
     };
-    const schATransaction: SchATransaction = await hydrateTransaction(data, SchATransaction);
+    const schATransaction: SchATransaction = await TransactionUtils.hydrateTransaction(data, SchATransaction);
     expect(schATransaction).toBeInstanceOf(SchATransaction);
     expect(schATransaction.id).toBe('999');
     expect(schATransaction.form_type).toBe('SA11Ai');
@@ -34,8 +34,8 @@ describe('SchATransaction', () => {
         },
       ],
     };
-    const transaction: SchATransaction = await hydrateTransaction(json, SchATransaction);
-    expect(transaction.constructor.name).toBe('_SchATransaction');
+    const transaction: SchATransaction = await TransactionUtils.hydrateTransaction(json, SchATransaction);
+    expect(transaction.constructor.name).toBe('SchATransaction');
   });
 
   it('Creates a REATTRIBUTED transaction object from JSON', async () => {
@@ -51,8 +51,8 @@ describe('SchATransaction', () => {
         reportCode: 'Q1',
       },
     };
-    const transaction: SchATransaction = await hydrateTransaction(json, SchATransaction);
-    expect(transaction.constructor.name).toBe('_SchATransaction');
+    const transaction: SchATransaction = await TransactionUtils.hydrateTransaction(json, SchATransaction);
+    expect(transaction.constructor.name).toBe('SchATransaction');
   });
 
   it('Creates a REATTRIBUTION_TO transaction object from JSON', async () => {
@@ -60,8 +60,8 @@ describe('SchATransaction', () => {
       transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
       reattribution_redesignation_tag: 'REATTRIBUTION_TO',
     };
-    const transaction: SchATransaction = await hydrateTransaction(json, SchATransaction);
-    expect(transaction.constructor.name).toBe('_SchATransaction');
+    const transaction: SchATransaction = await TransactionUtils.hydrateTransaction(json, SchATransaction);
+    expect(transaction.constructor.name).toBe('SchATransaction');
   });
 
   it('Creates a REATTRIBUTION_FROM transaction object from JSON', async () => {
@@ -73,7 +73,7 @@ describe('SchATransaction', () => {
         entity_type: 'INDIVIDUAL',
       },
     };
-    const transaction: SchATransaction = await hydrateTransaction(json, SchATransaction);
-    expect(transaction.constructor.name).toBe('_SchATransaction');
+    const transaction: SchATransaction = await TransactionUtils.hydrateTransaction(json, SchATransaction);
+    expect(transaction.constructor.name).toBe('SchATransaction');
   });
 });

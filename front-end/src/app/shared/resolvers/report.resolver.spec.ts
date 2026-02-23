@@ -9,6 +9,7 @@ import { Report } from '../models/reports/report.model';
 import { Form3X } from '../models/reports/form-3x.model';
 import { environment } from '../../../environments/environment';
 import { provideHttpClient } from '@angular/common/http';
+import { ReportService } from '../services/report.service';
 
 describe('ReportResolver', () => {
   let resolver: ReportResolver;
@@ -16,7 +17,14 @@ describe('ReportResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), Form3XService, provideMockStore(testMockStore())],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        Form3XService,
+        provideMockStore(testMockStore()),
+        ReportResolver,
+        ReportService,
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);

@@ -84,8 +84,13 @@ describe('ContactUtils', () => {
     contactId$ = new Subject();
   });
 
-  it('test updateFormWithPrimaryContact', () => {
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
+  it('test updateFormWithPrimaryContact', async () => {
+    TransactionContactUtils.updateFormWithPrimaryContact(
+      selectItem,
+      form,
+      await testScheduleATransaction(),
+      contactId$,
+    );
     expect(form.get('contributor_last_name')?.value).toBe('Smith');
     expect(form.get('contributor_first_name')?.value).toBe('Joe');
     expect(form.get('contributor_middle_name')?.value).toBe('James');
@@ -100,18 +105,30 @@ describe('ContactUtils', () => {
     expect(form.get('contributor_zip')?.value).toBe('22201');
 
     selectItem.value.type = ContactTypes.COMMITTEE;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(
+      selectItem,
+      form,
+      await testScheduleATransaction(),
+      contactId$,
+    );
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
     expect(form.get('donor_committee_fec_id')?.value).toBe('888');
     expect(form.get('donor_committee_name')?.value).toBe('Organization LLC');
 
     selectItem.value.type = ContactTypes.ORGANIZATION;
-    TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
+    TransactionContactUtils.updateFormWithPrimaryContact(
+      selectItem,
+      form,
+      await testScheduleATransaction(),
+      contactId$,
+    );
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
   });
 
-  it('test updateFormWithPrimaryContact and clearFormPrimaryContact', () => {
-    const transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
+  it('test updateFormWithPrimaryContact and clearFormPrimaryContact', async () => {
+    const transaction = (await getTestTransactionByType(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    )) as SchATransaction;
 
     TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, transaction, new Subject<string>());
     expect(transaction.contact_1).toBeTruthy();
@@ -120,8 +137,8 @@ describe('ContactUtils', () => {
     expect(transaction.contact_1).toBeFalsy();
   });
 
-  it('test updateFormWithCandidateContact', () => {
-    const transaction = testScheduleATransaction();
+  it('test updateFormWithCandidateContact', async () => {
+    const transaction = await testScheduleATransaction();
     TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
     expect(form.get('donor_candidate_last_name')?.value).toBe('Smith');
@@ -135,8 +152,10 @@ describe('ContactUtils', () => {
     expect(transaction.contact_2).toBeTruthy();
   });
 
-  it('test updateFormWithSecondaryContact', () => {
-    const transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
+  it('test updateFormWithSecondaryContact', async () => {
+    const transaction = (await getTestTransactionByType(
+      ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT,
+    )) as SchC1Transaction;
     TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('ind_name_account_location')?.value).toBe('Organization LLC');
     expect(form.get('account_street_1')?.value).toBe('123 Main St');
@@ -147,30 +166,30 @@ describe('ContactUtils', () => {
     expect(transaction.contact_2).toBeTruthy();
   });
 
-  it('test updateFormWithTertiaryContact', () => {
-    const transaction = getTestTransactionByType(
+  it('test updateFormWithTertiaryContact', async () => {
+    const transaction = (await getTestTransactionByType(
       ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
-    ) as SchBTransaction;
+    )) as SchBTransaction;
     TransactionContactUtils.updateFormWithTertiaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('beneficiary_committee_name')?.value).toBe('Organization LLC');
     expect(form.get('beneficiary_committee_fec_id')?.value).toBe('888');
     expect(transaction.contact_3).toBeTruthy();
   });
 
-  it('test updateFormWithQuaternaryContact', () => {
-    const transaction = getTestTransactionByType(
+  it('test updateFormWithQuaternaryContact', async () => {
+    const transaction = (await getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-    ) as SchFTransaction;
+    )) as SchFTransaction;
     TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('designating_committee_id_number')?.value).toBe('888');
     expect(form.get('designating_committee_name')?.value).toBe('Organization LLC');
     expect(transaction.contact_4).toBeTruthy();
   });
 
-  it('test updateFormWithQuaternaryContact and clearFormQuaternaryContact', () => {
-    const transaction = getTestTransactionByType(
+  it('test updateFormWithQuaternaryContact and clearFormQuaternaryContact', async () => {
+    const transaction = (await getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-    ) as SchFTransaction;
+    )) as SchFTransaction;
     // updateFormWithQuaternaryContact
     TransactionContactUtils.updateFormWithQuaternaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('designating_committee_id_number')?.value).toBe('888');
@@ -183,10 +202,10 @@ describe('ContactUtils', () => {
     expect(transaction.contact_4).toBeFalsy();
   });
 
-  it('test updateFormWithQuinaryContact and clearFormQuinaryContact', () => {
-    const transaction = getTestTransactionByType(
+  it('test updateFormWithQuinaryContact and clearFormQuinaryContact', async () => {
+    const transaction = (await getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-    ) as SchFTransaction;
+    )) as SchFTransaction;
     // updateFormWithQuaternaryContact
     TransactionContactUtils.updateFormWithQuinaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('subordinate_committee_id_number')?.value).toBe('888');
@@ -209,8 +228,10 @@ describe('ContactUtils', () => {
     expect(transaction.contact_5).toBeFalsy();
   });
 
-  it('corrects contact changes for IE Presidential Races', () => {
-    const transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE) as SchETransaction;
+  it('corrects contact changes for IE Presidential Races', async () => {
+    const transaction = (await getTestTransactionByType(
+      ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
+    )) as SchETransaction;
     const formProperties = transaction.transactionType.getFormControlNames();
     const formBuilder = new FormBuilder();
     const form = formBuilder.group(SchemaUtils.getFormGroupFields(formProperties));

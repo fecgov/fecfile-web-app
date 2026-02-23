@@ -1,15 +1,16 @@
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { getTestTransactionByType, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { FormGroup } from '@angular/forms';
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('Reattribution To', () => {
   describe('overlayTransactionProperties', () => {
-    it('should override default properties', () => {
-      const origTransaction = testScheduleATransaction();
+    it('should override default properties', async () => {
+      const origTransaction = await testScheduleATransaction();
       const toTransaction = ReattributionToUtils.overlayTransactionProperties(
-        getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction,
+        (await getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT)) as SchATransaction,
         origTransaction,
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
@@ -20,8 +21,8 @@ describe('Reattribution To', () => {
   });
 
   describe('overlayForm', () => {
-    it('should update validators and watch for value changes', () => {
-      const transaction = testScheduleATransaction();
+    it('should update validators and watch for value changes', async () => {
+      const transaction = await testScheduleATransaction();
       transaction.reatt_redes = {
         id: '999',
         report_ids: ['999'],

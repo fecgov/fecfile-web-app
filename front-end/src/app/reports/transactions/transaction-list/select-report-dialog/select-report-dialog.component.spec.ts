@@ -45,7 +45,7 @@ describe('SelectReportDialogComponent', () => {
 
   it('should get a list of available reports', fakeAsync(async () => {
     const transaction: TransactionListRecord = {
-      ...testScheduleATransaction(),
+      ...(await testScheduleATransaction()),
       name: 'TEST',
       date: new Date(),
       amount: 100,
@@ -66,7 +66,7 @@ describe('SelectReportDialogComponent', () => {
 
   it('should clear and close on cancel', async () => {
     const transaction: TransactionListRecord = {
-      ...testScheduleATransaction(),
+      ...(await testScheduleATransaction()),
       name: 'TEST',
       date: new Date(),
       amount: 100,
@@ -85,9 +85,9 @@ describe('SelectReportDialogComponent', () => {
   });
 
   describe('reattRedes', () => {
-    it("should determine if it's a reattribution of redesignation", () => {
+    it("should determine if it's a reattribution of redesignation", async () => {
       const transaction: TransactionListRecord = {
-        ...testScheduleATransaction(),
+        ...(await testScheduleATransaction()),
         name: 'TEST',
         date: new Date(),
         amount: 100,
@@ -124,7 +124,7 @@ describe('SelectReportDialogComponent', () => {
     it('should redirect based on the selected report and transaction', async () => {
       const routerSpy = spyOn(component.router, 'navigateByUrl');
       const transaction: TransactionListRecord = {
-        ...testScheduleATransaction(),
+        ...(await testScheduleATransaction()),
         name: 'TEST',
         date: new Date(),
         amount: 100,

@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from './CONTRIBUTION_TO_OTHER_COMMITTEE.model';
 
 describe('CONTRIBUTION_TO_OTHER_COMMITTEE', () => {
@@ -13,8 +14,8 @@ describe('CONTRIBUTION_TO_OTHER_COMMITTEE', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchBTransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB23');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE);
   });

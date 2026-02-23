@@ -3,7 +3,6 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -16,6 +15,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { Form24 } from 'app/shared/models/reports/form-24.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -37,7 +37,7 @@ describe('TransactionListComponent', () => {
           useValue: {
             get: (transactionId: string) =>
               of(
-                SchATransaction.fromJSON({
+                TransactionUtils.getFromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
                 }),

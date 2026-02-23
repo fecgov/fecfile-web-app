@@ -1,4 +1,3 @@
-import { SchC1Transaction } from './schc1-transaction.model';
 import { STANDARD_CONTROLS } from './transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { isPulledForwardLoan, Transaction } from './transaction.model';
@@ -98,6 +97,4 @@ export abstract class SchC1TransactionType extends TransactionType {
     quinary_state: '',
     quinary_zip: '',
   };
-
-  override readonly transactionClass = SchC1Transaction;
 }

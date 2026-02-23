@@ -1,14 +1,15 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { ScheduleATransactionTypes } from '../type-enums';
 
 describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
   let transaction: SchATransaction;
 
-  beforeEach(() => {
-    transaction = getTestTransactionByType(
+  beforeEach(async () => {
+    transaction = (await getTestTransactionByType(
       ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
-    ) as SchATransaction;
+    )) as SchATransaction;
   });
 
   it('should create an instance', () => {
@@ -28,10 +29,10 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
     expect(descrip).toBe('');
   });
 
-  it('#generatePurposeDescription() should reflect child', () => {
-    const childTransaction = getTestTransactionByType(
+  it('#generatePurposeDescription() should reflect child', async () => {
+    const childTransaction = (await getTestTransactionByType(
       ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
-    ) as SchATransaction;
+    )) as SchATransaction;
     childTransaction.entity_type = ContactTypes.INDIVIDUAL;
     childTransaction.contributor_first_name = 'Joe';
     childTransaction.contributor_last_name = 'Smith';

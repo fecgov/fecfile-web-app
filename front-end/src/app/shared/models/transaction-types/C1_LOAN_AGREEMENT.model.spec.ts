@@ -1,19 +1,21 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { SchCTransaction, ScheduleCTransactionTypes } from '../schc-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
+import { SchCTransaction } from '../schc-transaction.model';
+import { SchC1Transaction } from '../schc1-transaction.model';
 import { STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { C1_LOAN_AGREEMENT } from './C1_LOAN_AGREEMENT.model';
+import { ScheduleC1TransactionTypes, ScheduleCTransactionTypes } from '../type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('C1_LOAN_AGREEMENT', () => {
   let transactionType: C1_LOAN_AGREEMENT;
   let transaction: SchC1Transaction;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     transactionType = new C1_LOAN_AGREEMENT();
-    transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
-    transaction.parent_transaction = getTestTransactionByType(
+    transaction = (await getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT)) as SchC1Transaction;
+    transaction.parent_transaction = (await getTestTransactionByType(
       ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
-    ) as SchCTransaction;
+    )) as SchCTransaction;
   });
 
   it('should create an instance', () => {
@@ -21,8 +23,10 @@ describe('C1_LOAN_AGREEMENT', () => {
     expect(transactionType.scheduleId).toBe('C1');
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const transaction: SchC1Transaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchC1Transaction', async () => {
+    const transaction: SchC1Transaction = (await TransactionUtils.createNewTransaction(
+      transactionType,
+    )) as SchC1Transaction;
     expect(transaction.form_type).toBe('SC1/10');
     expect(transaction.transaction_type_identifier).toBe(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT);
   });

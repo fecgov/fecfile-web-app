@@ -1,5 +1,6 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 import { INDIVIDUAL_RECOUNT_RECEIPT } from './INDIVIDUAL_RECOUNT_RECEIPT.model';
+import { ScheduleATransactionTypes } from '../type-enums';
 
 describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
   let transactionType: INDIVIDUAL_RECOUNT_RECEIPT;
@@ -13,8 +14,8 @@ describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
     expect(transactionType.scheduleId).toBe('A');
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchATransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT);
   });

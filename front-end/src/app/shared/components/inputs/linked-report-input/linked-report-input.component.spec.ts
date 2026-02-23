@@ -71,18 +71,21 @@ const mockReports: Form3X[] = [
   template: `<app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction" />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   templateMap = testTemplateMap();
   form: FormGroup = new FormGroup({
     [this.templateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
     [this.templateMap['date2']]: new SubscriptionFormControl(new Date('06/02/2024')),
     [this.templateMap['memo_code']]: new SubscriptionFormControl(),
   });
-  transaction: Transaction = testScheduleATransaction();
+  transaction?: Transaction;
 
   component = viewChild.required(LinkedReportInputComponent);
-
   constructor() {
-    this.transaction.reports = mockReports;
+    this.initialized = testScheduleATransaction().then((t) => {
+      t.reports = mockReports;
+      this.transaction = t;
+    });
   }
 }
 
@@ -109,6 +112,7 @@ describe('LinkedReportInputComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
     fixture.detectChanges();
     await fixture.whenStable();

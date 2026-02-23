@@ -25,8 +25,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { hydrateTransaction } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleATransactionTypes, ScheduleBTransactionTypes } from 'app/shared/models/type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -57,12 +57,14 @@ describe('ReattTransactionTypeBaseComponent', () => {
     }).compileComponents();
   });
 
-  beforeEach(() => {
-    testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+  beforeEach(async () => {
+    testTransaction = (await getTestTransactionByType(
+      ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
+    )) as SchATransaction;
     testTransaction.reports = [testActiveReport()];
     testTransaction.report_ids = ['999'];
     testTransaction.children = [
-      getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
+      (await getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO)) as SchATransaction,
     ];
 
     reportService = TestBed.inject(ReportService<Form3X>);
@@ -77,7 +79,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
     component = fixture.componentInstance;
     component.transaction = testTransaction;
     component.childTransaction = testTransaction;
-    let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    let reattRedes = (await getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT)) as SchATransaction;
     reattRedes.reports = [testActiveReport()];
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
     component.transaction.reatt_redes = reattRedes;
@@ -146,13 +148,13 @@ describe('ReattTransactionTypeBaseComponent', () => {
         category_code: 'A',
       };
       component.transaction = RedesignationToUtils.overlayTransactionProperties(
-        await hydrateTransaction(data, SchBTransaction),
+        await TransactionUtils.hydrateTransaction(data, SchBTransaction),
       );
       expect(component.transaction.transactionType.templateMap).toBeTruthy();
       component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(
-        await hydrateTransaction(data, SchBTransaction),
+        await TransactionUtils.hydrateTransaction(data, SchBTransaction),
       );
-      component.childTransaction.reatt_redes = await hydrateTransaction(data, SchBTransaction);
+      component.childTransaction.reatt_redes = await TransactionUtils.hydrateTransaction(data, SchBTransaction);
       component.childForm.addControl('election_code', new SubscriptionFormControl(''));
       component.childForm.addControl('election_other_description', new SubscriptionFormControl(''));
       component.childForm.addControl('category_code', new SubscriptionFormControl(''));

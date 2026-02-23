@@ -4,7 +4,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { CommitteeInputComponent } from './committee-input.component';
-import type { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, viewChild } from '@angular/core';
 import { ContactTypes } from 'app/shared/models/contact.model';
@@ -24,6 +23,7 @@ import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   form: FormGroup = new FormGroup(
     {
       entity_type: new SubscriptionFormControl(ContactTypes.ORGANIZATION),
@@ -35,8 +35,14 @@ class TestHostComponent {
   );
   formSubmitted = false;
   templateMap = testTemplateMap();
-  transaction: Transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECEIPT) as SchATransaction;
+  transaction?: Transaction;
   component = viewChild.required(CommitteeInputComponent);
+
+  constructor() {
+    this.initialized = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECEIPT).then((t) => {
+      this.transaction = t;
+    });
+  }
 }
 
 describe('CommitteeInputComponent', () => {
@@ -51,6 +57,7 @@ describe('CommitteeInputComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
 
     fixture.detectChanges();
@@ -61,7 +68,7 @@ describe('CommitteeInputComponent', () => {
   });
 
   it('should sync committee_name to organization_name', () => {
-    host.transaction.transactionType.synchronizeOrgComNameValues = true;
+    host.transaction!.transactionType.synchronizeOrgComNameValues = true;
     fixture.detectChanges();
 
     expect(component.form.get('donor_committee_name')?.value).toBe('');

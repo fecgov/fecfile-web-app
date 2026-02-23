@@ -1,5 +1,6 @@
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleDTransactionTypes } from '../type-enums';
 import { DEBT_OWED_TO_COMMITTEE } from './DEBT_OWED_TO_COMMITTEE.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 
 describe('DEBT_OWED_TO_COMMITTEE', () => {
@@ -14,8 +15,8 @@ describe('DEBT_OWED_TO_COMMITTEE', () => {
     expect(transactionType.scheduleId).toBe('D');
   });
 
-  it('#factory() should return a SchDTransaction', () => {
-    const txn: SchDTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchDTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SD9');
     expect(txn.transaction_type_identifier).toBe(ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE);
   });

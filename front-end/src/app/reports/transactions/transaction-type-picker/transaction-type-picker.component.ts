@@ -5,12 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { LabelList } from 'app/shared/utils/label.utils';
-import {
-  PAC_ONLY,
-  PTY_ONLY,
-  TransactionTypeUtils,
-  getTransactionTypeClass,
-} from 'app/shared/utils/transaction-type.utils';
+import { PAC_ONLY, PTY_ONLY, getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
@@ -30,6 +25,7 @@ import {
   ScheduleFTransactionTypeLabels,
   ScheduleFTransactionTypes,
 } from 'app/shared/models/type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 interface TransactionTypesExtended {
   transactionType: TransactionTypes;
@@ -131,12 +127,16 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
             ],
             ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
           ];
-          const types = transactionTypes.filter(async (transactionType) => {
-            if (!(await getTransactionTypeClass(transactionType))) return false;
-            const type = await TransactionTypeUtils.factory(transactionType);
-            const lineNumber = (await type.getNewTransaction()).form_type ?? '';
-            return debtPaymentLines.includes(lineNumber);
-          });
+          const filterResults = await Promise.all(
+            transactionTypes.map(async (transactionType) => {
+              const typeClass = await getTransactionTypeClass(transactionType);
+              if (!typeClass) return false;
+              const transaction = await TransactionUtils.createNewTransactionByIdentifier(transactionType);
+              const lineNumber = transaction.form_type ?? '';
+              return debtPaymentLines.includes(lineNumber);
+            }),
+          );
+          const types = transactionTypes.filter((_, index) => filterResults[index]);
           typeMap.set(
             group,
             types.map((type) => {
@@ -163,20 +163,17 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
     { initialValue: new Map<TransactionGroupTypes, TransactionTypesExtended[]>() },
   );
 
-  readonly hasTransactions = derivedAsync(
-    async () => {
-      const groups = this.transactionGroups();
-      const typeGroups = this.transactionTypes();
-      const hasMap = new Map<TransactionGroupTypes, boolean>();
-      groups.forEach((group) => {
-        const types = typeGroups.get(group);
-        if (!types) hasMap.set(group, false);
-        else hasMap.set(group, types.length > 0);
-      });
-      return hasMap;
-    },
-    { initialValue: new Map<TransactionGroupTypes, boolean>() },
-  );
+  readonly hasTransactions = computed(() => {
+    const groups = this.transactionGroups();
+    const typeGroups = this.transactionTypes();
+    const hasMap = new Map<TransactionGroupTypes, boolean>();
+    groups.forEach((group) => {
+      const types = typeGroups.get(group);
+      if (!types) hasMap.set(group, false);
+      else hasMap.set(group, types.length > 0);
+    });
+    return hasMap;
+  });
 
   showTransaction(transactionTypeIdentifier: string): boolean {
     // currently we only hide SchedF in some ɵnvironments, but in the future?

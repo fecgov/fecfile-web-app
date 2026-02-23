@@ -22,6 +22,7 @@ import { ScheduleETransactionTypes } from 'app/shared/models/type-enums';
   />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   form: FormGroup = new FormGroup(
     {
       election_code: new SubscriptionFormControl(''),
@@ -31,8 +32,16 @@ class TestHostComponent {
   );
   formSubmitted = false;
   templateMap = testTemplateMap();
-  transaction: Transaction = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
+  transaction?: Transaction;
   component = viewChild.required(ElectionInputComponent);
+
+  constructor() {
+    this.initialized = getTestTransactionByType(ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE).then(
+      (t) => {
+        this.transaction = t;
+      },
+    );
+  }
 }
 
 describe('ElectionInputComponent', () => {

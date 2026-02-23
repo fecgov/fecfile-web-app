@@ -4,9 +4,9 @@ import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { ScheduleTransaction, Transaction } from '../models/transaction.model';
-import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { AggregationGroups } from '../models/type-enums';
+import { TransactionUtils } from '../utils/transaction.utils';
 
 interface PreviousAggregate {
   aggregate: number;
@@ -28,7 +28,7 @@ export class TransactionService {
 
   public get = async (id: string): Promise<ScheduleTransaction> => {
     const response = await this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`);
-    return getFromJSON(response);
+    return TransactionUtils.getFromJSON(response);
   };
 
   public async getPreviousEntityAggregate(

@@ -1,7 +1,8 @@
 import { getTestTransactionByType } from '../utils/unit-test.utils';
 import { ContactTypes } from './contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+import { SchATransaction } from './scha-transaction.model';
 import { Transaction, getTransactionName } from './transaction.model';
+import { ScheduleATransactionTypes } from './type-enums';
 
 describe('Transaction', () => {
   it('should create an instance', () => {
@@ -12,8 +13,10 @@ describe('Transaction', () => {
     expect(new ChildTransaction()).toBeTruthy();
   });
 
-  it('should formulate names correctly', () => {
-    const testTransaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) as SchATransaction;
+  it('should formulate names correctly', async () => {
+    const testTransaction = (await getTestTransactionByType(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    )) as SchATransaction;
     testTransaction.contributor_last_name = 'lname';
     testTransaction.contributor_first_name = 'fname';
     testTransaction.entity_type = ContactTypes.INDIVIDUAL;

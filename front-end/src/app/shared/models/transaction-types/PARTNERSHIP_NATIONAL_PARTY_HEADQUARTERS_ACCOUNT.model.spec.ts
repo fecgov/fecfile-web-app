@@ -1,13 +1,15 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
   let transaction: SchATransaction;
 
-  beforeEach(() => {
-    transaction = getTestTransactionByType(
+  beforeEach(async () => {
+    transaction = (await getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-    ) as SchATransaction;
+    )) as SchATransaction;
   });
 
   it('should create an instance', () => {
@@ -22,11 +24,11 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
     );
   });
 
-  it('#generatePurposeDescription() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', async () => {
     let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Headquarters Buildings Account (Partnership attributions do not meet itemization threshold)');
 
-    transaction.children = [transaction.transactionType?.getNewTransaction() as SchATransaction];
+    transaction.children = [await TransactionUtils.createNewTransaction(transaction.transactionType)];
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Headquarters Buildings Account (See Partnership Attribution(s) below)');
   });

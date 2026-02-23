@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
@@ -33,13 +33,13 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
-import { hydrateTransaction } from 'app/shared/utils/transaction-type.utils';
 import {
   AggregationGroups,
   ScheduleATransactionTypes,
   ScheduleBTransactionTypes,
   ScheduleETransactionTypes,
 } from 'app/shared/models/type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 let testTransaction: SchATransaction;
 
@@ -107,7 +107,7 @@ describe('TransactionTypeBaseComponent', () => {
     testConfirmationService = TestBed.inject(ConfirmationService);
     testwrapperService = TestBed.inject(ConfirmationWrapperService);
     messageServiceSpy = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
-    testTransaction = getTestIndividualReceipt();
+    testTransaction = await getTestIndividualReceipt();
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -142,7 +142,9 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overridden when the schema requires a negative value', async () => {
-    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    component.transaction = await getTestTransactionByType(
+      ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
+    );
     component.ngOnInit();
 
     component.form.patchValue({ contribution_amount: 2 });
@@ -150,8 +152,8 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('inherited fields should use the parent transaction to initialize the form values', async () => {
-    component.transaction = getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
-    component.transaction.parent_transaction = getTestIndividualReceipt();
+    component.transaction = await getTestTransactionByType(ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
+    component.transaction.parent_transaction = await getTestIndividualReceipt();
     if (component.transaction.parent_transaction.contact_1)
       component.transaction.parent_transaction.contact_1.street_1 = 'Parent Street 1';
     component.ngOnInit();
@@ -207,7 +209,7 @@ describe('TransactionTypeBaseComponent', () => {
       expect(navigateToSpy).toHaveBeenCalled();
     });
 
-    it('should set processing to false if no transaction type identifier on payload', () => {
+    it('should set processing to false if no transaction type identifier on payload', async () => {
       component.form.addControl('linkedF3xId', new SubscriptionFormControl());
       component.form.get('linkedF3xId')?.setValue('321');
 
@@ -364,19 +366,19 @@ describe('TransactionTypeBaseComponent', () => {
 
     // ANOTHER //
     describe('NavigationDestination.ANOTHER', () => {
-      it('should send success to message service', () => {
+      it('should send success to message service', async () => {
         testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.ANOTHER,
-            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            await getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
       });
 
-      it('should route to the same transaction type', () => {
-        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+      it('should route to the same transaction type', async () => {
+        const transaction = await getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         testNavigate(
           new NavigationEvent(
             NavigationAction.SAVE,
@@ -387,8 +389,8 @@ describe('TransactionTypeBaseComponent', () => {
           '/reports/transactions/report/999/create/PARTNERSHIP_JF_TRANSFER_MEMO',
         );
       });
-      it('should route to create a sub transaction of the current parent', () => {
-        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+      it('should route to create a sub transaction of the current parent', async () => {
+        const transaction = await getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         transaction.parent_transaction_id = '1';
         testNavigate(
           new NavigationEvent(
@@ -405,18 +407,18 @@ describe('TransactionTypeBaseComponent', () => {
 
     // CHILD //
     describe('NavigationDestination.CHILD', () => {
-      it('should send success to message service', () => {
+      it('should send success to message service', async () => {
         testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.CHILD,
-            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            await getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
       });
-      it('should route to child of current transaction if CHILD', () => {
-        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+      it('should route to child of current transaction if CHILD', async () => {
+        const transaction = await getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         transaction.id = '1';
         testNavigate(
           new NavigationEvent(
@@ -432,18 +434,18 @@ describe('TransactionTypeBaseComponent', () => {
 
     // PARENT //
     describe('NavigationDestination.PARENT', () => {
-      it('should not send success to message service', () => {
+      it('should not send success to message service', async () => {
         testNoMessage(
           new NavigationEvent(
             NavigationAction.CANCEL,
             NavigationDestination.PARENT,
-            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            await getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
       });
-      it('should route to the parent if PARENT', () => {
-        const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+      it('should route to the parent if PARENT', async () => {
+        const transaction = await getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         transaction.parent_transaction_id = '1';
         testNavigate(
           new NavigationEvent(
@@ -459,22 +461,22 @@ describe('TransactionTypeBaseComponent', () => {
 
     // LIST //
     describe('NavigationDestination.LIST', () => {
-      it('should not send success to message service if SAVE', () => {
+      it('should not send success to message service if SAVE', async () => {
         testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.LIST,
-            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            await getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
       });
-      it('should send success to message service if CANCEL', () => {
+      it('should send success to message service if CANCEL', async () => {
         testNoMessage(
           new NavigationEvent(
             NavigationAction.CANCEL,
             NavigationDestination.LIST,
-            getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
+            await getTestTransactionByType(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT),
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
@@ -591,8 +593,8 @@ describe('TransactionTypeBaseComponent', () => {
     });
   });
 
-  it('should populate treasurer data from committee for schedule E', () => {
-    component.transaction = testIndependentExpenditure();
+  it('should populate treasurer data from committee for schedule E', async () => {
+    component.transaction = await testIndependentExpenditure();
     const ca = testCommitteeAccount();
     component.ngOnInit();
     expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(ca.treasurer_name_2);
@@ -603,7 +605,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   describe('aggregate calculation', () => {
-    it('should request the previous transaction', fakeAsync(async () => {
+    it('should request the previous transaction', async () => {
       const form = new FormGroup(
         {
           expenditure_amount: new SubscriptionFormControl(),
@@ -614,7 +616,7 @@ describe('TransactionTypeBaseComponent', () => {
       const contactId$ = new Subject<string>();
       const contactIdMap: ContactIdMapType = { contact_1: contactId$ };
 
-      const transaction = await hydrateTransaction(
+      const transaction = await TransactionUtils.hydrateTransaction(
         {
           transaction_type_identifier: ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
           aggregation_group: AggregationGroups.INDEPENDENT_EXPENDITURE,
@@ -633,8 +635,8 @@ describe('TransactionTypeBaseComponent', () => {
       expect(transactionServiceSpy.getPreviousEntityAggregate).not.toHaveBeenCalled();
 
       contactId$.next('1234-abcd-1234-abcd');
-      tick();
+      await Promise.resolve();
       expect(transactionServiceSpy.getPreviousEntityAggregate).toHaveBeenCalled();
-    }));
+    });
   });
 });

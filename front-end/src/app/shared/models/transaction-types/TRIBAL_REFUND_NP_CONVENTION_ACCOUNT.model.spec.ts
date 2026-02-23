@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleBTransactionTypes } from '../type-enums';
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from './TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 
 describe('TRIBAL_REFUND_NP_CONVENTION_ACCOUNT', () => {
@@ -13,8 +14,8 @@ describe('TRIBAL_REFUND_NP_CONVENTION_ACCOUNT', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  it('#factory() should return a SchBTransaction', () => {
-    const txn: SchBTransaction = transactionType.getNewTransaction();
+  it('#factory() should return a SchBTransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SB21B');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT);
   });

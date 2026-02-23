@@ -98,8 +98,9 @@ export class TransactionResolver {
 
   async resolveNewTransaction(reportId: string, transactionTypeName: string): Promise<Transaction | undefined> {
     const { TransactionTypeUtils } = await import('../utils/transaction-type.utils');
+    const { TransactionUtils } = await import('../utils/transaction.utils');
     const transactionType = await TransactionTypeUtils.factory(transactionTypeName);
-    const transaction: Transaction = await transactionType.getNewTransaction();
+    const transaction: Transaction = await TransactionUtils.createNewTransaction(transactionType);
     transaction.report_ids = [String(reportId)];
 
     // If this transaction must be completed alongside other on-screen transactions, add them
@@ -107,16 +108,15 @@ export class TransactionResolver {
       const temp = transactionType.dependentChildTransactionTypes.map((type) =>
         this.getNewChildTransaction(transaction, type),
       );
-      transaction.children = await Promise.all(transaction.children);
+      transaction.children = await Promise.all(temp);
     }
     return transaction;
   }
 
   async resolveNewRepayment(toId: string, transactionTypeName: string, type: 'loan' | 'debt') {
+    const { TransactionUtils } = await import('../utils/transaction.utils');
     const to = await this.service.get(toId);
-    const { TransactionTypeUtils } = await import('../utils/transaction-type.utils');
-    const repaymentType = await TransactionTypeUtils.factory(transactionTypeName);
-    const repayment = await repaymentType.getNewTransaction();
+    const repayment = await TransactionUtils.createNewTransactionByIdentifier(transactionTypeName);
     if (type === 'loan') {
       repayment.loan = to;
       repayment.loan_id = to.id;
@@ -131,7 +131,7 @@ export class TransactionResolver {
 
   async resolveNewReattribution(reportId: string, originatingId: string) {
     const originatingTransaction = await this.service.get(originatingId);
-    const { TransactionTypeUtils } = await import('../utils/transaction-type.utils');
+    const { TransactionUtils } = await import('../utils/transaction.utils');
     const { ReattributedUtils } = await import('../utils/reatt-redes/reattributed.utils');
     const { ReattributionToUtils } = await import('../utils/reatt-redes/reattribution-to.utils');
     const { ReattributionFromUtils } = await import('../utils/reatt-redes/reattribution-from.utils');
@@ -142,13 +142,13 @@ export class TransactionResolver {
     if (!reattributed.transaction_type_identifier) {
       throw Error('FECfile+: originating reattribution transaction type not found.');
     }
-    let to = (await (
-      await TransactionTypeUtils.factory(reattributed.transaction_type_identifier)
-    ).getNewTransaction()) as SchATransaction;
+    let to = (await TransactionUtils.createNewTransactionByIdentifier(
+      reattributed.transaction_type_identifier,
+    )) as SchATransaction;
     to = ReattributionToUtils.overlayTransactionProperties(to, reattributed, reportId);
-    let from = (await (
-      await TransactionTypeUtils.factory(reattributed.transaction_type_identifier)
-    ).getNewTransaction()) as SchATransaction;
+    let from = (await TransactionUtils.createNewTransactionByIdentifier(
+      reattributed.transaction_type_identifier,
+    )) as SchATransaction;
     from = ReattributionFromUtils.overlayTransactionProperties(from, reattributed, reportId);
     to.children = [from];
     return to;
@@ -156,7 +156,7 @@ export class TransactionResolver {
 
   async resolveNewRedesignation(reportId: string, originatingId: string) {
     const originatingTransaction = await this.service.get(originatingId);
-    const { TransactionTypeUtils } = await import('../utils/transaction-type.utils');
+    const { TransactionUtils } = await import('../utils/transaction.utils');
     const { RedesignatedUtils } = await import('../utils/reatt-redes/redesignated.utils');
     const { RedesignationToUtils } = await import('../utils/reatt-redes/redesignation-to.utils');
     const { RedesignationFromUtils } = await import('../utils/reatt-redes/redesignation-from.utils');
@@ -167,13 +167,13 @@ export class TransactionResolver {
     if (!redesignated.transaction_type_identifier) {
       throw Error('FECfile+: originating redesignation transaction type not found.');
     }
-    let to = (await (
-      await TransactionTypeUtils.factory(redesignated.transaction_type_identifier)
-    ).getNewTransaction()) as SchBTransaction;
+    let to = (await TransactionUtils.createNewTransactionByIdentifier(
+      redesignated.transaction_type_identifier,
+    )) as SchBTransaction;
     to = RedesignationToUtils.overlayTransactionProperties(to, redesignated, reportId);
-    let from = (await (
-      await TransactionTypeUtils.factory(redesignated.transaction_type_identifier)
-    ).getNewTransaction()) as SchBTransaction;
+    let from = (await TransactionUtils.createNewTransactionByIdentifier(
+      redesignated.transaction_type_identifier,
+    )) as SchBTransaction;
     from = RedesignationFromUtils.overlayTransactionProperties(from, redesignated, reportId);
     to.children = [from];
     return to;
@@ -187,9 +187,8 @@ export class TransactionResolver {
    * @returns {Transaction}
    */
   async getNewChildTransaction(parentTransaction: Transaction, childTransactionTypeName: string): Promise<Transaction> {
-    const { TransactionTypeUtils } = await import('../utils/transaction-type.utils');
-    const childTransactionType = await TransactionTypeUtils.factory(childTransactionTypeName);
-    const childTransaction = await childTransactionType.getNewTransaction();
+    const { TransactionUtils } = await import('../utils/transaction.utils');
+    const childTransaction = await TransactionUtils.createNewTransactionByIdentifier(childTransactionTypeName);
     childTransaction.parent_transaction = parentTransaction;
     childTransaction.parent_transaction_id = parentTransaction.id;
     childTransaction.report_ids = parentTransaction.report_ids;

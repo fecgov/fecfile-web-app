@@ -3,14 +3,15 @@ import { RedesignatedUtils } from './redesignated.utils';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { testScheduleBTransaction } from '../unit-test.utils';
 import { ReportCodes } from '../report-code.utils';
+import { TransactionUtils } from '../transaction.utils';
 
 describe('Redesignated Utils', () => {
   let payload: SchBTransaction;
 
-  beforeEach(() => {
-    payload = testScheduleBTransaction();
+  beforeEach(async () => {
+    payload = await testScheduleBTransaction();
     payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
-    payload.reatt_redes = testScheduleBTransaction();
+    payload.reatt_redes = await testScheduleBTransaction();
   });
   describe('overlayTransactionProperties', () => {
     let data;
@@ -26,7 +27,7 @@ describe('Redesignated Utils', () => {
       );
     });
 
-    it('should filter out "expenditure_purpose_descrip" from the transaction fields to validate', () => {
+    it('should filter out "expenditure_purpose_descrip" from the transaction fields to validate', async () => {
       data = {
         id: '999',
         form_type: 'SA11Ai',
@@ -35,13 +36,13 @@ describe('Redesignated Utils', () => {
         expenditure_purpose_descrip: '',
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
       };
-      payload = SchBTransaction.fromJSON(data);
+      payload = await TransactionUtils.hydrateTransaction(data, SchBTransaction);
       expect(payload.fields_to_validate?.length).toBe(2);
       payload = RedesignatedUtils.overlayTransactionProperties(payload);
       expect(payload.fields_to_validate?.length).toBe(1);
     });
 
-    it('should alert if transaction has reattribution_redesignation_tag but is not the current report', () => {
+    it('should alert if transaction has reattribution_redesignation_tag but is not the current report', async () => {
       data = {
         id: '999',
         form_type: 'SA11Ai',
@@ -50,11 +51,11 @@ describe('Redesignated Utils', () => {
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
         report_ids: ['1'],
       };
-      payload = SchBTransaction.fromJSON(data);
+      payload = await TransactionUtils.hydrateTransaction(data, SchBTransaction);
       payload = RedesignatedUtils.overlayTransactionProperties(payload, '2');
     });
 
-    it('should update description and set tag to Redesignated', () => {
+    it('should update description and set tag to Redesignated', async () => {
       data = {
         id: '999',
         form_type: 'SA11Ai',
@@ -63,13 +64,13 @@ describe('Redesignated Utils', () => {
         fields_to_validate: ['abc', 'expenditure_purpose_descrip'],
         report_ids: ['1'],
       };
-      payload = SchBTransaction.fromJSON(data);
+      payload = await TransactionUtils.hydrateTransaction(data, SchBTransaction);
       payload = RedesignatedUtils.overlayTransactionProperties(payload, '1');
       expect(payload.expenditure_purpose_descrip).toEqual('See redesignation below.');
       expect(payload.reattribution_redesignation_tag).toEqual(ReattRedesTypes.REDESIGNATED);
     });
 
-    it('should update the memo', () => {
+    it('should update the memo', async () => {
       const updateMemoSpy = spyOn(ReattRedesUtils, 'updateMemo').and.callThrough();
       data = {
         id: '999',
@@ -81,7 +82,7 @@ describe('Redesignated Utils', () => {
         expenditure_purpose_descrip: 'PURPOSE',
         text4000: 'MEMO',
       };
-      payload = SchBTransaction.fromJSON(data);
+      payload = await TransactionUtils.hydrateTransaction(data, SchBTransaction);
       payload = RedesignatedUtils.overlayTransactionProperties(payload, '1');
       expect(payload.memo_text).toBeTruthy();
       expect(updateMemoSpy).toHaveBeenCalled();

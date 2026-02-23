@@ -1,5 +1,7 @@
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { ScheduleATransactionTypes } from '../type-enums';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
+import { SchATransaction } from '../scha-transaction.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT;
@@ -15,28 +17,28 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     }
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    const txn = transactionType.getNewTransaction();
+  it('#factory() should return a SchATransaction', async () => {
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
-  it('#generatePurposeDescription() should generate expected retval', () => {
-    const txn = transactionType.getNewTransaction();
+  it('#generatePurposeDescription() should generate expected retval', async () => {
+    const txn = (await TransactionUtils.createNewTransaction(transactionType)) as SchATransaction;
     const descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe(
       'Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)',
     );
   });
 
-  it('#generatePurposeDescription() should generate a string', () => {
-    const txn = transactionType.getNewTransaction();
+  it('#generatePurposeDescription() should generate a string', async () => {
+    const txn = (await TransactionUtils.createNewTransaction(transactionType)) as SchATransaction;
     let descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe(
       'Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)',
     );
 
-    txn.children = [transactionType.getNewTransaction()];
+    txn.children = [await TransactionUtils.createNewTransaction(transactionType)];
     descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Recount/Legal Proceedings Account (See Partnership Attribution(s) below)');
   });

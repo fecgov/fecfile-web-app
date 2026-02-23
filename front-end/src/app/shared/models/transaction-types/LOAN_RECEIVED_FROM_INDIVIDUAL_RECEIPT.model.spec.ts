@@ -1,6 +1,6 @@
 import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from './LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
-import type { SchATransaction } from '../scha-transaction.model';
 import { AggregationGroups, ScheduleATransactionTypes } from '../type-enums';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 describe('LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', () => {
   let transactionType: LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT;
@@ -15,12 +15,10 @@ describe('LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', () => {
   });
 
   it('#factory() should return a SchATransaction', async () => {
-    const transaction: SchATransaction = await transactionType.getNewTransaction();
-    expect(transaction.form_type).toBe('SA13');
-    expect(transaction.aggregation_group).toBe(AggregationGroups.GENERAL);
-    expect(transaction.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
-    );
+    const txn = await TransactionUtils.createNewTransaction(transactionType);
+    expect(txn.form_type).toBe('SA13');
+    expect(txn.aggregation_group).toBe(AggregationGroups.GENERAL);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT);
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
