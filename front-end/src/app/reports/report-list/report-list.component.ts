@@ -36,8 +36,6 @@ export class ReportListComponent {
   readonly form1mList = viewChild(Form1MListComponent);
   readonly form24List = viewChild(Form24ListComponent);
 
-  readonly viewInitialized = signal(false);
-
   readonly showEmptyState = computed(() => {
     const allLoaded =
       !this.form3xList()?.loading() &&

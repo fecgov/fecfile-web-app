@@ -20,7 +20,6 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   override readonly rowsPerPage = signal(5);
   override readonly totalItems = signal(0);
-  readonly loaded = output<void>();
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
   readonly includeCoverage: boolean = false;
@@ -121,7 +120,6 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   async amendReport(report: T) {
     await this.itemService.startAmendment(report);
     this.loadTableItems();
-    this.loaded.emit();
   }
 
   async unamendReport(report: T) {
