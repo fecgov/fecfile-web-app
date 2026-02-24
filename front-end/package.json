@@ -13,7 +13,7 @@
         "build-stage": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.stage",
         "build-prod": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.prod",
         "build-test": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=cloud.gov.test",
-        "build-local": "npm install && npx -y -p @angular/cli ng build --configuration=local",
+        "build-local": "npm install --omit=dev && npx -y -p @angular/cli ng build --configuration=local",
         "test": "npx --node-options='--max-old-space-size=4000' -y -p @angular/cli ng test",
         "e2e": "npx -y -p @angular/cli ng e2e",
         "e2e:headless": "npm run e2e -- --headless --watch=false",
