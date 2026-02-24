@@ -26,7 +26,7 @@
   [items]="items()"
   title="Manage users"
   [(totalItems)]="totalItems"
-  [loading]="loading"
+  [loading]="loading()"
   sortField="name"
   [(rowsPerPage)]="rowsPerPage"
   [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"

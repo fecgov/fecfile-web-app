@@ -11,7 +11,7 @@ import { Component, signal, viewChild } from '@angular/core';
     [items]="items()"
     title="Title"
     [(totalItems)]="totalItems"
-    [loading]="loading"
+    [loading]="loading()"
     [(rowsPerPage)]="rowsPerPage"
     [(selectedItems)]="selectedItems"
     itemName="reports"
@@ -23,7 +23,7 @@ class TestHostComponent {
   readonly items = signal<Report[]>([]);
   readonly rowsPerPage = signal(10);
   totalItems = signal(0);
-  loading = true;
+  loading = signal(true);
   readonly selectedItems = signal<Report[]>([]);
   readonly first = signal(0);
 }
