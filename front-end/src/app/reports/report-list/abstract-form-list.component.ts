@@ -1,4 +1,4 @@
-import { Component, computed, inject, output, Signal, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
