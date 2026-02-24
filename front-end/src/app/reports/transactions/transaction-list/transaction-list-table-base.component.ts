@@ -168,15 +168,28 @@ export abstract class TransactionListTableBaseComponent
     new TableAction(
       'Reattribute',
       this.createReattribution.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.transactionType.scheduleId === ScheduleIds.A &&
-        !transaction.transactionType.negativeAmountValueOnly &&
-        !transaction.parent_transaction_id &&
-        !ReattRedesUtils.isReattRedes(transaction, [
-          ReattRedesTypes.REATTRIBUTION_FROM,
-          ReattRedesTypes.REATTRIBUTION_TO,
-        ]) &&
-        !ReattRedesUtils.isAtAmountLimit(transaction),
+      (transaction: TransactionListRecord) => {
+        const excludedTypes = [
+          ScheduleATransactionTypes.IN_KIND_RECEIPT,
+          ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
+          ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
+        ];
+        const isForm3X = transaction.report_type === 'Form 3X';
+        const isExcludedType = excludedTypes.includes(
+          transaction.transaction_type_identifier as ScheduleATransactionTypes,
+        );
+        if (isForm3X && isExcludedType) return false;
+        return (
+          transaction.transactionType.scheduleId === ScheduleIds.A &&
+          !transaction.transactionType.negativeAmountValueOnly &&
+          !transaction.parent_transaction_id &&
+          !ReattRedesUtils.isReattRedes(transaction, [
+            ReattRedesTypes.REATTRIBUTION_FROM,
+            ReattRedesTypes.REATTRIBUTION_TO,
+          ]) &&
+          !ReattRedesUtils.isAtAmountLimit(transaction)
+        );
+      },
       () => true,
     ),
     new TableAction(
