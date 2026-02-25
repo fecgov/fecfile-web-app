@@ -94,6 +94,7 @@
     },
     "overrides": {
         "rollup": "4.52.3",
+        "tar": "7.5.9",
         "vite": "7.1.11",
         "@isaacs/brace-expansion": "5.0.1"
     },
