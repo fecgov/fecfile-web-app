@@ -93,6 +93,10 @@ export abstract class TransactionType {
   // transaction type model and implemented in a particular input component. See MULTISTATE_INDEPENDENT_EXPENDITURE for an example.
   mandatoryFormValues: { [field: string]: string | boolean | undefined } = {};
 
+  get isReattributable() {
+    return false;
+  }
+
   // Labels
   abstract title: string;
   subTitle?: string;

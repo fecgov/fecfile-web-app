@@ -42,7 +42,8 @@ export abstract class TransactionListTableBaseComponent
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
   protected readonly activatedRoute = inject(ActivatedRoute);
-  readonly report = this.store.selectSignal(selectActiveReport);
+  // only signal on new report
+  readonly report = this.store.selectSignal(selectActiveReport, { equal: (a, b) => a?.id === b?.id });
 
   abstract scheduleTransactionTypeLabels: LabelList;
   paginationPageSizeOptions = [5, 10, 15, 20];
@@ -168,15 +169,17 @@ export abstract class TransactionListTableBaseComponent
     new TableAction(
       'Reattribute',
       this.createReattribution.bind(this),
-      (transaction: TransactionListRecord) =>
-        transaction.transactionType.scheduleId === ScheduleIds.A &&
-        !transaction.transactionType.negativeAmountValueOnly &&
-        !transaction.parent_transaction_id &&
-        !ReattRedesUtils.isReattRedes(transaction, [
-          ReattRedesTypes.REATTRIBUTION_FROM,
-          ReattRedesTypes.REATTRIBUTION_TO,
-        ]) &&
-        !ReattRedesUtils.isAtAmountLimit(transaction),
+      (transaction: TransactionListRecord) => {
+        return (
+          transaction.transactionType.isReattributable &&
+          !transaction.parent_transaction_id &&
+          !ReattRedesUtils.isReattRedes(transaction, [
+            ReattRedesTypes.REATTRIBUTION_FROM,
+            ReattRedesTypes.REATTRIBUTION_TO,
+          ]) &&
+          !ReattRedesUtils.isAtAmountLimit(transaction)
+        );
+      },
       () => true,
     ),
     new TableAction(
