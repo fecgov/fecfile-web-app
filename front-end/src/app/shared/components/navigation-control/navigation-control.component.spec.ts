@@ -4,8 +4,10 @@ import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { JOINT_FUNDRAISING_TRANSFER } from 'app/shared/models/transaction-types/JOINT_FUNDRAISING_TRANSFER.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
@@ -78,5 +80,22 @@ describe('NavigationControlComponent', () => {
     const options = component.getOptions(TransactionTypeUtils.factory(JOINT_FUNDRAISING_TRANSFER.name));
     expect(options[0].label).toBe('Joint Fundraising Transfer Memo');
     expect(options[0].items[0].label).toBe('Individual');
+  });
+
+  it('should dispatch clone-safe dropdown option events', () => {
+    const storeSpy = spyOn(store, 'dispatch');
+    component.transaction = {
+      id: 'transaction-id',
+      parent_transaction_id: 'parent-transaction-id',
+    } as Transaction;
+    const option = component.getOptionFromConfig(JOINT_FUNDRAISING_TRANSFER.name) as { value: NavigationEvent };
+
+    expect(option.value.transaction).toEqual({
+      id: 'transaction-id',
+      parent_transaction_id: 'parent-transaction-id',
+    } as Transaction);
+    expect(() => structuredClone(option.value)).not.toThrow();
+    expect(() => component.onDropdownChange(option)).not.toThrow();
+    expect(storeSpy).toHaveBeenCalled();
   });
 });

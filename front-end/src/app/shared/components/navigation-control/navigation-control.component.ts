@@ -108,6 +108,14 @@ export class NavigationControlComponent implements OnInit {
     }
   }
 
+  private getCloneSafeTransactionContext(): Transaction | undefined {
+    if (!this.transaction) return undefined;
+    return {
+      id: this.transaction.id,
+      parent_transaction_id: this.transaction.parent_transaction_id,
+    } as Transaction;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig = false): any => {
     /** Interpret config to return either a group of navigation options or a single navigation option
@@ -143,7 +151,7 @@ export class NavigationControlComponent implements OnInit {
         NavigationAction.SAVE,
         // If this control came from the parent, the desination is ANOTHER
         isParentConfig ? NavigationDestination.ANOTHER : NavigationDestination.CHILD,
-        this.transaction,
+        this.getCloneSafeTransactionContext(),
         typeId,
       ),
     };
