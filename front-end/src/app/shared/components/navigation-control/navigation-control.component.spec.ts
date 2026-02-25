@@ -7,6 +7,7 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { JOINT_FUNDRAISING_TRANSFER } from 'app/shared/models/transaction-types/JOINT_FUNDRAISING_TRANSFER.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ButtonModule } from 'primeng/button';
@@ -88,7 +89,9 @@ describe('NavigationControlComponent', () => {
       id: 'transaction-id',
       parent_transaction_id: 'parent-transaction-id',
     } as Transaction;
-    const option = component.getOptionFromConfig(JOINT_FUNDRAISING_TRANSFER.name) as { value: NavigationEvent };
+    const option = component.getOptionFromConfig(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER) as {
+      value: NavigationEvent;
+    };
 
     expect(option.value.transaction).toEqual({
       id: 'transaction-id',
