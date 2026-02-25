@@ -8,7 +8,6 @@ export class FecDatePipe implements PipeTransform {
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
-      timeZone: 'UTC',
     }).format(new Date(value));
   }
 }
