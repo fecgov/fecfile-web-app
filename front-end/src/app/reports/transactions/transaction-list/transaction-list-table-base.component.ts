@@ -169,18 +169,8 @@ export abstract class TransactionListTableBaseComponent
       'Reattribute',
       this.createReattribution.bind(this),
       (transaction: TransactionListRecord) => {
-        const excludedTypes = [
-          ScheduleATransactionTypes.IN_KIND_RECEIPT,
-          ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
-          ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
-        ];
-        const isExcludedType = excludedTypes.includes(
-          transaction.transaction_type_identifier as ScheduleATransactionTypes,
-        );
         return (
-          !isExcludedType &&
-          transaction.transactionType.scheduleId === ScheduleIds.A &&
-          !transaction.transactionType.negativeAmountValueOnly &&
+          transaction.transactionType.isReattributable &&
           !transaction.parent_transaction_id &&
           !ReattRedesUtils.isReattRedes(transaction, [
             ReattRedesTypes.REATTRIBUTION_FROM,
