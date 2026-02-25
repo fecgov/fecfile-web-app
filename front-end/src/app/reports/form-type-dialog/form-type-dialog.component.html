@@ -28,8 +28,6 @@
         </ng-template>
       </p-select>
     </div>
-    <div [hidden]="!isF24()">
-      <app-create-f24 />
-    </div>
+    <app-create-f24 [visible]="isF24()" />
   </div>
 </app-dialog>
