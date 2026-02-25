@@ -95,6 +95,7 @@
     "overrides": {
         "rollup": "4.52.3",
         "vite": "7.1.11",
+        "qs": "6.15.0",
         "@isaacs/brace-expansion": "5.0.1"
     },
     "browser": {
