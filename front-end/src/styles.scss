@@ -727,6 +727,9 @@ select {
     selectedcontent {
       flex-grow: 1;
       text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -750,9 +753,13 @@ select {
     content: '';
     width: 16px;
     height: 16px;
-    background-image: url(./assets/img/i-arrow-down.svg);
+    background-image: url(./assets/img/dropdown_arrow.svg);
     background-repeat: no-repeat;
     background-position: center;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
