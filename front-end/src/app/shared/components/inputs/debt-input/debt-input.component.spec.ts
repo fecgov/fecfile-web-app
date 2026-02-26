@@ -40,8 +40,8 @@ describe('DebtInputComponent', () => {
      * Helper function to set transaction data for testing and initialize component
      */
     function setupAndInitialize(
-      beginningBalance: number | undefined,
-      paymentAmount: number | undefined,
+      beginningBalance: number | null | undefined,
+      paymentAmount: number | null | undefined,
       transactionId: string | undefined = '123',
     ) {
       // Create a mock transaction object with the required properties
@@ -61,6 +61,12 @@ describe('DebtInputComponent', () => {
 
     it('should initialize nullish beginning and payment balances to 0 for existing debts', () => {
       setupAndInitialize(undefined, undefined, '123');
+      expect(component.form.get('beginning_balance')?.value).toBe(0);
+      expect(component.form.get('payment_amount')?.value).toBe(0);
+    });
+
+    it('should initialize null beginning and payment balances to 0 for existing debts', () => {
+      setupAndInitialize(null, null, '123');
       expect(component.form.get('beginning_balance')?.value).toBe(0);
       expect(component.form.get('payment_amount')?.value).toBe(0);
     });

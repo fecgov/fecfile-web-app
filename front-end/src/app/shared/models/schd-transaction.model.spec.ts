@@ -33,6 +33,21 @@ describe('SchDTransaction', () => {
     expect(transaction.balance_at_close).toBe(0);
   });
 
+  it('should map null numeric fields to undefined from JSON', () => {
+    const data = {
+      transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
+      beginning_balance: null,
+      incurred_amount: null,
+      payment_amount: null,
+      balance_at_close: null,
+    };
+    const transaction: SchDTransaction = SchDTransaction.fromJSON(data);
+    expect(transaction.beginning_balance).toBeUndefined();
+    expect(transaction.incurred_amount).toBeUndefined();
+    expect(transaction.payment_amount).toBeUndefined();
+    expect(transaction.balance_at_close).toBeUndefined();
+  });
+
   xit('Creates a transaction object from JSON', () => {
     const json = {
       transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
