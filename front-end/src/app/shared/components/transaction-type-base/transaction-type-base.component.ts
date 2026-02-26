@@ -26,6 +26,7 @@ import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
+  cloneNavigationEvent,
 } from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
@@ -81,7 +82,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     effect(() => {
       const navEvent = this.navigationEvent();
       if (navEvent) {
-        const navigationEvent = { ...navEvent };
+        const navigationEvent = cloneNavigationEvent(navEvent);
         this.handleNavigate(navigationEvent);
         this.store.dispatch(navigationEventClearAction());
       }

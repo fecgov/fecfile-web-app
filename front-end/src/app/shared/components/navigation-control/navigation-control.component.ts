@@ -1,6 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
+  cloneNavigationEvent,
   ControlType,
   NavigationAction,
   NavigationControl,
@@ -103,7 +104,7 @@ export class NavigationControlComponent implements OnInit {
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
-      const navigationEvent = structuredClone(event.value);
+      const navigationEvent = cloneNavigationEvent(event.value);
       this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }
