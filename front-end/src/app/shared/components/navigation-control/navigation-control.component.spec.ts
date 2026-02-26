@@ -10,10 +10,13 @@ import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { testMockStore } from '../../utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore } from '../../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { navigationEventSetAction } from 'app/store/navigation-event.actions';
+import { cloneInstance, Transaction } from 'app/shared/models';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -54,6 +57,7 @@ describe('NavigationControlComponent', () => {
     beforeEach(async () => {
       fixture = TestBed.createComponent(NavigationControlComponent);
       component = fixture.componentInstance;
+      component.transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
       component.navigationControl = new NavigationControl(
         NavigationAction.SAVE,
         NavigationDestination.ANOTHER,
@@ -71,6 +75,24 @@ describe('NavigationControlComponent', () => {
       const nativeElement = fixture.nativeElement;
       const button = nativeElement.querySelector('.dd-button');
       expect(button).toBeTruthy();
+    });
+
+    it('should dispatch a navigationEvent with a transaction', () => {
+      // spy on event emitter
+      const storeSpy = spyOn(store, 'dispatch');
+
+      console.log(component.dropdownOptions);
+      component.onDropdownChange(component.dropdownOptions[0]); // simulate selecting the first dropdown option
+
+      fixture.detectChanges();
+      expect(storeSpy).toHaveBeenCalledWith(
+        navigationEventSetAction({
+          action: NavigationAction.SAVE,
+          destination: NavigationDestination.CHILD,
+          transaction: cloneInstance(component.transaction as Transaction),
+          destinationTransactionType: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
+        }),
+      );
     });
   });
 
