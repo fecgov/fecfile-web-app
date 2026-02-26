@@ -48,6 +48,21 @@ describe('SchDTransaction', () => {
     expect(transaction.balance_at_close).toBeUndefined();
   });
 
+  it('should map non-primitive numeric fields to undefined from JSON', () => {
+    const data = {
+      transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
+      beginning_balance: {},
+      incurred_amount: [],
+      payment_amount: { value: '1' },
+      balance_at_close: true,
+    };
+    const transaction: SchDTransaction = SchDTransaction.fromJSON(data);
+    expect(transaction.beginning_balance).toBeUndefined();
+    expect(transaction.incurred_amount).toBeUndefined();
+    expect(transaction.payment_amount).toBeUndefined();
+    expect(transaction.balance_at_close).toBeUndefined();
+  });
+
   xit('Creates a transaction object from JSON', () => {
     const json = {
       transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',

@@ -5,8 +5,17 @@ import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.uti
 
 function parseOptionalNumber(value: unknown): number | undefined {
   if (value === null || value === undefined || value === '') return undefined;
-  const parsedValue = parseFloat(String(value));
-  return Number.isNaN(parsedValue) ? undefined : parsedValue;
+
+  if (typeof value === 'number') {
+    return Number.isNaN(value) ? undefined : value;
+  }
+
+  if (typeof value === 'string') {
+    const parsedValue = Number.parseFloat(value);
+    return Number.isNaN(parsedValue) ? undefined : parsedValue;
+  }
+
+  return undefined;
 }
 
 export class SchDTransaction extends Transaction {
