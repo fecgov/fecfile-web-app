@@ -1,12 +1,13 @@
 import { HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { Form3X } from '../models/reports/form-3x.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
+import { Report, ReportStatus } from '../models';
 
 describe('ReportService', () => {
   let service: ReportService<Form3X>;
@@ -109,5 +110,63 @@ describe('ReportService', () => {
     expect(req.request.method).toEqual('PUT');
     req.flush(form3X);
     httpTestingController.verify();
+  });
+
+  describe('#pollReport()', () => {
+    const reportId = '123';
+    const pendingReport = Form3X.fromJSON({ id: reportId, report_status: ReportStatus.SUBMIT_PENDING });
+    const successReport = Form3X.fromJSON({ id: reportId, report_status: ReportStatus.SUBMIT_SUCCESS });
+    const stopCondition = (r: Report) => r.report_status !== ReportStatus.SUBMIT_PENDING;
+
+    it('should stop polling and dispatch action when condition is met immediately', fakeAsync(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dispatchSpy = spyOn((service as any).store, 'dispatch');
+      service.pollReport(reportId, stopCondition);
+      const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportId}/`);
+      req.flush(successReport);
+      tick();
+      expect(dispatchSpy).toHaveBeenCalled();
+      httpTestingController.verify();
+    }));
+
+    it('should poll multiple times until condition is met', fakeAsync(() => {
+      const pollingTime = 2000;
+
+      service.pollReport(reportId, stopCondition, pollingTime);
+      const req1 = httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportId}/`);
+      req1.flush(pendingReport);
+      tick();
+      tick(pollingTime);
+
+      const req2 = httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportId}/`);
+      req2.flush(successReport);
+      tick();
+
+      httpTestingController.verify();
+    }));
+
+    it('should stop polling when pollLimit is reached', fakeAsync(() => {
+      const pollLimit = 2;
+      const pollingTime = 1000;
+
+      service.pollReport(reportId, stopCondition, pollingTime, pollLimit);
+
+      // Poll 0
+      httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportId}/`).flush(pendingReport);
+      tick();
+      tick(pollingTime);
+
+      // Poll 1
+      httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportId}/`).flush(pendingReport);
+      tick();
+      tick(pollingTime);
+
+      // Poll 2 (The limit)
+      httpTestingController.expectOne(`${environment.apiUrl}/reports/${reportId}/`).flush(pendingReport);
+      tick();
+
+      // Ensure no further requests are made after the limit
+      httpTestingController.verify();
+    }));
   });
 });

@@ -8,7 +8,8 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
-import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import type { Report } from 'app/shared/models/reports/report.model';
 
 @Component({
   selector: 'app-report-summary',
@@ -33,6 +34,12 @@ export class SubmitReportStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
+    if (this.reportStatus() == ReportStatus.SUBMIT_PENDING) {
+      this.form3XService.pollReport(
+        this.report().id!,
+        (report: Report) => report.report_status !== ReportStatus.SUBMIT_PENDING,
+      );
+    }
   }
 
   public backToReports() {

@@ -143,4 +143,20 @@ export class ReportService<T extends Report> implements TableListService<Report>
     });
     return this.update(payload, ['committee_name', 'street_1', 'street_2', 'city', 'state', 'zip']);
   }
+
+  async pollReport(
+    reportId: string,
+    stopCondition: (report: Report) => boolean,
+    pollingTime = 2000,
+    pollLimit = 20,
+    currentPoll = 0,
+  ): Promise<Report> {
+    const report = await this.get(reportId);
+    if (stopCondition(report) || currentPoll === pollLimit) {
+      this.store.dispatch(setActiveReportAction({ payload: report }));
+      return report;
+    }
+    await new Promise((resolve) => setTimeout(resolve, pollingTime));
+    return this.pollReport(reportId, stopCondition, pollingTime, pollLimit, ++currentPoll);
+  }
 }
