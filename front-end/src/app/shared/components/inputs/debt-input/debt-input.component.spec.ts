@@ -59,6 +59,12 @@ describe('DebtInputComponent', () => {
       fixture.detectChanges();
     }
 
+    it('should initialize nullish beginning and payment balances to 0 for existing debts', () => {
+      setupAndInitialize(undefined, undefined, '123');
+      expect(component.form.get('beginning_balance')?.value).toBe(0);
+      expect(component.form.get('payment_amount')?.value).toBe(0);
+    });
+
     it('should calculate balance_at_close when incurred_amount changes', () => {
       // Setup: beginning balance = 5000, payment amount = 1000
       // When incurred_amount = 2000

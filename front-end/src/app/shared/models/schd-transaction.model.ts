@@ -3,6 +3,12 @@ import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
+function parseOptionalNumber(value: unknown): number | undefined {
+  if (value === null || value === undefined || value === '') return undefined;
+  const parsedValue = parseFloat(String(value));
+  return Number.isNaN(parsedValue) ? undefined : parsedValue;
+}
+
 export class SchDTransaction extends Transaction {
   entity_type: string | undefined;
   receipt_line_number: string | undefined;
@@ -20,13 +26,13 @@ export class SchDTransaction extends Transaction {
   creditor_state: string | undefined;
   creditor_zip: string | undefined;
   purpose_of_debt_or_obligation: string | undefined;
-  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
+  @Transform(({ value }) => parseOptionalNumber(value))
   beginning_balance: number | undefined;
-  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
+  @Transform(({ value }) => parseOptionalNumber(value))
   incurred_amount: number | undefined;
-  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
+  @Transform(({ value }) => parseOptionalNumber(value))
   payment_amount: number | undefined;
-  @Transform(({ value }) => (value ? parseFloat(value) : undefined))
+  @Transform(({ value }) => parseOptionalNumber(value))
   balance_at_close: number | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

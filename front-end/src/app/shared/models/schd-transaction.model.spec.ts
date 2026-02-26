@@ -18,6 +18,21 @@ describe('SchDTransaction', () => {
     expect(transaction.creditor_organization_name).toBe('foo');
   });
 
+  it('should preserve zero-valued numeric fields from JSON', () => {
+    const data = {
+      transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
+      beginning_balance: 0,
+      incurred_amount: '0',
+      payment_amount: 0,
+      balance_at_close: '0',
+    };
+    const transaction: SchDTransaction = SchDTransaction.fromJSON(data);
+    expect(transaction.beginning_balance).toBe(0);
+    expect(transaction.incurred_amount).toBe(0);
+    expect(transaction.payment_amount).toBe(0);
+    expect(transaction.balance_at_close).toBe(0);
+  });
+
   xit('Creates a transaction object from JSON', () => {
     const json = {
       transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
