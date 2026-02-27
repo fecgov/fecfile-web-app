@@ -83,7 +83,31 @@
   <app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
 </form>
 
-<p-dialog
+<app-dialog
+  [(visible)]="coverageDatesDialogVisible"
+  title="Can’t save report"
+  tabindex="-1"
+  aria-labelledby="dialog-title"
+>
+  <p>Some transactions would now fall outside your new coverage dates.</p>
+  <p>To fix this, delete those transactions.</p>
+  <ng-container dialog-footer #dialogFooterRef>
+    <div class="flex justify-content-center">
+      <p-button
+        type="button"
+        pButton
+        pRipple
+        label="Manage your transactions"
+        class="p-button-primary"
+        [routerLink]="['/reports/transactions/report', reportId(), 'list']"
+        [autofocus]="true"
+      >
+      </p-button>
+    </div>
+  </ng-container>
+</app-dialog>
+
+<!-- <p-dialog
   [(visible)]="coverageDatesDialogVisible"
   [style]="{ width: '30%' }"
   header="Can’t save report"
@@ -102,4 +126,4 @@
       [autofocus]="true"
     />
   </div>
-</p-dialog>
+</p-dialog> -->
