@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Scroll } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReportStatus, ReportTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -9,6 +9,7 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-report-summary',
@@ -30,6 +31,12 @@ export class SubmitReportStatusComponent implements OnInit {
   readonly reportStatus = computed(() => this.report().report_status as ReportStatus);
 
   reportCodeLabelMap?: { [key in ReportCodes]: string };
+
+  constructor() {
+    this.router.events.pipe(filter((event): event is Scroll => event instanceof Scroll)).subscribe(() => {
+      this.form3XService.setActiveReportById(this.report().id!);
+    });
+  }
 
   ngOnInit(): void {
     this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
