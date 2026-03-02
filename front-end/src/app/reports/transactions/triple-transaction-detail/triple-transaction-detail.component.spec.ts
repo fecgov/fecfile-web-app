@@ -23,18 +23,20 @@ import {
   ScheduleC1TransactionTypes,
   ScheduleATransactionTypes,
 } from 'app/shared/models/type-enums';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('TripleTransactionDetailComponent', async () => {
   let component: TripleTransactionDetailComponent;
   let fixture: ComponentFixture<TripleTransactionDetailComponent>;
 
-  const transaction = await getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
-  transaction.children = [
-    await getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
-    await getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
-  ];
+  let transaction: Transaction;
 
   beforeEach(async () => {
+    transaction = await getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
+    transaction.children = [
+      await getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT),
+      await getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT),
+    ];
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,

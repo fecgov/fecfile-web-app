@@ -13,9 +13,9 @@ export const F24_ROUTES: Route[] = [
       {
         path: 'report/:reportId/transactions/select/independent-expenditures',
         loadComponent: () =>
-          import(
-            './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component'
-          ).then((m) => m.TransactionIndependentExpenditurePickerComponent),
+          import('./transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component').then(
+            (m) => m.TransactionIndependentExpenditurePickerComponent,
+          ),
         canActivate: [ReportIsEditableGuard],
         resolve: { report: ReportResolver },
         data: {

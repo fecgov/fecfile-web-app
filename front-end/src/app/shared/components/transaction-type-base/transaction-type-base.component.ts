@@ -27,6 +27,7 @@ import {
   NavigationEvent,
   NavigationAction,
   NavigationDestination,
+  cloneNavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import type { TransactionType, TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
@@ -78,8 +79,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     effect(() => {
       const navEvent = this.navigationEvent();
-      if (navEvent) {
-        const navigationEvent = { ...navEvent };
+      if (navEvent?.transaction) {
+        const navigationEvent = cloneNavigationEvent(navEvent);
         this.handleNavigate(navigationEvent);
         this.store.dispatch(navigationEventClearAction());
       }

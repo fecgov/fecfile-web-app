@@ -35,10 +35,6 @@ let mockTransaction: Transaction;
 let routeDataSubject: BehaviorSubject<{ transaction?: Transaction | null }>;
 
 describe('TransactionContainerComponent', async () => {
-  mockTransaction = (await getTestTransactionByType(
-    ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-  )) as SchATransaction;
-  routeDataSubject = new BehaviorSubject<{ transaction?: Transaction | null }>({ transaction: mockTransaction });
   let component: TransactionContainerComponent;
   let fixture: ComponentFixture<TransactionContainerComponent>;
   let titleSpy: jasmine.Spy<(newTitle: string) => void>;
@@ -46,6 +42,11 @@ describe('TransactionContainerComponent', async () => {
   let store: MockStore;
 
   beforeEach(async () => {
+    mockTransaction = (await getTestTransactionByType(
+      ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    )) as SchATransaction;
+    routeDataSubject = new BehaviorSubject<{ transaction?: Transaction | null }>({ transaction: mockTransaction });
+
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -92,9 +93,7 @@ describe('TransactionContainerComponent', async () => {
         FecDatePipe,
       ],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     const title = TestBed.inject(Title);
     titleSpy = spyOn(title, 'setTitle');
     const reportService = TestBed.inject(ReportService);

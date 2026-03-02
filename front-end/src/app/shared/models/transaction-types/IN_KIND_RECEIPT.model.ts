@@ -26,4 +26,8 @@ export class IN_KIND_RECEIPT extends ABSTRACT_IN_KIND {
     transaction_type_identifier: ScheduleATransactionTypes.IN_KIND_RECEIPT,
     aggregation_group: AggregationGroups.GENERAL,
   };
+
+  override get isReattributable() {
+    return false;
+  }
 }

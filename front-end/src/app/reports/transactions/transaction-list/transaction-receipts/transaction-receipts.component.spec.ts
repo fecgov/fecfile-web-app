@@ -15,6 +15,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { ScheduleATransactionTypes } from 'app/shared/models/type-enums';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -69,8 +71,8 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('should show the correct row actions', async () => {
-    const transaction = {
-      ...(await getTestIndividualReceipt()),
+    const baseReceipt = await getTestIndividualReceipt();
+    const transaction = Object.assign(baseReceipt, {
       name: 'TEST',
       date: new Date(),
       amount: 100,
@@ -80,7 +82,7 @@ describe('TransactionReceiptsComponent', () => {
       can_delete: true,
       force_unaggregated: true,
       report_type: 'Form 3X',
-    } as unknown as TransactionListRecord;
+    }) as unknown as TransactionListRecord;
     const viewAction = component.rowActions.find((ra) => ra.label === 'View');
     const editAction = component.rowActions.find((ra) => ra.label === 'Edit');
     const aggregateAction = component.rowActions.find((ra) => ra.label === 'Aggregate');
@@ -164,7 +166,7 @@ describe('TransactionReceiptsComponent', () => {
       reattributeAction?.isAvailable({
         ...transaction,
         itemized: false,
-        transactionType: { ...transaction.transactionType, negativeAmountValueOnly: true },
+        transactionType: await TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_RETURN),
       } as TransactionListRecord),
     ).toEqual(false);
   });

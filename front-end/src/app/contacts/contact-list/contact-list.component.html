@@ -27,7 +27,7 @@
   title="Manage contacts"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
   [(totalItems)]="totalItems"
-  [loading]="loading"
+  [loading]="loading()"
   [(rowsPerPage)]="rowsPerPage"
   [(selectedItems)]="selectedItems"
   itemName="contacts"

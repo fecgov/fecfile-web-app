@@ -38,15 +38,19 @@ export abstract class Transaction extends BaseModel {
   itemized: boolean | undefined;
   force_itemized: boolean | undefined;
 
+  @Exclude({ toPlainOnly: true })
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
 
+  @Exclude({ toPlainOnly: true })
   debt: Transaction | undefined;
   debt_id: string | undefined; // Foreign key to debt which this transaction repays
 
+  @Exclude({ toPlainOnly: true })
   loan: Transaction | undefined;
   loan_id: string | undefined; // Foreign key to loan which this transaction repays
 
+  @Exclude({ toPlainOnly: true })
   reatt_redes: Transaction | undefined;
   reatt_redes_id: string | undefined; // Foreign key to original reattribution/redesignation transaction
 
@@ -54,6 +58,7 @@ export abstract class Transaction extends BaseModel {
   updated: string | undefined;
   deleted: string | undefined;
 
+  @Exclude({ toPlainOnly: true })
   reports: Report[] | undefined;
   report_ids: string[] | undefined;
 

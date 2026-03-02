@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { ClassConstructor, instanceToPlain, plainToInstance } from 'class-transformer';
 import { ScheduleIds } from '../models/type-enums';
 import { TransactionTypeUtils } from './transaction-type.utils';
 import type { TransactionType } from '../models/transaction-type.model';
@@ -70,6 +70,12 @@ export class TransactionUtils {
     }
 
     return transaction;
+  }
+
+  static cloneInstance<T extends Transaction>(instance: T | undefined): T | undefined {
+    if (!instance) return undefined;
+    const plain = instanceToPlain(instance);
+    return plainToInstance(instance.constructor as ClassConstructor<T>, plain);
   }
 }
 

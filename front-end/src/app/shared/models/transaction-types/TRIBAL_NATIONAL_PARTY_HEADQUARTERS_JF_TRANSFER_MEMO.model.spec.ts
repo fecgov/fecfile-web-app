@@ -4,9 +4,13 @@ import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { ScheduleATransactionTypes } from '../type-enums';
 
 describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', async () => {
-  const transaction: Transaction = await getTestTransactionByType(
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
-  );
+  let transaction: Transaction;
+
+  beforeEach(async () => {
+    transaction = await getTestTransactionByType(
+      ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+    );
+  });
 
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();

@@ -115,12 +115,13 @@ describe('ReattRedesUtils', () => {
 
   describe('amountValidator', async () => {
     let control: SubscriptionFormControl;
-    const txn = await testScheduleATransaction();
-    txn.reatt_redes = await testScheduleATransaction();
-    (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
-    (txn.reatt_redes as SchATransaction).contribution_amount = 100;
+    let txn: SchATransaction;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      txn = await testScheduleATransaction();
+      txn.reatt_redes = await testScheduleATransaction();
+      (txn.reatt_redes as SchATransaction).reatt_redes_total = 75;
+      (txn.reatt_redes as SchATransaction).contribution_amount = 100;
       control = new SubscriptionFormControl();
     });
 

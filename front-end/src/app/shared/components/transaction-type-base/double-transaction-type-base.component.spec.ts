@@ -282,6 +282,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   describe('getConfirmations()', () => {
     it('should return false if not child transaction', async () => {
       component.childTransaction = undefined;
+      fixture.detectChanges();
+      await Promise.resolve();
       const v = await component.getConfirmations();
       expect(v).toBeFalse();
     });

@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DateTime } from 'luxon';
 
 @Pipe({ name: 'longDate' })
 export class LongDatePipe implements PipeTransform {
@@ -7,7 +6,10 @@ export class LongDatePipe implements PipeTransform {
     if (!value) {
       return '';
     }
-    const date = DateTime.fromJSDate(value);
-    return date.toFormat('LLLL d, yyyy');
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(value);
   }
 }

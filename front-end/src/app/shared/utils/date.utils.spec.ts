@@ -14,7 +14,7 @@ describe('DateUtils', () => {
     let stringDate: string | null;
 
     stringDate = DateUtils.convertDateToFecFormat(null);
-    expect(stringDate).toBeNull();
+    expect(stringDate).toBe('');
 
     stringDate = DateUtils.convertDateToFecFormat(dateDate);
     expect(stringDate).toBe('1995-12-17');
@@ -25,7 +25,7 @@ describe('DateUtils', () => {
     let stringDate: string | null | undefined;
 
     stringDate = DateUtils.convertDateToSlashFormat(null);
-    expect(stringDate).toBeNull();
+    expect(stringDate).toBe('');
 
     stringDate = DateUtils.convertDateToSlashFormat(dateDate);
     expect(stringDate).toBe('12/17/1995');

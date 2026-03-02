@@ -11,6 +11,9 @@ export class RECEIPT_FROM_UNREGISTERED_ENTITY extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override get isReattributable() {
+    return false;
+  }
 
   override readonly initializationData = {
     form_type: 'SA11AI',
