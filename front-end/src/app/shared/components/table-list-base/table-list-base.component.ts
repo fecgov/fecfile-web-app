@@ -30,7 +30,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   readonly rowsPerPage = signal(10);
   readonly totalItems = signal(0);
   sort: SortEvent = {};
-  loading = true;
+  readonly loading = signal(true);
   readonly selectedItems = signal<T[]>([]);
   readonly detailVisible = signal(false);
   isNewItem = true;
@@ -87,7 +87,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
    * @param {TableLazyLoadEvent} event
    */
   public async loadTableItems(): Promise<void> {
-    this.loading = true;
+    this.loading.set(true);
     const table = this.table();
     const sortField = table.sortField();
     const sortOrder = table.sortOrder() === 'asc' ? 1 : -1;
@@ -114,7 +114,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     }
 
     this.totalItems.set(response.count);
-    this.loading = false;
+    this.loading.set(false);
   }
 
   public addItem() {

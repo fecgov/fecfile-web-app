@@ -1,16 +1,18 @@
 <app-shared-templates (reportNameClick)="this.editItem($event)" />
-<app-table
-  [(first)]="first"
-  data-cy="form24-list-component"
-  [items]="items()"
-  [(totalItems)]="totalItems"
-  [loading]="loading"
-  [(rowsPerPage)]="rowsPerPage"
-  [(selectedItems)]="selectedItems"
-  itemName="reports"
-  title="Form 24"
-  [columns]="columns()"
-  sortField="report_status"
-/>
+<div [hidden]="items().length === 0">
+  <app-table
+    [(first)]="first"
+    data-cy="form24-list-component"
+    [items]="items()"
+    [(totalItems)]="totalItems"
+    [loading]="loading()"
+    [(rowsPerPage)]="rowsPerPage"
+    [(selectedItems)]="selectedItems"
+    itemName="reports"
+    title="Form 24"
+    [columns]="columns()"
+    sortField="report_status"
+  />
+</div>
 
 <app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />

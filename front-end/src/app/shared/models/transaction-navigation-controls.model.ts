@@ -1,4 +1,4 @@
-import { hasNoContact, Transaction } from './transaction.model';
+import { hasNoContact, Transaction, cloneInstance } from './transaction.model';
 import { TransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
@@ -36,6 +36,15 @@ export class NavigationEvent {
     this.destinationTransactionType = destinationTransactionType;
   }
 }
+
+export const cloneNavigationEvent = (event: NavigationEvent): NavigationEvent => {
+  return new NavigationEvent(
+    event.action,
+    event.destination,
+    cloneInstance(event.transaction),
+    event.destinationTransactionType,
+  );
+};
 
 export class NavigationControl {
   navigationAction: NavigationAction = NavigationAction.CANCEL;

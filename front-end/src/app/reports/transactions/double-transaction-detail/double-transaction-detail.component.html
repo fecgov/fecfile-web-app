@@ -39,7 +39,7 @@
         <img
           class="accordion-icon"
           [src]="accordionValue() === 0 ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
-          alt="toggle icon"
+          [alt]="accordionValue() === 0 ? 'close content toggle' : 'open content toggle'"
         />
       </div>
     </p-accordion-header>
@@ -86,7 +86,7 @@
         <img
           class="accordion-icon"
           [src]="accordionValue() === 1 ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"
-          alt="toggle icon"
+          [alt]="accordionValue() === 1 ? 'close content toggle' : 'open content toggle'"
         />
       </div>
     </p-accordion-header>

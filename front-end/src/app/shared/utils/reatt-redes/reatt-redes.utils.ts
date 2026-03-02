@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { Transaction } from '../../models/transaction.model';
+import { cloneInstance, Transaction } from '../../models/transaction.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
@@ -8,7 +8,6 @@ import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
-import { cloneDeep } from 'lodash';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
 export enum ReattRedesTypes {
@@ -115,8 +114,8 @@ export class ReattRedesUtils {
 
     const clone =
       payload instanceof SchATransaction
-        ? (cloneDeep(payload.reatt_redes) as SchATransaction)
-        : (cloneDeep(payload.reatt_redes) as SchBTransaction);
+        ? (cloneInstance(payload.reatt_redes) as SchATransaction)
+        : (cloneInstance(payload.reatt_redes) as SchBTransaction);
     if (clone.memo_text) {
       clone.memo_text.id = undefined;
       clone.memo_text.report_id = payload.report_ids?.[0];
