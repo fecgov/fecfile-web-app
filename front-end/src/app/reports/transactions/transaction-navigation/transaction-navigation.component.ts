@@ -1,8 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Component, computed, input } from '@angular/core';
+import type { Transaction } from 'app/shared/models/transaction.model';
 import {
   GO_BACK_CONTROL,
-  NavigationControl,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 
@@ -15,18 +14,19 @@ import { NavigationControlBarComponent } from '../../../shared/components/naviga
   imports: [NavigationControlComponent, NavigationControlBarComponent],
 })
 export class TransactionNavigationComponent {
-  @Input() isEditable = true;
-  @Input() transaction?: Transaction;
-
-  getNavigationControls(): TransactionNavigationControls {
-    if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
+  readonly isEditable = input(true);
+  readonly transaction = input<Transaction | undefined>(undefined);
+  readonly navigationControls = computed(() => {
+    const isEditable = this.isEditable();
+    const transaction = this.transaction();
+    if (!isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
+    if (!transaction) return new TransactionNavigationControls([], [], []);
     return (
-      this.transaction?.transactionType?.getNavigationControls(this.transaction) ??
-      new TransactionNavigationControls([], [], [])
+      transaction.transactionType.getNavigationControls(transaction) ?? new TransactionNavigationControls([], [], [])
     );
-  }
+  });
 
-  getInlineControls(): NavigationControl[] {
-    return this.getNavigationControls().getNavigationControls('inline', this.transaction);
-  }
+  readonly inlineControls = computed(() =>
+    this.navigationControls().getNavigationControls('inline', this.transaction()),
+  );
 }

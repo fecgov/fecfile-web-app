@@ -1,15 +1,15 @@
 <div class="grid">
   <div class="grid col-6 cancel-controls">
-    @for (control of getNavigationControls('cancel'); track control) {
+    @for (control of cancelControls(); track control) {
       <div class="col-4">
-        <app-navigation-control [navigationControl]="control" [transaction]="transaction" />
+        <app-navigation-control [navigationControl]="control" [transaction]="transaction()" />
       </div>
     }
   </div>
   <div class="grid col-6 continue-controls">
-    @for (control of getNavigationControls('continue'); track control) {
+    @for (control of continueControls(); track control) {
       <div class="col-6 align-right">
-        <app-navigation-control [navigationControl]="control" [transaction]="transaction" />
+        <app-navigation-control [navigationControl]="control" [transaction]="transaction()" />
       </div>
     }
   </div>
