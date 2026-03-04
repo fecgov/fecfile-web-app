@@ -6593,6 +6593,14 @@ td {
   cursor: pointer;
 }
 
+.p-tieredmenu-item {
+  background: white !important;
+  color: var(--p-content-color);
+}
+
+.p-tieredmenu-item-link{
+  border:none !important;
+}
 
 
 

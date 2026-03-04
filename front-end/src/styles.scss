@@ -833,3 +833,21 @@ option {
     font-size: 0.75rem;
   }
 }
+
+.p-splitbutton-button {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 1px solid white;
+  &:hover {
+    border-right-color: white !important;
+  }
+}
+
+.p-splitbutton-dropdown {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.p-tieredmenu-item-content:hover {
+  background-color: var(--surface-hover);
+  color: var(--p-content-color);
+}

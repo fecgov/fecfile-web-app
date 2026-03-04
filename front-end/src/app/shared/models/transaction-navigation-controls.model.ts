@@ -16,6 +16,7 @@ export enum NavigationDestination {
 export enum ControlType {
   BUTTON,
   DROPDOWN,
+  SPLITBUTTON,
 }
 
 export class NavigationEvent {
@@ -97,6 +98,9 @@ export const SAVE_LIST_CONTROL = new NavigationControl(
   'Save',
   'p-button-primary',
   hasNoContact,
+  undefined,
+  undefined,
+  ControlType.SPLITBUTTON,
 );
 
 export const SAVE_DOUBLE_ENTRY_LIST_CONTROL = new NavigationControl(
