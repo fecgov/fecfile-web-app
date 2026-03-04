@@ -4,9 +4,9 @@
       <button
         pButton
         pRipple
-        [label]="navigationControl?.label || ''"
-        [icon]="navigationControl?.icon || ''"
-        [class]="navigationControl?.ngClass || ''"
+        [label]="navigationControl().label || ''"
+        [icon]="navigationControl().icon || ''"
+        [class]="navigationControl().ngClass || ''"
         (click)="clickButton()"
         [disabled]="isDisabled()"
         data-cy="navigation-control-button"
@@ -22,7 +22,7 @@
         (click)="op.toggle($event)"
         data-cy="navigation-control-dropdown"
       >
-        <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
+        <i [class]="navigationControl().icon || ''"></i><span>{{ navigationControl().label || '' }}</span>
       </button>
       <p-popover #op>
         <div class="p-3">

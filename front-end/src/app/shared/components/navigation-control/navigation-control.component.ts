@@ -39,7 +39,7 @@ import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 })
 export class NavigationControlComponent {
   private readonly store = inject(Store);
-  readonly navigationControl = input<NavigationControl | undefined>(undefined);
+  readonly navigationControl = input.required<NavigationControl>();
   readonly transaction = input<Transaction | undefined>(undefined);
 
   readonly dropdownOptions = derivedAsync(
@@ -53,13 +53,11 @@ export class NavigationControlComponent {
     { initialValue: [] },
   );
   dropdownControl = new SubscriptionFormControl('');
-
-  readonly isDisabled = computed(() => !!this.navigationControl()?.disabledCondition(this.transaction()));
+  // This could be a signal but the transaction data is getting updated out of sync
+  readonly isDisabled = () => !!this.navigationControl()?.disabledCondition(this.transaction());
   readonly controlType = computed(() =>
     this.navigationControl()?.controlType === ControlType.DROPDOWN ? 'dropdown' : 'button',
   );
-
-  isVisible = true;
 
   clickButton(): void {
     /** click handler for button version of control

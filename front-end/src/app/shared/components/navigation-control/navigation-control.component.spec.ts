@@ -4,11 +4,12 @@ import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
+  SAVE_LIST_CONTROL,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { getTestTransactionByType, testMockStore } from '../../utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testScheduleATransaction } from '../../utils/unit-test.utils';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
@@ -24,9 +25,15 @@ import { Component, viewChild } from '@angular/core';
   template: `<app-navigation-control [transaction]="transaction" [navigationControl]="navigationControl" />`,
 })
 class TestHostComponent {
+  initialized: Promise<void>;
   component = viewChild.required(NavigationControlComponent);
   transaction?: Transaction;
-  navigationControl?: NavigationControl;
+  navigationControl = SAVE_LIST_CONTROL;
+  constructor() {
+    this.initialized = testScheduleATransaction().then((transaction) => {
+      this.transaction = transaction;
+    });
+  }
 }
 
 describe('NavigationControlComponent', () => {
@@ -44,6 +51,7 @@ describe('NavigationControlComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
+    await host.initialized;
     component = host.component();
     fixture.detectChanges();
   });
