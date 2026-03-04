@@ -75,53 +75,63 @@ export class ReportListPage {
     ReportListPage.goToPage();
   }
 
-  static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    if (includeReceipts) {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules: 'A',
-          page: '1',
-          ordering: 'line_label,created',
-          page_size: '5',
-        },
-      }).as('GetReceipts');
-    }
 
-    if (includeLoans) {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules: 'C,D',
-          page: '1',
-          ordering: 'line_label,created',
-          page_size: '5',
-        },
-      }).as('GetLoans');
-    }
 
-    if (includeDisbursements) {
-      cy.intercept({
-        method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules: 'B,E,F',
-          page: '1',
-          ordering: 'line_label,created',
-          page_size: '5',
-        },
-      }).as('GetDisbursements');
-    }
-
+  static goToReportListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
     const visit = cy.visit(`/reports/transactions/report/${reportId}/list`);
-    if (includeLoans) cy.wait('@GetLoans');
-    if (includeDisbursements) cy.wait('@GetDisbursements');
-    if (includeReceipts) cy.wait('@GetReceipts');
-    return visit;
+    return ReportListPage.checkReportListPageLoaded(reportId, includeReceipts, includeDisbursements, includeLoans, visit);
+  }
+
+  static checkReportListPageLoaded(reportId: string, includeReceipts = true, includeDisbursements = true,
+     includeLoans = true, visit: Cypress.Chainable = cy.wrap(null)) {
+    if (includeReceipts) {
+        cy.intercept({
+          method: 'GET',
+          pathname: '/api/v1/transactions/',
+          query: {
+            report_id: reportId,
+            schedules: 'A',
+            page: '1',
+            ordering: 'line_label,created',
+            page_size: '5',
+          },
+        }).as('GetReceipts');
+      }
+
+      if (includeLoans) {
+        cy.intercept({
+          method: 'GET',
+          pathname: '/api/v1/transactions/',
+          query: {
+            report_id: reportId,
+            schedules: 'C,D',
+            page: '1',
+            ordering: 'line_label,created',
+            page_size: '5',
+          },
+        }).as('GetLoans');
+      }
+
+      if (includeDisbursements) {
+        cy.intercept({
+          method: 'GET',
+          pathname: '/api/v1/transactions/',
+          query: {
+            report_id: reportId,
+            schedules: 'B,E,F',
+            page: '1',
+            ordering: 'line_label,created',
+            page_size: '5',
+          },
+        }).as('GetDisbursements');
+      }
+
+      return visit.then(() => {
+        cy.contains('Transactions in this report').should('be.visible');
+        if (includeLoans) cy.wait('@GetLoans');
+        if (includeDisbursements) cy.wait('@GetDisbursements');
+        if (includeReceipts) cy.wait('@GetReceipts');
+      })
   }
 }
+
