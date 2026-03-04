@@ -27,9 +27,17 @@ export class TransactionDetailPage {
     }
 
     if (formData.candidate) {
-      cy.get('.contact-lookup-container').last().get('[data-cy="searchBox"]').type(formData.candidate);
-      cy.contains(formData.candidate).should('exist');
-      cy.contains(formData.candidate).click();
+      cy.get(alias)
+        .find('.contact-lookup-container')
+        .last()
+        .find('[data-cy="searchBox"] input.p-autocomplete-input')
+        .first()
+        .clear()
+        .type(formData.candidate);
+      cy.get('.p-autocomplete-list-container:visible')
+        .contains('.p-autocomplete-option', formData.candidate)
+        .first()
+        .click();
     }
 
     this.enterCommon(formData, alias);
@@ -56,7 +64,18 @@ export class TransactionDetailPage {
     }
 
     if (formData.supportOpposeCode) {
-      cy.get("[data-cy='support_oppose_code']").contains(formData.supportOpposeCode).click();
+      const supportOpposeCode = formData.supportOpposeCode.toString().trim().toUpperCase();
+      const supportOpposeOptionId =
+        supportOpposeCode === 'SUPPORT' || supportOpposeCode === 'S'
+          ? '#support'
+          : supportOpposeCode === 'OPPOSE' || supportOpposeCode === 'O'
+            ? '#oppose'
+            : '';
+      if (!supportOpposeOptionId) {
+        throw new Error(`Unsupported support/oppose code: ${formData.supportOpposeCode}`);
+      }
+
+      cy.get(alias).find(`[data-cy='support_oppose_code'] ${supportOpposeOptionId}`).first().click();
       ContactLookup.getCandidate(contactData, [], [], '#contact_2_lookup');
     }
 
@@ -118,12 +137,13 @@ export class TransactionDetailPage {
 
   static enterLoanFormData(
     formData: LoanFormData,
-    readOnlyAmount = false,
+    _readOnlyAmount = false,
     alias = '',
     amountField = '#loan-info-amount',
     dateField = 'expenditure_date',
     dateIncurredField = 'loan_incurred_date',
   ) {
+    void _readOnlyAmount;
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find(amountField).safeType(formData.amount);
 
@@ -136,7 +156,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.secured) {
-      cy.get(alias).find('input[name="secured"]').first().click({ force: true });
+      cy.get(alias).find('input[name="secured"]').first().click();
     }
 
     // Set due date dropdown & date
@@ -160,31 +180,32 @@ export class TransactionDetailPage {
 
   static enterLoanFormDataStepTwo(
     formData: LoanFormData,
-    readOnlyAmount = false,
+    _readOnlyAmount = false,
     alias = '',
     dateSigned1 = 'treasurer_date_signed',
     dateSigned2 = 'authorized_date_signed',
   ) {
+    void _readOnlyAmount;
     alias = PageUtils.getAlias(alias);
 
     if (formData.loan_restructured) {
-      cy.get(alias).find('input[name="loan_restructured"]').first().click({ force: true });
+      cy.get(alias).find('input[name="loan_restructured"]').first().click();
     }
 
     if (formData.line_of_credit) {
-      cy.get(alias).find('input#line_of_credit').first().click({ force: true });
+      cy.get(alias).find('input#line_of_credit').first().click();
     }
 
     if (formData.others_liable) {
-      cy.get(alias).find('input[name="others_liable"]').first().click({ force: true });
+      cy.get(alias).find('input[name="others_liable"]').first().click();
     }
 
     if (formData.collateral) {
-      cy.get(alias).find('input[name="collateral"]').first().click({ force: true });
+      cy.get(alias).find('input[name="collateral"]').first().click();
     }
 
     if (formData.future_income) {
-      cy.get(alias).find('input[name="future_income"]').first().click({ force: true });
+      cy.get(alias).find('input[name="future_income"]').first().click();
     }
 
     if (formData.last_name) {
@@ -270,7 +291,7 @@ export class TransactionDetailPage {
       'GET',
       `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
-    cy.contains(/^Save$/).click();
+    cy.get('button[data-cy="navigation-control-button"]').contains(/^Save$/).first().click();
 
     cy.wait('@GetLoans');
     cy.wait('@GetDisbursements');
@@ -345,7 +366,12 @@ export class TransactionDetailPage {
 
   private static enterPurpose(formData: ScheduleFormData, alias: string) {
     if (formData.purpose_description) {
-      cy.get(alias).find('textarea#purpose_description').first().safeType(formData.purpose_description);
+      cy.get(alias).then(($root) => {
+        const purposeInput = $root.find('textarea#purpose_description:visible:not([readonly]):not([disabled])').first();
+        if (purposeInput.length > 0) {
+          cy.wrap(purposeInput).safeType(formData.purpose_description!);
+        }
+      });
     }
   }
 

@@ -57,7 +57,7 @@ describe('Loans', () => {
       cy.contains('Loan By Committee').should('exist');
       cy.contains('Loan Made').should('exist');
       PageUtils.clickElement('loans-and-debts-button');
-      cy.contains('Receive loan repayment').click({ force: true });
+      cy.contains('Receive loan repayment').click();
 
       PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
       formData.date_received = new Date(currentYear, 4 - 1, 27);

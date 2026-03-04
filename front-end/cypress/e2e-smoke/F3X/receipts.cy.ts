@@ -9,6 +9,8 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { buildScheduleA } from '../requests/library/transactions';
+import { F3XAggregationHelpers } from '../../e2e-extended/f3x/f3x-aggregation.helpers';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -172,7 +174,12 @@ describe('Receipt Transactions', () => {
       PageUtils.clickButton('Cancel');
       PageUtils.urlCheck('/list');
       // Check form values of memo form
-      PageUtils.clickLink('Partnership Attribution');
+      cy.get(`${F3XAggregationHelpers.receiptsTableRoot} tbody tr`)
+        .contains('td', 'Partnership Attribution')
+        .first()
+        .closest('tr')
+        .as('partnershipAttributionRow');
+      PageUtils.clickLink('Partnership Attribution', '@partnershipAttributionRow');
       cy.get('#entity_type_dropdown.readonly').should('exist');
       cy.get('#entity_type_dropdown').should('contain', 'Individual');
       ContactListPage.assertFormData(individual, true);
@@ -512,6 +519,71 @@ describe('Receipt Transactions', () => {
         '#contribution_date',
       );
       PageUtils.clickButton('Cancel');
+    });
+  });
+
+  it('schedule A row action Itemize then Unitemize persists status after reload', () => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      F3XAggregationHelpers.createTransaction(
+        buildScheduleA('INDIVIDUAL_RECEIPT', 100, `${currentYear}-04-12`, result.individual, result.report),
+      ).then((created) => {
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.assertReceiptRowStatus(created.id, 'Unitemized', true);
+
+        F3XAggregationHelpers.itemizeRowById(F3XAggregationHelpers.receiptsTableRoot, created.id);
+        F3XAggregationHelpers.assertReceiptRowStatus(created.id, 'Unitemized', false);
+        F3XAggregationHelpers.assertStatusPersistsAfterReload(
+          result.report,
+          F3XAggregationHelpers.receiptsTableRoot,
+          created.id,
+          'Unitemized',
+          false,
+        );
+
+        F3XAggregationHelpers.unitemizeRowById(F3XAggregationHelpers.receiptsTableRoot, created.id);
+        F3XAggregationHelpers.assertReceiptRowStatus(created.id, 'Unitemized', true);
+        F3XAggregationHelpers.assertStatusPersistsAfterReload(
+          result.report,
+          F3XAggregationHelpers.receiptsTableRoot,
+          created.id,
+          'Unitemized',
+          true,
+        );
+      });
+    });
+  });
+
+  it('schedule A row action Unaggregate then Aggregate persists and restores aggregate chain behavior', () => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      F3XAggregationHelpers.seedScheduleAChain(result.report, result.individual, [
+        { amount: 100, date: `${currentYear}-04-12` },
+        { amount: 75, date: `${currentYear}-04-20` },
+      ]).then((transactionIds) => {
+        const [, secondId] = transactionIds;
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.assertReceiptAggregate(secondId, '$175.00');
+
+        F3XAggregationHelpers.unaggregateRowById(F3XAggregationHelpers.receiptsTableRoot, secondId);
+        F3XAggregationHelpers.assertReceiptRowStatus(secondId, 'Unaggregated', true);
+        F3XAggregationHelpers.assertStatusPersistsAfterReload(
+          result.report,
+          F3XAggregationHelpers.receiptsTableRoot,
+          secondId,
+          'Unaggregated',
+          true,
+        );
+
+        F3XAggregationHelpers.aggregateRowById(F3XAggregationHelpers.receiptsTableRoot, secondId);
+        F3XAggregationHelpers.assertReceiptRowStatus(secondId, 'Unaggregated', false);
+        F3XAggregationHelpers.assertReceiptAggregate(secondId, '$175.00');
+        F3XAggregationHelpers.assertStatusPersistsAfterReload(
+          result.report,
+          F3XAggregationHelpers.receiptsTableRoot,
+          secondId,
+          'Unaggregated',
+          false,
+        );
+      });
     });
   });
 

@@ -35,7 +35,7 @@ function clickLoan(button: string, urlCheck = '/list') {
     .children()
     .last()
     .click();
-  cy.contains(button).click({ force: true });
+  cy.contains(button).click();
   PageUtils.urlCheck(urlCheck);
 }
 

@@ -7,6 +7,7 @@ import { DataSetup } from './setup';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
+import { F3XAggregationHelpers } from '../../e2e-extended/f3x/f3x-aggregation.helpers';
 
 function generateReportAndContacts(transData: [number, string, boolean][]) {
   return cy
@@ -224,6 +225,29 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$65.00');
+    });
+  });
+
+  it('schedule F delete middle transaction reaggregates downstream aggregate_general_elec_expended', () => {
+    setCommitteeToPTY();
+    cy.wrap(DataSetup({ individual: true, candidate: true, committee: true })).then((result: any) => {
+      F3XAggregationHelpers.seedScheduleFChain(result.report, result.individual, result.candidate, result.committee, [
+        { amount: 100, date: `${currentYear}-04-10` },
+        { amount: 50, date: `${currentYear}-04-15` },
+        { amount: 25, date: `${currentYear}-04-20` },
+      ]).then((transactionIds) => {
+        const [, middleId, finalId] = transactionIds;
+
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.openRowById(F3XAggregationHelpers.disbursementsTableRoot, finalId);
+        F3XAggregationHelpers.assertScheduleFAggregateField('$175.00');
+        F3XAggregationHelpers.clickSave();
+
+        F3XAggregationHelpers.deleteRowById(F3XAggregationHelpers.disbursementsTableRoot, middleId);
+
+        F3XAggregationHelpers.openRowById(F3XAggregationHelpers.disbursementsTableRoot, finalId);
+        F3XAggregationHelpers.assertScheduleFAggregateField('$125.00');
+      });
     });
   });
 });

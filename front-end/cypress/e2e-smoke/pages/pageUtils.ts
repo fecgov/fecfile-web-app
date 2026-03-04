@@ -1,9 +1,46 @@
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
+  private static readonly monthNames: string[] = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  private static exactText(value: string): RegExp {
+    return new RegExp(`^\\s*${Cypress._.escapeRegExp(value)}\\s*$`);
+  }
+
+  private static normalizeSidebarLabel(value: string): string {
+    return value.replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+
+  private static isSidebarHeaderExpanded($header: JQuery<HTMLElement>): boolean {
+    const ariaExpanded = ($header.attr('aria-expanded') ?? '').toLowerCase();
+    if (ariaExpanded === 'true') return true;
+    if (ariaExpanded === 'false') return false;
+
+    const dataHighlight = ($header.attr('data-p-highlight') ?? '').toLowerCase();
+    return dataHighlight === 'true' || $header.hasClass('p-highlight');
+  }
+
   static closeToast() {
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('.p-toast-close-button').should('exist').click();
+    cy.get(alias).then(($root) => {
+      const closeButton = $root.find('.p-toast-close-button:visible').first();
+      if (closeButton.length > 0) {
+        cy.wrap(closeButton).click();
+      }
+    });
   }
 
   static clickElement(elementSelector: string, alias = '') {
@@ -31,7 +68,11 @@ export class PageUtils {
 
     if (value) {
       cy.get(alias).find(querySelector).eq(index).click();
-      cy.contains('p-selectitem', value)
+      cy.get('.p-select-overlay:visible')
+        .find('[role="option"]')
+        .filter((_, option) => PageUtils.exactText(value).test(option.textContent ?? ''))
+        .should('have.length', 1)
+        .first()
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
@@ -40,60 +81,62 @@ export class PageUtils {
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find(calendar).first().click();
-    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
+    cy.get('body').find('.p-datepicker-panel:visible').first().as('calendarElement');
 
-    PageUtils.pickYear(dateObj.getFullYear());
-    PageUtils.pickMonth(dateObj.getMonth());
-
+    PageUtils.navigateCalendarTo(dateObj);
     PageUtils.pickDay(dateObj.getDate().toString());
 
     cy.wait(100);
   }
 
+  private static monthIndex(monthText: string): number {
+    const monthPrefix = monthText.trim().toLowerCase().slice(0, 3);
+    return PageUtils.monthNames.findIndex((monthName) => monthName.toLowerCase().startsWith(monthPrefix));
+  }
+
+  static navigateCalendarTo(targetDate: Date) {
+    cy.get('@calendarElement')
+      .find('.p-datepicker-select-month:visible')
+      .first()
+      .invoke('text')
+      .then((displayedMonthText) => {
+        cy.get('@calendarElement')
+          .find('.p-datepicker-select-year:visible')
+          .first()
+          .invoke('text')
+          .then((displayedYearText) => {
+            const displayedMonth = PageUtils.monthIndex(displayedMonthText);
+            const displayedYear = Number(displayedYearText.trim());
+            if (displayedMonth < 0 || Number.isNaN(displayedYear)) {
+              throw new Error(
+                `Unable to resolve displayed calendar month/year from "${displayedMonthText}" and "${displayedYearText}"`,
+              );
+            }
+
+            const targetMonthIndex = targetDate.getFullYear() * 12 + targetDate.getMonth();
+            const displayedMonthIndex = displayedYear * 12 + displayedMonth;
+            const monthHops = targetMonthIndex - displayedMonthIndex;
+            if (monthHops === 0) {
+              return;
+            }
+
+            const navButton = monthHops > 0 ? '.p-datepicker-next-button:visible' : '.p-datepicker-prev-button:visible';
+            for (let i = 0; i < Math.abs(monthHops); i += 1) {
+              cy.get('@calendarElement').find(navButton).first().click();
+            }
+          });
+      });
+  }
+
   static pickDay(day: string) {
-    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
     cy.get('@calendarElement')
       .find('td')
       .find('span')
       .not('.p-disabled')
       .parent()
-      .contains(day)
-      .then(($day) => {
-        cy.wrap($day.parent()).click();
-      });
-  }
-
-  static pickMonth(month: number) {
-    const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const Month: string = Months[month];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
-  }
-
-  static pickYear(year: number) {
-    const currentYear: number = new Date().getFullYear();
-
-    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
-    cy.wait(100);
-    cy.get('@calendarElement').then(($calendarElement) => {
-      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
-      }
-    });
-    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
-
-    const decadeStart: number = currentYear - (currentYear % 10);
-    const decadeEnd: number = decadeStart + 9;
-    if (year < decadeStart) {
-      for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
-      }
-    }
-    if (year > decadeEnd) {
-      for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
-      }
-    }
-    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
+      .contains(PageUtils.exactText(day))
+      .first()
+      .click();
   }
 
   static clickSidebarSection(section: string) {
@@ -102,8 +145,83 @@ export class PageUtils {
   }
 
   static clickSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click({ force: true });
+    const normalizedMenuItem = PageUtils.normalizeSidebarLabel(menuItem);
+    const menuLabelSelector = '.p-panelmenu-header-label, .p-panelmenu-item-label';
+
+    const toMenuLink = ($label: JQuery<HTMLElement>): JQuery<HTMLElement> => {
+      const $link = $label.closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link');
+      expect($link.length, `sidebar link owner for "${menuItem}"`).to.eq(1);
+      return $link.first();
+    };
+
+    const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => {
+      const selector = visibleOnly ? `${menuLabelSelector}:visible` : menuLabelSelector;
+      return cy
+        .get('p-panelmenu')
+        .find(selector)
+        .filter((_, label) => PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem)
+        .should(($labels) => {
+          expect(
+            $labels.length,
+            `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`,
+          ).to.eq(1);
+        })
+        .first();
+    };
+
+    const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> =>
+      findMenuLabel(visibleOnly).then(($label) => cy.wrap(toMenuLink($label)));
+
+    const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+      findMenuLabel(false).then(($candidateLabel) => {
+        if (Cypress.dom.isVisible($candidateLabel[0])) {
+          return findMenuLink(true);
+        }
+
+        const $ownerPanel = $candidateLabel.closest('.p-panelmenu-panel');
+        expect($ownerPanel.length, `owner sidebar panel for "${menuItem}"`).to.eq(1);
+        const ownerPanelIndex = $ownerPanel.first().index();
+        expect(ownerPanelIndex, `owner sidebar panel index for "${menuItem}"`).to.be.greaterThan(-1);
+
+        const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+          cy
+            .get('p-panelmenu')
+            .find('.p-panelmenu-panel')
+            .eq(ownerPanelIndex)
+            .find('> .p-panelmenu-header')
+            .should('have.length', 1)
+            .first();
+
+        return findOwnerHeader().then(($ownerHeader) => {
+          if (PageUtils.isSidebarHeaderExpanded($ownerHeader)) {
+            return findMenuLink(true);
+          }
+
+          findOwnerHeader()
+            .find('a.p-panelmenu-header-link')
+            .should('have.length', 1)
+            .first()
+            .click();
+
+          findOwnerHeader().should(($header) => {
+            expect(PageUtils.isSidebarHeaderExpanded($header), `owner sidebar header expanded for "${menuItem}"`).to.eq(
+              true,
+            );
+          });
+
+          return findMenuLink(true);
+        });
+      });
+
+    ensureVisibleMenuLink().then(($menuLink) => {
+      const isHeaderLink = $menuLink.hasClass('p-panelmenu-header-link');
+      const $header = $menuLink.closest('.p-panelmenu-header');
+      const shouldClick = !isHeaderLink || !PageUtils.isSidebarHeaderExpanded($header);
+
+      if (shouldClick) {
+        findMenuLink(true).click();
+      }
+    });
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -126,7 +244,13 @@ export class PageUtils {
 
   static clickLink(name: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('a', name).click();
+    const exactName = PageUtils.exactText(name.trim());
+    cy.get(alias)
+      .find('a:visible')
+      .filter((_, link) => exactName.test(link.textContent ?? ''))
+      .first()
+      .should('exist')
+      .click();
   }
 
   static clickAccordion(name: string, alias = '') {

@@ -131,7 +131,7 @@ describe('Contacts - axe smoke (critical)', () => {
       .should('be.visible')
       .then(checkCritical);
 
-    cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
+    cy.contains('button', /^Back$/).should('be.visible').click();
     cy.wait(`@${CONTACTS_LIST_ALIAS}`);
   });
 

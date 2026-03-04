@@ -155,7 +155,7 @@ describe('Contacts List (/contacts)', () => {
         cy.get('button[aria-label="Next Page"], .p-paginator-next')
           .first()
           .should('not.be.disabled')
-          .click({ force: true });
+          .click();
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
         cy.get('tbody tr', { timeout: 15000 }).should('have.length', 1);

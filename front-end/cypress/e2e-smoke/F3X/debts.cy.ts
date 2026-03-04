@@ -12,6 +12,7 @@ import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel'
+import { F3XAggregationHelpers } from '../../e2e-extended/f3x/f3x-aggregation.helpers';
 
 function setupCoordinatedPartyExpenditure(
   organization: ContactFormData,
@@ -45,7 +46,7 @@ function createDebtRepaymentCallback(result: any) {
     PageUtils.urlCheck('select/disbursement?debt=');
     cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
     PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
-    cy.contains('Coordinated Party Expenditure').click({ force: true });
+    cy.contains('Coordinated Party Expenditure').click();
 
     setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
 
@@ -82,7 +83,7 @@ describe('Debts', () => {
       cy.contains('Debt Owed By Committee').should('exist');
 
       PageUtils.clickElement('loans-and-debts-button');
-      cy.contains('Report debt repayment').click({ force: true });
+      cy.contains('Report debt repayment').click();
       PageUtils.urlCheck('select/disbursement?debt=');
       cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
       PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
@@ -233,6 +234,85 @@ describe('Debts', () => {
     });
   });
 
+  it('deleting a debt repayment recalculates debt balance_at_close', () => {
+    cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
+      ReportListPage.goToReportList(result.report);
+      StartTransaction.Debts().ToCommittee();
+      ContactLookup.getCommittee(result.committee);
+
+      cy.intercept({
+        method: 'POST',
+        pathname: '/api/v1/transactions/',
+      }).as('CreateDebtOwedToCommittee');
+
+      TransactionDetailPage.enterLoanFormData(
+        {
+          ...debtFormData,
+          amount: 6000,
+        },
+        false,
+        '',
+        '#amount',
+      );
+      PageUtils.clickButton('Save');
+
+      cy.wait('@CreateDebtOwedToCommittee').then((interception) => {
+        const debtId = F3XAggregationHelpers.transactionIdFromPayload(
+          interception.response?.body,
+          'deleting debt repayment - create debt',
+        );
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.clickRowActionById(
+          F3XAggregationHelpers.loansAndDebtsTableRoot,
+          debtId,
+          'Report debt repayment',
+        );
+        PageUtils.urlCheck('select/receipt?debt=');
+        PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+        PageUtils.clickLink('Individual Receipt');
+        ContactLookup.getContact(result.individual.last_name);
+
+        cy.intercept({
+          method: 'POST',
+          pathname: '/api/v1/transactions/',
+        }).as('CreateDebtRepaymentReceipt');
+
+        TransactionDetailPage.enterScheduleFormData(
+          {
+            ...defaultScheduleFormData,
+            electionType: undefined,
+            electionYear: undefined,
+            date_received: new Date(currentYear, 4 - 1, 20),
+            amount: 1000,
+          },
+          false,
+          '',
+          true,
+          'contribution_date',
+        );
+        PageUtils.clickButton('Save');
+
+        cy.wait('@CreateDebtRepaymentReceipt').then((repaymentInterception) => {
+          const repaymentId = F3XAggregationHelpers.transactionIdFromPayload(
+            repaymentInterception.response?.body,
+            'deleting debt repayment - create repayment',
+          );
+
+          F3XAggregationHelpers.goToReport(result.report);
+          F3XAggregationHelpers.openRowById(F3XAggregationHelpers.loansAndDebtsTableRoot, debtId);
+          cy.get('#balance_at_close').should('have.value', '$5,000.00');
+          F3XAggregationHelpers.clickSave();
+
+          F3XAggregationHelpers.deleteTransactionById(repaymentId);
+          F3XAggregationHelpers.goToReport(result.report);
+
+          F3XAggregationHelpers.openRowById(F3XAggregationHelpers.loansAndDebtsTableRoot, debtId);
+          cy.get('#balance_at_close').should('have.value', '$6,000.00');
+        });
+      });
+    });
+  });
+
   describe('test PTY', () => {
     beforeEach(() => {
       ContactListPage.deleteAllContacts();
@@ -246,11 +326,15 @@ describe('Debts', () => {
     it('should test Debt Owed By Committee loan - Report debt repayment', () => {
       cy.wrap(
         DataSetup({
-          candidate: true,
           organization: true,
-          committee: true,
         }),
-      ).then(handleDebtOwedByCommitteeLoanReportDebtRepayment);
+      ).then((result: any) => {
+        return F3XAggregationHelpers.createContact(F3XAggregationHelpers.uniqueCommitteeSeed()).then((committee) => {
+          return F3XAggregationHelpers.createContact(F3XAggregationHelpers.uniqueHouseCandidateSeed()).then((candidate) => {
+            handleDebtOwedByCommitteeLoanReportDebtRepayment({ ...result, committee, candidate });
+          });
+        });
+      });
     });
   });
 });
