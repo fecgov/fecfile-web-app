@@ -1,4 +1,4 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, input, resource, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Form24 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -20,8 +20,12 @@ export class CreateF24Component {
   private readonly form24Service = inject(Form24Service);
   private readonly store = inject(Store);
   readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
+  readonly visible = input.required<boolean>();
   readonly form24Names = resource({
-    loader: async () => {
+    defaultValue: [],
+    params: () => ({ visible: this.visible() }),
+    loader: async ({ params }) => {
+      if (!params.visible) return [];
       const reports = await this.form24Service.getAllReports();
       return reports.map((report) => (report as Form24).name ?? '') ?? [];
     },

@@ -21,6 +21,9 @@ export class PARTNERSHIP_RECEIPT extends SchATransactionType {
     }
     return 'Partnership attributions do not meet itemization threshold';
   }
+  override get isReattributable() {
+    return false;
+  }
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

@@ -2,7 +2,7 @@ import { BaseModel } from './base.model';
 import { Contact, ContactTypes } from './contact.model';
 import { MemoText } from './memo-text.model';
 import { TransactionType } from './transaction-type.model';
-import { Exclude, Type } from 'class-transformer';
+import { ClassConstructor, Exclude, instanceToPlain, plainToInstance, Type } from 'class-transformer';
 import { SchemaUtils } from '../utils/schema.utils';
 import { ReportTypes, Report } from './reports/report.model';
 import type { SchC1Transaction, ScheduleC1TransactionTypes } from './schc1-transaction.model';
@@ -22,7 +22,7 @@ import type {
 import type { Form24 } from './reports/form-24.model';
 import type { Form3 } from './reports/form-3.model';
 import type { Form3X } from './reports/form-3x.model';
-import { TransactionListRecord } from './transaction-list-record.model';
+import type { TransactionListRecord } from './transaction-list-record.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -43,15 +43,19 @@ export abstract class Transaction extends BaseModel {
   itemized: boolean | undefined;
   force_itemized: boolean | undefined;
 
+  @Exclude({ toPlainOnly: true })
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
 
+  @Exclude({ toPlainOnly: true })
   debt: Transaction | undefined;
   debt_id: string | undefined; // Foreign key to debt which this transaction repays
 
+  @Exclude({ toPlainOnly: true })
   loan: Transaction | undefined;
   loan_id: string | undefined; // Foreign key to loan which this transaction repays
 
+  @Exclude({ toPlainOnly: true })
   reatt_redes: Transaction | undefined;
   reatt_redes_id: string | undefined; // Foreign key to original reattribution/redesignation transaction
 
@@ -59,6 +63,7 @@ export abstract class Transaction extends BaseModel {
   updated: string | undefined;
   deleted: string | undefined;
 
+  @Exclude({ toPlainOnly: true })
   reports: Report[] | undefined;
   report_ids: string[] | undefined;
 
@@ -226,4 +231,10 @@ export enum ScheduleIds {
   D = 'D',
   E = 'E',
   F = 'F',
+}
+
+export function cloneInstance<T extends Transaction>(instance: T | undefined): T | undefined {
+  if (!instance) return undefined;
+  const plain = instanceToPlain(instance);
+  return plainToInstance(instance.constructor as ClassConstructor<T>, plain);
 }

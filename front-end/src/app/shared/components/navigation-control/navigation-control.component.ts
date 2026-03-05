@@ -1,6 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
+  cloneNavigationEvent,
   ControlType,
   NavigationAction,
   NavigationControl,
@@ -18,7 +19,6 @@ import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
-import { clone, cloneDeep } from 'lodash';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ButtonModule } from 'primeng/button';
@@ -95,7 +95,7 @@ export class NavigationControlComponent implements OnInit {
     const navigationEvent = new NavigationEvent(
       this.navigationControl?.navigationAction,
       this.navigationControl?.navigationDestination,
-      cloneDeep(this.transaction),
+      cloneInstance(this.transaction),
       destinationTransactionType,
     );
     this.store.dispatch(navigationEventSetAction(navigationEvent));
@@ -104,7 +104,7 @@ export class NavigationControlComponent implements OnInit {
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
-      const navigationEvent = clone(event.value);
+      const navigationEvent = cloneNavigationEvent(event.value);
       this.store.dispatch(navigationEventSetAction(navigationEvent));
     }
   }

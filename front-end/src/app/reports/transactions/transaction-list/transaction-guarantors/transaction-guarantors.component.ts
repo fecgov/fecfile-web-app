@@ -51,7 +51,7 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
     if (!this.loan()?.id) {
       this.items.set([]);
       this.totalItems.set(0);
-      this.loading = false;
+      this.loading.set(false);
       this.cdr.detectChanges();
     } else {
       await super.loadTableItems();
