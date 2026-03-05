@@ -19,7 +19,6 @@ import { CustomRouteReuseStrategy } from './app/custom-route-reuse-strategy';
 import { LoginService } from './app/shared/services/login.service';
 import { SchedulerAction, asyncScheduler } from 'rxjs';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { StoreModule, MetaReducer, ActionReducer, Action } from '@ngrx/store';
@@ -31,19 +30,9 @@ import { navigationEventReducer } from './app/store/navigation-event.reducer';
 import { AppState } from './app/store/app-state.model';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { EffectsModule } from '@ngrx/effects';
-import { MenubarModule } from 'primeng/menubar';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { PanelModule } from 'primeng/panel';
-import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { PopoverModule } from 'primeng/popover';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 import { AppComponent } from './app/app.component';
 import { ROUTES } from 'app/routes';
-import { CheckboxModule } from 'primeng/checkbox';
 import Aura from '@primeuix/themes/aura';
 import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
@@ -119,17 +108,7 @@ bootstrapApplication(AppComponent, {
         { metaReducers },
       ),
       EffectsModule.forRoot([]),
-      MenubarModule,
-      PanelMenuModule,
-      PanelModule,
-      ButtonModule,
       NgOptimizedImage,
-      DialogModule,
-      InputTextModule,
-      PopoverModule,
-      ConfirmDialogModule,
-      ToastModule,
-      CheckboxModule,
     ),
     provideRouter(ROUTES, inMemoryScrollingFeature),
     provideAnimationsAsync(),
@@ -163,7 +142,6 @@ bootstrapApplication(AppComponent, {
       const initializerFn = initializeAppFactory(inject(LoginService), inject(Router), inject(CookieCheckService));
       return initializerFn();
     }),
-    provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.showGlossary },
   ],

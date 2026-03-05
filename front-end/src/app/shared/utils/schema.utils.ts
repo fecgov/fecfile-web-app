@@ -1,6 +1,6 @@
 import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
 import { JsonSchema, validate } from 'fecfile-validate';
-import { Transaction } from '../models/transaction.model';
+import type { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
 

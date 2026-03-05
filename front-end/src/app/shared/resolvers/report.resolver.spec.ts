@@ -16,7 +16,13 @@ describe('ReportResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), Form3XService, provideMockStore(testMockStore())],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        Form3XService,
+        provideMockStore(testMockStore()),
+        ReportResolver,
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);
