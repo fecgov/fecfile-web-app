@@ -56,10 +56,8 @@ export class ReportListPage {
   }
 
   static editReport(reportName: string, fieldName = 'Edit') {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
     ReportListPage.goToPage();
-    cy.wait(`@GetReports`);
-    cy.wait(`@GetReports`);
+    cy.contains('td', reportName, { timeout: 10000 }).should('be.visible');
     PageUtils.clickKababItem(reportName, fieldName);
   }
 
@@ -75,63 +73,66 @@ export class ReportListPage {
     ReportListPage.goToPage();
   }
 
-
+  // Backward-compatible alias used by existing smoke specs.
+  static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+    return ReportListPage.goToReportListPage(reportId, includeReceipts, includeDisbursements, includeLoans);
+  }
 
   static goToReportListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+    ReportListPage.registerReportListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
     const visit = cy.visit(`/reports/transactions/report/${reportId}/list`);
     return ReportListPage.checkReportListPageLoaded(reportId, includeReceipts, includeDisbursements, includeLoans, visit);
   }
 
-  static checkReportListPageLoaded(reportId: string, includeReceipts = true, includeDisbursements = true,
-     includeLoans = true, visit: Cypress.Chainable = cy.wrap(null)) {
-    if (includeReceipts) {
-        cy.intercept({
-          method: 'GET',
-          pathname: '/api/v1/transactions/',
-          query: {
-            report_id: reportId,
-            schedules: 'A',
-            page: '1',
-            ordering: 'line_label,created',
-            page_size: '5',
-          },
-        }).as('GetReceipts');
-      }
+  private static checkReportListPageLoaded(
+    reportId: string,
+    includeReceipts = true,
+    includeDisbursements = true,
+    includeLoans = true,
+    visit: Cypress.Chainable = cy.wrap(null),
+  ) {
+    return visit.then(() => {
+      cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
+      cy.contains('Transactions in this report').should('be.visible');
+      ReportListPage.waitForReportListRequests(includeReceipts, includeDisbursements, includeLoans);
+    });
+  }
 
-      if (includeLoans) {
-        cy.intercept({
-          method: 'GET',
-          pathname: '/api/v1/transactions/',
-          query: {
-            report_id: reportId,
-            schedules: 'C,D',
-            page: '1',
-            ordering: 'line_label,created',
-            page_size: '5',
-          },
-        }).as('GetLoans');
-      }
+  private static registerReportListInterceptions(
+    reportId: string,
+    includeReceipts = true,
+    includeDisbursements = true,
+    includeLoans = true,
+  ) {
+    const configs = [
+      { enabled: includeReceipts, alias: 'GetReceipts', schedules: 'A' },
+      { enabled: includeLoans, alias: 'GetLoans', schedules: 'C,D' },
+      { enabled: includeDisbursements, alias: 'GetDisbursements', schedules: 'B,E,F' },
+    ] as const;
 
-      if (includeDisbursements) {
-        cy.intercept({
-          method: 'GET',
-          pathname: '/api/v1/transactions/',
-          query: {
-            report_id: reportId,
-            schedules: 'B,E,F',
-            page: '1',
-            ordering: 'line_label,created',
-            page_size: '5',
-          },
-        }).as('GetDisbursements');
-      }
+    configs.forEach(({ enabled, alias, schedules }) => {
+      if (!enabled) return;
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/transactions/',
+        query: {
+          report_id: reportId,
+          schedules,
+        },
+      }).as(alias);
+    });
+  }
 
-      return visit.then(() => {
-        cy.contains('Transactions in this report').should('be.visible');
-        if (includeLoans) cy.wait('@GetLoans');
-        if (includeDisbursements) cy.wait('@GetDisbursements');
-        if (includeReceipts) cy.wait('@GetReceipts');
-      })
+  private static waitForReportListRequests(includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+    const waits = [
+      { enabled: includeLoans, alias: 'GetLoans' },
+      { enabled: includeDisbursements, alias: 'GetDisbursements' },
+      { enabled: includeReceipts, alias: 'GetReceipts' },
+    ] as const;
+
+    waits.forEach(({ enabled, alias }) => {
+      if (!enabled) return;
+      cy.wait(`@${alias}`);
+    });
   }
 }
-
