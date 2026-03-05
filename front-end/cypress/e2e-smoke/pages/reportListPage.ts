@@ -73,7 +73,7 @@ export class ReportListPage {
     ReportListPage.goToPage();
   }
 
-  // Backward-compatible alias used by existing smoke specs.
+  // backward-compatible alias used by existing smoke specs before big refactors for e2e-smoke
   static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
     return ReportListPage.goToReportListPage(reportId, includeReceipts, includeDisbursements, includeLoans);
   }
