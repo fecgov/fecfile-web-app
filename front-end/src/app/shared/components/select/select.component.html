@@ -10,7 +10,7 @@
       #selectElement
       [formControl]="control()"
       [id]="selectId().id"
-      (change)="handleChange($event)"
+      (change)="handleChange()"
       [disabled]="control().disabled"
       (blur)="update.emit(control().value)"
     >
