@@ -22,7 +22,7 @@ You can run a CircleCI job locally and avoid the change/commit/wait loop you nee
 do if you want to actually run the changes on Circle. 
 This can save a lot of time when trying to debug an issue in CI.
 ```
-circleci local execute --job JOB_NAME
+circleci local execute JOB_NAME
 ```
 
 ## CircleCI configuration
