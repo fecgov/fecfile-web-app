@@ -46,6 +46,12 @@ dialog {
   justify-content: space-between;
 }
 
+.rounded-image-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
 .field .dialog-label {
   font-family: var(--karla);
   font-weight: bold;
