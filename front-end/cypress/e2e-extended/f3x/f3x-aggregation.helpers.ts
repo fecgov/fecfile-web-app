@@ -4,7 +4,7 @@ import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
 import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
 import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
 import { TransactionDetailPage } from '../../e2e-smoke/pages/transactionDetailPage';
-import { defaultScheduleFormData, DisbursementFormData } from '../../e2e-smoke/models/TransactionFormModel';
+import { defaultDebtFormData, defaultScheduleFormData, DisbursementFormData } from '../../e2e-smoke/models/TransactionFormModel';
 import { DataSetup } from '../../e2e-smoke/F3X/setup';
 import { F3X, F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
 import { makeContact, makeF3x, makeTransaction } from '../../e2e-smoke/requests/methods';
@@ -483,6 +483,90 @@ export class F3XAggregationHelpers {
     return cy.then(() => createdId);
   }
 
+  static createIndependentExpenditureSeries(args: ScheduleECreateArgs[]): Cypress.Chainable<string[]> {
+    const createdIds: string[] = [];
+    let chain: Cypress.Chainable<unknown> = cy.wrap(null, { log: false });
+
+    args.forEach((entry) => {
+      chain = chain.then(() => {
+        return this.createIndependentExpenditureViaUI(entry).then((createdId) => {
+          createdIds.push(createdId);
+        });
+      });
+    });
+
+    return chain.then(() => createdIds);
+  }
+
+  static createDebtToCommitteeWithReceiptRepayment(args: {
+    reportId: string;
+    committee: any;
+    individual: any;
+    debtAmount: number;
+    repaymentAmount: number;
+    repaymentDate: Date;
+    debtContextLabel: string;
+    repaymentContextLabel: string;
+  }): Cypress.Chainable<{ debtId: string; repaymentId: string }> {
+    this.goToReport(args.reportId);
+    StartTransaction.Debts().ToCommittee();
+    ContactLookup.getCommittee(args.committee);
+
+    cy.intercept({
+      method: 'POST',
+      pathname: '/api/v1/transactions/',
+    }).as('CreateDebtTransaction');
+
+    TransactionDetailPage.enterLoanFormData(
+      {
+        ...defaultDebtFormData,
+        amount: args.debtAmount,
+      },
+      false,
+      '',
+      '#amount',
+    );
+    PageUtils.clickButton('Save');
+
+    return cy.wait('@CreateDebtTransaction').then((interception) => {
+      const debtId = this.transactionIdFromPayload(interception.response?.body, args.debtContextLabel);
+
+      this.goToReport(args.reportId);
+      this.openDebtRepaymentSelection(debtId);
+      this.reportDebtRepaymentAsReceipt();
+      ContactLookup.getContact(args.individual.last_name);
+
+      cy.intercept({
+        method: 'POST',
+        pathname: '/api/v1/transactions/',
+      }).as('CreateDebtRepaymentReceipt');
+
+      TransactionDetailPage.enterScheduleFormData(
+        {
+          ...defaultScheduleFormData,
+          electionType: undefined,
+          electionYear: undefined,
+          date_received: args.repaymentDate,
+          amount: args.repaymentAmount,
+        },
+        false,
+        '',
+        true,
+        'contribution_date',
+      );
+      PageUtils.clickButton('Save');
+
+      return cy.wait('@CreateDebtRepaymentReceipt').then((repaymentInterception) => {
+        const repaymentId = this.transactionIdFromPayload(
+          repaymentInterception.response?.body,
+          args.repaymentContextLabel,
+        );
+
+        return { debtId, repaymentId };
+      });
+    });
+  }
+
   static interceptDeleteTransaction(alias = 'DeleteTransaction'): void {
     cy.intercept({
       method: 'DELETE',
@@ -795,9 +879,13 @@ export class F3XAggregationHelpers {
     this.assertAggregateField(expected);
   }
 
-  static assertScheduleEAggregateFieldOnOpen(transactionId: string, expected: string): void {
-    this.openRowById(this.disbursementsTableRoot, transactionId);
+  static assertCalendarYtdFieldOnOpen(transactionId: string, expected: string): void {
+    this.openDisbursement(transactionId);
     this.assertCalendarYtdField(expected);
+  }
+
+  static assertScheduleEAggregateFieldOnOpen(transactionId: string, expected: string): void {
+    this.assertCalendarYtdFieldOnOpen(transactionId, expected);
   }
 
   static assertScheduleFAggregateFieldOnOpen(transactionId: string, expected: string): void {

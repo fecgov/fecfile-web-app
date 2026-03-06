@@ -338,31 +338,30 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('schedule E delete transaction reaggregates calendar_ytd_per_election_office', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true })).then((result: any) => {
-      F3XAggregationHelpers.createIndependentExpenditureViaUI({
-        reportId: result.report,
-        payeeContactName: result.individual.last_name,
-        candidate: result.candidate,
-        amount: 100,
-        disbursementDate: new Date(currentYear, 4 - 1, 5),
-      }).then((firstId) => {
-        F3XAggregationHelpers.createIndependentExpenditureViaUI({
+      F3XAggregationHelpers.createIndependentExpenditureSeries([
+        {
+          reportId: result.report,
+          payeeContactName: result.individual.last_name,
+          candidate: result.candidate,
+          amount: 100,
+          disbursementDate: new Date(currentYear, 4 - 1, 5),
+        },
+        {
           reportId: result.report,
           payeeContactName: result.individual.last_name,
           candidate: result.candidate,
           amount: 50,
           disbursementDate: new Date(currentYear, 4 - 1, 20),
-        }).then((secondId) => {
-          F3XAggregationHelpers.goToReport(result.report);
-          F3XAggregationHelpers.openRowById(F3XAggregationHelpers.disbursementsTableRoot, secondId);
-          cy.get('#calendar_ytd').should('have.value', '$150.00');
-          F3XAggregationHelpers.clickSave();
+        },
+      ]).then(([firstId, secondId]) => {
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.assertCalendarYtdFieldOnOpen(secondId, '$150.00');
+        F3XAggregationHelpers.clickSave();
 
-          F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.disbursementsTableRoot, firstId, 'Delete');
-          F3XAggregationHelpers.confirmDialog();
+        F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.disbursementsTableRoot, firstId, 'Delete');
+        F3XAggregationHelpers.confirmDialog();
 
-          F3XAggregationHelpers.openRowById(F3XAggregationHelpers.disbursementsTableRoot, secondId);
-          cy.get('#calendar_ytd').should('have.value', '$50.00');
-        });
+        F3XAggregationHelpers.assertCalendarYtdFieldOnOpen(secondId, '$50.00');
       });
     });
   });

@@ -13,6 +13,10 @@ function parseCurrency(value: string): number {
   return Number((value || '').replace(/[^0-9.-]/g, ''));
 }
 
+function sortIds(ids: string[]): string[] {
+  return [...ids].sort((a, b) => a.localeCompare(b));
+}
+
 function readLoanBalanceValueInList(loanId: string): Cypress.Chainable<number> {
   return F3XAggregationHelpers.rowById(F3XAggregationHelpers.loansAndDebtsTableRoot, loanId)
     .find('td')
@@ -77,8 +81,8 @@ function executeLoanRepaymentLifecycleWithIntegrity(
       F3XAggregationHelpers.deleteTransactionsAndVerify404(createdRepaymentIds)
         .then(() => {
           return F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsAfterDelete) => {
-            const sortedBefore = [...repaymentIdsBeforeCreate].sort();
-            const sortedAfterDelete = [...repaymentIdsAfterDelete].sort();
+            const sortedBefore = sortIds(repaymentIdsBeforeCreate);
+            const sortedAfterDelete = sortIds(repaymentIdsAfterDelete);
             expect(
               sortedAfterDelete,
               'C1-C5 repayment ids after delete should return to pre-create baseline',
