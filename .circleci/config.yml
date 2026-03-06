@@ -93,7 +93,7 @@ jobs:
           method: full
       - browser-tools/install_chrome:
           replace_existing: true
-          chrome_version: "145.0.7632.116-1"
+          chrome_version: "145.0.7632.116"
           channel: stable
       - browser-tools/install_chromedriver
       - run:
