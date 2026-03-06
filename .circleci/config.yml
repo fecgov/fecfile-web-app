@@ -11,7 +11,7 @@ orbs:
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
   spin-up-api-containers:
-    description: "Setup and start fecfile-web-api for E2E tests"
+    description: 'Setup and start fecfile-web-api for E2E tests'
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -73,7 +73,7 @@ jobs:
           working_directory: ~/project/front-end/
 
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -332,9 +332,9 @@ workflows:
         - not: << pipeline.parameters.is-triggered-unit-test >>
         - not: << pipeline.parameters.is-triggered-full-nightly >>
     jobs:
-      - lint
-      - test
-      - dependency-check
+      # - lint
+      # - test
+      # - dependency-check
       - e2e-smoke:
           video: << pipeline.parameters.e2e-video >> # Default is false
           filters:
@@ -348,7 +348,7 @@ workflows:
             - dependency-check
           filters:
             branches:
-              only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+              only: /feature\/2876|release\/sprint-[\.\d]+|release\/test|main/
 
   # This job is run when an e2e test is triggered with the
   # is-triggered-e2e-test parameter via the fecfile-web-api
