@@ -28,13 +28,13 @@ import {
   Organization_A,
 } from '../../e2e-smoke/requests/library/contacts';
 
-export interface SeedEntry {
+interface SeedEntry {
   amount: number;
   date: string;
   extra?: Record<string, unknown>;
 }
 
-export interface ScheduleECreateArgs {
+interface ScheduleECreateArgs {
   reportId: string;
   payeeContactName: string;
   candidate: any;
