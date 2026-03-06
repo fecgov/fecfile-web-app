@@ -14,6 +14,7 @@ Details and instructions for other platforms in the [CircleCI Docs](https://circ
 Run this from the top level of the repo:
 ```
 circleci config validate
+circleci config process .circleci/config.yml >/tmp/circleci.processed.yml
 ```
 
 ## Run the CircleCI Job locally
@@ -46,8 +47,16 @@ Authentication must be configured in a set of evironment variables:
 
 ## CircleCI E2E tests
 
-An E2E test job was added to the fecfile-web-app CircleCI configuration file and a corresponding technical details section added to the Cypress README.md.  This job can be kicked off using the following command (You will need to ensure you pass additional required environment variables to the job as needed and documented in the Cypress README.md.  Also, you may need to temporarily add 'e2e-test' to each workflow defined under the CircleCI config's 'workflows' section so that the command line can find it.  You also may need to add 'sudo' in front of the docker commands (otherwise it will complain about not being able to find Docker Daemon listening)). 
+The current E2E jobs are `e2e-smoke` and `e2e-extended`. They pin the browser
+runner to
+`cypress/browsers:node-24.14.0-chrome-145.0.7632.116-1-ff-148.0-edge-145.0.3800.70-1`,
+attach that container to the API proxy network, and run the npm headless E2E
+entrypoints from `front-end`.
+
+You may need to add `sudo` in front of local Docker-backed CircleCI commands if
+your machine requires it.
 
 ```
-sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} --job e2e-test
+sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} --job e2e-smoke
+sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} --job e2e-extended
 ```

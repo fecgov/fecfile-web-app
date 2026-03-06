@@ -1,0 +1,1150 @@
+# Orb 'circleci/browser-tools@2.4.0' resolved to 'circleci/browser-tools@2.4.0'
+# Orb 'circleci/node@7.2.1' resolved to 'circleci/node@7.2.1'
+# Orb 'circleci/python@4.0.0' resolved to 'circleci/python@4.0.0'
+# Orb 'cypress-io/cypress@6.0.0' resolved to 'cypress-io/cypress@6.0.0'
+version: 2
+jobs:
+  lint:
+    docker:
+    - image: cimg/node:24.14.0-browsers
+    resource_class: large
+    steps:
+    - checkout
+    - run:
+        command: |-
+          #!/usr/bin/env bash
+
+          # Fail if package.json does not exist in working directory
+
+          if [ ! -f "package.json" ]; then
+              echo
+              echo "---"
+              echo "Unable to find your package.json file. Did you forget to set the app-dir parameter?"
+              echo "---"
+              echo
+              echo "Current directory: $(pwd)"
+              echo
+              echo
+              echo "List directory: "
+              echo
+              ls
+              exit 1
+          fi
+        name: Checking for package.json
+        working_directory: ~/project/front-end/
+    - run:
+        command: |
+          #!/usr/bin/env bash
+
+          TARGET_DIR="/tmp"
+          if [ -n "$HOMEDRIVE" ]; then
+              TARGET_DIR="$HOMEDRIVE\\tmp"
+          fi
+
+          # Link corresponding lock file to a temporary file used by cache commands
+          if [ -f "package-lock.json" ]; then
+              echo "Found package-lock.json file, assuming lockfile"
+              cp package-lock.json "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "npm-shrinkwrap.json" ]; then
+              echo "Found npm-shrinkwrap.json file, assuming lockfile"
+              cp npm-shrinkwrap.json "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "yarn.lock" ]; then
+              echo "Found yarn.lock file, assuming lockfile"
+              cp yarn.lock "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "pnpm-lock.yaml" ]; then
+              echo "Found pnpm-lock.yaml file, assuming lockfile"
+              cp pnpm-lock.yaml "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "bun.lock" ]; then
+              echo "Found bun.lock file, assuming lockfile"
+              # Check if both bun.lock and bun.lockb exist and provide helpful guidance
+              if [ -f "bun.lockb" ]; then
+                  echo "Warning: Both bun.lock and bun.lockb are present. Because bun.lock exists, bun.lockb will be ignored."
+                  echo "To clear this warning, remove one of these two files."
+                  echo "The bun.lockb format is still supported by bun, but may be removed in the future."
+              fi
+              cp bun.lock "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "bun.lockb" ]; then
+              echo "Found bun.lockb file, assuming lockfile"
+              cp bun.lockb "$TARGET_DIR"/node-project-lockfile
+          else
+              echo "Found no lockfile, adding empty one"
+              touch "$TARGET_DIR"/node-project-lockfile
+          fi
+
+          cp package.json "$TARGET_DIR"/node-project-package.json
+        name: Determine lockfile
+        working_directory: ~/project/front-end/
+    - restore_cache:
+        keys:
+        - node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-lockfile" }}
+        - node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-package.json" }}
+        - node-deps-{{ arch }}-v1-
+    - run:
+        command: |-
+          #!/usr/bin/env bash
+
+          # Configure npm cache path if provided
+          if [[ -n "$PARAM_CACHE_PATH" ]] && [[ "$PARAM_OVERRIDE_COMMAND" != "npm ci" ]] && [[ -n "$PARAM_OVERRIDE_COMMAND" ]]; then
+              npm config set cache "$PARAM_CACHE_PATH"
+          fi
+
+          # Run override ci command if provided, otherwise run default npm install
+          if [[ -n "$PARAM_OVERRIDE_COMMAND" ]]; then
+              echo "Running override package installation command:"
+              eval "$PARAM_OVERRIDE_COMMAND"
+          else
+              npm ci
+          fi
+        environment:
+          PARAM_CACHE_PATH: ''
+          PARAM_OVERRIDE_COMMAND: npm install
+        name: Installing NPM packages
+        working_directory: ~/project/front-end/
+    - save_cache:
+        key: node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-lockfile" }}
+        paths:
+        - ~/.npm
+    - run:
+        command: rm -f /tmp/node-project-lockfile /tmp/node-project-package.json /tmp/yarn-zero-lockfile
+        name: Remove temporary links
+    - run:
+        name: Print the linter version
+        command: ./node_modules/.bin/eslint --version
+        working_directory: ~/project/front-end/
+    - run:
+        name: Run linter
+        command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
+        working_directory: ~/project/front-end/
+    - run:
+        name: Run Prettier with project configuration
+        command: npm run prettier:check:ci
+        working_directory: ~/project/front-end/
+  test:
+    docker:
+    - image: cimg/node:24.14.0-browsers
+    resource_class: large
+    steps:
+    - checkout:
+        method: full
+    - run:
+        command: |
+          #!/bin/bash
+          if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+
+          retry() {
+              local -r -i max_attempts=5
+              local -i attempt_num=1
+
+              until "$@"; do
+                  if (( attempt_num == max_attempts )); then
+                      echo "Attempt $attempt_num failed and there are no more attempts left!"
+                      exit 1
+                  else
+                      echo "Attempt $attempt_num failed! Trying again..."
+                      ((attempt_num++))
+                      $SUDO rm -rf /var/lib/apt/lists/*
+                      sleep 5
+                  fi
+              done
+          }
+
+          # process ORB_PARAM_CHROME_VERSION
+          if command -v circleci &>/dev/null; then
+            # CircleCI is installed, proceed with substitution
+            PROCESSED_CHROME_VERSION=$(circleci env subst "$ORB_PARAM_CHROME_VERSION")
+          else
+            # CircleCI is not installed, fallback to using the environment variable as-is
+            echo "CircleCI CLI is not installed. Relying on the environment variable ORB_PARAM_CHROME_VERSION to be set manually."
+            PROCESSED_CHROME_VERSION=${ORB_PARAM_CHROME_VERSION:-latest} # Default to "latest" if the variable is unset
+          fi
+
+          save_cache() {
+            echo "Saving cache"
+            if uname -a | grep Darwin >/dev/null 2>&1; then
+              $SUDO tar -czf /tmp/chrome.tar.gz -C "$CHROME_TEMP_DIR" googlechrome.pkg
+            elif command -v apt-get >/dev/null 2>&1; then
+              $SUDO tar -czf /tmp/chrome.tar.gz -C /opt/google/chrome .
+            else
+              echo "This system doesn't support cache for chrome"
+            fi
+          }
+
+          # installation check
+          if uname -a | grep Darwin >/dev/null 2>&1; then
+            if ls /Applications/*Google\ Chrome* >/dev/null 2>&1; then
+              if [[ "$PROCESSED_CHROME_VERSION" == "latest" ]]; then
+                LATEST_VERSION="$(curl -s 'https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Mac' | jq -r ' .[0] | .version ')"
+                target_version="$LATEST_VERSION"
+              else
+                target_version="$PROCESSED_CHROME_VERSION"
+              fi
+              installed_version="$(/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version)"
+
+              if [ "$ORB_PARAM_REPLACE_EXISTING" == "1" ] && [ "$installed_version" != "$target_version" ]; then
+                echo "$installed_version is currently installed; replacing it"
+                HOMEBREW_NO_AUTO_UPDATE=1 brew uninstall google-chrome >/dev/null 2>&1 || true
+                $SUDO rm -rf /Applications/Google\ Chrome.app >/dev/null 2>&1 || true
+              else
+                echo "$installed_version is already installed"
+                exit 0
+              fi
+            else
+              echo "Google Chrome is not currently installed; installing it"
+            fi
+          elif grep Alpine /etc/issue >/dev/null 2>&1; then
+            if command -v chromium-browser >/dev/null 2>&1; then
+              if [[ "$PROCESSED_CHROME_VERSION" == "latest" ]]; then
+                LATEST_VERSION="$(curl -s 'https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Linux' | jq -r ' .[0] | .version ')"
+                target_version="$LATEST_VERSION"
+              else
+                target_version="$PROCESSED_CHROME_VERSION"
+              fi
+              installed_version="$(chromium-browser --version)"
+
+              if [ "$ORB_PARAM_REPLACE_EXISTING" == "1" ] && [ "$installed_version" != "$target_version" ]; then
+                echo "$installed_version is currently installed; replacing it"
+                $SUDO apk del --force-broken-world chromium >/dev/null 2>&1 || true
+                $SUDO rm -f "$(command -v chromium-browser)" >/dev/null 2>&1 || true
+              else
+                echo "$installed_version is already installed to $(command -v chromium-browser)"
+                exit 0
+              fi
+            else
+              echo "Google Chrome (via Chromium) is not currently installed; installing it"
+            fi
+          elif command -v yum >/dev/null 2>&1; then
+            if command -v google-chrome >/dev/null 2>&1; then
+              if [[ "$PROCESSED_CHROME_VERSION" == "latest" ]]; then
+                LATEST_VERSION="$(curl -s 'https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Linux' | jq -r ' .[0] | .version ')"
+                target_version="$LATEST_VERSION"
+              else
+                target_version="$PROCESSED_CHROME_VERSION"
+              fi
+              installed_version="$(google-chrome --version)"
+
+              if [ "$ORB_PARAM_REPLACE_EXISTING" == "1" ] && [ "$installed_version" != "$target_version" ]; then
+                echo "$installed_version is currently installed; replacing it"
+                $SUDO yum remove -y google-chrome-stable >/dev/null 2>&1 || true
+                $SUDO rm -f "$(command -v google-chrome)" >/dev/null 2>&1 || true
+              else
+                echo "$installed_version is already installed to $(command -v google-chrome)"
+                exit 0
+              fi
+            else
+              echo "Google Chrome is not currently installed; installing it"
+            fi
+          else
+            if command -v google-chrome >/dev/null 2>&1; then
+              if [[ "$PROCESSED_CHROME_VERSION" == "latest" ]]; then
+                LATEST_VERSION="$(curl -s 'https://chromiumdash.appspot.com/fetch_releases?channel=Stable&platform=Linux' | jq -r ' .[0] | .version ')"
+                target_version="$LATEST_VERSION"
+              else
+                target_version="$PROCESSED_CHROME_VERSION"
+              fi
+              installed_version="$(google-chrome --version | awk '{print $3}')"
+              if [ "$ORB_PARAM_REPLACE_EXISTING" == "1" ] && [ "$installed_version" != "$target_version" ]; then
+                echo "$(google-chrome --version)is currently installed; replacing it"
+                $SUDO apt-get -y --purge remove google-chrome-stable >/dev/null 2>&1 || true
+                $SUDO rm -f "$(command -v google-chrome)" >/dev/null 2>&1 || true
+              else
+                echo "$(google-chrome --version)is already installed to $(command -v google-chrome)"
+                exit 0
+              fi
+            else
+              echo "Google Chrome is not currently installed; installing it"
+            fi
+          fi
+
+          # install chrome
+          if uname -a | grep Darwin >/dev/null 2>&1; then
+            echo "Preparing Chrome installation for MacOS-based systems"
+            # Universal MacOS .pkg with license pre-accepted: https://support.google.com/chrome/a/answer/9915669?hl=en
+            CHROME_TEMP_DIR="$(mktemp -d)"
+            if [ "$ORB_PARAM_SAVE_CACHE" = 1 ] && [ -f "/tmp/googlechrome.pkg" ]; then
+              echo "Cache found."
+              cp /tmp/googlechrome.pkg "$CHROME_TEMP_DIR"
+            else
+              CHROME_MAC_URL="https://dl.google.com/chrome/mac/${ORB_PARAM_CHANNEL}/accept_tos%3Dhttps%253A%252F%252Fwww.google.com%252Fintl%252Fen_ph%252Fchrome%252Fterms%252F%26_and_accept_tos%3Dhttps%253A%252F%252Fpolicies.google.com%252Fterms/googlechrome.pkg"
+              curl -L -o "$CHROME_TEMP_DIR/googlechrome.pkg" "$CHROME_MAC_URL"
+            fi
+            sudo /usr/sbin/installer -pkg "$CHROME_TEMP_DIR/googlechrome.pkg" -target /
+            if [ "$ORB_PARAM_SAVE_CACHE" = 1 ]; then
+              save_cache
+            fi
+            sudo rm -rf "$CHROME_TEMP_DIR"
+            echo '#!/usr/bin/env bash' >> google-chrome-$ORB_PARAM_CHANNEL
+            if [[ $ORB_PARAM_CHANNEL == "beta" ]]; then
+              xattr -rc "/Applications/Google Chrome Beta.app"
+              echo '/Applications/Google\ Chrome\ Beta.app/Contents/MacOS/Google\ Chrome\ Beta "$@"' >> google-chrome-$ORB_PARAM_CHANNEL
+            else
+              xattr -rc "/Applications/Google Chrome.app"
+              echo '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome "$@"' >> google-chrome-$ORB_PARAM_CHANNEL
+            fi
+            sudo mv google-chrome-$ORB_PARAM_CHANNEL /usr/local/bin/
+            sudo chmod +x /usr/local/bin/google-chrome-$ORB_PARAM_CHANNEL
+            # test/verify installation
+            if google-chrome-$ORB_PARAM_CHANNEL --version >/dev/null 2>&1; then
+              echo "$(google-chrome-$ORB_PARAM_CHANNEL --version)has been installed in the /Applications directory"
+              echo "A shortcut has also been created at $(command -v google-chrome)"
+              exit 0
+            else
+              echo "The latest release of Google Chrome (${ORB_PARAM_CHANNEL}) failed to install."
+              exit 1
+            fi
+          elif command -v yum >/dev/null 2>&1; then
+            echo "Preparing Chrome installation for RedHat-based systems"
+            # download chrome
+            if [[ "$PROCESSED_CHROME_VERSION" == "latest" ]]; then
+              CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm"
+            else
+              CHROME_URL="https://dl.google.com/linux/chrome/rpm/stable/x86_64/google-chrome-${ORB_PARAM_CHANNEL}-$PROCESSED_CHROME_VERSION-1.x86_64.rpm"
+            fi
+            curl --silent --show-error --location --fail --retry 3 \
+              --output google-chrome.rpm \
+              "$CHROME_URL"
+            curl --silent --show-error --location --fail --retry 3 \
+              --output liberation-fonts.rpm \
+              http://mirror.centos.org/centos/7/os/x86_64/Packages/liberation-fonts-1.07.2-16.el7.noarch.rpm
+            $SUDO yum localinstall -y liberation-fonts.rpm \
+              >/dev/null 2>&1
+            $SUDO yum localinstall -y google-chrome.rpm \
+              >/dev/null 2>&1
+            if [ "$ORB_PARAM_SAVE_CACHE" = 1 ]; then
+              save_cache
+            fi
+            rm -rf google-chrome.rpm liberation-fonts.rpm
+          else
+            # download chrome
+            echo "Preparing Chrome installation for Debian-based systems"
+            if [[ "$PROCESSED_CHROME_VERSION" == "latest" ]]; then
+              ENV_IS_ARM=$(! dpkg --print-architecture | grep -q arm; echo $?)
+              wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | $SUDO tee /etc/apt/trusted.gpg.d/linux_signing_key.asc
+              if [ "$ENV_IS_ARM" = 1 ]; then
+                echo "No Linux ARM64 support for Chrome"
+                exit 1
+              else
+                echo "Installing Chrome for AMD64"
+                $SUDO sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+              fi
+              retry $SUDO apt-get update
+              DEBIAN_FRONTEND=noninteractive $SUDO apt-get install -y google-chrome-${ORB_PARAM_CHANNEL}
+            else
+              # Google does not keep older releases in their PPA, but they can be installed manually. HTTPS should be enough to secure the download.
+              retry $SUDO apt-get update
+              wget --no-verbose -O /tmp/chrome.deb "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-${ORB_PARAM_CHANNEL}/google-chrome-${ORB_PARAM_CHANNEL}_${ORB_PARAM_CHROME_VERSION}-1_amd64.deb" \
+                && $SUDO apt-get install -y apt-utils && $SUDO apt-get install -y /tmp/chrome.deb \
+                && rm /tmp/chrome.deb
+            fi
+            if [ "$ORB_PARAM_SAVE_CACHE" = 1 ]; then
+              save_cache
+            fi
+          fi
+
+          TESTING_CHROME_VERSION=${PROCESSED_CHROME_VERSION::-2}
+          # test/verify installation
+          if [[ "$PROCESSED_CHROME_VERSION" != "latest" ]]; then
+            if google-chrome-$ORB_PARAM_CHANNEL --version | grep "$PROCESSED_CHROME_VERSION" >/dev/null 2>&1; then
+              :
+            elif google-chrome-$ORB_PARAM_CHANNEL --version | grep "$TESTING_CHROME_VERSION" >/dev/null 2>&1; then
+              :
+            else
+              echo "Google Chrome v${PROCESSED_CHROME_VERSION} (${ORB_PARAM_CHANNEL}) failed to install."
+              exit 1
+            fi
+          else
+            if google-chrome-$ORB_PARAM_CHANNEL --version >/dev/null 2>&1; then
+              :
+            else
+              echo "The latest release of Google Chrome (${ORB_PARAM_CHANNEL}) failed to install."
+              exit 1
+            fi
+            echo "$(google-chrome-$ORB_PARAM_CHANNEL --version) has been installed to $(command -v google-chrome-$ORB_PARAM_CHANNEL)"
+            echo "Chrome: $PROCESSED_CHROME_VERSION" >>"${HOME}/.browser-versions"
+          fi
+        environment:
+          ORB_PARAM_CHANNEL: stable
+          ORB_PARAM_CHROME_VERSION: 145.0.7632.116-1
+          ORB_PARAM_REPLACE_EXISTING: true
+          ORB_PARAM_SAVE_CACHE: false
+        name: Install Google Chrome
+        no_output_timeout: 10m
+    - run:
+        command: "#!/bin/bash\nif [[ $EUID == 0 ]]; then export SUDO=\"\"; else export SUDO=\"sudo\"; fi\n# determine_chrome_version\nif uname -a | grep Darwin >/dev/null 2>&1; then\n  echo \"System detected as MacOS\"\n\n  if [ -f \"/usr/local/bin/google-chrome-stable\" ]; then\n    CHROME_VERSION=\"$(/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --version)\"\n  else\n    CHROME_VERSION=\"$(/Applications/Google\\ Chrome\\ Beta.app/Contents/MacOS/Google\\ Chrome\\ Beta --version)\"\n  fi\n\n  if uname -a | grep arm64 >/dev/null 2>&1; then\n    PLATFORM=mac-arm64\n  else\n    PLATFORM=mac-x64\n  fi\n\n\nelif grep Alpine /etc/issue >/dev/null 2>&1; then\n  apk update >/dev/null 2>&1 &&\n    apk add --no-cache chromium-chromedriver >/dev/null\n\n  # verify version\n  echo \"$(chromedriver --version) has been installed to $(command -v chromedriver)\"\n\n  exit 0\nelse\n  ENV_IS_ARM=$(! dpkg --print-architecture | grep -q arm; echo $?)\n  if [ \"$ENV_IS_ARM\" = 1 ]; then\n    echo \"No Linux ARM64 support for Chrome Driver\"\n    exit 1\n  fi\n  CHROME_VERSION=\"$(google-chrome --version)\"\n  PLATFORM=linux64\nfi\n\nCHROME_VERSION_STRING=\"$(echo \"$CHROME_VERSION\" | sed 's/.*Google Chrome //' | sed 's/.*Chromium //')\"\n# shellcheck disable=SC2001 \nCHROME_VERSION_MAJOR=\"$(echo \"$CHROME_VERSION_STRING\" |  sed \"s/\\..*//\" )\"\necho \"Chrome version major is $CHROME_VERSION_MAJOR\"\n\n# print Chrome version\necho \"Installed version of Google Chrome is $CHROME_VERSION_STRING\"\n\n# determine chromedriver release\nCHROMEDRIVER_RELEASE=\"${CHROME_VERSION_STRING%%.*}\"\n\nCHROME_RELEASE=\"${CHROMEDRIVER_RELEASE}\"\n\nif [[ $CHROME_RELEASE -lt 70 ]]; then\n  # https://sites.google.com/a/chromium.org/chromedriver/downloads\n  # https://chromedriver.storage.googleapis.com/2.40/notes.txt\n\n  case $CHROME_RELEASE in\n  69)\n    CHROMEDRIVER_VERSION=\"2.44\"\n    ;;\n  68)\n    CHROMEDRIVER_VERSION=\"2.42\"\n    ;;\n  67)\n    CHROMEDRIVER_VERSION=\"2.41\"\n    ;;\n  66)\n    CHROMEDRIVER_VERSION=\"2.40\"\n    ;;\n  65)\n    CHROMEDRIVER_VERSION=\"2.38\"\n    ;;\n  64)\n    CHROMEDRIVER_VERSION=\"2.37\"\n    ;;\n  63)\n    CHROMEDRIVER_VERSION=\"2.36\"\n    ;;\n  62)\n    CHROMEDRIVER_VERSION=\"2.35\"\n    ;;\n  61)\n    CHROMEDRIVER_VERSION=\"2.34\"\n    ;;\n  60)\n    CHROMEDRIVER_VERSION=\"2.33\"\n    ;;\n  59)\n    CHROMEDRIVER_VERSION=\"2.32\"\n    ;;\n  58)\n    CHROMEDRIVER_VERSION=\"2.31\"\n    ;;\n  57)\n    CHROMEDRIVER_VERSION=\"2.29\"\n    ;;\n  56)\n    CHROMEDRIVER_VERSION=\"2.29\"\n    ;;\n  55)\n    CHROMEDRIVER_VERSION=\"2.28\"\n    ;;\n  54)\n    CHROMEDRIVER_VERSION=\"2.27\"\n    ;;\n  53)\n    CHROMEDRIVER_VERSION=\"2.26\"\n    ;;\n  52)\n    CHROMEDRIVER_VERSION=\"2.24\"\n    ;;\n  51)\n    CHROMEDRIVER_VERSION=\"2.23\"\n    ;;\n  50)\n    CHROMEDRIVER_VERSION=\"2.22\"\n    ;;\n  49)\n    CHROMEDRIVER_VERSION=\"2.22\"\n    ;;\n  48)\n    CHROMEDRIVER_VERSION=\"2.21\"\n    ;;\n  47)\n    CHROMEDRIVER_VERSION=\"2.21\"\n    ;;\n  46)\n    CHROMEDRIVER_VERSION=\"2.21\"\n    ;;\n  45)\n    CHROMEDRIVER_VERSION=\"2.20\"\n    ;;\n  44)\n    CHROMEDRIVER_VERSION=\"2.20\"\n    ;;\n  43)\n    CHROMEDRIVER_VERSION=\"2.20\"\n    ;;\n  *)\n    echo \"Sorry, Google Chrome/Chromium version 43 or newer is required to use ChromeDriver\"\n    exit 1\n    ;;\n  esac\nelif [[ $CHROME_RELEASE -lt 115 ]]; then\n  CHROMEDRIVER_VERSION=$(curl --silent --show-error --location --fail --retry 3 \\\n    \"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROMEDRIVER_RELEASE\")\nelse\n  # shellcheck disable=SC2001\n  CHROMEDRIVER_VERSION=$(echo $CHROME_VERSION | sed 's/[^0-9.]//g')\nfi\n\n# installation check\nif command -v chromedriver >/dev/null 2>&1; then\n  if chromedriver --version | grep \"$CHROMEDRIVER_VERSION\" >/dev/null 2>&1; then\n    echo \"ChromeDriver $CHROMEDRIVER_VERSION is already installed\"\n    exit 0\n  else\n    echo \"A different version of ChromeDriver is installed ($(chromedriver --version)); removing it\"\n    $SUDO rm -f \"$(command -v chromedriver)\"\n  fi\nfi\n\n# download chromedriver\nif [[ $CHROME_RELEASE -lt 115 ]]; then\n  curl --silent --show-error --location --fail --retry 3 \\\n    --output chromedriver_$PLATFORM.zip \\\n    \"http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_$PLATFORM.zip\"\nelse \n  MATCHING_CHROMEDRIVER_DOWNLOAD_URL=$(curl --silent https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json | jq --raw-output --arg chromeDriverVersion $CHROMEDRIVER_VERSION --arg platform $PLATFORM '.versions[] | select(.version==\"\\($chromeDriverVersion)\") | .downloads.chromedriver[] | select(.platform==\"\\($platform)\") | .url')\n  if [ -z \"${MATCHING_CHROMEDRIVER_DOWNLOAD_URL}\" ]; then\n    echo \"Matching Chrome Driver Version URL is empty, falling back to first matching major version.\"\n    CHROMEDRIVER_VERSION=$( curl https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone.json | jq \".milestones.\\\"$CHROME_VERSION_MAJOR\\\".version\" | sed 's/\\\"//g')\n    CHROMEDRIVER_DOWNLOAD_URL=$(curl https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json | jq --raw-output --arg chromeVersion $CHROME_VERSION_MAJOR --arg platform $PLATFORM '.milestones.\"\\($chromeVersion)\".downloads.chromedriver[] | select(.platform==\"\\($platform)\") | .url')\n    echo \"New ChromeDriver version to be installed: $CHROMEDRIVER_VERSION\"\n  else\n   CHROMEDRIVER_DOWNLOAD_URL=$MATCHING_CHROMEDRIVER_DOWNLOAD_URL\n  fi\n  echo \"$CHROMEDRIVER_VERSION will be installed\"\n\n  curl --silent --show-error --location --fail --retry 3 \\\n    --output chromedriver_$PLATFORM.zip \\\n    \"$CHROMEDRIVER_DOWNLOAD_URL\"\nfi\n\n# setup chromedriver installation\nif command -v yum >/dev/null 2>&1; then\n  yum install -y unzip >/dev/null 2>&1\nfi\n\nunzip \"chromedriver_$PLATFORM.zip\" >/dev/null 2>&1\nrm -rf \"chromedriver_$PLATFORM.zip\"\n\nif [[ $CHROME_RELEASE -gt 114 ]]; then\n  mv \"chromedriver-$PLATFORM\" chromedriver\n  $SUDO mv chromedriver/chromedriver \"$ORB_PARAM_DRIVER_INSTALL_DIR\"\n  rm -rf \"chromedriver\"\nelse\n  $SUDO mv chromedriver \"$ORB_PARAM_DRIVER_INSTALL_DIR\"\nfi\n\n\n$SUDO chmod +x \"$ORB_PARAM_DRIVER_INSTALL_DIR/chromedriver\" \n\n\n# test/verify version\n  if chromedriver --version | grep \"$CHROMEDRIVER_VERSION\" >/dev/null 2>&1; then\n    echo \"$(chromedriver --version) has been installed to $(command -v chromedriver)\"\n    readonly base_dir=\"${CIRCLE_WORKING_DIRECTORY/\\~/$HOME}\"\n    rm -f \"${base_dir}/LICENSE.chromedriver\"\n  else\n    echo \"Something went wrong; ChromeDriver could not be installed\"\n    exit 1\n  fi\n"
+        environment:
+          ORB_PARAM_DRIVER_INSTALL_DIR: /usr/local/bin
+        name: Install ChromeDriver
+        no_output_timeout: 10m
+    - run:
+        command: |
+          google-chrome --version
+          chromedriver --version
+        name: Check install
+    - run:
+        command: |-
+          #!/usr/bin/env bash
+
+          # Fail if package.json does not exist in working directory
+
+          if [ ! -f "package.json" ]; then
+              echo
+              echo "---"
+              echo "Unable to find your package.json file. Did you forget to set the app-dir parameter?"
+              echo "---"
+              echo
+              echo "Current directory: $(pwd)"
+              echo
+              echo
+              echo "List directory: "
+              echo
+              ls
+              exit 1
+          fi
+        name: Checking for package.json
+        working_directory: ~/project/front-end/
+    - run:
+        command: |
+          #!/usr/bin/env bash
+
+          TARGET_DIR="/tmp"
+          if [ -n "$HOMEDRIVE" ]; then
+              TARGET_DIR="$HOMEDRIVE\\tmp"
+          fi
+
+          # Link corresponding lock file to a temporary file used by cache commands
+          if [ -f "package-lock.json" ]; then
+              echo "Found package-lock.json file, assuming lockfile"
+              cp package-lock.json "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "npm-shrinkwrap.json" ]; then
+              echo "Found npm-shrinkwrap.json file, assuming lockfile"
+              cp npm-shrinkwrap.json "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "yarn.lock" ]; then
+              echo "Found yarn.lock file, assuming lockfile"
+              cp yarn.lock "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "pnpm-lock.yaml" ]; then
+              echo "Found pnpm-lock.yaml file, assuming lockfile"
+              cp pnpm-lock.yaml "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "bun.lock" ]; then
+              echo "Found bun.lock file, assuming lockfile"
+              # Check if both bun.lock and bun.lockb exist and provide helpful guidance
+              if [ -f "bun.lockb" ]; then
+                  echo "Warning: Both bun.lock and bun.lockb are present. Because bun.lock exists, bun.lockb will be ignored."
+                  echo "To clear this warning, remove one of these two files."
+                  echo "The bun.lockb format is still supported by bun, but may be removed in the future."
+              fi
+              cp bun.lock "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "bun.lockb" ]; then
+              echo "Found bun.lockb file, assuming lockfile"
+              cp bun.lockb "$TARGET_DIR"/node-project-lockfile
+          else
+              echo "Found no lockfile, adding empty one"
+              touch "$TARGET_DIR"/node-project-lockfile
+          fi
+
+          cp package.json "$TARGET_DIR"/node-project-package.json
+        name: Determine lockfile
+        working_directory: ~/project/front-end/
+    - restore_cache:
+        keys:
+        - node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-lockfile" }}
+        - node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-package.json" }}
+        - node-deps-{{ arch }}-v1-
+    - run:
+        command: |-
+          #!/usr/bin/env bash
+
+          # Configure npm cache path if provided
+          if [[ -n "$PARAM_CACHE_PATH" ]] && [[ "$PARAM_OVERRIDE_COMMAND" != "npm ci" ]] && [[ -n "$PARAM_OVERRIDE_COMMAND" ]]; then
+              npm config set cache "$PARAM_CACHE_PATH"
+          fi
+
+          # Run override ci command if provided, otherwise run default npm install
+          if [[ -n "$PARAM_OVERRIDE_COMMAND" ]]; then
+              echo "Running override package installation command:"
+              eval "$PARAM_OVERRIDE_COMMAND"
+          else
+              npm ci
+          fi
+        environment:
+          PARAM_CACHE_PATH: ''
+          PARAM_OVERRIDE_COMMAND: npm install
+        name: Installing NPM packages
+        working_directory: ~/project/front-end/
+    - save_cache:
+        key: node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-lockfile" }}
+        paths:
+        - ~/.npm
+    - run:
+        command: rm -f /tmp/node-project-lockfile /tmp/node-project-package.json /tmp/yarn-zero-lockfile
+        name: Remove temporary links
+    - run:
+        name: run unit tests
+        command: npm run test:ci
+        working_directory: ~/project/front-end/
+    - store_artifacts:
+        path: ~/project/front-end/coverage/front-end/lcov-report/
+        destination: coverage-report
+    - run:
+        name: Create sonar-scanner cache directory if it does not exist
+        command: mkdir -p /tmp/cache/scanner
+    - restore_cache:
+        keys:
+        - v1-sonarcloud-scanner-5.0.1.3006
+    - run:
+        name: SonarCloud
+        command: |
+          set -e
+          VERSION=5.0.1.3006
+          if [ -z "$SONAR_TOKEN" ]; then
+               echo "You must set SONAR_TOKEN environemnt variable"
+               exit 1
+          fi
+          SCANNER_DIRECTORY=/tmp/cache/scanner
+          export SONAR_USER_HOME=$SCANNER_DIRECTORY/.sonar
+          OS="linux"
+          echo $SONAR_USER_HOME
+          if [[ ! -x "$SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner" ]]; then
+            curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$VERSION-$OS.zip
+            unzip -qq -o sonar-scanner-cli-$VERSION-$OS.zip -d $SCANNER_DIRECTORY
+          fi
+
+          chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
+          chmod +x $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/jre/bin/java
+          $SCANNER_DIRECTORY/sonar-scanner-$VERSION-$OS/bin/sonar-scanner
+        environment:
+          SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
+    - save_cache:
+        key: v1-sonarcloud-scanner-5.0.1.3006
+        paths:
+        - /tmp/cache/scanner
+  dependency-check:
+    docker:
+    - image: cimg/python:3.13.12
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - nvm-v1-cache-24.14.0-{{ arch }}
+        name: Restore Nvm Cache
+    - run:
+        command: "#!/usr/bin/env bash\n# shellcheck disable=SC2016\n\n# Only install nvm if it's not already installed\nif command -v nvm &> /dev/null; then\n    echo \"nvm is already installed. Skipping nvm install.\";\nelse\n    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash;\n    \n    echo 'export NVM_DIR=\"$HOME/.nvm\"' >> \"$BASH_ENV\";\n    echo '[ -s \"$NVM_DIR/nvm.sh\" ] && \\. \"$NVM_DIR/nvm.sh\" --no-use' >> \"$BASH_ENV\";\n    \n    # shellcheck source=/dev/null\n    source \"$BASH_ENV\";\nfi\n\n# See: https://github.com/nvm-sh/nvm#usage\nif [ \"$NODE_PARAM_VERSION\" = \"latest\" ]; then\n    # When no version is specified we default to the latest version of Node\n    NODE_ORB_INSTALL_VERSION=$(nvm ls-remote | tail -n1 | grep -Eo 'v[0-9]+\\.[0-9]+\\.[0-9]+')\n    nvm install -b \"$NODE_ORB_INSTALL_VERSION\" # aka nvm install node. We're being explicit here.\n    nvm alias default \"$NODE_ORB_INSTALL_VERSION\"\nelif [ -n \"$NODE_PARAM_VERSION\" ] && [ \"$NODE_PARAM_VERSION\" != \"lts\" ]; then\n    nvm install -b \"$NODE_PARAM_VERSION\"\n    nvm alias default \"$NODE_PARAM_VERSION\"\nelif [ -f \".nvmrc\" ]; then\n    NVMRC_SPECIFIED_VERSION=$(<.nvmrc)\n    nvm install -b \"$NVMRC_SPECIFIED_VERSION\"\n    nvm alias default \"$NVMRC_SPECIFIED_VERSION\"\nelif [ -f \".node-version\" ]; then\n    NVMRC_SPECIFIED_VERSION=$(<.node-version)\n    nvm install \"$NVMRC_SPECIFIED_VERSION\"\n    nvm alias default \"$NVMRC_SPECIFIED_VERSION\"\nelse\n    nvm install -b --lts\n    nvm alias default lts/*\nfi\n\necho 'nvm use default &>/dev/null' >> \"$BASH_ENV\"\n"
+        environment:
+          NODE_PARAM_VERSION: 24.14.0
+        name: Install Node.js 24.14.0
+    - save_cache:
+        key: nvm-v1-cache-24.14.0-{{ arch }}
+        name: Save Nvm Cache
+        paths:
+        - ~/.nvm/.cache
+        - /opt/circleci/.nvm/.cache
+    - run:
+        command: |-
+          #!/usr/bin/env bash
+
+          # Fail if package.json does not exist in working directory
+
+          if [ ! -f "package.json" ]; then
+              echo
+              echo "---"
+              echo "Unable to find your package.json file. Did you forget to set the app-dir parameter?"
+              echo "---"
+              echo
+              echo "Current directory: $(pwd)"
+              echo
+              echo
+              echo "List directory: "
+              echo
+              ls
+              exit 1
+          fi
+        name: Checking for package.json
+        working_directory: ~/project/front-end/
+    - run:
+        command: |
+          #!/usr/bin/env bash
+
+          TARGET_DIR="/tmp"
+          if [ -n "$HOMEDRIVE" ]; then
+              TARGET_DIR="$HOMEDRIVE\\tmp"
+          fi
+
+          # Link corresponding lock file to a temporary file used by cache commands
+          if [ -f "package-lock.json" ]; then
+              echo "Found package-lock.json file, assuming lockfile"
+              cp package-lock.json "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "npm-shrinkwrap.json" ]; then
+              echo "Found npm-shrinkwrap.json file, assuming lockfile"
+              cp npm-shrinkwrap.json "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "yarn.lock" ]; then
+              echo "Found yarn.lock file, assuming lockfile"
+              cp yarn.lock "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "pnpm-lock.yaml" ]; then
+              echo "Found pnpm-lock.yaml file, assuming lockfile"
+              cp pnpm-lock.yaml "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "bun.lock" ]; then
+              echo "Found bun.lock file, assuming lockfile"
+              # Check if both bun.lock and bun.lockb exist and provide helpful guidance
+              if [ -f "bun.lockb" ]; then
+                  echo "Warning: Both bun.lock and bun.lockb are present. Because bun.lock exists, bun.lockb will be ignored."
+                  echo "To clear this warning, remove one of these two files."
+                  echo "The bun.lockb format is still supported by bun, but may be removed in the future."
+              fi
+              cp bun.lock "$TARGET_DIR"/node-project-lockfile
+          elif [ -f "bun.lockb" ]; then
+              echo "Found bun.lockb file, assuming lockfile"
+              cp bun.lockb "$TARGET_DIR"/node-project-lockfile
+          else
+              echo "Found no lockfile, adding empty one"
+              touch "$TARGET_DIR"/node-project-lockfile
+          fi
+
+          cp package.json "$TARGET_DIR"/node-project-package.json
+        name: Determine lockfile
+        working_directory: ~/project/front-end/
+    - restore_cache:
+        keys:
+        - node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-lockfile" }}
+        - node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-package.json" }}
+        - node-deps-{{ arch }}-v1-
+    - run:
+        command: |-
+          #!/usr/bin/env bash
+
+          # Configure npm cache path if provided
+          if [[ -n "$PARAM_CACHE_PATH" ]] && [[ "$PARAM_OVERRIDE_COMMAND" != "npm ci" ]] && [[ -n "$PARAM_OVERRIDE_COMMAND" ]]; then
+              npm config set cache "$PARAM_CACHE_PATH"
+          fi
+
+          # Run override ci command if provided, otherwise run default npm install
+          if [[ -n "$PARAM_OVERRIDE_COMMAND" ]]; then
+              echo "Running override package installation command:"
+              eval "$PARAM_OVERRIDE_COMMAND"
+          else
+              npm ci
+          fi
+        environment:
+          PARAM_CACHE_PATH: ''
+          PARAM_OVERRIDE_COMMAND: npm install
+        name: Installing NPM packages
+        working_directory: ~/project/front-end/
+    - save_cache:
+        key: node-deps-{{ arch }}-v1-{{ checksum "/tmp/node-project-lockfile" }}
+        paths:
+        - ~/.npm
+    - run:
+        command: rm -f /tmp/node-project-lockfile /tmp/node-project-package.json /tmp/yarn-zero-lockfile
+        name: Remove temporary links
+    - run:
+        name: List installed node dependencies
+        command: npm ls --all
+        working_directory: ~/project/front-end/
+    - run:
+        command: |-
+          # shellcheck disable=SC2016
+          echo 'if [ "${PARAM_PKG_MNGR}" = "auto" ]; then
+            if [ -f "requirements.txt" ]; then
+                if [ -f "${PARAM_SETUP_FILE_PATH:-setup.py}" ]; then
+                    export DETECT_PKG_MNGR="pip-dist"
+                else
+                    export DETECT_PKG_MNGR="pip"
+                fi
+                elif [ -f "Pipfile" ]; then
+                export DETECT_PKG_MNGR="pipenv"
+                export PYTHON_ENV_TOOL="pipenv"
+                elif [ -f "uv.lock" ]; then
+                export DETECT_PKG_MNGR="uv"
+                export PYTHON_ENV_TOOL="uv"
+                elif [ -f "pyproject.toml" ]; then
+                export DETECT_PKG_MNGR="poetry"
+                export PYTHON_ENV_TOOL="poetry"
+            fi
+            echo "INFO: Detected Package Manager ${DETECT_PKG_MNGR}"
+          fi' > /tmp/detect-env.sh
+          chmod +x /tmp/detect-env.sh
+          echo 'export AUTO_DETECT_ENV_SCRIPT="/tmp/detect-env.sh"' >> "$BASH_ENV"
+        name: Export automatic environment detection script
+    - run:
+        command: |-
+          if [ ! "${BASH_ENV_PYTHON_ALIASED}" ]; then
+              echo 'if [ ! $(command -v python) ]; then
+            shopt -s expand_aliases
+            alias python=python3
+            alias pip=pip3
+          fi
+
+          BASH_ENV_PYTHON_ALIASED=true' >> "$BASH_ENV"
+          fi
+        name: Alias Python
+    - run:
+        command: "eval \"$SCRIPT_UTILS\"\n# shellcheck source=detect-env.sh\nsource \"$AUTO_DETECT_ENV_SCRIPT\"\nPARAM_CACHE_FOLDER_PREFIX=\"$(echo \"$PARAM_CACHE_FOLDER_PREFIX\" | circleci env subst)\"\ndetect_os\nif [[ \"$PARAM_CACHE_FOLDER_PREFIX\" == /* ]]; then\n    if [[ \"$PLATFORM\" == \"windows\" ]]; then\n        CACHE_PREFIX=\"/c$PARAM_CACHE_FOLDER_PREFIX\"\n    else\n        CACHE_PREFIX=\"$PARAM_CACHE_FOLDER_PREFIX\"\n    fi\n\nelse\n    CACHE_PREFIX=\"${PWD%/\"$PARAM_APP_DIR\"}/$PARAM_CACHE_FOLDER_PREFIX\"\nfi\n\n    LOCKFILE_PATH=\"${CACHE_PREFIX%/}/.cci_pycache/lockfile\"\nmkdir -p \"${CACHE_PREFIX}/.cci_pycache/\"\n\nif [ ! -f \"${LOCKFILE_PATH}\" ]; then\n    case ${DETECT_PKG_MNGR:-${PARAM_PKG_MNGR}} in\n        pip | pip-dist)\n            LOCK_FILE=\"${PARAM_DEPENDENCY_FILE:-requirements.txt}\"\n        ;;\n        pipenv)\n            LOCK_FILE=\"Pipfile.lock\"\n        ;;\n        poetry)\n            LOCK_FILE=\"poetry.lock\"\n        ;;\n        uv)\n            LOCK_FILE=\"uv.lock\"\n        ;;\n    esac\n    \n    if [ -z \"${LOCK_FILE}\" ]; then\n        echo \"WARNING: Could not determine lockfile path for ${DETECT_PKG_MNGR:-PARAM_PKG_MNGR}\"\n    else\n        FULL_LOCK_FILE=$(readlink -f \"${LOCK_FILE}\")\n\n        if [ -f \"${LOCK_FILE}\" ]; then\n            echo \"INFO: Copying ${FULL_LOCK_FILE} to ${LOCKFILE_PATH}\"\n            cp \"${FULL_LOCK_FILE}\" \"${LOCKFILE_PATH}\"\n        else\n            echo \"WARNING: Could not find lockfile at ${LOCK_FILE}\"\n        fi\n    fi\nfi"
+        environment:
+          PARAM_APP_DIR: .
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          PARAM_DEPENDENCY_FILE: requirements.txt
+          PARAM_PKG_MNGR: pip
+          PARAM_PYPI_CACHE: true
+          PARAM_VENV_CACHE: true
+          PARAM_VENV_PATH: ''
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Link lockfile
+        working_directory: .
+    - run:
+        command: |-
+          eval "$SCRIPT_UTILS"
+          detect_os
+          PARAM_CACHE_FOLDER_PREFIX="$(echo "$PARAM_CACHE_FOLDER_PREFIX" | circleci env subst)"
+
+          if [[ "$PARAM_CACHE_FOLDER_PREFIX" == /* ]]; then
+              if [[ "$PLATFORM" == "windows" ]]; then
+                  CACHE_PREFIX="/c$PARAM_CACHE_FOLDER_PREFIX"
+              else
+                  CACHE_PREFIX="$PARAM_CACHE_FOLDER_PREFIX"
+              fi
+
+          else
+              CACHE_PREFIX="${PWD%/"$PARAM_APP_DIR"}/$PARAM_CACHE_FOLDER_PREFIX"
+          fi
+
+          CACHE_DIR="${CACHE_PREFIX%/}/.temp-python-version"
+          mkdir -p "${CACHE_PREFIX}"
+          echo "INFO: Copying python version to ${CACHE_DIR}"
+          python --version | cut -d ' ' -f2 > "$CACHE_DIR" && cat "$CACHE_DIR"
+        environment:
+          PARAM_APP_DIR: .
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Save python version
+        working_directory: .
+    - restore_cache:
+        keys:
+        - v1-cci_pycache-{{ .Branch }}-{{ checksum "/tmp/cache/.temp-python-version" }}-{{ checksum "/tmp/cache/.cci_pycache/lockfile" }}
+        - v1-cci_pycache-{{ .Branch }}-{{ checksum "/tmp/cache/.temp-python-version" }}-
+    - run:
+        command: "eval \"$SCRIPT_UTILS\"\ndetect_os\n\nrecurse() {\n    if [ ! -d \"$1\" ] || [ ! -e \"$2\" ]; then\n        mv -u \"$1\" \"$2\" || exit\n        return\n    fi\n    for entry in \"$1/\"* \"$1/.\"[!.]* \"$1/..\"?*; do\n        if [ -e \"$entry\" ]; then\n            recurse \"$entry\" \"$2/${entry##\"$1/\"}\"\n        fi\n    done\n}\n\nrestore_paths() {\n    if [ -d \"${1}\" ] && [ -n \"$(ls -A \"${1}\" 2>/dev/null)\" ]; then\n        for file in \"${1}\"/*; do\n            decoded=$(basename \"${file}\" | base64 -d)\n            parent_dir=$(dirname \"${decoded}\")\n            \n            # make sure the parent directories exist\n            if [ ! -d \"${parent_dir}\" ]; then\n                mkdir -p \"${parent_dir}\"\n            fi\n            \n            echo \"INFO: Restoring ${file} to ${decoded}\"\n\n            recurse \"${file}\" \"${decoded}\"\n        done\n    fi\n}\nPARAM_CACHE_FOLDER_PREFIX=\"$(echo \"$PARAM_CACHE_FOLDER_PREFIX\" | circleci env subst)\"\n\nif [[ \"$PARAM_CACHE_FOLDER_PREFIX\" == /* ]]; then\n    if [[ \"$PLATFORM\" == \"windows\" ]]; then\n        CACHE_PREFIX=\"/c$PARAM_CACHE_FOLDER_PREFIX\"\n    else\n        CACHE_PREFIX=\"$PARAM_CACHE_FOLDER_PREFIX\"\n    fi\n\nelse\n    CACHE_PREFIX=\"${PWD%/\"$PARAM_APP_DIR\"}/$PARAM_CACHE_FOLDER_PREFIX\"\nfi\n\nCACHE_DIR=\"${CACHE_PREFIX%/}/.cci_pycache\"\n\nif [ \"${PARAM_VENV_CACHE}\" = \"1\" ]; then\n    restore_paths \"${CACHE_DIR}/venv\"\nfi\n\nif [ \"${PARAM_PYPI_CACHE}\" = \"1\" ]; then\n    restore_paths \"${CACHE_DIR}/pypi\"\nfi"
+        environment:
+          PARAM_APP_SRC_DIR: .
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          PARAM_PYPI_CACHE: true
+          PARAM_VENV_CACHE: true
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Move restored cache
+        working_directory: .
+    - run:
+        command: "pip install -r requirements.txt \n"
+        name: Install dependencies with pip using project requirements.txt
+        no_output_timeout: 10m
+        working_directory: .
+    - run:
+        command: "# shellcheck source=detect-env.sh\neval \"$SCRIPT_UTILS\"\ndetect_os\nsource \"$AUTO_DETECT_ENV_SCRIPT\"\n\ncase ${DETECT_PKG_MNGR:-${PARAM_PKG_MNGR}} in\n    pip | pip-dist)\n        LOCK_FILE=\"${PARAM_DEPENDENCY_FILE:-requirements.txt}\"\n        CACHE_PATHS='[ \"/home/circleci/.cache/pip\", \"/home/circleci/.pyenv/versions\", \"/home/circleci/.local/lib\" ]'\n    ;;\n    pipenv) \n        # TODO: use PIPENV_PIPFILE\n        LOCK_FILE=\"Pipfile.lock\"\n        PIPENV_VENV_PATH=\"${WORKON_HOME:-/home/circleci/.local/share/virtualenvs}\"\n        \n        if [ -z \"${PIPENV_VENV_IN_PROJECT}\" ]; then\n            VENV_PATHS=\"[ \\\"${PIPENV_VENV_PATH}\\\" ]\"\n        else\n            VENV_PATHS=\"[ \\\"${CIRCLE_WORKING_DIRECTORY}/.venvs\\\" ]\"\n        fi\n        \n        CACHE_PATHS='[ \"/home/circleci/.cache/pip\", \"/home/circleci/.cache/pipenv\" ]'\n    ;;\n    poetry)\n        LOCK_FILE=\"poetry.lock\"\n        VENV_PATHS='[ \"/home/circleci/.cache/pypoetry/virtualenvs\" ]'\n        CACHE_PATHS='[ \"/home/circleci/.cache/pip\" ]'\n    ;;\n    uv)\n        LOCK_FILE=\"uv.lock\"\n        VENV_PATHS=\"[ \\\"${CIRCLE_WORKING_DIRECTORY}/.venv\\\" ]\"\n        CACHE_PATHS='[ \"/home/circleci/.cache/uv\" ]'\n    ;;\nesac\n\nif [ -n \"${PARAM_VENV_PATH}\" ]; then\n    VENV_PATHS=\"${PARAM_VENV_PATH}\"\nfi\nPARAM_CACHE_FOLDER_PREFIX=\"$(echo \"$PARAM_CACHE_FOLDER_PREFIX\" | circleci env subst)\"\n\nif [[ \"$PARAM_CACHE_FOLDER_PREFIX\" == /* ]]; then\n    if [[ \"$PLATFORM\" == \"windows\" ]]; then\n        CACHE_PREFIX=\"/c$PARAM_CACHE_FOLDER_PREFIX\"\n    else\n        CACHE_PREFIX=\"$PARAM_CACHE_FOLDER_PREFIX\"\n    fi\n\nelse\n    CACHE_PREFIX=\"${PWD%/\"$PARAM_APP_DIR\"}/$PARAM_CACHE_FOLDER_PREFIX\"\nfi\n\nCACHE_DIR=\"${CACHE_PREFIX%/}/.cci_pycache\"\nmkdir -p \"${CACHE_DIR}\"\n\nlink_paths() {\n    if [ -d \"${1}\" ]; then\n        echo \"INFO: Cache directory already exists. Deleting...\"\n        rm -r \"${1}\"\n        # return\n    fi\n    \n    mkdir \"${1}\"\n    \n    for encoded in $(echo \"${2}\" | jq -r '.[] | @base64'); do\n        decoded=$(echo \"${encoded}\" | tr -d '\\r' | base64 -d)\n        \n        if [ -e \"${decoded}\" ]; then\n            echo \"INFO: Copying ${decoded} to ${1}/${encoded}\"\n            cp -a \"${decoded}\" \"${1}/${encoded}\"\n        else\n            echo \"INFO: Could not find ${decoded}. Skipping...\"\n        fi\n    done\n}\n\nif [ \"${PARAM_VENV_CACHE}\" = \"1\" ] && [ -n \"${VENV_PATHS}\" ]; then\n    link_paths \"${CACHE_DIR}/venv\" \"${VENV_PATHS}\"\nfi\n\nif [ \"${PARAM_PYPI_CACHE}\" = \"1\" ]; then\n    link_paths \"${CACHE_DIR}/pypi\" \"${CACHE_PATHS}\"\nfi\n\nLOCKFILE_PATH=\"${CACHE_DIR}/lockfile\"\n\nif [ -e \"${LOCKFILE_PATH}\" ]; then\n    rm -f \"${LOCKFILE_PATH}\"\nfi\n\nif [ -e \"${LOCK_FILE}\" ]; then\n    FULL_LOCK_FILE=$(readlink -f \"${LOCK_FILE}\")\n    \n    echo \"INFO: Copying ${FULL_LOCK_FILE} to ${LOCKFILE_PATH}\"\n    cp \"${FULL_LOCK_FILE}\" \"${LOCKFILE_PATH}\"\nfi\n"
+        environment:
+          PARAM_APP_SRC_DIR: .
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          PARAM_DEPENDENCY_FILE: requirements.txt
+          PARAM_PKG_MNGR: pip
+          PARAM_PYPI_CACHE: true
+          PARAM_VENV_CACHE: true
+          PARAM_VENV_PATH: ''
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Copy to cache directory
+        working_directory: .
+    - save_cache:
+        key: v1-cci_pycache-{{ .Branch }}-{{ checksum "/tmp/cache/.temp-python-version" }}-{{ checksum "/tmp/cache/.cci_pycache/lockfile" }}
+        paths:
+        - /tmp/cache/.cci_pycache
+    - run:
+        name: Check for unused dependencies
+        command: npx knip
+        working_directory: ~/project/front-end/
+  e2e-smoke:
+    docker:
+    - image: cimg/node:24.14.0-browsers
+    environment:
+    - CYPRESS_VIDEO: false
+    - CYPRESS_BROWSER_IMAGE: cypress/browsers:node-24.14.0-chrome-145.0.7632.116-1-ff-148.0-edge-145.0.3800.70-1
+    steps:
+    - setup_remote_docker:
+        version: docker24
+        docker_layer_caching: false
+    - run:
+        name: clone fecfile-web-api
+        command: |
+          rm -rf fecfile-web-api
+          git clone https://github.com/fecgov/fecfile-web-api.git
+        working_directory: ~/project
+    - run:
+        name: use redis
+        command: |
+          export MOCK_OPENFEC=REDIS
+          echo $MOCK_OPENFEC
+    - run:
+        name: start fecfile-web-api
+        command: |
+          git checkout ${CIRCLE_BRANCH}
+          docker-compose down
+          DB_DOCKERFILE="Dockerfile-e2e" \
+          WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
+          API_DOCKERFILE="Dockerfile-e2e" \
+          FECFILE_TEST_DB_NAME="postgres" \
+          DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} \
+          DATABASE_URL=${E2E_DATABASE_URL} \
+          FEC_API=${E2E_FEC_API} \
+          FEC_API_KEY=${E2E_FEC_API_KEY} \
+          MOCK_EFO="True" \
+          E2E_TEST="True" \
+          docker-compose up --build -d
+
+          docker container run --network container:fecfile-api-proxy \
+            docker.io/jwilder/dockerize:v0.10.0 \
+            -wait http://localhost:8080/devops/status/ \
+            -wait-retry-interval 2s \
+            -timeout 60s;
+        working_directory: ~/project/fecfile-web-api
+    - run:
+        name: execute e2e tests
+        command: |
+          docker container run --name fecfile-web-app-e2e \
+            -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+            -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+            -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+            -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+            -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+            -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
+            --network container:fecfile-api-proxy \
+            ${CYPRESS_BROWSER_IMAGE} \
+            /bin/bash -c '\
+              cd ~; \
+              git clone https://github.com/fecgov/fecfile-web-app.git; \
+              cd fecfile-web-app/front-end; \
+              git checkout ${CIRCLE_BRANCH}; \
+              npm install; \
+              npm run e2e:smoke:headless;'
+    - run:
+        name: stage test result artifacts
+        when: always
+        command: |
+          rm -rf /tmp/cypress
+          mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+          docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
+          docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
+          docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
+          docker rm fecfile-web-app-e2e
+    - store_artifacts:
+        path: /tmp/cypress/results
+        destination: cypress/results
+    - store_artifacts:
+        path: /tmp/cypress/videos
+        destination: cypress/videos
+    - store_artifacts:
+        path: /tmp/cypress/screenshots
+        destination: cypress/screenshots
+    - store_artifacts:
+        path: /tmp/cypress/results/if-5xx
+        destination: cypress/results/if-5xx
+  deploy-even-if-e2e-job-fails:
+    docker:
+    - image: cimg/python:3.13.12
+    resource_class: large
+    steps:
+    - checkout
+    - run:
+        command: |-
+          # shellcheck disable=SC2016
+          echo 'if [ "${PARAM_PKG_MNGR}" = "auto" ]; then
+            if [ -f "requirements.txt" ]; then
+                if [ -f "${PARAM_SETUP_FILE_PATH:-setup.py}" ]; then
+                    export DETECT_PKG_MNGR="pip-dist"
+                else
+                    export DETECT_PKG_MNGR="pip"
+                fi
+                elif [ -f "Pipfile" ]; then
+                export DETECT_PKG_MNGR="pipenv"
+                export PYTHON_ENV_TOOL="pipenv"
+                elif [ -f "uv.lock" ]; then
+                export DETECT_PKG_MNGR="uv"
+                export PYTHON_ENV_TOOL="uv"
+                elif [ -f "pyproject.toml" ]; then
+                export DETECT_PKG_MNGR="poetry"
+                export PYTHON_ENV_TOOL="poetry"
+            fi
+            echo "INFO: Detected Package Manager ${DETECT_PKG_MNGR}"
+          fi' > /tmp/detect-env.sh
+          chmod +x /tmp/detect-env.sh
+          echo 'export AUTO_DETECT_ENV_SCRIPT="/tmp/detect-env.sh"' >> "$BASH_ENV"
+        name: Export automatic environment detection script
+    - run:
+        command: |-
+          if [ ! "${BASH_ENV_PYTHON_ALIASED}" ]; then
+              echo 'if [ ! $(command -v python) ]; then
+            shopt -s expand_aliases
+            alias python=python3
+            alias pip=pip3
+          fi
+
+          BASH_ENV_PYTHON_ALIASED=true' >> "$BASH_ENV"
+          fi
+        name: Alias Python
+    - run:
+        command: "eval \"$SCRIPT_UTILS\"\n# shellcheck source=detect-env.sh\nsource \"$AUTO_DETECT_ENV_SCRIPT\"\nPARAM_CACHE_FOLDER_PREFIX=\"$(echo \"$PARAM_CACHE_FOLDER_PREFIX\" | circleci env subst)\"\ndetect_os\nif [[ \"$PARAM_CACHE_FOLDER_PREFIX\" == /* ]]; then\n    if [[ \"$PLATFORM\" == \"windows\" ]]; then\n        CACHE_PREFIX=\"/c$PARAM_CACHE_FOLDER_PREFIX\"\n    else\n        CACHE_PREFIX=\"$PARAM_CACHE_FOLDER_PREFIX\"\n    fi\n\nelse\n    CACHE_PREFIX=\"${PWD%/\"$PARAM_APP_DIR\"}/$PARAM_CACHE_FOLDER_PREFIX\"\nfi\n\n    LOCKFILE_PATH=\"${CACHE_PREFIX%/}/.cci_pycache/lockfile\"\nmkdir -p \"${CACHE_PREFIX}/.cci_pycache/\"\n\nif [ ! -f \"${LOCKFILE_PATH}\" ]; then\n    case ${DETECT_PKG_MNGR:-${PARAM_PKG_MNGR}} in\n        pip | pip-dist)\n            LOCK_FILE=\"${PARAM_DEPENDENCY_FILE:-requirements.txt}\"\n        ;;\n        pipenv)\n            LOCK_FILE=\"Pipfile.lock\"\n        ;;\n        poetry)\n            LOCK_FILE=\"poetry.lock\"\n        ;;\n        uv)\n            LOCK_FILE=\"uv.lock\"\n        ;;\n    esac\n    \n    if [ -z \"${LOCK_FILE}\" ]; then\n        echo \"WARNING: Could not determine lockfile path for ${DETECT_PKG_MNGR:-PARAM_PKG_MNGR}\"\n    else\n        FULL_LOCK_FILE=$(readlink -f \"${LOCK_FILE}\")\n\n        if [ -f \"${LOCK_FILE}\" ]; then\n            echo \"INFO: Copying ${FULL_LOCK_FILE} to ${LOCKFILE_PATH}\"\n            cp \"${FULL_LOCK_FILE}\" \"${LOCKFILE_PATH}\"\n        else\n            echo \"WARNING: Could not find lockfile at ${LOCK_FILE}\"\n        fi\n    fi\nfi"
+        environment:
+          PARAM_APP_DIR: ~/project/
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          PARAM_DEPENDENCY_FILE: requirements.txt
+          PARAM_PKG_MNGR: pip
+          PARAM_PYPI_CACHE: true
+          PARAM_VENV_CACHE: true
+          PARAM_VENV_PATH: ''
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Link lockfile
+        working_directory: ~/project/
+    - run:
+        command: |-
+          eval "$SCRIPT_UTILS"
+          detect_os
+          PARAM_CACHE_FOLDER_PREFIX="$(echo "$PARAM_CACHE_FOLDER_PREFIX" | circleci env subst)"
+
+          if [[ "$PARAM_CACHE_FOLDER_PREFIX" == /* ]]; then
+              if [[ "$PLATFORM" == "windows" ]]; then
+                  CACHE_PREFIX="/c$PARAM_CACHE_FOLDER_PREFIX"
+              else
+                  CACHE_PREFIX="$PARAM_CACHE_FOLDER_PREFIX"
+              fi
+
+          else
+              CACHE_PREFIX="${PWD%/"$PARAM_APP_DIR"}/$PARAM_CACHE_FOLDER_PREFIX"
+          fi
+
+          CACHE_DIR="${CACHE_PREFIX%/}/.temp-python-version"
+          mkdir -p "${CACHE_PREFIX}"
+          echo "INFO: Copying python version to ${CACHE_DIR}"
+          python --version | cut -d ' ' -f2 > "$CACHE_DIR" && cat "$CACHE_DIR"
+        environment:
+          PARAM_APP_DIR: ~/project/
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Save python version
+        working_directory: ~/project/
+    - restore_cache:
+        keys:
+        - v1-cci_pycache-{{ .Branch }}-{{ checksum "/tmp/cache/.temp-python-version" }}-{{ checksum "/tmp/cache/.cci_pycache/lockfile" }}
+        - v1-cci_pycache-{{ .Branch }}-{{ checksum "/tmp/cache/.temp-python-version" }}-
+    - run:
+        command: "eval \"$SCRIPT_UTILS\"\ndetect_os\n\nrecurse() {\n    if [ ! -d \"$1\" ] || [ ! -e \"$2\" ]; then\n        mv -u \"$1\" \"$2\" || exit\n        return\n    fi\n    for entry in \"$1/\"* \"$1/.\"[!.]* \"$1/..\"?*; do\n        if [ -e \"$entry\" ]; then\n            recurse \"$entry\" \"$2/${entry##\"$1/\"}\"\n        fi\n    done\n}\n\nrestore_paths() {\n    if [ -d \"${1}\" ] && [ -n \"$(ls -A \"${1}\" 2>/dev/null)\" ]; then\n        for file in \"${1}\"/*; do\n            decoded=$(basename \"${file}\" | base64 -d)\n            parent_dir=$(dirname \"${decoded}\")\n            \n            # make sure the parent directories exist\n            if [ ! -d \"${parent_dir}\" ]; then\n                mkdir -p \"${parent_dir}\"\n            fi\n            \n            echo \"INFO: Restoring ${file} to ${decoded}\"\n\n            recurse \"${file}\" \"${decoded}\"\n        done\n    fi\n}\nPARAM_CACHE_FOLDER_PREFIX=\"$(echo \"$PARAM_CACHE_FOLDER_PREFIX\" | circleci env subst)\"\n\nif [[ \"$PARAM_CACHE_FOLDER_PREFIX\" == /* ]]; then\n    if [[ \"$PLATFORM\" == \"windows\" ]]; then\n        CACHE_PREFIX=\"/c$PARAM_CACHE_FOLDER_PREFIX\"\n    else\n        CACHE_PREFIX=\"$PARAM_CACHE_FOLDER_PREFIX\"\n    fi\n\nelse\n    CACHE_PREFIX=\"${PWD%/\"$PARAM_APP_DIR\"}/$PARAM_CACHE_FOLDER_PREFIX\"\nfi\n\nCACHE_DIR=\"${CACHE_PREFIX%/}/.cci_pycache\"\n\nif [ \"${PARAM_VENV_CACHE}\" = \"1\" ]; then\n    restore_paths \"${CACHE_DIR}/venv\"\nfi\n\nif [ \"${PARAM_PYPI_CACHE}\" = \"1\" ]; then\n    restore_paths \"${CACHE_DIR}/pypi\"\nfi"
+        environment:
+          PARAM_APP_SRC_DIR: ~/project/
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          PARAM_PYPI_CACHE: true
+          PARAM_VENV_CACHE: true
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Move restored cache
+        working_directory: ~/project/
+    - run:
+        command: "pip install -r requirements.txt \n"
+        name: Install dependencies with pip using project requirements.txt
+        no_output_timeout: 10m
+        working_directory: ~/project/
+    - run:
+        command: "# shellcheck source=detect-env.sh\neval \"$SCRIPT_UTILS\"\ndetect_os\nsource \"$AUTO_DETECT_ENV_SCRIPT\"\n\ncase ${DETECT_PKG_MNGR:-${PARAM_PKG_MNGR}} in\n    pip | pip-dist)\n        LOCK_FILE=\"${PARAM_DEPENDENCY_FILE:-requirements.txt}\"\n        CACHE_PATHS='[ \"/home/circleci/.cache/pip\", \"/home/circleci/.pyenv/versions\", \"/home/circleci/.local/lib\" ]'\n    ;;\n    pipenv) \n        # TODO: use PIPENV_PIPFILE\n        LOCK_FILE=\"Pipfile.lock\"\n        PIPENV_VENV_PATH=\"${WORKON_HOME:-/home/circleci/.local/share/virtualenvs}\"\n        \n        if [ -z \"${PIPENV_VENV_IN_PROJECT}\" ]; then\n            VENV_PATHS=\"[ \\\"${PIPENV_VENV_PATH}\\\" ]\"\n        else\n            VENV_PATHS=\"[ \\\"${CIRCLE_WORKING_DIRECTORY}/.venvs\\\" ]\"\n        fi\n        \n        CACHE_PATHS='[ \"/home/circleci/.cache/pip\", \"/home/circleci/.cache/pipenv\" ]'\n    ;;\n    poetry)\n        LOCK_FILE=\"poetry.lock\"\n        VENV_PATHS='[ \"/home/circleci/.cache/pypoetry/virtualenvs\" ]'\n        CACHE_PATHS='[ \"/home/circleci/.cache/pip\" ]'\n    ;;\n    uv)\n        LOCK_FILE=\"uv.lock\"\n        VENV_PATHS=\"[ \\\"${CIRCLE_WORKING_DIRECTORY}/.venv\\\" ]\"\n        CACHE_PATHS='[ \"/home/circleci/.cache/uv\" ]'\n    ;;\nesac\n\nif [ -n \"${PARAM_VENV_PATH}\" ]; then\n    VENV_PATHS=\"${PARAM_VENV_PATH}\"\nfi\nPARAM_CACHE_FOLDER_PREFIX=\"$(echo \"$PARAM_CACHE_FOLDER_PREFIX\" | circleci env subst)\"\n\nif [[ \"$PARAM_CACHE_FOLDER_PREFIX\" == /* ]]; then\n    if [[ \"$PLATFORM\" == \"windows\" ]]; then\n        CACHE_PREFIX=\"/c$PARAM_CACHE_FOLDER_PREFIX\"\n    else\n        CACHE_PREFIX=\"$PARAM_CACHE_FOLDER_PREFIX\"\n    fi\n\nelse\n    CACHE_PREFIX=\"${PWD%/\"$PARAM_APP_DIR\"}/$PARAM_CACHE_FOLDER_PREFIX\"\nfi\n\nCACHE_DIR=\"${CACHE_PREFIX%/}/.cci_pycache\"\nmkdir -p \"${CACHE_DIR}\"\n\nlink_paths() {\n    if [ -d \"${1}\" ]; then\n        echo \"INFO: Cache directory already exists. Deleting...\"\n        rm -r \"${1}\"\n        # return\n    fi\n    \n    mkdir \"${1}\"\n    \n    for encoded in $(echo \"${2}\" | jq -r '.[] | @base64'); do\n        decoded=$(echo \"${encoded}\" | tr -d '\\r' | base64 -d)\n        \n        if [ -e \"${decoded}\" ]; then\n            echo \"INFO: Copying ${decoded} to ${1}/${encoded}\"\n            cp -a \"${decoded}\" \"${1}/${encoded}\"\n        else\n            echo \"INFO: Could not find ${decoded}. Skipping...\"\n        fi\n    done\n}\n\nif [ \"${PARAM_VENV_CACHE}\" = \"1\" ] && [ -n \"${VENV_PATHS}\" ]; then\n    link_paths \"${CACHE_DIR}/venv\" \"${VENV_PATHS}\"\nfi\n\nif [ \"${PARAM_PYPI_CACHE}\" = \"1\" ]; then\n    link_paths \"${CACHE_DIR}/pypi\" \"${CACHE_PATHS}\"\nfi\n\nLOCKFILE_PATH=\"${CACHE_DIR}/lockfile\"\n\nif [ -e \"${LOCKFILE_PATH}\" ]; then\n    rm -f \"${LOCKFILE_PATH}\"\nfi\n\nif [ -e \"${LOCK_FILE}\" ]; then\n    FULL_LOCK_FILE=$(readlink -f \"${LOCK_FILE}\")\n    \n    echo \"INFO: Copying ${FULL_LOCK_FILE} to ${LOCKFILE_PATH}\"\n    cp \"${FULL_LOCK_FILE}\" \"${LOCKFILE_PATH}\"\nfi\n"
+        environment:
+          PARAM_APP_SRC_DIR: ~/project/
+          PARAM_CACHE_FOLDER_PREFIX: /tmp/cache
+          PARAM_DEPENDENCY_FILE: requirements.txt
+          PARAM_PKG_MNGR: pip
+          PARAM_PYPI_CACHE: true
+          PARAM_VENV_CACHE: true
+          PARAM_VENV_PATH: ''
+          SCRIPT_UTILS: |-
+            detect_os() {
+              detected_platform="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+              case "$detected_platform" in
+                linux*)
+                  export PLATFORM=linux
+                  ;;
+                darwin*)
+                  export PLATFORM=macos
+                  ;;
+                msys*|cygwin*)
+                  export PLATFORM=windows
+                  ;;
+                *)
+                  printf '%s\n' "Unsupported OS: \"$detected_platform\"."
+                  exit 1
+                  ;;
+              esac
+            }
+        name: Copy to cache directory
+        working_directory: ~/project/
+    - save_cache:
+        key: v1-cci_pycache-{{ .Branch }}-{{ checksum "/tmp/cache/.temp-python-version" }}-{{ checksum "/tmp/cache/.cci_pycache/lockfile" }}
+        paths:
+        - /tmp/cache/.cci_pycache
+    - run:
+        name: Install cf cli
+        command: |
+          mkdir -p $HOME/bin
+          export PATH=$HOME/bin:$PATH
+          curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=8.12.0" | tar xzv -C $HOME/bin
+    - run:
+        name: run deploy script
+        no_output_timeout: 15m
+        command: |
+          export PATH=$HOME/bin:$PATH
+          invoke deploy --branch $CIRCLE_BRANCH --login
+workflows:
+  primary:
+    jobs:
+    - lint
+    - test
+    - dependency-check
+    - e2e-smoke:
+        filters:
+          branches:
+            only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+    - deploy-even-if-e2e-job-fails:
+        filters:
+          branches:
+            only: /develop|release\/sprint-[\.\d]+|release\/test|main/
+        requires:
+        - lint
+        - test
+        - dependency-check
+        upstream:
+          lint:
+          - success
+          test:
+          - success
+          dependency-check:
+          - success
+  version: 2

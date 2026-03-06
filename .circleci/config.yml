@@ -4,9 +4,12 @@ version: 2.1
 
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
-  browser-tools: circleci/browser-tools@2.2.1
-  node: circleci/node@7.1.1
-  python: circleci/python@3.2.0
+  browser-tools: circleci/browser-tools@2.4.0
+  node: circleci/node@7.2.1
+  python: circleci/python@4.0.0
+  # Pinned for version tracking and future adoption; current e2e execution
+  # still runs manually inside a separate Docker container on the API network.
+  cypress: cypress-io/cypress@6.0.0
 
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
@@ -14,6 +17,7 @@ commands:
     description: "Setup and start fecfile-web-api for E2E tests"
     steps:
       - setup_remote_docker:
+          version: docker24
           docker_layer_caching: false
       - run:
           name: clone fecfile-web-api
@@ -44,7 +48,7 @@ commands:
             docker-compose up --build -d
 
             docker container run --network container:fecfile-api-proxy \
-              docker.io/jwilder/dockerize \
+              docker.io/jwilder/dockerize:v0.10.0 \
               -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
               -timeout 60s;
@@ -52,9 +56,11 @@ commands:
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  # Node 24.14.0 is compatible with Angular 20 and keeps CI ready for the
+  # separate Angular 21 upgrade ticket and a later Angular 22 move.
   lint:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: &node24_browsers_image cimg/node:24.14.0-browsers
     resource_class: large
     steps:
       - checkout
@@ -80,12 +86,15 @@ jobs:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
-      - image: cimg/node:lts-browsers
+      - image: *node24_browsers_image
     resource_class: large
     steps:
       - checkout:
           method: full
-      - browser-tools/install_chrome
+      - browser-tools/install_chrome:
+          replace_existing: true
+          chrome_version: "145.0.7632.116-1"
+          channel: stable
       - browser-tools/install_chromedriver
       - run:
           command: |
@@ -101,7 +110,7 @@ jobs:
 
       - run:
           name: run unit tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
+          command: npm run test:ci
           working_directory: ~/project/front-end/
 
       - store_artifacts:
@@ -145,13 +154,14 @@ jobs:
 
   e2e-smoke:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: *node24_browsers_image
     parameters:
       video:
         type: boolean
         default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
+      CYPRESS_BROWSER_IMAGE: &cypress_browser_image cypress/browsers:node-24.14.0-chrome-145.0.7632.116-1-ff-148.0-edge-145.0.3800.70-1
     steps:
       - spin-up-api-containers
       - run:
@@ -165,14 +175,14 @@ jobs:
               -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
               -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
-              cypress/browsers:latest \
+              ${CYPRESS_BROWSER_IMAGE} \
               /bin/bash -c '\
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'
+                npm run e2e:smoke:headless;'
       - run:
           name: stage test result artifacts
           when: always
@@ -199,13 +209,14 @@ jobs:
   # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: *node24_browsers_image
     parameters:
       video:
         type: boolean
         default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
+      CYPRESS_BROWSER_IMAGE: *cypress_browser_image
     steps:
       - spin-up-api-containers
       - run:
@@ -219,14 +230,14 @@ jobs:
               -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
               -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
-              cypress/browsers:latest \
+              ${CYPRESS_BROWSER_IMAGE} \
               /bin/bash -c '\
                 cd ~; \
                 git clone https://github.com/fecgov/fecfile-web-app.git; \
                 cd fecfile-web-app/front-end; \
                 git checkout ${CIRCLE_BRANCH}; \
                 npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'
+                npm run e2e:extended:headless;'
       - run:
           name: stage test result artifacts
           when: always
@@ -252,7 +263,7 @@ jobs:
 
   deploy-job:
     docker:
-      - image: cimg/python:3.13-node
+      - image: &python313_image cimg/python:3.13.12
     resource_class: large
     steps:
       - checkout
@@ -278,10 +289,12 @@ jobs:
 
   dependency-check:
     docker:
-      - image: cimg/python:3.13-node
+      - image: *python313_image
 
     steps:
       - checkout
+      - node/install:
+          node-version: "24.14.0"
 
       # If we need to modify the params for install-packages:
       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
