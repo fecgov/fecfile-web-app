@@ -57,6 +57,6 @@ You may need to add `sudo` in front of local Docker-backed CircleCI commands if
 your machine requires it.
 
 ```
-sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} --job e2e-smoke
-sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} --job e2e-extended
+sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} e2e-smoke
+sudo circleci local execute -e CIRCLE_BRANCH=${CIRCLE_BRANCH} e2e-extended
 ```
