@@ -36,4 +36,3 @@
     },
     "exclude": ["./cypress.config.ts"]
 }
-

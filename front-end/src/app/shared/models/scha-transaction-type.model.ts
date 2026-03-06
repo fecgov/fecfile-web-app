@@ -8,6 +8,9 @@ export abstract class SchATransactionType extends TransactionType {
   override dateLabel = 'DATE RECEIVED';
   override amountInputHeader = 'Receipt information';
   override purposeDescripLabel = 'PURPOSE OF RECEIPT';
+  override get isReattributable() {
+    return !this.negativeAmountValueOnly;
+  }
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {

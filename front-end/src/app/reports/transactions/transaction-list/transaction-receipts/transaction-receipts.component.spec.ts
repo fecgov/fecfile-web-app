@@ -2,6 +2,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getTestIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
@@ -15,6 +16,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { ScheduleATransactionTypes } from 'app/shared/models';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -22,6 +26,7 @@ describe('TransactionReceiptsComponent', () => {
   let router: Router;
   let testItemService: TransactionSchAService;
   let testConfirmationService: ConfirmationService;
+  let selectSignalSpy: jasmine.Spy;
   let confirmSpy: jasmine.Spy;
 
   beforeEach(async () => {
@@ -49,6 +54,8 @@ describe('TransactionReceiptsComponent', () => {
         TransactionSchAService,
       ],
     }).compileComponents();
+    const store = TestBed.inject(Store);
+    selectSignalSpy = spyOn(store, 'selectSignal').and.callThrough();
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
@@ -68,9 +75,29 @@ describe('TransactionReceiptsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('uses report id equality comparator when selecting active report', () => {
+    const signalCall = selectSignalSpy.calls
+      .allArgs()
+      .find(
+        ([selector, options]) =>
+          selector === selectActiveReport && typeof (options as { equal?: unknown } | undefined)?.equal === 'function',
+      );
+    expect(signalCall).toBeDefined();
+
+    const options = signalCall?.[1] as {
+      equal: (a: { id?: string } | undefined, b: { id?: string } | undefined) => boolean;
+    };
+    const equalByReportId = options.equal;
+
+    expect(equalByReportId({ id: 'same-id' }, { id: 'same-id' })).toBeTrue();
+    expect(equalByReportId({ id: 'left-id' }, { id: 'right-id' })).toBeFalse();
+    expect(equalByReportId(undefined, { id: 'present' })).toBeFalse();
+    expect(equalByReportId(undefined, undefined)).toBeTrue();
+  });
+
   it('should show the correct row actions', () => {
-    const transaction = {
-      ...getTestIndividualReceipt(),
+    const baseReceipt = getTestIndividualReceipt();
+    const transaction = Object.assign(baseReceipt, {
       name: 'TEST',
       date: new Date(),
       amount: 100,
@@ -80,7 +107,7 @@ describe('TransactionReceiptsComponent', () => {
       can_delete: true,
       force_unaggregated: true,
       report_type: 'Form 3X',
-    } as unknown as TransactionListRecord;
+    }) as unknown as TransactionListRecord;
     const viewAction = component.rowActions.find((ra) => ra.label === 'View');
     const editAction = component.rowActions.find((ra) => ra.label === 'Edit');
     const aggregateAction = component.rowActions.find((ra) => ra.label === 'Aggregate');
@@ -164,7 +191,7 @@ describe('TransactionReceiptsComponent', () => {
       reattributeAction?.isAvailable({
         ...transaction,
         itemized: false,
-        transactionType: { ...transaction.transactionType, negativeAmountValueOnly: true },
+        transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_RETURN),
       } as TransactionListRecord),
     ).toEqual(false);
   });

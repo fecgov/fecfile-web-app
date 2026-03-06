@@ -19,6 +19,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   override readonly rowsPerPage = signal(5);
+  override readonly totalItems = signal(0);
 
   readonly sharedTemplate = viewChild.required(SharedTemplatesComponent<T>);
   readonly includeCoverage: boolean = false;
