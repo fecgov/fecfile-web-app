@@ -140,7 +140,7 @@ describe('ContactListComponent', () => {
     const rowContact = testContact();
     component.items.set([rowContact]);
     component.totalItems.set(1);
-    component.loading = false;
+    component.loading.set(false);
 
     fixture.detectChanges();
     await fixture.whenStable();

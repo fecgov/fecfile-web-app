@@ -5,10 +5,22 @@ import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testCommitteeAccount, testF24 } from 'app/shared/utils/unit-test.utils';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [CreateF24Component],
+  standalone: true,
+  template: `<app-create-f24 [visible]="visible" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(CreateF24Component);
+  visible = false;
+}
 
 describe('CreateF24Component', () => {
   let component: CreateF24Component;
-  let fixture: ComponentFixture<CreateF24Component>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
   let form24Service: jasmine.SpyObj<Form24Service>;
   let router: Router;
   beforeEach(async () => {
@@ -24,8 +36,9 @@ describe('CreateF24Component', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreateF24Component);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     form24Service = TestBed.inject(Form24Service) as jasmine.SpyObj<Form24Service>;
     router = TestBed.inject(Router);
     fixture.detectChanges();
