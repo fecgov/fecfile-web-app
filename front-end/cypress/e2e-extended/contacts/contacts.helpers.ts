@@ -596,44 +596,53 @@ export class ContactsHelpers {
       .find('table[role="table"]', { timeout: 15000 })
       .first()
       .should('exist')
-      .then(($table) => {
-        const typeIdx = getColIndexByThIdOrText($table, colIds.type, 'Type');
-        expect(typeIdx, 'Type column index').to.be.gte(0);
+      .as('transactionHistoryTable')
+      .then(() =>
+        cy
+          .get('@transactionHistoryTable')
+          .find('tbody tr', { timeout: 15000 })
+          .should(($rows) => {
+            expect($rows.length, 'transaction history row count').to.be.greaterThan(0);
+          }),
+      )
+      .then(() =>
+        cy.get('@transactionHistoryTable').then(($table) => {
+          const typeIdx = getColIndexByThIdOrText($table, colIds.type, 'Type');
+          expect(typeIdx, 'Type column index').to.be.gte(0);
 
-        const formIdx = row.form ? getColIndexByThIdOrText($table, colIds.form, 'Form') : -1;
-        const reportIdx = row.report ? getColIndexByThIdOrText($table, colIds.report, 'Report') : -1;
-        const dateIdx = row.date ? getColIndexByThIdOrText($table, colIds.date, 'Date') : -1;
-        const amountIdx =
-          row.amount === undefined
-            ? -1
-            : getColIndexByThIdOrText($table, colIds.amount, 'Amount');
+          const formIdx = row.form ? getColIndexByThIdOrText($table, colIds.form, 'Form') : -1;
+          const reportIdx = row.report ? getColIndexByThIdOrText($table, colIds.report, 'Report') : -1;
+          const dateIdx = row.date ? getColIndexByThIdOrText($table, colIds.date, 'Date') : -1;
+          const amountIdx =
+            row.amount === undefined
+              ? -1
+              : getColIndexByThIdOrText($table, colIds.amount, 'Amount');
 
-        const $rows = $table.find('tbody tr');
-        expect($rows.length, 'transaction history row count').to.be.greaterThan(0);
+          const $rows = $table.find('tbody tr');
+          const rowIndex = $rows.toArray().findIndex((tr) => {
+            const tds = Array.from(tr.querySelectorAll('td'));
+            const cell = tds[typeIdx];
+            return !!cell && typeRx.test(normalize(cell.textContent ?? ''));
+          });
 
-        const rowIndex = $rows.toArray().findIndex((tr) => {
-          const tds = Array.from(tr.querySelectorAll('td'));
-          const cell = tds[typeIdx];
-          return !!cell && typeRx.test(normalize(cell.textContent ?? ''));
-        });
+          expect(rowIndex, `row index for type ${typeRx}`).to.be.gte(0);
 
-        expect(rowIndex, `row index for type ${typeRx}`).to.be.gte(0);
+          const $row = $rows.eq(rowIndex);
+          const $tds = $row.find('td');
 
-        const $row = $rows.eq(rowIndex);
-        const $tds = $row.find('td');
+          const assertCell = (idx: number, rx: RegExp, label: string) => {
+            expect(idx, `${label} column index`).to.be.gte(0);
+            const text = normalize($tds.eq(idx).text());
+            expect(text, `${label} cell text`).to.match(rx);
+          };
 
-        const assertCell = (idx: number, rx: RegExp, label: string) => {
-          expect(idx, `${label} column index`).to.be.gte(0);
-          const text = normalize($tds.eq(idx).text());
-          expect(text, `${label} cell text`).to.match(rx);
-        };
-
-        assertCell(typeIdx, typeRx, 'Type');
-        if (formRx) assertCell(formIdx, formRx, 'Form');
-        if (reportRx) assertCell(reportIdx, reportRx, 'Report');
-        if (dateRx) assertCell(dateIdx, dateRx, 'Date');
-        if (amountRx) assertCell(amountIdx, amountRx, 'Amount');
-      })
+          assertCell(typeIdx, typeRx, 'Type');
+          if (formRx) assertCell(formIdx, formRx, 'Form');
+          if (reportRx) assertCell(reportIdx, reportRx, 'Report');
+          if (dateRx) assertCell(dateIdx, dateRx, 'Date');
+          if (amountRx) assertCell(amountIdx, amountRx, 'Amount');
+        }),
+      )
       .then(() => cy.wrap<void>(undefined, { log: false }));
   }
 

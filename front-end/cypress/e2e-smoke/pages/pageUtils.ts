@@ -140,37 +140,45 @@ export class PageUtils {
   }
 
   static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+    return PageUtils.clickSidebarItem(section);
   }
 
   static clickSidebarItem(menuItem: string) {
     const normalizedMenuItem = PageUtils.normalizeSidebarLabel(menuItem);
     const menuLabelSelector = '.p-panelmenu-header-label, .p-panelmenu-item-label';
-
-    const toMenuLink = ($label: JQuery<HTMLElement>): JQuery<HTMLElement> => {
-      const $link = $label.closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link');
-      expect($link.length, `sidebar link owner for "${menuItem}"`).to.eq(1);
-      return $link.first();
+    const findPanelMenu = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+      cy.get('p-panelmenu', { timeout: 15000 }).should('exist');
+    const nativeClick = ($link: JQuery<HTMLElement>, label: string) => {
+      expect($link.length, `${label} link count for "${menuItem}"`).to.eq(1);
+      const link = $link.get(0);
+      expect(link, `${label} link element for "${menuItem}"`).to.exist;
+      (link as HTMLElement).click();
     };
+    const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> =>
+      findMenuLink(visibleOnly)
+        .should('be.visible')
+        .then(($link) => nativeClick($link, label));
 
     const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => {
-      const selector = visibleOnly ? `${menuLabelSelector}:visible` : menuLabelSelector;
-      return cy
-        .get('p-panelmenu')
-        .find(selector)
-        .filter((_, label) => PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem)
+      return findPanelMenu()
+        .find(menuLabelSelector)
+        .filter(
+          (_, label) =>
+            PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem &&
+            (!visibleOnly || Cypress.dom.isVisible(label)),
+        )
         .should(($labels) => {
           expect(
             $labels.length,
             `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`,
           ).to.eq(1);
-        })
-        .first();
+        });
     };
 
     const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> =>
-      findMenuLabel(visibleOnly).then(($label) => cy.wrap(toMenuLink($label)));
+      findMenuLabel(visibleOnly)
+        .closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link')
+        .should('have.length', 1);
 
     const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> =>
       findMenuLabel(false).then(($candidateLabel) => {
@@ -184,43 +192,44 @@ export class PageUtils {
         expect(ownerPanelIndex, `owner sidebar panel index for "${menuItem}"`).to.be.greaterThan(-1);
 
         const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> =>
-          cy
-            .get('p-panelmenu')
+          findPanelMenu()
             .find('.p-panelmenu-panel')
             .eq(ownerPanelIndex)
             .find('> .p-panelmenu-header')
-            .should('have.length', 1)
-            .first();
+            .should('have.length', 1);
 
         return findOwnerHeader().then(($ownerHeader) => {
           if (PageUtils.isSidebarHeaderExpanded($ownerHeader)) {
             return findMenuLink(true);
           }
 
-          findOwnerHeader()
+          return findOwnerHeader()
             .find('a.p-panelmenu-header-link')
             .should('have.length', 1)
-            .first()
-            .click();
-
-          findOwnerHeader().should(($header) => {
-            expect(PageUtils.isSidebarHeaderExpanded($header), `owner sidebar header expanded for "${menuItem}"`).to.eq(
-              true,
-            );
-          });
-
-          return findMenuLink(true);
+            .should('be.visible')
+            .then(($link) => nativeClick($link, 'owner sidebar header'))
+            .then(() =>
+              findOwnerHeader().should(($header) => {
+                expect(
+                  PageUtils.isSidebarHeaderExpanded($header),
+                  `owner sidebar header expanded for "${menuItem}"`,
+                ).to.eq(true);
+              }),
+            )
+            .then(() => findMenuLink(true));
         });
       });
 
-    ensureVisibleMenuLink().then(($menuLink) => {
+    return ensureVisibleMenuLink().then(($menuLink) => {
       const isHeaderLink = $menuLink.hasClass('p-panelmenu-header-link');
       const $header = $menuLink.closest('.p-panelmenu-header');
       const shouldClick = !isHeaderLink || !PageUtils.isSidebarHeaderExpanded($header);
 
       if (shouldClick) {
-        findMenuLink(true).click();
+        return clickMenuLink(true, 'sidebar target');
       }
+
+      return cy.wrap(undefined, { log: false });
     });
   }
 
@@ -374,18 +383,30 @@ export class PageUtils {
     cy.contains('Welcome to FECfile+').should('not.exist');
   }
 
+  static getFilingPassword(): Cypress.Chainable<string> {
+    return cy.env<{ FILING_PASSWORD?: unknown }>(['FILING_PASSWORD']).then(({ FILING_PASSWORD }) => {
+      expect(FILING_PASSWORD, 'CYPRESS_FILING_PASSWORD').to.not.be.oneOf([undefined, null]);
+
+      const filingPassword = String(FILING_PASSWORD).trim();
+      expect(filingPassword, 'CYPRESS_FILING_PASSWORD').to.not.eq('');
+      return filingPassword;
+    });
+  }
+
   static submitReportForm() {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
-    cy.get(alias).find('[data-cy="userCertified"]').first().click();
-    PageUtils.clickButton('Submit');
-    PageUtils.findOnPage('div', 'Are you sure?');
-    PageUtils.clickButton('Confirm');
-    cy.wait('@SubmitReport');
+    return PageUtils.getFilingPassword().then((filingPassword) => {
+      PageUtils.enterValue('#filingPassword', filingPassword);
+      cy.get(alias).find('[data-cy="userCertified"]').first().click();
+      PageUtils.clickButton('Submit');
+      PageUtils.findOnPage('div', 'Are you sure?');
+      PageUtils.clickButton('Confirm');
+      cy.wait('@SubmitReport');
+    });
   }
 
   static readonly blurActiveField = () => {

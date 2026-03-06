@@ -53,7 +53,7 @@
 
 ## Frontend setup for E2E
 - Cypress `baseUrl` is `http://localhost:4200` and is set in `cypress.config.ts`.
-- Report submission helpers read `Cypress.env('FILING_PASSWORD')`. To supply it locally, set `CYPRESS_FILING_PASSWORD` before running Cypress.
+- Report submission helpers read the Cypress `FILING_PASSWORD` env var via `cy.env()`. To supply it locally, set `CYPRESS_FILING_PASSWORD` before running Cypress.
 
 ### Env var tips (.env, .zshrc)
 - Local one-off (current shell):

@@ -68,11 +68,13 @@ export class ReportListPage {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickSidebarItem('Submit report');
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('#filingPassword').type(''); // Insert password from env variable
-    cy.get(alias).find('.p-checkbox').click();
-    PageUtils.clickButton('Submit');
-    PageUtils.clickButton('Yes');
-    ReportListPage.goToPage();
+    return PageUtils.getFilingPassword().then((filingPassword) => {
+      PageUtils.enterValue('#filingPassword', filingPassword, alias);
+      cy.get(alias).find('.p-checkbox').click();
+      PageUtils.clickButton('Submit');
+      PageUtils.clickButton('Yes');
+      ReportListPage.goToPage();
+    });
   }
 
   static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {

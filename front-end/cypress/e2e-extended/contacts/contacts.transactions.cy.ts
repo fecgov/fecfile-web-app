@@ -552,7 +552,10 @@ describe('Contacts: Transactions integration', () => {
           cy.get('td').eq(4).should('contain.text', newOccupation);
         });
 
-      cy.intercept('GET', '**/api/v1/transactions/?**contact=*').as('getContactTxns');
+      cy.intercept(
+        'GET',
+        '**/api/v1/transactions/?page=1&ordering=transaction_type_identifier&page_size=5&contact=*',
+      ).as('getContactTxns');
       PageUtils.clickKababItem(displayName, 'Edit');
       cy.contains(/Edit Contact/i).should('exist');
 

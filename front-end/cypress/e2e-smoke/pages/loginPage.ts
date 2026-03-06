@@ -55,7 +55,10 @@ function getLoginIntervalString(sessionDur: number): string {
 
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
+  cy.intercept({
+    method: 'GET',
+    pathname: '/api/v1/oidc/authenticate',
+  }).as('GetLoggedIn');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
