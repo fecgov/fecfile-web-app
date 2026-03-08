@@ -4,6 +4,7 @@ import {
   Committee_A,
   Individual_A_A,
   Individual_B_B,
+  cloneSetupContact,
   MockContact,
   Organization_A,
 } from '../requests/library/contacts';
@@ -25,7 +26,7 @@ export interface Setup {
 type ConType = 'organization' | 'individual' | 'individual2' | 'candidate' | 'candidateSenate' | 'committee';
 function addContact(contact: MockContact, results: Results, property: ConType) {
   return new Cypress.Promise((resolve) => {
-    makeContact(contact, (response) => {
+    makeContact(cloneSetupContact(contact), (response) => {
       results[property] = response.body;
       resolve();
     });

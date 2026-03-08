@@ -49,7 +49,7 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(individual.last_name);
 
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
       scheduleData.date_received = new Date(currentYear, 4 - 1, 27);
       cy.get('tr').should('contain', 'Individual Receipt');
       cy.get('tr').should('contain', 'Unitemized');
@@ -66,7 +66,7 @@ describe('Receipt Transactions', () => {
 
       // Check for regression on date error
       cy.get('#contribution_date').clear();
-      PageUtils.clickButton('Save'); // Triggers errors to show
+      PageUtils.clickSaveButton('navigation-control'); // triggers errors to show
       cy.get('app-calendar').should('exist').should('contain', 'This is a required field.');
     });
   });
@@ -87,7 +87,7 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(individual.last_name);
 
       TransactionDetailPage.enterScheduleFormData(negativeAmountFormData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
 
       cy.get('tr').should('contain', 'Returned/Bounced Receipt');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -129,7 +129,7 @@ describe('Receipt Transactions', () => {
       // Create memo transaction
       cy.contains('h1', 'Partnership Attribution').should('exist');
       ContactLookup.getContact(individual.first_name);
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
       const memoFormTransactionData = {
         ...formTransactionDataForSchedule,
         memo_code: true,
@@ -138,7 +138,7 @@ describe('Receipt Transactions', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      PageUtils.clickSaveButton('navigation-control');
 
       // Create a second memo transaction so we can check the aggregate value
       cy.contains('Transactions in this report').should('exist');
@@ -149,7 +149,7 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(individual.last_name);
       TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
 
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      PageUtils.clickSaveButton('navigation-control');
 
       // Assert transaction list table is correct
       checkTable(0, 'Partnership Receipt', false, '$200.01');
@@ -202,7 +202,7 @@ describe('Receipt Transactions', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(localFormTransactionData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
 
       cy.get('tr').should('contain', 'Party Receipt');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -233,7 +233,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
 
       cy.get('tr').should('contain', 'Refund of Contribution to Other Political Committee');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -286,7 +286,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save both transactions');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -374,7 +374,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save both transactions');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -470,7 +470,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(tier3TransactionData, false, '', true, 'contribution_date');
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      PageUtils.clickSaveButton('navigation-control');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');

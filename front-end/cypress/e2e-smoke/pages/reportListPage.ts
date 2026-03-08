@@ -1,6 +1,7 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
+import { getNormalizedFilingPassword } from '../../support/filing-password';
 
 export class ReportListPage {
   static goToPage() {
@@ -68,11 +69,13 @@ export class ReportListPage {
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickSidebarItem('Submit report');
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('#filingPassword').type(''); // Insert password from env variable
-    cy.get(alias).find('.p-checkbox').click();
-    PageUtils.clickButton('Submit');
-    PageUtils.clickButton('Yes');
-    ReportListPage.goToPage();
+    return getNormalizedFilingPassword().then((filingPassword) => {
+      cy.get(alias).find('#filingPassword').type(filingPassword);
+      cy.get(alias).find('.p-checkbox').click();
+      PageUtils.clickButton('Submit');
+      PageUtils.clickButton('Yes');
+      ReportListPage.goToPage();
+    });
   }
 
   static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {

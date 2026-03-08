@@ -15,11 +15,6 @@ export class LoginPage {
         cacheAcrossSpecs: true,
       },
     );
-
-    //Retrieve the AUTH TOKEN from the created/restored session
-    cy.then(() => {
-      Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
-    });
   }
 }
 
@@ -85,18 +80,12 @@ function loginDotGovLogin() {
         cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
         cy.wrap($email).should('have.value', 'admin@admin.com');
         cy.wrap($email).click();
-        PageUtils.clickButton('Save');
+        PageUtils.clickSaveButton('second-committee-admin-dialog');
 
         cy.get(alias).find('.p-toast-close-button').click();
       }
     });
   cy.contains('Welcome to FECfile+').should('not.exist');
-}
-
-function retrieveAuthToken() {
-  const storedData = localStorage.getItem('fecfile_online_userLoginData');
-  const loginData = JSON.parse(storedData ?? '');
-  return 'JWT ' + loginData.token;
 }
 
 export function Initialize() {

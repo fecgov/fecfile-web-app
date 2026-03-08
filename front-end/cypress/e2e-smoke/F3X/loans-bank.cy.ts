@@ -29,13 +29,17 @@ const formData = {
 
 function clickLoan(button: string, urlCheck = '/list') {
   cy.contains('Loan Received from Bank').last().should('exist');
-  const alias = PageUtils.getAlias('');
-  cy.get(alias)
-    .find("[datatest='" + 'loans-and-debts-button' + "']")
-    .children()
-    .last()
-    .click();
-  cy.contains(button).click({ force: true });
+  if (button === 'Edit') {
+    PageUtils.clickKababItem('Loan Received from Bank', button);
+  } else {
+    const alias = PageUtils.getAlias('');
+    cy.get(alias)
+      .find("[datatest='" + 'loans-and-debts-button' + "']")
+      .children()
+      .last()
+      .click();
+    cy.contains(button).click({ force: true });
+  }
   PageUtils.urlCheck(urlCheck);
 }
 
@@ -129,7 +133,7 @@ function handleLoanAgreementSetup(q3: string) {
       method: 'Post',
     }).as('saveNewAgreement');
 
-    PageUtils.clickButton('Save', '', true);
+    PageUtils.clickSaveButton('navigation-control', true);
     cy.wait('@saveNewAgreement');
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
@@ -211,25 +215,19 @@ describe('Loans', () => {
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
       ReportListPage.goToReportList(result.report);
-      cy.intercept(
-        'GET',
-        /\/api\/v1\/transactions\/\?(?=.*parent=)(?=.*schedules=C2).*/
-      ).as('GetC2List');
-      clickLoan('Edit');
+      clickLoan('Edit', '/list/');
 
-      // wait for form to be done (load c2 table)
-      cy.wait('@GetC2List', { timeout: 15000 });
       cy.get('.p-datatable-mask').should('not.exist');
 
       // go to create guarantor
       cy.intercept('PUT', '**/api/v1/transactions/**').as('saveAddGuarantor')
-      cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
+      cy.contains('button:visible', 'Save & add loan guarantor').should('be.enabled').click();
       cy.wait('@saveAddGuarantor', { timeout: 15000 });
       cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);
-      clickLoan('Edit');
+      clickLoan('Edit', '/list/');
       cy.contains('ORGANIZATION NAME').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);
     });

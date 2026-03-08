@@ -4,10 +4,17 @@ import { setupA11yNodeEvents } from './cypress.a11y';
 import { CypressConfigHelper } from './cypress/cypress.config.helpers.ts';
 
 const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS_VIDEO);
+const failOn5xxDefaults = CypressConfigHelper.failOn5xxDefaults;
 
 export default defineConfig({
+  allowCypressEnv: false,
   env: {
-    ...CypressConfigHelper.failOn5xxDefaults,
+    FILING_PASSWORD: CypressConfigHelper.resolveFilingPassword(process.env.CYPRESS_FILING_PASSWORD),
+    ...failOn5xxDefaults,
+  },
+  expose: {
+    ...failOn5xxDefaults,
+    RUN_LINKED_DELETE_API_TEST: process.env.CYPRESS_RUN_LINKED_DELETE_API_TEST,
   },
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',

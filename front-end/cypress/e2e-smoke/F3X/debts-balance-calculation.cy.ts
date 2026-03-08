@@ -33,7 +33,7 @@ describe('Debt Balance at Close Calculation', () => {
       // Verify balance_at_close was calculated during form entry: 0 + 3000 - 0 = 3000
       cy.get('#balance_at_close').should('have.value', '$3,000.00');
       
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
 
       // Navigate back to verify the saved debt and then edit it
       ReportListPage.goToReportList(result.report);
@@ -78,7 +78,7 @@ describe('Debt Balance at Close Calculation', () => {
       // Verify initial balance_at_close = 0 + 5000 - 0 = 5000
       cy.get('#balance_at_close').should('have.value', '$5,000.00');
       
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
 
       // Navigate back and edit the debt
       ReportListPage.goToReportList(result.report);

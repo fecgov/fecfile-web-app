@@ -149,6 +149,6 @@ export class ContactListPage {
     PageUtils.clickButton('Add contact');
     cy.wait(150);
     ContactListPage.enterFormData(fd);
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
   }
 }

@@ -384,7 +384,7 @@ describe('Contacts Edit', () => {
     cy.get('#employer').clear().type(newEmployer);
     cy.get('#occupation').clear().type(newOccupation);
 
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
     ContactsHelpers.assertAndContinueConfirmModal(oldDisplay, [
       `Updated last name to ${newLast}`,
       `Updated first name to ${newFirst}`,
@@ -637,7 +637,7 @@ describe('Contacts Edit', () => {
     cy.get('#zip').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
     ContactsHelpers.assertAndContinueConfirmModal(committeeDisplayName, [
       `Updated street address to ${newStreet1}`,
       `Updated apartment, suite, etc. to ${newStreet2}`,
@@ -725,7 +725,7 @@ describe('Contacts Edit', () => {
 
     cy.get('#name').clear().type(newName);
 
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
     ContactsHelpers.assertAndContinueConfirmModal(organizationDisplayName, [
       `Updated street address to ${newStreet1}`,
       `Updated apartment, suite, etc. to ${newStreet2}`,

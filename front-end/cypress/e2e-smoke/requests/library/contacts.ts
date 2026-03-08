@@ -187,3 +187,42 @@ export interface MockContact {
   country: string;
   telephone: string | null;
 }
+
+const SETUP_CONTACT_ID_SEED = Date.now();
+let setupContactIdCounter = 0;
+
+function nextSetupDigits(length: number) {
+  setupContactIdCounter += 1;
+  const max = 10 ** length;
+  const value = (SETUP_CONTACT_ID_SEED + setupContactIdCounter) % max;
+  return String(value).padStart(length, '0');
+}
+
+function uniqueCandidateId(candidateId: string) {
+  if (/^[HS]\d[A-Z]{2}\d{5}$/.test(candidateId)) {
+    return `${candidateId.slice(0, 4)}${nextSetupDigits(5)}`;
+  }
+
+  if (/^P\d{8}$/.test(candidateId)) {
+    return `P${nextSetupDigits(8)}`;
+  }
+
+  return candidateId;
+}
+
+function uniqueCommitteeId(committeeId: string) {
+  if (/^C\d{8}$/.test(committeeId)) {
+    return `C${nextSetupDigits(8)}`;
+  }
+
+  return committeeId;
+}
+
+// Clone seeded setup contacts so backend-unique FEC ids do not collide across runs.
+export function cloneSetupContact(contact: MockContact): MockContact {
+  return {
+    ...contact,
+    candidate_id: contact.candidate_id ? uniqueCandidateId(contact.candidate_id) : contact.candidate_id,
+    committee_id: contact.committee_id ? uniqueCommitteeId(contact.committee_id) : contact.committee_id,
+  };
+}

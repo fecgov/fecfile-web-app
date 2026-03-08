@@ -100,13 +100,13 @@ describe('Contacts Add (/contacts)', () => {
       last_name: 'Bad',
       first_name: 'Candidate',
     });
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
     cy.get('#candidate_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
     PageUtils.clickButton('Cancel');
-    cy.contains('Save').should('not.exist');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
 
     PageUtils.clickButton('Add contact');
     ContactListPage.enterFormData({
@@ -115,13 +115,13 @@ describe('Contacts Add (/contacts)', () => {
       committee_id: 'X123', // invalid format
       name: 'Bad Committee',
     });
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
     cy.get('#committee_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
     PageUtils.clickButton('Cancel');
-    cy.contains('Save').should('not.exist');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
   });
 
   it('Cancel flow: starting Add contact and cancelling does not create rows', () => {
@@ -173,7 +173,7 @@ describe('Contacts Add (/contacts)', () => {
 
           ContactListPage.enterFormData(formData);
           PageUtils.clickButton('Cancel');
-          cy.contains('Save').should('not.exist');
+          PageUtils.shouldNotHaveSaveButton('contact-dialog');
         }
 
         cy.get('tbody')
@@ -193,7 +193,7 @@ describe('Contacts Add (/contacts)', () => {
       state: '',
       zip: '',
     });
-    PageUtils.clickButton('Save');
+    PageUtils.clickSaveButton('contact-dialog');
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
@@ -202,7 +202,7 @@ describe('Contacts Add (/contacts)', () => {
     cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
     cy.get('#zip').parent().should('contain', 'This is a required field');
     PageUtils.clickButton('Cancel');
-    cy.contains('Save').should('not.exist');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
   });
 
   it('Save & Add More: chains Individual, Candidate, Committee, and Organization', () => {
@@ -228,7 +228,7 @@ describe('Contacts Add (/contacts)', () => {
           ContactsHelpers.assertSuccessToastMessage();
 
           cy.contains('button', 'Save & Add More').should('exist');
-          cy.contains('button', 'Save').should('exist');
+          PageUtils.getSaveButton('contact-dialog').should('exist');
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {
@@ -249,7 +249,7 @@ describe('Contacts Add (/contacts)', () => {
         }
 
         PageUtils.clickButton('Cancel');
-        cy.contains('Save').should('not.exist');
+        PageUtils.shouldNotHaveSaveButton('contact-dialog');
 
         ContactListPage.goToPage();
         cy.wait('@contactsReload');

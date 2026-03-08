@@ -63,7 +63,7 @@ describe('Loans', () => {
       formData.date_received = new Date(currentYear, 4 - 1, 27);
       PageUtils.calendarSetValue('[data-cy="contribution_date"]', formData.date_received);
       PageUtils.enterValue('#amount', formData.amount);
-      PageUtils.clickButton('Save');
+      PageUtils.clickSaveButton('navigation-control');
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Received').should('exist');
     });

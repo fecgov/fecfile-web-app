@@ -33,8 +33,8 @@ describe('Contacts List (/contacts)', () => {
       first_name: `IndFn${uid}`,
     };
     ContactListPage.enterFormData(individualFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    PageUtils.clickSaveButton('contact-dialog');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
 
     // Candidate
     PageUtils.clickButton('Add contact');
@@ -50,8 +50,8 @@ describe('Contacts List (/contacts)', () => {
       first_name: `CandFn${uid}`,
     };
     ContactListPage.enterFormData(candidateFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    PageUtils.clickSaveButton('contact-dialog');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
 
     // Committee
     PageUtils.clickButton('Add contact');
@@ -64,8 +64,8 @@ describe('Contacts List (/contacts)', () => {
       committee_id: committeeId,
     };
     ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    PageUtils.clickSaveButton('contact-dialog');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
 
     // Organization
     PageUtils.clickButton('Add contact');
@@ -76,8 +76,8 @@ describe('Contacts List (/contacts)', () => {
       name: organizationName,
     };
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    PageUtils.clickSaveButton('contact-dialog');
+    PageUtils.shouldNotHaveSaveButton('contact-dialog');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');

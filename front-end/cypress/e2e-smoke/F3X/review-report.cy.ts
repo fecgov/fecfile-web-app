@@ -125,7 +125,7 @@ describe('Receipt Transactions', () => {
         PageUtils.clickLink('Individual Receipt');
         const alias = PageUtils.getAlias('');
         cy.get(alias).find('#amount').clear().safeType(123.45);
-        PageUtils.clickButton('Save');
+        PageUtils.clickSaveButton('navigation-control');
         cy.get('tr').should('contain', '$123.45');
 
         // Return to summary page and verify summary calc runs

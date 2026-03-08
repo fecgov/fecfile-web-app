@@ -1,4 +1,14 @@
+import { getNormalizedFilingPassword } from '../../support/filing-password';
+
 export const currentYear = new Date().getFullYear();
+
+export type SaveButtonLocation = 'navigation-control' | 'contact-dialog' | 'second-committee-admin-dialog';
+
+const SAVE_BUTTON_DATA_CY: Record<SaveButtonLocation, string> = {
+  'navigation-control': 'save-navigation-control-button',
+  'contact-dialog': 'save-contact-dialog-button',
+  'second-committee-admin-dialog': 'save-second-committee-admin-dialog-button',
+};
 
 export class PageUtils {
   static closeToast() {
@@ -143,12 +153,33 @@ export class PageUtils {
   }
 
   static clickButton(name: string, alias = '', force = false) {
+    if (name === 'Save') {
+      throw new Error('Use PageUtils.clickSaveButton(location) for exact plain Save selectors.');
+    }
+
     alias = PageUtils.getAlias(alias);
     cy.get(alias)
-      .contains('button', name)
+      .contains('button:visible', name)
       .first()
       .as('btn');
     cy.get('@btn').click({ force });
+  }
+
+  static getSaveButton(location: SaveButtonLocation) {
+    return cy.get(`[data-cy="${SAVE_BUTTON_DATA_CY[location]}"]`).filter(':visible').first();
+  }
+
+  static clickSaveButton(location: SaveButtonLocation, force = false) {
+    PageUtils.getSaveButton(location).click({ force });
+  }
+
+  static shouldNotHaveSaveButton(location: SaveButtonLocation) {
+    cy.get('body').then(($body) => {
+      expect(
+        $body.find(`[data-cy="${SAVE_BUTTON_DATA_CY[location]}"]:visible`).length,
+        `${location} save button visible count`,
+      ).to.eq(0);
+    });
   }
 
   static dateToString(date: Date) {
@@ -244,7 +275,7 @@ export class PageUtils {
           cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
           cy.get('#email').should('have.value', 'admin@admin.com');
           cy.get('#email').click();
-          PageUtils.clickButton('Save');
+          PageUtils.clickSaveButton('second-committee-admin-dialog');
         }
       });
     cy.contains('Welcome to FECfile+').should('not.exist');
@@ -256,12 +287,14 @@ export class PageUtils {
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
-    cy.get(alias).find('[data-cy="userCertified"]').first().click();
-    PageUtils.clickButton('Submit');
-    PageUtils.findOnPage('div', 'Are you sure?');
-    PageUtils.clickButton('Confirm');
-    cy.wait('@SubmitReport');
+    return getNormalizedFilingPassword().then((filingPassword) => {
+      PageUtils.enterValue('#filingPassword', filingPassword);
+      cy.get(alias).find('[data-cy="userCertified"]').first().click();
+      PageUtils.clickButton('Submit');
+      PageUtils.findOnPage('div', 'Are you sure?');
+      PageUtils.clickButton('Confirm');
+      cy.wait('@SubmitReport');
+    });
   }
 
   static readonly blurActiveField = () => {
