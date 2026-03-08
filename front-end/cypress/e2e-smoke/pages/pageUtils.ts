@@ -2,7 +2,7 @@ import { getNormalizedFilingPassword } from '../../support/filing-password';
 
 export const currentYear = new Date().getFullYear();
 
-export type SaveButtonLocation = 'navigation-control' | 'contact-dialog' | 'second-committee-admin-dialog';
+type SaveButtonLocation = 'navigation-control' | 'contact-dialog' | 'second-committee-admin-dialog';
 
 const SAVE_BUTTON_DATA_CY: Record<SaveButtonLocation, string> = {
   'navigation-control': 'save-navigation-control-button',
