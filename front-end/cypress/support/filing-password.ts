@@ -1,4 +1,3 @@
-const DEFAULT_FILING_PASSWORD = 'make-it-up';
 export function normalizeFilingPassword(value: unknown): string {
   if (typeof value === 'string' && value.trim()) {
     return value;
@@ -8,7 +7,7 @@ export function normalizeFilingPassword(value: unknown): string {
     return String(value);
   }
 
-  return DEFAULT_FILING_PASSWORD;
+  return 'make-it-up';
 }
 
 export function getNormalizedFilingPassword() {
