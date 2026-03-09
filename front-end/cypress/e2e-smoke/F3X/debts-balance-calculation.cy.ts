@@ -19,7 +19,7 @@ describe('Debt Balance at Close Calculation', () => {
       // causing navigations to occur in the middle of the following
       // script.  To be addressed in FECFILE-2842
       cy.wait(500);
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       
       StartTransaction.Debts().ByCommittee();
 
@@ -36,8 +36,8 @@ describe('Debt Balance at Close Calculation', () => {
       PageUtils.clickButton('Save');
 
       // Navigate back to verify the saved debt and then edit it
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Debt Owed By Committee', { timeout: 10000 }).should('exist');
+      ReportListPage.goToReportListPage(result.report);
+      cy.contains('Debt Owed By Committee').should('exist');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 
@@ -65,7 +65,7 @@ describe('Debt Balance at Close Calculation', () => {
       // causing navigations to occur in the middle of the following
       // script.  To be addressed in FECFILE-2842
       cy.wait(500);
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
@@ -81,8 +81,8 @@ describe('Debt Balance at Close Calculation', () => {
       PageUtils.clickButton('Save');
 
       // Navigate back and edit the debt
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Debt Owed By Committee', { timeout: 10000 }).should('exist');
+      ReportListPage.goToReportListPage(result.report);
+      cy.contains('Debt Owed By Committee').should('exist');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 

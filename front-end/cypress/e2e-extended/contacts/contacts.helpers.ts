@@ -144,7 +144,7 @@ export class ContactsHelpers {
       '[role="option"]:not(.p-autocomplete-option-group):not([aria-disabled="true"])',
     ].join(',');
 
-    cy.get(inputSelector, { timeout: 20000 })
+    cy.get(inputSelector)
       .should('be.visible')
       .then(($input) => {
         const id = $input.attr('id');
@@ -153,7 +153,7 @@ export class ContactsHelpers {
 
         expect(listId, 'autocomplete list id').to.exist;
 
-        cy.get(`#${listId!}`, { timeout: 20000 })
+        cy.get(`#${listId!}`)
           .should('be.visible')
           .then(($list) => {
             const list = () => cy.wrap($list);
@@ -173,7 +173,7 @@ export class ContactsHelpers {
                   : new RegExp(ContactsHelpers.escapeRegExp(match), 'i');
 
               list()
-                .contains(selectableOptionSel, rx, { timeout: 20000 })
+                .contains(selectableOptionSel, rx)
                 .first()
                 .scrollIntoView()
                 .click({ force: true });
@@ -591,9 +591,9 @@ export class ContactsHelpers {
     };
 
     return cy
-      .get('app-table[itemname="transactions"]', { timeout: 15000 })
+      .get('app-table[itemname="transactions"]')
       .should('exist')
-      .find('table[role="table"]', { timeout: 15000 })
+      .find('table[role="table"]')
       .first()
       .should('exist')
       .then(($table) => {
@@ -654,7 +654,7 @@ export class ContactsHelpers {
 
   private static getVisibleConfirmDialog() {
     return cy
-      .contains('.p-dialog-title', /Confirm/i, { timeout: 10000 })
+      .contains('.p-dialog-title', /Confirm/i)
       .should('be.visible')
       .closest('.p-confirm-dialog, .p-dialog');
   }
@@ -795,7 +795,6 @@ export class ContactsDeleteHelpers {
       .contains(
         'dialog, [role="dialog"], .p-dialog, app-deleted-contact, app-table, h1, h2, h3',
         title,
-        { timeout: 10000 },
       )
       .should('be.visible')
       .then(($el) => {
@@ -820,7 +819,7 @@ export class ContactsDeleteHelpers {
   }
 
   static getContactRow(contactName: string) {
-    return cy.contains('tbody tr', contactName, { timeout: 15000 }).should('be.visible');
+    return cy.contains('tbody tr', contactName).should('be.visible');
   }
 
   static openActionsMenu(contactName: string) {
@@ -1014,7 +1013,7 @@ export class ContactsDeleteHelpers {
     const deleteAlias = options.deleteAlias ?? 'deleteContact';
     const contactsGoneAlias = options.contactsGoneAlias ?? 'contactsGone';
 
-    cy.contains('tbody tr', contactName, { timeout: 15000 }).should('be.visible');
+    cy.contains('tbody tr', contactName).should('be.visible');
     PageUtils.clickKababItem(contactName, 'Delete');
     ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
     ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
@@ -1025,7 +1024,7 @@ export class ContactsDeleteHelpers {
     if (contactsGoneAlias) {
       cy.wait(`@${contactsGoneAlias}`);
     }
-    cy.contains('tbody tr', contactName, { timeout: 15000 }).should('not.exist');
+    cy.contains('tbody tr', contactName).should('not.exist');
   }
 
   static restoreContact(contactName: string, options: { listAlias?: string } = {}) {
@@ -1033,7 +1032,7 @@ export class ContactsDeleteHelpers {
     cy.intercept('GET', '**/api/v1/contacts-deleted/?page=**').as('getDeletedContacts');
 
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
-      .contains('tbody tr', contactName, { timeout: 15000 })
+      .contains('tbody tr', contactName)
       .should('be.visible')
       .find('.p-checkbox-input')
       .check({ force: true });

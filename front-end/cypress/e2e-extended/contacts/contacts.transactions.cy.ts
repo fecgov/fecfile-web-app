@@ -47,7 +47,7 @@ const hasVisibleDialogMatching = ($body: JQuery<HTMLElement>, rx: RegExp): boole
 
 const getVisibleConfirmDialog = () =>
   cy
-    .contains('.p-dialog-title', /^Confirm$/i, { timeout: DEFAULT_TIMEOUT })
+    .contains('.p-dialog-title', /^Confirm$/i)
     .should('be.visible')
     .closest('.p-confirm-dialog, .p-dialog');
 
@@ -58,18 +58,18 @@ const openCreateContactModal = (which: CreateContactWhich = 'first') => {
     if ($containers.length > 0) {
       const $target = which === 'last' ? $containers.last() : $containers.first();
       cy.wrap($target)
-        .contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
+        .contains(/Create a new contact/i)
         .scrollIntoView()
         .click({ force: true });
       return;
     }
 
-    cy.contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
+    cy.contains(/Create a new contact/i)
       .scrollIntoView()
       .click({ force: true });
   });
 
-  cy.contains('.p-dialog', /Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('.p-dialog', /Create a new contact/i)
     .filter(':visible')
     .should('be.visible')
     .as('createContactDialog');
@@ -96,7 +96,7 @@ const saveCreateContactDialog = () => {
     .should('be.enabled')
     .click({ force: true });
 
-  cy.get('body', { timeout: DEFAULT_TIMEOUT }).should(($body) => {
+  cy.get('body').should(($body) => {
     expect(hasVisibleDialogMatching($body, /Create a new contact/i)).to.eq(false);
   });
 };
@@ -156,9 +156,9 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<
 };
 
 const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) => {
-  cy.get('p-panelmenu', { timeout: DEFAULT_TIMEOUT }).should('exist');
+  cy.get('p-panelmenu').should('exist');
 
-  cy.contains('a', panelMenuRx, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('a', panelMenuRx)
     .first()
     .scrollIntoView()
     .click({ force: true });
@@ -179,7 +179,7 @@ const resolveDisbursementDateField = (): Cypress.Chainable<DisbursementDateField
 const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amount: number) => {
   const amountStr = `$${amount.toFixed(2)}`;
 
-  cy.contains('tbody tr', contactDisplay, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('tbody tr', contactDisplay)
     .should('exist')
     .within(() => {
       cy.get('td').eq(1).invoke('text').should('match', expectedType);
@@ -188,7 +188,7 @@ const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amo
 };
 
 const assertContactsListRow = (name: string, type: string, fecId?: string) => {
-  cy.contains('tbody tr', name, { timeout: DEFAULT_TIMEOUT })
+  cy.contains('tbody tr', name)
     .should('exist')
     .within(() => {
       cy.get('td').eq(1).should('contain.text', type);
@@ -377,7 +377,7 @@ describe('Contacts: Transactions integration', () => {
       const rid = reportId as string;
 
       // INDIVIDUAL RECEIPT
-      ReportListPage.goToReportList(rid);
+      ReportListPage.goToReportListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /Individual Receipt/i);
       cy.contains(/Individual Receipt/i).should('exist');
 
@@ -406,7 +406,7 @@ describe('Contacts: Transactions integration', () => {
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
 
       // TRANSFER
-      ReportListPage.goToReportList(rid);
+      ReportListPage.goToReportListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /^Transfer$/i);
       cy.contains('h1', 'Transfer').should('exist');
 
@@ -435,7 +435,7 @@ describe('Contacts: Transactions integration', () => {
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
 
       // OPERATING EXPENDITURE
-      ReportListPage.goToReportList(rid);
+      ReportListPage.goToReportListPage(rid);
       goToTransactionCreateFromList(/Add a disbursement/i, /Operating Expenditure/i);
       cy.contains(/Operating Expenditure/i).should('exist');
 
@@ -510,7 +510,7 @@ describe('Contacts: Transactions integration', () => {
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
-      ReportListPage.goToReportList(rid);
+      ReportListPage.goToReportListPage(rid);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
       cy.contains('Individual Receipt').should('exist');
@@ -537,8 +537,8 @@ describe('Contacts: Transactions integration', () => {
       PageUtils.clickButton('Save');
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
-      cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
-      cy.contains(/occupation.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
+      cy.contains(/employer.*required|this is a required field\./i).should('exist');
+      cy.contains(/occupation.*required|this is a required field\./i).should('exist');
 
       cy.get('#employer').type(newEmployer);
       cy.get('#occupation').type(newOccupation);

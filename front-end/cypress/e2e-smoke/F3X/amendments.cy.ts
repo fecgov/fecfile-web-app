@@ -10,7 +10,7 @@ describe('Amendments', () => {
 
   it('should test Create an amendment', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
       PageUtils.clickLink('Submit report');
       PageUtils.submitReportForm();

@@ -1,3 +1,5 @@
+import { getNormalizedFilingPassword } from '../../support/filing-password';
+
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
@@ -135,7 +137,7 @@ export class PageUtils {
     const exactLabel = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(label)}\s*$`, 'i');
 
     cy.get(alias)
-      .contains('.accordion-text strong, .header-label', exactLabel, { timeout: 5000 })
+      .contains('.accordion-text strong, .header-label', exactLabel)
       .first()
       .closest('p-accordion-header, .p-accordionheader')
       .should('be.visible')
@@ -256,12 +258,14 @@ export class PageUtils {
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
-    cy.get(alias).find('[data-cy="userCertified"]').first().click();
-    PageUtils.clickButton('Submit');
-    PageUtils.findOnPage('div', 'Are you sure?');
-    PageUtils.clickButton('Confirm');
-    cy.wait('@SubmitReport');
+    return getNormalizedFilingPassword().then((filingPassword) => {
+      PageUtils.enterValue('#filingPassword', filingPassword);
+      cy.get(alias).find('[data-cy="userCertified"]').first().click();
+      PageUtils.clickButton('Submit');
+      PageUtils.findOnPage('div', 'Are you sure?');
+      PageUtils.clickButton('Confirm');
+      cy.wait('@SubmitReport');
+    });
   }
 
   static readonly blurActiveField = () => {

@@ -13,7 +13,7 @@ describe('Tests that contact data gets cleared out properly when switching types
   it('Single transaction', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       ReportListPage.goToPage();
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       PageUtils.clickButton("Add transaction");
       StartTransaction.Receipts().Other().OtherReceipts();
       ContactLookup.getContact(result.committee.name, '', 'Committee');
@@ -25,7 +25,7 @@ describe('Tests that contact data gets cleared out properly when switching types
   it('Double transaction', () => {
     cy.wrap(DataSetup({ committee: true, individual: true, individual2: true })).then((result: any) => {
       ReportListPage.goToPage();
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       PageUtils.clickButton("Add transaction");
       StartTransaction.Receipts().Individual().Earmark();
       ContactLookup.getContact(result.individual.last_name, '');

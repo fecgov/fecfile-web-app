@@ -23,6 +23,7 @@ export class ContactLookup {
     const lastName = contact['last_name'];
     if (!lastName) return;
     const nameEntry = lastName.slice(0, 3);
+    const optionText = [lastName, contact.first_name].filter(Boolean).join(', ');
     cy.intercept(
       'GET',
       `http://localhost:8080/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
@@ -35,13 +36,18 @@ export class ContactLookup {
       },
     );
     const candidateSection = cy.get(alias);
-    candidateSection.find('[data-cy="searchBox"]').type(nameEntry);
-    candidateSection
-      .get('.p-autocomplete-list-container')
-      .contains(nameEntry)
-      .then(($name) => {
-        cy.wrap($name).click();
-      });
+    candidateSection.find('[data-cy="searchBox"]').type(nameEntry).then(($input) => {
+      const listId = $input.attr('aria-controls') || `${$input.attr('id')}_list`;
+
+      expect(listId, 'candidate autocomplete list id').to.exist;
+
+      cy.get(`[id="${listId!}"]`)
+        .should('be.visible')
+        .find('.p-autocomplete-option:visible')
+        .should('contain', optionText)
+        .first()
+        .click();
+    });
   }
 
   static getCommittee(

@@ -34,7 +34,7 @@ function setupCoordinatedPartyExpenditure(
 
 function createDebtRepaymentCallback(result: any) {
   return () => {
-    ReportListPage.goToReportList(result.report);
+    ReportListPage.goToReportListPage(result.report);
     cy.contains('Debt Owed By Committee').should('exist');
 
     PageUtils.clickKababItem(
@@ -68,7 +68,7 @@ describe('Debts', () => {
 
   it('should test Debt Owed By Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
@@ -77,7 +77,7 @@ describe('Debts', () => {
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
       PageUtils.clickButton('Save');
 
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed By Committee').should('exist');
 
@@ -92,7 +92,7 @@ describe('Debts', () => {
 
   it('should test Owed To Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -108,7 +108,7 @@ describe('Debts', () => {
 
   it('should test debt carry-forward behavior', () => {
     cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');

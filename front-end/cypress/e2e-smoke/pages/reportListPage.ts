@@ -55,33 +55,14 @@ export class ReportListPage {
     cy.get('[data-cy="start-report"]').click();
   }
 
-  static editReport(reportName: string, fieldName = 'Edit') {
-    ReportListPage.goToPage();
-    cy.contains('td', reportName, { timeout: 10000 }).should('be.visible');
-    PageUtils.clickKababItem(reportName, fieldName);
-  }
-
-  static submitReport(reportName: string) {
-    ReportListPage.editReport(reportName);
-    PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
-    PageUtils.clickSidebarItem('Submit report');
-    const alias = PageUtils.getAlias('');
-    cy.get(alias).find('#filingPassword').type(''); // Insert password from env variable
-    cy.get(alias).find('.p-checkbox').click();
-    PageUtils.clickButton('Submit');
-    PageUtils.clickButton('Yes');
-    ReportListPage.goToPage();
-  }
-
-  // backward-compatible alias used by existing smoke specs before big refactors for e2e-smoke
-  static goToReportList(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    return ReportListPage.goToReportListPage(reportId, includeReceipts, includeDisbursements, includeLoans);
-  }
-
   static goToReportListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    ReportListPage.registerReportListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
-    const visit = cy.visit(`/reports/transactions/report/${reportId}/list`);
-    return ReportListPage.checkReportListPageLoaded(reportId, includeReceipts, includeDisbursements, includeLoans, visit);
+    return ReportListPage.checkReportListPageLoaded(
+      reportId,
+      includeReceipts,
+      includeDisbursements,
+      includeLoans,
+      cy.visit(`/reports/transactions/report/${reportId}/list`),
+    );
   }
 
   private static checkReportListPageLoaded(
@@ -91,6 +72,8 @@ export class ReportListPage {
     includeLoans = true,
     visit: Cypress.Chainable = cy.wrap(null),
   ) {
+    ReportListPage.registerReportListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
+
     return visit.then(() => {
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
       cy.contains('Transactions in this report').should('be.visible');

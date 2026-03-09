@@ -43,7 +43,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('new transaction aggregate', () => {
     setupTransactions(true).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
 
       cy.get('.p-datatable-tbody > tr')
         .eq(1) // 0-based, so 2nd row
@@ -88,7 +88,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
@@ -110,7 +110,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change amount', () => {
     setupTransactions(true).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
 
@@ -130,7 +130,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction date leapfrogging', () => {
     setupTransactions(true).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 
@@ -157,7 +157,7 @@ describe('Tests transaction form aggregate calculation', () => {
         result.report,
       );
       makeTransaction(transaction_c, () => {
-        ReportListPage.goToReportList(result.report);
+        ReportListPage.goToReportListPage(result.report);
         cy.contains('Transactions in this report').should('exist');
         cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 
@@ -180,7 +180,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing IE date leapfrogging', () => {
     cy.wrap(DataSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.goToReportListPage(result.report);
 
       // Create the first Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();

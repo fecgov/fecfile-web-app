@@ -55,7 +55,7 @@ describe('Reattributions', () => {
     DataSetup({ individual: true, candidate: true }).then((result: any) => {
       const receipt = buildScheduleA('INDIVIDUAL_RECEIPT', 100.55, '2025-04-12', result.individual, result.report);
       makeTransaction(receipt, () => {
-        ReportListPage.goToReportList(result.report);
+        ReportListPage.goToReportListPage(result.report);
         Reattribute(result);
       });
     });
@@ -66,8 +66,6 @@ describe('Reattributions', () => {
   //   ContactListPage.createIndividual(assignee);
   //   CreateReceipt();
   //   ReportListPage.createF3X(reportFormDataJuly);
-  //   ReportListPage.submitReport(APRIL_15);
-  //   ReportListPage.editReport(APRIL_15, 'Review');
   //   PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
   //   cy.wait(500);
   //   Reattribute(true);
