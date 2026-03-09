@@ -6,7 +6,6 @@ import { NavigationControlComponent } from '../navigation-control/navigation-con
 @Component({
   selector: 'app-navigation-control-bar',
   templateUrl: './navigation-control-bar.component.html',
-  styleUrls: ['./navigation-control-bar.component.scss'],
   imports: [NavigationControlComponent],
 })
 export class NavigationControlBarComponent {
