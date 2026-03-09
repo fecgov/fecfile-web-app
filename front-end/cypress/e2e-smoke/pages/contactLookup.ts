@@ -37,11 +37,14 @@ export class ContactLookup {
     );
     const candidateSection = cy.get(alias);
     candidateSection.find('[data-cy="searchBox"]').type(nameEntry).then(($input) => {
-      const listId = $input.attr('aria-controls') || `${$input.attr('id')}_list`;
+      const inputId = $input.attr('id');
+      const listId = $input.attr('aria-controls') ?? (inputId ? `${inputId}_list` : undefined);
 
-      expect(listId, 'candidate autocomplete list id').to.exist;
+      if (!listId) {
+        throw new Error('Candidate autocomplete list id was not found.');
+      }
 
-      cy.get(`[id="${listId!}"]`)
+      cy.get(`[id="${listId}"]`)
         .should('be.visible')
         .find('.p-autocomplete-option:visible')
         .should('contain', optionText)
