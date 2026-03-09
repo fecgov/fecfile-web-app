@@ -55,9 +55,9 @@ describe('Extended F3X Itemization Cascades', () => {
           F3XAggregationHelpers.unitemizeRowById(F3XAggregationHelpers.receiptsTableRoot, parent.id);
 
           F3XAggregationHelpers.getTransaction(parent.id).its('itemized').should('equal', false);
-          F3XAggregationHelpers.getTransaction(child.id).its('itemized').should('equal', true);
+          F3XAggregationHelpers.getTransaction(child.id).its('itemized').should('equal', false);
           F3XAggregationHelpers.assertReceiptRowStatus(parent.id, 'Unitemized', true);
-          F3XAggregationHelpers.assertReceiptRowStatus(child.id, 'Unitemized', false);
+          F3XAggregationHelpers.assertReceiptRowStatus(child.id, 'Unitemized', true);
         });
       });
     });
