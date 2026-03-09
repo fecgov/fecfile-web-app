@@ -1,4 +1,4 @@
-export function normalizeFilingPassword(value: unknown): string {
+function normalizeFilingPassword(value: unknown): string {
   if (typeof value === 'string' && value.trim()) {
     return value;
   }
