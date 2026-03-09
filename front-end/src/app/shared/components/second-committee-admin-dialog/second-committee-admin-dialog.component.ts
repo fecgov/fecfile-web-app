@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
