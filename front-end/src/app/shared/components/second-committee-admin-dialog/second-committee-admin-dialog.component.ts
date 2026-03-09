@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { getRoleKey, Roles } from 'app/shared/models';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
@@ -9,12 +9,13 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-second-committee-admin-dialog',
   templateUrl: './second-committee-admin-dialog.component.html',
   styleUrl: './second-committee-admin-dialog.component.scss',
-  imports: [ReactiveFormsModule, DialogModule, ButtonModule, ErrorMessagesComponent],
+  imports: [ReactiveFormsModule, DialogModule, ButtonModule, ErrorMessagesComponent, DialogComponent],
 })
 export class SecondCommitteeAdminDialogComponent extends FormComponent {
   readonly memberService = inject(CommitteeMemberService);

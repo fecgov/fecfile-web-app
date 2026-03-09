@@ -1,3 +1,21 @@
-:host {
+:host ::ng-deep {
   display: block;
+
+  img {
+    display: none;
+  }
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 32px;
+}
+
+p {
+  font-family: var(--karla);
+  margin-bottom: 32px;
+}
+
+input {
+  height: 32px;
 }
