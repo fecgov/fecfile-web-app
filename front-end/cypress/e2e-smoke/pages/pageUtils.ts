@@ -1,3 +1,5 @@
+import { getNormalizedFilingPassword } from '../../support/filing-password';
+
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
@@ -56,7 +58,13 @@ export class PageUtils {
     if (value) {
       cy.get(alias).find(querySelector).eq(index).find('select').contains('option', value).then(
         (option) => {
-          cy.get(alias).find(querySelector).eq(index).find('select').select(option.val()!);
+          const optionValue = option.val();
+          expect(optionValue, `select option value for "${value}"`).to.not.be.oneOf([undefined, null]);
+          if (optionValue === undefined || optionValue === null) {
+            throw new Error(`Missing select option value for "${value}"`);
+          }
+
+          cy.get(alias).find(querySelector).eq(index).find('select').select(String(optionValue));
         }
       );
     }
@@ -152,7 +160,10 @@ export class PageUtils {
       expect($link.length, `${label} link count for "${menuItem}"`).to.eq(1);
       const link = $link.get(0);
       expect(link, `${label} link element for "${menuItem}"`).to.exist;
-      (link as HTMLElement).click();
+      if (!link) {
+        throw new Error(`Missing ${label} link element for "${menuItem}"`);
+      }
+      link.click();
     };
     const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> =>
       findMenuLink(visibleOnly)
@@ -383,23 +394,13 @@ export class PageUtils {
     cy.contains('Welcome to FECfile+').should('not.exist');
   }
 
-  static getFilingPassword(): Cypress.Chainable<string> {
-    return cy.env<{ FILING_PASSWORD?: unknown }>(['FILING_PASSWORD']).then(({ FILING_PASSWORD }) => {
-      expect(FILING_PASSWORD, 'CYPRESS_FILING_PASSWORD').to.not.be.oneOf([undefined, null]);
-
-      const filingPassword = String(FILING_PASSWORD).trim();
-      expect(filingPassword, 'CYPRESS_FILING_PASSWORD').to.not.eq('');
-      return filingPassword;
-    });
-  }
-
   static submitReportForm() {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    return PageUtils.getFilingPassword().then((filingPassword) => {
+    return getNormalizedFilingPassword().then((filingPassword) => {
       PageUtils.enterValue('#filingPassword', filingPassword);
       cy.get(alias).find('[data-cy="userCertified"]').first().click();
       PageUtils.clickButton('Submit');

@@ -5,7 +5,7 @@ export class ContactLookup {
   private static readonly autocompleteInputSelector =
     '[data-cy="searchBox"] input.p-autocomplete-input:visible:not([readonly]):not([disabled])';
 
-  static getContact(name: string, alias = '', type: string | undefined = undefined, index=0) {
+  static getContact(name: string, alias = '', type: string | undefined = undefined, index = 0) {
     alias = PageUtils.getAlias(alias);
     if (type !== undefined) {
       PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', type, alias, index);
@@ -27,9 +27,7 @@ export class ContactLookup {
     excludeFecIds: string[],
     excludeIds: string[],
     alias = '',
-    _change = false,
   ) {
-    void _change;
     const lastName = contact['last_name'];
     if (!lastName) return;
     alias = PageUtils.getAlias(alias);
@@ -79,9 +77,9 @@ export class ContactLookup {
 
   static setType(
     type: "Individual" | "Organization" | "Committee" | "Candidate",
-    querySelector="#entity_type_dropdown",
-    alias='',
-    index=0,
+    querySelector = "#entity_type_dropdown",
+    alias = '',
+    index = 0,
   ) {
     PageUtils.pSelectDropdownSetValue(querySelector, type, alias, index);
   }

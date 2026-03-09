@@ -111,7 +111,7 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<
         .toArray()
         .some((link) => txnLinkRx.test((link.textContent || '').trim()));
       if (hasMatch) {
-        targetPanel = panel as HTMLElement;
+        targetPanel = panel;
         return false;
       }
       return undefined;
@@ -288,7 +288,10 @@ const selectContactLookupType = (type: 'Individual' | 'Organization' | 'Committe
     }
 
     expect(found, 'Contact Lookup type <select>').to.exist;
-    cy.wrap(found as HTMLSelectElement).select(type);
+    if (!found) {
+      throw new Error('Contact Lookup type <select> was not found');
+    }
+    cy.wrap(found).select(type);
   });
 };
 
@@ -359,8 +362,10 @@ describe('Contacts: Transactions integration', () => {
     });
 
     cy.then(() => {
-      expect(reportId, 'reportId').to.exist;
-      const rid = reportId as string;
+      if (!reportId) {
+        throw new Error('reportId should be defined');
+      }
+      const rid = reportId;
 
       // INDIVIDUAL RECEIPT
       ReportListPage.goToReportList(rid);
@@ -490,9 +495,10 @@ describe('Contacts: Transactions integration', () => {
     });
 
     cy.then(() => {
-      expect(reportId, 'F3X report id should be defined').to.exist;
-
-      const rid = reportId as string;
+      if (!reportId) {
+        throw new Error('F3X report id should be defined');
+      }
+      const rid = reportId;
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 

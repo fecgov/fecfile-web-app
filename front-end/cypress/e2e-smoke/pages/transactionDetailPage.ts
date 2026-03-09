@@ -65,12 +65,12 @@ export class TransactionDetailPage {
 
     if (formData.supportOpposeCode) {
       const supportOpposeCode = formData.supportOpposeCode.toString().trim().toUpperCase();
-      const supportOpposeOptionId =
-        supportOpposeCode === 'SUPPORT' || supportOpposeCode === 'S'
-          ? '#support'
-          : supportOpposeCode === 'OPPOSE' || supportOpposeCode === 'O'
-            ? '#oppose'
-            : '';
+      let supportOpposeOptionId = '';
+      if (supportOpposeCode === 'SUPPORT' || supportOpposeCode === 'S') {
+        supportOpposeOptionId = '#support';
+      } else if (supportOpposeCode === 'OPPOSE' || supportOpposeCode === 'O') {
+        supportOpposeOptionId = '#oppose';
+      }
       if (!supportOpposeOptionId) {
         throw new Error(`Unsupported support/oppose code: ${formData.supportOpposeCode}`);
       }
@@ -137,15 +137,16 @@ export class TransactionDetailPage {
 
   static enterLoanFormData(
     formData: LoanFormData,
-    _readOnlyAmount = false,
+    readOnlyAmount = false,
     alias = '',
     amountField = '#loan-info-amount',
     dateField = 'expenditure_date',
     dateIncurredField = 'loan_incurred_date',
   ) {
-    void _readOnlyAmount;
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find(amountField).safeType(formData.amount);
+    if (!readOnlyAmount) {
+      cy.get(alias).find(amountField).safeType(formData.amount);
+    }
 
     // set interest dropdown and rate
     if (formData.interest_rate_setting) {
@@ -180,12 +181,10 @@ export class TransactionDetailPage {
 
   static enterLoanFormDataStepTwo(
     formData: LoanFormData,
-    _readOnlyAmount = false,
     alias = '',
     dateSigned1 = 'treasurer_date_signed',
     dateSigned2 = 'authorized_date_signed',
   ) {
-    void _readOnlyAmount;
     alias = PageUtils.getAlias(alias);
 
     if (formData.loan_restructured) {
@@ -365,11 +364,12 @@ export class TransactionDetailPage {
   }
 
   private static enterPurpose(formData: ScheduleFormData, alias: string) {
-    if (formData.purpose_description) {
+    const purposeDescription = formData.purpose_description;
+    if (purposeDescription) {
       cy.get(alias).then(($root) => {
         const purposeInput = $root.find('textarea#purpose_description:visible:not([readonly]):not([disabled])').first();
         if (purposeInput.length > 0) {
-          cy.wrap(purposeInput).safeType(formData.purpose_description!);
+          cy.wrap(purposeInput).safeType(purposeDescription);
         }
       });
     }
