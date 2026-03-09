@@ -232,7 +232,8 @@ export class F3XAggregationHelpers {
     return cy
       .wrap(transactionIds)
       .each((transactionId) => {
-        const id = String(transactionId);
+        expect(transactionId, 'deleteTransactionsAndVerify404 transaction id').to.be.a('string');
+        const id = transactionId;
         this.assertTransactionId(id, 'deleteTransactionsAndVerify404');
         return this.deleteTransactionById(id).then(() => {
           return cy
