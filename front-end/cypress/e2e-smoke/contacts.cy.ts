@@ -94,23 +94,9 @@ describe('Manage contacts', () => {
 
   it('Empty required fields should display an error message', () => {
     PageUtils.clickButton('Add contact');
-    ContactListPage.enterFormData({
-      ...contactFormData,
-      last_name: '',
-      first_name: '',
-      street_1: '',
-      city: '',
-      state: '',
-      zip: '',
-    });
+    ContactListPage.enterFormData(ContactListPage.buildBlankRequiredContactFormData(contactFormData));
     PageUtils.clickSaveButton('contact-dialog');
-    cy.get('#last_name').parent().should('contain', 'This is a required field');
-    cy.get('#first_name').parent().should('contain', 'This is a required field');
-    cy.get('#street_1').parent().should('contain', 'This is a required field');
-    cy.get('#street_2').parent().should('not.contain', 'This is a required field');
-    cy.get('#city').parent().should('contain', 'This is a required field');
-    cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
-    cy.get('#zip').parent().should('contain', 'This is a required field');
+    ContactListPage.assertRequiredFieldValidationErrors();
   });
 
   it('Fields with too a long string should display an error message', () => {

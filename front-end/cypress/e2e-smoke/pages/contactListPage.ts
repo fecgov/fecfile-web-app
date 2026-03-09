@@ -13,6 +13,18 @@ export class ContactListPage {
     cy.visit('/contacts');
   }
 
+  static buildBlankRequiredContactFormData(base: ContactFormData = individualContactFormData): ContactFormData {
+    return {
+      ...base,
+      last_name: '',
+      first_name: '',
+      street_1: '',
+      city: '',
+      state: '',
+      zip: '',
+    };
+  }
+
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
     alias = PageUtils.getAlias(alias);
 
@@ -112,6 +124,19 @@ export class ContactListPage {
       cy.get(alias).find('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
       cy.get(alias).find('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
     }
+  }
+
+  static assertRequiredFieldValidationErrors(alias = '') {
+    alias = PageUtils.getAlias(alias);
+    const requiredFieldMessage = 'This is a required field';
+
+    cy.get(alias).find('#last_name').parent().should('contain', requiredFieldMessage);
+    cy.get(alias).find('#first_name').parent().should('contain', requiredFieldMessage);
+    cy.get(alias).find('#street_1').parent().should('contain', requiredFieldMessage);
+    cy.get(alias).find('#street_2').parent().should('not.contain', requiredFieldMessage);
+    cy.get(alias).find('#city').parent().should('contain', requiredFieldMessage);
+    cy.get(alias).find('[inputid="state"]').parent().should('contain', requiredFieldMessage);
+    cy.get(alias).find('#zip').parent().should('contain', requiredFieldMessage);
   }
 
   //Deletes all contacts belonging to the logged-in committee

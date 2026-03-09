@@ -11,7 +11,8 @@ import { buildDebtOwedByCommittee } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
-import { defaultScheduleFormData } from '../models/TransactionFormModel'
+import { defaultScheduleFormData } from '../models/TransactionFormModel';
+import { TransactionListPage, TransactionTableColumns } from '../pages/f3xTransactionListPage';
 
 function setupCoordinatedPartyExpenditure(
   organization: ContactFormData,
@@ -59,6 +60,39 @@ function createDebtRepaymentCallback(result: any) {
 function handleDebtOwedByCommitteeLoanReportDebtRepayment(result: any) {
   const debt = buildDebtOwedByCommittee(result.committee, result.report, 'TEST DEBT', 6000);
   makeTransaction(debt, createDebtRepaymentCallback(result));
+}
+
+type DebtOwedToCommitteeFields = {
+  balance: string;
+  amount: string;
+  paymentAmount: string;
+  balanceAtClose: string;
+};
+
+type DebtOwedToCommitteeState = DebtOwedToCommitteeFields & {
+  listAmount: string;
+  createdTransactionLabel?: string;
+};
+
+function assertDebtOwedToCommitteeFields(expected: DebtOwedToCommitteeFields) {
+  cy.get('#balance').should('exist').should('have.value', expected.balance);
+  cy.get('#amount').should('have.value', expected.amount);
+  cy.get('#payment_amount').should('have.value', expected.paymentAmount);
+  cy.get('#balance_at_close').should('have.value', expected.balanceAtClose);
+}
+
+function saveAndAssertDebtOwedToCommitteeState(expected: DebtOwedToCommitteeState) {
+  PageUtils.clickSaveButton('navigation-control');
+  PageUtils.urlCheck('/list');
+
+  if (expected.createdTransactionLabel) {
+    cy.contains(expected.createdTransactionLabel).should('exist');
+  }
+
+  cy.contains('Debt Owed To Committee').should('exist');
+  TransactionListPage.assertRowColumnValue('Debt Owed To Committee', TransactionTableColumns.amount, expected.listAmount);
+  PageUtils.clickLink('Debt Owed To Committee');
+  assertDebtOwedToCommitteeFields(expected);
 }
 
 describe('Debts', () => {
@@ -117,22 +151,21 @@ describe('Debts', () => {
       ContactLookup.getCommittee(result.committee);
       TransactionDetailPage.enterLoanFormData({
         ...debtFormData,
-        amount: 10000
+        amount: 10000,
       }, false, '', '#amount');
       PageUtils.clickSaveButton('navigation-control');
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$10,000.00").should('exist')
+      TransactionListPage.assertRowColumnValue('Debt Owed To Committee', TransactionTableColumns.amount, '$10,000.00');
 
       PageUtils.clickKababItem(
         'Debt Owed To Committee',
-        "Report debt repayment"
+        'Report debt repayment',
       );
 
-      PageUtils.clickAccordion("CONTRIBUTIONS FROM INDIVIDUALS/PERSONS")
-      PageUtils.clickLink("Individual Receipt");
-      ContactLookup.getContact(result.individual.last_name)
+      PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+      PageUtils.clickLink('Individual Receipt');
+      ContactLookup.getContact(result.individual.last_name);
       TransactionDetailPage.enterScheduleFormData(
         {
           ...defaultScheduleFormData,
@@ -143,20 +176,16 @@ describe('Debts', () => {
         false,
         '',
         true,
-        'contribution_date'
-      )
-      PageUtils.clickSaveButton('navigation-control');
-      PageUtils.urlCheck('/list');
-      cy.contains('Individual Receipt').should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$9,000.00").should('exist');
-
-      PageUtils.clickLink("Debt Owed To Committee");
-
-      cy.get('#balance').should('exist').should('have.value', '$0.00');
-      cy.get('#amount').should('have.value', '$10,000.00');
-      cy.get('#payment_amount').should('have.value', '$1,000.00');
-      cy.get('#balance_at_close').should('have.value', '$9,000.00');
+        'contribution_date',
+      );
+      saveAndAssertDebtOwedToCommitteeState({
+        createdTransactionLabel: 'Individual Receipt',
+        listAmount: '$9,000.00',
+        balance: '$0.00',
+        amount: '$10,000.00',
+        paymentAmount: '$1,000.00',
+        balanceAtClose: '$9,000.00',
+      });
 
       ReportListPage.createF3X({
         ...defaultForm3XData,
@@ -166,28 +195,25 @@ describe('Debts', () => {
         coverage_through_date: new Date(currentYear, 9 - 1, 30),
       });
 
-      cy.contains("Debt Owed To Committee").should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$9,000.00").should('exist');
+      cy.contains('Debt Owed To Committee').should('exist');
+      TransactionListPage.assertRowColumnValue('Debt Owed To Committee', TransactionTableColumns.amount, '$9,000.00');
 
-      PageUtils.clickLink("Debt Owed To Committee");
+      PageUtils.clickLink('Debt Owed To Committee');
 
       cy.get('#amount').should('exist').clear().safeType('2500');
       PageUtils.clickSaveButton('navigation-control');
       PageUtils.urlCheck('/list');
-
-      cy.contains("Debt Owed To Committee").should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$11,500.00").should('exist');
+      cy.contains('Debt Owed To Committee').should('exist');
+      TransactionListPage.assertRowColumnValue('Debt Owed To Committee', TransactionTableColumns.amount, '$11,500.00');
 
       PageUtils.clickKababItem(
         'Debt Owed To Committee',
-        "Report debt repayment"
+        'Report debt repayment',
       );
 
-      PageUtils.clickAccordion("CONTRIBUTIONS FROM INDIVIDUALS/PERSONS")
-      PageUtils.clickLink("Individual Receipt");
-      ContactLookup.getContact(result.individual.last_name)
+      PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+      PageUtils.clickLink('Individual Receipt');
+      ContactLookup.getContact(result.individual.last_name);
       TransactionDetailPage.enterScheduleFormData(
         {
           ...defaultScheduleFormData,
@@ -199,20 +225,15 @@ describe('Debts', () => {
         false,
         '',
         true,
-        'contribution_date'
-      )
-      PageUtils.clickSaveButton('navigation-control');
-      PageUtils.urlCheck('/list');
-      cy.contains("Debt Owed To Committee").should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$0.00").should('exist');
-
-      PageUtils.clickLink("Debt Owed To Committee");
-
-      cy.get('#balance').should('exist').should('have.value', '$9,000.00');
-      cy.get('#amount').should('have.value', '$2,500.00');
-      cy.get('#payment_amount').should('have.value', '$11,500.00');
-      cy.get('#balance_at_close').should('have.value', '$0.00');
+        'contribution_date',
+      );
+      saveAndAssertDebtOwedToCommitteeState({
+        listAmount: '$0.00',
+        balance: '$9,000.00',
+        amount: '$2,500.00',
+        paymentAmount: '$11,500.00',
+        balanceAtClose: '$0.00',
+      });
 
       cy.intercept(
         'GET',
@@ -229,7 +250,7 @@ describe('Debts', () => {
 
       PageUtils.urlCheck('/list');
       cy.wait('@GetLoans');
-      cy.contains("Debt Owed To Committee").should('not.exist');
+      cy.contains('Debt Owed To Committee').should('not.exist');
     });
   });
 

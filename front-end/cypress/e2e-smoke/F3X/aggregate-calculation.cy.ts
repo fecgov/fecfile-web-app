@@ -12,6 +12,7 @@ import { makeTransaction } from '../requests/methods';
 import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { TransactionListPage, TransactionTableColumns } from '../pages/f3xTransactionListPage';
 
 function setupTransactions(secondSame: boolean) {
   return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {
@@ -80,17 +81,15 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickSaveButton('navigation-control');
 
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
+      TransactionListPage.assertVisible();
+      TransactionListPage.assertColumnValues(TransactionTableColumns.aggregate, ['$200.01', '$240.01']);
     });
   });
 
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
       ReportListPage.goToReportList(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      TransactionListPage.openTransaction(1);
 
       // Tests changing the second transaction's contact
       cy.get('[id=aggregate]').should('have.value', '$25.00');
@@ -102,17 +101,15 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate]').should('have.value', '$225.01');
       PageUtils.clickSaveButton('navigation-control');
 
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$225.01');
+      TransactionListPage.assertVisible();
+      TransactionListPage.assertColumnValues(TransactionTableColumns.aggregate, ['$200.01', '$225.01']);
     });
   });
 
   it('existing transaction change amount', () => {
     setupTransactions(true).then((result: any) => {
       ReportListPage.goToReportList(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      TransactionListPage.openTransaction(1);
 
       // Tests changing the amount
       cy.get('[id=aggregate]').should('have.value', '$225.01');
@@ -122,9 +119,8 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickSaveButton('navigation-control');
 
-      cy.contains('Transactions in this report').should('exist');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
+      TransactionListPage.assertVisible();
+      TransactionListPage.assertColumnValues(TransactionTableColumns.aggregate, ['$200.01', '$240.01']);
     });
   });
 

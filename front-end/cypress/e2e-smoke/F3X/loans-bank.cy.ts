@@ -38,7 +38,7 @@ function clickLoan(button: string, urlCheck = '/list') {
       .children()
       .last()
       .click();
-    cy.contains(button).click({ force: true });
+    cy.contains(button).click();
   }
   PageUtils.urlCheck(urlCheck);
 }
@@ -227,7 +227,7 @@ describe('Loans', () => {
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);
-      clickLoan('Edit', '/list/');
+      clickLoan('Edit', '/list');
       cy.contains('ORGANIZATION NAME').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);
     });

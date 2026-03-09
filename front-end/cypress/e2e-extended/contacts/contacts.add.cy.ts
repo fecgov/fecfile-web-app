@@ -184,23 +184,9 @@ describe('Contacts Add (/contacts)', () => {
 
   it('Validation: missing required fields shows error messages', () => {
     PageUtils.clickButton('Add contact');
-    ContactListPage.enterFormData({
-      ...contactFormData,
-      last_name: '',
-      first_name: '',
-      street_1: '',
-      city: '',
-      state: '',
-      zip: '',
-    });
+    ContactListPage.enterFormData(ContactListPage.buildBlankRequiredContactFormData(contactFormData));
     PageUtils.clickSaveButton('contact-dialog');
-    cy.get('#last_name').parent().should('contain', 'This is a required field');
-    cy.get('#first_name').parent().should('contain', 'This is a required field');
-    cy.get('#street_1').parent().should('contain', 'This is a required field');
-    cy.get('#street_2').parent().should('not.contain', 'This is a required field');
-    cy.get('#city').parent().should('contain', 'This is a required field');
-    cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
-    cy.get('#zip').parent().should('contain', 'This is a required field');
+    ContactListPage.assertRequiredFieldValidationErrors();
     PageUtils.clickButton('Cancel');
     PageUtils.shouldNotHaveSaveButton('contact-dialog');
   });
