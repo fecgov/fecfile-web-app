@@ -64,7 +64,7 @@ export class F3XAggregationHelpers {
   static readonly saveButtonSelector = 'button[data-cy="navigation-control-button"]';
 
   private static exactText(value: string): RegExp {
-    return new RegExp(`^\\s*${Cypress._.escapeRegExp(value)}\\s*$`);
+    return new RegExp(`^\\s*${Cypress._.escapeRegExp(value)}\\s*$`); // NOSONAR
   }
 
   private static suffix(): string {
@@ -88,7 +88,7 @@ export class F3XAggregationHelpers {
   private static getRequiredId(payload: any, context: string): string {
     const id = payload?.id as string | undefined;
     this.assertTransactionId(id ?? '', context);
-    return id as string;
+    return id ?? '';
   }
 
   static transactionIdFromPayload(payload: unknown, context: string): string {
@@ -269,10 +269,10 @@ export class F3XAggregationHelpers {
     return this.getTransaction(loanId).then((transaction) => {
       const rawBalance = transaction?.loan_balance ?? transaction?.balance;
       const parsedBalance =
-        typeof rawBalance === 'number' ? rawBalance : Number(String(rawBalance ?? '').replace(/[^0-9.-]/g, ''));
+        typeof rawBalance === 'number' ? rawBalance : Number(String(rawBalance ?? '').replaceAll(/[^0-9.-]/g, ''));
 
       if (Number.isNaN(parsedBalance)) {
-        throw new Error(`readLoanBalanceValueByApi unable to parse loan balance for transaction ${loanId}`);
+        throw new TypeError(`readLoanBalanceValueByApi unable to parse loan balance for transaction ${loanId}`);
       }
 
       return parsedBalance;
@@ -1080,7 +1080,7 @@ export class F3XAggregationHelpers {
       .filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''))
       .should('have.length', 1)
       .first()
-      .click();
+      .should('be.visible');
   }
 
   static assertActionDoesNotExist(tableRoot: string, transactionId: string, actionLabel: string): void {

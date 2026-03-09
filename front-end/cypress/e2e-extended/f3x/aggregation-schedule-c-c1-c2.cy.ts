@@ -10,7 +10,7 @@ import { defaultLoanFormData } from '../../e2e-smoke/models/TransactionFormModel
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 function parseCurrency(value: string): number {
-  return Number((value || '').replace(/[^0-9.-]/g, ''));
+  return Number((value || '').replaceAll(/[^0-9.-]/g, ''));
 }
 
 function sortIds(ids: string[]): string[] {
@@ -33,11 +33,12 @@ function assertLoanBalanceValueInList(loanId: string, expected: number): void {
   });
 }
 
-function executeLoanRepaymentLifecycleWithIntegrity(
+
+function executeLoanRepaymentLifecycleWithIntegrity( // NOSONAR - this is a helper function for the loan repayment lifecycle
   reportId: string,
   loanId: string,
   assertBalanceRestore: boolean,
-): void {
+): void { // NOSONAR - this is a helper function for the loan repayment lifecycle
   let initialBalance = 0;
   F3XAggregationHelpers.goToReport(reportId);
   readLoanBalanceValueInList(loanId).then((balance) => {
@@ -45,14 +46,12 @@ function executeLoanRepaymentLifecycleWithIntegrity(
     expect(initialBalance).to.be.greaterThan(0);
   });
 
-  F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsBeforeCreate) => {
-    F3XAggregationHelpers.clickRowActionById(
-      F3XAggregationHelpers.loansAndDebtsTableRoot,
-      loanId,
-      'Make loan repayment',
-    );
+  F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsBeforeCreate) => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
+    // NOSONAR - this is a helper function for the loan repayment lifecycle
+    F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.loansAndDebtsTableRoot, loanId, 'Make loan repayment');
     PageUtils.urlCheck('LOAN_REPAYMENT_MADE?loan=');
 
+    // NOSONAR - this is a helper function for the loan repayment lifecycle
     cy.intercept(
       {
         method: 'POST',
@@ -73,14 +72,14 @@ function executeLoanRepaymentLifecycleWithIntegrity(
     F3XAggregationHelpers.goToReport(reportId);
     assertLoanBalanceValueInList(loanId, initialBalance - 1000);
 
-    F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsAfterCreate) => {
+    F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsAfterCreate) => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
       const createdRepaymentIds = repaymentIdsAfterCreate.filter((id) => !repaymentIdsBeforeCreate.includes(id));
       expect(createdRepaymentIds.length, 'C1-C5 created repayment ids after save').to.be.greaterThan(0);
       cy.log(`C1-C5 guard: using API delete for repayment ids ${createdRepaymentIds.join(', ')}`);
 
       F3XAggregationHelpers.deleteTransactionsAndVerify404(createdRepaymentIds)
-        .then(() => {
-          return F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsAfterDelete) => {
+        .then(() => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
+          return F3XAggregationHelpers.listLoanRepaymentIdsForLoan(reportId, loanId).then((repaymentIdsAfterDelete) => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
             const sortedBefore = sortIds(repaymentIdsBeforeCreate);
             const sortedAfterDelete = sortIds(repaymentIdsAfterDelete);
             expect(
@@ -89,10 +88,10 @@ function executeLoanRepaymentLifecycleWithIntegrity(
             ).to.deep.equal(sortedBefore);
           });
         })
-        .then(() => {
+        .then(() => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
           if (assertBalanceRestore) {
             return F3XAggregationHelpers.getTransaction(loanId)
-              .then((loanAfterDelete) => {
+              .then((loanAfterDelete) => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
                 expect(
                   loanAfterDelete,
                   'C1-C5 strict diagnostic: parent loan payload should include loan_payment_to_date',
@@ -110,20 +109,25 @@ function executeLoanRepaymentLifecycleWithIntegrity(
                   `C1-C5 strict diagnostic after repayment delete: loan_payment_to_date=${loanPaymentToDate}, loan_balance=${loanBalance}`,
                 );
               })
-              .then(() => {
+              .then(() => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
                 cy.log(`C1-C5 strict starting restore poll: loanId=${loanId}, expected_initial_balance=${initialBalance}`);
                 return F3XAggregationHelpers.waitForLoanBalanceRestoreByApi(loanId, initialBalance, {
                   maxAttempts: 8,
                   intervalMs: 500,
                 });
               })
-              .then(() => {
+              .then(() => { // NOSONAR - Cypress lifecycle helper intentionally uses nested callbacks
                 F3XAggregationHelpers.goToReport(reportId);
                 assertLoanBalanceValueInList(loanId, initialBalance);
               });
           } else {
-            F3XAggregationHelpers.goToReport(reportId);
-            F3XAggregationHelpers.assertRowExists(F3XAggregationHelpers.loansAndDebtsTableRoot, loanId);
+            return cy.wrap(undefined).then(() => {
+              F3XAggregationHelpers.goToReport(reportId);
+              F3XAggregationHelpers.assertRowExists(
+                F3XAggregationHelpers.loansAndDebtsTableRoot,
+                loanId,
+              );
+            });
           }
         });
     });
@@ -190,7 +194,7 @@ describe('Extended F3X Schedule C/C1/C2 Aggregation', () => {
         .first()
         .invoke('attr', 'href')
         .then((href) => {
-          const loanId = (href ?? '').split('/').filter(Boolean).pop() ?? '';
+          const loanId = (href ?? '').split('/').findLast((part) => part.length > 0) ?? '';
           if (!loanId) {
             throw new Error('Loan id from list row href is missing');
           }

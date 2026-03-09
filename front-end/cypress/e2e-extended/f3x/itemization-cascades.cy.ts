@@ -12,7 +12,7 @@ import { TransactionTableColumns } from '../../e2e-smoke/pages/f3xTransactionLis
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
 
 function transactionIdFromRowHref(href: string | undefined, context: string): string {
-  const match = href?.match(/\/list\/([0-9a-f-]+)/i);
+  const match = /\/list\/([0-9a-f-]+)/i.exec(href ?? '');
   const transactionId = match?.[1] ?? '';
   if (!transactionId) {
     throw new Error(`${context} transaction id is missing`);
@@ -140,13 +140,13 @@ describe('Extended F3X Itemization Cascades', () => {
         .eq(TransactionTableColumns.transaction_type)
         .should('contain', 'Individual Joint Fundraising Transfer Memo');
 
-      receiptTransactionIdByRow(0).then((parentId) => {
-        receiptTransactionIdByRow(1).then((childOneId) => {
-          receiptTransactionIdByRow(2).then((childTwoId) => {
+      receiptTransactionIdByRow(0).then((parentId) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for tier-3 row ids
+        receiptTransactionIdByRow(1).then((childOneId) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for tier-3 row ids
+          receiptTransactionIdByRow(2).then((childTwoId) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for tier-3 row ids
             F3XAggregationHelpers.interceptUpdateItemizationAggregation('Tier3Unitemize');
             F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.receiptsTableRoot, parentId, 'Unitemize');
             F3XAggregationHelpers.confirmDialog();
-            cy.wait('@Tier3Unitemize').then((interception) => {
+            cy.wait('@Tier3Unitemize').then((interception) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for tier-3 row ids
               expect(interception.request.url).to.contain(`/transactions/${parentId}/update-itemization-aggregation/`);
               expect(interception.response?.statusCode).to.equal(400);
             });

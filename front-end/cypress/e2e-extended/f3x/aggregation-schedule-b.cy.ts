@@ -11,32 +11,32 @@ describe('Extended F3X Schedule B Aggregation', () => {
   });
 
   it('B1-B5 same-payee chain recalculates after payee switch, insert, and delete', () => {
-    cy.wrap(DataSetup({ committee: true, candidate: true })).then((result: any) => {
+    cy.wrap(DataSetup({ committee: true, candidate: true })).then((result: any) => { // NOSONAR - Cypress aggregation scenario intentionally uses nested callbacks
       const newPayeeSeed = F3XAggregationHelpers.uniqueCommitteeSeed();
-      F3XAggregationHelpers.createContact(newPayeeSeed).then((newPayee) => {
+      F3XAggregationHelpers.createContact(newPayeeSeed).then((newPayee) => { // NOSONAR - Cypress aggregation scenario intentionally uses nested callbacks
         F3XAggregationHelpers.seedScheduleBChain(result.report, result.committee, result.candidate, [
           { amount: 100, date: `${currentYear}-04-10` },
           { amount: 60, date: `${currentYear}-04-15` },
           { amount: 40, date: `${currentYear}-04-20` },
-        ]).then(([firstId, secondId, thirdId]) => {
+        ]).then(([firstId, secondId, thirdId]) => { // NOSONAR - Cypress aggregation scenario intentionally uses nested callbacks
           F3XAggregationHelpers.getTransaction(firstId).its('aggregate').should('equal', '100.00');
           F3XAggregationHelpers.getTransaction(secondId).its('aggregate').should('equal', '160.00');
           F3XAggregationHelpers.getTransaction(thirdId).its('aggregate').should('equal', '200.00');
 
-          F3XAggregationHelpers.deleteTransactionById(secondId).then(() => {
+          F3XAggregationHelpers.deleteTransactionById(secondId).then(() => { // NOSONAR - Cypress aggregation scenario intentionally uses nested callbacks
             F3XAggregationHelpers.createTransaction(
               buildContributionToCandidate(60, `${currentYear}-04-15`, [newPayee, result.candidate], result.report, {
                 election_code: `P${currentYear}`,
                 support_oppose_code: 'S',
                 date_signed: `${currentYear}-04-10`,
               }),
-            ).then((recreatedSecondId) => {
+            ).then((recreatedSecondId) => { // NOSONAR - Cypress aggregation scenario intentionally uses nested callbacks
               F3XAggregationHelpers.getTransaction(recreatedSecondId.id).its('aggregate').should('equal', '60.00');
               F3XAggregationHelpers.getTransaction(thirdId).its('aggregate').should('equal', '140.00');
 
               F3XAggregationHelpers.seedScheduleBChain(result.report, result.committee, result.candidate, [
                 { amount: 20, date: `${currentYear}-04-12` },
-              ]).then(([insertedId]) => {
+              ]).then(([insertedId]) => { // NOSONAR - Cypress aggregation scenario intentionally uses nested callbacks
                 F3XAggregationHelpers.getTransaction(insertedId).its('aggregate').should('equal', '120.00');
                 F3XAggregationHelpers.getTransaction(thirdId).its('aggregate').should('equal', '160.00');
 

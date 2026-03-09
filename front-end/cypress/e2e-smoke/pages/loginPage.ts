@@ -16,10 +16,6 @@ export class LoginPage {
       },
     );
 
-    //Retrieve the AUTH TOKEN from the created/restored session
-    cy.then(() => {
-      Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
-    });
   }
 }
 
@@ -94,12 +90,6 @@ function loginDotGovLogin() {
       }
     });
   cy.contains('Welcome to FECfile+').should('not.exist');
-}
-
-function retrieveAuthToken() {
-  const storedData = localStorage.getItem('fecfile_online_userLoginData');
-  const loginData = JSON.parse(storedData ?? '');
-  return 'JWT ' + loginData.token;
 }
 
 export function Initialize() {
