@@ -1,73 +1,85 @@
-<div>
-  @switch (controlType) {
-    @case ('button') {
-      <button
-        pButton
-        pRipple
-        [label]="navigationControl?.label || ''"
-        [icon]="navigationControl?.icon || ''"
-        [class]="navigationControl?.ngClass || ''"
-        (click)="clickButton()"
-        [disabled]="isDisabled()"
-        data-cy="navigation-control-button"
-        appSingleClick
-      ></button>
-    }
-    @case ('dropdown') {
-      <button
-        pButton
-        pRipple
-        class="dd-button"
-        [disabled]="isDisabled()"
-        (click)="op.toggle($event)"
-        data-cy="navigation-control-dropdown"
-      >
-        <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
-      </button>
-      <p-popover #op>
-        <div class="p-3">
-          @for (option of dropdownOptions; track option) {
-            @if (option.items) {
-              <span class="dropdown-header">{{ option.label }}</span>
-              <hr />
-
-              <ul>
-                @for (childOption of option.items; track childOption) {
-                  <li>
-                    <button
-                      [text]="true"
-                      pButton
-                      pRipple
-                      data-cy="navigation-control-dropdown-option"
-                      (click)="onDropdownChange(childOption)"
-                      (keyup.enter)="onDropdownChange(childOption)"
-                      (keyup.space)="onDropdownChange(childOption)"
-                      [disabled]="!childOption.value"
-                      class="w-full flex justify-content-start"
-                    >
-                      {{ childOption.label }}
-                    </button>
-                  </li>
-                }
-              </ul>
-            } @else {
-              <button
-                [text]="true"
-                pButton
-                pRipple
-                data-cy="navigation-control-dropdown-option"
-                (click)="onDropdownChange(option)"
-                (keyup.enter)="onDropdownChange(option)"
-                (keyup.space)="onDropdownChange(option)"
-                [disabled]="!option.value"
-                class="w-full flex justify-content-start"
-              >
-                {{ option.label }}
-              </button>
-            }
-          }
-        </div>
-      </p-popover>
-    }
+@switch (type()) {
+  @case (controlType.BUTTON) {
+    <button
+      pButton
+      pRipple
+      [label]="navigationControl().label || ''"
+      [icon]="navigationControl().icon || ''"
+      [class]="navigationControl().ngClass || ''"
+      (click)="clickButton()"
+      [disabled]="isDisabled()"
+      data-cy="navigation-control-button"
+      appSingleClick
+    ></button>
   }
-</div>
+  @case (controlType.DROPDOWN) {
+    <button
+      pButton
+      pRipple
+      class="dd-button"
+      [disabled]="isDisabled()"
+      (click)="op.toggle($event)"
+      data-cy="navigation-control-dropdown"
+    >
+      <i [class]="navigationControl().icon || ''"></i><span>{{ navigationControl().label || '' }}</span>
+    </button>
+    <p-popover #op>
+      <div class="p-3">
+        @for (option of dropdownOptions(); track option) {
+          @if (option.items) {
+            <span class="dropdown-header">{{ option.label }}</span>
+            <hr />
+
+            <ul>
+              @for (childOption of option.items; track childOption) {
+                <li>
+                  <button
+                    [text]="true"
+                    pButton
+                    pRipple
+                    data-cy="navigation-control-dropdown-option"
+                    (click)="onDropdownChange(childOption)"
+                    (keyup.enter)="onDropdownChange(childOption)"
+                    (keyup.space)="onDropdownChange(childOption)"
+                    [disabled]="!childOption.value"
+                    class="w-full flex justify-content-start"
+                  >
+                    {{ childOption.label }}
+                  </button>
+                </li>
+              }
+            </ul>
+          } @else {
+            <button
+              [text]="true"
+              pButton
+              pRipple
+              data-cy="navigation-control-dropdown-option"
+              (click)="onDropdownChange(option)"
+              (keyup.enter)="onDropdownChange(option)"
+              (keyup.space)="onDropdownChange(option)"
+              [disabled]="!option.value"
+              class="w-full flex justify-content-start"
+            >
+              {{ option.label }}
+            </button>
+          }
+        }
+      </div>
+    </p-popover>
+  }
+  @case (controlType.SPLITBUTTON) {
+    <div class="split-button-container">
+      <p-splitButton
+        [label]="navigationControl().label || ''"
+        [icon]="navigationControl().icon || ''"
+        [model]="dropdownOptions()"
+        (onClick)="clickButton()"
+        data-cy="navigation-control-splitbutton"
+        [disabled]="isDisabled()"
+        [model]="items"
+        appSingleClick
+      />
+    </div>
+  }
+}
