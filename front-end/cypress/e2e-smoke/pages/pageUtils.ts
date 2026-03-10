@@ -290,16 +290,16 @@ export class PageUtils {
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
 
-    const buttonLabelRx =
-      typeof name === 'string'
-        ? new RegExp(`^\\s*${Cypress._.escapeRegExp(name)}\\s*$`, 'i')
-        : new RegExp(name.source, name.flags.replaceAll('g', ''));
+    const buttonLabelRx = new RegExp(
+      String.raw`^\s*${Cypress._.escapeRegExp(name)}\s*$`,
+      'i',
+    );
 
     cy.get(alias)
       .find('button:visible')
       .then(($buttons) => {
         const match = [...$buttons].find((button) => {
-          const text = (button.textContent ?? '').replace(/\s+/g, ' ').trim();
+          const text = (button.textContent ?? '').replaceAll(/\s+/g, ' ').trim();
           return buttonLabelRx.test(text);
         });
 

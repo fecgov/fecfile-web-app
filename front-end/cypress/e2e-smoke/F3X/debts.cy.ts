@@ -34,7 +34,7 @@ function setupCoordinatedPartyExpenditure(
 }
 
 function exactText(value: string): RegExp {
-  return new RegExp(`^\\s*${Cypress._.escapeRegExp(value)}\\s*$`);
+  return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value)}\s*$`);
 }
 
 function debtRowByLabel(label: string): Cypress.Chainable<JQuery<HTMLTableRowElement>> {
@@ -68,15 +68,17 @@ function debtTransactionIdByLabelAndBalance(label: string, expectedBalance: stri
     .first()
     .find('a')
     .first()
-    .should('have.attr', 'href')
+    .invoke('attr', 'href')
     .then((href) => {
-      const match = /\/list\/([0-9a-f-]+)/i.exec(href);
+      expect(href, `debt transaction href for ${label}`).to.be.a('string');
+      const hrefValue = href ?? '';
+      const match = /\/list\/([0-9a-f-]+)/i.exec(hrefValue);
       const debtId = match?.[1];
 
-      expect(debtId, `debt transaction id in href ${href}`).to.be.a('string');
+      expect(debtId, `debt transaction id in href ${hrefValue}`).to.be.a('string');
 
       if (!debtId) {
-        throw new Error(`Could not parse debt transaction id from href ${href}`);
+        throw new Error(`Could not parse debt transaction id from href ${hrefValue}`);
       }
 
       return debtId;
