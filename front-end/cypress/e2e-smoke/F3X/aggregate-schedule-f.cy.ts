@@ -28,6 +28,11 @@ function generateReportAndContacts(transData: [number, string, boolean][]) {
     });
 }
 
+function reloadTransactionsInReport(reportId: string) {
+  ReportListPage.goToReportList(reportId);
+  cy.contains('Transactions in this report').should('exist');
+}
+
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
     Initialize();
@@ -212,17 +217,17 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
       PageUtils.clickButton('Save');
 
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
       PageUtils.clickButton('Save');
 
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
       PageUtils.clickButton('Save');
 
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
       cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$65.00');
     });

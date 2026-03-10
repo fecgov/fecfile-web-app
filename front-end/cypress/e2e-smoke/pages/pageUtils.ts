@@ -289,11 +289,27 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
+
+    const buttonLabelRx =
+      typeof name === 'string'
+        ? new RegExp(`^\\s*${Cypress._.escapeRegExp(name)}\\s*$`, 'i')
+        : new RegExp(name.source, name.flags.replaceAll('g', ''));
+
     cy.get(alias)
-      .contains('button', name)
-      .first()
-      .as('btn');
-    cy.get('@btn').click({ force });
+      .find('button:visible')
+      .then(($buttons) => {
+        const match = [...$buttons].find((button) => {
+          const text = (button.textContent ?? '').replace(/\s+/g, ' ').trim();
+          return buttonLabelRx.test(text);
+        });
+
+        expect(match, `visible button match for ${String(name)}`).to.exist;
+        if (!match) {
+          throw new Error(`Missing visible button match for ${String(name)}`);
+        }
+
+        cy.wrap(match).click({ force });
+      });
   }
 
   static dateToString(date: Date) {

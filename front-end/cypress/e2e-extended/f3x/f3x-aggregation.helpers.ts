@@ -239,7 +239,7 @@ export class F3XAggregationHelpers {
           return cy
             .request({
               method: 'GET',
-              url: `http://localhost:8080/api/v1/transactions/${id}/`,
+              url: `http://localhost:8080/api/v1/transactions/${JSON.stringify(id)}/`,
               failOnStatusCode: false,
             })
             .then((response) => {

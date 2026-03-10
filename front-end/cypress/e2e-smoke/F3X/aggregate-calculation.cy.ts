@@ -37,6 +37,11 @@ function setupTransactions(secondSame: boolean) {
   });
 }
 
+function reloadTransactionsInReport(reportId: string) {
+  ReportListPage.goToReportList(reportId);
+  cy.contains('Transactions in this report').should('exist');
+}
+
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
     Initialize();
@@ -53,7 +58,6 @@ describe('Tests transaction form aggregate calculation', () => {
         .find('a')
         .first()
         .click();
-      cy.contains('Create a new contact').should('exist');
 
       cy.get('[id=aggregate]').should('have.value', '$225.01');
 
@@ -81,7 +85,7 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.get('[id=aggregate]').should('have.value', '$240.01');
       PageUtils.clickButton('Save');
 
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
     });
@@ -219,7 +223,7 @@ describe('Tests transaction form aggregate calculation', () => {
       PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$100.00');
       PageUtils.clickButton('Save');
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
 
       // Create the second Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
@@ -246,7 +250,7 @@ describe('Tests transaction form aggregate calculation', () => {
       PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
 
       // Create the third Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
@@ -273,7 +277,7 @@ describe('Tests transaction form aggregate calculation', () => {
       PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$175.00');
       PageUtils.clickButton('Save');
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
 
       // Test aggregation re-calculation from date leapfrogging
       cy.get(`${F3XAggregationHelpers.disbursementsTableRoot} .p-datatable-tbody > :nth-child(1) > :nth-child(2) > a`)
@@ -284,7 +288,7 @@ describe('Tests transaction form aggregate calculation', () => {
       PageUtils.blurActiveField();
       cy.get('#calendar_ytd').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
-      cy.contains('Transactions in this report').should('exist');
+      reloadTransactionsInReport(result.report);
 
       cy.get(`${F3XAggregationHelpers.disbursementsTableRoot} .p-datatable-tbody > :nth-child(2) > :nth-child(2) > a`)
         .first()

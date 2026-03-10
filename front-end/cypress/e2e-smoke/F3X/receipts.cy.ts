@@ -293,7 +293,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save both transactions');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -381,7 +381,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save both transactions');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
