@@ -408,8 +408,8 @@ label.disabled {
 }
 
 .p-button-primary.p-button:enabled:hover {
-  background-color: #164f85;
-  border-color: #164f85;
+  background-color: var(--primary-button-hover-color);
+  border-color: var(--primary-button-hover-color);
 }
 
 .p-button-secondary.p-button {

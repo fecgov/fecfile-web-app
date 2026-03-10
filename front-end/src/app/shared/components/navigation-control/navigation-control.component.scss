@@ -53,12 +53,3 @@ button > span {
 hr {
   margin: 1rem 0;
 }
-
-.split-button-container {
-  background: var(--p-button-primary-background);
-  width: fit-content;
-  border-radius: var(--border-radius);
-  &:has(.p-splitbutton-button:disabled) {
-    background: var(--surface-ground);
-  }
-}
