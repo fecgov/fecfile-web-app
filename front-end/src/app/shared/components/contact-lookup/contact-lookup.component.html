@@ -3,7 +3,7 @@
     <em>{{ candidateOfficeLabel }} candidates only</em>
   </div>
 }
-<div class="grid contact-lookup-container">
+<div class="grid contact-lookup-container" [attr.data-cy]="rootDataCy">
   <div class="px-0" [class.dropdown-with-search]="showSearchBoxCallback()">
     <p-select
       [formControl]="contactTypeFormControl"
@@ -13,14 +13,13 @@
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
       id="entity_type_dropdown"
       appendTo="body"
-      [pt]="{ dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon' }"
+      [pt]="contactTypeSelectPt"
     />
   </div>
   @if (showSearchBoxCallback()) {
     <div class="pl-0">
       <p-autoComplete
         id="searchBox"
-        data-cy="searchBox"
         inputId="searchBox"
         ariaLabelledBy="contact_searchbox_label"
         [formControl]="searchBoxFormControl"
@@ -35,6 +34,7 @@
         [delay]="600"
         scrollHeight="30vh"
         appendTo="body"
+        [pt]="contactLookupPt"
       >
         <ng-template let-group pTemplate="group">
           <div class="option-group-header">{{ group.label }}</div>
@@ -61,6 +61,7 @@
       or
       <span
         tabindex="0"
+        [attr.data-cy]="createContactDataCy"
         (click)="onCreateNewContactSelect()"
         (keydown.enter)="onCreateNewContactSelect()"
         (keydown.space)="onCreateNewContactSelect()"

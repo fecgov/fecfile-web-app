@@ -1,8 +1,8 @@
-<dialog #selectReportDialog (close)="cancel()">
+<dialog #selectReportDialog (close)="cancel()" data-cy="transactions-select-report-dialog">
   <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="dialog-content">
       <div class="dialog-header">
-        <h1 class="dialog-title" id="dialog-title">Select a report</h1>
+        <h1 class="dialog-title" id="dialog-title" data-cy="transactions-select-report-dialog-title">Select a report</h1>
         <button
           pButton
           type="button"
@@ -10,6 +10,7 @@
           id="close-button"
           (click)="cancel()"
           aria-label="Cancel"
+          data-cy="transactions-select-report-dialog-close-button"
         ></button>
       </div>
       <div class="dialog-body">
@@ -18,7 +19,7 @@
           different {{ actionTargetLabel() }}.
         </p>
         <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
-        <select id="report-selector" aria-label="Report selector" [(ngModel)]="selectedReport">
+        <select id="report-selector" aria-label="Report selector" [(ngModel)]="selectedReport" data-cy="transactions-select-report-dialog-report-select">
           <button aria-labelledby="report-selector-label">
             <selectedcontent></selectedcontent>
           </button>
@@ -28,7 +29,7 @@
         </select>
       </div>
       <div class="dialog-footer">
-        <button pButton pRipple class="p-button-secondary" (click)="selectReportDialog.close()">Cancel</button>
+        <button pButton pRipple class="p-button-secondary" (click)="selectReportDialog.close()" data-cy="transactions-select-report-dialog-cancel-button">Cancel</button>
         <button
           pButton
           pRipple
@@ -36,6 +37,7 @@
           [disabled]="!selectedReport"
           (click)="createReattribution()"
           label="Continue"
+          data-cy="transactions-select-report-dialog-continue-button"
         ></button>
       </div>
     </div>

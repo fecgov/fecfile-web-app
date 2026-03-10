@@ -55,6 +55,28 @@
 - Cypress `baseUrl` is `http://localhost:4200` and is set in `cypress.config.ts`.
 - Report submission helpers read `Cypress.env('FILING_PASSWORD')`. To supply it locally, set `CYPRESS_FILING_PASSWORD` before running Cypress.
 
+## `data-cy` convention
+- use contextual names only and keep the context in the `data-cy` string itself
+- pattern:
+  `feature-surface-target-kind`
+- examples:
+  `contacts-page-add-contact-button`
+  `contacts-dialog-last-name-input`
+  `contacts-table-row-42-actions-button`
+  `committee-members-dialog-role-select`
+  `report-list-page-create-report-button`
+  `report-create-f3x-page-coverage-from-date-date`
+  `transactions-receipt-picker-individual-receipt-link`
+- repeated elements should use stable ids when available, otherwise indexes
+  examples:
+  `contacts-table-row-<contactId>`
+  `report-list-form3x-table-row-<reportId>`
+  `transactions-receipts-table-row-<transactionId>`
+- prefer putting `data-cy` on the interactive element itself, not only on a wrapper
+- touched cypress code should use `cy.getByDataCy(name)` and `cy.findByDataCy(name)` from `cypress/support/commands.ts` instead of raw `[data-cy="..."]` strings when practical
+- do not add new generic hooks like `save-button`, `searchBox`, `membership-submit`, `row-kebab`, `filing_frequency`, or `userCertified` in touched code
+- smoke pages, `e2e-smoke/F3X/utils`, `e2e-smoke/models`, `e2e-smoke/requests`, `cypress/support`, root `cypress/` helpers, and `e2e-extended` helpers/specs should not introduce new brittle selectors when a contextual `data-cy` exists
+
 ### Env var tips (.env, .zshrc)
 - Local one-off (current shell):
   ```bash

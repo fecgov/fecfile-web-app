@@ -8,7 +8,7 @@
     [inputId]="fieldName()"
     [name]="fieldName()"
     [formControl]="control()!"
-    [attr.data-cy]="fieldName()"
+    [attr.data-cy]="calendarDataCy()"
     [showIcon]="true"
     [iconDisplay]="'input'"
     ariaLabelledBy="date_picker_label"
@@ -24,11 +24,12 @@
   </p-datepicker>
   @if (control() && showErrors()) {
     <app-error-messages
-      [attr.data-cy]="fieldName() + '-error'"
       [form]="form()"
       [control]="control()"
       [formSubmitted]="formSubmitted()"
       [requiredErrorMessage]="requiredErrorMessage()"
+      [dataCyContext]="dataCyContext()"
+      [fieldName]="fieldName()"
     />
   }
 </div>

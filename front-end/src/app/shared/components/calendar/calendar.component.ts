@@ -2,6 +2,7 @@ import { Component, computed, effect, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 import { DatePicker } from 'primeng/datepicker';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 
@@ -16,6 +17,7 @@ export class CalendarComponent {
   readonly formSubmitted = input.required<boolean>();
   readonly fieldName = input.required<string>();
   readonly label = input.required<string>();
+  readonly dataCyContext = input('');
   readonly showErrors = input(true);
   readonly requiredErrorMessage = input('This is a required field.');
 
@@ -26,6 +28,8 @@ export class CalendarComponent {
     if (!control) return undefined;
     return control as SubscriptionFormControl;
   });
+  readonly calendarDataCy = computed(() => buildDataCy(this.dataCyContext(), this.fieldName(), 'date'));
+  readonly errorDataCy = computed(() => buildDataCy(this.dataCyContext(), this.fieldName(), 'error'));
 
   constructor() {
     effect(() => {

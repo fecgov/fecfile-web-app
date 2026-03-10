@@ -7,10 +7,11 @@
     [class.rounded-text]="rounded()"
     [class]="buttonStyleClass()"
     [ariaLabel]="buttonAriaLabel()"
+    [attr.data-cy]="actionTriggerDataCy()"
     (click)="op.toggle($event)"
   ></button>
-  <p-popover #op>
-    <ul class="dropdown-menu">
+  <p-popover #op [attr.data-cy]="actionMenuDataCy()">
+    <ul class="dropdown-menu" [attr.data-cy]="actionMenuDataCy()">
       @for (action of filteredActions(); track action; let index = $index) {
         <li>
           <button
@@ -20,6 +21,7 @@
             type="button"
             class="p-button-secondary p-button-text w-full text-left table-action-button"
             [id]="'button-' + index"
+            [attr.data-cy]="actionButtonDataCy(action)"
             (click)="performAction(action)"
           >
             {{ action.label }}

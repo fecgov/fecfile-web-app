@@ -15,6 +15,7 @@
       (tableActionClick)="$event.action.action($event.actionItem)"
       [actionItem]="item"
       [tableActions]="rowActions"
+      dataCyContext="committee-members-table"
       buttonIcon="pi pi-ellipsis-v"
       buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary p-button-text mr-2"
     />
@@ -23,6 +24,7 @@
 
 <app-table
   [(first)]="first"
+  dataCyContext="committee-members"
   [items]="items()"
   title="Manage users"
   [(totalItems)]="totalItems"
@@ -36,7 +38,15 @@
 >
   <ng-template #caption>
     @if (isCommitteeAdministrator()) {
-      <button (click)="addItem()" class="add-button" icon="pi pi-plus" label="Add user" pButton pRipple></button>
+      <button
+        (click)="addItem()"
+        class="add-button"
+        icon="pi pi-plus"
+        label="Add user"
+        pButton
+        pRipple
+        data-cy="committee-members-page-add-user-button"
+      ></button>
     }
   </ng-template>
 </app-table>

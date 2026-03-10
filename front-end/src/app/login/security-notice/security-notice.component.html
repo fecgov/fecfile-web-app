@@ -29,6 +29,7 @@
             [binary]="true"
             inputId="security-consent-annual"
             ariaLabel="You consent to the security notification for one year"
+            [pt]="{ input: { 'data-cy': 'security-notice-page-consent-checkbox' } }"
           />
           <label for="security-consent-annual" class="p-checkbox-label">
             You consent to the security notification for one year
@@ -40,6 +41,7 @@
           pButton
           pRipple
           class="p-button-secondary decline-button"
+          data-cy="security-notice-page-decline-button"
           label="Decline and exit"
           (click)="loginService.logOut()"
         ></button>
@@ -47,7 +49,7 @@
           pButton
           pRipple
           class="p-button-primary"
-          data-cy="consent-button"
+          data-cy="security-notice-page-consent-button"
           label="Consent"
           (click)="signConsentForm()"
         ></button>

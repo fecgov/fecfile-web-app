@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { Options } from 'app/shared/utils/label.utils';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { NgTemplateOutlet } from '@angular/common';
 import { IdGeneratorService } from 'app/shared/services/id-generator.service';
@@ -31,6 +32,7 @@ export class SelectComponent {
   readonly options = input.required<Options>();
   readonly form = input.required<FormGroup>();
   readonly formControlName = input.required<string>();
+  readonly dataCyContext = input('');
   readonly labelClass = input<string>('');
   readonly formSubmitted = input<boolean>(false);
   readonly includeErrorMessages = input<boolean>(true);
@@ -44,6 +46,8 @@ export class SelectComponent {
   >('optionTemplate');
 
   readonly selectId = computed(() => this.idGen.getIdLabel(this.inputId()));
+  readonly selectDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'select'));
+  readonly clearButtonDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'clear', 'button'));
 
   readonly selectElement = viewChild.required<ElementRef<HTMLSelectElement>>('selectElement');
   readonly selected = viewChild.required<ElementRef>('selected');

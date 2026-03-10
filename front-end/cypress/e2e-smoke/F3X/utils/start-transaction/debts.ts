@@ -1,11 +1,14 @@
-import { PageUtils } from '../../../pages/pageUtils';
+import { buildDataCy } from '../../../../utils/dataCy';
+
+const clickDebtLink = (label: string) =>
+  cy.getByDataCy(buildDataCy('transactions', 'loans-and-debts', 'picker', label, 'link')).click({ force: true });
 
 export class Debts {
   static ByCommittee() {
-    PageUtils.clickLink('Debt Owed By Committee');
+    clickDebtLink('Debt Owed By Committee');
   }
 
   static ToCommittee() {
-    PageUtils.clickLink('Debt Owed To Committee');
+    clickDebtLink('Debt Owed To Committee');
   }
 }

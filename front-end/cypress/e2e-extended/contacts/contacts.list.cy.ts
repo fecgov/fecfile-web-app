@@ -15,11 +15,11 @@ describe('Contacts List (/contacts)', () => {
 
   it('shows header, table, Add, and correct column headers (empty state)', () => {
     cy.contains('h1', 'Manage contacts').should('exist');
-    cy.get('p-table table, table').first().should('exist');
-    cy.contains('button,a', 'Add contact').should('exist');
+    cy.getByDataCy('contacts-table').should('exist');
+    cy.getByDataCy('contacts-page-add-contact-button').should('exist');
     // restore button is conditional; covered in delete tests
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('.empty-message', 'No data available in table').should('exist');
+    cy.getByDataCy('contacts-table-empty-state').should('contain', 'No data available in table');
   });
 
   it('renders a populated list with correct columns after creating contacts via UI', () => {
@@ -34,7 +34,7 @@ describe('Contacts List (/contacts)', () => {
     };
     ContactListPage.enterFormData(individualFormData);
     PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.get('[data-cy="contacts-dialog"]').should('not.exist');
 
     // Candidate
     PageUtils.clickButton('Add contact');
@@ -51,7 +51,7 @@ describe('Contacts List (/contacts)', () => {
     };
     ContactListPage.enterFormData(candidateFormData);
     PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.get('[data-cy="contacts-dialog"]').should('not.exist');
 
     // Committee
     PageUtils.clickButton('Add contact');
@@ -65,7 +65,7 @@ describe('Contacts List (/contacts)', () => {
     };
     ContactListPage.enterFormData(committeeFormData);
     PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.get('[data-cy="contacts-dialog"]').should('not.exist');
 
     // Organization
     PageUtils.clickButton('Add contact');
@@ -77,10 +77,10 @@ describe('Contacts List (/contacts)', () => {
     };
     ContactListPage.enterFormData(organizationFormData);
     PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.get('[data-cy="contacts-dialog"]').should('not.exist');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
+    cy.get('[data-cy="contacts-page-restore-deleted-contacts-button"]').should('not.exist');
     cy.get('tbody tr').should('have.length.greaterThan', 3);
     const individualDisplayName = `${individualFormData['last_name']}, ${individualFormData['first_name']}`;
     const candidateDisplayName = `${candidateFormData['last_name']}, ${candidateFormData['first_name']}`;
@@ -91,19 +91,19 @@ describe('Contacts List (/contacts)', () => {
   });
 
   it('checks pagination controls empty state', () => {
-    cy.contains(/results\s*per\s*page:/i).should('exist');
+    cy.getByDataCy('contacts-table-pagination-rows-per-page').should('exist');
     SharedHelpers.openResultsPerPage();
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
-      cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
+      cy.get('[data-cy="contacts-table-pagination-rows-per-page-option"], [role="option"]').contains(String(size)).should('exist');
     }
 
     PageUtils.blurActiveField();
     cy.contains(/showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+contacts?/i).should('exist');
     SharedHelpers.paginator().should('exist');
-    ContactsHelpers.assertDisabled('button[aria-label="First Page"], .p-paginator-first');
-    ContactsHelpers.assertDisabled('button[aria-label="Previous Page"], .p-paginator-prev');
-    ContactsHelpers.assertDisabled('button[aria-label="Next Page"], .p-paginator-next');
-    ContactsHelpers.assertDisabled('button[aria-label="Last Page"], .p-paginator-last');
+    ContactsHelpers.assertDisabled('[data-cy="contacts-table-pagination-first-button"]');
+    ContactsHelpers.assertDisabled('[data-cy="contacts-table-pagination-previous-button"]');
+    ContactsHelpers.assertDisabled('[data-cy="contacts-table-pagination-next-button"]');
+    ContactsHelpers.assertDisabled('[data-cy="contacts-table-pagination-last-button"]');
   });
 
   it('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
@@ -131,18 +131,13 @@ describe('Contacts List (/contacts)', () => {
 
     SharedHelpers.openResultsPerPage();
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
-      cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
+      cy.get('[data-cy="contacts-table-pagination-rows-per-page-option"], [role="option"]').contains(String(size)).should('exist');
     }
     PageUtils.blurActiveField();
 
     const selectPageSize = (size: number) => {
       SharedHelpers.chooseResultsPerPage(size);
-      cy.contains(/results\s*per\s*page/i)
-        .parent()
-        .find('p-select [data-pc-section="label"], p-select .p-select-label')
-        .filter(':visible')
-        .first()
-        .should('contain.text', String(size));
+      cy.getByDataCy('contacts-table-pagination-rows-per-page').should('contain.text', String(size));
     };
 
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
@@ -152,15 +147,14 @@ describe('Contacts List (/contacts)', () => {
       cy.contains(pageTextRx(1, expectedFirstPageRows), { timeout: 15000 }).should('be.visible');
       cy.get('tbody tr', { timeout: 15000 }).should('have.length', expectedFirstPageRows);
       if (size === 20) {
-        cy.get('button[aria-label="Next Page"], .p-paginator-next')
-          .first()
+        cy.getByDataCy('contacts-table-pagination-next-button')
           .should('not.be.disabled')
           .click({ force: true });
 
         cy.contains(pageTextRx(21, 21), { timeout: 15000 }).should('be.visible');
         cy.get('tbody tr', { timeout: 15000 }).should('have.length', 1);
       }
-      cy.get('.p-paginator').should('exist');
+      cy.getByDataCy('contacts-table-pagination').should('exist');
     }
   });
 });

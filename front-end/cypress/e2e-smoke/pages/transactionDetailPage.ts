@@ -27,9 +27,8 @@ export class TransactionDetailPage {
     }
 
     if (formData.candidate) {
-      cy.get('.contact-lookup-container').last().get('[data-cy="searchBox"]').type(formData.candidate);
-      cy.contains(formData.candidate).should('exist');
-      cy.contains(formData.candidate).click();
+      cy.get('[data-cy$="-lookup"]').last().find('[data-cy$="-contact-search-input"]').type(formData.candidate, { force: true });
+      cy.get('body').contains('[data-cy$="-contact-search-input-option"], [role="option"]', formData.candidate).click({ force: true });
     }
 
     this.enterCommon(formData, alias);
@@ -270,7 +269,7 @@ export class TransactionDetailPage {
       'GET',
       `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
-    cy.contains(/^Save$/).click();
+    PageUtils.clickButton('Save');
 
     cy.wait('@GetLoans');
     cy.wait('@GetDisbursements');

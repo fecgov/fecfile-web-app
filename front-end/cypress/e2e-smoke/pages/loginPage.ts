@@ -61,13 +61,13 @@ function loginDotGovLogin() {
   cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
 
   cy.visit('/');
-  cy.get('#loginButton').click();
+  cy.getByDataCy('login-page-login-gov-button').click();
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
-  cy.get('#security-consent-annual').click();
-  cy.get('[data-cy="consent-button"]').click();
+  cy.getByDataCy('security-notice-page-consent-checkbox').click({ force: true });
+  cy.getByDataCy('security-notice-page-consent-button').click();
   cy.wait('@GetCommitteeAccounts');
-  cy.get('.committee-list .committee-info').first().click();
+  cy.get('[data-cy^="select-committee-page-committee-card-"][data-cy$="-info"]').first().click();
   cy.wait('@ActivateCommittee');
 
   // Wait for the reports page to load
@@ -76,18 +76,14 @@ function loginDotGovLogin() {
   // Creates a second create admin after logging in if necessary
   cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
   cy.get(alias)
-    .find('[data-cy="second-committee-email"]')
+    .find('[data-cy="select-committee-second-admin-dialog"]')
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
-    .then(($email) => {
-      if ($email.length) {
-        cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
-        cy.wrap($email).should('have.value', '');
-        cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-        cy.wrap($email).should('have.value', 'admin@admin.com');
-        cy.wrap($email).click();
-        PageUtils.clickButton('Save');
-
-        cy.get(alias).find('.p-toast-close-button').click();
+    .then(($dialog) => {
+      if ($dialog.length) {
+        cy.getByDataCy('select-committee-second-admin-dialog-email-input').should('have.value', '');
+        cy.getByDataCy('select-committee-second-admin-dialog-email-input').clear().type('admin@admin.com');
+        cy.getByDataCy('select-committee-second-admin-dialog-save-button').click();
+        PageUtils.closeToast();
       }
     });
   cy.contains('Welcome to FECfile+').should('not.exist');

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { currentYear } from '../pages/pageUtils';
+import { currentYear } from '../../utils/date';
 
 export class ScheduleFormData {
   amount: number;

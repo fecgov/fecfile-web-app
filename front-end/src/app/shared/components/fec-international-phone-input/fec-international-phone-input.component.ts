@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 import intlTelInput, { Iti } from 'intl-tel-input';
 
 type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
@@ -21,6 +22,7 @@ type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
   ngControl = inject(NgControl);
   readonly inputId = input('telephone');
+  readonly dataCyContext = input('');
   @Input() disabled = false;
   @Input() labelName = '';
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
@@ -34,6 +36,10 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   };
   private countryCode: string | undefined;
   private number = '';
+
+  get inputDataCy(): string {
+    return buildDataCy(this.dataCyContext(), this.inputId(), 'input');
+  }
 
   constructor() {
     this.ngControl.valueAccessor = this;

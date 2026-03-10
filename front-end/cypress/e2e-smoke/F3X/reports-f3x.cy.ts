@@ -14,7 +14,7 @@ describe('Manage reports', () => {
   it('Create a Quarterly Election Year report', () => {
     ReportListPage.createF3X();
     ReportListPage.goToPage();
-    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.getByDataCy('report-list-form3x-table').as('form3xTable');
     cy.get('@form3xTable').get('tr').should('contain', 'In progress');
     cy.get('@form3xTable').get('tr').should('contain', 'GENERAL (12G)');
     cy.get('@form3xTable').get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
@@ -28,7 +28,7 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.getByDataCy('report-list-form3x-table').as('form3xTable');
     cy.get('@form3xTable').get('tr').should('contain', 'OCTOBER 20 MONTHLY (M10)');
   });
 
@@ -40,7 +40,7 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.getByDataCy('report-list-form3x-table').as('form3xTable');
     cy.get('@form3xTable').get('tr').should('contain', 'RUNOFF (30R)');
   });
 
@@ -53,7 +53,7 @@ describe('Manage reports', () => {
     };
     ReportListPage.createF3X(formData);
     ReportListPage.goToPage();
-    cy.get('[data-cy="form3x-list-component').as('form3xTable');
+    cy.getByDataCy('report-list-form3x-table').as('form3xTable');
     cy.get('@form3xTable').get('tr').should('contain', 'JANUARY 31 YEAR-END (YE)');
     cy.get('@form3xTable').get('tr').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
   });
@@ -71,7 +71,7 @@ describe('Manage reports', () => {
 
     // Check for error messages caused by the overlapping dates
     const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
-    cy.get('app-error-messages[data-cy="coverage_from_date-error"]').should('contain', errorMessage);
+    cy.getByDataCy('report-create-f3x-page-coverage-from-date-error').should('contain', errorMessage);
     // https://fecgov.atlassian.net/browse/FECFILE-2661
     // This error looks to be behaving very strangely. I feel like it's also behaving odd on develop however...
     // cy.get('app-error-messages[data-cy="coverage_through_date-error"]').should('contain', errorMessage);
@@ -85,7 +85,7 @@ describe('Manage reports', () => {
     F3xCreateReportPage.coverageCall();
     ReportListPage.clickCreateAndSelectForm('F3X');
     F3xCreateReportPage.waitForCoverage();
-    cy.get('label[for="12G"]').should('have.class', 'p-disabled');
+    cy.getByDataCy('report-create-f3x-page-report-code-12G-label').should('have.class', 'p-disabled');
   });
 
   it('Create report and save', () => {

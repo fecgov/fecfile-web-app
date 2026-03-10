@@ -1,15 +1,18 @@
-import { PageUtils } from '../../../pages/pageUtils';
+import { buildDataCy } from '../../../../utils/dataCy';
+
+const clickLoanLink = (label: string) =>
+  cy.getByDataCy(buildDataCy('transactions', 'loans-and-debts', 'picker', label, 'link')).click({ force: true });
 
 export class Loans {
   static FromBank() {
-    PageUtils.clickLink('Loan Received from Bank');
+    clickLoanLink('Loan Received from Bank');
   }
 
   static ByCommittee() {
-    PageUtils.clickLink('Loan By Committee');
+    clickLoanLink('Loan By Committee');
   }
 
   static Individual() {
-    PageUtils.clickLink('Loan Received from Individual');
+    clickLoanLink('Loan Received from Individual');
   }
 }

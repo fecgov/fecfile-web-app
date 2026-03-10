@@ -1,4 +1,4 @@
-import { currentYear } from '../pages/pageUtils';
+import { currentYear } from '../../utils/date';
 
 export class F3xCreateReportFormData {
   filing_frequency: string;

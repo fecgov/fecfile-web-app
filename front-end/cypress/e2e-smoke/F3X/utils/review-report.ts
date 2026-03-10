@@ -1,23 +1,25 @@
-import { PageUtils } from '../../pages/pageUtils';
+import { buildDataCy } from '../../../utils/dataCy';
+
+const clickSidebarLink = (label: string) => cy.getByDataCy(buildDataCy('report-sidebar', label, 'link')).click({ force: true });
 
 export class ReviewReport {
   static Summary() {
-    PageUtils.clickSidebarItem('REVIEW A REPORT');
-    PageUtils.clickSidebarItem('View summary page');
+    clickSidebarLink('REVIEW A REPORT');
+    clickSidebarLink('View summary page');
   }
 
   static DSP() {
-    PageUtils.clickSidebarItem('REVIEW A REPORT');
-    PageUtils.clickSidebarItem('View detailed summary page');
+    clickSidebarLink('REVIEW A REPORT');
+    clickSidebarLink('View detailed summary page');
   }
 
   static PrintPreview() {
-    PageUtils.clickSidebarItem('REVIEW A REPORT');
-    PageUtils.clickSidebarItem('View print preview');
+    clickSidebarLink('REVIEW A REPORT');
+    clickSidebarLink('View print preview');
   }
 
   static AddReportLevelMemo() {
-    PageUtils.clickSidebarItem('REVIEW A REPORT');
-    PageUtils.clickSidebarItem('Add a report level memo');
+    clickSidebarLink('REVIEW A REPORT');
+    clickSidebarLink('Add a report level memo');
   }
 }

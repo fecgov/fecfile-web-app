@@ -1,5 +1,6 @@
 <app-dialog
   aria-labelledby="dialog-title"
+  dataCyContext="report-list"
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
@@ -15,6 +16,7 @@
         [(ngModel)]="selectedType"
         class="w-full"
         id="typeDropdown"
+        [pt]="formTypeSelectPt()"
       >
         <ng-template #selectedItem let-selectedOption>
           <span class="option">
@@ -22,7 +24,7 @@
           </span>
         </ng-template>
         <ng-template let-type #item>
-          <span class="option" [attr.data-cy]="type">
+          <span class="option" [attr.data-cy]="formTypeOptionDataCy(type)">
             <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}
           </span>
         </ng-template>

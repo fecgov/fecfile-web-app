@@ -1,5 +1,5 @@
 <ng-template #nameBody let-item>
-  <a (click)="editItem(item)">{{ displayName(item) }}</a>
+  <a (click)="editItem(item)" [attr.data-cy]="'contacts-table-row-' + item.id + '-name-link'">{{ displayName(item) }}</a>
 </ng-template>
 
 <ng-template #typeBody let-item>
@@ -14,6 +14,7 @@
   <app-table-actions-button
     [tableActions]="rowActions"
     [actionItem]="item"
+    dataCyContext="contacts-table"
     (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
     buttonIcon="pi pi-ellipsis-v"
     buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
@@ -23,6 +24,7 @@
 
 <app-table
   [(first)]="first"
+  dataCyContext="contacts"
   [items]="items()"
   title="Manage contacts"
   [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
@@ -36,12 +38,19 @@
 >
   <ng-template #caption>
     @if (restoreContactsButtonIsVisible) {
-      <button pButton pRipple class="restore-contact-button" [routerLink]="['deleted']">
+      <button
+        pButton
+        pRipple
+        class="restore-contact-button"
+        [routerLink]="['deleted']"
+        data-cy="contacts-page-restore-deleted-contacts-button"
+      >
         Restore deleted contacts
       </button>
     }
     <button
       id="button-contacts-new"
+      data-cy="contacts-page-add-contact-button"
       pButton
       pRipple
       label="Add contact"
@@ -55,6 +64,7 @@
 <app-contact-dialog
   [contactTypeOptions]="dialogContactTypeOptions"
   [contact]="item"
+  dataCyContext="contacts"
   [(detailVisible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact($event)"

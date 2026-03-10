@@ -1,6 +1,7 @@
 <app-dialog
   tabindex="-1"
   aria-labelledby="dialog-title"
+  dataCyContext="committee-members"
   [title]="member() ? 'Edit user' : 'Add user'"
   [submitLabel]="member() ? 'Change' : 'Add'"
   [(visible)]="detailVisible"
@@ -11,13 +12,18 @@
       @if (member()) {
         <div class="field">
           <label class="dialog-label" id="role-label" for="role">CURRENT ROLE</label>
-          <input id="role" [disabled]="true" [value]="role()" />
+          <input id="role" [disabled]="true" [value]="role()" data-cy="committee-members-dialog-current-role-input" />
         </div>
       } @else {
         <div class="field">
           <label class="dialog-label" for="email">ENTER EMAIL</label>
-          <input autofocus type="text" pInputText id="email" formControlName="email" />
-          <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
+          <input autofocus type="text" pInputText id="email" formControlName="email" data-cy="committee-members-dialog-email-input" />
+          <app-error-messages
+            [form]="form"
+            fieldName="email"
+            [formSubmitted]="formSubmitted"
+            dataCyContext="committee-members-dialog"
+          />
         </div>
       }
       <app-select
@@ -26,6 +32,7 @@
         [options]="roleOptions"
         [form]="form"
         formControlName="role"
+        dataCyContext="committee-members-dialog"
         labelClass="dialog-label"
       />
     </div>

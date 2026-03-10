@@ -1,6 +1,7 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
+import { buildDataCy } from '../../utils/dataCy';
 
 export class ReportListPage {
   static goToPage() {
@@ -10,14 +11,14 @@ export class ReportListPage {
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
-    cy.get('[data-cy="create-report"]').click({ force });
-    cy.get('#typeDropdown').click();
+    cy.getByDataCy('report-list-page-create-report-button').click({ force });
+    cy.getByDataCy('report-list-dialog-form-type-select').click({ force: true });
     if (formType === 'F24') {
-      cy.get(`[data-cy="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
+      cy.getByDataCy('report-list-dialog-form-type-f24-option').should('contain', '24/48 Hour Report of Independent Expenditure');
     }
-    cy.get(`[data-cy="${formType}"]`).click();
+    cy.getByDataCy(buildDataCy('report-list', 'dialog', 'form-type', formType, 'option')).click();
     if (submit) {
-      cy.contains('Start building report').click();
+      cy.getByDataCy('report-list-dialog-submit-button').click();
     }
   }
 
@@ -51,8 +52,8 @@ export class ReportListPage {
   static createF24(report = defaultForm24Data) {
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('F24', true, false);
-    cy.get('p-togglebutton').contains(`${report.report_type_24_48} Hour`).should('exist').click();
-    cy.get('[data-cy="start-report"]').click();
+    cy.getByDataCy('report-list-dialog-form24-type-select').contains(`${report.report_type_24_48}-Hour`).should('exist').click();
+    cy.getByDataCy('report-list-dialog-submit-button').click();
   }
 
   static editReport(reportName: string, fieldName = 'Edit') {
@@ -67,11 +68,10 @@ export class ReportListPage {
     ReportListPage.editReport(reportName);
     PageUtils.clickSidebarItem('SUBMIT YOUR REPORT');
     PageUtils.clickSidebarItem('Submit report');
-    const alias = PageUtils.getAlias('');
-    cy.get(alias).find('#filingPassword').type(''); // Insert password from env variable
-    cy.get(alias).find('.p-checkbox').click();
-    PageUtils.clickButton('Submit');
-    PageUtils.clickButton('Yes');
+    cy.getByDataCy('report-submit-page-filing-password-input').type(Cypress.env('FILING_PASSWORD'));
+    cy.getByDataCy('report-submit-page-user-certified-checkbox').click({ force: true });
+    cy.getByDataCy('report-submit-page-submit-button').click();
+    cy.getByDataCy('layout-confirm-dialog-submit-button').click();
     ReportListPage.goToPage();
   }
 

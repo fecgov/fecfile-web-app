@@ -7,6 +7,8 @@ import 'cypress-mochawesome-reporter/register';
 
 Cypress.Commands.add('safeType', { prevSubject: true }, commands.safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, commands.overwrite);
+Cypress.Commands.add('getByDataCy', commands.getByDataCy);
+Cypress.Commands.add('findByDataCy', { prevSubject: true }, commands.findByDataCy);
 
 registerFailOn5xx();
 
@@ -19,6 +21,8 @@ declare global {
         options?: Partial<RunOptions> & { includedImpacts?: string[] },
         waivers?: Record<string, { reason: string; link: string }>
       ): Chainable<void>;
+      getByDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>;
+      findByDataCy(dataCy: string): Chainable<JQuery<HTMLElement>>;
       safeType(value: string | number): Chainable<JQuery<HTMLElement>>;
       overwrite(value: string | number): Chainable<JQuery<HTMLElement>>;
     }

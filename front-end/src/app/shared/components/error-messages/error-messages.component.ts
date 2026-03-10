@@ -2,6 +2,7 @@ import { formatCurrency } from '@angular/common';
 import { Component, inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-error-messages',
@@ -13,6 +14,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() form?: FormGroup;
   @Input() fieldName = '';
   @Input() control?: SubscriptionFormControl;
+  @Input() dataCyContext = '';
 
   // We need the submitted status of the parent form to control the hide/show
   // of the error message
@@ -187,5 +189,9 @@ export class ErrorMessagesComponent implements OnInit {
     if (!this.control) {
       this.control = this.form?.get(this.fieldName) as SubscriptionFormControl;
     }
+  }
+
+  get errorDataCy(): string {
+    return buildDataCy(this.dataCyContext, this.fieldName, 'error');
   }
 }

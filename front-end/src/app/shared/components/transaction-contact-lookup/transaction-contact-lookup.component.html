@@ -3,6 +3,7 @@
     <app-contact-lookup
       [contactTypeOptions]="contactTypeOptions"
       [candidateOffice]="mandatoryCandidateOffice"
+      [dataCyContext]="dataCyContext"
       (contactTypeSelect)="contactTypeSelected($event)"
       (contactLookupSelect)="contactLookupSelected($event)"
       (createNewContactSelect)="createNewContactSelected()"
@@ -13,6 +14,7 @@
     headerTitle="Create a new contact"
     [contactTypeOptions]="dialogContactTypeOptions"
     [defaultCandidateOffice]="mandatoryCandidateOffice"
+    [dataCyContext]="dataCyContext"
     [(detailVisible)]="detailVisible"
     (savedContact)="saveContact($event)"
   />

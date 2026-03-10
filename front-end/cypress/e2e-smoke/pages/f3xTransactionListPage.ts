@@ -1,7 +1,9 @@
+import { buildDataCy } from '../../utils/dataCy';
+
 class TransactionListPage {
   static clickAddNewTransactionButton(menuItem: string) {
-    cy.contains('button', 'Add new transaction').click();
-    cy.contains('button', menuItem).click();
+    cy.getByDataCy('transactions-page-add-transaction-actions-button').click();
+    cy.getByDataCy(buildDataCy('transactions-page-add-transaction', 'actions', menuItem, 'button')).click();
   }
 }
 

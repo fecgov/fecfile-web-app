@@ -1,13 +1,13 @@
 <p-toolbar>
   <ng-template #start>
-    <h1 class="m-0">Manage reports</h1>
+    <h1 class="m-0" data-cy="report-list-page-title">Manage reports</h1>
   </ng-template>
   <ng-template #end>
     <button
       pButton
       pRipple
       label="Create report"
-      data-cy="create-report"
+      data-cy="report-list-page-create-report-button"
       icon="pi pi-plus"
       class="add-button"
       (click)="dialogVisible.set(true)"
@@ -17,7 +17,7 @@
 <hr class="mb-0" />
 
 @if (showEmptyState()) {
-  <div class="empty-state">
+  <div class="empty-state" data-cy="report-list-page-empty-state">
     <img src="assets/img/searching_image.png" alt="No reports created" />
     <span class="empty-state-text">No reports yet. Create your first report!</span>
   </div>

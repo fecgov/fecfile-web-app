@@ -11,20 +11,20 @@ describe('Manage Users', () => {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetMembers');
     UsersPage.create(userFormData);
     cy.wait('@GetMembers');
-    cy.get('[data-cy="membership-submit"]').should('not.be.visible');
+    cy.get('[data-cy="committee-members-dialog-submit-button"]').should('not.exist');
     UsersPage.assertRow(userFormData);
   });
 
   it('should display an error message when email is empty', () => {
     const formData = { ...userFormData, email: '' };
     UsersPage.create(formData);
-    cy.get('[data-cy="membership-submit"]').should('be.visible');
+    cy.get('[data-cy="committee-members-dialog-submit-button"]').should('be.visible');
   });
 
   it('should edit role', () => {
     const formData = { ...userFormData, role: Roles.MANAGER };
     UsersPage.editRole(formData);
-    cy.get('[data-cy="membership-submit"]').should('not.be.visible');
+    cy.get('[data-cy="committee-members-dialog-submit-button"]').should('not.exist');
     UsersPage.assertRow(formData);
   });
 

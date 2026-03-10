@@ -1,18 +1,18 @@
-<div class="sidebar">
-  <div class="report-info">
-    <div class="report-type">{{ formLabel() }}</div>
-    <div class="sub-heading">{{ subHeading() }}</div>
+<div class="sidebar" data-cy="report-sidebar">
+  <div class="report-info" data-cy="report-sidebar-panel">
+    <div class="report-type" data-cy="report-sidebar-form-label">{{ formLabel() }}</div>
+    <div class="sub-heading" data-cy="report-sidebar-subheading">{{ subHeading() }}</div>
     @if (hasCoverage()) {
-      <div class="sub-heading">
+      <div class="sub-heading" data-cy="report-sidebar-coverage">
         {{ coverageFrom() | fecDate }} — <wbr />
         {{ coverageThrough() | fecDate }}
       </div>
     }
     @if (isF24()) {
-      <a class="rename-option" (click)="renameForm24()">RENAME</a>
+      <a class="rename-option" (click)="renameForm24()" data-cy="report-sidebar-rename-link">RENAME</a>
     }
   </div>
-  <p-panelMenu [model]="items()" [multiple]="false">
+  <p-panelMenu [model]="items()" [multiple]="false" [pt]="panelMenuPt">
     <ng-template #headericon></ng-template>
   </p-panelMenu>
 </div>

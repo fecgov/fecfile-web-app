@@ -319,22 +319,22 @@ describe('Contacts - delete guard', () => {
 
     ContactsHelpers.assertSuccessToastMessage();
     cy.contains('tbody tr', UNLINKED_CONTACT).should('not.exist');
-    cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
+    cy.getByDataCy('contacts-page-restore-deleted-contacts-button').should('be.visible');
 
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
     cy.wait('@getDeletedContacts');
-    cy.get('#restoreButton').should('be.disabled');
+    cy.getByDataCy('contacts-deleted-page-restore-selected-button').should('be.disabled');
     ContactsDeleteHelpers.selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
-    cy.get('#restoreButton').should('not.be.disabled').click();
+    cy.getByDataCy('contacts-deleted-page-restore-selected-button').should('not.be.disabled').click();
 
     cy.wait('@restoreContact');
     cy.wait('@getDeletedContacts');
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
+    cy.getByDataCy('contacts-deleted-page-back-button').should('be.visible').click({ force: true });
     cy.wait('@getContactsList');
     cy.contains('tbody tr', UNLINKED_CONTACT).should('be.visible');
-    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
+    cy.get('[data-cy="contacts-page-restore-deleted-contacts-button"]').should('not.exist');
   });
 
   it('Linked: delete is not actionable (hidden or disabled); blocked after refresh; cannot bypass via DOM/script clicks', () => {

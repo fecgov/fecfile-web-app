@@ -1,48 +1,48 @@
 @if (formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn === 'blur')))) {
   @if (control?.hasError('required')) {
-    <small class="p-error">{{ requiredErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ requiredErrorMessage }}</small>
   }
   @if (control?.hasError('fecIdMustBeUnique')) {
-    <small class="p-error">{{ uniqueFecIdMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ uniqueFecIdMessage }}</small>
   }
   @if (control?.hasError('requiredTrue')) {
-    <small class="p-error">{{ requiredTrueErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ requiredTrueErrorMessage }}</small>
   }
   @if (control?.hasError('minlength')) {
-    <small class="p-error">{{ minLengthErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ minLengthErrorMessage }}</small>
   }
   @if (!control?.hasError('max') && control?.hasError('maxlength')) {
-    <small class="p-error">{{ maxLengthErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ maxLengthErrorMessage }}</small>
   }
   @if (control?.hasError('min')) {
-    <small class="p-error">{{ minErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ minErrorMessage }}</small>
   }
   @if (control?.hasError('max')) {
-    <small class="p-error">{{ maxErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ maxErrorMessage }}</small>
   }
   @if (control?.hasError('exclusiveMax')) {
-    <small class="p-error">{{ exclusiveMaxErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ exclusiveMaxErrorMessage }}</small>
   }
   @if (control?.hasError('exclusiveMin')) {
-    <small class="p-error">{{ exclusiveMinErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ exclusiveMinErrorMessage }}</small>
   }
   @if (control?.hasError('invaliddate')) {
-    <small class="p-error">{{ invalidDateErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ invalidDateErrorMessage }}</small>
   }
   @if (control?.hasError('noDateProvided')) {
-    <small class="p-error">{{ noDateProvidedErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ noDateProvidedErrorMessage }}</small>
   }
   @if (control?.hasError('noCorrespondingForm3X')) {
-    <small class="p-error">{{ noCorrespondingForm3XErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ noCorrespondingForm3XErrorMessage }}</small>
   }
   @if (!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')) {
-    <small class="p-error">{{ emailErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ emailErrorMessage }}</small>
   }
   @if (control?.hasError('isAfter')) {
-    <small class="p-error">{{ isAfterMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ isAfterMessage }}</small>
   }
   @if (control?.hasError('duplicateName')) {
-    <small class="p-error">{{ duplicateNameErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ duplicateNameErrorMessage }}</small>
   }
   @if (
     !control?.hasError('required') &&
@@ -56,6 +56,6 @@
     !control?.hasError('isAfter') &&
     control?.hasError('pattern')
   ) {
-    <small class="p-error">{{ patternErrorMessage }}</small>
+    <small class="p-error" [attr.data-cy]="errorDataCy">{{ patternErrorMessage }}</small>
   }
 }

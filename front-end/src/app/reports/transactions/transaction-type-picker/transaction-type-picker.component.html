@@ -1,4 +1,4 @@
-<h1>{{ title() }}</h1>
+<h1 [attr.data-cy]="pageTitleDataCy()">{{ title() }}</h1>
 @if (debtId()) {
   <p>Select the proper transaction type below to report this debt repayment.</p>
 }
@@ -7,7 +7,7 @@
     @for (transactionGroup of transactionGroups(); track transactionGroup; let index = $index) {
       @if (hasTransactions().get(transactionGroup)) {
         <p-accordion-panel [value]="index">
-          <p-accordion-header>
+          <p-accordion-header [attr.data-cy]="groupDataCy(transactionGroup.label)">
             <div class="accordion-header-wrapper">
               <span class="header-label">{{ transactionGroup.label }}</span>
               <img
@@ -23,6 +23,7 @@
                 <div class="transaction-type-wrapper">
                   @if (!isTransactionDisabled(transactionType)) {
                     <a
+                      [attr.data-cy]="transactionLinkDataCy(transactionType)"
                       [routerLink]="getRouterLink(transactionType)"
                       [queryParams]="debtId() ? { debt: debtId() } : undefined"
                     >

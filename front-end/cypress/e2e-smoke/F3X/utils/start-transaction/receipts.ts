@@ -1,28 +1,34 @@
-import { PageUtils } from '../../../pages/pageUtils';
+import { buildDataCy } from '../../../../utils/dataCy';
+
+const clickReceiptSection = (label: string) =>
+  cy.getByDataCy(buildDataCy('transactions', 'receipt', 'picker', label, 'section')).click({ force: true });
+
+const clickReceiptLink = (label: string) =>
+  cy.getByDataCy(buildDataCy('transactions', 'receipt', 'picker', label, 'link')).click({ force: true });
 
 export class Receipts {
   static Individual() {
-    PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+    clickReceiptSection('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
     return Individual;
   }
 
   static RegisteredFilers() {
-    PageUtils.clickAccordion('CONTRIBUTIONS FROM REGISTERED FILERS');
+    clickReceiptSection('CONTRIBUTIONS FROM REGISTERED FILERS');
     return RegisteredFilers;
   }
 
   static Refunds() {
-    PageUtils.clickAccordion('REFUNDS');
+    clickReceiptSection('REFUNDS');
     return Refunds;
   }
 
   static Transfers() {
-    PageUtils.clickAccordion('TRANSFERS');
+    clickReceiptSection('TRANSFERS');
     return Transfers;
   }
 
   static Other() {
-    PageUtils.clickAccordion("OTHER");
+    clickReceiptSection('OTHER');
     return Other;
   }
 }
@@ -31,62 +37,62 @@ export class Individual {
   static readonly INDIVIDUAL_RECEIPT = 'Individual Receipt';
 
   static IndividualReceipt() {
-    PageUtils.clickLink(Individual.INDIVIDUAL_RECEIPT);
+    clickReceiptLink(Individual.INDIVIDUAL_RECEIPT);
   }
 
   static Returned() {
-    PageUtils.clickLink('Returned/Bounced Receipt');
+    clickReceiptLink('Returned/Bounced Receipt');
   }
 
   static Partnership() {
-    PageUtils.clickLink('Partnership Receipt');
+    clickReceiptLink('Partnership Receipt');
   }
 
   static Earmark() {
-    PageUtils.clickLink('Earmark Receipt');
+    clickReceiptLink('Earmark Receipt');
   }
 }
 
 class RegisteredFilers {
   static Party() {
-    PageUtils.clickLink('Party Receipt');
+    clickReceiptLink('Party Receipt');
   }
 
   static PAC_Earmark() {
-    PageUtils.clickLink('PAC Earmark Receipt');
+    clickReceiptLink('PAC Earmark Receipt');
   }
 
   static PAC() {
-    PageUtils.clickLink('PAC Receipt');
+    clickReceiptLink('PAC Receipt');
   }
 }
 
 class Refunds {
   static ContributionToOtherPoliticalCommittee() {
-    PageUtils.clickLink('Refund of Contribution to Other Political Committee');
+    clickReceiptLink('Refund of Contribution to Other Political Committee');
   }
 }
 
 class Transfers {
   static JointFundraising() {
-    PageUtils.clickLink('Joint Fundraising Transfer');
+    clickReceiptLink('Joint Fundraising Transfer');
   }
 }
 
 class Other {
   static OffsetsToOperatingExpenditures() {
-    PageUtils.clickLink("Offsets to Operating Expenditures");
+    clickReceiptLink('Offsets to Operating Expenditures');
   }
   static OtherReceipts() {
-    PageUtils.clickLink("Other Receipts")
+    clickReceiptLink('Other Receipts');
   }
   static IndividualReceiptNonContributionAccount() {
-    PageUtils.clickLink("Individual Receipt - Non-contribution Account");
+    clickReceiptLink('Individual Receipt - Non-contribution Account');
   }
   static OtherCommitteeReceiptNonContributionAccount() {
-    PageUtils.clickLink("Other Committee Receipt - Non-contribution Account");
+    clickReceiptLink('Other Committee Receipt - Non-contribution Account');
   }
   static BusinessLaborOrganizationReceiptNonContributionAccount() {
-    PageUtils.clickLink("Business/Labor Organization Receipt - Non-contribution Account");
+    clickReceiptLink('Business/Labor Organization Receipt - Non-contribution Account');
   }
 }

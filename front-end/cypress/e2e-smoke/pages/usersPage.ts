@@ -2,6 +2,9 @@ import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
 
 export class UsersPage {
+  private static readonly dialogSelector = 'committee-members-dialog';
+  private static readonly roleSelectSelector = '[data-cy="committee-members-dialog-role-select"], app-select[inputid="role"] select';
+
   static goToPage(alias = '') {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/?page=1**').as('GetMembers');
     cy.visit('/committee/members');
@@ -10,12 +13,13 @@ export class UsersPage {
 
   static enterFormData(formData: UserFormData, excludeContactType = false, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find('#email').safeType(formData['email']);
-    PageUtils.selectDropdownSetValue("app-select[inputid='role']", formData['role'], alias);
+    cy.get(alias).find('[data-cy="committee-members-dialog-email-input"], #email').first().safeType(formData['email']);
+    UsersPage.selectRole(formData['role'], alias);
   }
 
   static assertRow(formData: UserFormData, status = 'Pending') {
-    cy.get('table tbody tr')
+    cy.getByDataCy('committee-members-table')
+      .find('tbody tr')
       .contains('td', formData.email)
       .parent()
       .within(() => {
@@ -27,38 +31,36 @@ export class UsersPage {
 
   static create(fd: UserFormData) {
     UsersPage.goToPage();
-    PageUtils.clickButton('Add user');
-    cy.get('#content-offset app-committee-member-dialog')
-      .filter(':visible')
-      .first()
-      .as('dialog');
+    cy.getByDataCy('committee-members-page-add-user-button').click();
+    cy.getByDataCy(UsersPage.dialogSelector).as('dialog');
 
     UsersPage.enterFormData(fd, false, '@dialog');
-    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
+    cy.getByDataCy('committee-members-dialog-submit-button').click();
   }
 
 
   static editRole(fd: UserFormData, alias = '') {
     UsersPage.goToPage();
     PageUtils.clickKababItem(fd.email, 'Edit Role');
-    cy.get('#content-offset app-committee-member-dialog')
-      .filter(':visible')
-      .first()
-      .as('dialog');
+    cy.getByDataCy(UsersPage.dialogSelector).as('dialog');
 
-    PageUtils.selectDropdownSetValue(
-      "app-select[inputid='role']",
-      fd['role'],
-      '@dialog'
-    );
-    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
+    UsersPage.selectRole(fd['role'], '@dialog');
+    cy.getByDataCy('committee-members-dialog-submit-button').click();
   }
 
   static delete(email: string) {
     UsersPage.goToPage();
     PageUtils.clickKababItem(email, 'Delete');
-    cy.get('app-confirm-dialog')
-      .contains('button', 'Confirm')
-      .click();
+    cy.getByDataCy('layout-confirm-dialog-submit-button').click();
+  }
+
+  private static selectRole(role: string, alias: string) {
+    cy.get(alias)
+      .find(UsersPage.roleSelectSelector)
+      .first()
+      .contains('option', role)
+      .then((option) => {
+        cy.get(alias).find(UsersPage.roleSelectSelector).first().select(option.val()!, { force: true });
+      });
   }
 }

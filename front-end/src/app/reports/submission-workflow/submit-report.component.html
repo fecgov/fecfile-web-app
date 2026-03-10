@@ -1,18 +1,18 @@
 <div id="submit-report-container">
-  <h1>Submit report</h1>
+  <h1 data-cy="report-submit-page-title">Submit report</h1>
   <hr type="solid" class="mt-2" />
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <h2>Verify confirmation email addresses</h2>
     <div class="row">
       <fieldset class="w-28">
         <label for="confirmation_email_1"><strong>EMAIL #1</strong></label>
-        <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
-        <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted" />
+        <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" data-cy="report-submit-page-confirmation-email-1-input" />
+        <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted" dataCyContext="report-submit-page" />
       </fieldset>
       <fieldset class="w-28">
         <label for="confirmation_email_2"><strong>EMAIL #2 </strong> <span class="paren-label">(OPTIONAL)</span></label>
-        <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
-        <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted" />
+        <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" data-cy="report-submit-page-confirmation-email-2-input" />
+        <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted" dataCyContext="report-submit-page" />
       </fieldset>
     </div>
     @if (activeReport().hasChangeOfAddress) {
@@ -24,7 +24,7 @@
             <span>HAS YOUR ADDRESS CHANGED IN THE LAST 10 DAYS?</span>
           </legend>
           <p-selectButton
-            data-cy="change_of_address"
+            data-cy="report-submit-page-change-of-address-select"
             [options]="changeOfAddressOptions"
             [allowEmpty]="false"
             formControlName="change_of_address"
@@ -71,9 +71,10 @@
             controlName="state"
             [form]="form"
             [options]="stateOptions"
+            dataCyContext="report-submit-page"
             appendTo="body"
           />
-          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
+          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" dataCyContext="report-submit-page" />
         </fieldset>
         <fieldset class="w-9">
           <label for="zip">ZIP/POSTAL CODE</label>
@@ -87,13 +88,13 @@
     <div class="row">
       <fieldset class="w-28">
         <label for="treasurer_last_name">LAST NAME</label>
-        <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
-        <app-error-messages [form]="form" fieldName="treasurer_last_name" [formSubmitted]="formSubmitted" />
+        <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" data-cy="report-submit-page-treasurer-last-name-input" />
+        <app-error-messages [form]="form" fieldName="treasurer_last_name" [formSubmitted]="formSubmitted" dataCyContext="report-submit-page" />
       </fieldset>
       <fieldset class="w-19">
         <label for="treasurer_first_name">FIRST NAME</label>
-        <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
-        <app-error-messages [form]="form" fieldName="treasurer_first_name" [formSubmitted]="formSubmitted" />
+        <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" data-cy="report-submit-page-treasurer-first-name-input" />
+        <app-error-messages [form]="form" fieldName="treasurer_first_name" [formSubmitted]="formSubmitted" dataCyContext="report-submit-page" />
       </fieldset>
       <fieldset class="w-19">
         <label for="treasurer_middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
@@ -133,8 +134,14 @@
         [feedback]="false"
         [toggleMask]="true"
         autocomplete="new-password"
+        [pt]="{
+          root: { 'data-cy': 'report-submit-page-filing-password-root' },
+          pcInputText: { root: { 'data-cy': 'report-submit-page-filing-password-input' } },
+          maskIcon: { 'data-cy': 'report-submit-page-filing-password-toggle' },
+          unmaskIcon: { 'data-cy': 'report-submit-page-filing-password-toggle' }
+        }"
       />
-      <app-error-messages [form]="form" fieldName="filingPassword" [formSubmitted]="formSubmitted" />
+      <app-error-messages [form]="form" fieldName="filingPassword" [formSubmitted]="formSubmitted" dataCyContext="report-submit-page" />
     </fieldset>
 
     @if (activeReport().report_version) {
@@ -162,13 +169,14 @@
       }
     }
 
-    <div class="field-row mb-0" data-cy="userCertified">
+    <div class="field-row mb-0" data-cy="report-submit-page-user-certified-field">
       <p-checkbox
         [binary]="true"
         inputId="userCertified"
         formControlName="userCertified"
         [trueValue]="true"
         [falseValue]="false"
+        [pt]="{ input: { 'data-cy': 'report-submit-page-user-certified-checkbox' } }"
       />
       <label for="userCertified" class="ml-2 mb-0 cursor-pointer">
         I certify that I have examined this Statement and to the best of my knowledge and belief it is true, correct,
@@ -178,7 +186,15 @@
     </div>
     <hr type="solid" class="mb-3" />
     <div class="flex justify-content-between">
-      <button pButton pRipple label="Back" type="button" class="p-button-secondary" [routerLink]="[backUrl()]"></button>
+      <button
+        pButton
+        pRipple
+        label="Back"
+        type="button"
+        class="p-button-secondary"
+        [routerLink]="[backUrl()]"
+        data-cy="report-submit-page-back-button"
+      ></button>
       <button
         pButton
         pRipple
@@ -187,6 +203,7 @@
         class="p-button"
         (click)="submitForm()"
         [disabled]="!form.value.userCertified || loading > 0"
+        data-cy="report-submit-page-submit-button"
       ></button>
     </div>
     @if (loading > 0) {

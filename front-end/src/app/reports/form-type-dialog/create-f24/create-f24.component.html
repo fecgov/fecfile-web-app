@@ -4,6 +4,7 @@
     <p-selectbutton
       inputId="form24Options"
       id="form24Options"
+      data-cy="report-list-dialog-form24-type-select"
       [options]="form24Options"
       [(ngModel)]="selectedForm24Type"
       optionLabel="label"
@@ -26,12 +27,13 @@
           id="form24Name"
           aria-labelledby="form24Name_label"
           [class]="selectedForm24Type() ? 'pl-1' : ''"
+          data-cy="report-list-dialog-form24-name-input"
         />
       </div>
     </p-input-group>
 
     @if (!isSubmitDisabled() && form24NameErrors()) {
-      <small class="p-error">{{ form24NameErrors() }}</small>
+      <small class="p-error" data-cy="report-list-dialog-form24-name-error">{{ form24NameErrors() }}</small>
     }
   </div>
 </div>

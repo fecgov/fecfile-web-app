@@ -1,5 +1,5 @@
 <ng-template #typeBody let-item>
-  <a [routerLink]="[item?.id]">
+  <a [routerLink]="[item?.id]" [attr.data-cy]="'transactions-receipts-table-row-' + item.id + '-type-link'">
     {{ item.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
   </a>
 
@@ -16,6 +16,7 @@
   <app-table-actions-button
     [tableActions]="rowActions"
     [actionItem]="item"
+    dataCyContext="transactions-receipts-table"
     (tableActionClick)="onRowActionClick($event.action, $event.actionItem)"
     buttonIcon="pi pi-ellipsis-v"
     buttonStyleClass="p-button-text"
@@ -26,6 +27,7 @@
 
 <app-table
   [(first)]="first"
+  dataCyContext="transactions-receipts"
   title="Receipts"
   [items]="items()"
   [(totalItems)]="totalItems"

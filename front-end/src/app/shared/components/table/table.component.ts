@@ -25,6 +25,7 @@ import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 export interface ColumnDefinition<T> {
   field: string;
@@ -42,6 +43,7 @@ export interface ColumnDefinition<T> {
 export interface TableBodyContext<T> {
   $implicit: T;
   rowActions?: TableAction<T>[];
+  rowIndex?: number;
 }
 
 @Component({
@@ -64,6 +66,7 @@ export interface TableBodyContext<T> {
   providers: [CurrencyPipe, MemoCodePipe, FecDatePipe, TransactionIdPipe, DefaultZeroPipe],
 })
 export class TableComponent<T> {
+  readonly dataCyContext = input('');
   readonly title = input.required<string>();
   readonly itemName = input('entries');
   readonly items = input.required<T[]>();
@@ -101,6 +104,27 @@ export class TableComponent<T> {
   readonly first = model.required<number>();
 
   readonly showPaginationControls = input(true);
+  readonly tableDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table'));
+  readonly titleDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'title'));
+  readonly emptyStateDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'empty-state'));
+  readonly resultsPerPageDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'pagination', 'rows-per-page'));
+  readonly paginatorDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'pagination'));
+  readonly paginationRowsSelectPt = computed(() => ({
+    root: { 'data-cy': this.resultsPerPageDataCy() },
+    label: { 'data-cy': buildDataCy(this.resultsPerPageDataCy(), 'label') },
+    dropdown: { 'data-cy': buildDataCy(this.resultsPerPageDataCy(), 'dropdown') },
+    listContainer: { 'data-cy': buildDataCy(this.resultsPerPageDataCy(), 'options') },
+    option: { 'data-cy': buildDataCy(this.resultsPerPageDataCy(), 'option') },
+  }));
+  readonly paginatorPt = computed(() => ({
+    root: { 'data-cy': this.paginatorDataCy() },
+    current: { 'data-cy': buildDataCy(this.paginatorDataCy(), 'current') },
+    first: { 'data-cy': buildDataCy(this.paginatorDataCy(), 'first-button') },
+    prev: { 'data-cy': buildDataCy(this.paginatorDataCy(), 'previous-button') },
+    next: { 'data-cy': buildDataCy(this.paginatorDataCy(), 'next-button') },
+    last: { 'data-cy': buildDataCy(this.paginatorDataCy(), 'last-button') },
+    pcRowPerPageDropdown: this.paginationRowsSelectPt(),
+  }));
 
   changePage(value: PaginatorState) {
     this.first.set(value.first ?? 0);
@@ -109,5 +133,20 @@ export class TableComponent<T> {
   updateSort(event: SortEvent) {
     this.sortField.set(event.field || '');
     this.sortOrder.set(event.order === 1 ? 'asc' : 'desc');
+  }
+
+  columnDataCy(column: ColumnDefinition<T>) {
+    return buildDataCy(this.dataCyContext(), 'table', column.field || column.header, 'column');
+  }
+
+  rowDataCy(item: T, rowIndex: number) {
+    if (item && typeof item === 'object' && 'id' in (item as Record<string, unknown>)) {
+      const id = (item as Record<string, unknown>)['id'];
+      if (typeof id === 'string' || typeof id === 'number') {
+        return buildDataCy(this.dataCyContext(), 'table', 'row', id);
+      }
+    }
+
+    return buildDataCy(this.dataCyContext(), 'table', 'row', rowIndex);
   }
 }

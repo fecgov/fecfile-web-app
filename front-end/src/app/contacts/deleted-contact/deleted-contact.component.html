@@ -3,6 +3,7 @@
 
 <app-table
   [(first)]="first"
+  dataCyContext="contacts-deleted"
   [items]="items()"
   [(totalItems)]="totalItems"
   title="Restore deleted contacts"
@@ -19,7 +20,15 @@
 </app-table>
 
 <div class="flex justify-content-between mt-5">
-  <button pButton pRipple label="Back" type="button" class="p-button-secondary" routerLink="/contacts"></button>
+  <button
+    pButton
+    pRipple
+    label="Back"
+    type="button"
+    class="p-button-secondary"
+    routerLink="/contacts"
+    data-cy="contacts-deleted-page-back-button"
+  ></button>
   <button
     pButton
     pRipple
@@ -29,5 +38,6 @@
     class="p-button-primary"
     (click)="restoreSelected()"
     [disabled]="selectedItems().length <= 0"
+    data-cy="contacts-deleted-page-restore-selected-button"
   ></button>
 </div>

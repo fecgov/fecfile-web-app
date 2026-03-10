@@ -7,6 +7,7 @@
   [draggable]="false"
   [resizable]="false"
   closable="false"
+  [pt]="{ root: { 'data-cy': 'select-committee-second-admin-dialog' } }"
 >
   <ng-template #header>
     <h1>Welcome to FECfile+</h1>
@@ -25,8 +26,8 @@
     </div>
     <div class="field">
       <label for="email">Email</label>
-      <input id="email" name="email" pInputText formControlName="email" data-cy="second-committee-email" />
-      <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
+      <input id="email" name="email" pInputText formControlName="email" data-cy="select-committee-second-admin-dialog-email-input" />
+      <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" dataCyContext="select-committee-second-admin-dialog" />
     </div>
   </form>
   <ng-template #footer>
@@ -37,7 +38,7 @@
         (keydown.enter)="submitForm()"
         (click)="submitForm()"
         label="Save"
-        data-cy="second-committee-save"
+        data-cy="select-committee-second-admin-dialog-save-button"
       />
     </div>
   </ng-template>

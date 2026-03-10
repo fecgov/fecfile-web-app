@@ -1,7 +1,12 @@
-<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()">
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()" [attr.data-cy]="dialogDataCy()">
   <div class="dialog-header">
-    <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
-    <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
+    <h1 class="dialog-title" id="dialog-title" [attr.data-cy]="titleDataCy()">{{ title() }}</h1>
+    <button
+      class="rounded-image-button"
+      (click)="close()"
+      aria-label="Cancel"
+      [attr.data-cy]="closeButtonDataCy()"
+    >
       <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
     </button>
   </div>
@@ -11,15 +16,23 @@
     <ng-content select="[dialog-footer]"></ng-content>
     @if (!hasCustomFooter()) {
       <div class="flex justify-content-between">
-        <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Cancel"
+          class="p-button-secondary"
+          [attr.data-cy]="cancelButtonDataCy()"
+          (click)="close()"
+        ></button>
         <button
           type="submit"
-          data-cy="membership-submit"
           pButton
           pRipple
           [label]="submitLabel()"
           [disabled]="submitDisabled()"
           class="p-button-primary submit-button"
+          [attr.data-cy]="submitButtonDataCy()"
           (click)="confirm.emit()"
         ></button>
       </div>

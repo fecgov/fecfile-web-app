@@ -2,7 +2,7 @@
   <p-toolbar>
     <ng-template pTemplate="left">
       <div class="flex flex-column">
-        <h1 class="gandhi-bold size-36">Transactions in this report</h1>
+        <h1 class="gandhi-bold size-36" data-cy="transactions-page-title">Transactions in this report</h1>
       </div>
     </ng-template>
 
@@ -11,6 +11,8 @@
         <app-table-actions-button
           [tableActions]="tableActions"
           [actionItem]="report()"
+          dataCyContext="transactions-page-add-transaction"
+          [includeRowKey]="false"
           [rounded]="false"
           (tableActionClick)="onTableActionClick($event.action, $event.actionItem)"
           buttonIcon="pi pi-plus"

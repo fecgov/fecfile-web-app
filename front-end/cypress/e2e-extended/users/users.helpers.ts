@@ -1,9 +1,9 @@
 export class UsersHelpers {
-  static readonly emailInput = () => cy.get("@dialog").find("#email").first();
-  static readonly submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
+  static readonly emailInput = () => cy.get('@dialog').find('[data-cy="committee-members-dialog-email-input"]').first();
+  static readonly submitBtn = () => cy.getByDataCy('committee-members-dialog-submit-button');
 
   static aliasUsersTable() {
-    cy.get('table').first().as('table');
+    cy.getByDataCy('committee-members-table').as('table');
   }
 
   static assertUsersTableColumns(expected: string[]) {
@@ -32,22 +32,12 @@ export class UsersHelpers {
   }
 
   static assertNoAddUserButton() {
-    const selectors = [
-      "[data-cy='membership-add']",
-      "button:contains('Add user')",
-      "button:contains('Invite')",
-      "a:contains('Add user')",
-      "a:contains('Invite')",
-    ];
-    cy.get('body').then(($b) => {
-      const found = selectors.some((sel) => $b.find(sel).filter(':visible').length > 0);
-      expect(found, 'Add/Invite affordance should NOT be visible').to.be.false;
-    });
+    cy.get('body').find('[data-cy="committee-members-page-add-user-button"]').should('not.exist');
   }
 
   static assertNoRowKebabs() {
     cy.get('@table')
-      .find('.pi.pi-ellipsis-v, [data-cy="row-kebab"]')
+      .find('[data-cy$="-actions-button"]')
       .should('not.exist');
   }
   

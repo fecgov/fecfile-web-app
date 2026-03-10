@@ -30,11 +30,11 @@ describe('Manage Users: Happy Paths', () => {
   it('should edit role to both MANAGER and COMMITTEE_ADMINISTRATOR and verify each change', () => {
     const formDataMgr = { ...userFormData, role: Roles.MANAGER };
     UsersPage.editRole(formDataMgr);
-    cy.get('[data-cy="membership-submit"]').should('not.be.visible');
+    cy.get('[data-cy="committee-members-dialog-submit-button"]').should('not.exist');
     UsersPage.assertRow(formDataMgr);
     const formDataAdm = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
     UsersPage.editRole(formDataAdm);
-    cy.get('[data-cy="membership-submit"]').should('not.be.visible');
+    cy.get('[data-cy="committee-members-dialog-submit-button"]').should('not.exist');
     UsersPage.assertRow(formDataAdm);
   });
 

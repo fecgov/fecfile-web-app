@@ -13,6 +13,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { ReportSidebarSection } from './menu-info';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 import { getFormTypes } from 'app/shared/utils/form-type.utils';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-drawer',
@@ -48,6 +50,15 @@ export class SidebarComponent {
   readonly renameF24DialogVisible = signal(false);
   readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
   form24ToUpdate?: Form24;
+  readonly panelMenuPt = {
+    root: { 'data-cy': 'report-sidebar-menu' },
+    headerLink: (options: { context?: { item?: MenuItem } }) => ({
+      'data-cy': this.menuItemDataCy(options.context?.item),
+    }),
+    itemLink: (options: { context?: { item?: MenuItem } }) => ({
+      'data-cy': this.menuItemDataCy(options.context?.item),
+    }),
+  };
 
   constructor() {
     effect(() => {
@@ -61,5 +72,13 @@ export class SidebarComponent {
   public renameForm24(): void {
     this.form24ToUpdate = this.report() as Form24;
     this.renameF24DialogVisible.set(true);
+  }
+
+  menuItemDataCy(item?: MenuItem): string {
+    if (!item?.label) {
+      return 'report-sidebar-item';
+    }
+
+    return buildDataCy('report-sidebar', item.label, item.items?.length ? 'section' : 'link');
   }
 }

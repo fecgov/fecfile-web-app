@@ -7,7 +7,7 @@ import { SharedHelpers } from '../utils/shared.helpers';
 
 const ADD_MEMBER_POST = '**/committee-members/add-member/**';
 const LIST_MEMBERS_GET = '**/committee-members/**';
-const DIALOG = "#content-offset app-committee-member-dialog";
+const DIALOG = '[data-cy="committee-members-dialog"]';
 
 describe("Users: Validation and API failure states", () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe("Users: Validation and API failure states", () => {
     UsersHelpers.submitBtn().click();
     UsersHelpers.submitBtn().should('be.visible');
     cy.get('body')
-      .find('.p-error')
+      .find('[data-cy="committee-members-dialog-email-error"], .p-error')
       .first()
       .should('be.visible')
       .and('contain.text', 'This is a required field.');
@@ -46,7 +46,7 @@ describe("Users: Validation and API failure states", () => {
 
     const findEmailError = () =>
       cy.get('body')
-        .find(".p-error")
+        .find('[data-cy="committee-members-dialog-email-error"], .p-error')
         .first();
 
     UsersPage.goToPage();

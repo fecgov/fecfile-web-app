@@ -9,6 +9,33 @@ import {
 import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
+  private static readonly inputSelectors = {
+    candidateId: '[data-cy$="-candidate-id-input"], #candidate_id',
+    city: '[data-cy$="-city-input"], #city',
+    committeeId: '[data-cy$="-committee-id-input"], #committee_id',
+    country: '[data-cy$="-country-select"], [inputid="country"]',
+    employer: '[data-cy$="-employer-input"], #employer',
+    firstName: '[data-cy$="-first-name-input"], #first_name',
+    lastName: '[data-cy$="-last-name-input"], #last_name',
+    middleName: '[data-cy$="-middle-name-input"], #middle_name',
+    name: '[data-cy$="-name-input"], #name',
+    occupation: '[data-cy$="-occupation-input"], #occupation',
+    prefix: '[data-cy$="-prefix-input"], #prefix',
+    state: '[data-cy$="-state-select"], app-searchable-select[inputid="state"]',
+    street1: '[data-cy$="-street-1-input"], #street_1',
+    street2: '[data-cy$="-street-2-input"], #street_2',
+    suffix: '[data-cy$="-suffix-input"], #suffix',
+    telephone: '[data-cy$="-telephone-input"], #telephone',
+    zip: '[data-cy$="-zip-input"], #zip',
+  } as const;
+
+  private static readonly selectSelectors = {
+    candidateDistrict: '[data-cy$="-candidate-district-select"], #candidate_district, app-select[inputid="candidate_district"]',
+    candidateOffice: '[data-cy$="-candidate-office-select"], app-select[inputid="candidate_office"]',
+    candidateState: '[data-cy$="-candidate-state-select"], app-select[inputid="candidate_state"]',
+    contactType: '[data-cy$="-contact-type-select"], #entity_type_dropdown',
+  } as const;
+
   static goToPage() {
     cy.visit('/contacts');
   }
@@ -17,57 +44,52 @@ export class ContactListPage {
     alias = PageUtils.getAlias(alias);
 
     if (!excludeContactType) {
-      PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
+      PageUtils.pSelectDropdownSetValue(ContactListPage.selectSelectors.contactType, formData['contact_type'], alias);
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
-      //Contact
-      cy.get(alias).find('#last_name').safeType(formData['last_name']);
-      cy.get(alias).find('#first_name').safeType(formData['first_name']);
-      cy.get(alias).find('#middle_name').safeType(formData['middle_name']);
-      cy.get(alias).find('#prefix').safeType(formData['prefix']);
-      cy.get(alias).find('#suffix').safeType(formData['suffix']);
-
-      //Employer
-      cy.get(alias).find('#employer').safeType(formData['employer']);
-      cy.get(alias).find('#occupation').safeType(formData['occupation']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.lastName, formData['last_name']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.firstName, formData['first_name']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.middleName, formData['middle_name']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.prefix, formData['prefix']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.suffix, formData['suffix']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.employer, formData['employer']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.occupation, formData['occupation']);
     }
 
-    //Address
-    cy.get(alias).find('#street_1').safeType(formData['street_1']);
-    cy.get(alias).find('#street_2').safeType(formData['street_2']);
-    cy.get(alias).find('#city').safeType(formData['city']);
-    cy.get(alias).find('#zip').safeType(formData['zip']);
-    cy.get(alias).find('#telephone').safeType(formData['phone']);
-    PageUtils.pSelectDropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
+    ContactListPage.typeInto(alias, ContactListPage.inputSelectors.street1, formData['street_1']);
+    ContactListPage.typeInto(alias, ContactListPage.inputSelectors.street2, formData['street_2']);
+    ContactListPage.typeInto(alias, ContactListPage.inputSelectors.city, formData['city']);
+    ContactListPage.typeInto(alias, ContactListPage.inputSelectors.zip, formData['zip']);
+    ContactListPage.typeInto(alias, ContactListPage.inputSelectors.telephone, formData['phone']);
+    PageUtils.pSelectDropdownSetValue(ContactListPage.inputSelectors.state, formData['state'], alias);
 
-    //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
-      cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.candidateId, formData['candidate_id']);
 
-      PageUtils.selectDropdownSetValue("app-select[inputid='candidate_office']", formData['candidate_office'], alias);
+      ContactListPage.selectNativeDropdown(ContactListPage.selectSelectors.candidateOffice, formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
-        PageUtils.selectDropdownSetValue(
-          "app-select[inputid='candidate_state']",
-          formData['candidate_state'],
-          alias,
-        );
+        ContactListPage.selectNativeDropdown(ContactListPage.selectSelectors.candidateState, formData['candidate_state'], alias);
 
         const singleDistrictStates = ['Alaska', 'Delaware', 'North Dakota', 'South Dakota', 'Vermont', 'Wyoming'];
         if (formData['candidate_office'] == 'House' && !singleDistrictStates.includes(formData['candidate_state'])) {
-          PageUtils.selectDropdownSetValue("app-select[inputid='candidate_district']", formData['candidate_district'], alias);
+          ContactListPage.selectNativeDropdown(
+            ContactListPage.selectSelectors.candidateDistrict,
+            formData['candidate_district'],
+            alias,
+          );
         }
       }
     }
 
     if (formData['contact_type'] == 'Committee') {
-      cy.get(alias).find('#committee_id').safeType(formData['committee_id']);
-      cy.get(alias).find('#name').safeType(formData['name']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.committeeId, formData['committee_id']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.name, formData['name']);
     }
 
     if (formData['contact_type'] == 'Organization') {
-      cy.get(alias).find('#name').safeType(formData['name']);
+      ContactListPage.typeInto(alias, ContactListPage.inputSelectors.name, formData['name']);
     }
   }
 
@@ -75,42 +97,30 @@ export class ContactListPage {
     alias = PageUtils.getAlias(alias);
 
     if (['Individual', 'Candidate'].includes(formData['contact_type'])) {
-      cy.get(alias).find('#last_name').should('have.value', formData['last_name']);
-      cy.get(alias).find('#first_name').should('have.value', formData['first_name']);
-      cy.get(alias)
-        .find('#middle_name')
-        .should('have.value', formData['middle_name'] ?? '');
-      cy.get(alias)
-        .find('#prefix')
-        .should('have.value', formData['prefix'] ?? '');
-      cy.get(alias)
-        .find('#suffix')
-        .should('have.value', formData['suffix'] ?? '');
-      cy.get(alias)
-        .find('#employer')
-        .should('have.value', formData['employer'] ?? '');
-      cy.get(alias)
-        .find('#occupation')
-        .should('have.value', formData['occupation'] ?? '');
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.lastName, formData['last_name']);
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.firstName, formData['first_name']);
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.middleName, formData['middle_name'] ?? '');
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.prefix, formData['prefix'] ?? '');
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.suffix, formData['suffix'] ?? '');
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.employer, formData['employer'] ?? '');
+      ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.occupation, formData['occupation'] ?? '');
     }
 
     if (!excludeCountry) {
-      cy.get(alias).find('[inputid="country"]').should('contain', formData['country']);
+      cy.get(alias).find(ContactListPage.inputSelectors.country).first().should('contain', formData['country']);
     }
-    cy.get(alias).find('#street_1').should('have.value', formData['street_1']);
-    cy.get(alias)
-      .find('#street_2')
-      .should('have.value', formData['street_2'] ?? '');
-    cy.get(alias).find('#city').should('have.value', formData['city']);
+    ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.street1, formData['street_1']);
+    ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.street2, formData['street_2'] ?? '');
+    ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.city, formData['city']);
     const state =
       formData['state'].length === 2 ? StatesCodeLabels.find((f) => f[0] === formData['state'])![1] : formData['state'];
-    cy.get(alias).find('[inputid="state"]').should('contain', state);
-    cy.get(alias).find('#zip').should('have.value', formData['zip']);
+    cy.get(alias).find(ContactListPage.inputSelectors.state).first().should('contain', state);
+    ContactListPage.shouldHaveValue(alias, ContactListPage.inputSelectors.zip, formData['zip']);
 
     if (formData['contact_type'] === 'Candidate') {
-      cy.get(alias).find('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
-      cy.get(alias).find('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
-      cy.get(alias).find('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
+      cy.get(alias).find(ContactListPage.selectSelectors.candidateOffice).first().find('option:selected').should('contain', formData['candidate_office']);
+      cy.get(alias).find(ContactListPage.selectSelectors.candidateState).first().find('option:selected').should('contain', formData['candidate_state']);
+      cy.get(alias).find(ContactListPage.selectSelectors.candidateDistrict).first().should('contain', formData['candidate_district']);
     }
   }
 
@@ -150,5 +160,25 @@ export class ContactListPage {
     cy.wait(150);
     ContactListPage.enterFormData(fd);
     PageUtils.clickButton('Save');
+  }
+
+  private static typeInto(alias: string, selector: string, value?: string | number | null) {
+    cy.get(alias).find(selector).first().safeType(value ?? '');
+  }
+
+  private static shouldHaveValue(alias: string, selector: string, value: string) {
+    cy.get(alias).find(selector).first().should('have.value', value);
+  }
+
+  private static selectNativeDropdown(selector: string, value: string, alias: string) {
+    if (!value) return;
+
+    cy.get(alias)
+      .find(selector)
+      .first()
+      .contains('option', value)
+      .then((option) => {
+        cy.get(alias).find(selector).first().select(option.val()!, { force: true });
+      });
   }
 }

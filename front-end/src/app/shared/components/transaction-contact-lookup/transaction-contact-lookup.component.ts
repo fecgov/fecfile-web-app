@@ -49,6 +49,10 @@ export class TransactionContactLookupComponent implements OnInit {
   currentType = ContactTypes.INDIVIDUAL;
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
+  get dataCyContext(): string {
+    return `transactions-${this.contactProperty.replaceAll('_', '-')}`;
+  }
+
   ngOnInit(): void {
     // Set the contact type options in the child dialog component to the first contact type option
     // listed in the child lookup component. This will automatically select the correct

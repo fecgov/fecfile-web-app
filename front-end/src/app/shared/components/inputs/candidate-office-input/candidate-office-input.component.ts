@@ -8,6 +8,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { InputText } from 'primeng/inputtext';
 import { SearchableSelectComponent } from '../../searchable-select/searchable-select.component';
 import { SelectComponent } from '../../select/select.component';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-candidate-office-input',
@@ -23,6 +24,7 @@ export class CandidateOfficeInputComponent implements OnInit {
   readonly officeFormControlName = input.required<string>();
   readonly stateFormControlName = input.required<string>();
   readonly districtFormControlName = input.required<string>();
+  readonly dataCyContext = input('');
 
   readonly transactionType = computed(() => this.transaction()?.transactionType);
 
@@ -151,5 +153,9 @@ export class CandidateOfficeInputComponent implements OnInit {
         this.candidateDistrictOptions.length === 1 ? this.candidateDistrictOptions[0]?.value : null,
       );
     }
+  }
+
+  fieldDataCy(fieldName: string, kind: string = 'input'): string {
+    return buildDataCy(this.dataCyContext(), fieldName, kind);
   }
 }

@@ -1,4 +1,4 @@
-<div class="flex select-committee-columns">
+<div class="flex select-committee-columns" data-cy="select-committee-page">
   <div class="col-6 left-side">
     <h1>Get started now</h1>
     <span class="h5">LET'S FILE YOUR FEC REPORT WITH FECFILE+...</span>
@@ -19,11 +19,16 @@
           </div>
         </div>
       } @else if (committees?.length) {
-        <div class="committee-list">
+        <div class="committee-list" data-cy="select-committee-page-committee-list">
           @for (committee of committees; track committee) {
-            <div id="{{ committee.id }}" class="committee-card" (click)="activateCommittee(committee)">
+            <div
+              id="{{ committee.id }}"
+              class="committee-card"
+              (click)="activateCommittee(committee)"
+              [attr.data-cy]="'select-committee-page-committee-card-' + committee.id"
+            >
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-              <div class="committee-info">
+              <div class="committee-info" [attr.data-cy]="'select-committee-page-committee-card-' + committee.id + '-info'">
                 <h3>
                   <span>{{ committee.name }}</span>
                 </h3>
@@ -36,7 +41,7 @@
       <span class="h5">LOOKING FOR AN EXISTING FECFILE+ COMMITTEE ACCOUNT?</span>
       Contact the administrator for that committee.
     </div>
-    <div class="create-committee-card font-karla-bold" routerLink="/login/create-committee">
+    <div class="create-committee-card font-karla-bold" routerLink="/login/create-committee" data-cy="select-committee-page-create-committee-link">
       <div class="blue-box">
         <img class="plus" src="assets/img/Plus-Circle.svg" alt="Create a new committee" height="60px" width="60px" />
       </div>

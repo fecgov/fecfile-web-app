@@ -1,9 +1,24 @@
 <div class="flex justify-content-between">
   <div>
-    <button pButton pRipple label="Back" (click)="cancelForm.emit()" class="p-button-secondary"></button>
+    <button
+      pButton
+      pRipple
+      label="Back"
+      (click)="cancelForm.emit()"
+      class="p-button-secondary"
+      [attr.data-cy]="backButtonDataCy()"
+    ></button>
   </div>
   <div>
-    <button pButton pRipple appSingleClick label="Save" (click)="save.emit()" class="p-button-primary"></button>
+    <button
+      pButton
+      pRipple
+      appSingleClick
+      label="Save"
+      (click)="save.emit()"
+      class="p-button-primary"
+      [attr.data-cy]="saveButtonDataCy()"
+    ></button>
     <button
       pButton
       pRipple
@@ -11,6 +26,7 @@
       label="Save and continue"
       (click)="save.emit('continue')"
       class="p-button-info ml-4"
+      [attr.data-cy]="saveAndContinueButtonDataCy()"
     ></button>
   </div>
 </div>

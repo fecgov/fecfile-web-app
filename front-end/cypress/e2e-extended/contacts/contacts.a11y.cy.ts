@@ -36,10 +36,7 @@ const visitContactsList = () => {
 };
 
 const getContactsTableContainer = () =>
-  cy.contains('h1', 'Manage contacts')
-    .should('be.visible')
-    .closest('p-table')
-    .should('exist');
+  cy.getByDataCy('contacts-table').should('be.visible');
 
 const checkCritical = ($el: JQuery<HTMLElement>) => {
   cy.checkA11yCritical($el, undefined, WAIVERS);
@@ -69,11 +66,7 @@ describe('Contacts - axe smoke (critical)', () => {
     visitContactsList();
     PageUtils.clickButton('Add contact');
     cy.get(ContactsHelpers.DIALOG).should('be.visible').then(checkCritical);
-    cy.get(ContactsHelpers.DIALOG)
-      .contains('button', /^Cancel$/)
-      .should('be.visible')
-      .focus()
-      .type('{enter}');
+    cy.getByDataCy('contacts-dialog-cancel-button').should('be.visible').focus().type('{enter}');
     cy.get(ContactsHelpers.DIALOG).should('not.exist');
   });
 
@@ -91,7 +84,7 @@ describe('Contacts - axe smoke (critical)', () => {
     cy.contains('tbody tr', displayName, { timeout: 15000 })
       .should('be.visible')
       .within(() => {
-        cy.get('app-table-actions-button button')
+        cy.get('[data-cy$="-actions-button"]')
           .should('have.attr', 'aria-label')
           .then((label) => {
             const normalized = (typeof label === 'string' ? label : '').replaceAll(/\s+/g, ' ').trim();
@@ -120,18 +113,18 @@ describe('Contacts - axe smoke (critical)', () => {
 
     makeContact(contact);
     visitContactsList();
-    cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
+    cy.get('[data-cy="contacts-page-restore-deleted-contacts-button"]').should('not.exist');
     cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
     cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('contactsGone');
     ContactsDeleteHelpers.deleteContact(deletedName);
-    cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
+    cy.getByDataCy('contacts-page-restore-deleted-contacts-button').should('be.visible');
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
     cy.wait('@contactsGone');
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
       .should('be.visible')
       .then(checkCritical);
 
-    cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
+    cy.getByDataCy('contacts-deleted-page-back-button').should('be.visible').click({ force: true });
     cy.wait(`@${CONTACTS_LIST_ALIAS}`);
   });
 
@@ -160,7 +153,7 @@ describe('Contacts - axe smoke (critical)', () => {
     PageUtils.clickKababItem(displayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
     cy.wait('@getTransactionHistory');
-    cy.get('app-table[itemname="transactions"]', { timeout: 15000 })
+    cy.getByDataCy('contacts-dialog-transaction-history-table')
       .should('exist')
       .scrollIntoView({ offset: { top: -120, left: 0 } })
       .should('be.visible')

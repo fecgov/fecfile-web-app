@@ -54,6 +54,7 @@ import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/tab
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -92,6 +93,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   @Input() showHistory = false;
   @Input() headerTitle?: string;
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
+  @Input() dataCyContext = 'contact';
   readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
   readonly first = signal(0);
@@ -195,6 +197,38 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       this.rowsPerPage();
       this.loadTransactions();
     });
+  }
+
+  get dialogPt() {
+    return {
+      root: { 'data-cy': this.dialogDataCy() },
+      title: { 'data-cy': this.dialogTitleDataCy() },
+      closeButton: { 'data-cy': this.dialogCloseButtonDataCy() },
+    };
+  }
+
+  dialogDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'dialog');
+  }
+
+  dialogTitleDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'dialog', 'title');
+  }
+
+  dialogCloseButtonDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'dialog', 'close', 'button');
+  }
+
+  dialogFieldContext(): string {
+    return buildDataCy(this.dataCyContext, 'dialog');
+  }
+
+  dialogFieldDataCy(fieldName: string, kind: string = 'input'): string {
+    return buildDataCy(this.dataCyContext, 'dialog', fieldName, kind);
+  }
+
+  transactionHistoryDataCyContext(): string {
+    return buildDataCy(this.dataCyContext, 'dialog', 'transaction-history');
   }
 
   async loadTransactions() {

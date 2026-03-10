@@ -1,6 +1,12 @@
-<p-dialog [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '512px' }" (onShow)="showDialog()">
+<p-dialog
+  [modal]="true"
+  [(visible)]="dialogVisible"
+  [style]="{ width: '512px' }"
+  (onShow)="showDialog()"
+  [pt]="{ root: { 'data-cy': 'transactions-secondary-report-selection-dialog' } }"
+>
   <ng-template #header>
-    <h1>Confirm</h1>
+    <h1 data-cy="transactions-secondary-report-selection-dialog-title">Confirm</h1>
   </ng-template>
   <div class="dialog-body">
     <p class="dialog-text">
@@ -13,7 +19,13 @@
       [(ngModel)]="selectedReport"
       class="w-full"
       appendTo="body"
-      data-cy="select-form-24"
+      [pt]="{
+        root: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select' },
+        label: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-label' },
+        dropdown: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-dropdown' },
+        listContainer: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-options' },
+        option: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-option' }
+      }"
       [placeholder]="placeholder()"
       [disabled]="reports().length === 0"
     >
@@ -48,9 +60,23 @@
         label="Confirm"
         class="p-button-primary"
         (click)="linkToSelectedReport()"
+        data-cy="transactions-secondary-report-selection-dialog-confirm-button"
       ></button>
-      <button pButton pRipple [text]="true" (click)="dialogVisible.set(false)" label="Cancel"></button>
+      <button
+        pButton
+        pRipple
+        [text]="true"
+        (click)="dialogVisible.set(false)"
+        label="Cancel"
+        data-cy="transactions-secondary-report-selection-dialog-cancel-button"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>
-<p-toast key="reportLinkToast" />
+<p-toast
+  key="reportLinkToast"
+  [pt]="{
+    root: { 'data-cy': 'transactions-secondary-report-selection-toast' },
+    closeButton: { 'data-cy': 'transactions-secondary-report-selection-toast-close-button' }
+  }"
+/>

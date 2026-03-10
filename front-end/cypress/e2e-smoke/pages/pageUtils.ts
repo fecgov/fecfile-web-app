@@ -1,153 +1,118 @@
-export const currentYear = new Date().getFullYear();
+import { buildDataCy, dataCySelector, slugifyDataCyPart } from '../../utils/dataCy';
+export { currentYear } from '../../utils/date';
 
 export class PageUtils {
+  private static readonly toastCloseSelectors = [
+    dataCySelector('layout-global-toast-close-button'),
+    dataCySelector('transactions-secondary-report-selection-toast-close-button'),
+  ];
+
   static closeToast() {
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('.p-toast-close-button').should('exist').click();
+    cy.get(alias)
+      .find(this.toastCloseSelectors.join(','))
+      .first()
+      .should('exist')
+      .click();
   }
 
   static clickElement(elementSelector: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .find("[datatest='" + elementSelector + "']")
-      .click();
+    cy.get(alias).find(`[datatest='${elementSelector}']`).click();
   }
 
   static selectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
 
-    if (value) {
-      cy.get(alias).find(querySelector).eq(index).find('select').contains('option', value).then(
-        (option) => {
-          cy.get(alias).find(querySelector).eq(index).find('select').select(option.val()!);
-        }
-      );
-    }
+    if (!value) return;
+
+    cy.get(alias)
+      .find(querySelector)
+      .eq(index)
+      .find('select')
+      .contains('option', value)
+      .then((option) => {
+        cy.get(alias).find(querySelector).eq(index).find('select').select(option.val()!);
+      });
   }
-  
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
 
-    if (value) {
-      cy.get(alias).find(querySelector).eq(index).click();
-      cy.contains('p-selectitem', value)
-        .scrollIntoView({ offset: { top: 0, left: 0 } })
-        .click();
-    }
+    if (!value) return;
+
+    cy.get(alias)
+      .find(querySelector)
+      .eq(index)
+      .first()
+      .then(($root) => {
+        cy.wrap($root).click({ force: true });
+
+        const dataCy = $root.attr('data-cy');
+        const optionSelector = dataCy
+          ? [dataCySelector(buildDataCy(dataCy, 'option')), '[role="option"]'].join(',')
+          : '[role="option"], .p-select-option';
+
+        cy.get('body').contains(optionSelector, value).scrollIntoView({ offset: { top: 0, left: 0 } }).click({ force: true });
+      });
   }
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find(calendar).first().click();
-    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
 
-    PageUtils.pickYear(dateObj.getFullYear());
-    PageUtils.pickMonth(dateObj.getMonth());
-
-    PageUtils.pickDay(dateObj.getDate().toString());
-
-    cy.wait(100);
-  }
-
-  static pickDay(day: string) {
-    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
-    cy.get('@calendarElement')
-      .find('td')
-      .find('span')
-      .not('.p-disabled')
-      .parent()
-      .contains(day)
-      .then(($day) => {
-        cy.wrap($day.parent()).click();
+    cy.get(alias)
+      .find(calendar)
+      .first()
+      .then(($calendar) => {
+        const $input = $calendar.is('input') ? $calendar : $calendar.find('input').first();
+        cy.wrap($input).clear({ force: true }).type(`${PageUtils.dateToString(dateObj)}{enter}`, { force: true });
       });
   }
 
-  static pickMonth(month: number) {
-    const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const Month: string = Months[month];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
-  }
-
-  static pickYear(year: number) {
-    const currentYear: number = new Date().getFullYear();
-
-    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
-    cy.wait(100);
-    cy.get('@calendarElement').then(($calendarElement) => {
-      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
-      }
-    });
-    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
-
-    const decadeStart: number = currentYear - (currentYear % 10);
-    const decadeEnd: number = decadeStart + 9;
-    if (year < decadeStart) {
-      for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
-      }
-    }
-    if (year > decadeEnd) {
-      for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
-      }
-    }
-    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
-  }
-
   static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+    cy.getByDataCy(buildDataCy('report-sidebar', section, 'section')).click({ force: true });
   }
 
   static clickSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click({ force: true });
+    cy.getByDataCy(buildDataCy('report-sidebar', menuItem, 'link')).click({ force: true });
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').as('PanelMenu');
-    cy.get('@PanelMenu').contains('a', menuItem).should('exist');
+    cy.getByDataCy(buildDataCy('report-sidebar', menuItem, 'link')).should('exist');
   }
 
   static shouldNotHaveSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).should('not.exist');
+    cy.get(dataCySelector(buildDataCy('report-sidebar', menuItem, 'link'))).should('not.exist');
   }
 
   static getAlias(alias = ''): string {
-    // Create the alias to limit the scope of the query selectors
     if (!alias) {
       cy.get('body').as('body');
       return '@body';
     }
+
     return alias;
   }
 
   static clickLink(name: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('a', name).click();
+    cy.get(alias)
+      .find(PageUtils.dataCySuffixSelector(name, 'link'))
+      .first()
+      .click({ force: true });
   }
 
   static clickAccordion(name: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    const label = name.trim();
-    const exactLabel = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(label)}\s*$`, 'i');
-
     cy.get(alias)
-      .contains('.accordion-text strong, .header-label', exactLabel, { timeout: 5000 })
+      .find(PageUtils.dataCySuffixSelector(name, 'section'))
       .first()
-      .closest('p-accordion-header, .p-accordionheader')
-      .should('be.visible')
-      .click();
+      .click({ force: true });
   }
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .contains('button', name)
-      .first()
-      .as('btn');
+    cy.get(alias).find(PageUtils.dataCySuffixSelector(name, 'button')).first().as('btn');
     cy.get('@btn').click({ force });
   }
 
@@ -189,78 +154,56 @@ export class PageUtils {
     cy.contains(selector).should('exist');
   }
 
-  /**
-   * Important note, the identifier must be unique. If there are multiple rows with the same info
-   * it will fail.
-   * Also, the identifier must be directly under the <td>.
-   * Example: <td>text</td> is good, but <td><div>text</div></td> won't work
-   * @param identifier string to identify which Row the kabob is in.
-   */
   static getKabob(identifier: string, alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias)
-      .contains(identifier)
-      .closest('td')
-      .siblings()
-      .last()
-      .find('app-table-actions-button')
-      .children()
-      .first()
-      .children()
-      .then(($btn) => {
-        cy.wrap($btn.first()).as('btn');
-        cy.get('@btn').click();
+      .contains('tr', identifier)
+      .should('be.visible')
+      .within(() => {
+        cy.get(PageUtils.dataCySuffixSelector('actions', 'button')).first().click({ force: true });
       });
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
     PageUtils.getKabob(identifier, alias);
-    cy.get(PageUtils.getAlias(''))
-      .find('.p-popover')
-      .contains(item)
-      .then(($item) => {
-        cy.wrap($item.first()).as('btn');
-        cy.get('@btn').click();
-      });
+    cy.get('body')
+      .find(PageUtils.dataCySuffixSelector(item, 'button'))
+      .filter(':visible')
+      .first()
+      .click({ force: true });
   }
 
   static switchCommittee(committeeId: string) {
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
     cy.visit('/login/select-committee');
-    cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
-    cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
+    cy.getByDataCy(`select-committee-page-committee-card-${committeeId}`).click();
+    cy.wait('@GetCommitteeMembers');
     cy.wait(1000);
     this.enterSecondCommitteeEmailIfneeded();
   }
 
   static enterSecondCommitteeEmailIfneeded() {
     cy.get(PageUtils.getAlias(''))
-      .find('[id="second-committee-admin-dialog"]')
-      .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
-      .then(($email) => {
-        if ($email.length) {
-          cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
-          cy.get('#email').should('have.value', '');
-          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-          cy.get('#email').should('have.value', 'admin@admin.com');
-          cy.get('#email').click();
-          PageUtils.clickButton('Save');
+      .find(dataCySelector('select-committee-second-admin-dialog'))
+      .should(Cypress._.noop)
+      .then(($dialog) => {
+        if ($dialog.length) {
+          cy.getByDataCy('select-committee-second-admin-dialog-email-input').should('have.value', '');
+          cy.getByDataCy('select-committee-second-admin-dialog-email-input').clear().type('admin@admin.com');
+          cy.getByDataCy('select-committee-second-admin-dialog-save-button').click();
         }
       });
-    cy.contains('Welcome to FECfile+').should('not.exist');
   }
 
   static submitReportForm() {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
-    const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
-    PageUtils.enterValue('#treasurer_last_name', 'TEST');
-    PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
-    cy.get(alias).find('[data-cy="userCertified"]').first().click();
-    PageUtils.clickButton('Submit');
-    PageUtils.findOnPage('div', 'Are you sure?');
-    PageUtils.clickButton('Confirm');
+    cy.getByDataCy('report-submit-page-treasurer-last-name-input').type('TEST');
+    cy.getByDataCy('report-submit-page-treasurer-first-name-input').type('TEST');
+    cy.getByDataCy('report-submit-page-filing-password-input').type(Cypress.env('FILING_PASSWORD'));
+    cy.getByDataCy('report-submit-page-user-certified-checkbox').click({ force: true });
+    cy.getByDataCy('report-submit-page-submit-button').click();
+    cy.getByDataCy('layout-confirm-dialog-submit-button').click();
     cy.wait('@SubmitReport');
   }
 
@@ -268,4 +211,25 @@ export class PageUtils {
     cy.get('body').click(0, 0);
   };
 
+  private static dataCySuffixSelector(label: string, kind: 'button' | 'link' | 'section') {
+    const base = PageUtils.labelToDataCySegment(label);
+    const alternates = Array.from(new Set([base, base.replaceAll('-and-', '-'), base.replaceAll('-', '_')])).filter(Boolean);
+    const selectors = alternates.map((value) => `[data-cy$="-${value}-${kind}"]`);
+
+    if (kind === 'button') {
+      if (['confirm', 'continue', 'yes', 'start-building-report'].includes(base)) {
+        selectors.push('[data-cy$="-dialog-submit-button"]');
+      }
+
+      if (['cancel', 'close', 'no'].includes(base)) {
+        selectors.push('[data-cy$="-dialog-cancel-button"]', '[data-cy$="-dialog-close-button"]');
+      }
+    }
+
+    return Array.from(new Set(selectors)).join(',');
+  }
+
+  private static labelToDataCySegment(label: string): string {
+    return slugifyDataCyPart(label.replaceAll('&', ' and '));
+  }
 }

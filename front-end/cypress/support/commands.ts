@@ -1,5 +1,6 @@
 import 'cypress-axe';
 import type { Result } from 'axe-core';
+import { dataCySelector } from '../utils/dataCy';
 
 type A11yWaiver = { reason: string; link: string };
 type A11yWaivers = Record<string, A11yWaiver>;
@@ -252,6 +253,14 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
   const outString = safeString(stringVal);
 
   return safeType(prevSubject, '{selectall}{del}' + outString);
+}
+
+export function getByDataCy(dataCy: string) {
+  return cy.get(dataCySelector(dataCy));
+}
+
+export function findByDataCy(prevSubject: any, dataCy: string) {
+  return cy.wrap(prevSubject).find(dataCySelector(dataCy));
 }
 
 declare global {

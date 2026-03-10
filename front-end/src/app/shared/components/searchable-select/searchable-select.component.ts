@@ -4,6 +4,7 @@ import { Select, SelectModule, SelectPassThrough, SelectStyle } from 'primeng/se
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { buildDataCy, mergePassThroughWithDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-searchable-select',
@@ -18,6 +19,7 @@ export class SearchableSelectComponent {
   readonly inputId = input.required<string>();
   readonly controlName = input.required<string>();
   readonly form = input.required<FormGroup>();
+  readonly dataCyContext = input('');
   readonly autoDisplayFirst = input(true);
   readonly readonly = input(false);
   readonly styleClass = input('');
@@ -33,6 +35,20 @@ export class SearchableSelectComponent {
   private currentCycleIndex: number = -1;
 
   readonly control = computed(() => this.form().get(this.controlName()) as FormControl);
+  readonly selectDataCy = computed(() => buildDataCy(this.dataCyContext(), this.controlName(), 'select'));
+  readonly mergedPt = computed<SelectPassThrough>(() => {
+    const pt = this.pt() ?? {};
+    const selectDataCy = this.selectDataCy();
+
+    return {
+      ...pt,
+      root: mergePassThroughWithDataCy(pt.root, selectDataCy),
+      label: mergePassThroughWithDataCy(pt.label, buildDataCy(selectDataCy, 'label')),
+      dropdown: mergePassThroughWithDataCy(pt.dropdown, buildDataCy(selectDataCy, 'dropdown')),
+      listContainer: mergePassThroughWithDataCy(pt.listContainer, buildDataCy(selectDataCy, 'options')),
+      option: mergePassThroughWithDataCy(pt.option, buildDataCy(selectDataCy, 'option')),
+    };
+  });
 
   constructor() {
     effectOnceIf(

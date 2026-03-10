@@ -26,6 +26,7 @@ import { environment } from '../../../../environments/environment';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
 import { scrollToTop } from 'app/shared/utils/form.utils';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -163,5 +164,18 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
       return `/reports/transactions/report/${this.report().id}/create/${transactionType}`;
     }
     return undefined;
+  }
+
+  pageTitleDataCy(): string {
+    return buildDataCy('transactions', this.category(), 'picker', 'title');
+  }
+
+  groupDataCy(label: string): string {
+    return buildDataCy('transactions', this.category(), 'picker', label, 'section');
+  }
+
+  transactionLinkDataCy(transactionType: string): string {
+    const label = this.transactionTypeLabels.find(([value]) => value === transactionType)?.[1] ?? transactionType;
+    return buildDataCy('transactions', this.category(), 'picker', label, 'link');
   }
 }

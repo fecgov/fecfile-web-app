@@ -1,8 +1,8 @@
-<app-shared-templates (reportNameClick)="this.editItem($event)" />
+<app-shared-templates dataCyContext="report-list-form24" (reportNameClick)="this.editItem($event)" />
 <div [hidden]="items().length === 0">
   <app-table
     [(first)]="first"
-    data-cy="form24-list-component"
+    dataCyContext="report-list-form24"
     [items]="items()"
     [(totalItems)]="totalItems"
     [loading]="loading()"

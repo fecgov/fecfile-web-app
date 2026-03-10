@@ -8,6 +8,7 @@
         [form]="form()"
         [formControlName]="officeFormControlName()"
         [formSubmitted]="formSubmitted()"
+        [dataCyContext]="dataCyContext()"
       />
     </div>
     <div class="col-3">
@@ -18,6 +19,7 @@
         [form]="form()"
         [formControlName]="stateFormControlName()"
         [formSubmitted]="formSubmitted()"
+        [dataCyContext]="dataCyContext()"
       />
     </div>
     <div class="col-3">
@@ -30,11 +32,13 @@
             id="candidate_district"
             [formControlName]="districtFormControlName()"
             class="p-disabled"
+            [attr.data-cy]="fieldDataCy(districtFormControlName())"
           />
           <app-error-messages
             [form]="form()"
             [fieldName]="districtFormControlName()"
             [formSubmitted]="formSubmitted()"
+            [dataCyContext]="dataCyContext()"
           />
         </div>
       } @else {
@@ -45,6 +49,7 @@
           [form]="form()"
           [formControlName]="districtFormControlName()"
           [formSubmitted]="formSubmitted()"
+          [dataCyContext]="dataCyContext()"
         />
       }
     </div>

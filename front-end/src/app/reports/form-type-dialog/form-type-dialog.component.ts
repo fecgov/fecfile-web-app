@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import { ReportTypes } from 'app/shared/models';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-form-type-dialog',
@@ -25,6 +26,17 @@ export class FormTypeDialogComponent {
   readonly dialogVisible = model(false);
 
   readonly selectedType = signal<ReportTypes | undefined>(undefined);
+  readonly formTypeSelectPt = computed(() => {
+    const baseDataCy = buildDataCy('report-list', 'dialog', 'form-type', 'select');
+
+    return {
+      root: { 'data-cy': baseDataCy },
+      label: { 'data-cy': buildDataCy(baseDataCy, 'label') },
+      dropdown: { 'data-cy': buildDataCy(baseDataCy, 'dropdown') },
+      listContainer: { 'data-cy': buildDataCy(baseDataCy, 'options') },
+      option: { 'data-cy': buildDataCy(baseDataCy, 'option') },
+    };
+  });
   readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
   readonly isSubmitDisabled = computed(() =>
@@ -57,6 +69,10 @@ export class FormTypeDialogComponent {
 
   getFormType(type?: ReportTypes): FormType | undefined {
     return type ? getFormTypes(environment.showForm3).get(type) : undefined;
+  }
+
+  formTypeOptionDataCy(type: ReportTypes): string {
+    return buildDataCy('report-list', 'dialog', 'form-type', type, 'option');
   }
 
   constructor() {

@@ -10,6 +10,7 @@
       #selectElement
       [formControl]="control()"
       [id]="selectId().id"
+      [attr.data-cy]="selectDataCy()"
       (change)="handleChange()"
       [disabled]="control().disabled"
       (blur)="update.emit(control().value)"
@@ -28,12 +29,23 @@
       }
     </select>
     @if (showClear() && control().value && !control().disabled) {
-      <button type="button" class="select-clear-button" aria-label="Clear selection" (click)="clear($event)">
+      <button
+        type="button"
+        class="select-clear-button"
+        aria-label="Clear selection"
+        [attr.data-cy]="clearButtonDataCy()"
+        (click)="clear($event)"
+      >
         <i class="pi pi-times"></i>
       </button>
     }
   </div>
   @if (includeErrorMessages()) {
-    <app-error-messages [form]="form()" [fieldName]="formControlName()" [formSubmitted]="formSubmitted()" />
+    <app-error-messages
+      [form]="form()"
+      [fieldName]="formControlName()"
+      [formSubmitted]="formSubmitted()"
+      [dataCyContext]="dataCyContext()"
+    />
   }
 </div>

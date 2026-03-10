@@ -19,6 +19,7 @@ import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../destroyer.component';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -32,6 +33,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
   @Input() showSearchBoxCallback = () => true;
+  @Input() dataCyContext = '';
 
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
@@ -58,6 +60,44 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
 
   searchTerm = '';
+
+  get rootDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'lookup');
+  }
+
+  get contactTypeDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'contact-type', 'select');
+  }
+
+  get searchBoxDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'contact-search', 'input');
+  }
+
+  get createContactDataCy(): string {
+    return buildDataCy(this.dataCyContext, 'create-contact', 'link');
+  }
+
+  get contactTypeSelectPt() {
+    const dropdownBase = { 'data-cy': buildDataCy(this.contactTypeDataCy, 'dropdown') };
+
+    return {
+      root: { 'data-cy': this.contactTypeDataCy },
+      label: { 'data-cy': buildDataCy(this.contactTypeDataCy, 'label') },
+      dropdown: this.contactTypeOptions.length > 1 ? dropdownBase : { class: 'no-dropdown-icon', ...dropdownBase },
+      listContainer: { 'data-cy': buildDataCy(this.contactTypeDataCy, 'options') },
+      option: { 'data-cy': buildDataCy(this.contactTypeDataCy, 'option') },
+    };
+  }
+
+  get contactLookupPt() {
+    return {
+      root: { 'data-cy': this.searchBoxDataCy },
+      pcInputText: { root: { 'data-cy': this.searchBoxDataCy } },
+      dropdown: { 'data-cy': buildDataCy(this.searchBoxDataCy, 'dropdown') },
+      listContainer: { 'data-cy': buildDataCy(this.searchBoxDataCy, 'options') },
+      option: { 'data-cy': buildDataCy(this.searchBoxDataCy, 'option') },
+    };
+  }
 
   ngOnInit(): void {
     this.contactType = this.contactTypeOptions[0].value as ContactTypes;
