@@ -14,6 +14,9 @@ export class UploadSubmission {
   @Type(() => Date)
   @Transform(BaseModel.dateTransform)
   updated: Date | undefined;
+  @Type(() => Date)
+  @Transform(BaseModel.dateTransform)
+  date_filed: Date | null = null;
 
   // prettier-ignore
   static fromJSON(json: any): UploadSubmission { // eslint-disable-line @typescript-eslint/no-explicit-any
