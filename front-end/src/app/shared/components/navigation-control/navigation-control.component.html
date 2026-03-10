@@ -9,7 +9,7 @@
         [class]="navigationControl?.ngClass || ''"
         (click)="clickButton()"
         [disabled]="isDisabled()"
-        [attr.data-cy]="buttonDataCy()"
+        data-cy="navigation-control-button"
         appSingleClick
       ></button>
     }
@@ -68,6 +68,20 @@
           }
         </div>
       </p-popover>
+    }
+    @case (controlType.SPLITBUTTON) {
+      <div class="split-button-container">
+        <p-splitButton
+          [label]="navigationControl().label || ''"
+          [icon]="navigationControl().icon || ''"
+          [model]="dropdownOptions()"
+          (onClick)="clickButton()"
+          data-cy="navigation-control-splitbutton"
+          [disabled]="isDisabled()"
+          [model]="items"
+          appSingleClick
+        />
+      </div>
     }
   }
 </div>

@@ -150,6 +150,9 @@
   color-scheme: light;
 
   --scrollbar-width: 0px;
+
+  --p-tieredmenu-item-color: var(--p-content-color);
+  --p-tieredmenu-separator-border-color: #212121b3; // 70% opacity of #212121
 }
 
 $breakpoints: (

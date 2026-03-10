@@ -50,16 +50,15 @@ button > span {
   color: var(--p-content-color);
 }
 
-.dropdown-menu {
-  background-color: #f1f1f1;
-}
-
-.dropdown-item {
-  padding: 0.5rem 1.5rem;
-  font-size: 1rem;
-  line-height: 1rem;
-}
-
 hr {
   margin: 1rem 0;
+}
+
+.split-button-container {
+  background: var(--p-button-primary-background);
+  width: fit-content;
+  border-radius: var(--border-radius);
+  &:has(.p-splitbutton-button:disabled) {
+    background: var(--surface-ground);
+  }
 }

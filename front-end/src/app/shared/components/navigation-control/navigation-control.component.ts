@@ -1,4 +1,5 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, computed, inject, input } from '@angular/core';
 import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   cloneNavigationEvent,
@@ -8,7 +9,7 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { SubTransactionGroup, TransactionType } from 'app/shared/models/transaction-type.model';
+import { SubTransactionGroup } from 'app/shared/models/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   ScheduleATransactionTypeLabels,
@@ -20,52 +21,64 @@ import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transac
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
-import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
   styleUrls: ['./navigation-control.component.scss'],
-  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule],
+  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule, SplitButtonModule],
 })
-export class NavigationControlComponent implements OnInit {
+export class NavigationControlComponent {
   private readonly store = inject(Store);
-  @Input() navigationControl?: NavigationControl;
-  @Input() transaction?: Transaction;
-  public controlType: 'button' | 'dropdown' = 'button';
-  public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  dropdownControl = new SubscriptionFormControl('');
+  readonly navigationControl = input.required<NavigationControl>();
+  readonly transaction = input<Transaction | undefined>(undefined);
 
-  ngOnInit(): void {
-    /**
-     * If the navigation control is a dropdown, we need to extract
-     * the options from the config in the transaction type
-     */
-    if (this.navigationControl?.controlType == ControlType.DROPDOWN) {
-      this.controlType = 'dropdown';
-      this.dropdownOptions = this.getOptions(
-        this.transaction?.transactionType,
-        this.transaction?.parent_transaction?.transactionType,
-      );
-      /**
-       * If the navigation control is a button, we'll just establish
-       * the destination in the click handler
-       */
-    } else {
-      this.controlType = 'button';
-    }
-  }
+  readonly dropdownOptions = derivedAsync(
+    () => {
+      const transaction = this.transaction();
+      const navigationControl = this.navigationControl();
+      if (!transaction || !navigationControl) return [];
+      if (navigationControl.controlType == ControlType.DROPDOWN) return this.getOptions(transaction);
+      return [];
+    },
+    { initialValue: [] },
+  );
 
-  isVisible = true;
+  readonly items: MenuItem[] = [
+    {
+      label: 'Save and...',
+      disabled: true,
+    },
+    { separator: true },
+    {
+      label: 'Add another',
+      command: () => {
+        this.saveAndAddAnother();
+      },
+    },
+  ];
 
-  isDisabled(): boolean {
-    return !!this.navigationControl?.disabledCondition(this.transaction);
+  // This could be a signal but the transaction data is getting updated out of sync
+  readonly isDisabled = () => !!this.navigationControl()?.disabledCondition(this.transaction());
+  readonly controlType = ControlType;
+  readonly type = computed(() => this.navigationControl().controlType);
+
+  saveAndAddAnother() {
+    const navControl = this.navigationControl();
+    const transaction = this.transaction();
+    if (!transaction) return;
+    const navigationEvent = new NavigationEvent(
+      navControl.navigationAction,
+      NavigationDestination.ANOTHER,
+      cloneInstance(transaction),
+      transaction.transaction_type_identifier as TransactionTypes,
+    );
+    this.store.dispatch(navigationEventSetAction(navigationEvent));
   }
 
   buttonDataCy(): string {
@@ -81,26 +94,26 @@ export class NavigationControlComponent implements OnInit {
      *    same as the current transaction
      */
     let destinationTransactionType: TransactionTypes | undefined;
+    const navControl = this.navigationControl();
+    const transaction = this.transaction();
+    if (!transaction) return;
     // Handle CHILD case by determining child TransactionType
     if (
-      this.navigationControl?.navigationDestination === NavigationDestination.CHILD &&
-      this.transaction?.transactionType.subTransactionConfig
+      navControl.navigationDestination === NavigationDestination.CHILD &&
+      transaction.transactionType.subTransactionConfig
     ) {
-      destinationTransactionType = (this.transaction.transactionType.subTransactionConfig as TransactionTypes[])[0];
+      destinationTransactionType = (transaction.transactionType.subTransactionConfig as TransactionTypes[])[0];
     }
 
     // Handle ANOTHER case by determining child TransactionType
-    if (
-      this.navigationControl?.navigationDestination === NavigationDestination.ANOTHER &&
-      this.transaction?.transaction_type_identifier
-    ) {
-      destinationTransactionType = this.transaction.transaction_type_identifier as TransactionTypes;
+    if (navControl.navigationDestination === NavigationDestination.ANOTHER && transaction.transaction_type_identifier) {
+      destinationTransactionType = transaction.transaction_type_identifier as TransactionTypes;
     }
 
     const navigationEvent = new NavigationEvent(
-      this.navigationControl?.navigationAction,
-      this.navigationControl?.navigationDestination,
-      cloneInstance(this.transaction),
+      navControl.navigationAction,
+      navControl.navigationDestination,
+      cloneInstance(transaction),
       destinationTransactionType,
     );
     this.store.dispatch(navigationEventSetAction(navigationEvent));
@@ -114,8 +127,11 @@ export class NavigationControlComponent implements OnInit {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig = false): any => {
+  getOptionFromConfig = (
+    config: SubTransactionGroup | TransactionTypes,
+    transaction: Transaction,
+    isParentConfig = false,
+  ): any => {
     /** Interpret config to return either a group of navigation options or a single navigation option
      * If the config is a group, return a group of options, recursively calling getOptionFromConfig
      * If the config is a single transaction type, return a single navigation option
@@ -126,7 +142,7 @@ export class NavigationControlComponent implements OnInit {
       const group = config as SubTransactionGroup;
       return {
         label: group.groupName,
-        items: group.subTransactionTypes.map((type) => this.getOptionFromConfig(type, isParentConfig)),
+        items: group.subTransactionTypes.map((type) => this.getOptionFromConfig(type, transaction, isParentConfig)),
       };
     }
     const typeId = config as TransactionTypes;
@@ -149,14 +165,13 @@ export class NavigationControlComponent implements OnInit {
         NavigationAction.SAVE,
         // If this control came from the parent, the desination is ANOTHER
         isParentConfig ? NavigationDestination.ANOTHER : NavigationDestination.CHILD,
-        this.transaction,
+        transaction,
         typeId,
       ),
     };
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): any {
+  getOptions(transaction: Transaction): any {
     /** Get options for dropdown based on transactionType and parentTransactionType
      * If parentTransactionType is provided, include options from parentTransactionType
      *    options from parent transaction will have the destionaion of ANOTHER
@@ -166,20 +181,20 @@ export class NavigationControlComponent implements OnInit {
      *    A single config can contain a group of transaction types or just be a single
      *    transaction type
      */
-    const config = transactionType?.subTransactionConfig;
-    const parentConfig = parentTransactionType?.subTransactionConfig;
+    const config = transaction.transactionType.subTransactionConfig;
+    const parentConfig = transaction.parent_transaction?.transactionType.subTransactionConfig;
     const options = [];
     // either flatten an array or add a single config
     if (Array.isArray(parentConfig)) {
-      options.push(...parentConfig.map((type) => this.getOptionFromConfig(type, true)));
+      options.push(...parentConfig.map((type) => this.getOptionFromConfig(type, transaction, true)));
     } else if (parentConfig) {
-      options.push(this.getOptionFromConfig(parentConfig, true));
+      options.push(this.getOptionFromConfig(parentConfig, transaction, true));
     }
     // either flatten an array or add a single config
     if (Array.isArray(config)) {
-      options.push(...config.map((type) => this.getOptionFromConfig(type)));
+      options.push(...config.map((type) => this.getOptionFromConfig(type, transaction)));
     } else if (config) {
-      options.push(this.getOptionFromConfig(config));
+      options.push(this.getOptionFromConfig(config, transaction));
     }
     return options;
   }
