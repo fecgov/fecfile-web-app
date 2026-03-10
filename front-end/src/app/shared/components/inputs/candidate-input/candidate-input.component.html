@@ -1,7 +1,7 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('candidate', 'panel')">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['candidate_fec_id'], 'field')">
         <label for="candidate_id">CANDIDATE ID</label>
         <input
           type="text"
@@ -9,12 +9,14 @@
           pInputText
           id="candidate_id"
           [formControlName]="templateMap['candidate_fec_id']"
+          [attr.data-cy]="fieldDataCy(templateMap['candidate_fec_id'])"
         />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_fec_id']"
           [formSubmitted]="formSubmitted"
           [patternErrorMessage]="patternMessage"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
@@ -22,59 +24,94 @@
   </div>
   <div class="grid">
     <div class="col-4">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['candidate_last_name'], 'field')">
         <label for="last_name">LAST NAME</label>
-        <input type="text" pInputText id="last_name" [formControlName]="templateMap['candidate_last_name']" />
+        <input
+          type="text"
+          pInputText
+          id="last_name"
+          [formControlName]="templateMap['candidate_last_name']"
+          [attr.data-cy]="fieldDataCy(templateMap['candidate_last_name'])"
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_last_name']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-4">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['candidate_first_name'], 'field')">
         <label for="first_name">FIRST NAME</label>
-        <input type="text" pInputText id="first_name" [formControlName]="templateMap['candidate_first_name']" />
+        <input
+          type="text"
+          pInputText
+          id="first_name"
+          [formControlName]="templateMap['candidate_first_name']"
+          [attr.data-cy]="fieldDataCy(templateMap['candidate_first_name'])"
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_first_name']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-4">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['candidate_middle_name'], 'field')">
         <label for="middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
-        <input type="text" pInputText id="middle_name" [formControlName]="templateMap['candidate_middle_name']" />
+        <input
+          type="text"
+          pInputText
+          id="middle_name"
+          [formControlName]="templateMap['candidate_middle_name']"
+          [attr.data-cy]="fieldDataCy(templateMap['candidate_middle_name'])"
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_middle_name']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
   </div>
   <div class="grid">
     <div class="col-3">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['candidate_prefix'], 'field')">
         <label for="prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
-        <input type="text" pInputText id="prefix" [formControlName]="templateMap['candidate_prefix']" />
+        <input
+          type="text"
+          pInputText
+          id="prefix"
+          [formControlName]="templateMap['candidate_prefix']"
+          [attr.data-cy]="fieldDataCy(templateMap['candidate_prefix'])"
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_prefix']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-3">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['candidate_suffix'], 'field')">
         <label for="suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
-        <input type="text" pInputText id="suffix" [formControlName]="templateMap['candidate_suffix']" />
+        <input
+          type="text"
+          pInputText
+          id="suffix"
+          [formControlName]="templateMap['candidate_suffix']"
+          [attr.data-cy]="fieldDataCy(templateMap['candidate_suffix'])"
+        />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['candidate_suffix']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
@@ -88,6 +125,7 @@
       [officeFormControlName]="templateMap['candidate_office']"
       [stateFormControlName]="templateMap['candidate_state']"
       [districtFormControlName]="templateMap['candidate_district']"
+      [dataCyContext]="contextDataCy('candidate-office')"
     />
   }
 </div>

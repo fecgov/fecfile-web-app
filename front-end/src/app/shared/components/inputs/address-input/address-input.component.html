@@ -1,7 +1,7 @@
-<div [formGroup]="form()">
+<div [formGroup]="form()" [attr.data-cy]="addressPanelDataCy()">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(streetOneFieldName(), 'field')">
         <span class="span-label" id="address_input_street_1_label">STREET ADDRESS</span>
         <input
           type="text"
@@ -11,12 +11,18 @@
           [formControlName]="streetOneFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
+          [attr.data-cy]="fieldDataCy(streetOneFieldName())"
         />
-        <app-error-messages [form]="form()" [fieldName]="streetOneFieldName()" [formSubmitted]="formSubmitted()" />
+        <app-error-messages
+          [form]="form()"
+          [fieldName]="streetOneFieldName()"
+          [formSubmitted]="formSubmitted()"
+          [dataCyContext]="dataCyContext()"
+        />
       </div>
     </div>
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(streetTwoFieldName(), 'field')">
         <span class="span-label" id="address_input_street_2_label"
           >APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></span
         >
@@ -28,14 +34,20 @@
           [formControlName]="streetTwoFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
+          [attr.data-cy]="fieldDataCy(streetTwoFieldName())"
         />
-        <app-error-messages [form]="form()" [fieldName]="streetTwoFieldName()" [formSubmitted]="formSubmitted()" />
+        <app-error-messages
+          [form]="form()"
+          [fieldName]="streetTwoFieldName()"
+          [formSubmitted]="formSubmitted()"
+          [dataCyContext]="dataCyContext()"
+        />
       </div>
     </div>
   </div>
   <div class="grid">
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(cityFieldName(), 'field')">
         <span class="span-label" id="address_input_city_label">CITY</span>
         <input
           type="text"
@@ -45,28 +57,40 @@
           [formControlName]="cityFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
+          [attr.data-cy]="fieldDataCy(cityFieldName())"
         />
-        <app-error-messages [form]="form()" [fieldName]="cityFieldName()" [formSubmitted]="formSubmitted()" />
+        <app-error-messages
+          [form]="form()"
+          [fieldName]="cityFieldName()"
+          [formSubmitted]="formSubmitted()"
+          [dataCyContext]="dataCyContext()"
+        />
       </div>
     </div>
     <div class="col-3">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(stateFieldName(), 'field')">
         <span class="span-label" id="state-label">STATE/TERRITORY</span>
         <app-searchable-select
           inputId="state"
           [controlName]="stateFieldName()"
           [form]="form()"
           [options]="stateOptions"
+          [dataCyContext]="dataCyContext()"
           appendTo="body"
           [readonly]="readonly()"
           styleClass="{{ readonly() ? 'readonly' : '' }}"
           fluid
         />
-        <app-error-messages [form]="form()" [fieldName]="stateFieldName()" [formSubmitted]="formSubmitted()" />
+        <app-error-messages
+          [form]="form()"
+          [fieldName]="stateFieldName()"
+          [formSubmitted]="formSubmitted()"
+          [dataCyContext]="dataCyContext()"
+        />
       </div>
     </div>
     <div class="col-3">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(zipFieldName(), 'field')">
         <span class="span-label" id="address_input_zip_label">ZIP/POSTAL CODE</span>
         <input
           id="zip"
@@ -76,8 +100,14 @@
           [formControlName]="zipFieldName()"
           [readonly]="readonly()"
           [class.readonly]="readonly()"
+          [attr.data-cy]="fieldDataCy(zipFieldName())"
         />
-        <app-error-messages [form]="form()" [fieldName]="zipFieldName()" [formSubmitted]="formSubmitted()" />
+        <app-error-messages
+          [form]="form()"
+          [fieldName]="zipFieldName()"
+          [formSubmitted]="formSubmitted()"
+          [dataCyContext]="dataCyContext()"
+        />
       </div>
     </div>
   </div>

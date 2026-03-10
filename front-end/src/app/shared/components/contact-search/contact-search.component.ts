@@ -12,6 +12,7 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-contact-search',
@@ -25,8 +26,13 @@ export class ContactSearchComponent {
 
   readonly key = input.required<string>();
   readonly isBare = input(true);
+  readonly dataCyContext = input('contacts-search');
 
   readonly manager = computed(() => this.cmservice.get(this.key()));
+  readonly rootDataCy = computed(() => buildDataCy(this.dataCyContext(), 'field'));
+  readonly contactTypeDataCy = computed(() => buildDataCy(this.dataCyContext(), 'contact-type', 'select'));
+  readonly searchFieldDataCy = computed(() => buildDataCy(this.dataCyContext(), 'contact-search', 'field'));
+  readonly searchInputDataCy = computed(() => buildDataCy(this.dataCyContext(), 'contact-search', 'input'));
 
   contactLookupList: SelectItemGroup[] = [];
   searchTerm = '';

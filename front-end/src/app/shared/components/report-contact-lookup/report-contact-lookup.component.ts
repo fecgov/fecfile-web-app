@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-report-contact-lookup',
@@ -18,6 +19,9 @@ export class ReportContactLookupComponent implements OnInit {
   readonly contactType = input.required<ContactTypes>();
 
   readonly manager = computed(() => this.cmservice.get(this.key()));
+  readonly rootDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'panel'));
+  readonly createContactDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'create-contact', 'link'));
+  readonly contactSearchContext = computed(() => buildDataCy('report-contact-lookup', this.key()));
 
   ngOnInit(): void {
     this.manager().setAsSingle(this.contactType());

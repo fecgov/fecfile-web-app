@@ -1,5 +1,5 @@
-<form id="form" [formGroup]="form">
-  <div class="field">
+<form id="form" [formGroup]="form" [attr.data-cy]="contextDataCy('linked-report', 'form')">
+  <div class="field" [attr.data-cy]="fieldDataCy('linkedF3x', 'field')">
     <label for="linkedF3x" class="flex">
       <span class="align-content-center">LINKED REPORT</span>
       <span
@@ -18,7 +18,8 @@
       pInputText
       id="linkedF3x"
       formControlName="linkedF3x"
+      [attr.data-cy]="fieldDataCy('linkedF3x')"
     />
-    <app-error-messages [form]="form" fieldName="linkedF3x" [formSubmitted]="formSubmitted" />
+    <app-error-messages [form]="form" fieldName="linkedF3x" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
   </div>
 </form>

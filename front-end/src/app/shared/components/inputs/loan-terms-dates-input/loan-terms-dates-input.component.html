@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('loan-terms-dates', 'panel')">
   <div class="grid">
     <div class="col-6">
       <app-calendar
@@ -6,6 +6,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         label="DATE INCURRED"
+        [dataCyContext]="dataCyContext"
       />
     </div>
     <div class="col-6"></div>
@@ -17,17 +18,29 @@
         [form]="form"
         [formControlName]="templateMap['due_date_setting']"
         [formSubmitted]="formSubmitted"
+        [dataCyContext]="dataCyContext"
       />
     </div>
     <div class="col-6" data-cy="dueDateInput">
       @switch (dueDateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
-          <div class="field">
+          <div class="field" [attr.data-cy]="fieldDataCy(templateMap['due_date'], 'field')">
             <label [id]="dueDateId.label" [for]="dueDateId.id"
               >DATE DUE <span class="paren-label">(USER DEFINED)</span></label
             >
-            <input type="text" pInputText [id]="dueDateId.id" [formControlName]="templateMap['due_date']" />
-            <app-error-messages [form]="form" [fieldName]="templateMap['due_date']" [formSubmitted]="formSubmitted" />
+            <input
+              type="text"
+              pInputText
+              [id]="dueDateId.id"
+              [formControlName]="templateMap['due_date']"
+              [attr.data-cy]="fieldDataCy(templateMap['due_date'])"
+            />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['due_date']"
+              [formSubmitted]="formSubmitted"
+              [dataCyContext]="dataCyContext"
+            />
           </div>
         }
         @case (termFieldSettings.SPECIFIC_DATE) {
@@ -36,6 +49,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             label="SPECIFIC DATE"
+            [dataCyContext]="dataCyContext"
           />
         }
         @default {}
@@ -50,25 +64,33 @@
         [form]="form"
         [formControlName]="templateMap['interest_rate_setting']"
         [formSubmitted]="formSubmitted"
+        [dataCyContext]="dataCyContext"
       />
     </div>
     <div class="col-6" data-cy="interestRateInput">
       @switch (interestRateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
-          <div class="field">
+          <div class="field" [attr.data-cy]="fieldDataCy(templateMap['interest_rate'], 'field')">
             <label [id]="interestRateId.label" [for]="interestRateId.id">
               INTEREST RATE <span class="paren-label">(USER DEFINED)</span>
             </label>
-            <input type="text" pInputText [id]="interestRateId.id" [formControlName]="templateMap['interest_rate']" />
+            <input
+              type="text"
+              pInputText
+              [id]="interestRateId.id"
+              [formControlName]="templateMap['interest_rate']"
+              [attr.data-cy]="fieldDataCy(templateMap['interest_rate'])"
+            />
             <app-error-messages
               [form]="form"
               [fieldName]="templateMap['interest_rate']"
               [formSubmitted]="formSubmitted"
+              [dataCyContext]="dataCyContext"
             />
           </div>
         }
         @case (termFieldSettings.EXACT_PERCENTAGE) {
-          <div class="field">
+          <div class="field" [attr.data-cy]="fieldDataCy(templateMap['interest_rate'], 'field')">
             <label [id]="interestRateId.label" [for]="interestRateId.id">
               EXACT PERCENTAGE <span class="paren-label">(%)</span>
             </label>
@@ -78,12 +100,14 @@
               pInputText
               [id]="interestRateId.id"
               [formControlName]="templateMap['interest_rate']"
+              [attr.data-cy]="fieldDataCy(templateMap['interest_rate'])"
             />
             <app-error-messages
               [form]="form"
               [fieldName]="templateMap['interest_rate']"
               [formSubmitted]="formSubmitted"
               patternErrorMessage="The interest rate must be a valid percentage with no more than 5 decimal places."
+              [dataCyContext]="dataCyContext"
             />
           </div>
         }

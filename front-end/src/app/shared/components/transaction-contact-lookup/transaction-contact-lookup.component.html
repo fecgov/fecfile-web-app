@@ -1,5 +1,5 @@
-<div class="p-fluid">
-  <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'">
+<div class="p-fluid" [attr.data-cy]="dataCyContext + '-panel'">
+  <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'" [attr.data-cy]="dataCyContext + '-lookup-field'">
     <app-contact-lookup
       [contactTypeOptions]="contactTypeOptions"
       [candidateOffice]="mandatoryCandidateOffice"
@@ -24,5 +24,6 @@
     [control]="errorMessageFormControl"
     [formSubmitted]="formSubmitted"
     [requiredErrorMessage]="currentContactLabel + ' information is required'"
+    [dataCyContext]="dataCyContext"
   />
 }

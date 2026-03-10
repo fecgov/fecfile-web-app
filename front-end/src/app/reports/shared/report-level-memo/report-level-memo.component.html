@@ -1,5 +1,5 @@
-<div class="main-content">
-  <h1>Report level memo</h1>
+<div class="main-content" data-cy="report-level-memo-page">
+  <h1 data-cy="report-level-memo-page-title">Report level memo</h1>
   <hr type="solid" class="mb-5" />
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <div class="field textarea-container">
@@ -13,6 +13,7 @@
         [cols]="30"
         appAutoResize
         [formControlName]="text4kFormProperty"
+        data-cy="report-level-memo-page-text4000-input"
       ></textarea>
     </div>
     <hr type="solid" class="mt-0" />
@@ -21,6 +22,7 @@
         pButton
         pRipple
         class="p-button-secondary previous-button"
+        data-cy="report-level-memo-page-see-print-preview-button"
         (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReport().id)"
       >
         <img pButtonIcon alt="Previous Arrow" src="assets/img/prev_arrow.svg" height="14px" />
@@ -32,6 +34,7 @@
         appSingleClick
         label="Save & continue"
         class="p-button-primary"
+        data-cy="report-level-memo-page-save-and-continue-button"
         (click)="submitForm()"
       ></button>
     </div>

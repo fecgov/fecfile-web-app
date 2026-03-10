@@ -12,6 +12,7 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { RouterLink } from '@angular/router';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-contact-list',
@@ -129,6 +130,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     } else {
       return item.name || '';
     }
+  }
+
+  public contactLinkDataCy(item: Contact): string {
+    return buildDataCy('contacts', 'table', 'row', item.id, this.displayName(item), 'link');
   }
 
   public displayFecId(item: Contact): string {

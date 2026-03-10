@@ -1,48 +1,87 @@
-<div class="p-fluid">
+<div class="p-fluid" data-cy="update-current-user-page">
   <div class="grid">
-    <div class="col-6">
-      <h1>Welcome to FECfile+</h1>
+    <div class="col-6" data-cy="update-current-user-page-hero-panel">
+      <h1 data-cy="update-current-user-page-title">Welcome to FECfile+</h1>
       <hr type="solid" />
-      <p>
+      <p data-cy="update-current-user-page-description">
         FECfile+ uses Login.gov to help us authenticate users. We will now use that information to set up your user
         profile
       </p>
-      <img src="/assets/img/Welcome-to-FECFile.png" alt="Workers checking a monitor" />
+      <img
+        src="/assets/img/Welcome-to-FECFile.png"
+        alt="Workers checking a monitor"
+        data-cy="update-current-user-page-hero-image"
+      />
     </div>
-    <div class="col-6">
-      <p-card>
-        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <div class="col-6" data-cy="update-current-user-page-profile-panel">
+      <p-card data-cy="update-current-user-page-profile-card">
+        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="update-current-user-page-form">
           <div class="grid">
             <div class="col-12">
               <div class="field">
-                <h2>Create profile</h2>
+                <h2 data-cy="update-current-user-page-profile-title">Create profile</h2>
               </div>
             </div>
           </div>
           <div class="grid">
             <div class="col-12">
-              <div class="field">
+              <div class="field" data-cy="update-current-user-page-first-name-field">
                 <label for="first_name"><strong>FIRST NAME</strong></label>
-                <input type="text" pInputText id="first_name" formControlName="first_name" />
-                <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
+                <input
+                  type="text"
+                  pInputText
+                  id="first_name"
+                  formControlName="first_name"
+                  data-cy="update-current-user-page-first-name-input"
+                />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="first_name"
+                  [formSubmitted]="formSubmitted"
+                  dataCyContext="update-current-user-page"
+                />
               </div>
             </div>
           </div>
           <div class="grid">
             <div class="col-12">
-              <div class="field">
+              <div class="field" data-cy="update-current-user-page-last-name-field">
                 <label for="last_name"><strong>LAST NAME</strong></label>
-                <input type="text" pInputText id="last_name" formControlName="last_name" />
-                <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
+                <input
+                  type="text"
+                  pInputText
+                  id="last_name"
+                  formControlName="last_name"
+                  data-cy="update-current-user-page-last-name-input"
+                />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="last_name"
+                  [formSubmitted]="formSubmitted"
+                  dataCyContext="update-current-user-page"
+                />
               </div>
             </div>
           </div>
           <div class="grid">
             <div class="col-12">
-              <div class="field">
+              <div class="field" data-cy="update-current-user-page-email-field">
                 <label for="email"><strong>EMAIL</strong></label>
-                <input class="readonly" type="text" pInputText id="email" [readonly]="true" formControlName="email" />
-                <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
+                <input
+                  class="readonly"
+                  type="text"
+                  pInputText
+                  id="email"
+                  [readonly]="true"
+                  formControlName="email"
+                  data-cy="update-current-user-page-email-input"
+                />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="email"
+                  [formSubmitted]="formSubmitted"
+                  dataCyContext="update-current-user-page"
+                />
               </div>
             </div>
           </div>
@@ -56,11 +95,12 @@
                   appSingleClick
                   label="Continue"
                   class="p-button-primary"
+                  data-cy="update-current-user-page-continue-button"
                   (click)="submitForm()"
                 ></button>
               </div>
               <div class="col-12 flex-center">
-                <a (click)="cancel()">Cancel and exit</a>
+                <a (click)="cancel()" data-cy="update-current-user-page-cancel-link">Cancel and exit</a>
               </div>
             </div>
           </div>

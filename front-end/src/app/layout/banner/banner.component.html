@@ -1,11 +1,15 @@
-<section #banner class="usa-banner" aria-label="Official website of the United States government">
-  <header class="usa-banner__header">
-    <div class="usa-banner__inner">
+<section #banner class="usa-banner" aria-label="Official website of the United States government" data-cy="layout-banner">
+  <header class="usa-banner__header" data-cy="layout-banner-header">
+    <div class="usa-banner__inner" data-cy="layout-banner-summary">
       <div>
         <img aria-hidden="true" class="usa-banner__header-flag" src="/assets/img/uswds/us_flag_small.png" alt="" />
       </div>
       <div>
-        <p class="usa-banner__header-text" aria-label="An official website of the United States government">
+        <p
+          class="usa-banner__header-text"
+          aria-label="An official website of the United States government"
+          data-cy="layout-banner-text"
+        >
           An official website of the United States government
         </p>
       </div>
@@ -14,15 +18,23 @@
         class="usa-banner__button"
         attr.aria-expanded="{{ expanded }}"
         aria-controls="gov-banner-default-default"
+        data-cy="layout-banner-toggle-button"
         (click)="onBannerClick()"
       >
-        <span class="usa-banner__button-text" aria-label="Here's how you know">Here’s how you know</span>
+        <span class="usa-banner__button-text" aria-label="Here's how you know" data-cy="layout-banner-toggle-label">
+          Here’s how you know
+        </span>
       </button>
     </div>
   </header>
-  <div class="usa-banner__content" id="gov-banner-default-default" [style]="{ display: expanded ? 'block' : 'none' }">
-    <div class="grid-row grid-gap-lg">
-      <div class="usa-banner__guidance tablet:grid-col-6">
+  <div
+    class="usa-banner__content"
+    id="gov-banner-default-default"
+    [style]="{ display: expanded ? 'block' : 'none' }"
+    data-cy="layout-banner-content"
+  >
+    <div class="grid-row grid-gap-lg" data-cy="layout-banner-guidance-grid">
+      <div class="usa-banner__guidance tablet:grid-col-6" data-cy="layout-banner-gov-guidance">
         <img class="usa-banner__icon" src="/assets/img/uswds/icon-dot-gov.svg" role="img" alt="" aria-hidden="true" />
         <div class="usa-media-block__body">
           <p>
@@ -31,7 +43,7 @@
           </p>
         </div>
       </div>
-      <div class="usa-banner__guidance tablet:grid-col-6">
+      <div class="usa-banner__guidance tablet:grid-col-6" data-cy="layout-banner-https-guidance">
         <img class="usa-banner__icon" src="/assets/img/uswds/icon-https.svg" role="img" alt="" aria-hidden="true" />
         <div class="usa-media-block__body">
           <p>

@@ -9,7 +9,7 @@
         [class]="navigationControl?.ngClass || ''"
         (click)="clickButton()"
         [disabled]="isDisabled()"
-        data-cy="navigation-control-button"
+        [attr.data-cy]="buttonDataCy()"
         appSingleClick
       ></button>
     }

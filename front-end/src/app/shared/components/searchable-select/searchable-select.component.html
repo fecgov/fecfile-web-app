@@ -1,5 +1,6 @@
 <p-select
   #pSelect
+  [attr.data-cy]="selectDataCy()"
   [options]="options()"
   [inputId]="inputId()"
   [readonly]="readonly()"

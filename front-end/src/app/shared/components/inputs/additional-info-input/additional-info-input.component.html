@@ -1,8 +1,8 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('additional-info', 'panel')">
   @if (templateMap.purpose_description) {
     <div class="grid">
       <div class="col-12">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy(templateMap['purpose_description'], 'field')">
           <span class="span-label" id="purpose_description_label">
             {{ transactionType()?.purposeDescripLabel }}
             <span class="paren-label">{{ transactionType()?.generatePurposeDescriptionLabel() }}</span>
@@ -22,11 +22,13 @@
             [formControlName]="templateMap['purpose_description']"
             [class.readonly]="isDescriptionSystemGenerated()"
             [readonly]="isDescriptionSystemGenerated()"
+            [attr.data-cy]="fieldDataCy(templateMap['purpose_description'], 'textarea')"
           ></textarea>
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['purpose_description']"
             [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
           />
         </div>
       </div>
@@ -38,6 +40,7 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction()"
+      [dataCyContext]="contextDataCy('designated-subordinate')"
       (designatingCommitteeSelect)="onDesignatingCommitteeSelect($event)"
       (designatingCommitteeClear)="onDesignatingCommitteeClear()"
       (subordinateCommitteeSelect)="onSubordinateCommitteeSelect($event)"
@@ -47,7 +50,7 @@
   @if (transactionType()?.hasMemoText()) {
     <div class="grid">
       <div class="col-12">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy(templateMap['text4000'], 'field')">
           <span class="span-label" id="text4000_label"
             >NOTE OR MEMO TEXT
             <span class="paren-label">{{
@@ -61,8 +64,14 @@
             [cols]="30"
             appAutoResize
             [formControlName]="templateMap['text4000']"
+            [attr.data-cy]="fieldDataCy(templateMap['text4000'], 'textarea')"
           ></textarea>
-          <app-error-messages [form]="form" [fieldName]="templateMap['text4000']" [formSubmitted]="formSubmitted" />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['text4000']"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
     </div>
@@ -79,6 +88,7 @@
           [formSubmitted]="formSubmitted"
           [showClear]="true"
           [optionalLabel]="true"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>

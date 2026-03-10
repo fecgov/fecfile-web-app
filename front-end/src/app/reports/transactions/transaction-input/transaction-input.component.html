@@ -5,9 +5,9 @@
   transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
   transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_RECEIVED'
 ) {
-  <div class="grid">
+  <div class="grid" [attr.data-cy]="dataCyContext + '-primary-contact-lookup-section'">
     <div class="col-12">
-      <div class="field">
+      <div class="field" [attr.data-cy]="dataCyContext + '-primary-contact-lookup-field'">
         <span class="span-label" id="contact_searchbox_label">LOOKUP</span>
         <app-transaction-contact-lookup
           id="contact_1_lookup"
@@ -34,6 +34,7 @@
         [templateMap]="templateMap"
         entityRole="ORGANIZATION"
         [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+        [dataCyContext]="dataCyContext + '-primary-contact'"
       />
     }
     @case (ContactTypes.COMMITTEE) {
@@ -43,27 +44,28 @@
         [templateMap]="templateMap"
         entityRole="COMMITTEE"
         [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+        [dataCyContext]="dataCyContext + '-primary-contact'"
       />
     }
     @case (ContactTypes.INDIVIDUAL) {
-      <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
+      <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" [dataCyContext]="dataCyContext + '-primary-contact-name'" />
     }
   }
 
   <hr class="solid" />
-  <app-section-header [isSingle]="isSingle" text="Address" />
-  <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
+  <app-section-header [isSingle]="isSingle" text="Address" [dataCy]="dataCyContext + '-address-title'" />
+  <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" [dataCyContext]="dataCyContext + '-address'" />
   @if (transactionType?.hasEmployeeFields() && entityType === ContactTypes.INDIVIDUAL) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" text="Employer" />
-    <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
+    <app-section-header [isSingle]="isSingle" text="Employer" [dataCy]="dataCyContext + '-employer-title'" />
+    <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" [dataCyContext]="dataCyContext + '-employer'" />
   }
   @if (candidateInfoPosition === 'high') {
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   }
   @if (transaction?.transactionType?.hasAmountInput) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transaction?.transactionType?.amountInputHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transaction?.transactionType?.amountInputHeader" [dataCy]="dataCyContext + '-amount-title'" />
     <app-amount-input
       [form]="form"
       [formSubmitted]="formSubmitted"
@@ -75,47 +77,52 @@
       [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
       [transaction]="transaction"
       [memoHasOptional]="(memoHasOptional$ | async)!"
+      [dataCyContext]="dataCyContext + '-amount'"
     />
   }
   @if (transaction?.transactionType?.hasDebtInput) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transaction?.transactionType?.debtInputHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transaction?.transactionType?.debtInputHeader" [dataCy]="dataCyContext + '-debt-title'" />
     <app-debt-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
+      [dataCyContext]="dataCyContext + '-debt'"
     />
   }
   @if (transactionType?.hasLoanFinanceFields()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.amountInputHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType?.amountInputHeader" [dataCy]="dataCyContext + '-loan-info-title'" />
     <app-loan-info-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [readonly]="false"
       [transaction]="transaction"
+      [dataCyContext]="dataCyContext + '-loan-info'"
     />
   }
   @if (transactionType?.hasLoanTermsFields() && !transactionType?.hasLoanAgreement) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" text="Terms" />
+    <app-section-header [isSingle]="isSingle" text="Terms" [dataCy]="dataCyContext + '-loan-terms-title'" />
     <app-loan-terms-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
+      [dataCyContext]="dataCyContext + '-loan-terms'"
     />
   }
   @if (transactionType?.hasLoanAgreement) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" text="Loan information" />
+    <app-section-header [isSingle]="isSingle" text="Loan information" [dataCy]="dataCyContext + '-loan-agreement-title'" />
     <app-loan-agreement-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
+      [dataCyContext]="dataCyContext + '-loan-agreement'"
       (contactSelect)="updateFormWithSecondaryContact($event)"
     />
   }
@@ -124,12 +131,13 @@
   }
   @if (transactionType?.hasAdditionalInfo) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" text="Additional information" />
+    <app-section-header [isSingle]="isSingle" text="Additional information" [dataCy]="dataCyContext + '-additional-info-title'" />
     <app-additional-info-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       [transaction]="transaction"
+      [dataCyContext]="dataCyContext + '-additional-info'"
       (designatingCommitteeSelect)="updateFormWithQuaternaryContact($event)"
       (designatingCommitteeClear)="clearFormQuaternaryContact()"
       (subordinateCommitteeSelect)="updateFormWithQuinaryContact($event)"
@@ -138,24 +146,26 @@
   }
   @if (transactionType?.hasSignature1()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.signatoryOneHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType?.signatoryOneHeader" [dataCy]="dataCyContext + '-signatory-1-title'" />
     <app-signature-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       class="signatory_1_input"
       templateMapKeyPrefix="signatory_1"
+      [dataCyContext]="dataCyContext + '-signatory-1'"
     />
   }
   @if (transactionType?.hasSignature2()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.signatoryTwoHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType?.signatoryTwoHeader" [dataCy]="dataCyContext + '-signatory-2-title'" />
     <app-signature-input
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       class="signatory_2_input"
       templateMapKeyPrefix="signatory_2"
+      [dataCyContext]="dataCyContext + '-signatory-2'"
     />
   }
   @if (transactionType?.getFooter(transaction)) {
@@ -173,13 +183,13 @@
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" [text]="transactionType?.committeeCandidateHeader" />
     @if (transactionType?.contact3IsRequired) {
-      <div class="candidate_committee_lookup">
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <span class="span-label">LOOKUP</span>
-              <app-transaction-contact-lookup
-                id="contact_3_lookup"
+    <div class="candidate_committee_lookup" [attr.data-cy]="dataCyContext + '-committee-candidate-section'">
+      <div class="grid">
+        <div class="col-12">
+          <div class="field" [attr.data-cy]="dataCyContext + '-committee-lookup-field'">
+            <span class="span-label">LOOKUP</span>
+            <app-transaction-contact-lookup
+              id="contact_3_lookup"
                 aria-label="contact_3_lookup"
                 contactProperty="contact_3"
                 [transaction]="transaction"
@@ -201,6 +211,7 @@
             [readonly]="false"
             [transaction]="transaction"
             [tertiaryContact]="true"
+            [dataCyContext]="dataCyContext + '-committee-candidate'"
           />
         }
       </div>
@@ -213,17 +224,18 @@
         [includeFecId]="true"
         [readonly]="true"
         [transaction]="transaction"
+        [dataCyContext]="dataCyContext + '-committee-candidate'"
       />
     }
     @if (transaction?.transactionType?.hasSupportOpposeCode()) {
-      <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted" />
+      <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext + '-support-oppose'" />
     }
 
     @if (transaction?.transactionType?.hasCandidateInformation(form)) {
       @if (!transactionType?.hideContactLookup) {
-        <div class="grid candidate_committee_lookup">
+        <div class="grid candidate_committee_lookup" [attr.data-cy]="dataCyContext + '-candidate-lookup-section'">
           <div class="col-12">
-            <div class="field">
+            <div class="field" [attr.data-cy]="dataCyContext + '-candidate-lookup-field'">
               <span class="span-label"
                 >LOOKUP
                 @if (!transaction?.transactionType?.contact2IsRequired(form)) {
@@ -252,6 +264,7 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
+            [dataCyContext]="dataCyContext + '-candidate'"
           />
         </div>
       }
@@ -259,12 +272,13 @@
   }
   @if (transactionType?.hasElectionInformation()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" text="Election information" />
+    <app-section-header [isSingle]="isSingle" text="Election information" [dataCy]="dataCyContext + '-election-title'" />
     <app-election-input
       [transaction]="transaction"
       [form]="form"
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
+      [dataCyContext]="dataCyContext + '-election'"
     />
   }
 </ng-template>

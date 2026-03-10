@@ -46,6 +46,8 @@ export class SelectComponent {
   >('optionTemplate');
 
   readonly selectId = computed(() => this.idGen.getIdLabel(this.inputId()));
+  readonly fieldDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'field'));
+  readonly labelDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'label'));
   readonly selectDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'select'));
   readonly clearButtonDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'clear', 'button'));
 

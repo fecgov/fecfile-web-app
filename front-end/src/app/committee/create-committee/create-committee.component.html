@@ -1,25 +1,47 @@
-<div class="flex create-committee-columns">
-  <div class="col-6 left-side">
-    <h1>Create an account</h1>
+<div class="flex create-committee-columns" data-cy="create-committee-page">
+  <div class="col-6 left-side" data-cy="create-committee-page-hero-panel">
+    <h1 data-cy="create-committee-page-title">Create an account</h1>
     <hr type="solid" />
 
-    <img src="assets/img/Create-an-account.png" draggable="false" alt="Users review a chart" />
+    <img
+      src="assets/img/Create-an-account.png"
+      draggable="false"
+      alt="Users review a chart"
+      data-cy="create-committee-page-hero-image"
+    />
   </div>
-  <div class="col-6 right-side">
-    <div class="go-back">
-      <a routerLink="/login/select-committee"><i class="pi pi-angle-left"></i> GO BACK</a>
+  <div class="col-6 right-side" data-cy="create-committee-page-search-panel">
+    <div class="go-back" data-cy="create-committee-page-go-back-link-wrapper">
+      <a routerLink="/login/select-committee" data-cy="create-committee-page-go-back-link">
+        <i class="pi pi-angle-left"></i> GO BACK
+      </a>
     </div>
-    <div class="right-side-box">
-      <h2 class="m-0">Find your committee</h2>
-      <div class="search-label">
+    <div class="right-side-box" data-cy="create-committee-page-search-card">
+      <h2 class="m-0" data-cy="create-committee-page-search-title">Find your committee</h2>
+      <div class="search-label" data-cy="create-committee-page-committee-id-field">
         <label for="search-input" class="font-karla-bold mr-1 line-height-1">COMMITTEE ID</label>
-        <button class="rounded-image-button" (click)="explanationVisible.set(true)" aria-label="explanation">
+        <button
+          class="rounded-image-button"
+          (click)="explanationVisible.set(true)"
+          aria-label="explanation"
+          data-cy="create-committee-page-search-help-button"
+        >
           <img alt="question mark" src="assets/img/i-question-circle.svg" />
         </button>
       </div>
-      <p-inputGroup class="search-group">
-        <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
-        <p-button class="search-button" (click)="search(searchBoxFormControl.value)">
+      <p-inputGroup class="search-group" data-cy="create-committee-page-search-group">
+        <input
+          id="search-input"
+          type="text"
+          class="p-inputtext search-input"
+          [formControl]="searchBoxFormControl"
+          data-cy="create-committee-page-committee-id-input"
+        />
+        <p-button
+          class="search-button"
+          data-cy="create-committee-page-search-button"
+          (click)="search(searchBoxFormControl.value)"
+        >
           <ng-template pTemplate="iconTemplate">
             <img
               alt="Magnifying lens"
@@ -30,17 +52,24 @@
           </ng-template>
         </p-button>
       </p-inputGroup>
-      <p class="search-examples font-karla mt-1">Examples: C00431445, C00343509</p>
+      <p class="search-examples font-karla mt-1" data-cy="create-committee-page-search-examples">
+        Examples: C00431445, C00343509
+      </p>
     </div>
     @if (selectedCommittee || unableToCreateAccount) {
-      <div class="right-side-box">
-        <h2 class="m-0">Result</h2>
+      <div class="right-side-box" data-cy="create-committee-page-result-card">
+        <h2 class="m-0" data-cy="create-committee-page-result-title">Result</h2>
         @if (selectedCommittee) {
-          <div class="committee-card">
+          <div
+            class="committee-card"
+            [attr.data-cy]="'create-committee-page-committee-card-' + selectedCommittee.committee_id.toLowerCase()"
+          >
             <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-            <div class="committee-info">
-              <h3>{{ selectedCommittee.name }}</h3>
-              <span class="h5 font-karla-bold mb-0">{{ selectedCommittee.committee_id }}</span>
+            <div class="committee-info" data-cy="create-committee-page-committee-card-content">
+              <h3 data-cy="create-committee-page-committee-name">{{ selectedCommittee.name }}</h3>
+              <span class="h5 font-karla-bold mb-0" data-cy="create-committee-page-committee-id">
+                {{ selectedCommittee.committee_id }}
+              </span>
 
               <p-button
                 class="create-button"
@@ -49,19 +78,22 @@
                 (click)="createAccount()"
                 icon="pi pi-angle-right"
                 iconPos="right"
+                data-cy="create-committee-page-create-account-button"
               >
               </p-button>
             </div>
           </div>
         }
         @if (unableToCreateAccount) {
-          <div class="committee-card unable-card">
+          <div class="committee-card unable-card" data-cy="create-committee-page-unable-card">
             <div class="unable-excl-img">
               <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
             </div>
-            <div class="unable-verbiage">
-              <p class="unable-verbiage-p1">Unable to create account</p>
-              <p class="unable-verbiage-p2">CONTACT FECFILE+ TECHNICAL SUPPORT FOR HELP</p>
+            <div class="unable-verbiage" data-cy="create-committee-page-unable-message">
+              <p class="unable-verbiage-p1" data-cy="create-committee-page-unable-title">Unable to create account</p>
+              <p class="unable-verbiage-p2" data-cy="create-committee-page-unable-support-text">
+                CONTACT FECFILE+ TECHNICAL SUPPORT FOR HELP
+              </p>
             </div>
           </div>
         }
@@ -70,7 +102,13 @@
   </div>
 </div>
 
-<app-dialog tabindex="-1" aria-labelledby="dialog-title" title="What am I searching?" [(visible)]="explanationVisible">
+<app-dialog
+  tabindex="-1"
+  aria-labelledby="dialog-title"
+  title="What am I searching?"
+  [(visible)]="explanationVisible"
+  dataCyContext="create-committee-page-explanation"
+>
   <p>
     The committee ID lookup searches FEC's global lookup of all committees registered with the Federal Election
     Commission.
@@ -88,6 +126,7 @@
         pRipple
         label="Close"
         class="p-button-primary"
+        data-cy="create-committee-page-explanation-close-button"
         (click)="explanationVisible.set(false)"
       ></button>
     </div>

@@ -1,10 +1,10 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('loan-agreement', 'panel')">
   <div class="grid">
     <div class="col-8">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['amount'], 'field')">
         <label [for]="loanAgreementAmountId.id" [id]="loanAgreementAmountId.label">ORIGINAL AMOUNT</label>
-        <app-input-number [inputId]="loanAgreementAmountId.id" [formControlName]="templateMap['amount']" />
-        <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
+        <app-input-number [inputId]="loanAgreementAmountId.id" [formControlName]="templateMap['amount']" [dataCy]="fieldDataCy(templateMap['amount'])" />
+        <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
       </div>
     </div>
   </div>
@@ -15,6 +15,7 @@
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [transaction]="transaction()"
+    [dataCyContext]="contextDataCy('loan-agreement-terms')"
   />
   <app-yes-no-radio-input
     [form]="form"
@@ -23,6 +24,7 @@
     label="Has loan been restructured?"
     ariaLabelYes="This loan has been restructured"
     ariaLabelNo="This loan has not been restructured"
+    [dataCyContext]="contextDataCy('loan-agreement')"
   />
   @if (showLoanRestructured) {
     <div class="grid">
@@ -32,16 +34,18 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           label="DATE OF ORIGINAL LOAN"
+          [dataCyContext]="contextDataCy('loan-agreement')"
         />
       </div>
     </div>
   }
-  <div class="flex p-2">
+  <div class="flex p-2" [attr.data-cy]="fieldDataCy('line_of_credit', 'field')">
     <p-checkbox
       inputId="line_of_credit"
       [binary]="true"
       formControlName="line_of_credit"
       ariaLabel="This loan has a line of credit"
+      [pt]="{ input: { 'data-cy': fieldDataCy('line_of_credit', 'checkbox') } }"
     />
     <label for="line_of_credit" class="mb-0 ml-2 cursor-pointer">
       This loan has a line of credit <span class="paren-label">(OPTIONAL)</span>
@@ -49,20 +53,20 @@
   </div>
   @if (showLineOfCredit) {
     <div class="grid">
-      <div class="col-4">
-        <div class="field">
+        <div class="col-4">
+        <div class="field" [attr.data-cy]="fieldDataCy('credit_amount_this_draw', 'field')">
           <label [for]="creditAmountThisDrawId.id" [id]="creditAmountThisDrawId.label">
             CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span>
           </label>
-          <app-input-number [inputId]="creditAmountThisDrawId.id" formControlName="credit_amount_this_draw" />
-          <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" />
+          <app-input-number [inputId]="creditAmountThisDrawId.id" formControlName="credit_amount_this_draw" [dataCy]="fieldDataCy('credit_amount_this_draw')" />
+          <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
         </div>
       </div>
       <div class="col-4">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy(templateMap['balance'], 'field')">
           <label [id]="balanceId.label" [for]="balanceId.id">TOTAL BALANCE</label>
-          <app-input-number [inputId]="balanceId.id" [formControlName]="templateMap['balance']" />
-          <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
+          <app-input-number [inputId]="balanceId.id" [formControlName]="templateMap['balance']" [dataCy]="fieldDataCy(templateMap['balance'])" />
+          <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
         </div>
       </div>
     </div>
@@ -76,6 +80,7 @@
     label="Are other parties secondarily liable for the debt incurred?"
     ariaLabelYes="Other parties are secondarily liable"
     ariaLabelNo="Other parties are not secondarily liable"
+    [dataCyContext]="contextDataCy('loan-agreement')"
   />
   @if (showOthersLiable) {
     <div class="grid">
@@ -97,11 +102,12 @@
     label="Are any of the following pledged as collateral for the loan: real estate, personal property, goods, negotiable instruments, certificates of deposit, chattel papers, stocks, accounts receivable, cash on deposit, or other similar traditional collateral?"
     ariaLabelYes="Collateral has been pledged"
     ariaLabelNo="Collateral has not been pledged"
+    [dataCyContext]="contextDataCy('loan-agreement')"
   />
   @if (showSecured) {
     <div class="grid">
       <div class="col-12">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('desc_collateral', 'field')">
           <label for="desc_collateral">COLLATERAL DESCRIPTION</label>
           <textarea
             id="desc_collateral"
@@ -109,17 +115,18 @@
             [cols]="30"
             appAutoResize
             formControlName="desc_collateral"
+            [attr.data-cy]="fieldDataCy('desc_collateral', 'textarea')"
           ></textarea>
-          <app-error-messages [form]="form" fieldName="desc_collateral" [formSubmitted]="formSubmitted" />
+          <app-error-messages [form]="form" fieldName="desc_collateral" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
         </div>
       </div>
     </div>
     <div class="grid">
       <div class="col-4">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('collateral_value_amount', 'field')">
           <label [for]="collateralValueAmountId.id" [id]="collateralValueAmountId.label">COLLATERAL AMOUNT</label>
-          <app-input-number [inputId]="collateralValueAmountId.id" formControlName="collateral_value_amount" />
-          <app-error-messages [form]="form" fieldName="collateral_value_amount" [formSubmitted]="formSubmitted" />
+          <app-input-number [inputId]="collateralValueAmountId.id" formControlName="collateral_value_amount" [dataCy]="fieldDataCy('collateral_value_amount')" />
+          <app-error-messages [form]="form" fieldName="collateral_value_amount" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
         </div>
       </div>
     </div>
@@ -131,6 +138,7 @@
       parenLabel="(OPTIONAL)"
       ariaLabelYes="Lender has a perfected security interest"
       ariaLabelNo="Lender does not have a perfected security interest"
+      [dataCyContext]="contextDataCy('loan-agreement')"
     />
   }
   <hr type="solid" />
@@ -142,11 +150,12 @@
     label="Are any future contributions or future receipts of interest income, pledged as collateral for the loan?"
     ariaLabelYes="Future income has been pledged"
     ariaLabelNo="Future income has not been pledged"
+    [dataCyContext]="contextDataCy('loan-agreement')"
   />
   @if (showFutureIncome) {
     <div class="grid">
       <div class="col-12">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('desc_specification_of_the_above', 'field')">
           <label for="desc_specification_of_the_above">FUTURE INCOME DESCRIPTION</label>
           <textarea
             id="desc_specification_of_the_above"
@@ -154,21 +163,23 @@
             [cols]="30"
             appAutoResize
             formControlName="desc_specification_of_the_above"
+            [attr.data-cy]="fieldDataCy('desc_specification_of_the_above', 'textarea')"
           ></textarea>
           <app-error-messages
             [form]="form"
             fieldName="desc_specification_of_the_above"
             [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
           />
         </div>
       </div>
     </div>
     <div class="grid">
       <div class="col-5">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('estimated_value', 'field')">
           <label [for]="estimatedValueId.id" [id]="estimatedValueId.label">ESTIMATED VALUE</label>
-          <app-input-number [inputId]="estimatedValueId.id" formControlName="estimated_value" />
-          <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" />
+          <app-input-number [inputId]="estimatedValueId.id" formControlName="estimated_value" [dataCy]="fieldDataCy('estimated_value')" />
+          <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
         </div>
       </div>
       <div class="col-5">
@@ -177,6 +188,7 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           label="DEPOSITORY ACCOUNT ESTABLISHED"
+          [dataCyContext]="contextDataCy('loan-agreement')"
         />
       </div>
     </div>
@@ -200,13 +212,20 @@
     @if (showLocationOfAccount) {
       <div class="grid">
         <div class="col-12">
-          <div class="field">
+          <div class="field" [attr.data-cy]="fieldDataCy(templateMap['secondary_name'], 'field')">
             <label for="secondary_name">ORGANIZATION NAME</label>
-            <input type="text" pInputText id="secondary_name" [formControlName]="templateMap['secondary_name']" />
+            <input
+              type="text"
+              pInputText
+              id="secondary_name"
+              [formControlName]="templateMap['secondary_name']"
+              [attr.data-cy]="fieldDataCy(templateMap['secondary_name'])"
+            />
             <app-error-messages
               [form]="form"
               [fieldName]="templateMap['secondary_name']"
               [formSubmitted]="formSubmitted"
+              [dataCyContext]="dataCyContext"
             />
           </div>
         </div>
@@ -216,6 +235,7 @@
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
         templateMapKeyPrefix="secondary"
+        [dataCyContext]="contextDataCy('secondary-address')"
       />
     }
   }
@@ -223,7 +243,7 @@
   <h2>Basis of loan</h2>
   <div class="grid">
     <div class="col-12">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy('basis_of_loan_description', 'field')">
         <p>
           If neither of the types of collateral described above was pledged for this loan, or if the amount pledged does
           not equal or exceed the loan amount, state the basis upon which this loan was made and the basis on which it
@@ -237,8 +257,9 @@
           [cols]="30"
           appAutoResize
           formControlName="basis_of_loan_description"
+          [attr.data-cy]="fieldDataCy('basis_of_loan_description', 'textarea')"
         ></textarea>
-        <app-error-messages [form]="form" fieldName="basis_of_loan_description" [formSubmitted]="formSubmitted" />
+        <app-error-messages [form]="form" fieldName="basis_of_loan_description" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
       </div>
     </div>
   </div>

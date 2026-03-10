@@ -1,6 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 import { FluidModule } from 'primeng/fluid';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -23,6 +24,7 @@ import { SelectModule } from 'primeng/select';
 export class AddressInputComponent {
   readonly form = input.required<FormGroup>();
   readonly formSubmitted = input.required<boolean>();
+  readonly dataCyContext = input('');
   readonly templateMap = input<TransactionTemplateMapType>({
     street_1: 'street_1',
     street_2: 'street_2',
@@ -61,4 +63,12 @@ export class AddressInputComponent {
     if (this.keyPrefix()) return `${this.keyPrefix()}_zip`;
     return this.templateMap()['zip'];
   });
+
+  fieldDataCy(fieldName: string, kind: string = 'input'): string {
+    return buildDataCy(this.dataCyContext(), fieldName, kind);
+  }
+
+  addressPanelDataCy(): string {
+    return buildDataCy(this.dataCyContext(), 'panel');
+  }
 }

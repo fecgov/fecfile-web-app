@@ -15,6 +15,7 @@ import {
   DOCUMENT,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 import { DomHandler } from 'primeng/dom';
 import { InputNumberInputEvent } from 'primeng/inputnumber';
 import { Nullable } from 'primeng/ts-helpers';
@@ -58,6 +59,7 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
    * @group Props
    */
   @Input() inputId?: string;
+  @Input() dataCy = '';
   /**
    * Style class of the component.
    * @group Props
@@ -218,6 +220,14 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
 
   _decimalChar = '.';
   _decimal = new RegExp(`[${this._decimalChar}]`, 'g');
+
+  get rootDataCy(): string {
+    return this.dataCy ? buildDataCy(this.dataCy, 'field') : '';
+  }
+
+  get inputDataCy(): string {
+    return this.dataCy || buildDataCy(this.inputId, 'input');
+  }
 
   groupChar = ',';
   _group = new RegExp(`[${this.groupChar}]`, 'g');

@@ -1,17 +1,23 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('signature', 'panel')">
   <app-name-input
     [form]="form"
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [templateMapKeyPrefix]="templateMapKeyPrefix"
+    [dataCyContext]="contextDataCy('signature-name')"
   />
   <div class="grid">
     @if (titleFieldName) {
       <div class="col-4">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy(titleFieldName, 'field')">
           <label for="title">TITLE</label>
-          <input type="text" pInputText id="title" [formControlName]="titleFieldName" />
-          <app-error-messages [form]="form" [fieldName]="titleFieldName" [formSubmitted]="formSubmitted" />
+          <input type="text" pInputText id="title" [formControlName]="titleFieldName" [attr.data-cy]="fieldDataCy(titleFieldName)" />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="titleFieldName"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
     }
@@ -22,6 +28,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         label="DATE SIGNED"
+        [dataCyContext]="contextDataCy('signature')"
       />
     </div>
   </div>

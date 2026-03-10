@@ -1,5 +1,5 @@
-<div class="field">
-  <label [class]="labelClass()" [id]="selectId().label" [for]="selectId().id">
+<div class="field" [attr.data-cy]="fieldDataCy()">
+  <label [class]="labelClass()" [id]="selectId().label" [for]="selectId().id" [attr.data-cy]="labelDataCy()">
     {{ label() }}
     @if (optionalLabel()) {
       <span class="paren-label">(OPTIONAL)</span>

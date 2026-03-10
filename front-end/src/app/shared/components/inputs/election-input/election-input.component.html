@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('election', 'panel')">
   <div class="grid">
     <div class="col-3">
       <app-select
@@ -8,6 +8,7 @@
         [form]="form"
         formControlName="electionType"
         [formSubmitted]="formSubmitted"
+        [dataCyContext]="contextDataCy('election')"
       >
         <ng-template #optionTemplate let-electionCode>
           <span class="bold">{{ electionCode?.label.split(' ')[0] }}</span>
@@ -16,7 +17,7 @@
       </app-select>
     </div>
     <div class="col-3">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy('electionYear', 'field')">
         <label for="electionYear">{{ labelPrefix() }} ELECTION YEAR</label>
         <input
           id="electionYear"
@@ -25,6 +26,7 @@
           (input)="formatElectionYear($event)"
           formControlName="electionYear"
           required
+          [attr.data-cy]="fieldDataCy('electionYear')"
         />
 
         <app-error-messages
@@ -32,11 +34,12 @@
           fieldName="electionYear"
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field requires a 4-digit year. (YYYY)"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['election_other_description'], 'field')">
         <label for="election_other_description"
           >{{ labelPrefix() }} ELECTION DESCRIPTION <span class="paren-label">(REQUIRED IF OTHER)</span></label
         >
@@ -45,11 +48,13 @@
           pInputText
           id="election_other_description"
           [formControlName]="templateMap['election_other_description']"
+          [attr.data-cy]="fieldDataCy(templateMap['election_other_description'])"
         />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['election_other_description']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>

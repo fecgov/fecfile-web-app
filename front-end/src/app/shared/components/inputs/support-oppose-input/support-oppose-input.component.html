@@ -1,5 +1,5 @@
-<fieldset [formGroup]="form">
-  <legend></legend>
+<fieldset [formGroup]="form" [attr.data-cy]="contextDataCy('support-oppose', 'field')">
+  <legend [attr.data-cy]="contextDataCy('support-oppose', 'legend')"></legend>
   <div class="grid" data-cy="support_oppose_code">
     <div class="col-2 flex radio-wrapper">
       <p-radioButton
@@ -8,6 +8,7 @@
         value="S"
         formControlName="support_oppose_code"
         ariaLabel="support candidate"
+        [attr.data-cy]="fieldDataCy('support', 'radio')"
       />
       <label for="support" class="ml-2">SUPPORT</label>
     </div>
@@ -18,6 +19,7 @@
         value="O"
         formControlName="support_oppose_code"
         ariaLabel="oppose candidate"
+        [attr.data-cy]="fieldDataCy('oppose', 'radio')"
       />
       <label for="oppose" class="ml-2">OPPOSE</label>
     </div>
@@ -29,6 +31,7 @@
         fieldName="support_oppose_code"
         [formSubmitted]="formSubmitted"
         patternErrorMessage="An answer is required"
+        [dataCyContext]="dataCyContext"
       />
     </div>
   </div>

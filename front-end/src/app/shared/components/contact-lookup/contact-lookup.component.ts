@@ -73,6 +73,10 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     return buildDataCy(this.dataCyContext, 'contact-search', 'input');
   }
 
+  get searchBoxFieldDataCy(): string {
+    return buildDataCy(this.searchBoxDataCy, 'field');
+  }
+
   get createContactDataCy(): string {
     return buildDataCy(this.dataCyContext, 'create-contact', 'link');
   }
@@ -91,7 +95,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   get contactLookupPt() {
     return {
-      root: { 'data-cy': this.searchBoxDataCy },
+      root: { 'data-cy': this.searchBoxFieldDataCy },
       pcInputText: { root: { 'data-cy': this.searchBoxDataCy } },
       dropdown: { 'data-cy': buildDataCy(this.searchBoxDataCy, 'dropdown') },
       listContainer: { 'data-cy': buildDataCy(this.searchBoxDataCy, 'options') },

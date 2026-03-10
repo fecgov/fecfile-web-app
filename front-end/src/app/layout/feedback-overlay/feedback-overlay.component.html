@@ -1,52 +1,79 @@
-<div class="anchor" #anchor></div>
+<div class="anchor" #anchor data-cy="layout-feedback-overlay-anchor"></div>
 <p-popover
   #op
   [style]="{ width: '500px', height: '95vh', overflow: 'auto' }"
   showTransitionOptions=".25s linear(0, 1)"
   [appendTo]="anchor"
   (onHide)="onHide()"
+  data-cy="layout-feedback-overlay-popover"
 >
   <ng-template #content let-closeCallback="closeCallback">
-    <div class="px-4 py-2">
-      <button (click)="closeCallback($event)" class="p-popover-close">
+    <div class="px-4 py-2" data-cy="layout-feedback-overlay-content">
+      <button
+        (click)="closeCallback($event)"
+        class="p-popover-close"
+        data-cy="layout-feedback-overlay-close-button"
+      >
         <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" />
       </button>
       @switch (submitStatus) {
         @case (SubmissionStatesEnum.DRAFT) {
-          <div class="grid">
+          <div class="grid" data-cy="layout-feedback-overlay-draft-panel">
             <div class="col-12">
-              <h3>Post feedback about FECfile+ anonymously</h3>
-              <p class="mb-2">
+              <h3 data-cy="layout-feedback-overlay-title">Post feedback about FECfile+ anonymously</h3>
+              <p class="mb-2" data-cy="layout-feedback-overlay-description">
                 How can we improve FECfile+? When you submit your feedback, it will include your comments, browser
                 information, and the URL you were viewing at the time of submission.
               </p>
             </div>
           </div>
-          <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+          <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="layout-feedback-overlay-form">
             <div class="grid">
               <div class="col-12">
-                <div class="field">
+                <div class="field" data-cy="layout-feedback-overlay-action-field">
                   <label for="action"
                     >WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?
                     <span class="paren-label">(Required)</span></label
                   >
-                  <textarea id="action" [rows]="3" appAutoResize formControlName="action"></textarea>
-                  <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted" />
+                  <textarea
+                    id="action"
+                    [rows]="3"
+                    appAutoResize
+                    formControlName="action"
+                    data-cy="layout-feedback-overlay-action-input"
+                  ></textarea>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="action"
+                    [formSubmitted]="formSubmitted"
+                    dataCyContext="layout-feedback-overlay"
+                  />
                 </div>
               </div>
             </div>
             <div class="grid">
               <div class="col-12">
-                <div class="field">
+                <div class="field" data-cy="layout-feedback-overlay-feedback-field">
                   <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
-                  <textarea id="feedback" [rows]="3" appAutoResize formControlName="feedback"></textarea>
-                  <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
+                  <textarea
+                    id="feedback"
+                    [rows]="3"
+                    appAutoResize
+                    formControlName="feedback"
+                    data-cy="layout-feedback-overlay-feedback-input"
+                  ></textarea>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="feedback"
+                    [formSubmitted]="formSubmitted"
+                    dataCyContext="layout-feedback-overlay"
+                  />
                 </div>
               </div>
             </div>
             <div class="grid">
               <div class="col-12">
-                <div class="field">
+                <div class="field" data-cy="layout-feedback-overlay-about-field">
                   <label for="about"
                     >TELL US ABOUT YOURSELF
                     <br />
@@ -55,8 +82,19 @@
                       Security number.)</span
                     >
                   </label>
-                  <textarea id="about" [rows]="3" appAutoResize formControlName="about"></textarea>
-                  <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted" />
+                  <textarea
+                    id="about"
+                    [rows]="3"
+                    appAutoResize
+                    formControlName="about"
+                    data-cy="layout-feedback-overlay-about-input"
+                  ></textarea>
+                  <app-error-messages
+                    [form]="form"
+                    fieldName="about"
+                    [formSubmitted]="formSubmitted"
+                    dataCyContext="layout-feedback-overlay"
+                  />
                 </div>
               </div>
             </div>
@@ -70,16 +108,28 @@
                 pRipple
                 label="Post"
                 class="p-button-primary"
+                data-cy="layout-feedback-overlay-post-button"
                 (click)="submitForm()"
               ></button>
             </div>
           </div>
           <div class="grid">
             <div class="col-12">
-              <div class="flex gap-1 text-start">
-                <a href="https://www.fec.gov/use-recaptcha/" target="_blank" rel="noopener">Use of reCAPTCHA</a>
+              <div class="flex gap-1 text-start" data-cy="layout-feedback-overlay-links">
+                <a
+                  href="https://www.fec.gov/use-recaptcha/"
+                  target="_blank"
+                  rel="noopener"
+                  data-cy="layout-feedback-overlay-use-of-recaptcha-link"
+                >
+                  Use of reCAPTCHA
+                </a>
                 |
-                <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener"
+                <a
+                  href="https://www.fec.gov/contact/"
+                  target="_blank"
+                  rel="noopener"
+                  data-cy="layout-feedback-overlay-contact-fec-link"
                   >Contact the FEC about a specific question</a
                 >
               </div>
@@ -87,12 +137,12 @@
           </div>
         }
         @case (SubmissionStatesEnum.SUCCESS) {
-          <div class="flex">
+          <div class="flex" data-cy="layout-feedback-overlay-success-panel">
             <div class="success-verticle-bar"></div>
             <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%" />
             <div>
-              <h2>Thanks for helping us improve FECfile+</h2>
-              <p>This information has been reported.</p>
+              <h2 data-cy="layout-feedback-overlay-success-title">Thanks for helping us improve FECfile+</h2>
+              <p data-cy="layout-feedback-overlay-success-message">This information has been reported.</p>
             </div>
           </div>
           <div class="grid">
@@ -103,18 +153,19 @@
                 pRipple
                 label="Submit more feedback"
                 class="p-button-info"
+                data-cy="layout-feedback-overlay-submit-more-button"
                 (click)="reset()"
               ></button>
             </div>
           </div>
         }
         @case (SubmissionStatesEnum.FAIL) {
-          <div class="flex">
+          <div class="flex" data-cy="layout-feedback-overlay-fail-panel">
             <div class="fail-verticle-bar"></div>
             <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%" />
             <div>
-              <h2>Oops: Something went wrong.</h2>
-              <p>We had trouble processing your feedback.</p>
+              <h2 data-cy="layout-feedback-overlay-fail-title">Oops: Something went wrong.</h2>
+              <p data-cy="layout-feedback-overlay-fail-message">We had trouble processing your feedback.</p>
             </div>
           </div>
           <div class="grid">
@@ -125,6 +176,7 @@
                 pRipple
                 label="Try Again"
                 class="p-button-info"
+                data-cy="layout-feedback-overlay-try-again-button"
                 (click)="tryAgain()"
               ></button>
             </div>

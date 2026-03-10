@@ -59,6 +59,7 @@ export class TransactionInputComponent implements OnInit {
   @Input() contributionAmountReadOnly = false;
   @Input() candidateInfoPosition = 'low';
   @Input() isSingle = false;
+  @Input() dataCyContext = 'transactions-detail';
 
   @Output() primaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() primaryContactClear = new EventEmitter<void>();

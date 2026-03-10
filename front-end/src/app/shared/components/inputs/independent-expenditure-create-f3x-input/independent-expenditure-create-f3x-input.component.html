@@ -1,12 +1,24 @@
-<div>
-  <p class="ie-explanation">
+<div [attr.data-cy]="contextDataCy('independent-expenditure-create-f3x', 'panel')">
+  <p class="ie-explanation" [attr.data-cy]="contextDataCy('independent-expenditure-create-f3x', 'description')">
     Independent expenditures (IE) submitted on a Form 24 must also be submitted on the regularly scheduled Form 3X
     report. In order to create an IE on the Form 24, the IE's date of disbursement must fall within the corresponding
     Form 3X coverage dates. If date of disbursement is not available, date of dissemination will be used. IEs already
     created on a Form 3X can be added to an existing Form 24.
   </p>
-  <button pButton class="p-button-secondary ie-explanation-button-create" (click)="create()">Create Form 3X</button>
-  <button pButton class="p-button-secondary ie-explanation-button-cancel" (click)="cancel()">
+  <button
+    pButton
+    class="p-button-secondary ie-explanation-button-create"
+    [attr.data-cy]="contextDataCy('independent-expenditure-create-f3x', 'create-form-3x', 'button')"
+    (click)="create()"
+  >
+    Create Form 3X
+  </button>
+  <button
+    pButton
+    class="p-button-secondary ie-explanation-button-cancel"
+    [attr.data-cy]="contextDataCy('independent-expenditure-create-f3x', 'return-to-manage-reports', 'button')"
+    (click)="cancel()"
+  >
     Return to manage reports
   </button>
 </div>

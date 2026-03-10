@@ -33,21 +33,19 @@ export class SearchableSelectComponent {
 
   private lastCycleSearchChar: string = '';
   private currentCycleIndex: number = -1;
+  private readonly emptyPt: SearchableSelectPtObject = {};
 
   readonly control = computed(() => this.form().get(this.controlName()) as FormControl);
   readonly selectDataCy = computed(() => buildDataCy(this.dataCyContext(), this.controlName(), 'select'));
   readonly mergedPt = computed<SelectPassThrough>(() => {
-    const pt = this.pt() ?? {};
+    const pt = this.pt();
     const selectDataCy = this.selectDataCy();
 
-    return {
-      ...pt,
-      root: mergePassThroughWithDataCy(pt.root, selectDataCy),
-      label: mergePassThroughWithDataCy(pt.label, buildDataCy(selectDataCy, 'label')),
-      dropdown: mergePassThroughWithDataCy(pt.dropdown, buildDataCy(selectDataCy, 'dropdown')),
-      listContainer: mergePassThroughWithDataCy(pt.listContainer, buildDataCy(selectDataCy, 'options')),
-      option: mergePassThroughWithDataCy(pt.option, buildDataCy(selectDataCy, 'option')),
-    };
+    if (typeof pt === 'function') {
+      return (context) => this.mergePtDataCy(pt(context) ?? this.emptyPt, selectDataCy);
+    }
+
+    return this.mergePtDataCy(pt ?? this.emptyPt, selectDataCy);
   });
 
   constructor() {
@@ -61,6 +59,23 @@ export class SearchableSelectComponent {
   }
 
   private searchValue = '';
+
+  private mergePtDataCy(pt: SearchableSelectPtObject, selectDataCy: string): SearchableSelectPtObject {
+    return {
+      ...pt,
+      root: mergePassThroughWithDataCy(pt.root, selectDataCy) as SearchableSelectPtObject['root'],
+      label: mergePassThroughWithDataCy(pt.label, buildDataCy(selectDataCy, 'label')) as SearchableSelectPtObject['label'],
+      dropdown: mergePassThroughWithDataCy(
+        pt.dropdown,
+        buildDataCy(selectDataCy, 'dropdown'),
+      ) as SearchableSelectPtObject['dropdown'],
+      listContainer: mergePassThroughWithDataCy(
+        pt.listContainer,
+        buildDataCy(selectDataCy, 'options'),
+      ) as SearchableSelectPtObject['listContainer'],
+      option: mergePassThroughWithDataCy(pt.option, buildDataCy(selectDataCy, 'option')) as SearchableSelectPtObject['option'],
+    };
+  }
 
   private customSearch(event: KeyboardEvent, char: string): boolean {
     char = char.toLowerCase();
@@ -143,3 +158,6 @@ export class SearchableSelectComponent {
     );
   }
 }
+
+type SearchableSelectPtResolver = Extract<NonNullable<SelectPassThrough>, (context: any) => any>;
+type SearchableSelectPtObject = Exclude<NonNullable<SelectPassThrough>, SearchableSelectPtResolver>;

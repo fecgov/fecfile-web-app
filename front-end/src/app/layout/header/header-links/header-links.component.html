@@ -1,17 +1,21 @@
-<ul class="flex">
+<ul class="flex" data-cy="layout-header-links-menu">
   @switch (headerStyle()) {
     @case (headerStyles.DEFAULT) {
-      <li><a class="nav-item" routerLink="/reports">Reports</a></li>
-      <li><a class="nav-item" routerLink="/contacts">Contacts</a></li>
+      <li data-cy="layout-header-links-reports-item">
+        <a class="nav-item" routerLink="/reports" data-cy="layout-header-links-reports-link">Reports</a>
+      </li>
+      <li data-cy="layout-header-links-contacts-item">
+        <a class="nav-item" routerLink="/contacts" data-cy="layout-header-links-contacts-link">Contacts</a>
+      </li>
       <li>
-        <button class="nav-item" (click)="toolsOp.toggle($event)">
+        <button class="nav-item" data-cy="layout-header-links-tools-button" (click)="toolsOp.toggle($event)">
           <span>Tools</span>
           <i class="pi pi-sort-down-fill"></i>
         </button>
       </li>
 
-      <li id="navbarProfileDropdownMenuLink">
-        <button class="nav-item" (click)="accountOp.toggle($event)">
+      <li id="navbarProfileDropdownMenuLink" data-cy="layout-header-links-account-item">
+        <button class="nav-item" data-cy="layout-header-links-account-button" (click)="accountOp.toggle($event)">
           <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
           <i class="pi pi-sort-down-fill"></i>
         </button>
@@ -20,43 +24,69 @@
     @case (headerStyles.LOGIN) {
       @if (!disableLogin) {
         <li>
-          <button class="nav-item" (click)="navigateToLoginDotGov()">SIGN IN</button>
+          <button class="nav-item" data-cy="layout-header-links-sign-in-button" (click)="navigateToLoginDotGov()">
+            SIGN IN
+          </button>
         </li>
       }
     }
     @case (headerStyles.LOGOUT) {
       <li>
-        <button class="nav-item" (click)="logOut()">Log Out</button>
+        <button class="nav-item" data-cy="layout-header-links-log-out-button" (click)="logOut()">Log Out</button>
       </li>
     }
   }
 </ul>
 
-<p-popover #toolsOp>
+<p-popover #toolsOp data-cy="layout-header-links-tools-menu">
   <ul>
     <li>
-      <button class="popover-button" (click)="openLink('/tools/update-cash-on-hand', toolsOp)" autofocus>
+      <button
+        class="popover-button"
+        data-cy="layout-header-links-tools-update-cash-on-hand-button"
+        (click)="openLink('/tools/update-cash-on-hand', toolsOp)"
+        autofocus
+      >
         Update cash on hand
       </button>
     </li>
   </ul>
 </p-popover>
 
-<p-popover #accountOp>
+<p-popover #accountOp data-cy="layout-header-links-account-menu">
   <ul>
     <li>
-      <button class="popover-button" (click)="openLink('/committee/', accountOp)" autofocus>Account</button>
+      <button
+        class="popover-button"
+        data-cy="layout-header-links-account-account-button"
+        (click)="openLink('/committee/', accountOp)"
+        autofocus
+      >
+        Account
+      </button>
     </li>
     <li>
-      <button class="popover-button" (click)="openLink('/committee/members', accountOp)">Users</button>
+      <button
+        class="popover-button"
+        data-cy="layout-header-links-account-users-button"
+        (click)="openLink('/committee/members', accountOp)"
+      >
+        Users
+      </button>
     </li>
     <li>
-      <button class="popover-button" (click)="openLink('/login/select-committee/', accountOp)">
+      <button
+        class="popover-button"
+        data-cy="layout-header-links-account-switch-committees-button"
+        (click)="openLink('/login/select-committee/', accountOp)"
+      >
         Switch Committees
       </button>
     </li>
     <li>
-      <button class="popover-button" (click)="logOut()">Logout</button>
+      <button class="popover-button" data-cy="layout-header-links-account-logout-button" (click)="logOut()">
+        Logout
+      </button>
     </li>
   </ul>
 </p-popover>

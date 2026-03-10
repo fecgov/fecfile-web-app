@@ -1,17 +1,39 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('employer', 'panel')">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['employer'], 'field')">
         <label for="employer">EMPLOYER</label>
-        <input type="text" pInputText id="employer" [formControlName]="templateMap['employer']" />
-        <app-error-messages [form]="form" [fieldName]="templateMap['employer']" [formSubmitted]="formSubmitted" />
+        <input
+          type="text"
+          pInputText
+          id="employer"
+          [formControlName]="templateMap['employer']"
+          [attr.data-cy]="fieldDataCy(templateMap['employer'])"
+        />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['employer']"
+          [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
+        />
       </div>
     </div>
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['occupation'], 'field')">
         <label for="occupation">OCCUPATION</label>
-        <input type="text" pInputText id="occupation" [formControlName]="templateMap['occupation']" />
-        <app-error-messages [form]="form" [fieldName]="templateMap['occupation']" [formSubmitted]="formSubmitted" />
+        <input
+          type="text"
+          pInputText
+          id="occupation"
+          [formControlName]="templateMap['occupation']"
+          [attr.data-cy]="fieldDataCy(templateMap['occupation'])"
+        />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['occupation']"
+          [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
+        />
       </div>
     </div>
   </div>

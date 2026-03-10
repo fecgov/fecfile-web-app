@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('designated-subordinate', 'panel')">
   <div class="grid">
     <div class="col-12">
       <app-select
@@ -9,6 +9,7 @@
         [form]="form"
         formControlName="filer_designated_to_make_coordinated_expenditures"
         [formSubmitted]="formSubmitted"
+        [dataCyContext]="contextDataCy('designated-subordinate')"
         (update)="onDesignatedOrSubordinateChange($event)"
       />
     </div>
@@ -25,6 +26,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
+            [attr.data-cy]="contextDataCy('designating-committee', 'lookup')"
             (contactSelect)="onDesignatingCommitteeSelect($event)"
           />
         </div>
@@ -32,25 +34,38 @@
     </div>
     <div class="grid">
       <div class="col-9">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('designating_committee_name', 'field')">
           <label for="designating_committee_name">DESIGNATING COMMITTEE NAME</label>
-          <input type="text" pInputText id="designating_committee_name" formControlName="designating_committee_name" />
-          <app-error-messages [form]="form" fieldName="designating_committee_name" [formSubmitted]="formSubmitted" />
+          <input
+            type="text"
+            pInputText
+            id="designating_committee_name"
+            formControlName="designating_committee_name"
+            [attr.data-cy]="fieldDataCy('designating_committee_name')"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="designating_committee_name"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
       <div class="col-3">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('designating_committee_id_number', 'field')">
           <label for="designating_committee_id_number">DESIGNATING COMMITTEE ID</label>
           <input
             type="text"
             pInputText
             id="designating_committee_id_number"
             formControlName="designating_committee_id_number"
+            [attr.data-cy]="fieldDataCy('designating_committee_id_number')"
           />
           <app-error-messages
             [form]="form"
             fieldName="designating_committee_id_number"
             [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
           />
         </div>
       </div>
@@ -68,6 +83,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [contactTypeOptions]="committeeContactTypeOptions"
+            [attr.data-cy]="contextDataCy('subordinate-committee', 'lookup')"
             (contactSelect)="onSubordinateCommitteeSelect($event)"
           />
         </div>
@@ -75,14 +91,25 @@
     </div>
     <div class="grid">
       <div class="col-9">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('subordinate_committee_name', 'field')">
           <label for="subordinate_committee_name">SUBORDINATE COMMITTEE NAME</label>
-          <input type="text" pInputText id="subordinate_committee_name" formControlName="subordinate_committee_name" />
-          <app-error-messages [form]="form" fieldName="subordinate_committee_name" [formSubmitted]="formSubmitted" />
+          <input
+            type="text"
+            pInputText
+            id="subordinate_committee_name"
+            formControlName="subordinate_committee_name"
+            [attr.data-cy]="fieldDataCy('subordinate_committee_name')"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="subordinate_committee_name"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
       <div class="col-3">
-        <div class="field">
+        <div class="field" [attr.data-cy]="fieldDataCy('subordinate_committee_id_number', 'field')">
           <label for="subordinate_committee_id_number">SUBORDINATE COMMITTEE ID</label>
           <input
             type="text"
@@ -90,11 +117,13 @@
             id="subordinate_committee_id_number"
             formControlName="subordinate_committee_id_number"
             (blur)="onSubordinateCommitteeIdBlur()"
+            [attr.data-cy]="fieldDataCy('subordinate_committee_id_number')"
           />
           <app-error-messages
             [form]="form"
             fieldName="subordinate_committee_id_number"
             [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
           />
         </div>
       </div>
@@ -104,6 +133,7 @@
       [formSubmitted]="formSubmitted"
       [templateMap]="templateMap"
       keyPrefix="subordinate"
+      [dataCyContext]="contextDataCy('subordinate-address')"
     />
   }
 </div>

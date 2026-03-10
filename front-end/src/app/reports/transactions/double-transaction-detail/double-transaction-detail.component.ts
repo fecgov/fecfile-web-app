@@ -5,6 +5,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { Ripple } from 'primeng/ripple';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-double-transaction-detail',
@@ -18,4 +19,8 @@ import { TransactionInputComponent } from '../transaction-input/transaction-inpu
     TransactionInputComponent,
   ],
 })
-export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseComponent {}
+export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseComponent {
+  accordionSectionDataCy(title?: string): string {
+    return buildDataCy('transactions-detail', title || 'section', 'section');
+  }
+}

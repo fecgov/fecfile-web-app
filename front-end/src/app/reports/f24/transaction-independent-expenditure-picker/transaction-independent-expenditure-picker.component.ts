@@ -6,6 +6,7 @@ import { ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from 'app/s
 import { Card } from 'primeng/card';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
 import { Disbursement } from 'app/shared/models/transaction-group';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-transaction-independent-expenditure-picker',
@@ -29,7 +30,16 @@ export class TransactionIndependentExpenditurePickerComponent {
   readonly report = this.store.selectSignal(selectActiveReport);
   readonly title = 'Add an independent expenditure';
 
+  readonly pageDataCy = buildDataCy('transactions', 'independent-expenditure', 'picker', 'page');
+  readonly titleDataCy = buildDataCy('transactions', 'independent-expenditure', 'picker', 'title');
+  readonly panelDataCy = buildDataCy('transactions', 'independent-expenditure', 'picker', 'panel');
+
   getRouterLink(transactionType: string): string | undefined {
     return `/reports/transactions/report/${this.report().id}/create/${transactionType}`;
+  }
+
+  transactionLinkDataCy(transactionType: string): string {
+    const label = this.transactionTypeLabels.find(([value]) => value === transactionType)?.[1] ?? transactionType;
+    return buildDataCy('transactions', 'independent-expenditure', 'picker', label, 'link');
   }
 }

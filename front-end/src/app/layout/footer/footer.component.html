@@ -1,74 +1,143 @@
-<footer #footerElement [class.sidebar-version]="showSidebar" [class.full-version]="!showSidebar">
+<footer
+  #footerElement
+  [class.sidebar-version]="showSidebar"
+  [class.full-version]="!showSidebar"
+  data-cy="layout-footer"
+>
   @if (showUpperFooter) {
-    <div id="footer-upper">
-      <div class="upper-footer-section">
+    <div id="footer-upper" data-cy="layout-footer-upper">
+      <div class="upper-footer-section" data-cy="layout-footer-help-link-wrapper">
         <a
           href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
           class="footer-upper-text font-karla-bold"
           target="_blank"
           rel="noopener"
+          data-cy="layout-footer-help-link"
         >
           Need help? Contact us
         </a>
       </div>
-      <div class="upper-footer-section">
-        <a routerLink="/notifications/security" class="footer-upper-text font-karla-bold"
+      <div class="upper-footer-section" data-cy="layout-footer-terms-link-wrapper">
+        <a
+          routerLink="/notifications/security"
+          class="footer-upper-text font-karla-bold"
+          data-cy="layout-footer-terms-link"
           >Terms of service and user agreement</a
         >
       </div>
     </div>
   }
-  <div id="footer-lower" class="grid">
-    <div class="col-6">
-      <img alt="The seal of the Federal Election Commission" id="fec-seal" src="assets/img/fec-seal-inverse.svg" />
-      <p id="fec-title">Federal Election Commission</p>
-      <p id="fec-address" class="font-karla">1050 First Street, NE Washington, DC 20463</p>
+  <div id="footer-lower" class="grid" data-cy="layout-footer-lower">
+    <div class="col-6" data-cy="layout-footer-brand-panel">
+      <img
+        alt="The seal of the Federal Election Commission"
+        id="fec-seal"
+        src="assets/img/fec-seal-inverse.svg"
+        data-cy="layout-footer-seal-image"
+      />
+      <p id="fec-title" data-cy="layout-footer-title">Federal Election Commission</p>
+      <p id="fec-address" class="font-karla" data-cy="layout-footer-address">1050 First Street, NE Washington, DC 20463</p>
     </div>
-    <div class="col-3">
+    <div class="col-3" data-cy="layout-footer-links-column-left">
       <div class="grid">
         <div class="col-12 footer-item font-karla font-karla">
-          <a href="https://www.fec.gov/about/privacy-and-security-policy/" target="_blank" rel="noopener">
+          <a
+            href="https://www.fec.gov/about/privacy-and-security-policy/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-privacy-and-security-policy-link"
+          >
             Privacy and security policy
           </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/about/plain-language/" target="_blank" rel="noopener">Plain language</a>
+          <a
+            href="https://www.fec.gov/about/plain-language/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-plain-language-link"
+          >
+            Plain language
+          </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/about/no-fear-act/" target="_blank" rel="noopener">No FEAR Act</a>
+          <a
+            href="https://www.fec.gov/about/no-fear-act/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-no-fear-act-link"
+          >
+            No FEAR Act
+          </a>
         </div>
         <div class="col-12 footer-item font-karla">
           <a
             href="https://www.fec.gov/about/reports-about-fec/strategy-budget-and-performance/"
             target="_blank"
             rel="noopener"
+            data-cy="layout-footer-strategy-budget-and-performance-link"
           >
             Strategy, budget, and performance
           </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/accessibility-statement/" target="_blank" rel="noopener">
+          <a
+            href="https://www.fec.gov/accessibility-statement/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-accessibility-statement-link"
+          >
             Accessibility statement
           </a>
         </div>
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-3" data-cy="layout-footer-links-column-right">
       <div class="grid">
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/about/open/" target="_blank" rel="noopener">Open government</a>
+          <a
+            href="https://www.fec.gov/about/open/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-open-government-link"
+          >
+            Open government
+          </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.usa.gov/" target="_blank" rel="noopener">USA.gov</a>
+          <a href="https://www.usa.gov/" target="_blank" rel="noopener" data-cy="layout-footer-usa-gov-link">
+            USA.gov
+          </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/office-inspector-general/" target="_blank" rel="noopener">Inspector General</a>
+          <a
+            href="https://www.fec.gov/office-inspector-general/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-inspector-general-link"
+          >
+            Inspector General
+          </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://www.fec.gov/freedom-information-act/" target="_blank" rel="noopener">FOIA</a>
+          <a
+            href="https://www.fec.gov/freedom-information-act/"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-foia-link"
+          >
+            FOIA
+          </a>
         </div>
         <div class="col-12 footer-item font-karla">
-          <a href="https://github.com/fecgov/fec" target="_blank" rel="noopener">Github repository</a>
+          <a
+            href="https://github.com/fecgov/fec"
+            target="_blank"
+            rel="noopener"
+            data-cy="layout-footer-github-repository-link"
+          >
+            Github repository
+          </a>
         </div>
       </div>
     </div>

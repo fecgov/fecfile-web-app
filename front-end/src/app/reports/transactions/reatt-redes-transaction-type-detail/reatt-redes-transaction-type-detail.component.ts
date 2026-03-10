@@ -4,6 +4,7 @@ import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'pr
 import { Ripple } from 'primeng/ripple';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
 import { ReattRedesTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/reatt-redes-transaction-type-base.component';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-reatt-redes-transaction-type-detail',
@@ -20,6 +21,10 @@ import { ReattRedesTransactionTypeBaseComponent } from 'app/shared/components/tr
   ],
 })
 export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransactionTypeBaseComponent implements OnInit {
+  accordionSectionDataCy(title?: string): string {
+    return buildDataCy('transactions-reatt-redes-detail', title || 'section', 'section');
+  }
+
   override ngOnInit(): void {
     super.ngOnInit();
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];

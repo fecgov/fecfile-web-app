@@ -1,9 +1,10 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('loan-terms', 'panel')">
   <app-loan-terms-dates-input
     [form]="form"
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [transaction]="transaction()"
+    [dataCyContext]="contextDataCy('loan-terms')"
   />
   <app-yes-no-radio-input
     [form]="form"
@@ -12,5 +13,6 @@
     label="Is this loan secured?"
     ariaLabelYes="This loan is secured"
     ariaLabelNo="This loan is not secured"
+    [dataCyContext]="contextDataCy('loan-terms')"
   />
 </div>

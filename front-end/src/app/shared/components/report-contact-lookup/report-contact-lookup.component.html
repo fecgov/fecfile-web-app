@@ -1,8 +1,14 @@
-<div class="flex">
-  <app-contact-search [key]="key()" />
+<div class="flex" [attr.data-cy]="rootDataCy()">
+  <app-contact-search [key]="key()" [dataCyContext]="contactSearchContext()" />
   <div class="add-contact-container">
     or
-    <span tabindex="0" (click)="openDialog()" (keydown.enter)="openDialog()" (keydown.space)="openDialog()">
+    <span
+      tabindex="0"
+      (click)="openDialog()"
+      (keydown.enter)="openDialog()"
+      (keydown.space)="openDialog()"
+      [attr.data-cy]="createContactDataCy()"
+    >
       <img alt="Plus" src="assets/img/i-plus-circle.svg" height="20px" width="20px" />
       <a>Create a new contact</a>
     </span>

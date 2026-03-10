@@ -1,5 +1,5 @@
-<div class="calculation-icon">
-  <p-popover #op>
+<div class="calculation-icon" data-cy="shared-calculation-overlay">
+  <p-popover #op data-cy="shared-calculation-overlay-popover">
     <ng-content></ng-content>
   </p-popover>
   <img
@@ -7,6 +7,7 @@
     role="img"
     alt=""
     aria-hidden="true"
+    data-cy="shared-calculation-overlay-trigger-button"
     (click)="op.toggle($event)"
     (keyup.enter)="op.toggle($event)"
     tabindex="0"

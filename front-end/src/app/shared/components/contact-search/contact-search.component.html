@@ -1,6 +1,6 @@
-<div class="field">
+<div class="field" [attr.data-cy]="rootDataCy()">
   <label [for]="`searchBox-${key}`">LOOKUP</label>
-  <div class="grid contact-lookup-container">
+  <div class="grid contact-lookup-container" [attr.data-cy]="searchFieldDataCy()">
     <div class="px-0" [class.dropdown-with-search]="isBare()">
       <p-select
         [(ngModel)]="manager().contactType"
@@ -11,10 +11,11 @@
         id="entity_type_dropdown"
         appendTo="body"
         [pt]="{ dropdown: 'no-dropdown-icon' }"
+        [attr.data-cy]="contactTypeDataCy()"
       />
     </div>
 
-    <div class="pl-0">
+    <div class="pl-0" [attr.data-cy]="searchInputDataCy()">
       <p-autoComplete
         id="searchBox"
         data-cy="searchBox"

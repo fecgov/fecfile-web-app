@@ -1,15 +1,17 @@
-<h1 class="m-0">{{ title }}</h1>
+<div [attr.data-cy]="pageDataCy">
+<h1 class="m-0" [attr.data-cy]="titleDataCy">{{ title }}</h1>
 <hr />
-<p-card>
+<p-card [attr.data-cy]="panelDataCy">
   <h2 class="m-0">Disbursements</h2>
   <hr type="solid" />
   <div class="grid">
     @for (transactionType of transactionTypes; track transactionType) {
       <div class="col-12">
-        <a [routerLink]="getRouterLink(transactionType)">
+        <a [routerLink]="getRouterLink(transactionType)" [attr.data-cy]="transactionLinkDataCy(transactionType)">
           {{ transactionType | label: transactionTypeLabels }}
         </a>
       </div>
     }
   </div>
 </p-card>
+</div>

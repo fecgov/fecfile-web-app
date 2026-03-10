@@ -1,16 +1,21 @@
-<fieldset [formGroup]="form">
-  <legend>
+<fieldset [formGroup]="form" [attr.data-cy]="contextDataCy(controlName(), 'fieldset')">
+  <legend [attr.data-cy]="contextDataCy(controlName(), 'legend')">
     {{ label() }}
     @if (parenLabel()) {
       <span class="paren-label">{{ parenLabel() }}</span>
     }
   </legend>
   @if (tooltipText()) {
-    <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ tooltipText() }}" [escape]="tooltipEscape"></span>
+    <span
+      class="pi pi-info-circle circle-icon-tooltip"
+      pTooltip="{{ tooltipText() }}"
+      [escape]="tooltipEscape"
+      [attr.data-cy]="contextDataCy(controlName(), 'tooltip', 'button')"
+    ></span>
   }
 
   <div class="grid">
-    <div class="col-1 flex">
+    <div class="col-1 flex" [attr.data-cy]="contextDataCy(controlName(), 'no', 'option')">
       <p-radioButton
         [name]="controlName()"
         [inputId]="controlName() + '-N'"
@@ -18,10 +23,13 @@
         [formControlName]="controlName()"
         [ariaLabel]="ariaLabelNo()"
         [class]="radioClass()"
+        [attr.data-cy]="contextDataCy(controlName(), 'no', 'radio')"
       />
-      <label [for]="controlName() + '-N'" class="ml-2">NO</label>
+      <label [for]="controlName() + '-N'" class="ml-2" [attr.data-cy]="contextDataCy(controlName(), 'no', 'label')">
+        NO
+      </label>
     </div>
-    <div class="col-1 flex">
+    <div class="col-1 flex" [attr.data-cy]="contextDataCy(controlName(), 'yes', 'option')">
       <p-radioButton
         [name]="controlName()"
         [inputId]="controlName() + '-Y'"
@@ -29,8 +37,11 @@
         [formControlName]="controlName()"
         [ariaLabel]="ariaLabelYes()"
         [class]="radioClass()"
+        [attr.data-cy]="contextDataCy(controlName(), 'yes', 'radio')"
       />
-      <label [for]="controlName() + '-Y'" class="ml-2">YES</label>
+      <label [for]="controlName() + '-Y'" class="ml-2" [attr.data-cy]="contextDataCy(controlName(), 'yes', 'label')">
+        YES
+      </label>
     </div>
   </div>
   <div class="grid">
@@ -40,6 +51,7 @@
         [fieldName]="controlName()"
         [formSubmitted]="formSubmitted"
         [patternErrorMessage]="errorMessage()"
+        [dataCyContext]="dataCyContext"
       />
     </div>
   </div>

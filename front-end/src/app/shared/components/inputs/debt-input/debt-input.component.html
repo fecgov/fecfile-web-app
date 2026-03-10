@@ -1,13 +1,14 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('debt', 'panel')">
   <div class="grid">
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy('beginning_balance', 'field')">
         <label for="balance">BEGINNING BALANCE</label>
         <app-input-number
           inputId="balance"
           formControlName="beginning_balance"
           [readonly]="true"
           inputStyleClass="readonly"
+          [dataCy]="fieldDataCy('beginning_balance')"
         />
         <app-error-messages
           [form]="form"
@@ -15,32 +16,35 @@
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The beginning balance can be 12 digits max"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy('incurred_amount', 'field')">
         <label for="amount">INCURRED AMOUNT</label>
-        <app-input-number inputId="amount" formControlName="incurred_amount" />
+        <app-input-number inputId="amount" formControlName="incurred_amount" [dataCy]="fieldDataCy('incurred_amount')" />
         <app-error-messages
           [form]="form"
           fieldName="incurred_amount"
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The incurred amount can be 12 digits max"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
   </div>
   <div class="grid">
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy('payment_amount', 'field')">
         <label for="payment_amount">PAYMENT AMOUNT</label>
         <app-input-number
           inputId="payment_amount"
           formControlName="payment_amount"
           [readonly]="true"
           inputStyleClass="readonly"
+          [dataCy]="fieldDataCy('payment_amount')"
         />
         <app-error-messages
           [form]="form"
@@ -48,17 +52,19 @@
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The payment amount can be 12 digits max"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-6">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy('balance_at_close', 'field')">
         <label for="balance_at_close">BALANCE AT CLOSE</label>
         <app-input-number
           inputId="balance_at_close"
           formControlName="balance_at_close"
           [readonly]="true"
           inputStyleClass="readonly"
+          [dataCy]="fieldDataCy('balance_at_close')"
         />
         <app-error-messages
           [form]="form"
@@ -66,6 +72,7 @@
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The balance at close can be 12 digits max"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>

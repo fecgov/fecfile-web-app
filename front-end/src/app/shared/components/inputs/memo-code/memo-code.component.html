@@ -1,7 +1,7 @@
-<div [formGroup]="form">
-  <div class="grid memo-container">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('memo-code', 'panel')">
+  <div class="grid memo-container" [attr.data-cy]="contextDataCy('memo-code', 'field')">
     @if (memoCodeMapOptions.length === 0) {
-      <div class="col-12 field-row">
+      <div class="col-12 field-row" [attr.data-cy]="contextDataCy('memo-code', 'checkbox', 'field')">
         <p-checkbox
           #memoCode
           [binary]="true"
@@ -13,14 +13,19 @@
           [falseValue]="false"
           [readonly]="form.controls[templateMap['memo_code']].disabled"
           (onChange)="onMemoItemClick()"
+          [attr.data-cy]="fieldDataCy(templateMap['memo_code'], 'checkbox')"
         />
-        <span id="memo_code_label" class="ml-2">
+        <span id="memo_code_label" class="ml-2" [attr.data-cy]="contextDataCy('memo-code', 'label')">
           {{ checkboxLabel() }}
           @if (parenLabel()) {
             <span class="paren-label">{{ parenLabel() }}</span>
           }
         </span>
-        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
+        <span
+          class="pi pi-info-circle circle-icon-tooltip"
+          pTooltip="{{ memoItemHelpText() }}"
+          [attr.data-cy]="contextDataCy('memo-code', 'tooltip', 'button')"
+        ></span>
       </div>
       <div class="col-12">
         <app-error-messages
@@ -28,10 +33,11 @@
           [fieldName]="templateMap['memo_code']"
           [formSubmitted]="formSubmitted"
           [patternErrorMessage]="'This is a required field.'"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     } @else {
-      <div class="col-3">
+      <div class="col-3" [attr.data-cy]="contextDataCy('memo-code', 'select', 'field')">
         <p-selectButton
           #memoCode
           inputId="memo_code"
@@ -39,17 +45,26 @@
           [options]="memoCodeMapOptions()"
           optionLabel="label"
           optionValue="value"
+          [attr.data-cy]="fieldDataCy(templateMap['memo_code'], 'select')"
         />
       </div>
-      <div class="col-12">
+      <div class="col-12" [attr.data-cy]="contextDataCy('memo-code', 'status')">
         @if (memoControl.value) {
-          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
+          <span
+            class="pi pi-check memo-item-check"
+            pTooltip="{{ memoItemHelpText() }}"
+            [attr.data-cy]="contextDataCy('memo-code', 'selected', 'icon')"
+          ></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM
         }
         @if (memoControl.value !== undefined) {
-          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
+          <span
+            class="pi pi-info-circle circle-icon-tooltip"
+            pTooltip="{{ memoItemHelpText() }}"
+            [attr.data-cy]="contextDataCy('memo-code', 'tooltip', 'button')"
+          ></span>
         }
       </div>
       <div class="col-12">
@@ -58,6 +73,7 @@
           [fieldName]="templateMap['memo_code']"
           [formSubmitted]="formSubmitted"
           [patternErrorMessage]="'This is a required field.'"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     }
@@ -68,6 +84,7 @@
     aria-labelledby="dialog-title"
     title="Just checking..."
     [(visible)]="outOfDateDialogVisible"
+    [dataCyContext]="contextDataCy('memo-code', 'out-of-date')"
   >
     <p id="out-of-date-dialog-text">
       <b>
@@ -86,6 +103,7 @@
           pRipple
           label="Close"
           class="p-button-primary"
+          [attr.data-cy]="contextDataCy('memo-code', 'out-of-date', 'close', 'button')"
           (click)="outOfDateDialogVisible.set(false)"
         ></button>
       </div>

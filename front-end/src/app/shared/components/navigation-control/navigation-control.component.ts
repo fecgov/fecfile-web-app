@@ -26,6 +26,7 @@ import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-navigation-control',
@@ -65,6 +66,10 @@ export class NavigationControlComponent implements OnInit {
 
   isDisabled(): boolean {
     return !!this.navigationControl?.disabledCondition(this.transaction);
+  }
+
+  buttonDataCy(): string {
+    return buildDataCy('transactions-navigation', this.navigationControl?.label || 'control', 'button');
   }
 
   clickButton(): void {

@@ -1,43 +1,57 @@
-<div [formGroup]="form">
+<div [formGroup]="form" [attr.data-cy]="contextDataCy('loan-info', 'panel')">
   <div class="grid">
     <div class="col-4">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['amount'], 'field')">
         <label for="loan-info-amount">ORIGINAL AMOUNT</label>
         <app-input-number
           inputId="loan-info-amount"
           [formControlName]="templateMap['amount']"
           [inputStyleClass]="readonly() ? 'readonly' : ''"
           [readonly]="readonly()"
+          [dataCy]="fieldDataCy(templateMap['amount'])"
         />
-        <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['amount']"
+          [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
+        />
       </div>
     </div>
     <div class="col-4">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['payment_to_date'], 'field')">
         <label for="payment_to_date">PAYMENT TO DATE</label>
         <app-input-number
           inputId="payment_to_date"
           [formControlName]="templateMap['payment_to_date']"
           inputStyleClass="readonly"
           [readonly]="true"
+          [dataCy]="fieldDataCy(templateMap['payment_to_date'])"
         />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['payment_to_date']"
           [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
         />
       </div>
     </div>
     <div class="col-4">
-      <div class="field">
+      <div class="field" [attr.data-cy]="fieldDataCy(templateMap['balance'], 'field')">
         <label [id]="balanceInputId.label" [for]="balanceInputId.id">BALANCE OUTSTANDING</label>
         <app-input-number
           [inputId]="balanceInputId.id"
           [formControlName]="templateMap['balance']"
           inputStyleClass="readonly"
           [readonly]="true"
+          [dataCy]="fieldDataCy(templateMap['balance'])"
         />
-        <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['balance']"
+          [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
+        />
       </div>
     </div>
   </div>
@@ -52,6 +66,7 @@
           [transaction]="transaction()"
           checkboxLabel="MEMO ITEM "
           parenLabel="(OPTIONAL)"
+          [dataCyContext]="contextDataCy('loan-info')"
         />
       </div>
     </div>

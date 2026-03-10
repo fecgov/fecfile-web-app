@@ -4,6 +4,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionInputComponent } from '../transaction-input/transaction-input.component';
 import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/components/inputs/independent-expenditure-create-f3x-input/independent-expenditure-create-f3x-input.component';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-triple-transaction-detail',
@@ -17,6 +18,10 @@ import { IndependentExpenditureCreateF3xInputComponent } from 'app/shared/compon
   ],
 })
 export class TripleTransactionDetailComponent extends TripleTransactionTypeBaseComponent implements OnInit {
+  accordionSectionDataCy(title?: string): string {
+    return buildDataCy('transactions-detail', title || 'section', 'section');
+  }
+
   override ngOnInit(): void {
     super.ngOnInit();
 

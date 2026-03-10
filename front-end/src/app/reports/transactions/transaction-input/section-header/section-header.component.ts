@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class SectionHeaderComponent {
   @Input() isSingle = false;
   @Input() text? = '';
+  @Input() dataCy = '';
 }
