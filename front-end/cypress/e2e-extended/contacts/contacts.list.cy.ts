@@ -14,12 +14,12 @@ describe('Contacts List (/contacts)', () => {
   });
 
   it('shows header, table, Add, and correct column headers (empty state)', () => {
-    cy.contains('h1', 'Manage contacts').should('exist');
-    cy.get('p-table table, table').first().should('exist');
-    cy.contains('button,a', 'Add contact').should('exist');
+    cy.contains('h1', 'Manage contacts').should('be.visible');
+    cy.get('p-table table, table').first().should('be.visible');
+    cy.contains('button,a', 'Add contact').should('be.visible');
     // restore button is conditional; covered in delete tests
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    cy.contains('.empty-message', 'No data available in table').should('exist');
+    cy.contains('.empty-message', 'No data available in table').should('be.visible');
   });
 
   it('renders a populated list with correct columns after creating contacts via UI', () => {
@@ -91,15 +91,15 @@ describe('Contacts List (/contacts)', () => {
   });
 
   it('checks pagination controls empty state', () => {
-    cy.contains(/results\s*per\s*page:/i).should('exist');
+    cy.contains(/results\s*per\s*page:/i).should('be.visible');
     SharedHelpers.openResultsPerPage();
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
-      cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
+      cy.contains('[role="option"], .p-select-option', String(size)).should('be.visible');
     }
 
     PageUtils.blurActiveField();
-    cy.contains(/showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+contacts?/i).should('exist');
-    SharedHelpers.paginator().should('exist');
+    cy.contains(/showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+contacts?/i).should('be.visible');
+    SharedHelpers.paginator().should('be.visible');
     ContactsHelpers.assertDisabled('button[aria-label="First Page"], .p-paginator-first');
     ContactsHelpers.assertDisabled('button[aria-label="Previous Page"], .p-paginator-prev');
     ContactsHelpers.assertDisabled('button[aria-label="Next Page"], .p-paginator-next');
@@ -131,7 +131,7 @@ describe('Contacts List (/contacts)', () => {
 
     SharedHelpers.openResultsPerPage();
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
-      cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
+      cy.contains('[role="option"], .p-select-option', String(size)).should('be.visible');
     }
     PageUtils.blurActiveField();
 
@@ -160,7 +160,7 @@ describe('Contacts List (/contacts)', () => {
         cy.contains(pageTextRx(21, 21)).should('be.visible');
         cy.get('tbody tr').should('have.length', 1);
       }
-      cy.get('.p-paginator').should('exist');
+      cy.get('.p-paginator').should('be.visible');
     }
   });
 });

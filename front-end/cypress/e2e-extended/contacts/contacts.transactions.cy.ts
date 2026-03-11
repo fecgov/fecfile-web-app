@@ -156,7 +156,7 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<
 };
 
 const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) => {
-  cy.get('p-panelmenu').should('exist');
+  cy.get('p-panelmenu').should('be.visible');
 
   cy.contains('a', panelMenuRx)
     .first()
@@ -180,16 +180,16 @@ const assertTxnRowByContact = (contactDisplay: string, expectedType: RegExp, amo
   const amountStr = `$${amount.toFixed(2)}`;
 
   cy.contains('tbody tr', contactDisplay)
-    .should('exist')
+    .should('be.visible')
     .within(() => {
       cy.get('td').eq(1).invoke('text').should('match', expectedType);
-      cy.contains(amountStr).should('exist');
+      cy.contains(amountStr).should('be.visible');
     });
 };
 
 const assertContactsListRow = (name: string, type: string, fecId?: string) => {
   cy.contains('tbody tr', name)
-    .should('exist')
+    .should('be.visible')
     .within(() => {
       cy.get('td').eq(1).should('contain.text', type);
       if (fecId) cy.get('td').eq(2).should('contain.text', fecId);
@@ -379,7 +379,7 @@ describe('Contacts: Transactions integration', () => {
       // INDIVIDUAL RECEIPT
       ReportListPage.goToReportListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /Individual Receipt/i);
-      cy.contains(/Individual Receipt/i).should('exist');
+      cy.contains(/Individual Receipt/i).should('be.visible');
 
       openCreateContactModal('first');
       cy.get('@createContactDialog').find('#last_name').clear().type(individual.last);
@@ -408,7 +408,7 @@ describe('Contacts: Transactions integration', () => {
       // TRANSFER
       ReportListPage.goToReportListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /^Transfer$/i);
-      cy.contains('h1', 'Transfer').should('exist');
+      cy.contains('h1', 'Transfer').should('be.visible');
 
       openCreateContactModal('first');
       cy.get('@createContactDialog').find('#committee_id').clear().type(committee.id);
@@ -437,7 +437,7 @@ describe('Contacts: Transactions integration', () => {
       // OPERATING EXPENDITURE
       ReportListPage.goToReportListPage(rid);
       goToTransactionCreateFromList(/Add a disbursement/i, /Operating Expenditure/i);
-      cy.contains(/Operating Expenditure/i).should('exist');
+      cy.contains(/Operating Expenditure/i).should('be.visible');
 
       openCreateContactModal('first');
       cy.get('@createContactDialog').find('#name').clear().type(organization.name);
@@ -513,7 +513,7 @@ describe('Contacts: Transactions integration', () => {
       ReportListPage.goToReportListPage(rid);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
-      cy.contains('Individual Receipt').should('exist');
+      cy.contains('Individual Receipt').should('be.visible');
       ContactLookup.getContact(lastName);
 
       const scheduleData: ScheduleFormData = {
@@ -537,8 +537,8 @@ describe('Contacts: Transactions integration', () => {
       PageUtils.clickButton('Save');
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
-      cy.contains(/employer.*required|this is a required field\./i).should('exist');
-      cy.contains(/occupation.*required|this is a required field\./i).should('exist');
+      cy.contains(/employer.*required|this is a required field\./i).should('be.visible');
+      cy.contains(/occupation.*required|this is a required field\./i).should('be.visible');
 
       cy.get('#employer').type(newEmployer);
       cy.get('#occupation').type(newOccupation);
@@ -560,7 +560,7 @@ describe('Contacts: Transactions integration', () => {
       ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
 
       cy.contains('tbody tr', displayName)
-        .should('exist')
+        .should('be.visible')
         .within(() => {
           cy.get('td').eq(3).should('contain.text', newEmployer);
           cy.get('td').eq(4).should('contain.text', newOccupation);
@@ -568,7 +568,7 @@ describe('Contacts: Transactions integration', () => {
 
       cy.intercept('GET', '**/api/v1/transactions/?**contact=*').as('getContactTxns');
       PageUtils.clickKababItem(displayName, 'Edit');
-      cy.contains(/Edit Contact/i).should('exist');
+      cy.contains(/Edit Contact/i).should('be.visible');
 
       cy.wait('@getContactTxns');
 

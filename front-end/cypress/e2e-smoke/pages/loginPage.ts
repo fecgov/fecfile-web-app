@@ -71,7 +71,7 @@ function loginDotGovLogin() {
   cy.wait('@ActivateCommittee');
 
   // Wait for the reports page to load
-  cy.contains('Manage reports').should('exist');
+  cy.contains('Manage reports').should('be.visible');
 
   // Creates a second create admin after logging in if necessary
   cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
@@ -80,7 +80,7 @@ function loginDotGovLogin() {
     .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
     .then(($email) => {
       if ($email.length) {
-        cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
+        cy.contains('Welcome to FECfile+').should('be.visible').click(); // Ensures that the modal is in focus
         cy.wrap($email).should('have.value', '');
         cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
         cy.wrap($email).should('have.value', 'admin@admin.com');

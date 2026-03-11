@@ -38,7 +38,7 @@ function Redesignate(old = false) {
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
-  cy.contains(Contributions.TO_CANDIDATE).should('exist');
+  cy.contains(Contributions.TO_CANDIDATE).should('be.visible');
 }
 
 describe('Redesignations', () => {

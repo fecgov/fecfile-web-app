@@ -15,7 +15,7 @@ describe('Manage profile', () => {
 
   it('Can view the Users table', () => {
     ProfileUserListPage.goToPage();
-    cy.contains('Testson, Test').should('exist');
+    cy.contains('Testson, Test').should('be.visible');
   });
 
   it('Can navigate to the Committee members via the navbar', () => {

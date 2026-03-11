@@ -69,7 +69,7 @@ export class ContactsHelpers {
 
   static expectErrorNearLabel(labelRx: RegExp, errorRx: RegExp, root = ContactsHelpers.DIALOG) {
     ContactsHelpers.fieldForLabel(labelRx, root).within(() => {
-      cy.contains(errorRx).should('exist');
+      cy.contains(errorRx).should('be.visible');
     });
   }
 
@@ -125,8 +125,8 @@ export class ContactsHelpers {
 
   static assertAndContinueConfirmModal(contactName: string, expectedChanges: Array<string | RegExp> = []) {
     ContactsHelpers.getVisibleConfirmDialog().within(() => {
-      cy.contains(contactName).should('exist');
-      expectedChanges.forEach((c) => cy.contains(c).should('exist'));
+      cy.contains(contactName).should('be.visible');
+      expectedChanges.forEach((c) => cy.contains(c).should('be.visible'));
       cy.contains('button', /Continue/i).click();
     });
     cy.contains('.p-dialog-title', /Confirm/i).should('not.exist');
@@ -295,7 +295,7 @@ export class ContactsHelpers {
   static assertDisabled(selector: string) {
     cy.get(selector)
       .first()
-      .should('exist')
+      .should('be.visible')
       .should(($el) => {
         const disabled =
           $el.is(':disabled') ||
@@ -308,7 +308,7 @@ export class ContactsHelpers {
   static assertEnabled(selector: string) {
     cy.get(selector)
       .first()
-      .should('exist')
+      .should('be.visible')
       .should(($el) => {
         const disabled =
           $el.is(':disabled') ||
@@ -342,13 +342,13 @@ export class ContactsHelpers {
       String.raw`showing\s+${start}\s*(?:-|to)\s*${end}\s+of\s+${total}\s+contacts?`,
       'i',
     );
-    cy.contains(rx).should('exist');
+    cy.contains(rx).should('be.visible');
   }
 
   static assertSuccessToastMessage() {
     cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
       timeout: 10000,
-    }).should('exist');
+    }).should('be.visible');
   }
 
   static assertRowValues(
@@ -357,7 +357,7 @@ export class ContactsHelpers {
     expectedFecId?: string,
   ) {
     cy.contains('tbody tr', rowText, { matchCase: false })
-      .should('exist')
+      .should('be.visible')
       .within(() => {
         cy.get('td')
           .eq(1)
@@ -530,7 +530,7 @@ export class ContactsHelpers {
       .click();
 
     cy.get('.p-autocomplete-input')
-      .should('exist')
+      .should('be.visible')
       .type(searchTerm);
 
     cy.wait('@entityLookup');
@@ -546,7 +546,7 @@ export class ContactsHelpers {
     cy.wait('@createContact');
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    return cy.contains('tbody tr', rowMatch).should('exist');
+    return cy.contains('tbody tr', rowMatch).should('be.visible');
   }
 
   static assertTransactionHistoryRow(row: TxnHistoryRow): Cypress.Chainable<void> {
@@ -592,10 +592,10 @@ export class ContactsHelpers {
 
     return cy
       .get('app-table[itemname="transactions"]')
-      .should('exist')
+      .should('be.visible')
       .find('table[role="table"]')
       .first()
-      .should('exist')
+      .should('be.visible')
       .then(($table) => {
         const typeIdx = getColIndexByThIdOrText($table, colIds.type, 'Type');
         expect(typeIdx, 'Type column index').to.be.gte(0);
@@ -825,7 +825,7 @@ export class ContactsDeleteHelpers {
   static openActionsMenu(contactName: string) {
     PageUtils.blurActiveField();
     PageUtils.getKabob(contactName);
-    cy.get('.p-popover').filter(':visible').should('exist');
+    cy.get('.p-popover').filter(':visible').should('be.visible');
     cy.get('.p-popover').filter(':visible').contains('button', /Edit/i).should('be.visible');
   }
 

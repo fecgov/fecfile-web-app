@@ -28,7 +28,7 @@ const formData = {
 };
 
 function clickLoan(button: string, urlCheck = '/list') {
-  cy.contains('Loan Received from Bank').last().should('exist');
+  cy.contains('Loan Received from Bank').last().should('be.visible');
   const alias = PageUtils.getAlias('');
   cy.get(alias)
     .find("[datatest='" + 'loans-and-debts-button' + "']")
@@ -131,7 +131,7 @@ function handleLoanAgreementSetup(q3: string) {
 
     PageUtils.clickButton('Save', '', true);
     cy.wait('@saveNewAgreement');
-    cy.contains('Loan Received from Bank').should('exist');
+    cy.contains('Loan Received from Bank').should('be.visible');
     PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');
     PageUtils.valueCheck('input[id^="loan-agreement-amount-"]', '$65,000.00');
@@ -167,7 +167,7 @@ describe('Loans', () => {
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
       PageUtils.clickButton('Save transactions');
       PageUtils.urlCheck('/list');
-      cy.contains('Loan Received from Bank').should('exist');
+      cy.contains('Loan Received from Bank').should('be.visible');
 
       assertNoDeleteButtonInLoanReceivedFromBankRow();
     });
@@ -182,7 +182,7 @@ describe('Loans', () => {
       PageUtils.enterValue('#amount', formData.amount);
       TransactionDetailPage.clickSave(result.report);
       PageUtils.urlCheck('/list');
-      cy.contains('Loan Repayment Made').should('exist');
+      cy.contains('Loan Repayment Made').should('be.visible');
     });
   });
 
@@ -192,7 +192,7 @@ describe('Loans', () => {
       clickLoan('Review loan agreement');
       PageUtils.clickButton('Save transactions');
       PageUtils.locationCheck('/list');
-      cy.contains('Loan Received from Bank').should('exist');
+      cy.contains('Loan Received from Bank').should('be.visible');
     });
   });
 
@@ -218,7 +218,7 @@ describe('Loans', () => {
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);
       clickLoan('Edit');
-      cy.contains('ORGANIZATION NAME').should('exist');
+      cy.contains('ORGANIZATION NAME').should('be.visible');
       cy.get('#organization_name').should('have.value', result.organization.name);
     });
   });

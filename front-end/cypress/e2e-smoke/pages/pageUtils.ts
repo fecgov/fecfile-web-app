@@ -5,7 +5,7 @@ export const currentYear = new Date().getFullYear();
 export class PageUtils {
   static closeToast() {
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('.p-toast-close-button').should('exist').click();
+    cy.get(alias).find('.p-toast-close-button').should('be.visible').click();
   }
 
   static clickElement(elementSelector: string, alias = '') {
@@ -110,7 +110,7 @@ export class PageUtils {
 
   static shouldHaveSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').as('PanelMenu');
-    cy.get('@PanelMenu').contains('a', menuItem).should('exist');
+    cy.get('@PanelMenu').contains('a', menuItem).should('be.visible');
   }
 
   static shouldNotHaveSidebarItem(menuItem: string) {
@@ -184,11 +184,11 @@ export class PageUtils {
   }
 
   static findOnPage(selector: string, value: string) {
-    cy.get(selector).contains(value).should('exist');
+    cy.get(selector).contains(value).should('be.visible');
   }
 
   static containedOnPage(selector: string) {
-    cy.contains(selector).should('exist');
+    cy.contains(selector).should('be.visible');
   }
 
   /**
@@ -241,7 +241,7 @@ export class PageUtils {
       .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
       .then(($email) => {
         if ($email.length) {
-          cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
+          cy.contains('Welcome to FECfile+').should('be.visible').click(); // Ensures that the modal is in focus
           cy.get('#email').should('have.value', '');
           cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
           cy.get('#email').should('have.value', 'admin@admin.com');

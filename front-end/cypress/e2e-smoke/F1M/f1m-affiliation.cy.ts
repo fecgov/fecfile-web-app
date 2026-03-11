@@ -115,7 +115,7 @@ describe('Manage reports', () => {
       }
 
       PageUtils.clickButton('Save and continue');
-      cy.get('[data-cy="print-preview"]').should('exist');
+      cy.get('[data-cy="print-preview"]').should('be.visible');
 
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
       PageUtils.shouldNotHaveSidebarItem('Report Status');

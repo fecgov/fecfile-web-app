@@ -43,7 +43,7 @@ function Reattribute(result: any, old = false) {
 
   PageUtils.clickButton('Save');
   PageUtils.urlCheck('/list');
-  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
+  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('be.visible');
 }
 
 describe('Reattributions', () => {

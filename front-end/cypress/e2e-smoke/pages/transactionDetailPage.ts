@@ -28,7 +28,7 @@ export class TransactionDetailPage {
 
     if (formData.candidate) {
       cy.get('.contact-lookup-container').last().get('[data-cy="searchBox"]').type(formData.candidate);
-      cy.contains(formData.candidate).should('exist');
+      cy.contains(formData.candidate).should('be.visible');
       cy.contains(formData.candidate).click();
     }
 
@@ -293,7 +293,7 @@ export class TransactionDetailPage {
 
     PageUtils.clickButton('Save & add loan guarantor');
     PageUtils.closeToast();
-    cy.contains('Guarantors to loan source').should('exist');
+    cy.contains('Guarantors to loan source').should('be.visible');
     ContactLookup.getContact(name);
     cy.get('#amount').safeType(amount);
     cy.intercept({

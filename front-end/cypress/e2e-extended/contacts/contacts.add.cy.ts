@@ -227,8 +227,8 @@ describe('Contacts Add (/contacts)', () => {
           PageUtils.clickButton('Save & Add More');
           ContactsHelpers.assertSuccessToastMessage();
 
-          cy.contains('button', 'Save & Add More').should('exist');
-          cy.contains('button', 'Save').should('exist');
+          cy.contains('button', 'Save & Add More').should('be.visible');
+          cy.contains('button', 'Save').should('be.visible');
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {

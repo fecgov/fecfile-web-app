@@ -567,7 +567,7 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
   it('check that all contacts, including soft-deleted ones, are deleted', () => {
     cy.contains('button,a', 'Restore deleted contacts')
       .should('not.exist');
-    cy.contains('.empty-message', 'No data available in table').should('exist');
+    cy.contains('.empty-message', 'No data available in table').should('be.visible');
     cy.get('.paginator-text')
       .should('be.visible')
       .and('contain', 'Showing 0 to 0 of 0 contacts:');

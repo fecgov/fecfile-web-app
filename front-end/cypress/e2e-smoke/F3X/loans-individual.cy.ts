@@ -30,7 +30,7 @@ function setupLoanReceivedFromIndividual() {
 function verifyLoanReceivedFromIndividualNoDeleteButton() {
   PageUtils.clickButton('Save both transactions');
   PageUtils.urlCheck('/list');
-  cy.contains('Loan Received from Individual').should('exist');
+  cy.contains('Loan Received from Individual').should('be.visible');
 
   cy.get('app-transaction-receipts').within(() => {
     cy.contains('Loan Received from Individual')
@@ -57,7 +57,7 @@ describe('Loans', () => {
   it('should test: Loan Guarantors', () => {
     setupLoanReceivedFromIndividual().then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
-      cy.contains('Transactions in this report').should('exist');
+      cy.contains('Transactions in this report').should('be.visible');
     });
   });
 

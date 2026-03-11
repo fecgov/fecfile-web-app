@@ -35,8 +35,8 @@ describe('Loans', () => {
     setupLoanByCommittee().then((result: any) => {
       PageUtils.clickButton('Save both transactions');
       PageUtils.urlCheck('/list');
-      cy.contains('Loan By Committee').should('exist');
-      cy.contains('Loan Made').should('exist');
+      cy.contains('Loan By Committee').should('be.visible');
+      cy.contains('Loan Made').should('be.visible');
       cy.contains('Loan Made')
         .closest('tr')
         .find('button')
@@ -54,8 +54,8 @@ describe('Loans', () => {
     setupLoanByCommittee().then((result: any) => {
       PageUtils.clickButton('Save both transactions');
       PageUtils.urlCheck('/list');
-      cy.contains('Loan By Committee').should('exist');
-      cy.contains('Loan Made').should('exist');
+      cy.contains('Loan By Committee').should('be.visible');
+      cy.contains('Loan Made').should('be.visible');
       PageUtils.clickElement('loans-and-debts-button');
       cy.contains('Receive loan repayment').click({ force: true });
 
@@ -65,7 +65,7 @@ describe('Loans', () => {
       PageUtils.enterValue('#amount', formData.amount);
       PageUtils.clickButton('Save');
       PageUtils.urlCheck('/list');
-      cy.contains('Loan Repayment Received').should('exist');
+      cy.contains('Loan Repayment Received').should('be.visible');
     });
   });
 
@@ -74,7 +74,7 @@ describe('Loans', () => {
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       cy.contains('Loan By Committee').click();
       PageUtils.urlCheck('/list');
-      cy.contains(result.individual.last_name).should('exist');
+      cy.contains(result.individual.last_name).should('be.visible');
     });
   });
 
@@ -84,7 +84,7 @@ describe('Loans', () => {
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
       cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
       cy.contains('Loan By Committee').click();
-      cy.contains('Guarantors').should('exist');
+      cy.contains('Guarantors').should('be.visible');
       cy.wait('@GuarantorList');
       PageUtils.clickKababItem(result.individual.last_name, 'Delete');
       PageUtils.clickButton('Confirm');

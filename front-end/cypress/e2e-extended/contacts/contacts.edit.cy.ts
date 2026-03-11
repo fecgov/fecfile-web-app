@@ -169,7 +169,7 @@ describe('Contacts Edit', () => {
 
   const assertCandidateRowInList = (display: string, candidateId: string) => {
     cy.contains('tbody tr', display)
-      .should('exist')
+      .should('be.visible')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'CAN');
         cy.get('td').eq(2).should('contain.text', candidateId);
@@ -178,7 +178,7 @@ describe('Contacts Edit', () => {
 
   const reopenAndAssertCandidateBasics = (display: string, candidateId: string, last: string, first: string) => {
     PageUtils.clickKababItem(display, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#candidate_id').should('have.value', candidateId);
     cy.get('#last_name').should('have.value', last);
@@ -204,11 +204,11 @@ describe('Contacts Edit', () => {
 
   const assertTransactionHistoryTableExists = () => {
     cy.contains('h2', 'Transaction history')
-      .should('exist')
+      .should('be.visible')
       .parentsUntil('body')
       .last()
       .find('table')
-      .should('exist');
+      .should('be.visible');
   };
 
   const assertPersonContactFormValues = (v: PersonContactValues) => {
@@ -234,7 +234,7 @@ describe('Contacts Edit', () => {
     cy.contains('label', labelRx)
       .parent()
       .within(() => {
-        cy.contains(/This is a required field\./i).should('exist');
+        cy.contains(/This is a required field\./i).should('be.visible');
       });
   };
 
@@ -269,7 +269,7 @@ describe('Contacts Edit', () => {
         ContactsHelpers.clickSaveAndHandleConfirm();
 
         ContactsHelpers.assertSuccessToastMessage();
-        cy.contains(/Manage contacts/i).should('exist');
+        cy.contains(/Manage contacts/i).should('be.visible');
 
         assertCandidateRowInList(display, candidateId);
         reopenAndAssertCandidateBasics(display, candidateId, last, first);
@@ -307,7 +307,7 @@ describe('Contacts Edit', () => {
     };
 
     PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#last_name').clear();
     cy.get('#first_name').clear();
@@ -317,7 +317,7 @@ describe('Contacts Edit', () => {
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
     expectRequiredNearLabel(/^Last name/i);
     expectRequiredNearLabel(/^First name/i);
     expectRequiredNearLabel(/^Street address/i);
@@ -351,7 +351,7 @@ describe('Contacts Edit', () => {
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     expectMaxErrorNearLabel(/^Last name/i, /cannot contain more than 30 alphanumeric characters/i);
     expectMaxErrorNearLabel(/^First name/i, /cannot contain more than 20 alphanumeric characters/i);
@@ -401,17 +401,17 @@ describe('Contacts Edit', () => {
     ]);
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains(/Manage contacts/i).should('exist');
+    cy.contains(/Manage contacts/i).should('be.visible');
 
     cy.contains('tbody tr', newDisplay)
-      .should('exist')
+      .should('be.visible')
       .within(() => {
         cy.get('td').eq(3).should('contain.text', newEmployer);
         cy.get('td').eq(4).should('contain.text', newOccupation);
       });
 
     PageUtils.clickKababItem(newDisplay, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     assertPersonContactFormValues({
       last: newLast,
@@ -468,12 +468,12 @@ describe('Contacts Edit', () => {
 
     const expectRequiredNearLabel = (labelRx: RegExp) => {
       ContactsHelpers.fieldForLabel(labelRx).within(() => {
-        cy.contains('This is a required field.').should('exist');
+        cy.contains('This is a required field.').should('be.visible');
       });
     };
 
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#candidate_id').should('have.value', originalCandidateId).clear();
     cy.get('#last_name').clear();
@@ -484,7 +484,7 @@ describe('Contacts Edit', () => {
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
     expectRequiredNearLabel(/^Candidate ID/i);
     expectRequiredNearLabel(/^Last name/i);
     expectRequiredNearLabel(/^First name/i);
@@ -495,7 +495,7 @@ describe('Contacts Edit', () => {
 
     cy.get('select[id^="candidate_office-"]').select('Senate');
     ContactsHelpers.clickSaveAndHandleConfirm();
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     ContactsHelpers.fieldForLabel(/^Candidate district/i)
       .find('small.p-error, .p-error')
@@ -504,7 +504,7 @@ describe('Contacts Edit', () => {
       
     cy.get('select[id^="candidate_office-"]').select('House');
     ContactsHelpers.clickSaveAndHandleConfirm();
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     expectRequiredNearLabel(/^Candidate district/i);
 
@@ -536,10 +536,10 @@ describe('Contacts Edit', () => {
     ContactsHelpers.clickSaveAndHandleConfirm();
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains(/Manage contacts/i).should('exist');
+    cy.contains(/Manage contacts/i).should('be.visible');
 
     cy.contains('tbody tr', newDisplay)
-      .should('exist')
+      .should('be.visible')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'CAN');
         cy.get('td').eq(2).should('contain.text', originalCandidateId);
@@ -547,7 +547,7 @@ describe('Contacts Edit', () => {
 
     // Re-open and verify everything persisted
     PageUtils.clickKababItem(newDisplay, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#candidate_id').should('have.value', originalCandidateId);
     assertPersonContactFormValues({
@@ -581,7 +581,7 @@ describe('Contacts Edit', () => {
     const lookupName = `${lookupLast}, ${lookupFirst}`;
 
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     candidateLookup(lookupCandidateId, lookupLast, lookupFirst, lookupName);
     assertCandidateRowInList(lookupName, lookupCandidateId);
@@ -600,7 +600,7 @@ describe('Contacts Edit', () => {
     const newPhone = '5550001111';
 
     PageUtils.clickKababItem(committeeDisplayName, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#committee_id').clear();
     cy.get('#name').clear();
@@ -610,7 +610,7 @@ describe('Contacts Edit', () => {
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     expectRequiredNearLabel(/^Committee ID/i);
     expectRequiredNearLabel(/^Name/i);
@@ -650,17 +650,17 @@ describe('Contacts Edit', () => {
     ]);
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains(/Manage contacts/i).should('exist');
+    cy.contains(/Manage contacts/i).should('be.visible');
 
     cy.contains('tbody tr', newName)
-      .should('exist')
+      .should('be.visible')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'COM');
         cy.get('td').eq(2).should('contain.text', newCommitteeId);
       });
 
     PageUtils.clickKababItem(newName, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#committee_id').should('have.value', newCommitteeId);
     assertNamedContactFormValuesWithTxn({
@@ -688,7 +688,7 @@ describe('Contacts Edit', () => {
     const overlongName = 'a'.repeat(201);
 
     PageUtils.clickKababItem(organizationDisplayName, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     cy.get('#name').clear();
     cy.get('#street_1').clear();
@@ -697,7 +697,7 @@ describe('Contacts Edit', () => {
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
     expectRequiredNearLabel(/^Name$/i);
     expectRequiredNearLabel(/^Street address/i);
     expectRequiredNearLabel(/^City/i);
@@ -716,11 +716,11 @@ describe('Contacts Edit', () => {
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
     cy.contains('label', /^Name$/i)
       .parent()
       .within(() => {
-        cy.contains(/cannot contain more than 200 alphanumeric characters/i).should('exist');
+        cy.contains(/cannot contain more than 200 alphanumeric characters/i).should('be.visible');
       });
 
     cy.get('#name').clear().type(newName);
@@ -736,16 +736,16 @@ describe('Contacts Edit', () => {
     ]);
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains(/Manage contacts/i).should('exist');
+    cy.contains(/Manage contacts/i).should('be.visible');
 
     cy.contains('tbody tr', newName)
-      .should('exist')
+      .should('be.visible')
       .within(() => {
         cy.get('td').eq(1).should('contain.text', 'ORG');
       });
 
     PageUtils.clickKababItem(newName, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
 
     assertNamedContactFormValuesWithTxn({
       name: newName,

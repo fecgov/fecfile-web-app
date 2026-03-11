@@ -19,7 +19,7 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
-    cy.get('#entity_type_dropdown.readonly').should('exist');
+    cy.get('#entity_type_dropdown.readonly').should('be.visible');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
   });
@@ -51,7 +51,7 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
-    cy.get('#entity_type_dropdown').should('exist');
+    cy.get('#entity_type_dropdown').should('be.visible');
     cy.get('#entity_type_dropdown').should('contain', 'Candidate');
     ContactListPage.assertFormData(formData);
   });
@@ -70,7 +70,7 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
-    cy.get('#entity_type_dropdown').should('exist');
+    cy.get('#entity_type_dropdown').should('be.visible');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formData);
   });

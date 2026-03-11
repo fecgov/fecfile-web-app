@@ -45,13 +45,13 @@ export class ReportListPage {
   static createF1M() {
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('F1M', true);
-    cy.get('[data-cy="form-1m-component"]').should('exist');
+    cy.get('[data-cy="form-1m-component"]').should('be.visible');
   }
 
   static createF24(report = defaultForm24Data) {
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('F24', true, false);
-    cy.get('p-togglebutton').contains(`${report.report_type_24_48} Hour`).should('exist').click();
+    cy.get('p-togglebutton').contains(`${report.report_type_24_48} Hour`).should('be.visible').click();
     cy.get('[data-cy="start-report"]').click();
   }
 

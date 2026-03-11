@@ -37,7 +37,7 @@ describe('Debt Balance at Close Calculation', () => {
 
       // Navigate back to verify the saved debt and then edit it
       ReportListPage.goToReportListPage(result.report);
-      cy.contains('Debt Owed By Committee').should('exist');
+      cy.contains('Debt Owed By Committee').should('be.visible');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 
@@ -82,7 +82,7 @@ describe('Debt Balance at Close Calculation', () => {
 
       // Navigate back and edit the debt
       ReportListPage.goToReportListPage(result.report);
-      cy.contains('Debt Owed By Committee').should('exist');
+      cy.contains('Debt Owed By Committee').should('be.visible');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 

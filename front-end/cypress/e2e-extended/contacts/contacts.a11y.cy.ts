@@ -39,7 +39,7 @@ const getContactsTableContainer = () =>
   cy.contains('h1', 'Manage contacts')
     .should('be.visible')
     .closest('p-table')
-    .should('exist');
+    .should('be.visible');
 
 const checkCritical = ($el: JQuery<HTMLElement>) => {
   cy.checkA11yCritical($el, undefined, WAIVERS);
@@ -100,11 +100,11 @@ describe('Contacts - axe smoke (critical)', () => {
           });
       });
     PageUtils.clickKababItem(displayName, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
     cy.get(ContactsHelpers.DIALOG)
       .should('be.visible')
       .find('form#form')
-      .should('exist')
+      .should('be.visible')
       .then(checkCritical);
 
     PageUtils.clickButton('Cancel');
@@ -158,15 +158,15 @@ describe('Contacts - axe smoke (critical)', () => {
       '**/api/v1/transactions/?page=1&ordering=transaction_type_identifier&page_size=5&contact=*',
     ).as('getTransactionHistory');
     PageUtils.clickKababItem(displayName, 'Edit');
-    cy.contains(/Edit Contact/i).should('exist');
+    cy.contains(/Edit Contact/i).should('be.visible');
     cy.wait('@getTransactionHistory');
     cy.get('app-table[itemname="transactions"]')
-      .should('exist')
+      .should('be.visible')
       .scrollIntoView({ offset: { top: -120, left: 0 } })
       .should('be.visible')
       .as('transactionHistoryTable');
 
-    cy.get('@transactionHistoryTable').find('table').should('exist');
+    cy.get('@transactionHistoryTable').find('table').should('be.visible');
     cy.get('@transactionHistoryTable').then(checkCritical);
     PageUtils.clickButton('Cancel');
     cy.contains(/Edit Contact/i).should('not.exist');
