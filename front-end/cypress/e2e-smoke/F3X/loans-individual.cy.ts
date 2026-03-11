@@ -5,7 +5,7 @@ import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportListPage } from '../pages/reportListPage';
+import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -16,7 +16,7 @@ function setupLoanReceivedFromIndividual() {
   return cy
     .wrap(DataSetup({ individual: true, individual2: true, committee: true }))
     .then((result: any) => {
-      ReportListPage.goToReportListPage(result.report);
+      ReportTransactionListPage.goToReportTransactionListPage(result.report);
       StartTransaction.Loans().Individual();
       PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
       ContactLookup.getContact(result.individual.last_name);

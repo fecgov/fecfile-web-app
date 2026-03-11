@@ -8,7 +8,7 @@ import {
 import { DataSetup } from '../F3X/setup';
 import { StartTransaction } from '../F3X/utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
-import { ReportListPage } from '../pages/reportListPage';
+import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
 import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpenditureData: DisbursementFormData = {
@@ -27,7 +27,7 @@ describe('Form 24 Independent Expenditures', () => {
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
-      ReportListPage.goToReportListPage(result.f24, false, true, false);
+      ReportTransactionListPage.goToReportTransactionListPage(result.f24, false, true, false);
       StartTransaction.IndependentExpenditures().IndependentExpenditure();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
@@ -45,7 +45,7 @@ describe('Form 24 Independent Expenditures', () => {
       cy.get('#first_name').should('have.value', result.individual.first_name);
       cy.get('#last_name').should('have.value', result.individual.last_name);
 
-      ReportListPage.goToReportListPage(result.report);
+      ReportTransactionListPage.goToReportTransactionListPage(result.report);
       PageUtils.clickSidebarItem('Manage your transactions');
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('be.visible');

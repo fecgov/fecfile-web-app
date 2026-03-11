@@ -5,7 +5,7 @@ import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportListPage } from '../pages/reportListPage';
+import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
 
 describe('Debt Balance at Close Calculation', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('Debt Balance at Close Calculation', () => {
       // causing navigations to occur in the middle of the following
       // script.  To be addressed in FECFILE-2842
       cy.wait(500);
-      ReportListPage.goToReportListPage(result.report);
+      ReportTransactionListPage.goToReportTransactionListPage(result.report);
       
       StartTransaction.Debts().ByCommittee();
 
@@ -36,7 +36,7 @@ describe('Debt Balance at Close Calculation', () => {
       PageUtils.clickButton('Save');
 
       // Navigate back to verify the saved debt and then edit it
-      ReportListPage.goToReportListPage(result.report);
+      ReportTransactionListPage.goToReportTransactionListPage(result.report);
       cy.contains('Debt Owed By Committee').should('be.visible');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
@@ -65,7 +65,7 @@ describe('Debt Balance at Close Calculation', () => {
       // causing navigations to occur in the middle of the following
       // script.  To be addressed in FECFILE-2842
       cy.wait(500);
-      ReportListPage.goToReportListPage(result.report);
+      ReportTransactionListPage.goToReportTransactionListPage(result.report);
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
@@ -81,7 +81,7 @@ describe('Debt Balance at Close Calculation', () => {
       PageUtils.clickButton('Save');
 
       // Navigate back and edit the debt
-      ReportListPage.goToReportListPage(result.report);
+      ReportTransactionListPage.goToReportTransactionListPage(result.report);
       cy.contains('Debt Owed By Committee').should('be.visible');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);

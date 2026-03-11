@@ -1,6 +1,6 @@
 import { ContactListPage } from './contactListPage';
 import { PageUtils } from './pageUtils';
-import { ReportListPage } from './reportListPage';
+import { ReportTransactionListPage } from './ReportTransactionListPage';
 
 export class LoginPage {
   static login() {
@@ -65,7 +65,7 @@ function loginDotGovLogin() {
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
-  cy.get('[data-cy="consent-button"]').click();
+  cy.get('[data-cy="consent-button"]:visible').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
@@ -101,7 +101,7 @@ function retrieveAuthToken() {
 
 export function Initialize() {
   LoginPage.login();
-  ReportListPage.deleteAllReports();
+  ReportTransactionListPage.deleteAllReports();
   ContactListPage.deleteAllContacts();
 }
 

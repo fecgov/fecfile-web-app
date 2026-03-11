@@ -2,7 +2,7 @@ import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 
-export class ReportListPage {
+export class ReportTransactionListPage {
   static goToPage() {
     cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
     cy.visit('/reports');
@@ -10,7 +10,7 @@ export class ReportListPage {
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
-    cy.get('[data-cy="create-report"]').click({ force });
+    cy.get('[data-cy="create-report"]:visible').click({ force });
     cy.get('#typeDropdown').click();
     if (formType === 'F24') {
       cy.get(`[data-cy="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
@@ -34,29 +34,29 @@ export class ReportListPage {
   }
 
   static createF3X(fd = defaultReportFormData) {
-    ReportListPage.goToPage();
+    ReportTransactionListPage.goToPage();
     F3xCreateReportPage.coverageCall();
-    ReportListPage.clickCreateAndSelectForm('F3X');
+    ReportTransactionListPage.clickCreateAndSelectForm('F3X');
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
   }
 
   static createF1M() {
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateAndSelectForm('F1M', true);
+    ReportTransactionListPage.goToPage();
+    ReportTransactionListPage.clickCreateAndSelectForm('F1M', true);
     cy.get('[data-cy="form-1m-component"]').should('be.visible');
   }
 
   static createF24(report = defaultForm24Data) {
-    ReportListPage.goToPage();
-    ReportListPage.clickCreateAndSelectForm('F24', true, false);
+    ReportTransactionListPage.goToPage();
+    ReportTransactionListPage.clickCreateAndSelectForm('F24', true, false);
     cy.get('p-togglebutton').contains(`${report.report_type_24_48} Hour`).should('be.visible').click();
-    cy.get('[data-cy="start-report"]').click();
+    cy.get('[data-cy="start-report"]:visible').click();
   }
 
-  static goToReportListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    return ReportListPage.checkReportListPageLoaded(
+  static goToReportTransactionListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+    return ReportTransactionListPage.checkReportTransactionListPageLoaded(
       reportId,
       includeReceipts,
       includeDisbursements,
@@ -65,23 +65,23 @@ export class ReportListPage {
     );
   }
 
-  private static checkReportListPageLoaded(
+  private static checkReportTransactionListPageLoaded(
     reportId: string,
     includeReceipts = true,
     includeDisbursements = true,
     includeLoans = true,
     visit: Cypress.Chainable = cy.wrap(null),
   ) {
-    ReportListPage.registerReportListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
+    ReportTransactionListPage.registerReportTransactionListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
 
     return visit.then(() => {
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
       cy.contains('Transactions in this report').should('be.visible');
-      ReportListPage.waitForReportListRequests(includeReceipts, includeDisbursements, includeLoans);
+      ReportTransactionListPage.waitForReportTransactionListRequests(includeReceipts, includeDisbursements, includeLoans);
     });
   }
 
-  private static registerReportListInterceptions(
+  private static registerReportTransactionListInterceptions(
     reportId: string,
     includeReceipts = true,
     includeDisbursements = true,
@@ -106,7 +106,7 @@ export class ReportListPage {
     });
   }
 
-  private static waitForReportListRequests(includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+  private static waitForReportTransactionListRequests(includeReceipts = true, includeDisbursements = true, includeLoans = true) {
     const waits = [
       { enabled: includeLoans, alias: 'GetLoans' },
       { enabled: includeDisbursements, alias: 'GetDisbursements' },
