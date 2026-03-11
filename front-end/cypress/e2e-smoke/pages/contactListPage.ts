@@ -37,7 +37,16 @@ export class ContactListPage {
       .scrollIntoView()
       .click();
 
-    cy.contains('[role="option"], .p-select-option', exactValue).should('be.visible').click();
+    cy.get('body')
+      .find('[role="listbox"], .p-select-list')
+      .filter(':visible')
+      .last()
+      .within(() => {
+        cy.contains('[role="option"], .p-select-option', exactValue)
+          .scrollIntoView()
+          .should('be.visible')
+          .click();
+      });
   }
 
   static goToPage() {

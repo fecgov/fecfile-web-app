@@ -11,7 +11,7 @@ describe('Manage contacts', () => {
   });
 
   xit('Create an Individual contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
     cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
@@ -25,7 +25,7 @@ describe('Manage contacts', () => {
   });
 
   it('should not trigger validation failure if telephone is touched', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const formData = { ...contactFormData };
     formData['phone'] = ' ';
     ContactListPage.enterFormData(formData);
@@ -35,7 +35,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Candidate contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
 
     const formData = {
       ...contactFormData,
@@ -57,7 +57,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Committee contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
 
     const formData = {
       ...contactFormData,
@@ -76,7 +76,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create an Organization contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
 
     const formData = {
       ...contactFormData,
@@ -93,7 +93,7 @@ describe('Manage contacts', () => {
   });
 
   it('Empty required fields should display an error message', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '',
@@ -114,7 +114,7 @@ describe('Manage contacts', () => {
   });
 
   it('Fields with too a long string should display an error message', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '012345678901234567890123456789LONG',

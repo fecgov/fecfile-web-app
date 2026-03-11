@@ -26,7 +26,7 @@ describe('Contacts List (/contacts)', () => {
     const uid = Cypress._.random(1000, 9999);
 
     // Individual
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const individualFormData = {
       ...contactFormData,
       last_name: `IndLn${uid}`,
@@ -37,7 +37,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Candidate
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const candidateId = 'H0VA00001';
     const candidateFormData = {
       ...contactFormData,
@@ -54,7 +54,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Committee
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const committeeName = `Committee ${uid}`;
     const committeeId = 'C00000001';
     const committeeFormData = {
@@ -68,7 +68,7 @@ describe('Contacts List (/contacts)', () => {
     cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Organization
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const organizationName = `Organization ${uid}`;
     const organizationFormData = {
       ...contactFormData,
