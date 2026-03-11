@@ -9,15 +9,54 @@ import {
 import { PageUtils } from './pageUtils';
 
 export class ContactListPage {
+  private static getVisibleDialogFormAlias(alias = '') {
+    if (alias) {
+      return PageUtils.getAlias(alias);
+    }
+
+    cy.get('[data-cy="contact-dialog"]:visible')
+      .first()
+      .find('[data-cy="contact-dialog-form"]')
+      .first()
+      .as('contactDialogForm');
+    return '@contactDialogForm';
+  }
+
+  private static selectDialogValue(selectHook: string, value: string, alias = '') {
+    if (!value) {
+      return;
+    }
+
+    const formAlias = ContactListPage.getVisibleDialogFormAlias(alias);
+    const exactValue = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value.trim())}\s*$`);
+
+    cy.get(formAlias)
+      .find(`[data-cy="${selectHook}"]`)
+      .first()
+      .should('exist')
+      .scrollIntoView()
+      .click();
+
+    cy.contains('[role="option"], .p-select-option', exactValue).should('be.visible').click();
+  }
+
   static goToPage() {
     cy.visit('/contacts');
   }
 
+  static openAddContactDialog() {
+    PageUtils.clickButton('Add contact');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('be.visible');
+    cy.get('[data-cy="contact-dialog"]:visible').first().as('contactDialog');
+    cy.get('@contactDialog').find('[data-cy="contact-dialog-form"]').first().as('contactDialogForm');
+    cy.get('@contactDialogForm').find('[data-cy="contact-type-select"]').should('exist');
+  }
+
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
-    alias = PageUtils.getAlias(alias);
+    alias = ContactListPage.getVisibleDialogFormAlias(alias);
 
     if (!excludeContactType) {
-      PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
+      ContactListPage.selectDialogValue('contact-type-select', formData['contact_type'], alias);
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
@@ -39,7 +78,7 @@ export class ContactListPage {
     cy.get(alias).find('#city').safeType(formData['city']);
     cy.get(alias).find('#zip').safeType(formData['zip']);
     cy.get(alias).find('#telephone').safeType(formData['phone']);
-    PageUtils.pSelectDropdownSetValue("app-searchable-select[inputid='state']", formData['state'], alias);
+    ContactListPage.selectDialogValue('contact-state-select', formData['state'], alias);
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
@@ -146,8 +185,7 @@ export class ContactListPage {
 
   private static create(fd: ContactFormData) {
     ContactListPage.goToPage();
-    PageUtils.clickButton('Add contact');
-    cy.wait(150);
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData(fd);
     cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
   }

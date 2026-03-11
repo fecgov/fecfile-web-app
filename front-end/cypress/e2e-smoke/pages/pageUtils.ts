@@ -1,6 +1,22 @@
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
+  private static normalizeText(value: string) {
+    return value.replaceAll(/\s+/g, ' ').trim();
+  }
+
+  private static getExactTextMatcher(value: string) {
+    return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value.trim())}\s*$`);
+  }
+
+  private static isNavigationControlScope(alias: string) {
+    return (
+      alias.includes('navigation-control-splitbutton') ||
+      alias.includes('navigation-control-button') ||
+      alias.includes('navigation-control-dropdown')
+    );
+  }
+
   static closeToast() {
     const alias = PageUtils.getAlias('');
     cy.get(alias).find('.p-toast-close-button').should('exist').click();
@@ -28,10 +44,23 @@ export class PageUtils {
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
+    const exactValue = PageUtils.getExactTextMatcher(value);
 
     if (value) {
-      cy.get(alias).find(querySelector).eq(index).click();
-      cy.contains('p-selectitem', value)
+      cy.get(alias)
+        .find(querySelector)
+        .eq(index)
+        .then(($select) => {
+          const visibleSelect = $select.filter(':visible');
+          const trigger = visibleSelect.length
+            ? visibleSelect.first()
+            : $select.find('.p-select:visible, [role="combobox"]:visible, .p-select-dropdown:visible').first();
+
+          expect(trigger.length, `visible p-select trigger for ${querySelector}`).to.be.greaterThan(0);
+          cy.wrap(trigger).as('trigger');
+          cy.get('@trigger').click();
+        });
+      cy.contains('p-selectitem, .p-select-option, [role="option"]', exactValue)
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
@@ -144,11 +173,42 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .contains('button', name)
+    const label = PageUtils.normalizeText(name);
+
+    const getMatches = (selector: string) =>
+      cy.get(alias)
+        .find(selector)
+        .filter(':visible')
+        .filter((_index, element) => {
+          const htmlElement = element as HTMLElement & { value?: string };
+          const candidate =
+            htmlElement.innerText ||
+            htmlElement.textContent ||
+            htmlElement.getAttribute('aria-label') ||
+            htmlElement.getAttribute('label') ||
+            htmlElement.value ||
+            '';
+          return PageUtils.normalizeText(candidate) === label;
+        });
+
+    if (PageUtils.isNavigationControlScope(alias)) {
+      alias = PageUtils.getAlias('');
+      getMatches(
+        [
+          '[data-cy="navigation-control-splitbutton"]:visible button:visible',
+          '[data-cy="navigation-control-button"]:visible',
+          '[data-cy="navigation-control-dropdown"]:visible',
+          '.p-popover:visible [data-cy="navigation-control-dropdown-option"]:visible',
+        ].join(', ')
+      )
+        .first()
+        .click({ force });
+      return;
+    }
+
+    getMatches('button:visible, a:visible, [role="button"]:visible')
       .first()
-      .as('btn');
-    cy.get('@btn').click({ force });
+      .click({ force });
   }
 
   static dateToString(date: Date) {
@@ -214,14 +274,24 @@ export class PageUtils {
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
+    const label = PageUtils.normalizeText(item);
+
     PageUtils.getKabob(identifier, alias);
     cy.get(PageUtils.getAlias(''))
-      .find('.p-popover')
-      .contains(item)
-      .then(($item) => {
-        cy.wrap($item.first()).as('btn');
-        cy.get('@btn').click();
-      });
+      .find('.p-popover:visible button:visible, .p-popover:visible a:visible, .p-popover:visible [role="menuitem"]:visible')
+      .filter((_index, element) => {
+        const htmlElement = element as HTMLElement & { value?: string };
+        const candidate =
+          htmlElement.innerText ||
+          htmlElement.textContent ||
+          htmlElement.getAttribute('aria-label') ||
+          htmlElement.getAttribute('label') ||
+          htmlElement.value ||
+          '';
+        return PageUtils.normalizeText(candidate) === label;
+      })
+      .first()
+      .click();
   }
 
   static switchCommittee(committeeId: string) {

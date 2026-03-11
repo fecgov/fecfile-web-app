@@ -270,7 +270,7 @@ export class TransactionDetailPage {
       'GET',
       `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
-    cy.contains(/^Save$/).click();
+    PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
     cy.wait('@GetLoans');
     cy.wait('@GetDisbursements');

@@ -1,4 +1,8 @@
-<div [style]="{ display: dialogVisible() ? '' : 'none' }" [class.contact-dialog-not-submitted]="!formSubmitted">
+<div
+  data-cy="contact-dialog"
+  [style]="{ display: dialogVisible() ? '' : 'none' }"
+  [class.contact-dialog-not-submitted]="!formSubmitted"
+>
   <p-dialog
     [visible]="detailVisible"
     [style]="{ width: '90%' }"
@@ -9,7 +13,7 @@
     (visibleChange)="closeDialog($event)"
     closeAriaLabel="closeDialog"
   >
-    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <form id="form" data-cy="contact-dialog-form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="grid">
         <div class="col-12">
           <h3>Contact</h3>
@@ -174,6 +178,7 @@
             <span class="span-label" id="state_territory_label">STATE/TERRITORY</span>
             <app-searchable-select
               inputId="state"
+              dataCy="contact-state-select"
               aria-labelledby="state_territory_label"
               controlName="state"
               [form]="form"

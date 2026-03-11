@@ -286,7 +286,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      PageUtils.clickButton('Save both transactions', '[data-cy="navigation-control-button"]:visible');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -374,7 +374,7 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      PageUtils.clickButton('Save both transactions', '[data-cy="navigation-control-button"]:visible');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');

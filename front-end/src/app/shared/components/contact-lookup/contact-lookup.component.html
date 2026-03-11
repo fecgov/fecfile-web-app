@@ -8,6 +8,7 @@
     <p-select
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
+      data-cy="contact-type-select"
       [options]="contactTypeOptions"
       [readonly]="contactTypeReadOnly"
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"

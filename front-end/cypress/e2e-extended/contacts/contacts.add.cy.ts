@@ -48,7 +48,7 @@ describe('Contacts Add (/contacts)', () => {
     const uid = Cypress._.random(1000, 9999);
     const cases = ContactsHelpers.buildContactTypeCases(uid);
 
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     for (const c of cases) {
       cy.log(`Creating: ${c.label}`);
       const formData = buildFormDataForType(c.type, c.overrides);
@@ -89,7 +89,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Candidate and Committee FEC ID validation fails on bad IDs', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       contact_type: 'Candidate',
@@ -108,7 +108,7 @@ describe('Contacts Add (/contacts)', () => {
     PageUtils.clickButton('Cancel');
     cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       contact_type: 'Committee',
@@ -136,7 +136,7 @@ describe('Contacts Add (/contacts)', () => {
         ];
 
         for (const contactType of types) {
-          PageUtils.clickButton('Add contact');
+          ContactListPage.openAddContactDialog();
           let formData: ContactFormData = {
             ...contactFormData,
             contact_type: contactType,
@@ -183,7 +183,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Validation: missing required fields shows error messages', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '',
@@ -217,7 +217,7 @@ describe('Contacts Add (/contacts)', () => {
     cy.get('tbody', { timeout: 5000 })
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
-        PageUtils.clickButton('Add contact');
+        ContactListPage.openAddContactDialog();
 
         for (const c of cases) {
           cy.log(`Creating via Save & Add More: ${c.label}`);
