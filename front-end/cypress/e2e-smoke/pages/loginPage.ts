@@ -1,6 +1,6 @@
 import { ContactListPage } from './contactListPage';
 import { PageUtils } from './pageUtils';
-import { ReportTransactionListPage } from './ReportTransactionListPage';
+import { ReportTransactionListPage } from './reportTransactionListPage';
 
 export class LoginPage {
   static login() {

@@ -1,5 +1,3 @@
-import { getNormalizedFilingPassword } from '../../support/filing-password';
-
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
