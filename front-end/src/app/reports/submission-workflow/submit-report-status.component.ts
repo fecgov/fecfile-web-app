@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReportStatus, ReportTypes } from 'app/shared/models';
@@ -17,7 +17,7 @@ import { filter } from 'rxjs';
   styleUrls: ['./submit-report-status.component.scss'],
   imports: [ButtonDirective, Ripple, LongDatePipe],
 })
-export class SubmitReportStatusComponent implements OnInit {
+export class SubmitReportStatusComponent {
   reportStatusEnum = ReportStatus;
   private readonly store = inject(Store);
   public readonly router = inject(Router);
@@ -29,17 +29,12 @@ export class SubmitReportStatusComponent implements OnInit {
   readonly fecStatus = computed(() => this.report().upload_submission?.fec_status);
   readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
   readonly reportStatus = computed(() => this.report().report_status as ReportStatus);
-
-  reportCodeLabelMap?: { [key in ReportCodes]: string };
+  readonly reportType = computed(() => this.report().report_code_label);
 
   constructor() {
     this.router.events.pipe(filter((event): event is Scroll => event instanceof Scroll)).subscribe(() => {
       this.form3XService.setActiveReportById(this.report().id!);
     });
-  }
-
-  ngOnInit(): void {
-    this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
   }
 
   public backToReports() {
