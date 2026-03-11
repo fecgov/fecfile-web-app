@@ -234,9 +234,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         );
         // Otherwise, navigate to create another tier 1 transaction
       } else {
-        result = await this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
-        // Reset transaction to new blank transaction of the same type as the destination type
-        this.transaction = getFromJSON({ transaction_type_identifier: event.destinationTransactionType });
+        result = await this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`, {
+          onSameUrlNavigation: 'reload',
+        });
       }
     } else if (event.destination === NavigationDestination.CHILD) {
       // Navigate to create a sub-transaction of the current transaction
