@@ -11,7 +11,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
 import { ContactListPage } from '../pages/contactListPage';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpVoidData: DisbursementFormData = {

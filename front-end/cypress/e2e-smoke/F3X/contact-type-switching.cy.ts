@@ -3,7 +3,7 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 
 describe('Tests that contact data gets cleared out properly when switching types', () => {
   beforeEach(() => {

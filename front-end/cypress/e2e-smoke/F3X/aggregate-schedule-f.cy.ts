@@ -5,7 +5,7 @@ import { makeTransaction } from '../requests/methods';
 import { buildScheduleF } from '../requests/library/transactions';
 import { DataSetup } from './setup';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 
 function generateReportAndContacts(transData: [number, string, boolean][]) {

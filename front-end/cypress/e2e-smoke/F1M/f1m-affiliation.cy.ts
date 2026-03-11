@@ -1,5 +1,5 @@
 import { Initialize } from '../pages/loginPage';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ContactFormData } from '../models/ContactFormModel';
 import type { MockContact } from '../requests/library/contacts';

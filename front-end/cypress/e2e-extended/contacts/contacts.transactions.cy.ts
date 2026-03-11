@@ -7,7 +7,7 @@ import { makeContact, makeF3x } from '../../e2e-smoke/requests/methods';
 import { F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
 import { Individual_A_A, MockContact } from '../../e2e-smoke/requests/library/contacts';
 
-import { ReportTransactionListPage } from '../../e2e-smoke/pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../../e2e-smoke/pages/reportTransactionListPage';
 import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
 import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
 

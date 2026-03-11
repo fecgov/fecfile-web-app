@@ -9,7 +9,7 @@ import { ContactListPage } from '../pages/contactListPage';
 import { ContactLookup } from '../pages/contactLookup';
 import { buildDebtOwedByCommittee } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel'
 

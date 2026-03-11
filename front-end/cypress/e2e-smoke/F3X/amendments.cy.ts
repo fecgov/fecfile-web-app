@@ -1,5 +1,5 @@
 import { PageUtils } from '../pages/pageUtils';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { Initialize } from '../pages/loginPage';
 import { DataSetup } from './setup';
 

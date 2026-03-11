@@ -14,7 +14,7 @@ import {
   LoanInfo,
 } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 
 const formData = {
   ...defaultLoanFormData,

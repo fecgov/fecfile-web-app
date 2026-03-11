@@ -8,7 +8,7 @@ import {
 import { DataSetup } from '../F3X/setup';
 import { StartTransaction } from '../F3X/utils/start-transaction/start-transaction';
 import { faker } from '@faker-js/faker';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { ContactLookup } from '../pages/contactLookup';
 
 const independentExpenditureData: DisbursementFormData = {

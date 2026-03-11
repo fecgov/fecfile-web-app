@@ -11,7 +11,7 @@ import { faker } from '@faker-js/faker';
 import { makeTransaction } from '../requests/methods';
 import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 
 function setupTransactions(secondSame: boolean) {
   return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {

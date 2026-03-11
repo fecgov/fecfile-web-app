@@ -8,7 +8,7 @@ import { defaultScheduleFormData, formTransactionDataForSchedule } from '../mode
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 
 const scheduleData = {
   ...defaultScheduleFormData,

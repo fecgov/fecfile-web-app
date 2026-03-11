@@ -5,7 +5,7 @@ import { DataSetup } from './setup';
 import { ScheduleFormData } from '../models/TransactionFormModel';
 import { Individual } from './utils/start-transaction/receipts';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 

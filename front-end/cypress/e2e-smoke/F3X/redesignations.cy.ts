@@ -10,7 +10,7 @@ import { Contributions } from './utils/start-transaction/disbursements';
 import { F3X_Q1, F3X_Q2 } from '../requests/library/reports';
 import { buildContributionToCandidate } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
-import { ReportTransactionListPage } from '../pages/ReportTransactionListPage';
+import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
