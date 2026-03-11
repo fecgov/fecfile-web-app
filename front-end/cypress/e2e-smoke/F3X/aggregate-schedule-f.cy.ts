@@ -170,13 +170,13 @@ describe('Tests transaction form aggregate calculation', () => {
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 30), '');
 
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
 
@@ -184,7 +184,7 @@ describe('Tests transaction form aggregate calculation', () => {
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 10), '');
 
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
@@ -209,17 +209,17 @@ describe('Tests transaction form aggregate calculation', () => {
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 3, 29), '');
 
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$200.01');
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       cy.contains('Transactions in this report').should('exist');
       cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(2) > a').click();

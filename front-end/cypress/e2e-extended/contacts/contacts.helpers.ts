@@ -542,7 +542,7 @@ export class ContactsHelpers {
 
     cy.wait('@entityDetails');
     cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
-    PageUtils.clickButton('Save');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
     cy.wait('@createContact');
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
@@ -638,7 +638,7 @@ export class ContactsHelpers {
   }
 
   static clickSaveAndHandleConfirm() {
-    cy.contains('button', /^Save$/).click();
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
 
     cy.get('body').then(($body) => {
       const hasConfirm = $body

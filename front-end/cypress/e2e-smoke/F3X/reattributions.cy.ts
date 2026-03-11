@@ -41,7 +41,7 @@ function Reattribute(result: any, old = false) {
     'contribution_date',
   );
 
-  PageUtils.clickButton('Save');
+  PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
   PageUtils.urlCheck('/list');
   cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }

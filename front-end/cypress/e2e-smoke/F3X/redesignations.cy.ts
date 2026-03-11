@@ -36,7 +36,7 @@ function Redesignate(old = false) {
     'expenditure_date',
   );
 
-  PageUtils.clickButton('Save');
+  PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
   PageUtils.urlCheck('/list');
   cy.contains(Contributions.TO_CANDIDATE).should('exist');
 }

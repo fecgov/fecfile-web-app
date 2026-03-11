@@ -296,6 +296,7 @@
             label="Save & continue"
             icon="pi pi-check"
             class="p-button-info"
+            data-cy="contact-dialog-actions"
             (click)="submitForm()"
           ></button>
         } @else {
@@ -306,6 +307,7 @@
             label="Save"
             icon="pi pi-check"
             class="p-button-primary"
+            data-cy="contact-dialog-actions"
             (click)="submitForm()"
           ></button>
           @if (isNewItem) {
@@ -316,6 +318,7 @@
               label="Save & Add More"
               icon="pi pi-check"
               class="p-button-info"
+              data-cy="contact-dialog-actions"
               (click)="submitForm('continue')"
             ></button>
           }

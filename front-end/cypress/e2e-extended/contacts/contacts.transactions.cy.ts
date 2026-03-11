@@ -236,7 +236,7 @@ const clickSaveAndConfirmCreatesNewContact = (
     `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
   ).as('GetDisbursements');
 
-  PageUtils.clickButton('Save');
+  PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
   assertCreatesNewContactConfirmMessage(contactTypeLower, contactDisplay);
 
@@ -534,7 +534,7 @@ describe('Contacts: Transactions integration', () => {
       cy.get('#occupation').should('have.value', '').click();
 
       cy.contains('button', 'Save').scrollIntoView();
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
       cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
@@ -543,7 +543,7 @@ describe('Contacts: Transactions integration', () => {
       cy.get('#employer').type(newEmployer);
       cy.get('#occupation').type(newOccupation);
 
-      PageUtils.clickButton('Save');
+      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
 
       assertSuggestedChangesConfirmDialog(displayName, [
         `Updated employer to ${newEmployer}`,

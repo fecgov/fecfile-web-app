@@ -234,20 +234,26 @@ export class PageUtils {
   }
 
   static enterSecondCommitteeEmailIfneeded() {
-    cy.get(PageUtils.getAlias(''))
-      .find('[id="second-committee-admin-dialog"]')
-      .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
-      .then(($email) => {
-        if ($email.length) {
-          cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
-          cy.get('#email').should('have.value', '');
-          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-          cy.get('#email').should('have.value', 'admin@admin.com');
-          cy.get('#email').click();
-          PageUtils.clickButton('Save');
+    const secondCommitteeEmailSelector = '[data-cy="second-committee-email"]:visible';
+    const secondCommitteeActionsSelector = '[data-cy="second-committee-admin-actions"]:visible';
+
+    cy.get('body').then(($body) => {
+      if (!$body.find(secondCommitteeEmailSelector).length) return;
+
+      cy.get(secondCommitteeEmailSelector).first().as('secondCommitteeEmail');
+      cy.get('@secondCommitteeEmail').should('have.value', '');
+      cy.get('@secondCommitteeEmail').clear().type('admin@admin.com');
+      cy.get('@secondCommitteeEmail').should('have.value', 'admin@admin.com');
+      cy.get('@secondCommitteeEmail').click();
+      cy.contains(secondCommitteeActionsSelector, 'Save').click();
+      cy.get(secondCommitteeEmailSelector).should('not.exist');
+
+      cy.get('body').then(($updatedBody) => {
+        if ($updatedBody.find('.p-toast-close-button:visible').length) {
+          cy.get('.p-toast-close-button:visible').first().click();
         }
       });
-    cy.contains('Welcome to FECfile+').should('not.exist');
+    });
   }
 
   static submitReportForm() {

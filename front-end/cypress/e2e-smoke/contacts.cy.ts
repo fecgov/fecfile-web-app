@@ -14,8 +14,8 @@ describe('Manage contacts', () => {
     PageUtils.clickButton('Add contact');
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -30,8 +30,8 @@ describe('Manage contacts', () => {
     formData['phone'] = ' ';
     ContactListPage.enterFormData(formData);
 
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
   });
 
   it('Create a Candidate contact', () => {
@@ -46,8 +46,8 @@ describe('Manage contacts', () => {
       candidate_district: '01',
     };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -65,8 +65,8 @@ describe('Manage contacts', () => {
       committee_id: 'C00000001',
     };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -83,8 +83,8 @@ describe('Manage contacts', () => {
       contact_type: 'Organization',
     };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -103,7 +103,7 @@ describe('Manage contacts', () => {
       state: '',
       zip: '',
     });
-    PageUtils.clickButton('Save');
+    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
