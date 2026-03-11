@@ -36,37 +36,36 @@
       </div>
     </div>
   }
-  <div class="flex p-2 mb-4">
-    <p-checkbox
-      inputId="line_of_credit"
-      [binary]="true"
-      formControlName="line_of_credit"
-      ariaLabel="This loan has a line of credit"
-    />
-    <label for="line_of_credit" class="mb-0 ml-2 cursor-pointer">
-      This loan has a line of credit <span class="paren-label">(OPTIONAL)</span>
-    </label>
-  </div>
-  @if (showLineOfCredit) {
-    <div class="grid">
-      <div class="col-4">
-        <div class="field">
+  <div class="mb-4">
+    <div class="flex p-2">
+      <p-checkbox
+        inputId="line_of_credit"
+        [binary]="true"
+        formControlName="line_of_credit"
+        ariaLabel="This loan has a line of credit"
+      />
+      <label for="line_of_credit" class="mb-0 ml-2 cursor-pointer">
+        This loan has a line of credit <span class="paren-label">(OPTIONAL)</span>
+      </label>
+    </div>
+    @if (showLineOfCredit) {
+      <div class="flex p-2 gap-3 w-8">
+        <div class="field mb-0 w-6">
           <label [for]="creditAmountThisDrawId.id" [id]="creditAmountThisDrawId.label">
             CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span>
           </label>
           <app-input-number [inputId]="creditAmountThisDrawId.id" formControlName="credit_amount_this_draw" />
           <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" />
         </div>
-      </div>
-      <div class="col-4">
-        <div class="field">
+        <div class="field mb-0 w-6">
           <label [id]="balanceId.label" [for]="balanceId.id">TOTAL BALANCE</label>
           <app-input-number [inputId]="balanceId.id" [formControlName]="templateMap['balance']" />
           <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" />
         </div>
       </div>
-    </div>
-  }
+    }
+  </div>
+
   <hr type="solid" />
   <h2>Others liable</h2>
   <app-yes-no-radio-input
