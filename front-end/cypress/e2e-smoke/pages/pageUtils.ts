@@ -53,8 +53,7 @@ export class PageUtils {
   }
 
   static pickDay(day: string) {
-    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
-    cy.get('@calendarElement')
+    cy.get('@calendarElement:visible')
       .find('td')
       .find('span')
       .not('.p-disabled')
@@ -68,49 +67,49 @@ export class PageUtils {
   static pickMonth(month: number) {
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const Month: string = Months[month];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
+    cy.get('@calendarElement:visible').find('.p-datepicker-month').contains(Month).click({ force: true });
   }
 
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.get('@calendarElement:visible').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
     cy.wait(100);
-    cy.get('@calendarElement').then(($calendarElement) => {
+    cy.get('@calendarElement:visible').then(($calendarElement) => {
       if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
+        cy.get('@calendarElement:visible').find('.p-datepicker-select-year').click({ force: true });
       }
     });
-    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
+    cy.get('@calendarElement:visible').find('.p-datepicker-decade').should('be.visible');
 
     const decadeStart: number = currentYear - (currentYear % 10);
     const decadeEnd: number = decadeStart + 9;
     if (year < decadeStart) {
       for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
+        cy.get('@calendarElement:visible').find('.p-datepicker-prev-button').click();
       }
     }
     if (year > decadeEnd) {
       for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
+        cy.get('@calendarElement:visible').find('.p-datepicker-next-button').click();
       }
     }
-    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
+    cy.get('body:visible').find('.p-datepicker-year:visible').contains(year.toString()).click();
   }
 
   static clickSidebarSection(section: string) {
     cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+    cy.get('@section:visible').click();
   }
 
   static clickSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click({ force: true });
+    cy.get('@menuItem:visible').click();
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').as('PanelMenu');
-    cy.get('@PanelMenu').contains('a', menuItem).should('be.visible');
+    cy.get('@PanelMenu:visible').contains('a', menuItem);
   }
 
   static shouldNotHaveSidebarItem(menuItem: string) {
@@ -150,7 +149,7 @@ export class PageUtils {
       .contains('button', name)
       .first()
       .as('btn');
-    cy.get('@btn').click({ force });
+    cy.get('@btn:visible').click({ force });
   }
 
   static dateToString(date: Date) {
@@ -211,7 +210,7 @@ export class PageUtils {
       .children()
       .then(($btn) => {
         cy.wrap($btn.first()).as('btn');
-        cy.get('@btn').click();
+        cy.get('@btn:visible').click();
       });
   }
 
@@ -222,7 +221,7 @@ export class PageUtils {
       .contains(item)
       .then(($item) => {
         cy.wrap($item.first()).as('btn');
-        cy.get('@btn').click();
+        cy.get('@btn:visible').click();
       });
   }
 
@@ -242,10 +241,10 @@ export class PageUtils {
       .then(($email) => {
         if ($email.length) {
           cy.contains('Welcome to FECfile+').should('be.visible').click(); // Ensures that the modal is in focus
-          cy.get('#email').should('have.value', '');
-          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-          cy.get('#email').should('have.value', 'admin@admin.com');
-          cy.get('#email').click();
+          cy.get('#email:visible').should('have.value', '');
+          cy.get('#email:visible').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+          cy.get('#email:visible').should('have.value', 'admin@admin.com');
+          cy.get('#email:visible').click();
           PageUtils.clickButton('Save');
         }
       });
@@ -253,19 +252,17 @@ export class PageUtils {
   }
 
   static submitReportForm() {
-    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
+    cy.intercept('POST', '**/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    return getNormalizedFilingPassword().then((filingPassword) => {
-      PageUtils.enterValue('#filingPassword', filingPassword);
-      cy.get(alias).find('[data-cy="userCertified"]').first().click();
-      PageUtils.clickButton('Submit');
-      PageUtils.findOnPage('div', 'Are you sure?');
-      PageUtils.clickButton('Confirm');
-      cy.wait('@SubmitReport');
-    });
+    PageUtils.enterValue('#filingPassword:visible', 'filing!Passw0rd');
+    cy.get(alias).find('[data-cy="userCertified"]:visible').first().click();
+    PageUtils.clickButton('Submit');
+    PageUtils.findOnPage('div', 'Are you sure?');
+    PageUtils.clickButton('Confirm');
+    cy.wait('@SubmitReport');
   }
 
   static readonly blurActiveField = () => {

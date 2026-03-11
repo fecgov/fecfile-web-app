@@ -22,17 +22,17 @@ function checkTable(index: number, type: string, containMemo: boolean, value: st
 
   // this block of checks is here to ensure all columns exist
   // (and to prove to knip that every part of the TransactionTableColumns enum is needed)
-  cy.get('@row').find('td').eq(TransactionTableColumns.line_number).should('be.visible');
-  cy.get('@row').find('td').eq(TransactionTableColumns.date).should('be.visible');
-  cy.get('@row').find('td').eq(TransactionTableColumns.amount).should('be.visible');
-  cy.get('@row').find('td').eq(TransactionTableColumns.actions).should('be.visible');
+  cy.get('@row:visible').find('td').eq(TransactionTableColumns.line_number).should('be.visible');
+  cy.get('@row:visible').find('td').eq(TransactionTableColumns.date).should('be.visible');
+  cy.get('@row:visible').find('td').eq(TransactionTableColumns.amount).should('be.visible');
+  cy.get('@row:visible').find('td').eq(TransactionTableColumns.actions).should('be.visible');
 
-  cy.get('@row').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
-  cy.get('@row')
+  cy.get('@row:visible').find('td').eq(TransactionTableColumns.transaction_type).should('contain', type);
+  cy.get('@row:visible')
     .find('td')
     .eq(TransactionTableColumns.memo_code)
     .should(containMemo ? 'contain' : 'not.contain', 'Y');
-  cy.get('@row').find('td').eq(TransactionTableColumns.aggregate).should('contain', value);
+  cy.get('@row:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', value);
 }
 
 describe('Receipt Transactions', () => {
@@ -59,13 +59,13 @@ describe('Receipt Transactions', () => {
 
       // Check values of edit form
       PageUtils.clickLink('Individual Receipt');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Individual');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Individual');
       ContactListPage.assertFormData(individual, true);
       TransactionDetailPage.assertFormData(scheduleData, '', '#contribution_date');
 
       // Check for regression on date error
-      cy.get('#contribution_date').clear();
+      cy.get('#contribution_date:visible').clear();
       PageUtils.clickButton('Save'); // Triggers errors to show
       cy.get('app-calendar').should('be.visible').should('contain', 'This is a required field.');
     });
@@ -100,8 +100,8 @@ describe('Receipt Transactions', () => {
 
       // Check values of edit form
       PageUtils.clickLink('Returned/Bounced Receipt');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Individual');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Individual');
       ContactListPage.assertFormData(individual, true);
       TransactionDetailPage.assertFormData(negativeAmountFormData, '', '#contribution_date');
     });
@@ -158,8 +158,8 @@ describe('Receipt Transactions', () => {
 
       // Check form values of receipt form
       PageUtils.clickLink('Partnership Receipt');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Organization');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Organization');
       ContactListPage.assertFormData(org, true);
       TransactionDetailPage.assertFormData(
         {
@@ -173,8 +173,8 @@ describe('Receipt Transactions', () => {
       PageUtils.urlCheck('/list');
       // Check form values of memo form
       PageUtils.clickLink('Partnership Attribution');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Individual');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Individual');
       ContactListPage.assertFormData(individual, true);
       TransactionDetailPage.assertFormData(
         {
@@ -212,8 +212,8 @@ describe('Receipt Transactions', () => {
 
       // Check values of edit form
       PageUtils.clickLink('Party Receipt');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Committee');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Committee');
       ContactListPage.assertFormData(committee, true);
       TransactionDetailPage.assertFormData(localFormTransactionData, '', '#contribution_date');
     });
@@ -243,8 +243,8 @@ describe('Receipt Transactions', () => {
 
       // Check values of edit form
       PageUtils.clickLink('Refund of Contribution to Other Political Committee');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Committee');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Committee');
       ContactListPage.assertFormData(committee, true);
       TransactionDetailPage.assertFormData(transactionFormData, '', '#contribution_date');
     });
@@ -290,19 +290,19 @@ describe('Receipt Transactions', () => {
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Earmark Receipt');
-      cy.get('@row-1')
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Earmark Receipt');
+      cy.get('@row-1:visible')
         .find('td')
         .eq(TransactionTableColumns.name)
         .should('contain', `${individual['last_name']}, ${individual['first_name']}`);
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       cy.get('tbody tr').eq(1).as('row-2');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Earmark Memo');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.name).should('contain', committee['name']);
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'Earmark Memo');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.name).should('contain', committee['name']);
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       // Check form values of receipt edit form
       PageUtils.clickLink('Earmark Receipt');
@@ -378,25 +378,25 @@ describe('Receipt Transactions', () => {
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'PAC Earmark Receipt');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.name).should('contain', committee['name']);
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'PAC Earmark Receipt');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.name).should('contain', committee['name']);
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       cy.get('tbody tr').eq(1).as('row-2');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'PAC Earmark Memo');
-      cy.get('@row-2')
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.transaction_type).should('contain', 'PAC Earmark Memo');
+      cy.get('@row-2:visible')
         .find('td')
         .eq(TransactionTableColumns.name)
         .should('contain', `${individual['last_name']}, ${individual['first_name']}`);
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       // Check form values of receipt edit form
       PageUtils.clickLink('PAC Earmark Receipt');
       PageUtils.clickAccordion('STEP ONE');
-      cy.get('@stepOneAccordion').find('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
+      cy.get('@stepOneAccordion:visible').find('#entity_type_dropdown.readonly').should('be.visible');
+      cy.get('@stepOneAccordion:visible').find('#entity_type_dropdown').should('contain', 'Committee');
       ContactListPage.assertFormData(committee, true, '@stepOneAccordion');
       TransactionDetailPage.assertFormData(
         {
@@ -409,8 +409,8 @@ describe('Receipt Transactions', () => {
 
       // Check form values of memo edit form
       PageUtils.clickAccordion('STEP TWO');
-      cy.get('@stepTwoAccordion').find('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
+      cy.get('@stepTwoAccordion:visible').find('#entity_type_dropdown.readonly').should('be.visible');
+      cy.get('@stepTwoAccordion:visible').find('#entity_type_dropdown').should('contain', 'Individual');
       ContactListPage.assertFormData(individual, true, '@stepTwoAccordion');
       TransactionDetailPage.assertFormData(
         {
@@ -474,34 +474,34 @@ describe('Receipt Transactions', () => {
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
-      cy.get('@row-1')
+      cy.get('@row-1:visible')
         .find('td')
         .as('joint_fundraising_transfer_link')
         .eq(TransactionTableColumns.transaction_type)
         .should('contain', 'Joint Fundraising Transfer');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
-      cy.get('@row-1').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.memo_code).should('not.contain', 'Y');
+      cy.get('@row-1:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       cy.get('tbody tr').eq(1).as('row-2');
-      cy.get('@row-2')
+      cy.get('@row-2:visible')
         .find('td')
         .eq(TransactionTableColumns.transaction_type)
         .should('contain', 'Partnership Receipt Joint Fundraising Transfer Memo');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-      cy.get('@row-2').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
+      cy.get('@row-2:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       cy.get('tbody tr').eq(2).as('row-3');
-      cy.get('@row-3')
+      cy.get('@row-3:visible')
         .find('td')
         .eq(TransactionTableColumns.transaction_type)
         .should('contain', 'Individual Joint Fundraising Transfer Memo');
-      cy.get('@row-3').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
-      cy.get('@row-3').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
+      cy.get('@row-3:visible').find('td').eq(TransactionTableColumns.memo_code).should('contain', 'Y');
+      cy.get('@row-3:visible').find('td').eq(TransactionTableColumns.aggregate).should('contain', '$200.01');
 
       // Check form values of receipt form
       PageUtils.clickLink('Joint Fundraising Transfer', '@joint_fundraising_transfer_link');
-      cy.get('#entity_type_dropdown.readonly').should('be.visible');
-      cy.get('#entity_type_dropdown').should('contain', 'Committee');
+      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+      cy.get('#entity_type_dropdown:visible').should('contain', 'Committee');
       ContactListPage.assertFormData(committee, true);
       TransactionDetailPage.assertFormData(
         {
@@ -522,8 +522,8 @@ describe('Receipt Transactions', () => {
 
       StartTransaction.Receipts().RegisteredFilers().PAC();
       ContactLookup.getCommittee(committee);
-      cy.get('#organization_name').should('be.visible').should('have.value', committee.name);
-      cy.get('#committee_fec_id').should('be.visible').should('have.value', committee.committee_id);
+      cy.get('#organization_name:visible').should('be.visible').should('have.value', committee.name);
+      cy.get('#committee_fec_id:visible').should('be.visible').should('have.value', committee.committee_id);
     });
   });
 });

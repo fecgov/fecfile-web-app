@@ -523,7 +523,7 @@ export class ContactsHelpers {
     }
 
     PageUtils.clickButton('Add contact');
-    cy.get('#entity_type_dropdown').first().click();
+    cy.get('#entity_type_dropdown:visible').first().click();
 
     cy.contains('.p-select-option', entityLabel)
       .scrollIntoView({ offset: { top: 0, left: 0 } })

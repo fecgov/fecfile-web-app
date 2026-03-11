@@ -323,9 +323,9 @@ describe('Contacts - delete guard', () => {
 
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
     cy.wait('@getDeletedContacts');
-    cy.get('#restoreButton').should('be.disabled');
+    cy.get('#restoreButton:visible').should('be.disabled');
     ContactsDeleteHelpers.selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
-    cy.get('#restoreButton').should('not.be.disabled').click();
+    cy.get('#restoreButton:visible').should('not.be.disabled').click();
 
     cy.wait('@restoreContact');
     cy.wait('@getDeletedContacts');

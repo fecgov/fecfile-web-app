@@ -295,7 +295,7 @@ export class TransactionDetailPage {
     PageUtils.closeToast();
     cy.contains('Guarantors to loan source').should('be.visible');
     ContactLookup.getContact(name);
-    cy.get('#amount').safeType(amount);
+    cy.get('#amount:visible').safeType(amount);
     cy.intercept({
       method: 'Post',
     }).as('saveGuarantor');

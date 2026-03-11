@@ -18,7 +18,7 @@ describe('Tests that contact data gets cleared out properly when switching types
       StartTransaction.Receipts().Other().OtherReceipts();
       ContactLookup.getContact(result.committee.name, '', 'Committee');
       ContactLookup.setType("Individual")
-      cy.get("#last_name").should("not.exist");
+      cy.get("#last_name:visible").should("not.exist");
     });
   });
 

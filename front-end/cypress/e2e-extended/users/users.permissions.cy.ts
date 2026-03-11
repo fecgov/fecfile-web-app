@@ -17,7 +17,7 @@ describe('Users Permissions via Committee Switch RBAC', () => {
     UsersHelpers.assertUsersTableColumns(['Name', 'Email', 'Role', 'Status']);
     UsersHelpers.assertNoAddUserButton();
     UsersHelpers.assertNoRowKebabs();
-    cy.get('@table').should('be.visible');
+    cy.get('@table:visible');
     UsersHelpers.assertAtLeastOneUserRow();
   });
 

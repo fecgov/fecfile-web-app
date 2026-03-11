@@ -25,9 +25,9 @@ function setupCoordinatedPartyExpenditure(
   ContactLookup.getCandidate(candidate, [], [], '#contact_2_lookup');
 
   TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
-  cy.get('#general_election_year').safeType(currentYear);
-  cy.get('#amount').safeType(100);
-  cy.get('#purpose_description').first().safeType('test');
+  cy.get('#general_election_year:visible').safeType(currentYear);
+  cy.get('#amount:visible').safeType(100);
+  cy.get('#purpose_description:visible').first().safeType('test');
 
   PageUtils.clickButton('Save');
 }
@@ -153,10 +153,10 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#balance').should('be.visible').should('have.value', '$0.00');
-      cy.get('#amount').should('have.value', '$10,000.00');
-      cy.get('#payment_amount').should('have.value', '$1,000.00');
-      cy.get('#balance_at_close').should('have.value', '$9,000.00');
+      cy.get('#balance:visible').should('be.visible').should('have.value', '$0.00');
+      cy.get('#amount:visible').should('have.value', '$10,000.00');
+      cy.get('#payment_amount:visible').should('have.value', '$1,000.00');
+      cy.get('#balance_at_close:visible').should('have.value', '$9,000.00');
 
       ReportTransactionListPage.createF3X({
         ...defaultForm3XData,
@@ -172,7 +172,7 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#amount').should('be.visible').clear().safeType('2500');
+      cy.get('#amount:visible').should('be.visible').clear().safeType('2500');
       PageUtils.clickButton("Save");
       PageUtils.urlCheck('/list');
 
@@ -209,10 +209,10 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#balance').should('be.visible').should('have.value', '$9,000.00');
-      cy.get('#amount').should('have.value', '$2,500.00');
-      cy.get('#payment_amount').should('have.value', '$11,500.00');
-      cy.get('#balance_at_close').should('have.value', '$0.00');
+      cy.get('#balance:visible').should('be.visible').should('have.value', '$9,000.00');
+      cy.get('#amount:visible').should('have.value', '$2,500.00');
+      cy.get('#payment_amount:visible').should('have.value', '$11,500.00');
+      cy.get('#balance_at_close:visible').should('have.value', '$0.00');
 
       cy.intercept(
         'GET',

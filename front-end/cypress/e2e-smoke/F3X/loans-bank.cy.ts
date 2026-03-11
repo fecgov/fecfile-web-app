@@ -215,11 +215,11 @@ describe('Loans', () => {
       cy.wait('@saveAddGuarantor');
       cy.contains('h1', 'Guarantors to loan source').should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
-      cy.get('#amount').safeType(formData['amount']);
+      cy.get('#amount:visible').safeType(formData['amount']);
       TransactionDetailPage.clickSave(result.report);
       clickLoan('Edit');
       cy.contains('ORGANIZATION NAME').should('be.visible');
-      cy.get('#organization_name').should('have.value', result.organization.name);
+      cy.get('#organization_name:visible').should('have.value', result.organization.name);
     });
   });
 });

@@ -166,8 +166,8 @@ describe('Contacts - axe smoke (critical)', () => {
       .should('be.visible')
       .as('transactionHistoryTable');
 
-    cy.get('@transactionHistoryTable').find('table').should('be.visible');
-    cy.get('@transactionHistoryTable').then(checkCritical);
+    cy.get('@transactionHistoryTable:visible').find('table:visible');
+    cy.get('@transactionHistoryTable:visible').then(checkCritical);
     PageUtils.clickButton('Cancel');
     cy.contains(/Edit Contact/i).should('not.exist');
   });

@@ -28,20 +28,20 @@ export class UsersPage {
   static create(fd: UserFormData) {
     UsersPage.goToPage();
     PageUtils.clickButton('Add user');
-    cy.get('#content-offset app-committee-member-dialog')
+    cy.get('#content-offset app-committee-member-dialog:visible')
       .filter(':visible')
       .first()
       .as('dialog');
 
     UsersPage.enterFormData(fd, false, '@dialog');
-    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
+    cy.get('@dialog:visible').find('[data-cy="membership-submit"]:visible').click();
   }
 
 
   static editRole(fd: UserFormData, alias = '') {
     UsersPage.goToPage();
     PageUtils.clickKababItem(fd.email, 'Edit Role');
-    cy.get('#content-offset app-committee-member-dialog')
+    cy.get('#content-offset app-committee-member-dialog:visible')
       .filter(':visible')
       .first()
       .as('dialog');
@@ -51,7 +51,7 @@ export class UsersPage {
       fd['role'],
       '@dialog'
     );
-    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
+    cy.get('@dialog:visible').find('[data-cy="membership-submit"]:visible').click();
   }
 
   static delete(email: string) {

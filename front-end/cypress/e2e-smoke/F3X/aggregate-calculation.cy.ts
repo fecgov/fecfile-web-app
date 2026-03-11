@@ -205,7 +205,7 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$100.00');
+      cy.get('#calendar_ytd:visible').should('have.value', '$100.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('be.visible');
 
@@ -232,7 +232,7 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$150.00');
+      cy.get('#calendar_ytd:visible').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('be.visible');
 
@@ -259,7 +259,7 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$175.00');
+      cy.get('#calendar_ytd:visible').should('have.value', '$175.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('be.visible');
 
@@ -268,13 +268,13 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.contains('Payee').should('be.visible');
       TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$150.00');
+      cy.get('#calendar_ytd:visible').should('have.value', '$150.00');
       PageUtils.clickButton('Save');
       cy.contains('Transactions in this report').should('be.visible');
 
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
       cy.contains('Payee').should('be.visible');
-      cy.get('#calendar_ytd').should('have.value', '$50.00');
+      cy.get('#calendar_ytd:visible').should('have.value', '$50.00');
     });
   });
 });

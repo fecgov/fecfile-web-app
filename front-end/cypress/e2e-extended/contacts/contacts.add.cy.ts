@@ -101,7 +101,7 @@ describe('Contacts Add (/contacts)', () => {
       first_name: 'Candidate',
     });
     PageUtils.clickButton('Save');
-    cy.get('#candidate_id')
+    cy.get('#candidate_id:visible')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
@@ -116,7 +116,7 @@ describe('Contacts Add (/contacts)', () => {
       name: 'Bad Committee',
     });
     PageUtils.clickButton('Save');
-    cy.get('#committee_id')
+    cy.get('#committee_id:visible')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
@@ -194,13 +194,13 @@ describe('Contacts Add (/contacts)', () => {
       zip: '',
     });
     PageUtils.clickButton('Save');
-    cy.get('#last_name').parent().should('contain', 'This is a required field');
-    cy.get('#first_name').parent().should('contain', 'This is a required field');
-    cy.get('#street_1').parent().should('contain', 'This is a required field');
-    cy.get('#street_2').parent().should('not.contain', 'This is a required field');
-    cy.get('#city').parent().should('contain', 'This is a required field');
+    cy.get('#last_name:visible').parent().should('contain', 'This is a required field');
+    cy.get('#first_name:visible').parent().should('contain', 'This is a required field');
+    cy.get('#street_1:visible').parent().should('contain', 'This is a required field');
+    cy.get('#street_2:visible').parent().should('not.contain', 'This is a required field');
+    cy.get('#city:visible').parent().should('contain', 'This is a required field');
     cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
-    cy.get('#zip').parent().should('contain', 'This is a required field');
+    cy.get('#zip:visible').parent().should('contain', 'This is a required field');
     PageUtils.clickButton('Cancel');
     cy.contains('Save').should('not.exist');
   });
@@ -232,19 +232,19 @@ describe('Contacts Add (/contacts)', () => {
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {
-            cy.get('#last_name').should('have.value', '');
-            cy.get('#first_name').should('have.value', '');
+            cy.get('#last_name:visible').should('have.value', '');
+            cy.get('#first_name:visible').should('have.value', '');
           } else {
-            cy.get('#name').should('have.value', '');
+            cy.get('#name:visible').should('have.value', '');
           }
-          cy.get('#street_1').should('have.value', '');
-          cy.get('#city').should('have.value', '');
-          cy.get('#zip').should('have.value', '');
+          cy.get('#street_1:visible').should('have.value', '');
+          cy.get('#city:visible').should('have.value', '');
+          cy.get('#zip:visible').should('have.value', '');
           if (c.type === 'Candidate') {
-            cy.get('#candidate_id').should('have.value', '');
+            cy.get('#candidate_id:visible').should('have.value', '');
           }
           if (c.type === 'Committee') {
-            cy.get('#committee_id').should('have.value', '');
+            cy.get('#committee_id:visible').should('have.value', '');
           }
         }
 

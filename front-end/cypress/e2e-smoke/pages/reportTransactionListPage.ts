@@ -11,7 +11,7 @@ export class ReportTransactionListPage {
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
     cy.get('[data-cy="create-report"]:visible').click({ force });
-    cy.get('#typeDropdown').click();
+    cy.get('#typeDropdown:visible').click();
     if (formType === 'F24') {
       cy.get(`[data-cy="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
     }

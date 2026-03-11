@@ -19,8 +19,8 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
-    cy.get('#entity_type_dropdown.readonly').should('be.visible');
-    cy.get('#entity_type_dropdown').should('contain', 'Individual');
+    cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
+    cy.get('#entity_type_dropdown:visible').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
   });
 
@@ -51,8 +51,8 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
-    cy.get('#entity_type_dropdown').should('be.visible');
-    cy.get('#entity_type_dropdown').should('contain', 'Candidate');
+    cy.get('#entity_type_dropdown:visible').should('be.visible');
+    cy.get('#entity_type_dropdown:visible').should('contain', 'Candidate');
     ContactListPage.assertFormData(formData);
   });
 
@@ -70,8 +70,8 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
-    cy.get('#entity_type_dropdown').should('be.visible');
-    cy.get('#entity_type_dropdown').should('contain', 'Committee');
+    cy.get('#entity_type_dropdown:visible').should('be.visible');
+    cy.get('#entity_type_dropdown:visible').should('contain', 'Committee');
     ContactListPage.assertFormData(formData);
   });
 
@@ -88,7 +88,7 @@ describe('Manage contacts', () => {
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
-    cy.get('#entity_type_dropdown').should('contain', 'Organization');
+    cy.get('#entity_type_dropdown:visible').should('contain', 'Organization');
     ContactListPage.assertFormData(formData);
   });
 
@@ -104,13 +104,13 @@ describe('Manage contacts', () => {
       zip: '',
     });
     PageUtils.clickButton('Save');
-    cy.get('#last_name').parent().should('contain', 'This is a required field');
-    cy.get('#first_name').parent().should('contain', 'This is a required field');
-    cy.get('#street_1').parent().should('contain', 'This is a required field');
-    cy.get('#street_2').parent().should('not.contain', 'This is a required field');
-    cy.get('#city').parent().should('contain', 'This is a required field');
+    cy.get('#last_name:visible').parent().should('contain', 'This is a required field');
+    cy.get('#first_name:visible').parent().should('contain', 'This is a required field');
+    cy.get('#street_1:visible').parent().should('contain', 'This is a required field');
+    cy.get('#street_2:visible').parent().should('not.contain', 'This is a required field');
+    cy.get('#city:visible').parent().should('contain', 'This is a required field');
     cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
-    cy.get('#zip').parent().should('contain', 'This is a required field');
+    cy.get('#zip:visible').parent().should('contain', 'This is a required field');
   });
 
   it('Fields with too a long string should display an error message', () => {
@@ -129,19 +129,19 @@ describe('Manage contacts', () => {
       employer: '012345678901234567890123456789012345678LONG',
       occupation: '012345678901234567890123456789012345678LONG',
     });
-    cy.get('#last_name').parent().should('contain', 'This field cannot contain more than 30 alphanumeric characters.');
-    cy.get('#first_name').parent().should('contain', 'This field cannot contain more than 20 alphanumeric characters.');
-    cy.get('#middle_name')
+    cy.get('#last_name:visible').parent().should('contain', 'This field cannot contain more than 30 alphanumeric characters.');
+    cy.get('#first_name:visible').parent().should('contain', 'This field cannot contain more than 20 alphanumeric characters.');
+    cy.get('#middle_name:visible')
       .parent()
       .should('contain', 'This field cannot contain more than 20 alphanumeric characters.');
-    cy.get('#prefix').parent().should('contain', 'This field cannot contain more than 10 alphanumeric characters.');
-    cy.get('#suffix').parent().should('contain', 'This field cannot contain more than 10 alphanumeric characters.');
-    cy.get('#street_1').parent().should('contain', 'This field cannot contain more than 34 alphanumeric characters.');
-    cy.get('#street_2').parent().should('contain', 'This field cannot contain more than 34 alphanumeric characters.');
-    cy.get('#city').parent().should('contain', 'This field cannot contain more than 30 alphanumeric characters.');
-    cy.get('#zip').parent().should('contain', 'This field cannot contain more than 9 alphanumeric characters.');
-    cy.get('#employer').parent().should('contain', 'This field cannot contain more than 38 alphanumeric characters.');
-    cy.get('#occupation').parent().should('contain', 'This field cannot contain more than 38 alphanumeric characters.');
+    cy.get('#prefix:visible').parent().should('contain', 'This field cannot contain more than 10 alphanumeric characters.');
+    cy.get('#suffix:visible').parent().should('contain', 'This field cannot contain more than 10 alphanumeric characters.');
+    cy.get('#street_1:visible').parent().should('contain', 'This field cannot contain more than 34 alphanumeric characters.');
+    cy.get('#street_2:visible').parent().should('contain', 'This field cannot contain more than 34 alphanumeric characters.');
+    cy.get('#city:visible').parent().should('contain', 'This field cannot contain more than 30 alphanumeric characters.');
+    cy.get('#zip:visible').parent().should('contain', 'This field cannot contain more than 9 alphanumeric characters.');
+    cy.get('#employer:visible').parent().should('contain', 'This field cannot contain more than 38 alphanumeric characters.');
+    cy.get('#occupation:visible').parent().should('contain', 'This field cannot contain more than 38 alphanumeric characters.');
   });
 
   xit('Create lookup contact', () => {

@@ -146,15 +146,15 @@ describe('Contacts Edit', () => {
     });
 
     cy.wait('@candidateDetails');
-    cy.get('#candidate_id').should('have.value', lookupCandidate.candidate_id);
+    cy.get('#candidate_id:visible').should('have.value', lookupCandidate.candidate_id);
 
     ContactsHelpers.ensureInputHasValue('#last_name', LOOKUP_CAND_LAST);
     ContactsHelpers.ensureInputHasValue('#first_name', LOOKUP_CAND_FIRST);
 
-    return cy.get('#last_name').invoke('val').then((lastVal) => {
+    return cy.get('#last_name:visible').invoke('val').then((lastVal) => {
       const last = (lastVal as string)?.trim() || LOOKUP_CAND_LAST;
 
-      return cy.get('#first_name').invoke('val').then((firstVal) => {
+      return cy.get('#first_name:visible').invoke('val').then((firstVal) => {
         const first = (firstVal as string)?.trim() || LOOKUP_CAND_FIRST;
 
         return {
@@ -180,9 +180,9 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(display, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#candidate_id').should('have.value', candidateId);
-    cy.get('#last_name').should('have.value', last);
-    cy.get('#first_name').should('have.value', first);
+    cy.get('#candidate_id:visible').should('have.value', candidateId);
+    cy.get('#last_name:visible').should('have.value', last);
+    cy.get('#first_name:visible').should('have.value', first);
   };
 
   const assertTelephoneValue = (phone: string) => {
@@ -194,11 +194,11 @@ describe('Contacts Edit', () => {
   };
 
   const assertAddressAndPhone = (v: AddressPhoneValues) => {
-    cy.get('#street_1').should('have.value', v.street1);
-    cy.get('#street_2').should('have.value', v.street2);
-    cy.get('#city').should('have.value', v.city);
-    cy.get('#zip').should('have.value', v.zip);
-    cy.get('#state').should('contain.text', v.state);
+    cy.get('#street_1:visible').should('have.value', v.street1);
+    cy.get('#street_2:visible').should('have.value', v.street2);
+    cy.get('#city:visible').should('have.value', v.city);
+    cy.get('#zip:visible').should('have.value', v.zip);
+    cy.get('#state:visible').should('contain.text', v.state);
     assertTelephoneValue(v.phone);
   };
 
@@ -212,20 +212,20 @@ describe('Contacts Edit', () => {
   };
 
   const assertPersonContactFormValues = (v: PersonContactValues) => {
-    cy.get('#last_name').should('have.value', v.last);
-    cy.get('#first_name').should('have.value', v.first);
-    cy.get('#middle_name').should('have.value', v.middle);
-    cy.get('#prefix').should('have.value', v.prefix);
-    cy.get('#suffix').should('have.value', v.suffix);
+    cy.get('#last_name:visible').should('have.value', v.last);
+    cy.get('#first_name:visible').should('have.value', v.first);
+    cy.get('#middle_name:visible').should('have.value', v.middle);
+    cy.get('#prefix:visible').should('have.value', v.prefix);
+    cy.get('#suffix:visible').should('have.value', v.suffix);
 
     assertAddressAndPhone(v);
 
-    cy.get('#employer').should('have.value', v.employer);
-    cy.get('#occupation').should('have.value', v.occupation);
+    cy.get('#employer:visible').should('have.value', v.employer);
+    cy.get('#occupation:visible').should('have.value', v.occupation);
   };
 
   const assertNamedContactFormValuesWithTxn = (v: NamedContactValues) => {
-    cy.get('#name').should('have.value', v.name);
+    cy.get('#name:visible').should('have.value', v.name);
     assertAddressAndPhone(v);
     assertTransactionHistoryTableExists();
   };
@@ -309,11 +309,11 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(IND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#last_name').clear();
-    cy.get('#first_name').clear();
-    cy.get('#street_1').clear();
-    cy.get('#city').clear();
-    cy.get('#zip').clear();
+    cy.get('#last_name:visible').clear();
+    cy.get('#first_name:visible').clear();
+    cy.get('#street_1:visible').clear();
+    cy.get('#city:visible').clear();
+    cy.get('#zip:visible').clear();
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -331,23 +331,23 @@ describe('Contacts Edit', () => {
     const over38 = 'E'.repeat(39);
     const badPhone = '12345678901';
 
-    cy.get('#last_name').clear().type(over30);
-    cy.get('#first_name').clear().type(over20);
-    cy.get('#middle_name').clear().type(over20);
-    cy.get('#prefix').clear().type(over10);
-    cy.get('#suffix').clear().type(over10);
+    cy.get('#last_name:visible').clear().type(over30);
+    cy.get('#first_name:visible').clear().type(over20);
+    cy.get('#middle_name:visible').clear().type(over20);
+    cy.get('#prefix:visible').clear().type(over10);
+    cy.get('#suffix:visible').clear().type(over10);
 
     ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
 
-    cy.get('#street_1').clear().type(over34);
-    cy.get('#street_2').clear().type(over34);
-    cy.get('#city').clear().type(over30);
+    cy.get('#street_1:visible').clear().type(over34);
+    cy.get('#street_2:visible').clear().type(over34);
+    cy.get('#city:visible').clear().type(over30);
     PageUtils.pSelectDropdownSetValue('#state', newState);
-    cy.get('#zip').clear().type('0123456783');
+    cy.get('#zip:visible').clear().type('0123456783');
     ContactsHelpers.setTelephone(badPhone);
 
-    cy.get('#employer').clear().type(over38);
-    cy.get('#occupation').clear().type(over38);
+    cy.get('#employer:visible').clear().type(over38);
+    cy.get('#occupation:visible').clear().type(over38);
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -368,21 +368,21 @@ describe('Contacts Edit', () => {
     expectMaxErrorNearLabel(/^Occupation/i, /cannot contain more than 38 alphanumeric characters/i);
     ContactsHelpers.expectErrorNearLabel(/^Telephone/i, /must contain 10 numeric characters/i);
 
-    cy.get('#last_name').clear().type(newLast);
-    cy.get('#first_name').clear().type(newFirst);
-    cy.get('#middle_name').clear().type(newMiddle);
-    cy.get('#prefix').clear().type(newPrefix);
-    cy.get('#suffix').clear().type(newSuffix);
+    cy.get('#last_name:visible').clear().type(newLast);
+    cy.get('#first_name:visible').clear().type(newFirst);
+    cy.get('#middle_name:visible').clear().type(newMiddle);
+    cy.get('#prefix:visible').clear().type(newPrefix);
+    cy.get('#suffix:visible').clear().type(newSuffix);
 
-    cy.get('#street_1').clear().type(newStreet1);
-    cy.get('#street_2').clear().type(newStreet2);
-    cy.get('#city').clear().type(newCity);
+    cy.get('#street_1:visible').clear().type(newStreet1);
+    cy.get('#street_2:visible').clear().type(newStreet2);
+    cy.get('#city:visible').clear().type(newCity);
     PageUtils.pSelectDropdownSetValue('#state', newState);
-    cy.get('#zip').clear().type(newZip);
+    cy.get('#zip:visible').clear().type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
-    cy.get('#employer').clear().type(newEmployer);
-    cy.get('#occupation').clear().type(newOccupation);
+    cy.get('#employer:visible').clear().type(newEmployer);
+    cy.get('#occupation:visible').clear().type(newOccupation);
 
     PageUtils.clickButton('Save');
     ContactsHelpers.assertAndContinueConfirmModal(oldDisplay, [
@@ -475,12 +475,12 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(CAND_DISPLAY, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#candidate_id').should('have.value', originalCandidateId).clear();
-    cy.get('#last_name').clear();
-    cy.get('#first_name').clear();
-    cy.get('#street_1').clear();
-    cy.get('#city').clear();
-    cy.get('#zip').clear();
+    cy.get('#candidate_id:visible').should('have.value', originalCandidateId).clear();
+    cy.get('#last_name:visible').clear();
+    cy.get('#first_name:visible').clear();
+    cy.get('#street_1:visible').clear();
+    cy.get('#city:visible').clear();
+    cy.get('#zip:visible').clear();
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -509,25 +509,25 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^Candidate district/i);
 
 
-    cy.get('#candidate_id').clear().type(originalCandidateId);
+    cy.get('#candidate_id:visible').clear().type(originalCandidateId);
 
-    cy.get('#last_name').type(newLast);
-    cy.get('#first_name').type(newFirst);
-    cy.get('#middle_name').clear().type(newMiddle);
-    cy.get('#prefix').clear().type(newPrefix);
-    cy.get('#suffix').clear().type(newSuffix);
+    cy.get('#last_name:visible').type(newLast);
+    cy.get('#first_name:visible').type(newFirst);
+    cy.get('#middle_name:visible').clear().type(newMiddle);
+    cy.get('#prefix:visible').clear().type(newPrefix);
+    cy.get('#suffix:visible').clear().type(newSuffix);
 
     ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
 
-    cy.get('#street_1').type(newStreet1);
-    cy.get('#street_2').clear().type(newStreet2);
-    cy.get('#city').type(newCity);
+    cy.get('#street_1:visible').type(newStreet1);
+    cy.get('#street_2:visible').clear().type(newStreet2);
+    cy.get('#city:visible').type(newCity);
     PageUtils.pSelectDropdownSetValue('#state', newState);
-    cy.get('#zip').type(newZip);
+    cy.get('#zip:visible').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
-    cy.get('#employer').clear().type(newEmployer);
-    cy.get('#occupation').clear().type(newOccupation);
+    cy.get('#employer:visible').clear().type(newEmployer);
+    cy.get('#occupation:visible').clear().type(newOccupation);
 
     cy.get('select[id^="candidate_office-"]').select(newOffice);
     cy.get('select[id^="candidate_state-"]').select(newCandState);
@@ -549,7 +549,7 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(newDisplay, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#candidate_id').should('have.value', originalCandidateId);
+    cy.get('#candidate_id:visible').should('have.value', originalCandidateId);
     assertPersonContactFormValues({
       last: newLast,
       first: newFirst,
@@ -602,11 +602,11 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(committeeDisplayName, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#committee_id').clear();
-    cy.get('#name').clear();
-    cy.get('#street_1').clear();
-    cy.get('#city').clear();
-    cy.get('#zip').clear();
+    cy.get('#committee_id:visible').clear();
+    cy.get('#name:visible').clear();
+    cy.get('#street_1:visible').clear();
+    cy.get('#city:visible').clear();
+    cy.get('#zip:visible').clear();
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -618,23 +618,23 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    cy.get('#committee_id').should(($input) => {
+    cy.get('#committee_id:visible').should(($input) => {
       const ariaInvalid = $input.attr('aria-invalid');
       if (ariaInvalid) {
         expect(ariaInvalid).to.eq('true');
       }
     });
 
-    cy.get('#committee_id').type(newCommitteeId);
-    cy.get('#name').type(newName);
+    cy.get('#committee_id:visible').type(newCommitteeId);
+    cy.get('#name:visible').type(newName);
 
     ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
 
-    cy.get('#street_1').type(newStreet1);
-    cy.get('#street_2').clear().type(newStreet2);
-    cy.get('#city').type(newCity);
+    cy.get('#street_1:visible').type(newStreet1);
+    cy.get('#street_2:visible').clear().type(newStreet2);
+    cy.get('#city:visible').type(newCity);
     PageUtils.pSelectDropdownSetValue('#state', newState);
-    cy.get('#zip').type(newZip);
+    cy.get('#zip:visible').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
     PageUtils.clickButton('Save');
@@ -662,7 +662,7 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(newName, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#committee_id').should('have.value', newCommitteeId);
+    cy.get('#committee_id:visible').should('have.value', newCommitteeId);
     assertNamedContactFormValuesWithTxn({
       name: newName,
       street1: newStreet1,
@@ -690,10 +690,10 @@ describe('Contacts Edit', () => {
     PageUtils.clickKababItem(organizationDisplayName, 'Edit');
     cy.contains(/Edit Contact/i).should('be.visible');
 
-    cy.get('#name').clear();
-    cy.get('#street_1').clear();
-    cy.get('#city').clear();
-    cy.get('#zip').clear();
+    cy.get('#name:visible').clear();
+    cy.get('#street_1:visible').clear();
+    cy.get('#city:visible').clear();
+    cy.get('#zip:visible').clear();
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 
@@ -703,15 +703,15 @@ describe('Contacts Edit', () => {
     expectRequiredNearLabel(/^City/i);
     expectRequiredNearLabel(/^Zip\/Postal code/i);
 
-    cy.get('#name').clear().type(overlongName);
+    cy.get('#name:visible').clear().type(overlongName);
 
     ContactsHelpers.setDropdownByLabelIfPresent(/^Country(\/Region)?/i, 'United States of America');
 
-    cy.get('#street_1').type(newStreet1);
-    cy.get('#street_2').clear().type(newStreet2);
-    cy.get('#city').type(newCity);
+    cy.get('#street_1:visible').type(newStreet1);
+    cy.get('#street_2:visible').clear().type(newStreet2);
+    cy.get('#city:visible').type(newCity);
     PageUtils.pSelectDropdownSetValue('#state', newState);
-    cy.get('#zip').type(newZip);
+    cy.get('#zip:visible').type(newZip);
     ContactsHelpers.setTelephone(newPhone);
 
     ContactsHelpers.clickSaveAndHandleConfirm();
@@ -723,7 +723,7 @@ describe('Contacts Edit', () => {
         cy.contains(/cannot contain more than 200 alphanumeric characters/i).should('be.visible');
       });
 
-    cy.get('#name').clear().type(newName);
+    cy.get('#name:visible').clear().type(newName);
 
     PageUtils.clickButton('Save');
     ContactsHelpers.assertAndContinueConfirmModal(organizationDisplayName, [

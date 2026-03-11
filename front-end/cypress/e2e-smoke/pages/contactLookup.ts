@@ -10,7 +10,7 @@ export class ContactLookup {
     }
     cy.get(alias).find('[data-cy="searchBox"]').eq(index).type(name.slice(0, 3));
     cy.contains(name).should('be.visible').as('contactName');
-    cy.get('@contactName').click({ force: true });
+    cy.get('@contactName:visible').click();
   }
 
   static getCandidate(

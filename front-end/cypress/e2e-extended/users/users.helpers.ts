@@ -1,13 +1,13 @@
 export class UsersHelpers {
-  static readonly emailInput = () => cy.get("@dialog").find("#email").first();
-  static readonly submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
+  static readonly emailInput = () => cy.get("@dialog:visible").find("#email").first();
+  static readonly submitBtn  = () => cy.get("@dialog:visible").find("[data-cy='membership-submit']");
 
   static aliasUsersTable() {
     cy.get('table').first().as('table');
   }
 
   static assertUsersTableColumns(expected: string[]) {
-    cy.get('@table')
+    cy.get('@table:visible')
       // Use the last header row so multi-row headers don't pollute the list
       .find('thead tr:last-child > th, thead tr:last-child > td')
       .should(($cells) => {
@@ -21,11 +21,11 @@ export class UsersHelpers {
   }
 
   static assertAtLeastOneUserRow() {
-    cy.get('@table').find('tbody tr').its('length').should('be.greaterThan', 0);
+    cy.get('@table:visible').find('tbody tr').its('length').should('be.greaterThan', 0);
   }
 
   static getRowByEmail(email: string) {
-    return cy.get('@table').find('tbody tr').filter((_, tr) => {
+    return cy.get('@table:visible').find('tbody tr').filter((_, tr) => {
       const txt = tr.innerText.toLowerCase();
       return txt.includes(email.toLowerCase());
     });
@@ -46,7 +46,7 @@ export class UsersHelpers {
   }
 
   static assertNoRowKebabs() {
-    cy.get('@table')
+    cy.get('@table:visible')
       .find('.pi.pi-ellipsis-v, [data-cy="row-kebab"]')
       .should('not.exist');
   }

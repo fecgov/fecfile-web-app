@@ -42,9 +42,9 @@ describe('Tests transaction form aggregate calculation', () => {
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
 
       TransactionDetailPage.enterDate(`[data-cy="expenditure_date"]`, new Date(currentYear, 4 - 1, 27));
-      cy.get('#general_election_year').safeType(currentYear);
-      cy.get('#amount').safeType(100);
-      cy.get('#purpose_description').first().safeType('test').blur();
+      cy.get('#general_election_year:visible').safeType(currentYear);
+      cy.get('#amount:visible').safeType(100);
+      cy.get('#purpose_description:visible').first().safeType('test').blur();
       cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$100.00');
     });
   });
@@ -66,23 +66,22 @@ describe('Tests transaction form aggregate calculation', () => {
       const alias = PageUtils.getAlias('');
       cy.get(alias).find('[data-cy="expenditure_date"]').first().click();
       cy.get('body').find('.p-datepicker-panel').as('calendarElement');
-      cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
-      cy.get('@calendarElement').find(`[data-date="${currentYear}-3-29"]`).click('bottom', { force: true });
-      cy.get('[id=aggregate_general_elec_expended]').click();
-      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
+      cy.get('@calendarElement:visible').find(`[data-date="${currentYear}-3-29"]`).click('bottom');
+      cy.get('[id=aggregate_general_elec_expended]:visible').click();
+      cy.get('[id=aggregate_general_elec_expended]:visible').should('have.value', '$225.01');
 
       // Change the candidate contact
       ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
-      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$25.00');
+      cy.get('[id=aggregate_general_elec_expended]:visible').should('have.value', '$25.00');
 
       // Change the contact back
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
-      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$225.01');
+      cy.get('[id=aggregate_general_elec_expended]:visible').should('have.value', '$225.01');
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40').blur();
 
-      cy.get('[id=aggregate_general_elec_expended]').should('have.value', '$240.01');
+      cy.get('[id=aggregate_general_elec_expended]:visible').should('have.value', '$240.01');
     });
   });
 
@@ -94,13 +93,13 @@ describe('Tests transaction form aggregate calculation', () => {
     ]).then((result: any) => {
       cy.visit(`/reports/transactions/report/${result.report}/create/COORDINATED_PARTY_EXPENDITURE`);
       ContactLookup.getContact(result.organization.name);
-      cy.get('#amount').safeType('100').blur();
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+      cy.get('#amount:visible').safeType('100').blur();
+      cy.get('#aggregate_general_elec_expended:visible:visible').should('have.value', '$100.00');
       ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
-      cy.get('#general_election_year').safeType('2024').blur();
+      cy.get('#general_election_year:visible').safeType('2024').blur();
       cy.wait('@GetPrevious');
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+      cy.get('#aggregate_general_elec_expended:visible:visible').should('have.value', '$100.00');
     });
   });
 
@@ -113,13 +112,13 @@ describe('Tests transaction form aggregate calculation', () => {
       cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
       ContactLookup.getContact(result.organization.name);
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
-      cy.get('#amount').safeType('100').blur();
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
-      cy.get('#general_election_year').safeType('1990').blur();
+      cy.get('#amount:visible:visible').safeType('100').blur();
+      cy.get('#aggregate_general_elec_expended:visible:visible').should('have.value', '$100.00');
+      cy.get('#general_election_year:visible:visible').safeType('1990').blur();
 
       TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 20), '');
       cy.wait('@GetPrevious');
-      cy.get('#aggregate_general_elec_expended').should('have.value', '$100.00');
+      cy.get('#aggregate_general_elec_expended:visible:visible').should('have.value', '$100.00');
     });
   });
 

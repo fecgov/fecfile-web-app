@@ -91,7 +91,7 @@ const fillCommonRequiredAddressInDialog = (dialogAlias: string, address: Address
 };
 
 const saveCreateContactDialog = () => {
-  cy.get('@createContactDialog')
+  cy.get('@createContactDialog:visible')
     .contains('button', /Save\s*&\s*continue/i)
     .should('be.enabled')
     .click({ force: true });
@@ -382,8 +382,8 @@ describe('Contacts: Transactions integration', () => {
       cy.contains(/Individual Receipt/i).should('be.visible');
 
       openCreateContactModal('first');
-      cy.get('@createContactDialog').find('#last_name').clear().type(individual.last);
-      cy.get('@createContactDialog').find('#first_name').clear().type(individual.first);
+      cy.get('@createContactDialog:visible').find('#last_name').clear().type(individual.last);
+      cy.get('@createContactDialog:visible').find('#first_name').clear().type(individual.first);
       fillCommonRequiredAddressInDialog('@createContactDialog', address);
       saveCreateContactDialog();
 
@@ -411,8 +411,8 @@ describe('Contacts: Transactions integration', () => {
       cy.contains('h1', 'Transfer').should('be.visible');
 
       openCreateContactModal('first');
-      cy.get('@createContactDialog').find('#committee_id').clear().type(committee.id);
-      cy.get('@createContactDialog').find('#name').clear().type(committee.name);
+      cy.get('@createContactDialog:visible').find('#committee_id').clear().type(committee.id);
+      cy.get('@createContactDialog:visible').find('#name').clear().type(committee.name);
       fillCommonRequiredAddressInDialog('@createContactDialog', address);
       saveCreateContactDialog();
 
@@ -440,8 +440,8 @@ describe('Contacts: Transactions integration', () => {
       cy.contains(/Operating Expenditure/i).should('be.visible');
 
       openCreateContactModal('first');
-      cy.get('@createContactDialog').find('#name').clear().type(organization.name);
-      fillCommonRequiredAddressInDialog('@createContactDialog', address);
+      cy.get('@createContactDialog:visible').find('#name').clear().type(organization.name);
+      fillCommonRequiredAddressInDialog('@createContactDialog:visible', address);
       saveCreateContactDialog();
 
       const opExpData: ScheduleFormData = {
@@ -530,8 +530,8 @@ describe('Contacts: Transactions integration', () => {
 
       cy.wait('@getPrevAggregate');
 
-      cy.get('#employer').should('have.value', '').click();
-      cy.get('#occupation').should('have.value', '').click();
+      cy.get('#employer:visible').should('have.value', '').click();
+      cy.get('#occupation:visible').should('have.value', '').click();
 
       cy.contains('button', 'Save').scrollIntoView();
       PageUtils.clickButton('Save');
@@ -540,8 +540,8 @@ describe('Contacts: Transactions integration', () => {
       cy.contains(/employer.*required|this is a required field\./i).should('be.visible');
       cy.contains(/occupation.*required|this is a required field\./i).should('be.visible');
 
-      cy.get('#employer').type(newEmployer);
-      cy.get('#occupation').type(newOccupation);
+      cy.get('#employer:visible').type(newEmployer);
+      cy.get('#occupation:visible').type(newOccupation);
 
       PageUtils.clickButton('Save');
 
@@ -572,8 +572,8 @@ describe('Contacts: Transactions integration', () => {
 
       cy.wait('@getContactTxns');
 
-      cy.get('#employer').should('have.value', newEmployer);
-      cy.get('#occupation').should('have.value', newOccupation);
+      cy.get('#employer:visible').should('have.value', newEmployer);
+      cy.get('#occupation:visible').should('have.value', newOccupation);
 
       ContactsHelpers.assertTransactionHistoryRow({
         type: /Individual Receipt/i,
