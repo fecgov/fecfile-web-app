@@ -6323,6 +6323,9 @@ td {
   height: 33px;
   background: var(--p-button-primary-background);
   border-radius: var(--border-radius);
+  &:has(.p-splitbutton-button:disabled) {
+    background-color: var(--primary-button-disabled-background) !important;
+  }
   &:not(:has(.p-splitbutton-button:disabled)):hover {
     background-color: var(--primary-button-hover-color);
   }
@@ -6358,12 +6361,9 @@ td {
   img {
     filter: brightness(0) invert(1);
   }
-  &:disabled {
-    background-color: var(--p-button-disabled-background) !important;
-    & > img {
-     filter: invert(11%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(93%) contrast(85%) opacity(0.65);
-    }
-  } 
+  &:disabled > img {
+    filter: invert(11%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(93%) contrast(85%) opacity(0.65);
+  }
 }
 
 .p-tieredmenu-item-content:hover {

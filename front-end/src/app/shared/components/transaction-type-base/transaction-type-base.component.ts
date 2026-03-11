@@ -32,7 +32,6 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { GlossaryService } from '../glossary/glossary.service';
 import { environment } from 'environments/environment';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 
 @Component({
   template: '',
