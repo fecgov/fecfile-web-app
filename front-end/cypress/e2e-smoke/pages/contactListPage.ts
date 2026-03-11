@@ -114,6 +114,17 @@ export class ContactListPage {
     }
   }
 
+  static assertRequiredFieldErrors(alias = '') {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias).find('#last_name:visible').parent().should('contain', 'This is a required field');
+    cy.get(alias).find('#first_name:visible').parent().should('contain', 'This is a required field');
+    cy.get(alias).find('#street_1:visible').parent().should('contain', 'This is a required field');
+    cy.get(alias).find('#street_2:visible').parent().should('not.contain', 'This is a required field');
+    cy.get(alias).find('#city:visible').parent().should('contain', 'This is a required field');
+    cy.get(alias).find('[inputid="state"]:visible').parent().should('contain', 'This is a required field');
+    cy.get(alias).find('#zip:visible').parent().should('contain', 'This is a required field');
+  }
+
   //Deletes all contacts belonging to the logged-in committee
   static deleteAllContacts() {
     cy.getCookie('csrftoken').then((cookie) => {

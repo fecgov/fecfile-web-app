@@ -20,7 +20,7 @@ export class F3xCreateReportPage {
 
   static coverageCall() {
     return cy
-      .intercept({ method: 'GET', url: 'http://localhost:8080/api/v1/reports/form-3x/coverage_dates/' })
+      .intercept({ method: 'GET', url: '**/api/v1/reports/form-3x/coverage_dates/' })
       .as('coverageDates');
   }
   static waitForCoverage() {

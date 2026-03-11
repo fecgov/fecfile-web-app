@@ -191,7 +191,7 @@ const waitForLinkedContactStatus = (
 const fetchLinkedContactFromApi = (pageSize: number, errorLabel: string) =>
   ContactsDeleteHelpers.requestWithCookies<ContactListResponse>(
     'GET',
-    `http://localhost:8080/api/v1/contacts/?page=1&ordering=sort_name&page_size=${pageSize}`,
+    `**/api/v1/contacts/?page=1&ordering=sort_name&page_size=${pageSize}`,
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
     return cy.wrap(requireLinkedContact(results, errorLabel), { log: false });
@@ -223,7 +223,7 @@ const waitForLinkedContactStatusFromApi = (
 const fetchSeededReportFromApi = () =>
   ContactsDeleteHelpers.requestWithCookies<ReportTransactionListResponse>(
     'GET',
-    'http://localhost:8080/api/v1/reports/?page=1&ordering=-coverage_through_date&page_size=25',
+    '**/api/v1/reports/?page=1&ordering=-coverage_through_date&page_size=25',
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
     return cy.wrap(requireSeededReport(results), { log: false });
@@ -232,7 +232,7 @@ const fetchSeededReportFromApi = () =>
 const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
   ContactsDeleteHelpers.requestWithCookies<TransactionListResponse>(
     'GET',
-    `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&report_id=${reportId}&schedules=A`,
+    `**/api/v1/transactions/?page=1&ordering=-created&page_size=50&report_id=${reportId}&schedules=A`,
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
     const transactionId = findLinkedTransactionId(results, contactId, reportId);
@@ -241,7 +241,7 @@ const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
     }
     return ContactsDeleteHelpers.requestWithCookies<TransactionListResponse>(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&contact=${contactId}`,
+      `**/api/v1/transactions/?page=1&ordering=-created&page_size=50&contact=${contactId}`,
     ).then((fallback) => {
       const fallbackResults = Array.isArray(fallback.body?.results) ? fallback.body.results : [];
       return cy.wrap(requireLinkedTransactionId(fallbackResults, contactId, reportId), { log: false });
@@ -251,11 +251,11 @@ const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
 const deleteTransactionAndReport = (transactionId: string, reportId: string) =>
   ContactsDeleteHelpers.requestWithCookies(
     'DELETE',
-    `http://localhost:8080/api/v1/transactions/${transactionId}/`,
+    `**/api/v1/transactions/${transactionId}/`,
   ).then(() =>
     ContactsDeleteHelpers.requestWithCookies(
       'DELETE',
-      `http://localhost:8080/api/v1/reports/${reportId}/`,
+      `**/api/v1/reports/${reportId}/`,
     ),
   );
 
@@ -479,7 +479,7 @@ describe('Contacts - delete guard', () => {
     return fetchLinkedContact().then((linkedContact) =>
       ContactsDeleteHelpers.requestWithCookies(
         'DELETE',
-        `http://localhost:8080/api/v1/contacts/${linkedContact.id}/`,
+        `**/api/v1/contacts/${linkedContact.id}/`,
         undefined,
         { failOnStatusCode: false },
       ).then((response) => {
@@ -574,7 +574,7 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
 
     ContactsDeleteHelpers.requestWithCookies<ContactsDeletedResponse>(
       'GET',
-      'http://localhost:8080/api/v1/contacts-deleted/?page=1&ordering=sort_name',
+      '**/api/v1/contacts-deleted/?page=1&ordering=sort_name',
       undefined,
       { failOnStatusCode: false },
     ).then((response) => {

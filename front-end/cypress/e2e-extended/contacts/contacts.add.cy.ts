@@ -194,13 +194,7 @@ describe('Contacts Add (/contacts)', () => {
       zip: '',
     });
     PageUtils.clickButton('Save');
-    cy.get('#last_name:visible').parent().should('contain', 'This is a required field');
-    cy.get('#first_name:visible').parent().should('contain', 'This is a required field');
-    cy.get('#street_1:visible').parent().should('contain', 'This is a required field');
-    cy.get('#street_2:visible').parent().should('not.contain', 'This is a required field');
-    cy.get('#city:visible').parent().should('contain', 'This is a required field');
-    cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
-    cy.get('#zip:visible').parent().should('contain', 'This is a required field');
+    ContactListPage.assertRequiredFieldErrors();
     PageUtils.clickButton('Cancel');
     cy.contains('Save').should('not.exist');
   });

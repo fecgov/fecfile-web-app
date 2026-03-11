@@ -86,7 +86,7 @@ describe('Tests transaction form aggregate calculation', () => {
   });
 
   it('new transaction aggregate different contact', () => {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
+    cy.intercept('GET', '**/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
     generateReportAndContacts([
       [200.01, '2025-04-12', true],
       [25, '2025-04-16', true],
@@ -109,7 +109,7 @@ describe('Tests transaction form aggregate calculation', () => {
       [25, '2025-04-16', true],
     ]).then((result: any) => {
       cy.visit(`/reports/transactions/report/${result.report}/create/COORDINATED_PARTY_EXPENDITURE`);
-      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
+      cy.intercept('GET', '**/api/v1/transactions/previous/payee-candidate/**').as('GetPrevious');
       ContactLookup.getContact(result.organization.name);
       ContactLookup.getCandidate(result.candidate, [], [], '#contact_2_lookup');
       cy.get('#amount:visible:visible').safeType('100').blur();

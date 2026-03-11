@@ -55,16 +55,19 @@ function getLoginIntervalString(sessionDur: number): string {
 
 function loginDotGovLogin() {
   const alias = PageUtils.getAlias('');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
-  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.intercept('GET', '**/api/v1/oidc/login-redirect').as('GetLoggedIn');
+  cy.intercept('GET', '**/api/v1/committees/').as('GetCommitteeAccounts');
+  cy.intercept('POST', '**/api/v1/committees/*/activate/').as('ActivateCommittee');
+  cy.intercept('GET', '**/api/v1/committee-members/').as('GetCommitteeMembers');
 
   cy.visit('/');
   cy.get('#loginButton:visible').click();
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
-  cy.get('#security-consent-annual:visible').click();
+  cy.get('[data-cy="security-consent-checkbox"]:visible')
+    .find('.p-checkbox-input')
+    .check()
+    .should('be.checked');
   cy.get('[data-cy="consent-button"]:visible').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();

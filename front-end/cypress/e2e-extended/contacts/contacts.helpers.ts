@@ -262,7 +262,7 @@ export class ContactsHelpers {
           .request({
             method: 'GET',
             url:
-              `http://localhost:8080/api/v1/contacts/candidate_lookup/` +
+              `**/api/v1/contacts/candidate_lookup/` +
               `?q=${encodeURIComponent(seed)}` +
               `&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=`,
           })
@@ -707,7 +707,7 @@ export class ContactsDeleteHelpers {
   static createContact(contact: MockContact): Cypress.Chainable<Contact> {
     return ContactsDeleteHelpers.requestWithCookies<Contact>(
       'POST',
-      'http://localhost:8080/api/v1/contacts/',
+      '**/api/v1/contacts/',
       contact,
     ).then((response) => response.body);
   }
@@ -715,7 +715,7 @@ export class ContactsDeleteHelpers {
   static createReport(report: F3X): Cypress.Chainable<string> {
     return ContactsDeleteHelpers.requestWithCookies<{ id: string }>(
       'POST',
-      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      '**/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
       report,
     ).then((response) => response.body.id);
   }
@@ -728,7 +728,7 @@ export class ContactsDeleteHelpers {
     const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, transactionDate, contact, reportId);
     return ContactsDeleteHelpers.requestWithCookies(
       'POST',
-      'http://localhost:8080/api/v1/transactions/',
+      '**/api/v1/transactions/',
       transaction,
     );
   }

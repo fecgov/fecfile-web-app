@@ -4,7 +4,7 @@ import { PageUtils } from './pageUtils';
 
 export class ReportTransactionListPage {
   static goToPage() {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
+    cy.intercept('GET', '**/api/v1/reports/**').as('GetReports');
     cy.visit('/reports');
     cy.wait('@GetReports');
   }

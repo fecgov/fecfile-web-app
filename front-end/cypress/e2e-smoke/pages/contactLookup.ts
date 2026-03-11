@@ -26,7 +26,7 @@ export class ContactLookup {
     const optionText = [lastName, contact.first_name].filter(Boolean).join(', ');
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+      `**/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
       {
         statusCode: 200,
         body: {
@@ -65,7 +65,7 @@ export class ContactLookup {
     const nameEntry = name.slice(0, 3);
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/contacts/committee_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+      `**/api/v1/contacts/committee_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
       {
         statusCode: 200,
         body: {

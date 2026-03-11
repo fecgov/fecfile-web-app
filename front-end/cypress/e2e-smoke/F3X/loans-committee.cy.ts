@@ -82,7 +82,7 @@ describe('Loans', () => {
     setupLoanByCommittee().then((result: any) => {
 
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
-      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
+      cy.intercept('GET', '**/api/v1/transactions/**&schedules=C2').as('GuarantorList');
       cy.contains('Loan By Committee').click();
       cy.contains('Guarantors').should('be.visible');
       cy.wait('@GuarantorList');

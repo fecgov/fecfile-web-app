@@ -12,6 +12,7 @@ import { makeTransaction } from '../requests/methods';
 import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel'
+import { assertDebtFieldValues } from './utils/debt-assertions';
 
 function setupCoordinatedPartyExpenditure(
   organization: ContactFormData,
@@ -153,10 +154,12 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#balance:visible').should('be.visible').should('have.value', '$0.00');
-      cy.get('#amount:visible').should('have.value', '$10,000.00');
-      cy.get('#payment_amount:visible').should('have.value', '$1,000.00');
-      cy.get('#balance_at_close:visible').should('have.value', '$9,000.00');
+      assertDebtFieldValues({
+        amount: '$10,000.00',
+        balance: '$0.00',
+        paymentAmount: '$1,000.00',
+        balanceAtClose: '$9,000.00',
+      });
 
       ReportTransactionListPage.createF3X({
         ...defaultForm3XData,
@@ -209,10 +212,12 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#balance:visible').should('be.visible').should('have.value', '$9,000.00');
-      cy.get('#amount:visible').should('have.value', '$2,500.00');
-      cy.get('#payment_amount:visible').should('have.value', '$11,500.00');
-      cy.get('#balance_at_close:visible').should('have.value', '$0.00');
+      assertDebtFieldValues({
+        amount: '$2,500.00',
+        balance: '$9,000.00',
+        paymentAmount: '$11,500.00',
+        balanceAtClose: '$0.00',
+      });
 
       cy.intercept(
         'GET',

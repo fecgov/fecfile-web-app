@@ -260,15 +260,15 @@ export class TransactionDetailPage {
   static clickSave(reportId: string) {
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
     ).as('GetReceipts');
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
     ).as('GetLoans');
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
     cy.contains(/^Save$/).click();
 
@@ -280,15 +280,15 @@ export class TransactionDetailPage {
   static addGuarantor(name: string, amount: number | string, reportId: string) {
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
     ).as('GetReceipts');
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
     ).as('GetLoans');
     cy.intercept(
       'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
 
     PageUtils.clickButton('Save & add loan guarantor');

@@ -100,15 +100,15 @@ describe('Disbursements', () => {
       // Add IE to a F24 Report
       cy.intercept(
         'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
+        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
       ).as('GetReceipts');
       cy.intercept(
         'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
+        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
       ).as('GetLoans');
       cy.intercept(
         'GET',
-        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
+        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
       ).as('GetDisbursements');
       ReportTransactionListPage.goToReportTransactionListPage(result.report);
 

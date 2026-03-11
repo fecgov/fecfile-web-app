@@ -36,6 +36,32 @@ function setupTransactions(secondSame: boolean) {
   });
 }
 
+function openTransactionRow(rowIndex: number) {
+  cy.get('.p-datatable-tbody > tr')
+    .eq(rowIndex)
+    .find('td')
+    .eq(1)
+    .find('a')
+    .first()
+    .click();
+}
+
+function assertAggregateValue(value: string) {
+  cy.get('[id=aggregate]').should('have.value', value);
+}
+
+function assertAggregateColumnValues(...values: string[]) {
+  values.forEach((value, index) => {
+    cy.get(`.p-datatable-tbody > :nth-child(${index + 1}) > :nth-child(7)`).should('contain', value);
+  });
+}
+
+function saveAndAssertAggregateColumnValues(...values: string[]) {
+  PageUtils.clickButton('Save');
+  cy.contains('Transactions in this report').should('be.visible');
+  assertAggregateColumnValues(...values);
+}
+
 describe('Tests transaction form aggregate calculation', () => {
   beforeEach(() => {
     Initialize();
@@ -45,44 +71,34 @@ describe('Tests transaction form aggregate calculation', () => {
     setupTransactions(true).then((result: any) => {
       ReportTransactionListPage.goToReportTransactionListPage(result.report);
 
-      cy.get('.p-datatable-tbody > tr')
-        .eq(1) // 0-based, so 2nd row
-        .find('td')
-        .eq(1) // 2nd cell
-        .find('a')
-        .first()
-        .click();
+      openTransactionRow(1);
       cy.contains('Create a new contact').should('be.visible');
 
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
+      assertAggregateValue('$225.01');
 
       // Tests moving the date to be earlier
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 10), '');
       PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
-      cy.get('[id=aggregate]').should('have.value', '$25.00');
+      assertAggregateValue('$25.00');
 
       // Move the date back
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
       PageUtils.blurActiveField();
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
+      assertAggregateValue('$225.01');
 
       // Change the contact
       ContactLookup.getContact(result.individual2.last_name);
-      cy.get('[id=aggregate]').should('have.value', '$25.00');
+      assertAggregateValue('$25.00');
 
       // Change the contact back
       ContactLookup.getContact(result.individual.last_name);
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
+      assertAggregateValue('$225.01');
 
       // Change the amount
       cy.get('[id="amount"]').clear().safeType('40');
       PageUtils.blurActiveField();
-      cy.get('[id=aggregate]').should('have.value', '$240.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
+      assertAggregateValue('$240.01');
+      saveAndAssertAggregateColumnValues('$200.01', '$240.01');
     });
   });
 
@@ -90,21 +106,17 @@ describe('Tests transaction form aggregate calculation', () => {
     setupTransactions(false).then((result: any) => {
       ReportTransactionListPage.goToReportTransactionListPage(result.report);
       cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      openTransactionRow(1);
 
       // Tests changing the second transaction's contact
-      cy.get('[id=aggregate]').should('have.value', '$25.00');
+      assertAggregateValue('$25.00');
       cy.get('[data-cy="searchBox"]:visible').type('A');
       cy.contains('Ant').should('be.visible');
       cy.contains('Ant').click({ force: true });
       PageUtils.blurActiveField();
 
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$225.01');
+      assertAggregateValue('$225.01');
+      saveAndAssertAggregateColumnValues('$200.01', '$225.01');
     });
   });
 
@@ -112,19 +124,15 @@ describe('Tests transaction form aggregate calculation', () => {
     setupTransactions(true).then((result: any) => {
       ReportTransactionListPage.goToReportTransactionListPage(result.report);
       cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
+      openTransactionRow(1);
 
       // Tests changing the amount
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
+      assertAggregateValue('$225.01');
       cy.get('[id="amount"]').clear().safeType('40');
       PageUtils.blurActiveField();
 
-      cy.get('[id=aggregate]').should('have.value', '$240.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$240.01');
+      assertAggregateValue('$240.01');
+      saveAndAssertAggregateColumnValues('$200.01', '$240.01');
     });
   });
 
@@ -132,18 +140,14 @@ describe('Tests transaction form aggregate calculation', () => {
     setupTransactions(true).then((result: any) => {
       ReportTransactionListPage.goToReportTransactionListPage(result.report);
       cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
+      openTransactionRow(0);
 
       // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
       PageUtils.blurActiveField();
 
-      cy.get('[id=aggregate]').should('have.value', '$225.01');
-      PageUtils.clickButton('Save');
-
-      cy.contains('Transactions in this report').should('be.visible');
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$225.01');
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
+      assertAggregateValue('$225.01');
+      saveAndAssertAggregateColumnValues('$225.01', '$25.00');
     });
   });
 
@@ -159,7 +163,7 @@ describe('Tests transaction form aggregate calculation', () => {
       makeTransaction(transaction_c, () => {
         ReportTransactionListPage.goToReportTransactionListPage(result.report);
         cy.contains('Transactions in this report').should('be.visible');
-        cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
+        openTransactionRow(0);
 
         ContactLookup.getContact(result.individual2.last_name);
 
@@ -167,13 +171,8 @@ describe('Tests transaction form aggregate calculation', () => {
         TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
         PageUtils.blurActiveField();
 
-        cy.get('[id=aggregate]').should('have.value', '$200.01');
-        PageUtils.clickButton('Save');
-
-        cy.contains('Transactions in this report').should('be.visible');
-        cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(7)').should('contain', '$200.01');
-        cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(7)').should('contain', '$25.00');
-        cy.get('.p-datatable-tbody > :nth-child(3) > :nth-child(7)').should('contain', '$65.00');
+        assertAggregateValue('$200.01');
+        saveAndAssertAggregateColumnValues('$200.01', '$25.00', '$65.00');
       });
     });
   });
