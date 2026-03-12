@@ -45,28 +45,33 @@ export class PageUtils {
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
     const exactValue = PageUtils.getExactTextMatcher(value);
-    const comboboxSelector = '[role="combobox"]';
-    const getVisibleComboboxes = ($elements: JQuery<HTMLElement>) =>
-      $elements
-        .map((_elementIndex, element) => {
-          const matchedElement = Cypress.$(element);
-          if (matchedElement.is(`${comboboxSelector}:visible`)) {
-            return matchedElement.get(0);
-          }
-          return matchedElement.find(`${comboboxSelector}:visible`).get(0);
-        })
-        .get();
 
     if (value) {
       cy.get(alias)
         .find(querySelector)
-        .should(($elements) => {
-          expect(getVisibleComboboxes($elements as JQuery<HTMLElement>).length, `visible p-select trigger for ${querySelector}`).to.be.greaterThan(index);
-        })
-        .then(($elements) => {
-          return cy.wrap(getVisibleComboboxes($elements as JQuery<HTMLElement>)[index]).scrollIntoView().click();
+        .eq(index)
+        .then(($select) => {
+          const visibleSelect = $select.filter(':visible').first();
+          const label = $select.find('[data-pc-section="label"], .p-select-label').filter(':visible').first();
+          const root = $select.find('[data-pc-section="root"], .p-select').filter(':visible').first();
+          const combobox = $select.find('[role="combobox"]').filter(':visible').first();
+          const dropdown = $select.find('.p-select-dropdown, [aria-label="dropdown trigger"]').filter(':visible').first();
+          let trigger = dropdown;
+
+          if (visibleSelect.length) {
+            trigger = visibleSelect;
+          } else if (label.length) {
+            trigger = label;
+          } else if (root.length) {
+            trigger = root;
+          } else if (combobox.length) {
+            trigger = combobox;
+          }
+
+          expect(trigger.length, `visible p-select trigger for ${querySelector}`).to.be.greaterThan(0);
+          return cy.wrap(trigger).scrollIntoView().click();
         });
-      cy.contains('[role="option"]:visible', exactValue)
+      cy.contains('p-selectitem, .p-select-option, [role="option"]', exactValue)
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
