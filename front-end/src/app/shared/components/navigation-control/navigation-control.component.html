@@ -69,17 +69,19 @@
     </p-popover>
   }
   @case (controlType.SPLITBUTTON) {
-    <div class="split-button-container">
-      <p-splitButton
-        [label]="navigationControl().label || ''"
-        [icon]="navigationControl().icon || ''"
-        [model]="dropdownOptions()"
-        (onClick)="clickButton()"
-        data-cy="navigation-control-splitbutton"
-        [disabled]="isDisabled()"
-        [model]="items"
-        appSingleClick
-      />
-    </div>
+    <p-splitButton
+      [label]="navigationControl().label || ''"
+      [icon]="navigationControl().icon || ''"
+      [model]="dropdownOptions()"
+      (onClick)="clickButton()"
+      data-cy="navigation-control-splitbutton"
+      [disabled]="isDisabled()"
+      [model]="items"
+      appSingleClick
+    >
+      <ng-template #dropdownicon>
+        <img alt="dropdown arrow" height="9px" width="10px" src="assets/img/i-arrow-down.svg" />
+      </ng-template>
+    </p-splitButton>
   }
 }
