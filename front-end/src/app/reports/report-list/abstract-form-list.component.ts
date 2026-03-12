@@ -47,7 +47,7 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
       { field: 'report_status', header: 'Status', sortable: true, cssClass: 'status-column' },
       { field: 'version_label', header: 'Version', sortable: true, cssClass: 'version-column' },
       {
-        field: 'upload_submission__created',
+        field: 'upload_submission__date_filed',
         header: 'Filed',
         sortable: true,
         cssClass: 'filed-column',
