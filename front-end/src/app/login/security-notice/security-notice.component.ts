@@ -10,7 +10,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { Checkbox } from 'primeng/checkbox';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { environment } from 'environments/environment';
 import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
@@ -22,7 +22,7 @@ export const SECURITY_CONSENT_VERSION = '1';
   selector: 'app-security-notice',
   templateUrl: './security-notice.component.html',
   styleUrls: ['./security-notice.component.scss'],
-  imports: [ReactiveFormsModule, Checkbox, ButtonDirective, NgComponentOutlet],
+  imports: [ReactiveFormsModule, Checkbox, ButtonModule, NgComponentOutlet],
 })
 export class SecurityNoticeComponent implements OnInit {
   private readonly store = inject(Store);

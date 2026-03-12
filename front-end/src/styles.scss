@@ -108,10 +108,6 @@ label.disabled {
   text-align: right;
 }
 
-.align-center {
-  text-align: center;
-}
-
 .gray {
   background-color: #f1f1f1;
 }
@@ -840,5 +836,26 @@ select {
 
   i {
     font-size: 0.75rem;
+  }
+}
+
+.standard-container {
+  width: 512px;
+  min-width: 512px;
+  max-width: 512px;
+  @media (min-width: 768px) {
+    width: 704px;
+    min-width: 704px;
+    max-width: 704px;
+  }
+  @media (min-width: 992px) {
+    width: 852px;
+    min-width: 852px;
+    max-width: 852px;
+  }
+  @media (min-width: 1400px) {
+    width: 1052px;
+    min-width: 1052px;
+    max-width: 1052px;
   }
 }
