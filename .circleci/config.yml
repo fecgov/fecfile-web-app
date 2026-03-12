@@ -7,9 +7,6 @@ orbs:
   browser-tools: circleci/browser-tools@2.4.0
   node: circleci/node@7.2.1
   python: circleci/python@4.0.0
-  # Pinned for version tracking and future adoption; current e2e execution
-  # still runs manually inside a separate Docker container on the API network.
-  cypress: cypress-io/cypress@6.0.0
 
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
