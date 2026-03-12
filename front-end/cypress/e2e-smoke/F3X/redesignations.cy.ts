@@ -10,7 +10,7 @@ import { Contributions } from './utils/start-transaction/disbursements';
 import { F3X_Q1, F3X_Q2 } from '../requests/library/reports';
 import { buildContributionToCandidate } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 
 const redesignationData: ContributionFormData = {
   ...defaultTransactionFormData,
@@ -56,7 +56,7 @@ describe('Redesignations', () => {
         { election_code: 'P2020', support_oppose_code: 'S', date_signed: `${currentYear}-07-09` },
       );
       makeTransaction(transaction, () => {
-        ReportTransactionListPage.goToReportTransactionListPage(result.report);
+        ReportListPage.gotToReportTransactionListPage(result.report);
         Redesignate();
       });
     });

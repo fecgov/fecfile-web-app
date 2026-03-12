@@ -3,7 +3,7 @@ import { currentYear, PageUtils } from '../pages/pageUtils';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 
 describe('Tests that contact data gets cleared out properly when switching types', () => {
   beforeEach(() => {
@@ -12,8 +12,8 @@ describe('Tests that contact data gets cleared out properly when switching types
 
   it('Single transaction', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportTransactionListPage.goToPage();
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.goToPage();
+      ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.clickButton("Add transaction");
       StartTransaction.Receipts().Other().OtherReceipts();
       ContactLookup.getContact(result.committee.name, '', 'Committee');
@@ -24,8 +24,8 @@ describe('Tests that contact data gets cleared out properly when switching types
 
   it('Double transaction', () => {
     cy.wrap(DataSetup({ committee: true, individual: true, individual2: true })).then((result: any) => {
-      ReportTransactionListPage.goToPage();
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.goToPage();
+      ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.clickButton("Add transaction");
       StartTransaction.Receipts().Individual().Earmark();
       ContactLookup.getContact(result.individual.last_name, '');

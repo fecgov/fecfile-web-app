@@ -14,7 +14,7 @@ import {
   LoanInfo,
 } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -108,7 +108,7 @@ function assertNoDeleteButtonInLoanReceivedFromBankRow() {
 // Helper to handle result of setupLoanFromBank for the first test
 function handleLoanAgreementSetup(q3: string) {
   return (result: any) => {
-    ReportTransactionListPage.goToReportTransactionListPage(q3);
+    ReportListPage.gotToReportTransactionListPage(q3);
     clickLoan('New loan agreement');
 
     PageUtils.urlCheck('/C1_LOAN_AGREEMENT');
@@ -156,7 +156,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank', () => {
     cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Loans().FromBank();
 
       ContactLookup.getContact(result.organization.name);
@@ -175,7 +175,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Make loan repayment', 'LOAN_REPAYMENT_MADE');
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
@@ -188,7 +188,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Review loan agreement');
       PageUtils.clickButton('Save transactions');
       PageUtils.locationCheck('/list');
@@ -198,7 +198,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.intercept(
         'GET',
         /\/api\/v1\/transactions\/\?(?=.*parent=)(?=.*schedules=C2).*/

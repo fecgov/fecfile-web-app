@@ -34,7 +34,7 @@ type ContactsDeletedResponse = {
 
 type LinkedContactSearch = Pick<ContactListItem, 'first_name' | 'last_name' | 'name'>;
 
-type ReportTransactionListItem = {
+type ReportListItem = {
   id: string;
   report_type?: string | null;
   report_code?: string | null;
@@ -43,8 +43,8 @@ type ReportTransactionListItem = {
   form_type?: string | null;
 };
 
-type ReportTransactionListResponse = {
-  results?: ReportTransactionListItem[];
+type ReportListResponse = {
+  results?: ReportListItem[];
 };
 
 type TransactionListItem = {
@@ -87,7 +87,7 @@ const requireLinkedContact = (results: ContactListItem[] | undefined, errorLabel
   return linkedContact;
 };
 
-const findSeededReport = (results?: ReportTransactionListItem[]) => {
+const findSeededReport = (results?: ReportListItem[]) => {
   if (!Array.isArray(results)) return null;
   return (
     results.find((item) => {
@@ -100,7 +100,7 @@ const findSeededReport = (results?: ReportTransactionListItem[]) => {
   );
 };
 
-const requireSeededReport = (results: ReportTransactionListItem[] | undefined) => {
+const requireSeededReport = (results: ReportListItem[] | undefined) => {
   const report = findSeededReport(results);
   if (!report?.id) {
     throw new Error(`Unable to locate seeded report ${F3X_Q2.report_code} for cleanup.`);
@@ -221,7 +221,7 @@ const waitForLinkedContactStatusFromApi = (
 };
 
 const fetchSeededReportFromApi = () =>
-  ContactsDeleteHelpers.requestWithCookies<ReportTransactionListResponse>(
+  ContactsDeleteHelpers.requestWithCookies<ReportListResponse>(
     'GET',
     'http://localhost:8080/api/v1/reports/?page=1&ordering=-coverage_through_date&page_size=25',
   ).then((response) => {
@@ -262,7 +262,7 @@ const deleteTransactionAndReport = (transactionId: string, reportId: string) =>
 const attachReport = (linkedContact: ContactListItem) =>
   fetchSeededReportFromApi().then((report) => ({ linkedContact, report }));
 
-const attachTransactionId = (payload: { linkedContact: ContactListItem; report: ReportTransactionListItem }) =>
+const attachTransactionId = (payload: { linkedContact: ContactListItem; report: ReportListItem }) =>
   fetchLinkedTransactionIdFromApi(payload.report.id, payload.linkedContact.id).then(
     (transactionId) => ({
       reportId: payload.report.id,

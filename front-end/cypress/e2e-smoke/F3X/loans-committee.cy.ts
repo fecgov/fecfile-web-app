@@ -5,7 +5,7 @@ import { defaultLoanFormData } from '../models/TransactionFormModel';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 
 const formData = {
   ...defaultLoanFormData,
@@ -14,7 +14,7 @@ const formData = {
 
 function setupLoanByCommittee() {
   return cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
-    ReportTransactionListPage.goToReportTransactionListPage(result.report);
+    ReportListPage.gotToReportTransactionListPage(result.report);
     StartTransaction.Loans().ByCommittee();
     // Search for created committee and enter load data, then add load guarantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');

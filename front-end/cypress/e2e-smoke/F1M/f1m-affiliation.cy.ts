@@ -1,5 +1,5 @@
 import { Initialize } from '../pages/loginPage';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 import { PageUtils } from '../pages/pageUtils';
 import { ContactFormData } from '../models/ContactFormModel';
 import type { MockContact } from '../requests/library/contacts';
@@ -80,7 +80,7 @@ describe('Manage reports', () => {
     cy.wrap(Promise.all(apiCalls)).then(() => {
       expect(candidates).to.have.lengthOf(candidateList.length);
 
-      ReportTransactionListPage.createF1M();
+      ReportListPage.createF1M();
       PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
       clickRadioLabel('X', 'STATE PARTY');
       clickRadioLabel('qualification', 'QUALIFICATION');
