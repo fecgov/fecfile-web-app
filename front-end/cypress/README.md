@@ -94,7 +94,6 @@
   # Path to your Oh My Zsh installation
   export ZSH="$HOME/.oh-my-zsh"
   export DJANGO_SECRET_KEY="make-it-up"
-  export CYPRESS_RECORD_KEY="f0ce7ede-a176-4d72-8650-756286b47471"
   export CYPRESS_BASE_URL="http://localhost:4200"
   export CYPRESS_EMAIL='test@test.com'
   export CYPRESS_COMMITTEE_ID='C99999999'
