@@ -379,6 +379,7 @@ describe('TransactionTypeBaseComponent', () => {
             ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
           ),
           '/reports/transactions/report/999/create/PARTNERSHIP_JF_TRANSFER_MEMO',
+          { onSameUrlNavigation: 'reload' },
         );
       });
       it('should route to create a sub transaction of the current parent', () => {
