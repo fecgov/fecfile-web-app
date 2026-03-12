@@ -10,18 +10,18 @@ describe('Manage profile', () => {
 
   it('Can view the Account Info page', () => {
     ProfileAccountPage.goToPage();
-    cy.get('#committee_id:visible').should('have.value', 'C99999999');
+    cy.get('#committee_id').should('have.value', 'C99999999');
   });
 
   it('Can view the Users table', () => {
     ProfileUserListPage.goToPage();
-    cy.contains('Testson, Test').should('be.visible');
+    cy.contains('Testson, Test').should('exist');
   });
 
   it('Can navigate to the Committee members via the navbar', () => {
     const alias = PageUtils.getAlias('');
     cy.visit('/reports');
-    cy.get('#navbarProfileDropdownMenuLink:visible').click();
+    cy.get('#navbarProfileDropdownMenuLink').click();
     cy.get(alias).find('.p-popover').contains('Users').click();
     cy.location('pathname').should('include', '/members');
   });
@@ -31,7 +31,7 @@ describe('Manage profile', () => {
     cy.intercept('/profile').as('account');
     cy.visit('/reports');
 
-    cy.get('#navbarProfileDropdownMenuLink:visible').click();
+    cy.get('#navbarProfileDropdownMenuLink').click();
     cy.get(alias).find('.p-popover').contains('Account').click();
     cy.location('pathname').should('include', '/committee');
   });

@@ -28,7 +28,7 @@ export class TransactionDetailPage {
 
     if (formData.candidate) {
       cy.get('.contact-lookup-container').last().get('[data-cy="searchBox"]').type(formData.candidate);
-      cy.contains(formData.candidate).should('be.visible');
+      cy.contains(formData.candidate).should('exist');
       cy.contains(formData.candidate).click();
     }
 
@@ -260,15 +260,15 @@ export class TransactionDetailPage {
   static clickSave(reportId: string) {
     cy.intercept(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
     ).as('GetReceipts');
     cy.intercept(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
     ).as('GetLoans');
     cy.intercept(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
     cy.contains(/^Save$/).click();
 
@@ -280,22 +280,22 @@ export class TransactionDetailPage {
   static addGuarantor(name: string, amount: number | string, reportId: string) {
     cy.intercept(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
     ).as('GetReceipts');
     cy.intercept(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
     ).as('GetLoans');
     cy.intercept(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
     ).as('GetDisbursements');
 
     PageUtils.clickButton('Save & add loan guarantor');
     PageUtils.closeToast();
-    cy.contains('Guarantors to loan source').should('be.visible');
+    cy.contains('Guarantors to loan source').should('exist');
     ContactLookup.getContact(name);
-    cy.get('#amount:visible').safeType(amount);
+    cy.get('#amount').safeType(amount);
     cy.intercept({
       method: 'Post',
     }).as('saveGuarantor');

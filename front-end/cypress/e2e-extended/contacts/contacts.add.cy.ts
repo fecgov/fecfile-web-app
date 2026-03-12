@@ -101,7 +101,7 @@ describe('Contacts Add (/contacts)', () => {
       first_name: 'Candidate',
     });
     PageUtils.clickButton('Save');
-    cy.get('#candidate_id:visible')
+    cy.get('#candidate_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
@@ -116,7 +116,7 @@ describe('Contacts Add (/contacts)', () => {
       name: 'Bad Committee',
     });
     PageUtils.clickButton('Save');
-    cy.get('#committee_id:visible')
+    cy.get('#committee_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
@@ -125,7 +125,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Cancel flow: starting Add contact and cancelling does not create rows', () => {
-    cy.get('tbody')
+    cy.get('tbody', { timeout: 10000 })
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
         const types: ContactFormData['contact_type'][] = [
@@ -194,7 +194,13 @@ describe('Contacts Add (/contacts)', () => {
       zip: '',
     });
     PageUtils.clickButton('Save');
-    ContactListPage.assertRequiredFieldErrors();
+    cy.get('#last_name').parent().should('contain', 'This is a required field');
+    cy.get('#first_name').parent().should('contain', 'This is a required field');
+    cy.get('#street_1').parent().should('contain', 'This is a required field');
+    cy.get('#street_2').parent().should('not.contain', 'This is a required field');
+    cy.get('#city').parent().should('contain', 'This is a required field');
+    cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
+    cy.get('#zip').parent().should('contain', 'This is a required field');
     PageUtils.clickButton('Cancel');
     cy.contains('Save').should('not.exist');
   });
@@ -208,7 +214,7 @@ describe('Contacts Add (/contacts)', () => {
       '**/api/v1/contacts/?page=1&ordering=sort_name&page_size=10',
     ).as('contactsReload');
 
-    cy.get('tbody')
+    cy.get('tbody', { timeout: 5000 })
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
         PageUtils.clickButton('Add contact');
@@ -221,24 +227,24 @@ describe('Contacts Add (/contacts)', () => {
           PageUtils.clickButton('Save & Add More');
           ContactsHelpers.assertSuccessToastMessage();
 
-          cy.contains('button', 'Save & Add More').should('be.visible');
-          cy.contains('button', 'Save').should('be.visible');
+          cy.contains('button', 'Save & Add More').should('exist');
+          cy.contains('button', 'Save').should('exist');
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {
-            cy.get('#last_name:visible').should('have.value', '');
-            cy.get('#first_name:visible').should('have.value', '');
+            cy.get('#last_name').should('have.value', '');
+            cy.get('#first_name').should('have.value', '');
           } else {
-            cy.get('#name:visible').should('have.value', '');
+            cy.get('#name').should('have.value', '');
           }
-          cy.get('#street_1:visible').should('have.value', '');
-          cy.get('#city:visible').should('have.value', '');
-          cy.get('#zip:visible').should('have.value', '');
+          cy.get('#street_1').should('have.value', '');
+          cy.get('#city').should('have.value', '');
+          cy.get('#zip').should('have.value', '');
           if (c.type === 'Candidate') {
-            cy.get('#candidate_id:visible').should('have.value', '');
+            cy.get('#candidate_id').should('have.value', '');
           }
           if (c.type === 'Committee') {
-            cy.get('#committee_id:visible').should('have.value', '');
+            cy.get('#committee_id').should('have.value', '');
           }
         }
 

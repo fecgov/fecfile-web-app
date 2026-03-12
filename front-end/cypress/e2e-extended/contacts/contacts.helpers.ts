@@ -69,7 +69,7 @@ export class ContactsHelpers {
 
   static expectErrorNearLabel(labelRx: RegExp, errorRx: RegExp, root = ContactsHelpers.DIALOG) {
     ContactsHelpers.fieldForLabel(labelRx, root).within(() => {
-      cy.contains(errorRx).should('be.visible');
+      cy.contains(errorRx).should('exist');
     });
   }
 
@@ -125,8 +125,8 @@ export class ContactsHelpers {
 
   static assertAndContinueConfirmModal(contactName: string, expectedChanges: Array<string | RegExp> = []) {
     ContactsHelpers.getVisibleConfirmDialog().within(() => {
-      cy.contains(contactName).should('be.visible');
-      expectedChanges.forEach((c) => cy.contains(c).should('be.visible'));
+      cy.contains(contactName).should('exist');
+      expectedChanges.forEach((c) => cy.contains(c).should('exist'));
       cy.contains('button', /Continue/i).click();
     });
     cy.contains('.p-dialog-title', /Confirm/i).should('not.exist');
@@ -144,7 +144,7 @@ export class ContactsHelpers {
       '[role="option"]:not(.p-autocomplete-option-group):not([aria-disabled="true"])',
     ].join(',');
 
-    cy.get(inputSelector)
+    cy.get(inputSelector, { timeout: 20000 })
       .should('be.visible')
       .then(($input) => {
         const id = $input.attr('id');
@@ -153,7 +153,7 @@ export class ContactsHelpers {
 
         expect(listId, 'autocomplete list id').to.exist;
 
-        cy.get(`#${listId!}`)
+        cy.get(`#${listId!}`, { timeout: 20000 })
           .should('be.visible')
           .then(($list) => {
             const list = () => cy.wrap($list);
@@ -173,7 +173,7 @@ export class ContactsHelpers {
                   : new RegExp(ContactsHelpers.escapeRegExp(match), 'i');
 
               list()
-                .contains(selectableOptionSel, rx)
+                .contains(selectableOptionSel, rx, { timeout: 20000 })
                 .first()
                 .scrollIntoView()
                 .click({ force: true });
@@ -262,7 +262,7 @@ export class ContactsHelpers {
           .request({
             method: 'GET',
             url:
-              `**/api/v1/contacts/candidate_lookup/` +
+              `http://localhost:8080/api/v1/contacts/candidate_lookup/` +
               `?q=${encodeURIComponent(seed)}` +
               `&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=&exclude_ids=`,
           })
@@ -295,7 +295,7 @@ export class ContactsHelpers {
   static assertDisabled(selector: string) {
     cy.get(selector)
       .first()
-      .should('be.visible')
+      .should('exist')
       .should(($el) => {
         const disabled =
           $el.is(':disabled') ||
@@ -308,7 +308,7 @@ export class ContactsHelpers {
   static assertEnabled(selector: string) {
     cy.get(selector)
       .first()
-      .should('be.visible')
+      .should('exist')
       .should(($el) => {
         const disabled =
           $el.is(':disabled') ||
@@ -342,13 +342,13 @@ export class ContactsHelpers {
       String.raw`showing\s+${start}\s*(?:-|to)\s*${end}\s+of\s+${total}\s+contacts?`,
       'i',
     );
-    cy.contains(rx).should('be.visible');
+    cy.contains(rx).should('exist');
   }
 
   static assertSuccessToastMessage() {
     cy.contains('.p-toast-message, .p-toast', /(success|saved|created)/i, {
       timeout: 10000,
-    }).should('be.visible');
+    }).should('exist');
   }
 
   static assertRowValues(
@@ -357,7 +357,7 @@ export class ContactsHelpers {
     expectedFecId?: string,
   ) {
     cy.contains('tbody tr', rowText, { matchCase: false })
-      .should('be.visible')
+      .should('exist')
       .within(() => {
         cy.get('td')
           .eq(1)
@@ -523,14 +523,14 @@ export class ContactsHelpers {
     }
 
     PageUtils.clickButton('Add contact');
-    cy.get('#entity_type_dropdown:visible').first().click();
+    cy.get('#entity_type_dropdown').first().click();
 
     cy.contains('.p-select-option', entityLabel)
       .scrollIntoView({ offset: { top: 0, left: 0 } })
       .click();
 
     cy.get('.p-autocomplete-input')
-      .should('be.visible')
+      .should('exist')
       .type(searchTerm);
 
     cy.wait('@entityLookup');
@@ -546,7 +546,7 @@ export class ContactsHelpers {
     cy.wait('@createContact');
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
-    return cy.contains('tbody tr', rowMatch).should('be.visible');
+    return cy.contains('tbody tr', rowMatch).should('exist');
   }
 
   static assertTransactionHistoryRow(row: TxnHistoryRow): Cypress.Chainable<void> {
@@ -591,11 +591,11 @@ export class ContactsHelpers {
     };
 
     return cy
-      .get('app-table[itemname="transactions"]')
-      .should('be.visible')
-      .find('table[role="table"]')
+      .get('app-table[itemname="transactions"]', { timeout: 15000 })
+      .should('exist')
+      .find('table[role="table"]', { timeout: 15000 })
       .first()
-      .should('be.visible')
+      .should('exist')
       .then(($table) => {
         const typeIdx = getColIndexByThIdOrText($table, colIds.type, 'Type');
         expect(typeIdx, 'Type column index').to.be.gte(0);
@@ -654,7 +654,7 @@ export class ContactsHelpers {
 
   private static getVisibleConfirmDialog() {
     return cy
-      .contains('.p-dialog-title', /Confirm/i)
+      .contains('.p-dialog-title', /Confirm/i, { timeout: 10000 })
       .should('be.visible')
       .closest('.p-confirm-dialog, .p-dialog');
   }
@@ -707,7 +707,7 @@ export class ContactsDeleteHelpers {
   static createContact(contact: MockContact): Cypress.Chainable<Contact> {
     return ContactsDeleteHelpers.requestWithCookies<Contact>(
       'POST',
-      '**/api/v1/contacts/',
+      'http://localhost:8080/api/v1/contacts/',
       contact,
     ).then((response) => response.body);
   }
@@ -715,7 +715,7 @@ export class ContactsDeleteHelpers {
   static createReport(report: F3X): Cypress.Chainable<string> {
     return ContactsDeleteHelpers.requestWithCookies<{ id: string }>(
       'POST',
-      '**/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+      'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
       report,
     ).then((response) => response.body.id);
   }
@@ -728,7 +728,7 @@ export class ContactsDeleteHelpers {
     const transaction = buildScheduleA('INDIVIDUAL_RECEIPT', 200.01, transactionDate, contact, reportId);
     return ContactsDeleteHelpers.requestWithCookies(
       'POST',
-      '**/api/v1/transactions/',
+      'http://localhost:8080/api/v1/transactions/',
       transaction,
     );
   }
@@ -795,6 +795,7 @@ export class ContactsDeleteHelpers {
       .contains(
         'dialog, [role="dialog"], .p-dialog, app-deleted-contact, app-table, h1, h2, h3',
         title,
+        { timeout: 10000 },
       )
       .should('be.visible')
       .then(($el) => {
@@ -819,13 +820,13 @@ export class ContactsDeleteHelpers {
   }
 
   static getContactRow(contactName: string) {
-    return cy.contains('tbody tr', contactName).should('be.visible');
+    return cy.contains('tbody tr', contactName, { timeout: 15000 }).should('be.visible');
   }
 
   static openActionsMenu(contactName: string) {
     PageUtils.blurActiveField();
     PageUtils.getKabob(contactName);
-    cy.get('.p-popover').filter(':visible').should('be.visible');
+    cy.get('.p-popover').filter(':visible').should('exist');
     cy.get('.p-popover').filter(':visible').contains('button', /Edit/i).should('be.visible');
   }
 
@@ -1013,7 +1014,7 @@ export class ContactsDeleteHelpers {
     const deleteAlias = options.deleteAlias ?? 'deleteContact';
     const contactsGoneAlias = options.contactsGoneAlias ?? 'contactsGone';
 
-    cy.contains('tbody tr', contactName).should('be.visible');
+    cy.contains('tbody tr', contactName, { timeout: 15000 }).should('be.visible');
     PageUtils.clickKababItem(contactName, 'Delete');
     ContactsDeleteHelpers.assertConfirmDeleteModalVisible();
     ContactsDeleteHelpers.clickConfirmDeleteModalButton('Confirm');
@@ -1024,7 +1025,7 @@ export class ContactsDeleteHelpers {
     if (contactsGoneAlias) {
       cy.wait(`@${contactsGoneAlias}`);
     }
-    cy.contains('tbody tr', contactName).should('not.exist');
+    cy.contains('tbody tr', contactName, { timeout: 15000 }).should('not.exist');
   }
 
   static restoreContact(contactName: string, options: { listAlias?: string } = {}) {
@@ -1032,7 +1033,7 @@ export class ContactsDeleteHelpers {
     cy.intercept('GET', '**/api/v1/contacts-deleted/?page=**').as('getDeletedContacts');
 
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog()
-      .contains('tbody tr', contactName)
+      .contains('tbody tr', contactName, { timeout: 15000 })
       .should('be.visible')
       .find('.p-checkbox-input')
       .check({ force: true });

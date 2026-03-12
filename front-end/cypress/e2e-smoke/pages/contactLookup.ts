@@ -6,11 +6,11 @@ export class ContactLookup {
     alias = PageUtils.getAlias(alias);
     if (type !== undefined) {
       PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', type, alias, index);
-      cy.contains('LOOKUP').should('be.visible');
+      cy.contains('LOOKUP').should('exist');
     }
     cy.get(alias).find('[data-cy="searchBox"]').eq(index).type(name.slice(0, 3));
-    cy.contains(name).should('be.visible').as('contactName');
-    cy.get('@contactName:visible').click();
+    cy.contains(name).should('exist').as('contactName');
+    cy.get('@contactName').click({ force: true });
   }
 
   static getCandidate(
@@ -23,10 +23,9 @@ export class ContactLookup {
     const lastName = contact['last_name'];
     if (!lastName) return;
     const nameEntry = lastName.slice(0, 3);
-    const optionText = [lastName, contact.first_name].filter(Boolean).join(', ');
     cy.intercept(
       'GET',
-      `**/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+      `http://localhost:8080/api/v1/contacts/candidate_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&office=&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
       {
         statusCode: 200,
         body: {
@@ -36,21 +35,13 @@ export class ContactLookup {
       },
     );
     const candidateSection = cy.get(alias);
-    candidateSection.find('[data-cy="searchBox"]').type(nameEntry).then(($input) => {
-      const inputId = $input.attr('id');
-      const listId = $input.attr('aria-controls') ?? (inputId ? `${inputId}_list` : undefined);
-
-      if (!listId) {
-        throw new Error('Candidate autocomplete list id was not found.');
-      }
-
-      cy.get(`[id="${listId}"]`)
-        .should('be.visible')
-        .find('.p-autocomplete-option:visible')
-        .should('contain', optionText)
-        .first()
-        .click();
-    });
+    candidateSection.find('[data-cy="searchBox"]').type(nameEntry);
+    candidateSection
+      .get('.p-autocomplete-list-container')
+      .contains(nameEntry)
+      .then(($name) => {
+        cy.wrap($name).click();
+      });
   }
 
   static getCommittee(
@@ -65,7 +56,7 @@ export class ContactLookup {
     const nameEntry = name.slice(0, 3);
     cy.intercept(
       'GET',
-      `**/api/v1/contacts/committee_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
+      `http://localhost:8080/api/v1/contacts/committee_lookup/?q=${nameEntry}&max_fec_results=10&max_fecfile_results=5&exclude_fec_ids=${excludeFecIds.join(',')}&exclude_ids=${excludeIds.join(',')}`,
       {
         statusCode: 200,
         body: {

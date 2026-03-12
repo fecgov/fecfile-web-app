@@ -124,7 +124,7 @@ describe('failOn5xx tripwire: nightly self-test', () => {
       'self-test artifact should be written under the _self-test dir'
     ).to.include(`${SELF_TEST_ARTIFACT_DIR}/`);
 
-    cy.readFile(capturedArtifactPath).then((raw) => {
+    cy.readFile(capturedArtifactPath, { timeout: 10_000 }).then((raw) => {
       const artifact = raw as FailOn5xxArtifact;
 
       expect(artifact).to.have.property('failures');

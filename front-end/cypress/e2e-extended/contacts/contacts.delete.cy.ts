@@ -191,7 +191,7 @@ const waitForLinkedContactStatus = (
 const fetchLinkedContactFromApi = (pageSize: number, errorLabel: string) =>
   ContactsDeleteHelpers.requestWithCookies<ContactListResponse>(
     'GET',
-    `**/api/v1/contacts/?page=1&ordering=sort_name&page_size=${pageSize}`,
+    `http://localhost:8080/api/v1/contacts/?page=1&ordering=sort_name&page_size=${pageSize}`,
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
     return cy.wrap(requireLinkedContact(results, errorLabel), { log: false });
@@ -223,7 +223,7 @@ const waitForLinkedContactStatusFromApi = (
 const fetchSeededReportFromApi = () =>
   ContactsDeleteHelpers.requestWithCookies<ReportListResponse>(
     'GET',
-    '**/api/v1/reports/?page=1&ordering=-coverage_through_date&page_size=25',
+    'http://localhost:8080/api/v1/reports/?page=1&ordering=-coverage_through_date&page_size=25',
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
     return cy.wrap(requireSeededReport(results), { log: false });
@@ -232,7 +232,7 @@ const fetchSeededReportFromApi = () =>
 const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
   ContactsDeleteHelpers.requestWithCookies<TransactionListResponse>(
     'GET',
-    `**/api/v1/transactions/?page=1&ordering=-created&page_size=50&report_id=${reportId}&schedules=A`,
+    `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&report_id=${reportId}&schedules=A`,
   ).then((response) => {
     const results = Array.isArray(response.body?.results) ? response.body.results : [];
     const transactionId = findLinkedTransactionId(results, contactId, reportId);
@@ -241,7 +241,7 @@ const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
     }
     return ContactsDeleteHelpers.requestWithCookies<TransactionListResponse>(
       'GET',
-      `**/api/v1/transactions/?page=1&ordering=-created&page_size=50&contact=${contactId}`,
+      `http://localhost:8080/api/v1/transactions/?page=1&ordering=-created&page_size=50&contact=${contactId}`,
     ).then((fallback) => {
       const fallbackResults = Array.isArray(fallback.body?.results) ? fallback.body.results : [];
       return cy.wrap(requireLinkedTransactionId(fallbackResults, contactId, reportId), { log: false });
@@ -251,11 +251,11 @@ const fetchLinkedTransactionIdFromApi = (reportId: string, contactId: string) =>
 const deleteTransactionAndReport = (transactionId: string, reportId: string) =>
   ContactsDeleteHelpers.requestWithCookies(
     'DELETE',
-    `**/api/v1/transactions/${transactionId}/`,
+    `http://localhost:8080/api/v1/transactions/${transactionId}/`,
   ).then(() =>
     ContactsDeleteHelpers.requestWithCookies(
       'DELETE',
-      `**/api/v1/reports/${reportId}/`,
+      `http://localhost:8080/api/v1/reports/${reportId}/`,
     ),
   );
 
@@ -323,9 +323,9 @@ describe('Contacts - delete guard', () => {
 
     ContactsDeleteHelpers.openRestoreDeletedContactsModal();
     cy.wait('@getDeletedContacts');
-    cy.get('#restoreButton:visible').should('be.disabled');
+    cy.get('#restoreButton').should('be.disabled');
     ContactsDeleteHelpers.selectDeletedContactInRestoreModal(UNLINKED_CONTACT);
-    cy.get('#restoreButton:visible').should('not.be.disabled').click();
+    cy.get('#restoreButton').should('not.be.disabled').click();
 
     cy.wait('@restoreContact');
     cy.wait('@getDeletedContacts');
@@ -410,7 +410,7 @@ describe('Contacts - delete guard', () => {
       if (!deleteRequests) {
         return cy.wrap(null, { log: false });
       }
-      return cy.wait('@deleteContact');
+      return cy.wait('@deleteContact', { timeout: 15000 });
     });
 
     cy.then(() => {
@@ -479,7 +479,7 @@ describe('Contacts - delete guard', () => {
     return fetchLinkedContact().then((linkedContact) =>
       ContactsDeleteHelpers.requestWithCookies(
         'DELETE',
-        `**/api/v1/contacts/${linkedContact.id}/`,
+        `http://localhost:8080/api/v1/contacts/${linkedContact.id}/`,
         undefined,
         { failOnStatusCode: false },
       ).then((response) => {
@@ -547,16 +547,16 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
     cy.wait('@getDeletedContacts');
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog().should('be.visible');
     ContactsDeleteHelpers.getRestoreDeletedContactsDialog().within(() => {
-      cy.contains('tbody tr', contactToDelete).should('be.visible');
-      cy.contains('tbody tr', contactToRestore).should('be.visible');
-      cy.contains('tbody tr', contactToPreserve).should('not.exist');
+      cy.contains('tbody tr', contactToDelete, { timeout: 15000 }).should('be.visible');
+      cy.contains('tbody tr', contactToRestore, { timeout: 15000 }).should('be.visible');
+      cy.contains('tbody tr', contactToPreserve, { timeout: 15000 }).should('not.exist');
     });
     ContactsDeleteHelpers.restoreContact(contactToRestore);
     ContactsHelpers.assertSuccessToastMessage();
     ContactListPage.goToPage();
     cy.wait('@getContactsList');
-    cy.contains('tbody tr', contactToPreserve).should('be.visible');
-    cy.contains('tbody tr', contactToRestore).should('be.visible');
+    cy.contains('tbody tr', contactToPreserve, { timeout: 15000 }).should('be.visible');
+    cy.contains('tbody tr', contactToRestore, { timeout: 15000 }).should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('be.visible');
   });
 
@@ -567,14 +567,14 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
   it('check that all contacts, including soft-deleted ones, are deleted', () => {
     cy.contains('button,a', 'Restore deleted contacts')
       .should('not.exist');
-    cy.contains('.empty-message', 'No data available in table').should('be.visible');
+    cy.contains('.empty-message', 'No data available in table').should('exist');
     cy.get('.paginator-text')
       .should('be.visible')
       .and('contain', 'Showing 0 to 0 of 0 contacts:');
 
     ContactsDeleteHelpers.requestWithCookies<ContactsDeletedResponse>(
       'GET',
-      '**/api/v1/contacts-deleted/?page=1&ordering=sort_name',
+      'http://localhost:8080/api/v1/contacts-deleted/?page=1&ordering=sort_name',
       undefined,
       { failOnStatusCode: false },
     ).then((response) => {

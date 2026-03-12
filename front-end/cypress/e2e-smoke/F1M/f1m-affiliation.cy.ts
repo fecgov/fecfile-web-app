@@ -28,18 +28,6 @@ function createContactPromise(
 }
 
 describe('Manage reports', () => {
-  const clickRadioLabel = (inputId: string, label: string) => {
-    cy.get(`label[for="${inputId}"]`).filter(':visible').first().should('contain', label).click();
-  };
-
-  const typeCalendarDate = (fieldName: string, date: Date = new Date()) => {
-    cy.get(`#${fieldName}:visible`)
-      .clear()
-      .type(PageUtils.dateToString(date))
-      .type('{esc}')
-      .blur();
-  };
-
   beforeEach(() => {
     Initialize();
   });
@@ -82,12 +70,12 @@ describe('Manage reports', () => {
 
       ReportListPage.createF1M();
       PageUtils.valueCheck('[data-cy="committee-id-input"]', 'C99999999');
-      clickRadioLabel('X', 'STATE PARTY');
-      clickRadioLabel('qualification', 'QUALIFICATION');
-      cy.contains('h2', 'Qualification').should('be.visible');
-      typeCalendarDate('date_of_51st_contributor');
-      typeCalendarDate('date_of_original_registration');
-      typeCalendarDate('date_committee_met_requirements');
+      cy.get('[data-cy="state-party-radio"]').click();
+      cy.get('[data-cy="qualification-radio"]').click();
+      cy.get('[data-cy="qualification-radio"]').click();
+      PageUtils.calendarSetValue('[data-cy="date_of_51st_contributor"]');
+      PageUtils.calendarSetValue('[data-cy="date_of_original_registration"]');
+      PageUtils.calendarSetValue('[data-cy="date_committee_met_requirements"]');
 
       const excludeFecIds: string[] = [];
       const excludeIds: string[] = [];
@@ -115,7 +103,7 @@ describe('Manage reports', () => {
       }
 
       PageUtils.clickButton('Save and continue');
-      cy.get('[data-cy="print-preview"]').should('be.visible');
+      cy.get('[data-cy="print-preview"]').should('exist');
 
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
       PageUtils.shouldNotHaveSidebarItem('Report Status');

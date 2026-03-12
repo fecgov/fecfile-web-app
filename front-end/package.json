@@ -71,7 +71,7 @@
         "@typescript-eslint/eslint-plugin": "8.56.0",
         "@typescript-eslint/parser": "8.56.0",
         "axe-core": "^4.11.1",
-        "cypress": "^15.11.0",
+        "cypress": "^15.10.0",
         "cypress-axe": "^1.7.0",
         "cypress-mochawesome-reporter": "4.0.2",
         "eslint": "9.39.3",
@@ -90,7 +90,6 @@
     },
     "overrides": {
         "rollup": "4.59.0",
-        "tar": "7.5.9",
         "vite": "7.1.11",
         "qs": "6.15.0",
         "@isaacs/brace-expansion": "5.0.1"
