@@ -9,7 +9,7 @@ import { ContactListPage } from '../pages/contactListPage';
 import { ContactLookup } from '../pages/contactLookup';
 import { buildDebtOwedByCommittee } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel'
 import { assertDebtFieldValues } from './utils/debt-assertions';
@@ -35,7 +35,7 @@ function setupCoordinatedPartyExpenditure(
 
 function createDebtRepaymentCallback(result: any) {
   return () => {
-    ReportTransactionListPage.goToReportTransactionListPage(result.report);
+    ReportListPage.gotToReportTransactionListPage(result.report);
     cy.contains('Debt Owed By Committee').should('be.visible');
 
     PageUtils.clickKababItem(
@@ -69,7 +69,7 @@ describe('Debts', () => {
 
   it('should test Debt Owed By Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
@@ -78,7 +78,7 @@ describe('Debts', () => {
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
       PageUtils.clickButton('Save');
 
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed By Committee').should('be.visible');
 
@@ -93,7 +93,7 @@ describe('Debts', () => {
 
   it('should test Owed To Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -109,7 +109,7 @@ describe('Debts', () => {
 
   it('should test debt carry-forward behavior', () => {
     cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -161,7 +161,7 @@ describe('Debts', () => {
         balanceAtClose: '$9,000.00',
       });
 
-      ReportTransactionListPage.createF3X({
+      ReportListPage.createF3X({
         ...defaultForm3XData,
         filing_frequency: 'Q',
         report_code: 'Q3',
@@ -224,7 +224,7 @@ describe('Debts', () => {
         `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=**&schedules=C,D`,
       ).as('GetLoans');
 
-      ReportTransactionListPage.createF3X({
+      ReportListPage.createF3X({
         ...defaultForm3XData,
         filing_frequency: 'Q',
         report_code: 'YE',

@@ -5,7 +5,7 @@ import { DataSetup } from './setup';
 import { ScheduleFormData } from '../models/TransactionFormModel';
 import { Individual } from './utils/start-transaction/receipts';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 
@@ -55,7 +55,7 @@ describe('Reattributions', () => {
     DataSetup({ individual: true, candidate: true }).then((result: any) => {
       const receipt = buildScheduleA('INDIVIDUAL_RECEIPT', 100.55, '2025-04-12', result.individual, result.report);
       makeTransaction(receipt, () => {
-        ReportTransactionListPage.goToReportTransactionListPage(result.report);
+        ReportListPage.gotToReportTransactionListPage(result.report);
         Reattribute(result);
       });
     });
@@ -65,7 +65,7 @@ describe('Reattributions', () => {
   //   // Create an individual contact to be used with contact lookup
   //   ContactListPage.createIndividual(assignee);
   //   CreateReceipt();
-  //   ReportTransactionListPage.createF3X(reportFormDataJuly);
+  //   ReportListPage.createF3X(reportFormDataJuly);
   //   PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
   //   cy.wait(500);
   //   Reattribute(true);

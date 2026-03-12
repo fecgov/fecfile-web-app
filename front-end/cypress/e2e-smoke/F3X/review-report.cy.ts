@@ -1,7 +1,7 @@
 import { defaultScheduleFormData } from '../models/TransactionFormModel';
 import { Initialize } from '../pages/loginPage';
 import { PageUtils, currentYear } from '../pages/pageUtils';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { DataSetup } from './setup';
@@ -104,7 +104,7 @@ describe('Receipt Transactions', () => {
   it('should recalculate after transaction created or updated', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       // check summary calc runs
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       visitSummaryWithSpinner(result.report, true);
 
       // Create transaction

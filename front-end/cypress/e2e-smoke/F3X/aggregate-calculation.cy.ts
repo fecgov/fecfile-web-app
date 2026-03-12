@@ -11,7 +11,7 @@ import { faker } from '@faker-js/faker';
 import { makeTransaction } from '../requests/methods';
 import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 
 function setupTransactions(secondSame: boolean) {
   return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {
@@ -69,7 +69,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('new transaction aggregate', () => {
     setupTransactions(true).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
 
       openTransactionRow(1);
       cy.contains('Create a new contact').should('be.visible');
@@ -104,7 +104,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.contains('Transactions in this report').should('be.visible');
       openTransactionRow(1);
 
@@ -122,7 +122,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction change amount', () => {
     setupTransactions(true).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.contains('Transactions in this report').should('be.visible');
       openTransactionRow(1);
 
@@ -138,7 +138,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing transaction date leapfrogging', () => {
     setupTransactions(true).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.contains('Transactions in this report').should('be.visible');
       openTransactionRow(0);
 
@@ -161,7 +161,7 @@ describe('Tests transaction form aggregate calculation', () => {
         result.report,
       );
       makeTransaction(transaction_c, () => {
-        ReportTransactionListPage.goToReportTransactionListPage(result.report);
+        ReportListPage.gotToReportTransactionListPage(result.report);
         cy.contains('Transactions in this report').should('be.visible');
         openTransactionRow(0);
 
@@ -179,7 +179,7 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('existing IE date leapfrogging', () => {
     cy.wrap(DataSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
-      ReportTransactionListPage.goToReportTransactionListPage(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
 
       // Create the first Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();

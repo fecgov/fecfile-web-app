@@ -2,7 +2,7 @@ import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 
-export class ReportTransactionListPage {
+export class ReportListPage {
   static goToPage() {
     cy.intercept('GET', '**/api/v1/reports/**').as('GetReports');
     cy.visit('/reports');
@@ -34,29 +34,29 @@ export class ReportTransactionListPage {
   }
 
   static createF3X(fd = defaultReportFormData) {
-    ReportTransactionListPage.goToPage();
+    ReportListPage.goToPage();
     F3xCreateReportPage.coverageCall();
-    ReportTransactionListPage.clickCreateAndSelectForm('F3X');
+    ReportListPage.clickCreateAndSelectForm('F3X');
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
     PageUtils.clickButton('Save and continue');
   }
 
   static createF1M() {
-    ReportTransactionListPage.goToPage();
-    ReportTransactionListPage.clickCreateAndSelectForm('F1M', true);
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateAndSelectForm('F1M', true);
     cy.get('[data-cy="form-1m-component"]').should('be.visible');
   }
 
   static createF24(report = defaultForm24Data) {
-    ReportTransactionListPage.goToPage();
-    ReportTransactionListPage.clickCreateAndSelectForm('F24', true, false);
+    ReportListPage.goToPage();
+    ReportListPage.clickCreateAndSelectForm('F24', true, false);
     cy.get('p-togglebutton').contains(`${report.report_type_24_48} Hour`).should('be.visible').click();
     cy.get('[data-cy="start-report"]:visible').click();
   }
 
-  static goToReportTransactionListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    return ReportTransactionListPage.checkReportTransactionListPageLoaded(
+  static gotToReportTransactionListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+    return ReportListPage.checkReportTransactionListPageLoaded(
       reportId,
       includeReceipts,
       includeDisbursements,
@@ -72,16 +72,16 @@ export class ReportTransactionListPage {
     includeLoans = true,
     visit: Cypress.Chainable = cy.wrap(null),
   ) {
-    ReportTransactionListPage.registerReportTransactionListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
+    ReportListPage.registerReporTransactiontListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
 
     return visit.then(() => {
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
       cy.contains('Transactions in this report').should('be.visible');
-      ReportTransactionListPage.waitForReportTransactionListRequests(includeReceipts, includeDisbursements, includeLoans);
+      ReportListPage.waitForReportTransactionListRequests(includeReceipts, includeDisbursements, includeLoans);
     });
   }
 
-  private static registerReportTransactionListInterceptions(
+  private static registerReporTransactiontListInterceptions(
     reportId: string,
     includeReceipts = true,
     includeDisbursements = true,

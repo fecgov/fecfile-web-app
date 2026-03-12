@@ -1,5 +1,5 @@
 import { Initialize } from '../pages/loginPage';
-import { ReportTransactionListPage } from '../pages/reportTransactionListPage';
+import { ReportListPage } from '../pages/reportListPage';
 import { ReportLevelMemoPage } from '../pages/reportLevelMemoPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { defaultForm3XData } from '../models/ReportFormModel';
@@ -12,8 +12,8 @@ describe('Manage reports', () => {
   });
 
   it('Create a Quarterly Election Year report', () => {
-    ReportTransactionListPage.createF3X();
-    ReportTransactionListPage.goToPage();
+    ReportListPage.createF3X();
+    ReportListPage.goToPage();
     cy.get('[data-cy="form3x-list-component').as('form3xTable');
     cy.get('@form3xTable:visible').get('tr:visible').should('contain', 'In progress');
     cy.get('@form3xTable:visible').get('tr:visible').should('contain', 'GENERAL (12G)');
@@ -26,8 +26,8 @@ describe('Manage reports', () => {
       filing_frequency: 'M',
       report_code: 'M10',
     };
-    ReportTransactionListPage.createF3X(formData);
-    ReportTransactionListPage.goToPage();
+    ReportListPage.createF3X(formData);
+    ReportListPage.goToPage();
     cy.get('[data-cy="form3x-list-component').as('form3xTable');
     cy.get('@form3xTable:visible').get('tr:visible').should('contain', 'OCTOBER 20 MONTHLY (M10)');
   });
@@ -38,8 +38,8 @@ describe('Manage reports', () => {
       report_type_category: 'Non-Election Year',
       report_code: '30R',
     };
-    ReportTransactionListPage.createF3X(formData);
-    ReportTransactionListPage.goToPage();
+    ReportListPage.createF3X(formData);
+    ReportListPage.goToPage();
     cy.get('[data-cy="form3x-list-component').as('form3xTable');
     cy.get('@form3xTable:visible').get('tr:visible').should('contain', 'RUNOFF (30R)');
   });
@@ -51,8 +51,8 @@ describe('Manage reports', () => {
       report_type_category: 'Non-Election Year',
       report_code: 'YE',
     };
-    ReportTransactionListPage.createF3X(formData);
-    ReportTransactionListPage.goToPage();
+    ReportListPage.createF3X(formData);
+    ReportListPage.goToPage();
     cy.get('[data-cy="form3x-list-component').as('form3xTable');
     cy.get('@form3xTable:visible').get('tr:visible').should('contain', 'JANUARY 31 YEAR-END (YE)');
     cy.get('@form3xTable:visible').get('tr:visible').should('contain', `04/01/${currentYear} - 04/30/${currentYear}`);
@@ -60,14 +60,14 @@ describe('Manage reports', () => {
 
   it('Create a report error for overlapping coverage dates', () => {
     // Create report #1
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
 
     // Create report #2
     const formData = {
       ...defaultForm3XData,
       report_code: '30G',
     };
-    ReportTransactionListPage.createF3X(formData);
+    ReportListPage.createF3X(formData);
 
     // Check for error messages caused by the overlapping dates
     const errorMessage = `You have entered coverage dates that overlap the coverage dates of the following report: 12-DAY PRE-GENERAL (12G)  04/01/${currentYear} - 04/30/${currentYear}`;
@@ -79,29 +79,29 @@ describe('Manage reports', () => {
 
   xit('Create report with previous existing report types disabled', () => {
     // Create report #1
-    ReportTransactionListPage.createF3X();
-    ReportTransactionListPage.goToPage();
+    ReportListPage.createF3X();
+    ReportListPage.goToPage();
     // Start second report and check to see if report code disabled
     F3xCreateReportPage.coverageCall();
-    ReportTransactionListPage.clickCreateAndSelectForm('F3X');
+    ReportListPage.clickCreateAndSelectForm('F3X');
     F3xCreateReportPage.waitForCoverage();
     cy.get('label[for="12G"]').should('have.class', 'p-disabled');
   });
 
   it('Create report and save', () => {
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
   });
 
   xit('Check values on the Summary Page', () => {
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
   });
 
   xit('Check values on the Detail Summary Page', () => {
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
   });
 
   it('Create a report level memo', () => {
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
 
     // Enter the memo text
     PageUtils.clickSidebarSection('REVIEW A REPORT');
@@ -117,10 +117,10 @@ describe('Manage reports', () => {
   });
 
   xit('Confirm report information', () => {
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
   });
 
   xit('Submit a report', () => {
-    ReportTransactionListPage.createF3X();
+    ReportListPage.createF3X();
   });
 });
