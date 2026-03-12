@@ -29,6 +29,7 @@ export class ContactListPage {
 
     const formAlias = ContactListPage.getVisibleDialogFormAlias(alias);
     const exactValue = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value.trim())}\s*$`);
+    const overlaySelector = `[data-cy="${selectHook}-overlay"]`;
 
     cy.get(formAlias)
       .find(`[data-cy="${selectHook}"]`)
@@ -38,7 +39,7 @@ export class ContactListPage {
       .click();
 
     cy.get('body')
-      .find('[role="listbox"], .p-select-list')
+      .find(overlaySelector)
       .filter(':visible')
       .last()
       .within(() => {

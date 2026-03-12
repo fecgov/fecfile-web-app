@@ -183,6 +183,7 @@
               controlName="state"
               [form]="form"
               [options]="stateOptions"
+              [pt]="{ pcOverlay: { root: { 'data-cy': 'contact-state-select-overlay' } } }"
               appendTo="body"
             />
             <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />

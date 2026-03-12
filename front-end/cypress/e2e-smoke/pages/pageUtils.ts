@@ -51,14 +51,25 @@ export class PageUtils {
         .find(querySelector)
         .eq(index)
         .then(($select) => {
-          const visibleSelect = $select.filter(':visible');
-          const trigger = visibleSelect.length
-            ? visibleSelect.first()
-            : $select.find('.p-select:visible, [role="combobox"]:visible, .p-select-dropdown:visible').first();
+          const visibleSelect = $select.filter(':visible').first();
+          const label = $select.find('[data-pc-section="label"], .p-select-label').filter(':visible').first();
+          const root = $select.find('[data-pc-section="root"], .p-select').filter(':visible').first();
+          const combobox = $select.find('[role="combobox"]').filter(':visible').first();
+          const dropdown = $select.find('.p-select-dropdown, [aria-label="dropdown trigger"]').filter(':visible').first();
+          let trigger = dropdown;
+
+          if (visibleSelect.length) {
+            trigger = visibleSelect;
+          } else if (label.length) {
+            trigger = label;
+          } else if (root.length) {
+            trigger = root;
+          } else if (combobox.length) {
+            trigger = combobox;
+          }
 
           expect(trigger.length, `visible p-select trigger for ${querySelector}`).to.be.greaterThan(0);
-          cy.wrap(trigger).as('trigger');
-          cy.get('@trigger').click();
+          return cy.wrap(trigger).scrollIntoView().click();
         });
       cy.contains('p-selectitem, .p-select-option, [role="option"]', exactValue)
         .scrollIntoView({ offset: { top: 0, left: 0 } })

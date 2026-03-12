@@ -14,7 +14,10 @@
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
       id="entity_type_dropdown"
       appendTo="body"
-      [pt]="{ dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon' }"
+      [pt]="{
+        dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon',
+        pcOverlay: { root: { 'data-cy': 'contact-type-select-overlay' } },
+      }"
     />
   </div>
   @if (showSearchBoxCallback()) {
