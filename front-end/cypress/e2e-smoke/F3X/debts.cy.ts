@@ -237,6 +237,7 @@ describe('Debts', () => {
     beforeEach(() => {
       ContactListPage.deleteAllContacts();
       PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
+      ContactListPage.deleteAllContacts();
     });
 
     afterEach(() => {

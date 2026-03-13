@@ -175,7 +175,7 @@ describe('Loans', () => {
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
       PageUtils.enterValue('#amount', formData.amount);
-      TransactionDetailPage.clickSave(result.report);
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Made').should('exist');
     });
@@ -228,7 +228,7 @@ describe('Loans', () => {
       cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
-      TransactionDetailPage.clickSave(result.report);
+      TransactionDetailPage.clickSave( TransactionDetailPage.BUTTON);
       clickLoan('Edit');
       cy.contains('ORGANIZATION NAME').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);

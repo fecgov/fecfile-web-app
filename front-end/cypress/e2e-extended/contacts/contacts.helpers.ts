@@ -57,23 +57,23 @@ export class ContactsHelpers {
     'Actions',
   ] as const;
 
-  static readonly DIALOG = '.p-dialog:visible';
+  static readonly CONTACT_DIALOG = '[data-cy="contact-dialog"]:visible';
 
   static escapeRegExp(s: string) {
     return s.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
   }
 
-  static fieldForLabel(labelRx: RegExp, root = ContactsHelpers.DIALOG) {
+  static fieldForLabel(labelRx: RegExp, root = ContactsHelpers.CONTACT_DIALOG) {
     return cy.get(root).contains('label', labelRx).closest('.field, .p-field, div.field');
   }
 
-  static expectErrorNearLabel(labelRx: RegExp, errorRx: RegExp, root = ContactsHelpers.DIALOG) {
+  static expectErrorNearLabel(labelRx: RegExp, errorRx: RegExp, root = ContactsHelpers.CONTACT_DIALOG) {
     ContactsHelpers.fieldForLabel(labelRx, root).within(() => {
       cy.contains(errorRx).should('exist');
     });
   }
 
-  static setTelephone(value: string, root = ContactsHelpers.DIALOG) {
+  static setTelephone(value: string, root = ContactsHelpers.CONTACT_DIALOG) {
     ContactsHelpers.fieldForLabel(/^Telephone/i, root)
       .find('input')
       .last()
@@ -81,7 +81,7 @@ export class ContactsHelpers {
       .type(value);
   }
 
-  static setDropdownByLabel(labelRegex: RegExp, optionText: string, root = ContactsHelpers.DIALOG) {
+  static setDropdownByLabel(labelRegex: RegExp, optionText: string, root = ContactsHelpers.CONTACT_DIALOG) {
     ContactsHelpers.fieldForLabel(labelRegex, root).within(() => {
       cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click({ force: true });
     });
@@ -100,7 +100,7 @@ export class ContactsHelpers {
   static setDropdownByLabelIfPresent(
     labelRegex: RegExp,
     optionText: string,
-    root = ContactsHelpers.DIALOG,
+    root = ContactsHelpers.CONTACT_DIALOG,
   ) {
     cy.get(root).then(($root) => {
       const has = Array.from($root.find('label')).some((l) =>
@@ -638,7 +638,7 @@ export class ContactsHelpers {
   }
 
   static clickSaveAndHandleConfirm() {
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    this.clickDialogSave();
 
     cy.get('body').then(($body) => {
       const hasConfirm = $body
@@ -650,6 +650,11 @@ export class ContactsHelpers {
         ContactsHelpers.continueConfirmModal();
       }
     });
+  }
+
+  static clickDialogSave(shouldSucceed = false) {
+    PageUtils.clickButton('Save', ContactsHelpers.CONTACT_DIALOG);
+    cy.get(ContactsHelpers.CONTACT_DIALOG).should(shouldSucceed ? 'not.exist' : 'exist');
   }
 
   private static getVisibleConfirmDialog() {

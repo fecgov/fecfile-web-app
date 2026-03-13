@@ -1,22 +1,6 @@
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
-  private static normalizeText(value: string) {
-    return value.replaceAll(/\s+/g, ' ').trim();
-  }
-
-  private static getExactTextMatcher(value: string) {
-    return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value.trim())}\s*$`);
-  }
-
-  private static isNavigationControlScope(alias: string) {
-    return (
-      alias.includes('navigation-control-splitbutton') ||
-      alias.includes('navigation-control-button') ||
-      alias.includes('navigation-control-dropdown')
-    );
-  }
-
   static closeToast() {
     const alias = PageUtils.getAlias('');
     cy.get(alias).find('.p-toast-close-button').should('exist').click();
@@ -40,38 +24,14 @@ export class PageUtils {
       );
     }
   }
-  
+
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
-    const exactValue = PageUtils.getExactTextMatcher(value);
 
     if (value) {
-      cy.get(alias)
-        .find(querySelector)
-        .eq(index)
-        .then(($select) => {
-          const selectedOption = $select.first();
-          const label = $select.find('[data-pc-section="label"], .p-select-label').filter(':visible').first();
-          const root = $select.find('[data-pc-section="root"], .p-select').filter(':visible').first();
-          const combobox = $select.find('[role="combobox"]').filter(':visible').first();
-          const dropdown = $select.find('.p-select-dropdown, [aria-label="dropdown trigger"]').filter(':visible').first();
-          let trigger = dropdown;
-
-          if (selectedOption.length) {
-            trigger = selectedOption;
-          } else if (label.length) {
-            trigger = label;
-          } else if (root.length) {
-            trigger = root;
-          } else if (combobox.length) {
-            trigger = combobox;
-          }
-
-          expect(trigger.length, `p-select trigger for ${querySelector}`).to.be.greaterThan(0);
-          return cy.wrap(trigger).scrollIntoView().click();
-        });
-      cy.contains('p-selectitem, .p-select-option, [role="option"]', exactValue)
+      cy.get(alias).find(querySelector).eq(index).click();
+      cy.contains('p-selectitem', value)
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
@@ -184,42 +144,11 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    const label = PageUtils.normalizeText(name);
-
-    const getMatches = (selector: string) =>
-      cy.get(alias)
-        .find(selector)
-        .filter(':visible')
-        .filter((_index, element) => {
-          const htmlElement = element as HTMLElement & { value?: string };
-          const candidate =
-            htmlElement.innerText ||
-            htmlElement.textContent ||
-            htmlElement.getAttribute('aria-label') ||
-            htmlElement.getAttribute('label') ||
-            htmlElement.value ||
-            '';
-          return PageUtils.normalizeText(candidate) === label;
-        });
-
-    if (PageUtils.isNavigationControlScope(alias)) {
-      alias = PageUtils.getAlias('');
-      getMatches(
-        [
-          '[data-cy="navigation-control-splitbutton"]:visible button:visible',
-          '[data-cy="navigation-control-button"]:visible',
-          '[data-cy="navigation-control-dropdown"]:visible',
-          '.p-popover:visible [data-cy="navigation-control-dropdown-option"]:visible',
-        ].join(', ')
-      )
-        .first()
-        .click({ force });
-      return;
-    }
-
-    getMatches('button:visible, a:visible, [role="button"]:visible')
+    cy.get(alias)
+      .contains('button', name)
       .first()
-      .click({ force });
+      .as('btn');
+    cy.get('@btn').click({ force });
   }
 
   static dateToString(date: Date) {
@@ -285,24 +214,14 @@ export class PageUtils {
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
-    const label = PageUtils.normalizeText(item);
-
     PageUtils.getKabob(identifier, alias);
     cy.get(PageUtils.getAlias(''))
-      .find('.p-popover:visible button:visible, .p-popover:visible a:visible, .p-popover:visible [role="menuitem"]:visible')
-      .filter((_index, element) => {
-        const htmlElement = element as HTMLElement & { value?: string };
-        const candidate =
-          htmlElement.innerText ||
-          htmlElement.textContent ||
-          htmlElement.getAttribute('aria-label') ||
-          htmlElement.getAttribute('label') ||
-          htmlElement.value ||
-          '';
-        return PageUtils.normalizeText(candidate) === label;
-      })
-      .first()
-      .click();
+      .find('.p-popover')
+      .contains(item)
+      .then(($item) => {
+        cy.wrap($item.first()).as('btn');
+        cy.get('@btn').click();
+      });
   }
 
   static switchCommittee(committeeId: string) {
@@ -315,26 +234,19 @@ export class PageUtils {
   }
 
   static enterSecondCommitteeEmailIfneeded() {
-    const secondCommitteeEmailSelector = '[data-cy="second-committee-email"]:visible';
-    const secondCommitteeActionsSelector = '[data-cy="second-committee-admin-actions"]:visible';
-
-    cy.get('body').then(($body) => {
-      if (!$body.find(secondCommitteeEmailSelector).length) return;
-
-      cy.get(secondCommitteeEmailSelector).first().as('secondCommitteeEmail');
-      cy.get('@secondCommitteeEmail').should('have.value', '');
-      cy.get('@secondCommitteeEmail').clear().type('admin@admin.com');
-      cy.get('@secondCommitteeEmail').should('have.value', 'admin@admin.com');
-      cy.get('@secondCommitteeEmail').click();
-      cy.contains(secondCommitteeActionsSelector, 'Save').click();
-      cy.get(secondCommitteeEmailSelector).should('not.exist');
-
-      cy.get('body').then(($updatedBody) => {
-        if ($updatedBody.find('.p-toast-close-button:visible').length) {
-          cy.get('.p-toast-close-button:visible').first().click();
+    cy.get(PageUtils.getAlias('[data-cy="second-committee-admin-actions"]:visible'))
+      .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
+      .then(($email) => {
+        if ($email.length) {
+          cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
+          cy.get('#email').should('have.value', '');
+          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+          cy.get('#email').should('have.value', 'admin@admin.com');
+          cy.get('#email').click();
+          PageUtils.clickButton('Save', '[data-cy="second-committee-admin-actions"]');
+          cy.get(PageUtils.getAlias('')).find('.p-toast-close-button').click();
         }
       });
-    });
   }
 
   static submitReportForm() {

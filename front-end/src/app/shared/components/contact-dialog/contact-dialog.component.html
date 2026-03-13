@@ -13,7 +13,7 @@
     (visibleChange)="closeDialog($event)"
     closeAriaLabel="closeDialog"
   >
-    <form id="form" data-cy="contact-dialog-form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="grid">
         <div class="col-12">
           <h3>Contact</h3>
@@ -178,12 +178,10 @@
             <span class="span-label" id="state_territory_label">STATE/TERRITORY</span>
             <app-searchable-select
               inputId="state"
-              dataCy="contact-state-select"
               aria-labelledby="state_territory_label"
               controlName="state"
               [form]="form"
               [options]="stateOptions"
-              [pt]="{ pcOverlay: { root: { 'data-cy': 'contact-state-select-overlay' } } }"
               appendTo="body"
             />
             <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />

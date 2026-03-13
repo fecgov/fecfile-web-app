@@ -14,36 +14,36 @@ export default defineConfig({
   video: videoSetting,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
-  screenshotOnRunFailure: true,
+  screenshotOnRunFailure: false,
   fixturesFolder: 'cypress/fixtures',
   trashAssetsBeforeRuns: false,
   viewportHeight: 768,
   viewportWidth: 1366,
   chromeWebSecurity: false,
-  reporter: 'cypress-mochawesome-reporter',
-    reporterOptions: {
-    charts: true,
-    reportPageTitle: `FECFile+ E2E Test Report`,
-    reportFilename: '[status]_[datetime]-[name]',
-    reportDir: 'cypress/results',
-    embeddedScreenshots: true,
-    inlineAssets: true,
-    videoOnFailOnly: true,
-  },
+  // reporter: 'cypress-mochawesome-reporter',
+  //   reporterOptions: {
+  //   charts: true,
+  //   reportPageTitle: `FECFile+ E2E Test Report`,
+  //   reportFilename: '[status]_[datetime]-[name]',
+  //   reportDir: 'cypress/results',
+  //   embeddedScreenshots: true,
+  //   inlineAssets: true,
+  //   videoOnFailOnly: true,
+  // },
   retries: {
-    runMode: 1,
+    runMode: 0,
     openMode: 0,
   },
   experimentalWebKitSupport: true,
   e2e: {
     baseUrl: 'http://localhost:4200',
     specPattern: ['cypress/e2e-smoke/**/*.cy.ts', 'cypress/e2e-extended/**/*.cy.ts'],
-    setupNodeEvents(on, config) {
-      setupA11yNodeEvents(on);
-      // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
-      require('cypress-mochawesome-reporter/plugin')(on);
-      CypressConfigHelper.deleteVideoOnSuccess(on);
-      return config;
-    },
+    // setupNodeEvents(on, config) {
+    //   setupA11yNodeEvents(on);
+    //   // @ts-ignore - cypress-mochawesome-reporter/plugin is not typed
+    //   require('cypress-mochawesome-reporter/plugin')(on);
+    //   CypressConfigHelper.deleteVideoOnSuccess(on);
+    //   return config;
+    // },
   },
 });
