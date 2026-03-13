@@ -3,12 +3,11 @@
   title="Select a report"
   submitLabel="Continue"
   (confirm)="createReattribution()"
-  (reject)="cancel()"
 >
   <div class="dialog-body">
     <p>
-      Select the report where you want to {{ actionLabel() }} part of an excessive contribution to a joint
-      {{ actionTargetLabel() }}.
+      Pick the open report on which you would like to {{ actionLabel() }} a contribution or a portion of it to a
+      different {{ actionTargetLabel() }}.
     </p>
     <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
     <select id="report-selector" aria-labelledby="report-selector-label" [(ngModel)]="selectedReport">

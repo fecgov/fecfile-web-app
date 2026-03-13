@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, model } from '@angular/core';
 import { Report } from '../../../../shared/models/reports/report.model';
 import { ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
@@ -24,13 +24,12 @@ export class SelectReportDialogComponent {
   readonly store = inject(Store);
   readonly report = this.store.selectSignal(selectActiveReport);
 
-  readonly selectReportDialogSubject = toSignal(ReattRedesUtils.selectReportDialogSubject);
-  readonly transaction = computed(() =>
-    this.selectReportDialogSubject() ? this.selectReportDialogSubject()![0] : undefined,
-  );
-  readonly type = computed(() => (this.selectReportDialogSubject() ? this.selectReportDialogSubject()![1] : undefined));
+  readonly selectReportDialogSignal = toSignal(ReattRedesUtils.selectReportDialogSubject, { initialValue: undefined });
+
+  readonly transaction = computed(() => this.selectReportDialogSignal()?.[0]);
+  readonly type = computed(() => this.selectReportDialogSignal()?.[1]);
   readonly visible = computed(() => !!this.transaction());
-  readonly dialogVisible = signal(false);
+  readonly dialogVisible = model(false);
 
   readonly availableReports = derivedAsync(
     () => {
@@ -58,10 +57,12 @@ export class SelectReportDialogComponent {
 
   constructor() {
     effect(() => {
-      const visible = this.visible();
-      this.dialogVisible.set(visible);
-      if (visible) {
+      const data = this.selectReportDialogSignal();
+      if (data) {
+        this.dialogVisible.set(true);
         this.selectedReport = undefined;
+      } else {
+        this.dialogVisible.set(false);
       }
     });
   }
@@ -76,6 +77,7 @@ export class SelectReportDialogComponent {
   }
 
   cancel() {
+    this.dialogVisible.set(false);
     ReattRedesUtils.selectReportDialogSubject.next(undefined);
   }
 }

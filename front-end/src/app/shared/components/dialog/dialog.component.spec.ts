@@ -5,7 +5,7 @@ import { Component, signal, viewChild } from '@angular/core';
 @Component({
   imports: [DialogComponent],
   standalone: true,
-  template: `<app-dialog [(visible)]="visible" title="title" [closeOnEscape]="closeOnEscape" />`,
+  template: `<app-dialog [(visible)]="visible" title="title" [closeOnEscape]="closeOnEscape()" />`,
 })
 class TestHostComponent {
   visible = signal(false);
