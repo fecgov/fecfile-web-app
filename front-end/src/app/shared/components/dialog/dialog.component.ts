@@ -22,7 +22,12 @@ export class DialogComponent {
   readonly closeOnEscape = input(true);
 
   handleEscape(event: Event) {
-    if (!this.closeOnEscape()) event.preventDefault();
+    if (!this.closeOnEscape()) {
+      event.preventDefault();
+    } else {
+      this.reject.emit();
+      this.visible.set(false);
+    }
   }
 
   close() {

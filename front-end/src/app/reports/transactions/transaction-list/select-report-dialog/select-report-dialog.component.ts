@@ -1,4 +1,4 @@
-import { Component, computed, effect, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, model, viewChild } from '@angular/core';
 import { Report } from '../../../../shared/models/reports/report.model';
 import { ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
@@ -12,12 +12,13 @@ import { Form3X } from 'app/shared/models';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-select-report-dialog',
   templateUrl: './select-report-dialog.component.html',
   styleUrls: ['./select-report-dialog.component.scss'],
-  imports: [ReactiveFormsModule, FormsModule, ButtonDirective, Ripple],
+  imports: [ReactiveFormsModule, FormsModule, ButtonDirective, Ripple, DialogComponent],
 })
 export class SelectReportDialogComponent {
   public readonly router = inject(Router);
@@ -26,12 +27,13 @@ export class SelectReportDialogComponent {
   readonly selectReportDialog = viewChild.required<ElementRef<HTMLDialogElement>>('selectReportDialog');
   readonly report = this.store.selectSignal(selectActiveReport);
 
-  readonly selectReportDialogSubject = toSignal(ReattRedesUtils.selectReportDialogSubject);
-  readonly transaction = computed(() =>
-    this.selectReportDialogSubject() ? this.selectReportDialogSubject()![0] : undefined,
-  );
-  readonly type = computed(() => (this.selectReportDialogSubject() ? this.selectReportDialogSubject()![1] : undefined));
+  readonly selectReportDialogSignal = toSignal(ReattRedesUtils.selectReportDialogSubject, { initialValue: undefined });
+
+  readonly transaction = computed(() => this.selectReportDialogSignal()?.[0]);
+  readonly type = computed(() => this.selectReportDialogSignal()?.[1]);
   readonly visible = computed(() => !!this.transaction());
+
+  readonly dialogVisible = model(false);
 
   readonly availableReports = derivedAsync(
     () => {
@@ -59,11 +61,12 @@ export class SelectReportDialogComponent {
 
   constructor() {
     effect(() => {
-      if (this.visible()) {
-        this.selectReportDialog().nativeElement.show();
+      const data = this.selectReportDialogSignal();
+      if (data) {
+        this.dialogVisible.set(true);
         this.selectedReport = undefined;
       } else {
-        this.selectReportDialog().nativeElement.close();
+        this.dialogVisible.set(false);
       }
     });
   }
@@ -78,6 +81,7 @@ export class SelectReportDialogComponent {
   }
 
   cancel() {
+    this.dialogVisible.set(false);
     ReattRedesUtils.selectReportDialogSubject.next(undefined);
   }
 }

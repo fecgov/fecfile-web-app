@@ -1,81 +1,21 @@
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-h1 {
-  color: #212121;
-  font-size: 36px;
-  font-weight: bold;
-  line-height: 36px;
-}
-
-.field {
-  display: grid;
-}
-
-dialog {
-  width: 512px;
-  background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
-  border: none;
-  margin-top: 15%;
-  position: absolute;
-  top: 0;
-}
-
-.dialog-header {
-  border-bottom: 2px solid #212121;
-  width: 448px;
-  margin: auto;
-  padding-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.dialog-body {
-  padding: 16px 16px 64px 16px;
-  margin-left: 25px;
-  margin-right: 25px;
-}
-
 p {
-  margin-bottom: 16px;
+  font-size: 14px;
+  font-family: var(--karla);
+  margin-bottom: 24px;
 }
 
 label {
-  font-family: var(--karla);
-  font-weight: bold;
   font-size: 14px;
-  color: #212121;
-  margin-bottom: 5px;
-  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
-.dropdown,
-.dropdown-toggle {
-  width: 400px !important;
-}
-
-.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  border: 2px solid #aeb0b5;
+#report-selector {
+  height: 36px;
   font-size: 14px;
-  border-radius: 4px;
+  appearance: none;
+  background-image: url(assets/img/dropdown_arrow.svg);
 }
 
-.dialog-footer {
-  display: flex;
-  justify-content: space-between;
-  border-top: 0;
-  padding: 0 31px 16px 31px;
-}
-
-#close-button {
-  color: #212121;
-  background: transparent;
-  border: none;
+#report-selector option {
+  font-size: 14px;
 }
