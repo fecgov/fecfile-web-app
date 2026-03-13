@@ -1,11 +1,11 @@
-<p-card styleClass="mt-0">
-  <div class="summary-header">
-    <h1>Detailed summary page</h1>
+<p-card styleClass="mt-0" data-cy="report-f3-detailed-summary-page-card">
+  <div class="summary-header" data-cy="report-f3-detailed-summary-page-header">
+    <h1 data-cy="report-f3-detailed-summary-page-title">Detailed summary page</h1>
   </div>
   @if (calculationFinished$ | async) {
-    <div>
-      <table>
-        <caption>
+    <div data-cy="report-f3-detailed-summary-page-table-panel">
+      <table data-cy="report-f3-detailed-summary-page-receipts-table">
+        <caption data-cy="report-f3-detailed-summary-page-receipts-caption">
           Receipts
         </caption>
         <tr>
@@ -148,8 +148,8 @@
 
       <div class="table-spacer"></div>
 
-      <table>
-        <caption>
+      <table data-cy="report-f3-detailed-summary-page-disbursements-table">
+        <caption data-cy="report-f3-detailed-summary-page-disbursements-caption">
           Disbursements
         </caption>
         <tr>
@@ -286,8 +286,8 @@
 
       <div class="table-spacer"></div>
 
-      <table>
-        <caption>
+      <table data-cy="report-f3-detailed-summary-page-cash-summary-table">
+        <caption data-cy="report-f3-detailed-summary-page-cash-summary-caption">
           CASH SUMMARY
         </caption>
         <tr>
@@ -336,7 +336,7 @@
       </table>
     </div>
   } @else {
-    <div class="fec-loader-div col-12">
+    <div class="fec-loader-div col-12" data-cy="report-f3-detailed-summary-page-loader">
       <img
         class="max-w-full fec-loader-image"
         src="assets/img/fec-loading-flag.gif"
@@ -354,6 +354,7 @@
           pRipple
           label="Back"
           class="p-button-secondary"
+          data-cy="report-f3-detailed-summary-page-back-button"
           (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
         ></button>
       </div>
@@ -366,6 +367,7 @@
           pRipple
           label="See print preview"
           class="p-button-primary"
+          data-cy="report-f3-detailed-summary-page-print-preview-button"
           (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
         ></button>
       </div>

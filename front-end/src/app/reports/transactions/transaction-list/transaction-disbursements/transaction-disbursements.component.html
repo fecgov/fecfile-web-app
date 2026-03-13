@@ -4,12 +4,12 @@
   </a>
 
   @if (item?.force_unaggregated) {
-    <div><strong>Unaggregated</strong></div>
+    <div [attr.data-cy]="'transactions-disbursements-table-row-' + item.id + '-unaggregated'"><strong>Unaggregated</strong></div>
   }
 
   <!-- transactions are always itemized on f24 even if they aren't marked as such in the db -->
   @if (!item?.itemized && !isForm24()) {
-    <div><strong>Unitemized</strong></div>
+    <div [attr.data-cy]="'transactions-disbursements-table-row-' + item.id + '-unitemized'"><strong>Unitemized</strong></div>
   }
 </ng-template>
 
@@ -27,6 +27,7 @@
 
 <app-table
   [(first)]="first"
+  data-cy="transactions-disbursements-table"
   dataCyContext="transactions-disbursements"
   title="Disbursements"
   [items]="items()"

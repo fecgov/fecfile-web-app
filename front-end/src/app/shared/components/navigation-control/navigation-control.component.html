@@ -1,34 +1,35 @@
 <div>
-  @switch (controlType) {
-    @case ('button') {
+  @switch (type()) {
+    @case (controlType.BUTTON) {
       <button
         pButton
         pRipple
-        [label]="navigationControl?.label || ''"
-        [icon]="navigationControl?.icon || ''"
-        [class]="navigationControl?.ngClass || ''"
+        [label]="navigationControl().label || ''"
+        [icon]="navigationControl().icon || ''"
+        [class]="navigationControl().ngClass || ''"
         (click)="clickButton()"
         [disabled]="isDisabled()"
-        data-cy="navigation-control-button"
+        [attr.data-cy]="buttonDataCy()"
         appSingleClick
       ></button>
     }
-    @case ('dropdown') {
+    @case (controlType.DROPDOWN) {
       <button
         pButton
         pRipple
         class="dd-button"
         [disabled]="isDisabled()"
         (click)="op.toggle($event)"
-        data-cy="navigation-control-dropdown"
+        [attr.data-cy]="dropdownButtonDataCy()"
       >
-        <i [class]="navigationControl?.icon || ''"></i><span>{{ navigationControl?.label || '' }}</span>
+        <i [class]="navigationControl().icon || ''"></i>
+        <span [attr.data-cy]="dropdownLabelDataCy()">{{ navigationControl().label || '' }}</span>
       </button>
       <p-popover #op>
         <div class="p-3">
-          @for (option of dropdownOptions; track option) {
+          @for (option of dropdownOptions(); track option) {
             @if (option.items) {
-              <span class="dropdown-header">{{ option.label }}</span>
+              <span class="dropdown-header" [attr.data-cy]="dropdownGroupDataCy(option.label)">{{ option.label }}</span>
               <hr />
 
               <ul>
@@ -38,7 +39,7 @@
                       [text]="true"
                       pButton
                       pRipple
-                      data-cy="navigation-control-dropdown-option"
+                      [attr.data-cy]="dropdownOptionDataCy(childOption.label)"
                       (click)="onDropdownChange(childOption)"
                       (keyup.enter)="onDropdownChange(childOption)"
                       (keyup.space)="onDropdownChange(childOption)"
@@ -55,7 +56,7 @@
                 [text]="true"
                 pButton
                 pRipple
-                data-cy="navigation-control-dropdown-option"
+                [attr.data-cy]="dropdownOptionDataCy(option.label)"
                 (click)="onDropdownChange(option)"
                 (keyup.enter)="onDropdownChange(option)"
                 (keyup.space)="onDropdownChange(option)"
@@ -70,13 +71,12 @@
       </p-popover>
     }
     @case (controlType.SPLITBUTTON) {
-      <div class="split-button-container">
+      <div class="split-button-container" [attr.data-cy]="splitButtonContainerDataCy()">
         <p-splitButton
           [label]="navigationControl().label || ''"
           [icon]="navigationControl().icon || ''"
-          [model]="dropdownOptions()"
           (onClick)="clickButton()"
-          data-cy="navigation-control-splitbutton"
+          [attr.data-cy]="splitButtonDataCy()"
           [disabled]="isDisabled()"
           [model]="items"
           appSingleClick

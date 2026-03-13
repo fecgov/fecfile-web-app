@@ -1,11 +1,11 @@
-<div>
-  <app-second-committee-admin-dialog />
-  <app-poller />
-  <router-outlet />
-  <app-confirm-dialog />
+<div data-cy="app-root">
+  <app-second-committee-admin-dialog data-cy="app-root-second-committee-admin-dialog" />
+  <app-poller data-cy="app-root-poller" />
+  <router-outlet data-cy="app-root-router-outlet" />
+  <app-confirm-dialog data-cy="app-root-confirm-dialog" />
   <p-toast [pt]="{ root: { 'data-cy': 'layout-global-toast' }, closeButton: { 'data-cy': 'layout-global-toast-close-button' } }" />
-  <app-download-tray />
+  <app-download-tray data-cy="app-root-download-tray" />
 </div>
 @if (showGlossary) {
-  <app-glossary />
+  <app-glossary data-cy="app-root-glossary" />
 }

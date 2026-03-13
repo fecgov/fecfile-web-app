@@ -13,14 +13,12 @@ import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
-import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
   styleUrls: ['../../styles.scss'],
   imports: [
-    Ripple,
     ButtonModule,
     ReactiveFormsModule,
     FormsModule,

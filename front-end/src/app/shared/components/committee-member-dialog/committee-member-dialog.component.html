@@ -1,23 +1,33 @@
 <app-dialog
   tabindex="-1"
   aria-labelledby="dialog-title"
+  data-cy="committee-members-dialog"
   dataCyContext="committee-members"
   [title]="member() ? 'Edit user' : 'Add user'"
   [submitLabel]="member() ? 'Change' : 'Add'"
   [(visible)]="detailVisible"
   (confirm)="submitForm()"
 >
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-    <div class="dialog-body">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="committee-members-dialog-form">
+    <div class="dialog-body" data-cy="committee-members-dialog-body">
       @if (member()) {
-        <div class="field">
-          <label class="dialog-label" id="role-label" for="role">CURRENT ROLE</label>
+        <div class="field" data-cy="committee-members-dialog-current-role-field">
+          <label class="dialog-label" id="role-label" for="role" data-cy="committee-members-dialog-current-role-label">
+            CURRENT ROLE
+          </label>
           <input id="role" [disabled]="true" [value]="role()" data-cy="committee-members-dialog-current-role-input" />
         </div>
       } @else {
-        <div class="field">
-          <label class="dialog-label" for="email">ENTER EMAIL</label>
-          <input autofocus type="text" pInputText id="email" formControlName="email" data-cy="committee-members-dialog-email-input" />
+        <div class="field" data-cy="committee-members-dialog-email-field">
+          <label class="dialog-label" for="email" data-cy="committee-members-dialog-email-label">ENTER EMAIL</label>
+          <input
+            autofocus
+            type="text"
+            pInputText
+            id="email"
+            formControlName="email"
+            data-cy="committee-members-dialog-email-input"
+          />
           <app-error-messages
             [form]="form"
             fieldName="email"
@@ -26,15 +36,18 @@
           />
         </div>
       }
-      <app-select
-        inputId="role"
-        label="ROLE"
-        [options]="roleOptions"
-        [form]="form"
-        formControlName="role"
-        dataCyContext="committee-members-dialog"
-        labelClass="dialog-label"
-      />
+      <div data-cy="committee-members-dialog-role-field">
+        <app-select
+          inputId="role"
+          label="ROLE"
+          data-cy="committee-members-dialog-role-select"
+          [options]="roleOptions"
+          [form]="form"
+          formControlName="role"
+          dataCyContext="committee-members-dialog"
+          labelClass="dialog-label"
+        />
+      </div>
     </div>
   </form>
 </app-dialog>

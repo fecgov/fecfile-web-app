@@ -1,10 +1,10 @@
-<div class="flex gap-2">
+<div class="flex gap-2" data-cy="transactions-detail-page-header">
   @if (transactionType?.showParentTransactionTitle) {
-    <h1>
+    <h1 data-cy="transactions-detail-page-parent-title">
       {{ transaction?.parent_transaction?.transactionType?.title }}
     </h1>
   } @else {
-    <h1>
+    <h1 data-cy="transactions-detail-page-title">
       {{ transactionType?.title }}
     </h1>
   }
@@ -15,6 +15,7 @@
       src="assets/img/i-book.svg"
       draggable="false"
       alt="book"
+      data-cy="transactions-detail-page-glossary-button"
       (click)="openGlossary()"
       (keypress)="openGlossary()"
     />
@@ -22,26 +23,26 @@
 </div>
 <hr class="solid" />
 @if (transactionType?.showParentTransactionTitle) {
-  <h1 class="mt-5">
+  <h1 class="mt-5" data-cy="transactions-detail-page-child-title">
     {{ transactionType?.title }}
   </h1>
 }
 @if (transactionType?.subTitle) {
-  <div>{{ transactionType?.subTitle }}</div>
+  <div data-cy="transactions-detail-page-subtitle">{{ transactionType?.subTitle }}</div>
 }
 
 @if (activeReport().report_type === reportTypes.F24) {
-  <app-independent-expenditure-create-f3x-input />
+  <app-independent-expenditure-create-f3x-input data-cy="transactions-detail-page-independent-expenditure-panel" />
 }
 @if (!isEditable()) {
-  <h4 class="read-only-tag subtitle">READ ONLY</h4>
+  <h4 class="read-only-tag subtitle" data-cy="transactions-detail-page-read-only-tag">READ ONLY</h4>
 }
 @if (isDebtRepayment(transaction)) {
-  <h4 class="read-only-tag subtitle">DEBT REPAYMENT</h4>
+  <h4 class="read-only-tag subtitle" data-cy="transactions-detail-page-debt-repayment-tag">DEBT REPAYMENT</h4>
 }
 
-<h2 class="top-margin-32">{{ transactionType?.contactTitle || 'Contact' }}</h2>
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<h2 class="top-margin-32" data-cy="transactions-detail-page-contact-title">{{ transactionType?.contactTitle || 'Contact' }}</h2>
+<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="transactions-detail-page-form">
   <app-transaction-input
     [isEditable]="isEditable()"
     [isSingle]="true"
@@ -50,6 +51,7 @@
     [transaction]="transaction"
     [contactTypeOptions]="contactTypeOptions"
     [memoHasOptional$]="memoHasOptional$"
+    dataCyContext="transactions-detail-page"
     (primaryContactSelect)="updateFormWithPrimaryContact($event)"
     (primaryContactClear)="clearFormPrimaryContact()"
     (candidateContactSelect)="updateFormWithCandidateContact($event)"

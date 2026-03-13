@@ -1,26 +1,26 @@
-<p-drawer [(visible)]="glossaryService.visible" position="right" [pt]="pt">
-  <h1>Glossary</h1>
-  <div class="field mt-4">
+<p-drawer [(visible)]="glossaryService.visible" position="right" [pt]="pt" data-cy="layout-glossary-drawer">
+  <h1 data-cy="layout-glossary-drawer-title">Glossary</h1>
+  <div class="field mt-4" data-cy="layout-glossary-drawer-search-field">
     <label for="searchTerm">SEARCH TERMS</label>
-    <input id="searchTerm" type="text" [(ngModel)]="searchTerm" />
-    <span class="font-italic mt-1">Example: Conduit Earmark Receipt</span>
-    <div class="mt-4">
-      <div class="my-4 flex justify-content-between">
+    <input id="searchTerm" type="text" [(ngModel)]="searchTerm" data-cy="layout-glossary-drawer-search-input" />
+    <span class="font-italic mt-1" data-cy="layout-glossary-drawer-search-example">Example: Conduit Earmark Receipt</span>
+    <div class="mt-4" data-cy="layout-glossary-drawer-results-panel">
+      <div class="my-4 flex justify-content-between" data-cy="layout-glossary-drawer-results-header">
         @if (found()) {
-          <span class="font-bold">{{ found() }}</span>
-          <div [class]="shown() ? 'minus-icon-mask' : 'plus-icon-mask'" (click)="toggle()" (keypress)="toggle()"></div>
+          <span class="font-bold" data-cy="layout-glossary-drawer-result-term">{{ found() }}</span>
+          <div [class]="shown() ? 'minus-icon-mask' : 'plus-icon-mask'" data-cy="layout-glossary-drawer-toggle-button" (click)="toggle()" (keypress)="toggle()"></div>
         } @else {
-          <span>No Results</span>
+          <span data-cy="layout-glossary-drawer-no-results">No Results</span>
         }
       </div>
-      <div #content class="collapsible-content">
+      <div #content class="collapsible-content" data-cy="layout-glossary-drawer-results-content">
         <div>
-          <div class="line-height-3">{{ data()[0] }}</div>
+          <div class="line-height-3" data-cy="layout-glossary-drawer-result-description">{{ data()[0] }}</div>
           @if (data().length > 1) {
-            <ul>
-              @for (d of data(); track d; let isFirst = $first) {
+            <ul data-cy="layout-glossary-drawer-result-list">
+              @for (d of data(); track d; let isFirst = $first; let index = $index) {
                 @if (!isFirst) {
-                  <li>{{ d }}</li>
+                  <li [attr.data-cy]="'layout-glossary-drawer-result-item-' + index">{{ d }}</li>
                 }
               }
             </ul>

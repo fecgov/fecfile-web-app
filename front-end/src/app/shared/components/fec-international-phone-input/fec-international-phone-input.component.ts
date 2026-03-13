@@ -41,6 +41,14 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
     return buildDataCy(this.dataCyContext(), this.inputId(), 'input');
   }
 
+  get fieldDataCy(): string {
+    return buildDataCy(this.inputDataCy, 'field');
+  }
+
+  get containerDataCy(): string {
+    return buildDataCy(this.inputDataCy, 'container');
+  }
+
   constructor() {
     this.ngControl.valueAccessor = this;
   }

@@ -1,7 +1,7 @@
 <div class="flex" [attr.data-cy]="rootDataCy()">
-  <app-contact-search [key]="key()" [dataCyContext]="contactSearchContext()" />
-  <div class="add-contact-container">
-    or
+  <app-contact-search [key]="key()" [dataCyContext]="contactSearchContext()" [attr.data-cy]="contactSearchDataCy()" />
+  <div class="add-contact-container" [attr.data-cy]="addContactContainerDataCy()">
+    <span [attr.data-cy]="addContactDataCy()">or</span>
     <span
       tabindex="0"
       (click)="openDialog()"

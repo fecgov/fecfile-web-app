@@ -1,15 +1,15 @@
-<p-dialog [(visible)]="cmservice.showDialog" [style]="{ width: '90%' }" header="Add Contact" [modal]="true">
-  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<p-dialog [(visible)]="cmservice.showDialog" [style]="{ width: '90%' }" header="Add Contact" [modal]="true" data-cy="contact-modal-dialog">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="contact-modal-dialog-form">
     <div class="grid">
       <div class="col-12">
-        <h3>Contact</h3>
+        <h3 data-cy="contact-modal-dialog-contact-title">Contact</h3>
       </div>
     </div>
     <div class="grid">
       <div class="col-10">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-contact-type-field">
           <label for="type">CONTACT TYPE</label>
-          <app-contact-search [isBare]="false" [key]="cmservice.activeKey()" />
+          <app-contact-search [isBare]="false" [key]="cmservice.activeKey()" dataCyContext="contact-modal-dialog" />
         </div>
       </div>
       <div class="col-6"></div>
@@ -17,14 +17,15 @@
     @if (isCandidate()) {
       <div class="grid">
         <div class="col-6">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-candidate-id-field">
             <label for="candidate_id">CANDIDATE ID</label>
-            <input type="text" pInputText id="candidate_id" appToUpper formControlName="candidate_id" />
+            <input type="text" pInputText id="candidate_id" appToUpper formControlName="candidate_id" data-cy="contact-modal-dialog-candidate-id-input" />
             <app-error-messages
               [form]="form"
               fieldName="candidate_id"
               [formSubmitted]="formSubmitted"
               [patternErrorMessage]="candidatePatternMessage"
+              dataCyContext="contact-modal-dialog"
             />
           </div>
         </div>
@@ -35,23 +36,24 @@
       <div class="grid">
         @if (isCommittee()) {
           <div class="col-4">
-            <div class="field">
+            <div class="field" data-cy="contact-modal-dialog-committee-id-field">
               <label for="committee_id">COMMITTEE ID</label>
-              <input type="text" pInputText id="committee_id" appToUpper formControlName="committee_id" />
+              <input type="text" pInputText id="committee_id" appToUpper formControlName="committee_id" data-cy="contact-modal-dialog-committee-id-input" />
               <app-error-messages
                 [form]="form"
                 fieldName="committee_id"
                 [formSubmitted]="formSubmitted"
                 [patternErrorMessage]="committeePatternMessage"
+                dataCyContext="contact-modal-dialog"
               />
             </div>
           </div>
         }
         <div class="col-8">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-name-field">
             <label for="name">NAME</label>
-            <input type="text" pInputText id="name" formControlName="name" />
-            <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="name" formControlName="name" data-cy="contact-modal-dialog-name-input" />
+            <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
         @if (isOrganization()) {
@@ -62,40 +64,40 @@
     @if (isCandidate() || isIndividual()) {
       <div class="grid">
         <div class="col-4">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-last-name-field">
             <label for="last_name">LAST NAME</label>
-            <input type="text" pInputText id="last_name" formControlName="last_name" />
-            <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="last_name" formControlName="last_name" data-cy="last-name" />
+            <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
         <div class="col-4">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-first-name-field">
             <label for="first_name">FIRST NAME</label>
-            <input type="text" pInputText id="first_name" formControlName="first_name" />
-            <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="first_name" formControlName="first_name" data-cy="contact-modal-dialog-first-name-input" />
+            <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
         <div class="col-4">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-middle-name-field">
             <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-            <input type="text" pInputText id="middle_name" formControlName="middle_name" />
-            <app-error-messages [form]="form" fieldName="middle_name" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="middle_name" formControlName="middle_name" data-cy="contact-modal-dialog-middle-name-input" />
+            <app-error-messages [form]="form" fieldName="middle_name" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
       </div>
       <div class="grid">
         <div class="col-3">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-prefix-field">
             <label for="prefix">PREFIX (OPTIONAL)</label>
-            <input type="text" pInputText id="prefix" formControlName="prefix" />
-            <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="prefix" formControlName="prefix" data-cy="contact-modal-dialog-prefix-input" />
+            <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
         <div class="col-3">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-suffix-field">
             <label for="suffix">SUFFIX (OPTIONAL)</label>
-            <input type="text" pInputText id="suffix" formControlName="suffix" />
-            <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="suffix" formControlName="suffix" data-cy="contact-modal-dialog-suffix-input" />
+            <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
         <div class="col-6"></div>
@@ -108,73 +110,68 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <h3>Address</h3>
+        <h3 data-cy="contact-modal-dialog-address-title">Address</h3>
       </div>
     </div>
     <div class="grid">
       <div class="col-6">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-country-field">
           <label for="country">COUNTRY/REGION</label>
-          <p-select inputId="country" formControlName="country" [options]="countryOptions" />
+          <p-select inputId="country" formControlName="country" [options]="countryOptions" data-cy="contact-modal-dialog-country-select" />
         </div>
       </div>
       <div class="col-6"></div>
     </div>
     <div class="grid">
       <div class="col-6">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-street-1-field">
           <label for="street_1">STREET ADDRESS</label>
-          <input type="text" pInputText id="street_1" formControlName="street_1" />
-          <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
+          <input type="text" pInputText id="street_1" formControlName="street_1" data-cy="contact-modal-dialog-street-1-input" />
+          <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
         </div>
       </div>
       <div class="col-6">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-street-2-field">
           <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-          <input type="text" pInputText id="street_2" formControlName="street_2" />
-          <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
+          <input type="text" pInputText id="street_2" formControlName="street_2" data-cy="contact-modal-dialog-street-2-input" />
+          <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
         </div>
       </div>
     </div>
     <div class="grid">
       <div class="col-6">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-city-field">
           <label for="city">CITY</label>
-          <input type="text" pInputText id="city" formControlName="city" />
-          <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
+          <input type="text" pInputText id="city" formControlName="city" data-cy="contact-modal-dialog-city-input" />
+          <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
         </div>
       </div>
       <div class="col-3">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-state-field">
           <label for="state">STATE/TERRITORY</label>
-          <app-searchable-select
-            inputId="state"
-            controlName="state"
-            [form]="form"
-            [options]="stateOptions()"
-            appendTo="body"
-          />
-          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
+          <app-searchable-select inputId="state" controlName="state" [form]="form" [options]="stateOptions()" appendTo="body" dataCyContext="contact-modal-dialog" />
+          <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
         </div>
       </div>
       <div class="col-3">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-zip-field">
           <label for="zip">ZIP/POSTAL CODE</label>
-          <input type="text" pInputText id="zip" formControlName="zip" />
-          <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
+          <input type="text" pInputText id="zip" formControlName="zip" data-cy="contact-modal-dialog-zip-input" />
+          <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
         </div>
       </div>
     </div>
     <div class="grid">
       <div class="col-6">
-        <div class="field">
+        <div class="field" data-cy="contact-modal-dialog-telephone-field">
           <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
-          <app-fec-international-phone-input formControlName="telephone" />
+          <app-fec-international-phone-input formControlName="telephone" dataCyContext="contact-modal-dialog" />
           <app-error-messages
             [form]="form"
             fieldName="telephone"
             [formSubmitted]="formSubmitted"
             patternErrorMessage="This field must contain 10 numeric characters."
+            dataCyContext="contact-modal-dialog"
           />
         </div>
       </div>
@@ -188,22 +185,22 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <h3>Employer</h3>
+          <h3 data-cy="contact-modal-dialog-employer-title">Employer</h3>
         </div>
       </div>
       <div class="grid">
         <div class="col-6">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-employer-field">
             <label for="employer">EMPLOYER (OPTIONAL)</label>
-            <input type="text" pInputText id="employer" formControlName="employer" />
-            <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="employer" formControlName="employer" data-cy="contact-modal-dialog-employer-input" />
+            <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
         <div class="col-6">
-          <div class="field">
+          <div class="field" data-cy="contact-modal-dialog-occupation-field">
             <label for="occupation">OCCUPATION (OPTIONAL)</label>
-            <input type="text" pInputText id="occupation" formControlName="occupation" />
-            <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted" />
+            <input type="text" pInputText id="occupation" formControlName="occupation" data-cy="contact-modal-dialog-occupation-input" />
+            <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted" dataCyContext="contact-modal-dialog" />
           </div>
         </div>
       </div>
@@ -216,7 +213,7 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <h3>Office</h3>
+          <h3 data-cy="contact-modal-dialog-office-title">Office</h3>
         </div>
       </div>
       <app-candidate-office-input
@@ -225,18 +222,20 @@
         officeFormControlName="candidate_office"
         stateFormControlName="candidate_state"
         districtFormControlName="candidate_district"
+        dataCyContext="contact-modal-dialog"
       />
     }
   </form>
 
   <ng-template #footer>
-    <div class="top-border-footer">
+    <div class="top-border-footer" data-cy="contact-modal-dialog-footer">
       <button
         pButton
         pRipple
         label="Cancel"
         icon="pi pi-times"
         class="p-button-secondary mr-4"
+        data-cy="contact-modal-dialog-cancel-button"
         (click)="cmservice.showDialog.set(false)"
       ></button>
 
@@ -247,10 +246,11 @@
         label="Save & continue"
         icon="pi pi-check"
         class="p-button-info"
+        data-cy="contact-modal-dialog-save-and-continue-button"
         (click)="saveContact()"
       ></button>
     </div>
   </ng-template>
 </p-dialog>
 
-<p-confirmDialog key="contactDialogDialog" [style.width.px]="450" />
+<p-confirmDialog key="contactDialogDialog" [style.width.px]="450" data-cy="contact-modal-confirm-dialog" />

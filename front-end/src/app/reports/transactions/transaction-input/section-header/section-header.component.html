@@ -1,1 +1,5 @@
-<h2 [class]="isSingle ? 'top-margin-32' : ''" [attr.data-cy]="dataCy || null">{{ text }}</h2>
+<div [attr.data-cy]="dataCy ? dataCy + '-section' : null">
+  <h2 [class]="isSingle ? 'top-margin-32' : ''" [attr.data-cy]="dataCy || null">
+    <span [attr.data-cy]="dataCy ? dataCy + '-text' : null">{{ text }}</span>
+  </h2>
+</div>

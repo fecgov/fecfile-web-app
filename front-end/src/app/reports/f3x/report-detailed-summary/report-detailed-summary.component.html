@@ -22,8 +22,8 @@
   </div>
 </ng-template>
 
-<div class="summary-container">
-  <h1>Detailed summary page</h1>
+<div class="summary-container" data-cy="report-f3x-detailed-summary-page">
+  <h1 data-cy="report-f3x-detailed-summary-page-title">Detailed summary page</h1>
   <hr type="solid" class="mt-2 mb-5" />
 
   @if (calculationFinished()) {
@@ -40,6 +40,7 @@
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
+      dataCyContext="report-f3x-detailed-summary-page-receipts"
     >
     </app-table>
     <hr class="table-bottom" />
@@ -56,6 +57,7 @@
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
+      dataCyContext="report-f3x-detailed-summary-page-disbursements"
     >
     </app-table>
     <hr class="table-bottom" />
@@ -71,10 +73,11 @@
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
+      dataCyContext="report-f3x-detailed-summary-page-net-contributions"
     >
     </app-table>
   } @else {
-    <div class="fec-loader-div">
+    <div class="fec-loader-div" data-cy="report-f3x-detailed-summary-page-loader">
       <img
         class="max-w-full fec-loader-image"
         src="assets/img/fec-loading-flag.gif"
@@ -90,6 +93,7 @@
       pButton
       pRipple
       class="p-button-secondary icon-gap"
+      data-cy="report-f3x-detailed-summary-page-review-summary-button"
       (click)="router.navigateByUrl('/reports/f3x/summary/' + report().id)"
     >
       <span class="prev-arrow-mask"></span>
@@ -99,6 +103,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
+      data-cy="report-f3x-detailed-summary-page-print-preview-button"
       (click)="router.navigateByUrl('/reports/f3x/web-print/' + report().id)"
     >
       <span>See print preview</span>

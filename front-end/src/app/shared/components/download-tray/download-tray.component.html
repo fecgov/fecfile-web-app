@@ -1,7 +1,7 @@
-<p-drawer [visible]="sidebarVisible()" position="bottom" [showCloseIcon]="false" [modal]="false" appendTo="body">
-  <ng-template pTemplate="header">Your downloads</ng-template>
+<p-drawer [visible]="sidebarVisible()" position="bottom" [showCloseIcon]="false" [modal]="false" appendTo="body" data-cy="layout-download-tray-drawer">
+  <ng-template pTemplate="header"><span data-cy="layout-download-tray-drawer-title">Your downloads</span></ng-template>
   <ng-template pTemplate="content">
-    <table>
+    <table data-cy="layout-download-tray-drawer-table">
       <thead>
         <tr>
           <th>isComplete</th>
@@ -12,21 +12,22 @@
         </tr>
       </thead>
       <tbody>
-        @for (item of dotFecService.downloads(); track item) {
-          <tr>
+        @for (item of dotFecService.downloads(); track item; let index = $index) {
+          <tr [attr.data-cy]="'layout-download-tray-drawer-row-' + index">
             <td>
               @if (item.isComplete) {
-                <img src="assets/img/check.svg" draggable="false" alt="Checkmark" />
+                <img src="assets/img/check.svg" draggable="false" alt="Checkmark" [attr.data-cy]="'layout-download-tray-drawer-row-' + index + '-status-icon'" />
               } @else {
-                <img src="assets/img/loading-dots.gif" draggable="false" alt="Loading dots gif" />
+                <img src="assets/img/loading-dots.gif" draggable="false" alt="Loading dots gif" [attr.data-cy]="'layout-download-tray-drawer-row-' + index + '-status-icon'" />
               }
             </td>
-            <td class="download-text">{{ item.name }}</td>
+            <td class="download-text" [attr.data-cy]="'layout-download-tray-drawer-row-' + index + '-name'">{{ item.name }}</td>
             <td>
               <button
                 pButton
                 pRipple
                 styleClass="p-button-primary"
+                [attr.data-cy]="'layout-download-tray-drawer-row-' + index + '-download-button'"
                 (click)="download(item)"
                 [disabled]="!item.isComplete"
               >
@@ -34,11 +35,11 @@
               </button>
             </td>
             <td>
-              <button pButton pRipple [rounded]="true" [text]="true" class="p-1" (click)="removeDownload(item)">
+              <button pButton pRipple [rounded]="true" [text]="true" class="p-1" [attr.data-cy]="'layout-download-tray-drawer-row-' + index + '-remove-button'" (click)="removeDownload(item)">
                 <img src="assets/img/x-circle.svg" draggable="false" alt="X in a circle" />
               </button>
             </td>
-            <td class="download-text">
+            <td class="download-text" [attr.data-cy]="'layout-download-tray-drawer-row-' + index + '-status-text'">
               @if (!item.isComplete) {
                 <span>
                   We are preparing your download. Your wait will vary depending on how many records you requested and

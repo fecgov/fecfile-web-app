@@ -1,6 +1,7 @@
-<app-shared-templates dataCyContext="report-list-form24" (reportNameClick)="this.editItem($event)" />
-<div [hidden]="items().length === 0">
+<app-shared-templates data-cy="report-list-form24-shared-templates" dataCyContext="report-list-form24" (reportNameClick)="this.editItem($event)" />
+<div [hidden]="items().length === 0" data-cy="report-list-form24-panel">
   <app-table
+    data-cy="report-list-form24-table"
     [(first)]="first"
     dataCyContext="report-list-form24"
     [items]="items()"
@@ -15,4 +16,4 @@
   />
 </div>
 
-<app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />
+<app-rename-f24-dialog data-cy="report-list-form24-rename-dialog" [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />

@@ -62,7 +62,11 @@
         @if (selectedCommittee) {
           <div
             class="committee-card"
-            [attr.data-cy]="'create-committee-page-committee-card-' + selectedCommittee.committee_id.toLowerCase()"
+            [attr.data-cy]="
+              selectedCommittee.committee_id
+                ? 'create-committee-page-committee-card-' + selectedCommittee.committee_id.toLowerCase()
+                : 'create-committee-page-committee-card'
+            "
           >
             <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
             <div class="committee-info" data-cy="create-committee-page-committee-card-content">

@@ -1,10 +1,10 @@
 @if (candidateOffice && contactType === contactTypes.CANDIDATE) {
-  <div class="grid">
-    <em>{{ candidateOfficeLabel }} candidates only</em>
+  <div class="grid" [attr.data-cy]="candidateOfficeNoteDataCy">
+    <em [attr.data-cy]="candidateOfficeNoteDataCy">{{ candidateOfficeLabel }} candidates only</em>
   </div>
 }
 <div class="grid contact-lookup-container" [attr.data-cy]="rootDataCy">
-  <div class="px-0" [class.dropdown-with-search]="showSearchBoxCallback()">
+  <div class="px-0" [class.dropdown-with-search]="showSearchBoxCallback()" [attr.data-cy]="contactTypeFieldDataCy">
     <p-select
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
@@ -17,7 +17,7 @@
     />
   </div>
   @if (showSearchBoxCallback()) {
-    <div class="pl-0">
+    <div class="pl-0" [attr.data-cy]="searchBoxContainerDataCy">
       <p-autoComplete
         id="searchBox"
         inputId="searchBox"
@@ -57,7 +57,7 @@
     </div>
   }
   @if (showCreateNewContactButton) {
-    <div class="add-contact-container">
+    <div class="add-contact-container" [attr.data-cy]="createContactContainerDataCy">
       or
       <span
         tabindex="0"

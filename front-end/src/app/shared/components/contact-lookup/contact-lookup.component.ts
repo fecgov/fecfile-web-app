@@ -65,6 +65,14 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     return buildDataCy(this.dataCyContext, 'lookup');
   }
 
+  get candidateOfficeNoteDataCy(): string {
+    return buildDataCy(this.rootDataCy, 'candidate-office-only', 'text');
+  }
+
+  get contactTypeFieldDataCy(): string {
+    return buildDataCy(this.contactTypeDataCy, 'field');
+  }
+
   get contactTypeDataCy(): string {
     return buildDataCy(this.dataCyContext, 'contact-type', 'select');
   }
@@ -73,8 +81,16 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     return buildDataCy(this.dataCyContext, 'contact-search', 'input');
   }
 
+  get searchBoxContainerDataCy(): string {
+    return buildDataCy(this.searchBoxDataCy, 'container');
+  }
+
   get searchBoxFieldDataCy(): string {
     return buildDataCy(this.searchBoxDataCy, 'field');
+  }
+
+  get createContactContainerDataCy(): string {
+    return buildDataCy(this.createContactDataCy, 'container');
   }
 
   get createContactDataCy(): string {

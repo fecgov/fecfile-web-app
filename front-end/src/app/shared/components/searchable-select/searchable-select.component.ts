@@ -37,6 +37,8 @@ export class SearchableSelectComponent {
 
   readonly control = computed(() => this.form().get(this.controlName()) as FormControl);
   readonly selectDataCy = computed(() => buildDataCy(this.dataCyContext(), this.controlName(), 'select'));
+  readonly selectFieldDataCy = computed(() => buildDataCy(this.selectDataCy(), 'field'));
+  readonly selectContainerDataCy = computed(() => buildDataCy(this.selectDataCy(), 'container'));
   readonly mergedPt = computed<SelectPassThrough>(() => {
     const pt = this.pt();
     const selectDataCy = this.selectDataCy();

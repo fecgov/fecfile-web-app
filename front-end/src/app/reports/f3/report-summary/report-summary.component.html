@@ -1,13 +1,13 @@
-<div class="summary-container">
-  <p-card styleClass="mt-0">
-    <div class="summary-header">
-      <h1>Summary page</h1>
+<div class="summary-container" data-cy="report-f3-summary-page">
+  <p-card styleClass="mt-0" data-cy="report-f3-summary-page-card">
+    <div class="summary-header" data-cy="report-f3-summary-page-header">
+      <h1 data-cy="report-f3-summary-page-title">Summary page</h1>
     </div>
 
     @if (calculationFinished$ | async) {
-      <div>
-        <table>
-          <caption>
+      <div data-cy="report-f3-summary-page-table-panel">
+        <table data-cy="report-f3-summary-page-table">
+          <caption data-cy="report-f3-summary-page-table-caption">
             Report Summary
           </caption>
           <tr>
@@ -101,7 +101,7 @@
         </table>
       </div>
     } @else {
-      <div class="fec-loader-div col-12">
+      <div class="fec-loader-div col-12" data-cy="report-f3-summary-page-loader">
         <img
           class="max-w-full fec-loader-image"
           src="assets/img/fec-loading-flag.gif"
@@ -119,6 +119,7 @@
             pRipple
             label="Back"
             class="p-button-secondary"
+            data-cy="report-f3-summary-page-back-button"
             (click)="router.navigateByUrl('/reports/transactions/report/' + report.id + '/list')"
           ></button>
         </div>
@@ -131,6 +132,7 @@
             pRipple
             label="Review detailed summary page"
             class="p-button-primary"
+            data-cy="report-f3-summary-page-review-detailed-summary-button"
             (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
           ></button>
         </div>

@@ -1,29 +1,29 @@
-<div id="page-container" [class]="[layoutControls().backgroundStyle]">
-  <app-banner #bannerRef />
+<div id="page-container" [class]="[layoutControls().backgroundStyle]" data-cy="layout-page-container">
+  <app-banner #bannerRef data-cy="layout-page-banner" />
   @if (layoutControls().showHeader) {
-    <div class="header-container">
-      <app-header [headerStyle]="layoutControls().headerStyle" />
+    <div class="header-container" data-cy="layout-page-header-container">
+      <app-header [headerStyle]="layoutControls().headerStyle" data-cy="layout-page-header" />
     </div>
   }
 
   <!--  Begin Sidebar section -->
   @if (layoutControls().showSidebar && layoutService.showSidebar()) {
-    <div class="inline-flex w-100">
-      <div class="fec-background-color flex-shrink-1" id="sidebar-container">
-        <app-drawer />
+    <div class="inline-flex w-100" data-cy="layout-page-sidebar-shell">
+      <div class="fec-background-color flex-shrink-1" id="sidebar-container" data-cy="layout-page-sidebar-container">
+        <app-drawer data-cy="layout-page-sidebar-drawer" />
       </div>
-      <div class="sidebar-content-container">
-        <div class="main-content">
+      <div class="sidebar-content-container" data-cy="layout-page-sidebar-content">
+        <div class="main-content" data-cy="layout-page-main-content">
           @if (layoutControls().showCommitteeBanner) {
-            <app-committee-banner />
+            <app-committee-banner data-cy="layout-page-committee-banner" />
           }
-          <div class="router-outlet">
+          <div class="router-outlet" data-cy="layout-page-router-outlet">
             <router-outlet></router-outlet>
           </div>
         </div>
         <div class="flex-grow-1 flex flex-column">
           <div class="flex-grow-1 footer-spacer"></div>
-          <app-footer [showSidebar]="true" />
+          <app-footer [showSidebar]="true" data-cy="layout-page-footer" />
         </div>
       </div>
     </div>
@@ -38,13 +38,14 @@
       #contentOffset
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
       [style.marginTop]="isCookiesDisabled() ? '164px' : '64px'"
+      data-cy="layout-page-content-offset"
     >
-      <div class="main-content">
+      <div class="main-content" data-cy="layout-page-main-content">
         @if (layoutControls().showCommitteeBanner) {
-          <app-committee-banner />
+          <app-committee-banner data-cy="layout-page-committee-banner" />
         }
         @if (isDefault()) {
-          <div class="container">
+          <div class="container" data-cy="layout-page-default-container">
             <router-outlet></router-outlet>
           </div>
         } @else {
@@ -52,7 +53,7 @@
         }
       </div>
     </div>
-    <app-footer #footerRef [showUpperFooter]="layoutControls().showUpperFooter" [style.paddingTop]="topPadding()" />
+    <app-footer #footerRef [showUpperFooter]="layoutControls().showUpperFooter" [style.paddingTop]="topPadding()" data-cy="layout-page-footer" />
   }
   <!-- End No Sidebar section -->
 
@@ -71,5 +72,5 @@
   <app-feedback-overlay />
 </div>
 @if (useDynamicSidebar) {
-  <button (click)="toggleSidebar()">Toggle Sidebar</button>
+  <button (click)="toggleSidebar()" data-cy="layout-page-toggle-sidebar-button">Toggle Sidebar</button>
 }

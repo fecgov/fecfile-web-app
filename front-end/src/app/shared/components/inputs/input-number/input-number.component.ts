@@ -225,6 +225,10 @@ export class InputNumberComponent implements OnInit, ControlValueAccessor {
     return this.dataCy ? buildDataCy(this.dataCy, 'field') : '';
   }
 
+  get containerDataCy(): string {
+    return this.dataCy ? buildDataCy(this.dataCy, 'container') : '';
+  }
+
   get inputDataCy(): string {
     return this.dataCy || buildDataCy(this.inputId, 'input');
   }

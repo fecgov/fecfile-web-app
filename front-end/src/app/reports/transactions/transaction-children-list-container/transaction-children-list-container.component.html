@@ -1,3 +1,7 @@
 @if (transaction?.transactionType?.showGuarantorTable) {
-  <app-transaction-guarantors [loan]="transaction" />
+  <div data-cy="transactions-children-list-panel">
+    <div data-cy="transactions-children-list-content">
+      <app-transaction-guarantors data-cy="transactions-children-list-guarantors-table" [loan]="transaction" />
+    </div>
+  </div>
 }

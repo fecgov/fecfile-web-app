@@ -1,5 +1,5 @@
 <ng-template #nameBody let-item>
-  <a (click)="editItem(item)">
+  <a (click)="editItem(item)" [attr.data-cy]="'transactions-guarantors-table-row-' + item.id + '-name-link'">
     {{ item.name }}
   </a>
 </ng-template>
@@ -12,6 +12,7 @@
     buttonIcon="pi pi-ellipsis-v"
     buttonStyleClass="p-button-text"
     buttonAriaLabel="action"
+    dataCyContext="transactions-guarantors-table"
   />
 </ng-template>
 
@@ -26,20 +27,22 @@
   [currentPageReportTemplate]="'Showing {first} to {last} of {totalRecords} Guarantors'"
   sortField="name"
   [columns]="columns()"
+  dataCyContext="transactions-guarantors"
 >
 </app-table>
 
-<p-confirmDialog #deleteDialog [style]="{ width: '450px' }" key="transaction-deletion-dialog" header="Are you sure?">
+<p-confirmDialog #deleteDialog [style]="{ width: '450px' }" key="transaction-deletion-dialog" header="Are you sure?" data-cy="transactions-guarantors-delete-dialog">
   <ng-template pTemplate="footer">
-    <span class="confirm-footer">
+    <span class="confirm-footer" data-cy="transactions-guarantors-delete-dialog-footer">
       <button
         type="button"
         pButton
         class="p-button-secondary"
         label="Cancel"
+        data-cy="transactions-guarantors-delete-dialog-cancel-button"
         (click)="deleteDialog.onReject()"
       ></button>
-      <button type="button" pButton label="Confirm" (click)="deleteDialog.onAccept()"></button>
+      <button type="button" pButton label="Confirm" data-cy="transactions-guarantors-delete-dialog-confirm-button" (click)="deleteDialog.onAccept()"></button>
     </span>
   </ng-template>
 </p-confirmDialog>

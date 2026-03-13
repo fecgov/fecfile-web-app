@@ -1,8 +1,12 @@
-<div class="flex justify-content-between">
-  @for (control of cancelControls(); track control) {
-    <app-navigation-control [navigationControl]="control" [transaction]="transaction()" />
-  }
-  @for (control of continueControls(); track control) {
-    <app-navigation-control [navigationControl]="control" [transaction]="transaction()" />
-  }
+<div class="flex justify-content-between" data-cy="transactions-navigation-control-bar-panel">
+  <div data-cy="transactions-navigation-cancel-controls-panel">
+    @for (control of cancelControls(); track control) {
+      <app-navigation-control data-cy="transactions-navigation-cancel-control-button" [navigationControl]="control" [transaction]="transaction()" />
+    }
+  </div>
+  <div data-cy="transactions-navigation-continue-controls-panel">
+    @for (control of continueControls(); track control) {
+      <app-navigation-control data-cy="transactions-navigation-continue-control-button" [navigationControl]="control" [transaction]="transaction()" />
+    }
+  </div>
 </div>

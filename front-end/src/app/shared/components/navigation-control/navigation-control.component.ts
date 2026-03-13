@@ -26,6 +26,10 @@ import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuItem } from 'primeng/api';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { buildDataCy } from 'app/shared/utils/data-cy.utils';
 
 @Component({
   selector: 'app-navigation-control',
@@ -82,7 +86,31 @@ export class NavigationControlComponent {
   }
 
   buttonDataCy(): string {
-    return buildDataCy('transactions-navigation', this.navigationControl?.label || 'control', 'button');
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', 'button');
+  }
+
+  dropdownButtonDataCy(): string {
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', 'dropdown', 'button');
+  }
+
+  dropdownLabelDataCy(): string {
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', 'dropdown', 'label');
+  }
+
+  dropdownOptionDataCy(label?: string): string {
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', label || 'option', 'button');
+  }
+
+  dropdownGroupDataCy(label?: string): string {
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', label || 'group', 'label');
+  }
+
+  splitButtonContainerDataCy(): string {
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', 'splitbutton', 'container');
+  }
+
+  splitButtonDataCy(): string {
+    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', 'splitbutton');
   }
 
   clickButton(): void {

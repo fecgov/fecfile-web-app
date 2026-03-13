@@ -1,9 +1,9 @@
-<div id="print-preview-container" [class.sidebar-version]="layoutService.showSidebar()">
-  <h1 data-cy="print-preview">Print preview</h1>
+<div id="print-preview-container" [class.sidebar-version]="layoutService.showSidebar()" data-cy="print-preview-page">
+  <h1 data-cy="print-preview-page-title">Print preview</h1>
   <hr class="mb-5" />
 
   @if (webPrintStage === 'checking') {
-    <div class="flex flex-column align-items-center">
+    <div class="flex flex-column align-items-center" data-cy="print-preview-page-checking-panel">
       <img
         class="max-w-full fec-loader-image mt-5 mb-7"
         src="assets/img/fec-loading-flag.gif"
@@ -11,19 +11,19 @@
         alt="The report's web print status is loading..."
         height="100"
       />
-      <span class="body-header">CREATING YOUR PRINT PREVIEW</span>
-      <span class="body-text">This could take a few moments depending on the size of the report.</span>
+      <span class="body-header" data-cy="print-preview-page-checking-title">CREATING YOUR PRINT PREVIEW</span>
+      <span class="body-text" data-cy="print-preview-page-checking-text">This could take a few moments depending on the size of the report.</span>
     </div>
   } @else {
-    <div class="flex">
-      <div id="left-content">
+    <div class="flex" data-cy="print-preview-page-content">
+      <div id="left-content" data-cy="print-preview-page-left-content">
         @if (webPrintStage === 'not-submitted' || webPrintStage === 'failure') {
-          <div class="flex flex-column">
-            <span class="body-header">
+          <div class="flex flex-column" data-cy="print-preview-page-create-panel">
+            <span class="body-header" data-cy="print-preview-page-create-title">
               Would you like to compile a print preview?
               <span class="font-karla">(OPTIONAL)</span>
             </span>
-            <span class="body-text">
+            <span class="body-text" data-cy="print-preview-page-create-text">
               Review your in-progress report by creating a PDF print preview. This could take a few moments, depending
               on the size of the report.
             </span>
@@ -35,13 +35,14 @@
               appSingleClick
               label="Create PDF print preview"
               class="p-button-warning"
+              data-cy="print-preview-page-create-pdf-button"
               (click)="submitPrintJob()"
             ></button>
           </div>
         } @else {
-          <div class="flex flex-column">
-            <span class="body-header">YOUR PRINT PREVIEW IS READY!</span>
-            <span class="body-text">
+          <div class="flex flex-column" data-cy="print-preview-page-ready-panel">
+            <span class="body-header" data-cy="print-preview-page-ready-title">YOUR PRINT PREVIEW IS READY!</span>
+            <span class="body-text" data-cy="print-preview-page-ready-text">
               Download a previous print preview or create a new one to see recent changes.
             </span>
           </div>
@@ -52,9 +53,10 @@
               appSingleClick
               label="Download PDF"
               class="p-button-info m"
+              data-cy="print-preview-page-download-pdf-button"
               (click)="downloadPDF()"
             ></button>
-            <div class="inner-body-text">
+            <div class="inner-body-text" data-cy="print-preview-page-last-created">
               <span class="font-karla-bold">Last created:&nbsp;</span
               ><span class="font-karla">{{ formattedDate() }}</span>
             </div>
@@ -66,16 +68,17 @@
               appSingleClick
               label="Compile new PDF"
               class="p-button-warning"
+              data-cy="print-preview-page-compile-new-pdf-button"
               (click)="submitPrintJob()"
             ></button>
-            <div class="inner-body-text">
+            <div class="inner-body-text" data-cy="print-preview-page-compile-help-text">
               <span class="font-karla">Made changes to your report? To review recent changes, create a new PDF. </span>
             </div>
           </div>
         }
       </div>
-      <div id="right-content">
-        <img src="assets/img/PDFicon.svg" draggable="false" alt="pdf file" width="284" />
+      <div id="right-content" data-cy="print-preview-page-right-content">
+        <img src="assets/img/PDFicon.svg" draggable="false" alt="pdf file" width="284" data-cy="print-preview-page-pdf-image" />
       </div>
     </div>
   }
@@ -86,11 +89,12 @@
   }
 } -->
   <hr class="mt-5 mb-3" />
-  <div class="flex justify-content-between">
+  <div class="flex justify-content-between" data-cy="print-preview-page-navigation">
     <button
       pButton
       pRipple
       class="p-button-secondary icon-gap"
+      data-cy="print-preview-page-review-detailed-summary-button"
       (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
     >
       <span class="prev-arrow-mask"></span>
@@ -101,6 +105,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
+      data-cy="print-preview-page-sign-submit-button"
       (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
     >
       <span>Sign & submit report</span>

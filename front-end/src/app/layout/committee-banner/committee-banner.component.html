@@ -1,17 +1,18 @@
 @if (committeeID()) {
-  <div class="mb-7">
-    <div class="committee-name">{{ committeeName() }}</div>
-    <div class="committee-info" aria-label="Committee Status">
+  <div class="mb-7" data-cy="layout-committee-banner-panel">
+    <div class="committee-name" data-cy="layout-committee-banner-name">{{ committeeName() }}</div>
+    <div class="committee-info" aria-label="Committee Status" data-cy="layout-committee-banner-status-panel">
       <div
         class="pi pi-circle-on status-circle"
         [style.color]="frequencyColor()"
         [attr.aria-label]="committeeStatus()"
+        data-cy="layout-committee-banner-status-indicator"
       ></div>
-      <div class="sub-banner-item">{{ committeeFrequency() }}</div>
+      <div class="sub-banner-item" data-cy="layout-committee-banner-frequency">{{ committeeFrequency() }}</div>
       |
-      <div class="sub-banner-item">{{ committeeTypeLabel() }}</div>
+      <div class="sub-banner-item" data-cy="layout-committee-banner-type">{{ committeeTypeLabel() }}</div>
       |
-      <div class="sub-banner-item">ID: {{ committeeID() }}</div>
+      <div class="sub-banner-item" data-cy="layout-committee-banner-id">ID: {{ committeeID() }}</div>
     </div>
   </div>
 }

@@ -1,10 +1,13 @@
 <app-dialog
   [(visible)]="visible"
+  data-cy="layout-confirm-dialog"
   dataCyContext="layout-confirm"
   [title]="header()"
   submitLabel="Confirm"
   (confirm)="confirmOption()"
   (close)="cancelOption()"
 >
-  <p>{{ message() }}</p>
+  <p data-cy="layout-confirm-dialog-message">
+    <span data-cy="layout-confirm-dialog-message-text">{{ message() }}</span>
+  </p>
 </app-dialog>

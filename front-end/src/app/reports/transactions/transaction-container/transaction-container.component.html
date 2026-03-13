@@ -1,27 +1,28 @@
-<div class="components-wrapper">
+<div class="components-wrapper" data-cy="transactions-container-page">
   @switch (transactionCardinality()) {
     @case (1) {
-      <app-transaction-detail [transaction]="transaction()" />
+      <app-transaction-detail data-cy="transactions-container-detail-panel" [transaction]="transaction()" />
     }
     @case (2) {
-      <app-double-transaction-detail [transaction]="transaction()" />
+      <app-double-transaction-detail data-cy="transactions-container-double-detail-panel" [transaction]="transaction()" />
     }
     @case (3) {
-      <app-triple-transaction-detail [transaction]="transaction()" />
+      <app-triple-transaction-detail data-cy="transactions-container-triple-detail-panel" [transaction]="transaction()" />
     }
     @case (-1) {
-      <app-reatt-redes-transaction-type-detail [transaction]="transaction()" />
+      <app-reatt-redes-transaction-type-detail data-cy="transactions-container-reatt-redes-detail-panel" [transaction]="transaction()" />
     }
   }
 
-  <app-transaction-children-list-container [transaction]="transaction()" />
+  <app-transaction-children-list-container data-cy="transactions-container-children-panel" [transaction]="transaction()" />
 
   <app-transaction-navigation
+    data-cy="transactions-container-navigation-panel"
     [isEditable]="isEditableReport() && isEditableTransaction()"
     [transaction]="transaction()"
   />
 </div>
 
-<p-confirmDialog key="dialog" [style]="{ width: '450px' }" />
-<p-confirmDialog key="childDialog" [style]="{ width: '450px' }" />
-<p-confirmDialog key="childDialog_2" [style]="{ width: '450px' }" />
+<p-confirmDialog key="dialog" data-cy="transactions-container-confirm-dialog" [style]="{ width: '450px' }" />
+<p-confirmDialog key="childDialog" data-cy="transactions-container-child-confirm-dialog" [style]="{ width: '450px' }" />
+<p-confirmDialog key="childDialog_2" data-cy="transactions-container-secondary-child-confirm-dialog" [style]="{ width: '450px' }" />

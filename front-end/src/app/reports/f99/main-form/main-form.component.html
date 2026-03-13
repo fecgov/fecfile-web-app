@@ -1,10 +1,10 @@
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-  <h1>Form 99</h1>
-  <span class="misc-label">MISCELLANEOUS REPORT TO THE FEC</span>
+<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="report-f99-page-form">
+  <h1 data-cy="report-f99-page-title">Form 99</h1>
+  <span class="misc-label" data-cy="report-f99-page-subtitle">MISCELLANEOUS REPORT TO THE FEC</span>
   <hr />
-  <h2>Committee</h2>
+  <h2 data-cy="report-f99-page-committee-title">Committee</h2>
 
-  <div class="field w-9">
+  <div class="field w-9" data-cy="report-f99-page-committee-name-field">
     <label for="committee_name">COMMITTEE NAME</label>
     <input
       type="text"
@@ -14,9 +14,9 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" />
+    <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
   </div>
-  <div class="field w-3">
+  <div class="field w-3" data-cy="report-f99-page-committee-id-field">
     <label for="filer_committee_id_number">COMMITTEE ID</label>
     <input
       type="text"
@@ -26,18 +26,18 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
+    <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
   </div>
 
   <hr type="solid" />
-  <h2>Address</h2>
+  <h2 data-cy="report-f99-page-address-title">Address</h2>
 
-  <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form" />
+  <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form" dataCyContext="report-f99-page" />
 
   <hr type="solid" />
-  <h2>Text Information</h2>
+  <h2 data-cy="report-f99-page-text-information-title">Text Information</h2>
 
-  <div class="field w-6">
+  <div class="field w-6" data-cy="report-f99-page-document-type-field">
     <span class="span-label" id="text_code_label">DOCUMENT TYPE</span>
     <p-select
       ariaLabelledBy="text_code_label"
@@ -45,16 +45,17 @@
       formControlName="text_code"
       [options]="textCodes"
       appendTo="body"
+      data-cy="report-f99-page-document-type-select"
     />
-    <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted" />
+    <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
   </div>
 
   @if (isLoanAgreement()) {
-    <div class="gray flex py-2 mb-3" id="loan-agreement-container">
+    <div class="gray flex py-2 mb-3" id="loan-agreement-container" data-cy="report-f99-page-loan-agreement-alert">
       <i class="pi pi-info custom-info-icon mx-2"></i>
       <div class="ghandi text-sm">
         <span>To submit a Form 99 with a Loan Agreement or Loan Forgiveness attachment, please use the </span>
-        <a href="https://webforms.fec.gov/wfja/form99" target="_blank">Form 99 webform</a>
+        <a href="https://webforms.fec.gov/wfja/form99" target="_blank" data-cy="report-f99-page-form-99-webform-link">Form 99 webform</a>
         <span> on FEC.gov.</span>
       </div>
     </div>
@@ -62,7 +63,7 @@
 
   @if (showFilingFrequency()) {
     <div class="field w-6">
-      <div class="field">
+      <div class="field" data-cy="report-f99-page-filing-frequency-field">
         <label for="filing_frequency">NEW FILING FREQUENCY</label>
         <p-selectButton
           inputId="filing_frequency"
@@ -71,17 +72,17 @@
           [allowEmpty]="false"
           formControlName="filing_frequency"
         />
-        <app-error-messages [form]="form" fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
+        <app-error-messages [form]="form" fieldName="filing_frequency" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
       </div>
     </div>
   }
 
-  <div class="field w-full">
+  <div class="field w-full" data-cy="report-f99-page-message-text-field">
     <label for="message_text">TEXT MESSAGE</label>
-    <textarea id="message_text" appAutoResize formControlName="message_text"></textarea>
-    <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" />
+    <textarea id="message_text" appAutoResize formControlName="message_text" data-cy="report-f99-page-message-text-input"></textarea>
+    <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
   </div>
 
   <hr type="solid" />
-  <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
+  <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" dataCyContext="report-f99-page" />
 </form>

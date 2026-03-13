@@ -1,5 +1,5 @@
-<div class="summary-container">
-  <h1>Summary page</h1>
+<div class="summary-container" data-cy="report-f3x-summary-page">
+  <h1 data-cy="report-f3x-summary-page-title">Summary page</h1>
   <hr type="solid" class="mt-2 mb-5" />
 
   @if (calculationFinished()) {
@@ -15,10 +15,11 @@
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
+      dataCyContext="report-f3x-summary-page"
     >
     </app-table>
   } @else {
-    <div class="fec-loader-div">
+    <div class="fec-loader-div" data-cy="report-f3x-summary-page-loader">
       <img
         class="max-w-full fec-loader-image"
         src="assets/img/fec-loading-flag.gif"
@@ -34,6 +35,7 @@
       pButton
       pRipple
       class="p-button-secondary icon-gap"
+      data-cy="report-f3x-summary-page-back-button"
       (click)="router.navigateByUrl('/reports/transactions/report/' + report().id + '/list')"
     >
       <span class="prev-arrow-mask"></span>
@@ -43,6 +45,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
+      data-cy="report-f3x-summary-page-review-detailed-summary-button"
       (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report().id)"
     >
       <span>Review detailed summary page</span>

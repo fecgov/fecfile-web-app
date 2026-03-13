@@ -1,10 +1,10 @@
 <ng-template #nameBody let-item>
   @if (isCurrentUser(item)) {
-    <span>
+    <span [attr.data-cy]="'committee-members-table-row-' + item.id + '-name'">
       <b>{{ item.name }}</b> (You)
     </span>
   } @else {
-    <span>{{ item.name }}</span>
+    <span [attr.data-cy]="'committee-members-table-row-' + item.id + '-name'">{{ item.name }}</span>
   }
 </ng-template>
 <ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
@@ -24,6 +24,7 @@
 
 <app-table
   [(first)]="first"
+  data-cy="committee-members-page-table"
   dataCyContext="committee-members"
   [items]="items()"
   title="Manage users"
@@ -52,6 +53,7 @@
 </app-table>
 
 <app-committee-member-dialog
+  data-cy="committee-members-page-dialog"
   (userAdded)="userAdded($event)"
   (roleEdited)="roleEdited()"
   [(detailVisible)]="detailVisible"

@@ -3,6 +3,7 @@
 
 <app-table
   [(first)]="first"
+  data-cy="contacts-deleted-page-table"
   dataCyContext="contacts-deleted"
   [items]="items()"
   [(totalItems)]="totalItems"
@@ -19,7 +20,7 @@
   <!-- Just to make title h1 -->
 </app-table>
 
-<div class="flex justify-content-between mt-5">
+<div class="flex justify-content-between mt-5" data-cy="contacts-deleted-page-actions">
   <button
     pButton
     pRipple

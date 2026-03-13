@@ -29,6 +29,9 @@ export class CalendarComponent {
     return control as SubscriptionFormControl;
   });
   readonly calendarDataCy = computed(() => buildDataCy(this.dataCyContext(), this.fieldName(), 'date'));
+  readonly calendarFieldDataCy = computed(() => buildDataCy(this.calendarDataCy(), 'field'));
+  readonly calendarLabelDataCy = computed(() => buildDataCy(this.calendarDataCy(), 'label'));
+  readonly calendarIconDataCy = computed(() => buildDataCy(this.calendarDataCy(), 'icon'));
   readonly errorDataCy = computed(() => buildDataCy(this.dataCyContext(), this.fieldName(), 'error'));
 
   constructor() {

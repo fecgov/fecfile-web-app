@@ -1,17 +1,20 @@
-<p-select
-  #pSelect
-  [attr.data-cy]="selectDataCy()"
-  [options]="options()"
-  [inputId]="inputId()"
-  [readonly]="readonly()"
-  [styleClass]="styleClass()"
-  [formControl]="control()"
-  (onChange)="changeOut.emit($event)"
-  (onFocus)="focusOut.emit($event)"
-  (onBlur)="blurOut.emit($event)"
-  (onShow)="showOut.emit($event)"
-  (onHide)="hideOut.emit($event)"
-  [pt]="mergedPt()"
-  fluid
->
-</p-select>
+<div [attr.data-cy]="selectFieldDataCy()">
+  <div [attr.data-cy]="selectContainerDataCy()">
+    <p-select
+      #pSelect
+      [attr.data-cy]="selectDataCy()"
+      [options]="options()"
+      [inputId]="inputId()"
+      [readonly]="readonly()"
+      [styleClass]="styleClass()"
+      [formControl]="control()"
+      (onChange)="changeOut.emit($event)"
+      (onFocus)="focusOut.emit($event)"
+      (onBlur)="blurOut.emit($event)"
+      (onShow)="showOut.emit($event)"
+      (onHide)="hideOut.emit($event)"
+      [pt]="mergedPt()"
+      fluid
+    ></p-select>
+  </div>
+</div>

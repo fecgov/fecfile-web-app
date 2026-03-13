@@ -1,66 +1,78 @@
-<h1>Report status</h1>
+<h1 data-cy="report-submit-status-page-title">Report status</h1>
 <hr type="solid" />
-<div class="flex">
-  <div class="col-4 pl-0">
+<div class="flex" data-cy="report-submit-status-page">
+  <div class="col-4 pl-0" data-cy="report-submit-status-page-content">
     @if (reportStatus() === reportStatusEnum.SUBMIT_FAILURE) {
-      <h2 class="submission-status-heading">Report submission failed</h2>
-      <p class="submission-status-text">Please contact the Electronic Filing Office or visit FEC.gov for help.</p>
+      <h2 class="submission-status-heading" data-cy="report-submit-status-page-failure-title">Report submission failed</h2>
+      <p class="submission-status-text" data-cy="report-submit-status-page-failure-message">
+        Please contact the Electronic Filing Office or visit FEC.gov for help.
+      </p>
       @if (fecStatus() === 'REJECTED' && fecMessage()) {
-        <p class="error-text">Error Message: {{ fecMessage() }}</p>
+        <p class="error-text" data-cy="report-submit-status-page-failure-error-message">Error Message: {{ fecMessage() }}</p>
       }
-      <h3 class="assistance-heading">Need help?</h3>
+      <h3 class="assistance-heading" data-cy="report-submit-status-page-help-title">Need help?</h3>
       <a
         pButton
         href="https://www.fec.gov/help-candidates-and-committees/filing-reports/upload-errors/"
         target="_blank"
         rel="noopener"
         class="p-button-secondary learn-more-button"
+        data-cy="report-submit-status-page-learn-more-link"
       >
         Learn more about your submission error
       </a>
-      <h3 class="assistance-heading">Electronic Filing Office</h3>
-      <p class="assistance-text">
+      <h3 class="assistance-heading" data-cy="report-submit-status-page-office-title">Electronic Filing Office</h3>
+      <p class="assistance-text" data-cy="report-submit-status-page-office-text">
         Electronic Filing Office
         <br />
         1-800-424-9530, menu option 4
         <br />
         202-694-1307
         <br />
-        <a href="mailto:eFiletechsupport@fec.gov">eFiletechsupport&#64;fec.gov</a>
+        <a href="mailto:eFiletechsupport@fec.gov" data-cy="report-submit-status-page-office-email-link">
+          eFiletechsupport&#64;fec.gov
+        </a>
       </p>
-      <h3 class="assistance-heading">Support Hours of Operation</h3>
-      <p class="assistance-text">Monday through Friday from 9:00 a.m. to 5:30 p.m. Eastern Time</p>
+      <h3 class="assistance-heading" data-cy="report-submit-status-page-hours-title">Support Hours of Operation</h3>
+      <p class="assistance-text" data-cy="report-submit-status-page-hours-text">
+        Monday through Friday from 9:00 a.m. to 5:30 p.m. Eastern Time
+      </p>
       <button
         pButton
         pRipple
         class="p-button-primary failure-return-button"
         label="Return to reports"
+        data-cy="report-submit-status-page-return-to-reports-button"
         (click)="backToReports()"
       ></button>
     } @else {
       @if (reportStatus() === reportStatusEnum.SUBMIT_PENDING) {
-        <h2 class="submission-status-heading">Report submission pending</h2>
-        <p class="submission-status-text">Your submission has been sent to the FEC.</p>
+        <h2 class="submission-status-heading" data-cy="report-submit-status-page-pending-title">Report submission pending</h2>
+        <p class="submission-status-text" data-cy="report-submit-status-page-pending-message">
+          Your submission has been sent to the FEC.
+        </p>
       } @else if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
-        <h2 class="submission-status-heading">Report submission received</h2>
-        <p class="submission-status-text">Your submission to the FEC has been received.</p>
+        <h2 class="submission-status-heading" data-cy="report-submit-status-page-success-title">Report submission received</h2>
+        <p class="submission-status-text" data-cy="report-submit-status-page-success-message">
+          Your submission to the FEC has been received.
+        </p>
       } @else {
-        <h2 class="submission-status-heading">
+        <h2 class="submission-status-heading" data-cy="report-submit-status-page-processing-title">
           Thank you for submitting your report. It is currently being processed.
         </h2>
       }
-      <h3 class="submission-info-heading">Form Type:</h3>
-      <p class="submission-info-text">
+      <h3 class="submission-info-heading" data-cy="report-submit-status-page-form-type-title">Form Type:</h3>
+      <p class="submission-info-text" data-cy="report-submit-status-page-form-type-text">
         {{ report().formLabel }}
       </p>
       @if (isBaseF3()) {
-        <h3 class="submission-info-heading">Report Type:</h3>
-        <p class="submission-info-text">
+        <h3 class="submission-info-heading" data-cy="report-submit-status-page-report-type-title">Report Type:</h3>
+        <p class="submission-info-text" data-cy="report-submit-status-page-report-type-text">
           {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode()] : '' }}
         </p>
-        <h3 class="submission-info-heading">Coverage Dates:</h3>
+        <h3 class="submission-info-heading" data-cy="report-submit-status-page-coverage-dates-title">Coverage Dates:</h3>
         @if (coverageDates()) {
-          <p class="submission-info-text no-wrap">
+          <p class="submission-info-text no-wrap" data-cy="report-submit-status-page-coverage-dates-text">
             {{ coverageDates()!['coverage_from_date'] || null | longDate }} —
             <wbr />
             {{ coverageDates()!['coverage_through_date'] || null | longDate }}
@@ -68,14 +80,16 @@
         }
       }
 
-      <h3 class="submission-info-heading">Confirmation Emails:</h3>
-      <p class="submission-info-text word-break">
+      <h3 class="submission-info-heading" data-cy="report-submit-status-page-confirmation-emails-title">
+        Confirmation Emails:
+      </h3>
+      <p class="submission-info-text word-break" data-cy="report-submit-status-page-confirmation-emails-text">
         {{ report().confirmation_email_1 }} <br />
         {{ report().confirmation_email_2 }}
       </p>
       @if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
-        <h2 class="submission-info-heading">E-filing ID:</h2>
-        <p class="submission-info-text">
+        <h2 class="submission-info-heading" data-cy="report-submit-status-page-efiling-id-title">E-filing ID:</h2>
+        <p class="submission-info-text" data-cy="report-submit-status-page-efiling-id-text">
           {{ report().upload_submission?.fec_report_id }}
         </p>
       }
@@ -84,22 +98,25 @@
         pRipple
         class="p-button-primary success-return-button"
         label="Return to reports"
+        data-cy="report-submit-status-page-return-to-reports-button"
         (click)="backToReports()"
       ></button>
     }
   </div>
-  <div class="col-4 img-container">
+  <div class="col-4 img-container" data-cy="report-submit-status-page-image-panel">
     @if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
       <img
         class="status-image"
         src="assets/img/report-submission-received.svg"
         alt="Report submission received image"
+        data-cy="report-submit-status-page-success-image"
       />
     } @else {
       <img
         class="status-image"
         src="assets/img/report-submission-not-received.svg"
         alt="Report submission not received image"
+        data-cy="report-submit-status-page-failure-image"
       />
     }
   </div>

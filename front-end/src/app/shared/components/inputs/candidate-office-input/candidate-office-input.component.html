@@ -1,6 +1,6 @@
-<div [formGroup]="form()">
-  <div class="grid">
-    <div class="col-6">
+<div [formGroup]="form()" [attr.data-cy]="panelDataCy()">
+  <div class="grid" [attr.data-cy]="gridDataCy()">
+    <div class="col-6" [attr.data-cy]="fieldDataCy(officeFormControlName(), 'field')">
       <app-select
         inputId="candidate_office"
         label="CANDIDATE OFFICE"
@@ -11,7 +11,7 @@
         [dataCyContext]="dataCyContext()"
       />
     </div>
-    <div class="col-3">
+    <div class="col-3" [attr.data-cy]="fieldDataCy(stateFormControlName(), 'field')">
       <app-select
         inputId="candidate_state"
         label="CANDIDATE STATE"
@@ -22,10 +22,12 @@
         [dataCyContext]="dataCyContext()"
       />
     </div>
-    <div class="col-3">
+    <div class="col-3" [attr.data-cy]="fieldDataCy(districtFormControlName(), 'field')">
       @if (candidateDistrictOptions.length === 1) {
-        <div class="field">
-          <label for="candidate_district">CANDIDATE DISTRICT</label>
+        <div class="field" [attr.data-cy]="fieldDataCy(districtFormControlName() + '-readonly', 'field')">
+          <label for="candidate_district" [attr.data-cy]="fieldDataCy(districtFormControlName(), 'label')">
+            CANDIDATE DISTRICT
+          </label>
           <input
             type="text"
             pInputText

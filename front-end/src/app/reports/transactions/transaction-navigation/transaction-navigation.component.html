@@ -1,13 +1,16 @@
 @if (transaction()?.contact_1 && isEditable() && inlineControls().length > 0) {
-  @for (control of inlineControls(); track control) {
-    <div class="p-2">
-      <app-navigation-control [navigationControl]="control" [transaction]="transaction()" />
-    </div>
-  }
+  <div data-cy="transactions-navigation-inline-controls-panel">
+    @for (control of inlineControls(); track control; let index = $index) {
+      <div class="p-2" [attr.data-cy]="'transactions-navigation-inline-control-' + index">
+        <app-navigation-control data-cy="transactions-navigation-inline-control-button" [navigationControl]="control" [transaction]="transaction()" />
+      </div>
+    }
+  </div>
 }
 
-<hr type="solid" />
+<hr type="solid" data-cy="transactions-navigation-divider" />
 <app-navigation-control-bar
+  data-cy="transactions-navigation-control-bar"
   [navigationControls]="navigationControls()"
   [transaction]="transaction()"
   [class]="isEditable() ? '' : 'flex-center'"

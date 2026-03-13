@@ -1,14 +1,15 @@
 <app-dialog
   aria-labelledby="dialog-title"
   dataCyContext="report-list"
+  data-cy="report-list-form-type-dialog"
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
   (confirm)="goToReportForm()"
   [submitDisabled]="isSubmitDisabled()"
 >
-  <div class="dialog-body">
-    <div class="dropdown">
+  <div class="dialog-body" data-cy="report-list-form-type-dialog-body">
+    <div class="dropdown" data-cy="report-list-form-type-dialog-form-type-field">
       <span class="dialog-label" id="type-label">FORM TYPE</span>
       <p-select
         aria-labelledby="type-label"
@@ -17,6 +18,7 @@
         class="w-full"
         id="typeDropdown"
         [pt]="formTypeSelectPt()"
+        data-cy="report-list-form-type-dialog-form-type-select"
       >
         <ng-template #selectedItem let-selectedOption>
           <span class="option">
@@ -30,6 +32,6 @@
         </ng-template>
       </p-select>
     </div>
-    <app-create-f24 [visible]="isF24()" />
+    <app-create-f24 [visible]="isF24()" data-cy="report-list-form-type-dialog-create-f24" />
   </div>
 </app-dialog>

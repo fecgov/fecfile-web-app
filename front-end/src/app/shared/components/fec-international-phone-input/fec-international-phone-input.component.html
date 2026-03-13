@@ -1,13 +1,15 @@
-<div>
-  <input
-    [attr.aria-labelledby]="labelName"
-    [class.p-disabled]="disabled"
-    #internationalPhoneInput
-    type="tel"
-    [id]="inputId()"
-    [attr.data-cy]="inputDataCy"
-    [attr.labelName]="labelName"
-    (keyup)="onKey($event)"
-    (blur)="onBlur($event)"
-  />
+<div [attr.data-cy]="fieldDataCy">
+  <div [attr.data-cy]="containerDataCy">
+    <input
+      [attr.aria-labelledby]="labelName"
+      [class.p-disabled]="disabled"
+      #internationalPhoneInput
+      type="tel"
+      [id]="inputId()"
+      [attr.data-cy]="inputDataCy"
+      [attr.labelName]="labelName"
+      (keyup)="onKey($event)"
+      (blur)="onBlur($event)"
+    />
+  </div>
 </div>

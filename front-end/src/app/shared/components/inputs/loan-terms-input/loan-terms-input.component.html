@@ -1,5 +1,6 @@
 <div [formGroup]="form" [attr.data-cy]="contextDataCy('loan-terms', 'panel')">
   <app-loan-terms-dates-input
+    [attr.data-cy]="contextDataCy('loan-terms-dates', 'panel')"
     [form]="form"
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
@@ -7,6 +8,7 @@
     [dataCyContext]="contextDataCy('loan-terms')"
   />
   <app-yes-no-radio-input
+    [attr.data-cy]="contextDataCy('loan-secured', 'field')"
     [form]="form"
     [formSubmitted]="formSubmitted"
     [controlName]="templateMap['secured']"

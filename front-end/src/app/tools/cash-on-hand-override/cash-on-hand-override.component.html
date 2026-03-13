@@ -1,10 +1,10 @@
-<h1 class="page-title">Line 6a override</h1>
+<h1 class="page-title" data-cy="cash-on-hand-override-page-title">Line 6a override</h1>
 <hr type="solid" class="top-hr" />
-<form id="form" [formGroup]="form" class="form-layout">
-  <div class="form-content">
-    <section class="left-content">
-      <strong class="section-header">WHAT IS A LINE 6A OVERRIDE?</strong>
-      <p>
+<form id="form" [formGroup]="form" class="form-layout" data-cy="cash-on-hand-override-page-form">
+  <div class="form-content" data-cy="cash-on-hand-override-page-content">
+    <section class="left-content" data-cy="cash-on-hand-override-page-help-panel">
+      <strong class="section-header" data-cy="cash-on-hand-override-page-what-is-title">WHAT IS A LINE 6A OVERRIDE?</strong>
+      <p data-cy="cash-on-hand-override-page-what-is-text">
         When there is a discrepancy between the reported cash on hand and the correct cash on hand (bank account
         balance), committees filing a Form 3X can override the reported cash on hand by manually entering an amount for
         Line 6(a). If your committee overrides Line 6(a), the cash on hand will be adjusted for any reports in that
@@ -12,24 +12,25 @@
         is overridden on a report from a prior year, reports in subsequent years will also be adjusted and amendments
         may be needed.
       </p>
-      <strong class="section-header">NEED HELP?</strong>
-      <p>
+      <strong class="section-header" data-cy="cash-on-hand-override-page-need-help-title">NEED HELP?</strong>
+      <p data-cy="cash-on-hand-override-page-need-help-text">
         If you’re unsure whether an override is the right choice for your committee, please reach out to your assigned
         campaign finance analyst for guidance.
       </p>
     </section>
-    <section class="right-content">
-      <div class="right-grid">
-        <div class="field year">
+    <section class="right-content" data-cy="cash-on-hand-override-page-editor-panel">
+      <div class="right-grid" data-cy="cash-on-hand-override-page-editor-grid">
+        <div class="field year" data-cy="cash-on-hand-override-page-year-field">
           <app-select
             label="UPDATING CASH ON HAND JANUARY, 1"
             inputId="year"
             [options]="yearOptions"
             [form]="form"
             formControlName="year"
+            dataCyContext="cash-on-hand-override-page"
           />
         </div>
-        <div class="field current">
+        <div class="field current" data-cy="cash-on-hand-override-page-current-amount-field">
           <label for="currentAmount"
             >CURRENT LINE 6A, <br />
             COLUMN B AMOUNT</label
@@ -39,13 +40,18 @@
             formControlName="currentAmount"
             [readonly]="true"
             inputStyleClass="readonly"
+            dataCy="cash-on-hand-override-page-current-amount-input"
           />
         </div>
-        <div class="field new">
+        <div class="field new" data-cy="cash-on-hand-override-page-new-amount-field">
           <label for="newAmount">NEW AMOUNT</label>
-          <app-input-number inputId="newAmount" formControlName="newAmount" />
+          <app-input-number
+            inputId="newAmount"
+            formControlName="newAmount"
+            dataCy="cash-on-hand-override-page-new-amount-input"
+          />
         </div>
-        <div class="field action">
+        <div class="field action" data-cy="cash-on-hand-override-page-action-field">
           <button
             type="button"
             pButton
@@ -53,6 +59,7 @@
             [disabled]="!newAmountFormControl.dirty"
             label="Update Line 6a"
             class="p-button-primary"
+            data-cy="cash-on-hand-override-page-update-line-6a-button"
             (click)="updateLine6a()"
           ></button>
         </div>

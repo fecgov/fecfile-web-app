@@ -20,6 +20,9 @@ export class ReportContactLookupComponent implements OnInit {
 
   readonly manager = computed(() => this.cmservice.get(this.key()));
   readonly rootDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'panel'));
+  readonly contactSearchDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'search', 'panel'));
+  readonly addContactDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'add-contact', 'text'));
+  readonly addContactContainerDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'add-contact', 'container'));
   readonly createContactDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'create-contact', 'link'));
   readonly contactSearchContext = computed(() => buildDataCy('report-contact-lookup', this.key()));
 

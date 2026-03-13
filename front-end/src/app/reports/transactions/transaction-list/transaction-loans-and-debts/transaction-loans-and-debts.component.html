@@ -4,7 +4,7 @@
   </a>
 
   @if (!item?.itemized) {
-    <div><strong>Unitemized</strong></div>
+    <div [attr.data-cy]="'transactions-loans-debts-table-row-' + item.id + '-unitemized'"><strong>Unitemized</strong></div>
   }
 </ng-template>
 
@@ -24,6 +24,7 @@
 <app-table
   [(first)]="first"
   [(selectedItems)]="selectedItems"
+  data-cy="transactions-loans-debts-table"
   dataCyContext="transactions-loans-debts"
   itemName="transactions"
   title="Loans and Debts"

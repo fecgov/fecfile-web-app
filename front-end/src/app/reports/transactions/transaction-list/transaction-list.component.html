@@ -1,5 +1,5 @@
-<div class="transaction-list">
-  <p-toolbar>
+<div class="transaction-list" data-cy="transactions-page">
+  <p-toolbar data-cy="transactions-page-toolbar">
     <ng-template pTemplate="left">
       <div class="flex flex-column">
         <h1 class="gandhi-bold size-36" data-cy="transactions-page-title">Transactions in this report</h1>
@@ -24,23 +24,25 @@
     </ng-template>
   </p-toolbar>
   @if (!isForm24()) {
-    <app-transaction-receipts (reloadTables)="refreshTables()" />
+    <app-transaction-receipts (reloadTables)="refreshTables()" data-cy="transactions-page-receipts-section" />
   }
 
   <app-transaction-disbursements
+    data-cy="transactions-page-disbursements-section"
     (requestReportSelection)="
       openSecondaryReportSelectionDialog($event.transaction, $event.formType, $event.createMethod)
     "
     (reloadTables)="refreshTables()"
   />
   @if (!isForm24()) {
-    <app-transaction-loans-and-debts (reloadTables)="refreshTables()" />
+    <app-transaction-loans-and-debts (reloadTables)="refreshTables()" data-cy="transactions-page-loans-debts-section" />
   }
 </div>
 
-<app-select-report-dialog />
+<app-select-report-dialog data-cy="transactions-page-select-report-dialog" />
 
 <app-secondary-report-selection-dialog
+  data-cy="transactions-page-secondary-report-selection-dialog"
   [(dialogVisible)]="reportSelectDialogVisible"
   [reportType]="reportSelectFormType"
   [transaction]="reportSelectionTransaction"
