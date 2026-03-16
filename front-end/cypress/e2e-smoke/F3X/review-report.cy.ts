@@ -2,6 +2,7 @@ import { defaultScheduleFormData } from '../models/TransactionFormModel';
 import { Initialize } from '../pages/loginPage';
 import { PageUtils, currentYear } from '../pages/pageUtils';
 import { ReportListPage } from '../pages/reportListPage';
+import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
 import { DataSetup } from './setup';
@@ -125,7 +126,7 @@ describe('Receipt Transactions', () => {
         PageUtils.clickLink('Individual Receipt');
         const alias = PageUtils.getAlias('');
         cy.get(alias).find('#amount').clear().safeType(123.45);
-        PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+        TransactionDetailPage.clickSave();
         cy.get('tr').should('contain', '$123.45');
 
         // Return to summary page and verify summary calc runs

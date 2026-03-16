@@ -47,7 +47,7 @@ export class PageUtils {
 
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    cy.wait(100);
+    cy.get('@calendarElement').should('not.exist');
   }
 
   static pickDay(day: string) {

@@ -29,7 +29,7 @@ function setupCoordinatedPartyExpenditure(
   cy.get('#amount').safeType(100);
   cy.get('#purpose_description').first().safeType('test');
 
-  PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+  TransactionDetailPage.clickSave();
 }
 
 function createDebtRepaymentCallback(result: any) {
@@ -75,7 +75,7 @@ describe('Debts', () => {
       PageUtils.containedOnPage('Debt Owed By Committee');
       ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      TransactionDetailPage.clickSave();
 
       ReportListPage.goToReportList(result.report);
       PageUtils.urlCheck('/list');
@@ -100,7 +100,7 @@ describe('Debts', () => {
 
       ContactLookup.getCommittee(result.committee);
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
     });
@@ -119,7 +119,7 @@ describe('Debts', () => {
         ...debtFormData,
         amount: 10000
       }, false, '', '#amount');
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
@@ -145,7 +145,7 @@ describe('Debts', () => {
         true,
         'contribution_date'
       )
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Individual Receipt').should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
@@ -173,7 +173,7 @@ describe('Debts', () => {
       PageUtils.clickLink("Debt Owed To Committee");
 
       cy.get('#amount').should('exist').clear().safeType('2500');
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
 
       cy.contains("Debt Owed To Committee").should('exist');
@@ -201,7 +201,7 @@ describe('Debts', () => {
         true,
         'contribution_date'
       )
-      PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains("Debt Owed To Committee").should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
