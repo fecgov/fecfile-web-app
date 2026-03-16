@@ -290,6 +290,7 @@
           label="Cancel"
           icon="pi pi-times"
           class="p-button-secondary mr-4"
+          data-cy="cancel"
           (click)="closeDialog()"
         ></button>
         @if (headerTitle) {
@@ -300,7 +301,7 @@
             label="Save & continue"
             icon="pi pi-check"
             class="p-button-info"
-            data-cy="contact-dialog-actions"
+            data-cy="save-continue"
             (click)="submitForm()"
           ></button>
         } @else {
@@ -311,7 +312,7 @@
             label="Save"
             icon="pi pi-check"
             class="p-button-primary"
-            data-cy="contact-dialog-actions"
+            data-cy="save"
             (click)="submitForm()"
           ></button>
           @if (isNewItem) {
@@ -322,7 +323,7 @@
               label="Save & Add More"
               icon="pi pi-check"
               class="p-button-info"
-              data-cy="contact-dialog-actions"
+              data-cy="save-add-more"
               (click)="submitForm('continue')"
             ></button>
           }

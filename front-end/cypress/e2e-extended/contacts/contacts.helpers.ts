@@ -4,6 +4,7 @@ import type { MockContact } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
 import type { F3X } from '../../e2e-smoke/requests/library/reports';
 import type { Contact } from '../../../src/app/shared/models';
+import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
 
 type ContactCaseType = ContactFormData['contact_type'];
 type ContactCaseConfig = {
@@ -542,7 +543,7 @@ export class ContactsHelpers {
 
     cy.wait('@entityDetails');
     cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    ContactListPage.clickSave();
     cy.wait('@createContact');
 
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);

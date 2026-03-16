@@ -1,6 +1,5 @@
 import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
-import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactsHelpers } from './contacts.helpers';
 import {
   defaultFormData as contactFormData,
@@ -53,7 +52,7 @@ describe('Contacts Add (/contacts)', () => {
       cy.log(`Creating: ${c.label}`);
       const formData = buildFormDataForType(c.type, c.overrides);
       ContactListPage.enterFormData(formData);
-      cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save & Add More').click();
+      ContactListPage.clickSaveAndAddMore();
       ContactsHelpers.assertSuccessToastMessage();
     }
 
@@ -100,14 +99,14 @@ describe('Contacts Add (/contacts)', () => {
       last_name: 'Bad',
       first_name: 'Candidate',
     });
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    ContactListPage.clickSave();
     cy.get('#candidate_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
-    PageUtils.clickButton('Cancel');
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
-
+    ContactListPage.clickCancel();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    
     ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
@@ -115,13 +114,13 @@ describe('Contacts Add (/contacts)', () => {
       committee_id: 'X123', // invalid format
       name: 'Bad Committee',
     });
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    ContactListPage.clickSave();
     cy.get('#committee_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
-    PageUtils.clickButton('Cancel');
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+    ContactListPage.clickCancel();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
   });
 
   it('Cancel flow: starting Add contact and cancelling does not create rows', () => {
@@ -172,8 +171,8 @@ describe('Contacts Add (/contacts)', () => {
           }
 
           ContactListPage.enterFormData(formData);
-          PageUtils.clickButton('Cancel');
-          cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+          ContactListPage.clickCancel();
+          cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
         }
 
         cy.get('tbody')
@@ -193,7 +192,7 @@ describe('Contacts Add (/contacts)', () => {
       state: '',
       zip: '',
     });
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    ContactListPage.clickSave();
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
@@ -201,8 +200,8 @@ describe('Contacts Add (/contacts)', () => {
     cy.get('#city').parent().should('contain', 'This is a required field');
     cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
     cy.get('#zip').parent().should('contain', 'This is a required field');
-    PageUtils.clickButton('Cancel');
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+    ContactListPage.clickCancel();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
   });
 
   it('Save & Add More: chains Individual, Candidate, Committee, and Organization', () => {
@@ -224,11 +223,11 @@ describe('Contacts Add (/contacts)', () => {
           const formData = buildFormDataForType(c.type, c.overrides);
 
           ContactListPage.enterFormData(formData);
-          cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save & Add More').click();
+          ContactListPage.clickSaveAndAddMore();
           ContactsHelpers.assertSuccessToastMessage();
 
-          cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save & Add More').should('exist');
-          cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('exist');
+          // Dialog is still open
+          cy.get('[data-cy="contact-dialog"]').contains('Add Contact').should('be.visible');
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {
@@ -248,8 +247,8 @@ describe('Contacts Add (/contacts)', () => {
           }
         }
 
-        PageUtils.clickButton('Cancel');
-        cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+        ContactListPage.clickCancel();
+        cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
         ContactListPage.goToPage();
         cy.wait('@contactsReload');

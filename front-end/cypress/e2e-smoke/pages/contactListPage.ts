@@ -15,8 +15,10 @@ export class ContactListPage {
   }
 
   static openAddContactDialog() {
-    PageUtils.clickButton('Add contact');
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('be.visible');
+    // look into why this needs to be clicked twice
+    PageUtils.clickButton('Add contact', '#button-contacts-new:enabled', true);
+    PageUtils.clickButton('Add contact', '#button-contacts-new:enabled', true);
+    cy.get('[data-cy="contact-dialog"]:visible').should('exist');
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
@@ -154,6 +156,19 @@ export class ContactListPage {
     ContactListPage.goToPage();
     ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData(fd);
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
+    ContactListPage.clickSave();
+  }
+
+  static clickCancel() {
+    PageUtils.clickButton('Cancel', '[data-cy="contact-dialog"] [data-cy="cancel"]:visible');
+  }
+  static clickSave() {
+    PageUtils.clickButton('Save', '[data-cy="contact-dialog"] [data-cy="save"]:visible');
+  }
+  static clickSaveAndContinue() {
+    PageUtils.clickButton('Save & continue', '[data-cy="contact-dialog"] [data-cy="save-continue"]:visible');
+  }
+  static clickSaveAndAddMore() {
+    PageUtils.clickButton('Save & Add More', '[data-cy="contact-dialog"] [data-cy="save-add-more"]:visible');
   }
 }

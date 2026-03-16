@@ -147,8 +147,7 @@ export class PageUtils {
     cy.get(alias)
       .contains('button', name)
       .first()
-      .as('btn');
-    cy.get('@btn').click({ force });
+      .click({ force });
   }
 
   static dateToString(date: Date) {
