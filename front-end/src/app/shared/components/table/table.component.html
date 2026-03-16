@@ -73,7 +73,10 @@
           } @else {
             @if (col.bodyTpl) {
               <ng-container
-                *ngTemplateOutlet="col.bodyTpl; context: { $implicit: item, rowActions: col.actions, rowIndex: rowIndex }"
+                *ngTemplateOutlet="
+                  col.bodyTpl;
+                  context: { $implicit: item, rowActions: col.actions, rowIndex: rowIndex }
+                "
               />
             } @else {
               <span>{{ item[col.field] | dynamic: col.pipes : col.pipeArgs }}</span>

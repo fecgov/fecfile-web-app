@@ -49,7 +49,9 @@ export class SelectComponent {
   readonly fieldDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'field'));
   readonly labelDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'label'));
   readonly selectDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'select'));
-  readonly clearButtonDataCy = computed(() => buildDataCy(this.dataCyContext(), this.formControlName(), 'clear', 'button'));
+  readonly clearButtonDataCy = computed(() =>
+    buildDataCy(this.dataCyContext(), this.formControlName(), 'clear', 'button'),
+  );
 
   readonly selectElement = viewChild.required<ElementRef<HTMLSelectElement>>('selectElement');
   readonly selected = viewChild.required<ElementRef>('selected');

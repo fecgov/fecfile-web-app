@@ -1,7 +1,12 @@
 <div [formGroup]="form" [attr.data-cy]="contextDataCy('committee', 'panel')">
   <div class="grid">
     <div class="col-8">
-      <div class="field" [attr.data-cy]="fieldDataCy(tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name'], 'field')">
+      <div
+        class="field"
+        [attr.data-cy]="
+          fieldDataCy(tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name'], 'field')
+        "
+      >
         <span class="span-label" id="organization_name_label">{{ entityRole }} NAME</span>
         <input
           type="text"
@@ -11,7 +16,9 @@
           [formControlName]="tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name']"
           [class.readonly]="readonly"
           [readonly]="readonly"
-          [attr.data-cy]="fieldDataCy(tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name'])"
+          [attr.data-cy]="
+            fieldDataCy(tertiaryContact ? templateMap['committee_name'] : templateMap['organization_name'])
+          "
         />
         <app-error-messages
           [form]="form"

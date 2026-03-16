@@ -1,13 +1,30 @@
-<app-dialog [(visible)]="dialogVisible" title="Edit report name" (confirm)="submitForm()" data-cy="report-f24-rename-dialog">
+<app-dialog
+  [(visible)]="dialogVisible"
+  title="Edit report name"
+  (confirm)="submitForm()"
+  data-cy="report-f24-rename-dialog"
+>
   <ng-container content>
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="report-f24-rename-dialog-form">
       <div class="dialog-body" data-cy="report-f24-rename-dialog-body">
         <label for="form24Name" class="mb-1 dialog-label">REPORT NAME</label>
         <div id="f24-input-container" data-cy="report-f24-rename-dialog-form24-name-field">
           <span data-cy="report-f24-rename-dialog-type-name">{{ this.form.get('typeName')?.value }}</span>
-          <input id="form24Name" type="text" class="pl-1" pInputText formControlName="form24Name" data-cy="report-f24-rename-dialog-form24-name-input" />
+          <input
+            id="form24Name"
+            type="text"
+            class="pl-1"
+            pInputText
+            formControlName="form24Name"
+            data-cy="report-f24-rename-dialog-form24-name-input"
+          />
         </div>
-        <app-error-messages [form]="formParent" fieldName="form24NameGroup" [formSubmitted]="formSubmitted" dataCyContext="report-f24-rename-dialog" />
+        <app-error-messages
+          [form]="formParent"
+          fieldName="form24NameGroup"
+          [formSubmitted]="formSubmitted"
+          dataCyContext="report-f24-rename-dialog"
+        />
       </div>
     </form>
   </ng-container>

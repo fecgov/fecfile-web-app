@@ -4,7 +4,9 @@
   </a>
 
   @if (!item?.itemized) {
-    <div [attr.data-cy]="'transactions-loans-debts-table-row-' + item.id + '-unitemized'"><strong>Unitemized</strong></div>
+    <div [attr.data-cy]="'transactions-loans-debts-table-row-' + item.id + '-unitemized'">
+      <strong>Unitemized</strong>
+    </div>
   }
 </ng-template>
 

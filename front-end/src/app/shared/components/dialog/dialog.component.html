@@ -1,12 +1,7 @@
 <dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()" [attr.data-cy]="dialogDataCy()">
   <div class="dialog-header">
     <h1 class="dialog-title" id="dialog-title" [attr.data-cy]="titleDataCy()">{{ title() }}</h1>
-    <button
-      class="rounded-image-button"
-      (click)="close()"
-      aria-label="Cancel"
-      [attr.data-cy]="closeButtonDataCy()"
-    >
+    <button class="rounded-image-button" (click)="close()" aria-label="Cancel" [attr.data-cy]="closeButtonDataCy()">
       <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
     </button>
   </div>

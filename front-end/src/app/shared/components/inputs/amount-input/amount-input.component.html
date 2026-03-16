@@ -29,7 +29,12 @@
         [dataCyContext]="contextDataCy('amount')"
       />
       @if (isF24()) {
-        <app-linked-report-input [form]="form" [templateMap]="templateMap" [transaction]="transaction()" [dataCyContext]="contextDataCy('amount')" />
+        <app-linked-report-input
+          [form]="form"
+          [templateMap]="templateMap"
+          [transaction]="transaction()"
+          [dataCyContext]="contextDataCy('amount')"
+        />
       } @else if (linked24()) {
         <div class="field" [attr.data-cy]="fieldDataCy('linked24', 'field')">
           <label for="linked24" class="flex">
@@ -85,13 +90,13 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [overrideMemoItemHelpText]="memoItemHelpText()"
-          [transaction]="transaction()"
-          checkboxLabel="MEMO ITEM"
-          [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
-          [dataCyContext]="contextDataCy('amount')"
-        />
+            [transaction]="transaction()"
+            checkboxLabel="MEMO ITEM"
+            [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
+            [dataCyContext]="contextDataCy('amount')"
+          />
+        </div>
       </div>
-    </div>
     </div>
   }
   <div class="grid">

@@ -107,7 +107,9 @@ export class TableComponent<T> {
   readonly tableDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table'));
   readonly titleDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'title'));
   readonly emptyStateDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'empty-state'));
-  readonly resultsPerPageDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'pagination', 'rows-per-page'));
+  readonly resultsPerPageDataCy = computed(() =>
+    buildDataCy(this.dataCyContext(), 'table', 'pagination', 'rows-per-page'),
+  );
   readonly paginatorDataCy = computed(() => buildDataCy(this.dataCyContext(), 'table', 'pagination'));
   readonly paginationRowsSelectPt = computed(() => ({
     root: { 'data-cy': this.resultsPerPageDataCy() },

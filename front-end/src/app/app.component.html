@@ -3,7 +3,12 @@
   <app-poller data-cy="app-root-poller" />
   <router-outlet data-cy="app-root-router-outlet" />
   <app-confirm-dialog data-cy="app-root-confirm-dialog" />
-  <p-toast [pt]="{ root: { 'data-cy': 'layout-global-toast' }, closeButton: { 'data-cy': 'layout-global-toast-close-button' } }" />
+  <p-toast
+    [pt]="{
+      root: { 'data-cy': 'layout-global-toast' },
+      closeButton: { 'data-cy': 'layout-global-toast-close-button' },
+    }"
+  />
   <app-download-tray data-cy="app-root-download-tray" />
 </div>
 @if (showGlossary) {

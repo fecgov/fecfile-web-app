@@ -1,4 +1,8 @@
-<app-shared-templates data-cy="report-list-form3-shared-templates" dataCyContext="report-list-form3" (reportNameClick)="this.editItem($event)" />
+<app-shared-templates
+  data-cy="report-list-form3-shared-templates"
+  dataCyContext="report-list-form3"
+  (reportNameClick)="this.editItem($event)"
+/>
 <div [hidden]="items().length === 0" data-cy="report-list-form3-panel">
   <app-table
     data-cy="report-list-form3-table"

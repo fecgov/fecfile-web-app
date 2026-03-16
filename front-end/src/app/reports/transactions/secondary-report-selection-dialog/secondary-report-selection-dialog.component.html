@@ -24,7 +24,7 @@
         label: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-label' },
         dropdown: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-dropdown' },
         listContainer: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-options' },
-        option: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-option' }
+        option: { 'data-cy': 'transactions-secondary-report-selection-dialog-report-select-option' },
       }"
       [placeholder]="placeholder()"
       [disabled]="reports().length === 0"
@@ -77,6 +77,6 @@
   key="reportLinkToast"
   [pt]="{
     root: { 'data-cy': 'transactions-secondary-report-selection-toast' },
-    closeButton: { 'data-cy': 'transactions-secondary-report-selection-toast-close-button' }
+    closeButton: { 'data-cy': 'transactions-secondary-report-selection-toast-close-button' },
   }"
 />

@@ -4,7 +4,9 @@
   </a>
 
   @if (item?.force_unaggregated) {
-    <div [attr.data-cy]="'transactions-receipts-table-row-' + item.id + '-unaggregated'"><strong>Unaggregated</strong></div>
+    <div [attr.data-cy]="'transactions-receipts-table-row-' + item.id + '-unaggregated'">
+      <strong>Unaggregated</strong>
+    </div>
   }
 
   @if (!item?.itemized) {

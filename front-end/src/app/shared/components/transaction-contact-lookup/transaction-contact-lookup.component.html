@@ -1,5 +1,8 @@
 <div class="p-fluid" [attr.data-cy]="dataCyContext + '-panel'">
-  <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'" [attr.data-cy]="dataCyContext + '-lookup-field'">
+  <div
+    [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'"
+    [attr.data-cy]="dataCyContext + '-lookup-field'"
+  >
     <app-contact-lookup
       [attr.data-cy]="dataCyContext + '-lookup-panel'"
       [contactTypeOptions]="contactTypeOptions"

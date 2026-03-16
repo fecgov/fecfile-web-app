@@ -3,12 +3,16 @@
 <div class="flex" data-cy="report-submit-status-page">
   <div class="col-4 pl-0" data-cy="report-submit-status-page-content">
     @if (reportStatus() === reportStatusEnum.SUBMIT_FAILURE) {
-      <h2 class="submission-status-heading" data-cy="report-submit-status-page-failure-title">Report submission failed</h2>
+      <h2 class="submission-status-heading" data-cy="report-submit-status-page-failure-title">
+        Report submission failed
+      </h2>
       <p class="submission-status-text" data-cy="report-submit-status-page-failure-message">
         Please contact the Electronic Filing Office or visit FEC.gov for help.
       </p>
       @if (fecStatus() === 'REJECTED' && fecMessage()) {
-        <p class="error-text" data-cy="report-submit-status-page-failure-error-message">Error Message: {{ fecMessage() }}</p>
+        <p class="error-text" data-cy="report-submit-status-page-failure-error-message">
+          Error Message: {{ fecMessage() }}
+        </p>
       }
       <h3 class="assistance-heading" data-cy="report-submit-status-page-help-title">Need help?</h3>
       <a
@@ -47,12 +51,16 @@
       ></button>
     } @else {
       @if (reportStatus() === reportStatusEnum.SUBMIT_PENDING) {
-        <h2 class="submission-status-heading" data-cy="report-submit-status-page-pending-title">Report submission pending</h2>
+        <h2 class="submission-status-heading" data-cy="report-submit-status-page-pending-title">
+          Report submission pending
+        </h2>
         <p class="submission-status-text" data-cy="report-submit-status-page-pending-message">
           Your submission has been sent to the FEC.
         </p>
       } @else if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
-        <h2 class="submission-status-heading" data-cy="report-submit-status-page-success-title">Report submission received</h2>
+        <h2 class="submission-status-heading" data-cy="report-submit-status-page-success-title">
+          Report submission received
+        </h2>
         <p class="submission-status-text" data-cy="report-submit-status-page-success-message">
           Your submission to the FEC has been received.
         </p>
@@ -70,7 +78,9 @@
         <p class="submission-info-text" data-cy="report-submit-status-page-report-type-text">
           {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode()] : '' }}
         </p>
-        <h3 class="submission-info-heading" data-cy="report-submit-status-page-coverage-dates-title">Coverage Dates:</h3>
+        <h3 class="submission-info-heading" data-cy="report-submit-status-page-coverage-dates-title">
+          Coverage Dates:
+        </h3>
         @if (coverageDates()) {
           <p class="submission-info-text no-wrap" data-cy="report-submit-status-page-coverage-dates-text">
             {{ coverageDates()!['coverage_from_date'] || null | longDate }} —

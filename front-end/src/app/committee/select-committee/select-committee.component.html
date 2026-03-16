@@ -28,7 +28,10 @@
               [attr.data-cy]="'select-committee-page-committee-card-' + committee.id"
             >
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-              <div class="committee-info" [attr.data-cy]="'select-committee-page-committee-card-' + committee.id + '-info'">
+              <div
+                class="committee-info"
+                [attr.data-cy]="'select-committee-page-committee-card-' + committee.id + '-info'"
+              >
                 <h3>
                   <span>{{ committee.name }}</span>
                 </h3>
@@ -41,7 +44,11 @@
       <span class="h5">LOOKING FOR AN EXISTING FECFILE+ COMMITTEE ACCOUNT?</span>
       Contact the administrator for that committee.
     </div>
-    <div class="create-committee-card font-karla-bold" routerLink="/login/create-committee" data-cy="select-committee-page-create-committee-link">
+    <div
+      class="create-committee-card font-karla-bold"
+      routerLink="/login/create-committee"
+      data-cy="select-committee-page-create-committee-link"
+    >
       <div class="blue-box">
         <img class="plus" src="assets/img/Plus-Circle.svg" alt="Create a new committee" height="60px" width="60px" />
       </div>

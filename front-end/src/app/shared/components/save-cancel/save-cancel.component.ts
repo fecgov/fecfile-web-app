@@ -15,5 +15,7 @@ export class SaveCancelComponent {
   readonly cancelForm = output<void>();
   readonly backButtonDataCy = computed(() => buildDataCy(this.dataCyContext(), 'back', 'button'));
   readonly saveButtonDataCy = computed(() => buildDataCy(this.dataCyContext(), 'save', 'button'));
-  readonly saveAndContinueButtonDataCy = computed(() => buildDataCy(this.dataCyContext(), 'save-and-continue', 'button'));
+  readonly saveAndContinueButtonDataCy = computed(() =>
+    buildDataCy(this.dataCyContext(), 'save-and-continue', 'button'),
+  );
 }

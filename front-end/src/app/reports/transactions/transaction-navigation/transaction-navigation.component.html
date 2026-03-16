@@ -2,7 +2,11 @@
   <div data-cy="transactions-navigation-inline-controls-panel">
     @for (control of inlineControls(); track control; let index = $index) {
       <div class="p-2" [attr.data-cy]="'transactions-navigation-inline-control-' + index">
-        <app-navigation-control data-cy="transactions-navigation-inline-control-button" [navigationControl]="control" [transaction]="transaction()" />
+        <app-navigation-control
+          data-cy="transactions-navigation-inline-control-button"
+          [navigationControl]="control"
+          [transaction]="transaction()"
+        />
       </div>
     }
   </div>

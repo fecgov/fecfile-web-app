@@ -3,8 +3,17 @@
     <div class="col-8">
       <div class="field" [attr.data-cy]="fieldDataCy(templateMap['amount'], 'field')">
         <label [for]="loanAgreementAmountId.id" [id]="loanAgreementAmountId.label">ORIGINAL AMOUNT</label>
-        <app-input-number [inputId]="loanAgreementAmountId.id" [formControlName]="templateMap['amount']" [dataCy]="fieldDataCy(templateMap['amount'])" />
-        <app-error-messages [form]="form" [fieldName]="templateMap['amount']" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+        <app-input-number
+          [inputId]="loanAgreementAmountId.id"
+          [formControlName]="templateMap['amount']"
+          [dataCy]="fieldDataCy(templateMap['amount'])"
+        />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['amount']"
+          [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
+        />
       </div>
     </div>
   </div>
@@ -53,20 +62,38 @@
   </div>
   @if (showLineOfCredit) {
     <div class="grid">
-        <div class="col-4">
+      <div class="col-4">
         <div class="field" [attr.data-cy]="fieldDataCy('credit_amount_this_draw', 'field')">
           <label [for]="creditAmountThisDrawId.id" [id]="creditAmountThisDrawId.label">
             CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span>
           </label>
-          <app-input-number [inputId]="creditAmountThisDrawId.id" formControlName="credit_amount_this_draw" [dataCy]="fieldDataCy('credit_amount_this_draw')" />
-          <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+          <app-input-number
+            [inputId]="creditAmountThisDrawId.id"
+            formControlName="credit_amount_this_draw"
+            [dataCy]="fieldDataCy('credit_amount_this_draw')"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="credit_amount_this_draw"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
       <div class="col-4">
         <div class="field" [attr.data-cy]="fieldDataCy(templateMap['balance'], 'field')">
           <label [id]="balanceId.label" [for]="balanceId.id">TOTAL BALANCE</label>
-          <app-input-number [inputId]="balanceId.id" [formControlName]="templateMap['balance']" [dataCy]="fieldDataCy(templateMap['balance'])" />
-          <app-error-messages [form]="form" [fieldName]="templateMap['balance']" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+          <app-input-number
+            [inputId]="balanceId.id"
+            [formControlName]="templateMap['balance']"
+            [dataCy]="fieldDataCy(templateMap['balance'])"
+          />
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['balance']"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
     </div>
@@ -117,7 +144,12 @@
             formControlName="desc_collateral"
             [attr.data-cy]="fieldDataCy('desc_collateral', 'textarea')"
           ></textarea>
-          <app-error-messages [form]="form" fieldName="desc_collateral" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+          <app-error-messages
+            [form]="form"
+            fieldName="desc_collateral"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
     </div>
@@ -125,8 +157,17 @@
       <div class="col-4">
         <div class="field" [attr.data-cy]="fieldDataCy('collateral_value_amount', 'field')">
           <label [for]="collateralValueAmountId.id" [id]="collateralValueAmountId.label">COLLATERAL AMOUNT</label>
-          <app-input-number [inputId]="collateralValueAmountId.id" formControlName="collateral_value_amount" [dataCy]="fieldDataCy('collateral_value_amount')" />
-          <app-error-messages [form]="form" fieldName="collateral_value_amount" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+          <app-input-number
+            [inputId]="collateralValueAmountId.id"
+            formControlName="collateral_value_amount"
+            [dataCy]="fieldDataCy('collateral_value_amount')"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="collateral_value_amount"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
     </div>
@@ -178,8 +219,17 @@
       <div class="col-5">
         <div class="field" [attr.data-cy]="fieldDataCy('estimated_value', 'field')">
           <label [for]="estimatedValueId.id" [id]="estimatedValueId.label">ESTIMATED VALUE</label>
-          <app-input-number [inputId]="estimatedValueId.id" formControlName="estimated_value" [dataCy]="fieldDataCy('estimated_value')" />
-          <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+          <app-input-number
+            [inputId]="estimatedValueId.id"
+            formControlName="estimated_value"
+            [dataCy]="fieldDataCy('estimated_value')"
+          />
+          <app-error-messages
+            [form]="form"
+            fieldName="estimated_value"
+            [formSubmitted]="formSubmitted"
+            [dataCyContext]="dataCyContext"
+          />
         </div>
       </div>
       <div class="col-5">
@@ -259,7 +309,12 @@
           formControlName="basis_of_loan_description"
           [attr.data-cy]="fieldDataCy('basis_of_loan_description', 'textarea')"
         ></textarea>
-        <app-error-messages [form]="form" fieldName="basis_of_loan_description" [formSubmitted]="formSubmitted" [dataCyContext]="dataCyContext" />
+        <app-error-messages
+          [form]="form"
+          fieldName="basis_of_loan_description"
+          [formSubmitted]="formSubmitted"
+          [dataCyContext]="dataCyContext"
+        />
       </div>
     </div>
   </div>

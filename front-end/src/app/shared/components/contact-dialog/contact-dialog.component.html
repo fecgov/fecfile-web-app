@@ -10,7 +10,12 @@
     (visibleChange)="closeDialog($event)"
     closeAriaLabel="closeDialog"
   >
-    <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" [attr.data-cy]="dialogFieldDataCy('form', 'form')">
+    <form
+      id="form"
+      [formGroup]="form"
+      [class.ng-submitted]="formSubmitted"
+      [attr.data-cy]="dialogFieldDataCy('form', 'form')"
+    >
       <div class="grid">
         <div class="col-12">
           <h3>Contact</h3>
@@ -88,8 +93,19 @@
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" [attr.data-cy]="dialogFieldDataCy('name')" />
-              <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="name"
+                formControlName="name"
+                [attr.data-cy]="dialogFieldDataCy('name')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="name"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
           @if (contactType === ContactTypes.ORGANIZATION) {
@@ -102,22 +118,55 @@
           <div class="col-4">
             <div class="field">
               <label for="last_name">LAST NAME</label>
-              <input type="text" pInputText id="last_name" formControlName="last_name" [attr.data-cy]="dialogFieldDataCy('last-name')" />
-              <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="last_name"
+                formControlName="last_name"
+                [attr.data-cy]="dialogFieldDataCy('last-name')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="last_name"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="first_name">FIRST NAME</label>
-              <input type="text" pInputText id="first_name" formControlName="first_name" [attr.data-cy]="dialogFieldDataCy('first-name')" />
-              <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="first_name"
+                formControlName="first_name"
+                [attr.data-cy]="dialogFieldDataCy('first-name')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="first_name"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="middle_name" formControlName="middle_name" [attr.data-cy]="dialogFieldDataCy('middle-name')" />
-              <app-error-messages [form]="form" fieldName="middle_name" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="middle_name"
+                formControlName="middle_name"
+                [attr.data-cy]="dialogFieldDataCy('middle-name')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="middle_name"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
         </div>
@@ -125,15 +174,37 @@
           <div class="col-3">
             <div class="field">
               <label for="prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="prefix" formControlName="prefix" [attr.data-cy]="dialogFieldDataCy('prefix')" />
-              <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="prefix"
+                formControlName="prefix"
+                [attr.data-cy]="dialogFieldDataCy('prefix')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="prefix"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="suffix" formControlName="suffix" [attr.data-cy]="dialogFieldDataCy('suffix')" />
-              <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="suffix"
+                formControlName="suffix"
+                [attr.data-cy]="dialogFieldDataCy('suffix')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="suffix"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
           <div class="col-6"></div>
@@ -163,7 +234,7 @@
                 label: { 'data-cy': dialogFieldDataCy('country', 'select-label') },
                 dropdown: { 'data-cy': dialogFieldDataCy('country', 'select-dropdown') },
                 listContainer: { 'data-cy': dialogFieldDataCy('country', 'select-options') },
-                option: { 'data-cy': dialogFieldDataCy('country', 'select-option') }
+                option: { 'data-cy': dialogFieldDataCy('country', 'select-option') },
               }"
             />
           </div>
@@ -174,15 +245,37 @@
         <div class="col-6">
           <div class="field">
             <label for="street_1">STREET ADDRESS</label>
-            <input type="text" pInputText id="street_1" formControlName="street_1" [attr.data-cy]="dialogFieldDataCy('street-1')" />
-            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+            <input
+              type="text"
+              pInputText
+              id="street_1"
+              formControlName="street_1"
+              [attr.data-cy]="dialogFieldDataCy('street-1')"
+            />
+            <app-error-messages
+              [form]="form"
+              fieldName="street_1"
+              [formSubmitted]="formSubmitted"
+              [dataCyContext]="dialogFieldContext()"
+            />
           </div>
         </div>
         <div class="col-6">
           <div class="field">
             <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
-            <input type="text" pInputText id="street_2" formControlName="street_2" [attr.data-cy]="dialogFieldDataCy('street-2')" />
-            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+            <input
+              type="text"
+              pInputText
+              id="street_2"
+              formControlName="street_2"
+              [attr.data-cy]="dialogFieldDataCy('street-2')"
+            />
+            <app-error-messages
+              [form]="form"
+              fieldName="street_2"
+              [formSubmitted]="formSubmitted"
+              [dataCyContext]="dialogFieldContext()"
+            />
           </div>
         </div>
       </div>
@@ -191,7 +284,12 @@
           <div class="field">
             <label for="city">CITY</label>
             <input type="text" pInputText id="city" formControlName="city" [attr.data-cy]="dialogFieldDataCy('city')" />
-            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+            <app-error-messages
+              [form]="form"
+              fieldName="city"
+              [formSubmitted]="formSubmitted"
+              [dataCyContext]="dialogFieldContext()"
+            />
           </div>
         </div>
         <div class="col-3">
@@ -206,14 +304,24 @@
               appendTo="body"
               [dataCyContext]="dialogFieldContext()"
             />
-            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+            <app-error-messages
+              [form]="form"
+              fieldName="state"
+              [formSubmitted]="formSubmitted"
+              [dataCyContext]="dialogFieldContext()"
+            />
           </div>
         </div>
         <div class="col-3">
           <div class="field">
             <label for="zip">ZIP/POSTAL CODE</label>
             <input type="text" pInputText id="zip" formControlName="zip" [attr.data-cy]="dialogFieldDataCy('zip')" />
-            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+            <app-error-messages
+              [form]="form"
+              fieldName="zip"
+              [formSubmitted]="formSubmitted"
+              [dataCyContext]="dialogFieldContext()"
+            />
           </div>
         </div>
       </div>
@@ -221,7 +329,8 @@
         <div class="col-6">
           <div class="field">
             <label id="telephone-label" for="telephone">TELEPHONE <span class="paren-label">(OPTIONAL)</span></label>
-            <app-fec-international-phone-input formControlName="telephone" [dataCyContext]="dialogFieldContext()"> </app-fec-international-phone-input>
+            <app-fec-international-phone-input formControlName="telephone" [dataCyContext]="dialogFieldContext()">
+            </app-fec-international-phone-input>
             <app-error-messages
               [form]="form"
               fieldName="telephone"
@@ -248,15 +357,37 @@
           <div class="col-6">
             <div class="field">
               <label for="employer">EMPLOYER <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="employer" formControlName="employer" [attr.data-cy]="dialogFieldDataCy('employer')" />
-              <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="employer"
+                formControlName="employer"
+                [attr.data-cy]="dialogFieldDataCy('employer')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="employer"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
           <div class="col-6">
             <div class="field">
               <label for="occupation">OCCUPATION <span class="paren-label">(OPTIONAL)</span></label>
-              <input type="text" pInputText id="occupation" formControlName="occupation" [attr.data-cy]="dialogFieldDataCy('occupation')" />
-              <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted" [dataCyContext]="dialogFieldContext()" />
+              <input
+                type="text"
+                pInputText
+                id="occupation"
+                formControlName="occupation"
+                [attr.data-cy]="dialogFieldDataCy('occupation')"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="occupation"
+                [formSubmitted]="formSubmitted"
+                [dataCyContext]="dialogFieldContext()"
+              />
             </div>
           </div>
         </div>

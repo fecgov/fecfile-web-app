@@ -98,15 +98,30 @@ export class NavigationControlComponent {
   }
 
   dropdownOptionDataCy(label?: string): string {
-    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', label || 'option', 'button');
+    return buildDataCy(
+      'transactions-navigation',
+      this.navigationControl().label || 'control',
+      label || 'option',
+      'button',
+    );
   }
 
   dropdownGroupDataCy(label?: string): string {
-    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', label || 'group', 'label');
+    return buildDataCy(
+      'transactions-navigation',
+      this.navigationControl().label || 'control',
+      label || 'group',
+      'label',
+    );
   }
 
   splitButtonContainerDataCy(): string {
-    return buildDataCy('transactions-navigation', this.navigationControl().label || 'control', 'splitbutton', 'container');
+    return buildDataCy(
+      'transactions-navigation',
+      this.navigationControl().label || 'control',
+      'splitbutton',
+      'container',
+    );
   }
 
   splitButtonDataCy(): string {

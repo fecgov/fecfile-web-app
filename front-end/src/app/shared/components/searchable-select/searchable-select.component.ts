@@ -66,7 +66,10 @@ export class SearchableSelectComponent {
     return {
       ...pt,
       root: mergePassThroughWithDataCy(pt.root, selectDataCy) as SearchableSelectPtObject['root'],
-      label: mergePassThroughWithDataCy(pt.label, buildDataCy(selectDataCy, 'label')) as SearchableSelectPtObject['label'],
+      label: mergePassThroughWithDataCy(
+        pt.label,
+        buildDataCy(selectDataCy, 'label'),
+      ) as SearchableSelectPtObject['label'],
       dropdown: mergePassThroughWithDataCy(
         pt.dropdown,
         buildDataCy(selectDataCy, 'dropdown'),
@@ -75,7 +78,10 @@ export class SearchableSelectComponent {
         pt.listContainer,
         buildDataCy(selectDataCy, 'options'),
       ) as SearchableSelectPtObject['listContainer'],
-      option: mergePassThroughWithDataCy(pt.option, buildDataCy(selectDataCy, 'option')) as SearchableSelectPtObject['option'],
+      option: mergePassThroughWithDataCy(
+        pt.option,
+        buildDataCy(selectDataCy, 'option'),
+      ) as SearchableSelectPtObject['option'],
     };
   }
 

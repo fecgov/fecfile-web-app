@@ -9,11 +9,7 @@
 >
   <ng-template #content let-closeCallback="closeCallback">
     <div class="px-4 py-2" data-cy="layout-feedback-overlay-content">
-      <button
-        (click)="closeCallback($event)"
-        class="p-popover-close"
-        data-cy="layout-feedback-overlay-close-button"
-      >
+      <button (click)="closeCallback($event)" class="p-popover-close" data-cy="layout-feedback-overlay-close-button">
         <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" />
       </button>
       @switch (submitStatus) {
@@ -27,7 +23,12 @@
               </p>
             </div>
           </div>
-          <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="layout-feedback-overlay-form">
+          <form
+            id="form"
+            [formGroup]="form"
+            [class.ng-submitted]="formSubmitted"
+            data-cy="layout-feedback-overlay-form"
+          >
             <div class="grid">
               <div class="col-12">
                 <div class="field" data-cy="layout-feedback-overlay-action-field">

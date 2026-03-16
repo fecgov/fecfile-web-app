@@ -11,7 +11,13 @@
       <div class="col-4">
         <div class="field" [attr.data-cy]="fieldDataCy(titleFieldName, 'field')">
           <label for="title">TITLE</label>
-          <input type="text" pInputText id="title" [formControlName]="titleFieldName" [attr.data-cy]="fieldDataCy(titleFieldName)" />
+          <input
+            type="text"
+            pInputText
+            id="title"
+            [formControlName]="titleFieldName"
+            [attr.data-cy]="fieldDataCy(titleFieldName)"
+          />
           <app-error-messages
             [form]="form"
             [fieldName]="titleFieldName"

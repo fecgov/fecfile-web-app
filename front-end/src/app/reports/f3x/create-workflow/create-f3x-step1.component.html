@@ -13,7 +13,11 @@
       [allowEmpty]="false"
       formControlName="report_type_category"
     />
-    <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" dataCyContext="report-create-f3x-page" />
+    <app-error-messages
+      fieldName="report_type_category"
+      [formSubmitted]="formSubmitted"
+      dataCyContext="report-create-f3x-page"
+    />
   </div>
 
   @if (userCanSetFilingFrequency) {
@@ -25,7 +29,11 @@
         [allowEmpty]="false"
         formControlName="filing_frequency"
       />
-      <app-error-messages fieldName="filing_frequency" [formSubmitted]="formSubmitted" dataCyContext="report-create-f3x-page" />
+      <app-error-messages
+        fieldName="filing_frequency"
+        [formSubmitted]="formSubmitted"
+        dataCyContext="report-create-f3x-page"
+      />
     </div>
   }
 
@@ -82,14 +90,24 @@
           [pt]="{ label: 'w-15em' }"
           appendTo="body"
         />
-        <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted" dataCyContext="report-create-f3x-page" />
+        <app-error-messages
+          fieldName="state_of_election"
+          [formSubmitted]="formSubmitted"
+          dataCyContext="report-create-f3x-page"
+        />
       </div>
     </div>
   }
   <hr class="mt-0" />
   <h2 class="m-0">Covering period</h2>
   <div class="flex gap-20px">
-    <app-calendar fieldName="coverage_from_date" [form]="form" [formSubmitted]="formSubmitted" label="FROM" dataCyContext="report-create-f3x-page" />
+    <app-calendar
+      fieldName="coverage_from_date"
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      label="FROM"
+      dataCyContext="report-create-f3x-page"
+    />
     <app-calendar
       fieldName="coverage_through_date"
       [form]="form"

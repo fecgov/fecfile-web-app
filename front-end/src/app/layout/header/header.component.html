@@ -1,4 +1,8 @@
-<nav class="w-full flex justify-content-between align-items-center py-0" aria-label="Navigation Bar" data-cy="layout-header-nav">
+<nav
+  class="w-full flex justify-content-between align-items-center py-0"
+  aria-label="Navigation Bar"
+  data-cy="layout-header-nav"
+>
   <div class="navbar-brand pb-0" data-cy="layout-header-brand">
     <img
       ngSrc="assets/img/seal-and-title.svg"
@@ -10,7 +14,11 @@
     />
   </div>
 
-  <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo01" data-cy="layout-header-links-panel">
+  <div
+    class="collapse navbar-collapse justify-content-end"
+    id="navbarTogglerDemo01"
+    data-cy="layout-header-links-panel"
+  >
     <app-header-links [headerStyle]="headerStyle()" />
   </div>
 </nav>

@@ -3,12 +3,19 @@
   <div class="field mt-4" data-cy="layout-glossary-drawer-search-field">
     <label for="searchTerm">SEARCH TERMS</label>
     <input id="searchTerm" type="text" [(ngModel)]="searchTerm" data-cy="layout-glossary-drawer-search-input" />
-    <span class="font-italic mt-1" data-cy="layout-glossary-drawer-search-example">Example: Conduit Earmark Receipt</span>
+    <span class="font-italic mt-1" data-cy="layout-glossary-drawer-search-example"
+      >Example: Conduit Earmark Receipt</span
+    >
     <div class="mt-4" data-cy="layout-glossary-drawer-results-panel">
       <div class="my-4 flex justify-content-between" data-cy="layout-glossary-drawer-results-header">
         @if (found()) {
           <span class="font-bold" data-cy="layout-glossary-drawer-result-term">{{ found() }}</span>
-          <div [class]="shown() ? 'minus-icon-mask' : 'plus-icon-mask'" data-cy="layout-glossary-drawer-toggle-button" (click)="toggle()" (keypress)="toggle()"></div>
+          <div
+            [class]="shown() ? 'minus-icon-mask' : 'plus-icon-mask'"
+            data-cy="layout-glossary-drawer-toggle-button"
+            (click)="toggle()"
+            (keypress)="toggle()"
+          ></div>
         } @else {
           <span data-cy="layout-glossary-drawer-no-results">No Results</span>
         }

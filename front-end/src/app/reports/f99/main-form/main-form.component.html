@@ -14,7 +14,12 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
+    <app-error-messages
+      [form]="form"
+      fieldName="committee_name"
+      [formSubmitted]="formSubmitted"
+      dataCyContext="report-f99-page"
+    />
   </div>
   <div class="field w-3" data-cy="report-f99-page-committee-id-field">
     <label for="filer_committee_id_number">COMMITTEE ID</label>
@@ -26,7 +31,12 @@
       [readonly]="true"
       class="readonly"
     />
-    <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
+    <app-error-messages
+      [form]="form"
+      fieldName="committee_id"
+      [formSubmitted]="formSubmitted"
+      dataCyContext="report-f99-page"
+    />
   </div>
 
   <hr type="solid" />
@@ -47,7 +57,12 @@
       appendTo="body"
       data-cy="report-f99-page-document-type-select"
     />
-    <app-error-messages [form]="form" fieldName="text_code" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
+    <app-error-messages
+      [form]="form"
+      fieldName="text_code"
+      [formSubmitted]="formSubmitted"
+      dataCyContext="report-f99-page"
+    />
   </div>
 
   @if (isLoanAgreement()) {
@@ -55,7 +70,9 @@
       <i class="pi pi-info custom-info-icon mx-2"></i>
       <div class="ghandi text-sm">
         <span>To submit a Form 99 with a Loan Agreement or Loan Forgiveness attachment, please use the </span>
-        <a href="https://webforms.fec.gov/wfja/form99" target="_blank" data-cy="report-f99-page-form-99-webform-link">Form 99 webform</a>
+        <a href="https://webforms.fec.gov/wfja/form99" target="_blank" data-cy="report-f99-page-form-99-webform-link"
+          >Form 99 webform</a
+        >
         <span> on FEC.gov.</span>
       </div>
     </div>
@@ -72,15 +89,30 @@
           [allowEmpty]="false"
           formControlName="filing_frequency"
         />
-        <app-error-messages [form]="form" fieldName="filing_frequency" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
+        <app-error-messages
+          [form]="form"
+          fieldName="filing_frequency"
+          [formSubmitted]="formSubmitted"
+          dataCyContext="report-f99-page"
+        />
       </div>
     </div>
   }
 
   <div class="field w-full" data-cy="report-f99-page-message-text-field">
     <label for="message_text">TEXT MESSAGE</label>
-    <textarea id="message_text" appAutoResize formControlName="message_text" data-cy="report-f99-page-message-text-input"></textarea>
-    <app-error-messages [form]="form" fieldName="message_text" [formSubmitted]="formSubmitted" dataCyContext="report-f99-page" />
+    <textarea
+      id="message_text"
+      appAutoResize
+      formControlName="message_text"
+      data-cy="report-f99-page-message-text-input"
+    ></textarea>
+    <app-error-messages
+      [form]="form"
+      fieldName="message_text"
+      [formSubmitted]="formSubmitted"
+      dataCyContext="report-f99-page"
+    />
   </div>
 
   <hr type="solid" />

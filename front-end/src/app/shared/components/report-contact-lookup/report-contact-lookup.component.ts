@@ -22,8 +22,12 @@ export class ReportContactLookupComponent implements OnInit {
   readonly rootDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'panel'));
   readonly contactSearchDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'search', 'panel'));
   readonly addContactDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'add-contact', 'text'));
-  readonly addContactContainerDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'add-contact', 'container'));
-  readonly createContactDataCy = computed(() => buildDataCy('report-contact-lookup', this.key(), 'create-contact', 'link'));
+  readonly addContactContainerDataCy = computed(() =>
+    buildDataCy('report-contact-lookup', this.key(), 'add-contact', 'container'),
+  );
+  readonly createContactDataCy = computed(() =>
+    buildDataCy('report-contact-lookup', this.key(), 'create-contact', 'link'),
+  );
   readonly contactSearchContext = computed(() => buildDataCy('report-contact-lookup', this.key()));
 
   ngOnInit(): void {

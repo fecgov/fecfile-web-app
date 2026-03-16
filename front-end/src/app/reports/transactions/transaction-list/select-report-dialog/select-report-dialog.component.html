@@ -2,7 +2,9 @@
   <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="dialog-content">
       <div class="dialog-header">
-        <h1 class="dialog-title" id="dialog-title" data-cy="transactions-select-report-dialog-title">Select a report</h1>
+        <h1 class="dialog-title" id="dialog-title" data-cy="transactions-select-report-dialog-title">
+          Select a report
+        </h1>
         <button
           pButton
           type="button"
@@ -19,7 +21,12 @@
           different {{ actionTargetLabel() }}.
         </p>
         <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
-        <select id="report-selector" aria-label="Report selector" [(ngModel)]="selectedReport" data-cy="transactions-select-report-dialog-report-select">
+        <select
+          id="report-selector"
+          aria-label="Report selector"
+          [(ngModel)]="selectedReport"
+          data-cy="transactions-select-report-dialog-report-select"
+        >
           <button aria-labelledby="report-selector-label">
             <selectedcontent></selectedcontent>
           </button>
@@ -29,7 +36,15 @@
         </select>
       </div>
       <div class="dialog-footer">
-        <button pButton pRipple class="p-button-secondary" (click)="selectReportDialog.close()" data-cy="transactions-select-report-dialog-cancel-button">Cancel</button>
+        <button
+          pButton
+          pRipple
+          class="p-button-secondary"
+          (click)="selectReportDialog.close()"
+          data-cy="transactions-select-report-dialog-cancel-button"
+        >
+          Cancel
+        </button>
         <button
           pButton
           pRipple

@@ -23,7 +23,11 @@
     <div class="col-6">
       <div class="field" [attr.data-cy]="fieldDataCy('incurred_amount', 'field')">
         <label for="amount">INCURRED AMOUNT</label>
-        <app-input-number inputId="amount" formControlName="incurred_amount" [dataCy]="fieldDataCy('incurred_amount')" />
+        <app-input-number
+          inputId="amount"
+          formControlName="incurred_amount"
+          [dataCy]="fieldDataCy('incurred_amount')"
+        />
         <app-error-messages
           [form]="form"
           fieldName="incurred_amount"

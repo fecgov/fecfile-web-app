@@ -26,8 +26,19 @@
     </div>
     <div class="field">
       <label for="email">Email</label>
-      <input id="email" name="email" pInputText formControlName="email" data-cy="select-committee-second-admin-dialog-email-input" />
-      <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" dataCyContext="select-committee-second-admin-dialog" />
+      <input
+        id="email"
+        name="email"
+        pInputText
+        formControlName="email"
+        data-cy="select-committee-second-admin-dialog-email-input"
+      />
+      <app-error-messages
+        [form]="form"
+        fieldName="email"
+        [formSubmitted]="formSubmitted"
+        dataCyContext="select-committee-second-admin-dialog"
+      />
     </div>
   </form>
   <ng-template #footer>

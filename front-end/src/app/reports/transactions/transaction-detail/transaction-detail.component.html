@@ -41,7 +41,9 @@
   <h4 class="read-only-tag subtitle" data-cy="transactions-detail-page-debt-repayment-tag">DEBT REPAYMENT</h4>
 }
 
-<h2 class="top-margin-32" data-cy="transactions-detail-page-contact-title">{{ transactionType?.contactTitle || 'Contact' }}</h2>
+<h2 class="top-margin-32" data-cy="transactions-detail-page-contact-title">
+  {{ transactionType?.contactTitle || 'Contact' }}
+</h2>
 <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" data-cy="transactions-detail-page-form">
   <app-transaction-input
     [isEditable]="isEditable()"
