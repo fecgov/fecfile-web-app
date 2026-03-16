@@ -39,7 +39,7 @@ describe('Form 24 Independent Expenditures', () => {
         'date_signed',
       );
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('exist');
       cy.get('#first_name').should('have.value', result.individual.first_name);

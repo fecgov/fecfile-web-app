@@ -23,7 +23,7 @@ const reattributeData: ScheduleFormData = {
 
 function Reattribute(result: any, old = false) {
   cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**/').as('GetTransaction');
-  PageUtils.clickKababItem(' 11(a)(ii) ', 'Reattribute');
+  PageUtils.clickKababItem('11(a)(ii)', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');
@@ -41,7 +41,7 @@ function Reattribute(result: any, old = false) {
     'contribution_date',
   );
 
-  PageUtils.clickButton('Save');
+  PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
   PageUtils.urlCheck('/list');
   cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
