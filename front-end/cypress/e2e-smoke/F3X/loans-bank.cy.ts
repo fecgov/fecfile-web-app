@@ -28,14 +28,8 @@ const formData = {
 };
 
 function clickLoan(button: string, urlCheck = '/list') {
-  cy.contains('Loan Received from Bank').last().should('be.visible');
-  const alias = PageUtils.getAlias('');
-  cy.get(alias)
-    .find("[datatest='" + 'loans-and-debts-button' + "']")
-    .children()
-    .last()
-    .click();
-  cy.contains(button).click({ force: true });
+  cy.get('app-transaction-loans-and-debts').contains('Loan Received from Bank').should('exist');
+  PageUtils.clickKababItem('Loan Received from Bank', button, 'app-transaction-loans-and-debts');
   PageUtils.urlCheck(urlCheck);
 }
 
@@ -126,10 +120,11 @@ function handleLoanAgreementSetup(q3: string) {
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
 
     cy.intercept({
-      method: 'Post',
+      method: 'POST',
+      pathname: '/api/v1/transactions/',
     }).as('saveNewAgreement');
 
-    PageUtils.clickButton('Save', '', true);
+    TransactionDetailPage.clickSave();
     cy.wait('@saveNewAgreement');
     cy.contains('Loan Received from Bank').should('be.visible');
     PageUtils.urlCheck('/list');
@@ -165,7 +160,7 @@ describe('Loans', () => {
 
       PageUtils.clickAccordion('STEP TWO');
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-      PageUtils.clickButton('Save transactions');
+      PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
       PageUtils.urlCheck('/list');
       cy.contains('Loan Received from Bank').should('be.visible');
 
@@ -180,7 +175,7 @@ describe('Loans', () => {
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
       PageUtils.enterValue('#amount', formData.amount);
-      TransactionDetailPage.clickSave(result.report);
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Made').should('be.visible');
     });
@@ -190,7 +185,19 @@ describe('Loans', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
       ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Review loan agreement');
-      PageUtils.clickButton('Save transactions');
+      cy.intercept('PUT', '**/api/v1/transactions/**').as('SaveTransactions');
+      const reportId = result.report;
+
+      const txList = (s: string) =>
+        new RegExp(String.raw`/api/v1/transactions/\?(?=.*report_id=${reportId})${s}.*`);
+
+      cy.intercept('GET', txList('(?=.*schedules=A)')).as('GetReceiptsAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=.*C)(?=.*schedules=.*D)')).as('GetLoansAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=.*B)(?=.*schedules=.*E)(?=.*schedules=.*F)'))
+        .as('GetDisbursementsAfterSave');
+
+      PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
+      cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 20000 });
       PageUtils.locationCheck('/list');
       cy.contains('Loan Received from Bank').should('be.visible');
     });
@@ -198,11 +205,14 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-      ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.intercept(
-        'GET',
-        /\/api\/v1\/transactions\/\?(?=.*parent=)(?=.*schedules=C2).*/
-      ).as('GetC2List');
+      ReportListPage.goToReportList(result.report);
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/transactions/',
+        query: {
+          schedules: 'C2',
+        },
+      }).as('GetC2List');
       clickLoan('Edit');
 
       // wait for form to be done (load c2 table)
@@ -215,8 +225,8 @@ describe('Loans', () => {
       cy.wait('@saveAddGuarantor');
       cy.contains('h1', 'Guarantors to loan source').should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
-      cy.get('#amount:visible').safeType(formData['amount']);
-      TransactionDetailPage.clickSave(result.report);
+      cy.get('#amount').safeType(formData['amount']);
+      TransactionDetailPage.clickSave( TransactionDetailPage.BUTTON);
       clickLoan('Edit');
       cy.contains('ORGANIZATION NAME').should('be.visible');
       cy.get('#organization_name:visible').should('have.value', result.organization.name);

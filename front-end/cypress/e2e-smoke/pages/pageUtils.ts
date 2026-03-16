@@ -24,7 +24,7 @@ export class PageUtils {
       );
     }
   }
-  
+
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
@@ -47,7 +47,7 @@ export class PageUtils {
 
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    cy.wait(100);
+    cy.get('@calendarElement').should('not.exist');
   }
 
   static pickDay(day: string) {
@@ -146,8 +146,7 @@ export class PageUtils {
     cy.get(alias)
       .contains('button', name)
       .first()
-      .as('btn');
-    cy.get('@btn:visible').click({ force });
+      .click({ force });
   }
 
   static dateToString(date: Date) {
@@ -233,20 +232,19 @@ export class PageUtils {
   }
 
   static enterSecondCommitteeEmailIfneeded() {
-    cy.get(PageUtils.getAlias(''))
-      .find('[id="second-committee-admin-dialog"]')
+    cy.get(PageUtils.getAlias('[data-cy="second-committee-admin-actions"]:visible'))
       .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
       .then(($email) => {
         if ($email.length) {
-          cy.contains('Welcome to FECfile+').should('be.visible').click(); // Ensures that the modal is in focus
-          cy.get('#email:visible').should('have.value', '');
-          cy.get('#email:visible').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-          cy.get('#email:visible').should('have.value', 'admin@admin.com');
-          cy.get('#email:visible').click();
-          PageUtils.clickButton('Save');
+          cy.contains('Welcome to FECfile+').should('exist').click(); // Ensures that the modal is in focus
+          cy.get('#email').should('have.value', '');
+          cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
+          cy.get('#email').should('have.value', 'admin@admin.com');
+          cy.get('#email').click();
+          PageUtils.clickButton('Save', '[data-cy="second-committee-admin-actions"]');
+          cy.get(PageUtils.getAlias('')).find('.p-toast-close-button').click();
         }
       });
-    cy.contains('Welcome to FECfile+').should('not.exist');
   }
 
   static submitReportForm() {

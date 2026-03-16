@@ -32,7 +32,7 @@ describe('Debt Balance at Close Calculation', () => {
       
       // Verify balance_at_close was calculated during form entry: 0 + 3000 - 0 = 3000
       cy.get('#balance_at_close:visible').should('have.value', '$3,000.00');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       // Navigate back to verify the saved debt and then edit it
       ReportListPage.gotToReportTransactionListPage(result.report);
@@ -50,8 +50,9 @@ describe('Debt Balance at Close Calculation', () => {
 
       // Now on edit, these fields should be editable
       // Change incurred_amount from 3000 to 5000
-      updateDebtAmount(5000);
-
+      cy.get('#amount').clear().safeType('5000');
+      cy.wait(200);
+      
       // Verify balance_at_close updates to: 0 + 5000 - 0 = 5000
       cy.get('#balance_at_close:visible').should('have.value', '$5,000.00');
     });
@@ -76,7 +77,7 @@ describe('Debt Balance at Close Calculation', () => {
       
       // Verify initial balance_at_close = 0 + 5000 - 0 = 5000
       cy.get('#balance_at_close:visible').should('have.value', '$5,000.00');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       // Navigate back and edit the debt
       ReportListPage.gotToReportTransactionListPage(result.report);
@@ -93,7 +94,8 @@ describe('Debt Balance at Close Calculation', () => {
       });
 
       // Modify incurred_amount from 5000 to 8000
-      updateDebtAmount(8000);
+      cy.get('#amount').clear().safeType('8000');
+      cy.wait(200);
 
       // Verify balance_at_close updates to: 0 + 8000 - 0 = 8000
       cy.get('#balance_at_close:visible').should('have.value', '$8,000.00');

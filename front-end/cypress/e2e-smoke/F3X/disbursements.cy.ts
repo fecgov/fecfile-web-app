@@ -37,7 +37,7 @@ describe('Disbursements', () => {
 
       TransactionDetailPage.enterScheduleFormData(defaultTransactionFormData);
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       cy.contains('Transactions in this report').should('be.visible');
       PageUtils.clickLink('100% Federal Election Activity Payment');
       cy.contains('Address').should('be.visible');
@@ -59,7 +59,7 @@ describe('Disbursements', () => {
         'date_signed',
       );
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure - Void');
       cy.contains('Address').should('be.visible');
       cy.get('#organization_name:visible').should('have.value', result.organization.name);
@@ -80,7 +80,7 @@ describe('Disbursements', () => {
         '',
         'date_signed',
       );
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.closeToast();
 
       // Check that fields saved correctly
@@ -92,7 +92,7 @@ describe('Disbursements', () => {
       // Check that the date fields have the right errors
       cy.get('#dissemination_date:visible').clear();
       cy.get('#disbursement_date:visible').clear();
-      PageUtils.clickButton('Save'); // Trigger errors to show
+      TransactionDetailPage.clickSave(); // Trigger errors to show
       cy.get('app-amount-input')
         .should('contain', 'At least ONE date field must be entered.')
         .should('not.contain', 'This is a required field.');
@@ -143,7 +143,7 @@ describe('Disbursements', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(formTransactionData);
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Other Disbursement');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -178,7 +178,7 @@ describe('Disbursements', () => {
         memoCode: false,
       };
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
-      cy.get('[data-cy="navigation-control-button"]:visible').contains('button', 'Save').click();
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
       cy.get('tr').should('contain', result.organization.name);

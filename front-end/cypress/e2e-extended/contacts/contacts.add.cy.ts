@@ -1,6 +1,5 @@
 import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
-import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { ContactsHelpers } from './contacts.helpers';
 import {
   defaultFormData as contactFormData,
@@ -48,12 +47,12 @@ describe('Contacts Add (/contacts)', () => {
     const uid = Cypress._.random(1000, 9999);
     const cases = ContactsHelpers.buildContactTypeCases(uid);
 
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     for (const c of cases) {
       cy.log(`Creating: ${c.label}`);
       const formData = buildFormDataForType(c.type, c.overrides);
       ContactListPage.enterFormData(formData);
-      PageUtils.clickButton('Save & Add More');
+      ContactListPage.clickSaveAndAddMore();
       ContactsHelpers.assertSuccessToastMessage();
     }
 
@@ -89,7 +88,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Candidate and Committee FEC ID validation fails on bad IDs', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       contact_type: 'Candidate',
@@ -100,28 +99,28 @@ describe('Contacts Add (/contacts)', () => {
       last_name: 'Bad',
       first_name: 'Candidate',
     });
-    PageUtils.clickButton('Save');
+    ContactListPage.clickSave();
     cy.get('#candidate_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
-    PageUtils.clickButton('Cancel');
-    cy.contains('Save').should('not.exist');
-
-    PageUtils.clickButton('Add contact');
+    ContactListPage.clickCancel();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       contact_type: 'Committee',
       committee_id: 'X123', // invalid format
       name: 'Bad Committee',
     });
-    PageUtils.clickButton('Save');
+    ContactListPage.clickSave();
     cy.get('#committee_id')
       .parent()
       .invoke('text')
       .should('match', /the id entered is not in the correct format/i);
-    PageUtils.clickButton('Cancel');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickCancel();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
   });
 
   it('Cancel flow: starting Add contact and cancelling does not create rows', () => {
@@ -136,7 +135,7 @@ describe('Contacts Add (/contacts)', () => {
         ];
 
         for (const contactType of types) {
-          PageUtils.clickButton('Add contact');
+          ContactListPage.openAddContactDialog();
           let formData: ContactFormData = {
             ...contactFormData,
             contact_type: contactType,
@@ -172,8 +171,8 @@ describe('Contacts Add (/contacts)', () => {
           }
 
           ContactListPage.enterFormData(formData);
-          PageUtils.clickButton('Cancel');
-          cy.contains('Save').should('not.exist');
+          ContactListPage.clickCancel();
+          cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
         }
 
         cy.get('tbody')
@@ -183,7 +182,7 @@ describe('Contacts Add (/contacts)', () => {
   });
 
   it('Validation: missing required fields shows error messages', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '',
@@ -193,7 +192,7 @@ describe('Contacts Add (/contacts)', () => {
       state: '',
       zip: '',
     });
-    PageUtils.clickButton('Save');
+    ContactListPage.clickSave();
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
@@ -201,8 +200,8 @@ describe('Contacts Add (/contacts)', () => {
     cy.get('#city').parent().should('contain', 'This is a required field');
     cy.get('[inputid="state"]').parent().should('contain', 'This is a required field');
     cy.get('#zip').parent().should('contain', 'This is a required field');
-    PageUtils.clickButton('Cancel');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickCancel();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
   });
 
   it('Save & Add More: chains Individual, Candidate, Committee, and Organization', () => {
@@ -217,18 +216,18 @@ describe('Contacts Add (/contacts)', () => {
     cy.get('tbody', { timeout: 5000 })
       .then(($tbody) => $tbody.find('tr').length)
       .then((beforeCount) => {
-        PageUtils.clickButton('Add contact');
+        ContactListPage.openAddContactDialog();
 
         for (const c of cases) {
           cy.log(`Creating via Save & Add More: ${c.label}`);
           const formData = buildFormDataForType(c.type, c.overrides);
 
           ContactListPage.enterFormData(formData);
-          PageUtils.clickButton('Save & Add More');
+          ContactListPage.clickSaveAndAddMore();
           ContactsHelpers.assertSuccessToastMessage();
 
-          cy.contains('button', 'Save & Add More').should('exist');
-          cy.contains('button', 'Save').should('exist');
+          // Dialog is still open
+          cy.get('[data-cy="contact-dialog"]').contains('Add Contact').should('be.visible');
 
           // keep your reset checks
           if (c.type === 'Individual' || c.type === 'Candidate') {
@@ -248,8 +247,8 @@ describe('Contacts Add (/contacts)', () => {
           }
         }
 
-        PageUtils.clickButton('Cancel');
-        cy.contains('Save').should('not.exist');
+        ContactListPage.clickCancel();
+        cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
         ContactListPage.goToPage();
         cy.wait('@contactsReload');

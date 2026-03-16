@@ -54,7 +54,6 @@ function getLoginIntervalString(sessionDur: number): string {
 }
 
 function loginDotGovLogin() {
-  const alias = PageUtils.getAlias('');
   cy.intercept('GET', '**/api/v1/oidc/login-redirect').as('GetLoggedIn');
   cy.intercept('GET', '**/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', '**/api/v1/committees/*/activate/').as('ActivateCommittee');
@@ -75,22 +74,7 @@ function loginDotGovLogin() {
 
   // Creates a second create admin after logging in if necessary
   cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
-  cy.get(alias)
-    .find('[data-cy="second-committee-email"]')
-    .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
-    .then(($email) => {
-      if ($email.length) {
-        cy.contains('Welcome to FECfile+').should('be.visible').click(); // Ensures that the modal is in focus
-        cy.wrap($email).should('have.value', '');
-        cy.wrap($email).clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
-        cy.wrap($email).should('have.value', 'admin@admin.com');
-        cy.wrap($email).click();
-        PageUtils.clickButton('Save');
-
-        cy.get(alias).find('.p-toast-close-button').click();
-      }
-    });
-  cy.contains('Welcome to FECfile+').should('not.exist');
+  PageUtils.enterSecondCommitteeEmailIfneeded();
 }
 
 function retrieveAuthToken() {
