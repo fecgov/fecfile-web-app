@@ -23,7 +23,7 @@ const reattributeData: ScheduleFormData = {
 
 function Reattribute(result: any, old = false) {
   cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**/').as('GetTransaction');
-  PageUtils.clickKababItem(' 11(a)(ii) ', 'Reattribute');
+  PageUtils.clickKababItem('11(a)(ii)', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');

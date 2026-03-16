@@ -20,7 +20,6 @@ export class SearchableSelectComponent {
   readonly form = input.required<FormGroup>();
   readonly autoDisplayFirst = input(true);
   readonly readonly = input(false);
-  readonly dataCy = input('');
   readonly styleClass = input('');
   readonly pt = input<SelectPassThrough>();
 

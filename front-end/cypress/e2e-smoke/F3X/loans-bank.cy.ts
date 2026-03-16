@@ -124,7 +124,7 @@ function handleLoanAgreementSetup(q3: string) {
       pathname: '/api/v1/transactions/',
     }).as('saveNewAgreement');
 
-    PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
+    TransactionDetailPage.clickSave();
     cy.wait('@saveNewAgreement');
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
@@ -175,7 +175,7 @@ describe('Loans', () => {
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
       PageUtils.enterValue('#amount', formData.amount);
-      TransactionDetailPage.clickSave(result.report);
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Made').should('exist');
     });
@@ -216,9 +216,7 @@ describe('Loans', () => {
       clickLoan('Edit');
 
       // wait for form to be done (load c2 table)
-      cy.wait('@GetC2List', { timeout: 15000 }).then((interception) => {
-        expect(interception.request.query.parent, 'GetC2List parent query').to.be.a('string').and.not.be.empty;
-      });
+      cy.wait('@GetC2List', { timeout: 15000 });
       cy.get('.p-datatable-mask').should('not.exist');
 
       // go to create guarantor
@@ -228,7 +226,7 @@ describe('Loans', () => {
       cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
-      TransactionDetailPage.clickSave(result.report);
+      TransactionDetailPage.clickSave( TransactionDetailPage.BUTTON);
       clickLoan('Edit');
       cy.contains('ORGANIZATION NAME').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);

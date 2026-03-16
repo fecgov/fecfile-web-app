@@ -33,8 +33,8 @@ describe('Contacts List (/contacts)', () => {
       first_name: `IndFn${uid}`,
     };
     ContactListPage.enterFormData(individualFormData);
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Candidate
     ContactListPage.openAddContactDialog();
@@ -50,8 +50,8 @@ describe('Contacts List (/contacts)', () => {
       first_name: `CandFn${uid}`,
     };
     ContactListPage.enterFormData(candidateFormData);
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Committee
     ContactListPage.openAddContactDialog();
@@ -64,8 +64,8 @@ describe('Contacts List (/contacts)', () => {
       committee_id: committeeId,
     };
     ContactListPage.enterFormData(committeeFormData);
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Organization
     ContactListPage.openAddContactDialog();
@@ -76,8 +76,8 @@ describe('Contacts List (/contacts)', () => {
       name: organizationName,
     };
     ContactListPage.enterFormData(organizationFormData);
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').click();
-    cy.contains('[data-cy="contact-dialog-actions"]:visible', 'Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');

@@ -8,16 +8,12 @@
     <p-select
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
-      data-cy="contact-type-select"
       [options]="contactTypeOptions"
       [readonly]="contactTypeReadOnly"
       styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
       id="entity_type_dropdown"
       appendTo="body"
-      [pt]="{
-        dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon',
-        pcOverlay: { root: { 'data-cy': 'contact-type-select-overlay' } },
-      }"
+      [pt]="{ dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon' }"
     />
   </div>
   @if (showSearchBoxCallback()) {
