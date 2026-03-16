@@ -5,10 +5,10 @@ export function slugifyDataCyPart(part: DataCyPart): string {
 
   return String(part)
     .trim()
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .replace(/[^a-zA-Z0-9]+/g, '-')
-    .replace(/-{2,}/g, '-')
-    .replace(/^-|-$/g, '')
+    .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replaceAll(/[^a-zA-Z0-9]+/g, '-')
+    .replaceAll(/-{2,}/g, '-')
+    .replaceAll(/^-|-$/g, '')
     .toLowerCase();
 }
 
