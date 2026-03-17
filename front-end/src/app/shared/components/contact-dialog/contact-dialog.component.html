@@ -1,4 +1,8 @@
-<div [style]="{ display: dialogVisible() ? '' : 'none' }" [class.contact-dialog-not-submitted]="!formSubmitted">
+<div
+  data-cy="contact-dialog"
+  [style]="{ display: dialogVisible() ? '' : 'none' }"
+  [class.contact-dialog-not-submitted]="!formSubmitted"
+>
   <p-dialog
     [visible]="detailVisible"
     [style]="{ width: '90%' }"
@@ -286,6 +290,7 @@
           label="Cancel"
           icon="pi pi-times"
           class="p-button-secondary mr-4"
+          data-cy="cancel"
           (click)="closeDialog()"
         ></button>
         @if (headerTitle) {
@@ -296,6 +301,7 @@
             label="Save & continue"
             icon="pi pi-check"
             class="p-button-info"
+            data-cy="save-continue"
             (click)="submitForm()"
           ></button>
         } @else {
@@ -306,6 +312,7 @@
             label="Save"
             icon="pi pi-check"
             class="p-button-primary"
+            data-cy="save"
             (click)="submitForm()"
           ></button>
           @if (isNewItem) {
@@ -316,6 +323,7 @@
               label="Save & Add More"
               icon="pi pi-check"
               class="p-button-info"
+              data-cy="save-add-more"
               (click)="submitForm('continue')"
             ></button>
           }

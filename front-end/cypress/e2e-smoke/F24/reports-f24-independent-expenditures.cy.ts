@@ -27,7 +27,7 @@ describe('Form 24 Independent Expenditures', () => {
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.f24, false, true, false);
+      ReportListPage.gotToReportTransactionListPage(result.f24, false, true, false);
       StartTransaction.IndependentExpenditures().IndependentExpenditure();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
@@ -39,13 +39,13 @@ describe('Form 24 Independent Expenditures', () => {
         'date_signed',
       );
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('exist');
       cy.get('#first_name').should('have.value', result.individual.first_name);
       cy.get('#last_name').should('have.value', result.individual.last_name);
 
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.clickSidebarItem('Manage your transactions');
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('exist');
