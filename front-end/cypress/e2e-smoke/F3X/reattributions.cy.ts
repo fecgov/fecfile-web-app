@@ -55,21 +55,12 @@ describe('Reattributions', () => {
     DataSetup({ individual: true, candidate: true }).then((result: any) => {
       const receipt = buildScheduleA('INDIVIDUAL_RECEIPT', 100.55, '2025-04-12', result.individual, result.report);
       makeTransaction(receipt, () => {
-        ReportListPage.goToReportList(result.report);
+        ReportListPage.gotToReportTransactionListPage(result.report);
         Reattribute(result);
       });
     });
   });
   // Test disabled until a mock is set up for submitting a report.
-  // xit('should test reattributing a Schedule A in a submitted report', () => {
-  //   // Create an individual contact to be used with contact lookup
-  //   ContactListPage.createIndividual(assignee);
-  //   CreateReceipt();
-  //   ReportListPage.createF3X(reportFormDataJuly);
-  //   ReportListPage.submitReport(APRIL_15);
-  //   ReportListPage.editReport(APRIL_15, 'Review');
-  //   PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
-  //   cy.wait(500);
-  //   Reattribute(true);
-  // });
+  xit('should test reattributing a Schedule A in a submitted report', () => {
+  });
 });

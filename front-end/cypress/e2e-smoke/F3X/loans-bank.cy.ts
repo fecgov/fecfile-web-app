@@ -102,7 +102,7 @@ function assertNoDeleteButtonInLoanReceivedFromBankRow() {
 // Helper to handle result of setupLoanFromBank for the first test
 function handleLoanAgreementSetup(q3: string) {
   return (result: any) => {
-    ReportListPage.goToReportList(q3);
+    ReportListPage.gotToReportTransactionListPage(q3);
     clickLoan('New loan agreement');
 
     PageUtils.urlCheck('/C1_LOAN_AGREEMENT');
@@ -151,7 +151,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank', () => {
     cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Loans().FromBank();
 
       ContactLookup.getContact(result.organization.name);
@@ -170,7 +170,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Make loan repayment', 'LOAN_REPAYMENT_MADE');
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
@@ -183,7 +183,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Review loan agreement');
       cy.intercept('PUT', '**/api/v1/transactions/**').as('SaveTransactions');
       const reportId = result.report;
@@ -205,7 +205,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.intercept({
         method: 'GET',
         pathname: '/api/v1/transactions/',
@@ -216,14 +216,14 @@ describe('Loans', () => {
       clickLoan('Edit');
 
       // wait for form to be done (load c2 table)
-      cy.wait('@GetC2List', { timeout: 15000 });
+      cy.wait('@GetC2List');
       cy.get('.p-datatable-mask').should('not.exist');
 
       // go to create guarantor
       cy.intercept('PUT', '**/api/v1/transactions/**').as('saveAddGuarantor')
       cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
-      cy.wait('@saveAddGuarantor', { timeout: 15000 });
-      cy.contains('h1', 'Guarantors to loan source', { timeout: 15000 }).should('be.visible');
+      cy.wait('@saveAddGuarantor');
+      cy.contains('h1', 'Guarantors to loan source').should('be.visible');
       ContactLookup.getContact(result.individual.last_name);
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave( TransactionDetailPage.BUTTON);

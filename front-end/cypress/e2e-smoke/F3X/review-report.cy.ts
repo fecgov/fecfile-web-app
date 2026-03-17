@@ -105,7 +105,7 @@ describe('Receipt Transactions', () => {
   it('should recalculate after transaction created or updated', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       // check summary calc runs
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       visitSummaryWithSpinner(result.report, true);
 
       // Create transaction

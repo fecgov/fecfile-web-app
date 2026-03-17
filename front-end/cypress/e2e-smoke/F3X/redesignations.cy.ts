@@ -56,7 +56,7 @@ describe('Redesignations', () => {
         { election_code: 'P2020', support_oppose_code: 'S', date_signed: `${currentYear}-07-09` },
       );
       makeTransaction(transaction, () => {
-        ReportListPage.goToReportList(result.report);
+        ReportListPage.gotToReportTransactionListPage(result.report);
         Redesignate();
       });
     });

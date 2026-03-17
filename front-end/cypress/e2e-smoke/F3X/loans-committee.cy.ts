@@ -14,7 +14,7 @@ const formData = {
 
 function setupLoanByCommittee() {
   return cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
-    ReportListPage.goToReportList(result.report);
+    ReportListPage.gotToReportTransactionListPage(result.report);
     StartTransaction.Loans().ByCommittee();
     // Search for created committee and enter load data, then add load guarantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');

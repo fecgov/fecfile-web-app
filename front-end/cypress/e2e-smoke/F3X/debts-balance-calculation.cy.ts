@@ -6,6 +6,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { assertDebtFieldValues } from './utils/debt-assertions';
 
 describe('Debt Balance at Close Calculation', () => {
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Debt Balance at Close Calculation', () => {
       // causing navigations to occur in the middle of the following
       // script.  To be addressed in FECFILE-2842
       cy.wait(500);
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       
       StartTransaction.Debts().ByCommittee();
 
@@ -32,25 +33,25 @@ describe('Debt Balance at Close Calculation', () => {
       
       // Verify balance_at_close was calculated during form entry: 0 + 3000 - 0 = 3000
       cy.get('#balance_at_close').should('have.value', '$3,000.00');
-      
       TransactionDetailPage.clickSave();
 
       // Navigate back to verify the saved debt and then edit it
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Debt Owed By Committee', { timeout: 10000 }).should('exist');
+      ReportListPage.gotToReportTransactionListPage(result.report);
+      cy.contains('Debt Owed By Committee').should('exist');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 
       // Verify values from creation
-      cy.get('#amount').should('have.value', '$3,000.00');
-      cy.get('#balance').should('have.value', '$0.00');
-      cy.get('#payment_amount').should('have.value', '$0.00');
-      cy.get('#balance_at_close').should('have.value', '$3,000.00');
-      
+      assertDebtFieldValues({
+        amount: '$3,000.00',
+        balance: '$0.00',
+        paymentAmount: '$0.00',
+        balanceAtClose: '$3,000.00',
+      });
+
       // Now on edit, these fields should be editable
       // Change incurred_amount from 3000 to 5000
       cy.get('#amount').clear().safeType('5000');
-      cy.get('#amount');
       cy.wait(200);
       
       // Verify balance_at_close updates to: 0 + 5000 - 0 = 5000
@@ -65,7 +66,7 @@ describe('Debt Balance at Close Calculation', () => {
       // causing navigations to occur in the middle of the following
       // script.  To be addressed in FECFILE-2842
       cy.wait(500);
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
@@ -77,24 +78,24 @@ describe('Debt Balance at Close Calculation', () => {
       
       // Verify initial balance_at_close = 0 + 5000 - 0 = 5000
       cy.get('#balance_at_close').should('have.value', '$5,000.00');
-      
       TransactionDetailPage.clickSave();
 
       // Navigate back and edit the debt
-      ReportListPage.goToReportList(result.report);
-      cy.contains('Debt Owed By Committee', { timeout: 10000 }).should('exist');
+      ReportListPage.gotToReportTransactionListPage(result.report);
+      cy.contains('Debt Owed By Committee').should('exist');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 
       // Verify current values
-      cy.get('#amount').should('have.value', '$5,000.00');
-      cy.get('#balance').should('have.value', '$0.00');
-      cy.get('#payment_amount').should('have.value', '$0.00');
-      cy.get('#balance_at_close').should('have.value', '$5,000.00');
+      assertDebtFieldValues({
+        amount: '$5,000.00',
+        balance: '$0.00',
+        paymentAmount: '$0.00',
+        balanceAtClose: '$5,000.00',
+      });
 
       // Modify incurred_amount from 5000 to 8000
       cy.get('#amount').clear().safeType('8000');
-      cy.get('#amount');
       cy.wait(200);
 
       // Verify balance_at_close updates to: 0 + 8000 - 0 = 8000
