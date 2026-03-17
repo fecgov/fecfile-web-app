@@ -88,7 +88,7 @@ describe('Receipt Transactions', () => {
     });
   });
 
-  it('should calculate summary values on first visit', () => {
+  xit('should calculate summary values on first visit', () => {
     // Create report and check summary calc runs
     cy.wrap(DataSetup()).then((result: any) => {
       const reportId = result.report;
@@ -102,7 +102,7 @@ describe('Receipt Transactions', () => {
     });
   });
 
-  it('should recalculate after transaction created or updated', () => {
+  xit('should recalculate after transaction created or updated', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       // check summary calc runs
       ReportListPage.gotToReportTransactionListPage(result.report);

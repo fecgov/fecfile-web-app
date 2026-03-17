@@ -377,7 +377,7 @@ describe('Contacts: Transactions integration', () => {
       const rid = reportId as string;
 
       // INDIVIDUAL RECEIPT
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /Individual Receipt/i);
       cy.contains(/Individual Receipt/i).should('exist');
 
@@ -406,7 +406,7 @@ describe('Contacts: Transactions integration', () => {
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
 
       // TRANSFER
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /^Transfer$/i);
       cy.contains('h1', 'Transfer').should('exist');
 
@@ -435,7 +435,7 @@ describe('Contacts: Transactions integration', () => {
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
 
       // OPERATING EXPENDITURE
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       goToTransactionCreateFromList(/Add a disbursement/i, /Operating Expenditure/i);
       cy.contains(/Operating Expenditure/i).should('exist');
 
@@ -510,7 +510,7 @@ describe('Contacts: Transactions integration', () => {
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
       cy.contains('Individual Receipt').should('exist');
