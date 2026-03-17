@@ -1,5 +1,5 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { Router, Scroll } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReportStatus, ReportTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -9,6 +9,7 @@ import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-report-summary',
@@ -16,7 +17,7 @@ import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
   styleUrls: ['./submit-report-status.component.scss'],
   imports: [ButtonDirective, Ripple, LongDatePipe],
 })
-export class SubmitReportStatusComponent implements OnInit {
+export class SubmitReportStatusComponent {
   reportStatusEnum = ReportStatus;
   private readonly store = inject(Store);
   public readonly router = inject(Router);
@@ -28,11 +29,12 @@ export class SubmitReportStatusComponent implements OnInit {
   readonly fecStatus = computed(() => this.report().upload_submission?.fec_status);
   readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
   readonly reportStatus = computed(() => this.report().report_status as ReportStatus);
+  readonly reportType = computed(() => this.report().report_code_label);
 
-  reportCodeLabelMap?: { [key in ReportCodes]: string };
-
-  ngOnInit(): void {
-    this.form3XService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
+  constructor() {
+    this.router.events.pipe(filter((event): event is Scroll => event instanceof Scroll)).subscribe(() => {
+      this.form3XService.setActiveReportById(this.report().id!);
+    });
   }
 
   public backToReports() {

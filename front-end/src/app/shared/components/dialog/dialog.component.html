@@ -1,4 +1,4 @@
-<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()">
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()" (keydown.escape)="handleEscape($event)">
   <div class="dialog-header">
     <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
     <button class="rounded-image-button" (click)="close()" aria-label="Cancel">

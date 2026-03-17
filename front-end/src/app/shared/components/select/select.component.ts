@@ -57,8 +57,7 @@ export class SelectComponent {
     };
   }
 
-  handleChange(event: Event) {
-    event.stopPropagation();
+  handleChange() {
     setTimeout(() => {
       this.selectElement().nativeElement.blur();
     }, 0);
@@ -70,6 +69,6 @@ export class SelectComponent {
 
     this.control().setValue(null);
     this.control().markAsDirty();
-    this.handleChange({} as Event);
+    this.handleChange();
   }
 }

@@ -12,6 +12,7 @@ import { makeTransaction } from '../requests/methods';
 import { ReportListPage } from '../pages/reportListPage';
 import { defaultForm3XData } from '../models/ReportFormModel';
 import { defaultScheduleFormData } from '../models/TransactionFormModel'
+import { assertDebtFieldValues } from './utils/debt-assertions';
 
 function setupCoordinatedPartyExpenditure(
   organization: ContactFormData,
@@ -29,12 +30,12 @@ function setupCoordinatedPartyExpenditure(
   cy.get('#amount').safeType(100);
   cy.get('#purpose_description').first().safeType('test');
 
-  PageUtils.clickButton('Save');
+  TransactionDetailPage.clickSave();
 }
 
 function createDebtRepaymentCallback(result: any) {
   return () => {
-    ReportListPage.goToReportList(result.report);
+    ReportListPage.gotToReportTransactionListPage(result.report);
     cy.contains('Debt Owed By Committee').should('exist');
 
     PageUtils.clickKababItem(
@@ -68,16 +69,16 @@ describe('Debts', () => {
 
   it('should test Debt Owed By Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ByCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_BY_COMMITTEE');
       PageUtils.containedOnPage('Debt Owed By Committee');
       ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed By Committee').should('exist');
 
@@ -92,7 +93,7 @@ describe('Debts', () => {
 
   it('should test Owed To Committee loan', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -100,7 +101,7 @@ describe('Debts', () => {
 
       ContactLookup.getCommittee(result.committee);
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
     });
@@ -108,7 +109,7 @@ describe('Debts', () => {
 
   it('should test debt carry-forward behavior', () => {
     cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ToCommittee();
 
       PageUtils.urlCheck('DEBT_OWED_TO_COMMITTEE');
@@ -119,11 +120,11 @@ describe('Debts', () => {
         ...debtFormData,
         amount: 10000
       }, false, '', '#amount');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Debt Owed To Committee').should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$10,000.00").should('exist')
+        .contains("$10,000.00").should('exist');
 
       PageUtils.clickKababItem(
         'Debt Owed To Committee',
@@ -145,7 +146,7 @@ describe('Debts', () => {
         true,
         'contribution_date'
       )
-      PageUtils.clickButton("Save");
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Individual Receipt').should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
@@ -153,10 +154,12 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#balance').should('exist').should('have.value', '$0.00');
-      cy.get('#amount').should('have.value', '$10,000.00');
-      cy.get('#payment_amount').should('have.value', '$1,000.00');
-      cy.get('#balance_at_close').should('have.value', '$9,000.00');
+      assertDebtFieldValues({
+        amount: '$10,000.00',
+        balance: '$0.00',
+        paymentAmount: '$1,000.00',
+        balanceAtClose: '$9,000.00',
+      });
 
       ReportListPage.createF3X({
         ...defaultForm3XData,
@@ -173,7 +176,7 @@ describe('Debts', () => {
       PageUtils.clickLink("Debt Owed To Committee");
 
       cy.get('#amount').should('exist').clear().safeType('2500');
-      PageUtils.clickButton("Save");
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
 
       cy.contains("Debt Owed To Committee").should('exist');
@@ -201,7 +204,7 @@ describe('Debts', () => {
         true,
         'contribution_date'
       )
-      PageUtils.clickButton("Save");
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains("Debt Owed To Committee").should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
@@ -209,10 +212,12 @@ describe('Debts', () => {
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#balance').should('exist').should('have.value', '$9,000.00');
-      cy.get('#amount').should('have.value', '$2,500.00');
-      cy.get('#payment_amount').should('have.value', '$11,500.00');
-      cy.get('#balance_at_close').should('have.value', '$0.00');
+      assertDebtFieldValues({
+        amount: '$2,500.00',
+        balance: '$9,000.00',
+        paymentAmount: '$11,500.00',
+        balanceAtClose: '$0.00',
+      });
 
       cy.intercept(
         'GET',
@@ -237,6 +242,7 @@ describe('Debts', () => {
     beforeEach(() => {
       ContactListPage.deleteAllContacts();
       PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
+      ContactListPage.deleteAllContacts();
     });
 
     afterEach(() => {

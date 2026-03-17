@@ -408,8 +408,8 @@ label.disabled {
 }
 
 .p-button-primary.p-button:enabled:hover {
-  background-color: #164f85;
-  border-color: #164f85;
+  background-color: var(--primary-button-hover-color);
+  border-color: var(--primary-button-hover-color);
 }
 
 .p-button-secondary.p-button {
@@ -696,18 +696,24 @@ textarea {
   margin-right: auto;
 }
 
-select,
-::picker(select) {
-  appearance: base-select;
-  top: calc(anchor(bottom) + 1px);
-  max-height: 200px;
-  overflow: auto;
-  border-radius: var(--border-radius);
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  select {
+    width: var(--app-select-width, 100%);
+    padding-right: 32px;
+    &:has(+ .select-clear-button) {
+      padding-right: 50px;
+    }
+  }
 }
 
 select {
   min-width: var(--app-select-width, 75px);
-  background: var(--surface-ground);
+  background-color: var(--surface-ground);
   height: var(--app-select-height, 48px);
   padding: var(--app-select-padding, 8px 10px);
   line-height: 1.2;
@@ -716,24 +722,18 @@ select {
   display: flex;
   align-items: center;
 
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding-right: 2rem; // Space for the clear icon or dropdown arrow
-    position: relative;
-
-    selectedcontent {
-      flex-grow: 1;
-      text-align: left;
-    }
-  }
+  appearance: none;
+  background-image: url(./assets/img/dropdown_arrow.svg);
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 16px;
 
   &:not(:disabled) {
     cursor: pointer;
     border: var(--app-select-border-disabled, 2px solid var(--fec-grey-alt));
-    background: var(--p-content-background);
+    background-color: var(--p-content-background);
     &:hover {
       border-color: var(--surface-border);
     }
@@ -745,69 +745,78 @@ select {
       border-color: var(--p-primary-color);
     }
   }
-
-  &::picker-icon {
-    content: '';
-    width: 16px;
-    height: 16px;
-    background-image: url(./assets/img/i-arrow-down.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-  }
 }
 
-selectedcontent {
-  font-family: var(--karla);
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--p-select-selectedcontent-color);
-  padding: var(--p-select-selectedcontent-padding);
-
-  .icon {
-    display: none;
+@supports (appearance: base-select) {
+  ::picker(select) {
+    appearance: base-select;
+    top: calc(anchor(bottom) + 1px);
+    max-height: 200px;
+    overflow: auto;
+    border-radius: var(--border-radius);
   }
-}
-
-option {
-  font-family: var(--karla);
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--p-select-option-color);
-  padding: 8px 12px;
-
-  &:hover {
-    background: var(--p-select-option-focus-background);
-    color: var(--p-select-option-focus-color);
-  }
-  &:checked {
-    background: var(--p-select-option-selected-focus-background);
-    color: var(--p-select-option-selected-focus-color);
-  }
-  &:first-of-type {
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
-  }
-  &:last-of-type {
-    border-bottom-left-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-  }
-  &::checkmark {
-    display: none;
-  }
-}
-
-.select-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
 
   select {
-    width: var(--app-select-width, 100%);
+    appearance: base-select;
+    background-image: none;
+    padding: var(--app-select-padding, 8px 10px);
+
+    &::picker-icon {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: url(./assets/img/dropdown_arrow.svg) no-repeat center;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
     button {
-      padding-right: 2.5rem !important;
-      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+
+      selectedcontent {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-family: var(--karla);
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--p-select-selectedcontent-color);
+        padding: var(--p-select-selectedcontent-padding);
+      }
+    }
+  }
+
+  option {
+    font-family: var(--karla);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--p-select-option-color);
+    padding: 8px 12px;
+
+    &:hover {
+      background-color: var(--p-select-option-focus-background);
+      color: var(--p-select-option-focus-color);
+    }
+    &:checked {
+      background-color: var(--p-select-option-selected-focus-background);
+      color: var(--p-select-option-selected-focus-color);
+    }
+    &:first-of-type {
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+    }
+    &:last-of-type {
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+    &::checkmark {
+      display: none;
     }
   }
 }

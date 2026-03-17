@@ -53,14 +53,10 @@
 
 ## Frontend setup for E2E
 - Cypress `baseUrl` is `http://localhost:4200` and is set in `cypress.config.ts`.
-- Report submission helpers read `Cypress.env('FILING_PASSWORD')`. To supply it locally, set `CYPRESS_FILING_PASSWORD` before running Cypress.
+-`CYPRESS_FILING_PASSWORD` obsolesced, now it's just 'filing!Passw0rd'
 
 ### Env var tips (.env, .zshrc)
 - Local one-off (current shell):
-  ```bash
-  # from fecfile-web-app/front-end
-  export CYPRESS_FILING_PASSWORD="make-it-up"
-  ```
 - Using a local `.env` file you can `source` (example uses `fecfile-web-api/.env`):
   ```bash
   # from fecfile-web-api
@@ -68,11 +64,6 @@
   ```
   (Keep `.env` out of git.)
 - Using `~/.zshrc` for persistent vars:
-  ```bash
-  # from your home directory (~)
-  printf '\nexport CYPRESS_FILING_PASSWORD="make-it-up"\n' >> ~/.zshrc
-  source ~/.zshrc
-  ```
 - Note: you can just open the file in your IDE (VSCode, Cursor, etc.) and add the environment variables in and then source it in your terminal
 - Example file contents:
   ```bash
@@ -94,12 +85,10 @@
   # Path to your Oh My Zsh installation
   export ZSH="$HOME/.oh-my-zsh"
   export DJANGO_SECRET_KEY="make-it-up"
-  export CYPRESS_RECORD_KEY="f0ce7ede-a176-4d72-8650-756286b47471"
   export CYPRESS_BASE_URL="http://localhost:4200"
   export CYPRESS_EMAIL='test@test.com'
   export CYPRESS_COMMITTEE_ID='C99999999'
   export CYPRESS_PASSWORD=''
-  export CYPRESS_FILING_PASSWORD='make-it-up'
   export CYPRESS_PIN='make-it-up'
   export CIRCLE_BRANCH='feature/your-branch'
   export E2E_DJANGO_SECRET_KEY='make-it-up'
@@ -114,89 +103,14 @@
   export PRODUCTION_OPEN_FEC_API_KEY= "<your-key>"
   export PATH=/usr/local/node/bin:$PATH
   export SPACE=local
+  ...
 
-  plugins=(git)
 
-  source $ZSH/oh-my-zsh.sh
-
-  PROMPT='%n@%m:%~ %# '
-
-  # -----------------------------
-
-  # ✨ Sweet Dev Prompt (Zsh)
-
-  # -----------------------------
-
-  # Symbols
-
-  CHECK="✔︎"
-  CROSS="✘"
-  NODE_SYMBOL="⬢"
-  DOCKER_SYMBOL="🐳"
-  GIT_SYMBOL=""  # optional nerd font
-
-  # Prompt function
-
-  build_prompt() {
-
-  # Exit status
-
-    local exit_status=$?
-    if [[ $exit_status -eq 0 ]]; then
-      STATUS="$CHECK"
-    else
-      STATUS="$CROSS ($exit_status)"
-    fi
-
-  # Git branch
-
-    if git rev-parse --is-inside-work-tree &>/dev/null; then
-      BRANCH="[$(git rev-parse --abbrev-ref HEAD)]"
-    else
-      BRANCH=""
-    fi
-
-  # Node.js version
-
-    if command -v node &>/dev/null; then
-      NODE="via $NODE_SYMBOL $(node -v)"
-    else
-      NODE=""
-    fi
-
-  # Docker running?
-
+  ```
     if pgrep dockerd &>/dev/null; then
       DOCKER="$DOCKER_SYMBOL"
     else
-      DOCKER=""
-    fi
-
-  # Build final prompt
-
-    PROMPT="%F{green}$STATUS %F{blue}%n@%m%f:%F{cyan}%~%f %F{yellow}$BRANCH%f $NODE $DOCKER
-  ❯ "
-  }
-
-  precmd_functions+=(build_prompt)
-
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-  # Load Angular CLI autocompletion
-
-  if command -v ng >/dev/null 2>&1; then
-    source <(ng completion script)
-  fi
-
-  # activate API venv
-
-  fecapi() {
-    source /home/<user>/fecfile-web-api venv"
-  }
-
-  ```
+      D
 
 ## Running tests
 ### Run Cypress directly (requires the Angular dev server already running)
@@ -263,7 +177,7 @@ npm run e2e:smoke:headless
 - The `e2e-smoke` and `e2e-extended` jobs:
   - Spin up the API with docker-compose using the E2E Dockerfiles and `E2E_TEST=True`.
   - Run `ng e2e` headless from `fecfile-web-app/front-end` inside a `cypress/browsers:latest` container with `--spec` targeting either `e2e-smoke` or `e2e-extended`, `--watch=false`, and `--browser chrome`.
-  - Pass Cypress env vars into the container (`CYPRESS_EMAIL`, `CYPRESS_COMMITTEE_ID`, `CYPRESS_PASSWORD`, `CYPRESS_FILING_PASSWORD`) along with `CIRCLE_BRANCH`.
+  - Pass Cypress env vars into the container (`CYPRESS_EMAIL`, `CYPRESS_COMMITTEE_ID`, and `CYPRESS_PASSWORD`) along with `CIRCLE_BRANCH`.
   - Store test results/artifacts like videos, and/or screenshots from `cypress/results`.
 
 If you want to approximate CI locally, use the headless npm scripts above.
@@ -297,7 +211,6 @@ When a 5xx occurs, Cypress writes a JSON artifact under `cypress/artifacts/backe
 - **404 or 500 on `/api/v1/contacts/e2e-delete-all-contacts/`**: `E2E_TEST` is false. Set it in `fecfile-web-api/.env` or run `E2E_TEST=True docker compose up` from `fecfile-web-api`.
 - **Cypress can't reach `http://localhost:4200`**: the Angular dev server isn't running. Start it with `npm start` or `npm run local` from `fecfile-web-app/front-end`.
 - **Cypress can't reach `http://localhost:8080`**: backend is not running or compose is down. Start it with `docker compose up` from `fecfile-web-api`.
-- **Filing password errors on submit**: set `CYPRESS_FILING_PASSWORD` before running specs that submit reports.
 - **Clear Cypress cache**: from `fecfile-web-app/front-end`
 
   ```bash
