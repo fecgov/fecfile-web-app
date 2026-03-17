@@ -418,10 +418,15 @@ export class TransactionFormUtils {
     return formValues;
   }
 
-  static patchMemoText(transaction: Transaction | undefined, form: FormGroup) {
+  static patchMemoText(transaction: Transaction, form: FormGroup) {
     const memo_text = transaction?.memo_text;
     if (memo_text?.text4000) {
       form.patchValue({ text4000: memo_text.text4000 });
+    }
+    if (transaction.transactionType.generatePurposeDescription !== undefined) {
+      form.controls[transaction.transactionType.templateMap.purpose_description]?.setValue(
+        transaction.transactionType.generatePurposeDescriptionWrapper(transaction),
+      );
     }
   }
 

@@ -36,7 +36,7 @@
       </div>
     </div>
   }
-  <div class="flex p-2">
+  <div class="flex p-2 mb-4">
     <p-checkbox
       inputId="line_of_credit"
       [binary]="true"
@@ -49,7 +49,7 @@
   </div>
   @if (showLineOfCredit) {
     <div class="grid">
-      <div class="col-4">
+      <div class="col-4 pt-0">
         <div class="field">
           <label [for]="creditAmountThisDrawId.id" [id]="creditAmountThisDrawId.label">
             CREDIT AMOUNT THIS DRAW <span class="paren-label">(OPTIONAL)</span>
@@ -58,7 +58,7 @@
           <app-error-messages [form]="form" fieldName="credit_amount_this_draw" [formSubmitted]="formSubmitted" />
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-4 pt-0">
         <div class="field">
           <label [id]="balanceId.label" [for]="balanceId.id">TOTAL BALANCE</label>
           <app-input-number [inputId]="balanceId.id" [formControlName]="templateMap['balance']" />

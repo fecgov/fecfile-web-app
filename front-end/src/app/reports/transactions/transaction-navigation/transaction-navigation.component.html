@@ -1,14 +1,14 @@
-@if (transaction?.contact_1 && isEditable && getInlineControls().length > 0) {
-  @for (control of getInlineControls(); track control) {
+@if (transaction()?.contact_1 && isEditable() && inlineControls().length > 0) {
+  @for (control of inlineControls(); track control) {
     <div class="p-2">
-      <app-navigation-control [navigationControl]="control" [transaction]="transaction" />
+      <app-navigation-control [navigationControl]="control" [transaction]="transaction()" />
     </div>
   }
 }
 
 <hr type="solid" />
 <app-navigation-control-bar
-  [navigationControls]="getNavigationControls()"
-  [transaction]="transaction"
-  [class]="isEditable ? '' : 'flex-center'"
+  [navigationControls]="navigationControls()"
+  [transaction]="transaction()"
+  [class]="isEditable() ? '' : 'flex-center'"
 />

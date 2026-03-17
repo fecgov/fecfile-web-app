@@ -16,6 +16,7 @@ export enum NavigationDestination {
 export enum ControlType {
   BUTTON,
   DROPDOWN,
+  SPLITBUTTON,
 }
 
 export class NavigationEvent {
@@ -99,6 +100,17 @@ export const SAVE_LIST_CONTROL = new NavigationControl(
   hasNoContact,
 );
 
+const SPLIT_BUTTON_CONTROL = new NavigationControl(
+  NavigationAction.SAVE,
+  NavigationDestination.LIST,
+  'Save',
+  'p-button-primary',
+  hasNoContact,
+  undefined,
+  undefined,
+  ControlType.SPLITBUTTON,
+);
+
 export const SAVE_DOUBLE_ENTRY_LIST_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.LIST,
@@ -159,7 +171,7 @@ export class TransactionNavigationControls {
 /**
  * Standard set of form buttons used across non-child transaction types.
  */
-export const STANDARD_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
+export const STANDARD_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SPLIT_BUTTON_CONTROL]);
 
 /**
  * Standard set of form buttons used across double-entry transaction forms.

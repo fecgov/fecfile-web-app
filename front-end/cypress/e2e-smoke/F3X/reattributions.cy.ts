@@ -23,7 +23,7 @@ const reattributeData: ScheduleFormData = {
 
 function Reattribute(result: any, old = false) {
   cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**/').as('GetTransaction');
-  PageUtils.clickKababItem(' 11(a)(ii) ', 'Reattribute');
+  PageUtils.clickKababItem('11(a)(ii)', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
     const selector = cy.get(alias).find('#report-selector');
@@ -41,7 +41,7 @@ function Reattribute(result: any, old = false) {
     'contribution_date',
   );
 
-  PageUtils.clickButton('Save');
+  PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
   PageUtils.urlCheck('/list');
   cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
@@ -55,21 +55,12 @@ describe('Reattributions', () => {
     DataSetup({ individual: true, candidate: true }).then((result: any) => {
       const receipt = buildScheduleA('INDIVIDUAL_RECEIPT', 100.55, '2025-04-12', result.individual, result.report);
       makeTransaction(receipt, () => {
-        ReportListPage.goToReportList(result.report);
+        ReportListPage.gotToReportTransactionListPage(result.report);
         Reattribute(result);
       });
     });
   });
   // Test disabled until a mock is set up for submitting a report.
-  // xit('should test reattributing a Schedule A in a submitted report', () => {
-  //   // Create an individual contact to be used with contact lookup
-  //   ContactListPage.createIndividual(assignee);
-  //   CreateReceipt();
-  //   ReportListPage.createF3X(reportFormDataJuly);
-  //   ReportListPage.submitReport(APRIL_15);
-  //   ReportListPage.editReport(APRIL_15, 'Review');
-  //   PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
-  //   cy.wait(500);
-  //   Reattribute(true);
-  // });
+  xit('should test reattributing a Schedule A in a submitted report', () => {
+  });
 });

@@ -102,7 +102,7 @@ describe('Manage reports', () => {
         excludeIds.push(candidates[index].id!);
       }
 
-      PageUtils.clickButton('Save and continue');
+      PageUtils.clickButton('Save and continue', '[data-cy="save-cancel-actions"]:visible');
       cy.get('[data-cy="print-preview"]').should('exist');
 
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
@@ -112,7 +112,7 @@ describe('Manage reports', () => {
       PageUtils.clickSidebarItem('Add a report level memo');
       const memoText = faker.lorem.sentence({ min: 1, max: 4 });
       ReportLevelMemoPage.enterFormData(memoText);
-      PageUtils.clickButton('Save & continue');
+      PageUtils.clickButton('Save & continue', '[data-cy="report-level-memo-actions"]:visible');
 
       // Verify it is still there when we go back to the page
       PageUtils.clickSidebarSection('REVIEW A REPORT');

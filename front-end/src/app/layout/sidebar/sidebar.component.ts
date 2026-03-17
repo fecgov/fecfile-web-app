@@ -12,7 +12,6 @@ import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ReportSidebarSection } from './menu-info';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
-import { getFormTypes } from 'app/shared/utils/form-type.utils';
 
 @Component({
   selector: 'app-drawer',
@@ -38,7 +37,6 @@ export class SidebarComponent {
 
   readonly formLabel = computed(() => this.report().formLabel);
   readonly subHeading = computed(() => {
-    if (this.report().report_type === ReportTypes.F99) return getFormTypes(false).get(ReportTypes.F99)!.description!;
     return this.report().report_code_label;
   });
   readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));

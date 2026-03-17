@@ -33,7 +33,7 @@ export class ErrorMessagesComponent implements OnInit {
     if (this._duplicateNameErrorMessage) {
       return this._duplicateNameErrorMessage;
     }
-    return 'This name is already in use. Please choose a different name';
+    return 'This name is already in use. Please choose a different name.';
   }
 
   private _emailErrorMessage = '';
