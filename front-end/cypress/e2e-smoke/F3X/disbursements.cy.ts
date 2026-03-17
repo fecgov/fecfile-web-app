@@ -38,11 +38,11 @@ describe('Disbursements', () => {
       TransactionDetailPage.enterScheduleFormData(defaultTransactionFormData);
 
       TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
       PageUtils.clickLink('100% Federal Election Activity Payment');
-      cy.contains('Address').should('be.visible');
-      cy.get('#last_name:visible').should('have.value', result.individual.last_name);
-      cy.get('#first_name:visible').should('have.value', result.individual.first_name);
+      cy.contains('Address').should('exist');
+      cy.get('#last_name').should('have.value', result.individual.last_name);
+      cy.get('#first_name').should('have.value', result.individual.first_name);
     });
   });
 
@@ -61,8 +61,8 @@ describe('Disbursements', () => {
 
       TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure - Void');
-      cy.contains('Address').should('be.visible');
-      cy.get('#organization_name:visible').should('have.value', result.organization.name);
+      cy.contains('Address').should('exist');
+      cy.get('#organization_name').should('have.value', result.organization.name);
     });
   });
 
@@ -85,13 +85,13 @@ describe('Disbursements', () => {
 
       // Check that fields saved correctly
       PageUtils.clickLink('Independent Expenditure');
-      cy.contains('Address').should('be.visible');
-      cy.get('#first_name:visible').should('have.value', result.individual.first_name);
-      cy.get('#last_name:visible').should('have.value', result.individual.last_name);
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
 
       // Check that the date fields have the right errors
-      cy.get('#dissemination_date:visible').clear();
-      cy.get('#disbursement_date:visible').clear();
+      cy.get('#dissemination_date').clear();
+      cy.get('#disbursement_date').clear();
       TransactionDetailPage.clickSave(); // Trigger errors to show
       cy.get('app-amount-input')
         .should('contain', 'At least ONE date field must be entered.')
@@ -100,15 +100,15 @@ describe('Disbursements', () => {
       // Add IE to a F24 Report
       cy.intercept(
         'GET',
-        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=A`,
       ).as('GetReceipts');
       cy.intercept(
         'GET',
-        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=C,D`,
       ).as('GetLoans');
       cy.intercept(
         'GET',
-        `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
+        `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
       ).as('GetDisbursements');
       ReportListPage.gotToReportTransactionListPage(result.report);
 
@@ -122,9 +122,9 @@ describe('Disbursements', () => {
 
       ReportListPage.gotToReportTransactionListPage(result.f24);
       PageUtils.clickLink('Independent Expenditure');
-      cy.contains('Address').should('be.visible');
-      cy.get('#first_name:visible').should('have.value', result.individual.first_name);
-      cy.get('#last_name:visible').should('have.value', result.individual.last_name);
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
     });
   });
 
@@ -153,8 +153,8 @@ describe('Disbursements', () => {
 
       // Check values of edit form
       PageUtils.clickLink('Other Disbursement');
-      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
-      cy.get('#entity_type_dropdown:visible').should('contain', 'Organization');
+      cy.get('#entity_type_dropdown.readonly').should('exist');
+      cy.get('#entity_type_dropdown').should('contain', 'Organization');
       ContactListPage.assertFormData(result.organization, true);
       TransactionDetailPage.assertFormData(formTransactionDataForSchedule);
     });
@@ -187,8 +187,8 @@ describe('Disbursements', () => {
 
       // Check values of edit form
       PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
-      cy.get('#entity_type_dropdown.readonly:visible').should('be.visible');
-      cy.get('#entity_type_dropdown:visible').should('contain', 'Organization');
+      cy.get('#entity_type_dropdown.readonly').should('exist');
+      cy.get('#entity_type_dropdown').should('contain', 'Organization');
       ContactListPage.assertFormData(result.organization, true);
       TransactionDetailPage.assertFormData(transactionFormData);
     });

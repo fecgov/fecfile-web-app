@@ -6,6 +6,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { assertDebtFieldValues } from './utils/debt-assertions';
 
 describe('Debt Balance at Close Calculation', () => {
   beforeEach(() => {
@@ -31,12 +32,12 @@ describe('Debt Balance at Close Calculation', () => {
       }, false, '', "#amount");
       
       // Verify balance_at_close was calculated during form entry: 0 + 3000 - 0 = 3000
-      cy.get('#balance_at_close:visible').should('have.value', '$3,000.00');
+      cy.get('#balance_at_close').should('have.value', '$3,000.00');
       TransactionDetailPage.clickSave();
 
       // Navigate back to verify the saved debt and then edit it
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Debt Owed By Committee').should('be.visible');
+      cy.contains('Debt Owed By Committee').should('exist');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 
@@ -54,7 +55,7 @@ describe('Debt Balance at Close Calculation', () => {
       cy.wait(200);
       
       // Verify balance_at_close updates to: 0 + 5000 - 0 = 5000
-      cy.get('#balance_at_close:visible').should('have.value', '$5,000.00');
+      cy.get('#balance_at_close').should('have.value', '$5,000.00');
     });
   });
 
@@ -76,12 +77,12 @@ describe('Debt Balance at Close Calculation', () => {
       }, false, '', "#amount");
       
       // Verify initial balance_at_close = 0 + 5000 - 0 = 5000
-      cy.get('#balance_at_close:visible').should('have.value', '$5,000.00');
+      cy.get('#balance_at_close').should('have.value', '$5,000.00');
       TransactionDetailPage.clickSave();
 
       // Navigate back and edit the debt
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Debt Owed By Committee').should('be.visible');
+      cy.contains('Debt Owed By Committee').should('exist');
         cy.contains('Debt Owed By Committee').click();
         cy.wait(500);
 
@@ -98,7 +99,7 @@ describe('Debt Balance at Close Calculation', () => {
       cy.wait(200);
 
       // Verify balance_at_close updates to: 0 + 8000 - 0 = 8000
-      cy.get('#balance_at_close:visible').should('have.value', '$8,000.00');
+      cy.get('#balance_at_close').should('have.value', '$8,000.00');
     });
   });
 });

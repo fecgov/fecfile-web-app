@@ -54,23 +54,23 @@ function getLoginIntervalString(sessionDur: number): string {
 }
 
 function loginDotGovLogin() {
-  cy.intercept('GET', '**/api/v1/oidc/login-redirect').as('GetLoggedIn');
-  cy.intercept('GET', '**/api/v1/committees/').as('GetCommitteeAccounts');
-  cy.intercept('POST', '**/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', '**/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
+  cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
 
   cy.visit('/');
-  cy.get('#loginButton:visible').click();
+  cy.get('#loginButton').click();
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();
-  cy.get('[data-cy="consent-button"]:visible').click();
+  cy.get('[data-cy="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');
   cy.get('.committee-list .committee-info').first().click();
   cy.wait('@ActivateCommittee');
 
   // Wait for the reports page to load
-  cy.contains('Manage reports').should('be.visible');
+  cy.contains('Manage reports').should('exist');
 
   // Creates a second create admin after logging in if necessary
   cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve

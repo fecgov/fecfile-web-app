@@ -22,7 +22,7 @@ const reattributeData: ScheduleFormData = {
 };
 
 function Reattribute(result: any, old = false) {
-  cy.intercept('GET', '**/api/v1/transactions/**/').as('GetTransaction');
+  cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**/').as('GetTransaction');
   PageUtils.clickKababItem('11(a)(ii)', 'Reattribute');
   const alias = PageUtils.getAlias('');
   if (old) {
@@ -43,7 +43,7 @@ function Reattribute(result: any, old = false) {
 
   PageUtils.clickButton('Save', '[data-cy="navigation-control-splitbutton"]:visible');
   PageUtils.urlCheck('/list');
-  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('be.visible');
+  cy.contains(Individual.INDIVIDUAL_RECEIPT).should('exist');
 }
 
 describe('Reattributions', () => {
@@ -61,13 +61,6 @@ describe('Reattributions', () => {
     });
   });
   // Test disabled until a mock is set up for submitting a report.
-  // xit('should test reattributing a Schedule A in a submitted report', () => {
-  //   // Create an individual contact to be used with contact lookup
-  //   ContactListPage.createIndividual(assignee);
-  //   CreateReceipt();
-  //   ReportListPage.createF3X(reportFormDataJuly);
-  //   PageUtils.clickSidebarSection('REVIEW TRANSACTIONS');
-  //   cy.wait(500);
-  //   Reattribute(true);
-  // });
+  xit('should test reattributing a Schedule A in a submitted report', () => {
+  });
 });

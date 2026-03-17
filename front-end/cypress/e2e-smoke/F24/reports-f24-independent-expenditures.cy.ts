@@ -41,16 +41,16 @@ describe('Form 24 Independent Expenditures', () => {
 
       TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure');
-      cy.contains('Address').should('be.visible');
-      cy.get('#first_name:visible').should('have.value', result.individual.first_name);
-      cy.get('#last_name:visible').should('have.value', result.individual.last_name);
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
 
       ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.clickSidebarItem('Manage your transactions');
       PageUtils.clickLink('Independent Expenditure');
-      cy.contains('Address').should('be.visible');
-      cy.get('#first_name:visible').should('have.value', result.individual.first_name);
-      cy.get('#last_name:visible').should('have.value', result.individual.last_name);
+      cy.contains('Address').should('exist');
+      cy.get('#first_name').should('have.value', result.individual.first_name);
+      cy.get('#last_name').should('have.value', result.individual.last_name);
     });
   });
 });

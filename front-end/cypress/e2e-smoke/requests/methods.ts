@@ -5,7 +5,7 @@ import { F3X, F24 } from './library/reports';
 export function makeF3x(f3x: F3X, callback = (response: Cypress.Response<any>) => {}) {
   makeRequestToAPI(
     'POST',
-    '**/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
+    'http://localhost:8080/api/v1/reports/form-3x/?fields_to_validate=filing_frequency',
     f3x,
     callback,
   );
@@ -14,18 +14,18 @@ export function makeF3x(f3x: F3X, callback = (response: Cypress.Response<any>) =
 export function makeF24(f24: F24, callback = (response: Cypress.Response<any>) => {}) {
   makeRequestToAPI(
     'POST',
-    '**/api/v1/reports/form-24/?fields_to_validate=report_type_24_48',
+    'http://localhost:8080/api/v1/reports/form-24/?fields_to_validate=report_type_24_48',
     f24,
     callback,
   );
 }
 
 export function makeContact(contact: MockContact, callback = (response: Cypress.Response<any>) => {}) {
-  makeRequestToAPI('POST', '**/api/v1/contacts/', contact, callback);
+  makeRequestToAPI('POST', 'http://localhost:8080/api/v1/contacts/', contact, callback);
 }
 
 export function makeTransaction(transaction: any, callback = (response: Cypress.Response<any>) => {}) {
-  makeRequestToAPI('POST', '**/api/v1/transactions/', transaction, callback);
+  makeRequestToAPI('POST', 'http://localhost:8080/api/v1/transactions/', transaction, callback);
 }
 
 function makeRequestToAPI(
@@ -46,7 +46,7 @@ function makeRequestToAPI(
 
     cy.request({
       method: method,
-      url: url.startsWith('**/') ? `http://localhost:8080/${url.slice(3)}` : url,
+      url: url,
       body: body,
       headers: {
         Cookie: cookie_obj,

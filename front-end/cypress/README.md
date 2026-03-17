@@ -3,7 +3,7 @@
 ## Overview
 - Specs live in `cypress/e2e-smoke` and `cypress/e2e-extended`
 - the configuration file is `front-end/cypress.config.ts`
-- Tests drive the app at `http://localhost:4200` and hit the API at `**`
+- Tests drive the app at `http://localhost:4200` and hit the API at `http://localhost:8080`
 - The `Initialize()` helper (used by many specs in a beforeEach hook) logs in and purges reports and contacts on startup, so use a dedicated E2E database
 - make sure you're checked out to the same branch name for both `fecfile-web-api` and `fecfile-web-app`, i.e. `feature/0123-identifying-details`
 
@@ -210,7 +210,7 @@ When a 5xx occurs, Cypress writes a JSON artifact under `cypress/artifacts/backe
 
 - **404 or 500 on `/api/v1/contacts/e2e-delete-all-contacts/`**: `E2E_TEST` is false. Set it in `fecfile-web-api/.env` or run `E2E_TEST=True docker compose up` from `fecfile-web-api`.
 - **Cypress can't reach `http://localhost:4200`**: the Angular dev server isn't running. Start it with `npm start` or `npm run local` from `fecfile-web-app/front-end`.
-- **Cypress can't reach `**`**: backend is not running or compose is down. Start it with `docker compose up` from `fecfile-web-api`.
+- **Cypress can't reach `http://localhost:8080`**: backend is not running or compose is down. Start it with `docker compose up` from `fecfile-web-api`.
 - **Clear Cypress cache**: from `fecfile-web-app/front-end`
 
   ```bash

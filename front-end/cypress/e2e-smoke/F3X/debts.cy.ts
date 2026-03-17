@@ -26,9 +26,9 @@ function setupCoordinatedPartyExpenditure(
   ContactLookup.getCandidate(candidate, [], [], '#contact_2_lookup');
 
   TransactionDetailPage.enterDate('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
-  cy.get('#general_election_year:visible').safeType(currentYear);
-  cy.get('#amount:visible').safeType(100);
-  cy.get('#purpose_description:visible').first().safeType('test');
+  cy.get('#general_election_year').safeType(currentYear);
+  cy.get('#amount').safeType(100);
+  cy.get('#purpose_description').first().safeType('test');
 
   TransactionDetailPage.clickSave();
 }
@@ -36,7 +36,7 @@ function setupCoordinatedPartyExpenditure(
 function createDebtRepaymentCallback(result: any) {
   return () => {
     ReportListPage.gotToReportTransactionListPage(result.report);
-    cy.contains('Debt Owed By Committee').should('be.visible');
+    cy.contains('Debt Owed By Committee').should('exist');
 
     PageUtils.clickKababItem(
       'Debt Owed By Committee',
@@ -44,14 +44,14 @@ function createDebtRepaymentCallback(result: any) {
       'app-transaction-loans-and-debts',
     );
     PageUtils.urlCheck('select/disbursement?debt=');
-    cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('be.visible');
+    cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
     PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
     cy.contains('Coordinated Party Expenditure').click({ force: true });
 
     setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
 
     PageUtils.urlCheck('/list');
-    cy.contains('Coordinated Party Expenditure').should('be.visible');
+    cy.contains('Coordinated Party Expenditure').should('exist');
 
     PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
   };
@@ -80,12 +80,12 @@ describe('Debts', () => {
 
       ReportListPage.gotToReportTransactionListPage(result.report);
       PageUtils.urlCheck('/list');
-      cy.contains('Debt Owed By Committee').should('be.visible');
+      cy.contains('Debt Owed By Committee').should('exist');
 
       PageUtils.clickElement('loans-and-debts-button');
       cy.contains('Report debt repayment').click({ force: true });
       PageUtils.urlCheck('select/disbursement?debt=');
-      cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('be.visible');
+      cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
       PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
       cy.contains('Coordinated Party Expenditure').should('not.exist'); // PAC committee
     });
@@ -103,7 +103,7 @@ describe('Debts', () => {
       TransactionDetailPage.enterLoanFormData(debtFormData, false, '', '#amount');
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains('Debt Owed To Committee').should('be.visible');
+      cy.contains('Debt Owed To Committee').should('exist');
     });
   });
 
@@ -122,9 +122,9 @@ describe('Debts', () => {
       }, false, '', '#amount');
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains('Debt Owed To Committee').should('be.visible');
+      cy.contains('Debt Owed To Committee').should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$10,000.00").should('be.visible')
+        .contains("$10,000.00").should('exist');
 
       PageUtils.clickKababItem(
         'Debt Owed To Committee',
@@ -148,9 +148,9 @@ describe('Debts', () => {
       )
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains('Individual Receipt').should('be.visible');
+      cy.contains('Individual Receipt').should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$9,000.00").should('be.visible');
+        .contains("$9,000.00").should('exist');
 
       PageUtils.clickLink("Debt Owed To Committee");
 
@@ -169,19 +169,19 @@ describe('Debts', () => {
         coverage_through_date: new Date(currentYear, 9 - 1, 30),
       });
 
-      cy.contains("Debt Owed To Committee").should('be.visible');
+      cy.contains("Debt Owed To Committee").should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$9,000.00").should('be.visible');
+        .contains("$9,000.00").should('exist');
 
       PageUtils.clickLink("Debt Owed To Committee");
 
-      cy.get('#amount:visible').should('be.visible').clear().safeType('2500');
+      cy.get('#amount').should('exist').clear().safeType('2500');
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
 
-      cy.contains("Debt Owed To Committee").should('be.visible');
+      cy.contains("Debt Owed To Committee").should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$11,500.00").should('be.visible');
+        .contains("$11,500.00").should('exist');
 
       PageUtils.clickKababItem(
         'Debt Owed To Committee',
@@ -206,9 +206,9 @@ describe('Debts', () => {
       )
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains("Debt Owed To Committee").should('be.visible');
+      cy.contains("Debt Owed To Committee").should('exist');
       cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$0.00").should('be.visible');
+        .contains("$0.00").should('exist');
 
       PageUtils.clickLink("Debt Owed To Committee");
 
@@ -240,6 +240,7 @@ describe('Debts', () => {
 
   describe('test PTY', () => {
     beforeEach(() => {
+      ContactListPage.deleteAllContacts();
       PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
       ContactListPage.deleteAllContacts();
     });

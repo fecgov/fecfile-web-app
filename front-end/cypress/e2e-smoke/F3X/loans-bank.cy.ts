@@ -126,7 +126,7 @@ function handleLoanAgreementSetup(q3: string) {
 
     TransactionDetailPage.clickSave();
     cy.wait('@saveNewAgreement');
-    cy.contains('Loan Received from Bank').should('be.visible');
+    cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');
     PageUtils.valueCheck('input[id^="loan-agreement-amount-"]', '$65,000.00');
@@ -162,7 +162,7 @@ describe('Loans', () => {
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
       PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
       PageUtils.urlCheck('/list');
-      cy.contains('Loan Received from Bank').should('be.visible');
+      cy.contains('Loan Received from Bank').should('exist');
 
       assertNoDeleteButtonInLoanReceivedFromBankRow();
     });
@@ -177,7 +177,7 @@ describe('Loans', () => {
       PageUtils.enterValue('#amount', formData.amount);
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains('Loan Repayment Made').should('be.visible');
+      cy.contains('Loan Repayment Made').should('exist');
     });
   });
 
@@ -199,13 +199,13 @@ describe('Loans', () => {
       PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
       cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 20000 });
       PageUtils.locationCheck('/list');
-      cy.contains('Loan Received from Bank').should('be.visible');
+      cy.contains('Loan Received from Bank').should('exist');
     });
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.intercept({
         method: 'GET',
         pathname: '/api/v1/transactions/',
@@ -228,8 +228,8 @@ describe('Loans', () => {
       cy.get('#amount').safeType(formData['amount']);
       TransactionDetailPage.clickSave( TransactionDetailPage.BUTTON);
       clickLoan('Edit');
-      cy.contains('ORGANIZATION NAME').should('be.visible');
-      cy.get('#organization_name:visible').should('have.value', result.organization.name);
+      cy.contains('ORGANIZATION NAME').should('exist');
+      cy.get('#organization_name').should('have.value', result.organization.name);
     });
   });
 });

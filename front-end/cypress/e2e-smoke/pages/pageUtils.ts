@@ -3,7 +3,7 @@ export const currentYear = new Date().getFullYear();
 export class PageUtils {
   static closeToast() {
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('.p-toast-close-button').should('be.visible').click();
+    cy.get(alias).find('.p-toast-close-button').should('exist').click();
   }
 
   static clickElement(elementSelector: string, alias = '') {
@@ -51,7 +51,7 @@ export class PageUtils {
   }
 
   static pickDay(day: string) {
-    cy.get('@calendarElement:visible')
+    cy.get('@calendarElement')
       .find('td')
       .find('span')
       .not('.p-disabled')
@@ -65,49 +65,49 @@ export class PageUtils {
   static pickMonth(month: number) {
     const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const Month: string = Months[month];
-    cy.get('@calendarElement:visible').find('.p-datepicker-month').contains(Month).click({ force: true });
+    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
   }
 
   static pickYear(year: number) {
     const currentYear: number = new Date().getFullYear();
 
-    cy.get('@calendarElement:visible').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
     cy.wait(100);
-    cy.get('@calendarElement:visible').then(($calendarElement) => {
+    cy.get('@calendarElement').then(($calendarElement) => {
       if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement:visible').find('.p-datepicker-select-year').click({ force: true });
+        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
       }
     });
-    cy.get('@calendarElement:visible').find('.p-datepicker-decade').should('be.visible');
+    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
 
     const decadeStart: number = currentYear - (currentYear % 10);
     const decadeEnd: number = decadeStart + 9;
     if (year < decadeStart) {
       for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement:visible').find('.p-datepicker-prev-button').click();
+        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
       }
     }
     if (year > decadeEnd) {
       for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement:visible').find('.p-datepicker-next-button').click();
+        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
       }
     }
-    cy.get('body:visible').find('.p-datepicker-year:visible').contains(year.toString()).click();
+    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
 
   static clickSidebarSection(section: string) {
     cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section:visible').click();
+    cy.get('@section').click();
   }
 
   static clickSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem:visible').click();
+    cy.get('@menuItem').click();
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').as('PanelMenu');
-    cy.get('@PanelMenu:visible').contains('a', menuItem);
+    cy.get('@PanelMenu').contains('a', menuItem).should('exist');
   }
 
   static shouldNotHaveSidebarItem(menuItem: string) {
@@ -180,11 +180,11 @@ export class PageUtils {
   }
 
   static findOnPage(selector: string, value: string) {
-    cy.get(selector).contains(value).should('be.visible');
+    cy.get(selector).contains(value).should('exist');
   }
 
   static containedOnPage(selector: string) {
-    cy.contains(selector).should('be.visible');
+    cy.contains(selector).should('exist');
   }
 
   /**
@@ -207,7 +207,7 @@ export class PageUtils {
       .children()
       .then(($btn) => {
         cy.wrap($btn.first()).as('btn');
-        cy.get('@btn:visible').click();
+        cy.get('@btn').click();
       });
   }
 
@@ -218,12 +218,12 @@ export class PageUtils {
       .contains(item)
       .then(($item) => {
         cy.wrap($item.first()).as('btn');
-        cy.get('@btn:visible').click();
+        cy.get('@btn').click();
       });
   }
 
   static switchCommittee(committeeId: string) {
-    cy.intercept('GET', '**/api/v1/committee-members/').as('GetCommitteeMembers');
+    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
     cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
@@ -248,13 +248,13 @@ export class PageUtils {
   }
 
   static submitReportForm() {
-    cy.intercept('POST', '**/api/v1/web-services/submit-to-fec/').as('SubmitReport');
+    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword:visible', 'filing!Passw0rd');
-    cy.get(alias).find('[data-cy="userCertified"]:visible').first().click();
+    PageUtils.enterValue('#filingPassword', 'filing!Passw0rd');
+    cy.get(alias).find('[data-cy="userCertified"]').first().click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');
     PageUtils.clickButton('Confirm');

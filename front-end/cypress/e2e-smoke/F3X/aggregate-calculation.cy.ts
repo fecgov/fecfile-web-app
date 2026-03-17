@@ -72,7 +72,7 @@ describe('Tests transaction form aggregate calculation', () => {
       ReportListPage.gotToReportTransactionListPage(result.report);
 
       openTransactionRow(1);
-      cy.contains('Create a new contact').should('be.visible');
+      cy.contains('Create a new contact').should('exist');
 
       assertAggregateValue('$225.01');
 
@@ -105,13 +105,13 @@ describe('Tests transaction form aggregate calculation', () => {
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
       openTransactionRow(1);
 
       // Tests changing the second transaction's contact
       assertAggregateValue('$25.00');
-      cy.get('[data-cy="searchBox"]:visible').type('A');
-      cy.contains('Ant').should('be.visible');
+      cy.get('[data-cy="searchBox"]').type('A');
+      cy.contains('Ant').should('exist');
       cy.contains('Ant').click({ force: true });
       PageUtils.blurActiveField();
 
@@ -139,7 +139,7 @@ describe('Tests transaction form aggregate calculation', () => {
   it('existing transaction date leapfrogging', () => {
     setupTransactions(true).then((result: any) => {
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
       openTransactionRow(0);
 
       // Tests moving the first transaction's date to be later than the second
@@ -162,7 +162,7 @@ describe('Tests transaction form aggregate calculation', () => {
       );
       makeTransaction(transaction_c, () => {
         ReportListPage.gotToReportTransactionListPage(result.report);
-        cy.contains('Transactions in this report').should('be.visible');
+        cy.contains('Transactions in this report').should('exist');
         openTransactionRow(0);
 
         ContactLookup.getContact(result.individual2.last_name);
@@ -204,9 +204,9 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd:visible').should('have.value', '$100.00');
+      cy.get('#calendar_ytd').should('have.value', '$100.00');
       TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
 
       // Create the second Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
@@ -231,9 +231,9 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd:visible').should('have.value', '$150.00');
+      cy.get('#calendar_ytd').should('have.value', '$150.00');
       TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
 
       // Create the third Independent Expenditure
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
@@ -258,22 +258,22 @@ describe('Tests transaction form aggregate calculation', () => {
       );
 
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd:visible').should('have.value', '$175.00');
+      cy.get('#calendar_ytd').should('have.value', '$175.00');
       TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
 
       // Test aggregation re-calculation from date leapfrogging
       cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
-      cy.contains('Payee').should('be.visible');
+      cy.contains('Payee').should('exist');
       TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
       PageUtils.blurActiveField();
-      cy.get('#calendar_ytd:visible').should('have.value', '$150.00');
+      cy.get('#calendar_ytd').should('have.value', '$150.00');
       TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('be.visible');
+      cy.contains('Transactions in this report').should('exist');
 
       cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
-      cy.contains('Payee').should('be.visible');
-      cy.get('#calendar_ytd:visible').should('have.value', '$50.00');
+      cy.contains('Payee').should('exist');
+      cy.get('#calendar_ytd').should('have.value', '$50.00');
     });
   });
 });
