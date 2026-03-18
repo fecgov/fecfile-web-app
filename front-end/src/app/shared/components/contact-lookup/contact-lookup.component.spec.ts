@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, provideZoneChangeDetection } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -50,6 +50,7 @@ describe('ContactLookupComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideZoneChangeDetection(),
         FormBuilder,
         ContactService,
         EventEmitter,

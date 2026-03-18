@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, provideZoneChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -37,6 +37,7 @@ describe('TransactionContactLookupComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideZoneChangeDetection(),
         ConfirmationService,
         FormBuilder,
         EventEmitter,

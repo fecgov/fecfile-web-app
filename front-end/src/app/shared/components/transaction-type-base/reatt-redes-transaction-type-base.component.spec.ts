@@ -23,8 +23,8 @@ import { provideRouter } from '@angular/router';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Form3X } from 'app/shared/models';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -40,9 +40,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
       providers: [
         provideMockStore(testMockStore()),
         provideHttpClient(),
+        provideZoneChangeDetection(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
         DatePipe,
         MessageService,
         FormBuilder,

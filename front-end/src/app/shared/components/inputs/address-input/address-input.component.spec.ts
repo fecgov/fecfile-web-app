@@ -5,7 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { AddressInputComponent } from './address-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Component, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 
 const testTemplateMap = {
   street_1: 'street_1',
@@ -68,6 +68,7 @@ describe('AddressInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SelectModule, InputTextModule, ReactiveFormsModule, TestHostComponent, ErrorMessagesComponent],
+      providers: [provideZoneChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

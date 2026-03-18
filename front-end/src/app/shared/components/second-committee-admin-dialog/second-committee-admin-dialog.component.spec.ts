@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('SecondCommitteeAdminDialogComponent', () => {
   let component: SecondCommitteeAdminDialogComponent;
@@ -35,6 +36,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideZoneChangeDetection(),
         provideMockStore(testMockStore()),
         CommitteeMemberService,
         { provide: MessageService, useValue: messageService },

@@ -15,7 +15,7 @@ import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.s
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
 import { ScheduleCTransactionTypes } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 
@@ -50,6 +50,7 @@ describe('TransactionGuarantorsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ToolbarModule, TableModule, SelectModule, FormsModule, TransactionGuarantorsComponent],
       providers: [
+        provideZoneChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,

@@ -18,6 +18,7 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -41,6 +42,7 @@ describe('ContactDialogComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideZoneChangeDetection(),
         ConfirmationService,
         FormBuilder,
         provideMockStore(testMockStore()),

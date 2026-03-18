@@ -23,8 +23,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideZoneChangeDetection } from '@angular/core';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
@@ -40,14 +39,13 @@ describe('TripleTransactionTypeBaseComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TripleTransactionDetailComponent],
       providers: [
+        provideZoneChangeDetection(),
         DatePipe,
         MessageService,
         FormBuilder,
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
-        provideAnimations(),
         TransactionService,
         ConfirmationService,
         provideMockStore(testMockStore()),

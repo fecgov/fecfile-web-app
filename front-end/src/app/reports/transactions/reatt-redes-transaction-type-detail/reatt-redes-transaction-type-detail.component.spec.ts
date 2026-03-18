@@ -19,7 +19,7 @@ import { ScheduleATransactionTypes } from '../../../shared/models/scha-transacti
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -43,11 +43,11 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
         ReattRedesTransactionTypeDetailComponent,
       ],
       providers: [
+        provideZoneChangeDetection(),
         provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
         MessageService,
         ConfirmationService,
         FormBuilder,

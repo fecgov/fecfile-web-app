@@ -32,7 +32,6 @@ import {
 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TransactionService } from 'app/shared/services/transaction.service';
 
 const mockTransaction = getTestTransactionByType(
@@ -79,7 +78,6 @@ describe('TransactionContainerComponent', () => {
         TransactionDetailComponent,
       ],
       providers: [
-        provideAnimationsAsync(),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),

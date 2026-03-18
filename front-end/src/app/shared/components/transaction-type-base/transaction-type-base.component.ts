@@ -81,7 +81,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     effect(() => {
       const navEvent = this.navigationEvent();
-      if (navEvent) {
+      if (navEvent.transaction) {
         const navigationEvent = cloneNavigationEvent(navEvent);
         this.handleNavigate(navigationEvent);
         this.store.dispatch(navigationEventClearAction());

@@ -31,9 +31,9 @@ import { AggregationGroups, Transaction } from '../../models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { provideZoneChangeDetection } from '@angular/core';
 
 let testTransaction: SchATransaction;
 
@@ -66,7 +66,7 @@ describe('TransactionTypeBaseComponent', () => {
         provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideAnimationsAsync(),
+        provideZoneChangeDetection(),
         DatePipe,
         { provide: Router, useValue: mockRouter },
         {

@@ -24,9 +24,8 @@ import { TransactionType } from '../../models/transaction-type.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
-import { Component, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Form3X, Transaction } from 'app/shared/models';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @Component({
   imports: [DoubleTransactionDetailComponent],
@@ -61,7 +60,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DoubleTransactionDetailComponent],
       providers: [
-        provideAnimationsAsync(),
+        provideZoneChangeDetection(),
         provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),

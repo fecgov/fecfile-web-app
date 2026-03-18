@@ -9,9 +9,9 @@ import { ContactManagementService, ContactManager } from 'app/shared/services/co
 import { provideRouter } from '@angular/router';
 import { ContactTypes, CandidateOfficeTypes, Contact } from '../../models/contact.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom } from 'rxjs';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('ContactModalComponent', () => {
   let component: ContactModalComponent;
@@ -25,11 +25,11 @@ describe('ContactModalComponent', () => {
       imports: [ReactiveFormsModule, ContactModalComponent],
       providers: [
         provideHttpClient(),
+        provideZoneChangeDetection(),
         ContactService,
         ConfirmationService,
         provideRouter([]),
         ContactManagementService,
-        provideAnimationsAsync(),
       ],
     }).compileComponents();
 

@@ -19,7 +19,7 @@ import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Component, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Transaction } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 
@@ -83,7 +83,7 @@ describe('MemoCodeInputComponent', () => {
         Dialog,
         Tooltip,
       ],
-      providers: [provideMockStore(testMockStore()), ConfirmationService],
+      providers: [provideZoneChangeDetection(), provideMockStore(testMockStore()), ConfirmationService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

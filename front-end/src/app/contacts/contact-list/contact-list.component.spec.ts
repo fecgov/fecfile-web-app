@@ -83,178 +83,187 @@ describe('ContactListComponent', () => {
     service = TestBed.inject(ContactService);
     fixture = TestBed.createComponent(ContactListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should test TableAction behavior', () => {
-    const deleteAction = component.rowActions[1];
-    expect(deleteAction.isAvailable(contact)).toBe(true);
-    expect(deleteAction.isEnabled(contact)).toBe(true);
-    contact.has_transaction_or_report = true;
-    expect(deleteAction.isEnabled(contact)).toBe(false);
-  });
-
-  it('#addItem opens the dialog to add an item', () => {
-    component.isNewItem = false;
-    component.addItem();
-    expect(component.isNewItem).toBe(true);
-  });
-
-  it('#editItem opens the dialog to edit an item', () => {
-    component.isNewItem = true;
-    component.editItem(contact);
-    expect(component.isNewItem).toBe(false);
-  });
-
-  it('#displayName returns the contact name', () => {
-    let name = component.displayName(contact);
-    expect(name).toBe('Smith, Jane');
-
-    contact.type = ContactTypes.ORGANIZATION;
-    name = component.displayName(contact);
-    expect(name).toBe('ABC Inc');
-
-    contact.name = undefined;
-    name = component.displayName(contact);
-    expect(name).toBe('');
-  });
-
-  it('#displayFecId returns the contact FEC id', () => {
-    const item = new Contact();
-    item.candidate_id = 'H123';
-    expect(component.displayFecId(item)).toBe('H123');
-
-    item.candidate_id = undefined;
-    item.committee_id = 'C456';
-    expect(component.displayFecId(item)).toBe('C456');
-
-    item.committee_id = undefined;
-    expect(component.displayFecId(item)).toBe('');
-  });
-
-  it('renders contact row and edit link', async () => {
-    const rowContact = testContact();
-    component.items.set([rowContact]);
-    component.totalItems.set(1);
-    component.loading.set(false);
-
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const nameLink = fixture.nativeElement.querySelector('tbody a');
-    expect(nameLink).not.toBeNull();
-    expect(nameLink.textContent).toContain('Smith, Joe');
-
-    const fecIdCell = fixture.nativeElement.querySelector('td.fec-id-column');
-    expect(fecIdCell).not.toBeNull();
-    expect(fecIdCell.textContent).toContain('999');
-
-    const editSpy = spyOn(component, 'editItem');
-    nameLink.click();
-    expect(editSpy).toHaveBeenCalledWith(rowContact);
-  });
-
-  it('#canDeleteItem returns boolean status', () => {
-    const item: Contact = Contact.fromJSON({
-      has_transaction_or_report: false,
+  describe('typical', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
     });
-    let status: boolean = component.canDeleteItem(item);
-    expect(status).toBeTrue();
 
-    item.has_transaction_or_report = true;
-    status = component.canDeleteItem(item);
-    expect(status).toBeFalse();
-  });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
 
-  it('shows restore deleted contacts button when deleted contacts exist', () => {
-    component.restoreContactsButtonIsVisible = true;
-    fixture.detectChanges();
+    it('should test TableAction behavior', () => {
+      const deleteAction = component.rowActions[1];
+      expect(deleteAction.isAvailable(contact)).toBe(true);
+      expect(deleteAction.isEnabled(contact)).toBe(true);
+      contact.has_transaction_or_report = true;
+      expect(deleteAction.isEnabled(contact)).toBe(false);
+    });
 
-    const restoreBtn = fixture.nativeElement.querySelector('button.restore-contact-button');
-    expect(restoreBtn).toBeTruthy();
-  });
+    it('#addItem opens the dialog to add an item', () => {
+      component.isNewItem = false;
+      component.addItem();
+      expect(component.isNewItem).toBe(true);
+    });
 
-  it('#restoreButton should be visible if there is a deleted contact', async () => {
-    expect(component.restoreContactsButtonIsVisible).toBeFalse();
+    it('#editItem opens the dialog to edit an item', () => {
+      component.isNewItem = true;
+      component.editItem(contact);
+      expect(component.isNewItem).toBe(false);
+    });
 
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
+    it('#displayName returns the contact name', () => {
+      let name = component.displayName(contact);
+      expect(name).toBe('Smith, Jane');
+
+      contact.type = ContactTypes.ORGANIZATION;
+      name = component.displayName(contact);
+      expect(name).toBe('ABC Inc');
+
+      contact.name = undefined;
+      name = component.displayName(contact);
+      expect(name).toBe('');
+    });
+
+    it('#displayFecId returns the contact FEC id', () => {
+      const item = new Contact();
+      item.candidate_id = 'H123';
+      expect(component.displayFecId(item)).toBe('H123');
+
+      item.candidate_id = undefined;
+      item.committee_id = 'C456';
+      expect(component.displayFecId(item)).toBe('C456');
+
+      item.committee_id = undefined;
+      expect(component.displayFecId(item)).toBe('');
+    });
+
+    it('renders contact row and edit link', async () => {
+      const rowContact = testContact();
+      component.items.set([rowContact]);
+      component.totalItems.set(1);
+      component.loading.set(false);
+
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const nameLink = fixture.nativeElement.querySelector('tbody a');
+      expect(nameLink).not.toBeNull();
+      expect(nameLink.textContent).toContain('Smith, Joe');
+
+      const fecIdCell = fixture.nativeElement.querySelector('td.fec-id-column');
+      expect(fecIdCell).not.toBeNull();
+      expect(fecIdCell.textContent).toContain('999');
+
+      const editSpy = spyOn(component, 'editItem');
+      nameLink.click();
+      expect(editSpy).toHaveBeenCalledWith(rowContact);
+    });
+
+    it('#canDeleteItem returns boolean status', () => {
+      const item: Contact = Contact.fromJSON({
+        has_transaction_or_report: false,
+      });
+      let status: boolean = component.canDeleteItem(item);
+      expect(status).toBeTrue();
+
+      item.has_transaction_or_report = true;
+      status = component.canDeleteItem(item);
+      expect(status).toBeFalse();
+    });
+
+    it('#restoreButton should be visible if there is a deleted contact', async () => {
+      expect(component.restoreContactsButtonIsVisible).toBeFalse();
+
+      spyOn(deletedContactService, 'getTableData').and.returnValue(
+        Promise.resolve({
+          count: 1,
+          next: '',
+          previous: '',
+          pageNumber: 1,
+          results: [contact],
+        }),
+      );
+      await component.checkForDeletedContacts();
+
+      expect(component.restoreContactsButtonIsVisible).toBeTrue();
+    });
+
+    it('#restoreButton should not be visible if there are no deleted contacts', async () => {
+      component.restoreContactsButtonIsVisible = true;
+
+      spyOn(deletedContactService, 'getTableData').and.returnValue(
+        Promise.resolve({
+          count: 0,
+          next: '',
+          previous: '',
+          pageNumber: 1,
+          results: [],
+        }),
+      );
+      await component.checkForDeletedContacts();
+
+      expect(component.restoreContactsButtonIsVisible).toBeFalse();
+    });
+
+    it('#loadTableItems updates restore button visibility', async () => {
+      spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
+      spyOn(deletedContactService, 'getTableData').and.resolveTo({
         count: 1,
         next: '',
         previous: '',
         pageNumber: 1,
         results: [contact],
-      }),
-    );
-    await component.checkForDeletedContacts();
+      });
 
-    expect(component.restoreContactsButtonIsVisible).toBeTrue();
-  });
+      component.first.set(0);
+      component.rowsPerPage.set(10);
+      await component.loadTableItems();
 
-  it('#restoreButton should not be visible if there are no deleted contacts', async () => {
-    component.restoreContactsButtonIsVisible = true;
-
-    spyOn(deletedContactService, 'getTableData').and.returnValue(
-      Promise.resolve({
-        count: 0,
-        next: '',
-        previous: '',
-        pageNumber: 1,
-        results: [],
-      }),
-    );
-    await component.checkForDeletedContacts();
-
-    expect(component.restoreContactsButtonIsVisible).toBeFalse();
-  });
-
-  it('#loadTableItems updates restore button visibility', async () => {
-    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-    spyOn(deletedContactService, 'getTableData').and.resolveTo({
-      count: 1,
-      next: '',
-      previous: '',
-      pageNumber: 1,
-      results: [contact],
+      expect(component.restoreContactsButtonIsVisible).toBeTrue();
     });
 
-    component.first.set(0);
-    component.rowsPerPage.set(10);
-    await component.loadTableItems();
+    it('#saveContact calls itemService', async () => {
+      const updatedContact = testContact();
+      const createdContact = testContact();
+      createdContact.id = undefined;
 
-    expect(component.restoreContactsButtonIsVisible).toBeTrue();
+      const updatePromise = Promise.resolve(updatedContact);
+      const createPromise = Promise.resolve(createdContact);
+      spyOn(service, 'update').and.returnValue(updatePromise);
+      spyOn(service, 'create').and.returnValue(createPromise);
+      spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
+      const loadSpy = spyOn(component, 'loadTableItems').and.returnValue(Promise.resolve());
+      const toastSpy = spyOn(component.messageService, 'add');
+
+      component.saveContact(updatedContact);
+      await updatePromise;
+      await Promise.resolve();
+
+      expect(service.update).toHaveBeenCalledTimes(1);
+      expect(loadSpy).toHaveBeenCalled();
+      expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Updated');
+
+      component.saveContact(createdContact);
+      await createPromise;
+      await Promise.resolve();
+
+      expect(service.create).toHaveBeenCalledTimes(1);
+      expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Created');
+    });
   });
 
-  it('#saveContact calls itemService', async () => {
-    const updatedContact = testContact();
-    const createdContact = testContact();
-    createdContact.id = undefined;
+  describe('restoreContactsButtonIsVisible true', () => {
+    beforeEach(() => {
+      component.restoreContactsButtonIsVisible = true;
+      fixture.detectChanges();
+    });
 
-    const updatePromise = Promise.resolve(updatedContact);
-    const createPromise = Promise.resolve(createdContact);
-    spyOn(service, 'update').and.returnValue(updatePromise);
-    spyOn(service, 'create').and.returnValue(createPromise);
-    spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-    const loadSpy = spyOn(component, 'loadTableItems').and.returnValue(Promise.resolve());
-    const toastSpy = spyOn(component.messageService, 'add');
-
-    component.saveContact(updatedContact);
-    await updatePromise;
-    await Promise.resolve();
-
-    expect(service.update).toHaveBeenCalledTimes(1);
-    expect(loadSpy).toHaveBeenCalled();
-    expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Updated');
-
-    component.saveContact(createdContact);
-    await createPromise;
-    await Promise.resolve();
-
-    expect(service.create).toHaveBeenCalledTimes(1);
-    expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Created');
+    it('shows restore deleted contacts button when deleted contacts exist', () => {
+      const restoreBtn = fixture.nativeElement.querySelector('button.restore-contact-button');
+      expect(restoreBtn).toBeTruthy();
+    });
   });
 });

@@ -7,7 +7,7 @@ import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
-import { Component, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Transaction } from 'app/shared/models';
 
 @Component({
@@ -55,6 +55,7 @@ describe('AdditionalInfoInputComponent', () => {
         ErrorMessagesComponent,
         DesignatedSubordinateInputComponent,
       ],
+      providers: [provideZoneChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

@@ -28,6 +28,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { firstValueFrom } from 'rxjs';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
@@ -58,6 +59,7 @@ describe('TransactionDetailComponent', () => {
         NavigationControlComponent,
       ],
       providers: [
+        provideZoneChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
