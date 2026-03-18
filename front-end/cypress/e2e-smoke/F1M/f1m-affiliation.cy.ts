@@ -103,7 +103,7 @@ describe('Manage reports', () => {
       }
 
       PageUtils.clickButton('Save and continue', '[data-cy="save-cancel-actions"]:visible');
-      cy.get('[data-cy="print-preview"]').should('exist');
+      cy.get('[data-cy="print-preview"]').should('be.visible');
 
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
       PageUtils.shouldNotHaveSidebarItem('Report Status');
@@ -117,7 +117,8 @@ describe('Manage reports', () => {
       // Verify it is still there when we go back to the page
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
-      cy.get('[id="text4000"]').should('have.value', memoText);
+      cy.get('[id="text4000"]:visible').should('have.value', memoText);
+      PageUtils.clickButton('Save & continue', '[data-cy="report-level-memo-actions"]:visible');
 
       // Submit report and verify report status link now available
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
