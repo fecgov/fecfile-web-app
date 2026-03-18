@@ -1,43 +1,23 @@
-<dialog #selectReportDialog (close)="cancel()">
-  <div tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
-    <div class="dialog-content">
-      <div class="dialog-header">
-        <h1 class="dialog-title" id="dialog-title">Select a report</h1>
-        <button
-          pButton
-          type="button"
-          icon="pi pi-times"
-          id="close-button"
-          (click)="cancel()"
-          aria-label="Cancel"
-        ></button>
-      </div>
-      <div class="dialog-body">
-        <p>
-          Pick the open report on which you would like to {{ actionLabel() }} a contribution or a portion of it to a
-          different {{ actionTargetLabel() }}.
-        </p>
-        <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
-        <select id="report-selector" aria-label="Report selector" [(ngModel)]="selectedReport">
-          <button aria-labelledby="report-selector-label">
-            <selectedcontent></selectedcontent>
-          </button>
-          @for (report of availableReports(); track report) {
-            <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
-          }
-        </select>
-      </div>
-      <div class="dialog-footer">
-        <button pButton pRipple class="p-button-secondary" (click)="selectReportDialog.close()">Cancel</button>
-        <button
-          pButton
-          pRipple
-          class="p-button-primary"
-          [disabled]="!selectedReport"
-          (click)="createReattribution()"
-          label="Continue"
-        ></button>
-      </div>
-    </div>
+<app-dialog
+  [(visible)]="dialogVisible"
+  title="Select a report"
+  submitLabel="Continue"
+  (confirm)="createReattribution()"
+  (reject)="cancel()"
+>
+  <div class="dialog-body">
+    <p>
+      Select the report where you want to {{ actionLabel() }} part of an excessive contribution to a joint
+      {{ actionTargetLabel() }}.
+    </p>
+    <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
+    <select id="report-selector" aria-labelledby="report-selector-label" [(ngModel)]="selectedReport">
+      <button aria-labelledby="report-selector-label">
+        <selectedcontent></selectedcontent>
+      </button>
+      @for (report of availableReports(); track report) {
+        <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
+      }
+    </select>
   </div>
-</dialog>
+</app-dialog>
