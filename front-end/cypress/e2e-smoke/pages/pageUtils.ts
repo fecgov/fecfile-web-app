@@ -96,13 +96,20 @@ export class PageUtils {
   }
 
   static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(':visible',section).parent().as('section');
-    cy.get('@section').should('be.visible').click();
+    cy.contains('p-panelmenu .p-panelmenu-header', section)
+      .closest('.p-panelmenu-panel')
+      .find('.p-panelmenu-header')
+      .as('sectionHeader');
+
+    cy.get('@sectionHeader')
+      .click().then(() => {
+        cy.get('@sectionHeader').should('have.attr', 'data-p-highlight', 'true');
+      });
   }
 
   static clickSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').contains('a:visible', menuItem).as('menuItem');
-    cy.get('@menuItem').should('be.visible').click();
+    cy.get('@menuItem').click();
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -144,7 +151,7 @@ export class PageUtils {
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
     cy.get(alias)
-      .contains('button:visible', name)
+      .contains('button', name)
       .first()
       .click();
   }
@@ -251,6 +258,7 @@ export class PageUtils {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
+    cy.contains('h1', 'Submit report').should('be.visible');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
     PageUtils.enterValue('#filingPassword', 'filing!Passw0rd');
