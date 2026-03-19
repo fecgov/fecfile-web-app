@@ -108,7 +108,7 @@ export class PageUtils {
   }
 
   static clickSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a:visible', menuItem).as('menuItem');
+    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
     cy.get('@menuItem').click();
   }
 
