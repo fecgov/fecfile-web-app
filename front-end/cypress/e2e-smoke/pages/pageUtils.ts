@@ -96,13 +96,13 @@ export class PageUtils {
   }
 
   static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+    cy.get('p-panelmenu').contains(':visible',section).parent().as('section');
+    cy.get('@section').should('be.visible').click();
   }
 
   static clickSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click();
+    cy.get('p-panelmenu').contains('a:visible', menuItem).as('menuItem');
+    cy.get('@menuItem').should('be.visible').click();
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -144,9 +144,9 @@ export class PageUtils {
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
     cy.get(alias)
-      .contains('button', name)
+      .contains('button:visible', name)
       .first()
-      .click({ force });
+      .click();
   }
 
   static dateToString(date: Date) {
