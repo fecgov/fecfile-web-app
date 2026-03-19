@@ -10,11 +10,11 @@
     "@typescript-eslint/eslint-plugin",
     "@typescript-eslint/parser"
   ],
+  "ignore": ["src/test.ts"],
   "workspaces": {
     "front-end": {
       "entry": [
         "src/main.ts",
-        "src/test.ts",
         "src/app/**/*.ts",
         "src/environments/environment*.ts"
       ],
@@ -36,11 +36,6 @@
       "front-end/cypress/support/**/*.{js,ts}"
     ]
   },
-  "karma": {
-    "config": ["karma.conf.js"],
-    "entry": [
-      "src/**/*.spec.ts"
-    ]
-  },
+
   "tags": ["-lintignore"]
 }

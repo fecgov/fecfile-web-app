@@ -1,4 +1,4 @@
-import { discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { PollerService } from './poller.service';
 import { provideHttpClient } from '@angular/common/http';
@@ -8,6 +8,7 @@ describe('PollerService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    vi.useFakeTimers();
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting(), PollerService],
     });
@@ -17,25 +18,19 @@ describe('PollerService', () => {
 
   afterEach(() => {
     httpMock.verify();
+    vi.useRealTimers();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should start polling and call compareVersions', fakeAsync(() => {
-    const compareVersionsSpy = spyOn(service, 'compareVersions').and.callFake(() => Promise.resolve());
-
+  it('should start polling and call compareVersions', async () => {
+    const compareVersionsSpy = vi.spyOn(service, 'compareVersions').mockImplementation(() => Promise.resolve());
     service.startPolling('test-url');
-
-    // Fast-forward time to simulate the interval
-    tick(60000);
-
+    await vi.advanceTimersByTimeAsync(60000);
     expect(compareVersionsSpy).toHaveBeenCalled();
-
-    // Discard the periodic task (interval)
-    discardPeriodicTasks();
-  }));
+  });
 
   it('should stop polling when stopPolling is called', () => {
     service.startPolling('test-url');
@@ -45,7 +40,7 @@ describe('PollerService', () => {
     expect(service.versionCheckSubscription?.closed).toBe(true);
   });
 
-  it('should detect new version available', fakeAsync(() => {
+  it('should detect new version available', () => {
     const mockHtmlResponse = `
       <html>
         <head>
@@ -53,7 +48,7 @@ describe('PollerService', () => {
         </head>
       </html>`;
 
-    spyOn(document, 'getElementsByTagName').and.returnValue([
+    vi.spyOn(document, 'getElementsByTagName').mockReturnValue([
       {
         src: 'http://localhost/main.abc122.js',
       },
@@ -64,12 +59,12 @@ describe('PollerService', () => {
     const req = httpMock.expectOne('test-url');
     req.flush(mockHtmlResponse, { status: 200, statusText: 'OK' });
 
-    tick(); // Fast-forward any pending asynchronous tasks
+    // tick(); // Fast-forward any pending asynchronous tasks
 
     service.isNewVersionAvailable$.subscribe((isAvailable) => {
-      expect(isAvailable).toBeTrue();
+      expect(isAvailable).toBe(true);
     });
-  }));
+  });
 
   it('should handle error in version check', async () => {
     service.compareVersions('test-url');
@@ -78,7 +73,7 @@ describe('PollerService', () => {
     req.error(new ErrorEvent('Network error'), { status: 500 });
 
     service.isNewVersionAvailable$.subscribe((isAvailable) => {
-      expect(isAvailable).toBeFalse();
+      expect(isAvailable).toBe(false);
     });
   });
 });

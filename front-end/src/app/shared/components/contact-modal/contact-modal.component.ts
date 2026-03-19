@@ -138,13 +138,13 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.updateContactType();
   }
 
-  private reset() {
+  reset() {
     this.form.markAsUntouched();
     this.form.markAsPristine();
     this.formSubmitted = false;
   }
 
-  private updateContactType() {
+  updateContactType() {
     const contactType = this.manager().contactType();
 
     // The type form control is not displayed on the form page because we are

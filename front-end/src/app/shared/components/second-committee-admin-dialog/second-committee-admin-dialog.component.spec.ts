@@ -20,11 +20,9 @@ describe('SecondCommitteeAdminDialogComponent', () => {
   let component: SecondCommitteeAdminDialogComponent;
   let fixture: ComponentFixture<SecondCommitteeAdminDialogComponent>;
   let store: Store;
-  let messageService: jasmine.SpyObj<MessageService>;
+  let messageService: MessageService;
 
   beforeEach(async () => {
-    messageService = jasmine.createSpyObj('MessageService', ['add']);
-
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
@@ -39,7 +37,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
         provideZoneChangeDetection(),
         provideMockStore(testMockStore()),
         CommitteeMemberService,
-        { provide: MessageService, useValue: messageService },
+        MessageService,
         CommitteeMemberEmailValidator,
       ],
     }).compileComponents();
@@ -47,6 +45,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     fixture = TestBed.createComponent(SecondCommitteeAdminDialogComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(Store);
+    messageService = TestBed.inject(MessageService);
     fixture.detectChanges();
   });
 
@@ -63,24 +62,25 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     component.form.get('email')?.setValue('');
     component.form.get('email')?.markAsTouched();
     fixture.detectChanges();
-    expect(component.form.invalid).toBeTrue();
+    expect(component.form.invalid).toBe(true);
   });
 
   it('should dispatch singleClickEnableAction when form is invalid on save', async () => {
-    spyOn(store, 'dispatch');
+    vi.spyOn(store, 'dispatch');
     component.form.get('email')?.setValue('');
     await component.submitForm();
     expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
   });
 
   it('should call addMember and show success message on valid form submission', async () => {
-    spyOn(store, 'dispatch');
-    spyOn(component.uniqueEmailValidator.committeeMemberService, 'getMembers').and.resolveTo([]);
+    const messageAddSpy = vi.spyOn(messageService, 'add');
+    vi.spyOn(store, 'dispatch');
+    vi.spyOn(component.uniqueEmailValidator.committeeMemberService, 'getMembers').mockResolvedValue([]);
     component.form.get('email')?.setValue('test@example.com');
-    const addMemberSpy = spyOn(component.memberService, 'addMember').and.resolveTo(new CommitteeMember());
+    const addMemberSpy = vi.spyOn(component.memberService, 'addMember').mockResolvedValue(new CommitteeMember());
     await component.submitForm();
     expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', 'COMMITTEE_ADMINISTRATOR' as unknown as typeof Roles);
-    expect(messageService.add).toHaveBeenCalledWith({
+    expect(messageAddSpy).toHaveBeenCalledWith({
       severity: 'success',
       summary: 'Successful',
       detail: 'Committee Administrator created',

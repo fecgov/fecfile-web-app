@@ -49,33 +49,33 @@ describe('DesignatedSubordinateInputComponent', () => {
   });
 
   it('#onSubordinateCommitteeIdBlur should update subordinate form value/validity on subordinate committee id blur', () => {
-    const formUpdateValueAndValiditySpy = spyOn(component.form, 'updateValueAndValidity');
+    const formUpdateValueAndValiditySpy = vi.spyOn(component.form, 'updateValueAndValidity');
     component.onSubordinateCommitteeIdBlur();
     expect(formUpdateValueAndValiditySpy).toHaveBeenCalledTimes(8);
   });
 
   it('#onDesignatedOrSubordinateChange should clear subordinate committee on true', () => {
-    const clearSubordinateCommitteeSpy = spyOn(component, 'clearSubordinateCommittee');
+    const clearSubordinateCommitteeSpy = vi.spyOn(component, 'clearSubordinateCommittee');
     component.onDesignatedOrSubordinateChange(true);
     expect(clearSubordinateCommitteeSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#onDesignatedOrSubordinateChange should clear designating committee on false', () => {
-    const clearDesignatingCommitteeSpy = spyOn(component, 'clearDesignatingCommittee');
+    const clearDesignatingCommitteeSpy = vi.spyOn(component, 'clearDesignatingCommittee');
     component.onDesignatedOrSubordinateChange(false);
     expect(clearDesignatingCommitteeSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#onDesignatedOrSubordinateChange should clear designating and subordinate committee on null', () => {
-    const clearSubordinateCommitteeSpy = spyOn(component, 'clearSubordinateCommittee');
-    const clearDesignatingCommitteeSpy = spyOn(component, 'clearDesignatingCommittee');
+    const clearSubordinateCommitteeSpy = vi.spyOn(component, 'clearSubordinateCommittee');
+    const clearDesignatingCommitteeSpy = vi.spyOn(component, 'clearDesignatingCommittee');
     component.onDesignatedOrSubordinateChange(null);
     expect(clearSubordinateCommitteeSpy).toHaveBeenCalledTimes(1);
     expect(clearDesignatingCommitteeSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#onDesignatingCommitteeSelect should set designating committee', () => {
-    const designatingCommitteeSelectEmitSpy = spyOn(component.designatingCommitteeSelect, 'emit');
+    const designatingCommitteeSelectEmitSpy = vi.spyOn(component.designatingCommitteeSelect, 'emit');
     const selectItem = {
       label: '',
       value: testContact(),
@@ -89,13 +89,13 @@ describe('DesignatedSubordinateInputComponent', () => {
   });
 
   it('#clearDesignatingCommittee should clear subordinate committee', () => {
-    const designatingCommitteeClearEmitSpy = spyOn(component.designatingCommitteeClear, 'emit');
+    const designatingCommitteeClearEmitSpy = vi.spyOn(component.designatingCommitteeClear, 'emit');
     component.clearDesignatingCommittee();
     expect(designatingCommitteeClearEmitSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#onSubordinateCommitteeSelect should set subordinate committee', () => {
-    const subordinateCommitteeSelectEmitSpy = spyOn(component.subordinateCommitteeSelect, 'emit');
+    const subordinateCommitteeSelectEmitSpy = vi.spyOn(component.subordinateCommitteeSelect, 'emit');
     const selectItem = {
       label: '',
       value: testContact(),
@@ -109,7 +109,7 @@ describe('DesignatedSubordinateInputComponent', () => {
   });
 
   it('#clearSubordinateCommittee should clear subordinate committee', () => {
-    const subordinateCommitteeClearEmitSpy = spyOn(component.subordinateCommitteeClear, 'emit');
+    const subordinateCommitteeClearEmitSpy = vi.spyOn(component.subordinateCommitteeClear, 'emit');
     component.clearSubordinateCommittee();
     expect(subordinateCommitteeClearEmitSpy).toHaveBeenCalledTimes(1);
   });

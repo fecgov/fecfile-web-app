@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -7,7 +8,7 @@ import { CommitteeMemberService } from './committee-member.service';
 import { provideHttpClient } from '@angular/common/http';
 import { ListRestResponse, CommitteeMember, Roles } from '../models';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { ApiService, QueryParams } from './api.service';
+import { ApiService } from './api.service';
 
 describe('CommitteeMemberService', () => {
   let service: CommitteeMemberService;
@@ -89,42 +90,40 @@ describe('CommitteeMemberService', () => {
   });
 
   it('should return true for needsSecondAdmin() if only one committee admin exists', () => {
-    spyOn(service, 'membersSignal').and.returnValue([
+    vi.spyOn(service, 'membersSignal').mockReturnValue([
       CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
 
-    expect(service.needsSecondAdmin()).toBeTrue();
+    expect(service.needsSecondAdmin()).toBe(true);
   });
 
   it('should return false for needsSecondAdmin() if more than one committee admin exists', () => {
     mockStore.overrideSelector(selectUserLoginData, testCommitteeAdminLoginData());
     mockStore.refreshState();
-    spyOn(service, 'membersSignal').and.returnValue([
+    vi.spyOn(service, 'membersSignal').mockReturnValue([
       CommitteeMember.fromJSON({ email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
       CommitteeMember.fromJSON({ email: 'admin2@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
 
-    expect(service.needsSecondAdmin()).toBeFalse();
+    expect(service.needsSecondAdmin()).toBe(false);
   });
 
   it('should return false for needsSecondAdmin() if user is not a committee admin', () => {
-    spyOn(service, 'membersSignal').and.returnValue([
+    vi.spyOn(service, 'membersSignal').mockReturnValue([
       CommitteeMember.fromJSON({ email: 'admin@test.com', role: 'COMMITTEE_ADMINISTRATOR' }),
     ]);
 
-    expect(service.needsSecondAdmin()).toBeFalse();
+    expect(service.needsSecondAdmin()).toBe(false);
   });
 
   it('should update the member signal when updating', async () => {
     const member = CommitteeMember.fromJSON({ id: '1', email: 'admin1@test.com', role: 'COMMITTEE_ADMINISTRATOR' });
     service.membersSignal.set([member]);
     expect(service.membersSignal()[0].role).toBe('COMMITTEE_ADMINISTRATOR');
-    const apiSpy: jasmine.Spy<{
-      <CommitteeMember>(endpoint: string, payload: unknown, queryParams?: QueryParams): Promise<CommitteeMember>;
-    }> = spyOn(apiService, 'put');
-    apiSpy.and.resolveTo({ id: '1', email: 'admin1@test.com', role: 'MANAGER' } as CommitteeMember);
+    const apiSpy: Mock = vi.spyOn(apiService, 'put');
+    apiSpy.mockResolvedValue({ id: '1', email: 'admin1@test.com', role: 'MANAGER' } as CommitteeMember);
 
     await service.update({ ...member, role: 'MANAGER' } as CommitteeMember);
     expect(service.membersSignal()[0].role).toBe('MANAGER');

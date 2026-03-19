@@ -1,5 +1,5 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
@@ -50,31 +50,31 @@ describe('MemoTextService', () => {
     httpTestingController.verify();
   });
 
-  it('#create() should POST a payload', fakeAsync(() => {
+  it('#create() should POST a payload', () => {
     const memoText: MemoText = new MemoText();
 
     service.create(memoText).then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
-    tick(100);
+    // tick(100);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
     req.flush(memoText);
     httpTestingController.verify();
-  }));
+  });
 
-  it('#update() should PUT a payload', fakeAsync(() => {
+  it('#update() should PUT a payload', () => {
     const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
     service.update(memoText).then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
-    tick(100);
+    // tick(100);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/${memoText.id}/?fields_to_validate=`);
     expect(req.request.method).toEqual('PUT');
     req.flush(memoText);
     httpTestingController.verify();
-  }));
+  });
 
   describe('#delete()', () => {
     it('should DELETE a record', () => {

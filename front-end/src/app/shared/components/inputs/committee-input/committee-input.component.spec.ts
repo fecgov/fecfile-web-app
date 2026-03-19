@@ -18,7 +18,7 @@ import { Transaction, ContactTypes } from 'app/shared/models';
     [templateMap]="templateMap"
     [transaction]="transaction"
     entityRole="ORGANIZATION"
-    [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+    [includeFecId]="transaction.transactionType.hasCommitteeFecId()"
   />`,
 })
 class TestHostComponent {

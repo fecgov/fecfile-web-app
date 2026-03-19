@@ -62,7 +62,7 @@ describe('NavigationControlComponent', () => {
 
     it('should dispatch a navigationEvent', () => {
       // spy on event emitter
-      const storeSpy = spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(store, 'dispatch');
 
       // trigger the click
       const nativeElement = fixture.nativeElement;
@@ -76,7 +76,7 @@ describe('NavigationControlComponent', () => {
 
     it('should allow adding another', () => {
       // spy on event emitter
-      const storeSpy = spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(store, 'dispatch');
 
       component.saveAndAddAnother();
 
@@ -122,7 +122,7 @@ describe('NavigationControlComponent', () => {
 
     it('should dispatch a navigationEvent with a transaction', () => {
       // spy on event emitter
-      const storeSpy = spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(store, 'dispatch');
 
       console.log(component.dropdownOptions);
       component.onDropdownChange(component.dropdownOptions()[0]); // simulate selecting the first dropdown option

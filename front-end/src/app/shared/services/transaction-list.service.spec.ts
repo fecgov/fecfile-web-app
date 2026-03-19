@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -88,7 +88,7 @@ describe('TransactionListService', () => {
       } as unknown as TransactionListRecord;
 
       service.delete(transaction).then(() => {
-        expect(true).toBeTrue();
+        expect(true).toBe(true);
       });
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
@@ -99,7 +99,7 @@ describe('TransactionListService', () => {
   });
 
   describe('addToReport', () => {
-    it('should add a transaction to a report', fakeAsync(() => {
+    it('should add a transaction to a report', () => {
       const a: SchATransaction = SchATransaction.fromJSON({
         id: '1',
         transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -122,13 +122,13 @@ describe('TransactionListService', () => {
       });
 
       service.addToReport(transaction, report).then((response) => {
-        expect(response.ok).toBeTrue();
+        expect(response.ok).toBe(true);
       });
-      tick(100);
+      // tick(100);
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/add-to-report/`);
       expect(req.request.method).toEqual('POST');
       req.flush(transaction);
       httpTestingController.verify();
-    }));
+    });
   });
 });

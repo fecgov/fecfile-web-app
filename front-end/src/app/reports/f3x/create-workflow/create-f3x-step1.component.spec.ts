@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import type { Mock } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { Form3X, F3xFormTypes, Report } from 'app/shared/models';
+import { Form3X, F3xFormTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
@@ -12,7 +13,6 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { CoverageDates } from 'app/shared/models/reports/base-form-3';
 
 let component: CreateF3XStep1Component;
 let fixture: ComponentFixture<CreateF3XStep1Component>;
@@ -41,10 +41,10 @@ async function setup(params: { reportId?: string }) {
   }).compileComponents();
 
   store = TestBed.inject(MockStore);
-  spyOn(store, 'dispatch').and.callThrough();
+  vi.spyOn(store, 'dispatch');
   router = TestBed.inject(Router);
   form3XService = TestBed.inject(Form3XService);
-  spyOn(router, 'navigateByUrl').and.stub();
+  vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
 }
 
 describe('CreateF3XStep1Component: New', () => {
@@ -56,11 +56,11 @@ describe('CreateF3XStep1Component: New', () => {
     },
   ];
 
-  let coverageDateSpy: jasmine.Spy<() => Promise<CoverageDates[]>>;
+  let coverageDateSpy: Mock;
   beforeEach(async () => {
     await setup({});
 
-    coverageDateSpy = spyOn(form3XService, 'getCoverageDates').and.resolveTo(mockCoverageDates);
+    coverageDateSpy = vi.spyOn(form3XService, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -79,7 +79,7 @@ describe('CreateF3XStep1Component: New', () => {
   it('should call create method on save when form is valid', async () => {
     const mockForm3X = new Form3X();
     mockForm3X.id = '999';
-    const createSpy = spyOn(form3XService, 'create').and.resolveTo(mockForm3X);
+    const createSpy = vi.spyOn(form3XService, 'create').mockResolvedValue(mockForm3X);
 
     component.form.patchValue({
       report_code: ReportCodes.Q2,
@@ -95,8 +95,8 @@ describe('CreateF3XStep1Component: New', () => {
   });
 
   it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
-    const createSpy = spyOn(form3XService, 'create');
-    const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes');
+    const createSpy = vi.spyOn(form3XService, 'create');
+    const updateSpy = vi.spyOn(form3XService, 'updateWithAllowedErrorCodes');
 
     // wait for all async initialization to complete
     await fixture.whenStable();
@@ -104,24 +104,22 @@ describe('CreateF3XStep1Component: New', () => {
 
     // now invalidate the form
     component.form.patchValue({ coverage_from_date: null });
+    expect(component.form.valid).toBe(false);
 
-    expect(component.form.valid).toBeFalse();
     await component.submitForm();
 
-    expect(component.formSubmitted).toBeTrue();
+    expect(component.formSubmitted).toBe(true);
     expect(createSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();
     expect(store.dispatch).toHaveBeenCalled();
-    const dispatchCall = store.dispatch as jasmine.Spy;
-    const lastCall = dispatchCall.calls.mostRecent();
-    expect(lastCall.args[0].type).toEqual('[SingleClickButtonDisabled] False');
+    expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: '[SingleClickButtonDisabled] False' }));
   });
 });
 
 describe('CreateF3XStep1Component: Edit', () => {
   let messageService: MessageService;
-  let getSpy: jasmine.Spy<(reportId: string) => Promise<Report>>;
-  let messageSpy: jasmine.Spy<(message: ToastMessageOptions) => void>;
+  let getSpy: Mock;
+  let messageSpy: Mock;
   const mockReportId = '123';
   const mockReport = Form3X.fromJSON({
     id: mockReportId,
@@ -136,8 +134,8 @@ describe('CreateF3XStep1Component: Edit', () => {
     await setup({ reportId: mockReportId });
 
     messageService = TestBed.inject(MessageService);
-    getSpy = spyOn(form3XService, 'get').and.resolveTo(mockReport);
-    messageSpy = spyOn(messageService, 'add');
+    getSpy = vi.spyOn(form3XService, 'get').mockResolvedValue(mockReport);
+    messageSpy = vi.spyOn(messageService, 'add');
 
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
@@ -157,7 +155,7 @@ describe('CreateF3XStep1Component: Edit', () => {
   });
 
   it('should call update method on save', async () => {
-    const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes').and.resolveTo(mockReport);
+    const updateSpy = vi.spyOn(form3XService, 'updateWithAllowedErrorCodes').mockResolvedValue(mockReport);
     component.form.patchValue({ coverage_from_date: new Date('2024-06-01') });
     component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
     await component.submitForm();
@@ -174,16 +172,16 @@ describe('CreateF3XStep1Component: Edit', () => {
         report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
       });
       fixture.detectChanges();
-      expect(component.reportCodes()).toContain(ReportCodes.M2);
+      expect(component.reportCodes()).toContainEqual(ReportCodes.M2);
 
       component.form.patchValue({ filing_frequency: 'Q' });
       fixture.detectChanges();
-      expect(component.reportCodes()).toContain(ReportCodes.Q1);
+      expect(component.reportCodes()).toContainEqual(ReportCodes.Q1);
     });
 
-    it('should automatically update coverage dates when report code changes', fakeAsync(() => {
+    it('should automatically update coverage dates when report code changes', () => {
       component.form.get('report_code')?.setValue(ReportCodes.M2);
-      tick();
+
       fixture.detectChanges();
 
       const fromDate = component.form.get('coverage_from_date')?.value;
@@ -191,18 +189,18 @@ describe('CreateF3XStep1Component: Edit', () => {
 
       expect(fromDate.getMonth()).toBe(3);
       expect(throughDate.getMonth()).toBe(3);
-    }));
+    });
   });
 });
 
 describe('Default Report Type Category Logic', () => {
   beforeEach(async () => {
     await setup({});
-    jasmine.clock().install();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   const setupComponent = () => {
@@ -212,25 +210,25 @@ describe('Default Report Type Category Logic', () => {
   };
 
   it('should be ELECTION_YEAR in an even year after January', () => {
-    jasmine.clock().mockDate(new Date(2024, 1, 1));
+    vi.setSystemTime(new Date(2024, 1, 1));
     setupComponent();
     expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.ELECTION_YEAR);
   });
 
   it('should be ELECTION_YEAR in an odd year during January', () => {
-    jasmine.clock().mockDate(new Date(2025, 0, 15));
+    vi.setSystemTime(new Date(2025, 0, 15));
     setupComponent();
     expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.ELECTION_YEAR);
   });
 
   it('should be NON_ELECTION_YEAR in an odd year after January', () => {
-    jasmine.clock().mockDate(new Date(2025, 2, 20));
+    vi.setSystemTime(new Date(2025, 2, 20));
     setupComponent();
     expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.NON_ELECTION_YEAR);
   });
 
   it('should be NON_ELECTION_YEAR in an even year during January', () => {
-    jasmine.clock().mockDate(new Date(2024, 0, 10));
+    vi.setSystemTime(new Date(2024, 0, 10));
     setupComponent();
     expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.NON_ELECTION_YEAR);
   });

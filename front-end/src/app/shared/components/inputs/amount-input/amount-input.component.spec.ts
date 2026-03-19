@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -28,12 +28,12 @@ import { provideHttpClient } from '@angular/common/http';
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [contributionAmountReadOnly]="contributionAmountReadOnly"
-    [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
-    [showAggregate]="!!transaction?.transactionType?.showAggregate"
-    [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
-    [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
+    [negativeAmountValueOnly]="!!transaction.transactionType.negativeAmountValueOnly"
+    [showAggregate]="!!transaction.transactionType.showAggregate"
+    [showCalendarYTD]="!!transaction.transactionType.showCalendarYTD"
+    [showPayeeCandidateYTD]="!!transaction.transactionType.showPayeeCandidateYTD"
     [transaction]="transaction"
-    [memoHasOptional]="(memoHasOptional$ | async)!"
+    [memoHasOptional]="(memoHasOptional | async)!"
     [negativeAmountValueOnly]="negativeAmountValueOnly"
   />`,
 })
@@ -105,7 +105,7 @@ describe('AmountInputComponent', () => {
 
     it('should not call updateInput when negativeAmountValueOnly is false', () => {
       fixture.detectChanges();
-      const updateInputMethodFalse = spyOn(component.amountInput(), 'updateInput');
+      const updateInputMethodFalse = vi.spyOn(component.amountInput(), 'updateInput');
       expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
       component.onInputAmount();
       // expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
@@ -118,7 +118,7 @@ describe('AmountInputComponent', () => {
       fixture.detectChanges();
     });
     it('should call updateInput when negativeAmountValueOnly is true', () => {
-      const updateInputMethodTrue = spyOn(component.amountInput(), 'updateInput');
+      const updateInputMethodTrue = vi.spyOn(component.amountInput(), 'updateInput');
       component.onInputAmount();
       expect(updateInputMethodTrue).toHaveBeenCalled();
     });
@@ -158,22 +158,22 @@ describe('AmountInputComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should not allow memo item selection for loan repayment', fakeAsync(() => {
+    it('should not allow memo item selection for loan repayment', () => {
       const dateFormControl = component.form.get(component.templateMap.date);
       const validDate: Date = new Date('May 26, 22 20:17:40 GMT+00:00');
       component.form.patchValue({
         [transaction.transactionType.templateMap.date]: validDate,
       });
-      expect(dateFormControl?.invalid).toBeFalse();
+      expect(dateFormControl?.invalid).toBe(false);
       const invalidDate: Date = new Date('May 26, 20 20:17:40 GMT+00:00');
       component.form.patchValue({
         [transaction.transactionType.templateMap.date]: invalidDate,
       });
       fixture.detectChanges();
-      expect(dateFormControl?.invalid).toBeTrue();
+      expect(dateFormControl?.invalid).toBe(true);
 
       const msg = dateFormControl?.errors?.['invaliddate'].msg;
       expect(msg).toEqual('Date must fall within the report date range.');
-    }));
+    });
   });
 });

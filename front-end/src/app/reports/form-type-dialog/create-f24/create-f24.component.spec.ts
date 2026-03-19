@@ -1,3 +1,4 @@
+import type { MockedObject } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateF24Component } from './create-f24.component';
 import { provideHttpClient } from '@angular/common/http';
@@ -21,10 +22,13 @@ describe('CreateF24Component', () => {
   let component: CreateF24Component;
   let host: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let form24Service: jasmine.SpyObj<Form24Service>;
+  let form24Service: MockedObject<Form24Service>;
   let router: Router;
   beforeEach(async () => {
-    const form24ServiceSpy = jasmine.createSpyObj('Form24Service', ['getAllReports', 'create']);
+    const form24ServiceSpy = {
+      getAllReports: vi.fn().mockName('Form24Service.getAllReports'),
+      create: vi.fn().mockName('Form24Service.create'),
+    };
 
     await TestBed.configureTestingModule({
       imports: [CreateF24Component],
@@ -39,7 +43,7 @@ describe('CreateF24Component', () => {
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
-    form24Service = TestBed.inject(Form24Service) as jasmine.SpyObj<Form24Service>;
+    form24Service = TestBed.inject(Form24Service) as MockedObject<Form24Service>;
     router = TestBed.inject(Router);
     fixture.detectChanges();
   });
@@ -71,9 +75,9 @@ describe('CreateF24Component', () => {
 
   it('should create F24 and navigate upon success', async () => {
     const report = testF24();
-    form24Service.getAllReports.and.resolveTo([]);
-    form24Service.create.and.returnValue(Promise.resolve(report));
-    spyOn(router, 'navigateByUrl');
+    form24Service.getAllReports.mockResolvedValue([]);
+    form24Service.create.mockReturnValue(Promise.resolve(report));
+    vi.spyOn(router, 'navigateByUrl');
 
     component.selectedForm24Type.set('24');
     component.form24Name.set('Valid Report Name');
@@ -84,7 +88,7 @@ describe('CreateF24Component', () => {
   });
 
   it('should handle error during create F24', async () => {
-    form24Service.create.and.rejectWith('Error creating F24');
+    form24Service.create.mockRejectedValue('Error creating F24');
 
     component.selectedForm24Type.set('24');
     component.form24Name.set('Valid Report Name');

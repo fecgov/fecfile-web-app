@@ -35,21 +35,21 @@ describe('LoginService', () => {
   });
 
   it('#logOut non-login.gov happy path', async () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
     store.overrideSelector(selectUserLoginData, testUserLoginData());
     service.logOut();
     expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
   });
 
   it('#logOut login.gov happy path', () => {
-    spyOn(store, 'dispatch');
+    vi.spyOn(store, 'dispatch');
 
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
   });
 
   it('userHasProfileData should return true', () => {
-    expect(service.userHasProfileData()).toBeTrue();
+    expect(service.userHasProfileData()).toBe(true);
   });
 
   describe('#userHasConsented should work', () => {
@@ -62,7 +62,7 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
       });
-      expect(service.userHasConsented()).toBeFalse();
+      expect(service.userHasConsented()).toBe(false);
     });
 
     it('test false security_consented', () => {
@@ -75,7 +75,7 @@ describe('LoginService', () => {
         email: '',
         security_consented: false,
       });
-      expect(service.userHasConsented()).toBeFalse();
+      expect(service.userHasConsented()).toBe(false);
     });
 
     it('test true security_consented', () => {
@@ -90,7 +90,7 @@ describe('LoginService', () => {
         security_consent_version: SECURITY_CONSENT_VERSION + 'B',
         security_consent_version_at_login: SECURITY_CONSENT_VERSION,
       });
-      expect(service.userHasConsented()).toBeFalse();
+      expect(service.userHasConsented()).toBe(false);
     });
 
     it('test true security_consented', () => {
@@ -105,7 +105,7 @@ describe('LoginService', () => {
         security_consent_version: SECURITY_CONSENT_VERSION + 'B',
         security_consent_version_at_login: SECURITY_CONSENT_VERSION + 'B',
       });
-      expect(service.userHasConsented()).toBeTrue();
+      expect(service.userHasConsented()).toBe(true);
     });
 
     it('test true security_consented', () => {
@@ -120,7 +120,7 @@ describe('LoginService', () => {
         security_consent_version: SECURITY_CONSENT_VERSION,
         security_consent_version_at_login: SECURITY_CONSENT_VERSION,
       });
-      expect(service.userHasConsented()).toBeTrue();
+      expect(service.userHasConsented()).toBe(true);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { Component, viewChild } from '@angular/core';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,7 +27,7 @@ interface MockItem {
   `,
 })
 class TestHostComponent {
-  inputItem: MockItem | undefined = undefined;
+  inputItem: MockItem = { id: '123', status: 'active', name: 'Test Item' };
   inputId: string = '';
   fetchMethod: ((id: string) => Promise<MockItem>) | undefined = undefined;
 
@@ -51,23 +51,20 @@ describe('TableActionsButtonComponent', () => {
   let component: TableActionsButtonComponent<MockItem>;
   let fixture: ComponentFixture<TestHostComponent>;
   let host: TestHostComponent;
-  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   const mockActiveItem: MockItem = { id: '123', status: 'active', name: 'Test 1' };
 
   beforeEach(async () => {
-    apiServiceSpy = jasmine.createSpyObj('ApiService', ['get']); // Mock whatever ApiService does
-
     await TestBed.configureTestingModule({
       imports: [PopoverModule, ButtonModule, TableActionsButtonComponent, TestHostComponent, NoopAnimationsModule],
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: ApiService, useValue: apiServiceSpy }],
+      providers: [provideHttpClient(), provideHttpClientTesting(), ApiService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
 
-    spyOn(host, 'onActionClick');
+    vi.spyOn(host, 'onActionClick');
   });
 
   it('should create', () => {
@@ -81,25 +78,25 @@ describe('TableActionsButtonComponent', () => {
       fixture.detectChanges();
 
       const popoverInstance = component.op();
-      spyOn(popoverInstance, 'toggle');
+      vi.spyOn(popoverInstance, 'toggle');
       expect(component.actionItem()).toEqual(mockActiveItem);
     });
 
-    it('performAction should emit event and hide popover', fakeAsync(() => {
+    it('performAction should emit event and hide popover', () => {
       host.inputItem = mockActiveItem;
       fixture.detectChanges();
       const targetAction = host.actions[0];
       const popoverInstance = component.op();
-      spyOn(popoverInstance, 'hide');
+      vi.spyOn(popoverInstance, 'hide');
 
       component.performAction(targetAction);
-      tick();
+      fixture.detectChanges();
 
       expect(popoverInstance.hide).toHaveBeenCalled();
       expect(host.onActionClick).toHaveBeenCalledWith({
         action: targetAction,
         actionItem: mockActiveItem,
       });
-    }));
+    });
   });
 });

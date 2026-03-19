@@ -6,6 +6,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { AddressInputComponent } from './address-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import { TransactionTemplateMapType } from 'app/shared/models';
 
 const testTemplateMap = {
   street_1: 'street_1',
@@ -18,7 +19,7 @@ const testTemplateMap = {
   secondary_city: 'secondary_city',
   secondary_state: 'secondary_state',
   secondary_zip: 'secondary_zip',
-};
+} as TransactionTemplateMapType;
 
 @Component({
   imports: [AddressInputComponent],

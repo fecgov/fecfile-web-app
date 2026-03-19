@@ -1,3 +1,4 @@
+import type { MockedObject } from 'vitest';
 import { CurrencyPipe } from '@angular/common';
 import { DynamicPipe } from './dynamic.pipe';
 import { MemoCodePipe } from './memo-code.pipe';
@@ -9,14 +10,20 @@ import { DefaultZeroPipe } from './default-zero.pipe';
 describe('DynamicPipe', () => {
   let pipe: DynamicPipe;
   let currencyPipe: CurrencyPipe;
-  let memoCodePipeMock: jasmine.SpyObj<MemoCodePipe>;
-  let fecDatePipeMock: jasmine.SpyObj<FecDatePipe>;
-  let transactionIdPipeMock: jasmine.SpyObj<TransactionIdPipe>;
+  let memoCodePipeMock: MockedObject<MemoCodePipe>;
+  let fecDatePipeMock: MockedObject<FecDatePipe>;
+  let transactionIdPipeMock: MockedObject<TransactionIdPipe>;
 
   beforeEach(() => {
-    memoCodePipeMock = jasmine.createSpyObj('MemoCodePipe', ['transform']);
-    fecDatePipeMock = jasmine.createSpyObj('FecDatePipe', ['transform']);
-    transactionIdPipeMock = jasmine.createSpyObj('TransactionIdPipe', ['transform']);
+    memoCodePipeMock = {
+      transform: vi.fn().mockName('MemoCodePipe.transform'),
+    };
+    fecDatePipeMock = {
+      transform: vi.fn().mockName('FecDatePipe.transform'),
+    };
+    transactionIdPipeMock = {
+      transform: vi.fn().mockName('TransactionIdPipe.transform'),
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -33,7 +40,7 @@ describe('DynamicPipe', () => {
   });
 
   it('Should transform currency', () => {
-    const currencySpy = spyOn(currencyPipe, 'transform').and.callThrough();
+    const currencySpy = vi.spyOn(currencyPipe, 'transform');
     const value = 1000;
     const args = ['CAD', 'symbol', '4.2-2'];
 
@@ -44,7 +51,7 @@ describe('DynamicPipe', () => {
 
   it('Should transform memoCode', () => {
     const value = true;
-    memoCodePipeMock.transform.and.returnValue('Y');
+    memoCodePipeMock.transform.mockReturnValue('Y');
 
     const result = pipe.transform(value, ['memoCode']);
     expect(result).toBe('Y');
@@ -53,7 +60,7 @@ describe('DynamicPipe', () => {
 
   it('Should transform fecDate', () => {
     const value = new Date('2026-01-01');
-    fecDatePipeMock.transform.and.returnValue('01/01/2026');
+    fecDatePipeMock.transform.mockReturnValue('01/01/2026');
 
     const result = pipe.transform(value, ['fecDate']);
     expect(result).toBe('01/01/2026');
@@ -62,7 +69,7 @@ describe('DynamicPipe', () => {
 
   it('Should transform transactionId', () => {
     const value = '271da73858hj841';
-    transactionIdPipeMock.transform.and.returnValue('271DA738');
+    transactionIdPipeMock.transform.mockReturnValue('271DA738');
 
     const result = pipe.transform(value, ['transactionId']);
     expect(result).toBe('271DA738');

@@ -59,6 +59,7 @@ describe('TransactionResolver', () => {
     TestBed.configureTestingModule(testBedConfig);
     resolver = TestBed.inject(TransactionResolver);
     testContactService = TestBed.inject(ContactService);
+    vi.restoreAllMocks();
   });
 
   it('should be created', () => {
@@ -74,13 +75,13 @@ describe('TransactionResolver', () => {
 
       const testContact: Contact = new Contact();
       testContact.id = 'testId';
-      spyOn(testContactService, 'get').and.returnValue(Promise.resolve(testContact));
-      await expectAsync(
+      vi.spyOn(testContactService, 'get').mockReturnValue(Promise.resolve(testContact));
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((response) => {
           expect(response).toBeTruthy();
           expect('Offsets to Operating Expenditures').toEqual(response?.transactionType?.title ?? '');
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should return an existing transaction', async () => {
@@ -91,14 +92,14 @@ describe('TransactionResolver', () => {
           transactionType: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
         }),
       };
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((response: Transaction | undefined) => {
           expect(response).toBeTruthy();
           if (response) {
             expect(response.transactionType?.title).toEqual('Offsets to Operating Expenditures');
           }
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should return undefined', async () => {
@@ -106,11 +107,11 @@ describe('TransactionResolver', () => {
         queryParamMap: convertToParamMap({}),
         paramMap: convertToParamMap({ transactionId: undefined }),
       };
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((response: Transaction | undefined) => {
           expect(response).toEqual(undefined);
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
@@ -124,7 +125,7 @@ describe('TransactionResolver', () => {
           transactionType: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
         }),
       };
-      spyOn(resolver.service, 'get').and.returnValue(
+      vi.spyOn(resolver.service, 'get').mockReturnValue(
         Promise.resolve(
           SchATransaction.fromJSON({
             id: 1,
@@ -137,18 +138,18 @@ describe('TransactionResolver', () => {
         ),
       );
 
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((response: Transaction | undefined) => {
           expect(response).toBeTruthy();
           if (response) {
             expect(response.transactionType?.title).toEqual('PAC Joint Fundraising Transfer Memo');
           }
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should add debt to repayment', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchDTransaction.fromJSON({
             id: id,
@@ -167,18 +168,18 @@ describe('TransactionResolver', () => {
         }),
       };
 
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
           expect(transaction).toBeTruthy();
           if (transaction) {
             expect(transaction.debt?.id).toEqual('1');
           }
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should add loan to repayment', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchDTransaction.fromJSON({
             id: id,
@@ -197,18 +198,18 @@ describe('TransactionResolver', () => {
         }),
       };
 
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
           expect(transaction).toBeTruthy();
           if (transaction) {
             expect(transaction.loan?.id).toEqual('1');
           }
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should add redesignation', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchBTransaction.fromJSON({
             id: id,
@@ -227,7 +228,7 @@ describe('TransactionResolver', () => {
         }),
       };
 
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
           expect(transaction).toBeTruthy();
           if (transaction) {
@@ -237,14 +238,14 @@ describe('TransactionResolver', () => {
             ).toEqual('REDESIGNATION_FROM');
           }
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('resolveExistingTransactionFromId', () => {
     it('should return parent transaction if dependent child is requested', async () => {
       let firstCall = true;
-      spyOn(resolver.service, 'get').and.callFake(() => {
+      vi.spyOn(resolver.service, 'get').mockImplementation(() => {
         if (firstCall) {
           firstCall = false; // Mark first call as completed
           return Promise.resolve(
@@ -270,18 +271,18 @@ describe('TransactionResolver', () => {
         }
       });
 
-      await expectAsync(
+      await expect(
         resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
           if (transaction)
             expect(transaction.transaction_type_identifier).toBe(
               ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             );
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should have parent transaction', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -301,17 +302,17 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      await expectAsync(
+      await expect(
         resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
           expect(transaction).toBeTruthy();
           if (transaction) expect(transaction.id).toBe('10');
           expect(transaction?.parent_transaction?.id).toBe('2');
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should have grandparent transaction ', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -340,17 +341,17 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      await expectAsync(
+      await expect(
         resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
           if (transaction) expect(transaction.id).toBe('10');
           expect(transaction?.parent_transaction?.id).toBe('2');
           expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should have debt transaction', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -368,16 +369,16 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      await expectAsync(
+      await expect(
         resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
           if (transaction) expect(transaction.id).toBe('10');
           expect(transaction?.debt?.id).toBe('2');
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should have loan transaction', async () => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -395,25 +396,25 @@ describe('TransactionResolver', () => {
           }),
         );
       });
-      await expectAsync(
+      await expect(
         resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
           if (transaction) expect(transaction.id).toBe('10');
           expect(transaction?.loan?.id).toBe('2');
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
   describe('resolveNewTransaction', () => {
     it('should add new child transaction to new parent if parent has a dependentChildTransactionTypes', async () => {
-      await expectAsync(
+      await expect(
         resolver
           .resolveNewTransaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
           .then((transaction: Transaction | undefined) => {
             if (transaction?.children)
               expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
           }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
   });
 
@@ -426,7 +427,7 @@ describe('TransactionResolver', () => {
       }),
     };
     beforeEach(() => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -444,7 +445,7 @@ describe('TransactionResolver', () => {
       });
     });
     it('should add reattribution', async () => {
-      await expectAsync(
+      await expect(
         resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
           expect(transaction).toBeTruthy();
           if (transaction) {
@@ -454,11 +455,11 @@ describe('TransactionResolver', () => {
             ).toEqual('REATTRIBUTION_FROM');
           }
         }),
-      ).toBeResolved();
+      ).resolves.not.toThrow();
     });
 
     it('should throw error if redesignated does not have transaction_type_identifier', async () => {
-      spyOn(ReattributedUtils, 'overlayTransactionProperties').and.callFake((transaction, id) => {
+      vi.spyOn(ReattributedUtils, 'overlayTransactionProperties').mockImplementation((transaction, id) => {
         return SchATransaction.fromJSON({
           id: id,
           transaction_type_identifier: undefined,
@@ -467,7 +468,7 @@ describe('TransactionResolver', () => {
           contact_1: Contact.fromJSON({ id: 123 }),
         });
       });
-      await expectAsync(resolver.resolve(route as ActivatedRouteSnapshot)).toBeRejectedWithError(
+      await expect(resolver.resolve(route as ActivatedRouteSnapshot)).rejects.toThrowError(
         'FECfile+: originating reattribution transaction type not found.',
       );
     });
@@ -475,7 +476,7 @@ describe('TransactionResolver', () => {
 
   describe('resolveExistingReattribution', async () => {
     beforeEach(() => {
-      spyOn(resolver.service, 'get').and.callFake((id) => {
+      vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(
           SchATransaction.fromJSON({
             id: id,
@@ -496,11 +497,8 @@ describe('TransactionResolver', () => {
     });
 
     it('should resolve existing reattribution', async () => {
-      await expectAsync(
-        resolver.resolveExistingTransactionFromId('10').then((transaction: Transaction | undefined) => {
-          if (transaction) expect(transaction.id).toBe('10');
-        }),
-      ).toBeResolved();
+      const transaction = await resolver.resolveExistingTransactionFromId('10');
+      expect(transaction!.id).toBe('10');
     });
   });
 });

@@ -1,9 +1,10 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, viewChild } from '@angular/core';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SearchableSelectComponent } from './searchable-select.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Select } from 'primeng/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   imports: [SearchableSelectComponent],
@@ -37,7 +38,7 @@ describe('SearchableSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
+      imports: [TestHostComponent, NoopAnimationsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -46,7 +47,8 @@ describe('SearchableSelectComponent', () => {
 
     component = host.component();
 
-    await fixture.whenStable();
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     pSelectInstance = component.pSelectInstance()!;
     focusableElement = pSelectInstance.focusInputViewChild?.nativeElement;
@@ -57,55 +59,53 @@ describe('SearchableSelectComponent', () => {
     expect(pSelectInstance).toBeTruthy();
   });
 
-  it('should focus the first "A" option on the first "A" key press', fakeAsync(() => {
+  it('should focus the first "A" option on the first "A" key press', async () => {
     focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
-    tick();
-    fixture.detectChanges();
 
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(pSelectInstance.focusedOptionIndex()).toBe(0);
     const focusedOption = pSelectInstance.visibleOptions()[pSelectInstance.focusedOptionIndex()];
     expect(pSelectInstance.getOptionLabel(focusedOption)).toBe('Alabama');
-  }));
+  });
 
-  it('should cycle to the second "A" option on the second "A" key press', fakeAsync(() => {
+  it('should cycle to the second "A" option on the second "A" key press', async () => {
     focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
-    tick();
-    focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
-    tick();
     fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(pSelectInstance.focusedOptionIndex()).toBe(1);
     const focusedOption = pSelectInstance.visibleOptions()[pSelectInstance.focusedOptionIndex()];
     expect(pSelectInstance.getOptionLabel(focusedOption)).toBe('Alaska');
-  }));
+  });
 
-  it('should wrap around to the first "A" option after cycling through all "A" options', fakeAsync(() => {
+  it('should wrap around to the first "A" option after cycling through all "A" options', async () => {
     for (let i = 0; i < 3; i++) {
       focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
-      tick();
       fixture.detectChanges();
+      await new Promise((resolve) => setTimeout(resolve, 0));
       expect(pSelectInstance.focusedOptionIndex()).toBe(i);
     }
-    focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
-    tick();
-    fixture.detectChanges();
-    expect(pSelectInstance.focusedOptionIndex()).toBe(0);
-  }));
 
-  it('should reset the cycle and perform a normal search when a different key is pressed', fakeAsync(() => {
     focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
-    tick();
     fixture.detectChanges();
-
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(pSelectInstance.focusedOptionIndex()).toBe(0);
-    tick(1300);
+  });
+
+  it('should reset the cycle and perform a normal search when a different key is pressed', async () => {
+    focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
+    await fixture.whenStable();
+    expect(pSelectInstance.focusedOptionIndex()).toBe(0);
 
     focusableElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'C' }));
-    tick();
     fixture.detectChanges();
-
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(pSelectInstance.focusedOptionIndex()).toBe(3);
     const focusedOption = pSelectInstance.visibleOptions()[pSelectInstance.focusedOptionIndex()];
     expect(pSelectInstance.getOptionLabel(focusedOption)).toBe('California');
-  }));
+  });
 });

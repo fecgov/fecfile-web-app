@@ -157,7 +157,7 @@ describe('ContactListComponent', () => {
       expect(fecIdCell).not.toBeNull();
       expect(fecIdCell.textContent).toContain('999');
 
-      const editSpy = spyOn(component, 'editItem');
+      const editSpy = vi.spyOn(component, 'editItem');
       nameLink.click();
       expect(editSpy).toHaveBeenCalledWith(rowContact);
     });
@@ -167,17 +167,17 @@ describe('ContactListComponent', () => {
         has_transaction_or_report: false,
       });
       let status: boolean = component.canDeleteItem(item);
-      expect(status).toBeTrue();
+      expect(status).toBe(true);
 
       item.has_transaction_or_report = true;
       status = component.canDeleteItem(item);
-      expect(status).toBeFalse();
+      expect(status).toBe(false);
     });
 
     it('#restoreButton should be visible if there is a deleted contact', async () => {
-      expect(component.restoreContactsButtonIsVisible).toBeFalse();
+      expect(component.restoreContactsButtonIsVisible).toBe(false);
 
-      spyOn(deletedContactService, 'getTableData').and.returnValue(
+      vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
         Promise.resolve({
           count: 1,
           next: '',
@@ -188,13 +188,13 @@ describe('ContactListComponent', () => {
       );
       await component.checkForDeletedContacts();
 
-      expect(component.restoreContactsButtonIsVisible).toBeTrue();
+      expect(component.restoreContactsButtonIsVisible).toBe(true);
     });
 
     it('#restoreButton should not be visible if there are no deleted contacts', async () => {
       component.restoreContactsButtonIsVisible = true;
 
-      spyOn(deletedContactService, 'getTableData').and.returnValue(
+      vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
         Promise.resolve({
           count: 0,
           next: '',
@@ -205,12 +205,12 @@ describe('ContactListComponent', () => {
       );
       await component.checkForDeletedContacts();
 
-      expect(component.restoreContactsButtonIsVisible).toBeFalse();
+      expect(component.restoreContactsButtonIsVisible).toBe(false);
     });
 
     it('#loadTableItems updates restore button visibility', async () => {
-      spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-      spyOn(deletedContactService, 'getTableData').and.resolveTo({
+      vi.spyOn(service, 'getTableData').mockReturnValue(Promise.resolve(tableDataResponse));
+      vi.spyOn(deletedContactService, 'getTableData').mockResolvedValue({
         count: 1,
         next: '',
         previous: '',
@@ -222,7 +222,7 @@ describe('ContactListComponent', () => {
       component.rowsPerPage.set(10);
       await component.loadTableItems();
 
-      expect(component.restoreContactsButtonIsVisible).toBeTrue();
+      expect(component.restoreContactsButtonIsVisible).toBe(true);
     });
 
     it('#saveContact calls itemService', async () => {
@@ -232,11 +232,11 @@ describe('ContactListComponent', () => {
 
       const updatePromise = Promise.resolve(updatedContact);
       const createPromise = Promise.resolve(createdContact);
-      spyOn(service, 'update').and.returnValue(updatePromise);
-      spyOn(service, 'create').and.returnValue(createPromise);
-      spyOn(service, 'getTableData').and.returnValue(Promise.resolve(tableDataResponse));
-      const loadSpy = spyOn(component, 'loadTableItems').and.returnValue(Promise.resolve());
-      const toastSpy = spyOn(component.messageService, 'add');
+      vi.spyOn(service, 'update').mockReturnValue(updatePromise);
+      vi.spyOn(service, 'create').mockReturnValue(createPromise);
+      vi.spyOn(service, 'getTableData').mockReturnValue(Promise.resolve(tableDataResponse));
+      const loadSpy = vi.spyOn(component, 'loadTableItems').mockReturnValue(Promise.resolve());
+      const toastSpy = vi.spyOn(component.messageService, 'add');
 
       component.saveContact(updatedContact);
       await updatePromise;
@@ -244,14 +244,26 @@ describe('ContactListComponent', () => {
 
       expect(service.update).toHaveBeenCalledTimes(1);
       expect(loadSpy).toHaveBeenCalled();
-      expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Updated');
+      expect(
+        (
+          vi.mocked(toastSpy).mock.lastCall![0] as {
+            detail?: string;
+          }
+        ).detail,
+      ).toBe('Contact Updated');
 
       component.saveContact(createdContact);
       await createPromise;
       await Promise.resolve();
 
       expect(service.create).toHaveBeenCalledTimes(1);
-      expect((toastSpy.calls.mostRecent().args[0] as { detail?: string }).detail).toBe('Contact Created');
+      expect(
+        (
+          vi.mocked(toastSpy).mock.lastCall![0] as {
+            detail?: string;
+          }
+        ).detail,
+      ).toBe('Contact Created');
     });
   });
 

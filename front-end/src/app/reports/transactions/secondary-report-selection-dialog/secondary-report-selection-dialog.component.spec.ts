@@ -1,13 +1,14 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { Report, ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
+import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, signal, viewChild } from '@angular/core';
@@ -69,8 +70,8 @@ class TestHostComponent {
     force_unaggregated: true,
     report_type: 'Form 3X',
   } as unknown as TransactionListRecord;
-  reportSelectionCreateMethod = jasmine.createSpy('create');
-  refreshTables = jasmine.createSpy('refreshTables');
+  reportSelectionCreateMethod = vi.fn();
+  refreshTables = vi.fn();
 }
 
 describe('SecondaryReportSelectionDialogComponent', () => {
@@ -79,14 +80,11 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   let host: TestHostComponent;
   let messageService: MessageService;
   let transactionListService: TransactionListService;
-  let addSpy: jasmine.Spy<(transaction: TransactionListRecord, report: Report) => Promise<HttpResponse<string>>>;
-  let reportServiceMock: jasmine.SpyObj<Form24Service>;
-  let messageSpy: jasmine.Spy<(message: ToastMessageOptions) => void>;
+  let addSpy: Mock;
+  let form24Service: Form24Service;
+  let messageSpy: Mock;
 
   beforeEach(async () => {
-    reportServiceMock = jasmine.createSpyObj('Form24Service', ['getAllReports']);
-    reportServiceMock.getAllReports.and.resolveTo(mockReports);
-
     await TestBed.configureTestingModule({
       imports: [DialogModule, Dialog, SecondaryReportSelectionDialogComponent, LabelPipe],
       providers: [
@@ -98,7 +96,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
             redirectTo: '',
           },
         ]),
-        { provide: Form24Service, useValue: reportServiceMock },
+        Form24Service,
         TransactionListService,
         MessageService,
         DatePipe,
@@ -120,10 +118,12 @@ describe('SecondaryReportSelectionDialogComponent', () => {
         },
       ],
     }).compileComponents();
+    form24Service = TestBed.inject(Form24Service);
+    vi.spyOn(form24Service, 'getAllReports').mockResolvedValue(mockReports);
     transactionListService = TestBed.inject(TransactionListService);
-    addSpy = spyOn(transactionListService, 'addToReport');
+    addSpy = vi.spyOn(transactionListService, 'addToReport');
     messageService = TestBed.inject(MessageService);
-    messageSpy = spyOn(messageService, 'add');
+    messageSpy = vi.spyOn(messageService, 'add');
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
@@ -138,7 +138,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(reportServiceMock.getAllReports).toHaveBeenCalled();
+    expect(form24Service.getAllReports).toHaveBeenCalled();
     const filteredReports = component.reports();
     expect(filteredReports.length).toBe(3);
     expect(filteredReports[0].id).toBe('1');
@@ -153,7 +153,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   });
 
   it('should successfully link transaction to selected report', async () => {
-    addSpy.and.resolveTo(new HttpResponse({ status: 200 }));
+    addSpy.mockResolvedValue(new HttpResponse({ status: 200 }));
 
     await fixture.whenStable();
     fixture.detectChanges();
@@ -174,7 +174,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   });
 
   it('should handle service error when adding report', async () => {
-    addSpy.and.resolveTo(new HttpResponse({ status: 500 }));
+    addSpy.mockResolvedValue(new HttpResponse({ status: 500 }));
 
     component.selectedReport.set(mockReports[0]);
     await component.linkToSelectedReport();
@@ -189,7 +189,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
   });
 
   it('should show dialog and focus select when showDialog is called', () => {
-    spyOn(component.select(), 'applyFocus');
+    vi.spyOn(component.select(), 'applyFocus');
     component.showDialog();
     expect(component.select().applyFocus).toHaveBeenCalled();
   });

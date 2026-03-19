@@ -120,7 +120,7 @@ describe('CandidateOfficeInputComponent', () => {
     component.ngOnInit();
 
     const electionCodeControl = component.electionControl();
-    expect(electionCodeControl!.subscriptions).toHaveSize(1);
+    expect(electionCodeControl!.subscriptions).toHaveLength(1);
   });
 
   it('updates state availability for SchE transactions in Presidential Primary elections', () => {
@@ -130,15 +130,15 @@ describe('CandidateOfficeInputComponent', () => {
 
     component.form().patchValue({ [component.officeFormControlName()]: CandidateOfficeTypes.PRESIDENTIAL });
     component.form().patchValue({ election_code: 'P2025' });
-    expect(component.stateControl()?.disabled).toBeFalse();
+    expect(component.stateControl()?.disabled).toBe(false);
 
     component.form().patchValue({ election_code: 'G2025' });
-    expect(component.stateControl()?.disabled).toBeTrue();
+    expect(component.stateControl()?.disabled).toBe(true);
   });
 
   it('updates the district field correctly while switching between states', () => {
     component.officeControl()?.setValue(CandidateOfficeTypes.HOUSE);
-    expect(component.districtControl()?.disabled).toBeFalse();
+    expect(component.districtControl()?.disabled).toBe(false);
 
     component.stateControl()?.setValue('AK');
     expect(component.districtControl()?.value).toEqual('00');

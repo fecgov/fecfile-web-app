@@ -8,7 +8,8 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Contact, Transaction } from 'app/shared/models';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   imports: [AdditionalInfoInputComponent],
@@ -40,6 +41,15 @@ class TestHostComponent {
   constructor() {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
   }
+
+  updateFormWithQuaternaryContact(event: SelectItem<Contact>) {
+    console.log(event);
+  }
+  clearFormQuaternaryContact() {}
+  updateFormWithQuinaryContact(event: SelectItem<Contact>) {
+    console.log(event);
+  }
+  clearFormQuinaryContact() {}
 }
 
 describe('AdditionalInfoInputComponent', () => {

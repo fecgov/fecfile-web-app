@@ -5,7 +5,6 @@ import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { Form24Service } from '../services/form-24.service';
 import { DateUtils } from './date.utils';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
@@ -224,29 +223,6 @@ export class CommitteeMemberEmailValidator implements AsyncValidator {
           email: 'taken-in-committee',
         };
       }
-    }
-    return null;
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-export class F24UniqueNameValidator implements AsyncValidator {
-  protected readonly form24Service = inject(Form24Service);
-  async validate(control: AbstractControl): Promise<ValidationErrors | null> {
-    if (!control.get('typeName')?.value || !control.get('form24Name')?.value) {
-      return {
-        required: true,
-      };
-    }
-    const typeName = control.get('typeName')?.value;
-    const form24Name = control.get('form24Name')?.value;
-    const reports = await this.form24Service.getAllReports();
-    const existingNames = reports.map((report) => report?.name?.toLowerCase() ?? '') ?? [];
-    const newName = (typeName + form24Name).toLowerCase();
-    if (existingNames.includes(newName)) {
-      return {
-        duplicateName: true,
-      };
     }
     return null;
   }

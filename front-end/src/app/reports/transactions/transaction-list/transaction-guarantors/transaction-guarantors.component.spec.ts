@@ -16,19 +16,17 @@ import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
-import { ScheduleCTransactionTypes } from 'app/shared/models';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
   standalone: true,
-  template: `<app-transaction-guarantors [loan]="loan" />`,
+  template: `<app-transaction-guarantors [transaction]="transaction" />`,
 })
 class TestHostComponent {
   component = viewChild.required(TransactionGuarantorsComponent);
-  transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
-  loan = {
-    ...this.transaction,
+  transaction = {
+    ...getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK),
     name: 'TEST',
     date: new Date(),
     amount: 100,
@@ -38,7 +36,7 @@ class TestHostComponent {
     can_delete: true,
     force_unaggregated: true,
     report_type: 'Form 3X',
-  } as unknown as TransactionListRecord;
+  } as unknown as Transaction;
 }
 
 describe('TransactionGuarantorsComponent', () => {
@@ -100,7 +98,7 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   it('should load items with loan', () => {
-    host.loan = { id: '1' } as TransactionListRecord;
+    host.transaction = { id: '1' } as Transaction;
     fixture.detectChanges();
     expect(component).toBeTruthy();
     expect(component.params()['parent']).toEqual('1');
@@ -108,11 +106,11 @@ describe('TransactionGuarantorsComponent', () => {
 
   it('should have delete', () => {
     (component.reportIsEditable as any) = signal(true);
-    expect(component.rowActions[0].isAvailable(host.loan)).toEqual(false);
-    expect(component.rowActions[1].isAvailable(host.loan)).toEqual(true);
-    expect(component.rowActions[2].isAvailable(host.loan)).toEqual(true);
-    expect(component.rowActions[0].isEnabled(host.loan)).toEqual(true);
-    expect(component.rowActions[1].isEnabled(host.loan)).toEqual(true);
-    expect(component.rowActions[2].isEnabled(host.loan)).toEqual(true);
+    expect(component.rowActions[0].isAvailable(component.loan())).toEqual(false);
+    expect(component.rowActions[1].isAvailable(component.loan())).toEqual(true);
+    expect(component.rowActions[2].isAvailable(component.loan())).toEqual(true);
+    expect(component.rowActions[0].isEnabled(component.loan())).toEqual(true);
+    expect(component.rowActions[1].isEnabled(component.loan())).toEqual(true);
+    expect(component.rowActions[2].isEnabled(component.loan())).toEqual(true);
   });
 });

@@ -59,7 +59,7 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
-    spyOn(component, 'getChildTransaction').and.callFake(() => transaction);
+    vi.spyOn(component, 'getChildTransaction').mockImplementation(() => transaction);
     component.transaction = transaction;
     component.templateMap = testTemplateMap();
     component.ngOnInit();

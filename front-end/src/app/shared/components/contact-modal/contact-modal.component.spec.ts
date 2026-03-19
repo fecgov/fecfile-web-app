@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactModalComponent } from './contact-modal.component';
 import { provideHttpClient } from '@angular/common/http';
@@ -59,7 +58,7 @@ describe('ContactModalComponent', () => {
     manager.contactType.set(ContactTypes.CANDIDATE);
     fixture.detectChanges();
 
-    expect(component.isCandidate()).toBeTrue();
+    expect(component.isCandidate()).toBe(true);
     expect(component.stateOptions().length).toBeGreaterThan(0);
   });
 
@@ -67,14 +66,14 @@ describe('ContactModalComponent', () => {
     component.form.get('country')?.setValue('CAN');
     fixture.detectChanges();
 
-    expect(component.form.get('state')?.disabled).toBeTrue();
+    expect(component.form.get('state')?.disabled).toBe(true);
   });
 
   it('should enable state control when country is USA', () => {
     component.form.get('country')?.setValue('USA');
     fixture.detectChanges();
 
-    expect(component.form.get('state')?.enabled).toBeTrue();
+    expect(component.form.get('state')?.enabled).toBe(true);
   });
 
   it('should update candidate district options when candidate state changes', () => {
@@ -94,13 +93,13 @@ describe('ContactModalComponent', () => {
   });
 
   it('should not save contact if form is invalid', async () => {
-    spyOn(component.cmservice.showDialog, 'set');
+    vi.spyOn(component.cmservice.showDialog, 'set');
     component.form.get('first_name')?.setValue('');
     fixture.detectChanges();
     await fixture.whenStable();
     component.saveContact();
 
-    expect(component.form.valid).toBeFalse();
+    expect(component.form.valid).toBe(false);
     expect(component.cmservice.showDialog.set).not.toHaveBeenCalled();
   });
 
@@ -112,7 +111,7 @@ describe('ContactModalComponent', () => {
         await firstValueFrom(component.form.controls[control].statusChanges);
     }
 
-    expect(component.form.valid).toBeTrue();
+    expect(component.form.valid).toBe(true);
     component.saveContact();
 
     expect(manager.contact().first_name).toEqual('Joe');
@@ -120,7 +119,7 @@ describe('ContactModalComponent', () => {
   });
 
   it('should reset the form when the dialog is closed', () => {
-    spyOn<any>(component, 'reset').and.callThrough();
+    vi.spyOn(component, 'reset');
     component.cmservice.showDialog.set(true);
     fixture.detectChanges();
     component.cmservice.showDialog.set(false);
@@ -129,14 +128,14 @@ describe('ContactModalComponent', () => {
   });
 
   it('should call updateContactType on initialization', () => {
-    spyOn<any>(component, 'updateContactType').and.callThrough();
+    vi.spyOn(component, 'updateContactType');
     component.ngOnInit();
 
     expect(component['updateContactType']).toHaveBeenCalled();
   });
 
   it('should set the correct schema validators based on contact type', () => {
-    spyOn(SchemaUtils, 'addJsonSchemaValidators').and.callThrough();
+    vi.spyOn(SchemaUtils, 'addJsonSchemaValidators');
     component['updateContactType']();
 
     const contactType = component.manager().contactType();
@@ -146,7 +145,7 @@ describe('ContactModalComponent', () => {
   });
 
   it('should patch form value when manager contact changes', () => {
-    spyOn(component.form, 'patchValue').and.callThrough();
+    vi.spyOn(component.form, 'patchValue');
     const newContact = new Contact();
     newContact.first_name = 'Jane';
     manager.contact.set(newContact);

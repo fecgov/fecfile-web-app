@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpClient, HttpContext, HttpErrorResponse, HttpHandler, HttpStatusCode } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHandler, HttpRequest, HttpStatusCode } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -31,15 +31,17 @@ describe('HttpErrorInterceptor', () => {
 
   it('should handle 403 incoming error', () => {
     const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
-    const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
-    const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
-    const logOutSpy = spyOn(loginService, 'logOut');
+    const httpRequest = new HttpRequest('GET', '/test-url');
+    const httpHandlerSpy = {
+      handle: vi.fn().mockReturnValue(throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden }))),
+    } as any;
+    const logOutSpy = vi.spyOn(loginService, 'logOut');
 
-    httpHandlerSpy.handle.and.returnValue(
+    httpHandlerSpy.handle.mockReturnValue(
       throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden })),
     );
 
-    testIterceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe(
+    testIterceptor.intercept(httpRequest, httpHandlerSpy).subscribe(
       (x) => x,
       (y) => y,
     );
@@ -48,10 +50,13 @@ describe('HttpErrorInterceptor', () => {
 
   it('should handle outgoing error', async () => {
     const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
-    const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
-    const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
-    spyOn(console, 'log');
-    httpHandlerSpy.handle.and.returnValue(
+    const httpRequest = new HttpRequest('GET', '/test-url');
+
+    const httpHandlerSpy = {
+      handle: vi.fn().mockName('HttpHandler.handle'),
+    };
+    vi.spyOn(console, 'log');
+    httpHandlerSpy.handle.mockReturnValue(
       throwError(
         () =>
           new HttpErrorResponse({
@@ -61,11 +66,11 @@ describe('HttpErrorInterceptor', () => {
       ),
     );
 
-    spyOn(store, 'dispatch');
+    vi.spyOn(store, 'dispatch');
 
     let retval = '';
     try {
-      await firstValueFrom(testIterceptor.intercept(httpRequestSpy, httpHandlerSpy));
+      await firstValueFrom(testIterceptor.intercept(httpRequest, httpHandlerSpy));
     } catch (error: any) {
       retval = error;
     }
@@ -74,10 +79,12 @@ describe('HttpErrorInterceptor', () => {
 
   it('should handle no API response (status === 0)', async () => {
     const testIterceptor: HttpErrorInterceptor = TestBed.inject(HttpErrorInterceptor);
-    const httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter'], { context: new HttpContext() });
-    const httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
-    spyOn(console, 'log');
-    httpHandlerSpy.handle.and.returnValue(
+    const httpRequest = new HttpRequest('GET', '/test-url');
+    const httpHandlerSpy = {
+      handle: vi.fn().mockName('HttpHandler.handle'),
+    };
+    vi.spyOn(console, 'log');
+    httpHandlerSpy.handle.mockReturnValue(
       throwError(
         () =>
           new HttpErrorResponse({
@@ -86,11 +93,11 @@ describe('HttpErrorInterceptor', () => {
       ),
     );
 
-    spyOn(store, 'dispatch');
+    vi.spyOn(store, 'dispatch');
 
     let retval = '';
     try {
-      await firstValueFrom(testIterceptor.intercept(httpRequestSpy, httpHandlerSpy));
+      await firstValueFrom(testIterceptor.intercept(httpRequest, httpHandlerSpy));
     } catch (error: any) {
       retval = error;
     }
