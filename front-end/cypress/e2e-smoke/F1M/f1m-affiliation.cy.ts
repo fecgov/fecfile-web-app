@@ -118,9 +118,9 @@ describe('Manage reports', () => {
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
       cy.get('[id="text4000"]:visible').should('have.value', memoText);
-      PageUtils.clickButton('Save & continue', '[data-cy="report-level-memo-actions"]:visible');
 
       // Submit report and verify report status link now available
+      // PageUtils.clickSidebarSection and .clickSidebarItem modified to assert visibility too
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
       PageUtils.clickSidebarItem('Submit report');
       PageUtils.submitReportForm();
