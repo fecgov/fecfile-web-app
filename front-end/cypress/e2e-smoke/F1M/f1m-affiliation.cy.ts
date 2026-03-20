@@ -113,6 +113,9 @@ describe('Manage reports', () => {
       const memoText = faker.lorem.sentence({ min: 1, max: 4 });
       ReportLevelMemoPage.enterFormData(memoText);
       PageUtils.clickButton('Save & continue', '[data-cy="report-level-memo-actions"]:visible');
+      // Verify we've landed on the submit report page before checking
+      // back on the memo page
+      cy.get('#submit-report-container').should('exist');
 
       // Verify it is still there when we go back to the page
       PageUtils.clickSidebarSection('REVIEW A REPORT');
@@ -120,7 +123,6 @@ describe('Manage reports', () => {
       cy.get('[id="text4000"]:visible').should('have.value', memoText);
 
       // Submit report and verify report status link now available
-      // PageUtils.clickSidebarSection and .clickSidebarItem modified to assert visibility too
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
       PageUtils.clickSidebarItem('Submit report');
       PageUtils.submitReportForm();

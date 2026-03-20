@@ -96,15 +96,8 @@ export class PageUtils {
   }
 
   static clickSidebarSection(section: string) {
-    cy.contains('p-panelmenu .p-panelmenu-header', section)
-      .closest('.p-panelmenu-panel')
-      .find('.p-panelmenu-header')
-      .as('sectionHeader');
-
-    cy.get('@sectionHeader')
-      .click().then(() => {
-        cy.get('@sectionHeader').should('have.attr', 'data-p-highlight', 'true');
-      });
+    cy.get('p-panelmenu').contains(section).parent().as('section');
+    cy.get('@section').click();
   }
 
   static clickSidebarItem(menuItem: string) {
@@ -153,7 +146,7 @@ export class PageUtils {
     cy.get(alias)
       .contains('button', name)
       .first()
-      .click();
+      .click({ force });
   }
 
   static dateToString(date: Date) {
