@@ -95,14 +95,21 @@ export class PageUtils {
     cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
 
-  static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+  static clickSidebarSection(section: string) {  
+    cy.contains('p-panelmenu .p-panelmenu-header', section)
+      .closest('.p-panelmenu-panel')
+      .find('.p-panelmenu-header')
+      .as('sectionHeader');
+
+    cy.get('@sectionHeader')
+      .click().then(() => {
+        cy.get('@sectionHeader').should('have.attr', 'data-p-highlight', 'true');
+      });
   }
 
   static clickSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click();
+    cy.get('@menuItem').click({ force: true });
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
