@@ -53,11 +53,11 @@
       <p class="submission-info-text">
         {{ report().formLabel }}
       </p>
+      <h3 class="submission-info-heading">Report Type:</h3>
+      <p class="submission-info-text">
+        {{ reportType() }}
+      </p>
       @if (isBaseF3()) {
-        <h3 class="submission-info-heading">Report Type:</h3>
-        <p class="submission-info-text">
-          {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode()] : '' }}
-        </p>
         <h3 class="submission-info-heading">Coverage Dates:</h3>
         @if (coverageDates()) {
           <p class="submission-info-text no-wrap">

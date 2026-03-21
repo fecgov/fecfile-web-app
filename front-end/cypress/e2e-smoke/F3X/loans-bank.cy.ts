@@ -28,11 +28,8 @@ const formData = {
 };
 
 function clickLoan(button: string, urlCheck = '/list') {
-  PageUtils.clickKababItem(
-    'Loan Received from Bank',
-    button,
-    'app-transaction-loans-and-debts',
-  );
+  cy.get('app-transaction-loans-and-debts').contains('Loan Received from Bank').should('exist');
+  PageUtils.clickKababItem('Loan Received from Bank', button, 'app-transaction-loans-and-debts');
   PageUtils.urlCheck(urlCheck);
 }
 
@@ -105,7 +102,7 @@ function assertNoDeleteButtonInLoanReceivedFromBankRow() {
 // Helper to handle result of setupLoanFromBank for the first test
 function handleLoanAgreementSetup(q3: string) {
   return (result: any) => {
-    ReportListPage.goToReportList(q3);
+    ReportListPage.gotToReportTransactionListPage(q3);
     clickLoan('New loan agreement');
 
     PageUtils.urlCheck('/C1_LOAN_AGREEMENT');
@@ -123,10 +120,11 @@ function handleLoanAgreementSetup(q3: string) {
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
 
     cy.intercept({
-      method: 'Post',
+      method: 'POST',
+      pathname: '/api/v1/transactions/',
     }).as('saveNewAgreement');
 
-    PageUtils.clickButton('Save', '', true);
+    TransactionDetailPage.clickSave();
     cy.wait('@saveNewAgreement');
     cy.contains('Loan Received from Bank').should('exist');
     PageUtils.urlCheck('/list');
@@ -153,7 +151,7 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank', () => {
     cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Loans().FromBank();
 
       ContactLookup.getContact(result.organization.name);
@@ -162,7 +160,7 @@ describe('Loans', () => {
 
       PageUtils.clickAccordion('STEP TWO');
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-      PageUtils.clickButton('Save transactions');
+      PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
       PageUtils.urlCheck('/list');
       cy.contains('Loan Received from Bank').should('exist');
 
@@ -172,12 +170,12 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Make loan repayment', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Make loan repayment', 'LOAN_REPAYMENT_MADE');
 
       PageUtils.calendarSetValue('[data-cy="expenditure_date"]', new Date(currentYear, 4 - 1, 27));
       PageUtils.enterValue('#amount', formData.amount);
-      TransactionDetailPage.clickSave(result.report);
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Made').should('exist');
     });
@@ -185,24 +183,50 @@ describe('Loans', () => {
 
   it('should test: Loan Received from Bank - Review loan agreement', () => {
     setupLoanFromBank({ organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       clickLoan('Review loan agreement');
-      cy.get('input[id^="loan-agreement-amount-"]').should('exist');
-      cy.get('#loan_incurred_date').should('exist');
+      cy.intercept('PUT', '**/api/v1/transactions/**').as('SaveTransactions');
+      const reportId = result.report;
+
+      const txList = (s: string) =>
+        new RegExp(String.raw`/api/v1/transactions/\?(?=.*report_id=${reportId})${s}.*`);
+
+      cy.intercept('GET', txList('(?=.*schedules=A)')).as('GetReceiptsAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=.*C)(?=.*schedules=.*D)')).as('GetLoansAfterSave');
+      cy.intercept('GET', txList('(?=.*schedules=.*B)(?=.*schedules=.*E)(?=.*schedules=.*F)'))
+        .as('GetDisbursementsAfterSave');
+
+      PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
+      cy.wait(['@SaveTransactions', '@GetLoansAfterSave', '@GetDisbursementsAfterSave', '@GetReceiptsAfterSave'], { timeout: 20000 });
+      PageUtils.locationCheck('/list');
+      cy.contains('Loan Received from Bank').should('exist');
     });
   });
 
   it('should test: Loan Received from Bank - add Guarantor', () => {
     setupLoanFromBank({ individual: true, organization: true }).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
+      cy.intercept({
+        method: 'GET',
+        pathname: '/api/v1/transactions/',
+        query: {
+          schedules: 'C2',
+        },
+      }).as('GetC2List');
       clickLoan('Edit');
-      cy.contains('ORGANIZATION NAME').should('exist');
-      cy.get('#organization_name').should('have.value', result.organization.name);
-      TransactionDetailPage.addGuarantor(
-        result.individual.last_name,
-        formData.amount,
-        result.report,
-      );
+
+      // wait for form to be done (load c2 table)
+      cy.wait('@GetC2List');
+      cy.get('.p-datatable-mask').should('not.exist');
+
+      // go to create guarantor
+      cy.intercept('PUT', '**/api/v1/transactions/**').as('saveAddGuarantor')
+      cy.contains('button', 'Save & add loan guarantor').should('be.enabled').click();
+      cy.wait('@saveAddGuarantor');
+      cy.contains('h1', 'Guarantors to loan source').should('be.visible');
+      ContactLookup.getContact(result.individual.last_name);
+      cy.get('#amount').safeType(formData['amount']);
+      TransactionDetailPage.clickSave( TransactionDetailPage.BUTTON);
       clickLoan('Edit');
       cy.contains('ORGANIZATION NAME').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);

@@ -222,7 +222,7 @@ const clickSaveAndConfirmCreatesNewContact = (
     `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
   ).as('GetDisbursements');
 
-  PageUtils.clickButton('Save');
+  TransactionDetailPage.clickSave();
 
   assertCreatesNewContactConfirmMessage(contactTypeLower, contactDisplay);
 
@@ -368,7 +368,7 @@ describe('Contacts: Transactions integration', () => {
       const rid = reportId;
 
       // INDIVIDUAL RECEIPT
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /Individual Receipt/i);
       cy.contains(/Individual Receipt/i).should('exist');
 
@@ -397,7 +397,7 @@ describe('Contacts: Transactions integration', () => {
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
 
       // TRANSFER
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       goToTransactionCreateFromList(/Add a receipt/i, /^Transfer$/i);
       cy.contains('h1', 'Transfer').should('exist');
 
@@ -426,8 +426,8 @@ describe('Contacts: Transactions integration', () => {
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
 
       // OPERATING EXPENDITURE
-      ReportListPage.goToReportList(rid);
-      goToTransactionCreateFromList(/Add a disbursement/i, /^Operating Expenditure$/i);
+      ReportListPage.gotToReportTransactionListPage(rid);
+      goToTransactionCreateFromList(/Add a disbursement/i, /Operating Expenditure/i);
       cy.contains(/Operating Expenditure/i).should('exist');
 
       openCreateContactModal('first');
@@ -502,7 +502,7 @@ describe('Contacts: Transactions integration', () => {
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
-      ReportListPage.goToReportList(rid);
+      ReportListPage.gotToReportTransactionListPage(rid);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
       cy.contains('Individual Receipt').should('exist');
@@ -526,7 +526,7 @@ describe('Contacts: Transactions integration', () => {
       cy.get('#occupation').should('have.value', '').click();
 
       cy.contains('button', 'Save').scrollIntoView();
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       cy.url().should('include', `report/${rid}/create/INDIVIDUAL_RECEIPT`);
       cy.contains(/employer.*required|this is a required field\./i, { timeout: 10000 }).should('exist');
@@ -535,7 +535,7 @@ describe('Contacts: Transactions integration', () => {
       cy.get('#employer').type(newEmployer);
       cy.get('#occupation').type(newOccupation);
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       assertSuggestedChangesConfirmDialog(displayName, [
         `Updated employer to ${newEmployer}`,

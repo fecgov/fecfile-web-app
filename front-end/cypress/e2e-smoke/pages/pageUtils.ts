@@ -69,7 +69,7 @@ export class PageUtils {
       );
     }
   }
-  
+
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
@@ -94,46 +94,7 @@ export class PageUtils {
     PageUtils.navigateCalendarTo(dateObj);
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    cy.wait(100);
-  }
-
-  private static monthIndex(monthText: string): number {
-    const monthPrefix = monthText.trim().toLowerCase().slice(0, 3);
-    return PageUtils.monthNames.findIndex((monthName) => monthName.toLowerCase().startsWith(monthPrefix));
-  }
-
-  static navigateCalendarTo(targetDate: Date) {
-    cy.get('@calendarElement')
-      .find('.p-datepicker-select-month:visible')
-      .first()
-      .invoke('text')
-      .then((displayedMonthText) => {
-        cy.get('@calendarElement')
-          .find('.p-datepicker-select-year:visible')
-          .first()
-          .invoke('text')
-          .then((displayedYearText) => {
-            const displayedMonth = PageUtils.monthIndex(displayedMonthText);
-            const displayedYear = Number(displayedYearText.trim());
-            if (displayedMonth < 0 || Number.isNaN(displayedYear)) {
-              throw new Error(
-                `Unable to resolve displayed calendar month/year from "${displayedMonthText}" and "${displayedYearText}"`,
-              );
-            }
-
-            const targetMonthIndex = targetDate.getFullYear() * 12 + targetDate.getMonth();
-            const displayedMonthIndex = displayedYear * 12 + displayedMonth;
-            const monthHops = targetMonthIndex - displayedMonthIndex;
-            if (monthHops === 0) {
-              return;
-            }
-
-            const navButton = monthHops > 0 ? '.p-datepicker-next-button:visible' : '.p-datepicker-prev-button:visible';
-            for (let i = 0; i < Math.abs(monthHops); i += 1) {
-              cy.get('@calendarElement').find(navButton).first().click();
-            }
-          });
-      });
+    cy.get('@calendarElement').should('not.exist');
   }
 
   static pickDay(day: string) {
@@ -153,96 +114,8 @@ export class PageUtils {
 
   // NOSONAR - this is a helper function for the sidebar
   static clickSidebarItem(menuItem: string) {
-    const normalizedMenuItem = PageUtils.normalizeSidebarLabel(menuItem);
-    const menuLabelSelector = '.p-panelmenu-header-label, .p-panelmenu-item-label';
-    const findPanelMenu = (): Cypress.Chainable<JQuery<HTMLElement>> =>
-      cy.get('p-panelmenu', { timeout: 15000 }).should('exist');
-    const nativeClick = ($link: JQuery<HTMLElement>, label: string) => {
-      expect($link.length, `${label} link count for "${menuItem}"`).to.eq(1);
-      const link = $link.get(0);
-      expect(link, `${label} link element for "${menuItem}"`).to.exist;
-      if (!link) {
-        throw new Error(`Missing ${label} link element for "${menuItem}"`);
-      }
-      link.click();
-    };
-    const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> =>
-      findMenuLink(visibleOnly)
-        .should('be.visible')
-        .then(($link) => nativeClick($link, label));
-
-    const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => {
-      return findPanelMenu()
-        .find(menuLabelSelector)
-        .filter(
-          (_, label) =>
-            PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem &&
-            (!visibleOnly || Cypress.dom.isVisible(label)),
-        )
-        .should(($labels) => {
-          expect(
-            $labels.length,
-            `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`,
-          ).to.eq(1);
-        });
-    };
-
-    const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> =>
-      findMenuLabel(visibleOnly)
-        .closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link')
-        .should('have.length', 1);
-
-    const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> =>
-      findMenuLabel(false).then(($candidateLabel) => { // NOSONAR - sidebar helper intentionally uses nested Cypress callbacks
-        if (Cypress.dom.isVisible($candidateLabel[0])) {
-          return findMenuLink(true);
-        }
-
-        const $ownerPanel = $candidateLabel.closest('.p-panelmenu-panel');
-        expect($ownerPanel.length, `owner sidebar panel for "${menuItem}"`).to.eq(1);
-        const ownerPanelIndex = $ownerPanel.first().index();
-        expect(ownerPanelIndex, `owner sidebar panel index for "${menuItem}"`).to.be.greaterThan(-1);
-
-        const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> =>
-          findPanelMenu()
-            .find('.p-panelmenu-panel')
-            .eq(ownerPanelIndex)
-            .find('> .p-panelmenu-header')
-            .should('have.length', 1);
-
-        return findOwnerHeader().then(($ownerHeader) => { // NOSONAR - sidebar helper intentionally uses nested Cypress callbacks
-          if (PageUtils.isSidebarHeaderExpanded($ownerHeader)) {
-            return findMenuLink(true);
-          }
-
-          return findOwnerHeader()
-            .find('a.p-panelmenu-header-link')
-            .should('have.length', 1)
-            .should('be.visible')
-            .then(($link) => nativeClick($link, 'owner sidebar header')) // NOSONAR - sidebar helper intentionally uses nested Cypress callbacks
-            .then(() => // NOSONAR - sidebar helper intentionally uses nested Cypress callbacks
-              findOwnerHeader().should(($header) => { // NOSONAR - sidebar helper intentionally uses nested Cypress callbacks
-                expect(
-                  PageUtils.isSidebarHeaderExpanded($header),
-                  `owner sidebar header expanded for "${menuItem}"`,
-                ).to.eq(true);
-              }),
-            )
-            .then(() => findMenuLink(true)); // NOSONAR - sidebar helper intentionally uses nested Cypress callbacks
-        });
-      });
-
-    return ensureVisibleMenuLink().then(($menuLink) => {
-      const isHeaderLink = $menuLink.hasClass('p-panelmenu-header-link');
-      const $header = $menuLink.closest('.p-panelmenu-header');
-      const shouldClick = !isHeaderLink || !PageUtils.isSidebarHeaderExpanded($header);
-
-      if (shouldClick) {
-        return clickMenuLink(true, 'sidebar target');
-      }
-
-      return cy.wrap(undefined, { log: false });
-    });
+    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
+    cy.get('@menuItem').click();
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -280,7 +153,7 @@ export class PageUtils {
     const exactLabel = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(label)}\s*$`, 'i');
 
     cy.get(alias)
-      .contains('.accordion-text strong, .header-label', exactLabel, { timeout: 5000 })
+      .contains('.accordion-text strong, .header-label', exactLabel)
       .first()
       .closest('p-accordion-header, .p-accordionheader')
       .should('be.visible')
@@ -296,20 +169,9 @@ export class PageUtils {
     );
 
     cy.get(alias)
-      .find('button:visible')
-      .then(($buttons) => {
-        const match = [...$buttons].find((button) => {
-          const text = (button.textContent ?? '').replaceAll(/\s+/g, ' ').trim();
-          return buttonLabelRx.test(text);
-        });
-
-        expect(match, `visible button match for ${String(name)}`).to.exist;
-        if (!match) {
-          throw new Error(`Missing visible button match for ${String(name)}`);
-        }
-
-        cy.wrap(match).click({ force });
-      });
+      .contains('button', name)
+      .first()
+      .click({ force });
   }
 
   static dateToString(date: Date) {
@@ -395,8 +257,7 @@ export class PageUtils {
   }
 
   static enterSecondCommitteeEmailIfneeded() {
-    cy.get(PageUtils.getAlias(''))
-      .find('[id="second-committee-admin-dialog"]')
+    cy.get(PageUtils.getAlias('[data-cy="second-committee-admin-actions"]:visible'))
       .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
       .then(($email) => {
         if ($email.length) {
@@ -405,10 +266,10 @@ export class PageUtils {
           cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
           cy.get('#email').should('have.value', 'admin@admin.com');
           cy.get('#email').click();
-          PageUtils.clickButton('Save');
+          PageUtils.clickButton('Save', '[data-cy="second-committee-admin-actions"]');
+          cy.get(PageUtils.getAlias('')).find('.p-toast-close-button').click();
         }
       });
-    cy.contains('Welcome to FECfile+').should('not.exist');
   }
 
   static submitReportForm() {
@@ -417,14 +278,12 @@ export class PageUtils {
     PageUtils.urlCheck('/submit');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    return getNormalizedFilingPassword().then((filingPassword) => {
-      PageUtils.enterValue('#filingPassword', filingPassword);
-      cy.get(alias).find('[data-cy="userCertified"]').first().click();
-      PageUtils.clickButton('Submit');
-      PageUtils.findOnPage('div', 'Are you sure?');
-      PageUtils.clickButton('Confirm');
-      cy.wait('@SubmitReport');
-    });
+    PageUtils.enterValue('#filingPassword', 'filing!Passw0rd');
+    cy.get(alias).find('[data-cy="userCertified"]').first().click();
+    PageUtils.clickButton('Submit');
+    PageUtils.findOnPage('div', 'Are you sure?');
+    PageUtils.clickButton('Confirm');
+    cy.wait('@SubmitReport');
   }
 
   static readonly blurActiveField = () => {

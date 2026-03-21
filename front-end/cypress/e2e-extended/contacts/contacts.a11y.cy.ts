@@ -68,13 +68,13 @@ describe('Contacts - axe smoke (critical)', () => {
   it('Add Contact dialog', () => {
     visitContactsList();
     PageUtils.clickButton('Add contact');
-    cy.get(ContactsHelpers.DIALOG).should('be.visible').then(checkCritical);
-    cy.get(ContactsHelpers.DIALOG)
+    cy.get(ContactsHelpers.CONTACT_DIALOG).should('be.visible').then(checkCritical);
+    cy.get(ContactsHelpers.CONTACT_DIALOG)
       .contains('button', /^Cancel$/)
       .should('be.visible')
       .focus()
       .type('{enter}');
-    cy.get(ContactsHelpers.DIALOG).should('not.exist');
+    cy.get(ContactsHelpers.CONTACT_DIALOG).should('not.exist');
   });
 
   it('Edit Contact dialog', () => {
@@ -101,7 +101,7 @@ describe('Contacts - axe smoke (critical)', () => {
       });
     PageUtils.clickKababItem(displayName, 'Edit');
     cy.contains(/Edit Contact/i).should('exist');
-    cy.get(ContactsHelpers.DIALOG)
+    cy.get(ContactsHelpers.CONTACT_DIALOG)
       .should('be.visible')
       .find('form#form')
       .should('exist')

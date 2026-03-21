@@ -26,18 +26,18 @@ describe('Contacts List (/contacts)', () => {
     const uid = Cypress._.random(1000, 9999);
 
     // Individual
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const individualFormData = {
       ...contactFormData,
       last_name: `IndLn${uid}`,
       first_name: `IndFn${uid}`,
     };
     ContactListPage.enterFormData(individualFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Candidate
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const candidateId = 'H0VA00001';
     const candidateFormData = {
       ...contactFormData,
@@ -50,11 +50,11 @@ describe('Contacts List (/contacts)', () => {
       first_name: `CandFn${uid}`,
     };
     ContactListPage.enterFormData(candidateFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Committee
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const committeeName = `Committee ${uid}`;
     const committeeId = 'C00000001';
     const committeeFormData = {
@@ -64,11 +64,11 @@ describe('Contacts List (/contacts)', () => {
       committee_id: committeeId,
     };
     ContactListPage.enterFormData(committeeFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Organization
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const organizationName = `Organization ${uid}`;
     const organizationFormData = {
       ...contactFormData,
@@ -76,8 +76,8 @@ describe('Contacts List (/contacts)', () => {
       name: organizationName,
     };
     ContactListPage.enterFormData(organizationFormData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
     ContactListPage.goToPage();
     ContactsHelpers.assertColumnHeaders(ContactsHelpers.CONTACTS_HEADERS);
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');

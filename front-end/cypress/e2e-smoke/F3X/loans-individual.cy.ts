@@ -16,7 +16,7 @@ function setupLoanReceivedFromIndividual() {
   return cy
     .wrap(DataSetup({ individual: true, individual2: true, committee: true }))
     .then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Loans().Individual();
       PageUtils.urlCheck('LOAN_RECEIVED_FROM_INDIVIDUAL');
       ContactLookup.getContact(result.individual.last_name);
@@ -71,7 +71,11 @@ describe('Loans', () => {
         .should('be.visible')
         .click();
 
-      cy.contains('tbody tr', result.individual2.last_name, { timeout: 15000 })
+      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**/').as('getTransaction');
+      cy.wait('@getTransaction').its('response.statusCode').should('be.equal', 200);
+      cy.contains('Guarantors').should('be.visible');
+
+      cy.contains('tbody tr', result.individual2.last_name)
           .should('be.visible');
 
       cy.intercept('DELETE', '**/api/v1/transactions/**').as('deleteGuarantor');
@@ -91,7 +95,7 @@ describe('Loans', () => {
         .its('response.statusCode')
         .should('be.equal', 200);
 
-      cy.contains('tbody tr', result.individual2.last_name, { timeout: 15000 })
+      cy.contains('tbody tr', result.individual2.last_name)
           .should('not.exist');
     });
   });
