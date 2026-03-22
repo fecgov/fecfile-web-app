@@ -108,14 +108,22 @@ export class PageUtils {
       .click();
   }
 
-  static clickSidebarSection(section: string) {
-    return PageUtils.clickSidebarItem(section);
+  static clickSidebarSection(section: string) {  
+    cy.contains('p-panelmenu .p-panelmenu-header', section)
+      .closest('.p-panelmenu-panel')
+      .find('.p-panelmenu-header')
+      .as('sectionHeader');
+
+    cy.get('@sectionHeader')
+      .click().then(() => {
+        cy.get('@sectionHeader').should('have.attr', 'data-p-highlight', 'true');
+      });
   }
 
   // NOSONAR - this is a helper function for the sidebar
   static clickSidebarItem(menuItem: string) {
     cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click();
+    cy.get('@menuItem').click({ force: true });
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -276,6 +284,7 @@ export class PageUtils {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
+    cy.contains('h1', 'Submit report').should('be.visible');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
     PageUtils.enterValue('#filingPassword', 'filing!Passw0rd');
