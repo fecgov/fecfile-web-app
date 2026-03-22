@@ -103,7 +103,7 @@ describe('Manage reports', () => {
       }
 
       PageUtils.clickButton('Save and continue', '[data-cy="save-cancel-actions"]:visible');
-      cy.get('[data-cy="print-preview"]').should('exist');
+      cy.get('[data-cy="print-preview"]').should('be.visible');
 
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
       PageUtils.shouldNotHaveSidebarItem('Report Status');
@@ -113,11 +113,14 @@ describe('Manage reports', () => {
       const memoText = faker.lorem.sentence({ min: 1, max: 4 });
       ReportLevelMemoPage.enterFormData(memoText);
       PageUtils.clickButton('Save & continue', '[data-cy="report-level-memo-actions"]:visible');
+      // Verify we've landed on the submit report page before checking
+      // back on the memo page
+      cy.get('#submit-report-container').should('exist');
 
       // Verify it is still there when we go back to the page
       PageUtils.clickSidebarSection('REVIEW A REPORT');
       PageUtils.clickSidebarItem('Add a report level memo');
-      cy.get('[id="text4000"]').should('have.value', memoText);
+      cy.get('[id="text4000"]:visible').should('have.value', memoText);
 
       // Submit report and verify report status link now available
       PageUtils.clickSidebarSection('SIGN & SUBMIT');
