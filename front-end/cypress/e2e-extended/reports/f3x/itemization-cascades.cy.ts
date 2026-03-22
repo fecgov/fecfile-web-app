@@ -36,16 +36,16 @@ describe('Extended F3X Itemization Cascades', () => {
   });
 
   it('parent/child receipt row-action unitemize is rejected and preserves itemization state @allow-5xx', () => {
-    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for itemization rejection flow
       F3XAggregationHelpers.createTransaction(
         buildScheduleA('INDIVIDUAL_RECEIPT', 250, `${currentYear}-04-27`, result.individual, result.report),
-      ).then((parent) => {
+      ).then((parent) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for itemization rejection flow
         F3XAggregationHelpers.createTransaction(
           buildScheduleA('INDIVIDUAL_RECEIPT', 250, `${currentYear}-04-28`, result.individual, result.report, {
             parent_transaction_id: parent.id,
             memo_code: true,
           }),
-        ).then((child) => {
+        ).then((child) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for itemization rejection flow
           F3XAggregationHelpers.goToReport(result.report);
           F3XAggregationHelpers.assertRowExists(F3XAggregationHelpers.receiptsTableRoot, parent.id);
           F3XAggregationHelpers.assertRowExists(F3XAggregationHelpers.receiptsTableRoot, child.id);
@@ -55,7 +55,7 @@ describe('Extended F3X Itemization Cascades', () => {
           F3XAggregationHelpers.interceptUpdateItemizationAggregation('ParentChildUnitemize');
           F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.receiptsTableRoot, parent.id, 'Unitemize');
           F3XAggregationHelpers.confirmDialog();
-          cy.wait('@ParentChildUnitemize').then((interception) => {
+          cy.wait('@ParentChildUnitemize').then((interception) => { // NOSONAR - Cypress assertion block intentionally uses nested callbacks for itemization rejection flow
             expect(interception.request.url).to.contain(`/transactions/${parent.id}/update-itemization-aggregation/`);
             expect(interception.response?.statusCode).to.equal(500);
           });

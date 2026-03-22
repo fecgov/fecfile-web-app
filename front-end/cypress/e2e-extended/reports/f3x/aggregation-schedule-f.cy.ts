@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Initialize, setCommitteeToPTY } from '../../../e2e-smoke/pages/loginPage';
-import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { currentYear } from '../../../e2e-smoke/pages/pageUtils';
 import { DataSetup } from '../../../e2e-smoke/F3X/setup';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 

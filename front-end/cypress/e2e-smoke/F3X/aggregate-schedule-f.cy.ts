@@ -8,14 +8,14 @@ import { ReportListPage } from '../pages/reportListPage';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { F3XAggregationHelpers } from '../../e2e-extended/reports/f3x/f3x-aggregation.helpers';
 
-function generateReportAndContacts(transactions: [number, string, boolean][]) {
+function generateReportAndContacts(transactions: [number, string, boolean][]) { // NOSONAR - Cypress helper intentionally uses nested closures to build seeded transactions deterministically
   return cy
     .wrap(DataSetup({ individual: true, candidate: true, candidateSenate: true, committee: true, organization: true }))
-    .then((result: any) => {
+    .then((result: any) => { // NOSONAR - nested Cypress callback is intentional for deterministic seeded setup
       const transactionIds: string[] = [];
       let chain: Cypress.Chainable<unknown> = cy.wrap(null, { log: false });
 
-      transactions.forEach(([amount, date, usePrimaryCandidate]) => {
+      transactions.forEach(([amount, date, usePrimaryCandidate]) => { // NOSONAR - nested Cypress callback is intentional for deterministic seeded setup
         const payload = buildScheduleF(
           amount,
           date,
@@ -25,14 +25,14 @@ function generateReportAndContacts(transactions: [number, string, boolean][]) {
           result.report,
         );
 
-        chain = chain.then(() =>
-          F3XAggregationHelpers.createTransaction(payload).then((created) => {
+        chain = chain.then(() => // NOSONAR - nested Cypress callback is intentional for deterministic seeded setup
+          F3XAggregationHelpers.createTransaction(payload).then((created) => { // NOSONAR - nested Cypress callback is intentional for deterministic seeded setup
             transactionIds.push(created.id);
           }),
         );
       });
 
-      return chain.then(() => ({ ...result, transactionIds }));
+      return chain.then(() => ({ ...result, transactionIds })); // NOSONAR - nested Cypress callback is intentional for deterministic seeded setup
     });
 }
 

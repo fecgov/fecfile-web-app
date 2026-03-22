@@ -9,8 +9,8 @@ import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
-  static SPLIT_BUTTON = 'navigation-control-splitbutton';
-  static BUTTON = 'navigation-control-button';
+  static readonly SPLIT_BUTTON = 'navigation-control-splitbutton';
+  static readonly BUTTON = 'navigation-control-button';
 
   static enterDate(dateFieldName: string, dateFieldValue: Date, alias = '') {
     alias = PageUtils.getAlias(alias);
