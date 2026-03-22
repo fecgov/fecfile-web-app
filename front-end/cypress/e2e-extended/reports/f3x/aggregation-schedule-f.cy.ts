@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize, setCommitteeToPTY } from '../../e2e-smoke/pages/loginPage';
-import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
+import { Initialize, setCommitteeToPTY } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 describe('Extended F3X Schedule F Aggregation', () => {
@@ -42,7 +42,7 @@ describe('Extended F3X Schedule F Aggregation', () => {
 
         F3XAggregationHelpers.openDisbursement(secondId);
         F3XAggregationHelpers.clearAndType('#general_election_year', '2026');
-        PageUtils.blurActiveField();
+        cy.blurActiveField();
         F3XAggregationHelpers.assertScheduleFAggregateField('$60.00');
         F3XAggregationHelpers.clickSave();
 

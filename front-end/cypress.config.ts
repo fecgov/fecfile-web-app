@@ -7,9 +7,6 @@ const videoSetting = CypressConfigHelper.resolveCypressVideo(process.env.CYPRESS
 
 export default defineConfig({
   env: {
-    FILING_PASSWORD: CypressConfigHelper.resolveFilingPassword(
-      process.env.CYPRESS_FILING_PASSWORD,
-    ),
     ...CypressConfigHelper.failOn5xxDefaults,
   },
   defaultCommandTimeout: 10000,

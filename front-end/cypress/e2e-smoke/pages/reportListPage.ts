@@ -1,7 +1,6 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
-import { getNormalizedFilingPassword } from '../../support/filing-password';
 
 export class ReportListPage {
   static goToPage() {

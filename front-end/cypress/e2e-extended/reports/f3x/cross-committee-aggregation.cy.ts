@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
-import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
-import { currentYear } from '../../e2e-smoke/pages/pageUtils';
-import { F3X_Q1, F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { ContactListPage } from '../../../e2e-smoke/pages/contactListPage';
+import { ReportListPage } from '../../../e2e-smoke/pages/reportListPage';
+import { currentYear } from '../../../e2e-smoke/pages/pageUtils';
+import { F3X_Q1, F3X_Q2 } from '../../../e2e-smoke/requests/library/reports';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 describe('Extended F3X Cross-Committee Aggregation Isolation', () => {

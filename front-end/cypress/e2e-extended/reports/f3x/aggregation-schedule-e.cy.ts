@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
-import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
+import { ContactLookup } from '../../../e2e-smoke/pages/contactLookup';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 describe('Extended F3X Schedule E Aggregation', () => {
@@ -34,7 +34,7 @@ describe('Extended F3X Schedule E Aggregation', () => {
 
         F3XAggregationHelpers.openDisbursement(secondId);
         ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
-        PageUtils.blurActiveField();
+        cy.blurActiveField();
         F3XAggregationHelpers.assertCalendarYtdField('$50.00');
         F3XAggregationHelpers.clickSave();
 
@@ -72,7 +72,7 @@ describe('Extended F3X Schedule E Aggregation', () => {
         F3XAggregationHelpers.openDisbursement(secondId);
         PageUtils.selectDropdownSetValue('[inputid="electionType"]', 'G');
         F3XAggregationHelpers.clearAndType('#electionYear', `${currentYear}`);
-        PageUtils.blurActiveField();
+        cy.blurActiveField();
         F3XAggregationHelpers.assertCalendarYtdField('$40.00');
         F3XAggregationHelpers.clickSave();
 

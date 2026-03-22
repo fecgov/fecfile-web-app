@@ -6,6 +6,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { F3XAggregationHelpers } from '../../e2e-extended/reports/f3x/f3x-aggregation.helpers';
 
 const formData = {
   ...defaultLoanFormData,
@@ -65,6 +66,9 @@ describe('Loans', () => {
     setupLoanReceivedFromIndividual().then((result: any) => {
       TransactionDetailPage.addGuarantor(result.individual2.last_name, formData['amount'], result.report);
       const receipts = PageUtils.getAlias('app-transaction-receipts');
+      const guarantorDisplayName = [result.individual2.last_name, result.individual2.first_name]
+        .filter(Boolean)
+        .join(', ');
 
       cy.get(receipts)
         .contains('Loan Received from Individual')
@@ -75,8 +79,9 @@ describe('Loans', () => {
       cy.wait('@getTransaction').its('response.statusCode').should('be.equal', 200);
       cy.contains('Guarantors').should('be.visible');
 
-      cy.contains('tbody tr', result.individual2.last_name)
-          .should('be.visible');
+      cy.get('app-transaction-guarantors p-table')
+        .contains('td', guarantorDisplayName)
+        .should('be.visible');
 
       cy.intercept('DELETE', '**/api/v1/transactions/**').as('deleteGuarantor');
       cy.intercept(
@@ -84,7 +89,11 @@ describe('Loans', () => {
         /\/api\/v1\/transactions\/\?page=1&ordering=name&page_size=5&parent=.*&schedules=C2/,
       ).as('guarantorsReload');
 
-      PageUtils.clickKababItem(result.individual2.last_name, 'Delete');
+      F3XAggregationHelpers.clickRowActionByCellText(
+        'app-transaction-guarantors p-table',
+        guarantorDisplayName,
+        'Delete',
+      );
       PageUtils.clickButton('Confirm');
 
       cy.wait('@deleteGuarantor')
@@ -95,8 +104,9 @@ describe('Loans', () => {
         .its('response.statusCode')
         .should('be.equal', 200);
 
-      cy.contains('tbody tr', result.individual2.last_name)
-          .should('not.exist');
+      cy.get('app-transaction-guarantors p-table')
+        .contains(guarantorDisplayName)
+        .should('not.exist');
     });
   });
 });

@@ -1,9 +1,62 @@
+type CommitteeMemberApiRow = {
+  id?: string;
+  email?: string;
+};
+
 export class UsersHelpers {
   static readonly emailInput = () => cy.get("@dialog").find("#email").first();
   static readonly submitBtn  = () => cy.get("@dialog").find("[data-cy='membership-submit']");
 
+  private static apiRequest<T = unknown>(method: string, url: string, body?: unknown, failOnStatusCode = true) {
+    return cy.getAllCookies().then((cookies) => {
+      const cookieHeader = cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
+      const csrfToken = cookies.find((cookie) => cookie.name === 'csrftoken')?.value ?? '';
+
+      return cy.request<T>({
+        method,
+        url,
+        body,
+        failOnStatusCode,
+        headers: {
+          Cookie: cookieHeader,
+          'x-csrftoken': csrfToken,
+        },
+      });
+    });
+  }
+
   static aliasUsersTable() {
     cy.get('table').first().as('table');
+  }
+
+  static deleteAllTestUsers() {
+    const protectedEmails = new Set(['test@test.com', 'admin@admin.com', 'test333@test.com']);
+
+    return UsersHelpers.apiRequest<CommitteeMemberApiRow[]>(
+      'GET',
+      'http://localhost:8080/api/v1/committee-members/',
+    ).then((response) => {
+      const members = Array.isArray(response.body) ? response.body : [];
+      const generatedUsers = members.filter((member) => {
+        const email = (member.email ?? '').toLowerCase();
+        return (
+          typeof member.id === 'string' &&
+          /^user_.*@fec\.gov$/i.test(email) &&
+          !protectedEmails.has(email)
+        );
+      });
+
+      if (generatedUsers.length === 0) {
+        return cy.wrap(null, { log: false });
+      }
+
+      return cy.wrap(generatedUsers, { log: false }).each((member) => {
+        return UsersHelpers.apiRequest(
+          'DELETE',
+          `http://localhost:8080/api/v1/committee-members/${member.id}/remove-member/`,
+        );
+      });
+    });
   }
 
   static assertUsersTableColumns(expected: string[]) {
@@ -25,10 +78,8 @@ export class UsersHelpers {
   }
 
   static getRowByEmail(email: string) {
-    return cy.get('@table').find('tbody tr').filter((_, tr) => {
-      const txt = tr.innerText.toLowerCase();
-      return txt.includes(email.toLowerCase());
-    });
+    const exactEmail = new RegExp(`^\\s*${Cypress._.escapeRegExp(email)}\\s*$`, 'i');
+    return cy.get('@table').contains('tbody tr td', exactEmail).closest('tr');
   }
 
   static assertNoAddUserButton() {

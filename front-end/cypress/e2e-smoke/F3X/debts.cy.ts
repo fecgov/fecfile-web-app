@@ -1,15 +1,19 @@
-import { defaultDebtFormData as debtFormData } from '../models/TransactionFormModel';
+import {
+  defaultDebtFormData as debtFormData,
+  defaultScheduleFormData,
+} from '../models/TransactionFormModel';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactFormData } from '../models/ContactFormModel';
-import { ContactListPage } from '../pages/contactListPage';
 import { ContactLookup } from '../pages/contactLookup';
 import { buildDebtOwedByCommittee } from '../requests/library/transactions';
 import { ReportListPage } from '../pages/reportListPage';
-import { defaultScheduleFormData } from '../models/TransactionFormModel'
+import { F3XAggregationHelpers } from '../../e2e-extended/reports/f3x/f3x-aggregation.helpers';
+import { makeF3x } from '../requests/methods';
+import { F3X_Q3 } from '../requests/library/reports';
 import { assertDebtFieldValues } from './utils/debt-assertions';
 
 function setupCoordinatedPartyExpenditure(
@@ -31,27 +35,120 @@ function setupCoordinatedPartyExpenditure(
   TransactionDetailPage.clickSave();
 }
 
-function createDebtRepaymentCallback(result: any) {
-  return () => {
-    ReportListPage.gotToReportTransactionListPage(result.report);
-    cy.contains('Debt Owed By Committee').should('exist');
+function exactText(value: string): RegExp {
+  return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value)}\s*$`);
+}
 
-    PageUtils.clickKababItem(
-      'Debt Owed By Committee',
-      'Report debt repayment',
-      'app-transaction-loans-and-debts',
-    );
-    PageUtils.urlCheck('select/disbursement?debt=');
-    cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
-    PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
-    cy.contains('Coordinated Party Expenditure').click({ force: true });
+function debtRowByLabel(label: string): Cypress.Chainable<JQuery<HTMLTableRowElement>> {
+  return cy
+    .get(F3XAggregationHelpers.loansAndDebtsTableRoot)
+    .contains('a', exactText(label))
+    .closest('tr');
+}
+
+function assertDebtListBalance(label: string, expected: string): void {
+  debtRowByLabel(label).find('td').eq(5).should('contain', expected);
+}
+
+function openDebtByLabel(label: string): void {
+  cy.get(F3XAggregationHelpers.loansAndDebtsTableRoot)
+    .contains('a', exactText(label))
+    .click();
+}
+
+function debtTransactionIdByLabelAndBalance(label: string, expectedBalance: string): Cypress.Chainable<string> {
+  return cy
+    .get(F3XAggregationHelpers.loansAndDebtsTableRoot)
+    .find('tbody tr')
+    .then(($rows) => {
+      const matchingRows = $rows.filter((_, row) => {
+        const $row = Cypress.$(row);
+        const rowLabel = $row.find('a').first().text().trim();
+        const rowBalance = $row.find('td').eq(5).text();
+        return exactText(label).test(rowLabel) && rowBalance.includes(expectedBalance);
+      });
+
+      expect(matchingRows.length, `debt rows for ${label} at ${expectedBalance}`).to.be.greaterThan(0);
+
+      return cy
+        .wrap(matchingRows.get(0))
+        .find('a')
+        .first()
+        .invoke('attr', 'href')
+        .then((href) => {
+          expect(href, `debt transaction href for ${label}`).to.be.a('string');
+          const hrefValue = href ?? '';
+          const match = /\/list\/([0-9a-f-]+)/i.exec(hrefValue);
+          const debtId = match?.[1];
+
+          expect(debtId, `debt transaction id in href ${hrefValue}`).to.be.a('string');
+          if (!debtId) {
+            throw new Error(`Could not parse debt transaction id from href ${hrefValue}`);
+          }
+
+          return debtId;
+        });
+    });
+}
+
+function createF3XReport(reportRequest: Parameters<typeof makeF3x>[0]): Cypress.Chainable<string> {
+  return makeF3x(reportRequest).then((response) => {
+    const reportId = response.body?.id;
+
+    expect(reportId, `created report id for ${reportRequest.report_code}`).to.be.a('string');
+    if (!reportId) {
+      throw new Error(`Could not parse created report id for ${reportRequest.report_code}`);
+    }
+
+    return reportId;
+  });
+}
+
+function waitForDebtBalanceAtCloseByApi(
+  debtId: string,
+  expectedBalance: string,
+  options: { maxAttempts?: number; intervalMs?: number } = {},
+): Cypress.Chainable<void> {
+  const maxAttempts = options.maxAttempts ?? 8;
+  const intervalMs = options.intervalMs ?? 500;
+
+  const poll = (attempt: number): Cypress.Chainable<void> => {
+    return F3XAggregationHelpers.getTransaction(debtId).then((transaction) => {
+      const actualBalance = String(transaction?.balance_at_close ?? '');
+
+      if (actualBalance === expectedBalance) {
+        return;
+      }
+
+      if (attempt >= maxAttempts) {
+        expect(
+          actualBalance,
+          `Debt balance_at_close via API (attempt ${attempt + 1}/${maxAttempts + 1})`,
+        ).to.equal(expectedBalance);
+        return;
+      }
+
+      return cy.wait(intervalMs).then(() => poll(attempt + 1));
+    });
+  };
+
+  return poll(0);
+}
+
+function continueDebtRepaymentFlow(result: any, debtId: string): void {
+  ReportListPage.gotToReportTransactionListPage(result.report);
+  F3XAggregationHelpers.assertRowExists(F3XAggregationHelpers.loansAndDebtsTableRoot, debtId);
+  F3XAggregationHelpers.openDebtDisbursementRepaymentSelection(debtId);
+  cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
+  PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
+  cy.contains('Coordinated Party Expenditure').click();
 
   setupCoordinatedPartyExpenditure(result.organization, result.committee, result.candidate);
 
-  ReportListPage.goToReportList(result.report, false, true, true);
+  ReportListPage.gotToReportTransactionListPage(result.report, false, true, true);
   cy.contains('Coordinated Party Expenditure').should('exist');
 
-  PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
+  PageUtils.switchCommittee(F3XAggregationHelpers.committeePrimaryId);
 }
 
 function handleDebtOwedByCommitteeLoanReportDebtRepayment(result: any) {
@@ -86,7 +183,7 @@ describe('Debts', () => {
       PageUtils.urlCheck('select/disbursement?debt=');
       cy.contains('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS').should('exist');
       PageUtils.clickAccordion('CONTRIBUTIONS/EXPENDITURES TO/ON BEHALF OF REGISTERED FILERS');
-      cy.contains('Coordinated Party Expenditure').should('not.exist'); // PAC committee
+      cy.contains('Coordinated Party Expenditure').should('not.exist');
     });
   });
 
@@ -115,24 +212,24 @@ describe('Debts', () => {
       PageUtils.containedOnPage('Debt Owed To Committee');
 
       ContactLookup.getCommittee(result.committee);
-      TransactionDetailPage.enterLoanFormData({
-        ...debtFormData,
-        amount: 10000
-      }, false, '', '#amount');
+      TransactionDetailPage.enterLoanFormData(
+        {
+          ...debtFormData,
+          amount: 10000,
+        },
+        false,
+        '',
+        '#amount',
+      );
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains('Debt Owed To Committee').should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$10,000.00").should('exist');
+      debtRowByLabel('Debt Owed To Committee').should('exist');
+      assertDebtListBalance('Debt Owed To Committee', '$10,000.00');
 
-      PageUtils.clickKababItem(
-        'Debt Owed To Committee',
-        "Report debt repayment"
-      );
-
-      PageUtils.clickAccordion("CONTRIBUTIONS FROM INDIVIDUALS/PERSONS")
-      PageUtils.clickLink("Individual Receipt");
-      ContactLookup.getContact(result.individual.last_name)
+      PageUtils.clickKababItem('Debt Owed To Committee', 'Report debt repayment');
+      PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+      PageUtils.clickLink('Individual Receipt');
+      ContactLookup.getContact(result.individual.last_name);
       TransactionDetailPage.enterScheduleFormData(
         {
           ...defaultScheduleFormData,
@@ -143,15 +240,15 @@ describe('Debts', () => {
         false,
         '',
         true,
-        'contribution_date'
-      )
+        'contribution_date',
+      );
       TransactionDetailPage.clickSave();
-      PageUtils.urlCheck('/list');
+
+      ReportListPage.gotToReportTransactionListPage(result.report);
       cy.contains('Individual Receipt').should('exist');
       assertDebtListBalance('Debt Owed To Committee', '$9,000.00');
 
       openDebtByLabel('Debt Owed To Committee');
-
       assertDebtFieldValues({
         amount: '$10,000.00',
         balance: '$0.00',
@@ -159,63 +256,66 @@ describe('Debts', () => {
         balanceAtClose: '$9,000.00',
       });
 
-      ReportListPage.createF3X({
-        ...defaultForm3XData,
-        filing_frequency: 'Q',
-        report_code: 'Q3',
-        coverage_from_date: new Date(currentYear, 7 - 1, 1),
-        coverage_through_date: new Date(currentYear, 9 - 1, 30),
-      });
+      createF3XReport(F3X_Q3).then((q3ReportId) => {
+        ReportListPage.gotToReportTransactionListPage(q3ReportId);
+        debtRowByLabel('Debt Owed To Committee').should('exist');
+        assertDebtListBalance('Debt Owed To Committee', '$9,000.00');
 
-      cy.contains("Debt Owed To Committee").should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$9,000.00").should('exist');
+        debtTransactionIdByLabelAndBalance('Debt Owed To Committee', '$9,000.00').then((carriedForwardDebtId) => {
+          F3XAggregationHelpers.openRowById(
+            F3XAggregationHelpers.loansAndDebtsTableRoot,
+            carriedForwardDebtId,
+          );
 
-      PageUtils.clickLink("Debt Owed To Committee");
+          cy.get('#amount').should('exist').clear().safeType('2500').blurActiveField();
+          cy.get('#balance_at_close').should('have.value', '$11,500.00');
+          TransactionDetailPage.clickSave();
 
-      cy.get('#amount').should('exist').clear().safeType('2500');
-      TransactionDetailPage.clickSave();
-      PageUtils.urlCheck('/list');
+          ReportListPage.gotToReportTransactionListPage(q3ReportId);
+          F3XAggregationHelpers.assertRowExists(
+            F3XAggregationHelpers.loansAndDebtsTableRoot,
+            carriedForwardDebtId,
+          );
+          F3XAggregationHelpers.assertLoansBalance(carriedForwardDebtId, '$11,500.00');
 
-      cy.contains("Debt Owed To Committee").should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$11,500.00").should('exist');
+          F3XAggregationHelpers.openDebtRepaymentSelection(carriedForwardDebtId);
+          PageUtils.clickAccordion('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+          PageUtils.clickLink('Individual Receipt');
+          ContactLookup.getContact(result.individual.last_name);
+          TransactionDetailPage.enterScheduleFormData(
+            {
+              ...defaultScheduleFormData,
+              electionType: undefined,
+              electionYear: undefined,
+              date_received: new Date(currentYear, 7 - 1, 15),
+              amount: 11500,
+            },
+            false,
+            '',
+            true,
+            'contribution_date',
+          );
+          TransactionDetailPage.clickSave();
 
-      PageUtils.clickKababItem(
-        'Debt Owed To Committee',
-        "Report debt repayment"
-      );
+          waitForDebtBalanceAtCloseByApi(carriedForwardDebtId, '0.00');
 
-      PageUtils.clickAccordion("CONTRIBUTIONS FROM INDIVIDUALS/PERSONS")
-      PageUtils.clickLink("Individual Receipt");
-      ContactLookup.getContact(result.individual.last_name)
-      TransactionDetailPage.enterScheduleFormData(
-        {
-          ...defaultScheduleFormData,
-          electionType: undefined,
-          electionYear: undefined,
-          date_received: new Date(currentYear, 7 - 1, 15),
-          amount: 11500,
-        },
-        false,
-        '',
-        true,
-        'contribution_date'
-      )
-      TransactionDetailPage.clickSave();
-      PageUtils.urlCheck('/list');
-      cy.contains("Debt Owed To Committee").should('exist');
-      cy.get('.p-datatable-tbody > tr.ng-star-inserted > :nth-child(6)')
-        .contains("$0.00").should('exist');
+          ReportListPage.gotToReportTransactionListPage(q3ReportId);
+          F3XAggregationHelpers.assertRowExists(
+            F3XAggregationHelpers.loansAndDebtsTableRoot,
+            carriedForwardDebtId,
+          );
+          F3XAggregationHelpers.assertLoansBalance(carriedForwardDebtId, '$0.00');
 
-      PageUtils.clickLink("Debt Owed To Committee");
-
-      assertDebtFieldValues({
-        amount: '$2,500.00',
-        balance: '$9,000.00',
-        paymentAmount: '$11,500.00',
-        balanceAtClose: '$0.00',
-      });
+          F3XAggregationHelpers.openRowById(
+            F3XAggregationHelpers.loansAndDebtsTableRoot,
+            carriedForwardDebtId,
+          );
+          assertDebtFieldValues({
+            amount: '$2,500.00',
+            balance: '$9,000.00',
+            paymentAmount: '$11,500.00',
+            balanceAtClose: '$0.00',
+          });
 
           createF3XReport({
             ...F3X_Q3,
@@ -223,7 +323,7 @@ describe('Debts', () => {
             coverage_from_date: `${currentYear}-10-01`,
             coverage_through_date: `${currentYear}-12-31`,
           }).then((yearEndReportId) => {
-            ReportListPage.goToReportList(yearEndReportId);
+            ReportListPage.gotToReportTransactionListPage(yearEndReportId);
             F3XAggregationHelpers.assertLoanOrDebtTransactionAbsent(carriedForwardDebtId);
           });
         });
@@ -246,7 +346,6 @@ describe('Debts', () => {
         F3XAggregationHelpers.goToReport(result.report);
         F3XAggregationHelpers.openRowById(F3XAggregationHelpers.loansAndDebtsTableRoot, debtId);
         cy.get('#balance_at_close').should('have.value', '$5,000.00');
-        F3XAggregationHelpers.clickSave();
 
         F3XAggregationHelpers.deleteTransactionById(repaymentId);
         F3XAggregationHelpers.goToReport(result.report);
@@ -259,13 +358,11 @@ describe('Debts', () => {
 
   describe('test PTY', () => {
     beforeEach(() => {
-      ContactListPage.deleteAllContacts();
-      PageUtils.switchCommittee('7c176dc0-7062-49b5-bc35-58b4ef050d08');
-      ContactListPage.deleteAllContacts();
+      PageUtils.switchCommittee(F3XAggregationHelpers.committeePtyId);
     });
 
     afterEach(() => {
-      PageUtils.switchCommittee('c94c5d1a-9e73-464d-ad72-b73b5d8667a9');
+      PageUtils.switchCommittee(F3XAggregationHelpers.committeePrimaryId);
     });
 
     it('should test Debt Owed By Committee loan - Report debt repayment', () => {
@@ -275,9 +372,11 @@ describe('Debts', () => {
         }),
       ).then((result: any) => {
         return F3XAggregationHelpers.createContact(F3XAggregationHelpers.uniqueCommitteeSeed()).then((committee) => {
-          return F3XAggregationHelpers.createContact(F3XAggregationHelpers.uniqueHouseCandidateSeed()).then((candidate) => {
-            handleDebtOwedByCommitteeLoanReportDebtRepayment({ ...result, committee, candidate });
-          });
+          return F3XAggregationHelpers.createContact(F3XAggregationHelpers.uniqueHouseCandidateSeed()).then(
+            (candidate) => {
+              handleDebtOwedByCommitteeLoanReportDebtRepayment({ ...result, committee, candidate });
+            },
+          );
         });
       });
     });

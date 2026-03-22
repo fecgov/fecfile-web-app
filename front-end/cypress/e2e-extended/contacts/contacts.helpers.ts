@@ -523,7 +523,7 @@ export class ContactsHelpers {
       }).as('entityDetails');
     }
 
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     cy.get('#entity_type_dropdown').first().click();
 
     cy.contains('.p-select-option', entityLabel)
@@ -839,7 +839,7 @@ export class ContactsDeleteHelpers {
   }
 
   static openActionsMenu(contactName: string) {
-    PageUtils.blurActiveField();
+    cy.blurActiveField();
     PageUtils.getKabob(contactName);
     cy.get('.p-popover').filter(':visible').should('exist');
     cy.get('.p-popover').filter(':visible').contains('button', /Edit/i).should('be.visible');

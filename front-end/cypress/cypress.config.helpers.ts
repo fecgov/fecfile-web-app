@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import { normalizeFilingPassword } from './support/filing-password';
 
 export class CypressConfigHelper {
     static readonly failOn5xxDefaults = {
@@ -11,10 +10,6 @@ export class CypressConfigHelper {
 
   static resolveCypressVideo(string?: string) {
     return string?.trim().toLowerCase() === 'true';
-  }
-
-  static resolveFilingPassword(value?: string) {
-    return normalizeFilingPassword(value);
   }
 
   static deleteVideoOnSuccess(on: Cypress.PluginEvents) {

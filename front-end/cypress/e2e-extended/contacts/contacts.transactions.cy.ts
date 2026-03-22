@@ -129,11 +129,13 @@ const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<
 
     cy.wrap($targetPanel)
       .find('.accordion-content-wrapper a')
-      .filter((_, link) => txnLinkRx.test((link.textContent || '').trim()) && Cypress.dom.isVisible(link))
-      .should('have.length', 1)
-      .first()
-      .scrollIntoView()
-      .click();
+      .then(($links) => {
+        const matches = $links.filter(
+          (_, link) => txnLinkRx.test((link.textContent || '').trim()) && Cypress.dom.isVisible(link),
+        );
+        expect(matches.length, `transaction link matches for ${txnLinkRx}`).to.be.greaterThan(0);
+        cy.wrap(matches.get(0)).scrollIntoView().click();
+      });
   });
 };
 

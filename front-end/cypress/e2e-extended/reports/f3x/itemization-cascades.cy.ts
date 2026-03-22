@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
-import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
-import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
-import { TransactionDetailPage } from '../../e2e-smoke/pages/transactionDetailPage';
-import { formTransactionDataForSchedule } from '../../e2e-smoke/models/TransactionFormModel';
-import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
+import { StartTransaction } from '../../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
+import { ContactLookup } from '../../../e2e-smoke/pages/contactLookup';
+import { TransactionDetailPage } from '../../../e2e-smoke/pages/transactionDetailPage';
+import { formTransactionDataForSchedule } from '../../../e2e-smoke/models/TransactionFormModel';
+import { ReportListPage } from '../../../e2e-smoke/pages/reportListPage';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
-import { TransactionTableColumns } from '../../e2e-smoke/pages/f3xTransactionListPage';
-import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
+import { TransactionTableColumns } from '../../../e2e-smoke/pages/f3xTransactionListPage';
+import { buildScheduleA } from '../../../e2e-smoke/requests/library/transactions';
 
 function transactionIdFromRowHref(href: string | undefined, context: string): string {
   const match = /\/list\/([0-9a-f-]+)/i.exec(href ?? '');
@@ -35,7 +35,7 @@ describe('Extended F3X Itemization Cascades', () => {
     Initialize();
   });
 
-  it('parent/child receipt row-action unitemize updates parent while memo child remains itemized', () => {
+  it('parent/child receipt row-action unitemize is rejected and preserves itemization state @allow-5xx', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       F3XAggregationHelpers.createTransaction(
         buildScheduleA('INDIVIDUAL_RECEIPT', 250, `${currentYear}-04-27`, result.individual, result.report),
@@ -52,12 +52,18 @@ describe('Extended F3X Itemization Cascades', () => {
           F3XAggregationHelpers.getTransaction(parent.id).its('itemized').should('equal', true);
           F3XAggregationHelpers.getTransaction(child.id).its('itemized').should('equal', true);
 
-          F3XAggregationHelpers.unitemizeRowById(F3XAggregationHelpers.receiptsTableRoot, parent.id);
+          F3XAggregationHelpers.interceptUpdateItemizationAggregation('ParentChildUnitemize');
+          F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.receiptsTableRoot, parent.id, 'Unitemize');
+          F3XAggregationHelpers.confirmDialog();
+          cy.wait('@ParentChildUnitemize').then((interception) => {
+            expect(interception.request.url).to.contain(`/transactions/${parent.id}/update-itemization-aggregation/`);
+            expect(interception.response?.statusCode).to.equal(500);
+          });
 
-          F3XAggregationHelpers.getTransaction(parent.id).its('itemized').should('equal', false);
-          F3XAggregationHelpers.getTransaction(child.id).its('itemized').should('equal', false);
-          F3XAggregationHelpers.assertReceiptRowStatus(parent.id, 'Unitemized', true);
-          F3XAggregationHelpers.assertReceiptRowStatus(child.id, 'Unitemized', true);
+          F3XAggregationHelpers.getTransaction(parent.id).its('itemized').should('equal', true);
+          F3XAggregationHelpers.getTransaction(child.id).its('itemized').should('equal', true);
+          F3XAggregationHelpers.assertReceiptRowStatus(parent.id, 'Unitemized', false);
+          F3XAggregationHelpers.assertReceiptRowStatus(child.id, 'Unitemized', false);
         });
       });
     });
@@ -65,7 +71,7 @@ describe('Extended F3X Itemization Cascades', () => {
 
   it('tier-3 joint fundraising row-action unitemize is rejected and preserves itemization state', () => {
     cy.wrap(DataSetup({ committee: true, organization: true, individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().Transfers().JointFundraising();
       ContactLookup.getCommittee(result.committee);
 

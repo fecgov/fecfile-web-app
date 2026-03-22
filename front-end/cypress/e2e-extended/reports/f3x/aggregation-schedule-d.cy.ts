@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { TransactionDetailPage } from '../../e2e-smoke/pages/transactionDetailPage';
-import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
-import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
-import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
-import { defaultDebtFormData } from '../../e2e-smoke/models/TransactionFormModel';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { TransactionDetailPage } from '../../../e2e-smoke/pages/transactionDetailPage';
+import { ContactLookup } from '../../../e2e-smoke/pages/contactLookup';
+import { ReportListPage } from '../../../e2e-smoke/pages/reportListPage';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
+import { StartTransaction } from '../../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
+import { defaultDebtFormData } from '../../../e2e-smoke/models/TransactionFormModel';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 describe('Extended F3X Schedule D Aggregation', () => {
@@ -28,7 +28,6 @@ describe('Extended F3X Schedule D Aggregation', () => {
       }).then(({ debtId, repaymentId }) => {
         F3XAggregationHelpers.goToReport(result.report);
         F3XAggregationHelpers.assertDebtBalanceFieldOnOpen(debtId, '$5,000.00');
-        F3XAggregationHelpers.clickSave();
 
         F3XAggregationHelpers.deleteTransactionById(repaymentId);
         F3XAggregationHelpers.goToReport(result.report);
@@ -40,7 +39,7 @@ describe('Extended F3X Schedule D Aggregation', () => {
 
   it('D3 editing debt amount updates running debt balance_at_close', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Debts().ByCommittee();
       ContactLookup.getCommittee(result.committee, [], [], '', 'Committee');
 
@@ -69,7 +68,7 @@ describe('Extended F3X Schedule D Aggregation', () => {
 
         F3XAggregationHelpers.goToReport(result.report);
         F3XAggregationHelpers.openLoanOrDebt(debtId);
-        cy.get('#amount').clear().safeType('5500').blur();
+        cy.get('#amount').clear().safeType('5500').blurActiveField();
         cy.get('#balance_at_close').should('have.value', '$5,500.00');
         F3XAggregationHelpers.clickSave();
 

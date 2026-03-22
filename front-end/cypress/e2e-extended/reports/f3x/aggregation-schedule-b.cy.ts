@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { currentYear } from '../../e2e-smoke/pages/pageUtils';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
-import { buildContributionToCandidate } from '../../e2e-smoke/requests/library/transactions';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear } from '../../../e2e-smoke/pages/pageUtils';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
+import { buildContributionToCandidate } from '../../../e2e-smoke/requests/library/transactions';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 describe('Extended F3X Schedule B Aggregation', () => {

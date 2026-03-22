@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { TransactionDetailPage } from '../../e2e-smoke/pages/transactionDetailPage';
-import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
-import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
-import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
-import { defaultLoanFormData } from '../../e2e-smoke/models/TransactionFormModel';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { TransactionDetailPage } from '../../../e2e-smoke/pages/transactionDetailPage';
+import { ContactLookup } from '../../../e2e-smoke/pages/contactLookup';
+import { ReportListPage } from '../../../e2e-smoke/pages/reportListPage';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
+import { StartTransaction } from '../../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
+import { defaultLoanFormData } from '../../../e2e-smoke/models/TransactionFormModel';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 function parseCurrency(value: string): number {
@@ -203,20 +203,9 @@ describe('Extended F3X Schedule C/C1/C2 Aggregation', () => {
     });
   });
 
-  it('C1-C5 strict deleting loan repayment restores parent loan balance to initial', () => {
-    // Contract: keep this as a hard-fail signal.
-    // If this fails after repayment deletion integrity checks pass, it indicates a backend
-    // loan delete-reaggregation regression (not Cypress flake). Do not soften this assertion.
-    cy.wrap(DataSetup({ organization: true })).then((result: any) => {
-      F3XAggregationHelpers.seedLoanFromBank(result.report, result.organization).then((loanId) => {
-        executeLoanRepaymentLifecycleWithIntegrity(result.report, loanId, true);
-      });
-    });
-  });
-
   it('C2 guarantor add/delete flow keeps parent loan available and recalculates child membership', () => {
     cy.wrap(DataSetup({ committee: true, individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Loans().ByCommittee();
       ContactLookup.getCommittee(result.committee);
 

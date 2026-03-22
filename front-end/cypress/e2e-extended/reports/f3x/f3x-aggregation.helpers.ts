@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
-import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
-import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
-import { TransactionDetailPage } from '../../e2e-smoke/pages/transactionDetailPage';
-import { defaultDebtFormData, defaultScheduleFormData, DisbursementFormData } from '../../e2e-smoke/models/TransactionFormModel';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
-import { F3X, F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
-import { makeContact, makeF3x, makeTransaction } from '../../e2e-smoke/requests/methods';
+import { currentYear, PageUtils } from '../../../e2e-smoke/pages/pageUtils';
+import { ReportListPage } from '../../../e2e-smoke/pages/reportListPage';
+import { StartTransaction } from '../../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
+import { ContactLookup } from '../../../e2e-smoke/pages/contactLookup';
+import { TransactionDetailPage } from '../../../e2e-smoke/pages/transactionDetailPage';
+import { defaultDebtFormData, defaultScheduleFormData, DisbursementFormData } from '../../../e2e-smoke/models/TransactionFormModel';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
+import { F3X, F3X_Q2 } from '../../../e2e-smoke/requests/library/reports';
+import { makeContact, makeF3x, makeTransaction } from '../../../e2e-smoke/requests/methods';
 import {
   Authorizor,
   buildContributionToCandidate,
@@ -18,7 +18,7 @@ import {
   buildScheduleA,
   buildScheduleF,
   LoanInfo,
-} from '../../e2e-smoke/requests/library/transactions';
+} from '../../../e2e-smoke/requests/library/transactions';
 import {
   Candidate_House_A,
   Candidate_Senate_A,
@@ -26,7 +26,7 @@ import {
   Individual_A_A,
   MockContact,
   Organization_A,
-} from '../../e2e-smoke/requests/library/contacts';
+} from '../../../e2e-smoke/requests/library/contacts';
 
 interface SeedEntry {
   amount: number;
@@ -473,7 +473,7 @@ export class F3XAggregationHelpers {
 
     TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(formData, args.candidate, false, '', 'date_signed');
     this.clearAndType('#electionYear', `${electionYearFromCode}`);
-    PageUtils.blurActiveField();
+    cy.blurActiveField();
     this.clickSave();
 
     cy.wait('@CreateScheduleETransaction').then((interception) => {
@@ -587,8 +587,8 @@ export class F3XAggregationHelpers {
   }
 
   static goToReport(reportId: string): void {
-    ReportListPage.goToReportList(reportId);
-    cy.contains('Transactions in this report').should('exist');
+    ReportListPage.gotToReportTransactionListPage(reportId);
+    cy.contains('Transactions in this report').should('be.visible');
   }
 
   static reloadReport(reportId: string): void {
@@ -616,11 +616,11 @@ export class F3XAggregationHelpers {
     this.rowById(tableRoot, transactionId).within(() => {
       cy.get(this.rowActionButtonSelector).first().click();
     });
-    cy.get(this.rowActionMenuButtonSelector)
-      .filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''))
-      .should('have.length', 1)
-      .first()
-      .click();
+    cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
+      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(1);
+      cy.wrap(matchingButtons.get(0)).click();
+    });
   }
 
   static clickRowActionByCellText(tableRoot: string, cellText: string, actionLabel: string): void {
@@ -632,11 +632,11 @@ export class F3XAggregationHelpers {
         cy.get(this.rowActionButtonSelector).should('have.length', 1).first().click();
       });
 
-    cy.get(this.rowActionMenuButtonSelector)
-      .filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''))
-      .should('have.length', 1)
-      .first()
-      .click();
+    cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
+      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(1);
+      cy.wrap(matchingButtons.get(0)).click();
+    });
   }
 
   static confirmDialog(): void {
@@ -650,13 +650,8 @@ export class F3XAggregationHelpers {
       if ($body.find('.p-datepicker-panel:visible').length > 0) {
         cy.get('body').type('{esc}');
       }
-    });
-    PageUtils.blurActiveField();
-    cy.get(`${this.saveButtonSelector}:visible:not([disabled])`)
-      .filter((_, button) => this.exactText('Save').test(button.textContent ?? ''))
-      .should('have.length.at.least', 1)
-      .last()
-      .click();
+    }).blurActiveField();
+    PageUtils.clickButton('Save', 'app-navigation-control-bar:visible');
   }
 
   static assertRowStatus(
@@ -760,7 +755,7 @@ export class F3XAggregationHelpers {
   }
 
   static clearAndType(selector: string, value: string): void {
-    cy.get(selector).clear().safeType(value).blur();
+    cy.get(selector).clear().safeType(value);
   }
 
   static assertReceiptTransactionAbsent(transactionId: string): void {
@@ -1077,20 +1072,21 @@ export class F3XAggregationHelpers {
     this.rowById(tableRoot, transactionId).within(() => {
       cy.get(this.rowActionButtonSelector).first().click();
     });
-    cy.get(this.rowActionMenuButtonSelector)
-      .filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''))
-      .should('have.length', 1)
-      .first()
-      .should('be.visible');
+    cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
+      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(1);
+      cy.wrap(matchingButtons.get(0)).should('be.visible');
+    });
   }
 
   static assertActionDoesNotExist(tableRoot: string, transactionId: string, actionLabel: string): void {
     this.rowById(tableRoot, transactionId).within(() => {
       cy.get(this.rowActionButtonSelector).first().click();
     });
-    cy.get(this.rowActionMenuButtonSelector)
-      .filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''))
-      .should('have.length', 0);
+    cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
+      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(0);
+    });
     cy.get('body').type('{esc}');
   }
 

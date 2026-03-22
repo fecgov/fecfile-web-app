@@ -241,17 +241,21 @@ export function safeType(prevSubject: any, stringVal: string | number) {
   const subject = cy.wrap(prevSubject);
   const outString: string = safeString(stringVal);
 
-  if (outString.length != 0) {
-    subject.type(outString).blur();
+  if (outString.length === 0) {
+    return subject;
   }
 
-  return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
+  return subject.type(outString); //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
 }
 
 export function overwrite(prevSubject: any, stringVal: string | number) {
   const outString = safeString(stringVal);
 
   return safeType(prevSubject, '{selectall}{del}' + outString);
+}
+
+export function blurActiveField(_prevSubject?: unknown) {
+  return cy.get('body').click(0, 0);
 }
 
 declare global {

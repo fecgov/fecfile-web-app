@@ -92,12 +92,10 @@ describe('Contacts List (/contacts)', () => {
 
   it('checks pagination controls empty state', () => {
     cy.contains(/results\s*per\s*page:/i).should('exist');
-    SharedHelpers.openResultsPerPage();
+    SharedHelpers.openResultsPerPage().blurActiveField();
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
       cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
     }
-
-    PageUtils.blurActiveField();
     cy.contains(/showing\s+\d+\s+to\s+\d+\s+of\s+\d+\s+contacts?/i).should('exist');
     SharedHelpers.paginator().should('exist');
     ContactsHelpers.assertDisabled('button[aria-label="First Page"], .p-paginator-first');
@@ -129,11 +127,10 @@ describe('Contacts List (/contacts)', () => {
         'i',
       );
 
-    SharedHelpers.openResultsPerPage();
+    SharedHelpers.openResultsPerPage().blurActiveField();
     for (const size of SharedHelpers.RESULTS_PER_PAGE_SIZES) {
       cy.contains('[role="option"], .p-select-option', String(size)).should('exist');
     }
-    PageUtils.blurActiveField();
 
     const selectPageSize = (size: number) => {
       SharedHelpers.chooseResultsPerPage(size);

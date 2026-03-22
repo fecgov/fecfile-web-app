@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
-import { currentYear } from '../../e2e-smoke/pages/pageUtils';
-import { F3X_Q1, F3X_Q2 } from '../../e2e-smoke/requests/library/reports';
-import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
-import { DataSetup } from '../../e2e-smoke/F3X/setup';
+import { Initialize } from '../../../e2e-smoke/pages/loginPage';
+import { currentYear } from '../../../e2e-smoke/pages/pageUtils';
+import { F3X_Q1, F3X_Q2 } from '../../../e2e-smoke/requests/library/reports';
+import { buildScheduleA } from '../../../e2e-smoke/requests/library/transactions';
+import { DataSetup } from '../../../e2e-smoke/F3X/setup';
 import { F3XAggregationHelpers } from './f3x-aggregation.helpers';
 
 describe('Extended F3X Schedule A Aggregation', () => {
@@ -73,7 +73,7 @@ describe('Extended F3X Schedule A Aggregation', () => {
         F3XAggregationHelpers.assertReceiptAggregate(q2TxnId, '$150.00');
         F3XAggregationHelpers.openReceipt(q2TxnId);
         F3XAggregationHelpers.assertAggregateField('$150.00');
-        F3XAggregationHelpers.clickSave();
+        F3XAggregationHelpers.goToReport(q2);
 
         F3XAggregationHelpers.deleteReport(q1);
         F3XAggregationHelpers.goToReport(q2);

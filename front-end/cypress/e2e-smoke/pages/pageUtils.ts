@@ -1,25 +1,12 @@
-import { getNormalizedFilingPassword } from '../../support/filing-password';
-
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
-  private static readonly monthNames: string[] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
   private static exactText(value: string): RegExp {
-    return new RegExp(`^\\s*${Cypress._.escapeRegExp(value)}\\s*$`); // NOSONAR
+    return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value)}\s*$`, 'i'); // NOSONAR
+  }
+
+  private static normalizeButtonLabel(value: string): string {
+    return value.replaceAll(/\s+/g, ' ').trim();
   }
 
   private static normalizeSidebarLabel(value: string): string {
@@ -89,9 +76,10 @@ export class PageUtils {
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
     cy.get(alias).find(calendar).first().click();
-    cy.get('body').find('.p-datepicker-panel:visible').first().as('calendarElement');
+    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
 
-    PageUtils.navigateCalendarTo(dateObj);
+    PageUtils.pickYear(dateObj.getFullYear());
+    PageUtils.pickMonth(dateObj.getMonth());
     PageUtils.pickDay(dateObj.getDate().toString());
 
     cy.get('@calendarElement').should('not.exist');
@@ -103,27 +91,141 @@ export class PageUtils {
       .find('span')
       .not('.p-disabled')
       .parent()
-      .contains(PageUtils.exactText(day))
-      .first()
-      .click();
+      .contains(day)
+      .then(($day) => {
+        cy.wrap($day.parent()).click();
+      });
   }
 
-  static clickSidebarSection(section: string) {  
-    cy.contains('p-panelmenu .p-panelmenu-header', section)
-      .closest('.p-panelmenu-panel')
-      .find('.p-panelmenu-header')
-      .as('sectionHeader');
+  static pickMonth(month: number) {
+    const months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const targetMonth = months[month];
+    cy.get('@calendarElement').find('.p-datepicker-month').contains(targetMonth).click({ force: true });
+  }
 
-    cy.get('@sectionHeader')
-      .click().then(() => {
-        cy.get('@sectionHeader').should('have.attr', 'data-p-highlight', 'true');
-      });
+  static pickYear(year: number) {
+    const currentCalendarYear: number = new Date().getFullYear();
+
+    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.wait(100);
+    cy.get('@calendarElement').then(($calendarElement) => {
+      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
+        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
+      }
+    });
+    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
+
+    const decadeStart: number = currentCalendarYear - (currentCalendarYear % 10);
+    const decadeEnd: number = decadeStart + 9;
+    if (year < decadeStart) {
+      for (let i = 0; i < decadeStart - year; i += 10) {
+        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
+      }
+    }
+    if (year > decadeEnd) {
+      for (let i = 0; i < year - decadeEnd; i += 10) {
+        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
+      }
+    }
+    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
+  }
+
+  static clickSidebarSection(section: string) {
+    return PageUtils.clickSidebarItem(section);
   }
 
   // NOSONAR - this is a helper function for the sidebar
   static clickSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click({ force: true });
+    const normalizedMenuItem = PageUtils.normalizeSidebarLabel(menuItem);
+    const menuLabelSelector = '.p-panelmenu-header-label, .p-panelmenu-item-label';
+    const findPanelMenu = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+      cy.get('p-panelmenu', { timeout: 15000 }).should('exist');
+    const nativeClick = ($link: JQuery<HTMLElement>, label: string) => {
+      expect($link.length, `${label} link count for "${menuItem}"`).to.eq(1);
+      const link = $link.get(0);
+      expect(link, `${label} link element for "${menuItem}"`).to.exist;
+      if (!link) {
+        throw new Error(`Missing ${label} link element for "${menuItem}"`);
+      }
+      link.click();
+    };
+    const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> =>
+      findMenuLink(visibleOnly)
+        .should('be.visible')
+        .then(($link) => nativeClick($link, label));
+
+    const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => {
+      return findPanelMenu()
+        .find(menuLabelSelector)
+        .filter(
+          (_, label) =>
+            PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem &&
+            (!visibleOnly || Cypress.dom.isVisible(label)),
+        )
+        .should(($labels) => {
+          expect(
+            $labels.length,
+            `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`,
+          ).to.eq(1);
+        });
+    };
+
+    const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> =>
+      findMenuLabel(visibleOnly)
+        .closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link')
+        .should('have.length', 1);
+
+    const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+      findMenuLabel(false).then(($candidateLabel) => {
+        if (Cypress.dom.isVisible($candidateLabel[0])) {
+          return findMenuLink(true);
+        }
+
+        const $ownerPanel = $candidateLabel.closest('.p-panelmenu-panel');
+        expect($ownerPanel.length, `owner sidebar panel for "${menuItem}"`).to.eq(1);
+        const ownerPanelIndex = $ownerPanel.first().index();
+        expect(ownerPanelIndex, `owner sidebar panel index for "${menuItem}"`).to.be.greaterThan(-1);
+
+        const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+          findPanelMenu()
+            .find('.p-panelmenu-panel')
+            .eq(ownerPanelIndex)
+            .find('> .p-panelmenu-header')
+            .should('have.length', 1);
+
+        return findOwnerHeader().then(($ownerHeader) => {
+          if (PageUtils.isSidebarHeaderExpanded($ownerHeader)) {
+            return findMenuLink(true);
+          }
+
+          return findOwnerHeader()
+            .find('a.p-panelmenu-header-link')
+            .should('have.length', 1)
+            .should('be.visible')
+            .then(($link) => nativeClick($link, 'owner sidebar header'))
+            .then(() =>
+              findOwnerHeader().should(($header) => {
+                expect(
+                  PageUtils.isSidebarHeaderExpanded($header),
+                  `owner sidebar header expanded for "${menuItem}"`,
+                ).to.eq(true);
+              }),
+            )
+            .then(() => findMenuLink(true));
+        });
+      });
+
+    return ensureVisibleMenuLink().then(($menuLink) => {
+      const isHeaderLink = $menuLink.hasClass('p-panelmenu-header-link');
+      const $header = $menuLink.closest('.p-panelmenu-header');
+      const shouldClick = !isHeaderLink || !PageUtils.isSidebarHeaderExpanded($header);
+
+      if (shouldClick) {
+        return clickMenuLink(true, 'sidebar target');
+      }
+
+      return cy.wrap(undefined, { log: false });
+    });
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -170,16 +272,38 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
+    const normalizedName = PageUtils.normalizeButtonLabel(name);
 
-    const buttonLabelRx = new RegExp(
-      String.raw`^\s*${Cypress._.escapeRegExp(name)}\s*$`,
-      'i',
-    );
+    const resolveLabel = (button: HTMLElement): string => {
+      const sources = [
+        button.getAttribute('aria-label') ?? '',
+        button.getAttribute('label') ?? '',
+        button instanceof HTMLInputElement ? button.value : '',
+        button.textContent ?? '',
+      ];
+      const matchingLabel = sources.find((value) => PageUtils.normalizeButtonLabel(value).length > 0) ?? '';
+      return PageUtils.normalizeButtonLabel(matchingLabel);
+    };
 
-    cy.get(alias)
-      .contains('button', name)
-      .first()
-      .click({ force });
+    cy.get(alias).then(($root) => {
+      const selector = 'button:visible, input[type="button"]:visible, input[type="submit"]:visible';
+      const directMatches = $root.filter(selector);
+      const nestedMatches = $root.find(selector);
+      const candidates = Cypress.$([...directMatches.toArray(), ...nestedMatches.toArray()]);
+      const uniqueCandidates = Cypress.$(Array.from(new Set(candidates.toArray())));
+      const matchingButtons = uniqueCandidates.filter((_, element) => {
+        return resolveLabel(element as HTMLElement) === normalizedName;
+      });
+
+      expect(matchingButtons.length, `visible button match for ${String(name)}`).to.eq(1);
+      const button = matchingButtons.get(0);
+      expect(button, `button element for ${String(name)}`).to.exist;
+      if (!button) {
+        throw new Error(`Missing visible button match for ${String(name)}`);
+      }
+
+      cy.wrap(button).click({ force });
+    });
   }
 
   static dateToString(date: Date) {
@@ -229,29 +353,50 @@ export class PageUtils {
    */
   static getKabob(identifier: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .contains(identifier)
-      .closest('td')
-      .siblings()
-      .last()
-      .find('app-table-actions-button')
-      .children()
-      .first()
-      .children()
-      .then(($btn) => {
-        cy.wrap($btn.first()).as('btn');
-        cy.get('@btn').click();
+    const normalizedIdentifier = PageUtils.normalizeButtonLabel(identifier);
+    cy.get(alias).find('tbody tr:visible, tr:visible').then(($rows) => {
+      const matchingRows = $rows.filter((_, row) => {
+        const $row = Cypress.$(row);
+        const labels = $row
+          .find('td:visible, th:visible, a:visible')
+          .toArray()
+          .map((element) => PageUtils.normalizeButtonLabel(element.textContent ?? ''))
+          .filter(Boolean);
+
+        return labels.some((label) => label === normalizedIdentifier);
       });
+
+      expect(matchingRows.length, `kabob row matches for ${identifier}`).to.eq(1);
+      const row = matchingRows.get(0);
+      expect(row, `kabob row for ${identifier}`).to.exist;
+      if (!row) {
+        throw new Error(`Missing kabob row for ${identifier}`);
+      }
+
+      cy.wrap(row).within(() => {
+        cy.get('app-table-actions-button button:visible')
+          .should('have.length.at.least', 1)
+          .first()
+          .click();
+      });
+    });
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
     PageUtils.getKabob(identifier, alias);
     cy.get(PageUtils.getAlias(''))
-      .find('.p-popover')
-      .contains(item)
-      .then(($item) => {
-        cy.wrap($item.first()).as('btn');
-        cy.get('@btn').click();
+      .find('.p-popover:visible')
+      .find('button:visible, a:visible')
+      .then(($items) => {
+        const matchingItems = $items.filter((_, element) => PageUtils.exactText(item).test(element.textContent ?? ''));
+        expect(matchingItems.length, `kabob action matches for ${item}`).to.eq(1);
+        const action = matchingItems.get(0);
+        expect(action, `kabob action for ${item}`).to.exist;
+        if (!action) {
+          throw new Error(`Missing kabob action for ${item}`);
+        }
+
+        cy.wrap(action).click();
       });
   }
 
@@ -294,9 +439,4 @@ export class PageUtils {
     PageUtils.clickButton('Confirm');
     cy.wait('@SubmitReport');
   }
-
-  static readonly blurActiveField = () => {
-    cy.get('body').click(0, 0);
-  };
-
 }
