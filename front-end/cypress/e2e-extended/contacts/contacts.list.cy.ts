@@ -2,7 +2,6 @@ import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
 import { ContactsHelpers } from './contacts.helpers';
 import { SharedHelpers } from '../utils/shared.helpers';
-import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { defaultFormData as contactFormData } from '../../e2e-smoke/models/ContactFormModel';
 import { makeContact } from '../../e2e-smoke/requests/methods';
 import { Individual_A_A, MockContact } from '../../e2e-smoke/requests/library/contacts';

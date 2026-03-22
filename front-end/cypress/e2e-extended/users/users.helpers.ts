@@ -78,7 +78,7 @@ export class UsersHelpers {
   }
 
   static getRowByEmail(email: string) {
-    const exactEmail = new RegExp(`^\\s*${Cypress._.escapeRegExp(email)}\\s*$`, 'i');
+    const exactEmail = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(email)}\s*$`, 'i');
     return cy.get('@table').contains('tbody tr td', exactEmail).closest('tr');
   }
 
