@@ -1,10 +1,7 @@
-import { faker } from '@faker-js/faker';
 import { DataSetup } from '../../e2e-smoke/F3X/setup';
+import { createIndependentExpenditureOnForm24 } from '../../e2e-smoke/F24/f24.helpers';
 import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
-import {
-  defaultScheduleFormData,
-  DisbursementFormData,
-} from '../../e2e-smoke/models/TransactionFormModel';
+import { defaultScheduleFormData } from '../../e2e-smoke/models/TransactionFormModel';
 import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
 import { currentYear, PageUtils } from '../../e2e-smoke/pages/pageUtils';
@@ -20,15 +17,6 @@ const f3xReceiptData = {
   electionYear: undefined,
   electionType: undefined,
   date_received: new Date(currentYear, 4 - 1, 27),
-};
-
-const independentExpenditureData: DisbursementFormData = {
-  ...defaultScheduleFormData,
-  date2: new Date(currentYear, 4 - 1, 27),
-  supportOpposeCode: 'SUPPORT',
-  signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-  signatoryFirstName: faker.person.firstName(),
-  signatoryLastName: faker.person.lastName(),
 };
 
 function submitCurrentReport(sidebarSection: string) {
@@ -110,19 +98,12 @@ describe('Reports can_unamend (/reports)', () => {
 
   it('shows Unamend only while an F24 amendment is eligible, then clears it after unamend and reload', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
-      ReportListPage.gotToReportTransactionListPage(result.f24, false, true, false);
-      StartTransaction.IndependentExpenditures().IndependentExpenditure();
-      ContactLookup.getContact(result.individual.last_name, '', 'Individual');
-      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-        independentExpenditureData,
+      createIndependentExpenditureOnForm24(
+        result.f24,
+        result.individual.last_name,
         result.candidate,
-        false,
-        '',
-        'date_signed',
+        true,
       );
-      PageUtils.blurActiveField();
-      TransactionDetailPage.clickSave();
-      cy.location('pathname').should('include', `/reports/transactions/report/${result.f24}/list`);
       cy.get('tr').should('contain', 'Independent Expenditure');
       submitCurrentReport('SIGN & SUBMIT');
 
