@@ -15,10 +15,13 @@ export class ContactListPage {
   }
 
   static openAddContactDialog() {
-    // look into why this needs to be clicked twice
-    PageUtils.clickButton('Add contact', '#button-contacts-new:enabled', true);
-    PageUtils.clickButton('Add contact', '#button-contacts-new:enabled', true);
-    cy.get('[data-cy="contact-dialog"]:visible').should('exist');
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
+    cy.get('#button-contacts-new:enabled')
+      .should('be.visible')
+      .click();
+    cy.get('[data-cy="contact-dialog"]:visible')
+      .should('exist')
+      .and('contain', 'Add Contact');
   }
 
   static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
