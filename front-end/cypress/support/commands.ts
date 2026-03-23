@@ -242,7 +242,7 @@ export function safeType(prevSubject: any, stringVal: string | number) {
   const outString: string = safeString(stringVal);
 
   if (outString.length != 0) {
-    subject.type(outString);
+    subject.type(outString).blur();
   }
 
   return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)

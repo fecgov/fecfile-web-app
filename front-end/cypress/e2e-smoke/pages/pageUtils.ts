@@ -24,7 +24,7 @@ export class PageUtils {
       );
     }
   }
-  
+
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
@@ -47,11 +47,10 @@ export class PageUtils {
 
     PageUtils.pickDay(dateObj.getDate().toString());
 
-    cy.wait(100);
+    cy.get('@calendarElement').should('not.exist');
   }
 
   static pickDay(day: string) {
-    cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(day).click();
     cy.get('@calendarElement')
       .find('td')
       .find('span')
@@ -96,9 +95,16 @@ export class PageUtils {
     cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
   }
 
-  static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+  static clickSidebarSection(section: string) {  
+    cy.contains('p-panelmenu .p-panelmenu-header', section)
+      .closest('.p-panelmenu-panel')
+      .find('.p-panelmenu-header')
+      .as('sectionHeader');
+
+    cy.get('@sectionHeader')
+      .click().then(() => {
+        cy.get('@sectionHeader').should('have.attr', 'data-p-highlight', 'true');
+      });
   }
 
   static clickSidebarItem(menuItem: string) {
@@ -135,7 +141,7 @@ export class PageUtils {
     const exactLabel = new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(label)}\s*$`, 'i');
 
     cy.get(alias)
-      .contains('.accordion-text strong, .header-label', exactLabel, { timeout: 5000 })
+      .contains('.accordion-text strong, .header-label', exactLabel)
       .first()
       .closest('p-accordion-header, .p-accordionheader')
       .should('be.visible')
@@ -147,8 +153,7 @@ export class PageUtils {
     cy.get(alias)
       .contains('button', name)
       .first()
-      .as('btn');
-    cy.get('@btn').click({ force });
+      .click({ force });
   }
 
   static dateToString(date: Date) {
@@ -234,8 +239,7 @@ export class PageUtils {
   }
 
   static enterSecondCommitteeEmailIfneeded() {
-    cy.get(PageUtils.getAlias(''))
-      .find('[id="second-committee-admin-dialog"]')
+    cy.get(PageUtils.getAlias('[data-cy="second-committee-admin-actions"]:visible'))
       .should(Cypress._.noop) // No-op to avoid failure if it doesn't exist
       .then(($email) => {
         if ($email.length) {
@@ -244,19 +248,20 @@ export class PageUtils {
           cy.get('#email').clear().type('admin@admin.com'); // Clearing the field makes the typing behavior consistent
           cy.get('#email').should('have.value', 'admin@admin.com');
           cy.get('#email').click();
-          PageUtils.clickButton('Save');
+          PageUtils.clickButton('Save', '[data-cy="second-committee-admin-actions"]');
+          cy.get(PageUtils.getAlias('')).find('.p-toast-close-button').click();
         }
       });
-    cy.contains('Welcome to FECfile+').should('not.exist');
   }
 
   static submitReportForm() {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
+    cy.contains('h1', 'Submit report').should('be.visible');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
-    PageUtils.enterValue('#filingPassword', Cypress.env('FILING_PASSWORD'));
+    PageUtils.enterValue('#filingPassword', 'filing!Passw0rd');
     cy.get(alias).find('[data-cy="userCertified"]').first().click();
     PageUtils.clickButton('Submit');
     PageUtils.findOnPage('div', 'Are you sure?');

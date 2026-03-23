@@ -1,11 +1,9 @@
-import { Component, computed, effect, ElementRef, inject, model, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Report } from '../../../../shared/models/reports/report.model';
 import { ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ButtonDirective } from 'primeng/button';
-import { Ripple } from 'primeng/ripple';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models';
@@ -18,13 +16,12 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   selector: 'app-select-report-dialog',
   templateUrl: './select-report-dialog.component.html',
   styleUrls: ['./select-report-dialog.component.scss'],
-  imports: [ReactiveFormsModule, FormsModule, ButtonDirective, Ripple, DialogComponent],
+  imports: [ReactiveFormsModule, FormsModule, DialogComponent],
 })
 export class SelectReportDialogComponent {
   public readonly router = inject(Router);
   private readonly service = inject(Form3XService);
   readonly store = inject(Store);
-  readonly selectReportDialog = viewChild.required<ElementRef<HTMLDialogElement>>('selectReportDialog');
   readonly report = this.store.selectSignal(selectActiveReport);
 
   readonly selectReportDialogSignal = toSignal(ReattRedesUtils.selectReportDialogSubject, { initialValue: undefined });
@@ -32,8 +29,7 @@ export class SelectReportDialogComponent {
   readonly transaction = computed(() => this.selectReportDialogSignal()?.[0]);
   readonly type = computed(() => this.selectReportDialogSignal()?.[1]);
   readonly visible = computed(() => !!this.transaction());
-
-  readonly dialogVisible = model(false);
+  readonly dialogVisible = signal(false);
 
   readonly availableReports = derivedAsync(
     () => {

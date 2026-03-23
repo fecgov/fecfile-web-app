@@ -28,7 +28,15 @@
   </ng-container>
   <ng-container dialog-footer #dialogFooterRef>
     <div class="flex justify-content-center">
-      <button type="button" pButton pRipple label="Save" class="p-button-primary" (click)="submitForm()"></button>
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Save"
+        class="p-button-primary"
+        data-cy="second-committee-admin-actions"
+        (click)="submitForm()"
+      ></button>
     </div>
   </ng-container>
 </app-dialog>

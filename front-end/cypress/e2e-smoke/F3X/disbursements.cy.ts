@@ -31,13 +31,13 @@ describe('Disbursements', () => {
   it('should test F3xFederalElectionActivityExpendituresPage disbursement', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
       setCommitteeToPTY();
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Disbursements().Federal().HundredPercentFederalElectionActivityPayment();
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');
 
       TransactionDetailPage.enterScheduleFormData(defaultTransactionFormData);
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       cy.contains('Transactions in this report').should('exist');
       PageUtils.clickLink('100% Federal Election Activity Payment');
       cy.contains('Address').should('exist');
@@ -48,7 +48,7 @@ describe('Disbursements', () => {
 
   it('should test Independent Expenditure - Void Schedule E disbursement', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, organization: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Disbursements().Contributions().IndependentExpenditureVoid();
       ContactLookup.getContact(result.organization.name);
       TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
@@ -59,7 +59,7 @@ describe('Disbursements', () => {
         'date_signed',
       );
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure - Void');
       cy.contains('Address').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);
@@ -68,7 +68,7 @@ describe('Disbursements', () => {
 
   it('should be able to link an Independent Expenditure to a Form 24', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Disbursements().Contributions().IndependentExpenditure();
 
       ContactLookup.getContact(result.individual.last_name, '', 'Individual');
@@ -80,7 +80,7 @@ describe('Disbursements', () => {
         '',
         'date_signed',
       );
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.closeToast();
 
       // Check that fields saved correctly
@@ -92,7 +92,7 @@ describe('Disbursements', () => {
       // Check that the date fields have the right errors
       cy.get('#dissemination_date').clear();
       cy.get('#disbursement_date').clear();
-      PageUtils.clickButton('Save'); // Trigger errors to show
+      TransactionDetailPage.clickSave(); // Trigger errors to show
       cy.get('app-amount-input')
         .should('contain', 'At least ONE date field must be entered.')
         .should('not.contain', 'This is a required field.');
@@ -110,7 +110,7 @@ describe('Disbursements', () => {
         'GET',
         `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${result.report}&schedules=B,E,F`,
       ).as('GetDisbursements');
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
 
       cy.wait('@GetLoans');
       cy.wait('@GetDisbursements');
@@ -120,7 +120,7 @@ describe('Disbursements', () => {
       PageUtils.pSelectDropdownSetValue('[data-cy="select-form-24"]', '24-HOUR: Report of Independent Expenditure');
       PageUtils.clickButton('Confirm');
 
-      ReportListPage.goToReportList(result.f24);
+      ReportListPage.gotToReportTransactionListPage(result.f24);
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('exist');
       cy.get('#first_name').should('have.value', result.individual.first_name);
@@ -130,7 +130,7 @@ describe('Disbursements', () => {
 
   it('Create an Other Disbursement transaction', () => {
     cy.wrap(DataSetup({ organization: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Disbursements().Other().Other();
       ContactLookup.getContact(result.organization.name);
 
@@ -143,7 +143,7 @@ describe('Disbursements', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(formTransactionData);
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Other Disbursement');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -163,7 +163,7 @@ describe('Disbursements', () => {
   it('Create a Credit Card Payment for 100% Federal Election Activity transaction', () => {
     cy.wrap(DataSetup({ organization: true })).then((result: any) => {
       setCommitteeToPTY();
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Disbursements().Federal().CreditCardPayment();
       ContactLookup.getContact(result.organization.name);
 
@@ -178,7 +178,7 @@ describe('Disbursements', () => {
         memoCode: false,
       };
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', false);
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
       cy.get('tr').should('contain', result.organization.name);

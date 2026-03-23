@@ -10,7 +10,7 @@
       {{ actionTargetLabel() }}.
     </p>
     <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
-    <select id="report-selector" aria-label="Report selector" [(ngModel)]="selectedReport">
+    <select id="report-selector" aria-labelledby="report-selector-label" [(ngModel)]="selectedReport">
       <button aria-labelledby="report-selector-label">
         <selectedcontent></selectedcontent>
       </button>

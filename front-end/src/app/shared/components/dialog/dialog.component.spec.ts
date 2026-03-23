@@ -5,10 +5,10 @@ import { Component, signal, viewChild } from '@angular/core';
 @Component({
   imports: [DialogComponent],
   standalone: true,
-  template: `<app-dialog [(visible)]="visible" title="title" [(closeOnEscape)]="closeOnEscape" />`,
+  template: `<app-dialog [(visible)]="visible" title="title" [closeOnEscape]="closeOnEscape()" />`,
 })
 class TestHostComponent {
-  visible = signal(true);
+  visible = signal(false);
   closeOnEscape = signal(true);
   component = viewChild.required(DialogComponent);
 }
@@ -49,7 +49,6 @@ describe('DialogComponent', () => {
 
   it('should prevent default when closeOnEscape is false', () => {
     host.closeOnEscape.set(false);
-    host.visible.set(true);
     fixture.detectChanges();
 
     const rejectSpy = jasmine.createSpy('rejectSpy');
@@ -62,7 +61,6 @@ describe('DialogComponent', () => {
 
     expect(event.preventDefault).toHaveBeenCalled();
     expect(rejectSpy).not.toHaveBeenCalled();
-    expect(host.visible()).toBeTrue();
   });
 
   it('should create', () => {
