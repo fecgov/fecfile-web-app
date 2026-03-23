@@ -14,7 +14,7 @@ const formData = {
 
 function setupLoanByCommittee() {
   return cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
-    ReportListPage.goToReportList(result.report);
+    ReportListPage.gotToReportTransactionListPage(result.report);
     StartTransaction.Loans().ByCommittee();
     // Search for created committee and enter load data, then add load guarantor
     PageUtils.urlCheck('LOAN_BY_COMMITTEE');
@@ -63,7 +63,7 @@ describe('Loans', () => {
       formData.date_received = new Date(currentYear, 4 - 1, 27);
       PageUtils.calendarSetValue('[data-cy="contribution_date"]', formData.date_received);
       PageUtils.enterValue('#amount', formData.amount);
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
       cy.contains('Loan Repayment Received').should('exist');
     });

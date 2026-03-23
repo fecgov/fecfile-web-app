@@ -46,14 +46,7 @@
             </span>
           </div>
           <div>
-            <button
-              pButton
-              pRipple
-              appSingleClick
-              label="Download PDF"
-              class="p-button-info m"
-              (click)="downloadPDF()"
-            ></button>
+            <button pButton pRipple label="Download PDF" class="p-button-info m" (click)="downloadPDF()"></button>
             <div class="inner-body-text">
               <span class="font-karla-bold">Last created:&nbsp;</span
               ><span class="font-karla">{{ formattedDate() }}</span>
@@ -94,7 +87,7 @@
       (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
     >
       <span class="prev-arrow-mask"></span>
-      <span>Review detailed summary page</span>
+      <span>Back</span>
     </button>
 
     <button

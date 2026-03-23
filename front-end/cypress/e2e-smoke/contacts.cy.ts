@@ -11,11 +11,11 @@ describe('Manage contacts', () => {
   });
 
   xit('Create an Individual contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const formData = { ...contactFormData };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -25,17 +25,17 @@ describe('Manage contacts', () => {
   });
 
   it('should not trigger validation failure if telephone is touched', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     const formData = { ...contactFormData };
     formData['phone'] = ' ';
     ContactListPage.enterFormData(formData);
 
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
   });
 
   it('Create a Candidate contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
 
     const formData = {
       ...contactFormData,
@@ -46,8 +46,8 @@ describe('Manage contacts', () => {
       candidate_district: '01',
     };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
@@ -57,7 +57,7 @@ describe('Manage contacts', () => {
   });
 
   it('Create a Committee contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
 
     const formData = {
       ...contactFormData,
@@ -65,8 +65,8 @@ describe('Manage contacts', () => {
       committee_id: 'C00000001',
     };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -76,15 +76,15 @@ describe('Manage contacts', () => {
   });
 
   it('Create an Organization contact', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
 
     const formData = {
       ...contactFormData,
       contact_type: 'Organization',
     };
     ContactListPage.enterFormData(formData);
-    PageUtils.clickButton('Save');
-    cy.contains('Save').should('not.exist');
+    ContactListPage.clickSave();
+    cy.get('[data-cy="contact-dialog"]:visible').should('not.exist');
 
     // Edit new contact and verify form conains correct values.
     PageUtils.clickLink(formData['name']);
@@ -93,7 +93,7 @@ describe('Manage contacts', () => {
   });
 
   it('Empty required fields should display an error message', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '',
@@ -103,7 +103,7 @@ describe('Manage contacts', () => {
       state: '',
       zip: '',
     });
-    PageUtils.clickButton('Save');
+    ContactListPage.clickSave();
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
@@ -114,7 +114,7 @@ describe('Manage contacts', () => {
   });
 
   it('Fields with too a long string should display an error message', () => {
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     ContactListPage.enterFormData({
       ...contactFormData,
       last_name: '012345678901234567890123456789LONG',
