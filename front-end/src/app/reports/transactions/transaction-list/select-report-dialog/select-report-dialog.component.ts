@@ -31,6 +31,8 @@ export class SelectReportDialogComponent {
   readonly visible = computed(() => !!this.transaction());
   readonly dialogVisible = model(false);
 
+  readonly dialogVisible = model(false);
+
   readonly availableReports = derivedAsync(
     () => {
       const visible = this.visible();
