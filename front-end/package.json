@@ -37,7 +37,7 @@
         "@ngrx/store": "20.1.0",
         "@primeuix/themes": "2.0.3",
         "class-transformer": "0.5.1",
-        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#0cf017439a59a08a7bed02e2069045708887209c",
+        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#0322bb973333f175d45d2b4b06de470a0d5c48d7",
         "intl-tel-input": "26.5.1",
         "ngrx-store-localstorage": "20.1.0",
         "ngx-cookie-service": "20.1.1",
