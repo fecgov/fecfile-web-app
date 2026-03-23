@@ -41,10 +41,10 @@ describe('HttpErrorInterceptor', () => {
       throwError(() => new HttpErrorResponse({ status: HttpStatusCode.Forbidden })),
     );
 
-    testIterceptor.intercept(httpRequest, httpHandlerSpy).subscribe(
-      (x) => x,
-      (y) => y,
-    );
+    testIterceptor.intercept(httpRequest, httpHandlerSpy).subscribe({
+      next: (x) => x,
+      error: (y) => y,
+    });
     expect(logOutSpy).toHaveBeenCalled();
   });
 

@@ -45,11 +45,15 @@ class TestHostComponent {
   updateFormWithQuaternaryContact(event: SelectItem<Contact>) {
     console.log(event);
   }
-  clearFormQuaternaryContact() {}
+  clearFormQuaternaryContact() {
+    console.log('clear quaternary contact');
+  }
   updateFormWithQuinaryContact(event: SelectItem<Contact>) {
     console.log(event);
   }
-  clearFormQuinaryContact() {}
+  clearFormQuinaryContact() {
+    console.log('clear quinary contact');
+  }
 }
 
 describe('AdditionalInfoInputComponent', () => {

@@ -311,13 +311,13 @@ describe('ContactService', () => {
   });
 
   it('#getCommitteeDetails should raise an error when no id is provided', async () => {
-    await expect(service.getCommitteeDetails(null)).rejects.toThrowError(
+    await expect(service.getCommitteeDetails(null)).rejects.toThrow(
       'FECfile+: No Committee Id provided in getCommitteeDetails()',
     );
   });
 
   it('#getCandidateDetails should raise an error when no id is provided', async () => {
-    await expect(service.getCandidateDetails(null)).rejects.toThrowError(
+    await expect(service.getCandidateDetails(null)).rejects.toThrow(
       'FECfile+: No Candidate Id provided in getCandidateDetails()',
     );
   });

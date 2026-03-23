@@ -56,7 +56,7 @@ describe('LabelUtils', () => {
 
   it('should return value for undefined term', () => {
     const testValue = 'testValue';
-    const retval = LabelUtils.htmlHighlightTerm(testValue, undefined);
+    const retval = LabelUtils.htmlHighlightTerm(testValue);
     expect(retval).toEqual(testValue);
   });
 

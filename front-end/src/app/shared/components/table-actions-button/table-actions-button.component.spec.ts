@@ -2,7 +2,6 @@ import { Component, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
 import { TableActionsButtonComponent } from './table-actions-button.component';
@@ -56,7 +55,7 @@ describe('TableActionsButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PopoverModule, ButtonModule, TableActionsButtonComponent, TestHostComponent, NoopAnimationsModule],
+      imports: [PopoverModule, ButtonModule, TableActionsButtonComponent, TestHostComponent],
       providers: [provideHttpClient(), provideHttpClientTesting(), ApiService],
     }).compileComponents();
 

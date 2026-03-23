@@ -116,7 +116,7 @@ describe('CreateCommitteeComponent', () => {
   it('should handle failed create', async () => {
     const spy = vi
       .spyOn(testCommitteeAccountService, 'createCommitteeAccount')
-      .mockImplementation(() => Promise.reject(new Error()));
+      .mockImplementation(() => Promise.reject(new Error('Failed to create committee account')));
 
     expect(component.unableToCreateAccount).toBe(false);
     expect(component.selectedCommittee).toBeFalsy();

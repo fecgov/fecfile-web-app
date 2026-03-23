@@ -253,7 +253,6 @@ describe('TransactionService', () => {
       expect(req.request.method).toEqual('PUT');
       req.flush(transactions.map((t) => t.id));
       httpTestingController.verify();
-      // tick(100);
     });
   });
 });

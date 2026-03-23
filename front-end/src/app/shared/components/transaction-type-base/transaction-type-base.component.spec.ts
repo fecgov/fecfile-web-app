@@ -2,7 +2,7 @@ import type { Mock, MockedObject } from 'vitest';
 import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   NavigationAction,
   NavigationDestination,
@@ -35,6 +35,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { provideZoneChangeDetection } from '@angular/core';
+import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 
 let testTransaction: SchATransaction;
 
@@ -55,6 +56,28 @@ describe('TransactionTypeBaseComponent', () => {
   const mockRouter = {
     navigateByUrl: vi.fn(),
   };
+  let store: MockStore;
+
+  async function testMessage(navEvent: NavigationEvent) {
+    await component.navigateTo(navEvent);
+    expect(messageServiceSpy.add).toHaveBeenCalledWith({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Transaction Saved',
+      life: 3000,
+    });
+  }
+
+  async function testNoMessage(navEvent: NavigationEvent) {
+    await component.navigateTo(navEvent);
+    expect(messageServiceSpy.add).toHaveBeenCalledTimes(0);
+  }
+
+  async function testNavigate(navEvent: NavigationEvent, route: string, options?: NavigationBehaviorOptions) {
+    await component.navigateTo(navEvent);
+    if (options) expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route, options);
+    else expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
+  }
 
   beforeAll(async () => {
     await import(`fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT.validator`);
@@ -103,6 +126,8 @@ describe('TransactionTypeBaseComponent', () => {
         FecDatePipe,
       ],
     }).compileComponents();
+
+    store = TestBed.inject(MockStore);
 
     transactionServiceSpy = TestBed.inject(TransactionService) as MockedObject<TransactionService>;
     testConfirmationService = TestBed.inject(ConfirmationService);
@@ -161,6 +186,16 @@ describe('TransactionTypeBaseComponent', () => {
     expect(component.transaction.contact_1_id).toBe('testId');
   });
 
+  it('should not trigger effect if NavigationEvent has no transaction', async () => {
+    const handleNavSpy = vi.spyOn(component, 'handleNavigate');
+    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST);
+    store.dispatch(navigationEventSetAction(navEvent));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(handleNavSpy).toHaveBeenCalledTimes(0);
+  });
+
   describe('save', () => {
     beforeEach(() => {
       navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
@@ -174,7 +209,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     it('should stop processing and throw an error if there is no transaction', async () => {
       component.transaction = undefined;
-      await expect(component.submitForm(navEvent)).rejects.toThrowError(
+      await expect(component.submitForm(navEvent)).rejects.toThrow(
         'FECfile+: No transactions submitted for single-entry transaction form.',
       );
     });
@@ -237,7 +272,7 @@ describe('TransactionTypeBaseComponent', () => {
           'dialog',
           component.transaction,
         ),
-      ).rejects.toThrowError('FECfile+: Cannot find template map when confirming transaction');
+      ).rejects.toThrow('FECfile+: Cannot find template map when confirming transaction');
     });
 
     it('should return without confirmation if using parent and contact_1', async () => {
@@ -337,27 +372,6 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   describe('navigateTo', () => {
-    async function testMessage(navEvent: NavigationEvent) {
-      await component.navigateTo(navEvent);
-      expect(messageServiceSpy.add).toHaveBeenCalledWith({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Transaction Saved',
-        life: 3000,
-      });
-    }
-
-    async function testNoMessage(navEvent: NavigationEvent) {
-      await component.navigateTo(navEvent);
-      expect(messageServiceSpy.add).toHaveBeenCalledTimes(0);
-    }
-
-    async function testNavigate(navEvent: NavigationEvent, route: string, options?: NavigationBehaviorOptions) {
-      await component.navigateTo(navEvent);
-      if (options) expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route, options);
-      else expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
-    }
-
     // ANOTHER //
     describe('NavigationDestination.ANOTHER', () => {
       it('should send success to message service', async () => {

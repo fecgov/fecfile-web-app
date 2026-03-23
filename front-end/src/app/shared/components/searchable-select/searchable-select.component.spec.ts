@@ -4,7 +4,6 @@ import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SearchableSelectComponent } from './searchable-select.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Select } from 'primeng/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   imports: [SearchableSelectComponent],
@@ -38,7 +37,7 @@ describe('SearchableSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent, NoopAnimationsModule],
+      imports: [TestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

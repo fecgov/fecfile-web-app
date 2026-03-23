@@ -59,8 +59,6 @@ describe('PollerService', () => {
     const req = httpMock.expectOne('test-url');
     req.flush(mockHtmlResponse, { status: 200, statusText: 'OK' });
 
-    // tick(); // Fast-forward any pending asynchronous tasks
-
     service.isNewVersionAvailable$.subscribe((isAvailable) => {
       expect(isAvailable).toBe(true);
     });

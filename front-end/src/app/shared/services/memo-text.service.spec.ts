@@ -56,7 +56,6 @@ describe('MemoTextService', () => {
     service.create(memoText).then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
-    // tick(100);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
     req.flush(memoText);
@@ -69,7 +68,6 @@ describe('MemoTextService', () => {
     service.update(memoText).then((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
-    // tick(100);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/${memoText.id}/?fields_to_validate=`);
     expect(req.request.method).toEqual('PUT');
     req.flush(memoText);

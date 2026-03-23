@@ -200,7 +200,10 @@
                     "options": {
                         "tsConfig": "tsconfig.spec.json",
                         "setupFiles": ["src/test.ts"],
-                        "exclude": ["src/environments/environment.cloud.gov.test.ts"]
+                        "exclude": ["src/environments/environment.cloud.gov.test.ts"],
+                        "coverage": true,
+                        "coverageReporters": ["lcov"],
+                        "coverageExclude": ["src/test.ts"]
                     }
                 },
                 "lint": {

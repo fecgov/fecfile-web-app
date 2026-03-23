@@ -468,7 +468,7 @@ describe('TransactionResolver', () => {
           contact_1: Contact.fromJSON({ id: 123 }),
         });
       });
-      await expect(resolver.resolve(route as ActivatedRouteSnapshot)).rejects.toThrowError(
+      await expect(resolver.resolve(route as ActivatedRouteSnapshot)).rejects.toThrow(
         'FECfile+: originating reattribution transaction type not found.',
       );
     });

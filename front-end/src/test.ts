@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { vi } from 'vitest';
 
-(global as any).AbortController = class {
+(globalThis as any).AbortController = class {
   constructor() {
     this.signal = new EventTarget();
   }
@@ -27,11 +27,11 @@ if (typeof DataTransfer === 'undefined') {
   };
 
   // Attach to the Node global scope
-  (global as any).DataTransfer = DataTransferPolyfill;
+  (globalThis as any).DataTransfer = DataTransferPolyfill;
 
   // Attach to the JSDOM window scope if it exists
-  if (typeof window !== 'undefined') {
-    (window as any).DataTransfer = DataTransferPolyfill;
+  if (globalThis.window !== undefined) {
+    (globalThis.window as any).DataTransfer = DataTransferPolyfill;
   }
 }
 
@@ -45,9 +45,9 @@ if (typeof ClipboardEvent === 'undefined') {
     }
   };
 
-  (global as any).ClipboardEvent = ClipboardEventPolyfill;
-  if (typeof window !== 'undefined') {
-    (window as any).ClipboardEvent = ClipboardEventPolyfill;
+  (globalThis as any).ClipboardEvent = ClipboardEventPolyfill;
+  if (globalThis.window !== undefined) {
+    (globalThis.window as any).ClipboardEvent = ClipboardEventPolyfill;
   }
 }
 
@@ -65,8 +65,8 @@ if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.sho
 }
 
 // Polyfill for matchMedia which is missing in JSDOM
-if (typeof window !== 'undefined' && !window.matchMedia) {
-  Object.defineProperty(window, 'matchMedia', {
+if (globalThis.window !== undefined && !globalThis.window.matchMedia) {
+  Object.defineProperty(globalThis.window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
       matches: false,
@@ -81,12 +81,12 @@ if (typeof window !== 'undefined' && !window.matchMedia) {
   });
 }
 
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
+globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }));
 
-window.scrollTo = vi.fn();
+globalThis.window.scrollTo = vi.fn();
 
-Object.defineProperty(URL, 'createObjectURL', { writable: true, value: vi.fn() });
+Object.defineProperty(globalThis.URL, 'createObjectURL', { writable: true, value: vi.fn() });

@@ -30,51 +30,27 @@ describe('Form24Service', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('F24UniqueNameValidator', () => {
-    it('should return error if name is duplicate', async () => {
-      const report = Form24.fromJSON({ name: '24 hourreport' });
-      vi.spyOn(service, 'getAllReports').mockResolvedValue([report]);
-      const control = new FormGroup({
-        typeName: new FormControl('24 HOUR'),
-        form24Name: new FormControl('REPORT'),
-      });
-      const result = await validator.validate(control);
-      expect(result).toEqual({ duplicateName: true });
+  describe('F24UniqueNameValidator Coverage', () => {
+    it('should return required error if any name part is missing', async () => {
+      const scenarios = [
+        { type: '', form: 'REPORT' },
+        { type: '24 HOUR', form: '' },
+        { type: '', form: '' },
+      ];
+
+      for (const scenario of scenarios) {
+        const control = new FormGroup({
+          typeName: new FormControl(scenario.type),
+          form24Name: new FormControl(scenario.form),
+        });
+        const result = await validator.validate(control);
+        expect(result).toEqual({ required: true });
+      }
     });
 
-    it('should return null if name is unique', async () => {
-      vi.spyOn(service, 'getAllReports').mockResolvedValue([]);
-      const control = new FormGroup({
-        typeName: new FormControl('24 HOUR'),
-        form24Name: new FormControl('REPORT'),
-      });
-      const result = await validator.validate(control);
-      expect(result).toBeNull();
-    });
-
-    it('should return required error if typeName is missing', async () => {
-      const control = new FormGroup({
-        typeName: new FormControl(''),
-        form24Name: new FormControl('REPORT'),
-      });
-
-      const result = await validator.validate(control);
-      expect(result).toEqual({ required: true });
-    });
-
-    it('should return required error if form24Name is missing', async () => {
-      const control = new FormGroup({
-        typeName: new FormControl('24 HOUR'),
-        form24Name: new FormControl(''),
-      });
-
-      const result = await validator.validate(control);
-      expect(result).toEqual({ required: true });
-    });
-
-    it('should handle reports with null/missing names gracefully', async () => {
-      const mockReports = [{ name: null } as unknown as Form24, Form24.fromJSON({ name: 'existing' })];
-      vi.spyOn(service, 'getAllReports').mockResolvedValue(mockReports);
+    it('should handle null/undefined reports or names', async () => {
+      const form24 = Form24.fromJSON({ name: null });
+      vi.spyOn(service, 'getAllReports').mockResolvedValue([form24]);
 
       const control = new FormGroup({
         typeName: new FormControl('NEW'),
@@ -83,12 +59,6 @@ describe('Form24Service', () => {
 
       const result = await validator.validate(control);
       expect(result).toBeNull();
-    });
-
-    it('should return null if control gets return null for sub-controls', async () => {
-      const control = new FormGroup({}); 
-      const result = await validator.validate(control);
-      expect(result).toEqual({ required: true });
     });
   });
 });

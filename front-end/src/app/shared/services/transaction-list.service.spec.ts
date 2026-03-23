@@ -124,7 +124,6 @@ describe('TransactionListService', () => {
       service.addToReport(transaction, report).then((response) => {
         expect(response.ok).toBe(true);
       });
-      // tick(100);
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/add-to-report/`);
       expect(req.request.method).toEqual('POST');
       req.flush(transaction);

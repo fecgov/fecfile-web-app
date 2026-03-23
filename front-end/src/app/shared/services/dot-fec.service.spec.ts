@@ -108,7 +108,7 @@ describe('DotFecService', () => {
   it('should download FEC file', async () => {
     const dotFEC = 'test content';
     vi.spyOn(apiService, 'getString').mockReturnValue(Promise.resolve(dotFEC));
-    vi.spyOn(window.URL, 'createObjectURL').mockReturnValue('blob:testBlob');
+    vi.spyOn(globalThis.URL, 'createObjectURL').mockReturnValue('blob:testBlob');
     const link = {
       href: '',
       download: '',
