@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, model } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Report } from '../../../../shared/models/reports/report.model';
 import { ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class SelectReportDialogComponent {
   readonly transaction = computed(() => this.selectReportDialogSignal()?.[0]);
   readonly type = computed(() => this.selectReportDialogSignal()?.[1]);
   readonly visible = computed(() => !!this.transaction());
-  readonly dialogVisible = model(false);
+  readonly dialogVisible = signal(false);
 
   readonly availableReports = derivedAsync(
     () => {
