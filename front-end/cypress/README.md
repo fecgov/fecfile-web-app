@@ -199,7 +199,7 @@ npm run e2e:smoke:headless
 - CircleCI config lives at `fecfile-web-app/.circleci/config.yml`.
 - The `e2e-smoke` and `e2e-extended` jobs:
   - Spin up the API with docker-compose using the E2E Dockerfiles and `E2E_TEST=True`.
-  - Run `ng e2e` headless from `fecfile-web-app/front-end` inside a `cypress/browsers:latest` container with `--spec` targeting either `e2e-smoke` or `e2e-extended`, `--watch=false`, and `--browser chrome`.
+  - Run `npm run e2e:smoke:headless` or `npm run e2e:extended:headless` from `fecfile-web-app/front-end` inside a `cypress/browsers:node-24.14.0-chrome-146.0.7680.80-1-ff-148.0.2-edge-146.0.3856.62-1` container.
   - Pass Cypress env vars into the container (`CYPRESS_EMAIL`, `CYPRESS_COMMITTEE_ID`, and `CYPRESS_PASSWORD`) along with `CIRCLE_BRANCH`.
   - Store test results/artifacts like videos, and/or screenshots from `cypress/results`.
 

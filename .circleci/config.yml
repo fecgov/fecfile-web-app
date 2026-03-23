@@ -90,7 +90,7 @@ jobs:
           method: full
       - browser-tools/install_chrome:
           replace_existing: true
-          chrome_version: "145.0.7632.116"
+          chrome_version: "146.0.7680.80"
           channel: stable
       - browser-tools/install_chromedriver
       - run:
@@ -158,13 +158,14 @@ jobs:
         default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
-      CYPRESS_BROWSER_IMAGE: &cypress_browser_image cypress/browsers:node-24.14.0-chrome-145.0.7632.116-1-ff-148.0-edge-145.0.3800.70-1
+      CYPRESS_BROWSER_IMAGE: &cypress_browser_image cypress/browsers:node-24.14.0-chrome-146.0.7680.80-1-ff-148.0.2-edge-146.0.3856.62-1
     steps:
       - spin-up-api-containers
       - run:
           name: execute e2e tests
+          no_output_timeout: 5m
           command: |
-            docker container run --name fecfile-web-app-e2e \
+            timeout --foreground --signal=TERM --kill-after=5m 55m docker container run --name fecfile-web-app-e2e \
               -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
               -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
               -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
@@ -185,10 +186,11 @@ jobs:
           command: |
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            docker stop --time 40 fecfile-web-app-e2e || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e
+            docker rm fecfile-web-app-e2e || true
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -217,8 +219,9 @@ jobs:
       - spin-up-api-containers
       - run:
           name: execute extended e2e tests
+          no_output_timeout: 5m
           command: |
-            docker container run --name fecfile-web-app-e2e \
+            timeout --foreground --signal=TERM --kill-after=5m 55m docker container run --name fecfile-web-app-e2e \
               -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
               -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
               -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
@@ -239,10 +242,11 @@ jobs:
           command: |
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            docker stop --time 40 fecfile-web-app-e2e || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e
+            docker rm fecfile-web-app-e2e || true
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -262,6 +266,15 @@ jobs:
     resource_class: large
     steps:
       - checkout
+      - node/install:
+          node-version: "24.14.0"
+
+      - run:
+          name: Check deploy tool versions
+          command: |
+            python --version
+            node -v
+            npm -v
 
       - python/install-packages:
           pkg-manager: pip

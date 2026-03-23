@@ -49,7 +49,7 @@ Authentication must be configured in a set of evironment variables:
 
 The current E2E jobs are `e2e-smoke` and `e2e-extended`. They pin the browser
 runner to
-`cypress/browsers:node-24.14.0-chrome-145.0.7632.116-1-ff-148.0-edge-145.0.3800.70-1`,
+`cypress/browsers:node-24.14.0-chrome-146.0.7680.80-1-ff-148.0.2-edge-146.0.3856.62-1`,
 attach that container to the API proxy network, and run the npm headless E2E
 entrypoints from `front-end`.
 
