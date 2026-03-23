@@ -170,7 +170,6 @@ jobs:
               -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
               -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
               -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
               ${CYPRESS_BROWSER_IMAGE} \
               /bin/bash -c '\
@@ -225,7 +224,6 @@ jobs:
               -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
               -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
               -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              -e CYPRESS_FILING_PASSWORD=${CYPRESS_FILING_PASSWORD} \
               --network container:fecfile-api-proxy \
               ${CYPRESS_BROWSER_IMAGE} \
               /bin/bash -c '\

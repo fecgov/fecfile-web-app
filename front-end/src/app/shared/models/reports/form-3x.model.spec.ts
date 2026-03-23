@@ -27,6 +27,7 @@ describe('Form3X', () => {
       upload_submission: {
         fec_report_id: 'FEC-1234567',
         created: '12/12/2012',
+        date_filed: '12/15/2012',
       },
       webprint_submission: {
         fec_message: 'test message',
@@ -38,8 +39,8 @@ describe('Form3X', () => {
     const form3X = Form3X.fromJSON(data);
     expect(form3X.upload_submission).toBeInstanceOf(UploadSubmission);
     expect(form3X.upload_submission?.fec_report_id).toBe('FEC-1234567');
-    expect(form3X.upload_submission?.created).toBeInstanceOf(Date);
-    expect(form3X.upload_submission?.created?.getFullYear()).toBe(2012);
+    expect(form3X.upload_submission?.date_filed).toBeInstanceOf(Date);
+    expect(form3X.upload_submission?.date_filed?.getFullYear()).toBe(2012);
     expect(form3X.webprint_submission).toBeInstanceOf(WebPrintSubmission);
     expect(form3X.webprint_submission?.fec_status).toBe('COMPLETED');
     expect(form3X.webprint_submission?.created).toBeInstanceOf(Date);

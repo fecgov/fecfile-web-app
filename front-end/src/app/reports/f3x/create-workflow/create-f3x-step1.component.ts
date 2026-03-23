@@ -34,6 +34,7 @@ import { injectParams } from 'ngxtension/inject-params';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -50,6 +51,7 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
     Dialog,
     RouterLink,
     Button,
+    DialogComponent,
   ],
 })
 export class CreateF3XStep1Component extends FormComponent implements OnInit {

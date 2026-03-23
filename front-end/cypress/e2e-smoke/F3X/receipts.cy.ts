@@ -42,14 +42,14 @@ describe('Receipt Transactions', () => {
 
   it('Create an Individual Receipt transaction using the contact lookup', () => {
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().Individual().IndividualReceipt();
 
       const individual: ContactFormData = result.individual;
       ContactLookup.getContact(individual.last_name);
 
       TransactionDetailPage.enterScheduleFormData(scheduleData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
       scheduleData.date_received = new Date(currentYear, 4 - 1, 27);
       cy.get('tr').should('contain', 'Individual Receipt');
       cy.get('tr').should('contain', 'Unitemized');
@@ -66,7 +66,7 @@ describe('Receipt Transactions', () => {
 
       // Check for regression on date error
       cy.get('#contribution_date').clear();
-      PageUtils.clickButton('Save'); // Triggers errors to show
+      TransactionDetailPage.clickSave(); // Triggers errors to show
       cy.get('app-calendar').should('exist').should('contain', 'This is a required field.');
     });
   });
@@ -80,14 +80,14 @@ describe('Receipt Transactions', () => {
     };
 
     cy.wrap(DataSetup({ individual: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().Individual().Returned();
 
       const individual: ContactFormData = result.individual;
       ContactLookup.getContact(individual.last_name);
 
       TransactionDetailPage.enterScheduleFormData(negativeAmountFormData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Returned/Bounced Receipt');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -115,7 +115,7 @@ describe('Receipt Transactions', () => {
     };
 
     cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().Individual().Partnership();
       const org = result.organization;
       const individual = result.individual;
@@ -129,7 +129,6 @@ describe('Receipt Transactions', () => {
       // Create memo transaction
       cy.contains('h1', 'Partnership Attribution').should('exist');
       ContactLookup.getContact(individual.first_name);
-      PageUtils.clickButton('Save');
       const memoFormTransactionData = {
         ...formTransactionDataForSchedule,
         memo_code: true,
@@ -138,7 +137,7 @@ describe('Receipt Transactions', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      TransactionDetailPage.clickInlineSave();
 
       // Create a second memo transaction so we can check the aggregate value
       cy.contains('Transactions in this report').should('exist');
@@ -149,7 +148,7 @@ describe('Receipt Transactions', () => {
       ContactLookup.getContact(individual.last_name);
       TransactionDetailPage.enterScheduleFormData(memoFormTransactionData, false, '', true, 'contribution_date');
 
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      TransactionDetailPage.clickSave();
 
       // Assert transaction list table is correct
       checkTable(0, 'Partnership Receipt', false, '$200.01');
@@ -169,7 +168,7 @@ describe('Receipt Transactions', () => {
         '',
         '#contribution_date',
       );
-      PageUtils.clickButton('Cancel');
+      TransactionDetailPage.clickCancel();
       PageUtils.urlCheck('/list');
       // Check form values of memo form
       PageUtils.clickLink('Partnership Attribution');
@@ -190,7 +189,7 @@ describe('Receipt Transactions', () => {
   it('Create a Party Receipt transaction', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       const committee = result.committee;
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().RegisteredFilers().Party();
 
       ContactLookup.getCommittee(committee);
@@ -202,7 +201,7 @@ describe('Receipt Transactions', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(localFormTransactionData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Party Receipt');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -222,7 +221,7 @@ describe('Receipt Transactions', () => {
   it('Create a Group I transaction', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       const committee = result.committee;
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().Refunds().ContributionToOtherPoliticalCommittee();
 
       ContactLookup.getCommittee(committee);
@@ -233,7 +232,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(transactionFormData, false, '', true, 'contribution_date');
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSave();
 
       cy.get('tr').should('contain', 'Refund of Contribution to Other Political Committee');
       cy.get('tr').should('not.contain', 'Unitemized');
@@ -254,7 +253,7 @@ describe('Receipt Transactions', () => {
     cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
       const individual = result.individual;
       const committee = result.committee;
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().Individual().Earmark();
 
       // Enter STEP ONE transaction
@@ -286,7 +285,8 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSaveBothTransactions();
+      PageUtils.urlCheck('/list');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -339,7 +339,7 @@ describe('Receipt Transactions', () => {
     cy.wrap(DataSetup({ individual: true, committee: true })).then((result: any) => {
       const committee = result.committee;
       const individual = result.individual;
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
       StartTransaction.Receipts().RegisteredFilers().PAC_Earmark();
 
       // Enter STEP ONE transaction
@@ -374,7 +374,8 @@ describe('Receipt Transactions', () => {
         'contribution_date',
       );
 
-      PageUtils.clickButton('Save');
+      TransactionDetailPage.clickSaveBothTransactions();
+      PageUtils.urlCheck('/list');
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -429,7 +430,7 @@ describe('Receipt Transactions', () => {
       const committee = result.committee;
       const individual = result.individual;
       const organization = result.organization;
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
 
       // Create a Joint Fundraising Transfer
       StartTransaction.Receipts().Transfers().JointFundraising();
@@ -470,7 +471,7 @@ describe('Receipt Transactions', () => {
         date_received: new Date(currentYear, 4 - 1, 27),
       };
       TransactionDetailPage.enterScheduleFormData(tier3TransactionData, false, '', true, 'contribution_date');
-      cy.get('[data-cy="navigation-control-button"]').contains('button', 'Save').click();
+      TransactionDetailPage.clickInlineSave();
 
       // Assert transaction list table is correct
       cy.get('tbody tr').eq(0).as('row-1');
@@ -511,14 +512,14 @@ describe('Receipt Transactions', () => {
         '',
         '#contribution_date',
       );
-      PageUtils.clickButton('Cancel');
+      TransactionDetailPage.clickCancel();
     });
   });
 
   it('Committee Fields Display Properly', () => {
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       const committee = result.committee;
-      ReportListPage.goToReportList(result.report);
+      ReportListPage.gotToReportTransactionListPage(result.report);
 
       StartTransaction.Receipts().RegisteredFilers().PAC();
       ContactLookup.getCommittee(committee);

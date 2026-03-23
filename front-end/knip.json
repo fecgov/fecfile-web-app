@@ -1,5 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreIssues": {
+    "src/app/shared/models/transaction-type.model.ts": ["enumMembers"]
+  },
   "ignoreDependencies": [
     "primeflex",
     "primeicons",

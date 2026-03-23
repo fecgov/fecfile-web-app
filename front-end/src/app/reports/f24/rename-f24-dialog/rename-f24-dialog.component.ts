@@ -1,6 +1,7 @@
 import { Component, effect, inject, input, model } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { FormComponent } from 'app/shared/components/form.component';
 import { Form24, Report } from 'app/shared/models';
@@ -27,6 +28,7 @@ import { Ripple } from 'primeng/ripple';
     InputText,
     AutoFocusModule,
     ErrorMessagesComponent,
+    DialogComponent,
   ],
 })
 export class RenameF24DialogComponent extends FormComponent {

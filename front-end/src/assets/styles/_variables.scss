@@ -64,6 +64,8 @@
   --p-datepicker-select-year-hover-color: var(--p-datepicker-select-year-color);
   --p-content-hover-background: var(--surface-hover);
   --p-content-hover-color: var(--p-content-color);
+  --primary-button-disabled-background: var(--surface-ground);
+  --primary-button-hover-color: #164f85; 
   --p-datepicker-month-padding: 0.5rem;
   --p-datepicker-date-border-radius: var(--p-border-radius-sm);
   --p-datepicker-month-border-radius: var(--p-datepicker-date-border-radius);
@@ -150,6 +152,9 @@
   color-scheme: light;
 
   --scrollbar-width: 0px;
+
+  --p-tieredmenu-item-color: var(--p-content-color);
+  --p-tieredmenu-separator-border-color: #212121b3; // 70% opacity of #212121
 }
 
 $breakpoints: (

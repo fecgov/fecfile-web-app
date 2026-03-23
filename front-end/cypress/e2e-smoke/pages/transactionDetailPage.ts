@@ -9,6 +9,9 @@ import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
+  static SPLIT_BUTTON = 'navigation-control-splitbutton';
+  static BUTTON = 'navigation-control-button';
+
   static enterDate(dateFieldName: string, dateFieldValue: Date, alias = '') {
     alias = PageUtils.getAlias(alias);
     PageUtils.calendarSetValue(dateFieldName, dateFieldValue, alias);
@@ -131,7 +134,7 @@ export class TransactionDetailPage {
     if (formData.interest_rate_setting) {
       PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.interest_rate_setting, alias);
       if (formData.interest_rate) {
-        cy.get(alias).find('[data-cy="interestRateInput"]:first').safeType(formData.interest_rate);
+        cy.get('[data-cy="interestRateInput"]').find('input:visible:first').safeType(formData.interest_rate);
       }
     }
 
@@ -257,24 +260,21 @@ export class TransactionDetailPage {
     }
   }
 
-  static clickSave(reportId: string) {
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-    ).as('GetReceipts');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-    ).as('GetLoans');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-    ).as('GetDisbursements');
-    cy.contains(/^Save$/).click();
 
-    cy.wait('@GetLoans');
-    cy.wait('@GetDisbursements');
-    cy.wait('@GetReceipts');
+  static clickSave(buttonType = this.SPLIT_BUTTON) {
+    PageUtils.clickButton('Save', `app-navigation-control-bar,[data-cy="${buttonType}"]:visible`);
+  }
+
+  static clickInlineSave() {
+    PageUtils.clickButton('Save', `[data-cy="${this.BUTTON}"]:visible`);
+  }
+
+  static clickSaveBothTransactions() {
+    PageUtils.clickButton('Save both transactions', `[data-cy="${this.BUTTON}"]:visible`);
+  }
+
+  static clickCancel() {
+    PageUtils.clickButton('Cancel', '[data-cy="navigation-control-button"]:visible');
   }
 
   static addGuarantor(name: string, amount: number | string, reportId: string) {
@@ -303,7 +303,7 @@ export class TransactionDetailPage {
     cy.wait('@saveGuarantor');
     PageUtils.closeToast();
     PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-    PageUtils.clickButton('Cancel');
+    this.clickCancel();
 
     cy.wait('@GetLoans');
     cy.wait('@GetDisbursements');

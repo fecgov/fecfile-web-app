@@ -23,7 +23,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
       />
     </ng-template>
     <ng-template #submissionBody let-item>
-      {{ item.upload_submission?.created | fecDate }}
+      {{ item.upload_submission?.date_filed | fecDate }}
     </ng-template>
   `,
   imports: [TableActionsButtonComponent, FecDatePipe],
