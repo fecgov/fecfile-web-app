@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, Type } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -40,9 +40,7 @@ export class SecurityNoticeComponent implements OnInit {
     },
     { updateOn: 'blur' },
   );
-  readonly componentToLoad: Type<ProdNoticeComponent> | Type<DevNoticeComponent> = environment.production
-    ? ProdNoticeComponent
-    : DevNoticeComponent;
+  readonly componentToLoad = environment.name === 'test' ? DevNoticeComponent : ProdNoticeComponent;
 
   constructor() {
     this.activatedRoute.data.subscribe((d) => {
