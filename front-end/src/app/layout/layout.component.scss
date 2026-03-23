@@ -81,6 +81,15 @@ app-footer {
   background-repeat: no-repeat, no-repeat;
   background-size: cover, cover;
   background-position-x: 0px, 90%;
+
+  & > #content-offset {
+    margin-top: 30.781px !important;
+
+    & > .main-content {
+      margin: 0;
+      width: 100%;
+    }
+  }
 }
 
 .feedback-button {

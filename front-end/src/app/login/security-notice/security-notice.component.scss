@@ -1,20 +1,6 @@
 #fec-seal-and-title {
   min-height: 64px;
   max-height: 5%;
-  position: absolute;
-  left: 5px;
-  top: 40px;
-}
-
-.security-notice {
-  width: 100%;
-  height: 100%;
-  margin-top: 100px;
-}
-
-.notice-header {
-  padding-left: 20px;
-  padding-top: 16px;
 }
 
 :host ::ng-deep {
@@ -22,79 +8,110 @@
     font-style: italic;
     font-family: var(--gandhi);
   }
+
+  .security-button {
+    width: 180px;
+    height: 35px;
+    line-height: 14px;
+  }
 }
 
 .logout-button {
-  position: absolute;
-  top: 64px;
-  right: 32px;
   font-size: 18px;
   font-family: var(--karla-bold);
   text-transform: uppercase;
   text-shadow: #000000 1px 0 10px;
   color: white !important;
+  margin-right: 32px;
 }
 
-.decline-button {
-  margin-right: 20px;
+@keyframes adjust-mask {
+  0% {
+    mask-image: linear-gradient(to bottom, black calc(100% - 40px), transparent);
+  }
+  3%,
+  97% {
+    mask-image: linear-gradient(to bottom, transparent, black 40px, black calc(100% - 40px), transparent);
+  }
+  100% {
+    mask-image: linear-gradient(to bottom, transparent, black 40px, black 100%);
+  }
 }
 
 .notice-box-form {
-  width: 80vw;
-  margin: 0 32px;
-}
-
-.notice-box {
-  max-width: min(648px, 100vw);
-  margin: 0;
-}
-@media screen and (max-width: 767px) {
-  .notice-box {
-    margin: 0 32px;
-  }
-}
-@media screen and (min-width: 768px) {
-  .notice-box {
-    width: 66.666666666667vw;
-  }
-}
-@media screen and (min-width: 1200px) {
-  .notice-box {
-    width: 50vw;
-  }
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  animation: adjust-mask linear both;
+  animation-timeline: scroll(self);
 }
 
 .security-container {
   background-color: white;
-  margin-top: 108px;
-  padding: 32px;
+  padding: 24px;
   border-radius: 8px;
+  width: 80vw;
+  margin: auto;
+  height: 902px;
+  display: flex;
+  flex-direction: column;
 }
 
 p,
 li {
-  margin-bottom: 20px;
-  font-size: 18px;
+  margin-bottom: 16px;
+  font-size: 16px;
 }
 
 p + ul {
   margin-top: 0;
 }
 
-ul li {
-  list-style-type: disc;
+ul {
   margin-left: 16px;
+  & li {
+    list-style-type: disc;
+    margin-left: 16px;
+  }
 }
 
 h1 {
   font-size: 36px;
+  margin: 0 0 20px 0;
 }
 
 h2 {
-  font-size: 28px;
-  margin: 0;
+  margin: 32px 0 16px 0;
 }
 
-.top-line {
-  margin: 20px 0;
+h3 {
+  margin-bottom: 0;
+}
+
+.notice-container {
+  max-height: 902px;
+  overflow-y: auto;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.header {
+  border-bottom: 2px solid #212121;
+  margin-bottom: 20px;
+}
+
+.header,
+.footer {
+  flex-shrink: 0;
+}
+
+.notice-box {
+  width: 292px;
+  margin: auto;
+  @media (min-width: 768px) {
+    width: 484px;
+  }
+  @media (min-width: 992px) {
+    width: 668px;
+  }
 }
