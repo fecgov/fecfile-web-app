@@ -49,16 +49,14 @@ describe('LabelUtils', () => {
   });
 
   it('should return value for undefined value', () => {
-    let testValue;
     const testTerm = 'testTerm';
-    const retval = LabelUtils.htmlHighlightTerm(testValue, testTerm);
+    const retval = LabelUtils.htmlHighlightTerm(undefined, testTerm);
     expect(retval).toEqual(undefined);
   });
 
   it('should return value for undefined term', () => {
     const testValue = 'testValue';
-    let testTerm;
-    const retval = LabelUtils.htmlHighlightTerm(testValue, testTerm);
+    const retval = LabelUtils.htmlHighlightTerm(testValue, undefined);
     expect(retval).toEqual(testValue);
   });
 
