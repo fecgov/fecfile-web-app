@@ -9,8 +9,8 @@ import { ContactLookup } from './contactLookup';
 import { PageUtils } from './pageUtils';
 
 export class TransactionDetailPage {
-  static SPLIT_BUTTON = 'navigation-control-splitbutton';
-  static BUTTON = 'navigation-control-button';
+  static readonly SPLIT_BUTTON = 'navigation-control-splitbutton';
+  static readonly BUTTON = 'navigation-control-button';
 
   static enterDate(dateFieldName: string, dateFieldValue: Date, alias = '') {
     alias = PageUtils.getAlias(alias);
@@ -30,9 +30,17 @@ export class TransactionDetailPage {
     }
 
     if (formData.candidate) {
-      cy.get('.contact-lookup-container').last().get('[data-cy="searchBox"]').type(formData.candidate);
-      cy.contains(formData.candidate).should('exist');
-      cy.contains(formData.candidate).click();
+      cy.get(alias)
+        .find('.contact-lookup-container')
+        .last()
+        .find('[data-cy="searchBox"] input.p-autocomplete-input')
+        .first()
+        .clear()
+        .type(formData.candidate);
+      cy.get('.p-autocomplete-list-container:visible')
+        .contains('.p-autocomplete-option', formData.candidate)
+        .first()
+        .click();
     }
 
     this.enterCommon(formData, alias);
@@ -59,7 +67,18 @@ export class TransactionDetailPage {
     }
 
     if (formData.supportOpposeCode) {
-      cy.get("[data-cy='support_oppose_code']").contains(formData.supportOpposeCode).click();
+      const supportOpposeCode = formData.supportOpposeCode.toString().trim().toUpperCase();
+      let supportOpposeOptionId = '';
+      if (supportOpposeCode === 'SUPPORT' || supportOpposeCode === 'S') {
+        supportOpposeOptionId = '#support';
+      } else if (supportOpposeCode === 'OPPOSE' || supportOpposeCode === 'O') {
+        supportOpposeOptionId = '#oppose';
+      }
+      if (!supportOpposeOptionId) {
+        throw new Error(`Unsupported support/oppose code: ${formData.supportOpposeCode}`);
+      }
+
+      cy.get(alias).find(`[data-cy='support_oppose_code'] ${supportOpposeOptionId}`).first().click();
       ContactLookup.getCandidate(contactData, [], [], '#contact_2_lookup');
     }
 
@@ -128,7 +147,9 @@ export class TransactionDetailPage {
     dateIncurredField = 'loan_incurred_date',
   ) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find(amountField).safeType(formData.amount);
+    if (!readOnlyAmount) {
+      cy.get(alias).find(amountField).safeType(formData.amount);
+    }
 
     // set interest dropdown and rate
     if (formData.interest_rate_setting) {
@@ -139,7 +160,7 @@ export class TransactionDetailPage {
     }
 
     if (formData.secured) {
-      cy.get(alias).find('input[name="secured"]').first().click({ force: true });
+      cy.get(alias).find('input[name="secured"]').first().click();
     }
 
     // Set due date dropdown & date
@@ -163,7 +184,6 @@ export class TransactionDetailPage {
 
   static enterLoanFormDataStepTwo(
     formData: LoanFormData,
-    readOnlyAmount = false,
     alias = '',
     dateSigned1 = 'treasurer_date_signed',
     dateSigned2 = 'authorized_date_signed',
@@ -171,23 +191,23 @@ export class TransactionDetailPage {
     alias = PageUtils.getAlias(alias);
 
     if (formData.loan_restructured) {
-      cy.get(alias).find('input[name="loan_restructured"]').first().click({ force: true });
+      cy.get(alias).find('input[name="loan_restructured"]').first().click();
     }
 
     if (formData.line_of_credit) {
-      cy.get(alias).find('input#line_of_credit').first().click({ force: true });
+      cy.get(alias).find('input#line_of_credit').first().click();
     }
 
     if (formData.others_liable) {
-      cy.get(alias).find('input[name="others_liable"]').first().click({ force: true });
+      cy.get(alias).find('input[name="others_liable"]').first().click();
     }
 
     if (formData.collateral) {
-      cy.get(alias).find('input[name="collateral"]').first().click({ force: true });
+      cy.get(alias).find('input[name="collateral"]').first().click();
     }
 
     if (formData.future_income) {
-      cy.get(alias).find('input[name="future_income"]').first().click({ force: true });
+      cy.get(alias).find('input[name="future_income"]').first().click();
     }
 
     if (formData.last_name) {
@@ -344,8 +364,14 @@ export class TransactionDetailPage {
   }
 
   private static enterPurpose(formData: ScheduleFormData, alias: string) {
-    if (formData.purpose_description) {
-      cy.get(alias).find('textarea#purpose_description').first().safeType(formData.purpose_description);
+    const purposeDescription = formData.purpose_description;
+    if (purposeDescription) {
+      cy.get(alias).then(($root) => {
+        const purposeInput = $root.find('textarea#purpose_description:visible:not([readonly]):not([disabled])').first();
+        if (purposeInput.length > 0) {
+          cy.wrap(purposeInput).safeType(purposeDescription);
+        }
+      });
     }
   }
 

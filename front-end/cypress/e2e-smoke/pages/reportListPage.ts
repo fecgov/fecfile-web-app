@@ -2,11 +2,66 @@ import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
 import { PageUtils } from './pageUtils';
 
+type ReportListType = 'form-3x' | 'form-24';
+type ReportAction = 'amend' | 'unamend';
+
 export class ReportListPage {
+  private static readonly reportActionsTriggerSelector = '[data-cy="report-actions-trigger"]';
+  private static readonly reportActionsPopoverSelector = '[data-cy="table-actions-popover"]:visible';
+
   static goToPage() {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/reports/**').as('GetReports');
+    ReportListPage.interceptReportList('GetReports');
     cy.visit('/reports');
     cy.wait('@GetReports');
+  }
+
+  static interceptReportList(alias = 'GetReports', reportListType?: ReportListType) {
+    const pathname = reportListType ? `/api/v1/reports/${reportListType}/` : '/api/v1/reports/**';
+    cy.intercept({ method: 'GET', pathname }).as(alias);
+  }
+
+  static goToPageAndWaitForReportList(reportListType: ReportListType, alias = 'GetReportList') {
+    ReportListPage.interceptReportList(alias, reportListType);
+    cy.visit('/reports');
+    cy.wait(`@${alias}`);
+    cy.contains('Manage reports').should('exist');
+  }
+
+  static interceptReportAction(
+    reportListType: ReportListType,
+    reportId: string,
+    action: ReportAction,
+    alias = `${action}Report`,
+  ) {
+    cy.intercept({
+      method: 'POST',
+      pathname: `/api/v1/reports/${reportListType}/${reportId}/${action}/`,
+    }).as(alias);
+  }
+
+  static clickReportAction(identifier: string, action: string) {
+    ReportListPage.openReportActions(identifier);
+    cy.get(ReportListPage.reportActionsPopoverSelector)
+      .find(`[data-cy="${ReportListPage.actionDataCy(action)}"]`)
+      .should('be.visible')
+      .click();
+  }
+
+  static assertReportActionExists(identifier: string, action: string) {
+    ReportListPage.openReportActions(identifier);
+    cy.get(ReportListPage.reportActionsPopoverSelector)
+      .find(`[data-cy="${ReportListPage.actionDataCy(action)}"]`)
+      .should('exist')
+      .and('be.visible');
+    ReportListPage.closeReportActions();
+  }
+
+  static assertReportActionDoesNotExist(identifier: string, action: string) {
+    ReportListPage.openReportActions(identifier);
+    cy.get(ReportListPage.reportActionsPopoverSelector)
+      .find(`[data-cy="${ReportListPage.actionDataCy(action)}"]`)
+      .should('not.exist');
+    ReportListPage.closeReportActions();
   }
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
@@ -118,5 +173,28 @@ export class ReportListPage {
       if (!enabled) return;
       cy.wait(`@${alias}`);
     });
+  }
+
+  private static openReportActions(identifier: string) {
+    cy.contains('tr[role="row"]', identifier)
+      .scrollIntoView()
+      .within(() => {
+        cy.get(ReportListPage.reportActionsTriggerSelector).should('be.visible').click();
+      });
+
+    cy.get(ReportListPage.reportActionsPopoverSelector).should('be.visible');
+  }
+
+  private static closeReportActions() {
+    cy.get('body').click(0, 0);
+    cy.get(ReportListPage.reportActionsPopoverSelector).should('not.exist');
+  }
+
+  private static actionDataCy(action: string) {
+    return `report-action-${action
+      .trim()
+      .toLowerCase()
+      .replaceAll(/[^a-z0-9]+/g, '-')
+      .replaceAll(/(^-|-$)/g, '')}`;
   }
 }

@@ -84,7 +84,7 @@ export class ContactsHelpers {
 
   static setDropdownByLabel(labelRegex: RegExp, optionText: string, root = ContactsHelpers.CONTACT_DIALOG) {
     ContactsHelpers.fieldForLabel(labelRegex, root).within(() => {
-      cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click({ force: true });
+      cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click();
     });
 
     cy.get('body')
@@ -95,7 +95,7 @@ export class ContactsHelpers {
           'i',
         ),
       )
-      .click({ force: true });
+      .click();
   }
 
   static setDropdownByLabelIfPresent(
@@ -114,13 +114,13 @@ export class ContactsHelpers {
         .contains('label', labelRegex)
         .closest('.field, .p-field, div.field')
         .within(() => {
-          cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click({ force: true });
+          cy.get('.p-select, .p-dropdown, .p-inputwrapper').first().click();
         });
 
       cy.get('body')
         .find('.p-select-option, .p-dropdown-item')
         .contains(new RegExp(String.raw`^\\s*${ContactsHelpers.escapeRegExp(optionText)}\\s*$`))
-        .click({ force: true });
+        .click();
     });
   }
 
@@ -177,14 +177,14 @@ export class ContactsHelpers {
                 .contains(selectableOptionSel, rx, { timeout: 20000 })
                 .first()
                 .scrollIntoView()
-                .click({ force: true });
+                .click();
             } else {
               list()
                 .find(selectableOptionSel)
                 .filter(':visible')
                 .eq(index)
                 .scrollIntoView()
-                .click({ force: true });
+                .click();
             }
           });
       });
@@ -523,7 +523,7 @@ export class ContactsHelpers {
       }).as('entityDetails');
     }
 
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     cy.get('#entity_type_dropdown').first().click();
 
     cy.contains('.p-select-option', entityLabel)
@@ -539,7 +539,7 @@ export class ContactsHelpers {
       .find('.p-autocomplete-option')
       .should('have.length.at.least', 1)
       .first()
-      .click({ force: true });
+      .click();
 
     cy.wait('@entityDetails');
     cy.intercept('POST', '**/api/v1/contacts/').as('createContact');
@@ -597,44 +597,53 @@ export class ContactsHelpers {
       .find('table[role="table"]', { timeout: 15000 })
       .first()
       .should('exist')
-      .then(($table) => {
-        const typeIdx = getColIndexByThIdOrText($table, colIds.type, 'Type');
-        expect(typeIdx, 'Type column index').to.be.gte(0);
+      .as('transactionHistoryTable')
+      .then(() =>
+        cy
+          .get('@transactionHistoryTable')
+          .find('tbody tr', { timeout: 15000 })
+          .should(($rows) => {
+            expect($rows.length, 'transaction history row count').to.be.greaterThan(0);
+          }),
+      )
+      .then(() =>
+        cy.get('@transactionHistoryTable').then(($table) => {
+          const typeIdx = getColIndexByThIdOrText($table, colIds.type, 'Type');
+          expect(typeIdx, 'Type column index').to.be.gte(0);
 
-        const formIdx = row.form ? getColIndexByThIdOrText($table, colIds.form, 'Form') : -1;
-        const reportIdx = row.report ? getColIndexByThIdOrText($table, colIds.report, 'Report') : -1;
-        const dateIdx = row.date ? getColIndexByThIdOrText($table, colIds.date, 'Date') : -1;
-        const amountIdx =
-          row.amount === undefined
-            ? -1
-            : getColIndexByThIdOrText($table, colIds.amount, 'Amount');
+          const formIdx = row.form ? getColIndexByThIdOrText($table, colIds.form, 'Form') : -1;
+          const reportIdx = row.report ? getColIndexByThIdOrText($table, colIds.report, 'Report') : -1;
+          const dateIdx = row.date ? getColIndexByThIdOrText($table, colIds.date, 'Date') : -1;
+          const amountIdx =
+            row.amount === undefined
+              ? -1
+              : getColIndexByThIdOrText($table, colIds.amount, 'Amount');
 
-        const $rows = $table.find('tbody tr');
-        expect($rows.length, 'transaction history row count').to.be.greaterThan(0);
+          const $rows = $table.find('tbody tr');
+          const rowIndex = $rows.toArray().findIndex((tr) => {
+            const tds = Array.from(tr.querySelectorAll('td'));
+            const cell = tds[typeIdx];
+            return !!cell && typeRx.test(normalize(cell.textContent ?? ''));
+          });
 
-        const rowIndex = $rows.toArray().findIndex((tr) => {
-          const tds = Array.from(tr.querySelectorAll('td'));
-          const cell = tds[typeIdx];
-          return !!cell && typeRx.test(normalize(cell.textContent ?? ''));
-        });
+          expect(rowIndex, `row index for type ${typeRx}`).to.be.gte(0);
 
-        expect(rowIndex, `row index for type ${typeRx}`).to.be.gte(0);
+          const $row = $rows.eq(rowIndex);
+          const $tds = $row.find('td');
 
-        const $row = $rows.eq(rowIndex);
-        const $tds = $row.find('td');
+          const assertCell = (idx: number, rx: RegExp, label: string) => {
+            expect(idx, `${label} column index`).to.be.gte(0);
+            const text = normalize($tds.eq(idx).text());
+            expect(text, `${label} cell text`).to.match(rx);
+          };
 
-        const assertCell = (idx: number, rx: RegExp, label: string) => {
-          expect(idx, `${label} column index`).to.be.gte(0);
-          const text = normalize($tds.eq(idx).text());
-          expect(text, `${label} cell text`).to.match(rx);
-        };
-
-        assertCell(typeIdx, typeRx, 'Type');
-        if (formRx) assertCell(formIdx, formRx, 'Form');
-        if (reportRx) assertCell(reportIdx, reportRx, 'Report');
-        if (dateRx) assertCell(dateIdx, dateRx, 'Date');
-        if (amountRx) assertCell(amountIdx, amountRx, 'Amount');
-      })
+          assertCell(typeIdx, typeRx, 'Type');
+          if (formRx) assertCell(formIdx, formRx, 'Form');
+          if (reportRx) assertCell(reportIdx, reportRx, 'Report');
+          if (dateRx) assertCell(dateIdx, dateRx, 'Date');
+          if (amountRx) assertCell(amountIdx, amountRx, 'Amount');
+        }),
+      )
       .then(() => cy.wrap<void>(undefined, { log: false }));
   }
 
@@ -773,7 +782,7 @@ export class ContactsDeleteHelpers {
       if (normalized === 'Close') {
         const $close = $dialog.find('[aria-label="Cancel"]').first();
         if ($close.length) {
-          return cy.wrap($close).click({ force: true });
+          return cy.wrap($close).click();
         }
         throw new Error('Confirm delete dialog close icon not found.');
       }
@@ -783,12 +792,12 @@ export class ContactsDeleteHelpers {
         .filter((_, el) => (el.textContent || '').trim() === normalized)
         .first();
       if ($button.length) {
-        return cy.wrap($button).click({ force: true });
+        return cy.wrap($button).click();
       }
       if (normalized === 'Cancel') {
         const $close = $dialog.find('[aria-label="Cancel"]').first();
         if ($close.length) {
-          return cy.wrap($close).click({ force: true });
+          return cy.wrap($close).click();
         }
       }
       throw new Error(`Confirm delete dialog "${normalized}" button not found.`);
@@ -830,7 +839,7 @@ export class ContactsDeleteHelpers {
   }
 
   static openActionsMenu(contactName: string) {
-    PageUtils.blurActiveField();
+    cy.blurActiveField();
     PageUtils.getKabob(contactName);
     cy.get('.p-popover').filter(':visible').should('exist');
     cy.get('.p-popover').filter(':visible').contains('button', /Edit/i).should('be.visible');
@@ -897,7 +906,7 @@ export class ContactsDeleteHelpers {
       if (label === 'Close') {
         const $close = $dialog.find('[aria-label="Cancel"]').first();
         if ($close.length) {
-          return cy.wrap($close).click({ force: true });
+          return cy.wrap($close).click();
         }
         throw new Error('Confirm delete dialog close icon not found.');
       }
@@ -907,12 +916,12 @@ export class ContactsDeleteHelpers {
         .filter((_, el) => (el.textContent || '').trim() === label)
         .first();
       if ($button.length) {
-        return cy.wrap($button).click({ force: true });
+        return cy.wrap($button).click();
       }
       if (label === 'Cancel') {
         const $close = $dialog.find('[aria-label="Cancel"]').first();
         if ($close.length) {
-          return cy.wrap($close).click({ force: true });
+          return cy.wrap($close).click();
         }
       }
       throw new Error(`Confirm delete dialog is visible but "${label}" action was not found.`);
@@ -920,7 +929,7 @@ export class ContactsDeleteHelpers {
   }
 
   static openRestoreDeletedContactsModal() {
-    cy.contains('button,a', 'Restore deleted contacts').should('be.visible').click({ force: true });
+    cy.contains('button,a', 'Restore deleted contacts').should('be.visible').click();
     const dialog = ContactsDeleteHelpers.getRestoreDeletedContactsDialog();
     dialog.contains('button', /Restore selected/i).should('be.visible');
     return dialog;
@@ -943,7 +952,7 @@ export class ContactsDeleteHelpers {
           .first();
         if ($root.length) return cy.wrap($root).scrollIntoView().click();
         const $trigger = $wrap.find('.p-select-dropdown, [aria-label="dropdown trigger"]').first();
-        if ($trigger.length) return cy.wrap($trigger).scrollIntoView().click({ force: true });
+        if ($trigger.length) return cy.wrap($trigger).scrollIntoView().click();
         throw new Error('Results-per-page select not found in restore dialog.');
       });
   }
@@ -988,7 +997,7 @@ export class ContactsDeleteHelpers {
         if ($row.length) {
           return cy.wrap($row)
             .within(() => {
-              cy.get('input[type="checkbox"], .p-checkbox-box').first().click({ force: true });
+              cy.get('input[type="checkbox"], .p-checkbox-box').first().click();
             })
             .then(() => $row);
         }
@@ -1001,7 +1010,7 @@ export class ContactsDeleteHelpers {
           throw new Error(`Could not find deleted contact "${contactName}" before last page.`);
         }
 
-        cy.wrap($next).click({ force: true });
+        cy.wrap($next).click();
         return waitForPageLoad().then(() => tryPage(page + 1));
       });
     };

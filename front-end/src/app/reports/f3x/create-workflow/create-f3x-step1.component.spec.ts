@@ -9,7 +9,6 @@ import { Form3X, F3xFormTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -26,7 +25,6 @@ async function setup(params: { reportId?: string }) {
     providers: [
       provideHttpClient(),
       provideHttpClientTesting(),
-      provideNoopAnimations(),
       Form3XService,
       MessageService,
       {
@@ -98,7 +96,6 @@ describe('CreateF3XStep1Component: New', () => {
     const createSpy = vi.spyOn(form3XService, 'create');
     const updateSpy = vi.spyOn(form3XService, 'updateWithAllowedErrorCodes');
 
-    // wait for all async initialization to complete
     await fixture.whenStable();
     fixture.detectChanges();
 

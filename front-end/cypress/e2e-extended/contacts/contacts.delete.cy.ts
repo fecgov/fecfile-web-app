@@ -155,7 +155,7 @@ const openDeleteAction = (contactName: string, assertEnabled = true) => {
         ContactsDeleteHelpers.assertActionButtonEnabled($button, 'Delete');
       }
     })
-    .click({ force: true });
+    .click();
 };
 
 const waitForLinkedContactStatus = (
@@ -331,7 +331,7 @@ describe('Contacts - delete guard', () => {
     cy.wait('@getDeletedContacts');
 
     ContactsHelpers.assertSuccessToastMessage();
-    cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
+    cy.contains('button', /^Back$/).should('be.visible').click();
     cy.wait('@getContactsList');
     cy.contains('tbody tr', UNLINKED_CONTACT).should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
@@ -397,7 +397,7 @@ describe('Contacts - delete guard', () => {
           ContactsDeleteHelpers.assertActionButtonDisabled($deleteBtn, 'Delete');
         }
         cy.wrap($deleteBtn).invoke('removeAttr', 'disabled');
-        cy.wrap($deleteBtn).click({ force: true });
+        cy.wrap($deleteBtn).click();
         ContactsDeleteHelpers.confirmDeleteModalIfPresent(action);
         ContactsDeleteHelpers.assertNoConfirmDeleteModal();
       });

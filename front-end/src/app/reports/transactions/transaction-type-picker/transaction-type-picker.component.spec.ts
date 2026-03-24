@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { AccordionModule } from 'primeng/accordion';
@@ -35,7 +34,7 @@ describe('TransactionTypePickerComponent', () => {
     const routeParams$ = new BehaviorSubject({ category: 'receipt' });
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        imports: [AccordionModule, TransactionTypePickerComponent],
         providers: [
           provideHttpClient(),
           provideHttpClientTesting(),
@@ -131,7 +130,7 @@ describe('TransactionTypePickerComponent', () => {
       routeParams$ = new BehaviorSubject({ category: 'receipt' });
 
       await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        imports: [AccordionModule, TransactionTypePickerComponent],
         providers: [
           provideHttpClient(),
           provideHttpClientTesting(),
