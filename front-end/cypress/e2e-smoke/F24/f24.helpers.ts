@@ -38,7 +38,7 @@ export function createIndependentExpenditureOnForm24(
     'date_signed',
   );
   if (blurBeforeSave) {
-    PageUtils.blurActiveField();
+    cy.blurActiveField();
   }
   TransactionDetailPage.clickSave();
   cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
