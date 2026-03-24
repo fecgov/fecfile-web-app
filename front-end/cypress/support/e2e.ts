@@ -7,6 +7,7 @@ import 'cypress-mochawesome-reporter/register';
 
 Cypress.Commands.add('safeType', { prevSubject: true }, commands.safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, commands.overwrite);
+Cypress.Commands.add('blurActiveField', { prevSubject: 'optional' }, commands.blurActiveField);
 
 registerFailOn5xx();
 
@@ -21,6 +22,7 @@ declare global {
       ): Chainable<void>;
       safeType(value: string | number): Chainable<JQuery<HTMLElement>>;
       overwrite(value: string | number): Chainable<JQuery<HTMLElement>>;
+      blurActiveField(): Chainable<JQuery<HTMLBodyElement>>;
     }
   }
 }
