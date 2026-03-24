@@ -60,8 +60,6 @@ describe('AdditionalInfoInputComponent', () => {
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
-
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -84,6 +82,7 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should trigger the purposeDescriptionPrefix callbacks', () => {
+    fixture.detectChanges();
     component.form.patchValue({
       [host.templateMap.purpose_description]: 'abc',
     });
@@ -100,6 +99,7 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('purpose_description of just prefix just trigger required error', () => {
+    fixture.detectChanges();
     component.form.patchValue({
       [host.templateMap.purpose_description]: 'Prefix: hihi',
     });
@@ -115,6 +115,7 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should detect memo prefixes', () => {
+    fixture.detectChanges();
     expect(component.form.get(host.templateMap.text4000)?.value).toEqual('');
     host.transaction.memo_text = MemoText.fromJSON({
       text_prefix: 'MEMO PREFIX:',
