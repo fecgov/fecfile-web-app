@@ -14,7 +14,6 @@
     "@typescript-eslint/parser",
     "@vitest/coverage-v8"
   ],
-  "ignore": ["src/test.ts"],
   "workspaces": {
     "front-end": {
       "entry": [
@@ -33,13 +32,18 @@
     "config": ["angular.json"]
   },
   "cypress": {
-    "config": ["cypress.config.{js,ts,mjs,cjs}"],
     "entry": [
       "front-end/cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
       "front-end/cypress/support/e2e.{js,jsx,ts,tsx}",
       "front-end/cypress/support/**/*.{js,ts}"
     ]
   },
-
+  "vitest": {
+    "entry": [
+      "**/*.{bench,test,test-d,spec,spec-d}.?(c|m)[jt]s?(x)",
+      "**/__mocks__/**/*.[jt]s?(x)",
+      "src/test.{ts,tsx}"
+    ]
+  },
   "tags": ["-lintignore"]
 }
