@@ -6,6 +6,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { F3XAggregationHelpers } from '../../e2e-extended/reports/f3x/f3x-aggregation.helpers';
 
 const formData = {
   ...defaultLoanFormData,
@@ -57,7 +58,7 @@ describe('Loans', () => {
       cy.contains('Loan By Committee').should('exist');
       cy.contains('Loan Made').should('exist');
       PageUtils.clickElement('loans-and-debts-button');
-      cy.contains('Receive loan repayment').click({ force: true });
+      cy.contains('Receive loan repayment').click();
 
       PageUtils.urlCheck('LOAN_REPAYMENT_RECEIVED');
       formData.date_received = new Date(currentYear, 4 - 1, 27);
@@ -80,15 +81,25 @@ describe('Loans', () => {
 
   it('should test: Loan By Committee - delete Guarantor', () => {
     setupLoanByCommittee().then((result: any) => {
-
       TransactionDetailPage.addGuarantor(result.individual.last_name, formData['amount'], result.report);
-      cy.intercept('GET', 'http://localhost:8080/api/v1/transactions/**&schedules=C2').as('GuarantorList');
+      const guarantorDisplayName = [result.individual.last_name, result.individual.first_name]
+        .filter(Boolean)
+        .join(', ');
+
+      cy.intercept('DELETE', '**/api/v1/transactions/**').as('DeleteGuarantor');
       cy.contains('Loan By Committee').click();
       cy.contains('Guarantors').should('exist');
-      cy.wait('@GuarantorList');
-      PageUtils.clickKababItem(result.individual.last_name, 'Delete');
+
+      F3XAggregationHelpers.clickRowActionByCellText(
+        'app-transaction-guarantors p-table',
+        guarantorDisplayName,
+        'Delete',
+      );
       PageUtils.clickButton('Confirm');
-      cy.contains(result.individual.last_name).should('not.exist');
+      cy.wait('@DeleteGuarantor');
+      cy.get('app-transaction-guarantors p-table')
+        .contains(guarantorDisplayName)
+        .should('not.exist');
     });
   });
 });

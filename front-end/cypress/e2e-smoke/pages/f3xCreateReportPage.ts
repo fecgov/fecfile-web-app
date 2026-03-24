@@ -7,7 +7,7 @@ export class F3xCreateReportPage {
 
     cy.get("[data-cy='report-type-category']").contains(formData['report_type_category']).click();
 
-    cy.get(`#${formData['report_code']}`).click({ force: true });
+    cy.get(`#${formData['report_code']}`).click();
 
     if (['12G', '30G', '12P', '12R', '12S', '12C', '30R', '30S'].includes(formData['report_code'])) {
       PageUtils.calendarSetValue('[data-cy="date_of_election"]', new Date(formData['date_of_election']));

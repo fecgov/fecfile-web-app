@@ -14,7 +14,7 @@ describe('Tests that contact data gets cleared out properly when switching types
     cy.wrap(DataSetup({ committee: true })).then((result: any) => {
       ReportListPage.goToPage();
       ReportListPage.gotToReportTransactionListPage(result.report);
-      PageUtils.clickButton("Add transaction");
+      cy.contains('app-table-actions-button button:visible', /^Add transaction$/).click();
       StartTransaction.Receipts().Other().OtherReceipts();
       ContactLookup.getContact(result.committee.name, '', 'Committee');
       ContactLookup.setType("Individual")
@@ -26,7 +26,7 @@ describe('Tests that contact data gets cleared out properly when switching types
     cy.wrap(DataSetup({ committee: true, individual: true, individual2: true })).then((result: any) => {
       ReportListPage.goToPage();
       ReportListPage.gotToReportTransactionListPage(result.report);
-      PageUtils.clickButton("Add transaction");
+      cy.contains('app-table-actions-button button:visible', /^Add transaction$/).click();
       StartTransaction.Receipts().Individual().Earmark();
       ContactLookup.getContact(result.individual.last_name, '');
       PageUtils.calendarSetValue(
