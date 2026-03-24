@@ -5,21 +5,23 @@ import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
 import { UsersHelpers } from './users.helpers';
 import { SharedHelpers } from '../utils/shared.helpers';
 
-const ADD_MEMBER_POST = '**/committee-members/add-member/**';
-const LIST_MEMBERS_GET = '**/committee-members/**';
-const DIALOG = "#content-offset app-committee-member-dialog";
+const uniqueUser = (overrides: Partial<typeof userFormData> = {}) => ({
+  ...userFormData,
+  email: `user_${Date.now()}_${Cypress._.random(1000, 9999)}@fec.gov`,
+  ...overrides,
+});
 
 describe("Users: Validation and API failure states", () => {
   beforeEach(() => {
     Initialize();
+    UsersHelpers.deleteAllTestUsers();
     UsersPage.goToPage();
     UsersHelpers.aliasUsersTable();
   });
 
   it('shows required inline validation when email is empty', () => {
     UsersPage.goToPage();
-    PageUtils.clickButton('Add user');
-    cy.get(DIALOG).filter(':visible').first().as('dialog');
+    UsersPage.openAddUserDialog();
     UsersHelpers.emailInput().clear({ force: true }).should('have.value', '');
     UsersHelpers.submitBtn().click();
     UsersHelpers.submitBtn().should('be.visible');
@@ -50,8 +52,7 @@ describe("Users: Validation and API failure states", () => {
         .first();
 
     UsersPage.goToPage();
-    PageUtils.clickButton('Add user');
-    cy.get(DIALOG).filter(':visible').first().as('dialog');
+    UsersPage.openAddUserDialog();
 
     for (const badEmail of invalidEmails) {
       UsersHelpers.emailInput().clear({ force: true }).type(badEmail, { delay: 0 });
@@ -72,26 +73,27 @@ describe("Users: Validation and API failure states", () => {
   });
 
   it('should verify that toast messages close correctly on all actions', () => {
-    const newUser = { ...userFormData, email: 'toast_user@fec.gov', role: Roles.MANAGER };
+    const newUser = uniqueUser({ role: Roles.MANAGER });
     UsersPage.create(newUser);
     PageUtils.closeToast();
     PageUtils.findOnPage('table tbody', newUser.email);
     UsersPage.delete(newUser.email);
     PageUtils.closeToast();
+    UsersPage.goToPage();
+    cy.get('table tbody tr').contains('td', newUser.email).should('not.exist');
   });
 
   it('@allow-5xx should stub 500 on invite, keep submit enabled, then succeed on retry', () => {
-    const adminUser = { ...userFormData, role: Roles.COMMITTEE_ADMINISTRATOR };
-    UsersHelpers.stubOnce('POST', ADD_MEMBER_POST, { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
-    cy.intercept('GET', LIST_MEMBERS_GET).as('GetMembers');
-    PageUtils.clickButton('Add user');
-    cy.get(DIALOG).filter(':visible').first().as('dialog');
+    const adminUser = uniqueUser({ role: Roles.COMMITTEE_ADMINISTRATOR });
+    UsersHelpers.stubOnce('POST', '**/committee-members/add-member/**', { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
+    UsersPage.openAddUserDialog();
     UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
-    cy.intercept('POST', ADD_MEMBER_POST).as('invite201'); // capture success (no stub)
+    cy.intercept('POST', '**/committee-members/add-member/**').as('invite201'); // capture success (no stub)
+    cy.intercept('GET', '**/committee-members/?page=1**').as('GetMembers');
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
@@ -102,18 +104,21 @@ describe("Users: Validation and API failure states", () => {
 
 
   it('@allow-5xx should stub 500 on delete of user, keep row, then succeed on retry', () => {
-    const target = userFormData.email;
-    UsersPage.assertRow({ ...userFormData, email: target }, 'Pending');
+    const targetUser = uniqueUser();
+    UsersPage.create(targetUser);
+    PageUtils.closeToast();
+    UsersPage.assertRow(targetUser, 'Pending');
     cy.intercept(
       { method: 'DELETE', url: '**/committee-members/**', times: 1 },
       { statusCode: 500, body: { message: 'Server error during delete' } },
     ).as('Delete500');
-    UsersPage.delete(target);
+    UsersPage.delete(targetUser.email);
     cy.wait('@Delete500').its('response.statusCode').should('eq', 500);
     cy.intercept('DELETE', '**/committee-members/**').as('DeleteOK');
-    UsersPage.delete(target);
+    UsersPage.delete(targetUser.email);
     cy.wait('@DeleteOK').its('response.statusCode').should('be.oneOf', [200, 204]);
     PageUtils.closeToast();
-    cy.get('table tbody tr').contains('td', target).should('not.exist');
+    UsersPage.goToPage();
+    cy.get('table tbody tr').contains('td', targetUser.email).should('not.exist');
   });
 });

@@ -2,15 +2,24 @@ import { ContactFormData } from '../models/ContactFormModel';
 import { PageUtils } from './pageUtils';
 
 export class ContactLookup {
-  static getContact(name: string, alias = '', type: string | undefined = undefined, index=0) {
+  private static readonly autocompleteInputSelector =
+    '[data-cy="searchBox"] input.p-autocomplete-input:visible:not([readonly]):not([disabled])';
+
+  static getContact(name: string, alias = '', type: string | undefined = undefined, index = 0) {
     alias = PageUtils.getAlias(alias);
     if (type !== undefined) {
       PageUtils.pSelectDropdownSetValue('#entity_type_dropdown', type, alias, index);
       cy.contains('LOOKUP').should('exist');
     }
-    cy.get(alias).find('[data-cy="searchBox"]').eq(index).type(name.slice(0, 3));
-    cy.contains(name).should('exist').as('contactName');
-    cy.get('@contactName').click({ force: true });
+    cy.get(alias)
+      .find(this.autocompleteInputSelector)
+      .eq(index)
+      .clear()
+      .type(name.slice(0, 3));
+    cy.get('.p-autocomplete-list-container:visible')
+      .contains('.p-autocomplete-option', name)
+      .first()
+      .click();
   }
 
   static getCandidate(
@@ -18,10 +27,10 @@ export class ContactLookup {
     excludeFecIds: string[],
     excludeIds: string[],
     alias = '',
-    change = false,
   ) {
     const lastName = contact['last_name'];
     if (!lastName) return;
+    alias = PageUtils.getAlias(alias);
     const nameEntry = lastName.slice(0, 3);
     cy.intercept(
       'GET',
@@ -34,14 +43,11 @@ export class ContactLookup {
         },
       },
     );
-    const candidateSection = cy.get(alias);
-    candidateSection.find('[data-cy="searchBox"]').type(nameEntry);
-    candidateSection
-      .get('.p-autocomplete-list-container')
-      .contains(nameEntry)
-      .then(($name) => {
-        cy.wrap($name).click();
-      });
+    cy.get(alias).find(this.autocompleteInputSelector).first().clear().type(nameEntry);
+    cy.get('.p-autocomplete-list-container:visible')
+      .contains('.p-autocomplete-option', nameEntry)
+      .first()
+      .click();
   }
 
   static getCommittee(
@@ -71,9 +77,9 @@ export class ContactLookup {
 
   static setType(
     type: "Individual" | "Organization" | "Committee" | "Candidate",
-    querySelector="#entity_type_dropdown",
-    alias='',
-    index=0,
+    querySelector = "#entity_type_dropdown",
+    alias = '',
+    index = 0,
   ) {
     PageUtils.pSelectDropdownSetValue(querySelector, type, alias, index);
   }

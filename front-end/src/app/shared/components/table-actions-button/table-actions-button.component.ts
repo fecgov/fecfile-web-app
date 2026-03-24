@@ -20,6 +20,8 @@ export class TableActionsButtonComponent<T> {
   readonly buttonLabel = input('');
   readonly buttonStyleClass = input('');
   readonly buttonAriaLabel = input('');
+  readonly buttonDataCy = input('table-actions-trigger');
+  readonly actionDataCyPrefix = input('table-action');
   readonly rounded = input(true);
   readonly tableActionClick = output<{ action: TableAction<T>; actionItem: T }>();
 
@@ -32,5 +34,13 @@ export class TableActionsButtonComponent<T> {
   performAction(action: TableAction<T>) {
     this.tableActionClick.emit({ action, actionItem: this.actionItem() });
     this.op().hide();
+  }
+
+  actionDataCy(label: string): string {
+    return `${this.actionDataCyPrefix()}-${label
+      .trim()
+      .toLowerCase()
+      .replaceAll(/[^a-z0-9]+/g, '-')
+      .replaceAll(/(^-|-$)/g, '')}`;
   }
 }

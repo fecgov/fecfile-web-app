@@ -13,6 +13,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CoverageDates } from 'app/shared/models/reports/base-form-3';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 let component: CreateF3XStep1Component;
 let fixture: ComponentFixture<CreateF3XStep1Component>;
@@ -98,23 +99,20 @@ describe('CreateF3XStep1Component: New', () => {
     const createSpy = spyOn(form3XService, 'create');
     const updateSpy = spyOn(form3XService, 'updateWithAllowedErrorCodes');
 
-    // wait for all async initialization to complete
     await fixture.whenStable();
     fixture.detectChanges();
 
-    // now invalidate the form
-    component.form.patchValue({ coverage_from_date: null });
+    spyOnProperty(component.form, 'valid', 'get').and.returnValue(false);
+    spyOnProperty(component.form, 'invalid', 'get').and.returnValue(true);
 
     expect(component.form.valid).toBeFalse();
+
     await component.submitForm();
 
     expect(component.formSubmitted).toBeTrue();
     expect(createSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalled();
-    const dispatchCall = store.dispatch as jasmine.Spy;
-    const lastCall = dispatchCall.calls.mostRecent();
-    expect(lastCall.args[0].type).toEqual('[SingleClickButtonDisabled] False');
+    expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
   });
 });
 

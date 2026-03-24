@@ -9,6 +9,7 @@ import { DataSetup } from './setup';
 import { StartTransaction } from './utils/start-transaction/start-transaction';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { F3XAggregationHelpers } from '../../e2e-extended/reports/f3x/f3x-aggregation.helpers';
 
 const scheduleData = {
   ...defaultScheduleFormData,
@@ -171,7 +172,12 @@ describe('Receipt Transactions', () => {
       TransactionDetailPage.clickCancel();
       PageUtils.urlCheck('/list');
       // Check form values of memo form
-      PageUtils.clickLink('Partnership Attribution');
+      cy.get(`${F3XAggregationHelpers.receiptsTableRoot} tbody tr`)
+        .contains('td', 'Partnership Attribution')
+        .first()
+        .closest('tr')
+        .as('partnershipAttributionRow');
+      PageUtils.clickLink('Partnership Attribution', '@partnershipAttributionRow');
       cy.get('#entity_type_dropdown.readonly').should('exist');
       cy.get('#entity_type_dropdown').should('contain', 'Individual');
       ContactListPage.assertFormData(individual, true);
