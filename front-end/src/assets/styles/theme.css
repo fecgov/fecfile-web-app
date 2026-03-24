@@ -2077,7 +2077,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-info > .p-button {
   color: #212121;
   background: #35bdbb;
-  border: 1px solid #35bdbb;
+  border: none;
 }
 .p-button.p-button-info:enabled:hover,
 .p-buttonset.p-button-info > .p-button:enabled:hover,
@@ -3394,7 +3394,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-paginator .p-paginator-next,
 .p-paginator .p-paginator-last {
   background-color: var(--fec-grey-alt);
-  border: 1px solid var(--surface-border);
+  border: none;
   color: var(--p-content-color);
   min-width: 2.357rem;
   height: 2rem;
@@ -3441,7 +3441,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-paginator .p-paginator-pages .p-paginator-page {
   background: var(--p-content-background);
-  border: 1px solid var(--surface-border);
+  border: none;
   min-width: 2.357rem;
   height: 2rem;
   margin: 0 0 0 4px;
