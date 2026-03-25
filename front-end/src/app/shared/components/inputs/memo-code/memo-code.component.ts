@@ -120,34 +120,47 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
   }
 
+  private clearOutOfDateRequirement(): void {
+    if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
+      this.memoControl.removeValidators([Validators.requiredTrue]);
+      this.memoControl.markAsTouched();
+      this.memoControl.updateValueAndValidity();
+    }
+    this.dateIsOutsideReport = false;
+  }
+
+  private setOutOfDateRequirement(): void {
+    this.memoControl.addValidators(Validators.requiredTrue);
+    this.memoControl.markAsTouched();
+    this.memoControl.markAsDirty();
+    this.memoControl.updateValueAndValidity();
+    this.dateIsOutsideReport = true;
+    if (!this.memoControl.value) {
+      this.outOfDateDialogVisible.set(true);
+    }
+  }
+
+  private isMemoDateWithinCoverage(date: Date, coverageFromDate: Date, coverageThroughDate: Date): boolean {
+    return date >= coverageFromDate && date <= coverageThroughDate;
+  }
+
   updateMemoItemWithDate(date: Date | null | undefined) {
     const coverageFromDate = this.coverageFromDate();
     const coverageThrough = this.coverageThroughDate();
-    if (this.transactionType()?.doMemoCodeDateCheck && coverageFromDate && coverageThrough) {
-      if (!date) {
-        if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
-          this.memoControl.removeValidators([Validators.requiredTrue]);
-          this.memoControl.markAsTouched();
-          this.memoControl.updateValueAndValidity();
-        }
-        this.dateIsOutsideReport = false;
-      } else if (date < coverageFromDate || date > coverageThrough) {
-        this.memoControl.addValidators(Validators.requiredTrue);
-        this.memoControl.markAsTouched();
-        this.memoControl.markAsDirty();
-        this.memoControl.updateValueAndValidity();
-        this.dateIsOutsideReport = true;
-        if (!this.memoControl.value) {
-          this.outOfDateDialogVisible.set(true);
-        }
-      } else {
-        if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
-          this.memoControl.removeValidators([Validators.requiredTrue]);
-          this.memoControl.markAsTouched();
-          this.memoControl.updateValueAndValidity();
-        }
-        this.dateIsOutsideReport = false;
-      }
+    if (!this.transactionType()?.doMemoCodeDateCheck || !coverageFromDate || !coverageThrough) {
+      return;
     }
+
+    if (!date) {
+      this.clearOutOfDateRequirement();
+      return;
+    }
+
+    if (this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
+      this.clearOutOfDateRequirement();
+      return;
+    }
+
+    this.setOutOfDateRequirement();
   }
 }

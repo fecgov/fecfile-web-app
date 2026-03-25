@@ -45,7 +45,7 @@ describe('LoginService', () => {
   it('#logOut login.gov happy path', () => {
     const dispatchSpy = vi.spyOn(store, 'dispatch');
     const originalLogoutUrl = environment.loginDotGovLogoutUrl;
-    environment.loginDotGovLogoutUrl = window.location.href;
+    environment.loginDotGovLogoutUrl = globalThis.location.href;
     const userIsAuthenticatedSpy = vi.spyOn(service, 'userIsAuthenticated').mockReturnValue(true);
 
     try {
