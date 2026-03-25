@@ -1849,6 +1849,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
     border-color 0.15s,
     box-shadow 0.15s;
   border-radius: var(--border-radius);
+  border: 0;
 }
 .p-button:enabled:hover,
 .p-button:enabled:active {
