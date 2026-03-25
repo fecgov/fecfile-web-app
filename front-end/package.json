@@ -69,7 +69,7 @@
     "@typescript-eslint/parser": "8.57.2",
     "@vitest/coverage-v8": "^4.1.1",
     "axe-core": "^4.11.1",
-    "cypress": "^15.13.0",
+    "cypress": "15.13.0",
     "cypress-axe": "^1.7.0",
     "cypress-mochawesome-reporter": "4.0.2",
     "eslint": "10.1.0",
