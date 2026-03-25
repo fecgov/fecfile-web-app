@@ -49,41 +49,53 @@ describe('NavigationControlComponent', () => {
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  describe('button', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
 
-  it('should dispatch a navigationEvent', () => {
-    // spy on event emitter
-    const storeSpy = spyOn(store, 'dispatch');
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
 
-    // trigger the click
-    const nativeElement = fixture.nativeElement;
-    const button = nativeElement.querySelector('button');
-    button.dispatchEvent(new Event('click'));
+    it('should dispatch a navigationEvent', () => {
+      // spy on event emitter
+      const storeSpy = vi.spyOn(store, 'dispatch');
 
-    fixture.detectChanges();
+      // trigger the click
+      const nativeElement = fixture.nativeElement;
+      const button = nativeElement.querySelector('button');
+      button.dispatchEvent(new Event('click'));
 
-    expect(storeSpy).toHaveBeenCalled();
-  });
+      fixture.detectChanges();
 
-  it('should allow adding another', () => {
-    // spy on event emitter
-    const storeSpy = spyOn(store, 'dispatch');
+      expect(storeSpy).toHaveBeenCalled();
+    });
 
-    component.saveAndAddAnother();
+    it('should allow adding another', () => {
+      // spy on event emitter
+      const storeSpy = vi.spyOn(store, 'dispatch');
 
-    fixture.detectChanges();
-    const navigationEvent = new NavigationEvent(
-      component.navigationControl().navigationAction,
-      NavigationDestination.ANOTHER,
-      cloneInstance(component.transaction() as Transaction),
-      component.transaction()?.transaction_type_identifier as TransactionTypes,
-    );
-    expect(storeSpy).toHaveBeenCalledWith(navigationEventSetAction(navigationEvent));
+      component.saveAndAddAnother();
+
+      fixture.detectChanges();
+      const navigationEvent = new NavigationEvent(
+        component.navigationControl().navigationAction,
+        NavigationDestination.ANOTHER,
+        cloneInstance(component.transaction() as Transaction),
+        component.transaction()?.transaction_type_identifier as TransactionTypes,
+      );
+      expect(storeSpy).toHaveBeenCalledWith(navigationEventSetAction(navigationEvent));
+    });
+
+    it('should have grouped options', () => {
+      const transaction = getTestTransactionByType(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
+      const options = component.getOptions(transaction);
+      expect(options[0].label).toBe('Joint Fundraising Transfer Memo');
+      expect(options[0].items[0].label).toBe('Individual');
+    });
   });
 
   describe('with dropdown', () => {
@@ -110,7 +122,7 @@ describe('NavigationControlComponent', () => {
 
     it('should dispatch a navigationEvent with a transaction', () => {
       // spy on event emitter
-      const storeSpy = spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(store, 'dispatch');
 
       console.log(component.dropdownOptions);
       component.onDropdownChange(component.dropdownOptions()[0]); // simulate selecting the first dropdown option
@@ -125,12 +137,5 @@ describe('NavigationControlComponent', () => {
         }),
       );
     });
-  });
-
-  it('should have grouped options', () => {
-    const transaction = getTestTransactionByType(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
-    const options = component.getOptions(transaction);
-    expect(options[0].label).toBe('Joint Fundraising Transfer Memo');
-    expect(options[0].items[0].label).toBe('Individual');
   });
 });

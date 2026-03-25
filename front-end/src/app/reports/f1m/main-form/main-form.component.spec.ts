@@ -124,7 +124,7 @@ describe('MainFormComponent', () => {
     component.form.patchValue({ affiliated_committee_name: '' });
     fixture.detectChanges();
     const affiliated = component.form.get('affiliated_committee_name')!;
-    expect(affiliated.valid).toBeFalse();
+    expect(affiliated.valid).toBe(false);
 
     component.form.patchValue({ statusBy: 'qualification' });
     fixture.detectChanges();
@@ -132,7 +132,7 @@ describe('MainFormComponent', () => {
     if (affiliated.pending) {
       await firstValueFrom(affiliated.statusChanges);
     }
-    expect(affiliated.valid).toBeTrue();
+    expect(affiliated.valid).toBe(true);
   });
 
   it('getReportPayload should update and return the report properties', () => {

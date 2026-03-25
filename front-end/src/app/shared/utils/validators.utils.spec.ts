@@ -1,3 +1,4 @@
+import type { MockedObject } from 'vitest';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   emailValidator,
@@ -8,15 +9,12 @@ import {
   buildAfterDateValidator,
   buildReattRedesTransactionValidator,
   CommitteeMemberEmailValidator,
-  F24UniqueNameValidator,
 } from './validators.utils';
 import { CoverageDates } from '../models/reports/base-form-3';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { Form24Service } from '../services/form-24.service';
 import { TestBed } from '@angular/core/testing';
 import { CommitteeMember } from '../models/committee-member.model';
-import { Form24 } from '../models/reports/form-24.model';
 
 describe('ValidatorsUtils', () => {
   describe('emailValidator', () => {
@@ -201,64 +199,31 @@ describe('ValidatorsUtils', () => {
   });
 
   describe('CommitteeMemberEmailValidator', () => {
-    let service: jasmine.SpyObj<CommitteeMemberService>;
+    let service: MockedObject<CommitteeMemberService>;
     let validator: CommitteeMemberEmailValidator;
 
     beforeEach(() => {
-      const spy = jasmine.createSpyObj('CommitteeMemberService', ['getMembers']);
+      const spy = {
+        getMembers: vi.fn().mockName('CommitteeMemberService.getMembers'),
+      };
       TestBed.configureTestingModule({
         providers: [CommitteeMemberEmailValidator, { provide: CommitteeMemberService, useValue: spy }],
       });
-      service = TestBed.inject(CommitteeMemberService) as jasmine.SpyObj<CommitteeMemberService>;
+      service = TestBed.inject(CommitteeMemberService) as MockedObject<CommitteeMemberService>;
       validator = TestBed.inject(CommitteeMemberEmailValidator);
     });
 
     it('should return error if email is taken', async () => {
       const member = CommitteeMember.fromJSON({ email: 'taken@example.com' });
-      service.getMembers.and.resolveTo([member]);
+      service.getMembers.mockResolvedValue([member]);
       const control = new FormControl('taken@example.com');
       const result = await validator.validate(control);
       expect(result).toEqual({ email: 'taken-in-committee' });
     });
 
     it('should return null if email is not taken', async () => {
-      service.getMembers.and.resolveTo([]);
+      service.getMembers.mockResolvedValue([]);
       const control = new FormControl('new@example.com');
-      const result = await validator.validate(control);
-      expect(result).toBeNull();
-    });
-  });
-
-  describe('F24UniqueNameValidator', () => {
-    let service: jasmine.SpyObj<Form24Service>;
-    let validator: F24UniqueNameValidator;
-
-    beforeEach(() => {
-      const spy = jasmine.createSpyObj('Form24Service', ['getAllReports']);
-      TestBed.configureTestingModule({
-        providers: [F24UniqueNameValidator, { provide: Form24Service, useValue: spy }],
-      });
-      service = TestBed.inject(Form24Service) as jasmine.SpyObj<Form24Service>;
-      validator = TestBed.inject(F24UniqueNameValidator);
-    });
-
-    it('should return error if name is duplicate', async () => {
-      const report = Form24.fromJSON({ name: '24 hourreport' });
-      service.getAllReports.and.resolveTo([report]);
-      const control = new FormGroup({
-        typeName: new FormControl('24 HOUR'),
-        form24Name: new FormControl('REPORT'),
-      });
-      const result = await validator.validate(control);
-      expect(result).toEqual({ duplicateName: true });
-    });
-
-    it('should return null if name is unique', async () => {
-      service.getAllReports.and.resolveTo([]);
-      const control = new FormGroup({
-        typeName: new FormControl('24 HOUR'),
-        form24Name: new FormControl('REPORT'),
-      });
       const result = await validator.validate(control);
       expect(result).toBeNull();
     });

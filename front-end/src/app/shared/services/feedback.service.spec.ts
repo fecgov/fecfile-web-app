@@ -1,5 +1,5 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from 'environments/environment';
 import { testMockStore } from '../utils/unit-test.utils';
@@ -34,7 +34,7 @@ describe('FeedbackService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#submitFeedback() should POST a payload', fakeAsync(() => {
+  it('#submitFeedback() should POST a payload', async () => {
     const feedback: Feedback = {
       action: 'test_action',
       feedback: 'test_feedback',
@@ -42,11 +42,11 @@ describe('FeedbackService', () => {
       location: 'test_location',
     };
 
-    service.submitFeedback(feedback).then();
-    tick(100);
+    const feedbackPromise = service.submitFeedback(feedback);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/feedback/submit/`);
     expect(req.request.method).toEqual('POST');
     req.flush(feedback);
+    await feedbackPromise;
     httpTestingController.verify();
-  }));
+  });
 });

@@ -15,7 +15,9 @@ import { ReportListComponent } from 'app/reports/report-list/report-list.compone
 describe('DownloadTrayComponent', () => {
   let component: DownloadTrayComponent;
   let fixture: ComponentFixture<DownloadTrayComponent>;
-  const actions$ = new Subject<{ type: string }>();
+  const actions$ = new Subject<{
+    type: string;
+  }>();
   let dotFecService: DotFecService;
   let report: Report;
   let download: Download;
@@ -52,16 +54,16 @@ describe('DownloadTrayComponent', () => {
     await component.router.navigateByUrl('/reports');
     const downloads = [download];
     dotFecService.downloads.set(downloads);
-    expect(component.sidebarVisible()).toBeTrue();
+    expect(component.sidebarVisible()).toBe(true);
 
     dotFecService.downloads.set([]);
-    expect(component.sidebarVisible()).toBeFalse();
+    expect(component.sidebarVisible()).toBe(false);
 
     dotFecService.downloads.set(downloads);
-    expect(component.sidebarVisible()).toBeTrue();
+    expect(component.sidebarVisible()).toBe(true);
 
     await component.router.navigateByUrl('');
-    expect(component.sidebarVisible()).toBeFalse();
+    expect(component.sidebarVisible()).toBe(false);
   });
 
   it('should remove download and update sidebarVisible', () => {
@@ -71,13 +73,13 @@ describe('DownloadTrayComponent', () => {
     component.removeDownload(download);
 
     expect(dotFecService.downloads()).toEqual([]);
-    expect(component.sidebarVisible()).toBeFalse();
+    expect(component.sidebarVisible()).toBe(false);
   });
 
   it('should call downloadFecFile on download', () => {
     const downloads = [download];
     dotFecService.downloads.set(downloads);
-    spyOn(dotFecService, 'downloadFecFile');
+    vi.spyOn(dotFecService, 'downloadFecFile');
 
     component.download(download);
 

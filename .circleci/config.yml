@@ -101,7 +101,7 @@ jobs:
 
       - run:
           name: run unit tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --watch=false
           working_directory: ~/project/front-end/
 
       - store_artifacts:

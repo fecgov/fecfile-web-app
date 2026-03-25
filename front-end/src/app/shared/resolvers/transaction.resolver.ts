@@ -87,7 +87,7 @@ export class TransactionResolver {
       // tune page size
       const params = { parent: transaction.id ?? '', page_size: 100 };
       let pageNumber = 0;
-      let page: ListRestResponse | null = null;
+      let page: ListRestResponse;
       do {
         page = await this.listService.getTableData(++pageNumber, '', params);
         for (const result of page.results) {

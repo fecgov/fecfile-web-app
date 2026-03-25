@@ -1,8 +1,7 @@
 {
     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
     "cli": {
-        "analytics": false,
-        "defaultCollection": "@angular-eslint/schematics"
+        "analytics": false
     },
     "version": 1,
     "newProjectRoot": "projects",
@@ -197,20 +196,14 @@
                     }
                 },
                 "test": {
-                    "builder": "@angular/build:karma",
+                    "builder": "@angular/build:unit-test",
                     "options": {
-                        "main": "src/test.ts",
-                        "polyfills": ["zone.js", "zone.js/testing", "reflect-metadata"],
                         "tsConfig": "tsconfig.spec.json",
-                        "karmaConfig": "karma.conf.js",
-                        "styles": ["src/styles.scss"],
-                        "stylePreprocessorOptions": {
-                            "includePaths": [
-                                "src/assets/styles" 
-                            ]
-                        },
-                        "scripts": [],
-                        "assets": ["src/favicon.ico", "src/assets"]
+                        "setupFiles": ["src/test.ts"],
+                        "exclude": ["src/environments/environment.cloud.gov.test.ts"],
+                        "coverage": true,
+                        "coverageReporters": ["lcov"],
+                        "coverageExclude": ["src/test.ts"]
                     }
                 },
                 "lint": {

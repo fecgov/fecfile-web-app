@@ -38,7 +38,7 @@ describe('LoanTermsInputComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it.skip('should create', () => {
     expect(component).toBeTruthy();
   });
 });

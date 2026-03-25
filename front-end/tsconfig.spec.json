@@ -1,17 +1,31 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
     "outDir": "./out-tsc/spec",
+    "typeRoots": [
+        "./node_modules/@types", "./node_modules/"
+      ],
     "types": [
-      "jasmine",
+      "vitest/globals",
       "node"
-    ]
+    ],
+    "lib": [
+      "ES2024", 
+      "dom",
+      "ESNext.Disposable"
+    ],
   },
+  "references": [
+    { "path": "./tsconfig.app.json" }
+  ],
   "files": [
     "src/test.ts"
   ],
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+    "src/**/*.d.ts",
+    "src/**/*.ts"
+  ],
 }

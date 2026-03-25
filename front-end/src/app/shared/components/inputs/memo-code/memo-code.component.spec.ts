@@ -19,7 +19,7 @@ import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Component, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Transaction } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 
@@ -83,7 +83,7 @@ describe('MemoCodeInputComponent', () => {
         Dialog,
         Tooltip,
       ],
-      providers: [provideMockStore(testMockStore()), ConfirmationService],
+      providers: [provideZoneChangeDetection(), provideMockStore(testMockStore()), ConfirmationService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -105,11 +105,11 @@ describe('MemoCodeInputComponent', () => {
     component.form.get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
 
-    expect(component.outOfDateDialogVisible()).toBeTrue();
+    expect(component.outOfDateDialogVisible()).toBe(true);
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible()).toBeTrue();
+    expect(component.outOfDateDialogVisible()).toBe(true);
   });
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
@@ -117,7 +117,7 @@ describe('MemoCodeInputComponent', () => {
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
     component.form.get('memo_code')?.patchValue(false);
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible()).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBe(false);
   });
 
   it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
@@ -127,36 +127,36 @@ describe('MemoCodeInputComponent', () => {
     component.outOfDateDialogVisible.set(false);
     component.form.get('memo_code')?.patchValue(true);
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible()).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBe(false);
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.outOfDateDialogVisible.set(false);
     component.onMemoItemClick();
-    expect(component.outOfDateDialogVisible()).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBe(false);
   });
 
   it('should not open the dialog box when same report date is set', () => {
     setForm3X();
 
     component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
-    expect(component.outOfDateDialogVisible()).toBeTrue();
+    expect(component.outOfDateDialogVisible()).toBe(true);
 
     component.outOfDateDialogVisible.set(false);
     component.form.get('contribution_date')?.patchValue(new Date('12/22/2019'));
-    expect(component.outOfDateDialogVisible()).toBeFalse();
+    expect(component.outOfDateDialogVisible()).toBe(false);
   });
 
   it('should add and remove the requiredTrue validator when a date is set', () => {
     setForm3X(false);
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBe(true);
 
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBe(false);
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBe(true);
   });
 
   it('should preserve old validators when clearing an added requiredTrue validator', () => {
@@ -164,12 +164,12 @@ describe('MemoCodeInputComponent', () => {
 
     component.form.get('memo_code')?.addValidators(Validators.email);
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBe(true);
 
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
-    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBe(false);
 
-    expect(component.form.get('memo_code')?.hasValidator(Validators.email)).toBeTrue();
+    expect(component.form.get('memo_code')?.hasValidator(Validators.email)).toBe(true);
   });
 
   it('should not crash if it tries to update the contribution date without a memo_code formControl', () => {
@@ -177,7 +177,7 @@ describe('MemoCodeInputComponent', () => {
     component.form.removeControl('memo_code');
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    expect(component.dateIsOutsideReport).toBeTrue();
+    expect(component.dateIsOutsideReport).toBe(true);
   });
 
   it('should update transaction type identifiers correctly based on the TransactionType', () => {

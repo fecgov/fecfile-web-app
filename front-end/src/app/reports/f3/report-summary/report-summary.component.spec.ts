@@ -47,7 +47,7 @@ describe('ReportSummaryComponent', () => {
     fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse<unknown>()));
+    vi.spyOn(apiService, 'post').mockReturnValue(Promise.resolve(new HttpResponse<unknown>()));
   });
 
   it('should create', () => {

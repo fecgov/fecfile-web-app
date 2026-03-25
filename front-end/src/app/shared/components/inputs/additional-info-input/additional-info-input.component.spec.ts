@@ -7,8 +7,9 @@ import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
-import { Component, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import { Contact, Transaction } from 'app/shared/models';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   imports: [AdditionalInfoInputComponent],
@@ -40,6 +41,19 @@ class TestHostComponent {
   constructor() {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
   }
+
+  updateFormWithQuaternaryContact(event: SelectItem<Contact>) {
+    console.log(event);
+  }
+  clearFormQuaternaryContact() {
+    console.log('clear quaternary contact');
+  }
+  updateFormWithQuinaryContact(event: SelectItem<Contact>) {
+    console.log(event);
+  }
+  clearFormQuinaryContact() {
+    console.log('clear quinary contact');
+  }
 }
 
 describe('AdditionalInfoInputComponent', () => {
@@ -55,6 +69,7 @@ describe('AdditionalInfoInputComponent', () => {
         ErrorMessagesComponent,
         DesignatedSubordinateInputComponent,
       ],
+      providers: [provideZoneChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

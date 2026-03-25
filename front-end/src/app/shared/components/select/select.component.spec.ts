@@ -40,16 +40,13 @@ describe('SelectComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should blur on change', (done) => {
+  it('should blur on change', async () => {
     const selectEl = fixture.nativeElement.querySelector('select');
-    const blurSpy = spyOn(selectEl, 'blur');
+    const blurSpy = vi.spyOn(selectEl, 'blur');
 
     selectEl.dispatchEvent(new Event('change'));
 
-    // Wait for the setTimeout(0)
-    setTimeout(() => {
-      expect(blurSpy).toHaveBeenCalled();
-      done();
-    }, 0);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(blurSpy).toHaveBeenCalled();
   });
 });

@@ -89,7 +89,7 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private onChange(value: string) {
+  onChange(value: string) {
     // noop
   }
 

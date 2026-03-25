@@ -39,8 +39,8 @@ describe('loggedInGuard', () => {
   });
 
   it('should continue if logged in', () => {
-    spyOn(loginService, 'userIsAuthenticated').and.returnValue(true);
-    const navigateSpy = spyOn(router, 'navigate');
+    vi.spyOn(loginService, 'userIsAuthenticated').mockReturnValue(true);
+    const navigateSpy = vi.spyOn(router, 'navigate');
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const safe = executeGuard(route, state) as boolean | UrlTree;
@@ -49,7 +49,7 @@ describe('loggedInGuard', () => {
   });
 
   it('should redirect to login if not logged in', () => {
-    spyOn(loginService, 'userIsAuthenticated').and.returnValue(false);
+    vi.spyOn(loginService, 'userIsAuthenticated').mockReturnValue(false);
     const route: ActivatedRouteSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const state: RouterStateSnapshot = {} as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     const safe = executeGuard(route, state) as boolean | UrlTree;
