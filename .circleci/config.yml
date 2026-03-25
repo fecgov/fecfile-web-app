@@ -255,6 +255,10 @@ jobs:
     steps:
       - checkout
 
+      - node/install-packages:
+          app-dir: ~/project/front-end/
+          override-ci-command: npm install
+
       - python/install-packages:
           pkg-manager: pip
           app-dir: ~/project/
