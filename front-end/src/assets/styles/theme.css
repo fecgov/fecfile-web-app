@@ -9,11 +9,6 @@
   font-weight: normal;
 }
 
-
-.p-button:disabled {
-  border: 2px solid gray;
-}
-
 .p-disabled,
 .p-component:disabled,
 .p-select:disabled {
@@ -1859,7 +1854,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-button:enabled:active {
   background: var(--primary-button-hover-color);
   color: #ffffff;
-  border-color: var(--primary-button-hover-color);;
 }
 .p-button.p-button-outlined {
   background-color: transparent;
@@ -2007,14 +2001,12 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-secondary > .p-button {
   color: #ffffff;
   background: #5b616b;
-  border: 1px solid #5b616b;
 }
 .p-button.p-button-secondary:enabled:hover,
 .p-buttonset.p-button-secondary > .p-button:enabled:hover,
 .p-splitbutton.p-button-secondary > .p-button:enabled:hover {
   background: #494e56;
   color: #ffffff;
-  border-color: #494e56;
 }
 
 .p-button.p-button-secondary:enabled:focus,
@@ -2027,7 +2019,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-secondary > .p-button:enabled:active {
   background: #5b616b;
   color: #ffffff;
-  border-color: #5b616b;
 }
 .p-button.p-button-secondary.p-button-outlined,
 .p-buttonset.p-button-secondary > .p-button.p-button-outlined,
@@ -2084,7 +2075,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-info > .p-button:enabled:hover {
   background: #2b9896;
   color: #212121;
-  border-color: #2b9896;
 }
 .p-button.p-button-info:enabled:focus,
 .p-buttonset.p-button-info > .p-button:enabled:focus,
@@ -2096,7 +2086,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-info > .p-button:enabled:active {
   background: #138496;
   color: #212121;
-  border-color: #117a8b;
 }
 .p-button.p-button-info.p-button-outlined,
 .p-buttonset.p-button-info > .p-button.p-button-outlined,
@@ -2215,14 +2204,12 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-warning > .p-button {
   color: var(--p-content-color);
   background: #fdb838;
-  border: 1px solid #fdb838;
 }
 .p-button.p-button-warning:enabled:hover,
 .p-buttonset.p-button-warning > .p-button:enabled:hover,
 .p-splitbutton.p-button-warning > .p-button:enabled:hover {
   background: #cc942d;
   color: var(--p-content-color);
-  border-color: #cc942d;
 }
 .p-button.p-button-warning:enabled:focus,
 .p-buttonset.p-button-warning > .p-button:enabled:focus,
@@ -2234,48 +2221,41 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-splitbutton.p-button-warning > .p-button:enabled:active {
   background: #d39e00;
   color: var(--p-content-color);
-  border-color: #c69500;
 }
 .p-button.p-button-warning.p-button-outlined,
 .p-buttonset.p-button-warning > .p-button.p-button-outlined,
 .p-splitbutton.p-button-warning > .p-button.p-button-outlined {
   background-color: transparent;
   color: #fdb838;
-  border: 1px solid;
 }
 .p-button.p-button-warning.p-button-outlined:enabled:hover,
 .p-buttonset.p-button-warning > .p-button.p-button-outlined:enabled:hover,
 .p-splitbutton.p-button-warning > .p-button.p-button-outlined:enabled:hover {
   background: rgba(255, 193, 7, 0.04);
   color: #fdb838;
-  border: 1px solid;
 }
 .p-button.p-button-warning.p-button-outlined:enabled:active,
 .p-buttonset.p-button-warning > .p-button.p-button-outlined:enabled:active,
 .p-splitbutton.p-button-warning > .p-button.p-button-outlined:enabled:active {
   background: rgba(255, 193, 7, 0.16);
   color: #fdb838;
-  border: 1px solid;
 }
 .p-button.p-button-warning.p-button-text,
 .p-buttonset.p-button-warning > .p-button.p-button-text,
 .p-splitbutton.p-button-warning > .p-button.p-button-text {
   background-color: transparent;
   color: #fdb838;
-  border-color: transparent;
 }
 .p-button.p-button-warning.p-button-text:enabled:hover,
 .p-buttonset.p-button-warning > .p-button.p-button-text:enabled:hover,
 .p-splitbutton.p-button-warning > .p-button.p-button-text:enabled:hover {
   background: rgba(255, 193, 7, 0.04);
-  border-color: transparent;
   color: #fdb838;
 }
 .p-button.p-button-warning.p-button-text:enabled:active,
 .p-buttonset.p-button-warning > .p-button.p-button-text:enabled:active,
 .p-splitbutton.p-button-warning > .p-button.p-button-text:enabled:active {
   background: rgba(255, 193, 7, 0.16);
-  border-color: transparent;
   color: #fdb838;
 }
 
