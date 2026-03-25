@@ -102,7 +102,10 @@ describe('TransactionTypeBaseComponent', () => {
         {
           provide: MessageService,
           useValue: {
-            add: vi.fn().mockName('MessageService.add').mockReturnValue(() => undefined),
+            add: vi
+              .fn()
+              .mockName('MessageService.add')
+              .mockReturnValue(() => undefined),
           },
         },
         FormBuilder,
