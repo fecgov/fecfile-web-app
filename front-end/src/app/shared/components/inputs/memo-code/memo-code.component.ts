@@ -44,7 +44,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       : 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.',
   );
   readonly memoCodeReadOnly = computed(() => TransactionFormUtils.isMemoCodeReadOnly(this.transactionType()));
-  readonly coverageDate = signal(new Date());
+  readonly coverageDate = signal<Date | null>(null);
   readonly coverageDateQuestion = signal(
     'Did you mean to date this transaction outside of the report coverage period?',
   );
@@ -77,8 +77,8 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   ngOnInit(): void {
     const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
     if (dateControl?.enabled) {
-      dateControl.addSubscription((date: Date) => {
-        if (date && date.getTime() !== this.coverageDate().getTime()) {
+      dateControl.addSubscription((date: Date | null) => {
+        if (date?.getTime() !== this.coverageDate()?.getTime()) {
           this.coverageDate.set(date);
           this.updateMemoItemWithDate(date);
         }
@@ -120,11 +120,18 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
   }
 
-  updateMemoItemWithDate(date: Date) {
+  updateMemoItemWithDate(date: Date | null | undefined) {
     const coverageFromDate = this.coverageFromDate();
     const coverageThrough = this.coverageThroughDate();
     if (this.transactionType()?.doMemoCodeDateCheck && coverageFromDate && coverageThrough) {
-      if (date && (date < coverageFromDate || date > coverageThrough)) {
+      if (!date) {
+        if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
+          this.memoControl.removeValidators([Validators.requiredTrue]);
+          this.memoControl.markAsTouched();
+          this.memoControl.updateValueAndValidity();
+        }
+        this.dateIsOutsideReport = false;
+      } else if (date < coverageFromDate || date > coverageThrough) {
         this.memoControl.addValidators(Validators.requiredTrue);
         this.memoControl.markAsTouched();
         this.memoControl.markAsDirty();

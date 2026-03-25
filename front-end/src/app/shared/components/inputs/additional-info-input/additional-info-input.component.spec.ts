@@ -42,10 +42,18 @@ class TestHostComponent {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
   }
 
-  updateFormWithQuaternaryContact(_event: SelectItem<Contact>) {}
-  clearFormQuaternaryContact() {}
-  updateFormWithQuinaryContact(_event: SelectItem<Contact>) {}
-  clearFormQuinaryContact() {}
+  updateFormWithQuaternaryContact(_event: SelectItem<Contact>): void {
+    return;
+  }
+  clearFormQuaternaryContact(): void {
+    return;
+  }
+  updateFormWithQuinaryContact(_event: SelectItem<Contact>): void {
+    return;
+  }
+  clearFormQuinaryContact(): void {
+    return;
+  }
 }
 
 describe('AdditionalInfoInputComponent', () => {
