@@ -102,12 +102,7 @@ describe('TransactionTypeBaseComponent', () => {
         {
           provide: MessageService,
           useValue: {
-            add: vi
-              .fn()
-              .mockName('MessageService.add')
-              .mockReturnValue((message: { severity: string; summary: string; detail: string; life: number }) => {
-                console.log(message.summary);
-              }),
+            add: vi.fn().mockName('MessageService.add').mockReturnValue(() => undefined),
           },
         },
         FormBuilder,
@@ -187,11 +182,11 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('should not trigger effect if NavigationEvent has no transaction', async () => {
-    const handleNavSpy = vi.spyOn(component, 'handleNavigate');
+    const handleNavSpy = vi.spyOn(component, 'handleNavigate').mockResolvedValue();
     const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST);
     store.dispatch(navigationEventSetAction(navEvent));
     fixture.detectChanges();
-    await fixture.whenStable();
+    await Promise.resolve();
 
     expect(handleNavSpy).toHaveBeenCalledTimes(0);
   });

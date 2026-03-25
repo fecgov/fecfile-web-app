@@ -124,7 +124,6 @@ describe('NavigationControlComponent', () => {
       // spy on event emitter
       const storeSpy = vi.spyOn(store, 'dispatch');
 
-      console.log(component.dropdownOptions);
       component.onDropdownChange(component.dropdownOptions()[0]); // simulate selecting the first dropdown option
 
       fixture.detectChanges();

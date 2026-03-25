@@ -10,6 +10,7 @@ import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { LoginService } from './login.service';
 import { provideHttpClient } from '@angular/common/http';
 import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
+import { environment } from 'environments/environment';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -42,10 +43,18 @@ describe('LoginService', () => {
   });
 
   it('#logOut login.gov happy path', () => {
-    vi.spyOn(store, 'dispatch');
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const originalLogoutUrl = environment.loginDotGovLogoutUrl;
+    environment.loginDotGovLogoutUrl = window.location.href;
+    const userIsAuthenticatedSpy = vi.spyOn(service, 'userIsAuthenticated').mockReturnValue(true);
 
-    service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    try {
+      service.logOut();
+      expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+      expect(userIsAuthenticatedSpy).toHaveBeenCalled();
+    } finally {
+      environment.loginDotGovLogoutUrl = originalLogoutUrl;
+    }
   });
 
   it('userHasProfileData should return true', () => {
