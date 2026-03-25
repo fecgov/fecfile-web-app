@@ -23,6 +23,11 @@ const independentExpVoidData: DisbursementFormData = {
   signatoryLastName: faker.person.lastName(),
 };
 
+function checkLocationCheck() {
+  PageUtils.locationCheck('/list');
+  cy.contains('Transactions in this report').should('be.visible');
+}
+
 describe('Disbursements', () => {
   beforeEach(() => {
     Initialize();
@@ -60,6 +65,7 @@ describe('Disbursements', () => {
       );
 
       TransactionDetailPage.clickSave();
+      checkLocationCheck();
       PageUtils.clickLink('Independent Expenditure - Void');
       cy.contains('Address').should('exist');
       cy.get('#organization_name').should('have.value', result.organization.name);
@@ -81,6 +87,7 @@ describe('Disbursements', () => {
         'date_signed',
       );
       TransactionDetailPage.clickSave();
+      checkLocationCheck();
       PageUtils.closeToast();
 
       // Check that fields saved correctly
