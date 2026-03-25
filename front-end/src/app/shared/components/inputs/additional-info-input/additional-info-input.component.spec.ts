@@ -42,14 +42,14 @@ class TestHostComponent {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
   }
 
-  updateFormWithQuaternaryContact(_event: SelectItem<Contact>): void {
-    return;
+  updateFormWithQuaternaryContact(event: SelectItem<Contact>): void {
+    void event;
   }
   clearFormQuaternaryContact(): void {
     return;
   }
-  updateFormWithQuinaryContact(_event: SelectItem<Contact>): void {
-    return;
+  updateFormWithQuinaryContact(event: SelectItem<Contact>): void {
+    void event;
   }
   clearFormQuinaryContact(): void {
     return;
