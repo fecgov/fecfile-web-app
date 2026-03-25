@@ -9,7 +9,7 @@ export class PageUtils {
     return value.replaceAll(/\s+/g, ' ').trim();
   }
 
-  private static canonicalizeButtonLabel(value: string): string {
+  private static canonizeButtonLabel(value: string): string {
     return PageUtils.normalizeButtonLabel(value)
       .replaceAll('&', ' and ')
       .replaceAll(/\s+/g, ' ')
@@ -279,7 +279,7 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    const normalizedName = PageUtils.canonicalizeButtonLabel(name);
+    const normalizedName = PageUtils.canonizeButtonLabel(name);
 
     const resolveLabel = (button: HTMLElement): string => {
       const sources = [
@@ -289,7 +289,7 @@ export class PageUtils {
         button.textContent ?? '',
       ];
       const matchingLabel = sources.find((value) => PageUtils.normalizeButtonLabel(value).length > 0) ?? '';
-      return PageUtils.canonicalizeButtonLabel(matchingLabel);
+      return PageUtils.canonizeButtonLabel(matchingLabel);
     };
 
     cy.get(alias).then(($root) => {
