@@ -22,6 +22,7 @@
             [formControlName]="templateMap['purpose_description']"
             [class.readonly]="isDescriptionSystemGenerated()"
             [readonly]="isDescriptionSystemGenerated()"
+            [class.font-italic]="form.controls[templateMap['purpose_description']].value === pendingCommitteeText"
           ></textarea>
           <app-error-messages
             [form]="form"
