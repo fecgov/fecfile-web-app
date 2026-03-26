@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, Type } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -10,7 +10,7 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { Checkbox } from 'primeng/checkbox';
-import { ButtonDirective } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { environment } from 'environments/environment';
 import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
@@ -22,7 +22,7 @@ export const SECURITY_CONSENT_VERSION = '1';
   selector: 'app-security-notice',
   templateUrl: './security-notice.component.html',
   styleUrls: ['./security-notice.component.scss'],
-  imports: [ReactiveFormsModule, Checkbox, ButtonDirective, NgComponentOutlet],
+  imports: [ReactiveFormsModule, Checkbox, ButtonModule, NgComponentOutlet],
 })
 export class SecurityNoticeComponent implements OnInit {
   private readonly store = inject(Store);
@@ -40,9 +40,7 @@ export class SecurityNoticeComponent implements OnInit {
     },
     { updateOn: 'blur' },
   );
-  readonly componentToLoad: Type<ProdNoticeComponent> | Type<DevNoticeComponent> = environment.production
-    ? ProdNoticeComponent
-    : DevNoticeComponent;
+  readonly componentToLoad = environment.name === 'test' ? DevNoticeComponent : ProdNoticeComponent;
 
   constructor() {
     this.activatedRoute.data.subscribe((d) => {

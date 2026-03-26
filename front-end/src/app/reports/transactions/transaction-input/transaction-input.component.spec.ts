@@ -47,31 +47,31 @@ describe('TransactionInputComponent', () => {
   });
 
   it('updateFormWithPrimaryContact should call emit', () => {
-    spyOn(component.primaryContactSelect, 'emit');
+    vi.spyOn(component.primaryContactSelect, 'emit');
     component.updateFormWithPrimaryContact(selectItem);
     expect(component.primaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
   });
 
   it('clearFormPrimaryContact should call emit', () => {
-    spyOn(component.primaryContactClear, 'emit');
+    vi.spyOn(component.primaryContactClear, 'emit');
     component.clearFormPrimaryContact();
     expect(component.primaryContactClear.emit).toHaveBeenCalled();
   });
 
   it('updateFormWithSecondaryContact should call emit', () => {
-    spyOn(component.secondaryContactSelect, 'emit');
+    vi.spyOn(component.secondaryContactSelect, 'emit');
     component.updateFormWithSecondaryContact(selectItem);
     expect(component.secondaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
   });
 
   it('updateFormWithCandidateContact should call emit', () => {
-    spyOn(component.candidateContactSelect, 'emit');
+    vi.spyOn(component.candidateContactSelect, 'emit');
     component.updateFormWithCandidateContact(selectItem);
     expect(component.candidateContactSelect.emit).toHaveBeenCalledWith(selectItem);
   });
 
   it('updateFormWithTertiaryContact should call emit', () => {
-    spyOn(component.tertiaryContactSelect, 'emit');
+    vi.spyOn(component.tertiaryContactSelect, 'emit');
     component.updateFormWithTertiaryContact(selectItem);
     expect(component.tertiaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
   });

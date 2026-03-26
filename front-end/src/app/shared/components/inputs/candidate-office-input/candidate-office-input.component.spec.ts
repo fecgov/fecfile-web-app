@@ -8,7 +8,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { CandidateOfficeInputComponent } from './candidate-office-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testScheduleATransaction, testIndependentExpenditure } from 'app/shared/utils/unit-test.utils';
-import { Component, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Transaction } from 'app/shared/models';
 
 const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
@@ -62,6 +62,7 @@ describe('CandidateOfficeInputComponent', () => {
         CandidateOfficeInputComponent,
         ErrorMessagesComponent,
       ],
+      providers: [provideZoneChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -119,7 +120,7 @@ describe('CandidateOfficeInputComponent', () => {
     component.ngOnInit();
 
     const electionCodeControl = component.electionControl();
-    expect(electionCodeControl!.subscriptions).toHaveSize(1);
+    expect(electionCodeControl!.subscriptions).toHaveLength(1);
   });
 
   it('updates state availability for SchE transactions in Presidential Primary elections', () => {
@@ -129,15 +130,15 @@ describe('CandidateOfficeInputComponent', () => {
 
     component.form().patchValue({ [component.officeFormControlName()]: CandidateOfficeTypes.PRESIDENTIAL });
     component.form().patchValue({ election_code: 'P2025' });
-    expect(component.stateControl()?.disabled).toBeFalse();
+    expect(component.stateControl()?.disabled).toBe(false);
 
     component.form().patchValue({ election_code: 'G2025' });
-    expect(component.stateControl()?.disabled).toBeTrue();
+    expect(component.stateControl()?.disabled).toBe(true);
   });
 
   it('updates the district field correctly while switching between states', () => {
     component.officeControl()?.setValue(CandidateOfficeTypes.HOUSE);
-    expect(component.districtControl()?.disabled).toBeFalse();
+    expect(component.districtControl()?.disabled).toBe(false);
 
     component.stateControl()?.setValue('AK');
     expect(component.districtControl()?.value).toEqual('00');

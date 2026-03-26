@@ -7,10 +7,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { CreateCommitteeComponent } from './create-committee.component';
-import { NavigationBehaviorOptions, provideRouter, Router, UrlTree } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UsersService } from 'app/shared/services/users.service';
+import { Mock } from 'vitest';
 
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
@@ -18,7 +19,7 @@ describe('CreateCommitteeComponent', () => {
   let testCommitteeAccountService: CommitteeAccountService;
   let testUserService: UsersService;
   let router: Router;
-  let routerSpy: jasmine.Spy<(url: string | UrlTree, extras?: NavigationBehaviorOptions) => Promise<boolean>>;
+  let routerSpy: Mock;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +37,7 @@ describe('CreateCommitteeComponent', () => {
     testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
     testUserService = TestBed.inject(UsersService);
     router = TestBed.inject(Router);
-    routerSpy = spyOn(router, 'navigateByUrl');
+    routerSpy = vi.spyOn(router, 'navigateByUrl');
     fixture = TestBed.createComponent(CreateCommitteeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -52,9 +53,9 @@ describe('CreateCommitteeComponent', () => {
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
       const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-      const spy = spyOn(testCommitteeAccountService, 'getAvailableCommittee').and.returnValue(
-        Promise.resolve(testCommittee),
-      );
+      const spy = vi
+        .spyOn(testCommitteeAccountService, 'getAvailableCommittee')
+        .mockReturnValue(Promise.resolve(testCommittee));
 
       expect(component.selectedCommittee).toBeFalsy();
       component.search(testCommitteeId);
@@ -66,10 +67,10 @@ describe('CreateCommitteeComponent', () => {
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
 
-      expect(component.unableToCreateAccount).toBeFalse();
+      expect(component.unableToCreateAccount).toBe(false);
       expect(component.selectedCommittee).toBeFalsy();
       component.handleSuccessfulSearch(testCommittee);
-      expect(component.unableToCreateAccount).toBeFalse();
+      expect(component.unableToCreateAccount).toBe(false);
       expect(component.selectedCommittee?.committee_id).toEqual(testCommitteeId);
     });
 
@@ -78,27 +79,27 @@ describe('CreateCommitteeComponent', () => {
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
 
-      expect(component.unableToCreateAccount).toBeFalse();
+      expect(component.unableToCreateAccount).toBe(false);
       expect(component.selectedCommittee).toBeFalsy();
       component.handleFailedSearch();
-      expect(component.unableToCreateAccount).toBeTrue();
+      expect(component.unableToCreateAccount).toBe(true);
       expect(component.selectedCommittee).toBeFalsy();
     });
   });
 
   it('should create committee and redirect to reports page', async () => {
-    const createSpy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() => {
+    const createSpy = vi.spyOn(testCommitteeAccountService, 'createCommitteeAccount').mockImplementation(() => {
       const committeeAccount = new CommitteeAccount();
       committeeAccount.committee_id = 'C12345678';
       committeeAccount.id = '123';
       return Promise.resolve(committeeAccount);
     });
-    const activateSpy = spyOn(testCommitteeAccountService, 'activateCommittee').and.callFake(() =>
-      Promise.resolve(true),
-    );
-    const userSpy = spyOn(testUserService, 'getCurrentUser').and.returnValue(
-      Promise.resolve(testCommitteeAdminLoginData()),
-    );
+    const activateSpy = vi
+      .spyOn(testCommitteeAccountService, 'activateCommittee')
+      .mockImplementation(() => Promise.resolve(true));
+    const userSpy = vi
+      .spyOn(testUserService, 'getCurrentUser')
+      .mockReturnValue(Promise.resolve(testCommitteeAdminLoginData()));
     const testCommitteeId = 'C12345678';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
@@ -113,14 +114,14 @@ describe('CreateCommitteeComponent', () => {
   });
 
   it('should handle failed create', async () => {
-    const spy = spyOn(testCommitteeAccountService, 'createCommitteeAccount').and.callFake(() =>
-      Promise.reject(new Error()),
-    );
+    const spy = vi
+      .spyOn(testCommitteeAccountService, 'createCommitteeAccount')
+      .mockImplementation(() => Promise.reject(new Error('Failed to create committee account')));
 
-    expect(component.unableToCreateAccount).toBeFalse();
+    expect(component.unableToCreateAccount).toBe(false);
     expect(component.selectedCommittee).toBeFalsy();
     await component.createAccount();
-    expect(component.unableToCreateAccount).toBeTrue();
+    expect(component.unableToCreateAccount).toBe(true);
     expect(component.selectedCommittee).toBeFalsy();
     expect(spy).toHaveBeenCalledWith('');
     expect(routerSpy).not.toHaveBeenCalled();

@@ -54,15 +54,20 @@ DEPLOY_RULES = (
 
 def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
-    os.chdir(os.path.join(orig_directory, "front-end"))
+    frontend_dir = os.path.join(orig_directory, "front-end")
+    os.chdir(frontend_dir)
+    ng_bin = os.path.join(frontend_dir, "node_modules", ".bin", "ng")
 
-    print(f"Starting build: npm run build-{space}")
-    result = ctx.run(f"npm run build-{space}", warn=True, echo=True)
+    print(f"Starting build for {space} using {ng_bin}")
+    build_cmd = f"{ng_bin} build --configuration=cloud.gov.{space}"
+    result = ctx.run(build_cmd, warn=True, echo=True)
 
     if result.return_code != 0:
         print(f"error building Angular app.  Exiting with code {result.return_code}")
+        os.chdir(orig_directory)
         exit(result.return_code)
 
+    os.chdir(orig_directory)
     ctx.run("npm ls --all", warn=True, echo=True)
 
     os.chdir(orig_directory)
@@ -213,7 +218,7 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
 
     Example usage: invoke deploy --space dev
     """
-    ctx.run(f"cf version", echo=True)
+    ctx.run("cf version", echo=True)
 
     if help:
         _print_help_text()

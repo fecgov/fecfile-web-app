@@ -132,7 +132,7 @@ describe('ContactService', () => {
 
   it('#candidateLookup() happy path', async () => {
     const expectedRetval = new CandidateLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
+    const apiServiceGetSpy = vi.spyOn(testApiService, 'get').mockImplementation(async () => expectedRetval);
     const testSearch = 'testSearch';
 
     const expectedEndpoint = '/contacts/candidate_lookup/';
@@ -147,22 +147,14 @@ describe('ContactService', () => {
 
     const value = await service.candidateLookup(testSearch, 'C000000001,C000000002', '');
     expect(value).toEqual(expectedRetval);
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+    expect(apiServiceGetSpy).toHaveBeenCalledTimes(1);
+    expect(apiServiceGetSpy).toHaveBeenCalledWith(expectedEndpoint, expectedParams);
   });
 
   it('#committeeLookup() happy path', async () => {
     const expectedRetval = new CommitteeLookupResponse();
     const testSearch = 'testSearch';
-    const apiServiceGetSpy = spyOn(testApiService, 'get')
-      .withArgs('/contacts/committee_lookup/', {
-        q: testSearch,
-        max_fec_results: service.maxFecResults(),
-        max_fecfile_results: service.maxFecfileResults(),
-        exclude_fec_ids: '',
-        exclude_ids: '',
-      })
-      .and.callFake(async () => expectedRetval);
-
+    const apiServiceGetSpy = vi.spyOn(testApiService, 'get').mockResolvedValue(expectedRetval);
     const expectedEndpoint = '/contacts/committee_lookup/';
     const expectedParams = {
       q: testSearch,
@@ -174,12 +166,13 @@ describe('ContactService', () => {
 
     const value = await service.committeeLookup(testSearch, '', '');
     expect(value).toEqual(expectedRetval);
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+    expect(apiServiceGetSpy).toHaveBeenCalledTimes(1);
+    expect(apiServiceGetSpy).toHaveBeenCalledWith(expectedEndpoint, expectedParams);
   });
 
   it('#individualLookup() happy path', () => {
     const expectedRetval = new IndividualLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
+    const apiServiceGetSpy = vi.spyOn(testApiService, 'get').mockImplementation(async () => expectedRetval);
     const testSearch = 'testSearch';
 
     const expectedEndpoint = '/contacts/individual_lookup/';
@@ -190,12 +183,13 @@ describe('ContactService', () => {
     };
 
     service.individualLookup(testSearch, '').then((value) => expect(value).toEqual(expectedRetval));
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+    expect(apiServiceGetSpy).toHaveBeenCalledTimes(1);
+    expect(apiServiceGetSpy).toHaveBeenCalledWith(expectedEndpoint, expectedParams);
   });
 
   it('#organizationLookup() happy path', async () => {
     const expectedRetval = new OrganizationLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.callFake(async () => expectedRetval);
+    const apiServiceGetSpy = vi.spyOn(testApiService, 'get').mockImplementation(async () => expectedRetval);
     const testSearch = 'testSearch';
 
     const expectedEndpoint = '/contacts/organization_lookup/';
@@ -207,7 +201,8 @@ describe('ContactService', () => {
 
     const value = await service.organizationLookup(testSearch, '');
     expect(value).toEqual(expectedRetval);
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+    expect(apiServiceGetSpy).toHaveBeenCalledTimes(1);
+    expect(apiServiceGetSpy).toHaveBeenCalledWith(expectedEndpoint, expectedParams);
   });
 
   it('#getSchemaByType should return the correct schema', () => {
@@ -262,38 +257,26 @@ describe('ContactService', () => {
   it('#checkFecIdForUniqueness should return true if contact matches', async () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
-    spyOn(testApiService, 'get')
-      .withArgs('/contacts/get_contact_id/', {
-        fec_id: fecId,
-      })
-      .and.returnValue(Promise.resolve('contactId' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    vi.spyOn(testApiService, 'get').mockResolvedValue('contactId');
 
     const isUnique = await service.checkFecIdForUniqueness(fecId, contactId);
-    expect(isUnique).toBeTrue();
+    expect(isUnique).toBe(true);
   });
 
   it('#checkFecIdForUniqueness should return false if server comes back with differnt contact id', async () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
-    spyOn(testApiService, 'get')
-      .withArgs('/contacts/get_contact_id/', {
-        fec_id: fecId,
-      })
-      .and.returnValue(Promise.resolve('different id' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    vi.spyOn(testApiService, 'get').mockResolvedValue('different id');
     const isUnique = await service.checkFecIdForUniqueness(fecId, contactId);
-    expect(isUnique).toBeFalse();
+    expect(isUnique).toBe(false);
   });
 
   it('#checkFecIdForUniqueness should return true if server comes back no id', async () => {
     const fecId = 'fecId';
     const contactId = 'contactId';
-    spyOn(testApiService, 'get')
-      .withArgs('/contacts/get_contact_id/', {
-        fec_id: fecId,
-      })
-      .and.returnValue(Promise.resolve('' as any)); // eslint-disable-line @typescript-eslint/no-explicit-any
+    vi.spyOn(testApiService, 'get').mockResolvedValue('');
     const isUnique = await service.checkFecIdForUniqueness(fecId, contactId);
-    expect(isUnique).toBeTrue();
+    expect(isUnique).toBe(true);
   });
 
   describe('#getCandidateDetails()', () => {
@@ -328,13 +311,13 @@ describe('ContactService', () => {
   });
 
   it('#getCommitteeDetails should raise an error when no id is provided', async () => {
-    await expectAsync(service.getCommitteeDetails(null)).toBeRejectedWithError(
+    await expect(service.getCommitteeDetails(null)).rejects.toThrow(
       'FECfile+: No Committee Id provided in getCommitteeDetails()',
     );
   });
 
   it('#getCandidateDetails should raise an error when no id is provided', async () => {
-    await expectAsync(service.getCandidateDetails(null)).toBeRejectedWithError(
+    await expect(service.getCandidateDetails(null)).rejects.toThrow(
       'FECfile+: No Candidate Id provided in getCandidateDetails()',
     );
   });

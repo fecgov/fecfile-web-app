@@ -2,8 +2,22 @@ import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
 
 export class UsersPage {
+  private static readonly dialogSelector = '#content-offset app-committee-member-dialog dialog[open]';
+
+  static openAddUserDialog() {
+    cy.contains('h1', 'Manage users').should('be.visible');
+    cy.get(UsersPage.dialogSelector).should('have.length', 0);
+    cy.contains('button.add-button:visible', /^Add user$/)
+      .should('have.length', 1)
+      .click();
+    cy.get(UsersPage.dialogSelector)
+      .should('have.length', 1)
+      .first()
+      .as('dialog');
+  }
+
   static goToPage(alias = '') {
-    cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/?page=1**').as('GetMembers');
+    cy.intercept('GET', '**/committee-members/?page=1**').as('GetMembers');
     cy.visit('/committee/members');
     cy.wait('@GetMembers');
   }
@@ -27,22 +41,24 @@ export class UsersPage {
 
   static create(fd: UserFormData) {
     UsersPage.goToPage();
-    PageUtils.clickButton('Add user');
-    cy.get('#content-offset app-committee-member-dialog')
-      .filter(':visible')
-      .first()
-      .as('dialog');
-
+    cy.intercept('POST', '**/committee-members/add-member/**').as('AddMember');
+    cy.intercept('GET', '**/committee-members/?page=1**').as('RefreshMembers');
+    UsersPage.openAddUserDialog();
     UsersPage.enterFormData(fd, false, '@dialog');
     cy.get('@dialog').find('[data-cy="membership-submit"]').click();
+    cy.wait('@AddMember');
+    cy.wait('@RefreshMembers');
+    cy.get(UsersPage.dialogSelector).should('have.length', 0);
   }
 
 
   static editRole(fd: UserFormData, alias = '') {
     UsersPage.goToPage();
+    cy.intercept('PUT', '**/committee-members/**').as('UpdateMember');
+    cy.intercept('GET', '**/committee-members/?page=1**').as('RefreshMembers');
     PageUtils.clickKababItem(fd.email, 'Edit Role');
-    cy.get('#content-offset app-committee-member-dialog')
-      .filter(':visible')
+    cy.get(UsersPage.dialogSelector)
+      .should('have.length', 1)
       .first()
       .as('dialog');
 
@@ -52,6 +68,9 @@ export class UsersPage {
       '@dialog'
     );
     cy.get('@dialog').find('[data-cy="membership-submit"]').click();
+    cy.wait('@UpdateMember');
+    cy.wait('@RefreshMembers');
+    cy.get(UsersPage.dialogSelector).should('have.length', 0);
   }
 
   static delete(email: string) {

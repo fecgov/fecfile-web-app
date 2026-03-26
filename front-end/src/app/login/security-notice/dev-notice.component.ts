@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dev-notice',
-  template: `<h1>Security notification</h1>
-    <hr type="solid" class="top-line" />
-    <h2>Warning</h2>
+  template: `<h2 class="mt-0">Warning</h2>
     <p>
       This version of the application is for testing new features and functionality and gathering user feedback. Any
       submitted reports do not constitute official filings with the Federal Election Commission (FEC). Any information

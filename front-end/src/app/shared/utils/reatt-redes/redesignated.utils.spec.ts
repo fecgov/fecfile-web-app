@@ -70,7 +70,7 @@ describe('Redesignated Utils', () => {
     });
 
     it('should update the memo', () => {
-      const updateMemoSpy = spyOn(ReattRedesUtils, 'updateMemo').and.callThrough();
+      const updateMemoSpy = vi.spyOn(ReattRedesUtils, 'updateMemo');
       data = {
         id: '999',
         form_type: 'SA11Ai',

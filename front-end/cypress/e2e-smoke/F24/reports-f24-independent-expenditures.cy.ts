@@ -1,24 +1,8 @@
 import { Initialize } from '../pages/loginPage';
-import { currentYear, PageUtils } from '../pages/pageUtils';
-import { TransactionDetailPage } from '../pages/transactionDetailPage';
-import {
-  defaultScheduleFormData as defaultTransactionFormData,
-  DisbursementFormData,
-} from '../models/TransactionFormModel';
+import { PageUtils } from '../pages/pageUtils';
 import { DataSetup } from '../F3X/setup';
-import { StartTransaction } from '../F3X/utils/start-transaction/start-transaction';
-import { faker } from '@faker-js/faker';
 import { ReportListPage } from '../pages/reportListPage';
-import { ContactLookup } from '../pages/contactLookup';
-
-const independentExpenditureData: DisbursementFormData = {
-  ...defaultTransactionFormData,
-  date2: new Date(currentYear, 4 - 1, 27),
-  supportOpposeCode: 'SUPPORT',
-  signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-  signatoryFirstName: faker.person.firstName(),
-  signatoryLastName: faker.person.lastName(),
-};
+import { createIndependentExpenditureOnForm24 } from './f24.helpers';
 
 describe('Form 24 Independent Expenditures', () => {
   beforeEach(() => {
@@ -27,19 +11,11 @@ describe('Form 24 Independent Expenditures', () => {
 
   it('Independent Expenditures created on a Form 24 should be linked to a Form 3X', () => {
     cy.wrap(DataSetup({ individual: true, candidate: true, f24: true })).then((result: any) => {
-      ReportListPage.gotToReportTransactionListPage(result.f24, false, true, false);
-      StartTransaction.IndependentExpenditures().IndependentExpenditure();
-      ContactLookup.getContact(result.individual.last_name, '', 'Individual');
-
-      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-        independentExpenditureData,
+      createIndependentExpenditureOnForm24(
+        result.f24,
+        result.individual.last_name,
         result.candidate,
-        false,
-        '',
-        'date_signed',
       );
-
-      TransactionDetailPage.clickSave();
       PageUtils.clickLink('Independent Expenditure');
       cy.contains('Address').should('exist');
       cy.get('#first_name').should('have.value', result.individual.first_name);

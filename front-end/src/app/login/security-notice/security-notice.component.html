@@ -1,21 +1,24 @@
-<div [class.security-container]="showForm">
-  @if (showForm) {
-    <div>
-      <img
-        id="fec-seal-and-title"
-        alt="FECfile+ Seal and Title"
-        src="/assets/img/seal-and-title-white.svg"
-        height="64"
-        width="247"
-      />
+@if (showForm) {
+  <div class="flex justify-content-between align-items-center">
+    <img
+      id="fec-seal-and-title"
+      alt="FECfile+ Seal and Title"
+      src="/assets/img/seal-and-title-white.svg"
+      height="64"
+      width="247"
+    />
 
-      <a class="logout-button" (click)="loginService.logOut()">
-        <span>Log Out</span>
-      </a>
-    </div>
-  }
+    <a class="logout-button" (click)="loginService.logOut()">
+      <span>Log Out</span>
+    </a>
+  </div>
+}
 
-  <div [class.notice-box-form]="showForm" [class.notice-box]="!showForm">
+<div [class.security-container]="showForm" [class.standard-container]="showForm" [class.notice-box]="!showForm">
+  <div class="header">
+    <h1>Terms of service and user agreement</h1>
+  </div>
+  <div [class.notice-box-form]="showForm">
     <ng-container *ngComponentOutlet="componentToLoad"></ng-container>
   </div>
 
@@ -35,22 +38,21 @@
           </label>
         </div>
       </form>
-      <div class="align-center">
-        <button
-          pButton
-          pRipple
-          class="p-button-secondary decline-button"
+      <div class="flex justify-content-center gap-6">
+        <p-button
+          [pt]="{ root: 'security-button' }"
+          severity="secondary"
           label="Decline and exit"
           (click)="loginService.logOut()"
-        ></button>
-        <button
-          pButton
-          pRipple
-          class="p-button-primary"
+          (keypress)="loginService.logOut()"
+        />
+        <p-button
+          [pt]="{ root: 'security-button' }"
           data-cy="consent-button"
           label="Consent"
           (click)="signConsentForm()"
-        ></button>
+          (keypress)="signConsentForm()"
+        />
       </div>
     </div>
 

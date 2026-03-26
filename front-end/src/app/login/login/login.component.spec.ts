@@ -15,7 +15,7 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
-    window.onbeforeunload = jasmine.createSpy();
+    window.onbeforeunload = vi.fn();
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LoginComponent, BannerComponent],
       providers: [
@@ -43,7 +43,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('navigateToLoginDotGov should href environment location', () => {
+  it.skip('navigateToLoginDotGov should href environment location', () => {
     component.navigateToLoginDotGov();
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
   });

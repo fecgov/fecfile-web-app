@@ -18,7 +18,6 @@ import { DoubleTransactionDetailComponent } from './double-transaction-detail.co
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 describe('DoubleTransactionDetailComponent', () => {
   let component: DoubleTransactionDetailComponent;
@@ -48,7 +47,6 @@ describe('DoubleTransactionDetailComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
         MessageService,
         ConfirmationService,
         FormBuilder,

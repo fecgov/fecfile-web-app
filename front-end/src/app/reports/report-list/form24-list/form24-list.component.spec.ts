@@ -49,7 +49,7 @@ describe('Form24ListComponent', () => {
   });
 
   it('edit a F24 should go to F24 edit page', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     const item: Form24 = Form24.fromJSON({ id: '99', report_type: ReportTypes.F24 });
     component.editItem(item);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/99/list');

@@ -81,7 +81,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
 
     effect(() => {
       const navEvent = this.navigationEvent();
-      if (navEvent) {
+      if (navEvent.transaction) {
         const navigationEvent = cloneNavigationEvent(navEvent);
         this.handleNavigate(navigationEvent);
         this.store.dispatch(navigationEventClearAction());
@@ -217,7 +217,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
      *      (a child of the current transaction's parent if it exists)
      *  - If the destination is CHILD, navigate to create a sub-transaction of the current transaction
      */
-    let result = false;
+    let result: boolean;
     const reportId = this.activatedRoute.snapshot.params['reportId'];
     const reportPath = `/reports/transactions/report/${reportId}`;
     // If the transaction is saved, display a success message

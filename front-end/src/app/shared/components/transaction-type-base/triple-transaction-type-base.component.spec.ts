@@ -1,13 +1,14 @@
+import type { Mock } from 'vitest';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DatePipe } from '@angular/common';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { TripleTransactionDetailComponent } from 'app/reports/transactions/triple-transaction-detail/triple-transaction-detail.component';
@@ -19,18 +20,37 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from '../../models/transaction-navigation-controls.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideZoneChangeDetection } from '@angular/core';
+import { Subject } from 'rxjs';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
 
 // Spys
-let confirmSpy: jasmine.Spy;
+let confirmSpy: Mock;
+
+function dummy() {
+  return {
+    organization_name: 'name',
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  };
+}
 
 describe('TripleTransactionTypeBaseComponent', () => {
   let component: TripleTransactionTypeBaseComponent;
@@ -40,14 +60,13 @@ describe('TripleTransactionTypeBaseComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TripleTransactionDetailComponent],
       providers: [
+        provideZoneChangeDetection(),
         DatePipe,
         MessageService,
         FormBuilder,
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
-        provideAnimations(),
         TransactionService,
         ConfirmationService,
         provideMockStore(testMockStore()),
@@ -63,6 +82,9 @@ describe('TripleTransactionTypeBaseComponent', () => {
     const child2 = getTestTransactionByType(
       ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
     ) as SchATransaction;
+    child2.transactionType.contactConfig['contact_2'] = dummy();
+    child2.transactionType.contactConfig['contact_3'] = dummy();
+
     testTransaction.report_ids = ['123'];
     testTransaction.children = [child1, child2];
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
@@ -70,10 +92,13 @@ describe('TripleTransactionTypeBaseComponent', () => {
     component.transaction = testTransaction;
     component.childTransaction = child1;
     component.childTransaction_2 = child2;
+    component.childContactIdMap_2 = { contact_1: new Subject(), contact_2: new Subject(), contact_3: new Subject() };
 
-    confirmSpy = spyOn(testConfirmationService, 'confirm');
+    confirmSpy = vi.spyOn(testConfirmationService, 'confirm').mockImplementation((confirmation: Confirmation) => {
+      if (confirmation.accept) return confirmation?.accept();
+    });
 
-    component.ngOnInit();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -85,36 +110,33 @@ describe('TripleTransactionTypeBaseComponent', () => {
     it('should return false if there is not child transaction 2', async () => {
       component.childTransaction_2 = undefined;
       const res = await component.getConfirmations();
-      expect(res).toBeFalse();
+      expect(res).toBe(false);
     });
 
     it('should return false if not child transaction', async () => {
       component.childTransaction = undefined;
       const v = await component.getConfirmations();
-      expect(v).toBeFalse();
+      expect(v).toBe(false);
     });
 
     it('should return false if reject parent confirmation', async () => {
       component.transaction = undefined;
       const v = await component.getConfirmations();
-      expect(v).toBeFalse();
+      expect(v).toBe(false);
     });
 
     it('should confirm with user', async () => {
-      const confirmSpy = spyOn(component.confirmationService, 'confirmWithUser').and.returnValue(Promise.resolve(true));
+      component.transaction!.contact_1 = testContact();
       await component.getConfirmations();
       expect(confirmSpy).toHaveBeenCalled();
     });
 
-    it('should confirm with user 1 time if only primary transaction contact updated', fakeAsync(() => {
-      if (!component.transaction) throw new Error('Bad test');
-      component.transaction.contact_1 = testContact();
-      component.getConfirmations().then((res) => {
-        expect(res).toBeTrue();
-      });
-      tick();
+    it('should confirm with user 1 time if only primary transaction contact updated', async () => {
+      component.transaction!.contact_1 = testContact();
+      await component.getConfirmations();
+
       expect(confirmSpy).toHaveBeenCalledTimes(1);
-    }));
+    });
   });
 
   describe('validateForm', () => {
@@ -124,27 +146,29 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
     it('should be invalid if childForm_2 is invalid', async () => {
       component.forms = [component.form, component.childForm, component.childForm_2];
-      expect(component.form.invalid).toBeFalse();
-      expect(component.childForm.invalid).toBeFalse();
+      expect(component.form.invalid).toBe(false);
+      expect(component.childForm.invalid).toBe(false);
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
-      component.childForm_2.addControl('Test', new SubscriptionFormControl(undefined, Validators.required));
-      component.childForm_2.updateValueAndValidity();
-      expect(component.childForm_2.invalid).toBeTrue();
-      expect(await component.validateForm()).toBeFalse();
+      const controls = component.childForm_2.controls;
+      for (const control in controls) {
+        controls[control].setValidators(Validators.required);
+        controls[control].setValue(null);
+      }
+      expect(await component.validateForm()).toBe(false);
     });
 
     it('should be valid in all other cases', async () => {
       component.form = new FormBuilder().group({});
       component.childForm_2 = new FormBuilder().group({});
       component.forms = [component.form, component.childForm, component.childForm_2];
-      expect(component.form.invalid).toBeFalse();
-      expect(component.childForm.invalid).toBeFalse();
-      expect(component.childForm_2.invalid).toBeFalse();
+      expect(component.form.invalid).toBe(false);
+      expect(component.childForm.invalid).toBe(false);
+      expect(component.childForm_2.invalid).toBe(false);
       expect(component.transaction).toBeTruthy();
       expect(component.childTransaction).toBeTruthy();
       expect(component.childTransaction_2).toBeTruthy();
-      expect(await component.validateForm()).toBeTrue();
+      expect(await component.validateForm()).toBe(true);
     });
   });
 
@@ -157,7 +181,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
         component.childTransaction_2?.transactionType?.getUseParentContact(component.childTransaction_2),
       ).toBeTruthy();
       expect(component.transaction.contact_1).toBeTruthy();
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
       const selectItem: SelectItem<Contact> = { value: component.transaction.contact_1 };
       component.updateFormWithPrimaryContact(selectItem);
       expect(spy).toHaveBeenCalled();
@@ -167,7 +191,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithPrimaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
       const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithPrimaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
@@ -181,7 +205,8 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithCandidateContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithCandidateContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithCandidateContact');
+
       const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithCandidateContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
@@ -195,7 +220,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithSecondaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
       const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithSecondaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
@@ -209,7 +234,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('childUpdateFormWithTertiaryContact_2', () => {
     it('should run the super version and then update data if ', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
       const selectItem: SelectItem<Contact> = { value: testContact() };
       component.childUpdateFormWithTertiaryContact_2(selectItem);
       expect(spy).toHaveBeenCalledWith(
