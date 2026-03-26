@@ -20,7 +20,22 @@ commands:
           name: clone fecfile-web-api
           command: |
             rm -rf fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git
+            API_REPO_URL="https://github.com/fecgov/fecfile-web-api.git"
+            API_REPO_PUSH_URL="https://x-access-token:${FECFILE_WEB_API_GITHUB_TOKEN}@github.com/fecgov/fecfile-web-api.git"
+
+            if git ls-remote --exit-code --heads "${API_REPO_URL}" "${CIRCLE_BRANCH}" >/dev/null 2>&1; then
+              git clone --depth 1 --branch "${CIRCLE_BRANCH}" "${API_REPO_URL}" fecfile-web-api
+            else
+              # Keep triggered feature/release branches runnable even when the
+              # matching API branch has not been created yet.
+              git clone --depth 1 --branch develop "${API_REPO_URL}" fecfile-web-api
+              cd fecfile-web-api
+              git remote set-url origin "${API_REPO_PUSH_URL}"
+              git push origin "HEAD:refs/heads/${CIRCLE_BRANCH}"
+              cd ..
+              rm -rf fecfile-web-api
+              git clone --depth 1 --branch "${CIRCLE_BRANCH}" "${API_REPO_URL}" fecfile-web-api
+            fi
           working_directory: ~/project
       - run:
           name: use redis
@@ -30,7 +45,6 @@ commands:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${CIRCLE_BRANCH}
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" \
             WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
@@ -62,7 +76,6 @@ commands:
         type: integer
         default: 55
     steps:
-      - checkout
       - run:
           name: prepare and execute web-app e2e container
           no_output_timeout: 5m
@@ -208,6 +221,7 @@ jobs:
       CYPRESS_VIDEO: << parameters.video >>
       CYPRESS_BROWSER_IMAGE: &cypress_browser_image cypress/browsers:node-24.14.0-chrome-146.0.7680.80-1-ff-148.0.2-edge-146.0.3856.62-1
     steps:
+      - checkout
       - spin-up-api-containers
       - execute-web-app-e2e:
           script: e2e:smoke:headless
@@ -238,6 +252,7 @@ jobs:
       CYPRESS_VIDEO: << parameters.video >>
       CYPRESS_BROWSER_IMAGE: *cypress_browser_image
     steps:
+      - checkout
       - spin-up-api-containers
       - execute-web-app-e2e:
           script: e2e:extended:headless
