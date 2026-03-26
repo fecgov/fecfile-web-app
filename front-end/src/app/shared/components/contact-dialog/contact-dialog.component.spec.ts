@@ -119,7 +119,7 @@ describe('ContactDialogComponent', () => {
 
   describe('transactions', () => {
     it('should route to transaction', async () => {
-      const spy = vi.spyOn(component.router, 'navigate').mockResolvedValue(true);
+      const spy = vi.spyOn(component.router, 'navigate');
       const testTransactionListRecord = createTestTransactionListRecord();
       testTransactionListRecord.report_ids = ['abc'];
       await component.openTransaction(testTransactionListRecord);

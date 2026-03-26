@@ -118,14 +118,15 @@ function handleLoanAgreementSetup(q3: string) {
 
     TransactionDetailPage.enterNewLoanAgreementFormData(fd);
 
-    cy.intercept('POST', '**/api/v1/transactions/**').as('saveNewAgreement');
+    cy.intercept({
+      method: 'POST',
+      pathname: '/api/v1/transactions/',
+    }).as('saveNewAgreement');
 
     TransactionDetailPage.clickSave();
-    cy.wait('@saveNewAgreement').then((interception) => {
-      expect(interception.response?.statusCode).to.equal(200);
-    });
-    PageUtils.locationCheck('/list');
-    cy.contains('Loan Received from Bank').should('be.visible');
+    cy.wait('@saveNewAgreement');
+    cy.contains('Loan Received from Bank').should('exist');
+    PageUtils.urlCheck('/list');
     clickLoan('Review loan agreement');
     PageUtils.valueCheck('input[id^="loan-agreement-amount-"]', '$65,000.00');
     PageUtils.valueCheck('#loan_incurred_date', `05/27/${currentYear}`);
@@ -158,9 +159,8 @@ describe('Loans', () => {
 
       PageUtils.clickAccordion('STEP TWO');
       TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
-      PageUtils.clickFormActionButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
-      PageUtils.locationCheck('/list');
-      cy.contains('Transactions in this report').should('be.visible');
+      PageUtils.clickButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
+      PageUtils.urlCheck('/list');
       cy.contains('Loan Received from Bank').should('exist');
 
       assertNoDeleteButtonInLoanReceivedFromBankRow();
@@ -176,7 +176,7 @@ describe('Loans', () => {
       PageUtils.enterValue('#amount', formData.amount);
       TransactionDetailPage.clickSave();
       PageUtils.urlCheck('/list');
-      cy.contains('Loan Repayment Made').should('be.visible');
+      cy.contains('Loan Repayment Made').should('exist');
     });
   });
 

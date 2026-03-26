@@ -77,18 +77,18 @@ describe('CommitteeInfoComponent', () => {
     const link = 'https://webforms.stage.gov/webforms/form1/index.htm';
     await setEnvironment(link);
 
-    const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    vi.spyOn(window, 'open');
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();
-    expect(windowOpenSpy).toHaveBeenCalledWith(link, '_blank', 'noopener');
+    expect(window.open).toHaveBeenCalledWith(link, '_blank', 'noopener');
   });
 
   it('should use the staging link in non-production environment', async () => {
     const link = 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm';
     await setEnvironment(link);
-    const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    vi.spyOn(window, 'open');
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();
-    expect(windowOpenSpy).toHaveBeenCalledWith(link, '_blank', 'noopener');
+    expect(window.open).toHaveBeenCalledWith(link, '_blank', 'noopener');
   });
 });

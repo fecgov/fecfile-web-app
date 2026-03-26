@@ -44,7 +44,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       : 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.',
   );
   readonly memoCodeReadOnly = computed(() => TransactionFormUtils.isMemoCodeReadOnly(this.transactionType()));
-  readonly coverageDate = signal<Date | null>(null);
+  readonly coverageDate = signal(new Date());
   readonly coverageDateQuestion = signal(
     'Did you mean to date this transaction outside of the report coverage period?',
   );
@@ -77,8 +77,8 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   ngOnInit(): void {
     const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
     if (dateControl?.enabled) {
-      dateControl.addSubscription((date: Date | null) => {
-        if (date?.getTime() !== this.coverageDate()?.getTime()) {
+      dateControl.addSubscription((date: Date) => {
+        if (date && date.getTime() !== this.coverageDate().getTime()) {
           this.coverageDate.set(date);
           this.updateMemoItemWithDate(date);
         }
@@ -120,47 +120,27 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
   }
 
-  private clearOutOfDateRequirement(): void {
-    if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
-      this.memoControl.removeValidators([Validators.requiredTrue]);
-      this.memoControl.markAsTouched();
-      this.memoControl.updateValueAndValidity();
-    }
-    this.dateIsOutsideReport = false;
-  }
-
-  private setOutOfDateRequirement(): void {
-    this.memoControl.addValidators(Validators.requiredTrue);
-    this.memoControl.markAsTouched();
-    this.memoControl.markAsDirty();
-    this.memoControl.updateValueAndValidity();
-    this.dateIsOutsideReport = true;
-    if (!this.memoControl.value) {
-      this.outOfDateDialogVisible.set(true);
-    }
-  }
-
-  private isMemoDateWithinCoverage(date: Date, coverageFromDate: Date, coverageThroughDate: Date): boolean {
-    return date >= coverageFromDate && date <= coverageThroughDate;
-  }
-
-  updateMemoItemWithDate(date: Date | null | undefined) {
+  updateMemoItemWithDate(date: Date) {
     const coverageFromDate = this.coverageFromDate();
     const coverageThrough = this.coverageThroughDate();
-    if (!this.transactionType()?.doMemoCodeDateCheck || !coverageFromDate || !coverageThrough) {
-      return;
+    if (this.transactionType()?.doMemoCodeDateCheck && coverageFromDate && coverageThrough) {
+      if (date && (date < coverageFromDate || date > coverageThrough)) {
+        this.memoControl.addValidators(Validators.requiredTrue);
+        this.memoControl.markAsTouched();
+        this.memoControl.markAsDirty();
+        this.memoControl.updateValueAndValidity();
+        this.dateIsOutsideReport = true;
+        if (!this.memoControl.value) {
+          this.outOfDateDialogVisible.set(true);
+        }
+      } else {
+        if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
+          this.memoControl.removeValidators([Validators.requiredTrue]);
+          this.memoControl.markAsTouched();
+          this.memoControl.updateValueAndValidity();
+        }
+        this.dateIsOutsideReport = false;
+      }
     }
-
-    if (!date) {
-      this.clearOutOfDateRequirement();
-      return;
-    }
-
-    if (this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
-      this.clearOutOfDateRequirement();
-      return;
-    }
-
-    this.setOutOfDateRequirement();
   }
 }

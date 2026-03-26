@@ -94,7 +94,8 @@ export class ReportListPage {
     ReportListPage.clickCreateAndSelectForm('F3X');
     F3xCreateReportPage.waitForCoverage();
     F3xCreateReportPage.enterFormData(fd);
-    PageUtils.clickFormActionButton('Save & continue', '[data-cy="save-cancel-actions"]:visible');
+    PageUtils.clickButton('Save and continue', '[data-cy="save-cancel-actions"]:visible');
+    
   }
 
   static createF1M() {

@@ -180,14 +180,6 @@ describe('MemoCodeInputComponent', () => {
     expect(component.dateIsOutsideReport).toBe(true);
   });
 
-  it('should not crash when the memo coverage date is temporarily cleared', () => {
-    setForm3X();
-    component.coverageDate.set(null);
-
-    expect(() => component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'))).not.toThrow();
-    expect(component.dateIsOutsideReport).toBe(true);
-  });
-
   it('should update transaction type identifiers correctly based on the TransactionType', () => {
     host.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     fixture.detectChanges();

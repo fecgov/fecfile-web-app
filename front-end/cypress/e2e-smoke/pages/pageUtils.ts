@@ -9,14 +9,6 @@ export class PageUtils {
     return value.replaceAll(/\s+/g, ' ').trim();
   }
 
-  private static canonizeButtonLabel(value: string): string {
-    return PageUtils.normalizeButtonLabel(value)
-      .replaceAll('&', ' and ')
-      .replaceAll(/\s+/g, ' ')
-      .trim()
-      .toLowerCase();
-  }
-
   private static normalizeSidebarLabel(value: string): string {
     return value.replaceAll(/\s+/g, ' ').trim().toLowerCase();
   }
@@ -279,7 +271,7 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    const normalizedName = PageUtils.canonizeButtonLabel(name);
+    const normalizedName = PageUtils.normalizeButtonLabel(name);
 
     const resolveLabel = (button: HTMLElement): string => {
       const sources = [
@@ -289,7 +281,7 @@ export class PageUtils {
         button.textContent ?? '',
       ];
       const matchingLabel = sources.find((value) => PageUtils.normalizeButtonLabel(value).length > 0) ?? '';
-      return PageUtils.canonizeButtonLabel(matchingLabel);
+      return PageUtils.normalizeButtonLabel(matchingLabel);
     };
 
     cy.get(alias).then(($root) => {
@@ -311,18 +303,6 @@ export class PageUtils {
 
       cy.wrap(button).click({ force });
     });
-  }
-
-  static clickFormActionButton(name: string, alias = '', force = false) {
-    return cy
-      .get('body')
-      .then(($body) => {
-        if ($body.find('.p-datepicker-panel:visible').length > 0) {
-          cy.get('body').type('{esc}');
-        }
-      })
-      .blurActiveField()
-      .then(() => PageUtils.clickButton(name, alias, force));
   }
 
   static dateToString(date: Date) {

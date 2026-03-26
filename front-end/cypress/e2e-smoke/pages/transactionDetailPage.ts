@@ -282,15 +282,15 @@ export class TransactionDetailPage {
 
 
   static clickSave(buttonType = this.SPLIT_BUTTON) {
-    PageUtils.clickFormActionButton('Save', `app-navigation-control-bar,[data-cy="${buttonType}"]:visible`);
+    PageUtils.clickButton('Save', `app-navigation-control-bar,[data-cy="${buttonType}"]:visible`);
   }
 
   static clickInlineSave() {
-    PageUtils.clickFormActionButton('Save', `[data-cy="${this.BUTTON}"]:visible`);
+    PageUtils.clickButton('Save', `[data-cy="${this.BUTTON}"]:visible`);
   }
 
   static clickSaveBothTransactions() {
-    PageUtils.clickFormActionButton('Save both transactions', `[data-cy="${this.BUTTON}"]:visible`);
+    PageUtils.clickButton('Save both transactions', `[data-cy="${this.BUTTON}"]:visible`);
   }
 
   static clickCancel() {

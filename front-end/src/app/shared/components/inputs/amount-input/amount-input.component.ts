@@ -96,7 +96,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
           );
           // Opening of 'Just checking...' pop-up is handled in app-memo-code component directly.
         }, this.destroy$);
-        date2Control.addSubscription((date: Date | null) => {
+        date2Control.addSubscription((date: Date) => {
           dateControl.updateValueAndValidity({ emitEvent: false });
           // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
           if (!dateControl.value) {

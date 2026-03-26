@@ -37,24 +37,22 @@ class TestHostComponent {
   formSubmitted = false;
   templateMap = testTemplateMap();
   transaction: Transaction = testScheduleATransaction();
-  designatingCommitteeSelection?: SelectItem<Contact>;
-  subordinateCommitteeSelection?: SelectItem<Contact>;
   component = viewChild.required(AdditionalInfoInputComponent);
   constructor() {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
   }
 
-  updateFormWithQuaternaryContact(event: SelectItem<Contact>): void {
-    this.designatingCommitteeSelection = event;
+  updateFormWithQuaternaryContact(event: SelectItem<Contact>) {
+    console.log(event);
   }
-  clearFormQuaternaryContact(): void {
-    return;
+  clearFormQuaternaryContact() {
+    console.log('clear quaternary contact');
   }
-  updateFormWithQuinaryContact(event: SelectItem<Contact>): void {
-    this.subordinateCommitteeSelection = event;
+  updateFormWithQuinaryContact(event: SelectItem<Contact>) {
+    console.log(event);
   }
-  clearFormQuinaryContact(): void {
-    return;
+  clearFormQuinaryContact() {
+    console.log('clear quinary contact');
   }
 }
 
