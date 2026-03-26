@@ -15,12 +15,12 @@ commands:
     steps:
       - setup_remote_docker:
           version: docker24
-          docker_layer_caching: false
+          docker_layer_caching: true
       - run:
           name: clone fecfile-web-api
           command: |
             rm -rf fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git
+            git clone --depth 1 --branch ${CIRCLE_BRANCH} https://github.com/fecgov/fecfile-web-api.git
           working_directory: ~/project
       - run:
           name: use redis
@@ -30,7 +30,6 @@ commands:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${CIRCLE_BRANCH}
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" \
             WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
@@ -50,6 +49,53 @@ commands:
               -wait-retry-interval 2s \
               -timeout 60s;
           working_directory: ~/project/fecfile-web-api
+  execute-web-app-e2e:
+    description: "Run a web-app Cypress job inside the shared browser container"
+    parameters:
+      script:
+        type: string
+      container_name:
+        type: string
+        default: fecfile-web-app-e2e
+      timeout_minutes:
+        type: integer
+        default: 55
+    steps:
+      - checkout
+      - run:
+          name: prepare and execute web-app e2e container
+          no_output_timeout: 5m
+          command: |
+            docker rm -f << parameters.container_name >> || true
+            docker container create --name << parameters.container_name >> \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              --network container:fecfile-api-proxy \
+              ${CYPRESS_BROWSER_IMAGE} \
+              /bin/bash -lc "cd /root/fecfile-web-app/front-end && npm ci --no-audit --no-fund && npm run << parameters.script >>"
+            docker cp ~/project/. << parameters.container_name >>:/root/fecfile-web-app
+            timeout --foreground --signal=TERM --kill-after=5m << parameters.timeout_minutes >>m docker container start -a << parameters.container_name >>
+  stage-web-app-e2e-artifacts:
+    description: "Copy Cypress results, videos, and screenshots from the browser container"
+    parameters:
+      container_name:
+        type: string
+        default: fecfile-web-app-e2e
+    steps:
+      - run:
+          name: stage test result artifacts
+          when: always
+          command: |
+            rm -rf /tmp/cypress
+            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            docker stop --time 40 << parameters.container_name >> || true
+            docker cp << parameters.container_name >>:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
+            docker cp << parameters.container_name >>:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
+            docker cp << parameters.container_name >>:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
+            docker rm << parameters.container_name >> || true
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -162,36 +208,9 @@ jobs:
       CYPRESS_BROWSER_IMAGE: &cypress_browser_image cypress/browsers:node-24.14.0-chrome-146.0.7680.80-1-ff-148.0.2-edge-146.0.3856.62-1
     steps:
       - spin-up-api-containers
-      - run:
-          name: execute e2e tests
-          no_output_timeout: 5m
-          command: |
-            timeout --foreground --signal=TERM --kill-after=5m 55m docker container run --name fecfile-web-app-e2e \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              --network container:fecfile-api-proxy \
-              ${CYPRESS_BROWSER_IMAGE} \
-              /bin/bash -c '\
-                cd ~; \
-                git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; \
-                git checkout ${CIRCLE_BRANCH}; \
-                npm install; \
-                npm run e2e:smoke:headless;'
-      - run:
-          name: stage test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
-            docker stop --time 40 fecfile-web-app-e2e || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e || true
+      - execute-web-app-e2e:
+          script: e2e:smoke:headless
+      - stage-web-app-e2e-artifacts
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -219,36 +238,9 @@ jobs:
       CYPRESS_BROWSER_IMAGE: *cypress_browser_image
     steps:
       - spin-up-api-containers
-      - run:
-          name: execute extended e2e tests
-          no_output_timeout: 5m
-          command: |
-            timeout --foreground --signal=TERM --kill-after=5m 55m docker container run --name fecfile-web-app-e2e \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              --network container:fecfile-api-proxy \
-              ${CYPRESS_BROWSER_IMAGE} \
-              /bin/bash -c '\
-                cd ~; \
-                git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; \
-                git checkout ${CIRCLE_BRANCH}; \
-                npm install; \
-                npm run e2e:extended:headless;'
-      - run:
-          name: stage test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
-            docker stop --time 40 fecfile-web-app-e2e || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e || true
+      - execute-web-app-e2e:
+          script: e2e:extended:headless
+      - stage-web-app-e2e-artifacts
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
