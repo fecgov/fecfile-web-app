@@ -152,6 +152,7 @@ jobs:
   e2e-smoke:
     docker:
       - image: *node24_browsers_image
+    resource_class: large
     parameters:
       video:
         type: boolean
@@ -208,6 +209,7 @@ jobs:
   e2e-extended:
     docker:
       - image: *node24_browsers_image
+    resource_class: large
     parameters:
       video:
         type: boolean
