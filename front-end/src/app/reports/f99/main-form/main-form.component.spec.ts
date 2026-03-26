@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -90,15 +90,15 @@ describe('MainFormComponent', () => {
   });
 
   it('should go back', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     component.goBack();
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('should save', fakeAsync(async () => {
-    const createSpy = spyOn(component.reportService, 'create').and.resolveTo(Form99.fromJSON({}));
-    const updateSpy = spyOn(component.reportService, 'update').and.resolveTo(Form99.fromJSON({}));
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+  it('should save', async () => {
+    const createSpy = vi.spyOn(component.reportService, 'create').mockResolvedValue(Form99.fromJSON({}));
+    const updateSpy = vi.spyOn(component.reportService, 'update').mockResolvedValue(Form99.fromJSON({}));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
 
     component.form.patchValue({ ...f99 });
     expect(component.form.invalid).toBe(false);
@@ -111,7 +111,7 @@ describe('MainFormComponent', () => {
     await component.submitForm();
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
-  }));
+  });
 });
 
 describe('MainFormComponent (showFilingFrequency)', () => {
@@ -147,16 +147,16 @@ describe('MainFormComponent (showFilingFrequency)', () => {
   it('returns true for text_code values that require a filing frequency (MSR, MSM)', () => {
     component.form.controls['text_code'].setValue('MSR');
     fixture.detectChanges();
-    expect(component.showFilingFrequency()).toBeTrue();
+    expect(component.showFilingFrequency()).toBe(true);
 
     component.form.controls['text_code'].setValue('MSM');
     fixture.detectChanges();
-    expect(component.showFilingFrequency()).toBeTrue();
+    expect(component.showFilingFrequency()).toBe(true);
   });
 
   it('returns false for text_code values that do not require a filing frequency', () => {
     component.form.controls['text_code'].setValue('MST');
     fixture.detectChanges();
-    expect(component.showFilingFrequency()).toBeFalse();
+    expect(component.showFilingFrequency()).toBe(false);
   });
 });

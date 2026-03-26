@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ToUpperDirective } from './to-upper.directive';
@@ -33,20 +33,18 @@ describe('ToUpperDirective', () => {
     expect(directiveInstance).toBeTruthy();
   });
 
-  it('should convert input value to uppercase on input event', fakeAsync(() => {
+  it('should convert input value to uppercase on input event', () => {
     inputElement.value = 'test';
     inputElement.dispatchEvent(new Event('input'));
-    tick();
     fixture.detectChanges();
 
     expect(inputElement.value).toBe('TEST');
-  }));
+  });
 
-  it('should preserve cursor position after conversion', fakeAsync(() => {
+  it('should preserve cursor position after conversion', () => {
     inputElement.value = 'test';
     inputElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick();
 
     inputElement.setSelectionRange(3, 3);
 
@@ -55,22 +53,20 @@ describe('ToUpperDirective', () => {
 
     inputElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick();
 
     expect(inputElement.value).toBe('TESTING');
     expect(inputElement.selectionStart).toBe(6);
     expect(inputElement.selectionEnd).toBe(6);
-  }));
+  });
 
-  it('should NOT update form model on input when control is set to updateOn: "blur"', fakeAsync(() => {
+  it('should NOT update form model on input when control is set to updateOn: "blur"', () => {
     fixture.detectChanges();
 
     inputElement.value = 'test';
     inputElement.dispatchEvent(new Event('input'));
-    tick();
     fixture.detectChanges();
 
     expect(inputElement.value).toBe('TEST');
     expect(fixture.componentInstance.control.value).toBe('');
-  }));
+  });
 });

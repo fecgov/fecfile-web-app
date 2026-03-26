@@ -14,7 +14,7 @@ describe('Reattribution To', () => {
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
       expect(toTransaction.transactionType.accordionTitle).toBe('STEP ONE');
-      expect(toTransaction.fields_to_validate?.includes('memo_code')).toBeFalse();
+      expect(toTransaction.fields_to_validate?.includes('memo_code')).toBe(false);
       expect(toTransaction.reatt_redes_id).toBe(origTransaction.id);
     });
   });
@@ -36,11 +36,11 @@ describe('Reattribution To', () => {
       );
 
       ReattributionToUtils.overlayForm(toForm, transaction);
-      expect(toForm.get('memo_code')?.value).toBeTrue();
+      expect(toForm.get('memo_code')?.value).toBe(true);
 
       transaction.report_ids = ['999'];
       ReattributionToUtils.overlayForm(toForm, transaction);
-      expect(toForm.get('memo_code')?.value).toBeTrue();
+      expect(toForm.get('memo_code')?.value).toBe(true);
     });
   });
 });

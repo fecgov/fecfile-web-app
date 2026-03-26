@@ -1,5 +1,4 @@
 import { DateUtils } from './date.utils';
-
 import { buildAfterDateValidator } from './validators.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
 import { FormGroup } from '@angular/forms';
@@ -38,23 +37,23 @@ describe('DateUtils', () => {
     const januaryForth = new Date('01/04/2023');
     const decemberFirstLastYear = new Date('12/01/2022');
     // A1----B1----A2----B2
-    expect(DateUtils.areOverlapping(januaryFirst, januaryThird, januarySecond, januaryForth)).toBeTrue();
+    expect(DateUtils.areOverlapping(januaryFirst, januaryThird, januarySecond, januaryForth)).toBe(true);
     // B1----A1----B2----A2
-    expect(DateUtils.areOverlapping(januarySecond, januaryForth, januaryFirst, januaryThird)).toBeTrue();
+    expect(DateUtils.areOverlapping(januarySecond, januaryForth, januaryFirst, januaryThird)).toBe(true);
     // A1----A2B1----B2
-    expect(DateUtils.areOverlapping(januaryFirst, januarySecond, januarySecond, januaryThird)).toBeTrue();
+    expect(DateUtils.areOverlapping(januaryFirst, januarySecond, januarySecond, januaryThird)).toBe(true);
     // A1--(new-year)--B1----A2----B2
-    expect(DateUtils.areOverlapping(decemberFirstLastYear, januarySecond, januaryFirst, januaryThird)).toBeTrue();
+    expect(DateUtils.areOverlapping(decemberFirstLastYear, januarySecond, januaryFirst, januaryThird)).toBe(true);
     // B1----A1----A2----B2
-    expect(DateUtils.areOverlapping(januarySecond, januaryThird, januaryFirst, januaryForth)).toBeTrue();
+    expect(DateUtils.areOverlapping(januarySecond, januaryThird, januaryFirst, januaryForth)).toBe(true);
 
     // A1----A2----B1----B2
-    expect(DateUtils.areOverlapping(decemberFirstLastYear, januaryFirst, januaryThird, januaryForth)).toBeFalse();
+    expect(DateUtils.areOverlapping(decemberFirstLastYear, januaryFirst, januaryThird, januaryForth)).toBe(false);
     // B1--(new-year)--B2----A1----A2
-    expect(DateUtils.areOverlapping(januaryThird, januaryForth, decemberFirstLastYear, januaryFirst)).toBeFalse();
+    expect(DateUtils.areOverlapping(januaryThird, januaryForth, decemberFirstLastYear, januaryFirst)).toBe(false);
 
     // undefined
-    expect(DateUtils.areOverlapping(undefined, januaryFirst, januaryThird, januaryForth)).toBeFalse();
+    expect(DateUtils.areOverlapping(undefined, januaryFirst, januaryThird, januaryForth)).toBe(false);
   });
 
   it('#isWithin should detect dates within range', () => {
@@ -63,19 +62,19 @@ describe('DateUtils', () => {
     const januaryThird = new Date('01/03/2023');
     const decemberFirstLastYear = new Date('12/01/2022');
     // F----D----T
-    expect(DateUtils.isWithin(januarySecond, januaryFirst, januaryThird)).toBeTrue();
+    expect(DateUtils.isWithin(januarySecond, januaryFirst, januaryThird)).toBe(true);
     // FD----T
-    expect(DateUtils.isWithin(januaryFirst, januaryFirst, januaryThird)).toBeTrue();
+    expect(DateUtils.isWithin(januaryFirst, januaryFirst, januaryThird)).toBe(true);
     // F--(new-year)--D----T
-    expect(DateUtils.isWithin(januaryFirst, decemberFirstLastYear, januarySecond)).toBeTrue();
+    expect(DateUtils.isWithin(januaryFirst, decemberFirstLastYear, januarySecond)).toBe(true);
 
     // D----F----T
-    expect(DateUtils.isWithin(januaryFirst, januarySecond, januaryThird)).toBeFalse();
+    expect(DateUtils.isWithin(januaryFirst, januarySecond, januaryThird)).toBe(false);
     // F----T----D
-    expect(DateUtils.isWithin(januaryThird, januaryFirst, januarySecond)).toBeFalse();
+    expect(DateUtils.isWithin(januaryThird, januaryFirst, januarySecond)).toBe(false);
 
     // undefined
-    expect(DateUtils.areOverlapping(undefined, januaryFirst, januaryThird)).toBeFalse();
+    expect(DateUtils.areOverlapping(undefined, januaryFirst, januaryThird)).toBe(false);
   });
 
   describe('dateBefore', () => {
@@ -86,12 +85,12 @@ describe('DateUtils', () => {
       const control = new SubscriptionFormControl<Date>(new Date(), [buildAfterDateValidator(form, 'other')]);
       otherControl.setValue(null);
       control.updateValueAndValidity();
-      expect(control.valid).toBeTrue();
+      expect(control.valid).toBe(true);
 
       otherControl.setValue(new Date());
       control.setValue(null);
       control.updateValueAndValidity();
-      expect(control.valid).toBeTrue();
+      expect(control.valid).toBe(true);
     });
 
     it("should verify that the control's date comes after the date of the other control", () => {
@@ -103,23 +102,23 @@ describe('DateUtils', () => {
         nonNullable: true,
       });
       control.updateValueAndValidity();
-      expect(control.valid).toBeFalse();
+      expect(control.valid).toBe(false);
       if (!control.errors) throw new Error('Bad test');
       expect(control.errors['isAfter']).not.toBeNull();
       control.setValue(new Date(2024, 1, 3));
-      expect(control.valid).toBeTrue();
+      expect(control.valid).toBe(true);
     });
   });
 
   describe('isCurrentMonthJanuary', () => {
     it('should return true if the current month is January', () => {
-      spyOn(Date.prototype, 'getMonth').and.returnValue(0); // January
+      vi.spyOn(Date.prototype, 'getMonth').mockReturnValue(0); // January
       const result = DateUtils.isCurrentMonthJanuary();
       expect(result).toBe(true);
     });
 
     it('should return false if the current month is not January', () => {
-      spyOn(Date.prototype, 'getMonth').and.returnValue(1); // February
+      vi.spyOn(Date.prototype, 'getMonth').mockReturnValue(1); // February
       const result = DateUtils.isCurrentMonthJanuary();
       expect(result).toBe(false);
     });

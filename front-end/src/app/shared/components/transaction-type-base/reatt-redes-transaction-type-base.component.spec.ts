@@ -23,8 +23,8 @@ import { provideRouter } from '@angular/router';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { Form3X } from 'app/shared/models';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -40,9 +40,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
       providers: [
         provideMockStore(testMockStore()),
         provideHttpClient(),
+        provideZoneChangeDetection(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
         DatePipe,
         MessageService,
         FormBuilder,
@@ -64,9 +64,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
     ];
 
     reportService = TestBed.inject(ReportService<Form3X>);
-    spyOn(reportService, 'isEditable').and.returnValue(true);
+    vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+    vi.spyOn(testConfirmationService, 'confirm').mockImplementation((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
     transactionService = TestBed.inject(TransactionService);
@@ -89,10 +89,10 @@ describe('ReattTransactionTypeBaseComponent', () => {
   describe('reattribution and redesignation', () => {
     it('should update child primary contacts', () => {
       if (!component.transaction) throw Error('Bad test setup');
-      const overlaySpy = spyOn(ReattRedesUtils, 'overlayForms').and.callThrough();
-      const childFormSpy = spyOn(component, 'childUpdateFormWithPrimaryContact');
-      const primaryContactSpy = spyOn(component, 'updateFormWithPrimaryContact');
-      const updateElectionDataSpy = spyOn(component, 'updateElectionData');
+      const overlaySpy = vi.spyOn(ReattRedesUtils, 'overlayForms');
+      const childFormSpy = vi.spyOn(component, 'childUpdateFormWithPrimaryContact');
+      const primaryContactSpy = vi.spyOn(component, 'updateFormWithPrimaryContact');
+      const updateElectionDataSpy = vi.spyOn(component, 'updateElectionData');
 
       (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
       component.ngOnInit();
@@ -104,9 +104,9 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
     it('should save all transaction', async () => {
       if (!component.transaction) throw Error('Bad test setup');
-      spyOn(ReattRedesUtils, 'isReattRedes').and.callFake(() => true);
-      const multiSaveSpy = spyOn(transactionService, 'multiSaveReattRedes').and.resolveTo([testTransaction]);
-      const navSpy = spyOn(component, 'navigateTo').and.resolveTo(true);
+      vi.spyOn(ReattRedesUtils, 'isReattRedes').mockImplementation(() => true);
+      const multiSaveSpy = vi.spyOn(transactionService, 'multiSaveReattRedes').mockResolvedValue([testTransaction]);
+      const navSpy = vi.spyOn(component, 'navigateTo').mockResolvedValue(true);
       component.ngOnInit();
       await component.submit(
         new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
@@ -165,7 +165,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       component.form.addControl('beneficiary_candidate_state', new SubscriptionFormControl(''));
       component.form.addControl('beneficiary_candidate_district', new SubscriptionFormControl(''));
 
-      expect(Object.keys(component.childForm.controls)).toContain('election_code');
+      expect(Object.keys(component.childForm.controls)).toContainEqual('election_code');
 
       component.updateElectionData();
       expect(component.childForm.get('election_code')?.value).toBe('A');

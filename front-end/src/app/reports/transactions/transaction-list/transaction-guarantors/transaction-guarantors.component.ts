@@ -10,6 +10,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { Transaction } from 'app/shared/models';
+import { instanceToPlain } from 'class-transformer';
 
 @Component({
   selector: 'app-transaction-guarantors',
@@ -25,7 +26,12 @@ export class TransactionGuarantorsComponent extends TransactionListTableBaseComp
   readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('nameBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
 
-  readonly loan = input<Transaction>();
+  readonly transaction = input<Transaction>();
+  readonly loan = computed(() => {
+    const transaction = this.transaction();
+    const plain = instanceToPlain(transaction);
+    return TransactionListRecord.fromJSON(plain);
+  });
 
   readonly columns = computed(() => [
     this.buildNameColumn({ bodyTpl: this.nameBodyTpl() }),

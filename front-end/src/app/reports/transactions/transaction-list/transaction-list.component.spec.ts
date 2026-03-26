@@ -84,22 +84,22 @@ describe('TransactionListComponent', () => {
   });
 
   it('should navigate to create receipt', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[0], { id: '999' } as Form3X);
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/receipt`);
   });
   it('should navigate to create disbursement', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[1], { id: '999' } as Form3X);
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/disbursement`);
   });
   it('should navigate to create loans & debts', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[2], { id: '999' } as Form3X);
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/loans-and-debts`);
   });
   it('should navigate to create other transactions', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[3], { id: '999' } as Form3X);
     expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/other-transactions`);
   });
@@ -128,9 +128,9 @@ describe('TransactionListComponent', () => {
   });
 
   it('should call refreshTable on receipts, disbursements, and loans', async () => {
-    const receiptSpy = spyOn(component.receipts(), 'refreshTable');
-    const disbursementsSpy = spyOn(component.disbursements(), 'refreshTable');
-    const loanSpy = spyOn(component.loans(), 'refreshTable');
+    const receiptSpy = vi.spyOn(component.receipts(), 'refreshTable').mockResolvedValue(undefined);
+    const disbursementsSpy = vi.spyOn(component.disbursements(), 'refreshTable').mockResolvedValue(undefined);
+    const loanSpy = vi.spyOn(component.loans(), 'refreshTable').mockResolvedValue(undefined);
     await component.refreshTables();
     expect(receiptSpy).toHaveBeenCalled();
     expect(disbursementsSpy).toHaveBeenCalled();

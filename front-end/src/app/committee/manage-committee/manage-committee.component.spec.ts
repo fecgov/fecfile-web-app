@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -97,12 +97,12 @@ describe('ManageCommitteeComponent', () => {
     component.openEdit(committeeMembers[0]);
 
     expect(component.member).toEqual(committeeMembers[0]);
-    expect(component.detailVisible()).toBeTrue();
+    expect(component.detailVisible()).toBe(true);
   });
 
   it('should call loadTableItems, show success message, and close detail', () => {
-    spyOn(component, 'loadTableItems');
-    const messageSpy = spyOn(component.messageService, 'add');
+    vi.spyOn(component, 'loadTableItems');
+    const messageSpy = vi.spyOn(component.messageService, 'add');
 
     component.roleEdited();
 
@@ -112,7 +112,7 @@ describe('ManageCommitteeComponent', () => {
       summary: 'Successful',
       detail: 'Role Updated',
     });
-    expect(component.detailVisible()).toBeFalse();
+    expect(component.detailVisible()).toBe(false);
   });
 
   it('should close detail and clear member', () => {
@@ -131,12 +131,12 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should not be able to remove self from committee', () => {
-    expect(component.isCurrentUser(committeeMembers[0])).toBeTrue();
-    expect(component.isCurrentUser(committeeMembers[1])).toBeFalse();
+    expect(component.isCurrentUser(committeeMembers[0])).toBe(true);
+    expect(component.isCurrentUser(committeeMembers[1])).toBe(false);
   });
 
   it('should not be able to remove committee admin if less than 3 committee admins', () => {
-    spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
+    vi.spyOn(service, 'membersSignal').mockReturnValue(committeeMembers);
     committeeMembers.push(
       CommitteeMember.fromJSON({
         first_name: 'Man',
@@ -147,9 +147,9 @@ describe('ManageCommitteeComponent', () => {
       }),
     );
 
-    expect(component.canEditMember(committeeMembers[0])).toBeFalse(); // Admin
-    expect(component.canEditMember(committeeMembers[1])).toBeFalse(); // Admin
-    expect(component.canEditMember(committeeMembers[2])).toBeTrue(); // Manager
+    expect(component.canEditMember(committeeMembers[0])).toBe(false); // Admin
+    expect(component.canEditMember(committeeMembers[1])).toBe(false); // Admin
+    expect(component.canEditMember(committeeMembers[2])).toBe(true); // Manager
   });
 
   it('should do it', () => {
@@ -162,22 +162,22 @@ describe('ManageCommitteeComponent', () => {
         is_active: true,
       }),
     );
-    spyOn(service, 'membersSignal').and.returnValue(committeeMembers);
+    vi.spyOn(service, 'membersSignal').mockReturnValue(committeeMembers);
 
-    expect(component.canEditMember(committeeMembers[0])).toBeFalse();
-    expect(component.canEditMember(committeeMembers[1])).toBeTrue();
-    expect(component.canEditMember(committeeMembers[2])).toBeTrue();
+    expect(component.canEditMember(committeeMembers[0])).toBe(false);
+    expect(component.canEditMember(committeeMembers[1])).toBe(true);
+    expect(component.canEditMember(committeeMembers[2])).toBe(true);
   });
 
   it('should confirm before delete', () => {
-    const confirmSpy = spyOn(component.confirmationService, 'confirm');
+    const confirmSpy = vi.spyOn(component.confirmationService, 'confirm');
     component.confirmDelete(committeeMembers[0]);
     expect(confirmSpy).toHaveBeenCalled();
   });
 
-  it('should delete member', fakeAsync(async () => {
-    const messageSpy = spyOn(component.messageService, 'add');
-    const deleteSpy = spyOn(service, 'delete').and.callFake(async (member: CommitteeMember) => {
+  it('should delete member', async () => {
+    const messageSpy = vi.spyOn(component.messageService, 'add');
+    const deleteSpy = vi.spyOn(service, 'delete').mockImplementation(async (member: CommitteeMember) => {
       committeeMembers = committeeMembers.filter((m) => m.email !== member.email);
       return null;
     });
@@ -190,11 +190,11 @@ describe('ManageCommitteeComponent', () => {
       detail: 'Successfully removed user from committee',
       life: 3000,
     });
-  }));
+  });
 
-  it('should show error on fail', fakeAsync(async () => {
-    const messageSpy = spyOn(component.messageService, 'add');
-    const deleteSpy = spyOn(service, 'delete').and.callFake(() => {
+  it('should show error on fail', async () => {
+    const messageSpy = vi.spyOn(component.messageService, 'add');
+    const deleteSpy = vi.spyOn(service, 'delete').mockImplementation(() => {
       throw new Error('Failed');
     });
     await component.deleteItem(committeeMembers[0]);
@@ -206,5 +206,5 @@ describe('ManageCommitteeComponent', () => {
       detail: 'There was an error removing the user from the committee',
       life: 3000,
     });
-  }));
+  });
 });

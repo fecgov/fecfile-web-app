@@ -107,7 +107,7 @@ jobs:
 
       - run:
           name: run unit tests
-          command: npm run test:ci
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --watch=false
           working_directory: ~/project/front-end/
 
       - store_artifacts:
@@ -276,6 +276,10 @@ jobs:
             node -v
             npm -v
 
+      - node/install-packages:
+          app-dir: ~/project/front-end/
+          override-ci-command: npm install
+
       - python/install-packages:
           pkg-manager: pip
           app-dir: ~/project/
@@ -309,13 +313,16 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
+
       - run:
           name: List installed node dependencies
           command: npm ls --all
           working_directory: ~/project/front-end/
+
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
+
       - run:
           name: Check for unused dependencies
           command: npx knip

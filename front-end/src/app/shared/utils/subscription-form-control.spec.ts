@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 describe('SubscriptionFormControl', () => {
   it('should add subscription', () => {
     const control = new SubscriptionFormControl();
-    const spy = jasmine.createSpy('action');
+    const spy = vi.fn();
     control.addSubscription(spy);
     control.setValue('test');
     expect(spy).toHaveBeenCalledWith('test');
@@ -12,7 +12,7 @@ describe('SubscriptionFormControl', () => {
 
   it('should unsubscribe when destroy$ emits', () => {
     const control = new SubscriptionFormControl();
-    const spy = jasmine.createSpy('action');
+    const spy = vi.fn();
     const destroy$ = new Subject<undefined>();
     control.addSubscription(spy, destroy$);
     control.setValue('test1');
@@ -25,7 +25,7 @@ describe('SubscriptionFormControl', () => {
 
   it('should copy control with subscriptions', () => {
     const control = new SubscriptionFormControl();
-    const spy = jasmine.createSpy('action');
+    const spy = vi.fn();
     control.addSubscription(spy);
 
     const copy = control.copy('initial');

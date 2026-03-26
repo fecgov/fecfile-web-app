@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit, AfterViewChecked {
   }
 
   navigateToLoginDotGov() {
-    window.location.href = this.loginDotGovAuthUrl ?? '';
+    globalThis.location.href = this.loginDotGovAuthUrl ?? '';
   }
 
   updateScrollbarWidth() {

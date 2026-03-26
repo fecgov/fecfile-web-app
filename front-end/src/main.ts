@@ -1,6 +1,11 @@
-import { enableProdMode, provideAppInitializer, inject, importProvidersFrom } from '@angular/core';
+import {
+  enableProdMode,
+  provideAppInitializer,
+  inject,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { environment } from './environments/environment';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { CookieService } from 'ngx-cookie-service';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -19,7 +24,6 @@ import { CustomRouteReuseStrategy } from './app/custom-route-reuse-strategy';
 import { LoginService } from './app/shared/services/login.service';
 import { SchedulerAction, asyncScheduler } from 'rxjs';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { StoreModule, MetaReducer, ActionReducer, Action } from '@ngrx/store';
@@ -102,6 +106,7 @@ const inMemoryScrollingFeature: InMemoryScrollingFeature = withInMemoryScrolling
 const ngCspNonce = document.body?.querySelector('[ngCspNonce]')?.getAttribute('ngCspNonce') ?? undefined;
 bootstrapApplication(AppComponent, {
   providers: [
+    provideZoneChangeDetection(),
     CookieCheckService,
     importProvidersFrom(
       BrowserModule,
@@ -132,7 +137,6 @@ bootstrapApplication(AppComponent, {
       CheckboxModule,
     ),
     provideRouter(ROUTES, inMemoryScrollingFeature),
-    provideAnimationsAsync(),
     providePrimeNG({
       csp: {
         nonce: ngCspNonce,
@@ -163,7 +167,6 @@ bootstrapApplication(AppComponent, {
       const initializerFn = initializeAppFactory(inject(LoginService), inject(Router), inject(CookieCheckService));
       return initializerFn();
     }),
-    provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.showGlossary },
   ],

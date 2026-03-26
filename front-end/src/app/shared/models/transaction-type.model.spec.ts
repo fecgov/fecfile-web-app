@@ -8,8 +8,8 @@ describe('Transaction Type Model', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     if (!transaction.transactionType) throw new Error('FECfile+: transactionType method does not exist');
     // prettier-ignore
-    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
-    spy.and.returnValue('A short response');
+    const spy = vi.spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
+    spy.mockReturnValue('A short response');
 
     const originalDescrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     const modifiedDescrip = transaction.transactionType?.generatePurposeDescriptionWrapper(transaction);
@@ -20,8 +20,8 @@ describe('Transaction Type Model', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     if (!transaction.transactionType) throw new Error('FECfile+: transactionType method does not exist');
     // prettier-ignore
-    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
-    spy.and.returnValue(
+    const spy = vi.spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
+    spy.mockReturnValue(
       'An absurdly long response' +
         'Just the biggest; no corners cut.' +
         'It needs to be at least 100 chars.' +
@@ -36,11 +36,11 @@ describe('Transaction Type Model', () => {
 
   it('form toggle functions to work', () => {
     let transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
-    expect(transaction.transactionType.hasSignature1()).toBeFalse();
-    expect(transaction.transactionType.hasSignature2()).toBeFalse();
-    expect(transaction.transactionType.hasSupportOpposeCode()).toBeFalse();
+    expect(transaction.transactionType.hasSignature1()).toBe(false);
+    expect(transaction.transactionType.hasSignature2()).toBe(false);
+    expect(transaction.transactionType.hasSupportOpposeCode()).toBe(false);
     transaction = getTestTransactionByType(ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE);
-    expect(transaction.transactionType.hasSignature1()).toBeTrue();
-    expect(transaction.transactionType.hasSupportOpposeCode()).toBeTrue();
+    expect(transaction.transactionType.hasSignature1()).toBe(true);
+    expect(transaction.transactionType.hasSupportOpposeCode()).toBe(true);
   });
 });

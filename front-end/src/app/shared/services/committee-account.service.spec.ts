@@ -1,5 +1,5 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
@@ -62,12 +62,12 @@ describe('CommitteeAccountService', () => {
     expect(request.request.method).toEqual('POST');
     request.flush(true);
     const result = await resultPromise;
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
 
     httpTestingController.verify();
   });
 
-  it('should call api get active committee', waitForAsync(() => {
+  it('should call api get active committee', () => {
     const committeeId = '123';
     service.getActiveCommittee().then((committee) => {
       expect(committee.id).toBe(committeeId);
@@ -76,9 +76,9 @@ describe('CommitteeAccountService', () => {
     expect(request.request.method).toEqual('GET');
     request.flush({ id: committeeId });
     httpTestingController.verify();
-  }));
+  });
 
-  it('should calle api to create committee account', waitForAsync(() => {
+  it('should calle api to create committee account', () => {
     const committeeId = '123';
     service.createCommitteeAccount(committeeId).then((committee) => {
       expect(committee.committee_id).toBe(committeeId);
@@ -88,5 +88,5 @@ describe('CommitteeAccountService', () => {
     expect(request.request.body).toEqual({ committee_id: '123' });
     request.flush({ id: 1, committee_id: committeeId });
     httpTestingController.verify();
-  }));
+  });
 });
