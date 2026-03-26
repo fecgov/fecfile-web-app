@@ -34,28 +34,28 @@ describe('DialogComponent', () => {
     host.visible.set(true);
     fixture.detectChanges();
 
-    const rejectSpy = jasmine.createSpy('rejectSpy');
+    const rejectSpy = vi.fn();
     component.reject.subscribe(rejectSpy);
 
     const event = new KeyboardEvent('keydown', { key: 'Escape' });
-    spyOn(event, 'preventDefault');
+    vi.spyOn(event, 'preventDefault');
 
     component.handleEscape(event);
 
     expect(event.preventDefault).not.toHaveBeenCalled();
     expect(rejectSpy).toHaveBeenCalled();
-    expect(component.visible()).toBeFalse();
+    expect(component.visible()).toBe(false);
   });
 
   it('should prevent default when closeOnEscape is false', () => {
     host.closeOnEscape.set(false);
     fixture.detectChanges();
 
-    const rejectSpy = jasmine.createSpy('rejectSpy');
+    const rejectSpy = vi.fn();
     component.reject.subscribe(rejectSpy);
 
     const event = new KeyboardEvent('keydown', { key: 'Escape' });
-    spyOn(event, 'preventDefault');
+    vi.spyOn(event, 'preventDefault');
 
     component.handleEscape(event);
 
