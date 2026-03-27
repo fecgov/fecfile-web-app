@@ -14,7 +14,7 @@ describe('Reattribution From', () => {
         '3cd741da-aa57-4cc3-8530-667e8b7bad78',
       );
       expect(fromTransaction.transactionType.accordionTitle).toBe('AUTO-POPULATED');
-      expect(fromTransaction.fields_to_validate?.includes('memo_code')).toBeFalse();
+      expect(fromTransaction.fields_to_validate?.includes('memo_code')).toBe(false);
       expect(fromTransaction.reatt_redes_id).toBe(transaction.id);
     });
   });
@@ -47,9 +47,9 @@ describe('Reattribution From', () => {
         { updateOn: 'blur' },
       );
 
-      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeTrue();
+      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBe(true);
       ReattributionFromUtils.overlayForm(fromForm, transaction, toForm);
-      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
+      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBe(false);
 
       toForm.get('contribution_amount')?.setValue(5 as never);
       expect(fromForm.get('contribution_amount')?.value).toBe(-5 as never);

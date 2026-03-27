@@ -5,22 +5,19 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { FormComponent } from 'app/shared/components/form.component';
 import { Form24, Report } from 'app/shared/models';
-import { Form24Service } from 'app/shared/services/form-24.service';
+import { F24UniqueNameValidator, Form24Service } from 'app/shared/services/form-24.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { F24UniqueNameValidator } from 'app/shared/utils/validators.utils';
 import { MessageService } from 'primeng/api';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
-import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-rename-f24-dialog',
   templateUrl: './rename-f24-dialog.component.html',
   styleUrls: ['../../styles.scss'],
   imports: [
-    Ripple,
     ButtonModule,
     ReactiveFormsModule,
     FormsModule,

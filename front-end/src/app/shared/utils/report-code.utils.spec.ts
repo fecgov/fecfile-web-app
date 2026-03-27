@@ -43,7 +43,7 @@ describe('ReportCodeUtils', () => {
       const result = getCoverageDatesFunction(ReportCodes.YE);
       if (result) {
         expect(typeof result).toBe('function');
-        spyOn(DateUtils, 'isCurrentMonthJanuary').and.returnValue(true);
+        vi.spyOn(DateUtils, 'isCurrentMonthJanuary').mockReturnValue(true);
 
         // Test for election year
         let [startDate, endDate] = result(2024, true, 'Q');
@@ -78,7 +78,7 @@ describe('ReportCodeUtils', () => {
       const result = getCoverageDatesFunction(ReportCodes.YE);
       if (result) {
         expect(typeof result).toBe('function');
-        spyOn(DateUtils, 'isCurrentMonthJanuary').and.returnValue(false);
+        vi.spyOn(DateUtils, 'isCurrentMonthJanuary').mockReturnValue(false);
 
         // Test for election year
         let [startDate, endDate] = result(2024, true, 'Q');
@@ -125,14 +125,14 @@ describe('ReportCodeUtils', () => {
       const result = getCoverageDatesFunction(ReportCodes.M3);
       expect(typeof result).toBe('function');
       if (result) {
-        let [startDate, endDate] = result(2024, true, 'M');
+        const [startDate, endDate] = result(2024, true, 'M');
         expect(startDate.getMonth()).toBe(1);
         expect(startDate.getDate()).toBe(1);
         expect(endDate.getMonth()).toBe(1);
         expect(endDate.getDate()).toBe(29);
 
-        [startDate, endDate] = result(2025, true, 'M');
-        expect(endDate.getDate()).toBe(28);
+        const [, endDate1] = result(2025, true, 'M');
+        expect(endDate1.getDate()).toBe(28);
       }
     });
 

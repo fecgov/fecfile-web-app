@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PollerComponent } from './poller.component';
@@ -8,11 +9,13 @@ describe('PollerComponent', () => {
   let component: PollerComponent;
   let fixture: ComponentFixture<PollerComponent>;
   let pollerServiceMock: {
-    startPolling: jasmine.Spy;
-    stopPolling: jasmine.Spy;
+    startPolling: Mock;
+    stopPolling: Mock;
     isNewVersionAvailable$: Observable<boolean>;
   };
-  let locationMock: { path: jasmine.Spy };
+  let locationMock: {
+    path: Mock;
+  };
   let isNewVersionAvailableSubject: BehaviorSubject<boolean>;
 
   beforeEach(async () => {
@@ -20,14 +23,14 @@ describe('PollerComponent', () => {
 
     // Mocking PollerService
     pollerServiceMock = {
-      startPolling: jasmine.createSpy('startPolling'),
-      stopPolling: jasmine.createSpy('stopPolling'),
+      startPolling: vi.fn(),
+      stopPolling: vi.fn(),
       isNewVersionAvailable$: isNewVersionAvailableSubject.asObservable(),
     };
 
     // Mocking Location
     locationMock = {
-      path: jasmine.createSpy('path').and.returnValue('/current-path'),
+      path: vi.fn().mockReturnValue('/current-path'),
     };
 
     await TestBed.configureTestingModule({
@@ -47,7 +50,7 @@ describe('PollerComponent', () => {
   });
 
   it('should call reload when new version', () => {
-    spyOn(component, 'reload');
+    vi.spyOn(component, 'reload');
 
     // Simulate new version being available
     isNewVersionAvailableSubject.next(true);
@@ -57,7 +60,7 @@ describe('PollerComponent', () => {
   });
 
   it('should stop polling when component is destroyed', () => {
-    spyOn(component, 'stopPolling').and.callThrough();
+    vi.spyOn(component, 'stopPolling');
 
     component.ngOnDestroy();
 

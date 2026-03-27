@@ -2,64 +2,62 @@ import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
 import { DataSetup } from './setup';
-import { StartTransaction } from './utils/start-transaction/start-transaction';
-import {
-  defaultScheduleFormData as defaultTransactionFormData,
-  DisbursementFormData,
-} from '../models/TransactionFormModel';
-import { faker } from '@faker-js/faker';
-import { makeTransaction } from '../requests/methods';
 import { buildScheduleA } from '../requests/library/transactions';
 import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
+import { F3XAggregationHelpers } from '../../e2e-extended/reports/f3x/f3x-aggregation.helpers';
 
 function setupTransactions(secondSame: boolean) {
   return cy.wrap(DataSetup({ individual: true, individual2: true })).then((result: any) => {
-    const transaction_a = buildScheduleA(
+    const firstTransaction = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
       200.01,
       `${currentYear}-04-12`,
       result.individual,
       result.report,
     );
-    const transaction_b = buildScheduleA(
+    const secondTransaction = buildScheduleA(
       'INDIVIDUAL_RECEIPT',
       25,
       `${currentYear}-04-16`,
       secondSame ? result.individual : result.individual2,
       result.report,
     );
-    makeTransaction(transaction_a);
-    makeTransaction(transaction_b);
 
-    cy.wrap(result);
+    return F3XAggregationHelpers.createTransaction(firstTransaction).then((createdFirst) => {
+      return F3XAggregationHelpers.createTransaction(secondTransaction).then((createdSecond) => {
+        return {
+          ...result,
+          transactionIds: [createdFirst.id, createdSecond.id],
+        };
+      });
+    });
   });
 }
 
-function openTransactionRow(rowIndex: number) {
-  cy.get('.p-datatable-tbody > tr')
-    .eq(rowIndex)
-    .find('td')
-    .eq(1)
-    .find('a')
-    .first()
-    .click();
+function reloadTransactionsInReport(reportId: string) {
+  ReportListPage.gotToReportTransactionListPage(reportId);
+  cy.contains('Transactions in this report').should('be.visible');
+}
+
+function openReceiptTransaction(transactionId: string) {
+  F3XAggregationHelpers.openRowById(F3XAggregationHelpers.receiptsTableRoot, transactionId);
 }
 
 function assertAggregateValue(value: string) {
-  cy.get('[id=aggregate]').should('have.value', value);
+  cy.get('#aggregate').should('have.value', value);
 }
 
-function assertAggregateColumnValues(...values: string[]) {
-  values.forEach((value, index) => {
-    cy.get(`.p-datatable-tbody > :nth-child(${index + 1}) > :nth-child(7)`).should('contain', value);
+function assertAggregateColumnValues(aggregates: Array<[string, string]>) {
+  aggregates.forEach(([transactionId, expected]) => {
+    F3XAggregationHelpers.assertReceiptAggregate(transactionId, expected);
   });
 }
 
-function saveAndAssertAggregateColumnValues(...values: string[]) {
-  TransactionDetailPage.clickSave();
-  cy.contains('Transactions in this report').should('be.visible');
-  assertAggregateColumnValues(...values);
+function saveAndAssertAggregateColumnValues(reportId: string, aggregates: Array<[string, string]>) {
+  PageUtils.clickButton('Save', 'app-navigation-control-bar:visible');
+  reloadTransactionsInReport(reportId);
+  assertAggregateColumnValues(aggregates);
 }
 
 describe('Tests transaction form aggregate calculation', () => {
@@ -69,211 +67,227 @@ describe('Tests transaction form aggregate calculation', () => {
 
   it('new transaction aggregate', () => {
     setupTransactions(true).then((result: any) => {
+      const [firstId, secondId] = result.transactionIds;
       ReportListPage.gotToReportTransactionListPage(result.report);
-
-      openTransactionRow(1);
-      cy.contains('Create a new contact').should('exist');
+      openReceiptTransaction(secondId);
 
       assertAggregateValue('$225.01');
 
-      // Tests moving the date to be earlier
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 10), '');
-      PageUtils.blurActiveField(); // clicking outside of fields to ensure that the amount field loses focus and updates
+      cy.blurActiveField();
       assertAggregateValue('$25.00');
 
-      // Move the date back
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      PageUtils.blurActiveField();
+      cy.blurActiveField();
       assertAggregateValue('$225.01');
 
-      // Change the contact
       ContactLookup.getContact(result.individual2.last_name);
       assertAggregateValue('$25.00');
 
-      // Change the contact back
       ContactLookup.getContact(result.individual.last_name);
       assertAggregateValue('$225.01');
 
-      // Change the amount
-      cy.get('[id="amount"]').clear().safeType('40');
-      PageUtils.blurActiveField();
+      cy.get('#amount').clear().safeType('40').blurActiveField();
       assertAggregateValue('$240.01');
-      saveAndAssertAggregateColumnValues('$200.01', '$240.01');
+
+      saveAndAssertAggregateColumnValues(result.report, [
+        [firstId, '$200.01'],
+        [secondId, '$240.01'],
+      ]);
     });
   });
 
   it('existing transaction change contact', () => {
     setupTransactions(false).then((result: any) => {
+      const [firstId, secondId] = result.transactionIds;
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      openTransactionRow(1);
+      openReceiptTransaction(secondId);
 
-      // Tests changing the second transaction's contact
       assertAggregateValue('$25.00');
-      cy.get('[data-cy="searchBox"]').type('A');
-      cy.contains('Ant').should('exist');
-      cy.contains('Ant').click({ force: true });
-      PageUtils.blurActiveField();
-
+      ContactLookup.getContact(result.individual.last_name);
+      cy.blurActiveField();
       assertAggregateValue('$225.01');
-      saveAndAssertAggregateColumnValues('$200.01', '$225.01');
+
+      saveAndAssertAggregateColumnValues(result.report, [
+        [firstId, '$200.01'],
+        [secondId, '$225.01'],
+      ]);
     });
   });
 
   it('existing transaction change amount', () => {
     setupTransactions(true).then((result: any) => {
+      const [firstId, secondId] = result.transactionIds;
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Transactions in this report').should('be.visible');
-      openTransactionRow(1);
+      openReceiptTransaction(secondId);
 
-      // Tests changing the amount
       assertAggregateValue('$225.01');
-      cy.get('[id="amount"]').clear().safeType('40');
-      PageUtils.blurActiveField();
-
+      cy.get('#amount').clear().safeType('40').blurActiveField();
       assertAggregateValue('$240.01');
-      saveAndAssertAggregateColumnValues('$200.01', '$240.01');
+
+      saveAndAssertAggregateColumnValues(result.report, [
+        [firstId, '$200.01'],
+        [secondId, '$240.01'],
+      ]);
     });
   });
 
   it('existing transaction date leapfrogging', () => {
     setupTransactions(true).then((result: any) => {
+      const [firstId, secondId] = result.transactionIds;
       ReportListPage.gotToReportTransactionListPage(result.report);
-      cy.contains('Transactions in this report').should('exist');
-      openTransactionRow(0);
+      openReceiptTransaction(firstId);
 
-      // Tests moving the first transaction's date to be later than the second
       TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 30), '');
-      PageUtils.blurActiveField();
-
+      cy.blurActiveField();
       assertAggregateValue('$225.01');
-      saveAndAssertAggregateColumnValues('$225.01', '$25.00');
+
+      saveAndAssertAggregateColumnValues(result.report, [
+        [firstId, '$225.01'],
+        [secondId, '$25.00'],
+      ]);
     });
   });
 
   it('leapfrog and contact change', () => {
     setupTransactions(true).then((result: any) => {
-      const transaction_c = buildScheduleA(
+      const [firstId, secondId] = result.transactionIds;
+      const thirdTransaction = buildScheduleA(
         'INDIVIDUAL_RECEIPT',
         40,
         `${currentYear}-04-20`,
         result.individual,
         result.report,
       );
-      makeTransaction(transaction_c, () => {
+
+      F3XAggregationHelpers.createTransaction(thirdTransaction).then((createdThird) => {
         ReportListPage.gotToReportTransactionListPage(result.report);
-        cy.contains('Transactions in this report').should('exist');
-        openTransactionRow(0);
+        openReceiptTransaction(firstId);
 
         ContactLookup.getContact(result.individual2.last_name);
-
-        // Tests moving the first transaction's date to be later than the second
         TransactionDetailPage.enterDate('[data-cy="contribution_date"]', new Date(currentYear, 3, 29), '');
-        PageUtils.blurActiveField();
-
+        cy.blurActiveField();
         assertAggregateValue('$200.01');
-        saveAndAssertAggregateColumnValues('$200.01', '$25.00', '$65.00');
+
+        saveAndAssertAggregateColumnValues(result.report, [
+          [firstId, '$200.01'],
+          [secondId, '$25.00'],
+          [createdThird.id, '$65.00'],
+        ]);
       });
     });
   });
 
   it('existing IE date leapfrogging', () => {
     cy.wrap(DataSetup({ individual: true, individual2: true, candidate: true })).then((result: any) => {
-      ReportListPage.gotToReportTransactionListPage(result.report);
+      F3XAggregationHelpers.createIndependentExpenditureSeries([
+        {
+          reportId: result.report,
+          payeeContactName: result.individual.last_name,
+          candidate: result.candidate,
+          amount: 100,
+          disbursementDate: new Date(currentYear, 4 - 1, 5),
+        },
+        {
+          reportId: result.report,
+          payeeContactName: result.individual2.last_name,
+          candidate: result.candidate,
+          amount: 50,
+          disbursementDate: new Date(currentYear, 4 - 1, 15),
+        },
+        {
+          reportId: result.report,
+          payeeContactName: result.individual.last_name,
+          candidate: result.candidate,
+          amount: 25,
+          disbursementDate: new Date(currentYear, 4 - 1, 27),
+        },
+      ]).then(([firstId, secondId]) => {
+        reloadTransactionsInReport(result.report);
+        F3XAggregationHelpers.openRowById(F3XAggregationHelpers.disbursementsTableRoot, firstId);
+        cy.contains('Payee').should('exist');
+        TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
+        cy.blurActiveField();
+        cy.get('#calendar_ytd').should('have.value', '$150.00');
+        PageUtils.clickButton('Save', 'app-navigation-control-bar:visible');
 
-      // Create the first Independent Expenditure
-      StartTransaction.Disbursements().Contributions().IndependentExpenditure();
-      ContactLookup.getContact(result.individual.last_name, '', 'Individual');
+        reloadTransactionsInReport(result.report);
+        F3XAggregationHelpers.openRowById(F3XAggregationHelpers.disbursementsTableRoot, secondId);
+        cy.contains('Payee').should('exist');
+        cy.get('#calendar_ytd').should('have.value', '$50.00');
+      });
+    });
+  });
 
-      const independentExpenditureData: DisbursementFormData = {
-        ...defaultTransactionFormData,
-        date_received: new Date(currentYear, 4 - 1, 5),
-        supportOpposeCode: 'SUPPORT',
-        amount: 100,
-        signatoryDateSigned: new Date(currentYear, 4 - 1, 5),
-        signatoryFirstName: faker.person.firstName(),
-        signatoryLastName: faker.person.lastName(),
-      };
+  it('schedule A delete earliest transaction reaggregates remaining chain', () => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      F3XAggregationHelpers.seedScheduleAChain(result.report, result.individual, [
+        { amount: 100, date: `${currentYear}-04-10` },
+        { amount: 50, date: `${currentYear}-04-15` },
+        { amount: 25, date: `${currentYear}-04-20` },
+      ]).then((transactionIds) => {
+        const [firstId, secondId, thirdId] = transactionIds;
 
-      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-        independentExpenditureData,
-        result.candidate,
-        false,
-        '',
-        'date_signed',
-      );
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.assertReceiptAggregate(secondId, '$150.00');
+        F3XAggregationHelpers.assertReceiptAggregate(thirdId, '$175.00');
 
-      PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$100.00');
-      TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('exist');
+        F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.receiptsTableRoot, firstId, 'Delete');
+        F3XAggregationHelpers.confirmDialog();
 
-      // Create the second Independent Expenditure
-      StartTransaction.Disbursements().Contributions().IndependentExpenditure();
-      ContactLookup.getContact(result.individual2.last_name, '', 'Individual');
+        cy.get(`${F3XAggregationHelpers.receiptsTableRoot} a[href*="/list/${firstId}"]`).should('not.exist');
+        F3XAggregationHelpers.assertReceiptAggregate(secondId, '$50.00');
+        F3XAggregationHelpers.assertReceiptAggregate(thirdId, '$75.00');
+      });
+    });
+  });
 
-      const independentExpenditureTwoData: DisbursementFormData = {
-        ...defaultTransactionFormData,
-        date_received: new Date(currentYear, 4 - 1, 15),
-        supportOpposeCode: 'SUPPORT',
-        amount: 50,
-        signatoryDateSigned: new Date(currentYear, 4 - 1, 15),
-        signatoryFirstName: faker.person.firstName(),
-        signatoryLastName: faker.person.lastName(),
-      };
+  it('schedule A insert middle-date transaction does not double-count downstream aggregate', () => {
+    cy.wrap(DataSetup({ individual: true })).then((result: any) => {
+      F3XAggregationHelpers.seedScheduleAChain(result.report, result.individual, [
+        { amount: 100, date: `${currentYear}-04-10` },
+        { amount: 150, date: `${currentYear}-04-20` },
+      ]).then((seedIds) => {
+        const [firstId, lastId] = seedIds;
+        F3XAggregationHelpers.createTransaction(
+          buildScheduleA('INDIVIDUAL_RECEIPT', 75, `${currentYear}-04-15`, result.individual, result.report),
+        ).then((middleTransaction) => {
+          F3XAggregationHelpers.goToReport(result.report);
+          F3XAggregationHelpers.assertReceiptAggregate(firstId, '$100.00');
+          F3XAggregationHelpers.assertReceiptAggregate(middleTransaction.id, '$175.00');
+          F3XAggregationHelpers.assertReceiptAggregate(lastId, '$325.00');
+        });
+      });
+    });
+  });
 
-      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-        independentExpenditureTwoData,
-        result.candidate,
-        false,
-        '',
-        'date_signed',
-      );
+  it('schedule E delete transaction reaggregates calendar_ytd_per_election_office', () => {
+    cy.wrap(DataSetup({ individual: true, candidate: true })).then((result: any) => {
+      F3XAggregationHelpers.createIndependentExpenditureSeries([
+        {
+          reportId: result.report,
+          payeeContactName: result.individual.last_name,
+          candidate: result.candidate,
+          amount: 100,
+          disbursementDate: new Date(currentYear, 4 - 1, 5),
+        },
+        {
+          reportId: result.report,
+          payeeContactName: result.individual.last_name,
+          candidate: result.candidate,
+          amount: 50,
+          disbursementDate: new Date(currentYear, 4 - 1, 20),
+        },
+      ]).then(([firstId, secondId]) => {
+        F3XAggregationHelpers.goToReport(result.report);
+        F3XAggregationHelpers.assertCalendarYtdFieldOnOpen(secondId, '$150.00');
+        F3XAggregationHelpers.goToReport(result.report);
 
-      PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$150.00');
-      TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('exist');
+        F3XAggregationHelpers.clickRowActionById(F3XAggregationHelpers.disbursementsTableRoot, firstId, 'Delete');
+        F3XAggregationHelpers.confirmDialog();
 
-      // Create the third Independent Expenditure
-      StartTransaction.Disbursements().Contributions().IndependentExpenditure();
-      ContactLookup.getContact(result.individual.last_name, '', 'Individual');
-
-      const independentExpenditureThreeData: DisbursementFormData = {
-        ...defaultTransactionFormData,
-        date_received: new Date(currentYear, 4 - 1, 27),
-        supportOpposeCode: 'SUPPORT',
-        amount: 25,
-        signatoryDateSigned: new Date(currentYear, 4 - 1, 27),
-        signatoryFirstName: faker.person.firstName(),
-        signatoryLastName: faker.person.lastName(),
-      };
-
-      TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(
-        independentExpenditureThreeData,
-        result.candidate,
-        false,
-        '',
-        'date_signed',
-      );
-
-      PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$175.00');
-      TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('exist');
-
-      // Test aggregation re-calculation from date leapfrogging
-      cy.get('.p-datatable-tbody > :nth-child(1) > :nth-child(2) > a').click();
-      cy.contains('Payee').should('exist');
-      TransactionDetailPage.enterDate('[data-cy="disbursement_date"]', new Date(currentYear, 4 - 1, 20), '');
-      PageUtils.blurActiveField();
-      cy.get('#calendar_ytd').should('have.value', '$150.00');
-      TransactionDetailPage.clickSave();
-      cy.contains('Transactions in this report').should('exist');
-
-      cy.get('.p-datatable-tbody > :nth-child(2) > :nth-child(2) > a').click();
-      cy.contains('Payee').should('exist');
-      cy.get('#calendar_ytd').should('have.value', '$50.00');
+        F3XAggregationHelpers.assertCalendarYtdFieldOnOpen(secondId, '$50.00');
+      });
     });
   });
 });

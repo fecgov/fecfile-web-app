@@ -1,4 +1,5 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import type { Mock } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SelectReportDialogComponent } from './select-report-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testActiveReport, testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
@@ -14,7 +15,7 @@ describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
   let fixture: ComponentFixture<SelectReportDialogComponent>;
   let service: Form3XService;
-  let futureSpy: jasmine.Spy;
+  let futureSpy: Mock;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SelectReportDialogComponent],
@@ -36,14 +37,14 @@ describe('SelectReportDialogComponent', () => {
       coverage_through_date: '2024-04-20',
     };
 
-    futureSpy = spyOn(service, 'getFutureReports').and.resolveTo([Form3X.fromJSON(data)]);
+    futureSpy = vi.spyOn(service, 'getFutureReports').mockResolvedValue([Form3X.fromJSON(data)]);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get a list of available reports', fakeAsync(async () => {
+  it('should get a list of available reports', async () => {
     const transaction: TransactionListRecord = {
       ...testScheduleATransaction(),
       name: 'TEST',
@@ -57,12 +58,12 @@ describe('SelectReportDialogComponent', () => {
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
     ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-    TestBed.tick();
+    fixture.detectChanges();
     await fixture.whenStable();
     expect(component.transaction()).toBeTruthy();
     expect(futureSpy).toHaveBeenCalled();
     expect(component.availableReports().length).toBe(1);
-  }));
+  });
 
   it('should clear and close on cancel', async () => {
     const transaction: TransactionListRecord = {
@@ -122,7 +123,7 @@ describe('SelectReportDialogComponent', () => {
     });
 
     it('should redirect based on the selected report and transaction', async () => {
-      const routerSpy = spyOn(component.router, 'navigateByUrl');
+      const routerSpy = vi.spyOn(component.router, 'navigateByUrl').mockResolvedValue(true);
       const transaction: TransactionListRecord = {
         ...testScheduleATransaction(),
         name: 'TEST',

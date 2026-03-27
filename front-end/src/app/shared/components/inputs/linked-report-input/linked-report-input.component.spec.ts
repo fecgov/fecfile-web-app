@@ -88,22 +88,18 @@ describe('LinkedReportInputComponent', () => {
   let host: TestHostComponent;
   let component: LinkedReportInputComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let reportServiceMock: jasmine.SpyObj<Form3XService>;
+  let form3XService: Form3XService;
 
   beforeEach(async () => {
-    reportServiceMock = jasmine.createSpyObj('Form3XService', ['getAllReports', 'get']);
-    reportServiceMock.getAllReports.and.returnValue(Promise.resolve(mockReports));
-    reportServiceMock.get.and.callFake((id: string) => Promise.resolve(mockReports.find((r) => r.id === id)!));
-
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LinkedReportInputComponent, InputTextModule, ErrorMessagesComponent],
-      providers: [
-        provideMockStore(testMockStore()),
-        provideHttpClient(),
-        FecDatePipe,
-        { provide: Form3XService, useValue: reportServiceMock },
-      ],
+      providers: [provideMockStore(testMockStore()), provideHttpClient(), FecDatePipe, Form3XService],
     }).compileComponents();
+    form3XService = TestBed.inject(Form3XService);
+    vi.spyOn(form3XService, 'getAllReports').mockResolvedValue(mockReports);
+    vi.spyOn(form3XService, 'get').mockImplementation((id: string) =>
+      Promise.resolve(mockReports.find((r) => r.id === id)!),
+    );
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
@@ -117,7 +113,7 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should load F3X reports on init', async () => {
-    expect(reportServiceMock.getAllReports).toHaveBeenCalled();
+    expect(form3XService.getAllReports).toHaveBeenCalled();
     expect(component.committeeF3xReports()).toEqual(mockReports);
   });
 
@@ -152,8 +148,8 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should set form controls values on date change', async () => {
-    spyOn(component.form.get('linkedF3x')!, 'setValue');
-    spyOn(component.form.get('linkedF3xId')!, 'setValue');
+    vi.spyOn(component.form.get('linkedF3x')!, 'setValue');
+    vi.spyOn(component.form.get('linkedF3xId')!, 'setValue');
 
     component.form.get(host.templateMap['date'])?.setValue(new Date('2024-01-15'));
     fixture.detectChanges();

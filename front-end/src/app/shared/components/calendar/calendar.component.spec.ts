@@ -57,10 +57,10 @@ describe('CalendarComponent', () => {
 
   it('should toggle calendarOpened on validateDate', () => {
     component.validateDate(true);
-    expect(component.calendarOpened).toBeTrue();
+    expect(component.calendarOpened).toBe(true);
 
     component.validateDate(false);
-    expect(component.calendarOpened).toBeFalse();
+    expect(component.calendarOpened).toBe(false);
   });
 
   it('should mark control as touched and update value on updateValue', () => {
@@ -68,7 +68,7 @@ describe('CalendarComponent', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (component.control() as any)._pendingValue = date;
     component.validateDate(false);
-    expect(component.control()!.touched).toBeTrue();
+    expect(component.control()!.touched).toBe(true);
     expect(component.control()!.value).toBe(date);
   });
 });

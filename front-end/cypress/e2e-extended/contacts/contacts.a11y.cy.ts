@@ -67,7 +67,7 @@ describe('Contacts - axe smoke (critical)', () => {
 
   it('Add Contact dialog', () => {
     visitContactsList();
-    PageUtils.clickButton('Add contact');
+    ContactListPage.openAddContactDialog();
     cy.get(ContactsHelpers.CONTACT_DIALOG).should('be.visible').then(checkCritical);
     cy.get(ContactsHelpers.CONTACT_DIALOG)
       .contains('button', /^Cancel$/)
@@ -131,7 +131,7 @@ describe('Contacts - axe smoke (critical)', () => {
       .should('be.visible')
       .then(checkCritical);
 
-    cy.contains('button', /^Back$/).should('be.visible').click({ force: true });
+    cy.contains('button', /^Back$/).should('be.visible').click();
     cy.wait(`@${CONTACTS_LIST_ALIAS}`);
   });
 

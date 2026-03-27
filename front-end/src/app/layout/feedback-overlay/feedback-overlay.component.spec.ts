@@ -37,13 +37,13 @@ describe('FeedbackOverlayComponent', () => {
 
   it('#show happy path', () => {
     component.show(null);
-    expect(component.formSubmitted).toBeFalse();
+    expect(component.formSubmitted).toBe(false);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
   it('#hide happy path', () => {
     component.onHide();
-    expect(component.formSubmitted).toBeFalse();
+    expect(component.formSubmitted).toBe(false);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
@@ -55,9 +55,10 @@ describe('FeedbackOverlayComponent', () => {
     component.form.get('feedback')?.setValue(test_feedback);
     component.form.get('about')?.setValue(test_about);
 
-    const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.resolveTo();
+    const submitFeedbackSpy = vi.spyOn(component.feedbackService, 'submitFeedback').mockResolvedValue();
     await component.submitForm();
-    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith({
+    expect(submitFeedbackSpy).toHaveBeenCalledTimes(1);
+    expect(submitFeedbackSpy).toHaveBeenCalledWith({
       action: test_action,
       feedback: test_feedback,
       about: test_about,
@@ -74,9 +75,12 @@ describe('FeedbackOverlayComponent', () => {
     component.form.get('feedback')?.setValue(test_feedback);
     component.form.get('about')?.setValue(test_about);
 
-    const submitFeedbackSpy = spyOn(component.feedbackService, 'submitFeedback').and.rejectWith();
+    const submitFeedbackSpy = vi
+      .spyOn(component.feedbackService, 'submitFeedback')
+      .mockRejectedValue(new Error('Async error'));
     await component.submitForm();
-    expect(submitFeedbackSpy).toHaveBeenCalledOnceWith({
+    expect(submitFeedbackSpy).toHaveBeenCalledTimes(1);
+    expect(submitFeedbackSpy).toHaveBeenCalledWith({
       action: test_action,
       feedback: test_feedback,
       about: test_about,
@@ -87,7 +91,7 @@ describe('FeedbackOverlayComponent', () => {
 
   it('#reset happy path', () => {
     component.reset();
-    expect(component.formSubmitted).toBeFalse();
+    expect(component.formSubmitted).toBe(false);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 

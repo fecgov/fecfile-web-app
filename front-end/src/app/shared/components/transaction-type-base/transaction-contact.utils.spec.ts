@@ -236,7 +236,7 @@ describe('ContactUtils', () => {
       transaction,
     );
 
-    expect(Object.values(changes)).toContain(['candidate_state', null]);
+    expect(Object.values(changes)).toContainEqual(['candidate_state', null]);
 
     // By changing the election code, the candidate_state should no longer be excluded from the contact data
     form.patchValue({ election_code: 'S1912' });
@@ -248,7 +248,7 @@ describe('ContactUtils', () => {
       transaction,
     );
 
-    expect(Object.values(changesB)).toContain(['candidate_state', 'AK']);
+    expect(Object.values(changesB)).toContainEqual(['candidate_state', 'AK']);
 
     form.patchValue({
       so_candidate_office: CandidateOfficeTypes.SENATE,
@@ -262,6 +262,6 @@ describe('ContactUtils', () => {
       transaction,
     );
 
-    expect(Object.values(changesC)).toContain(['candidate_state', 'AK']);
+    expect(Object.values(changesC)).toContainEqual(['candidate_state', 'AK']);
   });
 });

@@ -1,11 +1,12 @@
+import type { Mock } from 'vitest';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Form3X, Report } from 'app/shared/models/';
-import { ApiService, QueryParams } from 'app/shared/services/api.service';
+import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -43,11 +44,8 @@ describe('SubmitReportComponent', () => {
   let router: Router;
   let component: SubmitReportComponent;
   let fixture: ComponentFixture<SubmitReportComponent>;
-  let mockMessageService: jasmine.SpyObj<MessageService>;
 
   beforeEach(async () => {
-    mockMessageService = jasmine.createSpyObj('MessageService', ['add']);
-
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -64,7 +62,7 @@ describe('SubmitReportComponent', () => {
         FormBuilder,
         provideRouter(F3X_ROUTES),
         provideMockStore(testMockStore()),
-        { provide: MessageService, useValue: mockMessageService },
+        MessageService,
         ConfirmationService,
         ApiService,
         ReportService,
@@ -86,38 +84,38 @@ describe('SubmitReportComponent', () => {
   });
 
   it('should initialize form with proper controls', () => {
-    expect(component.form.contains('treasurer_first_name')).toBeTrue();
-    expect(component.form.contains('filingPassword')).toBeTrue();
-    expect(component.form.controls['filingPassword'].hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.contains('treasurer_first_name')).toBe(true);
+    expect(component.form.contains('filingPassword')).toBe(true);
+    expect(component.form.controls['filingPassword'].hasValidator(Validators.required)).toBe(true);
   });
 
   it('should add backdoor_code control when backdoorYesNo is true', () => {
     component.form.get('backdoorYesNo')?.setValue(true);
-    expect(component.form.contains('backdoor_code')).toBeTrue();
+    expect(component.form.contains('backdoor_code')).toBe(true);
   });
 
   it('should remove backdoor_code control when backdoorYesNo is false', () => {
     component.form.get('backdoorYesNo')?.setValue(true);
     component.form.get('backdoorYesNo')?.setValue(false);
-    expect(component.form.contains('backdoor_code')).toBeFalse();
+    expect(component.form.contains('backdoor_code')).toBe(false);
   });
 
   it('should toggle address fields validation on change_of_address toggle', () => {
     component.form.get('change_of_address')?.setValue(true);
-    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeTrue();
-    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeTrue();
-    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeTrue();
-    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeTrue();
+    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBe(true);
+    expect(component.form.get('city')?.hasValidator(Validators.required)).toBe(true);
+    expect(component.form.get('state')?.hasValidator(Validators.required)).toBe(true);
+    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBe(true);
 
     component.form.get('change_of_address')?.setValue(false);
-    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBeFalse();
-    expect(component.form.get('city')?.hasValidator(Validators.required)).toBeFalse();
-    expect(component.form.get('state')?.hasValidator(Validators.required)).toBeFalse();
-    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBeFalse();
+    expect(component.form.get('street_1')?.hasValidator(Validators.required)).toBe(false);
+    expect(component.form.get('city')?.hasValidator(Validators.required)).toBe(false);
+    expect(component.form.get('state')?.hasValidator(Validators.required)).toBe(false);
+    expect(component.form.get('zip')?.hasValidator(Validators.required)).toBe(false);
   });
 
   it('should not submit when form is invalid', async () => {
-    spyOn(component, 'saveAndSubmit');
+    vi.spyOn(component, 'saveAndSubmit');
     component.form.patchValue({ filingPassword: '', userCertified: false });
     component.submitForm();
     expect(component.saveAndSubmit).not.toHaveBeenCalled();
@@ -143,7 +141,7 @@ describe('SubmitReportComponent', () => {
 
     TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
     TestBed.inject(MockStore).refreshState();
-    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
+    const reportServiceUpdateSpy = vi.spyOn(component.reportService, 'update').mockImplementation((payload) => {
       return payload;
     });
 
@@ -166,7 +164,7 @@ describe('SubmitReportComponent', () => {
 
     TestBed.inject(MockStore).overrideSelector(selectActiveReport, testReport);
     TestBed.inject(MockStore).refreshState();
-    const reportServiceUpdateSpy = spyOn(component.reportService, 'update').and.callFake((payload) => {
+    const reportServiceUpdateSpy = vi.spyOn(component.reportService, 'update').mockImplementation((payload) => {
       return payload;
     });
 
@@ -181,30 +179,24 @@ describe('SubmitReportComponent', () => {
   });
 
   describe('saveAndSubmit', () => {
-    let confirmSpy: jasmine.Spy<(confirmation: Confirmation) => ConfirmationService>;
-    let updateReport: jasmine.Spy<() => Promise<Report | undefined>>;
-    let submitSpy: jasmine.Spy<() => Promise<boolean>>;
-    let reportSpy: jasmine.Spy<(report: Report, fieldsToValidate?: string[]) => Promise<Report>>;
-    let apiSpy: jasmine.Spy<{
-      <T>(endpoint: string, payload: unknown, queryParams?: QueryParams): Promise<T>;
-      <T>(
-        endpoint: string,
-        payload: unknown,
-        queryParams?: QueryParams,
-        allowedErrorCodes?: number[],
-      ): Promise<HttpResponse<T>>;
-    }>;
+    let confirmSpy: Mock;
+    let updateReport: Mock;
+    let submitSpy: Mock;
+    let reportSpy: Mock;
+    let apiSpy: Mock;
     const mockPassword = '12345aA!';
 
     beforeEach(() => {
-      confirmSpy = spyOn(component.confirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-        if (confirmation.accept) confirmation.accept();
-        return component.confirmationService;
-      });
-      updateReport = spyOn(component, 'updateReport').and.callThrough();
-      submitSpy = spyOn(component, 'submitReport').and.callThrough();
-      reportSpy = spyOn(component.reportService, 'update').and.returnValue(Promise.resolve(new Form3X()));
-      apiSpy = spyOn(component.apiService, 'post').and.returnValue(Promise.resolve(new HttpResponse()));
+      confirmSpy = vi
+        .spyOn(component.confirmationService, 'confirm')
+        .mockImplementation((confirmation: Confirmation) => {
+          if (confirmation.accept) confirmation.accept();
+          return component.confirmationService;
+        });
+      updateReport = vi.spyOn(component, 'updateReport');
+      submitSpy = vi.spyOn(component, 'submitReport');
+      reportSpy = vi.spyOn(component.reportService, 'update').mockReturnValue(Promise.resolve(new Form3X()));
+      apiSpy = vi.spyOn(component.apiService, 'post').mockReturnValue(Promise.resolve(new HttpResponse()));
 
       component.form.patchValue({
         treasurer_name_1: 'name1',
@@ -218,12 +210,12 @@ describe('SubmitReportComponent', () => {
     });
 
     it('should call saveAndSubmit when form is valid', async () => {
-      const saveSpy = spyOn(component, 'saveAndSubmit').and.callThrough();
-      const navSpy = spyOn(router, 'navigateByUrl').and.callThrough();
+      const saveSpy = vi.spyOn(component, 'saveAndSubmit');
+      const navSpy = vi.spyOn(router, 'navigateByUrl');
 
       await component.submitForm();
 
-      expect(component.form.invalid).toBeFalse();
+      expect(component.form.invalid).toBe(false);
       expect(confirmSpy).toHaveBeenCalled();
       expect(saveSpy).toHaveBeenCalled();
       expect(updateReport).toHaveBeenCalled();
@@ -234,10 +226,9 @@ describe('SubmitReportComponent', () => {
         password: mockPassword,
         backdoor_code: undefined,
       });
-      fakeAsync(() => {
-        tick(100);
-        expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/999');
-      });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/999');
     });
   });
 });

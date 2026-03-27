@@ -34,6 +34,10 @@ export class Individual {
     PageUtils.clickLink(Individual.INDIVIDUAL_RECEIPT);
   }
 
+  static ConduitEarmarkReceipt() {
+    PageUtils.clickLink("Conduit Earmark Receipt");
+  }
+
   static Returned() {
     PageUtils.clickLink('Returned/Bounced Receipt');
   }

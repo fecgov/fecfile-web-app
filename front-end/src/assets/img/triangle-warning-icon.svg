@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="13px" viewBox="0 0 16 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Password-rework-option-2" transform="translate(-305, -305)">
+            <g id="Group" transform="translate(305, 305)">
+                <path d="M9.70331663,2.76788953 L14.1241878,9.95180515 C14.7030898,10.8925209 14.4097818,12.1244146 13.469066,12.7033166 C13.1538506,12.8972953 12.7909907,13 12.4208712,13 L3.57912885,13 C2.47455935,13 1.57912885,12.1045695 1.57912885,11 C1.57912885,10.6298804 1.68183351,10.2670205 1.87581222,9.95180515 L6.29668337,2.76788953 C6.8755854,1.82717373 8.10747905,1.53386572 9.04819485,2.11276775 C9.31483574,2.27685445 9.53922993,2.50124864 9.70331663,2.76788953 Z" id="Triangle" fill="#5B616B"></path>
+                <text id="!" font-family="GandhiSerif-Bold, Gandhi Serif" font-size="10" font-weight="bold" fill="#FFFFFF">
+                    <tspan x="6.29" y="11">!</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

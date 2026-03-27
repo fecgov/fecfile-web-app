@@ -51,8 +51,7 @@ describe('Debt Balance at Close Calculation', () => {
 
       // Now on edit, these fields should be editable
       // Change incurred_amount from 3000 to 5000
-      cy.get('#amount').clear().safeType('5000');
-      cy.wait(200);
+      cy.get('#amount').clear().safeType('5000').blurActiveField();
       
       // Verify balance_at_close updates to: 0 + 5000 - 0 = 5000
       cy.get('#balance_at_close').should('have.value', '$5,000.00');
@@ -95,8 +94,7 @@ describe('Debt Balance at Close Calculation', () => {
       });
 
       // Modify incurred_amount from 5000 to 8000
-      cy.get('#amount').clear().safeType('8000');
-      cy.wait(200);
+      cy.get('#amount').clear().safeType('8000').blurActiveField();
 
       // Verify balance_at_close updates to: 0 + 8000 - 0 = 8000
       cy.get('#balance_at_close').should('have.value', '$8,000.00');
