@@ -242,11 +242,11 @@ export abstract class TransactionType {
   hasLoanAgreement = false;
 }
 
-export enum PurposeDescriptionLabelSuffix {
-  SYSTEM_GENERATED = '(SYSTEM-GENERATED)',
-  REQUIRED = '(REQUIRED)',
-  OPTIONAL = '(OPTIONAL)',
-}
+export const PurposeDescriptionLabelSuffix = {
+  SYSTEM_GENERATED: '(SYSTEM-GENERATED)',
+  REQUIRED: '(REQUIRED)',
+  OPTIONAL: '(OPTIONAL)',
+} as const;
 
 export type TransactionTemplateMapType = {
   // Form fields
