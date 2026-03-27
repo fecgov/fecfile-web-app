@@ -1,6 +1,6 @@
 import { HttpStatusCode, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { Form3X } from '../models/reports/form-3x.model';
@@ -53,7 +53,7 @@ describe('ReportService', () => {
   it('#setActiveReportById() should throw error if report id is undefined', async () => {
     try {
       await service.setActiveReportById(undefined);
-      fail('Expected function to throw an error, but it did not.');
+      throw new Error('Expected function to throw an error, but it did not.');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       expect(err.message).toBe('FECfile+: No Report Id Provided.');
@@ -73,7 +73,7 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
-  it('#startAmendment() should call amend', fakeAsync(async () => {
+  it('#startAmendment() should call amend', async () => {
     const report: Form3X = Form3X.fromJSON({ id: 1 });
 
     service.startAmendment(report).then((response) => {
@@ -84,9 +84,9 @@ describe('ReportService', () => {
     expect(req.request.method).toEqual('POST');
     req.flush('amended 1');
     httpTestingController.verify();
-  }));
+  });
 
-  it('#startUnamendment() should call unamend', fakeAsync(async () => {
+  it('#startUnamendment() should call unamend', async () => {
     const report: Form3X = Form3X.fromJSON({ id: 1 });
 
     service.startUnamendment(report).then((response) => {
@@ -97,7 +97,7 @@ describe('ReportService', () => {
     expect(req.request.method).toEqual('POST');
     req.flush('unamended 1');
     httpTestingController.verify();
-  }));
+  });
 
   it('#updateWithAllowedErrorCodes() should PUT a record', async () => {
     const form3X: Form3X = Form3X.fromJSON({ id: 1 });

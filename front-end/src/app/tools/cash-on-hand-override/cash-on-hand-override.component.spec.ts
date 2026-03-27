@@ -48,7 +48,7 @@ describe('CashOnHandOverrideComponent', () => {
   });
 
   it('should call setCashOnHand', () => {
-    spyOn(component.cashOnHandService, 'setCashOnHand').and.returnValue(Promise.resolve({}));
+    vi.spyOn(component.cashOnHandService, 'setCashOnHand').mockReturnValue(Promise.resolve({}));
     component.yearFormControl.setValue('2024');
     component.currentAmountFormControl.setValue(0.0);
     component.newAmountFormControl.setValue(25.0);

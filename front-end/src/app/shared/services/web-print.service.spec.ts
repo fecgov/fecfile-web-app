@@ -29,7 +29,7 @@ describe('WebPrintService', () => {
   });
 
   it('should post as expected', () => {
-    const api = spyOn(apiService, 'post');
+    const api = vi.spyOn(apiService, 'post');
     service.submitPrintJob('1');
     expect(api).toHaveBeenCalledWith('/web-services/submit-to-webprint/', {
       report_id: '1',
@@ -37,7 +37,7 @@ describe('WebPrintService', () => {
   });
 
   it('should get new reports', async () => {
-    const reportRequest = spyOn(reportService, 'setActiveReportById').and.resolveTo(new Form3X());
+    const reportRequest = vi.spyOn(reportService, 'setActiveReportById').mockResolvedValue(new Form3X());
     await service.getStatus('1');
     expect(reportRequest).toHaveBeenCalledWith('1');
   });

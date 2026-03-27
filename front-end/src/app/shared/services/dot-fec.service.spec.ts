@@ -1,4 +1,4 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { DotFecService, Download } from './dot-fec.service';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
@@ -18,14 +18,16 @@ class MockRendererFactory {
   createRenderer() {
     return {
       createElement: () => {
-        const attributes: { [key: string]: string } = {};
+        const attributes: {
+          [key: string]: string;
+        } = {};
         return {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setAttribute: (element: any, name: string, value: string) => {
             element[name] = value;
           },
           getAttribute: (name: string) => attributes[name],
-          click: jasmine.createSpy('click'),
+          click: vi.fn(),
         };
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +47,9 @@ class MockRendererFactory {
 
 describe('DotFecService', () => {
   let service: DotFecService;
-  const actions$ = new Subject<{ type: string }>();
+  const actions$ = new Subject<{
+    type: string;
+  }>();
   let apiService: ApiService;
   let report: Report;
   let download: Download;
@@ -74,21 +78,20 @@ describe('DotFecService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should clear downloads list on logout', waitForAsync(() => {
+  it('should clear downloads list on logout', async () => {
     service.downloads.set([download]);
     expect(service.downloads().length).toEqual(1);
 
     actions$.next({ type: '[User Login Data] Discarded' });
 
-    setTimeout(() => {
-      expect(service.downloads().length).toEqual(0);
-    }, 0);
-  }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(service.downloads().length).toEqual(0);
+  });
 
   it('should generate FEC file', async () => {
     const response = { status: 'testStatus', task_id: 'testTaskId' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn(apiService, 'post').and.returnValue(Promise.resolve(response) as Promise<any>);
+    vi.spyOn(apiService, 'post').mockReturnValue(Promise.resolve(response) as Promise<any>);
 
     const result = await service.generateFecFile(report);
     const dateStr = new Date().toISOString().slice(0, 10);
@@ -104,12 +107,12 @@ describe('DotFecService', () => {
 
   it('should download FEC file', async () => {
     const dotFEC = 'test content';
-    spyOn(apiService, 'getString').and.returnValue(Promise.resolve(dotFEC));
-    spyOn(window.URL, 'createObjectURL').and.returnValue('blob:testBlob');
+    vi.spyOn(apiService, 'getString').mockReturnValue(Promise.resolve(dotFEC));
+    vi.spyOn(globalThis.URL, 'createObjectURL').mockReturnValue('blob:testBlob');
     const link = {
       href: '',
       download: '',
-      click: jasmine.createSpy('click'),
+      click: vi.fn(),
       getAttribute: (name: string) => {
         if (name === 'href') {
           return 'blob:testBlob';
@@ -121,8 +124,8 @@ describe('DotFecService', () => {
       },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn(document, 'createElement').and.returnValue(link as any);
-    spyOn(service['renderer'], 'createElement').and.returnValue(link);
+    vi.spyOn(document, 'createElement').mockReturnValue(link as any);
+    vi.spyOn(service['renderer'], 'createElement').mockReturnValue(link);
     await service.downloadFecFile(download);
 
     expect(apiService.getString).toHaveBeenCalledWith(`/web-services/dot-fec/${download.id}/`);
@@ -134,7 +137,7 @@ describe('DotFecService', () => {
   it('should check FEC file', async () => {
     const response = { done: true, id: 'testId' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn(apiService, 'get').and.returnValue(Promise.resolve(response) as Promise<any>);
+    vi.spyOn(apiService, 'get').mockReturnValue(Promise.resolve(response) as Promise<any>);
 
     service.downloads.set([download]);
     await service.checkFecFileTask(download);
@@ -144,12 +147,11 @@ describe('DotFecService', () => {
     expect(service.downloads()[0].id).toBe(response.id);
   });
 
-  it('should clear downloads on committee change', waitForAsync(() => {
+  it('should clear downloads on committee change', async () => {
     service.downloads.set([download]);
     expect(service.downloads().length).toEqual(1);
     service.store.dispatch(setCommitteeAccountDetailsAction({ payload: testCommitteeAccount() }));
-    setTimeout(() => {
-      expect(service.downloads().length).toEqual(0);
-    }, 0);
-  }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(service.downloads().length).toEqual(0);
+  });
 });

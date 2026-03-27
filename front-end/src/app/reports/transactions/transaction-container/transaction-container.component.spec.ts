@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, provideRouter } from '@angular/router';
@@ -22,7 +23,6 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Title } from '@angular/platform-browser';
 import { ReportService } from 'app/shared/services/report.service';
 import {
-  Report,
   SchATransaction,
   SchCTransaction,
   ScheduleATransactionTypes,
@@ -32,14 +32,15 @@ import {
 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { TransactionService } from 'app/shared/services/transaction.service';
 
 const mockTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
 ) as SchATransaction;
 
-const routeDataSubject = new BehaviorSubject<{ transaction?: Transaction | null }>({ transaction: mockTransaction });
+const routeDataSubject = new BehaviorSubject<{
+  transaction?: Transaction | null;
+}>({ transaction: mockTransaction });
 
 const routeMock = {
   data: routeDataSubject.asObservable(),
@@ -56,8 +57,8 @@ const routeMock = {
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
   let fixture: ComponentFixture<TransactionContainerComponent>;
-  let titleSpy: jasmine.Spy<(newTitle: string) => void>;
-  let isEditableSpy: jasmine.Spy<(report: Report | undefined) => boolean>;
+  let titleSpy: Mock;
+  let isEditableSpy: Mock;
   let store: MockStore;
 
   beforeEach(async () => {
@@ -79,7 +80,6 @@ describe('TransactionContainerComponent', () => {
         TransactionDetailComponent,
       ],
       providers: [
-        provideAnimationsAsync(),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
@@ -101,9 +101,9 @@ describe('TransactionContainerComponent', () => {
 
   beforeEach(() => {
     const title = TestBed.inject(Title);
-    titleSpy = spyOn(title, 'setTitle');
+    titleSpy = vi.spyOn(title, 'setTitle');
     const reportService = TestBed.inject(ReportService);
-    isEditableSpy = spyOn(reportService, 'isEditable');
+    isEditableSpy = vi.spyOn(reportService, 'isEditable');
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(TransactionContainerComponent);
     component = fixture.componentInstance;
@@ -121,15 +121,15 @@ describe('TransactionContainerComponent', () => {
   });
 
   it('should correctly determine if the report is editable', () => {
-    isEditableSpy.and.returnValue(true);
+    isEditableSpy.mockReturnValue(true);
     store.overrideSelector(selectActiveReport, testActiveReport());
     store.refreshState();
-    expect(component.isEditableReport()).toBeTrue();
+    expect(component.isEditableReport()).toBe(true);
 
-    isEditableSpy.and.returnValue(false);
+    isEditableSpy.mockReturnValue(false);
     store.overrideSelector(selectActiveReport, testActiveReport());
     store.refreshState();
-    expect(component.isEditableReport()).toBeFalse();
+    expect(component.isEditableReport()).toBe(false);
   });
 
   it('should get the transaction from the route data', () => {

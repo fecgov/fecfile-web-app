@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
@@ -106,12 +106,12 @@ describe('LoanTermsDatesInputComponent', () => {
 
   it('should add and remove the percentage pattern validator', () => {
     component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
-    expect(component.interestRateField?.hasValidator(percentageValidator)).toBeFalse();
+    expect(component.interestRateField?.hasValidator(percentageValidator)).toBe(false);
     component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    expect(component.interestRateField?.hasValidator(percentageValidator)).toBeTrue();
+    expect(component.interestRateField?.hasValidator(percentageValidator)).toBe(true);
   });
 
-  it('should handle due_date inputs correctly when clearValuesOnChange is true', fakeAsync(() => {
+  it('should handle due_date inputs correctly when clearValuesOnChange is true', () => {
     // Changing the due_date setting to USER_DEFINED should clear value
     component.dueDate = new Date('10/31/2010 00:00');
     component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
@@ -129,9 +129,9 @@ describe('LoanTermsDatesInputComponent', () => {
     component.dueDate = 'Not a Date instance';
     component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
     expect(component.dueDate).toEqual('');
-  }));
+  });
 
-  it('should handle due_date inputs correctly when clearValuesOnChange is false', fakeAsync(() => {
+  it('should handle due_date inputs correctly when clearValuesOnChange is false', () => {
     component.clearValuesOnChange = false;
     // Changing the due_date setting to USER_DEFINED should clear value
     component.dueDate = new Date('10/31/2010 00:00');
@@ -140,7 +140,7 @@ describe('LoanTermsDatesInputComponent', () => {
 
     // When changing to the SPECIFIC_DATE setting should clear value
     component.dueDateSetting = component.termFieldSettings.SPECIFIC_DATE;
-    expect(component.dueDate instanceof Date).toBeTrue();
+    expect(component.dueDate instanceof Date).toBe(true);
 
     // When switch settings, it will fall back to clearing the date field
     component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
@@ -150,5 +150,5 @@ describe('LoanTermsDatesInputComponent', () => {
     component.dueDate = 'Not a Date instance';
     component.dueDateSetting = component.termFieldSettings.USER_DEFINED;
     expect(component.dueDate).toEqual('Not a Date instance');
-  }));
+  });
 });

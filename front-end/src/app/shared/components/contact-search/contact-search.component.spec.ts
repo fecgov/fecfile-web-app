@@ -62,13 +62,11 @@ describe('ContactSearchComponent', () => {
     it('should perform candidate lookup and set contactLookupList when contact type is CANDIDATE', async () => {
       const searchTerm = 'John Doe';
       const mockResponse = {
-        toSelectItemGroups: jasmine
-          .createSpy('toSelectItemGroups')
-          .and.returnValue([{ label: 'Candidates', items: [] }]),
+        toSelectItemGroups: vi.fn().mockReturnValue([{ label: 'Candidates', items: [] }]),
       };
 
       component.manager().contactType.set(ContactTypes.CANDIDATE);
-      const spy = spyOn(component.contactService, 'candidateLookup').and.returnValue(Promise.resolve(mockResponse));
+      const spy = vi.spyOn(component.contactService, 'candidateLookup').mockReturnValue(Promise.resolve(mockResponse));
       const event = { query: searchTerm } as AutoCompleteCompleteEvent;
 
       await component.onDropdownSearch(event);
@@ -81,13 +79,11 @@ describe('ContactSearchComponent', () => {
     it('should perform committee lookup and set contactLookupList when contact type is COMMITTEE', async () => {
       const searchTerm = 'Committee ABC';
       const mockResponse = {
-        toSelectItemGroups: jasmine
-          .createSpy('toSelectItemGroups')
-          .and.returnValue([{ label: 'Committees', items: [] }]),
+        toSelectItemGroups: vi.fn().mockReturnValue([{ label: 'Committees', items: [] }]),
       };
 
       component.manager().contactType.set(ContactTypes.COMMITTEE);
-      const spy = spyOn(component.contactService, 'committeeLookup').and.resolveTo(mockResponse);
+      const spy = vi.spyOn(component.contactService, 'committeeLookup').mockResolvedValue(mockResponse);
       const event = { query: searchTerm } as AutoCompleteCompleteEvent;
       await component.onDropdownSearch(event);
 
@@ -99,13 +95,11 @@ describe('ContactSearchComponent', () => {
     it('should perform individual lookup and set contactLookupList when contact type is INDIVIDUAL', async () => {
       const searchTerm = 'Jane Smith';
       const mockResponse = {
-        toSelectItemGroups: jasmine
-          .createSpy('toSelectItemGroups')
-          .and.returnValue([{ label: 'Individuals', items: [] }]),
+        toSelectItemGroups: vi.fn().mockReturnValue([{ label: 'Individuals', items: [] }]),
       };
 
       component.manager().contactType.set(ContactTypes.INDIVIDUAL);
-      const spy = spyOn(component.contactService, 'individualLookup').and.returnValue(Promise.resolve(mockResponse));
+      const spy = vi.spyOn(component.contactService, 'individualLookup').mockReturnValue(Promise.resolve(mockResponse));
       const event = { query: searchTerm } as AutoCompleteCompleteEvent;
 
       await component.onDropdownSearch(event);
@@ -118,14 +112,14 @@ describe('ContactSearchComponent', () => {
     it('should perform organization lookup and set contactLookupList when contact type is ORGANIZATION', async () => {
       const searchTerm = 'Org XYZ';
       const mockResponse = {
-        toSelectItemGroups: jasmine
-          .createSpy('toSelectItemGroups')
-          .and.returnValue([{ label: 'Organizations', items: [] }]),
+        toSelectItemGroups: vi.fn().mockReturnValue([{ label: 'Organizations', items: [] }]),
       };
 
       component.manager().contactType.set(ContactTypes.ORGANIZATION);
 
-      const spy = spyOn(component.contactService, 'organizationLookup').and.returnValue(Promise.resolve(mockResponse));
+      const spy = vi
+        .spyOn(component.contactService, 'organizationLookup')
+        .mockReturnValue(Promise.resolve(mockResponse));
       const event = { query: searchTerm } as AutoCompleteCompleteEvent;
       await component.onDropdownSearch(event);
 
@@ -153,8 +147,8 @@ describe('ContactSearchComponent', () => {
 
       const event = { value: selectedContact } as AutoCompleteSelectEvent;
 
-      spyOn(component.manager().contact, 'set');
-      spyOn(component.manager().outerContact, 'set');
+      vi.spyOn(component.manager().contact, 'set');
+      vi.spyOn(component.manager().outerContact, 'set');
 
       await component.onContactLookupSelect(event);
 
@@ -179,10 +173,10 @@ describe('ContactSearchComponent', () => {
         treasurer_phone: '1234567890',
       });
 
-      const spy = spyOn(component.contactService, 'getCommitteeDetails').and.resolveTo(committeeDetails);
+      const spy = vi.spyOn(component.contactService, 'getCommitteeDetails').mockResolvedValue(committeeDetails);
 
-      spyOn(component.manager().contact, 'set');
-      spyOn(component.manager().outerContact, 'set');
+      vi.spyOn(component.manager().contact, 'set');
+      vi.spyOn(component.manager().outerContact, 'set');
 
       const event = { value: committeeData } as AutoCompleteSelectEvent;
 
@@ -196,8 +190,8 @@ describe('ContactSearchComponent', () => {
     });
 
     it('should do nothing if event.value is null or undefined', async () => {
-      spyOn(component.manager().contact, 'set');
-      spyOn(component.manager().outerContact, 'set');
+      vi.spyOn(component.manager().contact, 'set');
+      vi.spyOn(component.manager().outerContact, 'set');
 
       await component.onContactLookupSelect({ value: null } as AutoCompleteSelectEvent);
 
@@ -209,12 +203,12 @@ describe('ContactSearchComponent', () => {
   describe('isContact', () => {
     it('should return true if value is instance of Contact', () => {
       const contact = new Contact();
-      expect(component.isContact(contact)).toBeTrue();
+      expect(component.isContact(contact)).toBe(true);
     });
 
     it('should return false if value is not instance of Contact', () => {
       const notContact = {};
-      expect(component.isContact(notContact)).toBeFalse();
+      expect(component.isContact(notContact)).toBe(false);
     });
   });
 });

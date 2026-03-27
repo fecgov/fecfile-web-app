@@ -40,7 +40,7 @@ describe('ConfirmDialogComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.visible()).toBeFalse();
+    expect(component.visible()).toBe(false);
     expect(component.message()).toBeUndefined();
     expect(component.confirmation()).toBeUndefined();
   });
@@ -56,13 +56,13 @@ describe('ConfirmDialogComponent', () => {
     confirmation$.next(conf);
     fixture.detectChanges();
 
-    expect(component.visible()).toBeTrue();
+    expect(component.visible()).toBe(true);
     expect(component.message()).toBe('Are you sure?');
     expect(component.confirmation()).toEqual(conf);
   });
 
   it('should call reject on cancel', () => {
-    const rejectSpy = jasmine.createSpy('reject');
+    const rejectSpy = vi.fn();
 
     fixture.componentRef.setInput('key', 'x');
 
@@ -74,16 +74,16 @@ describe('ConfirmDialogComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.visible()).toBeTrue();
+    expect(component.visible()).toBe(true);
 
     component.cancelOption();
 
     expect(rejectSpy).toHaveBeenCalled();
-    expect(component.visible()).toBeFalse();
+    expect(component.visible()).toBe(false);
   });
 
   it('should call accept on confirm', () => {
-    const acceptSpy = jasmine.createSpy('accept');
+    const acceptSpy = vi.fn();
 
     fixture.componentRef.setInput('key', 'x');
 
@@ -95,10 +95,10 @@ describe('ConfirmDialogComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.visible()).toBeTrue();
+    expect(component.visible()).toBe(true);
     component.confirmOption();
 
     expect(acceptSpy).toHaveBeenCalled();
-    expect(component.visible()).toBeFalse();
+    expect(component.visible()).toBe(false);
   });
 });

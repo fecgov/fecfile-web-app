@@ -55,7 +55,7 @@ describe('DeletedContactComponent', () => {
   });
 
   it('should restore', async () => {
-    spyOn(service, 'restore').and.returnValue(Promise.resolve(['1']));
+    vi.spyOn(service, 'restore').mockReturnValue(Promise.resolve(['1']));
     component.selectedItems.set([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     await component.restoreSelected();
     fixture.detectChanges();

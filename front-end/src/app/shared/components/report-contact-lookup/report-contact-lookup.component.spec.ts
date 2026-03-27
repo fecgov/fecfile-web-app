@@ -61,18 +61,19 @@ describe('ReportContactLookupComponent', () => {
 
   it('should initialize and set contact type on manager', () => {
     const manager = contactManagementService.get(host.key);
-    const setAsSingleSpy = spyOn(manager, 'setAsSingle');
+    const setAsSingleSpy = vi.spyOn(manager, 'setAsSingle');
 
     component.ngOnInit();
 
     expect(component.manager().contactType()).toBe(host.contactType);
-    expect(setAsSingleSpy).toHaveBeenCalledOnceWith(host.contactType);
+    expect(setAsSingleSpy).toHaveBeenCalledTimes(1);
+    expect(setAsSingleSpy).toHaveBeenCalledWith(host.contactType);
   });
 
   it('should open dialog and set active key in service', () => {
     component.openDialog();
 
     expect(contactManagementService.activeKey()).toBe(host.key);
-    expect(contactManagementService.showDialog()).toBeTrue();
+    expect(contactManagementService.showDialog()).toBe(true);
   });
 });

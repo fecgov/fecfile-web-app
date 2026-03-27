@@ -16,7 +16,7 @@ export class SharedHelpers {
 
       // last resort: force the trigger if PrimeNG gives it 0 height
       const $trigger = $wrap.find('.p-select-dropdown, [aria-label="dropdown trigger"]').first();
-      if ($trigger.length) return cy.wrap($trigger).scrollIntoView().click({ force: true });
+      if ($trigger.length) return cy.wrap($trigger).scrollIntoView().click();
 
       throw new Error('Results-per-page select not found');
     });

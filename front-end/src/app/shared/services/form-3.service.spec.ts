@@ -1,3 +1,4 @@
+import type { Mock, MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -8,16 +9,19 @@ import { CommitteeAccount } from '../models/committee-account.model';
 
 describe('Form3Service', () => {
   let service: Form3Service;
-  let apiService: jasmine.SpyObj<ApiService>;
+  let apiService: MockedObject<ApiService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('ApiService', ['get', 'put']);
+    const spy = {
+      get: vi.fn().mockName('ApiService.get'),
+      put: vi.fn().mockName('ApiService.put'),
+    };
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [Form3Service, { provide: ApiService, useValue: spy }, provideMockStore()],
     });
     service = TestBed.inject(Form3Service);
-    apiService = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+    apiService = TestBed.inject(ApiService) as MockedObject<ApiService>;
   });
 
   it('should be created', () => {
@@ -27,7 +31,9 @@ describe('Form3Service', () => {
   it('should get coverage dates', async () => {
     const mockCoverageDates = [{ coverage_from_date: new Date(), report_code: 'Q1' }];
     const mockMap = { Q1: 'Quarter 1' };
-    apiService.get.and.returnValues(Promise.resolve(mockCoverageDates), Promise.resolve(mockMap));
+    apiService.get
+      .mockReturnValueOnce(Promise.resolve(mockCoverageDates))
+      .mockReturnValueOnce(Promise.resolve(mockMap));
 
     const result = await service.getCoverageDates();
     expect(result.length).toBe(1);
@@ -36,14 +42,14 @@ describe('Form3Service', () => {
 
   it('should get future reports', async () => {
     const mockReports = [Form3.fromJSON({})];
-    apiService.get.and.returnValue(Promise.resolve(mockReports));
+    apiService.get.mockReturnValue(Promise.resolve(mockReports));
     const result = await service.getFutureReports('2023-01-01');
     expect(result.length).toBe(1);
   });
 
   it('should get final report', async () => {
     const mockReport = Form3.fromJSON({});
-    apiService.get.and.returnValue(Promise.resolve(mockReport));
+    apiService.get.mockReturnValue(Promise.resolve(mockReport));
     const result = await service.getFinalReport(2024);
     expect(result).toBeTruthy();
   });
@@ -51,7 +57,7 @@ describe('Form3Service', () => {
   it('should update report with committee info', async () => {
     const report = Form3.fromJSON({ id: '1' });
     const committeeAccount = CommitteeAccount.fromJSON({ name: 'Committee' });
-    (apiService.put as jasmine.Spy).and.returnValue(Promise.resolve(report));
+    (apiService.put as Mock).mockReturnValue(Promise.resolve(report));
 
     await service.fecUpdate(report, committeeAccount);
     expect(apiService.put).toHaveBeenCalled();

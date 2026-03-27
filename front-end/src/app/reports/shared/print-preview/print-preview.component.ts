@@ -45,8 +45,8 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       timeZoneName: 'long',
     }).format(date);
     dateString = dateString.replace(/(\d{4})[\s,]+(?:at\s+)?(\d{1,2}:)/, '$1, at $2');
-    dateString = dateString.replace(' Standard Time', ' Time');
-    dateString = dateString.replace(' Daylight Time', ' Time');
+    dateString = dateString.replaceAll(' Standard Time', ' Time');
+    dateString = dateString.replaceAll(' Daylight Time', ' Time');
     const parts = dateString.split(/( AM | PM )/);
     if (parts.length === 3) {
       return `${parts[0]}${parts[1]}(${parts[2].trim()})`;

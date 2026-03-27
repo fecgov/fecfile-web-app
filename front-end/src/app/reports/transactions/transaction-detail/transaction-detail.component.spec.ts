@@ -28,6 +28,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { firstValueFrom } from 'rxjs';
+import { provideZoneChangeDetection } from '@angular/core';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;
@@ -58,6 +59,7 @@ describe('TransactionDetailComponent', () => {
         NavigationControlComponent,
       ],
       providers: [
+        provideZoneChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
@@ -73,7 +75,7 @@ describe('TransactionDetailComponent', () => {
 
   beforeEach(() => {
     reportService = TestBed.inject(Form3XService);
-    spyOn(reportService, 'isEditable').and.returnValue(true);
+    vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = transaction;
@@ -87,8 +89,8 @@ describe('TransactionDetailComponent', () => {
   });
 
   it('#handleNavigate() should not save an invalid record', async () => {
-    const navSpy = spyOn(component, 'navigateTo');
-    const saveSpy = spyOn(component, 'submit');
+    const navSpy = vi.spyOn(component, 'navigateTo');
+    const saveSpy = vi.spyOn(component, 'submit');
 
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     for (const control in component.form.controls) {

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, provideZoneChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -37,6 +37,7 @@ describe('TransactionContactLookupComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideZoneChangeDetection(),
         ConfirmationService,
         FormBuilder,
         EventEmitter,
@@ -85,7 +86,7 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('selecting a contactType should emit its value', () => {
-    spyOn(component.contactTypeSelect, 'emit');
+    vi.spyOn(component.contactTypeSelect, 'emit');
     component.contactTypeSelected(ContactTypes.COMMITTEE);
     expect(component.contactTypeSelect.emit).toHaveBeenCalledWith(ContactTypes.COMMITTEE);
   });
@@ -96,17 +97,17 @@ describe('TransactionContactLookupComponent', () => {
     component.contactLookupSelected(contact);
     contact.id = undefined;
     component.contactLookupSelected(contact);
-    expect(component.detailVisible).toBeTrue();
+    expect(component.detailVisible).toBe(true);
   });
 
   it('selecting create new contact should open the contact dialog', () => {
     component.detailVisible = false;
     component.createNewContactSelected();
-    expect(component.detailVisible).toBeTrue();
+    expect(component.detailVisible).toBe(true);
   });
 
   it('saving a contact should emit the contact', () => {
-    spyOn(component.contactSelect, 'emit');
+    vi.spyOn(component.contactSelect, 'emit');
     const contact = testContact();
     component.saveContact(contact);
     expect(component.contactSelect.emit).toHaveBeenCalledWith({ value: contact });

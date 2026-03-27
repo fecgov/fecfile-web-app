@@ -60,13 +60,13 @@ const openCreateContactModal = (which: CreateContactWhich = 'first') => {
       cy.wrap($target)
         .contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
         .scrollIntoView()
-        .click({ force: true });
+        .click();
       return;
     }
 
     cy.contains(/Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
       .scrollIntoView()
-      .click({ force: true });
+      .click();
   });
 
   cy.contains('.p-dialog', /Create a new contact/i, { timeout: DEFAULT_TIMEOUT })
@@ -85,7 +85,7 @@ const fillCommonRequiredAddressInDialog = (dialogAlias: string, address: Address
     .then(($state) => {
       if ($state.length === 0) return;
       cy.wrap($state)
-        .click({ force: true })
+        .click()
         .type('{downarrow}{enter}', { force: true });
     });
 };
@@ -94,74 +94,62 @@ const saveCreateContactDialog = () => {
   cy.get('@createContactDialog')
     .contains('button', /Save\s*&\s*continue/i)
     .should('be.enabled')
-    .click({ force: true });
+    .click();
 
   cy.get('body', { timeout: DEFAULT_TIMEOUT }).should(($body) => {
     expect(hasVisibleDialogMatching($body, /Create a new contact/i)).to.eq(false);
   });
 };
 
-const findFirstAnchorMatching = ($body: JQuery<HTMLElement>, rx: RegExp): HTMLAnchorElement | null => {
-  const anchors = $body.find('a').toArray();
-  for (const a of anchors) {
-    const txt = (a.textContent || '').trim();
-    if (rx.test(txt)) return a as HTMLAnchorElement;
-  }
-  return null;
-};
+const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<void> => {
+  return cy.get('p-accordion-panel', { timeout: DEFAULT_TIMEOUT }).then(($panels) => {
+    let targetPanel: HTMLElement | null = null;
 
-const findAndClickTransactionLink = (txnLinkRx: RegExp): Cypress.Chainable<boolean> => {
-  return cy.get('body').then(($body) => {
-    const link = findFirstAnchorMatching($body, txnLinkRx);
+    $panels.each((_, panel) => {
+      const hasMatch = Cypress.$(panel)
+        .find('.accordion-content-wrapper a')
+        .toArray()
+        .some((link) => txnLinkRx.test((link.textContent || '').trim()));
+      if (hasMatch) {
+        targetPanel = panel;
+        return false;
+      }
+      return undefined;
+    });
 
-    if (!link) {
-      return cy.wrap(false, { log: false });
+    if (!targetPanel) {
+      throw new Error(`Could not find transaction link matching: ${txnLinkRx}`);
     }
 
-    return cy
-      .wrap(link)
-      .scrollIntoView()
-      .click({ force: true })
-      .then(() => true);
-  });
-};
+    const $targetPanel = Cypress.$(targetPanel);
+    const $header = $targetPanel.find('p-accordion-header, .p-accordionheader').first();
+    if ($header.attr('aria-expanded') === 'false') {
+      cy.wrap($header).scrollIntoView().click();
+    }
 
-const expandAccordionsAndTryClickLink = (txnLinkRx: RegExp): Cypress.Chainable<boolean> => {
-  return cy
-    .get('body')
-    .then(($body): void => {
-      const $headers = $body.find('p-accordion-header');
-
-      if ($headers.length === 0) return;
-
-      cy.wrap($headers).each(($h) => {
-        if ($h.attr('aria-expanded') === 'false') {
-          cy.wrap($h).scrollIntoView().click({ force: true });
-        }
+    cy.wrap($targetPanel)
+      .find('.accordion-content-wrapper a')
+      .then(($links) => {
+        const matches = $links.filter(
+          (_, link) => txnLinkRx.test((link.textContent || '').trim()) && Cypress.dom.isVisible(link),
+        );
+        expect(matches.length, `transaction link matches for ${txnLinkRx}`).to.be.greaterThan(0);
+        cy.wrap(matches.get(0)).scrollIntoView().click();
       });
-    })
-    .then(() => findAndClickTransactionLink(txnLinkRx));
-};
-
-const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<boolean> => {
-  return findAndClickTransactionLink(txnLinkRx)
-    .then((found): Cypress.Chainable<boolean> => {
-      if (found) return cy.wrap(true, { log: false });
-      return expandAccordionsAndTryClickLink(txnLinkRx);
-    })
-    .then((found) => {
-      if (!found) throw new Error(`Could not find transaction link matching: ${txnLinkRx}`);
-      return true;
-    });
+  });
 };
 
 const goToTransactionCreateFromList = (panelMenuRx: RegExp, txnLinkRx: RegExp) => {
   cy.get('p-panelmenu', { timeout: DEFAULT_TIMEOUT }).should('exist');
 
-  cy.contains('a', panelMenuRx, { timeout: DEFAULT_TIMEOUT })
-    .first()
-    .scrollIntoView()
-    .click({ force: true });
+  cy.get('p-panelmenu').then(($panelMenu) => {
+    const matches = $panelMenu
+      .find('a.p-panelmenu-item-link')
+      .filter((_, link) => panelMenuRx.test((link.textContent || '').trim()) && Cypress.dom.isVisible(link));
+
+    expect(matches.length, `visible panel menu matches for ${panelMenuRx}`).to.eq(1);
+    cy.wrap(matches.first()).scrollIntoView().click();
+  });
 
   cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', '/select/');
   clickTransactionLinkOnSelectPage(txnLinkRx);
@@ -302,7 +290,10 @@ const selectContactLookupType = (type: 'Individual' | 'Organization' | 'Committe
     }
 
     expect(found, 'Contact Lookup type <select>').to.exist;
-    cy.wrap(found as HTMLSelectElement).select(type);
+    if (!found) {
+      throw new Error('Contact Lookup type <select> was not found');
+    }
+    cy.wrap(found).select(type);
   });
 };
 
@@ -373,8 +364,10 @@ describe('Contacts: Transactions integration', () => {
     });
 
     cy.then(() => {
-      expect(reportId, 'reportId').to.exist;
-      const rid = reportId as string;
+      if (!reportId) {
+        throw new Error('reportId should be defined');
+      }
+      const rid = reportId;
 
       // INDIVIDUAL RECEIPT
       ReportListPage.gotToReportTransactionListPage(rid);
@@ -504,9 +497,10 @@ describe('Contacts: Transactions integration', () => {
     });
 
     cy.then(() => {
-      expect(reportId, 'F3X report id should be defined').to.exist;
-
-      const rid = reportId as string;
+      if (!reportId) {
+        throw new Error('F3X report id should be defined');
+      }
+      const rid = reportId;
 
       cy.intercept('GET', '**/api/v1/transactions/previous/entity/**').as('getPrevAggregate');
 
@@ -566,7 +560,10 @@ describe('Contacts: Transactions integration', () => {
           cy.get('td').eq(4).should('contain.text', newOccupation);
         });
 
-      cy.intercept('GET', '**/api/v1/transactions/?**contact=*').as('getContactTxns');
+      cy.intercept(
+        'GET',
+        '**/api/v1/transactions/?page=1&ordering=transaction_type_identifier&page_size=5&contact=*',
+      ).as('getContactTxns');
       PageUtils.clickKababItem(displayName, 'Edit');
       cy.contains(/Edit Contact/i).should('exist');
 

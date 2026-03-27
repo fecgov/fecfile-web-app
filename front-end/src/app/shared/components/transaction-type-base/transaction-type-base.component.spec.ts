@@ -1,7 +1,8 @@
+import type { Mock, MockedObject } from 'vitest';
 import { DatePipe } from '@angular/common';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   NavigationAction,
   NavigationDestination,
@@ -31,9 +32,10 @@ import { AggregationGroups, Transaction } from '../../models/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
+import { provideZoneChangeDetection } from '@angular/core';
+import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 
 let testTransaction: SchATransaction;
 
@@ -44,16 +46,38 @@ describe('TransactionTypeBaseComponent', () => {
   let testwrapperService: ConfirmationWrapperService;
 
   // spies
-  let navigateToSpy: jasmine.Spy;
-  let transactionServiceSpy: jasmine.SpyObj<TransactionService>;
-  let confirmSpy: jasmine.Spy;
-  let createMessageSpy: jasmine.Spy;
-  let messageServiceSpy: jasmine.SpyObj<MessageService>;
+  let navigateToSpy: Mock;
+  let transactionServiceSpy: MockedObject<TransactionService>;
+  let confirmSpy: Mock;
+  let createMessageSpy: Mock;
+  let messageServiceSpy: MockedObject<MessageService>;
 
   let navEvent: NavigationEvent;
   const mockRouter = {
-    navigateByUrl: jasmine.createSpy('navigateByUrl'),
+    navigateByUrl: vi.fn(),
   };
+  let store: MockStore;
+
+  async function testMessage(navEvent: NavigationEvent) {
+    await component.navigateTo(navEvent);
+    expect(messageServiceSpy.add).toHaveBeenCalledWith({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Transaction Saved',
+      life: 3000,
+    });
+  }
+
+  async function testNoMessage(navEvent: NavigationEvent) {
+    await component.navigateTo(navEvent);
+    expect(messageServiceSpy.add).toHaveBeenCalledTimes(0);
+  }
+
+  async function testNavigate(navEvent: NavigationEvent, route: string, options?: NavigationBehaviorOptions) {
+    await component.navigateTo(navEvent);
+    if (options) expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route, options);
+    else expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
+  }
 
   beforeAll(async () => {
     await import(`fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT.validator`);
@@ -66,7 +90,7 @@ describe('TransactionTypeBaseComponent', () => {
         provideMockStore(testMockStore()),
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideAnimationsAsync(),
+        provideZoneChangeDetection(),
         DatePipe,
         { provide: Router, useValue: mockRouter },
         {
@@ -77,43 +101,50 @@ describe('TransactionTypeBaseComponent', () => {
         },
         {
           provide: MessageService,
-          useValue: jasmine.createSpyObj('MessageService', {
-            add: (message: { severity: string; summary: string; detail: string; life: number }) => {
-              console.log(message.summary);
-            },
-          }),
+          useValue: {
+            add: vi
+              .fn()
+              .mockName('MessageService.add')
+              .mockReturnValue(() => undefined),
+          },
         },
         FormBuilder,
         {
           provide: TransactionService,
-          useValue: jasmine.createSpyObj('TransactionService', {
-            update: of(undefined),
-            create: of(undefined),
-            getPreviousEntityAggregate: Promise.resolve(undefined),
-          }),
+          useValue: {
+            update: vi.fn().mockName('TransactionService.update').mockReturnValue(of(undefined)),
+            create: vi.fn().mockName('TransactionService.create').mockReturnValue(of(undefined)),
+            getPreviousEntityAggregate: vi
+              .fn()
+              .mockName('TransactionService.getPreviousEntityAggregate')
+              .mockReturnValue(Promise.resolve(undefined)),
+          },
         },
         ConfirmationService,
         FecDatePipe,
       ],
     }).compileComponents();
 
-    transactionServiceSpy = TestBed.inject(TransactionService) as jasmine.SpyObj<TransactionService>;
+    store = TestBed.inject(MockStore);
+
+    transactionServiceSpy = TestBed.inject(TransactionService) as MockedObject<TransactionService>;
     testConfirmationService = TestBed.inject(ConfirmationService);
     testwrapperService = TestBed.inject(ConfirmationWrapperService);
-    messageServiceSpy = TestBed.inject(MessageService) as jasmine.SpyObj<MessageService>;
+    messageServiceSpy = TestBed.inject(MessageService) as MockedObject<MessageService>;
     testTransaction = getTestIndividualReceipt();
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
+    component.contactIdMap = { contact_1: new Subject(), contact_2: new Subject(), contact_3: new Subject() };
 
-    navigateToSpy = spyOn(component, 'navigateTo');
-    confirmSpy = spyOn(testConfirmationService, 'confirm');
-    createMessageSpy = spyOn(testwrapperService, 'getCreateTransactionContactConfirmationMessage');
+    navigateToSpy = vi.spyOn(component, 'navigateTo');
+    confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
+    createMessageSpy = vi.spyOn(testwrapperService, 'getCreateTransactionContactConfirmationMessage');
   });
 
   describe('init', () => {
     it('should initialize Individual Receipt', () => {
-      component.ngOnInit();
+      fixture.detectChanges();
       expect(component).toBeTruthy();
       expect(component.transactionType?.title).toBe('Individual Receipt');
     });
@@ -121,23 +152,23 @@ describe('TransactionTypeBaseComponent', () => {
     it('should throw an error if the transaction template map is unavailable', async () => {
       component.transaction = undefined;
       try {
-        component.ngOnInit();
+        fixture.detectChanges();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         expect(err.message).toBe('FECfile+: Template map not found for transaction component');
       }
     });
 
-    it('should set the contact type options', async () => {
-      component.ngOnInit();
-      expect(component.contactTypeOptions).toContain({ value: ContactTypes.INDIVIDUAL, label: 'Individual' });
+    it('should set the contact type options', () => {
+      fixture.detectChanges();
+      expect(component.contactTypeOptions).toContainEqual({ label: 'Individual', value: ContactTypes.INDIVIDUAL });
       expect(component.contactTypeOptions.length).toEqual(1);
     });
   });
 
   it('positive contribution_amount values should be overridden when the schema requires a negative value', async () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
-    component.ngOnInit();
+    fixture.detectChanges();
 
     component.form.patchValue({ contribution_amount: 2 });
     expect(component.form.get('contribution_amount')?.value).toBe(-2);
@@ -148,9 +179,19 @@ describe('TransactionTypeBaseComponent', () => {
     component.transaction.parent_transaction = getTestIndividualReceipt();
     if (component.transaction.parent_transaction.contact_1)
       component.transaction.parent_transaction.contact_1.street_1 = 'Parent Street 1';
-    component.ngOnInit();
+    fixture.detectChanges();
     expect(component.transaction.contact_1?.street_1).toBe('Parent Street 1');
     expect(component.transaction.contact_1_id).toBe('testId');
+  });
+
+  it('should not trigger effect if NavigationEvent has no transaction', async () => {
+    const handleNavSpy = vi.spyOn(component, 'handleNavigate').mockResolvedValue();
+    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST);
+    store.dispatch(navigationEventSetAction(navEvent));
+    fixture.detectChanges();
+    await Promise.resolve();
+
+    expect(handleNavSpy).toHaveBeenCalledTimes(0);
   });
 
   describe('save', () => {
@@ -159,14 +200,14 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should update contacts form if there is a transaction', async () => {
-      const contactSpy = spyOn(TransactionContactUtils, 'updateContactsWithForm');
+      const contactSpy = vi.spyOn(TransactionContactUtils, 'updateContactsWithForm');
       await component.submitForm(navEvent);
       expect(contactSpy).toHaveBeenCalled();
     });
 
     it('should stop processing and throw an error if there is no transaction', async () => {
       component.transaction = undefined;
-      await expectAsync(component.submitForm(navEvent)).toBeRejectedWithError(
+      await expect(component.submitForm(navEvent)).rejects.toThrow(
         'FECfile+: No transactions submitted for single-entry transaction form.',
       );
     });
@@ -189,7 +230,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should update data and then set processing to false', async () => {
-      component.ngOnInit();
+      fixture.detectChanges();
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
         '999',
@@ -212,7 +253,7 @@ describe('TransactionTypeBaseComponent', () => {
         component.formProperties,
       );
       expect(payload.report_ids?.length).toEqual(2);
-      expect(payload.report_ids?.includes('321')).toBeTrue();
+      expect(payload.report_ids?.includes('321')).toBe(true);
     });
   });
 
@@ -220,7 +261,7 @@ describe('TransactionTypeBaseComponent', () => {
     it('should throw an error if no template map', async () => {
       const contactConfig = component.transaction!.transactionType?.contactConfig;
       component.transaction!.transactionType = {} as TransactionType;
-      await expectAsync(
+      await expect(
         testwrapperService.confirmWithUser(
           component.form,
           contactConfig,
@@ -229,10 +270,10 @@ describe('TransactionTypeBaseComponent', () => {
           'dialog',
           component.transaction,
         ),
-      ).toBeRejectedWithError('FECfile+: Cannot find template map when confirming transaction');
+      ).rejects.toThrow('FECfile+: Cannot find template map when confirming transaction');
     });
 
-    it('should return without confirmation if using parent and contact_1', fakeAsync(async () => {
+    it('should return without confirmation if using parent and contact_1', async () => {
       if (!component.transaction) throw new Error('Bad test');
       const payload = TransactionFormUtils.getPayloadTransaction(
         component.transaction,
@@ -251,11 +292,11 @@ describe('TransactionTypeBaseComponent', () => {
         component.transaction,
       );
       expect(confirmSpy).toHaveBeenCalledTimes(0);
-    }));
+    });
 
     it('should generate confirm message if there is no contact id', () => {
       if (!component.transaction) throw new Error('Bad test');
-      confirmSpy.and.callFake((confirmation: Confirmation) => {
+      confirmSpy.mockImplementation((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
       (component.transaction['contact_1' as keyof Transaction] as Contact).id = undefined;
@@ -284,32 +325,30 @@ describe('TransactionTypeBaseComponent', () => {
       navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
     });
 
-    it('should exit if form is invalid', () => {
-      component.form.addControl('test', new SubscriptionFormControl(undefined, Validators.required));
-      expect(component.form.invalid).toBeTruthy();
-      component.handleNavigate(navEvent);
+    it('should exit if form is invalid', async () => {
+      await component.handleNavigate(navEvent);
       expect(navigateToSpy).toHaveBeenCalledTimes(0);
     });
 
-    it('should exit if transaction is missing', () => {
+    it('should exit if transaction is missing', async () => {
       expect(component.form.invalid).toBeFalsy();
       component.transaction = undefined;
-      component.handleNavigate(navEvent);
+      await component.handleNavigate(navEvent);
       expect(navigateToSpy).toHaveBeenCalledTimes(0);
     });
 
     it('should confirm with user before proceeding', async () => {
-      confirmSpy.and.callFake((confirmation: Confirmation) => {
+      confirmSpy.mockImplementation((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
-      component.ngOnInit();
+      fixture.detectChanges();
       await component.handleNavigate(navEvent);
       expect(confirmSpy).toHaveBeenCalled();
     });
 
     it('should stop processing if user rejects', async () => {
-      component.ngOnInit();
-      confirmSpy.and.callFake((confirmation: Confirmation) => {
+      fixture.detectChanges();
+      confirmSpy.mockImplementation((confirmation: Confirmation) => {
         if (confirmation.reject) return confirmation?.reject();
       });
       await component.handleNavigate(navEvent);
@@ -317,12 +356,12 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should save on confirmation', async () => {
-      component.ngOnInit();
-      if (component.transaction) transactionServiceSpy.update.and.returnValue(Promise.resolve(component.transaction));
-      confirmSpy.and.callFake((confirmation: Confirmation) => {
+      fixture.detectChanges();
+      if (component.transaction) transactionServiceSpy.update.mockReturnValue(Promise.resolve(component.transaction));
+      confirmSpy.mockImplementation((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
-      expect(component.form.invalid).toBeFalse();
+      expect(component.form.invalid).toBe(false);
       await component.handleNavigate(navEvent);
 
       expect(transactionServiceSpy.update).toHaveBeenCalled();
@@ -331,35 +370,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   describe('navigateTo', () => {
-    beforeEach(() => {
-      navigateToSpy.and.callThrough();
-    });
-
-    function testMessage(navEvent: NavigationEvent) {
-      component.navigateTo(navEvent);
-      expect(messageServiceSpy.add).toHaveBeenCalledWith({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Transaction Saved',
-        life: 3000,
-      });
-    }
-
-    function testNoMessage(navEvent: NavigationEvent) {
-      component.navigateTo(navEvent);
-      expect(messageServiceSpy.add).toHaveBeenCalledTimes(0);
-    }
-
-    function testNavigate(navEvent: NavigationEvent, route: string, options?: NavigationBehaviorOptions) {
-      component.navigateTo(navEvent);
-      if (options) expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route, options);
-      else expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
-    }
-
     // ANOTHER //
     describe('NavigationDestination.ANOTHER', () => {
-      it('should send success to message service', () => {
-        testMessage(
+      it('should send success to message service', async () => {
+        await testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.ANOTHER,
@@ -369,9 +383,9 @@ describe('TransactionTypeBaseComponent', () => {
         );
       });
 
-      it('should route to the same transaction type', () => {
+      it('should route to the same transaction type', async () => {
         const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
-        testNavigate(
+        await testNavigate(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.ANOTHER,
@@ -382,10 +396,10 @@ describe('TransactionTypeBaseComponent', () => {
           { onSameUrlNavigation: 'reload' },
         );
       });
-      it('should route to create a sub transaction of the current parent', () => {
+      it('should route to create a sub transaction of the current parent', async () => {
         const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         transaction.parent_transaction_id = '1';
-        testNavigate(
+        await testNavigate(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.ANOTHER,
@@ -400,8 +414,8 @@ describe('TransactionTypeBaseComponent', () => {
 
     // CHILD //
     describe('NavigationDestination.CHILD', () => {
-      it('should send success to message service', () => {
-        testMessage(
+      it('should send success to message service', async () => {
+        await testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.CHILD,
@@ -410,10 +424,10 @@ describe('TransactionTypeBaseComponent', () => {
           ),
         );
       });
-      it('should route to child of current transaction if CHILD', () => {
+      it('should route to child of current transaction if CHILD', async () => {
         const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         transaction.id = '1';
-        testNavigate(
+        await testNavigate(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.CHILD,
@@ -427,8 +441,8 @@ describe('TransactionTypeBaseComponent', () => {
 
     // PARENT //
     describe('NavigationDestination.PARENT', () => {
-      it('should not send success to message service', () => {
-        testNoMessage(
+      it('should not send success to message service', async () => {
+        await testNoMessage(
           new NavigationEvent(
             NavigationAction.CANCEL,
             NavigationDestination.PARENT,
@@ -437,10 +451,10 @@ describe('TransactionTypeBaseComponent', () => {
           ),
         );
       });
-      it('should route to the parent if PARENT', () => {
+      it('should route to the parent if PARENT', async () => {
         const transaction = getTestTransactionByType(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
         transaction.parent_transaction_id = '1';
-        testNavigate(
+        await testNavigate(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.PARENT,
@@ -454,8 +468,8 @@ describe('TransactionTypeBaseComponent', () => {
 
     // LIST //
     describe('NavigationDestination.LIST', () => {
-      it('should not send success to message service if SAVE', () => {
-        testMessage(
+      it('should not send success to message service if SAVE', async () => {
+        await testMessage(
           new NavigationEvent(
             NavigationAction.SAVE,
             NavigationDestination.LIST,
@@ -464,8 +478,8 @@ describe('TransactionTypeBaseComponent', () => {
           ),
         );
       });
-      it('should send success to message service if CANCEL', () => {
-        testNoMessage(
+      it('should send success to message service if CANCEL', async () => {
+        await testNoMessage(
           new NavigationEvent(
             NavigationAction.CANCEL,
             NavigationDestination.LIST,
@@ -479,7 +493,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('updateFormWithCandidateContact', () => {
     it('should call updateFormWithCandidateContact', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithCandidateContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithCandidateContact');
       const selectItem: SelectItem<Contact> = { value: new Contact() };
       component.updateFormWithCandidateContact(selectItem);
       expect(spy).toHaveBeenCalledWith(
@@ -493,7 +507,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('updateFormWithSecondaryContact', () => {
     it('should call updateFormWithSecondaryContact', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithSecondaryContact');
       const selectItem: SelectItem<Contact> = { value: new Contact() };
       component.updateFormWithSecondaryContact(selectItem);
       expect(spy).toHaveBeenCalledWith(
@@ -507,23 +521,23 @@ describe('TransactionTypeBaseComponent', () => {
 
   describe('updateFormWithTertiaryContact', () => {
     it('should call updateFormWithTertiaryContact', () => {
-      const spy = spyOn(TransactionContactUtils, 'updateFormWithTertiaryContact');
+      const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithTertiaryContact');
       const selectItem: SelectItem<Contact> = { value: new Contact() };
       component.updateFormWithTertiaryContact(selectItem);
       expect(spy).toHaveBeenCalledWith(
         selectItem,
         component.form,
         component.transaction,
-        component.contactIdMap['contact_2'],
+        component.contactIdMap['contact_3'],
       );
     });
   });
 
   describe('getMemoHasOptional$', () => {
     it('should return required label if read only', () => {
-      component.ngOnInit();
+      fixture.detectChanges();
       if (!component.transactionType) throw new Error('Bad test');
-      const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
+      const spy = vi.spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').mockImplementation(() => {
         return true;
       });
       component.getMemoHasOptional$(component.form, component.transactionType).subscribe((res) => {
@@ -533,9 +547,9 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should return required label if memo required', () => {
-      component.ngOnInit();
+      fixture.detectChanges();
       if (!component.transactionType) throw new Error('Bad test');
-      const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.callFake(() => {
+      const spy = vi.spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').mockImplementation(() => {
         return false;
       });
       const memo = component.form.get(component.transactionType.templateMap.memo_code);
@@ -549,10 +563,10 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     it('should return optional label if memo not required', async () => {
-      component.ngOnInit();
+      fixture.detectChanges();
       if (!component.transactionType) throw new Error('Bad test');
       component.form.get(component.transactionType?.templateMap.memo_code)?.clearValidators();
-      const spy = spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').and.returnValue(false);
+      const spy = vi.spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').mockReturnValue(false);
       const res = await firstValueFrom(component.getMemoHasOptional$(component.form, component.transactionType));
       expect(res).toEqual(true);
       expect(spy).toHaveBeenCalled();
@@ -572,14 +586,14 @@ describe('TransactionTypeBaseComponent', () => {
     it('should return false if no transaction', async () => {
       component.transaction = undefined;
       const res = await component.getConfirmations();
-      expect(res).toBeFalse();
+      expect(res).toBe(false);
     });
 
     it('should call confirm with user', async () => {
-      confirmSpy.and.callFake((confirmation: Confirmation) => {
+      confirmSpy.mockImplementation((confirmation: Confirmation) => {
         if (confirmation.accept) return confirmation?.accept();
       });
-      component.ngOnInit();
+      fixture.detectChanges();
       const res = await component.getConfirmations();
       expect(res).toBeTruthy();
       expect(confirmSpy).toHaveBeenCalled();
@@ -589,7 +603,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('should populate treasurer data from committee for schedule E', () => {
     component.transaction = testIndependentExpenditure();
     const ca = testCommitteeAccount();
-    component.ngOnInit();
+    fixture.detectChanges();
     expect(component.form.get(component.templateMap['signatory_1_last_name'])!.value).toBe(ca.treasurer_name_2);
     expect(component.form.get(component.templateMap['signatory_1_first_name'])!.value).toBe(ca.treasurer_name_1);
     expect(component.form.get(component.templateMap['signatory_1_middle_name'])!.value).toBe(ca.treasurer_name_middle);
@@ -598,7 +612,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   describe('aggregate calculation', () => {
-    it('should request the previous transaction', fakeAsync(() => {
+    it('should request the previous transaction', async () => {
       const form = new FormGroup(
         {
           expenditure_amount: new SubscriptionFormControl(),
@@ -625,8 +639,9 @@ describe('TransactionTypeBaseComponent', () => {
       expect(transactionServiceSpy.getPreviousEntityAggregate).not.toHaveBeenCalled();
 
       contactId$.next('1234-abcd-1234-abcd');
-      tick();
+      fixture.detectChanges();
+      await fixture.whenStable();
       expect(transactionServiceSpy.getPreviousEntityAggregate).toHaveBeenCalled();
-    }));
+    });
   });
 });

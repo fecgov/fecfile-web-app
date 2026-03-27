@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FecInternationalPhoneInputComponent } from './fec-international-phone-input.component';
 import { ElementRef } from '@angular/core';
+import { Country } from 'intl-tel-input/data';
 
 class MockNgControl extends NgControl {
   control = new FormControl<string | undefined>('', Validators.pattern(/^\+\d{1,3} \d{10}$/));
@@ -36,13 +37,16 @@ describe('FecInternationalPhoneInputComponent', () => {
   });
 
   it('writeValue() happy path', () => {
-    const setNumberSpy = spyOn<any>(component['intlTelInput'], 'setNumber');
-    const onChangeSpy = spyOn<any>(component, 'onChange');
+    const setNumberSpy = vi.spyOn(component['intlTelInput']!, 'setNumber');
+    const onChangeSpy = vi.spyOn(component, 'onChange');
     const testString = 'testString';
     component.writeValue(testString);
 
-    expect(setNumberSpy).toHaveBeenCalledOnceWith(testString);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith(testString);
+    expect(setNumberSpy).toHaveBeenCalledTimes(1);
+
+    expect(setNumberSpy).toHaveBeenCalledWith(testString);
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith(testString);
   });
 
   it('registerOnChange() happy path', () => {
@@ -50,44 +54,50 @@ describe('FecInternationalPhoneInputComponent', () => {
       return;
     };
     component.registerOnChange(testFunction);
-    const onChangeSpy = spyOn<any>(component, 'onChange');
+    const onChangeSpy = vi.spyOn(component, 'onChange');
     const testValue = 'testValue';
     const testTarget = { value: testValue } as HTMLInputElement;
     const testEvent = { target: testTarget } as unknown as KeyboardEvent;
     component.onKey(testEvent);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + component['countryCode'] + ' ' + component['number']);
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith('+' + component['countryCode'] + ' ' + component['number']);
   });
 
   it('onKey() happy path', () => {
-    const onChangeSpy = spyOn<any>(component, 'onChange');
+    const onChangeSpy = vi.spyOn(component, 'onChange');
     const testValue = 'testValue';
     const testTarget = { value: testValue } as HTMLInputElement;
     const testEvent = { target: testTarget } as unknown as KeyboardEvent;
     component.onKey(testEvent);
+    fixture.detectChanges();
 
     expect(component['number']).toEqual(testValue);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + component['countryCode'] + ' ' + component['number']);
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith('+' + component['countryCode'] + ' ' + component['number']);
   });
 
-  it('afterViewInit() happy path', fakeAsync(() => {
+  it('afterViewInit() happy path', () => {
     const testDialCode = '123';
-    spyOn<any>(component['intlTelInput'], 'getSelectedCountryData').and.returnValue({ dialCode: testDialCode });
-    const onChangeSpy = spyOn<any>(component, 'onChange');
+    vi.spyOn(component['intlTelInput']!, 'getSelectedCountryData').mockReturnValue({
+      dialCode: testDialCode,
+    } as Country);
+    const onChangeSpy = vi.spyOn(component, 'onChange');
 
     component.internationalPhoneInputChild?.nativeElement.dispatchEvent(new Event('countrychange'));
-    tick();
+    fixture.detectChanges();
     expect(component['countryCode']).toEqual(testDialCode);
-    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' + testDialCode + ' ' + component['number']);
-  }));
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith('+' + testDialCode + ' ' + component['number']);
+  });
 
   it('should blur properly', () => {
     component.ngControl = new MockNgControl();
     const control = (component.ngControl as MockNgControl).control;
 
-    spyOn(control, 'setValue').and.callThrough();
-    spyOn(control, 'markAsTouched').and.callThrough();
-    spyOn(control, 'markAsDirty').and.callThrough();
-    spyOn(control, 'updateValueAndValidity').and.callThrough();
+    vi.spyOn(control, 'setValue');
+    vi.spyOn(control, 'markAsTouched');
+    vi.spyOn(control, 'markAsDirty');
+    vi.spyOn(control, 'updateValueAndValidity');
 
     let event: FocusEvent = {
       target: { value: '' } as HTMLInputElement,
@@ -98,7 +108,7 @@ describe('FecInternationalPhoneInputComponent', () => {
     expect(control.markAsTouched).toHaveBeenCalled();
     expect(control.markAsDirty).toHaveBeenCalled();
     expect(control.updateValueAndValidity).toHaveBeenCalled();
-    expect(control.valid).toBeTrue();
+    expect(control.valid).toBe(true);
 
     event = {
       target: { value: '123' } as HTMLInputElement,
@@ -106,6 +116,6 @@ describe('FecInternationalPhoneInputComponent', () => {
 
     component.onBlur(event);
     expect(control.setValue).toHaveBeenCalledWith('+1 123', { emitEvent: false });
-    expect(control.valid).toBeFalse();
+    expect(control.valid).toBe(false);
   });
 });
