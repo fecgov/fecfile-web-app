@@ -9,7 +9,7 @@ import { ButtonDirective } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectButton } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
-import { takeUntil } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, of, startWith, takeUntil } from 'rxjs';
 import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
@@ -75,22 +75,30 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   });
 
   ngOnInit(): void {
-    const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
-    if (dateControl?.enabled) {
-      dateControl.addSubscription((date: Date | null) => {
-        if (date?.getTime() !== this.coverageDate()?.getTime()) {
-          this.coverageDate.set(date);
-          this.updateMemoItemWithDate(date);
+    const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl<Date | null>;
+    const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl<Date | null>;
+    const d1$ = dateControl ? dateControl.valueChanges.pipe(startWith(dateControl.value)) : of(null);
+    const d2$ = date2Control ? date2Control.valueChanges.pipe(startWith(date2Control.value)) : of(null);
+    combineLatest([d1$, d2$])
+      .pipe(
+        takeUntil(this.destroy$),
+        map(([d1, d2]) => {
+          const val1 = dateControl?.enabled ? d1 : null;
+          const val2 = date2Control?.enabled ? d2 : null;
+          return val1 || val2;
+        }),
+        distinctUntilChanged((prev, curr) => prev?.getTime() === curr?.getTime()),
+      )
+      .subscribe((activeDate) => {
+        if (activeDate) {
+          this.updateMemoItemWithDate(activeDate);
+        } else {
+          this.clearOutOfDateRequirement();
         }
-      }, this.destroy$);
-    }
+      });
 
     this.memoControl =
       (this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>) || this.memoControl;
-    const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;
-    if (savedDate) {
-      this.updateMemoItemWithDate(savedDate);
-    }
 
     if (this.transactionType()?.memoCodeTransactionTypes) {
       this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -151,12 +159,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       return;
     }
 
-    if (!date) {
-      this.clearOutOfDateRequirement();
-      return;
-    }
-
-    if (this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
+    if (!date || this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
       this.clearOutOfDateRequirement();
       return;
     }

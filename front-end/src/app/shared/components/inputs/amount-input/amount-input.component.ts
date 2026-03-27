@@ -18,7 +18,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
 import { InputText } from 'primeng/inputtext';
-import { Form24, ReportTypes } from 'app/shared/models';
+import { ReportTypes } from 'app/shared/models';
 import { TooltipModule } from 'primeng/tooltip';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { derivedAsync } from 'ngxtension/derived-async';
@@ -66,7 +66,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
     const reports = this.transaction()?.reports;
     const report = reports?.find((report) => report.report_type === ReportTypes.F24);
     if (!report) return undefined;
-    return (await this.form24Service.get(report.id!)) as Form24;
+    return await this.form24Service.get(report.id!);
   });
   readonly linked24Label = computed(() => {
     const report = this.linked24();
@@ -89,22 +89,16 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
       const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl;
       if (dateControl && date2Control) {
-        dateControl.addSubscription(() => {
+        dateControl.addSubscription((val) => {
           date2Control.updateValueAndValidity({ emitEvent: false });
-          this.memoCode()?.coverageDateQuestion.set(
-            'Did you mean to enter a date outside of the report coverage period?',
-          );
-          // Opening of 'Just checking...' pop-up is handled in app-memo-code component directly.
+          if (val) {
+            this.memoCode()?.coverageDateQuestion.set('Did you mean to enter a date...');
+          }
         }, this.destroy$);
-        date2Control.addSubscription((date: Date | null) => {
+        date2Control.addSubscription(() => {
           dateControl.updateValueAndValidity({ emitEvent: false });
-          // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
           if (!dateControl.value) {
-            this.memoCode()?.coverageDate.set(date);
-            this.memoCode()?.coverageDateQuestion.set(
-              'Did you mean to enter a disbursement date outside of the report coverage period?',
-            );
-            this.memoCode()?.updateMemoItemWithDate(date);
+            this.memoCode()?.coverageDateQuestion.set('Did you mean to enter a disbursement date...');
           }
         }, this.destroy$);
       }
@@ -138,7 +132,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       // Automatically convert the amount value to a negative dollar amount.
       const inputValue = this.amountInput().input.nativeElement.value;
       if (inputValue.startsWith('$')) {
-        const value = Number(parseInt(inputValue.slice(1)).toFixed(2));
+        const value = Number(Number.parseInt(inputValue.slice(1)).toFixed(2));
         this.amountInput().updateInput(-1 * value, undefined, 'insert', undefined);
       }
     }
