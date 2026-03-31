@@ -65,7 +65,9 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   });
 
   readonly rowActions: TableAction<T>[] = [
-    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
+    new TableAction('Edit', this.editItem.bind(this), (report: T) =>
+      [ReportStatus.IN_PROGRESS, ReportStatus.SUBMIT_FAILURE].includes(report.report_status!),
+    ),
     new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
     new TableAction(
       'Review',
