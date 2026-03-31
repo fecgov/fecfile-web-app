@@ -1,3 +1,5 @@
+import type { RouteMatcher } from "cypress/types/net-stubbing";
+
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
@@ -444,8 +446,15 @@ export class PageUtils {
       });
   }
 
-  static submitReportForm() {
-    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
+  static submitReportForm(reject = false) {
+    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/', (req) => {
+    if (reject) {
+      const url = new URL(req.url);
+      url.searchParams.set('mock', 'true');
+      url.searchParams.set('mock_reject', 'true');
+      req.url = url.toString();
+    }
+  }).as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     cy.contains('h1', 'Submit report').should('be.visible');
