@@ -137,7 +137,8 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     this.dateIsOutsideReport = false;
   }
 
-  private setOutOfDateRequirement(): void {
+  private setOutOfDateRequirement(date: Date): void {
+    this.coverageDate.set(date);
     this.memoControl.addValidators(Validators.requiredTrue);
     this.memoControl.markAsTouched();
     this.memoControl.markAsDirty();
@@ -164,6 +165,6 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       return;
     }
 
-    this.setOutOfDateRequirement();
+    this.setOutOfDateRequirement(date);
   }
 }
