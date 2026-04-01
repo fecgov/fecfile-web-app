@@ -92,13 +92,17 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
         dateControl.addSubscription((val) => {
           date2Control.updateValueAndValidity({ emitEvent: false });
           if (val) {
-            this.memoCode()?.coverageDateQuestion.set('Did you mean to enter a date...');
+            this.memoCode()?.coverageDateQuestion.set(
+              'Did you mean to enter a date outside of the report coverage period?',
+            );
           }
         }, this.destroy$);
         date2Control.addSubscription(() => {
           dateControl.updateValueAndValidity({ emitEvent: false });
           if (!dateControl.value) {
-            this.memoCode()?.coverageDateQuestion.set('Did you mean to enter a disbursement date...');
+            this.memoCode()?.coverageDateQuestion.set(
+              'Did you mean to enter a disbursement date outside of the report coverage period?',
+            );
           }
         }, this.destroy$);
       }
