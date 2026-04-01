@@ -7,7 +7,7 @@
     </ng-template>
 
     <ng-template pTemplate="right">
-      @if (isNotSubmitted()) {
+      @if (report().canEdit) {
         <app-table-actions-button
           [tableActions]="tableActions"
           [actionItem]="report()"
