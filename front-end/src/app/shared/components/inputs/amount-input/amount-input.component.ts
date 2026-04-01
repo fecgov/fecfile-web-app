@@ -7,7 +7,6 @@ import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import {
   LinkedReportInputComponent,
@@ -52,7 +51,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   readonly memoItemHelpText = input<string | undefined>();
 
   readonly amountInput = viewChild.required<InputNumber>('amountInput');
-  readonly memoCode = viewChild(MemoCodeInputComponent);
   readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
 
   readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
@@ -83,31 +81,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
-    // and set up the "Just checking..." pop-up as needed.
-    if (this.templateMap.date && this.templateMap.date2) {
-      const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
-      const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl;
-      if (dateControl && date2Control) {
-        dateControl.addSubscription((val) => {
-          date2Control.updateValueAndValidity({ emitEvent: false });
-          if (val) {
-            this.memoCode()?.coverageDateQuestion.set(
-              'Did you mean to enter a date outside of the report coverage period?',
-            );
-          }
-        }, this.destroy$);
-        date2Control.addSubscription(() => {
-          dateControl.updateValueAndValidity({ emitEvent: false });
-          if (!dateControl.value) {
-            this.memoCode()?.coverageDateQuestion.set(
-              'Did you mean to enter a disbursement date outside of the report coverage period?',
-            );
-          }
-        }, this.destroy$);
-      }
-    }
-
     if (this.isDebtRepayment() || this.isLoanRepayment()) {
       this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
         const form3X = this.report() as Form3X;
