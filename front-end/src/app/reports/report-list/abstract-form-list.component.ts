@@ -65,13 +65,9 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   });
 
   readonly rowActions: TableAction<T>[] = [
-    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.report_status === ReportStatus.IN_PROGRESS),
+    new TableAction('Edit', this.editItem.bind(this), (report: T) => report.canEdit),
     new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
-    new TableAction(
-      'Review',
-      this.editItem.bind(this),
-      (report: T) => report.report_status !== ReportStatus.IN_PROGRESS,
-    ),
+    new TableAction('Review', this.editItem.bind(this), (report: T) => !report.canEdit),
     new TableAction('Delete', this.confirmDelete.bind(this), (report: T) => report.can_delete),
     new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
     new TableAction('Download as .fec', this.download.bind(this)),
