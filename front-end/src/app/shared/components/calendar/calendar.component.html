@@ -12,6 +12,10 @@
     [showIcon]="true"
     [iconDisplay]="'input'"
     ariaLabelledBy="date_picker_label"
+    [keepInvalid]="true"
+    placeholder="MM/DD/YYYY"
+    pInputMask="99/99/9999"
+    slotChar="MM/DD/YYYY"
   >
     <ng-template #inputicon let-clickCallBack="clickCallBack">
       <div
@@ -30,5 +34,11 @@
       [formSubmitted]="formSubmitted()"
       [requiredErrorMessage]="requiredErrorMessage()"
     />
+  }
+
+  @if (control()?.hasError('invalidFormat') && (control()?.touched || formSubmitted())) {
+    <small class="p-error error-message">
+      {{ invalidFormatMessage() }}
+    </small>
   }
 </div>
