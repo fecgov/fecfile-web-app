@@ -105,7 +105,6 @@ export class TransactionListComponent {
   readonly loans = viewChild.required(TransactionLoansAndDebtsComponent);
 
   readonly isForm24 = computed(() => this.report().report_type === ReportTypes.F24);
-  readonly isNotSubmitted = computed(() => this.report().report_status !== ReportStatus.SUBMIT_SUCCESS);
 
   async createTransactions(transactionCategory: string, report: Report): Promise<void> {
     await this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
