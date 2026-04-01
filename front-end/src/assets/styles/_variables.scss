@@ -33,6 +33,7 @@
   --surface-hover: #e8e8e8;
   --maskbg: rgba(0, 0, 0, 0.4);
   --focus-ring: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  --fec-black: #212121;
 
   --fec-grey-background: var(--surface-c);
   --fec-grey-alt: #aeb0b5;
@@ -57,7 +58,7 @@
   --p-content-background: white;
   --p-togglebutton-content-checked-background: transparent;
   --p-datepicker-panel-padding: 0;
-  --p-content-color: #212121;
+  --p-content-color: var(--fec-black);
   --p-primary-color: var(--primary-color);
   --p-primary-contrast-color: white;
   --p-datepicker-select-month-hover-color: var(--p-datepicker-select-month-color);
@@ -65,7 +66,9 @@
   --p-content-hover-background: var(--surface-hover);
   --p-content-hover-color: var(--p-content-color);
   --primary-button-disabled-background: var(--surface-ground);
-  --primary-button-hover-color: #164f85; 
+  --primary-button-hover-color: #164f85;
+  --p-button-primary-hover-background: var(--primary-button-hover-color);
+  --p-button-primary-active-background: var(--primary-button-hover-color);
   --p-datepicker-month-padding: 0.5rem;
   --p-datepicker-date-border-radius: var(--p-border-radius-sm);
   --p-datepicker-month-border-radius: var(--p-datepicker-date-border-radius);

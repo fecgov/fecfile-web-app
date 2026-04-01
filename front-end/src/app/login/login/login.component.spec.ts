@@ -15,13 +15,12 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
-    window.onbeforeunload = vi.fn();
+    globalThis.onbeforeunload = vi.fn();
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LoginComponent, BannerComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: Window, useValue: window },
         provideMockStore(testMockStore()),
         provideRouter([
           {
@@ -45,6 +44,6 @@ describe('LoginComponent', () => {
 
   it.skip('navigateToLoginDotGov should href environment location', () => {
     component.navigateToLoginDotGov();
-    expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
+    expect(globalThis.location.href).toEqual(environment.loginDotGovAuthUrl);
   });
 });
