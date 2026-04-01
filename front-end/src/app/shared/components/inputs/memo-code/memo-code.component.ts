@@ -83,17 +83,30 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       map(([d1, d2]) => {
         const val1 = dateControl?.enabled ? d1 : null;
         const val2 = date2Control?.enabled ? d2 : null;
-        return val1 || val2;
+        const activeDate = val1 || val2;
+        const isDisbursement = !val1 && !!val2;
+
+        return { activeDate, isDisbursement };
       }),
-      distinctUntilChanged((prev, curr) => prev?.getTime() === curr?.getTime()),
+      distinctUntilChanged((prev, curr) => prev.activeDate?.getTime() === curr.activeDate?.getTime()),
     );
 
     this.memoControl = this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>;
     const memo$ = this.memoControl.valueChanges.pipe(startWith(this.memoControl.value));
     combineLatest([activeDate$, memo$])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([activeDate, isMemoChecked]) => {
+      .subscribe(([{ activeDate, isDisbursement }, isMemoChecked]) => {
         this.updateTransactionTypeIdentifier();
+        const question = isDisbursement
+          ? 'Did you mean to enter a disbursement date outside of the report coverage period?'
+          : 'Did you mean to enter a date outside of the report coverage period?';
+        this.coverageDateQuestion.set(question);
+
+        if (dateControl && date2Control) {
+          dateControl.updateValueAndValidity({ emitEvent: false });
+          date2Control.updateValueAndValidity({ emitEvent: false });
+        }
+
         if (!isMemoChecked && activeDate) {
           this.updateMemoItemWithDate(activeDate);
         } else {
