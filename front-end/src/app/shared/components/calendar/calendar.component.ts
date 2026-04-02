@@ -27,7 +27,7 @@ export class CalendarComponent {
     const control = this.form()?.get(field);
     if (!control) return undefined;
 
-    if (control.hasValidator(this.dateFormatValidator)) {
+    if (!control.hasValidator(this.dateFormatValidator)) {
       control.addValidators(this.dateFormatValidator);
     }
 
@@ -46,9 +46,13 @@ export class CalendarComponent {
   constructor() {
     effect(() => {
       const control = this.control();
-      if (control) {
-        const date = DateUtils.parseDate(control.value);
-        control.setValue(date);
+      const value = control?.value;
+      if (value && typeof value === 'string' && value.length === 10 && !value.includes('D')) {
+        const date = DateUtils.parseDate(value);
+
+        if (date) {
+          control.setValue(date, { emitEvent: false });
+        }
       }
     });
   }
