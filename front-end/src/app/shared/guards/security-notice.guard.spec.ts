@@ -44,6 +44,6 @@ describe('securityNoticeGuard', () => {
     const route: ActivatedRouteSnapshot = {} as any;
     const state: RouterStateSnapshot = {} as any;
     const safe = await executeGuard(route, state);
-    expect(safe).toBeTrue();
+    expect(safe).toBe(true);
   });
 });

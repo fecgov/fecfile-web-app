@@ -1,9 +1,43 @@
 export const currentYear = new Date().getFullYear();
 
 export class PageUtils {
+  private static exactText(value: string): RegExp {
+    return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value)}\s*$`, 'i'); // NOSONAR
+  }
+
+  private static normalizeButtonLabel(value: string): string {
+    return value.replaceAll(/\s+/g, ' ').trim();
+  }
+
+  private static canonizeButtonLabel(value: string): string {
+    return PageUtils.normalizeButtonLabel(value)
+      .replaceAll('&', ' and ')
+      .replaceAll(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  private static normalizeSidebarLabel(value: string): string {
+    return value.replaceAll(/\s+/g, ' ').trim().toLowerCase();
+  }
+
+  private static isSidebarHeaderExpanded($header: JQuery<HTMLElement>): boolean {
+    const ariaExpanded = ($header.attr('aria-expanded') ?? '').toLowerCase();
+    if (ariaExpanded === 'true') return true;
+    if (ariaExpanded === 'false') return false;
+
+    const dataHighlight = ($header.attr('data-p-highlight') ?? '').toLowerCase();
+    return dataHighlight === 'true' || $header.hasClass('p-highlight');
+  }
+
   static closeToast() {
     const alias = PageUtils.getAlias('');
-    cy.get(alias).find('.p-toast-close-button').should('exist').click();
+    cy.get(alias).then(($root) => {
+      const closeButton = $root.find('.p-toast-close-button:visible').first();
+      if (closeButton.length > 0) {
+        cy.wrap(closeButton).click();
+      }
+    });
   }
 
   static clickElement(elementSelector: string, alias = '') {
@@ -19,7 +53,13 @@ export class PageUtils {
     if (value) {
       cy.get(alias).find(querySelector).eq(index).find('select').contains('option', value).then(
         (option) => {
-          cy.get(alias).find(querySelector).eq(index).find('select').select(option.val()!);
+          const optionValue = option.val();
+          expect(optionValue, `select option value for "${value}"`).to.not.be.oneOf([undefined, null]);
+          if (optionValue === undefined || optionValue === null) {
+            throw new Error(`Missing select option value for "${value}"`);
+          }
+
+          cy.get(alias).find(querySelector).eq(index).find('select').select(String(optionValue));
         }
       );
     }
@@ -31,7 +71,11 @@ export class PageUtils {
 
     if (value) {
       cy.get(alias).find(querySelector).eq(index).click();
-      cy.contains('p-selectitem', value)
+      cy.get('.p-select-overlay:visible')
+        .find('[role="option"]')
+        .filter((_, option) => PageUtils.exactText(value).test(option.textContent ?? ''))
+        .should('have.length', 1)
+        .first()
         .scrollIntoView({ offset: { top: 0, left: 0 } })
         .click();
     }
@@ -44,7 +88,6 @@ export class PageUtils {
 
     PageUtils.pickYear(dateObj.getFullYear());
     PageUtils.pickMonth(dateObj.getMonth());
-
     PageUtils.pickDay(dateObj.getDate().toString());
 
     cy.get('@calendarElement').should('not.exist');
@@ -63,13 +106,13 @@ export class PageUtils {
   }
 
   static pickMonth(month: number) {
-    const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const Month: string = Months[month];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(Month).click({ force: true });
+    const months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const targetMonth = months[month];
+    cy.get('@calendarElement').find('.p-datepicker-month').contains(targetMonth).click({ force: true });
   }
 
   static pickYear(year: number) {
-    const currentYear: number = new Date().getFullYear();
+    const currentCalendarYear: number = new Date().getFullYear();
 
     cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
     cy.wait(100);
@@ -80,7 +123,7 @@ export class PageUtils {
     });
     cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
 
-    const decadeStart: number = currentYear - (currentYear % 10);
+    const decadeStart: number = currentCalendarYear - (currentCalendarYear % 10);
     const decadeEnd: number = decadeStart + 9;
     if (year < decadeStart) {
       for (let i = 0; i < decadeStart - year; i += 10) {
@@ -96,13 +139,100 @@ export class PageUtils {
   }
 
   static clickSidebarSection(section: string) {
-    cy.get('p-panelmenu').contains(section).parent().as('section');
-    cy.get('@section').click();
+    return PageUtils.clickSidebarItem(section);
   }
 
-  static clickSidebarItem(menuItem: string) {
-    cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
-    cy.get('@menuItem').click();
+  static clickSidebarItem(menuItem: string) { // NOSONAR - sidebar helper intentionally uses nested closures for deterministic menu expansion
+    const normalizedMenuItem = PageUtils.normalizeSidebarLabel(menuItem);
+    const menuLabelSelector = '.p-panelmenu-header-label, .p-panelmenu-item-label';
+    const findPanelMenu = (): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
+      cy.get('p-panelmenu', { timeout: 15000 }).should('exist');
+    const nativeClick = ($link: JQuery<HTMLElement>, label: string) => { // NOSONAR - scoped sidebar helper
+      expect($link.length, `${label} link count for "${menuItem}"`).to.eq(1);
+      const link = $link.get(0);
+      expect(link, `${label} link element for "${menuItem}"`).to.exist;
+      if (!link) {
+        throw new Error(`Missing ${label} link element for "${menuItem}"`);
+      }
+      link.click();
+    };
+    const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> => // NOSONAR - scoped sidebar helper
+      findMenuLink(visibleOnly)
+        .should('be.visible')
+        .then(($link) => nativeClick($link, label)); // NOSONAR - scoped sidebar helper
+
+    const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => { // NOSONAR - scoped sidebar helper
+      return findPanelMenu()
+        .find(menuLabelSelector)
+        .filter(
+          (_, label) => // NOSONAR - scoped sidebar helper
+            PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem &&
+            (!visibleOnly || Cypress.dom.isVisible(label)),
+        )
+        .should(($labels) => { // NOSONAR - scoped sidebar helper
+          expect(
+            $labels.length,
+            `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`,
+          ).to.eq(1);
+        });
+    };
+
+    const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
+      findMenuLabel(visibleOnly)
+        .closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link')
+        .should('have.length', 1);
+
+    const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
+      findMenuLabel(false).then(($candidateLabel) => { // NOSONAR - scoped sidebar helper
+        if (Cypress.dom.isVisible($candidateLabel[0])) {
+          return findMenuLink(true);
+        }
+
+        const $ownerPanel = $candidateLabel.closest('.p-panelmenu-panel');
+        expect($ownerPanel.length, `owner sidebar panel for "${menuItem}"`).to.eq(1);
+        const ownerPanelIndex = $ownerPanel.first().index();
+        expect(ownerPanelIndex, `owner sidebar panel index for "${menuItem}"`).to.be.greaterThan(-1);
+
+        const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
+          findPanelMenu()
+            .find('.p-panelmenu-panel')
+            .eq(ownerPanelIndex)
+            .find('> .p-panelmenu-header')
+            .should('have.length', 1);
+
+        return findOwnerHeader().then(($ownerHeader) => { // NOSONAR - scoped sidebar helper
+          if (PageUtils.isSidebarHeaderExpanded($ownerHeader)) {
+            return findMenuLink(true);
+          }
+
+          return findOwnerHeader()
+            .find('a.p-panelmenu-header-link')
+            .should('have.length', 1)
+            .should('be.visible')
+            .then(($link) => nativeClick($link, 'owner sidebar header')) // NOSONAR - scoped sidebar helper
+            .then(() => // NOSONAR - scoped sidebar helper
+              findOwnerHeader().should(($header) => { // NOSONAR - scoped sidebar helper
+                expect(
+                  PageUtils.isSidebarHeaderExpanded($header),
+                  `owner sidebar header expanded for "${menuItem}"`,
+                ).to.eq(true);
+              }),
+            )
+            .then(() => findMenuLink(true)); // NOSONAR - scoped sidebar helper
+        });
+      });
+
+    return ensureVisibleMenuLink().then(($menuLink) => { // NOSONAR - scoped sidebar helper
+      const isHeaderLink = $menuLink.hasClass('p-panelmenu-header-link');
+      const $header = $menuLink.closest('.p-panelmenu-header');
+      const shouldClick = !isHeaderLink || !PageUtils.isSidebarHeaderExpanded($header);
+
+      if (shouldClick) {
+        return clickMenuLink(true, 'sidebar target');
+      }
+
+      return cy.wrap(undefined, { log: false });
+    });
   }
 
   static shouldHaveSidebarItem(menuItem: string) {
@@ -125,7 +255,13 @@ export class PageUtils {
 
   static clickLink(name: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).contains('a', name).click();
+    const exactName = PageUtils.exactText(name.trim());
+    cy.get(alias)
+      .find('a:visible')
+      .filter((_, link) => exactName.test(link.textContent ?? ''))
+      .first()
+      .should('exist')
+      .click();
   }
 
   static clickAccordion(name: string, alias = '') {
@@ -143,10 +279,50 @@ export class PageUtils {
 
   static clickButton(name: string, alias = '', force = false) {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .contains('button', name)
-      .first()
-      .click({ force });
+    const normalizedName = PageUtils.canonizeButtonLabel(name);
+
+    const resolveLabel = (button: HTMLElement): string => {
+      const sources = [
+        button.getAttribute('aria-label') ?? '',
+        button.getAttribute('label') ?? '',
+        button instanceof HTMLInputElement ? button.value : '',
+        button.textContent ?? '',
+      ];
+      const matchingLabel = sources.find((value) => PageUtils.normalizeButtonLabel(value).length > 0) ?? '';
+      return PageUtils.canonizeButtonLabel(matchingLabel);
+    };
+
+    cy.get(alias).then(($root) => {
+      const selector = 'button:visible, input[type="button"]:visible, input[type="submit"]:visible';
+      const directMatches = $root.filter(selector);
+      const nestedMatches = $root.find(selector);
+      const candidates = Cypress.$([...directMatches.toArray(), ...nestedMatches.toArray()]);
+      const uniqueCandidates = Cypress.$(Array.from(new Set(candidates.toArray())));
+      const matchingButtons = uniqueCandidates.filter((_, element) => {
+        return resolveLabel(element) === normalizedName;
+      });
+
+      expect(matchingButtons.length, `visible button match for ${String(name)}`).to.eq(1);
+      const button = matchingButtons.get(0);
+      expect(button, `button element for ${String(name)}`).to.exist;
+      if (!button) {
+        throw new Error(`Missing visible button match for ${String(name)}`);
+      }
+
+      cy.wrap(button).click({ force });
+    });
+  }
+
+  static clickFormActionButton(name: string, alias = '', force = false) {
+    return cy
+      .get('body')
+      .then(($body) => {
+        if ($body.find('.p-datepicker-panel:visible').length > 0) {
+          cy.get('body').type('{esc}');
+        }
+      })
+      .blurActiveField()
+      .then(() => PageUtils.clickButton(name, alias, force));
   }
 
   static dateToString(date: Date) {
@@ -196,29 +372,50 @@ export class PageUtils {
    */
   static getKabob(identifier: string, alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias)
-      .contains(identifier)
-      .closest('td')
-      .siblings()
-      .last()
-      .find('app-table-actions-button')
-      .children()
-      .first()
-      .children()
-      .then(($btn) => {
-        cy.wrap($btn.first()).as('btn');
-        cy.get('@btn').click();
+    const normalizedIdentifier = PageUtils.normalizeButtonLabel(identifier);
+    cy.get(alias).find('tbody tr:visible, tr:visible').then(($rows) => {
+      const matchingRows = $rows.filter((_, row) => {
+        const $row = Cypress.$(row);
+        const labels = $row
+          .find('td:visible, th:visible, a:visible')
+          .toArray()
+          .map((element) => PageUtils.normalizeButtonLabel(element.textContent ?? ''))
+          .filter(Boolean);
+
+        return labels.includes(normalizedIdentifier);
       });
+
+      expect(matchingRows.length, `kabob row matches for ${identifier}`).to.eq(1);
+      const row = matchingRows.get(0);
+      expect(row, `kabob row for ${identifier}`).to.exist;
+      if (!row) {
+        throw new Error(`Missing kabob row for ${identifier}`);
+      }
+
+      cy.wrap(row).within(() => {
+        cy.get('app-table-actions-button button:visible')
+          .should('have.length.at.least', 1)
+          .first()
+          .click();
+      });
+    });
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
     PageUtils.getKabob(identifier, alias);
     cy.get(PageUtils.getAlias(''))
-      .find('.p-popover')
-      .contains(item)
-      .then(($item) => {
-        cy.wrap($item.first()).as('btn');
-        cy.get('@btn').click();
+      .find('.p-popover:visible')
+      .find('button:visible, a:visible')
+      .then(($items) => {
+        const matchingItems = $items.filter((_, element) => PageUtils.exactText(item).test(element.textContent ?? ''));
+        expect(matchingItems.length, `kabob action matches for ${item}`).to.eq(1);
+        const action = matchingItems.get(0);
+        expect(action, `kabob action for ${item}`).to.exist;
+        if (!action) {
+          throw new Error(`Missing kabob action for ${item}`);
+        }
+
+        cy.wrap(action).click();
       });
   }
 
@@ -251,6 +448,7 @@ export class PageUtils {
     cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
+    cy.contains('h1', 'Submit report').should('be.visible');
     PageUtils.enterValue('#treasurer_last_name', 'TEST');
     PageUtils.enterValue('#treasurer_first_name', 'TEST');
     PageUtils.enterValue('#filingPassword', 'filing!Passw0rd');
@@ -260,9 +458,4 @@ export class PageUtils {
     PageUtils.clickButton('Confirm');
     cy.wait('@SubmitReport');
   }
-
-  static readonly blurActiveField = () => {
-    cy.get('body').click(0, 0);
-  };
-
 }

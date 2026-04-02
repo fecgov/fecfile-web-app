@@ -25,7 +25,6 @@ import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButton } from 'primeng/selectbutton';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
@@ -48,7 +47,6 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
     CalendarComponent,
     SearchableSelectComponent,
     SaveCancelComponent,
-    Dialog,
     RouterLink,
     Button,
     DialogComponent,

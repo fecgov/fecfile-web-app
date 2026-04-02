@@ -6,6 +6,10 @@ import { testScheduleBTransaction } from '../utils/unit-test.utils';
 import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 
 describe('SchBTransaction', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should create an instance', () => {
     expect(new SchBTransaction()).toBeTruthy();
   });
@@ -43,7 +47,7 @@ describe('SchBTransaction', () => {
 
   describe('redesignation from json', () => {
     it('should create reattribution_redesignation from json', () => {
-      const baseOverlaySpy = spyOn(RedesignatedUtils, 'overlayTransactionProperties').and.callThrough();
+      const baseOverlaySpy = vi.spyOn(RedesignatedUtils, 'overlayTransactionProperties');
 
       const json = {
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
@@ -62,7 +66,7 @@ describe('SchBTransaction', () => {
     });
 
     it('should create REDESIGNATED from json', () => {
-      const overlaySpy = spyOn(RedesignatedUtils, 'overlayTransactionProperties').and.callThrough();
+      const overlaySpy = vi.spyOn(RedesignatedUtils, 'overlayTransactionProperties');
 
       const json = {
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
@@ -81,7 +85,7 @@ describe('SchBTransaction', () => {
     });
 
     it('should create REDESIGNATION_FROM from json', () => {
-      const overlaySpy = spyOn(RedesignationFromUtils, 'overlayTransactionProperties').and.callThrough();
+      const overlaySpy = vi.spyOn(RedesignationFromUtils, 'overlayTransactionProperties');
       const json = {
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
         reattribution_redesignation_tag: ReattRedesTypes.REDESIGNATION_FROM,
@@ -99,7 +103,7 @@ describe('SchBTransaction', () => {
     });
 
     it('should create REDESIGNATION_TO from json', () => {
-      const overlaySpy = spyOn(RedesignationToUtils, 'overlayTransactionProperties').and.callThrough();
+      const overlaySpy = vi.spyOn(RedesignationToUtils, 'overlayTransactionProperties');
       const json = {
         transaction_type_identifier: ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
         reattribution_redesignation_tag: ReattRedesTypes.REDESIGNATION_TO,
@@ -117,7 +121,7 @@ describe('SchBTransaction', () => {
     });
 
     it('should create REDESIGNATION_TO from json', () => {
-      const overlaySpy = spyOn(RedesignationToUtils, 'overlayTransactionProperties').and.callFake((trans) => {
+      const overlaySpy = vi.spyOn(RedesignationToUtils, 'overlayTransactionProperties').mockImplementation((trans) => {
         trans.reatt_redes = testScheduleBTransaction();
         return trans;
       });

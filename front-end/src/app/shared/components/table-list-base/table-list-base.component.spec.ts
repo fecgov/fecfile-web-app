@@ -95,7 +95,7 @@ describe('TableListBaseComponent', () => {
   });
 
   it('#deleteItems should delete items', async () => {
-    spyOn(component, 'refreshTable').and.returnValue(Promise.resolve());
+    vi.spyOn(component, 'refreshTable').mockReturnValue(Promise.resolve());
     component.first.set(0);
     component.rowsPerPage.set(2);
     await component.loadTableItems();

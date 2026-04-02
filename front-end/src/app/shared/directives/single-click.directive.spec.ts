@@ -1,5 +1,5 @@
 import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SingleClickDirective } from './single-click.directive';
 import { By } from '@angular/platform-browser';
 import { Store, StoreModule } from '@ngrx/store';
@@ -26,17 +26,17 @@ describe('SingleClickDirective', () => {
     des = fixture.debugElement.queryAll(By.directive(SingleClickDirective));
   });
 
-  it('should create instance and add+remove disabled attribute', fakeAsync(() => {
+  it('should create instance and add+remove disabled attribute', () => {
     expect(des.length).toBe(1);
     const button = des[0].nativeElement as HTMLButtonElement;
-    spyOn(button, 'setAttribute');
-    spyOn(button, 'removeAttribute');
+    vi.spyOn(button, 'setAttribute');
+    vi.spyOn(button, 'removeAttribute');
     button.click();
-    tick(300);
+    fixture.detectChanges();
     expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
     expect(button.setAttribute).toHaveBeenCalledTimes(1);
     store.dispatch(singleClickEnableAction());
-    tick(300);
+    fixture.detectChanges();
     expect(button.removeAttribute).toHaveBeenCalledTimes(1);
-  }));
+  });
 });

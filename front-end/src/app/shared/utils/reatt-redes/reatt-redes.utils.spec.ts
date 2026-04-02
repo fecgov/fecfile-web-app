@@ -13,20 +13,20 @@ describe('ReattRedesUtils', () => {
     it('should test if transaction is reatt/redes', () => {
       const txn = getTestIndividualReceipt();
       let result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
       txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
       result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
     });
 
     it('should skip types check if no types provided', () => {
       const txn = getTestIndividualReceipt();
       txn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATED;
       let result = ReattRedesUtils.isReattRedes(txn);
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
 
       result = ReattRedesUtils.isReattRedes(txn, [ReattRedesTypes.REATTRIBUTED]);
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
     });
   });
 
@@ -35,13 +35,13 @@ describe('ReattRedesUtils', () => {
       const txn = getTestIndividualReceipt();
       txn.transaction_id = 'AC9877E1';
       let result = ReattRedesUtils.isAtAmountLimit(txn);
-      expect(result).toBeFalse();
+      expect(result).toBe(false);
 
       txn.reatt_redes_total = 100;
       txn.contribution_amount = 100;
       txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
       result = ReattRedesUtils.isAtAmountLimit(txn);
-      expect(result).toBeTrue();
+      expect(result).toBe(true);
     });
   });
 
@@ -76,8 +76,8 @@ describe('ReattRedesUtils', () => {
       fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
 
       ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-      expect(toForm.get('memo_code')?.enabled).toBeFalse();
-      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
+      expect(toForm.get('memo_code')?.enabled).toBe(false);
+      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBe(false);
     });
 
     it('should overlay redesignation forms correctly', () => {
@@ -85,8 +85,8 @@ describe('ReattRedesUtils', () => {
       fromTxn.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_FROM;
 
       ReattRedesUtils.overlayForms(toForm, toTxn, fromForm, fromTxn);
-      expect(toForm.get('memo_code')?.enabled).toBeFalse();
-      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBeFalse();
+      expect(toForm.get('memo_code')?.enabled).toBe(false);
+      expect(fromForm.get('contribution_purpose_descrip')?.enabled).toBe(false);
     });
   });
 
@@ -173,7 +173,7 @@ describe('ReattRedesUtils', () => {
     });
 
     it('should clone ', () => {
-      const cloneSpy = spyOn(ReattRedesUtils, 'clone').and.callThrough();
+      const cloneSpy = vi.spyOn(ReattRedesUtils, 'clone');
       if (!payload.reatt_redes) throw new Error('Bad test setup');
       payload.reatt_redes.memo_text_id = 'TEST';
       const memo = new MemoText();
@@ -191,7 +191,7 @@ describe('ReattRedesUtils', () => {
       expect(cloned[0].reports).toBeFalsy();
       expect(cloned[0].id).toBeFalsy();
       expect(cloned[0].reattribution_redesignation_tag).toBe(ReattRedesTypes.REDESIGNATED);
-      expect(cloned[0].force_unaggregated).toBeTrue();
+      expect(cloned[0].force_unaggregated).toBe(true);
 
       // Test memo text
       expect(cloned[0].memo_text_id).toBeFalsy();

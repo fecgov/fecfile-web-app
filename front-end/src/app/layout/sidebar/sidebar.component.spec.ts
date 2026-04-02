@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SidebarComponent } from './sidebar.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { provideHttpClient } from '@angular/common/http';
@@ -19,7 +18,7 @@ describe('SidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, MenuModule, PanelMenuModule, SidebarComponent],
+      imports: [MenuModule, PanelMenuModule, SidebarComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -59,7 +58,7 @@ describe('SidebarComponent', () => {
   });
 
   it('hasCoverage true for F3X', () => {
-    expect(component.hasCoverage()).toBeTrue();
+    expect(component.hasCoverage()).toBe(true);
     expect(component.coverageThrough()!.toISOString().substring(0, 10)).toBe('2022-06-30');
   });
 });

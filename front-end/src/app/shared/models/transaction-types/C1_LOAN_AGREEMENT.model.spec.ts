@@ -47,8 +47,8 @@ describe('C1_LOAN_AGREEMENT', () => {
     expect(transaction.transactionType.getFooter(transaction)).toBe(expectedFooterText);
 
     // getUseParentContact()
-    expect(transaction.transactionType.useParentContact).toBeTrue();
-    expect(transaction.transactionType.getUseParentContact(transaction)).toBeTrue();
+    expect(transaction.transactionType.useParentContact).toBe(true);
+    expect(transaction.transactionType.getUseParentContact(transaction)).toBe(true);
 
     if (transaction.parent_transaction) {
       transaction.parent_transaction.loan_id = 'test';
@@ -58,6 +58,6 @@ describe('C1_LOAN_AGREEMENT', () => {
     expect(transaction.transactionType.getFooter(transaction)).toBeUndefined();
     expect(transaction.transactionType.getInheritedFields(transaction)?.length).toBeUndefined();
     expect(transaction.transactionType.getNavigationControls(transaction)).toBe(STANDARD_CONTROLS);
-    expect(transaction.transactionType.getUseParentContact(transaction)).toBeFalse();
+    expect(transaction.transactionType.getUseParentContact(transaction)).toBe(false);
   });
 });

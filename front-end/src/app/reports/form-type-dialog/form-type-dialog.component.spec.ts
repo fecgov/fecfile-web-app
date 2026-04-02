@@ -65,7 +65,7 @@ describe('FormTypeDialogComponent', () => {
 
   describe('goToReportForm', () => {
     it('should route properly', () => {
-      const navigateSpy = spyOn(router, 'navigateByUrl');
+      const navigateSpy = vi.spyOn(router, 'navigateByUrl');
       component.selectedType.set(ReportTypes.F3X);
       component.goToReportForm();
       expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
@@ -85,7 +85,7 @@ describe('FormTypeDialogComponent', () => {
 
     component.f24().selectedForm24Type.set('48');
 
-    const create = spyOn(form24Service, 'create').and.returnValue(
+    const create = vi.spyOn(form24Service, 'create').mockReturnValue(
       Promise.resolve(
         Form24.fromJSON({
           id: 2401,

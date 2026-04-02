@@ -14,11 +14,11 @@ import { provideRouter } from '@angular/router';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { signal } from '@angular/core';
 import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
+import { LayoutService } from './layout.service';
 
 class MockLayoutService {
   showSidebar = signal(true);
 }
-import { LayoutService } from './layout.service';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -31,12 +31,12 @@ describe('LayoutComponent', () => {
   const configureModule = async (dynamicSidebarEnabled: boolean) => {
     matchMediaMock = {
       matches: false,
-      addEventListener: jasmine.createSpy('addEventListener').and.callFake((evt, cb) => (mediaQueryListener = cb)),
-      removeEventListener: jasmine.createSpy('removeEventListener'),
+      addEventListener: vi.fn().mockImplementation((evt, cb) => (mediaQueryListener = cb)),
+      removeEventListener: vi.fn(),
     };
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: jasmine.createSpy().and.returnValue(matchMediaMock),
+      value: vi.fn().mockReturnValue(matchMediaMock),
     });
 
     await TestBed.configureTestingModule({

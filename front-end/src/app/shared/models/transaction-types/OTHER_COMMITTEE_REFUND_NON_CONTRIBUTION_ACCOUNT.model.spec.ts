@@ -13,7 +13,7 @@ describe('OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
     expect(transactionType.scheduleId).toBe('B');
   });
 
-  xit('#factory() should return a SchBTransaction', () => {
+  it.skip('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(

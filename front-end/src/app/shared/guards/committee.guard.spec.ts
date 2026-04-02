@@ -35,7 +35,7 @@ describe('committeeGuard', () => {
     TestBed.inject(MockStore).overrideSelector(selectCommitteeAccount, CommitteeAccount.fromJSON({ id: '123' }));
     TestBed.inject(MockStore).refreshState();
     (executeGuard(route, state) as Promise<boolean>).then((safe) => {
-      expect(safe).toBeTrue();
+      expect(safe).toBe(true);
     });
   });
 });

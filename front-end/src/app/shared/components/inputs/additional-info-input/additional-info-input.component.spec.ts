@@ -7,8 +7,9 @@ import { testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
-import { Component, viewChild } from '@angular/core';
-import { Transaction } from 'app/shared/models';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import { Contact, Transaction } from 'app/shared/models';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   imports: [AdditionalInfoInputComponent],
@@ -36,9 +37,24 @@ class TestHostComponent {
   formSubmitted = false;
   templateMap = testTemplateMap();
   transaction: Transaction = testScheduleATransaction();
+  designatingCommitteeSelection?: SelectItem<Contact>;
+  subordinateCommitteeSelection?: SelectItem<Contact>;
   component = viewChild.required(AdditionalInfoInputComponent);
   constructor() {
     this.transaction.transactionType.purposeDescriptionPrefix = 'Prefix: ';
+  }
+
+  updateFormWithQuaternaryContact(event: SelectItem<Contact>): void {
+    this.designatingCommitteeSelection = event;
+  }
+  clearFormQuaternaryContact(): void {
+    return;
+  }
+  updateFormWithQuinaryContact(event: SelectItem<Contact>): void {
+    this.subordinateCommitteeSelection = event;
+  }
+  clearFormQuinaryContact(): void {
+    return;
   }
 }
 
@@ -55,13 +71,12 @@ describe('AdditionalInfoInputComponent', () => {
         ErrorMessagesComponent,
         DesignatedSubordinateInputComponent,
       ],
+      providers: [provideZoneChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
-
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -84,6 +99,7 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should trigger the purposeDescriptionPrefix callbacks', () => {
+    fixture.detectChanges();
     component.form.patchValue({
       [host.templateMap.purpose_description]: 'abc',
     });
@@ -100,6 +116,7 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('purpose_description of just prefix just trigger required error', () => {
+    fixture.detectChanges();
     component.form.patchValue({
       [host.templateMap.purpose_description]: 'Prefix: hihi',
     });
@@ -115,6 +132,7 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should detect memo prefixes', () => {
+    fixture.detectChanges();
     expect(component.form.get(host.templateMap.text4000)?.value).toEqual('');
     host.transaction.memo_text = MemoText.fromJSON({
       text_prefix: 'MEMO PREFIX:',

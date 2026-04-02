@@ -23,6 +23,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
 import { takeUntil } from 'rxjs';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-submit-report',
@@ -65,7 +66,8 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     'filingPassword',
     'userCertified',
   ];
-
+  readonly psaHelp = `${environment.webForms}/psa/help.htm`;
+  readonly psaIndex = `${environment.webForms}/psa/index.htm`;
   loading: 0 | 1 | 2 = 0;
   readonly backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';

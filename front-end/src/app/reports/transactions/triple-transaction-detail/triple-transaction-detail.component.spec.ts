@@ -20,7 +20,6 @@ import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 describe('TripleTransactionDetailComponent', () => {
   let component: TripleTransactionDetailComponent;
@@ -53,7 +52,6 @@ describe('TripleTransactionDetailComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        provideAnimationsAsync(),
         MessageService,
         ConfirmationService,
         FormBuilder,

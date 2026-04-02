@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -28,12 +28,12 @@ import { provideHttpClient } from '@angular/common/http';
     [formSubmitted]="formSubmitted"
     [templateMap]="templateMap"
     [contributionAmountReadOnly]="contributionAmountReadOnly"
-    [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
-    [showAggregate]="!!transaction?.transactionType?.showAggregate"
-    [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
-    [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
+    [negativeAmountValueOnly]="!!transaction.transactionType.negativeAmountValueOnly"
+    [showAggregate]="!!transaction.transactionType.showAggregate"
+    [showCalendarYTD]="!!transaction.transactionType.showCalendarYTD"
+    [showPayeeCandidateYTD]="!!transaction.transactionType.showPayeeCandidateYTD"
     [transaction]="transaction"
-    [memoHasOptional]="(memoHasOptional$ | async)!"
+    [memoHasOptional]="(memoHasOptional | async)!"
     [negativeAmountValueOnly]="negativeAmountValueOnly"
   />`,
 })
@@ -47,6 +47,7 @@ class TestHostComponent {
       disbursement_date: new SubscriptionFormControl(''),
       dissemination_date: new SubscriptionFormControl(''),
       expenditure_date: new SubscriptionFormControl(''),
+      expenditure_amount: new SubscriptionFormControl(''),
       calendar_ytd_per_election_office: new SubscriptionFormControl(''),
     },
     { updateOn: 'blur' },
@@ -88,74 +89,91 @@ describe('AmountInputComponent', () => {
 
     host = fixture.componentInstance;
     component = host.component();
-    fixture.detectChanges();
   });
 
   afterEach(() => {
     fixture.destroy(); // destroy the fixture to avoid memory leaks & state carried between test cases
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('default transaction', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should not call updateInput when negativeAmountValueOnly is false', () => {
+      fixture.detectChanges();
+      const updateInputMethodFalse = vi.spyOn(component.amountInput(), 'updateInput');
+      expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
+      component.onInputAmount();
+      // expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
+    });
   });
 
-  it('should not call updateInput when negativeAmountValueOnly is false', () => {
-    fixture.detectChanges();
-    const updateInputMethodFalse = spyOn(component.amountInput(), 'updateInput');
-    expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
-    component.onInputAmount();
-    // expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
+  describe('negativeAmountValueOnly transaction', () => {
+    beforeEach(() => {
+      host.negativeAmountValueOnly = true;
+      fixture.detectChanges();
+    });
+    it('should call updateInput when negativeAmountValueOnly is true', () => {
+      const updateInputMethodTrue = vi.spyOn(component.amountInput(), 'updateInput');
+      component.onInputAmount();
+      expect(updateInputMethodTrue).toHaveBeenCalled();
+    });
   });
 
-  it('should call updateInput when negativeAmountValueOnly is true', () => {
-    host.negativeAmountValueOnly = true;
-    fixture.detectChanges();
-    const updateInputMethodTrue = spyOn(component.amountInput(), 'updateInput');
-    component.onInputAmount();
-    expect(updateInputMethodTrue).toHaveBeenCalled();
-  });
-
-  it('should set up the component properly', () => {
-    fixture.detectChanges();
+  describe('Independent expenditure transaction', () => {
     const transaction = getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
     const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
-    host.transaction = transaction;
-    host.templateMap = transaction.transactionType.templateMap;
-    const checkboxLabel = signal('MEMO ITEM');
 
-    component.form.patchValue({
-      [transaction.transactionType.templateMap.date]: undefined,
+    beforeEach(() => {
+      host.transaction = transaction;
+      host.templateMap = transaction.transactionType.templateMap;
+      fixture.detectChanges();
     });
-    component.form.patchValue({
-      [transaction.transactionType.templateMap.date2]: date,
+
+    it('should set up the component properly', () => {
+      const checkboxLabel = signal('MEMO ITEM');
+
+      component.form.patchValue({
+        [transaction.transactionType.templateMap.date]: undefined,
+      });
+      component.form.patchValue({
+        [transaction.transactionType.templateMap.date2]: date,
+      });
+      fixture.detectChanges();
+      expect(component.memoCode()?.checkboxLabel()).toBe(checkboxLabel());
     });
-    fixture.detectChanges();
-    expect(component.memoCode()?.checkboxLabel()).toBe(checkboxLabel());
   });
 
-  it('should not allow memo item selection for loan repayment', fakeAsync(() => {
+  describe('loan repayment', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT);
     transaction.loan_id = 'test';
-    host.transaction = transaction;
-    host.templateMap = transaction.transactionType.templateMap;
-    fixture.detectChanges();
-    component.ngOnInit();
 
-    const dateFormControl = component.form.get(component.templateMap.date);
-
-    const validDate: Date = new Date('May 26, 22 20:17:40 GMT+00:00');
-    component.form.patchValue({
-      [transaction.transactionType.templateMap.date]: validDate,
+    beforeEach(() => {
+      host.transaction = transaction;
+      host.templateMap = transaction.transactionType.templateMap;
+      fixture.detectChanges();
     });
-    expect(dateFormControl?.invalid).toBeFalse();
-    const invalidDate: Date = new Date('May 26, 20 20:17:40 GMT+00:00');
-    component.form.patchValue({
-      [transaction.transactionType.templateMap.date]: invalidDate,
-    });
-    fixture.detectChanges();
-    expect(dateFormControl?.invalid).toBeTrue();
 
-    const msg = dateFormControl?.errors?.['invaliddate'].msg;
-    expect(msg).toEqual('Date must fall within the report date range.');
-  }));
+    it('should not allow memo item selection for loan repayment', () => {
+      const dateFormControl = component.form.get(component.templateMap.date);
+      const validDate: Date = new Date('May 26, 22 20:17:40 GMT+00:00');
+      component.form.patchValue({
+        [transaction.transactionType.templateMap.date]: validDate,
+      });
+      expect(dateFormControl?.invalid).toBe(false);
+      const invalidDate: Date = new Date('May 26, 20 20:17:40 GMT+00:00');
+      component.form.patchValue({
+        [transaction.transactionType.templateMap.date]: invalidDate,
+      });
+      fixture.detectChanges();
+      expect(dateFormControl?.invalid).toBe(true);
+
+      const msg = dateFormControl?.errors?.['invaliddate'].msg;
+      expect(msg).toEqual('Date must fall within the report date range.');
+    });
+  });
 });

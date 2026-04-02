@@ -26,7 +26,7 @@ export const LOGIN_ROUTES: Route[] = [
   {
     path: 'security-notice',
     component: SecurityNoticeComponent,
-    title: 'Security Notice',
+    title: 'Terms of service and user agreement',
     canActivate: [loggedInGuard, nameGuard],
     data: {
       showCommitteeBanner: false,

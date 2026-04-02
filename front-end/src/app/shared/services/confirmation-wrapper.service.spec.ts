@@ -1,3 +1,4 @@
+import type { MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { ConfirmationWrapperService } from './confirmation-wrapper.service';
 import { Confirmation, ConfirmationService } from 'primeng/api';
@@ -7,15 +8,17 @@ import { TransactionTemplateMapType } from '../models/transaction-type.model';
 
 describe('ConfirmationWrapperService', () => {
   let service: ConfirmationWrapperService;
-  let confirmationService: jasmine.SpyObj<ConfirmationService>;
+  let confirmationService: MockedObject<ConfirmationService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('ConfirmationService', ['confirm']);
+    const spy = {
+      confirm: vi.fn().mockName('ConfirmationService.confirm'),
+    };
     TestBed.configureTestingModule({
       providers: [ConfirmationWrapperService, { provide: ConfirmationService, useValue: spy }],
     });
     service = TestBed.inject(ConfirmationWrapperService);
-    confirmationService = TestBed.inject(ConfirmationService) as jasmine.SpyObj<ConfirmationService>;
+    confirmationService = TestBed.inject(ConfirmationService) as MockedObject<ConfirmationService>;
   });
 
   it('should be created', () => {
@@ -29,10 +32,10 @@ describe('ConfirmationWrapperService', () => {
     const getTemplateMap = (): TransactionTemplateMapType =>
       ({ organization_name: 'name' }) as TransactionTemplateMapType;
 
-    confirmationService.confirm.and.callFake((config: Confirmation) => config.accept?.());
+    confirmationService.confirm.mockImplementation((config: Confirmation) => config.accept?.());
 
     const result = await service.confirmWithUser(form, contactConfig, getContact, getTemplateMap);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should generate confirmation message for individual', () => {
