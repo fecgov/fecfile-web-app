@@ -1,6 +1,6 @@
 import { DatePipe, formatDate } from '@angular/common';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { AggregationGroups, Transaction } from '../models/transaction.model';
@@ -216,7 +216,7 @@ describe('TransactionService', () => {
       });
 
       service.delete(schATransaction).then(() => {
-        expect(true).toBeTrue();
+        expect(true).toBe(true);
       });
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
@@ -227,7 +227,7 @@ describe('TransactionService', () => {
   });
 
   describe('multiSaveReattRedes', () => {
-    it('should PUT an array of records', fakeAsync(() => {
+    it('should PUT an array of records', () => {
       const transactions: SchATransaction[] = [
         SchATransaction.fromJSON({
           id: '1',
@@ -253,7 +253,6 @@ describe('TransactionService', () => {
       expect(req.request.method).toEqual('PUT');
       req.flush(transactions.map((t) => t.id));
       httpTestingController.verify();
-      tick(100);
-    }));
+    });
   });
 });

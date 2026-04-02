@@ -19,7 +19,7 @@
       "target": "ES2024",
       "module": "ES2022",
       "typeRoots": [
-        "./node_modules/@types"
+        "./node_modules/@types", 
       ],
       "lib": [
         "ES2024",
@@ -34,5 +34,8 @@
         "strictInputAccessModifiers": true,
         "strictTemplates": true
     },
-    "exclude": ["./cypress.config.ts"]
+    "exclude": ["./cypress.config.ts",],
+    "references": [
+    { "path": "./tsconfig.spec.json" }
+  ]
 }

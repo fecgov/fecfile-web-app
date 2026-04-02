@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, viewChild } from '@angular/core';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AutoResizeDirective } from './auto-resize.directive';
+import { Mock } from 'vitest';
 
 @Component({
   imports: [AutoResizeDirective],
@@ -31,6 +32,7 @@ describe('AutoResizeDirective', () => {
     let fixture: ComponentFixture<TestHostComponent>;
     let textAreaEl: HTMLTextAreaElement;
     let directiveInstance: AutoResizeDirective;
+    let resizeSpy: Mock<any>;
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
@@ -42,7 +44,7 @@ describe('AutoResizeDirective', () => {
 
       textAreaEl = directiveDebugElement.nativeElement;
       directiveInstance = directiveDebugElement.injector.get(AutoResizeDirective);
-
+      resizeSpy = vi.spyOn(directiveInstance as any, 'resize');
       Object.defineProperty(textAreaEl, 'scrollHeight', { configurable: true, value: 50 });
     });
 
@@ -50,22 +52,16 @@ describe('AutoResizeDirective', () => {
       expect(directiveInstance).toBeTruthy();
     });
 
-    it('should set textarea overflow to "hidden" and resize on init', fakeAsync(() => {
-      const resizeSpy = spyOn(directiveInstance as any, 'resize').and.callThrough();
-
+    it('should set textarea overflow to "hidden" and resize on init', async () => {
       fixture.detectChanges();
-      tick();
-
+      await fixture.whenStable();
       expect(textAreaEl.style.overflow).toBe('hidden');
       expect(resizeSpy).toHaveBeenCalled();
       expect(textAreaEl.style.height).toBe('50px');
-    }));
+    });
 
     it('should call resize method on input event', () => {
       fixture.detectChanges();
-
-      const resizeSpy = spyOn(directiveInstance as any, 'resize').and.callThrough();
-
       textAreaEl.value = 'A new line of text';
       textAreaEl.dispatchEvent(new Event('input'));
       fixture.detectChanges();

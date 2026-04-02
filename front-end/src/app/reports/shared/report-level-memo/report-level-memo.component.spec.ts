@@ -81,43 +81,45 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.text4000 = 'test_text4k';
     component.form.addControl('text4000', new SubscriptionFormControl());
     component.form.get('text4000')?.setValue(testText4kValue);
-    spyOn(testMemoTextService, 'getForReportId').and.returnValue(Promise.resolve([testMemoText]));
+    vi.spyOn(testMemoTextService, 'getForReportId').mockReturnValue(Promise.resolve([testMemoText]));
     component.ngOnInit();
     expect(component).toBeTruthy();
   });
 
   it('save for existing memo text happy path', async () => {
-    const navSpy = spyOn(router, 'navigateByUrl').and.callThrough();
+    const navSpy = vi.spyOn(router, 'navigateByUrl');
     const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Updated',
       life: 3000,
     };
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.resolveTo(new MemoText());
-    const testMessageServiceSpy = spyOn(testMessageService, 'add');
+    const testMemoTextServiceSpy = vi.spyOn(testMemoTextService, 'update').mockResolvedValue(new MemoText());
+    const testMessageServiceSpy = vi.spyOn(testMessageService, 'add');
     component.assignedMemoText.id = '1';
     await component.submit();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
 
     expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/999');
-    expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
+    expect(testMessageServiceSpy).toHaveBeenCalledTimes(1);
+    expect(testMessageServiceSpy).toHaveBeenCalledWith(expectedMessage);
   });
 
   it('save for new memo text happy path', async () => {
-    const navSpy = spyOn(router, 'navigateByUrl').and.callThrough();
+    const navSpy = vi.spyOn(router, 'navigateByUrl');
     const expectedMessage: ToastMessageOptions = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Created',
       life: 3000,
     };
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.resolveTo(new MemoText());
-    const testMessageServiceSpy = spyOn(testMessageService, 'add');
+    const testMemoTextServiceSpy = vi.spyOn(testMemoTextService, 'create').mockResolvedValue(new MemoText());
+    const testMessageServiceSpy = vi.spyOn(testMessageService, 'add');
     component.assignedMemoText.id = undefined;
     await component.submit();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navSpy).toHaveBeenCalledWith('/reports/f3x/submit/999');
-    expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
+    expect(testMessageServiceSpy).toHaveBeenCalledTimes(1);
+    expect(testMessageServiceSpy).toHaveBeenCalledWith(expectedMessage);
   });
 });

@@ -10,6 +10,7 @@ import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { LoginService } from './login.service';
 import { provideHttpClient } from '@angular/common/http';
 import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
+import { environment } from 'environments/environment';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -35,21 +36,29 @@ describe('LoginService', () => {
   });
 
   it('#logOut non-login.gov happy path', async () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
     store.overrideSelector(selectUserLoginData, testUserLoginData());
     service.logOut();
     expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
   });
 
   it('#logOut login.gov happy path', () => {
-    spyOn(store, 'dispatch');
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const originalLogoutUrl = environment.loginDotGovLogoutUrl;
+    environment.loginDotGovLogoutUrl = globalThis.location.href;
+    const userIsAuthenticatedSpy = vi.spyOn(service, 'userIsAuthenticated').mockReturnValue(true);
 
-    service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+    try {
+      service.logOut();
+      expect(dispatchSpy).toHaveBeenCalledWith(userLoginDataDiscardedAction());
+      expect(userIsAuthenticatedSpy).toHaveBeenCalled();
+    } finally {
+      environment.loginDotGovLogoutUrl = originalLogoutUrl;
+    }
   });
 
   it('userHasProfileData should return true', () => {
-    expect(service.userHasProfileData()).toBeTrue();
+    expect(service.userHasProfileData()).toBe(true);
   });
 
   describe('#userHasConsented should work', () => {
@@ -62,7 +71,7 @@ describe('LoginService', () => {
         last_name: '',
         email: '',
       });
-      expect(service.userHasConsented()).toBeFalse();
+      expect(service.userHasConsented()).toBe(false);
     });
 
     it('test false security_consented', () => {
@@ -75,7 +84,7 @@ describe('LoginService', () => {
         email: '',
         security_consented: false,
       });
-      expect(service.userHasConsented()).toBeFalse();
+      expect(service.userHasConsented()).toBe(false);
     });
 
     it('test true security_consented', () => {
@@ -90,7 +99,7 @@ describe('LoginService', () => {
         security_consent_version: SECURITY_CONSENT_VERSION + 'B',
         security_consent_version_at_login: SECURITY_CONSENT_VERSION,
       });
-      expect(service.userHasConsented()).toBeFalse();
+      expect(service.userHasConsented()).toBe(false);
     });
 
     it('test true security_consented', () => {
@@ -105,7 +114,7 @@ describe('LoginService', () => {
         security_consent_version: SECURITY_CONSENT_VERSION + 'B',
         security_consent_version_at_login: SECURITY_CONSENT_VERSION + 'B',
       });
-      expect(service.userHasConsented()).toBeTrue();
+      expect(service.userHasConsented()).toBe(true);
     });
 
     it('test true security_consented', () => {
@@ -120,7 +129,7 @@ describe('LoginService', () => {
         security_consent_version: SECURITY_CONSENT_VERSION,
         security_consent_version_at_login: SECURITY_CONSENT_VERSION,
       });
-      expect(service.userHasConsented()).toBeTrue();
+      expect(service.userHasConsented()).toBe(true);
     });
   });
 });

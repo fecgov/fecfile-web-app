@@ -54,7 +54,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
     fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
     router = TestBed.inject(Router);
     reportService = TestBed.inject(ReportService);
-    spyOn(reportService, 'isEditable').and.returnValue(true);
+    vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -64,7 +64,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   });
 
   it('test editItem', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     const testTransaction: TransactionListRecord = {
       id: 'testId',
       report_ids: ['1'],
@@ -74,7 +74,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
   });
 
   it('test createLoanRepaymentReceived', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     const testTransaction: TransactionListRecord = {
       id: '123',
       report_ids: ['123'],
@@ -96,12 +96,12 @@ describe('TransactionLoansAndDebtsComponent', () => {
       report_code_label: '',
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    expect(tableAction.isAvailable(transaction)).toBeFalse();
+    expect(tableAction.isAvailable(transaction)).toBe(false);
     transaction.loan_agreement_id = 'loan agreement id';
-    expect(tableAction.isAvailable(transaction)).toBeTrue();
-    expect(tableAction.isEnabled(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(true);
+    expect(tableAction.isEnabled(transaction)).toBe(true);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     component.editLoanAgreement(transaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
@@ -120,18 +120,18 @@ describe('TransactionLoansAndDebtsComponent', () => {
       loan_id: 'testLoanId',
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(true);
     transaction.loan_agreement_id = 'loan agreement id';
-    expect(tableAction.isAvailable(transaction)).toBeFalse();
-    expect(tableAction.isEnabled(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(false);
+    expect(tableAction.isEnabled(transaction)).toBe(true);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     component.createLoanAgreement(transaction);
     expect(navigateSpy).toHaveBeenCalled();
   });
 
   it('test createLoanAgreement', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     const testTransaction: TransactionListRecord = {
       id: '123',
       report_ids: ['123'],
@@ -155,12 +155,12 @@ describe('TransactionLoansAndDebtsComponent', () => {
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
 
-    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(true);
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_TO_COMMITTEE;
-    expect(tableAction.isAvailable(transaction)).toBeFalse();
-    expect(tableAction.isEnabled(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(false);
+    expect(tableAction.isEnabled(transaction)).toBe(true);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     const testTransaction: TransactionListRecord = {
       id: '123',
       report_ids: ['123'],
@@ -183,12 +183,12 @@ describe('TransactionLoansAndDebtsComponent', () => {
       memo_code: false,
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    expect(tableAction.isAvailable(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(true);
     transaction.transaction_type_identifier = ScheduleDTransactionTypes.DEBT_OWED_BY_COMMITTEE;
-    expect(tableAction.isAvailable(transaction)).toBeFalse();
-    expect(tableAction.isEnabled(transaction)).toBeTrue();
+    expect(tableAction.isAvailable(transaction)).toBe(false);
+    expect(tableAction.isEnabled(transaction)).toBe(true);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     const testTransaction: TransactionListRecord = {
       id: '123',
       report_ids: ['123'],

@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { blurActiveInput, printFormErrors } from './form.utils';
 
@@ -6,7 +7,7 @@ describe('blurActiveInput', () => {
 
   beforeEach(() => {
     form = new FormGroup({}, { updateOn: 'blur' });
-    spyOn(form, 'updateValueAndValidity');
+    vi.spyOn(form, 'updateValueAndValidity');
   });
 
   it('should blur the active input element and update form validity', () => {
@@ -37,13 +38,17 @@ describe('blurActiveInput', () => {
 
 describe('printFormErrors', () => {
   let fb: FormBuilder;
-  let consoleGroupSpy: jasmine.Spy;
-  let consoleErrorSpy: jasmine.Spy;
+  let consoleGroupSpy: Mock;
+  let consoleErrorSpy: Mock;
 
   beforeEach(() => {
     fb = new FormBuilder();
-    consoleGroupSpy = spyOn(console, 'group');
-    consoleErrorSpy = spyOn(console, 'error');
+    consoleGroupSpy = vi.spyOn(console, 'group');
+    consoleErrorSpy = vi.spyOn(console, 'error');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should log a single error for a simple required field', () => {

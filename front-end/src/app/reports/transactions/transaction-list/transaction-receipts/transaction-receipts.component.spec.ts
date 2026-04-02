@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import type { Mock } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -26,8 +27,8 @@ describe('TransactionReceiptsComponent', () => {
   let router: Router;
   let testItemService: TransactionSchAService;
   let testConfirmationService: ConfirmationService;
-  let selectSignalSpy: jasmine.Spy;
-  let confirmSpy: jasmine.Spy;
+  let selectSignalSpy: Mock;
+  let confirmSpy: Mock;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -55,7 +56,7 @@ describe('TransactionReceiptsComponent', () => {
       ],
     }).compileComponents();
     const store = TestBed.inject(Store);
-    selectSignalSpy = spyOn(store, 'selectSignal').and.callThrough();
+    selectSignalSpy = vi.spyOn(store, 'selectSignal');
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
@@ -64,8 +65,8 @@ describe('TransactionReceiptsComponent', () => {
     };
     testConfirmationService = TestBed.inject(ConfirmationService);
     component = fixture.componentInstance;
-    confirmSpy = spyOn(testConfirmationService, 'confirm');
-    confirmSpy.and.callFake((confirmation: Confirmation) => {
+    confirmSpy = vi.spyOn(testConfirmationService, 'confirm');
+    confirmSpy.mockImplementation((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
     fixture.detectChanges();
@@ -76,23 +77,39 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('uses report id equality comparator when selecting active report', () => {
-    const signalCall = selectSignalSpy.calls
-      .allArgs()
-      .find(
-        ([selector, options]) =>
-          selector === selectActiveReport && typeof (options as { equal?: unknown } | undefined)?.equal === 'function',
-      );
+    const signalCall = vi.mocked(selectSignalSpy).mock.calls.find(
+      ([selector, options]) =>
+        selector === selectActiveReport &&
+        typeof (
+          options as
+            | {
+                equal?: unknown;
+              }
+            | undefined
+        )?.equal === 'function',
+    );
     expect(signalCall).toBeDefined();
 
     const options = signalCall?.[1] as {
-      equal: (a: { id?: string } | undefined, b: { id?: string } | undefined) => boolean;
+      equal: (
+        a:
+          | {
+              id?: string;
+            }
+          | undefined,
+        b:
+          | {
+              id?: string;
+            }
+          | undefined,
+      ) => boolean;
     };
     const equalByReportId = options.equal;
 
-    expect(equalByReportId({ id: 'same-id' }, { id: 'same-id' })).toBeTrue();
-    expect(equalByReportId({ id: 'left-id' }, { id: 'right-id' })).toBeFalse();
-    expect(equalByReportId(undefined, { id: 'present' })).toBeFalse();
-    expect(equalByReportId(undefined, undefined)).toBeTrue();
+    expect(equalByReportId({ id: 'same-id' }, { id: 'same-id' })).toBe(true);
+    expect(equalByReportId({ id: 'left-id' }, { id: 'right-id' })).toBe(false);
+    expect(equalByReportId(undefined, { id: 'present' })).toBe(false);
+    expect(equalByReportId(undefined, undefined)).toBe(true);
   });
 
   it('should show the correct row actions', () => {
@@ -116,26 +133,26 @@ describe('TransactionReceiptsComponent', () => {
     const unitemizeAction = component.rowActions.find((ra) => ra.label === 'Unitemize');
     const reattributeAction = component.rowActions.find((ra) => ra.label === 'Reattribute');
     const deleteAction = component.rowActions.find((ra) => ra.label === 'Delete');
-    expect(viewAction?.isAvailable(transaction)).toBeTrue();
-    expect(deleteAction?.isAvailable(transaction)).toBeFalse();
-    expect(editAction?.isAvailable(transaction)).toBeFalse();
-    expect(aggregateAction?.isAvailable(transaction)).toBeFalse();
+    expect(viewAction?.isAvailable(transaction)).toBe(true);
+    expect(deleteAction?.isAvailable(transaction)).toBe(false);
+    expect(editAction?.isAvailable(transaction)).toBe(false);
+    expect(aggregateAction?.isAvailable(transaction)).toBe(false);
 
-    expect(
-      unaggregateAction?.isAvailable({ ...transaction, force_unaggregated: false } as TransactionListRecord),
-    ).toBeFalse();
-    expect(itemizeAction?.isAvailable({ ...transaction, itemized: false } as TransactionListRecord)).toBeFalse();
-    expect(unitemizeAction?.isAvailable({ ...transaction, itemized: true } as TransactionListRecord)).toBeFalse();
+    expect(unaggregateAction?.isAvailable({ ...transaction, force_unaggregated: false } as TransactionListRecord)).toBe(
+      false,
+    );
+    expect(itemizeAction?.isAvailable({ ...transaction, itemized: false } as TransactionListRecord)).toBe(false);
+    expect(unitemizeAction?.isAvailable({ ...transaction, itemized: true } as TransactionListRecord)).toBe(false);
     (component.reportIsEditable as any) = signal(true);
-    expect(viewAction?.isAvailable(transaction)).toBeFalse();
-    expect(editAction?.isAvailable(transaction)).toBeTrue();
+    expect(viewAction?.isAvailable(transaction)).toBe(false);
+    expect(editAction?.isAvailable(transaction)).toBe(true);
     expect(
       deleteAction?.isAvailable({
         ...transaction,
         can_delete: true,
         transaction_type_identifier: '',
       } as TransactionListRecord),
-    ).toBeTrue();
+    ).toBe(true);
     expect(
       deleteAction?.isAvailable({
         ...transaction,
@@ -143,14 +160,14 @@ describe('TransactionReceiptsComponent', () => {
         transaction_type_identifier: 'LOAN_REPAYMENT_MADE',
         loan_id: 'test',
       } as TransactionListRecord),
-    ).toBeTrue();
+    ).toBe(true);
     expect(
       deleteAction?.isAvailable({
         ...transaction,
         can_delete: true,
         transaction_type_identifier: 'LOAN_RECEIVED_FROM_BANK_RECEIPT',
       } as TransactionListRecord),
-    ).toBeFalse();
+    ).toBe(false);
     expect(
       deleteAction?.isAvailable({
         ...transaction,
@@ -158,34 +175,34 @@ describe('TransactionReceiptsComponent', () => {
         transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
         loan_id: 'test',
       } as TransactionListRecord),
-    ).toBeFalse();
+    ).toBe(false);
     expect(
       deleteAction?.isAvailable({
         ...transaction,
         can_delete: true,
         transaction_type_identifier: undefined,
       } as TransactionListRecord),
-    ).toBeTrue();
-    expect(
-      aggregateAction?.isAvailable({ ...transaction, force_unaggregated: true } as TransactionListRecord),
-    ).toBeTrue();
+    ).toBe(true);
+    expect(aggregateAction?.isAvailable({ ...transaction, force_unaggregated: true } as TransactionListRecord)).toBe(
+      true,
+    );
     expect(
       unaggregateAction?.isAvailable({
         ...transaction,
         force_unaggregated: false,
       } as TransactionListRecord),
-    ).toBeTrue();
+    ).toBe(true);
     expect(itemizeAction?.isAvailable({ ...transaction, itemized: false } as TransactionListRecord)).toEqual(true);
     expect(unitemizeAction?.isAvailable({ ...transaction, itemized: true } as TransactionListRecord)).toEqual(true);
     expect(reattributeAction?.isAvailable({ ...transaction, itemized: false } as TransactionListRecord)).toEqual(true);
-    expect(viewAction?.isEnabled(transaction)).toBeTrue();
-    expect(editAction?.isEnabled(transaction)).toBeTrue();
-    expect(deleteAction?.isEnabled(transaction)).toBeTrue();
-    expect(aggregateAction?.isEnabled(transaction)).toBeTrue();
-    expect(unaggregateAction?.isEnabled(transaction)).toBeTrue();
-    expect(itemizeAction?.isEnabled(transaction)).toBeTrue();
-    expect(unitemizeAction?.isEnabled(transaction)).toBeTrue();
-    expect(reattributeAction?.isEnabled(transaction)).toBeTrue();
+    expect(viewAction?.isEnabled(transaction)).toBe(true);
+    expect(editAction?.isEnabled(transaction)).toBe(true);
+    expect(deleteAction?.isEnabled(transaction)).toBe(true);
+    expect(aggregateAction?.isEnabled(transaction)).toBe(true);
+    expect(unaggregateAction?.isEnabled(transaction)).toBe(true);
+    expect(itemizeAction?.isEnabled(transaction)).toBe(true);
+    expect(unitemizeAction?.isEnabled(transaction)).toBe(true);
+    expect(reattributeAction?.isEnabled(transaction)).toBe(true);
 
     expect(
       reattributeAction?.isAvailable({
@@ -198,36 +215,36 @@ describe('TransactionReceiptsComponent', () => {
 
   it('test forceAggregate', async () => {
     const testTransaction: TransactionListRecord = { force_aggregated: null } as unknown as TransactionListRecord;
-    spyOn(testItemService, 'unaggregate').and.resolveTo('');
+    vi.spyOn(testItemService, 'unaggregate').mockResolvedValue('');
     await component.forceAggregate(testTransaction);
     expect(testTransaction.force_unaggregated).toBe(false);
   });
 
   it('test forceUnaggregate', async () => {
     const testTransaction: TransactionListRecord = { force_aggregated: null } as unknown as TransactionListRecord;
-    spyOn(testItemService, 'unaggregate').and.resolveTo('');
+    vi.spyOn(testItemService, 'unaggregate').mockResolvedValue('');
     await component.forceUnaggregate(testTransaction);
     expect(testTransaction.force_unaggregated).toBe(true);
   });
 
-  it('test forceItemize', fakeAsync(() => {
+  it('test forceItemize', () => {
     const testTransaction: TransactionListRecord = { force_itemized: null } as unknown as TransactionListRecord;
-    spyOn(testItemService, 'itemize').and.resolveTo('');
+    vi.spyOn(testItemService, 'itemize').mockResolvedValue('');
     component.forceItemize(testTransaction);
-    tick(500);
+    fixture.detectChanges();
     expect(testTransaction.force_itemized).toBe(true);
-  }));
+  });
 
-  it('test forceUnitemize', fakeAsync(() => {
+  it('test forceUnitemize', () => {
     const testTransaction: TransactionListRecord = { force_itemized: null } as unknown as TransactionListRecord;
-    spyOn(testItemService, 'itemize').and.resolveTo('');
+    vi.spyOn(testItemService, 'itemize').mockResolvedValue('');
     component.forceUnitemize(testTransaction);
-    tick(500);
+    fixture.detectChanges();
     expect(testTransaction.force_itemized).toBe(false);
-  }));
+  });
 
   it('test editItem', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     const testTransaction: TransactionListRecord = {
       id: 'testId',
       report_ids: ['test'],
@@ -237,7 +254,7 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('test deleteItem', () => {
-    const deleteSpy = spyOn(testItemService, 'delete').and.callThrough();
+    const deleteSpy = vi.spyOn(testItemService, 'delete');
     const testTransaction: TransactionListRecord = {
       id: 'testId',
       report_ids: ['test'],

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { AccordionModule } from 'primeng/accordion';
@@ -35,7 +34,7 @@ describe('TransactionTypePickerComponent', () => {
     const routeParams$ = new BehaviorSubject({ category: 'receipt' });
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        imports: [AccordionModule, TransactionTypePickerComponent],
         providers: [
           provideHttpClient(),
           provideHttpClientTesting(),
@@ -67,8 +66,8 @@ describe('TransactionTypePickerComponent', () => {
 
     it('test utility testPAC() returns a PAC committee', () => {
       const pac = testPAC();
-      expect(pac.isPAC).toBeTrue();
-      expect(pac.isPTY).toBeFalse();
+      expect(pac.isPAC).toBe(true);
+      expect(pac.isPTY).toBe(false);
     });
 
     it('should create', () => {
@@ -106,18 +105,20 @@ describe('TransactionTypePickerComponent', () => {
     it('should limit by PACRestricted if Committee type is PAC', () => {
       routeParams$.next({ category: 'receipt' });
       const types = component.transactionTypes().get(Receipt[2]);
-      expect(types!.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBeFalse();
+      expect(types!.includes(ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY)).toBe(false);
     });
 
     it('should limit by PTY_ONLY if Committee type is PTY', () => {
       routeParams$.next({ category: 'receipt' });
       const types = component.transactionTypes().get(Receipt[4]);
-      expect(types!.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBeFalse();
+      expect(types!.includes(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT)).toBe(false);
     });
   });
 
   describe('f3', () => {
-    let routeParams$: BehaviorSubject<{ category: string }>;
+    let routeParams$: BehaviorSubject<{
+      category: string;
+    }>;
     const store = testMockStore();
     store.selectors = [
       { selector: selectCommitteeAccount, value: testPTY() },
@@ -129,7 +130,7 @@ describe('TransactionTypePickerComponent', () => {
       routeParams$ = new BehaviorSubject({ category: 'receipt' });
 
       await TestBed.configureTestingModule({
-        imports: [AccordionModule, BrowserAnimationsModule, TransactionTypePickerComponent],
+        imports: [AccordionModule, TransactionTypePickerComponent],
         providers: [
           provideHttpClient(),
           provideHttpClientTesting(),
@@ -156,7 +157,7 @@ describe('TransactionTypePickerComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(TransactionTypePickerComponent);
       component = fixture.componentInstance;
-      spyOn(component, 'showTransaction').and.returnValue(true);
+      vi.spyOn(component, 'showTransaction').mockReturnValue(true);
 
       fixture.detectChanges();
     });
@@ -165,7 +166,7 @@ describe('TransactionTypePickerComponent', () => {
       routeParams$.next({ category: 'disbursement' });
       fixture.detectChanges();
 
-      expect(component.isF3()).toBeTrue();
+      expect(component.isF3()).toBe(true);
 
       const groups = component.transactionGroups();
       expect(groups.length).toBe(5);

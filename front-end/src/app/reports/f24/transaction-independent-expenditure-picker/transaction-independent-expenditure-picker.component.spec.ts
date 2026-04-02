@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { AccordionModule } from 'primeng/accordion';
@@ -17,7 +16,7 @@ describe('TransactionIndependentExpenditurePickerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccordionModule, BrowserAnimationsModule, TransactionIndependentExpenditurePickerComponent],
+      imports: [AccordionModule, TransactionIndependentExpenditurePickerComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

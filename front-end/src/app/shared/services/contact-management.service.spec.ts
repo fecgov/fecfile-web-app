@@ -16,13 +16,13 @@ describe('ContactManagementService', () => {
   });
 
   it('should initially not show dialog', () => {
-    expect(service.showDialog()).toBeFalse();
+    expect(service.showDialog()).toBe(false);
   });
 
   it('should toggle dialog visibility', () => {
-    expect(service.showDialog()).toBeFalse();
+    expect(service.showDialog()).toBe(false);
     service.showDialog.set(true);
-    expect(service.showDialog()).toBeTrue();
+    expect(service.showDialog()).toBe(true);
   });
 
   it('should create and retrieve a ContactManager by key', () => {
@@ -76,7 +76,7 @@ describe('ContactManager', () => {
     manager.setContactTypeOptions([ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION]);
     expect(manager.contactType()).toBe(ContactTypes.INDIVIDUAL);
     expect(manager.contactTypeOptions().length).toBe(2);
-    expect(manager.contactTypeOptions().map((option) => option.value)).toContain(ContactTypes.INDIVIDUAL);
-    expect(manager.contactTypeOptions().map((option) => option.value)).toContain(ContactTypes.ORGANIZATION);
+    expect(manager.contactTypeOptions().map((option) => option.value)).toContainEqual(ContactTypes.INDIVIDUAL);
+    expect(manager.contactTypeOptions().map((option) => option.value)).toContainEqual(ContactTypes.ORGANIZATION);
   });
 });

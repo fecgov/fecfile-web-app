@@ -22,6 +22,7 @@ export const environment = {
   disableLogin: true,
   fecSpec: 8.5,
   showGlossary: false,
+  webForms: 'https://webforms.fec.gov',
 };
 
 /*

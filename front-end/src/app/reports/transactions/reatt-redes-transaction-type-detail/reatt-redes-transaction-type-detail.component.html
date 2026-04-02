@@ -116,10 +116,12 @@
   @if (pullForward) {
     <p-accordion-panel [value]="2">
       <p-accordion-header>
-        <img class="accordion-number-icon" src="assets/img/THREE-icon.svg" alt="Step three" />
-        <div class="accordion-text">
-          <strong>AUTO-POPULATED:</strong>
-          <p class="accordion-subtext">Duplicate of the original transaction</p>
+        <div class="accordion-header-wrapper">
+          <img class="accordion-number-icon" src="assets/img/THREE-icon.svg" alt="Step three" />
+          <div class="accordion-text">
+            <strong>AUTO-POPULATED:</strong>
+            <p class="accordion-subtext">Duplicate of the original transaction</p>
+          </div>
           <img
             class="accordion-icon"
             [src]="accordionValue() === 2 ? 'assets/img/i-minus-circle.svg' : 'assets/img/i-plus-circle.svg'"

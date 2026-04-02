@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InputNumberComponent } from './input-number.component';
 import { InputTextModule } from 'primeng/inputtext';
@@ -47,11 +48,11 @@ describe('InputNumberComponent', () => {
   });
 
   it('should spin value correctly', () => {
-    spyOn(component, 'parseValue').and.returnValue(10);
-    spyOn(component, 'validateValue').and.returnValue(11);
-    spyOn(component, 'updateInput');
-    spyOn(component, 'updateModel');
-    spyOn(component, 'handleOnInput');
+    vi.spyOn(component, 'parseValue').mockReturnValue(10);
+    vi.spyOn(component, 'validateValue').mockReturnValue(11);
+    vi.spyOn(component, 'updateInput');
+    vi.spyOn(component, 'updateModel');
+    vi.spyOn(component, 'handleOnInput');
 
     const event = new Event('spin');
     const inputElement = document.createElement('input');
@@ -76,13 +77,13 @@ describe('InputNumberComponent', () => {
     component.lastValue = '123';
     component.onUserInput(event);
     expect((event.target as HTMLInputElement).value).toBe('123');
-    expect(component.isSpecialChar).toBeFalse();
+    expect(component.isSpecialChar).toBe(false);
   });
 
   describe('onInputKeydown', () => {
-    let updateSpy: jasmine.Spy;
+    let updateSpy: Mock;
     beforeEach(() => {
-      updateSpy = spyOn(component, 'updateValue');
+      updateSpy = vi.spyOn(component, 'updateValue');
     });
 
     it('should do nothing on readonly', () => {
@@ -100,11 +101,11 @@ describe('InputNumberComponent', () => {
       const event = new KeyboardEvent('keydown', { altKey: true });
       createInput('$1,234.56', event);
       component.onInputKeyDown(event);
-      expect(component.isSpecialChar).toBeTrue();
+      expect(component.isSpecialChar).toBe(true);
     });
 
     it('should spin up if Arrow up', () => {
-      spyOn(component, 'spin');
+      vi.spyOn(component, 'spin');
       const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
       createInput('$1,234.56', event);
       component.onInputKeyDown(event);
@@ -112,7 +113,7 @@ describe('InputNumberComponent', () => {
     });
 
     it('should spin down if Arrow down', () => {
-      spyOn(component, 'spin');
+      vi.spyOn(component, 'spin');
       const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
       createInput('$1,234.56', event);
       component.onInputKeyDown(event);
@@ -122,7 +123,7 @@ describe('InputNumberComponent', () => {
     it('should move left if ArrowLeft', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
       createInput('$1,234.56', event);
-      const selectionSpy = spyOn(component.input.nativeElement, 'setSelectionRange');
+      const selectionSpy = vi.spyOn(component.input.nativeElement, 'setSelectionRange');
       component.onInputKeyDown(event);
       expect(selectionSpy).toHaveBeenCalledWith(9, 9);
     });
@@ -130,15 +131,15 @@ describe('InputNumberComponent', () => {
     it('should move right if ArrowRight', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
       createInput('$1,234.56', event);
-      const selectionSpy = spyOn(component.input.nativeElement, 'setSelectionRange');
+      const selectionSpy = vi.spyOn(component.input.nativeElement, 'setSelectionRange');
       component.onInputKeyDown(event);
       expect(selectionSpy).toHaveBeenCalledWith(8, 8);
     });
 
     it('should update if Tab or Enter', () => {
-      const parseSpy = spyOn(component, 'parseValue').and.returnValue(1234);
-      const formatSpy = spyOn(component, 'formatValue').and.returnValue('1234');
-      const updateModelSpy = spyOn(component, 'updateModel');
+      const parseSpy = vi.spyOn(component, 'parseValue').mockReturnValue(1234);
+      const formatSpy = vi.spyOn(component, 'formatValue').mockReturnValue('1234');
+      const updateModelSpy = vi.spyOn(component, 'updateModel');
       const event = new KeyboardEvent('keydown', { key: 'Tab' });
       createInput('$1,234.56', event);
       component.onInputKeyDown(event);
@@ -148,8 +149,8 @@ describe('InputNumberComponent', () => {
     });
 
     it('should delete previous char when backspace', () => {
-      const groupTestSpy = spyOn(component._group, 'test');
-      const isNumeralSpy = spyOn(component, 'isNumeralChar').and.returnValue(true);
+      const groupTestSpy = vi.spyOn(component._group, 'test');
+      const isNumeralSpy = vi.spyOn(component, 'isNumeralChar').mockReturnValue(true);
 
       const event = new KeyboardEvent('keydown', { key: 'Backspace' });
 
@@ -163,7 +164,7 @@ describe('InputNumberComponent', () => {
     });
 
     it('should delete selection when backspace or Delete', () => {
-      const deleteSpy = spyOn(component, 'deleteRange').and.returnValue('$1,.56');
+      const deleteSpy = vi.spyOn(component, 'deleteRange').mockReturnValue('$1,.56');
 
       let event = new KeyboardEvent('keydown', { key: 'Backspace' });
       createInput('$1,234.56', event, [3, 6]);
@@ -179,8 +180,8 @@ describe('InputNumberComponent', () => {
     });
 
     it('should delete next char when backspace', () => {
-      const groupTestSpy = spyOn(component._group, 'test');
-      const isNumeralSpy = spyOn(component, 'isNumeralChar').and.returnValue(true);
+      const groupTestSpy = vi.spyOn(component._group, 'test');
+      const isNumeralSpy = vi.spyOn(component, 'isNumeralChar').mockReturnValue(true);
 
       const event = new KeyboardEvent('keydown', { key: 'Delete' });
       createInput('$1,234.56', event, [7, 7]);
@@ -196,7 +197,7 @@ describe('InputNumberComponent', () => {
       const event = new KeyboardEvent('keydown', { key: 'Home' });
       createInput('$1,234.56', event);
       component.min = undefined;
-      const updateSpy = spyOn(component, 'updateModel');
+      const updateSpy = vi.spyOn(component, 'updateModel');
       component.onInputKeyDown(event);
       expect(updateSpy).toHaveBeenCalledTimes(0);
 
@@ -209,7 +210,7 @@ describe('InputNumberComponent', () => {
       const event = new KeyboardEvent('keydown', { key: 'End' });
       createInput('$1,234.56', event);
       component.max = undefined;
-      const updateSpy = spyOn(component, 'updateModel');
+      const updateSpy = vi.spyOn(component, 'updateModel');
       component.onInputKeyDown(event);
       expect(updateSpy).toHaveBeenCalledTimes(0);
 
@@ -219,7 +220,7 @@ describe('InputNumberComponent', () => {
     });
 
     it('should emit keydown', () => {
-      const keydownSpy = spyOn(component.keyDown, 'emit');
+      const keydownSpy = vi.spyOn(component.keyDown, 'emit');
       const event = new KeyboardEvent('keydown', { key: 'End' });
       createInput('$1,234.56', event);
       component.onInputKeyDown(event);
@@ -348,8 +349,8 @@ describe('InputNumberComponent', () => {
       clipboardData: dt,
     });
 
-    const parseSpy = spyOn(component, 'parseValue').and.callThrough();
-    const insertSpy = spyOn(component, 'insert');
+    const parseSpy = vi.spyOn(component, 'parseValue');
+    const insertSpy = vi.spyOn(component, 'insert');
     component.onPaste(event);
 
     expect(parseSpy).toHaveBeenCalledWith('123');
@@ -359,21 +360,21 @@ describe('InputNumberComponent', () => {
   describe('minus sign', () => {
     it('should allow minus sign if min is less than 0', () => {
       component.min = -1;
-      expect(component.allowMinusSign()).toBeTrue();
+      expect(component.allowMinusSign()).toBe(true);
     });
 
     it('should not allow minus sign if min is greater than or equal to 0', () => {
       component.min = 0;
-      expect(component.allowMinusSign()).toBeFalse();
+      expect(component.allowMinusSign()).toBe(false);
     });
 
     it('should recognize minus sign', () => {
-      expect(component.isMinusSign('-')).toBeTrue();
+      expect(component.isMinusSign('-')).toBe(true);
     });
   });
 
   it('should recognize decimal sign', () => {
-    expect(component.isDecimalSign('.')).toBeTrue();
+    expect(component.isDecimalSign('.')).toBe(true);
   });
 
   it('should get decimal character indexes', () => {
@@ -392,9 +393,9 @@ describe('InputNumberComponent', () => {
   });
 
   describe('insert', () => {
-    let updateSpy: jasmine.Spy;
+    let updateSpy: Mock;
     beforeEach(() => {
-      updateSpy = spyOn(component, 'updateValue');
+      updateSpy = vi.spyOn(component, 'updateValue');
     });
 
     it('should insert text correctly', () => {
@@ -462,7 +463,7 @@ describe('InputNumberComponent', () => {
   describe('initCursor', () => {
     it('should initialize cursor correctly', () => {
       createInput('$1,234.56', undefined, [1, 1]);
-      const isNumeralSpy = spyOn(component, 'isNumeralChar').and.returnValue(true);
+      const isNumeralSpy = vi.spyOn(component, 'isNumeralChar').mockReturnValue(true);
       const result = component.initCursor();
       expect(result).toBe(1);
       expect(isNumeralSpy).toHaveBeenCalledTimes(1);
@@ -470,7 +471,7 @@ describe('InputNumberComponent', () => {
 
     it('should handle input click correctly', () => {
       createInput('$1,234.56');
-      spyOn(component, 'initCursor');
+      vi.spyOn(component, 'initCursor');
       component.readonly = false;
       component.onInputClick();
       expect(component.initCursor).toHaveBeenCalled();
@@ -479,19 +480,19 @@ describe('InputNumberComponent', () => {
 
   it('should recognize numeral characters', () => {
     createInput('$1,234.56');
-    expect(component.isNumeralChar('1')).toBeTrue();
-    expect(component.isNumeralChar('.')).toBeTrue();
-    expect(component.isNumeralChar('-')).toBeTrue();
-    expect(component.isNumeralChar(',')).toBeTrue();
-    expect(component.isNumeralChar('a')).toBeFalse();
+    expect(component.isNumeralChar('1')).toBe(true);
+    expect(component.isNumeralChar('.')).toBe(true);
+    expect(component.isNumeralChar('-')).toBe(true);
+    expect(component.isNumeralChar(',')).toBe(true);
+    expect(component.isNumeralChar('a')).toBe(false);
   });
 
   it('should update value correctly', () => {
     const event = new Event('input');
     createInput('$1,234.56', event);
-    spyOn(component, 'parseValue').and.returnValue(123);
-    spyOn(component, 'updateInput');
-    spyOn(component, 'handleOnInput');
+    vi.spyOn(component, 'parseValue').mockReturnValue(123);
+    vi.spyOn(component, 'updateInput');
+    vi.spyOn(component, 'handleOnInput');
 
     component.updateValue(event, '123', '1', 'insert');
     expect(component.parseValue).toHaveBeenCalledWith('123');
@@ -502,11 +503,11 @@ describe('InputNumberComponent', () => {
   it('should handle on input correctly', () => {
     const event = new Event('input');
     createInput('$1,234.56', event);
-    spyOn(component, 'isValueChanged').and.returnValue(true);
-    spyOn(component, 'formatValue').and.returnValue('123');
-    spyOn(component, 'updateModel');
+    vi.spyOn(component, 'isValueChanged').mockReturnValue(true);
+    vi.spyOn(component, 'formatValue').mockReturnValue('123');
+    vi.spyOn(component, 'updateModel');
 
-    const setAttributeSpy = spyOn(component.input.nativeElement, 'setAttribute');
+    const setAttributeSpy = vi.spyOn(component.input.nativeElement, 'setAttribute');
     component.handleOnInput(event, '12345', 123);
     expect(component.isValueChanged).toHaveBeenCalledWith('12345', 123);
     expect(component.input.nativeElement.value).toBe('123');
@@ -515,10 +516,10 @@ describe('InputNumberComponent', () => {
   });
 
   it('should check if value is changed correctly', () => {
-    spyOn(component, 'parseValue').and.returnValue(123);
-    expect(component.isValueChanged('123', 123)).toBeFalse();
-    expect(component.isValueChanged('123', 124)).toBeTrue();
-    expect(component.isValueChanged(null, 123)).toBeTrue();
+    vi.spyOn(component, 'parseValue').mockReturnValue(123);
+    expect(component.isValueChanged('123', 123)).toBe(false);
+    expect(component.isValueChanged('123', 124)).toBe(true);
+    expect(component.isValueChanged(null, 123)).toBe(true);
   });
 
   it('should validate value correctly', () => {
@@ -543,7 +544,7 @@ describe('InputNumberComponent', () => {
 
     it('should handle range-insert operation', () => {
       const inputElement = createInput('');
-      spyOn(component, 'parseValue').and.returnValue(12);
+      vi.spyOn(component, 'parseValue').mockReturnValue(12);
       component.updateInput('123', '4', 'range-insert', '12');
       expect(inputElement.value).toBe('$123.00');
     });
@@ -590,27 +591,27 @@ describe('InputNumberComponent', () => {
   });
 
   it('should handle input focus event', () => {
-    spyOn(component.focusEvent, 'emit');
+    vi.spyOn(component.focusEvent, 'emit');
     const event = new Event('focus');
     component.onInputFocus(event);
-    expect(component.focused).toBeTrue();
+    expect(component.focused).toBe(true);
     expect(component.focusEvent.emit).toHaveBeenCalledWith(event);
   });
 
   it('should handle input blur event', () => {
-    spyOn(component.blurEvent, 'emit');
+    vi.spyOn(component.blurEvent, 'emit');
     const inputElement = document.createElement('input');
     inputElement.value = '$1,234.56';
     component.input = new ElementRef(inputElement);
     const event = new Event('blur');
     component.onInputBlur(event);
-    expect(component.focused).toBeFalse();
+    expect(component.focused).toBe(false);
     expect(component.blurEvent.emit).toHaveBeenCalledWith(event);
     expect(inputElement.value).toBe('$1,234.56');
   });
 
   it('should update model correctly', () => {
-    component.onModelChange = jasmine.createSpy('onModelChange');
+    component.onModelChange = vi.fn();
     component.updateModel(123);
     expect(component.value).toBe(123);
     expect(component.onModelChange).toHaveBeenCalledWith(123);
@@ -618,14 +619,14 @@ describe('InputNumberComponent', () => {
 
   describe('', () => {
     it('should write value and mark for check', () => {
-      const markSpy = spyOn(component.cd, 'markForCheck');
+      const markSpy = vi.spyOn(component.cd, 'markForCheck');
       component.writeValue(123);
       expect(component.value).toBe(123);
       expect(markSpy).toHaveBeenCalled();
     });
 
     it('should handle null value', () => {
-      const markSpy = spyOn(component.cd, 'markForCheck');
+      const markSpy = vi.spyOn(component.cd, 'markForCheck');
       component.writeValue(null);
       expect(component.value).toBeNull();
       expect(markSpy).toHaveBeenCalled();

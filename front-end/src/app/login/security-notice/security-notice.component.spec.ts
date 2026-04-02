@@ -16,7 +16,7 @@ describe('SecurityNoticeComponent', () => {
   let usersService: UsersService;
 
   beforeEach(async () => {
-    window.onbeforeunload = jasmine.createSpy();
+    window.onbeforeunload = vi.fn();
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, SecurityNoticeComponent],
       providers: [
@@ -49,10 +49,12 @@ describe('SecurityNoticeComponent', () => {
   it('should submit', () => {
     const expectedUserLoginData = testUserLoginData();
     expectedUserLoginData.consent_for_one_year = false;
-    const spy = spyOn(usersService, 'updateCurrentUser').and.returnValue(Promise.resolve(expectedUserLoginData));
+    const spy = vi.spyOn(usersService, 'updateCurrentUser').mockReturnValue(Promise.resolve(expectedUserLoginData));
     component.signConsentForm();
 
-    expect(spy).toHaveBeenCalledOnceWith(expectedUserLoginData);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    expect(spy).toHaveBeenCalledWith(expectedUserLoginData);
 
     expectedUserLoginData.consent_for_one_year = true;
     component.form.get('security-consent-annual')?.setValue(true);

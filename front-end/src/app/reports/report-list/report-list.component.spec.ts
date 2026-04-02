@@ -81,25 +81,25 @@ describe('ReportListComponent (with HostComponent)', () => {
     const mockLoadingList = { loading: () => true, totalItems: () => 0 };
     const mockIdleList = { loading: () => false, totalItems: () => 0 };
 
-    spyOn(component, 'form3xList' as any).and.returnValue(mockLoadingList);
-    spyOn(component, 'form3List' as any).and.returnValue(mockIdleList);
-    spyOn(component, 'form99List' as any).and.returnValue(mockIdleList);
-    spyOn(component, 'form1mList' as any).and.returnValue(mockIdleList);
-    spyOn(component, 'form24List' as any).and.returnValue(mockIdleList);
+    vi.spyOn(component, 'form3xList' as any).mockReturnValue(mockLoadingList);
+    vi.spyOn(component, 'form3List' as any).mockReturnValue(mockIdleList);
+    vi.spyOn(component, 'form99List' as any).mockReturnValue(mockIdleList);
+    vi.spyOn(component, 'form1mList' as any).mockReturnValue(mockIdleList);
+    vi.spyOn(component, 'form24List' as any).mockReturnValue(mockIdleList);
 
-    expect(component.showEmptyState()).toBeFalse();
+    expect(component.showEmptyState()).toBe(false);
   });
 
   it('should not showEmptyState when lists have items', () => {
     const mockWithItems = { loading: () => false, totalItems: () => 5 };
     const mockEmpty = { loading: () => false, totalItems: () => 0 };
 
-    spyOn(component, 'form3xList' as any).and.returnValue(mockWithItems);
-    spyOn(component, 'form3List' as any).and.returnValue(mockEmpty);
-    spyOn(component, 'form99List' as any).and.returnValue(mockEmpty);
-    spyOn(component, 'form1mList' as any).and.returnValue(mockEmpty);
-    spyOn(component, 'form24List' as any).and.returnValue(mockEmpty);
+    vi.spyOn(component, 'form3xList' as any).mockReturnValue(mockWithItems);
+    vi.spyOn(component, 'form3List' as any).mockReturnValue(mockEmpty);
+    vi.spyOn(component, 'form99List' as any).mockReturnValue(mockEmpty);
+    vi.spyOn(component, 'form1mList' as any).mockReturnValue(mockEmpty);
+    vi.spyOn(component, 'form24List' as any).mockReturnValue(mockEmpty);
 
-    expect(component.showEmptyState()).toBeFalse();
+    expect(component.showEmptyState()).toBe(false);
   });
 });

@@ -18,7 +18,7 @@ describe('SchDTransaction', () => {
     expect(transaction.creditor_organization_name).toBe('foo');
   });
 
-  xit('Creates a transaction object from JSON', () => {
+  it.skip('Creates a transaction object from JSON', () => {
     const json = {
       transaction_type_identifier: 'DEBT_OWED_BY_COMMITTEE',
     };

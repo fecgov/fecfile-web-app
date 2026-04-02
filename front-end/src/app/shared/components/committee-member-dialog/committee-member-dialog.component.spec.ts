@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -13,7 +12,7 @@ import { CommitteeMember, Roles } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',
@@ -76,24 +75,24 @@ describe('CommitteeMemberDialogComponent', () => {
     const newEmail = 'test_1234321@test.com';
     component.form.get('email')?.setValue(newEmail);
     component.submitForm();
-    expect(component.detailVisible()).toBeFalse();
+    expect(component.detailVisible()).toBe(false);
   });
 
-  it('should not add user with pre-existing email', fakeAsync(async () => {
+  it('should not add user with pre-existing email', async () => {
     const takenEmail = 'test@test.com';
     const takenEmail2 = 'TeSt@TeSt.CoM'; // Same email but with different case
-    spyOn(testCommitteeService, 'getMembers').and.resolveTo([CommitteeMember.fromJSON({ email: takenEmail })]);
+    vi.spyOn(testCommitteeService, 'getMembers').mockResolvedValue([CommitteeMember.fromJSON({ email: takenEmail })]);
     await testCommitteeService.getMembers();
 
     component.form.get('email')?.patchValue(takenEmail);
     const valid = await component.validateForm();
-    expect(valid).toBeFalse();
+    expect(valid).toBe(false);
 
     component.form.get('email')?.patchValue(takenEmail2);
     component.form.updateValueAndValidity();
 
-    expect(component.form.valid).toBeFalse();
-  }));
+    expect(component.form.valid).toBe(false);
+  });
 
   it('should default role to first in list', async () => {
     expect(component.form.get('role')?.value).toBe('COMMITTEE_ADMINISTRATOR');
@@ -102,19 +101,20 @@ describe('CommitteeMemberDialogComponent', () => {
   describe('submit', () => {
     it('should set formSubmitted to true', () => {
       component.submitForm();
-      expect(component.formSubmitted).toBeTrue();
+      expect(component.formSubmitted).toBe(true);
     });
 
     it('should call editRole when member is defined', () => {
-      spyOn(component, 'editRole');
-      (component.member as any) = signal<CommitteeMember | undefined>({ role: 'MANAGER' } as CommitteeMember);
+      vi.spyOn(component, 'editRole');
+      host.member = { role: 'MANAGER' } as CommitteeMember;
+      fixture.detectChanges();
       component.submit();
       expect(component.editRole).toHaveBeenCalled();
     });
 
     it('should call addUser when member is undefined', () => {
-      spyOn(component, 'addUser');
-      (component.member as any) = signal<CommitteeMember | undefined>(undefined);
+      vi.spyOn(component, 'addUser');
+      host.member = undefined;
       component.submit();
       expect(component.addUser).toHaveBeenCalled();
     });
@@ -122,22 +122,23 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('editRole', () => {
     beforeEach(() => {
-      (component.member as any) = signal<CommitteeMember | undefined>({ role: 'MANAGER' } as CommitteeMember);
+      host.member = { role: 'MANAGER' } as CommitteeMember;
       component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
     });
 
     it('should not proceed if role is invalid', async () => {
       host.member = CommitteeMember.fromJSON({ role: 'MANAGER', email: 'test@test.com' });
       component.form.get('role')?.setErrors({ required: true });
-      spyOn(testCommitteeService, 'update');
+      vi.spyOn(testCommitteeService, 'update');
       await component.submitForm();
       expect(testCommitteeService.update).not.toHaveBeenCalled();
     });
 
     it('should call committeeMemberService.update when role is valid', async () => {
-      const updateSpy = spyOn(testCommitteeService, 'update').and.returnValue(Promise.resolve(johnSmith));
-      const resetSpy = spyOn(component, 'resetForm');
-      (component.member as any) = signal<CommitteeMember | undefined>(johnSmith);
+      const updateSpy = vi.spyOn(testCommitteeService, 'update').mockResolvedValue(johnSmith);
+      const resetSpy = vi.spyOn(component, 'resetForm');
+      host.member = johnSmith;
+      fixture.detectChanges();
       component.form.get('role')?.setValue('MANAGER');
       await component.editRole();
 
@@ -147,9 +148,9 @@ describe('CommitteeMemberDialogComponent', () => {
 
     it('should handle error if update fails', async () => {
       const error = new Error('Update failed');
-      const updateSpy = spyOn(testCommitteeService, 'update').and.returnValue(Promise.reject(error));
-      const resetSpy = spyOn(component, 'resetForm').and.callThrough();
-      const consoleSpy = spyOn(console, 'error');
+      const updateSpy = vi.spyOn(testCommitteeService, 'update').mockRejectedValue(error);
+      const resetSpy = vi.spyOn(component, 'resetForm');
+      const consoleSpy = vi.spyOn(console, 'error');
       await component.editRole();
       expect(consoleSpy).toHaveBeenCalledWith('Error updating member', error);
 
@@ -161,31 +162,31 @@ describe('CommitteeMemberDialogComponent', () => {
   describe('addUser', () => {
     it('should not proceed if form is invalid', async () => {
       component.form.get('email')?.setErrors({ required: true });
-      spyOn(testCommitteeService, 'addMember');
+      vi.spyOn(testCommitteeService, 'addMember');
       await component.submitForm();
       expect(testCommitteeService.addMember).not.toHaveBeenCalled();
     });
 
     it('should call committeeMemberService.addMember when form is valid', async () => {
-      const addMemberSpy = spyOn(testCommitteeService, 'addMember').and.returnValue(Promise.resolve(johnSmith));
-      const resetSpy = spyOn(component, 'resetForm').and.callThrough();
-      const updateSpy = spyOn(component.form, 'updateValueAndValidity').and.callThrough();
+      const addMemberSpy = vi.spyOn(testCommitteeService, 'addMember').mockResolvedValue(johnSmith);
+      const resetSpy = vi.spyOn(component, 'resetForm');
+      const updateSpy = vi.spyOn(component.form, 'updateValueAndValidity');
       component.form.setControl('email', new SubscriptionFormControl('test@example.com'));
       component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
       const manager = component.form.get('role')?.value;
 
       await component.addUser();
       expect(updateSpy).toHaveBeenCalled();
-      expect(component.form.valid).toBeTrue();
+      expect(component.form.valid).toBe(true);
       expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', manager);
       expect(resetSpy).toHaveBeenCalled();
     });
 
     it('should handle error if addMember fails', async () => {
       const error = new Error('Add failed');
-      const addSpy = spyOn(testCommitteeService, 'addMember').and.returnValue(Promise.reject(error));
-      const resetSpy = spyOn(component, 'resetForm').and.callThrough();
-      const consoleSpy = spyOn(console, 'error');
+      const addSpy = vi.spyOn(testCommitteeService, 'addMember').mockRejectedValue(error);
+      const resetSpy = vi.spyOn(component, 'resetForm');
+      const consoleSpy = vi.spyOn(console, 'error');
       component.form.setControl('email', new SubscriptionFormControl('test@example.com'));
       component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
       await component.addUser();
@@ -197,12 +198,13 @@ describe('CommitteeMemberDialogComponent', () => {
 
   describe('role getter', () => {
     it('should return empty string if member is undefined', () => {
-      (component.member as any) = signal<CommitteeMember | undefined>(undefined);
+      host.member = undefined;
       expect(component.role()).toBe('');
     });
 
     it('should return the role label from Roles enum', () => {
-      (component.member as any) = signal<CommitteeMember | undefined>({ role: 'MANAGER' } as CommitteeMember);
+      host.member = { role: 'MANAGER' } as CommitteeMember;
+      fixture.detectChanges();
       expect(component.role()).toBe(Roles.MANAGER);
     });
   });

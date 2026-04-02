@@ -42,7 +42,7 @@ describe('ReportResolver', () => {
     httpTestingController.verify();
   });
 
-  xit('should return undefined', () => {
+  it.skip('should return undefined', () => {
     const route = {
       paramMap: convertToParamMap({ reportId: undefined }),
     };
