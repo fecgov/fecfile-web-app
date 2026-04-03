@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report, ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
+import { Report, ReportTypes } from 'app/shared/models/reports/report.model';
 
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
@@ -49,10 +49,7 @@ export class TransactionListComponent {
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
       (report: Report) => {
-        return (
-          report.report_status === ReportStatus.IN_PROGRESS &&
-          [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
-        );
+        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
       },
       () => true,
     ),
@@ -60,10 +57,7 @@ export class TransactionListComponent {
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
       (report: Report) => {
-        return (
-          report.report_status === ReportStatus.IN_PROGRESS &&
-          [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
-        );
+        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
       },
       () => true,
     ),
@@ -71,10 +65,7 @@ export class TransactionListComponent {
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
       (report: Report) => {
-        return (
-          report.report_status === ReportStatus.IN_PROGRESS &&
-          [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
-        );
+        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
       },
       () => true,
     ),
@@ -82,10 +73,7 @@ export class TransactionListComponent {
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
       (report: Report) => {
-        return (
-          report.report_status === ReportStatus.IN_PROGRESS &&
-          [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type)
-        );
+        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
       },
       () => false,
     ),
@@ -93,7 +81,7 @@ export class TransactionListComponent {
       'Add an independent expenditure',
       this.createF24Transactions.bind(this),
       (report: Report) => {
-        return report.report_status === ReportStatus.IN_PROGRESS && report.report_type === ReportTypes.F24;
+        return report.report_type === ReportTypes.F24;
       },
       () => true,
     ),
