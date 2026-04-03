@@ -67,7 +67,11 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   readonly rowActions: TableAction<T>[] = [
     new TableAction('Edit', this.editItem.bind(this), (report: T) => report.canEdit),
     new TableAction('Amend', this.amendReport.bind(this), (report: T) => report.canAmend),
-    new TableAction('Review', this.editItem.bind(this), (report: T) => !report.canEdit),
+    new TableAction(
+      'Review',
+      this.reviewItem.bind(this),
+      (report: T) => report.report_status !== ReportStatus.IN_PROGRESS,
+    ),
     new TableAction('Delete', this.confirmDelete.bind(this), (report: T) => report.can_delete),
     new TableAction('Unamend', this.unamendReport.bind(this), (report: T) => report.can_unamend),
     new TableAction('Download as .fec', this.download.bind(this)),
@@ -98,11 +102,15 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
   }
 
   override async editItem(item: T): Promise<boolean> {
-    if (item.report_status && item.report_status !== ReportStatus.IN_PROGRESS) {
+    if (!item.canEdit) {
       return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
     }
 
     return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+  }
+
+  async reviewItem(item: T): Promise<boolean> {
+    return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
   }
 
   async download(report: T): Promise<void> {
