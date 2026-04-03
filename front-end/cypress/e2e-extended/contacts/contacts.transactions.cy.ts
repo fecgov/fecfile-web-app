@@ -11,10 +11,7 @@ import { ReportListPage } from '../../e2e-smoke/pages/reportListPage';
 import { StartTransaction } from '../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
 import { ContactLookup } from '../../e2e-smoke/pages/contactLookup';
 
-import {
-  defaultScheduleFormData,
-  ScheduleFormData,
-} from '../../e2e-smoke/models/TransactionFormModel';
+import { defaultScheduleFormData, ScheduleFormData } from '../../e2e-smoke/models/TransactionFormModel';
 import { TransactionDetailPage } from '../../e2e-smoke/pages/transactionDetailPage';
 
 type Address = {
@@ -84,9 +81,7 @@ const fillCommonRequiredAddressInDialog = (dialogAlias: string, address: Address
     .find('#state')
     .then(($state) => {
       if ($state.length === 0) return;
-      cy.wrap($state)
-        .click()
-        .type('{downarrow}{enter}', { force: true });
+      cy.wrap($state).click().type('{downarrow}{enter}', { force: true });
     });
 };
 
@@ -184,10 +179,7 @@ const assertContactsListRow = (name: string, type: string, fecId?: string) => {
     });
 };
 
-const assertCreatesNewContactConfirmMessage = (
-  contactTypeLower: ContactTypeLower,
-  contactDisplay: string,
-) => {
+const assertCreatesNewContactConfirmMessage = (contactTypeLower: ContactTypeLower, contactDisplay: string) => {
   getVisibleConfirmDialog().within(() => {
     cy.get('[data-pc-section="message"], .p-confirm-dialog-message').should(($msg) => {
       const text = normalizeText($msg.text());
@@ -209,30 +201,13 @@ const clickSaveAndConfirmCreatesNewContact = (
   contactTypeLower: ContactTypeLower,
   contactDisplay: string,
 ) => {
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-  ).as('GetReceipts');
+  const fx = () => {
+    TransactionDetailPage.clickSave();
+    assertCreatesNewContactConfirmMessage(contactTypeLower, contactDisplay);
+    PageUtils.clickButton('Continue');
+  };
 
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-  ).as('GetLoans');
-
-  cy.intercept(
-    'GET',
-    `**/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-  ).as('GetDisbursements');
-
-  TransactionDetailPage.clickSave();
-
-  assertCreatesNewContactConfirmMessage(contactTypeLower, contactDisplay);
-
-  PageUtils.clickButton('Continue');
-
-  cy.wait('@GetLoans');
-  cy.wait('@GetDisbursements');
-  cy.wait('@GetReceipts');
+  TransactionDetailPage.interceptTransactions(reportId, fx);
 };
 
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
