@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { fakerEN as faker } from '@faker-js/faker';
 
 export class ContactFormData {
   id?: string;
@@ -73,9 +73,9 @@ function createContact(contact_type: ContactType): ContactFormData {
     candidateId = `S${faker.string.numeric(1)}${faker.location.state({ abbreviated: true })}${faker.string.numeric(5)}`;
   return {
     contact_type,
-    last_name: faker.person.lastName(),
-    first_name: faker.person.firstName(),
-    middle_name: faker.person.middleName(),
+    last_name: getName('last'),
+    first_name: getName('first'),
+    middle_name: getName('middle'),
     prefix: faker.person.prefix(),
     suffix: faker.person.suffix(),
     country: 'United States of America',
@@ -94,4 +94,18 @@ function createContact(contact_type: ContactType): ContactFormData {
     committee_id: contact_type === ContactType.COMMITTEE ? `C00${faker.string.numeric(6)}` : '',
     name: faker.company.name(),
   };
+}
+
+function getName(order: 'first' | 'middle' | 'last') {
+  const methodMap = {
+    first: () => faker.person.firstName(),
+    middle: () => faker.person.middleName(),
+    last: () => faker.person.lastName(),
+  };
+  let name: string;
+  do {
+    name = methodMap[order]();
+  } while (!/^[ -~]{0,30}$/.test(name));
+
+  return name;
 }
