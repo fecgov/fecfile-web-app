@@ -4,9 +4,9 @@ version: 2.1
 
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
-  browser-tools: circleci/browser-tools@2.2.1
-  node: circleci/node@7.1.1
-  python: circleci/python@3.2.0
+  browser-tools: circleci/browser-tools@2.4.0
+  node: circleci/node@7.2.1
+  python: circleci/python@4.0.0
 
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
@@ -14,12 +14,28 @@ commands:
     description: "Setup and start fecfile-web-api for E2E tests"
     steps:
       - setup_remote_docker:
-          docker_layer_caching: false
+          version: docker24
+          docker_layer_caching: true
       - run:
           name: clone fecfile-web-api
           command: |
             rm -rf fecfile-web-api
-            git clone https://github.com/fecgov/fecfile-web-api.git
+            API_REPO_URL="https://github.com/fecgov/fecfile-web-api.git"
+            API_REPO_PUSH_URL="https://x-access-token:${FECFILE_WEB_API_GITHUB_TOKEN}@github.com/fecgov/fecfile-web-api.git"
+
+            if git ls-remote --exit-code --heads "${API_REPO_URL}" "${CIRCLE_BRANCH}" >/dev/null 2>&1; then
+              git clone --depth 1 --branch "${CIRCLE_BRANCH}" "${API_REPO_URL}" fecfile-web-api
+            else
+              # Keep triggered feature/release branches runnable even when the
+              # matching API branch has not been created yet.
+              git clone --depth 1 --branch develop "${API_REPO_URL}" fecfile-web-api
+              cd fecfile-web-api
+              git remote set-url origin "${API_REPO_PUSH_URL}"
+              git push origin "HEAD:refs/heads/${CIRCLE_BRANCH}"
+              cd ..
+              rm -rf fecfile-web-api
+              git clone --depth 1 --branch "${CIRCLE_BRANCH}" "${API_REPO_URL}" fecfile-web-api
+            fi
           working_directory: ~/project
       - run:
           name: use redis
@@ -29,7 +45,6 @@ commands:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${CIRCLE_BRANCH}
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" \
             WORKER_DOCKERFILE="Worker_Dockerfile-e2e" \
@@ -44,17 +59,65 @@ commands:
             docker-compose up --build -d
 
             docker container run --network container:fecfile-api-proxy \
-              docker.io/jwilder/dockerize \
+              docker.io/jwilder/dockerize:v0.10.0 \
               -wait http://localhost:8080/devops/status/ \
               -wait-retry-interval 2s \
               -timeout 60s;
           working_directory: ~/project/fecfile-web-api
+  execute-web-app-e2e:
+    description: "Run a web-app Cypress job inside the shared browser container"
+    parameters:
+      script:
+        type: string
+      container_name:
+        type: string
+        default: fecfile-web-app-e2e
+      timeout_minutes:
+        type: integer
+        default: 55
+    steps:
+      - run:
+          name: prepare and execute web-app e2e container
+          no_output_timeout: 5m
+          command: |
+            docker rm -f << parameters.container_name >> || true
+            docker container create --name << parameters.container_name >> \
+              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
+              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
+              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
+              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
+              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
+              --network container:fecfile-api-proxy \
+              ${CYPRESS_BROWSER_IMAGE} \
+              /bin/bash -lc "cd /root/fecfile-web-app/front-end && npm ci --no-audit --no-fund && npm run << parameters.script >>"
+            docker cp ~/project/. << parameters.container_name >>:/root/fecfile-web-app
+            timeout --foreground --signal=TERM --kill-after=5m << parameters.timeout_minutes >>m docker container start -a << parameters.container_name >>
+  stage-web-app-e2e-artifacts:
+    description: "Copy Cypress results, videos, and screenshots from the browser container"
+    parameters:
+      container_name:
+        type: string
+        default: fecfile-web-app-e2e
+    steps:
+      - run:
+          name: stage test result artifacts
+          when: always
+          command: |
+            rm -rf /tmp/cypress
+            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
+            docker stop --time 40 << parameters.container_name >> || true
+            docker cp << parameters.container_name >>:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
+            docker cp << parameters.container_name >>:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
+            docker cp << parameters.container_name >>:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
+            docker rm << parameters.container_name >> || true
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  # Node 24.14.0 is compatible with Angular 20 and keeps CI ready for the
+  # separate Angular 21 upgrade ticket and a later Angular 22 move.
   lint:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: &node24_browsers_image cimg/node:24.14.0-browsers
     resource_class: large
     steps:
       - checkout
@@ -80,12 +143,15 @@ jobs:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
-      - image: cimg/node:lts-browsers
+      - image: *node24_browsers_image
     resource_class: large
     steps:
       - checkout:
           method: full
-      - browser-tools/install_chrome
+      - browser-tools/install_chrome:
+          replace_existing: true
+          chrome_version: "146.0.7680.80"
+          channel: stable
       - browser-tools/install_chromedriver
       - run:
           command: |
@@ -145,43 +211,21 @@ jobs:
 
   e2e-smoke:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: *node24_browsers_image
+    resource_class: large
     parameters:
       video:
         type: boolean
         default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
+      CYPRESS_BROWSER_IMAGE: &cypress_browser_image cypress/browsers:node-24.14.0-chrome-146.0.7680.80-1-ff-148.0.2-edge-146.0.3856.62-1
     steps:
+      - checkout
       - spin-up-api-containers
-      - run:
-          name: execute e2e tests
-          command: |
-            docker container run --name fecfile-web-app-e2e \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              --network container:fecfile-api-proxy \
-              cypress/browsers:latest \
-              /bin/bash -c '\
-                cd ~; \
-                git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; \
-                git checkout ${CIRCLE_BRANCH}; \
-                npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-smoke/**/*.cy.ts" --headless --watch=false --browser chrome;'
-      - run:
-          name: stage test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e
+      - execute-web-app-e2e:
+          script: e2e:smoke:headless
+      - stage-web-app-e2e-artifacts
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -198,43 +242,21 @@ jobs:
   # An extended e2e test suite running cypress/e2e-extended/**/*.cy.ts
   e2e-extended:
     docker:
-      - image: cimg/node:lts-browsers
+      - image: *node24_browsers_image
+    resource_class: large
     parameters:
       video:
         type: boolean
         default: false
     environment:
       CYPRESS_VIDEO: << parameters.video >>
+      CYPRESS_BROWSER_IMAGE: *cypress_browser_image
     steps:
+      - checkout
       - spin-up-api-containers
-      - run:
-          name: execute extended e2e tests
-          command: |
-            docker container run --name fecfile-web-app-e2e \
-              -e CIRCLE_BRANCH=${CIRCLE_BRANCH} \
-              -e CYPRESS_VIDEO=${CYPRESS_VIDEO} \
-              -e CYPRESS_EMAIL=${CYPRESS_EMAIL} \
-              -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} \
-              -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} \
-              --network container:fecfile-api-proxy \
-              cypress/browsers:latest \
-              /bin/bash -c '\
-                cd ~; \
-                git clone https://github.com/fecgov/fecfile-web-app.git; \
-                cd fecfile-web-app/front-end; \
-                git checkout ${CIRCLE_BRANCH}; \
-                npm install; \
-                node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e-extended/**/*.cy.ts" --headless --watch=false --browser chrome;'
-      - run:
-          name: stage test result artifacts
-          when: always
-          command: |
-            rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results /tmp/cypress/videos /tmp/cypress/screenshots
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/videos/. /tmp/cypress/videos || true
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/screenshots/. /tmp/cypress/screenshots || true
-            docker rm fecfile-web-app-e2e
+      - execute-web-app-e2e:
+          script: e2e:extended:headless
+      - stage-web-app-e2e-artifacts
       - store_artifacts:
           path: /tmp/cypress/results
           destination: cypress/results
@@ -250,10 +272,19 @@ jobs:
 
   deploy-job:
     docker:
-      - image: cimg/python:3.13-node
+      - image: &python313_image cimg/python:3.13.12
     resource_class: large
     steps:
       - checkout
+      - node/install:
+          node-version: "24.14.0"
+
+      - run:
+          name: Check deploy tool versions
+          command: |
+            python --version
+            node -v
+            npm -v
 
       - node/install-packages:
           app-dir: ~/project/front-end/
@@ -280,23 +311,28 @@ jobs:
 
   dependency-check:
     docker:
-      - image: cimg/python:3.13-node
+      - image: *python313_image
 
     steps:
       - checkout
+      - node/install:
+          node-version: "24.14.0"
 
       # If we need to modify the params for install-packages:
       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
+
       - run:
           name: List installed node dependencies
           command: npm ls --all
           working_directory: ~/project/front-end/
+
       - python/install-packages:
           pkg-manager: pip
           pip-dependency-file: requirements.txt
+
       - run:
           name: Check for unused dependencies
           command: npx knip
