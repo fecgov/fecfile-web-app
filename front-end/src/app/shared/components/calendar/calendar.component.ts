@@ -29,6 +29,7 @@ export class CalendarComponent {
 
     if (!control.hasValidator(this.dateFormatValidator)) {
       control.addValidators(this.dateFormatValidator);
+      // control.updateValueAndValidity({ emitEvent: false });
     }
 
     return control as SubscriptionFormControl;
@@ -36,11 +37,25 @@ export class CalendarComponent {
 
   private dateFormatValidator(control: AbstractControl): ValidationErrors | null {
     const val = control.value;
+
+    if (val instanceof Date) return null;
+
     if (!val || val === 'MM/DD/YYYY') return null;
 
+    if (typeof val === 'string' && /[MDY]/.test(val)) return { invalidFormat: true };
+
     const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
-    const isValid = regex.test(val);
-    return isValid ? null : { invalidFormat: true };
+    if (!regex.test(val)) return { invalidFormat: true };
+
+    const dateParts = val.split('/');
+    const m = parseInt(dateParts[0], 10);
+    const d = parseInt(dateParts[1], 10);
+    const y = parseInt(dateParts[2], 10);
+    const date = new Date(y, m - 1, d);
+
+    const isValidDate = date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d;
+
+    return isValidDate ? null : { invalidFormat: true };
   }
 
   constructor() {
@@ -60,17 +75,16 @@ export class CalendarComponent {
   validateDate(calendarUpdate: boolean) {
     this.calendarOpened = calendarUpdate;
     const control = this.control();
+
     if (!this.calendarOpened && control) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
       const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
-      const currentValue = inputElement.value;
+      const currentValue = inputElement?.value;
 
-      control.markAsTouched();
-
-      if (currentValue) {
+      if (currentValue && currentValue !== 'MM/DD/YYYY') {
         control.setValue(currentValue, { emitEvent: true });
       }
+
+      control.markAsTouched();
       control.updateValueAndValidity();
     }
   }
