@@ -1,5 +1,5 @@
 import { Component, computed, effect, input } from '@angular/core';
-import { AbstractControl, FormGroup, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { DatePicker } from 'primeng/datepicker';
@@ -27,36 +27,8 @@ export class CalendarComponent {
     const control = this.form()?.get(field);
     if (!control) return undefined;
 
-    // if (!control.hasValidator(this.dateFormatValidator)) {
-    //   control.addValidators(this.dateFormatValidator);
-    //   // control.updateValueAndValidity({ emitEvent: false });
-    // }
-
     return control as SubscriptionFormControl;
   });
-
-  // private dateFormatValidator(control: AbstractControl): ValidationErrors | null {
-  //   const val = control.value;
-
-  //   if (val instanceof Date) return null;
-
-  //   if (!val || val === 'MM/DD/YYYY') return null;
-
-  //   if (typeof val === 'string' && /[MDY]/.test(val)) return { invalidFormat: true };
-
-  //   const regex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
-  //   if (!regex.test(val)) return { invalidFormat: true };
-
-  //   const dateParts = val.split('/');
-  //   const m = parseInt(dateParts[0], 10);
-  //   const d = parseInt(dateParts[1], 10);
-  //   const y = parseInt(dateParts[2], 10);
-  //   const date = new Date(y, m - 1, d);
-
-  //   const isValidDate = date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d;
-
-  //   return isValidDate ? null : { invalidFormat: true };
-  // }
 
   constructor() {
     effect(() => {

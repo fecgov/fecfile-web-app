@@ -48,7 +48,7 @@ export class SchemaUtils {
     'collateral',
   ];
 
-  static getFormGroupFieldsNoBlur(properties: string[], jsonSchema?: JsonSchema) {
+  static getFormGroupFieldsNoBlur(properties: string[], _jsonSchema?: JsonSchema) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     properties.forEach((property) => {
       const updateOn = SchemaUtils.getUpdateOn(property);

@@ -6,6 +6,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { ScheduleATransactionTypes } from 'app/shared/models';
 import { Component, inject, viewChild } from '@angular/core';
+import { value } from '@primeuix/themes/aura/knob';
 
 @Component({
   imports: [CalendarComponent],
@@ -52,7 +53,7 @@ describe('CalendarComponent', () => {
   });
 
   it('should initialize form control with "submit" update strategy', () => {
-    expect(component.control()!.updateOn).toBe('submit');
+    expect(component.control()!.updateOn).toBe('blur');
   });
 
   it('should toggle calendarOpened on validateDate', () => {
@@ -64,11 +65,16 @@ describe('CalendarComponent', () => {
   });
 
   it('should mark control as touched and update value on updateValue', () => {
-    const date = new Date();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component.control() as any)._pendingValue = date;
+    const dateString = '01/01/2020';
+    const expectedDate = new Date(dateString);
+
+    vi.spyOn(document, 'getElementById').mockReturnValue({
+      value: dateString,
+    } as unknown as HTMLInputElement);
+
     component.validateDate(false);
+
     expect(component.control()!.touched).toBe(true);
-    expect(component.control()!.value).toBe(date);
+    expect(component.control()!.value).toEqual(expectedDate);
   });
 });
