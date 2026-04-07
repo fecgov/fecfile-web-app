@@ -290,7 +290,6 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-          with-cache: false
       - run:
           name: List installed node dependencies
           command: npm ls
