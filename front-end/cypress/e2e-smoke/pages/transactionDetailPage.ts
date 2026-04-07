@@ -7,6 +7,7 @@ import {
 } from '../models/TransactionFormModel';
 import { ContactLookup } from './contactLookup';
 import { Intercept, PageUtils } from './pageUtils';
+import { ReportListPage } from './reportListPage';
 
 export class TransactionDetailPage {
   static readonly SPLIT_BUTTON = 'navigation-control-splitbutton';
@@ -319,28 +320,7 @@ export class TransactionDetailPage {
       this.clickCancel();
     };
 
-    TransactionDetailPage.interceptTransactions(reportId, fx);
-  }
-
-  static interceptTransactions(reportId: string, fx: Function) {
-    const intercepts: Intercept[] = [
-      {
-        method: 'GET',
-        url: `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-        alias: 'GetReceipts',
-      },
-      {
-        method: 'GET',
-        url: `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-        alias: 'GetLoans',
-      },
-      {
-        method: 'GET',
-        url: `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-        alias: 'GetDisbursements',
-      },
-    ];
-    PageUtils.interceptAndWait(intercepts, fx);
+    ReportListPage.interceptTransactions(reportId, fx);
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {

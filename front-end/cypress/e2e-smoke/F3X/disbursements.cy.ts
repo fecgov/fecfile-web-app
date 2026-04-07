@@ -105,7 +105,7 @@ describe('Disbursements', () => {
         .should('not.contain', 'This is a required field.');
 
       // Add IE to a F24 Report
-      TransactionDetailPage.interceptTransactions(result.report, () =>
+      ReportListPage.interceptTransactions(result.report, () =>
         ReportListPage.gotToReportTransactionListPage(result.report),
       );
 
