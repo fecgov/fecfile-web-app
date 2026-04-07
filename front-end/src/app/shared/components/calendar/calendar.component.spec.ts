@@ -6,7 +6,6 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { ScheduleATransactionTypes } from 'app/shared/models';
 import { Component, inject, viewChild } from '@angular/core';
-import { value } from '@primeuix/themes/aura/knob';
 
 @Component({
   imports: [CalendarComponent],

@@ -48,6 +48,7 @@ export class SchemaUtils {
     'collateral',
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static getFormGroupFieldsNoBlur(properties: string[], _jsonSchema?: JsonSchema) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
     properties.forEach((property) => {
