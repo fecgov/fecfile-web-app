@@ -1,4 +1,4 @@
-<app-shared-templates (reportNameClick)="this.editItem($event)" />
+<app-shared-templates (reportNameClick)="this.goToReport($event)" />
 <div [hidden]="items().length === 0">
   <app-table
     [(first)]="first"
