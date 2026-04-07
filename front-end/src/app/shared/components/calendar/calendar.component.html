@@ -35,12 +35,7 @@
       [control]="control()"
       [formSubmitted]="formSubmitted()"
       [requiredErrorMessage]="requiredErrorMessage()"
+      [patternErrorMessage]="invalidFormatMessage()"
     />
-  }
-
-  @if (control()?.hasError('invalidFormat') && (control()?.touched || formSubmitted())) {
-    <small class="p-error error-message">
-      {{ invalidFormatMessage() }}
-    </small>
   }
 </div>

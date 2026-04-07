@@ -47,15 +47,11 @@ export class SchemaUtils {
     'future_income',
     'collateral',
   ];
-  static readonly DATE_FORMAT = '^[0-9]{4}-[0-9]{2}-[0-9]{2}$';
 
   static getFormGroupFieldsNoBlur(properties: string[], jsonSchema?: JsonSchema) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const dateProps = Object.keys(jsonSchema?.properties ?? {}).filter(
-      (key) => jsonSchema?.properties[key]?.pattern === SchemaUtils.DATE_FORMAT,
-    );
     properties.forEach((property) => {
-      const updateOn = SchemaUtils.getUpdateOn(property, dateProps);
+      const updateOn = SchemaUtils.getUpdateOn(property);
       group[property] = new SubscriptionFormControl<string | Date | null | undefined>('', {
         updateOn,
       });
@@ -64,8 +60,7 @@ export class SchemaUtils {
     return group;
   }
 
-  private static getUpdateOn(property: string, dateProps: string[]): 'change' | 'blur' | 'submit' {
-    if (dateProps.includes(property)) return 'submit';
+  private static getUpdateOn(property: string): 'change' | 'blur' {
     return SchemaUtils.noBlur.includes(property) ? 'change' : 'blur';
   }
 
