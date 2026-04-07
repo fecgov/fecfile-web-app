@@ -23,7 +23,6 @@ type Address = {
 
 type CreateContactWhich = 'first' | 'last';
 type ContactTypeLower = 'individual' | 'committee' | 'organization';
-type ContactLookupType = 'Individual' | 'Organization' | 'Committee';
 type DisbursementDateField = 'expenditure_date' | 'disbursement_date';
 
 const DEFAULT_TIMEOUT = 15000;
@@ -96,7 +95,7 @@ const saveCreateContactDialog = () => {
   });
 };
 
-const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable<void> => {
+const clickTransactionLinkOnSelectPage = (txnLinkRx: RegExp): Cypress.Chainable => {
   return cy.get('p-accordion-panel', { timeout: DEFAULT_TIMEOUT }).then(($panels) => {
     let targetPanel: HTMLElement | null = null;
 
@@ -207,7 +206,7 @@ const clickSaveAndConfirmCreatesNewContact = (
     PageUtils.clickButton('Continue');
   };
 
-  TransactionDetailPage.interceptTransactions(reportId, fx);
+  ReportListPage.interceptTransactions(reportId, fx);
 };
 
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
