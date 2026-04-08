@@ -52,7 +52,7 @@ describe('CalendarComponent', () => {
   });
 
   it('should initialize form control with "submit" update strategy', () => {
-    expect(component.control()!.updateOn).toBe('blur');
+    expect(component.control()!.updateOn).toBe('submit');
   });
 
   it('should toggle calendarOpened on validateDate', () => {
@@ -64,16 +64,11 @@ describe('CalendarComponent', () => {
   });
 
   it('should mark control as touched and update value on updateValue', () => {
-    const dateString = '01/01/2020';
-    const expectedDate = new Date(dateString);
-
-    vi.spyOn(document, 'getElementById').mockReturnValue({
-      value: dateString,
-    } as unknown as HTMLInputElement);
-
+    const date = new Date();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component.control() as any)._pendingValue = date;
     component.validateDate(false);
-
     expect(component.control()!.touched).toBe(true);
-    expect(component.control()!.value).toEqual(expectedDate);
+    expect(component.control()!.value).toBe(date);
   });
 });

@@ -156,9 +156,6 @@ export function buildAfterDateValidator(form: FormGroup, field: string): Validat
     if (!otherDate || !controlDate) {
       return null;
     }
-    if (typeof controlDate === 'string' || typeof otherDate === 'string') {
-      return null;
-    }
     return otherDate.getTime() >= controlDate.getTime()
       ? { isAfter: `${controlDate} must be after ${otherDate}` }
       : null;
