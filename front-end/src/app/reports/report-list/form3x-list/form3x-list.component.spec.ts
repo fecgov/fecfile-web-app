@@ -20,6 +20,35 @@ import { ReportListComponent } from '../report-list.component';
 import { Form3XListComponent } from './form3x-list.component';
 import { ROUTES } from 'app/routes';
 
+function getStatusLink(report: Form3X): string {
+  return `/reports/f3x/submit/status/${report.id}`;
+}
+
+function getListLink(report: Form3X): string {
+  return `/reports/transactions/report/${report.id}/list`;
+}
+
+const successForm = Form3X.fromJSON({
+  id: 'success_id',
+  report_type: ReportTypes.F3X,
+  report_status: ReportStatus.SUBMIT_SUCCESS,
+});
+const pendingForm = Form3X.fromJSON({
+  id: 'pending_id',
+  report_type: ReportTypes.F3X,
+  report_status: ReportStatus.SUBMIT_PENDING,
+});
+const inprogForm = Form3X.fromJSON({
+  id: 'inprog_id',
+  report_type: ReportTypes.F3X,
+  report_status: ReportStatus.IN_PROGRESS,
+});
+const failureForm = Form3X.fromJSON({
+  id: 'failure_id',
+  report_type: ReportTypes.F3X,
+  report_status: ReportStatus.SUBMIT_FAILURE,
+});
+
 describe('Form3XListComponent', () => {
   let component: Form3XListComponent;
   let fixture: ComponentFixture<Form3XListComponent>;
@@ -84,64 +113,28 @@ describe('Form3XListComponent', () => {
     expect(item.id).toBe(undefined);
   });
 
-  it('#editItem should route properly for report_status undefined', async () => {
-    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.editItem({
-      id: '777',
-      report_type: ReportTypes.F3X,
-      report_status: undefined,
-    } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/777/list');
-  });
-
   it('#editItem should route properly for in-progress report', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.editItem({
-      id: '777',
-      report_type: ReportTypes.F3X,
-      report_status: ReportStatus.IN_PROGRESS,
-    } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/777/list');
+    await component.editItem(inprogForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getListLink(inprogForm));
   });
 
   it('#editItem should route properly for report with submission pending', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.editItem({
-      id: '777',
-      report_type: ReportTypes.F3X,
-      report_status: ReportStatus.SUBMIT_PENDING,
-    } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+    await component.editItem(pendingForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(pendingForm));
   });
 
   it('#editItem should route properly for report with submission success', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.editItem({
-      id: '777',
-      report_type: ReportTypes.F3X,
-      report_status: ReportStatus.SUBMIT_SUCCESS,
-    } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+    await component.editItem(successForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(successForm));
   });
 
   it('#editItem should route properly for report with submission failure', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-    await component.editItem({ id: '888', report_type: ReportTypes.F3X, report_status: undefined } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
-    component.editItem({
-      id: '777',
-      report_type: ReportTypes.F3X,
-      report_status: ReportStatus.SUBMIT_FAILURE,
-    } as Form3X);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+    await component.editItem(failureForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getListLink(failureForm));
   });
 
   it('#amend should hit service', async () => {
@@ -159,12 +152,10 @@ describe('Form3XListComponent', () => {
   });
   it('#onActionClick should route properly', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-    await component.editItem({
-      id: '888',
-      report_type: ReportTypes.F3X,
-    } as Form3X);
-
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
+    await component.goToReport(inprogForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getListLink(inprogForm));
+    await component.goToReport(failureForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(failureForm));
   });
 
   it('#onDownload should open download panel properly', async () => {
