@@ -133,7 +133,7 @@ export class TransactionDetailPage {
 
     this.enterCommon(formData, alias, includeMemo);
     if (!readOnlyAmount) {
-      cy.get(alias).find('#amount').safeType(formData['amount']);
+      cy.get(alias).find('#amount').safeType(formData['amount']).blur();
     }
     this.enterElection(formData, alias);
   }
