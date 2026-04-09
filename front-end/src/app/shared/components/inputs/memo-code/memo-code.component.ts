@@ -9,7 +9,7 @@ import { ButtonDirective } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectButton } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
-import { takeUntil } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, of, startWith, takeUntil } from 'rxjs';
 import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
@@ -75,30 +75,44 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   });
 
   ngOnInit(): void {
-    const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
-    if (dateControl?.enabled) {
-      dateControl.addSubscription((date: Date | null) => {
-        if (date?.getTime() !== this.coverageDate()?.getTime()) {
-          this.coverageDate.set(date);
-          this.updateMemoItemWithDate(date);
-        }
-      }, this.destroy$);
-    }
+    const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl<Date | null>;
+    const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl<Date | null>;
+    const d1$ = dateControl ? dateControl.valueChanges.pipe(startWith(dateControl.value)) : of(null);
+    const d2$ = date2Control ? date2Control.valueChanges.pipe(startWith(date2Control.value)) : of(null);
+    const activeDate$ = combineLatest([d1$, d2$]).pipe(
+      map(([d1, d2]) => {
+        const val1 = dateControl?.enabled ? d1 : null;
+        const val2 = date2Control?.enabled ? d2 : null;
+        const activeDate = val1 || val2;
+        const isDisbursement = !val1 && !!val2;
 
-    this.memoControl =
-      (this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>) || this.memoControl;
-    const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;
-    if (savedDate) {
-      this.updateMemoItemWithDate(savedDate);
-    }
+        return { activeDate, isDisbursement };
+      }),
+      distinctUntilChanged((prev, curr) => prev.activeDate?.getTime() === curr.activeDate?.getTime()),
+    );
 
-    if (this.transactionType()?.memoCodeTransactionTypes) {
-      this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.memoControl = this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>;
+    const memo$ = this.memoControl.valueChanges.pipe(startWith(this.memoControl.value));
+    combineLatest([activeDate$, memo$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([{ activeDate, isDisbursement }, isMemoChecked]) => {
         this.updateTransactionTypeIdentifier();
-      });
-    }
+        const question = isDisbursement
+          ? 'Did you mean to enter a disbursement date outside of the report coverage period?'
+          : 'Did you mean to enter a date outside of the report coverage period?';
+        this.coverageDateQuestion.set(question);
 
-    this.updateTransactionTypeIdentifier();
+        if (dateControl && date2Control) {
+          dateControl.updateValueAndValidity({ emitEvent: false });
+          date2Control.updateValueAndValidity({ emitEvent: false });
+        }
+
+        if (!isMemoChecked && activeDate) {
+          this.updateMemoItemWithDate(activeDate);
+        } else {
+          this.clearOutOfDateRequirement();
+        }
+      });
   }
 
   ngOnChanges(): void {
@@ -114,26 +128,21 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
   }
 
-  onMemoItemClick() {
-    if (!this.memoCodeReadOnly() && this.dateIsOutsideReport && !this.memoControl.value) {
-      this.outOfDateDialogVisible.set(true);
-    }
-  }
-
   private clearOutOfDateRequirement(): void {
     if (this.dateIsOutsideReport && this.memoControl.hasValidator(Validators.requiredTrue)) {
       this.memoControl.removeValidators([Validators.requiredTrue]);
       this.memoControl.markAsTouched();
-      this.memoControl.updateValueAndValidity();
+      this.memoControl.updateValueAndValidity({ emitEvent: false });
     }
     this.dateIsOutsideReport = false;
   }
 
-  private setOutOfDateRequirement(): void {
+  private setOutOfDateRequirement(date: Date): void {
+    this.coverageDate.set(date);
     this.memoControl.addValidators(Validators.requiredTrue);
     this.memoControl.markAsTouched();
     this.memoControl.markAsDirty();
-    this.memoControl.updateValueAndValidity();
+    this.memoControl.updateValueAndValidity({ emitEvent: false });
     this.dateIsOutsideReport = true;
     if (!this.memoControl.value) {
       this.outOfDateDialogVisible.set(true);
@@ -151,16 +160,11 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       return;
     }
 
-    if (!date) {
+    if (!date || this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
       this.clearOutOfDateRequirement();
       return;
     }
 
-    if (this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
-      this.clearOutOfDateRequirement();
-      return;
-    }
-
-    this.setOutOfDateRequirement();
+    this.setOutOfDateRequirement(date);
   }
 }

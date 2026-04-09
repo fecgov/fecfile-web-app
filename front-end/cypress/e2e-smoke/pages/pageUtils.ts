@@ -1,5 +1,11 @@
 export const currentYear = new Date().getFullYear();
 
+export interface Intercept {
+  url: string;
+  method: 'PUT' | 'POST' | 'GET' | 'DELETE';
+  alias: string;
+}
+
 export class PageUtils {
   private static exactText(value: string): RegExp {
     return new RegExp(String.raw`^\s*${Cypress._.escapeRegExp(value)}\s*$`, 'i'); // NOSONAR
@@ -10,11 +16,7 @@ export class PageUtils {
   }
 
   private static canonizeButtonLabel(value: string): string {
-    return PageUtils.normalizeButtonLabel(value)
-      .replaceAll('&', ' and ')
-      .replaceAll(/\s+/g, ' ')
-      .trim()
-      .toLowerCase();
+    return PageUtils.normalizeButtonLabel(value).replaceAll('&', ' and ').replaceAll(/\s+/g, ' ').trim().toLowerCase();
   }
 
   private static normalizeSidebarLabel(value: string): string {
@@ -28,6 +30,12 @@ export class PageUtils {
 
     const dataHighlight = ($header.attr('data-p-highlight') ?? '').toLowerCase();
     return dataHighlight === 'true' || $header.hasClass('p-highlight');
+  }
+
+  static interceptAndWait(intercepts: Intercept[], fx: Function) {
+    intercepts.forEach((intercept) => cy.intercept(intercept.method, intercept.url).as(intercept.alias));
+    fx();
+    intercepts.forEach((intercept) => cy.wait(`@${intercept.alias}`));
   }
 
   static closeToast() {
@@ -51,8 +59,12 @@ export class PageUtils {
     alias = PageUtils.getAlias(alias);
 
     if (value) {
-      cy.get(alias).find(querySelector).eq(index).find('select').contains('option', value).then(
-        (option) => {
+      cy.get(alias)
+        .find(querySelector)
+        .eq(index)
+        .find('select')
+        .contains('option', value)
+        .then((option) => {
           const optionValue = option.val();
           expect(optionValue, `select option value for "${value}"`).to.not.be.oneOf([undefined, null]);
           if (optionValue === undefined || optionValue === null) {
@@ -60,11 +72,9 @@ export class PageUtils {
           }
 
           cy.get(alias).find(querySelector).eq(index).find('select').select(String(optionValue));
-        }
-      );
+        });
     }
   }
-
 
   static pSelectDropdownSetValue(querySelector: string, value: string, alias = '', index = 0) {
     alias = PageUtils.getAlias(alias);
@@ -142,12 +152,15 @@ export class PageUtils {
     return PageUtils.clickSidebarItem(section);
   }
 
-  static clickSidebarItem(menuItem: string) { // NOSONAR - sidebar helper intentionally uses nested closures for deterministic menu expansion
+  static clickSidebarItem(menuItem: string) {
+    // NOSONAR - sidebar helper intentionally uses nested closures for deterministic menu expansion
     const normalizedMenuItem = PageUtils.normalizeSidebarLabel(menuItem);
     const menuLabelSelector = '.p-panelmenu-header-label, .p-panelmenu-item-label';
-    const findPanelMenu = (): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
+    const findPanelMenu = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+      // NOSONAR - scoped sidebar helper
       cy.get('p-panelmenu', { timeout: 15000 }).should('exist');
-    const nativeClick = ($link: JQuery<HTMLElement>, label: string) => { // NOSONAR - scoped sidebar helper
+    const nativeClick = ($link: JQuery<HTMLElement>, label: string) => {
+      // NOSONAR - scoped sidebar helper
       expect($link.length, `${label} link count for "${menuItem}"`).to.eq(1);
       const link = $link.get(0);
       expect(link, `${label} link element for "${menuItem}"`).to.exist;
@@ -156,34 +169,38 @@ export class PageUtils {
       }
       link.click();
     };
-    const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> => // NOSONAR - scoped sidebar helper
+    const clickMenuLink = (visibleOnly: boolean, label: string): Cypress.Chainable<void> =>
+      // NOSONAR - scoped sidebar helper
       findMenuLink(visibleOnly)
         .should('be.visible')
         .then(($link) => nativeClick($link, label)); // NOSONAR - scoped sidebar helper
 
-    const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => { // NOSONAR - scoped sidebar helper
+    const findMenuLabel = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => {
+      // NOSONAR - scoped sidebar helper
       return findPanelMenu()
         .find(menuLabelSelector)
         .filter(
-          (_, label) => // NOSONAR - scoped sidebar helper
+          (
+            _,
+            label, // NOSONAR - scoped sidebar helper
+          ) =>
             PageUtils.normalizeSidebarLabel(label.textContent ?? '') === normalizedMenuItem &&
             (!visibleOnly || Cypress.dom.isVisible(label)),
         )
-        .should(($labels) => { // NOSONAR - scoped sidebar helper
-          expect(
-            $labels.length,
-            `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`,
-          ).to.eq(1);
+        .should(($labels) => {
+          // NOSONAR - scoped sidebar helper
+          expect($labels.length, `${visibleOnly ? 'visible ' : ''}sidebar link matches for "${menuItem}"`).to.eq(1);
         });
     };
 
-    const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
-      findMenuLabel(visibleOnly)
-        .closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link')
-        .should('have.length', 1);
+    const findMenuLink = (visibleOnly: boolean): Cypress.Chainable<JQuery<HTMLElement>> =>
+      // NOSONAR - scoped sidebar helper
+      findMenuLabel(visibleOnly).closest('a.p-panelmenu-header-link, a.p-panelmenu-item-link').should('have.length', 1);
 
-    const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
-      findMenuLabel(false).then(($candidateLabel) => { // NOSONAR - scoped sidebar helper
+    const ensureVisibleMenuLink = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+      // NOSONAR - scoped sidebar helper
+      findMenuLabel(false).then(($candidateLabel) => {
+        // NOSONAR - scoped sidebar helper
         if (Cypress.dom.isVisible($candidateLabel[0])) {
           return findMenuLink(true);
         }
@@ -193,14 +210,16 @@ export class PageUtils {
         const ownerPanelIndex = $ownerPanel.first().index();
         expect(ownerPanelIndex, `owner sidebar panel index for "${menuItem}"`).to.be.greaterThan(-1);
 
-        const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> => // NOSONAR - scoped sidebar helper
+        const findOwnerHeader = (): Cypress.Chainable<JQuery<HTMLElement>> =>
+          // NOSONAR - scoped sidebar helper
           findPanelMenu()
             .find('.p-panelmenu-panel')
             .eq(ownerPanelIndex)
             .find('> .p-panelmenu-header')
             .should('have.length', 1);
 
-        return findOwnerHeader().then(($ownerHeader) => { // NOSONAR - scoped sidebar helper
+        return findOwnerHeader().then(($ownerHeader) => {
+          // NOSONAR - scoped sidebar helper
           if (PageUtils.isSidebarHeaderExpanded($ownerHeader)) {
             return findMenuLink(true);
           }
@@ -210,8 +229,10 @@ export class PageUtils {
             .should('have.length', 1)
             .should('be.visible')
             .then(($link) => nativeClick($link, 'owner sidebar header')) // NOSONAR - scoped sidebar helper
-            .then(() => // NOSONAR - scoped sidebar helper
-              findOwnerHeader().should(($header) => { // NOSONAR - scoped sidebar helper
+            .then(() =>
+              // NOSONAR - scoped sidebar helper
+              findOwnerHeader().should(($header) => {
+                // NOSONAR - scoped sidebar helper
                 expect(
                   PageUtils.isSidebarHeaderExpanded($header),
                   `owner sidebar header expanded for "${menuItem}"`,
@@ -222,7 +243,8 @@ export class PageUtils {
         });
       });
 
-    return ensureVisibleMenuLink().then(($menuLink) => { // NOSONAR - scoped sidebar helper
+    return ensureVisibleMenuLink().then(($menuLink) => {
+      // NOSONAR - scoped sidebar helper
       const isHeaderLink = $menuLink.hasClass('p-panelmenu-header-link');
       const $header = $menuLink.closest('.p-panelmenu-header');
       const shouldClick = !isHeaderLink || !PageUtils.isSidebarHeaderExpanded($header);
@@ -373,32 +395,31 @@ export class PageUtils {
   static getKabob(identifier: string, alias = '') {
     alias = PageUtils.getAlias(alias);
     const normalizedIdentifier = PageUtils.normalizeButtonLabel(identifier);
-    cy.get(alias).find('tbody tr:visible, tr:visible').then(($rows) => {
-      const matchingRows = $rows.filter((_, row) => {
-        const $row = Cypress.$(row);
-        const labels = $row
-          .find('td:visible, th:visible, a:visible')
-          .toArray()
-          .map((element) => PageUtils.normalizeButtonLabel(element.textContent ?? ''))
-          .filter(Boolean);
+    cy.get(alias)
+      .find('tbody tr:visible, tr:visible')
+      .then(($rows) => {
+        const matchingRows = $rows.filter((_, row) => {
+          const $row = Cypress.$(row);
+          const labels = $row
+            .find('td:visible, th:visible, a:visible')
+            .toArray()
+            .map((element) => PageUtils.normalizeButtonLabel(element.textContent ?? ''))
+            .filter(Boolean);
 
-        return labels.includes(normalizedIdentifier);
+          return labels.includes(normalizedIdentifier);
+        });
+
+        expect(matchingRows.length, `kabob row matches for ${identifier}`).to.eq(1);
+        const row = matchingRows.get(0);
+        expect(row, `kabob row for ${identifier}`).to.exist;
+        if (!row) {
+          throw new Error(`Missing kabob row for ${identifier}`);
+        }
+
+        cy.wrap(row).within(() => {
+          cy.get('app-table-actions-button button:visible').should('have.length.at.least', 1).first().click();
+        });
       });
-
-      expect(matchingRows.length, `kabob row matches for ${identifier}`).to.eq(1);
-      const row = matchingRows.get(0);
-      expect(row, `kabob row for ${identifier}`).to.exist;
-      if (!row) {
-        throw new Error(`Missing kabob row for ${identifier}`);
-      }
-
-      cy.wrap(row).within(() => {
-        cy.get('app-table-actions-button button:visible')
-          .should('have.length.at.least', 1)
-          .first()
-          .click();
-      });
-    });
   }
 
   static clickKababItem(identifier: string, item: string, alias = '') {
@@ -444,8 +465,15 @@ export class PageUtils {
       });
   }
 
-  static submitReportForm() {
-    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/').as('SubmitReport');
+  static submitReportForm(reject = false) {
+    cy.intercept('POST', 'http://localhost:8080/api/v1/web-services/submit-to-fec/', (req) => {
+      if (reject) {
+        const url = new URL(req.url);
+        url.searchParams.set('mock', 'true');
+        url.searchParams.set('mock_reject', 'true');
+        req.url = url.toString();
+      }
+    }).as('SubmitReport');
     const alias = PageUtils.getAlias('');
     PageUtils.urlCheck('/submit');
     cy.contains('h1', 'Submit report').should('be.visible');

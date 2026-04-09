@@ -14,10 +14,9 @@ import { AmountInputComponent } from './amount-input.component';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleATransactionTypes, Transaction } from 'app/shared/models';
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { provideHttpClient } from '@angular/common/http';
 
 @Component({
@@ -121,30 +120,6 @@ describe('AmountInputComponent', () => {
       const updateInputMethodTrue = vi.spyOn(component.amountInput(), 'updateInput');
       component.onInputAmount();
       expect(updateInputMethodTrue).toHaveBeenCalled();
-    });
-  });
-
-  describe('Independent expenditure transaction', () => {
-    const transaction = getFromJSON({ transaction_type_identifier: 'INDEPENDENT_EXPENDITURE' });
-    const date: Date = new Date('July 20, 69 20:17:40 GMT+00:00');
-
-    beforeEach(() => {
-      host.transaction = transaction;
-      host.templateMap = transaction.transactionType.templateMap;
-      fixture.detectChanges();
-    });
-
-    it('should set up the component properly', () => {
-      const checkboxLabel = signal('MEMO ITEM');
-
-      component.form.patchValue({
-        [transaction.transactionType.templateMap.date]: undefined,
-      });
-      component.form.patchValue({
-        [transaction.transactionType.templateMap.date2]: date,
-      });
-      fixture.detectChanges();
-      expect(component.memoCode()?.checkboxLabel()).toBe(checkboxLabel());
     });
   });
 

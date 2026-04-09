@@ -36,6 +36,13 @@
   width: 30px;
 }
 
+.solid-line {
+  border-bottom: 1px solid black;
+  color: transparent;
+  display: inline-block;
+  vertical-align: 4px;
+}
+
 :host ::ng-deep {
   p,
   span,
@@ -51,14 +58,9 @@
     font-weight: normal;
   }
 
-  .close-icon {
-    right: 50px;
-    top: 50px;
-  }
-
   .p-popover .p-popover-close {
     right: 0.5rem;
-    top: 0.5rem;
+    top: 2rem;
     background: transparent;
     transform: scale(1.5);
     border: 0;
@@ -77,7 +79,7 @@
   }
 
   .p-popover .p-popover-content {
-    padding-top: 2.5rem;
+    padding-top: 1rem;
   }
 
   .p-popover .p-popover-content * {

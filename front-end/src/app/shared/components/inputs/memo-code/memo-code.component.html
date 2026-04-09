@@ -12,7 +12,6 @@
           [trueValue]="true"
           [falseValue]="false"
           [readonly]="form.controls[templateMap['memo_code']].disabled"
-          (onChange)="onMemoItemClick()"
         />
         <span id="memo_code_label" class="ml-2">
           {{ checkboxLabel() }}
@@ -31,7 +30,7 @@
         />
       </div>
     } @else {
-      <div class="col-3">
+      <div class="col-3 pl-0">
         <p-selectButton
           #memoCode
           inputId="memo_code"
@@ -41,7 +40,7 @@
           optionValue="value"
         />
       </div>
-      <div class="col-12">
+      <div class="col-12 pl-0">
         @if (memoControl.value) {
           <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
           MEMO ITEM
