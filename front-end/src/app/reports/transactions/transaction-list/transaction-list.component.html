@@ -7,7 +7,7 @@
     </ng-template>
 
     <ng-template pTemplate="right">
-      @if (isInProgress()) {
+      @if (report().canEdit) {
         <app-table-actions-button
           [tableActions]="tableActions"
           [actionItem]="report()"
@@ -17,6 +17,7 @@
           buttonLabel="Add transaction"
           buttonStyleClass="add-button"
           buttonAriaLabel="Add a Transaction"
+          buttonDataCy="add-transactions-actions-trigger"
         />
       }
     </ng-template>

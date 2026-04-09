@@ -860,3 +860,12 @@ select {
     max-width: 1052px;
   }
 }
+
+p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
+  overflow: hidden;
+}
+
+.p-motion[style*='visibility: hidden'] .accordion-content-wrapper {
+  height: 0;
+  overflow: hidden;
+}

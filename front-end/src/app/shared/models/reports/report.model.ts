@@ -55,6 +55,11 @@ export abstract class Report extends BaseModel {
 
   @Exclude()
   transactionTypes: TransactionTypes[] = [];
+
+  get canEdit(): boolean {
+    if (!this.report_status) return false;
+    return [ReportStatus.IN_PROGRESS, ReportStatus.SUBMIT_FAILURE].includes(this.report_status);
+  }
 }
 
 export enum ReportTypes {
