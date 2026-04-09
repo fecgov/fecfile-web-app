@@ -1,6 +1,7 @@
 <div class="sidebar">
   <div class="report-info">
     <div class="report-type">{{ formLabel() }}</div>
+    <div class="text-sm mb-2 pb-1">{{ version() }}</div>
     <div class="sub-heading">{{ subHeading() }}</div>
     @if (hasCoverage()) {
       <div class="sub-heading">
@@ -8,6 +9,7 @@
         {{ coverageThrough() | fecDate }}
       </div>
     }
+
     @if (isF24()) {
       <a class="rename-option" (click)="renameForm24()">RENAME</a>
     }
