@@ -1,11 +1,12 @@
 import { formatDate } from '@angular/common';
-import { HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
+import { map, Observable, of } from 'rxjs';
 
 interface PreviousAggregate {
   aggregate: number;
@@ -30,13 +31,14 @@ export class TransactionService {
     return getFromJSON(response);
   };
 
-  public async getPreviousEntityAggregate(
+  public getPreviousEntityAggregate(
     transaction: Transaction,
     contact_1_id: string,
     action_date: Date | string,
-  ): Promise<number | null> {
+  ): Observable<number | null> {
     const date = action_date ? formatDate(action_date, 'yyyy-MM-dd', 'en-US') : '';
 
+    // Use .pipe(map(...)) instead of await if fetchPreviousAggregate returns an Observable
     return this.fetchPreviousAggregate(
       transaction,
       '/transactions/previous/entity/',
@@ -46,7 +48,7 @@ export class TransactionService {
     );
   }
 
-  public async getPreviousElectionAggregate(
+  public getPreviousElectionAggregate(
     transaction: Transaction | undefined,
     disbursement_date: DateType,
     dissemination_date: DateType,
@@ -54,7 +56,7 @@ export class TransactionService {
     candidate_office: string | undefined,
     candidate_state: string | undefined,
     candidate_district: string | undefined,
-  ): Promise<number | null> {
+  ): Observable<number | null> {
     const date = this.getActionDateString(disbursement_date, dissemination_date);
     const hasRequiredState = !!(candidate_state || candidate_office === CandidateOfficeTypes.PRESIDENTIAL);
     const hasRequiredDistrict = !!(candidate_district || candidate_office !== CandidateOfficeTypes.HOUSE);
@@ -69,12 +71,12 @@ export class TransactionService {
     );
   }
 
-  public async getPreviousPayeeCandidateAggregate(
+  public getPreviousPayeeCandidateAggregate(
     transaction: Transaction | undefined,
     contact2Id: string | undefined,
     expenditure_date: Date | string,
     general_election_year: string | undefined,
-  ): Promise<number | null> {
+  ): Observable<number | null> {
     const date = expenditure_date ? formatDate(expenditure_date, 'yyyy-MM-dd', 'en-US') : '';
     const contact_2_id = contact2Id ?? '';
 
@@ -166,26 +168,22 @@ export class TransactionService {
     return actionDateString;
   }
 
-  private async fetchPreviousAggregate(
+  private fetchPreviousAggregate(
     transaction: Transaction | undefined,
     endpoint: string,
     params: Record<string, string | undefined>,
     resultField: PreviousAggregateField,
     validationCondition: boolean,
-  ): Promise<number | null> {
+  ): Observable<number | null> {
     const transaction_id = transaction?.id ?? '';
     const aggregation_group = (transaction as ScheduleTransaction)?.aggregation_group ?? AggregationGroups.GENERAL;
 
     if (!transaction || !aggregation_group || !params['date'] || !validationCondition) {
-      return null;
+      return of(null);
     }
 
-    const response = await this.apiService.get<HttpResponse<PreviousAggregate>>(
-      endpoint,
-      { transaction_id, aggregation_group, ...params },
-      [HttpStatusCode.NotFound],
-    );
-
-    return response.body?.[resultField] ?? null;
+    return this.apiService
+      .getObs<PreviousAggregate>(endpoint, { transaction_id, aggregation_group, ...params }, [HttpStatusCode.NotFound])
+      .pipe(map((response) => response.body?.[resultField] ?? null));
   }
 }
