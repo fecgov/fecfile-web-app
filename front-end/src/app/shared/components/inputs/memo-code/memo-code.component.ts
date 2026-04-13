@@ -75,7 +75,9 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   });
 
   readonly memoCodeText = computed(() =>
-    this.memoCodeMapOptions().length > 0 ? 'should be marked as <b>Undeposited</b>' : 'must be a <b>Memo Item</b>',
+    this.memoCodeMapOptions().length > 0
+      ? `should be marked as <b>${this.memoCodeMapOptions()[1].label}</b>`
+      : 'must be a <b>Memo Item</b>',
   );
 
   ngOnInit(): void {
