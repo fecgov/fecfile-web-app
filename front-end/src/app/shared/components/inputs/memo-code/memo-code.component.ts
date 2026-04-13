@@ -74,6 +74,10 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     return [];
   });
 
+  readonly memoCodeText = computed(() =>
+    this.memoCodeMapOptions().length > 0 ? 'should be marked as <b>Undeposited</b>' : 'must be a <b>Memo Item</b>',
+  );
+
   ngOnInit(): void {
     const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl<Date | null>;
     const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl<Date | null>;
