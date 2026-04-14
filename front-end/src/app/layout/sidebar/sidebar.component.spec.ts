@@ -58,7 +58,7 @@ describe('SidebarComponent', () => {
   });
 
   it('hasCoverage true for F3X', () => {
-    expect(component.isForm3Type()).toBe(true);
+    expect(component.hasCoverage()).toBe(true);
     expect(component.coverageThrough()!.toISOString().substring(0, 10)).toBe('2022-06-30');
   });
 });
