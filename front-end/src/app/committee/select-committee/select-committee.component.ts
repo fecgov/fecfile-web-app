@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { afterRenderEffect, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -6,22 +6,38 @@ import { CommitteeAccountService } from 'app/shared/services/committee-account.s
 import { UsersService } from 'app/shared/services/users.service';
 import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-select-committee',
   templateUrl: './select-committee.component.html',
   styleUrls: ['./select-committee.component.scss'],
-  imports: [RouterLink],
+  imports: [RouterLink, AccordionModule],
 })
-export class SelectCommitteeComponent implements OnInit {
+export class SelectCommitteeComponent {
   protected readonly committeeAccountService = inject(CommitteeAccountService);
   protected readonly store = inject(Store);
   protected readonly router = inject(Router);
   private readonly userService = inject(UsersService);
-  committees?: CommitteeAccount[];
+  readonly committees = derivedAsync(() => this.committeeAccountService.getCommittees(), { initialValue: [] });
+  readonly activeCommittees = computed(() => this.committees().filter((c) => !c.disabled));
+  readonly disabledCommittees = computed(() => this.committees().filter((c) => !!c.disabled));
+  readonly disabledShown = signal(false);
+  readonly content = viewChild.required<ElementRef<HTMLDivElement>>('content');
 
-  ngOnInit(): void {
-    this.committeeAccountService.getCommittees().then((committees) => (this.committees = committees));
+  constructor() {
+    afterRenderEffect(() => {
+      const isShown = this.disabledShown();
+      const contentEl = this.content().nativeElement;
+      console.log('disabled committee', this.disabledCommittees()[0]);
+      console.log('active committee', this.activeCommittees()[0]);
+      if (isShown) {
+        contentEl.style.height = contentEl.children[0].scrollHeight + 20 + 'px';
+      } else {
+        contentEl.style.height = '0px';
+      }
+    });
   }
 
   async activateCommittee(committee: CommitteeAccount): Promise<void> {
@@ -31,5 +47,9 @@ export class SelectCommitteeComponent implements OnInit {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });
     await this.router.navigateByUrl(``);
+  }
+
+  toggle() {
+    this.disabledShown.update((s) => !s);
   }
 }

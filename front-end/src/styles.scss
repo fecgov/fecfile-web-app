@@ -673,6 +673,25 @@ textarea {
   width: 8px;
 }
 
+.minus-icon-mask,
+.plus-icon-mask {
+  background-color: white;
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.minus-icon-mask {
+  mask-image: url('/assets/img/i-minus-circle.svg');
+}
+
+.plus-icon-mask {
+  mask-image: url('/assets/img/i-plus-circle.svg');
+}
+
 .icon-gap {
   gap: 5px;
 }
@@ -868,4 +887,9 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 .p-motion[style*='visibility: hidden'] .accordion-content-wrapper {
   height: 0;
   overflow: hidden;
+}
+
+.collapsible-content {
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
 }
