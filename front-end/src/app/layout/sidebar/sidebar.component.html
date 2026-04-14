@@ -1,9 +1,11 @@
 <div class="sidebar">
   <div class="report-info">
     <div class="report-type">{{ formLabel() }}</div>
-    <div class="text-sm mb-2 pb-1">{{ version() }}</div>
+    @if (isForm3Type()) {
+      <div class="text-sm mb-2 pb-1">{{ version() }}</div>
+    }
     <div class="sub-heading">{{ subHeading() }}</div>
-    @if (hasCoverage()) {
+    @if (isForm3Type()) {
       <div class="sub-heading">
         {{ coverageFrom() | fecDate }} — <wbr />
         {{ coverageThrough() | fecDate }}
