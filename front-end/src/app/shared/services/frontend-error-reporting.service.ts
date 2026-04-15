@@ -150,14 +150,9 @@ export class FrontendErrorReportingService {
     this.enqueue(report);
   }
 
-  reportHttpError(input: {
-    method: string;
-    url: string;
-    status: number;
-    statusText: string;
-    message: string;
-  }): void {
-    const sampleRate = input.status >= 500 || input.status === 0 ? this.config.sampleRates.http5xx : this.config.sampleRates.http4xx;
+  reportHttpError(input: { method: string; url: string; status: number; statusText: string; message: string }): void {
+    const sampleRate =
+      input.status >= 500 || input.status === 0 ? this.config.sampleRates.http5xx : this.config.sampleRates.http4xx;
     if (!this.shouldSample(sampleRate)) {
       return;
     }
