@@ -79,7 +79,7 @@ export class ApiService {
   public getObs<T>(
     endpoint: string,
     params: QueryParams = {},
-    allowedErrorCodes: number[],
+    allowedErrorCodes: number[] = [],
   ): Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
     return this.http
