@@ -134,7 +134,10 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
       const report = await this.reportService.get(this.report.id!);
       this.updatePrintStatus(report);
       await new Promise((resolve) => setTimeout(resolve, this.pollingTime));
-      if (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING') {
+      if (
+        this.componentAlive &&
+        (!report.webprint_submission?.fec_status || report.webprint_submission?.fec_status === 'PROCESSING')
+      ) {
         this.pollPrintStatus();
       }
     } catch (error) {
