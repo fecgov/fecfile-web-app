@@ -138,7 +138,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
         this.pollPrintStatus();
       }
     } catch (error) {
-      console.error('Error fetching report:', error);
+      if (this.componentAlive) console.error('Error fetching report:', error);
     }
   }
 
