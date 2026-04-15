@@ -24,6 +24,22 @@ export const environment = {
   showGlossary: false,
   webForms: 'https://webforms.stage.efo.fec.gov',
   whoCanUseLink: '(https://www.fec.gov/efiling/getting-started-fecfile-pilot',
+  errorReporting: {
+    enabled: true,
+    endpoint: '/frontend-error-report',
+    sampleRates: {
+      runtime: 1,
+      promise: 1,
+      http4xx: 0.5,
+      http5xx: 1,
+    },
+    dedupeWindowMs: 30000,
+    batchSize: 10,
+    flushIntervalMs: 5000,
+    maxMessageLength: 500,
+    maxStackLength: 2000,
+    maxPayloadBytes: 12000,
+  },
 };
 
 /*
