@@ -5,11 +5,11 @@
 }
 
 .header-filers {
-  color: #212121;
+  color: var(--fec-black);
 }
 
 .header-comming-soon {
-  color: #212121;
+  color: var(--fec-black);
 }
 
 .header-comming-soon,
@@ -22,37 +22,19 @@
   color: var(--primary-button-hover-color);
 }
 
-.description-text {
+p {
   font-family: var(--gandhi) !important;
   font-size: 18px !important;
-  color: #212121;
+  color: var(--fec-black);
   text-align: center;
   margin-bottom: 32px;
-}
-
-.button-container {
-  margin-bottom: 18px;
-}
-
-.login-button {
-  color: #ffffff;
-  background-color: #112e51;
-  border-radius: 4px;
-  display: inline-block;
-  font-family: 'karla', Sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1;
-  padding: 8px 20px;
-  text-align: center;
-  vertical-align: middle;
 }
 
 .learn-more-link {
   font-family: var(--karla-bold);
   font-size: 14px;
-  color: #112e51;
-  border-bottom: 1px dotted #112e51;
+  color: var(--primary-color);
+  border-bottom: 1px dotted var(--primary-color);
   cursor: pointer;
   text-decoration: none;
   transition: color 0.1s linear;
@@ -71,6 +53,10 @@
 .top-section {
   padding-bottom: 32px;
   flex: 0 0 auto;
+
+  @media (min-width: 992px) {
+    padding-bottom: 64px;
+  }
 }
 
 #bottom-section {
@@ -82,6 +68,19 @@
   flex: 1;
   display: flex;
   justify-content: center;
+
+  @media (min-width: 596px) {
+    height: calc(100% - 274px);
+  }
+  @media (min-width: 768px) {
+    height: calc(100% - 274px);
+  }
+  @media (min-width: 992px) {
+    height: calc(100% - 306px);
+  }
+  @media (min-width: 1200px) {
+    height: calc(100% - 263px);
+  }
 }
 
 #blue-background {
@@ -109,14 +108,6 @@
   justify-content: center;
 }
 
-@media (max-width: 767px) {
-  ::ng-deep .container,
-  ::ng-deep .main-content {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-
 @media (max-width: 991px) {
   ::ng-deep .container,
   ::ng-deep .main-content {
@@ -125,41 +116,14 @@
   }
 }
 
-@media (min-width: 596px) {
-  #bottom-section {
-    height: calc(100% - 274px);
-  }
-}
-
 @media (min-width: 768px) {
   .header-filers {
     display: inline;
-  }
-
-  .first-description-text {
-    display: block;
-  }
-  #bottom-section {
-    height: calc(100% - 274px);
-  }
-}
-
-@media (min-width: 992px) {
-  .top-section {
-    padding-bottom: 64px;
-  }
-
-  #bottom-section {
-    height: calc(100% - 306px);
   }
 }
 
 @media (min-width: 1200px) {
   .header-productivity {
     display: inline;
-  }
-
-  #bottom-section {
-    height: calc(100% - 263px);
   }
 }

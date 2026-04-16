@@ -1,6 +1,6 @@
 import { F3xCreateReportPage } from './f3xCreateReportPage';
 import { defaultForm24Data, defaultForm3XData as defaultReportFormData } from '../models/ReportFormModel';
-import { PageUtils } from './pageUtils';
+import { Intercept, PageUtils } from './pageUtils';
 
 type ReportListType = 'form-3x' | 'form-24';
 type ReportAction = 'amend' | 'unamend';
@@ -110,13 +110,17 @@ export class ReportListPage {
     cy.get('[data-cy="start-report"]:visible').click();
   }
 
-  static gotToReportTransactionListPage(reportId: string, includeReceipts = true, includeDisbursements = true, includeLoans = true) {
+  static gotToReportTransactionListPage(
+    reportId: string,
+    includeReceipts = true,
+    includeDisbursements = true,
+    includeLoans = true,
+  ) {
     return ReportListPage.checkReportTransactionListPageLoaded(
       reportId,
       includeReceipts,
       includeDisbursements,
       includeLoans,
-      cy.visit(`/reports/transactions/report/${reportId}/list`),
     );
   }
 
@@ -125,53 +129,38 @@ export class ReportListPage {
     includeReceipts = true,
     includeDisbursements = true,
     includeLoans = true,
-    visit: Cypress.Chainable = cy.wrap(null),
   ) {
-    ReportListPage.registerReporTransactiontListInterceptions(reportId, includeReceipts, includeDisbursements, includeLoans);
-
-    return visit.then(() => {
+    const fx = () => {
+      cy.visit(`/reports/transactions/report/${reportId}/list`);
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
       cy.contains('Transactions in this report').should('be.visible');
-      ReportListPage.waitForReportTransactionListRequests(includeReceipts, includeDisbursements, includeLoans);
-    });
-  }
+    };
 
-  private static registerReporTransactiontListInterceptions(
+    ReportListPage.interceptTransactions(reportId, fx, includeReceipts, includeDisbursements, includeLoans);
+  }
+  
+
+  static interceptTransactions(
     reportId: string,
+    fx: () => void,
     includeReceipts = true,
     includeDisbursements = true,
     includeLoans = true,
   ) {
-    const configs = [
+    const intercepts: Intercept[] = [];
+    [
       { enabled: includeReceipts, alias: 'GetReceipts', schedules: 'A' },
       { enabled: includeLoans, alias: 'GetLoans', schedules: 'C,D' },
       { enabled: includeDisbursements, alias: 'GetDisbursements', schedules: 'B,E,F' },
-    ] as const;
-
-    configs.forEach(({ enabled, alias, schedules }) => {
+    ].forEach(({ enabled, alias, schedules }) => {
       if (!enabled) return;
-      cy.intercept({
+      intercepts.push({
         method: 'GET',
-        pathname: '/api/v1/transactions/',
-        query: {
-          report_id: reportId,
-          schedules,
-        },
-      }).as(alias);
+        url: `http://localhost:8080/api/v1/transactions/**&report_id=${reportId}**&schedules=${schedules}**`,
+        alias,
+      });
     });
-  }
-
-  private static waitForReportTransactionListRequests(includeReceipts = true, includeDisbursements = true, includeLoans = true) {
-    const waits = [
-      { enabled: includeLoans, alias: 'GetLoans' },
-      { enabled: includeDisbursements, alias: 'GetDisbursements' },
-      { enabled: includeReceipts, alias: 'GetReceipts' },
-    ] as const;
-
-    waits.forEach(({ enabled, alias }) => {
-      if (!enabled) return;
-      cy.wait(`@${alias}`);
-    });
+    PageUtils.interceptAndWait(intercepts, fx);
   }
 
   private static openReportActions(identifier: string) {

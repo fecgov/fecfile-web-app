@@ -102,36 +102,33 @@ describe('MemoCodeInputComponent', () => {
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
     setForm3X();
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
-    component.form.get('memo_code')?.patchValue(false);
-    component.onMemoItemClick();
+    component.form.get('memo_code')?.patchValue(true);
 
     expect(component.outOfDateDialogVisible()).toBe(true);
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
-    component.onMemoItemClick();
+    component.form.get('memo_code')?.patchValue(false);
     expect(component.outOfDateDialogVisible()).toBe(true);
   });
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
     setForm3X();
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
-    component.form.get('memo_code')?.patchValue(false);
-    component.onMemoItemClick();
+    component.form.get('memo_code')?.patchValue(true);
     expect(component.outOfDateDialogVisible()).toBe(false);
   });
 
-  it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
+  it('should not open the dialog box when memo_code is checked and outside of report dates', async () => {
     setForm3X();
 
-    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    component.form.get('contribution_date')?.patchValue(new Date('01/02/2020'));
     component.outOfDateDialogVisible.set(false);
-    component.form.get('memo_code')?.patchValue(true);
-    component.onMemoItemClick();
+    component.form.get('memo_code')?.patchValue(false);
     expect(component.outOfDateDialogVisible()).toBe(false);
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.outOfDateDialogVisible.set(false);
-    component.onMemoItemClick();
+    component.form.get('memo_code')?.patchValue(true);
     expect(component.outOfDateDialogVisible()).toBe(false);
   });
 
