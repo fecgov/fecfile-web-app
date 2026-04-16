@@ -24,14 +24,14 @@ export class SelectCommitteeComponent {
   readonly activeCommittees = computed(() => this.committees().filter((c) => !c.disabled));
   readonly disabledCommittees = computed(() => this.committees().filter((c) => !!c.disabled));
   readonly disabledShown = signal(false);
-  readonly content = viewChild.required<ElementRef<HTMLDivElement>>('content');
+  readonly content = viewChild<ElementRef<HTMLDivElement>>('content');
+  readonly hasDisabledCommittees = computed(() => this.disabledCommittees().length > 0);
 
   constructor() {
     afterRenderEffect(() => {
       const isShown = this.disabledShown();
-      const contentEl = this.content().nativeElement;
-      console.log('disabled committee', this.disabledCommittees()[0]);
-      console.log('active committee', this.activeCommittees()[0]);
+      const contentEl = this.content()?.nativeElement;
+      if (!contentEl) return;
       if (isShown) {
         contentEl.style.height = contentEl.children[0].scrollHeight + 20 + 'px';
       } else {
