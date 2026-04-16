@@ -62,21 +62,17 @@
   }
 
   @if (transactionType()?.hasMemoCode() && !isDebtRepayment() && !isLoanRepayment()) {
-    <div class="grid">
-      <div class="col-12">
-        <div class="field">
-          <app-memo-code
-            #memoCode
-            [form]="form"
-            [formSubmitted]="formSubmitted"
-            [templateMap]="templateMap"
-            [overrideMemoItemHelpText]="memoItemHelpText()"
-            [transaction]="transaction()"
-            checkboxLabel="MEMO ITEM"
-            [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
-          />
-        </div>
-      </div>
+    <div class="field pl-2 pt-2">
+      <app-memo-code
+        #memoCode
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [templateMap]="templateMap"
+        [overrideMemoItemHelpText]="memoItemHelpText()"
+        [transaction]="transaction()"
+        checkboxLabel="MEMO ITEM"
+        [parenLabel]="memoHasOptional() ? '(OPTIONAL)' : ''"
+      />
     </div>
   }
   <div class="grid">

@@ -1,7 +1,7 @@
 <div [formGroup]="form">
-  <div class="grid memo-container">
+  <div class="flex flex-column gap-3">
     @if (memoCodeMapOptions().length === 0) {
-      <div class="col-12 field-row">
+      <div class="flex gap-1 align-items-center">
         <p-checkbox
           #memoCode
           [binary]="true"
@@ -21,28 +21,24 @@
         </span>
         <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
       </div>
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
-          [patternErrorMessage]="'This is a required field.'"
-        />
-      </div>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['memo_code']"
+        [formSubmitted]="formSubmitted"
+        [patternErrorMessage]="'This is a required field.'"
+      />
     } @else {
-      <div class="col-3 pl-0">
-        <p-selectButton
-          #memoCode
-          inputId="memo_code"
-          [formControlName]="templateMap['memo_code']"
-          [options]="memoCodeMapOptions()"
-          optionLabel="label"
-          optionValue="value"
-        />
-      </div>
-      <div class="col-12 pl-0">
+      <p-selectButton
+        #memoCode
+        inputId="memo_code"
+        [formControlName]="templateMap['memo_code']"
+        [options]="memoCodeMapOptions()"
+        optionLabel="label"
+        optionValue="value"
+      />
+      <div class="flex">
         @if (memoControl.value) {
-          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
+          <span class="pi pi-check" pTooltip="{{ memoItemHelpText() }}"></span>
           MEMO ITEM
         } @else {
           NOT A MEMO ITEM
@@ -51,14 +47,12 @@
           <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
         }
       </div>
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
-          [patternErrorMessage]="'This is a required field.'"
-        />
-      </div>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['memo_code']"
+        [formSubmitted]="formSubmitted"
+        [patternErrorMessage]="'This is a required field.'"
+      />
     }
   </div>
 
