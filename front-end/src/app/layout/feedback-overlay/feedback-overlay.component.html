@@ -8,23 +8,35 @@
 >
   <ng-template #content let-closeCallback="closeCallback">
     <div class="px-4 py-2">
-      <button (click)="closeCallback($event)" class="p-popover-close">
-        <img class="close-icon" alt="Close icon" src="assets/img/feedback-close-icon.svg" />
-      </button>
       @switch (submitStatus) {
         @case (SubmissionStatesEnum.DRAFT) {
           <div class="grid">
             <div class="col-12">
-              <h3>Post feedback about FECfile+ anonymously</h3>
+              <h2>Help improve FECfile+</h2>
+              <button (click)="closeCallback($event)" class="p-popover-close">
+                <img alt="Close icon" src="assets/img/feedback-close-icon.svg" />
+              </button>
+            </div>
+            <div class="col-12 mb-2">
+              <h3>Experiencing issues creating or filing reports?</h3>
               <p class="mb-2">
-                How can we improve FECfile+? When you submit your feedback, it will include your comments, browser
-                information, and the URL you were viewing at the time of submission.
+                Report issues to the Electronic Filing Office (EFO). This form should not be used to report technical
+                issues or ask questions about your filing.
               </p>
+              <a href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
+                >Contact EFO for help with technical issues</a
+              >
             </div>
           </div>
           <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
             <div class="grid">
               <div class="col-12">
+                <h3>Provide feedback anonymously about FECfile+</h3>
+                <p class="mb-4">
+                  How can we improve FECfile+? When you submit your feedback, it will include your comments, browser
+                  information, and the URL you were viewing at the time of submission - so don’t include sensitive
+                  information like your name, contact information, or Social Security number.
+                </p>
                 <div class="field">
                   <label for="action"
                     >WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?
@@ -38,7 +50,7 @@
             <div class="grid">
               <div class="col-12">
                 <div class="field">
-                  <label for="feedback">GENERAL WEBSITE FEEDBACK</label>
+                  <label for="feedback">GENERAL FEEDBACK</label>
                   <textarea id="feedback" [rows]="3" appAutoResize formControlName="feedback"></textarea>
                   <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
                 </div>
@@ -47,12 +59,11 @@
             <div class="grid">
               <div class="col-12">
                 <div class="field">
-                  <label for="about"
-                    >TELL US ABOUT YOURSELF
-                    <br />
+                  <label for="about">
+                    TELL US ABOUT YOURSELF<br />
                     <span
-                      >(Please don't include sensitive information like your name, contact information or Social
-                      Security number.)</span
+                      >I'm a <span class="solid-line">____</span> interested in
+                      <span class="solid-line">____________</span></span
                     >
                   </label>
                   <textarea id="about" [rows]="3" appAutoResize formControlName="about"></textarea>
@@ -68,7 +79,7 @@
                 type="button"
                 pButton
                 pRipple
-                label="Post"
+                label="Submit"
                 class="p-button-primary"
                 (click)="submitForm()"
               ></button>
@@ -77,8 +88,6 @@
           <div class="grid">
             <div class="col-12">
               <div class="flex gap-1 text-start">
-                <a href="https://www.fec.gov/use-recaptcha/" target="_blank" rel="noopener">Use of reCAPTCHA</a>
-                |
                 <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener"
                   >Contact the FEC about a specific question</a
                 >

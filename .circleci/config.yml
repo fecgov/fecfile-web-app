@@ -11,7 +11,7 @@ orbs:
 # Reusable Commands see https://circleci.com/docs/reference/reusing-config/
 commands:
   spin-up-api-containers:
-    description: "Setup and start fecfile-web-api for E2E tests"
+    description: 'Setup and start fecfile-web-api for E2E tests'
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -73,7 +73,7 @@ jobs:
           working_directory: ~/project/front-end/
 
       - run:
-          name: "Run Prettier with project configuration"
+          name: 'Run Prettier with project configuration'
           command: npm run prettier:check:ci
           working_directory: ~/project/front-end/
   test:
@@ -292,7 +292,7 @@ jobs:
           app-dir: ~/project/front-end/
       - run:
           name: List installed node dependencies
-          command: npm ls --all
+          command: npm ls
           working_directory: ~/project/front-end/
       - python/install-packages:
           pkg-manager: pip
