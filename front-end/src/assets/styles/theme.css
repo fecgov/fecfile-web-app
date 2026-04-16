@@ -6352,3 +6352,7 @@ td {
   background-color: var(--surface-hover);
   color: var(--p-content-color);
 }
+
+.surface-ground {
+  background-color: var(--surface-ground) !important;
+}

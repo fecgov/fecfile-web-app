@@ -9,7 +9,7 @@
   <div class="col-6 right-side">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
-      @if (committees?.length === 0) {
+      @if (activeCommittees().length === 0) {
         <div class="committee-card empty-card">
           <div class="empty-lens-img">
             <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg" />
@@ -18,9 +18,9 @@
             <p class="font-karla-bold">Not currently active in any FECfile+ committee accounts</p>
           </div>
         </div>
-      } @else if (committees?.length) {
+      } @else if (activeCommittees().length) {
         <div class="committee-list">
-          @for (committee of committees; track committee) {
+          @for (committee of activeCommittees(); track committee) {
             <div id="{{ committee.id }}" class="committee-card" (click)="activateCommittee(committee)">
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
               <div class="committee-info">
@@ -36,6 +36,47 @@
       <span class="h5">LOOKING FOR AN EXISTING FECFILE+ COMMITTEE ACCOUNT?</span>
       Contact the administrator for that committee.
     </div>
+    @if (hasDisabledCommittees()) {
+      <div class="disabled-committee-header" [class]="disabledShown() ? 'header-expanded' : ''">
+        <span class="font-karla-bold text-base">Disabled committees associated with your account</span>
+        <div
+          [class]="disabledShown() ? 'minus-icon-mask' : 'plus-icon-mask'"
+          class="bg-primary"
+          (click)="toggle()"
+          (keypress)="toggle()"
+        ></div>
+      </div>
+
+      <div #content class="collapsible-content">
+        <ul>
+          @if (disabledShown()) {
+            @for (committee of disabledCommittees(); track committee) {
+              <li class="disabled-committee">
+                <div class="flex">
+                  <svg width="34" height="34">
+                    <use href="/assets/img/committee-icon.svg"></use>
+                  </svg>
+                  <div class="ml-2 pl-1">
+                    <h3 class="committee-name">{{ committee.name ?? 'test' }}</h3>
+                    <h4 class="committee-id">{{ committee.committee_id }}</h4>
+                    <span class="disabled-message">
+                      This committee is diabled.
+                      <a
+                        href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
+                      >
+                        Contact RAD
+                      </a>
+                      for support.
+                    </span>
+                  </div>
+                </div>
+              </li>
+            }
+          }
+        </ul>
+      </div>
+    }
+
     <div class="create-committee-card font-karla-bold" routerLink="/login/create-committee">
       <div class="blue-box">
         <img class="plus" src="assets/img/Plus-Circle.svg" alt="Create a new committee" height="60px" width="60px" />
