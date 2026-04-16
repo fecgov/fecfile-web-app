@@ -85,6 +85,11 @@ jobs:
     steps:
       - checkout:
           method: full
+      - run:
+          name: Fix Ubuntu Mirror
+          command: |
+            sudo sed -i 's|http://archive.ubuntu.com/ubuntu/|http://us.archive.ubuntu.com/ubuntu/|g' /etc/apt/sources.list
+            sudo apt-get update
       - browser-tools/install_chrome
       - browser-tools/install_chromedriver
       - run:
