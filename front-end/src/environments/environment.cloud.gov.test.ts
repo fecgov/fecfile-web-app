@@ -23,6 +23,7 @@ export const environment = {
   fecSpec: 8.5,
   showGlossary: false,
   webForms: 'https://webforms.stage.efo.fec.gov',
+  whoCanUseLink: '(https://www.fec.gov/efiling/getting-started-fecfile-pilot',
 };
 
 /*

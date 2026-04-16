@@ -7,7 +7,6 @@ import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
 import { MemoCodeInputComponent } from '../memo-code/memo-code.component';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { CalendarComponent } from '../../calendar/calendar.component';
 import {
   LinkedReportInputComponent,
@@ -18,7 +17,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Store } from '@ngrx/store';
 import { InputText } from 'primeng/inputtext';
-import { Form24, ReportTypes } from 'app/shared/models';
+import { ReportTypes } from 'app/shared/models';
 import { TooltipModule } from 'primeng/tooltip';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { derivedAsync } from 'ngxtension/derived-async';
@@ -52,7 +51,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   readonly memoItemHelpText = input<string | undefined>();
 
   readonly amountInput = viewChild.required<InputNumber>('amountInput');
-  readonly memoCode = viewChild(MemoCodeInputComponent);
   readonly contributionAmountInputStyleClass = computed(() => (this.contributionAmountReadOnly() ? 'readonly' : ''));
 
   readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
@@ -66,7 +64,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
     const reports = this.transaction()?.reports;
     const report = reports?.find((report) => report.report_type === ReportTypes.F24);
     if (!report) return undefined;
-    return (await this.form24Service.get(report.id!)) as Form24;
+    return await this.form24Service.get(report.id!);
   });
   readonly linked24Label = computed(() => {
     const report = this.linked24();
@@ -83,33 +81,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    // If this is a two-date transaction. Monitor the other date, trigger validation on changes,
-    // and set up the "Just checking..." pop-up as needed.
-    if (this.templateMap.date && this.templateMap.date2) {
-      const dateControl = this.form.get(this.templateMap.date) as SubscriptionFormControl;
-      const date2Control = this.form.get(this.templateMap.date2) as SubscriptionFormControl;
-      if (dateControl && date2Control) {
-        dateControl.addSubscription(() => {
-          date2Control.updateValueAndValidity({ emitEvent: false });
-          this.memoCode()?.coverageDateQuestion.set(
-            'Did you mean to enter a date outside of the report coverage period?',
-          );
-          // Opening of 'Just checking...' pop-up is handled in app-memo-code component directly.
-        }, this.destroy$);
-        date2Control.addSubscription((date: Date | null) => {
-          dateControl.updateValueAndValidity({ emitEvent: false });
-          // Only show the 'Just checking...' pop-up if there is no date in the 'date' field.
-          if (!dateControl.value) {
-            this.memoCode()?.coverageDate.set(date);
-            this.memoCode()?.coverageDateQuestion.set(
-              'Did you mean to enter a disbursement date outside of the report coverage period?',
-            );
-            this.memoCode()?.updateMemoItemWithDate(date);
-          }
-        }, this.destroy$);
-      }
-    }
-
     if (this.isDebtRepayment() || this.isLoanRepayment()) {
       this.form.get(this.templateMap.date)?.addValidators((control: AbstractControl): ValidationErrors | null => {
         const form3X = this.report() as Form3X;
@@ -138,7 +109,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       // Automatically convert the amount value to a negative dollar amount.
       const inputValue = this.amountInput().input.nativeElement.value;
       if (inputValue.startsWith('$')) {
-        const value = Number(parseInt(inputValue.slice(1)).toFixed(2));
+        const value = Number(Number.parseInt(inputValue.slice(1)).toFixed(2));
         this.amountInput().updateInput(-1 * value, undefined, 'insert', undefined);
       }
     }

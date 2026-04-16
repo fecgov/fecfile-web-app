@@ -3,10 +3,11 @@ import {
   ContributionFormData,
   DisbursementFormData,
   LoanFormData,
-  ScheduleFormData
+  ScheduleFormData,
 } from '../models/TransactionFormModel';
 import { ContactLookup } from './contactLookup';
-import { PageUtils } from './pageUtils';
+import { Intercept, PageUtils } from './pageUtils';
+import { ReportListPage } from './reportListPage';
 
 export class TransactionDetailPage {
   static readonly SPLIT_BUTTON = 'navigation-control-splitbutton';
@@ -280,7 +281,6 @@ export class TransactionDetailPage {
     }
   }
 
-
   static clickSave(buttonType = this.SPLIT_BUTTON) {
     PageUtils.clickFormActionButton('Save', `app-navigation-control-bar,[data-cy="${buttonType}"]:visible`);
   }
@@ -297,37 +297,30 @@ export class TransactionDetailPage {
     PageUtils.clickButton('Cancel', '[data-cy="navigation-control-button"]:visible');
   }
 
-  static addGuarantor(name: string, amount: number | string, reportId: string) {
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=A`,
-    ).as('GetReceipts');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=C,D`,
-    ).as('GetLoans');
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/transactions/?page=1&ordering=line_label,created&page_size=5&report_id=${reportId}&schedules=B,E,F`,
-    ).as('GetDisbursements');
+  static addGuarantor(name: string, amount: number | string, reportId: string, isUpdate = false) {
+    const intercept: Intercept = isUpdate
+      ? { method: 'PUT', url: `http://localhost:8080/api/v1/transactions/**/`, alias: 'UpdateTransaction' }
+      : { method: 'POST', url: `http://localhost:8080/api/v1/transactions/`, alias: 'AddTransaction' };
+    const fx = () => {
+      PageUtils.interceptAndWait([intercept], () => {
+        PageUtils.clickButton('Save & add loan guarantor');
+        PageUtils.closeToast();
+      });
 
-    PageUtils.clickButton('Save & add loan guarantor');
-    PageUtils.closeToast();
-    cy.contains('Guarantors to loan source').should('exist');
-    ContactLookup.getContact(name);
-    cy.get('#amount').safeType(amount);
-    cy.intercept({
-      method: 'Post',
-    }).as('saveGuarantor');
-    PageUtils.clickButton('Save & add loan guarantor');
-    cy.wait('@saveGuarantor');
-    PageUtils.closeToast();
-    PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
-    this.clickCancel();
+      cy.contains('Guarantors to loan source').should('exist');
+      ContactLookup.getContact(name);
+      cy.get('#amount').safeType(amount);
+      cy.intercept({
+        method: 'Post',
+      }).as('saveGuarantor');
+      PageUtils.clickButton('Save & add loan guarantor');
+      cy.wait('@saveGuarantor');
+      PageUtils.closeToast();
+      PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
+      this.clickCancel();
+    };
 
-    cy.wait('@GetLoans');
-    cy.wait('@GetDisbursements');
-    cy.wait('@GetReceipts');
+    ReportListPage.interceptTransactions(reportId, fx);
   }
 
   private static enterMemo(formData: ScheduleFormData, alias: string) {

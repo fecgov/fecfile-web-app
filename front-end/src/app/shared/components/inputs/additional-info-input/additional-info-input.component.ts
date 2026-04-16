@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, output } from '@angular/core';
+import { Component, computed, effect, OnInit, output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Contact } from 'app/shared/models';
 import { CategoryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -39,6 +39,18 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   readonly pendingCommitteeText = `This information is system-generated based on the committee details provided in step two.
 
 Add additional information as needed in the following Note or Memo Text box.`;
+
+  constructor() {
+    super();
+    effect(() => {
+      const purposeDescriptionControl = this.form.get(this.templateMap.purpose_description);
+      if (this.isDescriptionSystemGenerated()) {
+        purposeDescriptionControl?.disable({ emitEvent: false });
+      } else {
+        purposeDescriptionControl?.enable({ emitEvent: false });
+      }
+    });
+  }
 
   ngOnInit(): void {
     SchemaUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
