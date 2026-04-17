@@ -67,14 +67,14 @@ describe('FrontendErrorReportingService', () => {
     // Calling initialize twice should not attach duplicate listeners.
     service.initializeGlobalListeners();
 
-    window.dispatchEvent(
+    globalThis.dispatchEvent(
       new CustomEvent('unhandledrejection', {
         detail: { reason: 'rejection reason' },
       }),
     );
 
-    window.dispatchEvent(new ErrorEvent('error', { error: new Error('runtime error') }));
-    window.dispatchEvent(new Event('pagehide'));
+    globalThis.dispatchEvent(new ErrorEvent('error', { error: new Error('runtime error') }));
+    globalThis.dispatchEvent(new Event('pagehide'));
 
     const visibilitySpy = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden');
     document.dispatchEvent(new Event('visibilitychange'));
@@ -86,7 +86,7 @@ describe('FrontendErrorReportingService', () => {
   });
 
   it('does not attach listeners when reporting is disabled', () => {
-    const addWindowListenerSpy = vi.spyOn(window, 'addEventListener');
+    const addWindowListenerSpy = vi.spyOn(globalThis, 'addEventListener');
     const addDocumentListenerSpy = vi.spyOn(document, 'addEventListener');
 
     const internalService = service as unknown as {

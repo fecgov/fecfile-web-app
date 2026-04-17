@@ -98,11 +98,11 @@ export class FrontendErrorReportingService {
 
     this.listenersAttached = true;
 
-    window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
+    globalThis.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
       this.reportPromiseRejection(event.reason);
     });
 
-    window.addEventListener('error', (event: ErrorEvent) => {
+    globalThis.addEventListener('error', (event: ErrorEvent) => {
       if (event.error) {
         this.reportRuntimeError(event.error, 'window.error');
         return;
@@ -110,7 +110,7 @@ export class FrontendErrorReportingService {
       this.reportRuntimeError(event.message || 'Unknown script error', 'window.error');
     });
 
-    window.addEventListener('pagehide', () => {
+    globalThis.addEventListener('pagehide', () => {
       this.flushQueue();
     });
 
@@ -176,7 +176,7 @@ export class FrontendErrorReportingService {
       type,
       level,
       timestamp: new Date().toISOString(),
-      path: this.sanitize(window.location.pathname + window.location.search),
+      path: this.sanitize(globalThis.location.pathname + globalThis.location.search),
       userAgent: this.sanitize(navigator.userAgent),
       appEnvironment: this.sanitize(environment.name),
     };
@@ -204,8 +204,8 @@ export class FrontendErrorReportingService {
   private sanitize(value: string): string {
     // strip email addresses, secrets, and cap message length
     const withoutSecrets = value
-      .replace(/[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9-]{1,63}(?:\.[A-Za-z0-9-]{1,63}){1,4}/g, '[redacted-email]')
-      .replace(/(token|password|secret|sessionid)=([^&\s]+)/gi, '$1=[redacted]');
+      .replaceAll(/[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9-]{1,63}(?:\.[A-Za-z0-9-]{1,63}){1,4}/g, '[redacted-email]')
+      .replaceAll(/(token|password|secret|sessionid)=([^&\s]+)/gi, '$1=[redacted]');
     return withoutSecrets.slice(0, this.config.maxMessageLength);
   }
 
@@ -242,12 +242,10 @@ export class FrontendErrorReportingService {
       return;
     }
 
-    if (!this.flushTimerId) {
-      this.flushTimerId = setTimeout(() => {
-        this.flushTimerId = null;
-        this.flushQueue();
-      }, this.config.flushIntervalMs);
-    }
+    this.flushTimerId ??= setTimeout(() => {
+      this.flushTimerId = null;
+      this.flushQueue();
+    }, this.config.flushIntervalMs);
   }
 
   private shouldQueue(fingerprint: string): boolean {
@@ -298,7 +296,7 @@ export class FrontendErrorReportingService {
     }
 
     const beaconPayload = new Blob([body], { type: 'application/json' });
-    if (navigator.sendBeacon && navigator.sendBeacon(this.config.endpoint, beaconPayload)) {
+    if (navigator.sendBeacon?.(this.config.endpoint, beaconPayload)) {
       return;
     }
 
