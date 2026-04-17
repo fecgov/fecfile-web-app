@@ -160,7 +160,7 @@ export class FrontendErrorReportingService {
     const report: HttpReport = {
       ...this.baseReport('http', input.status >= 500 || input.status === 0 ? 'error' : 'warning'),
       method: this.sanitize(input.method),
-      url: this.sanitizeUrl(input.url),
+      url: this.sanitize(input.url),
       status: input.status,
       statusText: this.sanitize(input.statusText),
       message: this.sanitize(input.message),
@@ -176,7 +176,7 @@ export class FrontendErrorReportingService {
       type,
       level,
       timestamp: new Date().toISOString(),
-      path: this.sanitizeUrl(window.location.pathname + window.location.search),
+      path: this.sanitize(window.location.pathname + window.location.search),
       userAgent: this.sanitize(navigator.userAgent),
       appEnvironment: this.sanitize(environment.name),
     };
@@ -202,21 +202,19 @@ export class FrontendErrorReportingService {
   }
 
   private sanitize(value: string): string {
+    // strip email addresses, secrets, and cap message length
     const withoutSecrets = value
-      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted-email]')
+      .replace(/[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9-]{1,63}(?:\.[A-Za-z0-9-]{1,63}){1,4}/g, '[redacted-email]')
       .replace(/(token|password|secret|sessionid)=([^&\s]+)/gi, '$1=[redacted]');
     return withoutSecrets.slice(0, this.config.maxMessageLength);
   }
 
   private sanitizeStack(value: string | undefined): string | undefined {
+    // sanitize contents and cap stack length
     if (!value) {
       return undefined;
     }
     return this.sanitize(value).slice(0, this.config.maxStackLength);
-  }
-
-  private sanitizeUrl(url: string): string {
-    return this.sanitize(url).replace(/([?&])(token|password|secret|sessionid)=([^&]+)/gi, '$1$2=[redacted]');
   }
 
   private shouldSample(rate: number): boolean {

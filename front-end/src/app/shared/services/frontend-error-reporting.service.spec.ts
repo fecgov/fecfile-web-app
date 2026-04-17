@@ -38,6 +38,25 @@ describe('FrontendErrorReportingService', () => {
     expect(() => service.reportPromiseRejection('promise test')).not.toThrow();
   });
 
+  it('redacts email addresses and token-like secrets', () => {
+    const internalService = service as unknown as {
+      sanitize: (value: string) => string;
+    };
+
+    const sanitized = internalService.sanitize(
+      'contact admin@example.com?token=abc123&sessionid=xyz789 password=hunter2',
+    );
+
+    expect(sanitized).toContain('[redacted-email]');
+    expect(sanitized).toContain('token=[redacted]');
+    expect(sanitized).toContain('sessionid=[redacted]');
+    expect(sanitized).toContain('password=[redacted]');
+    expect(sanitized).not.toContain('admin@example.com');
+    expect(sanitized).not.toContain('abc123');
+    expect(sanitized).not.toContain('xyz789');
+    expect(sanitized).not.toContain('hunter2');
+  });
+
   it('registers listeners once and dispatches to handlers', () => {
     const reportPromiseSpy = vi.spyOn(service, 'reportPromiseRejection');
     const reportRuntimeSpy = vi.spyOn(service, 'reportRuntimeError');
