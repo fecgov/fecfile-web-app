@@ -65,6 +65,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       }
     }
 
+    this.form.get('linkedF3x')?.updateValueAndValidity();
     return null;
   });
 
@@ -88,7 +89,12 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     effect(() => {
       this.form.get('linkedF3x')?.setValue(this.form3XLabel());
       this.form.get('linkedF3xId')?.setValue(this.associatedF3X()?.id);
-      this.form.get('linkedF3x')?.markAsTouched();
+      if (this.userTouchedValues()) {
+        this.form.get('linkedF3x')?.markAsTouched();
+      } else {
+        this.form.get('linkedF3x')?.markAsPristine();
+        this.form.get('linkedF3xId')?.markAsPristine();
+      }
     });
   }
 
