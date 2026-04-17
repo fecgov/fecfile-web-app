@@ -1,22 +1,29 @@
 <app-dialog
   [(visible)]="dialogVisible"
-  title="Select a report"
+  [title]="hasAvailableReports() ? 'Select a report' : 'Hang on...'"
   submitLabel="Continue"
   (confirm)="createReattribution()"
 >
   <div class="dialog-body">
-    <p>
-      Select the report where you want to {{ actionLabel() }} part of an excessive contribution to a joint
-      {{ actionTargetLabel() }}.
-    </p>
-    <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
-    <select id="report-selector" aria-labelledby="report-selector-label" [(ngModel)]="selectedReport">
-      <button aria-labelledby="report-selector-label">
-        <selectedcontent></selectedcontent>
-      </button>
-      @for (report of availableReports(); track report) {
-        <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
-      }
-    </select>
+    @if (hasAvailableReports()) {
+      <p>
+        Select the report where you want to {{ actionLabel() }} part of an excessive contribution to a joint
+        {{ actionTargetLabel() }}.
+      </p>
+      <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
+      <select id="report-selector" aria-labelledby="report-selector-label" [(ngModel)]="selectedReport">
+        <button aria-labelledby="report-selector-label">
+          <selectedcontent></selectedcontent>
+        </button>
+        @for (report of availableReports(); track report) {
+          <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
+        }
+      </select>
+    } @else {
+      <p>
+        <b>You don't have any in-progress reports.</b>
+        <span> Create or amend a report to continue with this {{ urlParameter() }}.</span>
+      </p>
+    }
   </div>
 </app-dialog>
