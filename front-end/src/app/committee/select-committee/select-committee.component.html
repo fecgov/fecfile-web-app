@@ -11,12 +11,10 @@
       <h2>Select a committee account</h2>
       @if (activeCommittees().length === 0) {
         <div class="committee-card empty-card">
-          <div class="empty-lens-img">
-            <img alt="Magnifying lens" src="assets/img/magnifying_lens.svg" />
-          </div>
-          <div class="empty-verbiage">
-            <p class="font-karla-bold">Not currently active in any FECfile+ committee accounts</p>
-          </div>
+          <svg alt="Magnifying lens" width="95" height="95">
+            <use href="assets/img/magnifying_lens.svg"></use>
+          </svg>
+          <span class="font-karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
         </div>
       } @else if (activeCommittees().length) {
         <div class="committee-list">
