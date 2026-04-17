@@ -42,7 +42,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           method: request.method,
           url: request.urlWithParams,
           status: error.status,
-          statusText: error.statusText,
           message: errorMessage,
         });
         if (error && error.status === HttpStatusCode.Forbidden) {

@@ -47,7 +47,6 @@ interface HttpReport extends ReportBase {
   method: string;
   url: string;
   status: number;
-  statusText: string;
   message: string;
 }
 
@@ -150,7 +149,7 @@ export class FrontendErrorReportingService {
     this.enqueue(report);
   }
 
-  reportHttpError(input: { method: string; url: string; status: number; statusText: string; message: string }): void {
+  reportHttpError(input: { method: string; url: string; status: number; message: string }): void {
     const sampleRate =
       input.status >= 500 || input.status === 0 ? this.config.sampleRates.http5xx : this.config.sampleRates.http4xx;
     if (!this.shouldSample(sampleRate)) {
@@ -162,7 +161,6 @@ export class FrontendErrorReportingService {
       method: this.sanitize(input.method),
       url: this.sanitize(input.url),
       status: input.status,
-      statusText: this.sanitize(input.statusText),
       message: this.sanitize(input.message),
     };
     this.enqueue(report);
