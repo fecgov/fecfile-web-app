@@ -13,6 +13,7 @@ import { TransactionChildrenListContainerComponent } from '../transaction-childr
 import { TransactionNavigationComponent } from '../transaction-navigation/transaction-navigation.component';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { injectRouteData } from 'ngxtension/inject-route-data';
+import { ConfirmDialogComponent } from 'app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-transaction-container',
@@ -26,6 +27,7 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
     TransactionChildrenListContainerComponent,
     TransactionNavigationComponent,
     ConfirmDialog,
+    ConfirmDialogComponent,
   ],
 })
 export class TransactionContainerComponent {
