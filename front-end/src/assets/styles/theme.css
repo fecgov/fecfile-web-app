@@ -242,6 +242,9 @@ p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
   margin-right: 0.5rem;
 }
+.p-datepicker-header {
+  display: none;
+}
 .p-datepicker table {
   font-size: 1rem;
   margin: 0.5rem 0;

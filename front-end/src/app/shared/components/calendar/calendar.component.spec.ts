@@ -71,4 +71,46 @@ describe('CalendarComponent', () => {
     expect(component.control()!.touched).toBe(true);
     expect(component.control()!.value).toBe(date);
   });
+
+  it('should increment the year and update the view when delta is 1', () => {
+    const event = new Event('click');
+    const datePicker = component.datePicker();
+    const yearSpy = vi.spyOn(datePicker, 'incrementYear');
+    const monthChangeSpy = vi.spyOn(datePicker.onMonthChange, 'emit');
+    const monthCreateSpy = vi.spyOn(datePicker, 'createMonths');
+    component.onYearChange(event, 1);
+
+    expect(yearSpy).toHaveBeenCalled();
+    expect(datePicker.isMonthNavigate).toBe(true);
+    expect(monthChangeSpy).toHaveBeenCalledWith({
+      month: datePicker.currentMonth + 1,
+      year: datePicker.currentYear,
+    });
+    expect(monthCreateSpy).toHaveBeenCalled();
+  });
+
+  it('should decrement the year and update the view when delta is -1', () => {
+    const event = new Event('click');
+    const datePicker = component.datePicker();
+    const yearSpy = vi.spyOn(datePicker, 'decrementYear');
+    const monthCreateSpy = vi.spyOn(datePicker, 'createMonths');
+    component.onYearChange(event, -1);
+
+    expect(yearSpy).toHaveBeenCalled();
+    expect(datePicker.isMonthNavigate).toBe(true);
+    expect(monthCreateSpy).toHaveBeenCalled();
+  });
+
+  it('should prevent default and return early if datepicker is disabled', () => {
+    const datePicker = component.datePicker();
+    vi.spyOn(datePicker, '$disabled').mockResolvedValue(true);
+    const yearSpy = vi.spyOn(datePicker, 'incrementYear');
+    const event = new Event('click');
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+    component.onYearChange(event, 1);
+
+    expect(preventDefaultSpy).toHaveBeenCalled();
+    expect(yearSpy).not.toHaveBeenCalled();
+  });
 });
