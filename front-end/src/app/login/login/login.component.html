@@ -1,7 +1,7 @@
 <div class="login-page container">
   <div class="text-center top-section">
     @if (disableLogin) {
-      <h1 class="login-box-header header-comming-soon">Coming Soon&nbsp;</h1>
+      <h1 class="login-box-header header-coming-soon">Coming Soon&nbsp;</h1>
     }
     <div class="mb-3">
       <h1 class="login-box-header header-filers">Made for filers.&nbsp;</h1>
@@ -42,3 +42,19 @@
     />
   </div>
 </div>
+
+<app-dialog
+  aria-labelledby="dialog-title"
+  title="We've detected a problem"
+  [(visible)]="loginDialogVisible"
+  submitLabel="Close"
+  [showCancel]="false"
+  (confirm)="dialogClose()"
+>
+  <div class="dialog-body">
+    Fecfile+ is experiencing an issue. Please wait a moment<br />
+    and try to log in again.<br />
+    <br />
+    We apologize for the inconvenience.
+  </div>
+</app-dialog>

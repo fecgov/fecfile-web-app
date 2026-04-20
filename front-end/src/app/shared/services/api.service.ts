@@ -76,6 +76,17 @@ export class ApiService {
     );
   }
 
+  public get_from_devops<T>(endpoint: string, params?: QueryParams): Promise<T> {
+    const headers = this.getHeaders();
+    return firstValueFrom(
+      this.http.get<T>(`${environment.apiUrl.split('/api')[0]}${endpoint}`, {
+        headers,
+        params,
+        withCredentials: true,
+      }),
+    );
+  }
+
   public getString(endpoint: string): Promise<string> {
     const headers = this.getHeaders();
     return firstValueFrom(
