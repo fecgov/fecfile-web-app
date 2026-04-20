@@ -31,7 +31,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }
         let errorMessage = '';
         if (error.status === 502) {
-          console.log('Setting false');
           this.store.dispatch(setServiceAvailableAction({ payload: false }));
         }
         if (error.error instanceof ErrorEvent) {

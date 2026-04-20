@@ -91,10 +91,6 @@ export class LayoutComponent implements AfterViewChecked {
     }
 
     this.store.dispatch(setServiceAvailableAction({ payload: true }));
-
-    this.store.select(selectServiceAvailable).subscribe((available) => {
-      console.log(`Service Available: ${available}`);
-    });
   }
 
   ngAfterViewChecked(): void {
@@ -111,6 +107,7 @@ class LayoutControls {
   showUpperFooter = true;
   showHeader = true;
   showSidebar = false;
+  showServiceUnavailableBanner = false;
   headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
   showFeedbackButton = true;
@@ -126,6 +123,7 @@ class LayoutControls {
       this.showSidebar = data['showSidebar'] ?? this.showSidebar;
       this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
       this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
+      this.showServiceUnavailableBanner = data['showServiceUnavailableBanner'] ?? this.showServiceUnavailableBanner;
     }
   }
 }
