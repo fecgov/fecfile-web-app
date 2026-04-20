@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
 
 export const committeePatternMessage =
@@ -69,6 +69,7 @@ export class CommitteeAccount extends BaseModel {
   affiliated_committee_name: string | undefined;
   website: string | undefined;
   cycles: number[] = [];
+  @Transform(BaseModel.dateTransform) disabled: Date | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeAccount { // eslint-disable-line @typescript-eslint/no-explicit-any
