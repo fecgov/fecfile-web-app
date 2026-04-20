@@ -340,7 +340,7 @@ export class PageUtils {
       .get('body')
       .then(($body) => {
         if ($body.find('.p-datepicker-panel:visible').length > 0) {
-          cy.get('body').type('{esc}');
+          cy.get('body').click(0, 0);
         }
       })
       .blurActiveField()
