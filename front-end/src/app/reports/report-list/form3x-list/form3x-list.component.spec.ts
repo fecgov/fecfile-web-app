@@ -113,28 +113,40 @@ describe('Form3XListComponent', () => {
     expect(item.id).toBe(undefined);
   });
 
-  it('#editItem should route properly for in-progress report', async () => {
+  it('#editItem should route to list link for in-progress report', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     await component.editItem(inprogForm);
     expect(navigateSpy).toHaveBeenCalledWith(getListLink(inprogForm));
   });
 
-  it('#editItem should route properly for report with submission pending', async () => {
+  it('#editItem should route to list link for report with submission pending', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     await component.editItem(pendingForm);
-    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(pendingForm));
+    expect(navigateSpy).toHaveBeenCalledWith(getListLink(pendingForm));
   });
 
-  it('#editItem should route properly for report with submission success', async () => {
+  it('#editItem should route to list link for report with submission success', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     await component.editItem(successForm);
-    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(successForm));
+    expect(navigateSpy).toHaveBeenCalledWith(getListLink(successForm));
   });
 
-  it('#editItem should route properly for report with submission failure', async () => {
+  it('#editItem should route to list link for report with submission failure', async () => {
     const navigateSpy = vi.spyOn(router, 'navigateByUrl');
     await component.editItem(failureForm);
     expect(navigateSpy).toHaveBeenCalledWith(getListLink(failureForm));
+  });
+
+  it('#reviewItem should route to status link for success report', async () => {
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
+    await component.reviewItem(successForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(successForm));
+  });
+
+  it('#reviewItem should route to status link for failure report', async () => {
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl');
+    await component.reviewItem(failureForm);
+    expect(navigateSpy).toHaveBeenCalledWith(getStatusLink(failureForm));
   });
 
   it('#amend should hit service', async () => {
