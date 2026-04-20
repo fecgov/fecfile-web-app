@@ -103,17 +103,13 @@ export abstract class AbstractFormListComponent<T extends Report> extends TableL
 
   async goToReport(item: T): Promise<boolean> {
     if (item.report_status === ReportStatus.IN_PROGRESS) {
-      return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
+      return this.editItem(item);
     } else {
-      return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
+      return this.reviewItem(item);
     }
   }
 
   override async editItem(item: T): Promise<boolean> {
-    if (!item.canEdit) {
-      return this.router.navigateByUrl(`/reports/${item.report_type.toLocaleLowerCase()}/submit/status/${item.id}`);
-    }
-
     return this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
   }
 
