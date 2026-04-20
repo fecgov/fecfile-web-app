@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { ApiService } from 'app/shared/services/api.service';
-import { HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { setServiceAvailableAction } from 'app/store/service-available.actions';
 import { DialogModule } from 'primeng/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
@@ -57,8 +57,9 @@ export class LoginComponent extends DestroyerComponent implements OnInit, AfterV
       this.store.dispatch(setServiceAvailableAction({ payload: undefined }));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response: HttpResponse<any> = await this.apiService.get_from_devops('/devops/status/');
-    if (!!response.status) {
+    if (response.status) {
       this.store.dispatch(setServiceAvailableAction({ payload: true }));
       globalThis.location.href = this.loginDotGovAuthUrl ?? '';
     }
