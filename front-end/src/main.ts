@@ -32,6 +32,7 @@ import { singleClickReducer } from './app/store/single-click.reducer';
 import { loginReducer } from './app/store/user-login-data.reducer';
 import { activeReportReducer } from './app/store/active-report.reducer';
 import { navigationEventReducer } from './app/store/navigation-event.reducer';
+import { serviceAvailableReducer } from './app/store/service-available.reducer';
 import { AppState } from './app/store/app-state.model';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { EffectsModule } from '@ngrx/effects';
@@ -120,6 +121,7 @@ bootstrapApplication(AppComponent, {
           userLoginData: loginReducer,
           activeReport: activeReportReducer,
           navigationEvent: navigationEventReducer,
+          serviceAvailable: serviceAvailableReducer,
         },
         { metaReducers },
       ),
