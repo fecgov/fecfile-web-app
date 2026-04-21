@@ -58,7 +58,7 @@ export class LoginComponent extends DestroyerComponent implements OnInit, AfterV
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response: HttpResponse<any> = await this.apiService.get_from_devops('/devops/status/');
+    const response: HttpResponse<any> = await this.apiService.get_from_base_uri('/devops/status/');
     if (response.status) {
       this.store.dispatch(setServiceAvailableAction({ payload: true }));
       globalThis.location.href = this.loginDotGovAuthUrl ?? '';

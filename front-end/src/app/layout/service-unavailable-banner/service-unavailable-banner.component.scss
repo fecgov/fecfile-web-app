@@ -1,4 +1,4 @@
-.service-unavailable-banner {
+.banner {
   height: 43px;
   width: 100%;
   background-color: #631010;
@@ -7,10 +7,14 @@
   top: 110px;
 }
 
-.service-unavailable-banner__header-text {
+.banner-header-text {
   font-weight: bold;
   line-height: 19px;
   padding-bottom: 12px;
   padding-top: 12px;
   text-align: center;
+}
+
+.pi-exclamation-circle {
+  padding-top: 8px;
 }

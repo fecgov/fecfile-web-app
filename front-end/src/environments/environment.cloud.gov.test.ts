@@ -2,10 +2,12 @@
 // `ng build --configuration=cloud.gov.prod` replaces `environment.ts` with `environment.cloud.gov.test.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const baseUri = 'https://test-api.fecfile.fec.gov';
 const apiUrl = 'https://test-api.fecfile.fec.gov/api/v1';
 export const environment = {
   production: true,
   name: 'test',
+  baseUri: baseUri,
   apiUrl: apiUrl,
   appTitle: 'FECfile+',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',

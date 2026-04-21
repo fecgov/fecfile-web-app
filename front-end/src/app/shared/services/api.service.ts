@@ -76,10 +76,10 @@ export class ApiService {
     );
   }
 
-  public get_from_devops<T>(endpoint: string, params?: QueryParams): Promise<T> {
+  public get_from_base_uri<T>(endpoint: string, params?: QueryParams): Promise<T> {
     const headers = this.getHeaders();
     return firstValueFrom(
-      this.http.get<T>(`${environment.apiUrl.split('/api')[0]}${endpoint}`, {
+      this.http.get<T>(`${environment.baseUri}${endpoint}`, {
         headers,
         params,
         withCredentials: true,
