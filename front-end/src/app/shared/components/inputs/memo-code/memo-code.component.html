@@ -30,16 +30,19 @@
         />
       </div>
     } @else {
-      <div class="col-3 pl-0">
-        <p-selectButton
-          #memoCode
-          inputId="memo_code"
-          [formControlName]="templateMap['memo_code']"
-          [options]="memoCodeMapOptions()"
-          optionLabel="label"
-          optionValue="value"
-        />
-      </div>
+      @if (!memoControl.disabled) {
+        <div class="col-3 pl-0">
+          <p-selectButton
+            #memoCode
+            inputId="memo_code"
+            [formControlName]="templateMap['memo_code']"
+            [options]="memoCodeMapOptions()"
+            optionLabel="label"
+            optionValue="value"
+          />
+        </div>
+      }
+
       <div class="col-12 pl-0">
         @if (memoControl.value) {
           <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
