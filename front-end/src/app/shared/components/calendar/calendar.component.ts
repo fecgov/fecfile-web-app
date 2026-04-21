@@ -52,12 +52,21 @@ export class CalendarComponent {
       const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
       const currentValue = inputElement?.value;
 
-      if (currentValue && currentValue !== 'MM/DD/YYYY') {
+      if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replace(/[_/]/g, '') === '') {
+        control.setValue(null);
+      } else {
         const date = new Date(currentValue);
         if (date instanceof Date && !Number.isNaN(date.getTime())) {
           control.setValue(date);
         }
       }
+
+      // if (currentValue && currentValue !== 'MM/DD/YYYY') {
+      //   const date = new Date(currentValue);
+      //   if (date instanceof Date && !Number.isNaN(date.getTime())) {
+      //     control.setValue(date);
+      //   }
+      // }
 
       control.markAsTouched();
       control.updateValueAndValidity();

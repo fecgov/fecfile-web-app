@@ -21,6 +21,8 @@ import { ReportTypes } from 'app/shared/models';
 import { TooltipModule } from 'primeng/tooltip';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { date } from '@primeuix/themes/aura/datepicker';
+import { da } from 'intl-tel-input/i18n';
 
 @Component({
   selector: 'app-amount-input',
@@ -102,7 +104,53 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
           ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
       }
     }
+
+    if (this.templateMap['date2']) {
+      const dateKey = this.templateMap['date'];
+      const date2Key = this.templateMap['date2'];
+
+      const dateControl = this.form.get(dateKey);
+      const date2Control = this.form.get(date2Key);
+
+      const isEmpty = (val: any) =>
+        !val || val === 'MM/DD/YYYY' || (typeof val === 'string' && val.replace(/[_/]/g, '') === '');
+
+      const requireIfOtherEmpty = (otherControl: AbstractControl | null) => {
+        return (control: AbstractControl): ValidationErrors | null => {
+          if (isEmpty(control.value) && isEmpty(otherControl?.value)) {
+            return { required: true };
+          }
+          return null;
+        };
+      };
+
+      dateControl?.addValidators(requireIfOtherEmpty(date2Control));
+      date2Control?.addValidators(requireIfOtherEmpty(dateControl));
+
+      dateControl?.valueChanges.subscribe(() => {
+        date2Control?.updateValueAndValidity({ emitEvent: false });
+      });
+
+      date2Control?.valueChanges.subscribe(() => {
+        dateControl?.updateValueAndValidity({ emitEvent: false });
+      });
+    }
   }
+
+  // private atLeastOneDateValidator() {
+  //   return (group: AbstractControl): ValidationErrors | null => {
+  //     const date1 = group.get(this.templateMap['date'])?.value;
+  //     const date2 = group.get(this.templateMap['date2'])?.value;
+
+  //     const isEmpty = (val: any) =>
+  //       !val || val === 'MM/DD/YYYY' || (typeof val === 'string' && val.replace(/[_/]/g, '') === '');
+
+  //     if (isEmpty(date1) && isEmpty(date2)) {
+  //       return { atLeastOneDate: true };
+  //     }
+  //     return null;
+  //   };
+  // }
 
   onInputAmount() {
     if (this.negativeAmountValueOnly()) {
