@@ -28,8 +28,8 @@ export const environment = {
     enabled: true,
     endpoint: '/frontend-error-report',
     sampleRates: {
-      runtime: 0.5,
-      promise: 0.5,
+      runtime: 1,
+      promise: 1,
       http4xx: 0.05,
       http5xx: 1,
     },

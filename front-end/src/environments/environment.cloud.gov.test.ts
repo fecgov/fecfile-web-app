@@ -30,7 +30,7 @@ export const environment = {
     sampleRates: {
       runtime: 1,
       promise: 1,
-      http4xx: 0.5,
+      http4xx: 1,
       http5xx: 1,
     },
     dedupeWindowMs: 30000,
