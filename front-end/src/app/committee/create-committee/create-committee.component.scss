@@ -64,13 +64,17 @@ app-dialog p {
   font-size: small;
 }
 .committee-info {
+  display: flex;
+  flex-direction: column;
   padding-left: 10px;
   h3 {
-    border-bottom: dotted 2px;
-    border-color: #d1d1d1;
     margin: 0;
-    cursor: pointer;
     display: inline;
+  }
+  .h5 {
+    font-family: var(--karla-bold);
+    padding-bottom: 8px;
+    line-height: normal;
   }
 }
 .right-side-box {
