@@ -1,11 +1,11 @@
-<div class="flex create-committee-columns">
-  <div class="col-6 left-side">
+<div class="flex">
+  <div class="col-6">
     <h1>Create an account</h1>
     <hr type="solid" />
 
     <img src="assets/img/Create-an-account.png" draggable="false" alt="Users review a chart" />
   </div>
-  <div class="col-6 right-side">
+  <div class="col-6">
     <div class="go-back">
       <a routerLink="/login/select-committee"><i class="pi pi-angle-left"></i> GO BACK</a>
     </div>
@@ -30,13 +30,13 @@
           </ng-template>
         </p-button>
       </p-inputGroup>
-      <p class="search-examples font-karla mt-1">Examples: C00431445, C00343509</p>
+      <p class="font-italic font-karla mt-1">Examples: C00431445, C00343509</p>
     </div>
     @if (selectedCommittee || unableToCreateAccount) {
       <div class="right-side-box">
         <h2 class="m-0">Result</h2>
         @if (selectedCommittee) {
-          <div class="committee-card">
+          <div class="fec-card">
             <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
             <div class="committee-info">
               <h3>{{ selectedCommittee.name }}</h3>
@@ -55,13 +55,13 @@
           </div>
         }
         @if (unableToCreateAccount) {
-          <div class="committee-card unable-card">
-            <div class="unable-excl-img">
-              <img alt="Exclamation mark" src="assets/img/exclamation.svg" />
-            </div>
+          <div class="fec-card vertical-card">
+            <svg alt="Exclamation mark" width="94" height="95">
+              <use href="assets/img/exclamation.svg"></use>
+            </svg>
             <div class="unable-verbiage">
-              <p class="unable-verbiage-p1">Unable to create account</p>
-              <p class="unable-verbiage-p2">CONTACT FECFILE+ TECHNICAL SUPPORT FOR HELP</p>
+              <span class="text-2xl">Unable to create account</span>
+              <span class="small-text">CONTACT FECFILE+ TECHNICAL SUPPORT FOR HELP</span>
             </div>
           </div>
         }

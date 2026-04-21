@@ -893,3 +893,20 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   overflow: hidden;
   transition: height 0.3s ease-in-out;
 }
+
+.fec-card {
+  margin: 20px 3px;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px 0px #d1d1d1;
+  cursor: pointer;
+}
+
+.vertical-card {
+  min-height: fit-content;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
