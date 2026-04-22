@@ -102,6 +102,38 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
           ?.setValue((transaction.parent_transaction as SchETransaction)?.calendar_ytd_per_election_office);
       }
     }
+
+    if (this.templateMap['date2']) {
+      const dateKey = this.templateMap['date'];
+      const date2Key = this.templateMap['date2'];
+
+      const dateControl = this.form.get(dateKey);
+      const date2Control = this.form.get(date2Key);
+
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const isEmpty = (val: any) =>
+        !val || val === 'MM/DD/YYYY' || (typeof val === 'string' && val.replace(/[_/]/g, '') === '');
+
+      const requireIfOtherEmpty = (otherControl: AbstractControl | null) => {
+        return (control: AbstractControl): ValidationErrors | null => {
+          if (isEmpty(control.value) && isEmpty(otherControl?.value)) {
+            return { required: true };
+          }
+          return null;
+        };
+      };
+
+      dateControl?.addValidators(requireIfOtherEmpty(date2Control));
+      date2Control?.addValidators(requireIfOtherEmpty(dateControl));
+
+      dateControl?.valueChanges.subscribe(() => {
+        date2Control?.updateValueAndValidity({ emitEvent: false });
+      });
+
+      date2Control?.valueChanges.subscribe(() => {
+        dateControl?.updateValueAndValidity({ emitEvent: false });
+      });
+    }
   }
 
   onInputAmount() {

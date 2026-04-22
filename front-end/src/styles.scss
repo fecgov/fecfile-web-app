@@ -18,6 +18,22 @@ hr {
   margin: 0;
 }
 
+.p-datepicker.p-component {
+  border-radius: 6px;
+  overflow: visible;
+}
+
+.p-datepicker-panel {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.p-connected-overlay,
+.p-datepicker .p-motion {
+  overflow: visible !important;
+  border-radius: 6px;
+}
+
 .p-panel .p-panel-header,
 .p-drawer {
   background: #f1f1f1;
