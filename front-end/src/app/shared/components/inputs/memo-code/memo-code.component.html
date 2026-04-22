@@ -30,14 +30,16 @@
         [patternErrorMessage]="'This is a required field.'"
       />
     } @else {
-      <p-selectButton
-        #memoCode
-        inputId="memo_code"
-        [formControlName]="templateMap['memo_code']"
-        [options]="memoCodeMapOptions()"
-        optionLabel="label"
-        optionValue="value"
-      />
+      @if (!memoControl.disabled) {
+        <p-selectButton
+          #memoCode
+          inputId="memo_code"
+          [formControlName]="templateMap['memo_code']"
+          [options]="memoCodeMapOptions()"
+          optionLabel="label"
+          optionValue="value"
+        />
+      }
       <div class="flex gap-2">
         @if (memoControl.value) {
           <span class="pi pi-check" pTooltip="{{ memoItemHelpText() }}"></span>
@@ -65,6 +67,7 @@
     aria-labelledby="dialog-title"
     title="Just checking..."
     [(visible)]="outOfDateDialogVisible"
+    [closeOnly]="true"
   >
     <p id="out-of-date-dialog-text">
       <b>
@@ -75,17 +78,5 @@
       >. {{ coverageDateQuestion() }} <br /><br />
       If the date entered is correct, this transaction <span [innerHTML]="memoCodeText()"></span>.
     </p>
-    <ng-container dialog-footer #dialogFooterRef>
-      <div class="flex justify-content-center">
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="Close"
-          class="p-button-primary"
-          (click)="outOfDateDialogVisible.set(false)"
-        ></button>
-      </div>
-    </ng-container>
   </app-dialog>
 </div>
