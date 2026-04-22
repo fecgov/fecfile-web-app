@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 const baseUri = 'https://api.fecfile.fec.gov';
-const apiUrl = 'https://api.fecfile.fec.gov/api/v1';
+const apiUrl = `${baseUri}/api/v1`;
 export const environment = {
   production: true,
   name: 'production',

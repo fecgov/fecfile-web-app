@@ -1,5 +1,5 @@
 const baseUri = 'http://localhost:8080';
-const apiUrl = 'http://localhost:8080/api/v1';
+const apiUrl = `${baseUri}/api/v1`;
 export const environment = {
   production: false,
   name: 'local',
