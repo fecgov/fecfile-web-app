@@ -14,6 +14,7 @@ export class DialogComponent {
   readonly showTitleWarning = input(false);
   readonly submitLabel = input('Save');
   readonly closeOnly = input(false);
+  readonly noInput = input(false);
   readonly confirm = output<void>();
   readonly reject = output<void>();
 
