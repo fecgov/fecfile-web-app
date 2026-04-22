@@ -535,6 +535,11 @@ p-checkbox {
   border-color: var(--p-primary-color);
 }
 
+.p-checkbox-input {
+  padding: 0;
+  height: 100%;
+}
+
 .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
   border-color: var(--primary-button-hover-color) !important;
   background: var(--primary-button-hover-color) !important;
