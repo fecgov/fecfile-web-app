@@ -21,8 +21,6 @@ import { ReportTypes } from 'app/shared/models';
 import { TooltipModule } from 'primeng/tooltip';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { derivedAsync } from 'ngxtension/derived-async';
-import { date } from '@primeuix/themes/aura/datepicker';
-import { da } from 'intl-tel-input/i18n';
 
 @Component({
   selector: 'app-amount-input',
@@ -112,6 +110,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       const dateControl = this.form.get(dateKey);
       const date2Control = this.form.get(date2Key);
 
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       const isEmpty = (val: any) =>
         !val || val === 'MM/DD/YYYY' || (typeof val === 'string' && val.replace(/[_/]/g, '') === '');
 
@@ -136,21 +135,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       });
     }
   }
-
-  // private atLeastOneDateValidator() {
-  //   return (group: AbstractControl): ValidationErrors | null => {
-  //     const date1 = group.get(this.templateMap['date'])?.value;
-  //     const date2 = group.get(this.templateMap['date2'])?.value;
-
-  //     const isEmpty = (val: any) =>
-  //       !val || val === 'MM/DD/YYYY' || (typeof val === 'string' && val.replace(/[_/]/g, '') === '');
-
-  //     if (isEmpty(date1) && isEmpty(date2)) {
-  //       return { atLeastOneDate: true };
-  //     }
-  //     return null;
-  //   };
-  // }
 
   onInputAmount() {
     if (this.negativeAmountValueOnly()) {
