@@ -89,8 +89,6 @@ export class LayoutComponent implements AfterViewChecked {
       mobileQuery.addEventListener('change', listener);
       this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
     }
-
-    this.store.dispatch(setServiceAvailableAction({ payload: true }));
   }
 
   ngAfterViewChecked(): void {
