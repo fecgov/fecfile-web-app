@@ -16,13 +16,12 @@ import { Toast } from 'primeng/toast';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-secondary-report-selection-dialog',
   templateUrl: './secondary-report-selection-dialog.component.html',
   styleUrls: ['./secondary-report-selection-dialog.component.scss'],
-  imports: [ButtonModule, Ripple, Toast, LabelPipe, SelectModule, DialogModule, FormsModule, DialogComponent],
+  imports: [ButtonModule, Ripple, Toast, LabelPipe, SelectModule, DialogModule, FormsModule],
 })
 export class SecondaryReportSelectionDialogComponent {
   public readonly router = inject(Router);

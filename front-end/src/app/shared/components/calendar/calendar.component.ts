@@ -1,16 +1,17 @@
-import { Component, computed, effect, input } from '@angular/core';
+import { Component, computed, effect, input, viewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { DatePicker } from 'primeng/datepicker';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
+import { ButtonModule } from 'primeng/button';
 import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
-  imports: [DatePicker, ReactiveFormsModule, ErrorMessagesComponent, InputMaskModule],
+  imports: [DatePicker, ReactiveFormsModule, ErrorMessagesComponent, InputMaskModule, ButtonModule],
 })
 export class CalendarComponent {
   readonly form = input.required<FormGroup>();
@@ -19,6 +20,7 @@ export class CalendarComponent {
   readonly label = input.required<string>();
   readonly showErrors = input(true);
   readonly requiredErrorMessage = input('This is a required field.');
+  readonly datePicker = viewChild.required(DatePicker);
   readonly invalidFormatMessage = input('This date does not follow the correct format, e.g. 01/01/2020');
 
   calendarOpened = false;
@@ -64,5 +66,20 @@ export class CalendarComponent {
       control.markAsTouched();
       control.updateValueAndValidity();
     }
+  }
+
+  onYearChange(event: Event, delta: -1 | 1) {
+    const datePicker = this.datePicker();
+    if (datePicker.$disabled()) {
+      event.preventDefault();
+      return;
+    }
+
+    datePicker.isMonthNavigate = true;
+    if (delta === 1) datePicker.incrementYear();
+    else datePicker.decrementYear();
+
+    datePicker.onMonthChange.emit({ month: datePicker.currentMonth + 1, year: datePicker.currentYear });
+    datePicker.createMonths(datePicker.currentMonth, datePicker.currentYear);
   }
 }
