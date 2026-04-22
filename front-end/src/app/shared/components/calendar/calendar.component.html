@@ -54,7 +54,7 @@
           @if (datepicker.currentView !== 'year') {
             <button
               type="button"
-              class="outlined-button"
+              class="outlined-button fec-datepicker-select-year"
               (click)="datepicker.switchToYearView($event)"
               (keydown)="datepicker.onContainerButtonKeydown($event)"
               [attr.disabled]="datepicker.switchViewButtonDisabled() ? '' : undefined"
