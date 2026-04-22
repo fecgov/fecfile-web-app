@@ -16,6 +16,7 @@ import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
 import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
 import { Store } from '@ngrx/store';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
+import { setServiceAvailableAction } from 'app/store/service-available.actions';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -88,6 +89,8 @@ export class LayoutComponent implements AfterViewChecked {
       mobileQuery.addEventListener('change', listener);
       this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
     }
+
+    this.store.dispatch(setServiceAvailableAction({ payload: true }));
   }
 
   ngAfterViewChecked(): void {
