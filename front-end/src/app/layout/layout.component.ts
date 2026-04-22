@@ -16,7 +16,6 @@ import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
 import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
 import { Store } from '@ngrx/store';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
-import { setServiceAvailableAction } from 'app/store/service-available.actions';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
