@@ -14,6 +14,7 @@ import { catchError, Observable, of, throwError } from 'rxjs';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { LoginService } from '../services/login.service';
 import { setServiceAvailableAction } from 'app/store/service-available.actions';
+import { FrontendErrorReportingService } from '../services/frontend-error-reporting.service';
 
 export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => [200]);
 
@@ -21,6 +22,7 @@ export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => [200]);
 export class HttpErrorInterceptor implements HttpInterceptor {
   private readonly store = inject(Store);
   private readonly loginService = inject(LoginService);
+  private readonly errorReportingService = inject(FrontendErrorReportingService);
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
@@ -40,6 +42,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         } else {
           errorMessage = `Incoming HTTP Error - [Error Code]: ${error.status} ${error.statusText}`;
         }
+        this.errorReportingService.reportHttpError({
+          method: request.method,
+          url: request.urlWithParams,
+          status: error.status,
+          message: errorMessage,
+        });
         if (error && error.status === HttpStatusCode.Forbidden) {
           this.loginService.logOut();
         } else {

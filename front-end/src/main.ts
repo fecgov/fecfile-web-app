@@ -1,4 +1,5 @@
 import {
+  ErrorHandler,
   enableProdMode,
   provideAppInitializer,
   inject,
@@ -56,6 +57,8 @@ import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { FrontendErrorReportingService } from 'app/shared/services/frontend-error-reporting.service';
+import { FrontendGlobalErrorHandlerService } from 'app/shared/services/frontend-global-error-handler.service';
 
 function initializeAppFactory(
   loginService: LoginService,
@@ -169,7 +172,11 @@ bootstrapApplication(AppComponent, {
       const initializerFn = initializeAppFactory(inject(LoginService), inject(Router), inject(CookieCheckService));
       return initializerFn();
     }),
+    provideAppInitializer(() => {
+      inject(FrontendErrorReportingService).initializeGlobalListeners();
+    }),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.showGlossary },
+    { provide: ErrorHandler, useClass: FrontendGlobalErrorHandlerService },
   ],
 }).catch((err) => console.log(err));
