@@ -6,17 +6,17 @@
       }
       {{ title() }}
     </h1>
-    @if (!!noInput()) {
+    @if (!noInput()) {
       <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
         <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
       </button>
     }
   </div>
   <ng-content></ng-content>
-  <div class="dialog-footer">
-    <hr type="solid" />
-    <ng-content select="[dialog-footer]"></ng-content>
-    @if (!!noInput()) {
+  @if (!noInput()) {
+    <div class="dialog-footer">
+      <hr type="solid" />
+      <ng-content select="[dialog-footer]"></ng-content>
       @if (!hasCustomFooter()) {
         @if (closeOnly()) {
           <div class="flex justify-content-center">
@@ -38,6 +38,6 @@
           </div>
         }
       }
-    }
-  </div>
+    </div>
+  }
 </dialog>
