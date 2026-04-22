@@ -70,7 +70,13 @@
   </div>
 </div>
 
-<app-dialog tabindex="-1" aria-labelledby="dialog-title" title="What am I searching?" [(visible)]="explanationVisible">
+<app-dialog
+  tabindex="-1"
+  aria-labelledby="dialog-title"
+  title="What am I searching?"
+  [(visible)]="explanationVisible"
+  [closeOnly]="true"
+>
   <p>
     The committee ID lookup searches FEC's global lookup of all committees registered with the Federal Election
     Commission.
@@ -80,16 +86,4 @@
     the committee was just created and the Form 1 was recently submitted, please wait 24 hours for the database to
     update. For all other questions, don't hesitate to get in touch with FECfile+ technical support for assistance.
   </p>
-  <ng-container dialog-footer #dialogFooterRef>
-    <div class="flex justify-content-center">
-      <button
-        type="button"
-        pButton
-        pRipple
-        label="Close"
-        class="p-button-primary"
-        (click)="explanationVisible.set(false)"
-      ></button>
-    </div>
-  </ng-container>
 </app-dialog>
