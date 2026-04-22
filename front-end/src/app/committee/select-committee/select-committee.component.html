@@ -1,16 +1,16 @@
 <div class="flex select-committee-columns">
-  <div class="col-6 left-side">
+  <div class="col-6">
     <h1>Get started now</h1>
     <span class="h5">LET'S FILE YOUR FEC REPORT WITH FECFILE+...</span>
     <hr type="solid" />
 
     <img src="assets/img/Get started now.jpg" draggable="false" alt="Workers checking a monitor" />
   </div>
-  <div class="col-6 right-side">
+  <div class="col-6">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
       @if (activeCommittees().length === 0) {
-        <div class="committee-card empty-card">
+        <div class="fec-card vertical-card">
           <svg alt="Magnifying lens" width="95" height="95">
             <use href="assets/img/magnifying_lens.svg"></use>
           </svg>
@@ -19,7 +19,7 @@
       } @else if (activeCommittees().length) {
         <div class="committee-list">
           @for (committee of activeCommittees(); track committee) {
-            <div id="{{ committee.id }}" class="committee-card" (click)="activateCommittee(committee)">
+            <div id="{{ committee.id }}" class="fec-card" (click)="activateCommittee(committee)">
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
               <div class="committee-info">
                 <h3>

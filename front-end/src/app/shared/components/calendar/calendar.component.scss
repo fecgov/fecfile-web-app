@@ -6,6 +6,7 @@
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
+  transform: translateY(-2px);
 }
 
 :host ::ng-deep {
