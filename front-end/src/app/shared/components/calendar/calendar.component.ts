@@ -61,13 +61,6 @@ export class CalendarComponent {
         }
       }
 
-      // if (currentValue && currentValue !== 'MM/DD/YYYY') {
-      //   const date = new Date(currentValue);
-      //   if (date instanceof Date && !Number.isNaN(date.getTime())) {
-      //     control.setValue(date);
-      //   }
-      // }
-
       control.markAsTouched();
       control.updateValueAndValidity();
     }
