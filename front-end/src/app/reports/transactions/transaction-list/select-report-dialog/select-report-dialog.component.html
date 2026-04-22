@@ -3,6 +3,7 @@
   [title]="hasAvailableReports() ? 'Select a report' : 'Hang on...'"
   submitLabel="Continue"
   (confirm)="createReattribution()"
+  [closeOnly]="!hasAvailableReports()"
 >
   <div class="dialog-body">
     @if (hasAvailableReports()) {

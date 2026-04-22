@@ -67,6 +67,7 @@
     aria-labelledby="dialog-title"
     title="Just checking..."
     [(visible)]="outOfDateDialogVisible"
+    [closeOnly]="true"
   >
     <p id="out-of-date-dialog-text">
       <b>
@@ -77,17 +78,5 @@
       >. {{ coverageDateQuestion() }} <br /><br />
       If the date entered is correct, this transaction <span [innerHTML]="memoCodeText()"></span>.
     </p>
-    <ng-container dialog-footer #dialogFooterRef>
-      <div class="flex justify-content-center">
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="Close"
-          class="p-button-primary"
-          (click)="outOfDateDialogVisible.set(false)"
-        ></button>
-      </div>
-    </ng-container>
   </app-dialog>
 </div>
