@@ -13,9 +13,7 @@ export class DialogComponent {
   readonly title = input.required<string>();
   readonly showTitleWarning = input(false);
   readonly submitLabel = input('Save');
-  readonly cancelLabel = input('Cancel');
-  readonly showSubmit = input(true);
-  readonly showCancel = input(true);
+  readonly closeOnly = input(false);
   readonly confirm = output<void>();
   readonly reject = output<void>();
 
@@ -24,10 +22,6 @@ export class DialogComponent {
   readonly projectedFooter = contentChild('dialogFooterRef');
   readonly hasCustomFooter = computed(() => !!this.projectedFooter());
   readonly closeOnEscape = input(true);
-
-  readonly footerJustification = computed(() =>
-    this.showCancel() ? 'flex justify-content-between' : 'flex justify-content-center',
-  );
 
   handleEscape(event: Event) {
     if (this.closeOnEscape()) {

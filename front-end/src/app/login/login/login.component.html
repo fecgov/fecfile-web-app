@@ -48,9 +48,8 @@
   title="We've detected a problem"
   [showTitleWarning]="true"
   [(visible)]="loginDialogVisible"
-  submitLabel="Close"
-  [showCancel]="false"
-  (confirm)="dialogClose()"
+  [closeOnly]="true"
+  (reject)="dialogClose()"
 >
   <div class="dialog-body">
     Fecfile+ is experiencing an issue. Please wait a moment<br />
