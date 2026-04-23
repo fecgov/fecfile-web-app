@@ -5,7 +5,6 @@ import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ButtonDirective } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SelectButton } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
@@ -26,7 +25,6 @@ import { DialogComponent } from '../../dialog/dialog.component';
     ErrorMessagesComponent,
     SelectButton,
     DialogComponent,
-    ButtonDirective,
     FecDatePipe,
     CheckboxModule,
   ],
