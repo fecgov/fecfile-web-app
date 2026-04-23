@@ -25,6 +25,9 @@ CYPRESS_PASSWORD="${CYPRESS_PASSWORD:-test}"
 WATCH="0"
 CONTAINER_NAME="fecfile-nginx-local"
 LOGS_PID=""
+BROWSER_SYNC_PID=""
+PUBLIC_PORT=""
+NGINX_PORT=""
 
 usage() {
   cat <<'EOF'
@@ -32,7 +35,7 @@ Usage: ./scripts/run-nginx-local.sh [options]
 
 Options:
   --env=<dev|stage|test|prod|local>  Angular build target (default: local)
-  --port=<port>                       Nginx listen port (default: 4200)
+  --port=<port>                       Browser-facing port (default: 4200)
   --api-url=<url>                     API origin or API URL for CSP connect-src (default: http://localhost:8080)
   --app-url=<url>                     Frontend URL for report endpoint (default: http://localhost:<port>)
   --watch                             Watch frontend files and rebuild on changes
@@ -72,8 +75,15 @@ case "$TARGET_ENV" in
     ;;
 esac
 
+PUBLIC_PORT="$PORT"
+NGINX_PORT="$PORT"
+
+if [[ "$WATCH" == "1" ]]; then
+  NGINX_PORT="$((PORT + 10))"
+fi
+
 if [[ -z "$APP_URL" ]]; then
-  APP_URL="http://localhost:$PORT"
+  APP_URL="http://localhost:$PUBLIC_PORT"
 fi
 
 if [[ "$API_URL" =~ ^https?://[^/]+ ]]; then
@@ -98,11 +108,19 @@ if [[ "$WATCH" == "1" ]] && ! command -v inotifywait >/dev/null 2>&1; then
   exit 1
 fi
 
+if [[ "$WATCH" == "1" ]] && ! command -v npx >/dev/null 2>&1; then
+  echo "--watch requires npx to run BrowserSync." >&2
+  exit 1
+fi
+
 DIST_DIR="$FRONTEND_DIR/dist/fecfile-web"
 CONTAINER_NAME="${CONTAINER_NAME}-${PORT}"
 
 cleanup() {
   rm -f "$TMP_CONF"
+  if [[ -n "$BROWSER_SYNC_PID" ]]; then
+    kill "$BROWSER_SYNC_PID" >/dev/null 2>&1 || true
+  fi
   if [[ -n "$LOGS_PID" ]]; then
     kill "$LOGS_PID" >/dev/null 2>&1 || true
   fi
@@ -126,17 +144,49 @@ render_nginx_config() {
   echo "Rendering Nginx config to $TMP_CONF ..."
   sed \
     -e "/^daemon off;/d" \
-    -e "s|{{port}}|$PORT|g" \
+    -e "s|{{port}}|$NGINX_PORT|g" \
     -e "s|{{env \"FECFILE_APP_URL\"}}|$APP_URL|g" \
     -e "s|{{env \"FECFILE_API_URL\"}}|$CSP_API_ORIGIN|g" \
     -e "s|root fecfile-web;|root /usr/share/nginx/html/fecfile-web;|g" \
     "$TEMPLATE_PATH" > "$TMP_CONF"
+
+  if [[ "$WATCH" == "1" ]]; then
+    local script_src_replacement="script-src 'self' 'nonce-\$nonce' http://localhost:$PUBLIC_PORT 'unsafe-inline';"
+    local connect_src_replacement="connect-src 'self' $CSP_API_ORIGIN http://localhost:$PUBLIC_PORT ws://localhost:$PUBLIC_PORT;"
+    local browser_sync_script
+    browser_sync_script='sub_filter '\''</body>'\'' '\''<script nonce="$nonce" async src="http://localhost:'"$PUBLIC_PORT"'/browser-sync/browser-sync-client.js"></script></body>'\'';'
+
+    sed -i \
+      -e "s|script-src 'self' 'nonce-\\\$nonce';|$script_src_replacement|" \
+      -e "s|connect-src 'self' $CSP_API_ORIGIN;|$connect_src_replacement|" \
+      "$TMP_CONF"
+
+    sed -i "/sub_filter web_app_nonce \\\$nonce;/a\\
+      $browser_sync_script" "$TMP_CONF"
+  fi
+}
+
+start_browser_sync() {
+  echo "Starting BrowserSync on http://localhost:$PUBLIC_PORT ..."
+  NODE_OPTIONS="--insecure-http-parser" npx -y browser-sync start \
+    --proxy "http://127.0.0.1:$NGINX_PORT" \
+    --port "$PUBLIC_PORT" \
+    --no-open \
+    --no-ui \
+    --no-snippet >/dev/null 2>&1 &
+  BROWSER_SYNC_PID="$!"
+}
+
+trigger_browser_reload() {
+  # Reload only after a successful rebuild to avoid serving stale chunks.
+  npx -y browser-sync reload --port "$PUBLIC_PORT" >/dev/null 2>&1 || \
+    echo "Warning: BrowserSync reload trigger failed." >&2
 }
 
 start_nginx() {
   local mode="$1"
 
-  echo "Starting Nginx in $mode mode on http://localhost:$PORT ..."
+  echo "Starting Nginx in $mode mode on http://localhost:$NGINX_PORT ..."
   if [[ "$mode" == "watch" ]]; then
     docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
     local docker_opt="-d"
@@ -146,7 +196,7 @@ start_nginx() {
   fi
 
   docker run $docker_opt --rm --name "$CONTAINER_NAME" \
-    -p "$PORT:$PORT" \
+    -p "$NGINX_PORT:$NGINX_PORT" \
     -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY" \
     -e "FEC_API=$FEC_API" \
     -e "FEC_API_KEY=$FEC_API_KEY" \
@@ -157,17 +207,19 @@ start_nginx() {
     nginx:alpine >/dev/null
 
   if [[ "$mode" == "watch" ]]; then
+    start_browser_sync
     docker logs -f "$CONTAINER_NAME" &
     LOGS_PID="$!"
 
     echo "Watching for changes under $FRONTEND_DIR/src ..."
-    echo "Press Ctrl+C to stop."
+    echo "Open http://localhost:$PUBLIC_PORT and press Ctrl+C to stop."
     while inotifywait -r -e modify,create,delete,move \
       --exclude '(^|/)(dist|node_modules|\.git)(/|$)' \
       "$FRONTEND_DIR/src" "$FRONTEND_DIR/angular.json" "$FRONTEND_DIR/tsconfig.app.json" "$FRONTEND_DIR/tsconfig.json" >/dev/null 2>&1; do
       echo "Change detected. Rebuilding..."
       if build_frontend; then
         echo "Rebuild complete."
+        trigger_browser_reload
       else
         echo "Rebuild failed. Nginx is still serving the last successful build." >&2
       fi
