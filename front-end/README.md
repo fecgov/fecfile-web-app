@@ -9,6 +9,7 @@ The simplest way to run a local development server is to run `ng serve` or `npx 
 Alternatively, if you want to run the frontend through nginx using a production-like static build and CSP behavior you can run `./scripts/run-nginx-local.sh`
 
 Useful options:
+
 - `./scripts/run-nginx-local.sh --env=dev`
 - `./scripts/run-nginx-local.sh --env=stage`
 - `./scripts/run-nginx-local.sh --env=test`
