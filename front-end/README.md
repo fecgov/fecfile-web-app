@@ -12,10 +12,7 @@ Useful options:
 
 - `./scripts/run-nginx-local.sh --help`
 - `./scripts/run-nginx-local.sh --watch`
-- `./scripts/run-nginx-local.sh --env=dev`
-- `./scripts/run-nginx-local.sh --env=stage`
-- `./scripts/run-nginx-local.sh --env=test`
-- `./scripts/run-nginx-local.sh --env=prod`
+- `./scripts/run-nginx-local.sh --env=[dev|stage|test|prod]`
 - `./scripts/run-nginx-local.sh --api-url=http://localhost:8080/api/v1/ --port=4200`
 
 This command builds the Angular app, renders a local nginx config from `../deploy-config/front-end-nginx-config/nginx.conf`, and starts `nginx:alpine` with the built files mounted at `/usr/share/nginx/html/fecfile-web`.
