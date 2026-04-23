@@ -114,13 +114,14 @@ CONTAINER_NAME="${CONTAINER_NAME}-${PORT}"
 
 cleanup() {
   rm -f "$TMP_CONF"
-  if [[ -n "$BROWSER_SYNC_PID" ]]; then
-    kill "$BROWSER_SYNC_PID" >/dev/null 2>&1 || true
-  fi
-  if [[ -n "$LOGS_PID" ]]; then
-    kill "$LOGS_PID" >/dev/null 2>&1 || true
-  fi
   if [[ "$WATCH" == "1" ]]; then
+    if [[ -n "$BROWSER_SYNC_PID" ]]; then
+      kill "$BROWSER_SYNC_PID" >/dev/null 2>&1 || true
+    fi
+    if [[ -n "$LOGS_PID" ]]; then
+      kill "$LOGS_PID" >/dev/null 2>&1 || true
+    fi
+
     docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
   fi
 }
