@@ -7,10 +7,6 @@ REPO_ROOT="$(cd "$FRONTEND_DIR/.." && pwd)"
 TEMPLATE_PATH="$REPO_ROOT/deploy-config/front-end-nginx-config/nginx.conf"
 TMP_CONF="${TMPDIR:-/tmp}/fecfile-nginx-local.conf"
 
-cleanup() {
-  rm -f "$TMP_CONF"
-}
-
 trap cleanup EXIT
 
 PORT="4200"
