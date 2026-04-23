@@ -133,25 +133,19 @@ render_nginx_config() {
     "$TEMPLATE_PATH" > "$TMP_CONF"
 }
 
-start_nginx_foreground() {
-  echo "Starting Nginx on http://localhost:$PORT ..."
-  echo "Press Ctrl+C to stop."
-  docker run --rm \
-    -p "$PORT:$PORT" \
-    -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY" \
-    -e "FEC_API=$FEC_API" \
-    -e "FEC_API_KEY=$FEC_API_KEY" \
-    -e "CYPRESS_COMMITTEE_ID=$CYPRESS_COMMITTEE_ID" \
-    -e "CYPRESS_PASSWORD=$CYPRESS_PASSWORD" \
-    -v "$DIST_DIR:/usr/share/nginx/html/fecfile-web:ro" \
-    -v "$TMP_CONF:/etc/nginx/nginx.conf:ro" \
-    nginx:alpine
-}
+start_nginx() {
+  local mode="$1"
 
-start_nginx_watch_mode() {
-  echo "Starting Nginx watch mode on http://localhost:$PORT ..."
-  docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
-  docker run -d --rm --name "$CONTAINER_NAME" \
+  echo "Starting Nginx in $mode mode on http://localhost:$PORT ..."
+  if [[ "$mode" == "watch" ]]; then
+    docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
+    local docker_opt="-d"
+  else
+    echo "Press Ctrl+C to stop."
+    local docker_opt=""
+  fi
+
+  docker run $docker_opt --rm --name "$CONTAINER_NAME" \
     -p "$PORT:$PORT" \
     -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY" \
     -e "FEC_API=$FEC_API" \
@@ -162,28 +156,30 @@ start_nginx_watch_mode() {
     -v "$TMP_CONF:/etc/nginx/nginx.conf:ro" \
     nginx:alpine >/dev/null
 
-  docker logs -f "$CONTAINER_NAME" &
-  LOGS_PID="$!"
+  if [[ "$mode" == "watch" ]]; then
+    docker logs -f "$CONTAINER_NAME" &
+    LOGS_PID="$!"
 
-  echo "Watching for changes under $FRONTEND_DIR/src ..."
-  echo "Press Ctrl+C to stop."
-  while inotifywait -r -e modify,create,delete,move \
-    --exclude '(^|/)(dist|node_modules|\.git)(/|$)' \
-    "$FRONTEND_DIR/src" "$FRONTEND_DIR/angular.json" "$FRONTEND_DIR/tsconfig.app.json" "$FRONTEND_DIR/tsconfig.json" >/dev/null 2>&1; do
-    echo "Change detected. Rebuilding..."
-    if build_frontend; then
-      echo "Rebuild complete."
-    else
-      echo "Rebuild failed. Nginx is still serving the last successful build." >&2
-    fi
-  done
+    echo "Watching for changes under $FRONTEND_DIR/src ..."
+    echo "Press Ctrl+C to stop."
+    while inotifywait -r -e modify,create,delete,move \
+      --exclude '(^|/)(dist|node_modules|\.git)(/|$)' \
+      "$FRONTEND_DIR/src" "$FRONTEND_DIR/angular.json" "$FRONTEND_DIR/tsconfig.app.json" "$FRONTEND_DIR/tsconfig.json" >/dev/null 2>&1; do
+      echo "Change detected. Rebuilding..."
+      if build_frontend; then
+        echo "Rebuild complete."
+      else
+        echo "Rebuild failed. Nginx is still serving the last successful build." >&2
+      fi
+    done
+  fi
 }
 
 build_frontend
 render_nginx_config
 
 if [[ "$WATCH" == "1" ]]; then
-  start_nginx_watch_mode
+  start_nginx watch
 else
-  start_nginx_foreground
+  start_nginx foreground
 fi
