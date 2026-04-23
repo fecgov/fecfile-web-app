@@ -10,6 +10,8 @@ Alternatively, if you want to run the frontend through nginx using a production-
 
 Useful options:
 
+- `./scripts/run-nginx-local.sh --help`
+- `./scripts/run-nginx-local.sh --watch`
 - `./scripts/run-nginx-local.sh --env=dev`
 - `./scripts/run-nginx-local.sh --env=stage`
 - `./scripts/run-nginx-local.sh --env=test`
