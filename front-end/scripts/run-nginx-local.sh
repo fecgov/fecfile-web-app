@@ -74,10 +74,6 @@ esac
 PUBLIC_PORT="$PORT"
 NGINX_PORT="$PORT"
 
-if [[ "$WATCH" == "1" ]]; then
-  NGINX_PORT="$((PORT + 10))"
-fi
-
 if [[ -z "$APP_URL" ]]; then
   APP_URL="http://localhost:$PUBLIC_PORT"
 fi
@@ -99,14 +95,17 @@ if [[ ! -f "$TEMPLATE_PATH" ]]; then
   exit 1
 fi
 
-if [[ "$WATCH" == "1" ]] && ! command -v inotifywait >/dev/null 2>&1; then
-  echo "--watch requires inotifywait (install inotify-tools)." >&2
-  exit 1
-fi
+if [[ "$WATCH" == "1" ]]; then
+  NGINX_PORT="$((PORT + 10))"
+  if ! command -v inotifywait >/dev/null 2>&1; then
+    echo "--watch requires inotifywait (install inotify-tools)." >&2
+    exit 1
+  fi
 
-if [[ "$WATCH" == "1" ]] && ! command -v npx >/dev/null 2>&1; then
-  echo "--watch requires npx to run BrowserSync." >&2
-  exit 1
+  if ! command -v npx >/dev/null 2>&1; then
+    echo "--watch requires npx to run BrowserSync." >&2
+    exit 1
+  fi
 fi
 
 DIST_DIR="$FRONTEND_DIR/dist/fecfile-web"
