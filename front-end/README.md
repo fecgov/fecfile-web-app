@@ -1,14 +1,21 @@
-# FecEFile
+# FECfile+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Running locally
 
-To run local development environment if Django backend is also running locally at port 8080 run `npm run local`.
+The simplest way to run a local development server is to run `ng serve` or `npx -p @angular/cli ng serve`. You can then navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Development server
+Alternatively, if you want to run the frontend through nginx using a production-like static build and CSP behavior you can run `./scripts/run-nginx-local.sh`
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Useful options:
+- `./scripts/run-nginx-local.sh --env=dev`
+- `./scripts/run-nginx-local.sh --env=stage`
+- `./scripts/run-nginx-local.sh --env=test`
+- `./scripts/run-nginx-local.sh --env=prod`
+- `./scripts/run-nginx-local.sh --api-url=http://localhost:8080/api/v1/ --port=4200`
+
+This command builds the Angular app, renders a local nginx config from `../deploy-config/front-end-nginx-config/nginx.conf`, and starts `nginx:alpine` with the built files mounted at `/usr/share/nginx/html/fecfile-web`.
 
 ## Code scaffolding
 
