@@ -38,7 +38,6 @@ export class TransactionService {
   ): Observable<number | null> {
     const date = action_date ? formatDate(action_date, 'yyyy-MM-dd', 'en-US') : '';
 
-    // Use .pipe(map(...)) instead of await if fetchPreviousAggregate returns an Observable
     return this.fetchPreviousAggregate(
       transaction,
       '/transactions/previous/entity/',
@@ -155,16 +154,26 @@ export class TransactionService {
     return payload;
   }
 
+  private readonly dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+  private isValidFormat(dateStr: string): boolean {
+    return this.dateRegex.test(dateStr);
+  }
+
   private getActionDateString(
     disbursement_date: string | Date | undefined,
     dissemination_date: string | Date | undefined,
   ): string {
     let actionDateString: string = '';
-    if (disbursement_date !== '')
+    if (disbursement_date && (disbursement_date instanceof Date || this.isValidFormat(disbursement_date)))
       actionDateString = disbursement_date ? formatDate(disbursement_date, 'yyyy-MM-dd', 'en-US') : '';
-    if (actionDateString.length === 0 && dissemination_date !== '') {
+    if (
+      actionDateString.length === 0 &&
+      dissemination_date &&
+      (dissemination_date instanceof Date || this.isValidFormat(dissemination_date))
+    ) {
       actionDateString = dissemination_date ? formatDate(dissemination_date, 'yyyy-MM-dd', 'en-US') : '';
     }
+
     return actionDateString;
   }
 
