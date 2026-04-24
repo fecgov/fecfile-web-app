@@ -6,16 +6,18 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The simplest way to run a local development server is to run `ng serve` or `npx -p @angular/cli ng serve`. You can then navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Alternatively, if you want to run the frontend through nginx using a production-like static build and CSP behavior you can run `./scripts/run-nginx-local.sh`
+Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, use the direct `docker compose` workflow:
 
-Useful options:
+- `docker compose up`
+- `docker compose --profile watch up`
 
-- `./scripts/run-nginx-local.sh --help`
-- `./scripts/run-nginx-local.sh --watch`
-- `./scripts/run-nginx-local.sh --env=[dev|stage|test|prod]`
-- `./scripts/run-nginx-local.sh --api-url=http://localhost:8080/api/v1/ --port=4200`
+For this setup:
 
-This command builds the Angular app, renders a local nginx config from `../deploy-config/front-end-nginx-config/nginx.conf`, and starts `nginx:alpine` with the built files mounted at `/usr/share/nginx/html/fecfile-web`.
+- Browser-facing traffic uses `localhost:4200`.
+- Nginx runs behind BrowserSync on `localhost:4210`.
+- The compose services run helper scripts in `scripts/` to build the frontend, render local nginx config, and trigger reload after successful rebuilds.
+
+This setup builds the Angular app, renders a local nginx config from `../deploy-config/front-end-nginx-config/nginx.conf`, and starts nginx with built files mounted at `/usr/share/nginx/html/fecfile-web`.
 
 ## Code scaffolding
 
