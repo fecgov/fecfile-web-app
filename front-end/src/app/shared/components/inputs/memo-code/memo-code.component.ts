@@ -92,7 +92,12 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
         return { activeDate, isDisbursement };
       }),
-      distinctUntilChanged((prev, curr) => prev.activeDate?.getTime() === curr.activeDate?.getTime()),
+      distinctUntilChanged((prev, curr) => {
+        const prevDate = prev.activeDate;
+        const currDate = curr.activeDate;
+        if (prevDate instanceof Date && currDate instanceof Date) return prevDate.getTime() === currDate.getTime();
+        return false;
+      }),
     );
 
     this.memoControl = this.form.get(this.templateMap.memo_code) as SubscriptionFormControl<boolean>;
@@ -157,14 +162,14 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     return date >= coverageFromDate && date <= coverageThroughDate;
   }
 
-  updateMemoItemWithDate(date: Date | null | undefined) {
+  updateMemoItemWithDate(date: Date | null | undefined | string) {
     const coverageFromDate = this.coverageFromDate();
     const coverageThrough = this.coverageThroughDate();
     if (!this.transactionType()?.doMemoCodeDateCheck || !coverageFromDate || !coverageThrough) {
       return;
     }
 
-    if (!date || this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
+    if (!date || !(date instanceof Date) || this.isMemoDateWithinCoverage(date, coverageFromDate, coverageThrough)) {
       this.clearOutOfDateRequirement();
       return;
     }
