@@ -13,6 +13,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { HeaderStyles } from './header/header-styles';
 import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
+import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
+import { Store } from '@ngrx/store';
+import { selectServiceAvailable } from 'app/store/service-available.selectors';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -33,10 +36,12 @@ export enum BackgroundStyles {
     FooterComponent,
     ButtonDirective,
     FeedbackOverlayComponent,
+    ServiceUnavailableBannerComponent,
   ],
 })
 export class LayoutComponent implements AfterViewChecked {
   readonly layoutService = inject(LayoutService);
+  private readonly store = inject(Store);
   readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
@@ -45,6 +50,7 @@ export class LayoutComponent implements AfterViewChecked {
   private readonly navEnd = toSignal(injectNavigationEnd());
 
   readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
+  readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
   readonly layoutControls = computed(() => {
     this.navEnd();
@@ -98,6 +104,7 @@ class LayoutControls {
   showUpperFooter = true;
   showHeader = true;
   showSidebar = false;
+  showServiceUnavailableBanner = false;
   headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
   showFeedbackButton = true;
@@ -113,6 +120,7 @@ class LayoutControls {
       this.showSidebar = data['showSidebar'] ?? this.showSidebar;
       this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
       this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
+      this.showServiceUnavailableBanner = data['showServiceUnavailableBanner'] ?? this.showServiceUnavailableBanner;
     }
   }
 }

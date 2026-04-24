@@ -21,6 +21,7 @@ export const LOGIN_ROUTES: Route[] = [
       showFeedbackButton: false,
       headerStyle: HeaderStyles.LOGIN,
       backgroundStyle: BackgroundStyles.LOGIN,
+      showServiceUnavailableBanner: true,
     },
   },
   {

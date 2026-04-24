@@ -5,6 +5,9 @@
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
+  @if (layoutControls().showServiceUnavailableBanner && serviceAvailable() !== true) {
+    <app-service-unavailable-banner />
+  }
 
   <!--  Begin Sidebar section -->
   @if (layoutControls().showSidebar && layoutService.showSidebar()) {

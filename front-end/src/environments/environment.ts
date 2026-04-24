@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   name: 'development',
+  baseUri: 'https://localhost',
   apiUrl: 'https://localhost/api/v1',
   appTitle: 'FECfile+',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',

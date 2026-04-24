@@ -1,0 +1,21 @@
+.banner {
+  height: 43px;
+  width: 100%;
+  background-color: #631010;
+  color: #ffffff;
+  position: fixed;
+  top: 110px;
+}
+
+.banner-header-text {
+  font-weight: bold;
+  line-height: 19px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  text-align: center;
+}
+
+.pi-exclamation-circle {
+  position: relative;
+  top: 1px;
+}
