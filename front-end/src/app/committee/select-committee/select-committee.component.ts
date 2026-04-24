@@ -20,12 +20,21 @@ export class SelectCommitteeComponent {
   protected readonly store = inject(Store);
   protected readonly router = inject(Router);
   private readonly userService = inject(UsersService);
-  readonly committees = derivedAsync(() => this.committeeAccountService.getCommittees(), { initialValue: [] });
+  readonly committees = derivedAsync(
+    async () => {
+      this.isLoading.set(true);
+      const committees = await this.committeeAccountService.getCommittees();
+      this.isLoading.set(false);
+      return committees;
+    },
+    { initialValue: [] },
+  );
   readonly activeCommittees = computed(() => this.committees().filter((c) => !c.disabled));
   readonly disabledCommittees = computed(() => this.committees().filter((c) => !!c.disabled));
   readonly disabledShown = signal(false);
   readonly content = viewChild<ElementRef<HTMLDivElement>>('content');
   readonly hasDisabledCommittees = computed(() => this.disabledCommittees().length > 0);
+  readonly isLoading = signal(true);
 
   constructor() {
     afterRenderEffect(() => {
