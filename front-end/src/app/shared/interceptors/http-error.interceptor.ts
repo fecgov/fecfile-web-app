@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { LoginService } from '../services/login.service';
+import { setServiceAvailableAction } from 'app/store/service-available.actions';
 import { FrontendErrorReportingService } from '../services/frontend-error-reporting.service';
 
 export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => [200]);
@@ -31,6 +32,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           return of(new HttpResponse({ status: error.status }));
         }
         let errorMessage = '';
+        if (error.status === 502) {
+          this.store.dispatch(setServiceAvailableAction({ payload: false }));
+        }
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Outgoing HTTP Error: ${error.error.message}`;
         } else if (error.status === 0) {

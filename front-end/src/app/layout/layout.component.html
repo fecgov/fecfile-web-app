@@ -5,6 +5,9 @@
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
+  @if (layoutControls().showServiceUnavailableBanner && serviceAvailable() !== true) {
+    <app-service-unavailable-banner />
+  }
 
   <!--  Begin Sidebar section -->
   @if (layoutControls().showSidebar && layoutService.showSidebar()) {
@@ -71,4 +74,23 @@
 </div>
 @if (useDynamicSidebar) {
   <button (click)="toggleSidebar()">Toggle Sidebar</button>
+}
+
+@if (router.url !== '/login' && serviceAvailable() === false) {
+  <app-dialog
+    aria-labelledby="dialog-title"
+    title="We've detected a problem"
+    [showTitleWarning]="true"
+    [visible]="true"
+    [noInput]="true"
+  >
+    <div class="dialog-body">
+      FECfile+ is experiencing an issue. Previously saved work<br />
+      should not be affected. Please close all instances of<br />
+      FECfile+ in your browser and attempt to log back in via<br />
+      the login page.<br />
+      <br />
+      We apologize for the inconvenience.
+    </div>
+  </app-dialog>
 }

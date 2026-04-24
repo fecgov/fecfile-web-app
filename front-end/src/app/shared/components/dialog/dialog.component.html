@@ -1,34 +1,43 @@
 <dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()" (keydown.escape)="handleEscape($event)">
   <div class="dialog-header">
-    <h1 class="dialog-title" id="dialog-title">{{ title() }}</h1>
-    <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
-      <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
-    </button>
-  </div>
-  <ng-content></ng-content>
-  <div class="dialog-footer">
-    <hr type="solid" />
-    <ng-content select="[dialog-footer]"></ng-content>
-    @if (!hasCustomFooter()) {
-      @if (closeOnly()) {
-        <div class="flex justify-content-center">
-          <button type="button" pButton pRipple label="Close" class="p-button-primary" (click)="close()"></button>
-        </div>
-      } @else {
-        <div class="flex justify-content-between">
-          <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
-          <button
-            type="submit"
-            data-cy="membership-submit"
-            pButton
-            pRipple
-            [label]="submitLabel()"
-            [disabled]="submitDisabled()"
-            class="p-button-primary submit-button"
-            (click)="confirm.emit()"
-          ></button>
-        </div>
+    <h1 class="dialog-title" id="dialog-title">
+      @if (!!showTitleWarning()) {
+        <i class="pi pi-exclamation-circle"></i>
       }
+      {{ title() }}
+    </h1>
+    @if (!noInput()) {
+      <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
+        <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
+      </button>
     }
   </div>
+  <ng-content></ng-content>
+  @if (!noInput()) {
+    <div class="dialog-footer">
+      <hr type="solid" />
+      <ng-content select="[dialog-footer]"></ng-content>
+      @if (!hasCustomFooter()) {
+        @if (closeOnly()) {
+          <div class="flex justify-content-center">
+            <button type="button" pButton pRipple label="Close" class="p-button-primary" (click)="close()"></button>
+          </div>
+        } @else {
+          <div class="flex justify-content-between">
+            <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
+            <button
+              type="submit"
+              data-cy="membership-submit"
+              pButton
+              pRipple
+              [label]="submitLabel()"
+              [disabled]="submitDisabled()"
+              class="p-button-primary submit-button"
+              (click)="confirm.emit()"
+            ></button>
+          </div>
+        }
+      }
+    </div>
+  }
 </dialog>
