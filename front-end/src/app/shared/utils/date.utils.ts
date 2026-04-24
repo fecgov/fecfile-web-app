@@ -22,7 +22,7 @@ export class DateUtils {
    * @returns {string} mm/dd/yyyy formatted date string
    */
   public static convertDateToSlashFormat(date: Date | null | undefined): string {
-    if (!date) {
+    if (!(date instanceof Date)) {
       return '';
     }
     return new Intl.DateTimeFormat('en-US', {
