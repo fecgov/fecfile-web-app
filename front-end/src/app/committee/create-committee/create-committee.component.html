@@ -19,7 +19,11 @@
       </div>
       <p-inputGroup class="search-group">
         <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
-        <p-button class="search-button" (click)="search(searchBoxFormControl.value)">
+        <p-button
+          class="search-button"
+          (click)="search(searchBoxFormControl.value)"
+          (keyUp.enter)="search(searchBoxFormControl.value)"
+        >
           <ng-template pTemplate="iconTemplate">
             <img
               alt="Magnifying lens"
@@ -32,38 +36,51 @@
       </p-inputGroup>
       <p class="font-italic font-karla mt-1">Examples: C00431445, C00343509</p>
     </div>
-    @if (selectedCommittee || unableToCreateAccount) {
+    @if (showResult()) {
       <div class="right-side-box">
         <h2 class="m-0">Result</h2>
-        @if (selectedCommittee) {
-          <div class="fec-card">
-            <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-            <div class="committee-info">
-              <h3>{{ selectedCommittee.name }}</h3>
-              <span class="h5 font-karla-bold mb-0">{{ selectedCommittee.committee_id }}</span>
-
-              <p-button
-                class="create-button"
-                label="Create account"
-                styleClass="p-button-primary"
-                (click)="createAccount()"
-                icon="pi pi-angle-right"
-                iconPos="right"
-              >
-              </p-button>
-            </div>
+        @if (loading()) {
+          <div class="flex bg-white shadow-1 mx-1 my-3 py-5">
+            <img
+              class="max-w-full fec-loader-image"
+              src="assets/img/fec-loading-flag.gif"
+              draggable="false"
+              height="72.66"
+              width="80"
+              alt="The available committees are loading..."
+            />
           </div>
-        }
-        @if (unableToCreateAccount) {
-          <div class="fec-card vertical-card">
-            <svg alt="Exclamation mark" width="94" height="95">
-              <use href="assets/img/exclamation.svg"></use>
-            </svg>
-            <div class="unable-verbiage">
-              <span class="text-2xl">Unable to create account</span>
-              <span class="small-text">CONTACT FECFILE+ TECHNICAL SUPPORT FOR HELP</span>
+        } @else {
+          @if (selectedCommittee()) {
+            <div class="fec-card">
+              <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+              <div class="committee-info">
+                <h3>{{ selectedCommittee()!.name }}</h3>
+                <span class="h5 font-karla-bold mb-0">{{ selectedCommittee()!.committee_id }}</span>
+                <p-button
+                  class="create-button"
+                  label="Create account"
+                  styleClass="p-button-primary"
+                  (click)="createAccount()"
+                  (keyUp.enter)="createAccount()"
+                  icon="pi pi-angle-right"
+                  iconPos="right"
+                >
+                </p-button>
+              </div>
             </div>
-          </div>
+          }
+          @if (unableToCreateAccount()) {
+            <div class="fec-card vertical-card">
+              <svg alt="Exclamation mark" width="94" height="95">
+                <use href="assets/img/exclamation.svg"></use>
+              </svg>
+              <div class="unable-verbiage">
+                <span class="text-2xl">Unable to create account</span>
+                <span class="small-text">CONTACT FECFILE+ TECHNICAL SUPPORT FOR HELP</span>
+              </div>
+            </div>
+          }
         }
       </div>
     }

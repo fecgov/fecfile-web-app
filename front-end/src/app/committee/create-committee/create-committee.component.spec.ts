@@ -53,37 +53,39 @@ describe('CreateCommitteeComponent', () => {
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
       const testCommitteeAccountService = TestBed.inject(CommitteeAccountService);
-      const spy = vi
-        .spyOn(testCommitteeAccountService, 'getAvailableCommittee')
-        .mockReturnValue(Promise.resolve(testCommittee));
+      const spy = vi.spyOn(testCommitteeAccountService, 'getAvailableCommittee').mockResolvedValue(testCommittee);
 
-      expect(component.selectedCommittee).toBeFalsy();
+      expect(component.selectedCommittee()).toBeFalsy();
       component.search(testCommitteeId);
       expect(spy).toHaveBeenCalledWith(testCommitteeId);
     });
 
-    it('should handle successful search', () => {
+    it('should handle successful search', async () => {
       const testCommitteeId = 'C12345678';
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
 
-      expect(component.unableToCreateAccount).toBe(false);
-      expect(component.selectedCommittee).toBeFalsy();
-      component.handleSuccessfulSearch(testCommittee);
-      expect(component.unableToCreateAccount).toBe(false);
-      expect(component.selectedCommittee?.committee_id).toEqual(testCommitteeId);
+      expect(component.unableToCreateAccount()).toBe(false);
+      expect(component.selectedCommittee()).toBeFalsy();
+      vi.spyOn(testCommitteeAccountService, 'getAvailableCommittee').mockResolvedValue(testCommittee);
+      component.search(testCommitteeId);
+      await fixture.whenStable();
+      expect(component.unableToCreateAccount()).toBe(false);
+      expect(component.selectedCommittee()?.committee_id).toEqual(testCommitteeId);
     });
 
-    it('should handle failed search', () => {
+    it('should handle failed search', async () => {
       const testCommitteeId = 'C12345678';
       const testCommittee = new CommitteeAccount();
       testCommittee.committee_id = testCommitteeId;
 
-      expect(component.unableToCreateAccount).toBe(false);
-      expect(component.selectedCommittee).toBeFalsy();
-      component.handleFailedSearch();
-      expect(component.unableToCreateAccount).toBe(true);
-      expect(component.selectedCommittee).toBeFalsy();
+      expect(component.unableToCreateAccount()).toBe(false);
+      expect(component.selectedCommittee()).toBeFalsy();
+      vi.spyOn(testCommitteeAccountService, 'getAvailableCommittee').mockRejectedValueOnce(null);
+      component.search(testCommitteeId);
+      await fixture.whenStable();
+      expect(component.unableToCreateAccount()).toBe(true);
+      expect(component.selectedCommittee()).toBeFalsy();
     });
   });
 
@@ -104,7 +106,7 @@ describe('CreateCommitteeComponent', () => {
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
 
-    component.selectedCommittee = testCommittee;
+    component.selectedCommittee.set(testCommittee);
     await component.createAccount();
 
     expect(createSpy).toHaveBeenCalledWith(testCommitteeId);
@@ -118,11 +120,11 @@ describe('CreateCommitteeComponent', () => {
       .spyOn(testCommitteeAccountService, 'createCommitteeAccount')
       .mockImplementation(() => Promise.reject(new Error('Failed to create committee account')));
 
-    expect(component.unableToCreateAccount).toBe(false);
-    expect(component.selectedCommittee).toBeFalsy();
+    expect(component.unableToCreateAccount()).toBe(false);
+    expect(component.selectedCommittee()).toBeFalsy();
     await component.createAccount();
-    expect(component.unableToCreateAccount).toBe(true);
-    expect(component.selectedCommittee).toBeFalsy();
+    expect(component.unableToCreateAccount()).toBe(true);
+    expect(component.selectedCommittee()).toBeFalsy();
     expect(spy).toHaveBeenCalledWith('');
     expect(routerSpy).not.toHaveBeenCalled();
   });
