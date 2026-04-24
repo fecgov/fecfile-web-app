@@ -1,7 +1,7 @@
 <div [formGroup]="form">
-  <div class="grid memo-container">
+  <div class="flex flex-column gap-2">
     @if (memoCodeMapOptions().length === 0) {
-      <div class="col-12 field-row">
+      <div class="flex gap-2 align-items-center">
         <p-checkbox
           #memoCode
           [binary]="true"
@@ -13,24 +13,24 @@
           [falseValue]="false"
           [readonly]="form.controls[templateMap['memo_code']].disabled"
         />
-        <span id="memo_code_label" class="ml-2">
+        <span id="memo_code_label" class="ml-1">
           {{ checkboxLabel() }}
           @if (parenLabel()) {
             <span class="paren-label">{{ parenLabel() }}</span>
           }
         </span>
-        <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
+        <svg pTooltip="{{ memoItemHelpText() }}" height="20" width="20">
+          <use href="assets/img/i-info-circle.svg"></use>
+        </svg>
       </div>
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
-          [patternErrorMessage]="'This is a required field.'"
-        />
-      </div>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['memo_code']"
+        [formSubmitted]="formSubmitted"
+        [patternErrorMessage]="'This is a required field.'"
+      />
     } @else {
-      <div class="col-3 pl-0">
+      @if (!memoControl.disabled) {
         <p-selectButton
           #memoCode
           inputId="memo_code"
@@ -39,26 +39,26 @@
           optionLabel="label"
           optionValue="value"
         />
-      </div>
-      <div class="col-12 pl-0">
+      }
+      <div class="flex gap-2">
         @if (memoControl.value) {
-          <span class="pi pi-check memo-item-check" pTooltip="{{ memoItemHelpText() }}"></span>
-          MEMO ITEM
+          <span class="pi pi-check" pTooltip="{{ memoItemHelpText() }}"></span>
+          <span>MEMO ITEM</span>
         } @else {
-          NOT A MEMO ITEM
+          <span>NOT A MEMO ITEM</span>
         }
         @if (memoControl.value !== undefined) {
-          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ memoItemHelpText() }}"></span>
+          <svg pTooltip="{{ memoItemHelpText() }}" height="20" width="20">
+            <use href="assets/img/i-info-circle.svg"></use>
+          </svg>
         }
       </div>
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
-          [patternErrorMessage]="'This is a required field.'"
-        />
-      </div>
+      <app-error-messages
+        [form]="form"
+        [fieldName]="templateMap['memo_code']"
+        [formSubmitted]="formSubmitted"
+        [patternErrorMessage]="'This is a required field.'"
+      />
     }
   </div>
 
@@ -67,6 +67,7 @@
     aria-labelledby="dialog-title"
     title="Just checking..."
     [(visible)]="outOfDateDialogVisible"
+    [closeOnly]="true"
   >
     <p id="out-of-date-dialog-text">
       <b>
@@ -75,19 +76,7 @@
       falls outside the report coverages dates of
       <b> {{ coverageFromDate() | fecDate }}-{{ coverageThroughDate() | fecDate }}</b
       >. {{ coverageDateQuestion() }} <br /><br />
-      If the date entered is correct, this transaction must be a <b>Memo Item</b>.
+      If the date entered is correct, this transaction <span [innerHTML]="memoCodeText()"></span>.
     </p>
-    <ng-container dialog-footer #dialogFooterRef>
-      <div class="flex justify-content-center">
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="Close"
-          class="p-button-primary"
-          (click)="outOfDateDialogVisible.set(false)"
-        ></button>
-      </div>
-    </ng-container>
   </app-dialog>
 </div>

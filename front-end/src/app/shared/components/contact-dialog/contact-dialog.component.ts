@@ -285,7 +285,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    * @param contactType
    */
   contactTypeChanged(contactType: ContactTypes) {
-    if (!this.contactTypeOptions.find((opt) => opt.value === contactType)) return;
+    if (!this.contactTypeOptions.some((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
     if (!this.contact()) this.contact.set(new Contact());
 

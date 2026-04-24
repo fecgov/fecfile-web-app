@@ -44,6 +44,7 @@ export class SelectReportDialogComponent {
     },
     { initialValue: [] },
   );
+  readonly hasAvailableReports = computed(() => this.availableReports().length > 0);
 
   readonly actionLabel = computed(() => (ReattRedesUtils.isReattribute(this.type()) ? 'reattribute' : 'redesignate'));
   readonly urlParameter = computed(() =>

@@ -6,6 +6,7 @@
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
+  transform: translateY(-2px);
 }
 
 :host ::ng-deep {
@@ -25,4 +26,28 @@
 
 .date-picker-field {
   width: 11em;
+}
+
+.year-button,
+.month-button,
+.outlined-button {
+  border-radius: var(--border-radius);
+  background-color: transparent;
+  height: 24px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--p-datepicker-select-month-hover-background);
+  }
+}
+
+.year-button,
+.month-button {
+  border: none;
+  padding: 5px;
+}
+
+.outlined-button {
+  border: 1px solid var(--primary-color);
+  font-family: var(--karla-bold);
+  padding: 4px 8px;
 }

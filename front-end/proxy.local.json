@@ -1,0 +1,8 @@
+{
+  "/frontend-error-report": {
+    "target": "http://localhost:7777",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
