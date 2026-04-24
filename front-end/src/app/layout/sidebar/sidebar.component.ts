@@ -36,12 +36,15 @@ export class SidebarComponent {
   });
 
   readonly formLabel = computed(() => this.report().formLabel);
-  readonly subHeading = computed(() => {
-    return this.report().report_code_label;
-  });
+  readonly subHeading = computed(() => this.report().report_code_label);
   readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
+  readonly isAmmendable = computed(() =>
+    [ReportTypes.F3, ReportTypes.F3X, ReportTypes.F24].includes(this.report().report_type),
+  );
   readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);
   readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
+
+  readonly version = computed(() => this.report().version_label ?? 'Original');
 
   readonly renameF24DialogVisible = signal(false);
   readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);

@@ -33,7 +33,6 @@ export class TransactionContactLookupComponent implements OnInit {
   @ViewChild(ContactDialogComponent) contactDialog!: ContactDialogComponent;
 
   detailVisible = false;
-  dialogContactTypeOptions: PrimeOptions = [];
   createContactForm: FormGroup = this.formBuilder.group(
     SchemaUtils.getFormGroupFields([
       ...new Set([
@@ -53,7 +52,7 @@ export class TransactionContactLookupComponent implements OnInit {
     // Set the contact type options in the child dialog component to the first contact type option
     // listed in the child lookup component. This will automatically select the correct
     // content type from the transaction contact lookup and make the second in the lookup in the dialog to readonly.
-    this.dialogContactTypeOptions = [this.contactTypeOptions[0]];
+
     this.currentContactLabel = this.contactTypeOptions[0].label;
     this.currentType = this.contactTypeOptions[0].value as ContactTypes;
 
@@ -124,7 +123,7 @@ export class TransactionContactLookupComponent implements OnInit {
    * @param contactType
    */
   contactTypeSelected(contactType: ContactTypes) {
-    this.contactDialog.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [contactType]);
+    this.contactDialog.contactTypeChanged(contactType);
     this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
     this.currentType = this.contactDialog.contactTypeOptions[0].value as ContactTypes;
     this.contactTypeSelect.emit(contactType);

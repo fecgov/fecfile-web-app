@@ -68,7 +68,7 @@ describe('Receipt Transactions', () => {
       // Check for regression on date error
       cy.get('#contribution_date').clear();
       TransactionDetailPage.clickSave(); // Triggers errors to show
-      cy.get('[data-cy="contribution_date-error"]').should('contain', 'This is a required field.');
+      cy.get('[data-cy="contribution_date-error"]').should('contain', 'This is a required field');
     });
   });
 
