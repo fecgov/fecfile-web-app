@@ -23,7 +23,6 @@ export class CalendarComponent {
   readonly datePicker = viewChild.required(DatePicker);
   readonly invalidFormatMessage = input('This date does not follow the correct format, e.g. 01/01/2020');
 
-  calendarOpened = false;
   readonly control = computed(() => {
     const field = this.fieldName();
     const control = this.form()?.get(field);
@@ -46,15 +45,14 @@ export class CalendarComponent {
     });
   }
 
-  validateDate(calendarUpdate: boolean) {
-    this.calendarOpened = calendarUpdate;
+  validateDate() {
     const control = this.control();
 
-    if (!this.calendarOpened && control) {
+    if (control) {
       const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
       const currentValue = inputElement?.value;
 
-      if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replace(/[_/]/g, '') === '') {
+      if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
         control.setValue(null);
       } else {
         const date = new Date(currentValue);
