@@ -5,8 +5,7 @@ services:
     command: bash -lc "./scripts/compose-prepare.sh"
     environment:
       BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
-      PUBLIC_PORT: ${PUBLIC_PORT:-4200}
-      NGINX_PORT: ${NGINX_PORT:-4210}
+      PORT: ${PORT:-4200}
       API_URL: ${API_URL:-http://localhost:8080}
       APP_URL: ${APP_URL:-http://localhost:4200}
       NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
@@ -24,24 +23,31 @@ services:
       FEC_API_KEY: ${FEC_API_KEY:-DEMO_KEY}
       CYPRESS_COMMITTEE_ID: ${CYPRESS_COMMITTEE_ID:-C99999999}
       CYPRESS_PASSWORD: ${CYPRESS_PASSWORD:-test}
+    ports:
+      - "${PORT:-4200}:${PORT:-4200}"
     volumes:
       - ./dist/fecfile-web:/usr/share/nginx/html/fecfile-web:ro
       - ./.tmp/nginx.local.generated.conf:/etc/nginx/nginx.conf:ro
 
   browser-sync:
     image: node:22
+    profiles: ["watch"]
     working_dir: /workspace/front-end
     command: >
       bash -lc "npx -y browser-sync start
-      --proxy http://frontend-nginx:${NGINX_PORT:-4210}
-      --port ${PUBLIC_PORT:-4200}
+      --proxy http://frontend-nginx:${PORT:-4200}
+      --port 3000
+      --files /workspace/front-end/.tmp/browser-sync.reload
+      --ws
       --no-open
       --no-ui
       --no-snippet"
     depends_on:
       - frontend-nginx
+    environment:
+      NODE_OPTIONS: --insecure-http-parser
     ports:
-      - "${PUBLIC_PORT:-4200}:${PUBLIC_PORT:-4200}"
+      - "3001:3001"
     volumes:
       - ..:/workspace
 
@@ -62,10 +68,10 @@ services:
       - browser-sync
     environment:
       BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
-      PUBLIC_PORT: ${PUBLIC_PORT:-4200}
-      NGINX_PORT: ${NGINX_PORT:-4210}
+      PORT: ${PORT:-4200}
       API_URL: ${API_URL:-http://localhost:8080}
       APP_URL: ${APP_URL:-http://localhost:4200}
       NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
+      SHELL: /bin/bash
     volumes:
       - ..:/workspace

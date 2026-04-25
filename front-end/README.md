@@ -12,9 +12,8 @@ Alternatively, to run the frontend through nginx using a production-like static 
 - `docker compose --profile watch up`
 
 For this setup:
-
-- Browser-facing traffic uses `localhost:4200`.
-- Nginx runs behind BrowserSync on `localhost:4210`.
+- In both cases the frontend is served on `localhost:4200`.
+- In watch mode, nginx still serves the app and proxies BrowserSync endpoints internally for live reload support.
 - The compose services run helper scripts in `scripts/` to build the frontend, render local nginx config, and trigger reload after successful rebuilds.
 
 This setup builds the Angular app, renders a local nginx config from `../deploy-config/front-end-nginx-config/nginx.conf`, and starts nginx with built files mounted at `/usr/share/nginx/html/fecfile-web`.
