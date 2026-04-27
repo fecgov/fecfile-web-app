@@ -8,9 +8,9 @@ The simplest way to run a local development server is to run `ng serve` or `npx 
 
 Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, use `docker compose` via npm:
 
-- `npm run compose:up`
-- `npm run compose:up:watch`
-- `npm run compose:down`
+- `npm run local:up`
+- `npm run local:watch:up`
+- `npm run local:down`
 
 For this setup:
 
