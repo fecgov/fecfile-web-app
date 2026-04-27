@@ -1,22 +1,16 @@
-@use 'mixins' as *;
-
-:host::ng-deep {
-  .sidebar-content-container > .main-content {
-    @include standard-container(true);
-  }
-  .container {
-    @include standard-container();
-  }
-}
+$sidebar-width: 284px;
 
 #sidebar-container {
-  min-height: calc(100vh - 2rem);
-  width: 284px;
-  min-width: 284px;
-  max-width: 284px;
+  min-height: 100%;
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  max-width: $sidebar-width;
   padding-left: 24px;
   padding-right: 24px;
   padding-top: 64px;
+  position: fixed;
+  top: var(--header-total);
+  z-index: 999;
 }
 
 #page-container {
@@ -29,6 +23,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-top: var(--header-total);
 }
 
 .main-content {
@@ -40,15 +35,9 @@
   flex-direction: column;
 }
 
-.sidebar-content-container > .main-content {
-  margin-left: 32px;
-  margin-right: 0;
-  width: calc(100% - 64px);
-}
-
-.header-container {
+.sidebar-content-container .header-container {
   padding: 0;
-  padding-bottom: 110px;
+  padding-bottom: var(--header-total);
 }
 
 .row {
@@ -64,11 +53,18 @@ app-footer {
 }
 
 .sidebar-content-container {
-  min-height: calc(100vh - 2rem);
-  width: calc(100% - 284px);
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  padding-left: $sidebar-width;
+  margin-top: var(--header-total);
   padding-top: 64px;
+  & > .main-content {
+    margin-left: 32px;
+    margin-right: 0;
+    width: calc(100% - 64px);
+  }
 }
 
 .login-background {
@@ -84,6 +80,7 @@ app-footer {
 
   & > #content-offset {
     margin-top: 30.781px !important;
+    padding-top: 0 !important ;
 
     & > .main-content {
       margin: 0;
@@ -99,8 +96,7 @@ app-footer {
   z-index: 1103;
   color: black;
   border-radius: 4px 4px 0px 0px;
-}
-
-.feedback-button:enabled:hover {
-  color: black;
+  &:enabled:hover {
+    color: black;
+  }
 }

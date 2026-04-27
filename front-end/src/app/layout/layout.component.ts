@@ -65,7 +65,7 @@ export class LayoutComponent implements AfterViewChecked {
 
   constructor() {
     if (this.useDynamicSidebar) {
-      const mobileQuery = window.matchMedia('(max-width: 991.98px)');
+      const mobileQuery = globalThis.matchMedia('(max-width: 991.98px)');
       if (mobileQuery.matches) {
         this.layoutService.showSidebar.set(false);
       }
@@ -86,10 +86,6 @@ export class LayoutComponent implements AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
-  }
-
-  toggleSidebar() {
-    this.layoutService.showSidebar.update((v) => !v);
   }
 }
 
