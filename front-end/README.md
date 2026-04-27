@@ -6,7 +6,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The simplest way to run a local development server is to run `ng serve` or `npx -p @angular/cli ng serve`. You can then navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, use `docker compose` via npm:
+Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, you can use `docker compose`:
+
+- `docker compose [--profile watch] [up|down]`
+
+If you would like the docker container to be automatically `downed` and tmp files cleaned up on quitting, you can run the same commands with a wrapper via npm:
 
 - `npm run local:up`
 - `npm run local:watch:up`
@@ -16,7 +20,7 @@ For this setup:
 
 - In both cases the frontend is served on `localhost:4200`.
 - In watch mode, nginx still serves the app and proxies BrowserSync endpoints internally for live reload support.
-- The compose services run helper scripts in `scripts/` to build the frontend, render local nginx config, and trigger reload after successful rebuilds.
+- The compose services run helper scripts in `scripts/` to build the frontend, render local nginx config, and (in watch mode) trigger reload after successful rebuilds.
 
 This setup builds the Angular app, renders a local nginx config from `../deploy-config/front-end-nginx-config/nginx.conf`, and starts nginx with built files mounted at `/usr/share/nginx/html/fecfile-web`.
 
