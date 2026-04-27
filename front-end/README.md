@@ -8,7 +8,9 @@ The simplest way to run a local development server is to run `ng serve` or `npx 
 
 Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, you can use `docker compose`:
 
-- `docker compose [--profile watch] [up|down]`
+- `docker compose [up|down]`
+- `docker compose --profile watch down`
+- `WATCH=1 docker compose --profile watch up`
 
 If you would like the docker container to be automatically `downed` and tmp files cleaned up on quitting, you can run the same commands with a wrapper via npm:
 

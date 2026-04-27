@@ -6,6 +6,7 @@ FRONTEND_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 BUILD_SCRIPT="${BUILD_SCRIPT:-build-local}"
 PORT="${PORT:-4200}"
+WATCH="${WATCH:-0}"
 API_URL="${API_URL:-http://localhost:8080}"
 APP_URL="${APP_URL:-http://localhost:${PORT}}"
 NGINX_CONF_PATH="${NGINX_CONF_PATH:-$FRONTEND_DIR/.tmp/nginx.local.generated.conf}"
@@ -24,7 +25,7 @@ if [[ ! -f "$FRONTEND_DIR/dist/fecfile-web/index.html" ]]; then
 fi
 
 PORT="$PORT" \
-WATCH="1" \
+WATCH="$WATCH" \
 API_URL="$API_URL" \
 APP_URL="$APP_URL" \
 NGINX_CONF_PATH="$NGINX_CONF_PATH" \

@@ -6,6 +6,7 @@ services:
     environment:
       BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
       PORT: ${PORT:-4200}
+      WATCH: ${WATCH:-0}
       API_URL: ${API_URL:-http://localhost:8080}
       APP_URL: ${APP_URL:-http://localhost:4200}
       NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
