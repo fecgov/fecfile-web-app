@@ -29,3 +29,5 @@ API_URL="$API_URL" \
 APP_URL="$APP_URL" \
 NGINX_CONF_PATH="$NGINX_CONF_PATH" \
 "$SCRIPT_DIR/render-nginx-local-config.sh"
+
+chmod -R a+w "$FRONTEND_DIR/.tmp"

@@ -6,10 +6,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The simplest way to run a local development server is to run `ng serve` or `npx -p @angular/cli ng serve`. You can then navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, use the direct `docker compose` workflow:
+Alternatively, to run the frontend through nginx using a production-like static build and CSP behavior, use `docker compose` via npm:
 
-- `docker compose up`
-- `docker compose --profile watch up`
+- `npm run compose:up`
+- `npm run compose:up:watch`
+- `npm run compose:down`
 
 For this setup:
 
