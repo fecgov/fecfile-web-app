@@ -12,6 +12,7 @@ Alternatively, to run the frontend through nginx using a production-like static 
 - `docker compose --profile watch up`
 
 For this setup:
+
 - In both cases the frontend is served on `localhost:4200`.
 - In watch mode, nginx still serves the app and proxies BrowserSync endpoints internally for live reload support.
 - The compose services run helper scripts in `scripts/` to build the frontend, render local nginx config, and trigger reload after successful rebuilds.
