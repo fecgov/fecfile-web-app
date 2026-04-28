@@ -55,19 +55,11 @@ describe('CalendarComponent', () => {
     expect(component.control()!.updateOn).toBe('blur');
   });
 
-  it('should toggle calendarOpened on validateDate', () => {
-    component.validateDate(true);
-    expect(component.calendarOpened).toBe(true);
-
-    component.validateDate(false);
-    expect(component.calendarOpened).toBe(false);
-  });
-
   it('should mark control as touched and update value on updateValue', () => {
     const dateString = '01/01/2020';
     const expectedDate = new Date(dateString);
     component.control()?.setValue(expectedDate);
-    component.validateDate(false);
+    component.validateDate();
 
     expect(component.control()!.touched).toBe(true);
     expect(component.control()!.value).toEqual(expectedDate);

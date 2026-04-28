@@ -21,7 +21,7 @@ export class DateUtils {
    * @param {Date} date
    * @returns {string} mm/dd/yyyy formatted date string
    */
-  public static convertDateToSlashFormat(date: Date | null | undefined): string {
+  public static convertDateToSlashFormat(date: Date | null | undefined | string): string {
     if (!(date instanceof Date)) {
       return '';
     }
@@ -42,12 +42,12 @@ export class DateUtils {
     const parts = dateStr.split('-');
     if (parts.length !== 3) return null;
 
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const day = parseInt(parts[2], 10);
+    const year = Number.parseInt(parts[0], 10);
+    const month = Number.parseInt(parts[1], 10) - 1;
+    const day = Number.parseInt(parts[2], 10);
 
     const date = new Date(year, month, day);
-    return isNaN(date.getTime()) ? null : date;
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 
   /**
@@ -70,6 +70,6 @@ export class DateUtils {
     if (!dateString) return null;
     const date = new Date(dateString);
     // Check if the date is valid
-    return isNaN(date.getTime()) ? null : date;
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 }

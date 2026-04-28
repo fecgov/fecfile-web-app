@@ -36,7 +36,7 @@ export class TransactionService {
     contact_1_id: string,
     action_date: Date | string,
   ): Observable<number | null> {
-    const date = action_date ? formatDate(action_date, 'yyyy-MM-dd', 'en-US') : '';
+    const date = this.getActionDateString(action_date);
 
     return this.fetchPreviousAggregate(
       transaction,
@@ -76,7 +76,7 @@ export class TransactionService {
     expenditure_date: Date | string,
     general_election_year: string | undefined,
   ): Observable<number | null> {
-    const date = expenditure_date ? formatDate(expenditure_date, 'yyyy-MM-dd', 'en-US') : '';
+    const date = this.getActionDateString(expenditure_date);
     const contact_2_id = contact2Id ?? '';
 
     return this.fetchPreviousAggregate(
@@ -159,19 +159,12 @@ export class TransactionService {
     return this.dateRegex.test(dateStr);
   }
 
-  private getActionDateString(
-    disbursement_date: string | Date | undefined,
-    dissemination_date: string | Date | undefined,
-  ): string {
+  private getActionDateString(date1: string | Date | undefined, date2?: string | Date | undefined): string {
     let actionDateString: string = '';
-    if (disbursement_date && (disbursement_date instanceof Date || this.isValidFormat(disbursement_date)))
-      actionDateString = disbursement_date ? formatDate(disbursement_date, 'yyyy-MM-dd', 'en-US') : '';
-    if (
-      actionDateString.length === 0 &&
-      dissemination_date &&
-      (dissemination_date instanceof Date || this.isValidFormat(dissemination_date))
-    ) {
-      actionDateString = dissemination_date ? formatDate(dissemination_date, 'yyyy-MM-dd', 'en-US') : '';
+    if (date1 && (date1 instanceof Date || this.isValidFormat(date1)))
+      actionDateString = date1 ? formatDate(date1, 'yyyy-MM-dd', 'en-US') : '';
+    if (actionDateString.length === 0 && date2 && (date2 instanceof Date || this.isValidFormat(date2))) {
+      actionDateString = date2 ? formatDate(date2, 'yyyy-MM-dd', 'en-US') : '';
     }
 
     return actionDateString;
