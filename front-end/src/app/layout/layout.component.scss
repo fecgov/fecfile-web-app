@@ -1,7 +1,7 @@
 $sidebar-width: 284px;
 
 #sidebar-container {
-  min-height: 100%;
+  height: calc(100% - var(--header-total));
   width: $sidebar-width;
   min-width: $sidebar-width;
   max-width: $sidebar-width;
@@ -11,6 +11,7 @@ $sidebar-width: 284px;
   position: fixed;
   top: var(--header-total);
   z-index: 999;
+  overflow-y: auto;
 }
 
 #page-container {
