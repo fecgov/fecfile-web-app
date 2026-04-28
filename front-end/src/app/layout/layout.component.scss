@@ -5,9 +5,7 @@ $sidebar-width: 284px;
   width: $sidebar-width;
   min-width: $sidebar-width;
   max-width: $sidebar-width;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-top: 64px;
+  padding: 64px 24px 32px 24px;
   position: fixed;
   top: var(--header-total);
   z-index: 999;
@@ -56,7 +54,7 @@ app-footer {
 .sidebar-content-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-total));
   width: 100%;
   padding-left: $sidebar-width;
   margin-top: var(--header-total);
