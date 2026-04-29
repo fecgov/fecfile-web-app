@@ -1,0 +1,112 @@
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Form24, Form3, Form3X, ReportTypes } from 'app/shared/models';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { SidebarComponent } from './sidebar.component';
+import { ReportService } from 'app/shared/services/report.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { collectRouteData } from 'app/shared/utils/route.utils';
+import { injectNavigationEnd } from 'ngxtension/navigation-end';
+import { ReportSidebarSection } from './menu-info';
+import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+
+@Component({
+  selector: 'app-report-sidebar',
+  standalone: true,
+  imports: [SidebarComponent, FecDatePipe, RenameF24DialogComponent],
+  template: `
+    <app-sidebar [items]="items()">
+      <div class="report-info">
+        <div class="report-type">{{ formLabel() }}</div>
+        @if (isAmmendable()) {
+          <div class="text-sm mb-2 pb-1">{{ version() }}</div>
+        }
+        <div class="sub-heading">{{ subHeading() }}</div>
+        @if (hasCoverage()) {
+          <div class="sub-heading">
+            {{ coverageFrom() | fecDate }} — <wbr />
+            {{ coverageThrough() | fecDate }}
+          </div>
+        }
+
+        @if (isF24()) {
+          <a class="rename-option" (click)="renameForm24()">RENAME</a>
+        }
+      </div>
+    </app-sidebar>
+
+    <app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />
+  `,
+  styles: `
+    .report-info {
+      margin-bottom: 64px;
+      font-family: var(--karla);
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    .report-info .report-type {
+      font-size: 36px;
+      font-family: var(--gandhi-bold);
+      line-height: 1;
+    }
+
+    .sub-heading {
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .rename-option {
+      border-bottom: 1px dotted white;
+    }
+  `,
+})
+export class ReportSidebarComponent {
+  private readonly navEnd = toSignal(injectNavigationEnd());
+  private readonly store = inject(Store);
+  private readonly reportService = inject(ReportService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly report = this.store.selectSignal(selectActiveReport);
+
+  readonly items = computed(() => {
+    this.navEnd();
+    const data = collectRouteData(this.route.snapshot);
+    if (!data) return [];
+    const sidebarState = data['sidebarSection'] as ReportSidebarSection;
+    const isEditable = this.reportService.isEditable(this.report());
+    return this.report().getMenuItems(sidebarState, isEditable);
+  });
+
+  readonly formLabel = computed(() => this.report().formLabel);
+  readonly subHeading = computed(() => this.report().report_code_label);
+  readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
+  readonly isAmmendable = computed(() =>
+    [ReportTypes.F3, ReportTypes.F3X, ReportTypes.F24].includes(this.report().report_type),
+  );
+  readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);
+  readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
+
+  readonly version = computed(() => this.report().version_label ?? 'Original');
+
+  readonly renameF24DialogVisible = signal(false);
+  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  form24ToUpdate?: Form24;
+
+  constructor() {
+    effect(() => {
+      if (!this.renameF24DialogVisible() && this.form24ToUpdate) {
+        this.form24ToUpdate = undefined;
+        this.reportService.setActiveReportById(this.report().id);
+      }
+    });
+  }
+
+  public renameForm24(): void {
+    this.form24ToUpdate = this.report() as Form24;
+    this.renameF24DialogVisible.set(true);
+  }
+}

@@ -85,9 +85,7 @@ ul {
   margin: 0;
   padding: 0;
 }
-ul ul {
-  margin-left: 2rem;
-}
+
 li p:last-child {
   margin-bottom: 0;
 }
@@ -136,7 +134,7 @@ textarea:focus {
 }
 input:not([type="checkbox"]):disabled,
 textarea:disabled {
-  background: #f1f1f1;
+  background: var(--surface-ground);
   color: var(--p-content-color);
 }
 

@@ -6,7 +6,7 @@
 
 .select-committee-box {
   display: flex;
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
   flex-direction: column;
   padding: 15px;
   border-radius: 5px;
@@ -17,7 +17,7 @@
 }
 .create-committee-card {
   border-radius: 5px;
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
   margin-top: 20px;
   font-size: large;
   display: flex;

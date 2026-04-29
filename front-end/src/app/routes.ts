@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { BackgroundStyles, LayoutComponent } from './layout/layout.component';
+import { BackgroundStyles, LayoutComponent, Sidebar } from './layout/layout.component';
 import { committeeGuard } from './shared/guards/committee.guard';
 import { nameGuard } from './shared/guards/name.guard';
 import { loggedInGuard } from './shared/guards/logged-in.guard';
@@ -43,7 +43,7 @@ export const ROUTES: Route[] = [
         path: 'reports',
         loadChildren: () => import('./reports/routes').then((mod) => mod.REPORTS_ROUTES),
         data: {
-          showSidebar: true,
+          sidebar: Sidebar.Report,
         },
         canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
       },

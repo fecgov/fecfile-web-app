@@ -25,7 +25,7 @@ export const F3X_ROUTES: Route[] = [
     component: CreateF3XStep1Component,
     runGuardsAndResolvers: 'always',
     data: {
-      showSidebar: false,
+      sidebar: null
     },
   },
   {

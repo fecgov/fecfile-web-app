@@ -36,7 +36,7 @@ hr {
 
 .p-panel .p-panel-header,
 .p-drawer {
-  background: #f1f1f1;
+  background: var(--surface-ground);
   color: #112e51;
 }
 
@@ -97,7 +97,7 @@ label.disabled {
 }
 
 .readonly {
-  background-color: #f1f1f1 !important;
+  background-color: var(--surface-ground) !important;
 }
 
 .flex-center {
@@ -125,7 +125,7 @@ label.disabled {
 }
 
 .gray {
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
 }
 
 .dark-gray {
@@ -149,7 +149,7 @@ label.disabled {
 }
 
 .fec-background-color {
-  background-color: #112e51;
+  background-color: var(--primary-color);
 }
 
 .radio-button-spacer {
@@ -925,4 +925,8 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.text-blue {
+  color: var(--primary-color);
 }
