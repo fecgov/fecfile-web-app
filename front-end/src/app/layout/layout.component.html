@@ -40,7 +40,7 @@
       id="content-offset"
       #contentOffset
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
-      [style.marginTop]="isCookiesDisabled() ? '164px' : '64px'"
+      [style.marginTop]="marginTop()"
     >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {
@@ -84,13 +84,10 @@
     [visible]="true"
     [noInput]="true"
   >
-    <div class="dialog-body">
-      FECfile+ is experiencing an issue. Previously saved work<br />
-      should not be affected. Please close all instances of<br />
-      FECfile+ in your browser and attempt to log back in via<br />
-      the login page.<br />
-      <br />
-      We apologize for the inconvenience.
-    </div>
+    <p class="font-karla mb-3">
+      FECfile+ is experiencing an issue. Previously saved work should not be affected. Please close all instances of
+      FECfile+ in your browser and attempt to log back in via the login page.
+    </p>
+    <p class="font-karla mb-0">We apologize for the inconvenience.</p>
   </app-dialog>
 }
