@@ -5,3 +5,5 @@ export const setCommitteeAccountDetailsAction = createAction(
   '[Committee Account] Account Retrieved',
   props<{ payload: CommitteeAccount }>(),
 );
+
+export const unsetCommitteeAccountDetailsAction = createAction('[Committee Account] Logout');
