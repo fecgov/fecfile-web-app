@@ -10,7 +10,6 @@ import { setServiceAvailableAction } from 'app/store/service-available.actions';
 import { DialogModule } from 'primeng/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
-import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 
 @Component({
