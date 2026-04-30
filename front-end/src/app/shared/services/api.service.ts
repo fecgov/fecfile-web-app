@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { catchError, firstValueFrom, of } from 'rxjs';
+import { catchError, firstValueFrom, Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
@@ -74,6 +74,31 @@ export class ApiService {
         withCredentials: true,
       }),
     );
+  }
+
+  public getObs<T>(
+    endpoint: string,
+    params: QueryParams = {},
+    allowedErrorCodes: number[] = [],
+  ): Observable<HttpResponse<T>> {
+    const headers = this.getHeaders();
+    return this.http
+      .get<T>(`${environment.apiUrl}${endpoint}`, {
+        headers,
+        params,
+        withCredentials: true,
+        observe: 'response',
+        responseType: 'json',
+        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (allowedErrorCodes.includes(error.status)) {
+            return of(error as unknown as HttpResponse<T>);
+          }
+          throw error;
+        }),
+      );
   }
 
   public getString(endpoint: string): Promise<string> {

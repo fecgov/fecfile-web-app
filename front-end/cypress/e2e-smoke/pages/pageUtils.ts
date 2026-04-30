@@ -112,6 +112,7 @@ export class PageUtils {
       .contains(day)
       .then(($day) => {
         cy.wrap($day.parent()).click();
+        cy.wait(10)
       });
   }
 
