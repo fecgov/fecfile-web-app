@@ -148,13 +148,20 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   private setOutOfDateRequirement(date: Date): void {
     this.coverageDate.set(date);
+
+    const input = document.getElementById(this.templateMap.date) as HTMLInputElement;
+    input.blur();
+    document.activeElement instanceof HTMLElement && document.activeElement.blur();
+
     this.memoControl.addValidators(Validators.requiredTrue);
     this.memoControl.markAsTouched();
     this.memoControl.markAsDirty();
     this.memoControl.updateValueAndValidity({ emitEvent: false });
     this.dateIsOutsideReport = true;
     if (!this.memoControl.value) {
-      this.outOfDateDialogVisible.set(true);
+      setTimeout(() => {
+        this.outOfDateDialogVisible.set(true);
+      });
     }
   }
 
