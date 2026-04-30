@@ -74,6 +74,12 @@ export class LayoutComponent implements AfterViewChecked {
     }
   });
 
+  readonly marginTop = computed(() => {
+    if (this.isCookiesDisabled()) return '164px';
+    else if (this.serviceAvailable() === false) return '107px';
+    return '64px';
+  });
+
   constructor() {
     if (this.useDynamicSidebar) {
       const mobileQuery = window.matchMedia('(max-width: 991.98px)');

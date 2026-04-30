@@ -19,7 +19,11 @@
       </div>
       <p-inputGroup class="search-group">
         <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
-        <p-button class="search-button" (click)="search(searchBoxFormControl.value)">
+        <p-button
+          class="search-button"
+          (click)="search(searchBoxFormControl.value)"
+          (keyup.enter)="search(searchBoxFormControl.value)"
+        >
           <ng-template pTemplate="iconTemplate">
             <img
               alt="Magnifying lens"
@@ -47,6 +51,7 @@
                 label="Create account"
                 styleClass="p-button-primary"
                 (click)="createAccount()"
+                (keyup.enter)="createAccount()"
                 icon="pi pi-angle-right"
                 iconPos="right"
               >
@@ -56,7 +61,7 @@
         }
         @if (unableToCreateAccount) {
           <div class="fec-card vertical-card">
-            <svg alt="Exclamation mark" width="94" height="95">
+            <svg alt="Exclamation mark" width="95" height="95" class="primary-icon">
               <use href="assets/img/exclamation.svg"></use>
             </svg>
             <div class="unable-verbiage">

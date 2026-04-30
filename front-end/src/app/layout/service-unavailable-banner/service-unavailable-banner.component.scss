@@ -1,7 +1,7 @@
 .banner {
   height: 43px;
   width: 100%;
-  background-color: #631010;
+  background-color: var(--warning);
   color: #ffffff;
   position: fixed;
   top: 110px;
@@ -13,9 +13,4 @@
   padding-bottom: 12px;
   padding-top: 12px;
   text-align: center;
-}
-
-.pi-exclamation-circle {
-  position: relative;
-  top: 1px;
 }

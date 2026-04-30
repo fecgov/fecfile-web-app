@@ -98,7 +98,7 @@
         @case (SubmissionStatesEnum.SUCCESS) {
           <div class="flex">
             <div class="success-verticle-bar"></div>
-            <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%" />
+            <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="22" width="22" />
             <div>
               <h2>Thanks for helping us improve FECfile+</h2>
               <p>This information has been reported.</p>
@@ -120,7 +120,9 @@
         @case (SubmissionStatesEnum.FAIL) {
           <div class="flex">
             <div class="fail-verticle-bar"></div>
-            <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%" />
+            <svg alt="Exclamation mark" width="22" height="22" class="mx-2 primary-icon">
+              <use href="assets/img/exclamation.svg"></use>
+            </svg>
             <div>
               <h2>Oops: Something went wrong.</h2>
               <p>We had trouble processing your feedback.</p>
