@@ -166,25 +166,37 @@
     <div class="grid">
       <div class="col-5">
         <div class="field">
-          <label [for]="estimatedValueId.id" [id]="estimatedValueId.label">ESTIMATED VALUE</label>
+          <label [for]="estimatedValueId.id" [id]="estimatedValueId.label"
+            >ESTIMATED <span class="block">VALUE</span></label
+          >
           <app-input-number [inputId]="estimatedValueId.id" formControlName="estimated_value" />
           <app-error-messages [form]="form" fieldName="estimated_value" [formSubmitted]="formSubmitted" />
         </div>
       </div>
       <div class="col-5">
-        <app-calendar
-          fieldName="depository_account_established_date"
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          label="DEPOSITORY ACCOUNT ESTABLISHED"
-        />
+        <div class="field">
+          <app-calendar
+            fieldName="depository_account_established_date"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            label="DEPOSITORY ACCOUNT ESTABLISHED"
+          />
+        </div>
       </div>
     </div>
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <span class="span-label" id="location_of_account">LOCATION OF ACCOUNT</span>
-          <span class="pi pi-info-circle circle-icon-tooltip" pTooltip="{{ locationOfAccountHelpText }}"></span>
+          <div class="flex align-items-center">
+            <span class="span-label" id="location_of_account">LOCATION OF ACCOUNT</span>
+            <img
+              alt="i info circle"
+              src="assets/img/i-info-circle.svg"
+              width="24px"
+              class="ml-2 mb-2"
+              pTooltip="{{ locationOfAccountHelpText }}"
+            />
+          </div>
           <app-transaction-contact-lookup
             aria-labelledby="location_of_account"
             contactProperty="contact_2"

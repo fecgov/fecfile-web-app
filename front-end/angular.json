@@ -181,7 +181,8 @@
                     },
                     "configurations": {
                         "local": {
-                            "buildTarget": "fecfile-web:build:local"
+                            "buildTarget": "fecfile-web:build:local",
+                            "proxyConfig": "proxy.local.json"
                         },
                         "development": {
                             "buildTarget": "fecfile-web:build:development"

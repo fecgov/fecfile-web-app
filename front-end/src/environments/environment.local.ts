@@ -20,4 +20,22 @@ export const environment = {
   showGlossary: true,
   webForms: 'https://webforms.stage.efo.fec.gov',
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
+  // run a dummy error reporting endpoint for local environment with:
+  // node -e "require('http').createServer((req,res)=>{let b='';req.on('data',d=>b+=d);req.on('end',()=>{console.log(req.method,req.url,b);res.writeHead(204);res.end();});}).listen(7777)"
+  errorReporting: {
+    enabled: true,
+    endpoint: '/frontend-error-report',
+    sampleRates: {
+      runtime: 1,
+      promise: 1,
+      http4xx: 1,
+      http5xx: 1,
+    },
+    dedupeWindowMs: 30000,
+    batchSize: 10,
+    flushIntervalMs: 5000,
+    maxMessageLength: 500,
+    maxStackLength: 2000,
+    maxPayloadBytes: 12000,
+  },
 };

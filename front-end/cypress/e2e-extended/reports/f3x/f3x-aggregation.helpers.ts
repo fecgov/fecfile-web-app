@@ -648,7 +648,7 @@ export class F3XAggregationHelpers {
   static clickSave(): void {
     cy.get('body').then(($body) => {
       if ($body.find('.p-datepicker-panel:visible').length > 0) {
-        cy.get('body').type('{esc}');
+        cy.get('body').click(0, 0);
       }
     }).blurActiveField();
     PageUtils.clickButton('Save', 'app-navigation-control-bar:visible');
