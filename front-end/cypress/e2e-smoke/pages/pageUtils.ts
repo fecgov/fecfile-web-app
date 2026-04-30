@@ -124,14 +124,13 @@ export class PageUtils {
   static pickYear(year: number) {
     const currentCalendarYear: number = new Date().getFullYear();
 
-    cy.get('@calendarElement').find('.p-datepicker-select-year').should('be.visible').click({ force: true });
+    cy.get('@calendarElement').find('.fec-datepicker-select-year').should('be.visible').click({ force: true });
     cy.wait(100);
     cy.get('@calendarElement').then(($calendarElement) => {
-      if ($calendarElement.find('.p-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement').find('.p-datepicker-select-year').click({ force: true });
+      if ($calendarElement.find('.fec-datepicker-select-year:visible').length > 0) {
+        cy.get('@calendarElement').find('.fec-datepicker-select-year').click({ force: true });
       }
     });
-    cy.get('@calendarElement').find('.p-datepicker-decade').should('be.visible');
 
     const decadeStart: number = currentCalendarYear - (currentCalendarYear % 10);
     const decadeEnd: number = decadeStart + 9;
@@ -340,7 +339,7 @@ export class PageUtils {
       .get('body')
       .then(($body) => {
         if ($body.find('.p-datepicker-panel:visible').length > 0) {
-          cy.get('body').type('{esc}');
+          cy.get('body').click(0, 0);
         }
       })
       .blurActiveField()

@@ -242,6 +242,9 @@ p-datepicker.ng-dirty.ng-invalid > .p-datepicker > .p-inputtext {
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
   margin-right: 0.5rem;
 }
+.p-datepicker-header {
+  display: none;
+}
 .p-datepicker table {
   font-size: 1rem;
   margin: 0.5rem 0;
@@ -530,6 +533,11 @@ p-checkbox {
   outline-offset: 0;
   box-shadow: var(--focus-ring);
   border-color: var(--p-primary-color);
+}
+
+.p-checkbox-input {
+  padding: 0;
+  height: 100%;
 }
 
 .p-checkbox-checked:not(.p-disabled):has(.p-checkbox-input:hover) .p-checkbox-box {
@@ -6351,4 +6359,8 @@ td {
 .p-tieredmenu-item-content:hover {
   background-color: var(--surface-hover);
   color: var(--p-content-color);
+}
+
+.surface-ground {
+  background-color: var(--surface-ground) !important;
 }

@@ -10,19 +10,25 @@
     <hr type="solid" />
     <ng-content select="[dialog-footer]"></ng-content>
     @if (!hasCustomFooter()) {
-      <div class="flex justify-content-between">
-        <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
-        <button
-          type="submit"
-          data-cy="membership-submit"
-          pButton
-          pRipple
-          [label]="submitLabel()"
-          [disabled]="submitDisabled()"
-          class="p-button-primary submit-button"
-          (click)="confirm.emit()"
-        ></button>
-      </div>
+      @if (closeOnly()) {
+        <div class="flex justify-content-center">
+          <button type="button" pButton pRipple label="Close" class="p-button-primary" (click)="close()"></button>
+        </div>
+      } @else {
+        <div class="flex justify-content-between">
+          <button type="button" pButton pRipple label="Cancel" class="p-button-secondary" (click)="close()"></button>
+          <button
+            type="submit"
+            data-cy="membership-submit"
+            pButton
+            pRipple
+            [label]="submitLabel()"
+            [disabled]="submitDisabled()"
+            class="p-button-primary submit-button"
+            (click)="confirm.emit()"
+          ></button>
+        </div>
+      }
     }
   </div>
 </dialog>

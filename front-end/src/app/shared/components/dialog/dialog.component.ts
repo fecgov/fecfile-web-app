@@ -12,6 +12,7 @@ export class DialogComponent {
   readonly visible = model.required<boolean>();
   readonly title = input.required<string>();
   readonly submitLabel = input('Save');
+  readonly closeOnly = input(false);
   readonly confirm = output<void>();
   readonly reject = output<void>();
 
