@@ -9,28 +9,42 @@
   <div class="col-6">
     <div class="select-committee-box">
       <h2>Select a committee account</h2>
-      @if (activeCommittees().length === 0) {
-        <div class="fec-card vertical-card">
-          <svg alt="Magnifying lens" width="95" height="95">
-            <use href="assets/img/magnifying_lens.svg"></use>
-          </svg>
-          <span class="font-karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
+      @if (isLoading()) {
+        <div class="flex bg-white shadow-1 mx-1 my-3 py-5">
+          <img
+            class="max-w-full fec-loader-image"
+            src="assets/img/fec-loading-flag.gif"
+            draggable="false"
+            height="72.66"
+            width="80"
+            alt="The available committees are loading..."
+          />
         </div>
-      } @else if (activeCommittees().length) {
-        <div class="committee-list">
-          @for (committee of activeCommittees(); track committee) {
-            <div id="{{ committee.id }}" class="fec-card" (click)="activateCommittee(committee)">
-              <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
-              <div class="committee-info">
-                <h3>
-                  <span>{{ committee.name }}</span>
-                </h3>
-                <span class="h5">{{ committee.committee_id }}</span>
+      } @else {
+        @if (activeCommittees().length === 0) {
+          <div class="fec-card vertical-card">
+            <svg alt="Magnifying lens" width="95" height="95">
+              <use href="assets/img/magnifying_lens.svg"></use>
+            </svg>
+            <span class="font-karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
+          </div>
+        } @else if (activeCommittees().length) {
+          <div class="committee-list">
+            @for (committee of activeCommittees(); track committee) {
+              <div id="{{ committee.id }}" class="fec-card" (click)="activateCommittee(committee)">
+                <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
+                <div class="committee-info">
+                  <h3>
+                    <span>{{ committee.name }}</span>
+                  </h3>
+                  <span class="h5">{{ committee.committee_id }}</span>
+                </div>
               </div>
-            </div>
-          }
-        </div>
+            }
+          </div>
+        }
       }
+
       <span class="h5">LOOKING FOR AN EXISTING FECFILE+ COMMITTEE ACCOUNT?</span>
       Contact the administrator for that committee.
     </div>
@@ -58,7 +72,7 @@
                     <h3 class="committee-name">{{ committee.name ?? 'test' }}</h3>
                     <h4 class="committee-id">{{ committee.committee_id }}</h4>
                     <span class="disabled-message">
-                      This committee is diabled.
+                      This committee is disabled.
                       <a
                         href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
                         target="_blank"

@@ -3,9 +3,8 @@
   <p-datepicker
     #datepicker
     appendTo="body"
-    (onFocus)="calendarOpened = true"
-    (onClose)="validateDate(false)"
-    (onBlur)="validateDate(calendarOpened)"
+    (onClose)="validateDate()"
+    (onBlur)="validateDate()"
     [inputId]="fieldName()"
     [name]="fieldName()"
     [formControl]="control()!"
@@ -54,7 +53,7 @@
           @if (datepicker.currentView !== 'year') {
             <button
               type="button"
-              class="outlined-button"
+              class="outlined-button fec-datepicker-select-year"
               (click)="datepicker.switchToYearView($event)"
               (keydown)="datepicker.onContainerButtonKeydown($event)"
               [attr.disabled]="datepicker.switchViewButtonDisabled() ? '' : undefined"
