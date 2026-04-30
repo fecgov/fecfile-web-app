@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, inject, OnInit, signal } from '@angular/core';
+import { AfterViewChecked, Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
 import { CookieService } from 'ngx-cookie-service';
@@ -30,21 +30,23 @@ export class LoginComponent extends DestroyerComponent implements OnInit, AfterV
   protected loginDialogVisible = signal(false);
   readonly whoCanUseLink = environment.whoCanUseLink;
 
+  constructor() {
+    super();
+
+    effect(() => {
+      const available = this.serviceAvailable();
+      if (available === false) {
+        this.loginDialogVisible.set(true);
+      }
+    });
+  }
+
   ngOnInit() {
     this.cookieService.deleteAll();
     this.store.dispatch(userLoginDataDiscardedAction());
     this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
 
     window.addEventListener('resize', this.updateScrollbarWidth);
-
-    this.store
-      .select(selectServiceAvailable)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((available) => {
-        if (available === false) {
-          this.loginDialogVisible.update(() => true);
-        }
-      });
   }
 
   ngAfterViewChecked() {

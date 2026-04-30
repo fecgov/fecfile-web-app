@@ -5,7 +5,7 @@
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
-  @if (layoutControls().showServiceUnavailableBanner && serviceAvailable() !== true) {
+  @if (layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
     <app-service-unavailable-banner />
   }
 
@@ -76,7 +76,7 @@
   <button (click)="toggleSidebar()">Toggle Sidebar</button>
 }
 
-@if (router.url !== '/login' && serviceAvailable() === false) {
+@if (!layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() === false) {
   <app-dialog
     aria-labelledby="dialog-title"
     title="We've detected a problem"

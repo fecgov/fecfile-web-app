@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, AfterViewChecked, inject, viewChild, computed, signal, DestroyRef } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderComponent } from './header/header.component';
@@ -49,7 +49,6 @@ export class LayoutComponent implements AfterViewChecked {
   readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
-  protected readonly router = inject(Router);
 
   readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
   private readonly navEnd = toSignal(injectNavigationEnd());
@@ -115,7 +114,7 @@ class LayoutControls {
   showUpperFooter = true;
   showHeader = true;
   showSidebar = false;
-  showServiceUnavailableBanner = false;
+  useServiceUnavailableLoginBanner = false;
   headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
   showFeedbackButton = true;
@@ -131,7 +130,8 @@ class LayoutControls {
       this.showSidebar = data['showSidebar'] ?? this.showSidebar;
       this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
       this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
-      this.showServiceUnavailableBanner = data['showServiceUnavailableBanner'] ?? this.showServiceUnavailableBanner;
+      this.useServiceUnavailableLoginBanner =
+        data['showServiceUnavailableBanner'] ?? this.useServiceUnavailableLoginBanner;
     }
   }
 }
