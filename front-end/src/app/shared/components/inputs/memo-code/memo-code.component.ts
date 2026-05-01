@@ -95,7 +95,8 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       distinctUntilChanged((prev, curr) => {
         const prevDate = prev.activeDate;
         const currDate = curr.activeDate;
-        if (prevDate instanceof Date && currDate instanceof Date) return prevDate.getTime() === currDate.getTime();
+        if (prevDate instanceof Date && currDate instanceof Date)
+          return prevDate?.getTime?.() === currDate?.getTime?.();
         return false;
       }),
     );
@@ -148,6 +149,14 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   private setOutOfDateRequirement(date: Date): void {
     this.coverageDate.set(date);
+
+    const input = document.getElementById(this.templateMap.date) as HTMLInputElement;
+    input.blur();
+
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
     this.memoControl.addValidators(Validators.requiredTrue);
     this.memoControl.markAsTouched();
     this.memoControl.markAsDirty();
