@@ -96,10 +96,6 @@ export class LayoutComponent implements AfterViewChecked {
   ngAfterViewChecked(): void {
     this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
   }
-
-  toggleSidebar() {
-    this.layoutService.showSidebar.update((v) => !v);
-  }
 }
 
 class LayoutControls {

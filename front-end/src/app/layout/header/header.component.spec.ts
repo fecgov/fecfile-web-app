@@ -7,6 +7,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { Component, viewChild } from '@angular/core';
+import { USE_DYNAMIC_SIDEBAR } from '../layout.service';
 
 @Component({
   imports: [HeaderComponent],
@@ -29,6 +30,7 @@ describe('HeaderComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
+        { provide: USE_DYNAMIC_SIDEBAR, useValue: true },
       ],
     }).compileComponents();
   });
