@@ -35,13 +35,14 @@ if [[ "$MODE" == "prepare" ]]; then
 fi
 
 if [[ "$LIKE_PROD" == "1" ]]; then
+  echo "LIKE_PROD=1 is set. Modifying angular.json for production-like settings..."
   if [[ ! -f "$ANGULAR_CONFIG_PATH" ]]; then
     echo "Angular config not found at $ANGULAR_CONFIG_PATH" >&2
     exit 1
   fi
 
   ANGULAR_CONFIG_BACKUP="$(mktemp "$FRONTEND_DIR/.tmp/angular.json.backup.XXXXXX")"
-  cp "$ANGULAR_CONFIG_PATH" "$ANGULAR_CONFIG_BACKUP"
+  cp -p "$ANGULAR_CONFIG_PATH" "$ANGULAR_CONFIG_BACKUP"
 
   perl -0pi -e 's|("with":\s*"src/environments/environment\.local\.ts"\s*\n\s*}\s*\n\s*],\s*\n)\s*"optimization":\s*true,\s*\n\s*"extractLicenses":\s*false,\s*\n\s*"sourceMap":\s*true,\s*\n\s*"namedChunks":\s*true|$1                            "outputHashing": "all",\n                            "optimization": true|s' "$ANGULAR_CONFIG_PATH"
 
