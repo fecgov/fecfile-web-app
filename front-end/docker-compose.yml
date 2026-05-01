@@ -60,9 +60,6 @@ services:
     command: >
       bash -lc "npx -y chokidar-cli
       'src/**/*'
-      'angular.json'
-      'tsconfig.app.json'
-      'tsconfig.json'
       -i 'dist/**'
       -i 'node_modules/**'
       -c './scripts/compose-build-render.sh rebuild'"
