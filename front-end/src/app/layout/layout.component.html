@@ -7,13 +7,24 @@
   }
 
   <!--  Begin Sidebar section -->
-  @if (layoutControls().showSidebar && layoutService.showSidebar()) {
+  @if (layoutControls().sidebar && layoutService.showSidebar()) {
     <div class="inline-flex w-100">
-      <div class="fec-background-color flex-shrink-1" id="sidebar-container">
-        <app-drawer />
+      <div
+        [class]="layoutControls().sidebar === Sidebar.Security ? 'gray' : 'fec-background-color'"
+        class="flex-shrink-1"
+        id="sidebar-container"
+      >
+        @switch (layoutControls().sidebar) {
+          @case (Sidebar.Report) {
+            <app-report-sidebar />
+          }
+          @case (Sidebar.Security) {
+            <app-security-notice-sidebar />
+          }
+        }
       </div>
       <div class="sidebar-content-container">
-        <div class="main-content">
+        <div class="main-content standard-container">
           @if (layoutControls().showCommitteeBanner) {
             <app-committee-banner />
           }
@@ -37,14 +48,14 @@
       id="content-offset"
       #contentOffset
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
-      [style.marginTop]="isCookiesDisabled() ? '164px' : '64px'"
+      [style.paddingTop]="isCookiesDisabled() ? '164px' : '64px'"
     >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner />
         }
         @if (isDefault()) {
-          <div class="container">
+          <div class="container standard-container">
             <router-outlet></router-outlet>
           </div>
         } @else {
@@ -69,6 +80,3 @@
 
   <app-feedback-overlay />
 </div>
-@if (useDynamicSidebar) {
-  <button (click)="toggleSidebar()">Toggle Sidebar</button>
-}

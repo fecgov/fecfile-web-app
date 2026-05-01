@@ -1,0 +1,22 @@
+<div class="karla text-white text-right mb-7 line-height-3">
+  <div class="text-36 gandhi-bold line-height-1">{{ formLabel() }}</div>
+  @if (isAmmendable()) {
+    <div class="text-sm mb-2 pb-1">{{ version() }}</div>
+  }
+  <div class="text-sm uppercase">{{ subHeading() }}</div>
+  @if (hasCoverage()) {
+    <div class="text-sm uppercase">
+      {{ coverageFrom() | fecDate }} — <wbr />
+      {{ coverageThrough() | fecDate }}
+    </div>
+  }
+
+  @if (isF24()) {
+    <a class="border-none border-bottom-1 border-dotted border-white" (click)="renameForm24()">RENAME</a>
+  }
+</div>
+<p-panelMenu [model]="items()" [multiple]="false" [pt]="{ headerLabel: ['karla'] }">
+  <ng-template #headericon></ng-template>
+</p-panelMenu>
+
+<app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />

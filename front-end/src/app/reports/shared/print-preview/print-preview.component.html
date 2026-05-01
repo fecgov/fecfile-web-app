@@ -21,7 +21,7 @@
           <div class="flex flex-column">
             <span class="body-header">
               Would you like to compile a print preview?
-              <span class="font-karla">(OPTIONAL)</span>
+              <span class="karla">(OPTIONAL)</span>
             </span>
             <span class="body-text">
               Review your in-progress report by creating a PDF print preview. This could take a few moments, depending
@@ -48,8 +48,7 @@
           <div>
             <button pButton pRipple label="Download PDF" class="p-button-info m" (click)="downloadPDF()"></button>
             <div class="inner-body-text">
-              <span class="font-karla-bold">Last created:&nbsp;</span
-              ><span class="font-karla">{{ formattedDate() }}</span>
+              <span class="karla-bold">Last created:&nbsp;</span><span class="karla">{{ formattedDate() }}</span>
             </div>
           </div>
           <div>
@@ -62,7 +61,7 @@
               (click)="submitPrintJob()"
             ></button>
             <div class="inner-body-text">
-              <span class="font-karla">Made changes to your report? To review recent changes, create a new PDF. </span>
+              <span class="karla">Made changes to your report? To review recent changes, create a new PDF. </span>
             </div>
           </div>
         }

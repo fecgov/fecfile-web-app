@@ -21,7 +21,7 @@ export const F99_ROUTES: Route[] = [
     title: 'Create a report',
     component: MainFormComponent,
     data: {
-      showSidebar: false,
+      sidebar: null,
     },
   },
   {

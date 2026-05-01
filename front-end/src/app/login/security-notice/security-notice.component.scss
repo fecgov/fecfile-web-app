@@ -115,3 +115,12 @@ h3 {
     width: 668px;
   }
 }
+
+[id]::before {
+  content: '';
+  display: block;
+  height: 150px;
+  margin-top: -150px;
+  visibility: hidden;
+  pointer-events: none;
+}
