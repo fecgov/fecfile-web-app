@@ -5,5 +5,5 @@
   (confirm)="confirmOption()"
   (close)="cancelOption()"
 >
-  <p>{{ message() }}</p>
+  <p [innerHTML]="message()"></p>
 </app-dialog>
