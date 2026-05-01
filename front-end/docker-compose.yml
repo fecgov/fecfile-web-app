@@ -2,11 +2,12 @@ services:
   frontend-prepare:
     image: node:22
     working_dir: /workspace/front-end
-    command: bash -lc "./scripts/compose-prepare.sh"
+    command: bash -lc "./scripts/compose-build-render.sh prepare"
     environment:
       BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
       PORT: ${PORT:-4200}
       WATCH: ${WATCH:-0}
+      LIKE_PROD: ${LIKE_PROD:-0}
       API_URL: ${API_URL:-http://localhost:8080}
       APP_URL: ${APP_URL:-http://localhost:4200}
       NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
@@ -64,12 +65,13 @@ services:
       'tsconfig.json'
       -i 'dist/**'
       -i 'node_modules/**'
-      -c './scripts/compose-rebuild-reload.sh'"
+      -c './scripts/compose-build-render.sh rebuild'"
     depends_on:
       - browser-sync
     environment:
       BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
       PORT: ${PORT:-4200}
+      LIKE_PROD: ${LIKE_PROD:-0}
       API_URL: ${API_URL:-http://localhost:8080}
       APP_URL: ${APP_URL:-http://localhost:4200}
       NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
