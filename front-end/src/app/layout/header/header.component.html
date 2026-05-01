@@ -1,6 +1,18 @@
 <nav class="w-full flex justify-content-between align-items-center py-0" aria-label="Navigation Bar">
   <div class="navbar-brand pb-0">
-    <img ngSrc="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" height="48" width="227" />
+    @if (useDynamicSidebar) {
+      <img
+        ngSrc="assets/img/seal-and-title.svg"
+        class="seal-and-title mr-2"
+        alt="FEC Seal"
+        height="48"
+        width="227"
+        (click)="toggleSidebar()"
+        (keydown.enter)="toggleSidebar()"
+      />
+    } @else {
+      <img ngSrc="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" height="48" width="227" />
+    }
   </div>
 
   <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo01">
