@@ -2,7 +2,6 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Form24, Form3, Form3X, ReportTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { SidebarComponent } from './sidebar.component';
 import { ReportService } from 'app/shared/services/report.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -11,59 +10,13 @@ import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { ReportSidebarSection } from './menu-info';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-report-sidebar',
   standalone: true,
-  imports: [SidebarComponent, FecDatePipe, RenameF24DialogComponent],
-  template: `
-    <app-sidebar [items]="items()">
-      <div class="report-info">
-        <div class="report-type">{{ formLabel() }}</div>
-        @if (isAmmendable()) {
-          <div class="text-sm mb-2 pb-1">{{ version() }}</div>
-        }
-        <div class="sub-heading">{{ subHeading() }}</div>
-        @if (hasCoverage()) {
-          <div class="sub-heading">
-            {{ coverageFrom() | fecDate }} — <wbr />
-            {{ coverageThrough() | fecDate }}
-          </div>
-        }
-
-        @if (isF24()) {
-          <a class="rename-option" (click)="renameForm24()">RENAME</a>
-        }
-      </div>
-    </app-sidebar>
-
-    <app-rename-f24-dialog [(dialogVisible)]="renameF24DialogVisible" [f24Report]="this.form24ToUpdate" />
-  `,
-  styles: `
-    .report-info {
-      margin-bottom: 64px;
-      font-family: var(--karla);
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
-      text-align: right;
-    }
-
-    .report-info .report-type {
-      font-size: 36px;
-      font-family: var(--gandhi-bold);
-      line-height: 1;
-    }
-
-    .sub-heading {
-      font-size: 14px;
-      text-transform: uppercase;
-    }
-
-    .rename-option {
-      border-bottom: 1px dotted white;
-    }
-  `,
+  imports: [FecDatePipe, RenameF24DialogComponent, PanelMenu],
+  templateUrl: 'report-sidebar.component.html',
 })
 export class ReportSidebarComponent {
   private readonly navEnd = toSignal(injectNavigationEnd());

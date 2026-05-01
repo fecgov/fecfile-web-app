@@ -15,7 +15,7 @@ export const REPORTS_ROUTES: Route[] = [
     component: ReportListComponent,
     pathMatch: 'full',
     data: {
-      sidebar: null
+      sidebar: null,
     },
   },
   {

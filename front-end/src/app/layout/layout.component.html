@@ -14,10 +14,13 @@
         class="flex-shrink-1"
         id="sidebar-container"
       >
-        @if (layoutControls().sidebar === Sidebar.Report) {
-          <app-report-sidebar />
-        } @else if (layoutControls().sidebar === Sidebar.Security) {
-          <app-security-notice-sidebar />
+        @switch (layoutControls().sidebar) {
+          @case (Sidebar.Report) {
+            <app-report-sidebar />
+          }
+          @case (Sidebar.Security) {
+            <app-security-notice-sidebar />
+          }
         }
       </div>
       <div class="sidebar-content-container">

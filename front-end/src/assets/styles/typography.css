@@ -197,6 +197,15 @@ body {
   }
 }
 /* TYPOGRAHY */
-.ghandi {
+.gandhi {
   font-family: var(--gandhi)
+}
+.gandhi-bold {
+  font-family: var(--gandhi-bold)
+}
+.karla {
+  font-family: var(--karla);
+}
+.karla-bold {
+  font-family: var(--karla-bold);
 }

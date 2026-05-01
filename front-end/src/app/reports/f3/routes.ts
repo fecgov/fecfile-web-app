@@ -25,7 +25,7 @@ export const F3_ROUTES: Route[] = [
     component: CreateF3Step1Component,
     runGuardsAndResolvers: 'always',
     data: {
-      sidebar: null
+      sidebar: null,
     },
   },
   {

@@ -136,18 +136,6 @@ label.disabled {
   color: #aeb0b5;
 }
 
-.font-karla {
-  font-family: var(--karla);
-}
-
-.font-karla-bold {
-  font-family: var(--karla-bold);
-}
-
-.font-gandhi {
-  font-family: var(--gandhi);
-}
-
 .fec-background-color {
   background-color: var(--primary-color);
 }
@@ -929,4 +917,18 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 
 .text-blue {
   color: var(--primary-color);
+}
+
+.text-36 {
+  font-size: 36px;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.hover\:bg-transparent {
+  &:hover {
+    background-color: transparent !important;
+  }
 }

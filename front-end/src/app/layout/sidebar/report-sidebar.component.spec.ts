@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { SidebarComponent } from './sidebar.component';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { provideHttpClient } from '@angular/common/http';
@@ -10,15 +9,16 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { REPORTS_ROUTES } from 'app/reports/routes';
 import { ReportSidebarSection } from './menu-info';
 import { MessageService } from 'primeng/api';
+import { ReportSidebarComponent } from './report-sidebar.component';
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('ReportSidebarComponent', () => {
+  let component: ReportSidebarComponent;
+  let fixture: ComponentFixture<ReportSidebarComponent>;
   let route: ActivatedRoute;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenuModule, PanelMenuModule, SidebarComponent],
+      imports: [MenuModule, PanelMenuModule, ReportSidebarComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -31,7 +31,7 @@ describe('SidebarComponent', () => {
 
   beforeEach(() => {
     route = TestBed.inject(ActivatedRoute);
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(ReportSidebarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

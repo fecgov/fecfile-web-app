@@ -26,7 +26,7 @@
             <svg alt="Magnifying lens" width="95" height="95">
               <use href="assets/img/magnifying_lens.svg"></use>
             </svg>
-            <span class="font-karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
+            <span class="karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
           </div>
         } @else if (activeCommittees().length) {
           <div class="committee-list">
@@ -50,7 +50,7 @@
     </div>
     @if (hasDisabledCommittees()) {
       <div class="disabled-committee-header" [class]="disabledShown() ? 'header-expanded' : ''">
-        <span class="font-karla-bold text-base">Disabled committees associated with your account</span>
+        <span class="karla-bold text-base">Disabled committees associated with your account</span>
         <div
           [class]="disabledShown() ? 'minus-icon-mask' : 'plus-icon-mask'"
           class="bg-primary"
@@ -90,11 +90,11 @@
       </div>
     }
 
-    <div class="create-committee-card font-karla-bold" routerLink="/login/create-committee">
+    <div class="create-committee-card karla-bold" routerLink="/login/create-committee">
       <div class="blue-box">
         <img class="plus" src="assets/img/Plus-Circle.svg" alt="Create a new committee" height="60px" width="60px" />
       </div>
-      <div class="font-karla-bold create-text">create a new committee account</div>
+      <div class="karla-bold create-text">create a new committee account</div>
     </div>
   </div>
 </div>
