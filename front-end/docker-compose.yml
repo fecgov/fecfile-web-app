@@ -1,0 +1,77 @@
+services:
+  frontend-prepare:
+    image: node:22
+    working_dir: /workspace/front-end
+    command: bash -lc "./scripts/compose-build-render.sh prepare"
+    environment:
+      BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
+      PORT: ${PORT:-4200}
+      WATCH: ${WATCH:-0}
+      LIKE_PROD: ${LIKE_PROD:-0}
+      API_URL: ${API_URL:-http://localhost:8080}
+      APP_URL: ${APP_URL:-http://localhost:4200}
+      NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
+    volumes:
+      - ..:/workspace
+
+  frontend-nginx:
+    image: nginx:alpine
+    depends_on:
+      frontend-prepare:
+        condition: service_completed_successfully
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-If_using_test_db_use_secret_key_in_cloud.gov}
+      FEC_API: ${FEC_API:-https://api.open.fec.gov/v1/}
+      FEC_API_KEY: ${FEC_API_KEY:-DEMO_KEY}
+      CYPRESS_COMMITTEE_ID: ${CYPRESS_COMMITTEE_ID:-C99999999}
+      CYPRESS_PASSWORD: ${CYPRESS_PASSWORD:-test}
+    ports:
+      - "${PORT:-4200}:${PORT:-4200}"
+    volumes:
+      - ./dist/fecfile-web:/usr/share/nginx/html/fecfile-web:ro
+      - ./.tmp/nginx.local.generated.conf:/etc/nginx/nginx.conf:ro
+
+  browser-sync:
+    image: node:22
+    profiles: ["watch"]
+    working_dir: /workspace/front-end
+    command: >
+      bash -lc "npx -y browser-sync start
+      --proxy http://frontend-nginx:${PORT:-4200}
+      --port 3000
+      --files /workspace/front-end/.tmp/browser-sync.reload
+      --ws
+      --no-open
+      --no-ui
+      --no-snippet"
+    depends_on:
+      - frontend-nginx
+    environment:
+      NODE_OPTIONS: --insecure-http-parser
+    ports:
+      - "3001:3001"
+    volumes:
+      - ..:/workspace
+
+  frontend-watcher:
+    image: node:22
+    profiles: ["watch"]
+    working_dir: /workspace/front-end
+    command: >
+      bash -lc "npx -y chokidar-cli
+      'src/**/*'
+      -i 'dist/**'
+      -i 'node_modules/**'
+      -c './scripts/compose-build-render.sh rebuild'"
+    depends_on:
+      - browser-sync
+    environment:
+      BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
+      PORT: ${PORT:-4200}
+      LIKE_PROD: ${LIKE_PROD:-0}
+      API_URL: ${API_URL:-http://localhost:8080}
+      APP_URL: ${APP_URL:-http://localhost:4200}
+      NGINX_CONF_PATH: /workspace/front-end/.tmp/nginx.local.generated.conf
+      SHELL: /bin/bash
+    volumes:
+      - ..:/workspace
