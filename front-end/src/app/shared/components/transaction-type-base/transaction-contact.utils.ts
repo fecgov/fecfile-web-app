@@ -65,7 +65,7 @@ export class TransactionContactUtils {
       if (!value) {
         return `<li>Removed ${ContactFields[property as keyof typeof ContactFields].toLowerCase()}</li>`;
       }
-      return `<li>Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to ${value}</li>`;
+      return `<li>Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to <b>${value}</b></li>`;
     });
     const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
     return (
