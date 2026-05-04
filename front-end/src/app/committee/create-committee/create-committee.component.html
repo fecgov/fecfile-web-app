@@ -12,7 +12,7 @@
     <div class="right-side-box">
       <h2 class="m-0">Find your committee</h2>
       <div class="search-label">
-        <label for="search-input" class="font-karla-bold mr-1 line-height-1">COMMITTEE ID</label>
+        <label for="search-input" class="karla-bold mr-1 line-height-1">COMMITTEE ID</label>
         <button class="rounded-image-button" (click)="explanationVisible.set(true)" aria-label="explanation">
           <img alt="question mark" src="assets/img/i-question-circle.svg" />
         </button>
@@ -34,7 +34,7 @@
           </ng-template>
         </p-button>
       </p-inputGroup>
-      <p class="font-italic font-karla mt-1">Examples: C00431445, C00343509</p>
+      <p class="font-italic karla mt-1">Examples: C00431445, C00343509</p>
     </div>
     @if (showResult()) {
       <div class="right-side-box">
@@ -56,7 +56,7 @@
               <img alt="Document with magnifying lens" src="assets/img/document-with-lens.svg" />
               <div class="committee-info">
                 <h3>{{ selectedCommittee()!.name }}</h3>
-                <span class="h5 font-karla-bold mb-0">{{ selectedCommittee()!.committee_id }}</span>
+                <span class="h5 karla-bold mb-0">{{ selectedCommittee()!.committee_id }}</span>
                 <p-button
                   class="create-button"
                   label="Create account"

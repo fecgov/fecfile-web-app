@@ -79,7 +79,7 @@ app-dialog p {
 }
 .right-side-box {
   display: flex;
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
   flex-direction: column;
   padding: 15px 25px;
   border-radius: 5px;
