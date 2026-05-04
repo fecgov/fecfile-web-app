@@ -16,7 +16,7 @@
         <app-drawer />
       </div>
       <div class="sidebar-content-container">
-        <div class="main-content">
+        <div class="main-content standard-container">
           @if (layoutControls().showCommitteeBanner) {
             <app-committee-banner />
           }
@@ -47,7 +47,7 @@
           <app-committee-banner />
         }
         @if (isDefault()) {
-          <div class="container">
+          <div class="container standard-container">
             <router-outlet></router-outlet>
           </div>
         } @else {
@@ -72,9 +72,6 @@
 
   <app-feedback-overlay />
 </div>
-@if (useDynamicSidebar) {
-  <button (click)="toggleSidebar()">Toggle Sidebar</button>
-}
 
 @if (!layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
   <app-dialog

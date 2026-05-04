@@ -159,6 +159,10 @@
 
   --p-tieredmenu-item-color: var(--p-content-color);
   --p-tieredmenu-separator-border-color: #212121b3; // 70% opacity of #212121
+
+  --header-height: 80px;
+  --header-top: 30px;
+  --header-total: calc(var(--header-height) + var(--header-top));
 }
 
 $breakpoints: (
@@ -168,3 +172,4 @@ $breakpoints: (
   'xl': 1200px,
   'xxl': 1400px,
 );
+
