@@ -54,9 +54,11 @@ function loginDotGovLogin() {
   cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
+  cy.intercept('GET', 'http://localhost:8080/devops/status/').as('GetStatus');
 
   cy.visit('/');
   cy.get('#loginButton').click();
+  cy.wait('@GetStatus');
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
   cy.get('#security-consent-annual').click();

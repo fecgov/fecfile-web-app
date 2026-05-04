@@ -926,3 +926,15 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   align-items: center;
   gap: 10px;
 }
+
+.primary-icon {
+  color: var(--primary-color);
+}
+
+.warning-icon {
+  color: var(--warning);
+}
+
+.inverted-warning-icon {
+  --icon-symbol: var(--warning);
+}

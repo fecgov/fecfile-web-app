@@ -1,17 +1,17 @@
 <div class="login-page container">
   <div class="text-center top-section">
     @if (disableLogin) {
-      <h1 class="login-box-header header-comming-soon">Coming Soon&nbsp;</h1>
+      <h1 class="login-box-header header-coming-soon">Coming Soon&nbsp;</h1>
     }
     <div class="mb-3">
       <h1 class="login-box-header header-filers">Made for filers.&nbsp;</h1>
       <h1 class="login-box-header header-productivity">Built to work anywhere.</h1>
     </div>
-    <p>
+    <p class="font-gandhi text-center mb-5 text-lg">
       FECfile+ is free web-based software filers can use for electronic filing. You and your team can create, review and
       submit your reports from anywhere.
     </p>
-    <p>
+    <p class="font-gandhi text-center mb-5 text-lg">
       FECfile+ is designed for a limited group of committees as we roll out initial support. Committees not currently
       supported will experience significant challenges and should use the original FECFile desktop platform or a third
       party service to meet reporting obligations.
@@ -42,3 +42,15 @@
     />
   </div>
 </div>
+
+<app-dialog
+  aria-labelledby="dialog-title"
+  title="We've detected a problem"
+  [showTitleWarning]="true"
+  [(visible)]="loginDialogVisible"
+  [closeOnly]="true"
+  (reject)="dialogClose()"
+>
+  <p class="font-karla mb-3">Fecfile+ is experiencing an issue. Please wait a moment and try to log in again.</p>
+  <p class="font-karla mb-0">We apologize for the inconvenience.</p>
+</app-dialog>

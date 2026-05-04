@@ -49,8 +49,7 @@ export class CalendarComponent {
     const control = this.control();
 
     if (control) {
-      const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
-      const currentValue = inputElement?.value;
+      const currentValue = this.datePicker().el.nativeElement.children[0].value;
 
       if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
         control.setValue(null);
