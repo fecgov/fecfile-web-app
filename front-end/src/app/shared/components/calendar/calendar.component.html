@@ -3,6 +3,7 @@
   <p-datepicker
     #datepicker
     appendTo="body"
+    (onClose)="validateDate()"
     (onBlur)="validateDate()"
     [showOnFocus]="false"
     [inputId]="fieldName()"
