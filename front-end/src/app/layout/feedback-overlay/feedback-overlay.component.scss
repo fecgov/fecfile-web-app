@@ -16,26 +16,6 @@
   color: black;
 }
 
-.anchor {
-  bottom: 0;
-  height: 95vh;
-  right: 532px;
-  z-index: 1104;
-  position: fixed;
-}
-
-.feedback-close-button {
-  text-align: right;
-}
-
-.feedback-close-button > button {
-  border: 0;
-}
-
-.feedback-close-button > button > img {
-  width: 30px;
-}
-
 .solid-line {
   border-bottom: 1px solid black;
   color: transparent;
@@ -43,46 +23,78 @@
   vertical-align: 4px;
 }
 
-:host ::ng-deep {
-  p,
-  span,
-  a {
-    font-size: 14px;
-  }
-
-  label {
-    font-weight: bold;
-  }
-
-  span {
-    font-weight: normal;
-  }
-
-  .p-popover .p-popover-close {
-    right: 0.5rem;
-    top: 2rem;
-    background: transparent;
-    transform: scale(1.5);
-    border: 0;
-  }
-
-  .p-popover .p-popover-close:hover {
-    background: transparent;
-  }
-
-  .p-popover .p-popover-close:focus {
+.popover-close {
+  background-color: transparent;
+  height: 30px;
+  position: absolute;
+  right: 32px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+  border-radius: 50%;
+  color: var(--primary-color);
+  &:focus {
     box-shadow: var(--focus-ring);
-  }
-
-  .p-popover {
-    background: #f1f1f1;
-  }
-
-  .p-popover .p-popover-content {
-    padding-top: 1rem;
-  }
-
-  .p-popover .p-popover-content * {
-    font-family: var(--karla);
+    outline: none;
   }
 }
+
+#popover-container {
+  padding: 32px;
+  background-color: var(--surface-ground);
+}
+#feedback-aside {
+  width: 500px;
+  margin-bottom: 42px;
+  margin-right: 32px;
+  padding: 0;
+  max-height: calc(98vh - 42px);
+  max-width: calc(98vw - 32px);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+}
+
+h3,
+p,
+span {
+  margin: 0;
+  font-family: var(--karla);
+}
+
+p,
+span {
+  font-size: 14px;
+}
+
+.field {
+  margin-bottom: 4px;
+}
+
+.feedback-button {
+  position: fixed;
+  bottom: 0;
+  right: 32px;
+  z-index: 1103;
+  color: black;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.feedback-button:enabled:hover {
+  color: black;
+}
+
+textarea {
+  min-height: 99px;
+}
+
+// .exclamation-svg {
+//   /* Set these on the SVG tag itself */
+//   --icon-bg: #aeb0b5;
+//   --icon-symbol: #ffffff;
+
+//   width: 30px;
+//   height: 30px;
+//   vertical-align: middle;
+//   display: inline-block;
+// }
