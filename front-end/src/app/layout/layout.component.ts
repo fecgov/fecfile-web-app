@@ -14,6 +14,11 @@ import { HeaderStyles } from './header/header-styles';
 import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
 import { ReportSidebarComponent } from './sidebar/report-sidebar.component';
 import { SecurityNoticeSidebarComponent } from './sidebar/security-notice-sidebar.component';
+import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
+import { Store } from '@ngrx/store';
+import { selectServiceAvailable } from 'app/store/service-available.selectors';
+import { DialogModule } from 'primeng/dialog';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -41,11 +46,15 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
     FooterComponent,
     ButtonDirective,
     FeedbackOverlayComponent,
+    ServiceUnavailableBannerComponent,
+    DialogModule,
+    DialogComponent,
   ],
 })
 export class LayoutComponent implements AfterViewChecked {
   Sidebar = Sidebar;
   readonly layoutService = inject(LayoutService);
+  private readonly store = inject(Store);
   readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
@@ -54,6 +63,7 @@ export class LayoutComponent implements AfterViewChecked {
   private readonly navEnd = toSignal(injectNavigationEnd());
 
   readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
+  readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
   readonly layoutControls = computed(() => {
     this.navEnd();
@@ -70,6 +80,12 @@ export class LayoutComponent implements AfterViewChecked {
     } else {
       return '64px';
     }
+  });
+
+  readonly marginTop = computed(() => {
+    if (this.isCookiesDisabled()) return '164px';
+    else if (this.serviceAvailable() === false) return '107px';
+    return '64px';
   });
 
   constructor() {
@@ -103,6 +119,7 @@ class LayoutControls {
   showUpperFooter = true;
   showHeader = true;
   sidebar: Sidebar | null = null;
+  useServiceUnavailableLoginBanner = false;
   headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
   showFeedbackButton = true;
@@ -118,6 +135,8 @@ class LayoutControls {
       this.sidebar = data['sidebar'] ?? this.sidebar;
       this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
       this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
+      this.useServiceUnavailableLoginBanner =
+        data['showServiceUnavailableBanner'] ?? this.useServiceUnavailableLoginBanner;
     }
   }
 }

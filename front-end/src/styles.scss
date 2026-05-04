@@ -932,3 +932,15 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
     background-color: transparent !important;
   }
 }
+
+.primary-icon {
+  color: var(--primary-color);
+}
+
+.warning-icon {
+  color: var(--warning);
+}
+
+.inverted-warning-icon {
+  --icon-symbol: var(--warning);
+}

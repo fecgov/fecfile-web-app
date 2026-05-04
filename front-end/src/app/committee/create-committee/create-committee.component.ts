@@ -5,7 +5,10 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
+import {
+  setCommitteeAccountDetailsAction,
+  unsetCommitteeAccountDetailsAction,
+} from 'app/store/committee-account.actions';
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -37,6 +40,10 @@ export class CreateCommitteeComponent {
   readonly showResult = computed(() => !!this.selectedCommittee() || this.unableToCreateAccount() || this.loading());
 
   searchBoxFormControl = new SubscriptionFormControl('');
+
+  constructor() {
+    this.store.dispatch(unsetCommitteeAccountDetailsAction());
+  }
 
   search(committeeId: string | null) {
     this.selectedCommittee.set(undefined);
