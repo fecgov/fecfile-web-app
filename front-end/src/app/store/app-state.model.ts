@@ -9,4 +9,5 @@ export interface AppState {
   userLoginData: UserLoginData;
   activeReport: Report | undefined;
   navigationEvent: NavigationEvent | undefined;
+  serviceAvailable: boolean | undefined;
 }

@@ -8,6 +8,10 @@ import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { Popover } from 'primeng/popover';
 import { HeaderStyles } from '../header-styles';
+import { setServiceAvailableAction } from 'app/store/service-available.actions';
+import { HttpResponse } from '@angular/common/http';
+import { ApiService } from 'app/shared/services/api.service';
+import { selectServiceAvailable } from 'app/store/service-available.selectors';
 
 @Component({
   standalone: true,
@@ -19,18 +23,27 @@ import { HeaderStyles } from '../header-styles';
 export class HeaderLinksComponent {
   private readonly router = inject(Router);
   readonly loginService = inject(LoginService);
+  readonly apiService = inject(ApiService);
   readonly store = inject(Store);
   readonly loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   readonly disableLogin = environment.disableLogin;
   readonly headerStyle = input(HeaderStyles.DEFAULT);
+  readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
   headerStyles = HeaderStyles;
 
   role?: Roles;
 
-  navigateToLoginDotGov() {
-    if (this.loginDotGovAuthUrl) {
-      window.location.href = this.loginDotGovAuthUrl;
+  async navigateToLoginDotGov() {
+    const available = this.serviceAvailable();
+    if (available === false) {
+      this.store.dispatch(setServiceAvailableAction({ payload: undefined }));
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response: HttpResponse<any> = await this.apiService.get_from_base_uri('/devops/status/');
+    if (response.status) {
+      this.store.dispatch(setServiceAvailableAction({ payload: true }));
+      globalThis.location.href = this.loginDotGovAuthUrl ?? '';
     }
   }
 
