@@ -56,13 +56,16 @@ describe('CalendarComponent', () => {
   });
 
   it('should mark control as touched and update value on updateValue', () => {
-    const dateString = '01/01/2020';
-    const expectedDate = new Date(dateString);
-    component.control()?.setValue(expectedDate);
+    const control = component.control()!;
+    control.setValue(new Date('01/01/2019'));
+
+    const inputElement = component.datePicker().el.nativeElement.children[0];
+    inputElement.value = '01/01/2020';
+
     component.validateDate();
 
     expect(component.control()!.touched).toBe(true);
-    expect(component.control()!.value).toEqual(expectedDate);
+    expect(component.control()!.value).toEqual(new Date('01/01/2020'));
   });
 
   it('should increment the year and update the view when delta is 1', () => {
