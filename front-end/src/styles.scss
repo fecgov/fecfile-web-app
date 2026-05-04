@@ -736,7 +736,6 @@ textarea {
 
   select {
     width: var(--app-select-width, 100%);
-    padding-right: 32px;
     &:has(+ .select-clear-button) {
       padding-right: 50px;
     }
@@ -747,7 +746,7 @@ select {
   min-width: var(--app-select-width, 75px);
   background-color: var(--surface-ground);
   height: var(--app-select-height, 48px);
-  padding: var(--app-select-padding, 8px 10px);
+  padding: 0 0 0 10px;
   line-height: 1.2;
   transition: 0.4s;
   border: var(--app-select-border, 2px solid gray);
@@ -760,7 +759,7 @@ select {
   background-position: right 12px center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 16px;
+  font-size: 14px;
 
   &:not(:disabled) {
     cursor: pointer;
@@ -791,7 +790,6 @@ select {
   select {
     appearance: base-select;
     background-image: none;
-    padding: var(--app-select-padding, 8px 10px);
 
     &::picker-icon {
       content: '';
