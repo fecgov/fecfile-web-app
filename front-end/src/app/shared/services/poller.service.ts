@@ -21,7 +21,7 @@ export class PollerService {
     try {
       const fetchedPage = await firstValueFrom(this.http.get(deploymentUrl, { responseType: 'text' }));
       const loadedText = fetchedPage as string;
-      const mainScriptRegex = /<script\s+src="(main\.[^"]+\.js)"\s+type="module"><\/script>/gim;
+      const mainScriptRegex = /<script[^>]*\bsrc="(main[-.][^"]+\.js)"[^>]*\btype="module"[^>]*><\/script>/im;
       const matchResponses = mainScriptRegex.exec(loadedText);
       const remoteMainScript = matchResponses && matchResponses.length > 0 ? matchResponses[1] : undefined;
 
