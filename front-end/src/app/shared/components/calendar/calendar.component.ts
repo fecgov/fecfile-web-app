@@ -22,7 +22,6 @@ export class CalendarComponent {
   readonly requiredErrorMessage = input('This is a required field.');
   readonly datePicker = viewChild.required(DatePicker);
   readonly invalidFormatMessage = input('This date does not follow the correct format, e.g. 01/01/2020');
-  private suppressValidation = false;
 
   readonly control = computed(() => {
     const field = this.fieldName();
@@ -47,14 +46,10 @@ export class CalendarComponent {
   }
 
   validateDate() {
-    if (this.suppressValidation) return;
-    this.suppressValidation = true;
-
     const control = this.control();
 
     if (control) {
-      const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
-      const currentValue = inputElement?.value;
+      const currentValue = this.datePicker().el.nativeElement.children[0].value;
 
       if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
         control.setValue(null);
@@ -68,10 +63,6 @@ export class CalendarComponent {
       control.markAsTouched();
       control.updateValueAndValidity();
     }
-
-    setTimeout(() => {
-      this.suppressValidation = false;
-    });
   }
 
   onYearChange(event: Event, delta: -1 | 1) {
