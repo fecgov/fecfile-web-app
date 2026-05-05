@@ -24,12 +24,12 @@ export class FeedbackOverlayComponent extends FormComponent {
   public readonly feedbackService = inject(FeedbackService);
 
   private readonly container = viewChild.required<ElementRef<HTMLDivElement>>('container');
-  private readonly aside = viewChild.required<ElementRef>('aside');
+  readonly aside = viewChild.required<ElementRef>('aside');
   minHeight: number | undefined;
 
   @HostListener('document:keydown.escape')
   onKeydownHandler() {
-    const aside = document.getElementById('feedback-aside');
+    const aside = this.aside().nativeElement;
     if (aside?.matches(':popover-open')) {
       aside.hidePopover();
     }

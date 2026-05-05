@@ -36,7 +36,9 @@
       class="p-button-secondary icon-gap"
       (click)="router.navigateByUrl('/reports/transactions/report/' + report().id + '/list')"
     >
-      <span class="prev-arrow-mask"></span>
+      <svg pButtonIcon alt="Previous Arrow" width="8" height="8" class="rotate-180">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
       <span>Transactions in this report</span>
     </button>
     <button
@@ -46,7 +48,9 @@
       (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report().id)"
     >
       <span>Review detailed summary page</span>
-      <span class="next-arrow-mask"></span>
+      <svg pButtonIcon alt="Next Arrow" width="8" height="8">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
     </button>
   </div>
 </div>

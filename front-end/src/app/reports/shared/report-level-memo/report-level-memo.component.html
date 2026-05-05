@@ -23,7 +23,9 @@
         class="p-button-secondary previous-button"
         (click)="router.navigateByUrl('/reports/f3x/web-print/' + activeReport().id)"
       >
-        <img pButtonIcon alt="Previous Arrow" src="assets/img/prev_arrow.svg" height="14px" />
+        <svg pButtonIcon alt="Previous Arrow" width="8" height="8" class="rotate-180">
+          <use href="assets/img/arrow.svg#arrow"></use>
+        </svg>
         <span pButtonLabel>See print preview</span>
       </button>
       <button

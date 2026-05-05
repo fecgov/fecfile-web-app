@@ -1,23 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg">
-  <symbol id="exclamation-icon" viewBox="0 0 100 100">
-    <circle 
-      cx="50" 
-      cy="50" 
-      r="50" 
-      fill="var(--icon-bg, currentColor)" />
-    
-    <path 
-      fill="var(--icon-symbol, #fff)" 
-      d="M39,25 
-         Q50,15 61,25 
-         L53,58 
-         Q50,62 47,58 
-         Z" />
-    
-    <circle 
-      cx="50" 
-      cy="76" 
-      r="8" 
-      fill="var(--icon-symbol, #fff)" />
-  </symbol>
+<svg xmlns="http://www.w3.org/2000/svg" id="exclamation-icon" viewBox="0 0 100 100">
+  <circle fill="currentColor" cx="50" cy="50" r="50" />
+  <text
+    x="50"
+    y="50"
+    dy=".35em"
+    text-anchor="middle"
+    font-size="70"
+    font-weight="700"
+    font-family="Times New Roman"
+    fill="var(--icon-symbol, #fff)">!</text>
 </svg>

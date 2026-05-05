@@ -1,11 +1,7 @@
-@switch (sortOrder) {
-  @case (0) {
-    <img alt="default sort icon" src="/assets/img/sort_default_icon.svg" />
+<svg class="primary-icon" [class]="sortOrder === -1 ? 'rotate-180' : ''" width="10" height="13">
+  @if (sortOrder === 0) {
+    <use href="/assets/img/sort_default_icon.svg#default-sort-icon"></use>
+  } @else {
+    <use href="/assets/img/sort_icon.svg#sort-icon"></use>
   }
-  @case (1) {
-    <img alt="ascending sort icon" src="/assets/img/sort_asc_icon.svg" />
-  }
-  @case (-1) {
-    <img alt="descending sort icon" src="/assets/img/sort_desc_icon.svg" />
-  }
-}
+</svg>
