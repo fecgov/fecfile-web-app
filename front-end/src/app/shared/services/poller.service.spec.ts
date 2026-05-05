@@ -64,6 +64,26 @@ describe('PollerService', () => {
     });
   });
 
+  it('should detect new version when script tag includes nonce and dashed main filename', () => {
+    const mockHtmlResponse =
+      '<script src="main-HNSF5G6R.js" type="module" nonce="4291914bf6c68c9cea8164bd46b00c15"></script>';
+
+    vi.spyOn(document, 'getElementsByTagName').mockReturnValue([
+      {
+        src: 'http://localhost/main-OLDHASH.js',
+      },
+    ] as unknown as HTMLCollectionOf<Element>);
+
+    service.compareVersions('test-url');
+
+    const req = httpMock.expectOne('test-url');
+    req.flush(mockHtmlResponse, { status: 200, statusText: 'OK' });
+
+    service.isNewVersionAvailable$.subscribe((isAvailable) => {
+      expect(isAvailable).toBe(true);
+    });
+  });
+
   it('should handle error in version check', async () => {
     service.compareVersions('test-url');
 
