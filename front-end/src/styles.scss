@@ -796,13 +796,14 @@ select {
       justify-content: space-between;
       width: 100%;
       position: relative;
+      font-size: 14px;
 
       selectedcontent {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         font-family: var(--karla);
-        font-size: 1rem;
+
         font-weight: 400;
         color: var(--p-select-selectedcontent-color);
         padding: var(--p-select-selectedcontent-padding);
@@ -812,7 +813,7 @@ select {
 
   option {
     font-family: var(--karla);
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: 400;
     color: var(--p-select-option-color);
     padding: 8px 12px;
