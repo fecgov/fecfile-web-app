@@ -2813,6 +2813,9 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   background: transparent;
   border: none;
 }
+.p-menu-item,.p-menu-item-link {
+  height: 36px;
+}
 .p-menu-item-link {
   color: var(--primary-color);
   font-size: 16px;
@@ -2823,6 +2826,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
 }
 .p-menu-item-content:hover,
 .p-menu-item.p-focus .p-menu-item-content {
+  
   background: transparent;
   color: var(--primary-color);
 }
