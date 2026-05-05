@@ -73,19 +73,16 @@ export class LayoutComponent implements AfterViewChecked {
   isCookiesDisabled = signal(false);
 
   readonly topPadding = computed(() => {
-    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) {
-      return '0px';
-    } else if (this.isCookiesDisabled()) {
-      return '165px';
-    } else {
-      return '64px';
-    }
+    if (this.isCookiesDisabled()) return '165px';
+    else if (this.serviceAvailable() === false) return '107px';
+    else return '64px';
   });
 
-  readonly marginTop = computed(() => {
-    if (this.isCookiesDisabled()) return '164px';
+  readonly footerTopPadding = computed(() => {
+    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) return '0px';
+    else if (this.isCookiesDisabled()) return '165px';
     else if (this.serviceAvailable() === false) return '107px';
-    return '64px';
+    else return '64px';
   });
 
   constructor() {
