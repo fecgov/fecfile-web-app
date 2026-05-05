@@ -819,7 +819,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
 
 .p-inputtext {
   font-family: var(--karla);
-  font-size: 1rem;
+  font-size: var(--input-font-size);
   color: var(--p-content-color);
   background: var(--p-content-background);
   padding: 10px 15px;
@@ -830,7 +830,6 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
     box-shadow 0.15s;
   appearance: none;
   border-radius: var(--border-radius);
-  height: 3em;
 }
 
 .p-inputtext:enabled:hover {
@@ -854,7 +853,6 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   padding: 0.625rem 0.9375rem;
 }
 .dialog-body .p-inputtext {
-  height: 36px;
   padding: 10px 10px;
 }
 
@@ -3142,7 +3140,6 @@ mark {
   border-radius: 0;
   color: #212121;
   font-family: var(--karla);
-  font-size: 16px;
   width: 342px;
 }
 
@@ -3192,13 +3189,13 @@ mark {
 
 input {
   font-family: var(--karla);
-  font-size: 1rem;
+  font-size: var(--input-font-size);
   font-weight: normal;
   color: var(--p-content-color);
 }
 
 .dialog-body input {
-  font-size: 14px;
+ --input-font-size: 14px; 
 }
 
 .btn-close {

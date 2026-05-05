@@ -358,7 +358,7 @@ label.disabled {
 }
 
 .p-select {
-  height: 48px;
+  height: var(--input-height);
 }
 
 .dialog-label {
@@ -580,7 +580,6 @@ legend {
 
 textarea {
   font-family: var(--karla);
-  font-size: 1rem;
   font-weight: 400;
   resize: none;
 }
@@ -733,9 +732,8 @@ textarea {
 select {
   min-width: var(--app-select-width, 75px);
   background-color: var(--surface-ground);
-  height: var(--app-select-height, 48px);
+  height: var(--input-height);
   padding: 0 0 0 10px;
-  line-height: 1.2;
   transition: 0.4s;
   border: var(--app-select-border, 2px solid gray);
   display: flex;
@@ -747,7 +745,8 @@ select {
   background-position: right 12px center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 14px;
+  font-size: var(--input-font-size);
+  line-height: 1.2;
 
   &:not(:disabled) {
     cursor: pointer;
@@ -796,7 +795,7 @@ select {
       justify-content: space-between;
       width: 100%;
       position: relative;
-      font-size: 14px;
+      font-size: var(--input-font-size);
 
       selectedcontent {
         white-space: nowrap;
@@ -813,10 +812,12 @@ select {
 
   option {
     font-family: var(--karla);
-    font-size: 14px;
+    font-size: var(--input-font-size);
+    line-height: 1.2;
     font-weight: 400;
     color: var(--p-select-option-color);
     padding: 8px 12px;
+    height: var(--input-height);
 
     &:hover {
       background-color: var(--p-select-option-focus-background);
