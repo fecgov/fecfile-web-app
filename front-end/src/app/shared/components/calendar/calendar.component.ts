@@ -56,12 +56,14 @@ export class CalendarComponent {
       } else {
         const date = new Date(currentValue);
         if (date instanceof Date && !Number.isNaN(date.getTime())) {
-          control.setValue(date);
+          const isDifferentDate = !(control.value instanceof Date) || control.value.getTime() !== date.getTime();
+          if (isDifferentDate) {
+            control.setValue(date);
+            control.markAsTouched();
+            control.updateValueAndValidity();
+          }
         }
       }
-
-      control.markAsTouched();
-      control.updateValueAndValidity();
     }
   }
 
