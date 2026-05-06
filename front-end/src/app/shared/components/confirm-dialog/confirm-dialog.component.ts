@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { DialogComponent } from '../dialog/dialog.component';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -10,16 +10,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './confirm-dialog.component.scss',
 })
 export class ConfirmDialogComponent {
+  private readonly confirmationService = inject(ConfirmationService);
+  readonly visible = signal(false);
+  readonly confirmation = toSignal(this.confirmationService.requireConfirmation$);
   readonly header = computed(() => this.confirmation()?.header ?? 'Are you sure?');
-
-  readonly key = input<string>();
-
-  visible = signal(false);
-
-  private confirmationService = inject(ConfirmationService);
-
-  private readonly _confirmation = toSignal(this.confirmationService.requireConfirmation$);
-  readonly confirmation = computed(() => (this._confirmation()?.key === this.key() ? this._confirmation() : undefined));
   readonly message = computed(() => this.confirmation()?.message);
 
   constructor() {

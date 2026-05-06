@@ -65,7 +65,7 @@ export class TransactionContactUtils {
       if (!value) {
         return `<li>Removed ${ContactFields[property as keyof typeof ContactFields].toLowerCase()}</li>`;
       }
-      return `<li>Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to ${value}</li>`;
+      return `<li>Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to <strong>${value}</strong></li>`;
     });
     const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
     return (
@@ -74,14 +74,9 @@ export class TransactionContactUtils {
     );
   }
 
-  static displayConfirmationPopup(
-    message: string,
-    confirmationService: ConfirmationService,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
-  ): Promise<boolean> {
+  static displayConfirmationPopup(message: string, confirmationService: ConfirmationService): Promise<boolean> {
     return new Promise((resolve) => {
       confirmationService.confirm({
-        key: targetDialog,
         header: 'Confirm',
         icon: 'pi pi-info-circle',
         message: message,
