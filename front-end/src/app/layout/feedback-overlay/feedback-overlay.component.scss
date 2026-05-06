@@ -26,9 +26,10 @@
 .popover-close {
   background-color: transparent;
   height: 30px;
+  width: 30px;
   position: absolute;
   right: 32px;
-  padding: 0;
+  padding: 5px;
   border: 0;
   cursor: pointer;
   transition: box-shadow 0.15s;
