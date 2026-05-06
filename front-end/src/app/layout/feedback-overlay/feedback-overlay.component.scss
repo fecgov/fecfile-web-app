@@ -46,10 +46,10 @@
 }
 #feedback-aside {
   width: 500px;
-  margin-bottom: 42px;
+  margin-bottom: 0;
   margin-right: 32px;
   padding: 0;
-  max-height: calc(98vh - 42px);
+  max-height: 98vh;
   max-width: calc(98vw - 32px);
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: var(--border-radius);
