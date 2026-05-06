@@ -150,7 +150,7 @@ import { Component } from '@angular/core';
       The FEC's failure to exercise or enforce any right or provision of this Agreement shall not constitute waiver of
       such right or provision.
     </p>
-    <h2 id="aup">3. Acceptable use policy</h2>
+    <h2 id="aup">Acceptable use policy</h2>
     <p>
       This acceptable use policy sets out a list of acceptable and unacceptable conduct for using FECfile+ and related
       services in addition to the restrictions imposed by the terms of service. If we believe a violation of the policy
@@ -194,12 +194,12 @@ import { Component } from '@angular/core';
       <li>send altered, deceptive or false source-identifying information, including "spoofing" or "phishing"; or</li>
       <li>authorize, permit, enable, induce or encourage any third party to do any of the above.</li>
     </ul>
-    <h2 id="sur">4. Sale or use restriction</h2>
+    <h2 id="sur">Sale or use restriction</h2>
     <p>
       Sale or use of publicly disclosed campaign finance information is restricted. 52 U.S.C. §30111(a)(4) and 11 C.F.R.
       §104.15
     </p>
-    <h2 id="pdu">5. Privacy and data use</h2>
+    <h2 id="pdu">Privacy and data use</h2>
     <p>Information collected through the software is governed by the FEC’s privacy and security policy.</p>
     <p>If you use FECfile+, we collect the following information:</p>
     <ul>
@@ -220,7 +220,7 @@ import { Component } from '@angular/core';
       Data submitted on campaign finance reports and statements are subject to public disclosure, 52 U.S.C.
       §30104(a)(11)(B). Reports and statements may be viewed on the FEC’s website.
     </p>
-    <h2 id="consent">6. Consent</h2>
+    <h2 id="consent">Consent</h2>
     <p>
       This is a U.S. Federal Government system that is for official use only. Unauthorized use is strictly prohibited.
     </p>
