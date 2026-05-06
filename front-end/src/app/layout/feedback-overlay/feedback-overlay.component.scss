@@ -54,6 +54,27 @@
   max-width: calc(98vw - 32px);
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: var(--border-radius);
+
+  transition:
+    display 0.4s allow-discrete,
+    overlay 0.4s allow-discrete,
+    transform 0.4s ease-in-out,
+    opacity 0.4s ease-in-out;
+
+  opacity: 0;
+  transform: translateY(100%);
+
+  &:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
 }
 
 h3,
