@@ -10,7 +10,7 @@ label {
 }
 
 #report-selector {
-  height: 36px;
+  height: var(--input-height);
   font-size: 14px;
   appearance: none;
   background-image: url(assets/img/dropdown_arrow.svg);
