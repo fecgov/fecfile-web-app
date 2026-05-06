@@ -10,14 +10,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './confirm-dialog.component.scss',
 })
 export class ConfirmDialogComponent {
+  private readonly confirmationService = inject(ConfirmationService);
+  readonly visible = signal(false);
+  readonly confirmation = toSignal(this.confirmationService.requireConfirmation$);
   readonly header = computed(() => this.confirmation()?.header ?? 'Are you sure?');
-
-  visible = signal(false);
-
-  private confirmationService = inject(ConfirmationService);
-
-  private readonly _confirmation = toSignal(this.confirmationService.requireConfirmation$);
-  readonly confirmation = this._confirmation;
   readonly message = computed(() => this.confirmation()?.message);
 
   constructor() {

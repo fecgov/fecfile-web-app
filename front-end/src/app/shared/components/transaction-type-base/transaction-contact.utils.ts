@@ -74,14 +74,9 @@ export class TransactionContactUtils {
     );
   }
 
-  static displayConfirmationPopup(
-    message: string,
-    confirmationService: ConfirmationService,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
-  ): Promise<boolean> {
+  static displayConfirmationPopup(message: string, confirmationService: ConfirmationService): Promise<boolean> {
     return new Promise((resolve) => {
       confirmationService.confirm({
-        key: targetDialog,
         header: 'Confirm',
         icon: 'pi pi-info-circle',
         message: message,

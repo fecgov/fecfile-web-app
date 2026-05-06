@@ -236,7 +236,6 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction.transactionType?.contactConfig ?? {},
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
-      'childDialog',
       this.childTransaction,
     );
   }
