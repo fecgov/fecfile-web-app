@@ -17,6 +17,7 @@
   (onSort)="updateSort($event)"
   stripedRows
   showGridlines
+  [pt]="{ root: 'standard-container' }"
 >
   <ng-template pTemplate="caption">
     @if (caption()) {
@@ -87,12 +88,7 @@
       <div class="paginator-container">
         <div class="responsive-container">
           <span class="paginator-text">Results per page:</span>
-          <p-select
-            [options]="paginationPageSizeOptions"
-            [(ngModel)]="rowsPerPage"
-            class="custom-paginator-dropdown"
-            appendTo="body"
-          >
+          <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" appendTo="body">
             <ng-template pTemplate="dropdownicon">
               <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
             </ng-template>

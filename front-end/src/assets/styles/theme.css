@@ -526,6 +526,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 .p-select {
   border-radius: var(--border-radius);
   align-items: center;
+  font-size: var(--input-font-size);
 }
 .p-select:not(.p-disabled) {
   background: var(--p-content-background);
@@ -550,6 +551,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 .p-select-label {
   padding-right: 0;
   padding-left: 10px;
+  font-size: var(--input-font-size)
 }
 
 .p-select .p-select-label {
@@ -832,9 +834,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-radius: var(--border-radius);
 }
 
-.p-inputtext:enabled:hover {
-  border-color: var(--surface-border);
-}
+
 .p-inputtext:enabled:focus {
   outline: 0 none;
   outline-offset: 0;
@@ -1308,13 +1308,11 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 .p-selectbutton > p-togglebutton {
   width: fit-content;
   text-wrap-mode: nowrap;
+  font-size: var(--input-font-size);
+  height: var(--input-height);
 }
 
-.p-selectbutton > p-togglebutton > button {
-  width: 100%;
-  height: 40px;
-  font-size: 14px;
-}
+
 
 .p-selectbutton .p-button {
   background-color: #ffffff;
@@ -3184,14 +3182,8 @@ mark {
 }
 
 input {
-  font-family: var(--karla);
-  font-size: var(--input-font-size);
   font-weight: normal;
   color: var(--p-content-color);
-}
-
-.dialog-body input {
- --input-font-size: 14px; 
 }
 
 .btn-close {
