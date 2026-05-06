@@ -7,7 +7,6 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
-import { ButtonDirective } from 'primeng/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { HeaderStyles } from './header/header-styles';
@@ -44,7 +43,6 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
     CommitteeBannerComponent,
     RouterOutlet,
     FooterComponent,
-    ButtonDirective,
     FeedbackOverlayComponent,
     ServiceUnavailableBannerComponent,
     DialogModule,
