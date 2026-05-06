@@ -168,7 +168,7 @@ export class TransactionDetailPage {
     if (formData.due_date_setting) {
       PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.due_date_setting, alias);
       if (formData.due_date) {
-        PageUtils.calendarSetValue(`[data-cy="dueDateInput"] input`, formData.due_date, alias);
+        PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
       }
     }
 
