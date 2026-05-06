@@ -2732,19 +2732,15 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
 }
 
 .p-popover-close {
-  background: var(--p-primary-color);
-  color: #ffffff;
-  width: 2rem;
-  height: 2rem;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
   transition: box-shadow 0.15s;
   border-radius: 50%;
-  position: absolute;
-  top: -1rem;
-  right: -1rem;
-}
-.p-popover-close:enabled:hover {
-  background: #0069d9;
-  color: #ffffff;
+  color: var(--primary-color);
+  &:focus {
+    box-shadow: var(--focus-ring);
+  }
 }
 .p-popover:before,
 .p-popover:after {

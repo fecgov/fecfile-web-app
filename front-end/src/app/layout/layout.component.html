@@ -83,17 +83,8 @@
   <!-- End No Sidebar section -->
 
   @if (layoutControls().showFeedbackButton) {
-    <button
-      type="button"
-      pButton
-      pRipple
-      label="Feedback"
-      class="p-button-info feedback-button"
-      (click)="feedbackOverlay().show($event)"
-    ></button>
+    <app-feedback-overlay />
   }
-
-  <app-feedback-overlay />
 </div>
 
 @if (!layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
