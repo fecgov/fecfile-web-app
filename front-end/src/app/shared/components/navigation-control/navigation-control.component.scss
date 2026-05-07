@@ -12,14 +12,14 @@
 }
 
 :host ::ng-deep .navigation-dropdown-panel {
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
   color: #000000;
 }
 
 :host ::ng-deep .navigation-dropdown-group {
   margin: -0.75rem -1rem -2rem;
   padding: 0.75rem 1rem;
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
 }
 
 :host ::ng-deep .group-label {

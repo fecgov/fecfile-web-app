@@ -49,20 +49,21 @@ export class CalendarComponent {
     const control = this.control();
 
     if (control) {
-      const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
-      const currentValue = inputElement?.value;
+      const currentValue = this.datePicker().el.nativeElement.children[0].value;
 
       if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
         control.setValue(null);
       } else {
         const date = new Date(currentValue);
         if (date instanceof Date && !Number.isNaN(date.getTime())) {
-          control.setValue(date);
+          const isDifferentDate = !(control.value instanceof Date) || control.value.getTime() !== date.getTime();
+          if (isDifferentDate) {
+            control.setValue(date);
+            control.markAsTouched();
+            control.updateValueAndValidity();
+          }
         }
       }
-
-      control.markAsTouched();
-      control.updateValueAndValidity();
     }
   }
 

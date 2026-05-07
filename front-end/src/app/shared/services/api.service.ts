@@ -76,6 +76,17 @@ export class ApiService {
     );
   }
 
+  public get_from_base_uri<T>(endpoint: string, params?: QueryParams): Promise<T> {
+    const headers = this.getHeaders();
+    return firstValueFrom(
+      this.http.get<T>(`${environment.baseUri}${endpoint}`, {
+        headers,
+        params,
+        withCredentials: true,
+      }),
+    );
+  }
+
   public getString(endpoint: string): Promise<string> {
     const headers = this.getHeaders();
     return firstValueFrom(

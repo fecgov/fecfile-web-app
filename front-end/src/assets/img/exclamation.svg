@@ -1,8 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="93.871" height="94.172" viewBox="0 0 93.871 94.172">
-  <g id="Group_565" data-name="Group 565" transform="translate(-802.064 -469.998)">
-    <g id="Group_530" data-name="Group 530" transform="translate(15.713 308.17)">
-      <ellipse id="path-x" cx="46.935" cy="47.086" rx="46.935" ry="47.086" transform="translate(786.352 161.828)" fill="#112e51"/>
-    </g>
-    <text id="_" data-name="!" transform="translate(840 537)" fill="#fff" font-size="60" font-family="GandhiSerif-Bold, Gandhi Serif" font-weight="700"><tspan x="0" y="0">!</tspan></text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" id="exclamation-icon" viewBox="0 0 100 100">
+  <circle fill="currentColor" cx="50" cy="50" r="50" />
+  <text x="50" y="50" dy=".35em" text-anchor="middle" font-size="70" font-weight="700"
+    font-family="Times New Roman" fill="var(--icon-symbol, #fff)">!</text>
 </svg>

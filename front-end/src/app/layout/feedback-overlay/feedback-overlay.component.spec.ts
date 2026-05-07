@@ -28,6 +28,18 @@ describe('FeedbackOverlayComponent', () => {
 
     fixture = TestBed.createComponent(FeedbackOverlayComponent);
     component = fixture.componentInstance;
+
+    const asideEl = component.aside().nativeElement;
+    if (!asideEl.showPopover) {
+      asideEl.showPopover = vi.fn();
+      asideEl.hidePopover = vi.fn();
+    }
+
+    const originalMatches = asideEl.matches;
+    asideEl.matches = vi.fn().mockImplementation((selector) => {
+      if (selector === ':popover-open') return true;
+      return originalMatches.call(asideEl, selector);
+    });
     fixture.detectChanges();
   });
 
@@ -36,15 +48,29 @@ describe('FeedbackOverlayComponent', () => {
   });
 
   it('#show happy path', () => {
-    component.show(null);
+    component.aside().nativeElement.showPopover();
     expect(component.formSubmitted).toBe(false);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
   });
 
   it('#hide happy path', () => {
-    component.onHide();
+    component.aside().nativeElement.hidePopover();
     expect(component.formSubmitted).toBe(false);
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
+  });
+
+  it('should hide popover on Escape key', () => {
+    const asideEl = component.aside().nativeElement;
+    const hideSpy = vi.spyOn(asideEl, 'hidePopover');
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+
+    expect(hideSpy).toHaveBeenCalled();
   });
 
   it('#save happy path', async () => {
@@ -62,7 +88,7 @@ describe('FeedbackOverlayComponent', () => {
       action: test_action,
       feedback: test_feedback,
       about: test_about,
-      location: window.location.href,
+      location: globalThis.location.href,
     });
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.SUCCESS);
   });
@@ -84,7 +110,7 @@ describe('FeedbackOverlayComponent', () => {
       action: test_action,
       feedback: test_feedback,
       about: test_about,
-      location: window.location.href,
+      location: globalThis.location.href,
     });
     expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.FAIL);
   });
