@@ -7,6 +7,36 @@
     border-color: #d6d7d9;
   }
 
+  .p-autocomplete {
+    display: flex;
+    align-items: stretch;
+    border: 2px solid #aeb0b5;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+    height: 48px;
+  }
+
+  .p-autocomplete-input.p-inputtext {
+    border: none !important;
+    box-shadow: none !important;
+    flex: 1;
+  }
+
+  .p-autocomplete-dropdown {
+    border: none !important;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .p-autocomplete:focus-within {
+    border-color: #112e51;
+    // box-shadow: 0 0 0 1px #bfdbfe;
+    outline: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  }
+
   .p-select {
     border: 2px solid #aeb0b5;
     background-color: var(--surface-ground);
