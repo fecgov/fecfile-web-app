@@ -49,18 +49,13 @@ export class CalendarComponent {
 
     if (control) {
       const currentValue = this.datePicker().el.nativeElement.children[0].value;
-
-      if ((currentValue && currentValue === 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
-        control.setValue(null);
-      } else {
-        const date = new Date(currentValue);
-        if (date instanceof Date && !Number.isNaN(date.getTime())) {
-          const isDifferentDate = !(control.value instanceof Date) || control.value.getTime() !== date.getTime();
-          if (isDifferentDate) {
-            control.setValue(date);
-            control.markAsTouched();
-            control.updateValueAndValidity();
-          }
+      const date = new Date(currentValue);
+      if (date instanceof Date && !Number.isNaN(date.getTime())) {
+        const isDifferentDate = !(control.value instanceof Date) || control.value.getTime() !== date.getTime();
+        if (isDifferentDate) {
+          control.setValue(date);
+          control.markAsTouched();
+          control.updateValueAndValidity();
         }
       }
     }
