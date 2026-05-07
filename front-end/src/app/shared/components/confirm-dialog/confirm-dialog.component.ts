@@ -15,6 +15,7 @@ export class ConfirmDialogComponent {
   readonly confirmation = toSignal(this.confirmationService.requireConfirmation$);
   readonly header = computed(() => this.confirmation()?.header ?? 'Are you sure?');
   readonly message = computed(() => this.confirmation()?.message);
+  readonly submitLabel = computed(() => this.confirmation()?.acceptLabel ?? 'Confirm');
 
   constructor() {
     effect(() => {

@@ -1,7 +1,7 @@
 <app-dialog
   [(visible)]="visible"
   [title]="header()"
-  submitLabel="Continue"
+  [submitLabel]="submitLabel()"
   (confirm)="confirmOption()"
   (close)="cancelOption()"
 >
