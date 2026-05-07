@@ -68,6 +68,7 @@ describe('Receipt Transactions', () => {
       // Check for regression on date error
       cy.get('#contribution_date').clear();
       TransactionDetailPage.clickSave(); // Triggers errors to show
+      // ensure that message is 'required' and not a 'mm/dd/yyyy' format error, which was a previous bug
       cy.get('[data-cy="contribution_date-error"]').should('contain', 'This is a required field');
     });
   });
