@@ -56,13 +56,8 @@ label {
 }
 
 label,
-p,
-:host::ng-deep .p-select .p-select-label {
+p {
   font-size: 14px !important;
-}
-
-:host::ng-deep .p-select {
-  height: 42px;
 }
 
 .row {
