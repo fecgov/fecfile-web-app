@@ -100,6 +100,7 @@ h5 {
   font-family: var(--karla-bold);
   font-size: 14px;
   margin: 0;
+  line-height: 1.2;
 }
 
 .committee-id {
@@ -122,4 +123,8 @@ h5 {
     max-height: 250px;
     overflow: auto;
   }
+}
+
+.committee-icon {
+  flex: 0 0 34px;
 }

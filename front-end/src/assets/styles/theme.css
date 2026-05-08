@@ -2349,6 +2349,9 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   margin: 0 0 0 4px;
   transition: box-shadow 0.15s;
   border-radius: 8px;
+  &.p-disabled > span > svg {
+    opacity: 0.65;
+  }
 }
 
 .p-paginator-page {
@@ -2388,7 +2391,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   padding: 0 0.5rem;
 }
 .p-paginator .p-paginator-pages .p-paginator-page {
-  background: var(--p-content-background);
+  background: var(--surface-ground);
   border: none;
   min-width: 2.357rem;
   height: 2rem;
@@ -3382,13 +3385,8 @@ td {
   }
 }
 
-.p-splitbutton-dropdown {
-  img {
-    filter: brightness(0) invert(1);
-  }
-  &:disabled > img {
-    filter: invert(11%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(93%) contrast(85%) opacity(0.65);
-  }
+.p-splitbutton-dropdown:disabled > svg {
+  opacity: 0.65;
 }
 
 .p-tieredmenu-item-content:hover {

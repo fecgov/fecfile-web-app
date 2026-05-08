@@ -1,15 +1,6 @@
 @use 'mixins' as *;
 
 :host::ng-deep {
-  .custom-paginator-dropdown {
-    height: 2.357rem !important;
-  }
-
-  .custom-paginator-dropdown > .p-select > .p-select-label {
-    line-height: 1 !important;
-    padding-right: 0 !important;
-  }
-
   .p-datatable {
     @include standard-container();
   }
@@ -42,10 +33,6 @@
   }
 }
 
-.stacked-paginator {
-  flex-direction: column !important;
-}
-
 .paginator-text {
   font-family: var(--karla);
   font-size: 1rem;
@@ -60,8 +47,4 @@ h1 {
 h2 {
   font-size: 32px;
   font-weight: 700;
-}
-
-#header-checkbox {
-  width: 3rem;
 }

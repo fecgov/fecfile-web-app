@@ -23,8 +23,8 @@
       } @else {
         @if (activeCommittees().length === 0) {
           <div class="fec-card vertical-card">
-            <svg alt="Magnifying lens" width="95" height="95">
-              <use href="assets/img/magnifying_lens.svg"></use>
+            <svg alt="Magnifying lens" width="95" height="95" class="primary-icon">
+              <use href="assets/img/magnifying_lens.svg#magnifying_lens"></use>
             </svg>
             <span class="karla-bold empty-verbiage">Not currently active in any FECfile+ committee accounts</span>
           </div>
@@ -65,8 +65,8 @@
             @for (committee of disabledCommittees(); track committee) {
               <li class="disabled-committee">
                 <div class="flex">
-                  <svg width="34" height="34">
-                    <use href="/assets/img/committee-icon.svg"></use>
+                  <svg width="34" height="34" class="committee-icon">
+                    <use href="/assets/img/committee-icon.svg#committee-icon"></use>
                   </svg>
                   <div class="ml-2 pl-1">
                     <h3 class="committee-name">{{ committee.name ?? 'test' }}</h3>

@@ -6,14 +6,18 @@
       <li>
         <button class="nav-item" (click)="toolsOp.toggle($event)">
           <span>Tools</span>
-          <i class="pi pi-sort-down-fill"></i>
+          <svg class="dropdown-icon">
+            <use href="assets/img/arrow.svg#arrow"></use>
+          </svg>
         </button>
       </li>
 
       <li id="navbarProfileDropdownMenuLink">
         <button class="nav-item" (click)="accountOp.toggle($event)">
           <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
-          <i class="pi pi-sort-down-fill"></i>
+          <svg class="dropdown-icon">
+            <use href="assets/img/arrow.svg#arrow"></use>
+          </svg>
         </button>
       </li>
     }

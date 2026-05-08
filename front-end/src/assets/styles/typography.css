@@ -164,12 +164,6 @@ input[type='search'] {
   text-decoration: none;
   user-select: none;
 }
-[type='button']:disabled,
-[type='submit']:disabled,
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
 img {
   margin: 0;
   max-width: 100%;
