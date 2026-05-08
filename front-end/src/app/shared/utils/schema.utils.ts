@@ -213,7 +213,12 @@ export class SchemaUtils {
             result['exclusiveMax'] = { exclusiveMax: error.params['limit'] };
           }
           if (error.keyword === 'pattern') {
-            result['pattern'] = { requiredPattern: error.params['pattern'] };
+            if (
+              error.params['pattern'] === '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' &&
+              form.get(property)?.value === 'MM/DD/YYYY'
+            )
+              result['required'] = true;
+            else result['pattern'] = { requiredPattern: error.params['pattern'] };
           }
           if (error.keyword === 'enum') {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
