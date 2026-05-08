@@ -44,10 +44,6 @@ const hasVisibleDialogMatching = ($body: JQuery<HTMLElement>, rx: RegExp): boole
 const getVisibleConfirmDialog = () =>{
   const foo = cy.get('dialog .dialog-header:visible')
   return foo.contains('Confirm', { timeout: DEFAULT_TIMEOUT }).should('be.visible').closest('dialog');
-  // cy
-  //   .contains('dialog .dialog-header', /^Confirm$/i, { timeout: DEFAULT_TIMEOUT })
-  //   .should('be.visible')
-  //   .closest('dialog');
 }
 
 
