@@ -19,6 +19,7 @@ export class CalendarComponent {
   readonly fieldName = input.required<string>();
   readonly label = input.required<string>();
   readonly showErrors = input(true);
+  readonly requiredErrorMessage = input('This is a required field.');
   readonly datePicker = viewChild.required(DatePicker);
   readonly invalidFormatMessage = input('This date does not follow the correct format, e.g. 01/01/2020');
 

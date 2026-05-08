@@ -41,11 +41,11 @@ const hasVisibleDialogMatching = ($body: JQuery<HTMLElement>, rx: RegExp): boole
   return false;
 };
 
-const getVisibleConfirmDialog = () =>
-  cy
-    .contains('.p-dialog-title', /^Confirm$/i, { timeout: DEFAULT_TIMEOUT })
-    .should('be.visible')
-    .closest('.p-confirm-dialog, .p-dialog');
+const getVisibleConfirmDialog = () =>{
+  const foo = cy.get('dialog .dialog-header:visible')
+  return foo.contains('Confirm', { timeout: DEFAULT_TIMEOUT }).should('be.visible').closest('dialog');
+}
+
 
 const openCreateContactModal = (which: CreateContactWhich = 'first') => {
   cy.get('body').then(($body) => {
@@ -180,7 +180,7 @@ const assertContactsListRow = (name: string, type: string, fecId?: string) => {
 
 const assertCreatesNewContactConfirmMessage = (contactTypeLower: ContactTypeLower, contactDisplay: string) => {
   getVisibleConfirmDialog().within(() => {
-    cy.get('[data-pc-section="message"], .p-confirm-dialog-message').should(($msg) => {
+    cy.get('p').should(($msg) => {
       const text = normalizeText($msg.text());
 
       const rx = new RegExp(
@@ -211,7 +211,7 @@ const clickSaveAndConfirmCreatesNewContact = (
 
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
   getVisibleConfirmDialog().within(() => {
-    cy.get('[data-pc-section="message"]').should(($msg) => {
+    cy.get('p').should(($msg) => {
       const full = tightenHyphens($msg.text());
       expect(full).to.include('Change(s):');
 
@@ -222,7 +222,7 @@ const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems:
       );
     });
 
-    cy.get('[data-pc-section="message"]')
+    cy.get('p')
       .find('b')
       .first()
       .should(($b) => {
