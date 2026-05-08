@@ -1,6 +1,7 @@
 :host ::ng-deep {
   .dropdown-with-search .p-select {
     border-radius: 4px 0 0 4px;
+    border-right: 0;
   }
 
   .dropdown-with-search .p-select:hover {
@@ -11,16 +12,25 @@
     display: flex;
     align-items: stretch;
     border: 2px solid #aeb0b5;
-    border-left: none;
     border-radius: 0 4px 4px 0;
+    box-sizing: border-box;
     overflow: hidden;
-    height: 48px;
+    height: 3em;
+  }
+
+  .p-autocomplete-input {
+    display: block;
+    flex: 1;
+    height: 100%;
+    margin: 0;
+    padding: 0.5em 0.75em;
+    line-height: 1.25;
+    box-sizing: border-box;
   }
 
   .p-autocomplete-input.p-inputtext {
     border: none !important;
     box-shadow: none !important;
-    flex: 1;
   }
 
   .p-autocomplete-dropdown {
@@ -33,8 +43,7 @@
 
   .p-autocomplete:focus-within {
     border-color: #112e51;
-    // box-shadow: 0 0 0 1px #bfdbfe;
-    outline: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+    box-shadow: 0 0 0 3px #92c7ff;
   }
 
   .p-select {
