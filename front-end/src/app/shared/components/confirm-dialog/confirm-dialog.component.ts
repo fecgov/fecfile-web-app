@@ -21,6 +21,12 @@ export class ConfirmDialogComponent {
     effect(() => {
       if (this.confirmation()) this.visible.set(true);
     });
+    effect(() => {
+      const confirmation = this.confirmation();
+      if (!this.visible() && confirmation) {
+        confirmation.reject?.();
+      }
+    });
   }
 
   cancelOption() {
