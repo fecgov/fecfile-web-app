@@ -29,6 +29,7 @@ import { PopoverModule } from 'primeng/popover';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
+import { singleClickDisableAction } from 'app/store/single-click.actions';
 
 @Component({
   selector: 'app-navigation-control',
@@ -72,6 +73,7 @@ export class NavigationControlComponent {
   readonly type = computed(() => this.navigationControl().controlType);
 
   saveAndAddAnother() {
+    this.store.dispatch(singleClickDisableAction());
     const navControl = this.navigationControl();
     const transaction = this.transaction();
     if (!transaction) return;
