@@ -18,6 +18,10 @@
     height: 3em;
   }
 
+  .p-autocomplete:hover {
+    border-color: #d6d7d9;
+  }
+
   .p-autocomplete-input {
     display: block;
     flex: 1;
