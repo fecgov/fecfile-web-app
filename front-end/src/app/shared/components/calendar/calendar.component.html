@@ -3,8 +3,6 @@
   <p-datepicker
     #datepicker
     appendTo="body"
-    (onClose)="validateDate()"
-    (onBlur)="validateDate()"
     [showOnFocus]="false"
     [inputId]="fieldName()"
     [name]="fieldName()"
@@ -19,6 +17,7 @@
     pInputMask="99/99/9999"
     slotChar="MM/DD/YYYY"
     dataType="string"
+    appDateSanitizer
   >
     <ng-template pTemplate="header">
       <div class="flex justify-content-between p-2 border-bottom-1 border-300">
