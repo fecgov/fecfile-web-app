@@ -21,6 +21,7 @@ import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-main-form',
@@ -67,7 +68,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   });
   readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
   readonly showFilingFrequency = computed(() => {
-    return this.documentType() in textCodesWithFilingFrequencies;
+    return environment.fecSpec === 8.5 && this.documentType() in textCodesWithFilingFrequencies;
   });
 
   getReportPayload(): Form99 {

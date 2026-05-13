@@ -23,6 +23,7 @@ export const environment = {
   showSchedF: false,
   disableLogin: false,
   fecSpec: 8.5,
+  IncludeMsaAndMsx: false,
   showGlossary: false,
   webForms: 'https://webforms.fec.gov',
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
