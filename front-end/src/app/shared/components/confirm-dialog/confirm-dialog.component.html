@@ -1,9 +1,9 @@
 <app-dialog
   [(visible)]="visible"
   [title]="header()"
-  submitLabel="Confirm"
+  [submitLabel]="submitLabel()"
   (confirm)="confirmOption()"
-  (close)="cancelOption()"
+  (reject)="cancelOption()"
 >
   <p [innerHTML]="message()"></p>
 </app-dialog>

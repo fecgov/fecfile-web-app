@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="sort-icon" viewBox="0 0 12 12" fill="currentcolor">
+  <g transform="translate(1, -0.65)">
+    <path
+      d="M4.27 1.24c.33-.56 1.13-.56 1.46 0l3.71 6.23c.33.56-.07 1.28-.73 1.28H1.29c-.66 0-1.06-.72-.73-1.28l3.71-6.23z" />
+    <rect x="0.45" y="10.5" width="9.2" height="2" rx="1" />
+  </g>
+</svg>

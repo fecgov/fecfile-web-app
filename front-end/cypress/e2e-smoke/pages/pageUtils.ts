@@ -1,3 +1,5 @@
+import { DateUtils } from "app/shared/utils/date.utils";
+
 export const currentYear = new Date().getFullYear();
 
 export interface Intercept {
@@ -93,59 +95,10 @@ export class PageUtils {
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find(calendar).first().click();
-    cy.get('body').find('.p-datepicker-panel').as('calendarElement');
-
-    PageUtils.pickYear(dateObj.getFullYear());
-    PageUtils.pickMonth(dateObj.getMonth());
-    PageUtils.pickDay(dateObj.getDate().toString());
-
-    cy.get('@calendarElement').should('not.exist');
-  }
-
-  static pickDay(day: string) {
-    cy.get('@calendarElement')
-      .find('td')
-      .find('span')
-      .not('.p-disabled')
-      .parent()
-      .contains(day)
-      .then(($day) => {
-        cy.wrap($day.parent()).click();
-        cy.wait(10)
-      });
-  }
-
-  static pickMonth(month: number) {
-    const months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const targetMonth = months[month];
-    cy.get('@calendarElement').find('.p-datepicker-month').contains(targetMonth).click({ force: true });
-  }
-
-  static pickYear(year: number) {
-    const currentCalendarYear: number = new Date().getFullYear();
-
-    cy.get('@calendarElement').find('.fec-datepicker-select-year').should('be.visible').click({ force: true });
-    cy.wait(100);
-    cy.get('@calendarElement').then(($calendarElement) => {
-      if ($calendarElement.find('.fec-datepicker-select-year:visible').length > 0) {
-        cy.get('@calendarElement').find('.fec-datepicker-select-year').click({ force: true });
-      }
-    });
-
-    const decadeStart: number = currentCalendarYear - (currentCalendarYear % 10);
-    const decadeEnd: number = decadeStart + 9;
-    if (year < decadeStart) {
-      for (let i = 0; i < decadeStart - year; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-prev-button').click();
-      }
-    }
-    if (year > decadeEnd) {
-      for (let i = 0; i < year - decadeEnd; i += 10) {
-        cy.get('@calendarElement').find('.p-datepicker-next-button').click();
-      }
-    }
-    cy.get('body').find('.p-datepicker-year').contains(year.toString()).should('be.visible').click({ force: true });
+    const input = cy.get(alias).find(calendar).find('.p-datepicker-input')
+    const dateStr = DateUtils.convertDateToSlashFormat(dateObj);
+    input.safeType(dateStr);
+    input.blur();
   }
 
   static clickSidebarSection(section: string) {

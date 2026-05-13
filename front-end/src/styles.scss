@@ -36,7 +36,7 @@ hr {
 
 .p-panel .p-panel-header,
 .p-drawer {
-  background: #f1f1f1;
+  background: var(--surface-ground);
   color: #112e51;
 }
 
@@ -97,7 +97,7 @@ label.disabled {
 }
 
 .readonly {
-  background-color: #f1f1f1 !important;
+  background-color: var(--surface-ground) !important;
 }
 
 .flex-center {
@@ -125,7 +125,7 @@ label.disabled {
 }
 
 .gray {
-  background-color: #f1f1f1;
+  background-color: var(--surface-ground);
 }
 
 .dark-gray {
@@ -136,20 +136,8 @@ label.disabled {
   color: #aeb0b5;
 }
 
-.font-karla {
-  font-family: var(--karla);
-}
-
-.font-karla-bold {
-  font-family: var(--karla-bold);
-}
-
-.font-gandhi {
-  font-family: var(--gandhi);
-}
-
 .fec-background-color {
-  background-color: #112e51;
+  background-color: var(--primary-color);
 }
 
 .radio-button-spacer {
@@ -370,7 +358,7 @@ label.disabled {
 }
 
 .p-select {
-  height: 48px;
+  height: var(--input-height);
 }
 
 .dialog-label {
@@ -592,7 +580,6 @@ legend {
 
 textarea {
   font-family: var(--karla);
-  font-size: 1rem;
   font-weight: 400;
   resize: none;
 }
@@ -736,7 +723,6 @@ textarea {
 
   select {
     width: var(--app-select-width, 100%);
-    padding-right: 32px;
     &:has(+ .select-clear-button) {
       padding-right: 50px;
     }
@@ -746,9 +732,8 @@ textarea {
 select {
   min-width: var(--app-select-width, 75px);
   background-color: var(--surface-ground);
-  height: var(--app-select-height, 48px);
-  padding: var(--app-select-padding, 8px 10px);
-  line-height: 1.2;
+  height: var(--input-height);
+  padding: 0 0 0 10px;
   transition: 0.4s;
   border: var(--app-select-border, 2px solid gray);
   display: flex;
@@ -760,7 +745,8 @@ select {
   background-position: right 12px center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 16px;
+  font-size: var(--input-font-size);
+  line-height: 1.2;
 
   &:not(:disabled) {
     cursor: pointer;
@@ -791,7 +777,6 @@ select {
   select {
     appearance: base-select;
     background-image: none;
-    padding: var(--app-select-padding, 8px 10px);
 
     &::picker-icon {
       content: '';
@@ -810,13 +795,14 @@ select {
       justify-content: space-between;
       width: 100%;
       position: relative;
+      font-size: var(--input-font-size);
 
       selectedcontent {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         font-family: var(--karla);
-        font-size: 1rem;
+
         font-weight: 400;
         color: var(--p-select-selectedcontent-color);
         padding: var(--p-select-selectedcontent-padding);
@@ -826,10 +812,12 @@ select {
 
   option {
     font-family: var(--karla);
-    font-size: 1rem;
+    font-size: var(--input-font-size);
+    line-height: 1.2;
     font-weight: 400;
     color: var(--p-select-option-color);
     padding: 8px 12px;
+    height: var(--input-height);
 
     &:hover {
       background-color: var(--p-select-option-focus-background);
@@ -925,6 +913,24 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.text-blue {
+  color: var(--primary-color);
+}
+
+.text-36 {
+  font-size: 36px;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.hover\:bg-transparent {
+  &:hover {
+    background-color: transparent !important;
+  }
 }
 
 .primary-icon {

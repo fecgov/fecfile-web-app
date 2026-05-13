@@ -11,7 +11,6 @@ import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_vali
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
@@ -43,7 +42,6 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
     CandidateOfficeInputComponent,
     ButtonDirective,
     Ripple,
-    ConfirmDialog,
     SearchableSelectComponent,
     ToUpperDirective,
   ],

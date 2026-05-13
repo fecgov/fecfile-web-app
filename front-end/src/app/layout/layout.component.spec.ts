@@ -34,7 +34,7 @@ describe('LayoutComponent', () => {
       addEventListener: vi.fn().mockImplementation((evt, cb) => (mediaQueryListener = cb)),
       removeEventListener: vi.fn(),
     };
-    Object.defineProperty(window, 'matchMedia', {
+    Object.defineProperty(globalThis, 'matchMedia', {
       writable: true,
       value: vi.fn().mockReturnValue(matchMediaMock),
     });

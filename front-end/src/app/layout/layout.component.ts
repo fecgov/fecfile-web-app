@@ -6,13 +6,13 @@ import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.co
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
-import { ButtonDirective } from 'primeng/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { HeaderStyles } from './header/header-styles';
 import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
+import { ReportSidebarComponent } from './sidebar/report-sidebar.component';
+import { SecurityNoticeSidebarComponent } from './sidebar/security-notice-sidebar.component';
 import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
 import { Store } from '@ngrx/store';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
@@ -25,6 +25,12 @@ export enum BackgroundStyles {
   'SECURITY_NOTICE' = 'security-notice-background',
 }
 
+export const Sidebar = {
+  Report: 'Report',
+  Security: 'Security',
+} as const;
+export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
+
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -32,11 +38,11 @@ export enum BackgroundStyles {
   imports: [
     BannerComponent,
     HeaderComponent,
-    SidebarComponent,
+    ReportSidebarComponent,
+    SecurityNoticeSidebarComponent,
     CommitteeBannerComponent,
     RouterOutlet,
     FooterComponent,
-    ButtonDirective,
     FeedbackOverlayComponent,
     ServiceUnavailableBannerComponent,
     DialogModule,
@@ -44,6 +50,7 @@ export enum BackgroundStyles {
   ],
 })
 export class LayoutComponent implements AfterViewChecked {
+  Sidebar = Sidebar;
   readonly layoutService = inject(LayoutService);
   private readonly store = inject(Store);
   readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
@@ -64,24 +71,21 @@ export class LayoutComponent implements AfterViewChecked {
   isCookiesDisabled = signal(false);
 
   readonly topPadding = computed(() => {
-    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) {
-      return '0px';
-    } else if (this.isCookiesDisabled()) {
-      return '165px';
-    } else {
-      return '64px';
-    }
+    if (this.isCookiesDisabled()) return '165px';
+    else if (this.serviceAvailable() === false) return '107px';
+    else return '64px';
   });
 
-  readonly marginTop = computed(() => {
-    if (this.isCookiesDisabled()) return '164px';
+  readonly footerTopPadding = computed(() => {
+    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) return '0px';
+    else if (this.isCookiesDisabled()) return '165px';
     else if (this.serviceAvailable() === false) return '107px';
-    return '64px';
+    else return '64px';
   });
 
   constructor() {
     if (this.useDynamicSidebar) {
-      const mobileQuery = window.matchMedia('(max-width: 991.98px)');
+      const mobileQuery = globalThis.matchMedia('(max-width: 991.98px)');
       if (mobileQuery.matches) {
         this.layoutService.showSidebar.set(false);
       }
@@ -103,17 +107,13 @@ export class LayoutComponent implements AfterViewChecked {
   ngAfterViewChecked(): void {
     this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
   }
-
-  toggleSidebar() {
-    this.layoutService.showSidebar.update((v) => !v);
-  }
 }
 
 class LayoutControls {
   // Default values
   showUpperFooter = true;
   showHeader = true;
-  showSidebar = false;
+  sidebar: Sidebar | null = null;
   useServiceUnavailableLoginBanner = false;
   headerStyle = HeaderStyles.DEFAULT;
   showCommitteeBanner = true;
@@ -127,7 +127,7 @@ class LayoutControls {
       this.showCommitteeBanner = data['showCommitteeBanner'] ?? this.showCommitteeBanner;
       this.showFeedbackButton = data['showFeedbackButton'] ?? this.showFeedbackButton;
       this.showHeader = data['showHeader'] ?? this.showHeader;
-      this.showSidebar = data['showSidebar'] ?? this.showSidebar;
+      this.sidebar = data['sidebar'] ?? this.sidebar;
       this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
       this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
       this.useServiceUnavailableLoginBanner =

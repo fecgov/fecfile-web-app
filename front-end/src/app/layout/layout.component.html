@@ -10,19 +10,38 @@
   }
 
   <!--  Begin Sidebar section -->
-  @if (layoutControls().showSidebar && layoutService.showSidebar()) {
+  @if (layoutControls().sidebar === Sidebar.Report && layoutService.showSidebar()) {
     <div class="inline-flex w-100">
-      <div class="fec-background-color flex-shrink-1" id="sidebar-container">
-        <app-drawer />
+      <div
+        [class]="layoutControls().sidebar === Sidebar.Security ? 'gray' : 'fec-background-color'"
+        class="flex-shrink-1"
+        id="sidebar-container"
+      >
+        <app-report-sidebar />
       </div>
       <div class="sidebar-content-container">
-        <div class="main-content">
+        <div class="main-content standard-container">
           @if (layoutControls().showCommitteeBanner) {
             <app-committee-banner />
           }
           <div class="router-outlet">
             <router-outlet></router-outlet>
           </div>
+        </div>
+        <div class="flex-grow-1 flex flex-column">
+          <div class="flex-grow-1 footer-spacer"></div>
+          <app-footer [showSidebar]="true" />
+        </div>
+      </div>
+    </div>
+  } @else if (layoutControls().sidebar === Sidebar.Security) {
+    <div class="inline-flex w-100">
+      <div class="flex-shrink-1 gray" id="sidebar-container">
+        <app-security-notice-sidebar />
+      </div>
+      <div class="sidebar-content-container">
+        <div class="router-outlet">
+          <router-outlet></router-outlet>
         </div>
         <div class="flex-grow-1 flex flex-column">
           <div class="flex-grow-1 footer-spacer"></div>
@@ -40,14 +59,14 @@
       id="content-offset"
       #contentOffset
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
-      [style.marginTop]="marginTop()"
+      [style.paddingTop]="topPadding()"
     >
       <div class="main-content">
         @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner />
         }
         @if (isDefault()) {
-          <div class="container">
+          <div class="container standard-container">
             <router-outlet></router-outlet>
           </div>
         } @else {
@@ -55,26 +74,18 @@
         }
       </div>
     </div>
-    <app-footer #footerRef [showUpperFooter]="layoutControls().showUpperFooter" [style.paddingTop]="topPadding()" />
+    <app-footer
+      #footerRef
+      [showUpperFooter]="layoutControls().showUpperFooter"
+      [style.paddingTop]="footerTopPadding()"
+    />
   }
   <!-- End No Sidebar section -->
 
   @if (layoutControls().showFeedbackButton) {
-    <button
-      type="button"
-      pButton
-      pRipple
-      label="Feedback"
-      class="p-button-info feedback-button"
-      (click)="feedbackOverlay().show($event)"
-    ></button>
+    <app-feedback-overlay />
   }
-
-  <app-feedback-overlay />
 </div>
-@if (useDynamicSidebar) {
-  <button (click)="toggleSidebar()">Toggle Sidebar</button>
-}
 
 @if (!layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
   <app-dialog
@@ -83,6 +94,7 @@
     [showTitleWarning]="true"
     [visible]="true"
     [noInput]="true"
+    [closeOnEscape]="false"
   >
     <p class="font-karla mb-3">
       FECfile+ is experiencing an issue. Previously saved work should not be affected. Please close all instances of
