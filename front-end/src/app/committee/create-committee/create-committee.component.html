@@ -18,7 +18,13 @@
         </button>
       </div>
       <p-inputGroup class="search-group">
-        <input id="search-input" type="text" class="p-inputtext search-input" [formControl]="searchBoxFormControl" />
+        <input
+          appToUpper
+          id="search-input"
+          type="text"
+          class="p-inputtext search-input"
+          [formControl]="searchBoxFormControl"
+        />
         <p-button
           class="search-button"
           (click)="search(searchBoxFormControl.value)"
