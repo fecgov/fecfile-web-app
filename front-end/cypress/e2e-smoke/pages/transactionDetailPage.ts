@@ -153,8 +153,8 @@ export class TransactionDetailPage {
     }
 
     // set interest dropdown and rate
-    if (formData.interest_rate_setting) {
-      PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.interest_rate_setting, alias);
+    if (formData.loan_interest_rate_is_percent) {
+      PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.loan_interest_rate_is_percent, alias);
       if (formData.interest_rate) {
         cy.get('[data-cy="interestRateInput"]').find('input:visible:first').safeType(formData.interest_rate);
       }
@@ -165,8 +165,8 @@ export class TransactionDetailPage {
     }
 
     // Set due date dropdown & date
-    if (formData.due_date_setting) {
-      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.due_date_setting, alias);
+    if (formData.loan_due_date_is_date) {
+      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.loan_due_date_is_date, alias);
       if (formData.due_date) {
         PageUtils.calendarSetValue(`[data-cy="dueDateInput"] input`, formData.due_date, alias);
       }

@@ -32,10 +32,10 @@ describe('LoanTermsDatesInputComponent', () => {
       ...testTemplateMap(),
       ...{
         interest_rate: 'loan_interest_rate',
-        interest_rate_setting: 'loan_interest_rate_is_percent',
+        loan_interest_rate_is_percent: 'loan_interest_rate_is_percent',
         date: 'loan_incurred_date',
         due_date: 'loan_due_date',
-        due_date_setting: 'loan_due_date_is_date',
+        loan_due_date_is_date: 'loan_due_date_is_date',
       },
     };
     fixture.detectChanges();
