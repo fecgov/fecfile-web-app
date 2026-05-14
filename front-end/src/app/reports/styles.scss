@@ -1,3 +1,7 @@
+* {
+  --input-font-size: 14px;
+}
+
 .summary-header {
   margin-bottom: 20px;
 }
@@ -71,12 +75,7 @@ caption {
 .p-selectbutton {
   display: flex;
   width: fit-content;
-  height: 36px;
-}
-
-#form24Options .p-togglebutton-content {
-  font-family: var(--karla-bold);
-  font-size: 14px;
+  height: var(--input-height);
 }
 
 .modal-item-margin {
@@ -85,13 +84,22 @@ caption {
   width: fit-content;
 }
 
+.dialog-buttons {
+  justify-content: space-between;
+}
+
+#form24Options .p-togglebutton-content {
+  font-family: var(--karla-bold);
+}
+
 #f24-input-container {
   border: 2px solid var(--fec-grey-alt);
   border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   width: 448px;
-  height: 36px;
+  height: var(--input-height);
+  line-height: 1.2;
 
   &:focus-within {
     outline: 0 none;
@@ -106,10 +114,9 @@ caption {
 
   & > span {
     background: var(--p-content-background);
-    line-height: 1.4rem;
     font-family: var(--karla-bold);
+    font-size: var(--input-font-size);
     padding: 0 0 0 10px;
-    font-size: 14px;
     text-wrap-mode: nowrap;
   }
 }
@@ -126,8 +133,4 @@ caption {
 #form24Name {
   border: 0;
   box-shadow: none;
-}
-
-.dialog-buttons {
-  justify-content: space-between;
 }

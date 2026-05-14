@@ -4,8 +4,6 @@ import { TransactionContactUtils } from '../components/transaction-type-base/tra
 import { Transaction, Contact, TransactionTemplateMapType, ContactTypes } from '../models';
 import { ConfirmationService } from 'primeng/api';
 
-type dialogs = 'dialog' | 'childDialog' | 'childDialog_2';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -21,7 +19,6 @@ export class ConfirmationWrapperService {
     },
     getContact: (contactKey: string, transaction?: Transaction) => Contact | null,
     getTemplateMap: (contactKey: string, transaction?: Transaction) => TransactionTemplateMapType | undefined,
-    targetDialog: dialogs = 'dialog',
     transaction?: Transaction,
   ): Promise<boolean> {
     for (const [contactKey, config] of Object.entries(contactConfig)) {
@@ -32,9 +29,9 @@ export class ConfirmationWrapperService {
 
       const contact = getContact(contactKey, transaction);
       if (contact === null) continue;
-      let result = await this.createContactConfirmation(contact, form, templateMap, contactKey, targetDialog);
+      let result = await this.createContactConfirmation(contact, form, templateMap, contactKey);
       if (!result) return false;
-      result = await this.contactChangesConfirmation(contact, form, templateMap, targetDialog, config, transaction);
+      result = await this.contactChangesConfirmation(contact, form, templateMap, config, transaction);
       if (!result) return false;
     }
     return true;
@@ -44,14 +41,13 @@ export class ConfirmationWrapperService {
     contact: Contact,
     form: FormGroup,
     templateMap: TransactionTemplateMapType,
-    targetDialog: dialogs,
     config: { [formField: string]: string },
     transaction?: Transaction,
   ): Promise<boolean> {
     const changes = TransactionContactUtils.getContactChanges(form, contact, templateMap, config, transaction);
     if (changes.length > 0) {
       const message = TransactionContactUtils.getContactChangesMessage(contact, changes);
-      return this.displayConfirmationPopup(message, targetDialog);
+      return this.displayConfirmationPopup(message);
     }
     return true;
   }
@@ -61,22 +57,17 @@ export class ConfirmationWrapperService {
     form: FormGroup,
     templateMap: TransactionTemplateMapType,
     contactKey: string,
-    targetDialog: dialogs,
   ): Promise<boolean> {
     if (!contact.id) {
       const message = this.getCreateTransactionContactConfirmationMessage(contact.type, form, templateMap, contactKey);
-      return this.displayConfirmationPopup(message, targetDialog);
+      return this.displayConfirmationPopup(message);
     }
     return true;
   }
 
-  private displayConfirmationPopup(
-    message: string,
-    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog',
-  ): Promise<boolean> {
+  private displayConfirmationPopup(message: string): Promise<boolean> {
     return new Promise((resolve) => {
       this.confirmationService.confirm({
-        key: targetDialog,
         header: 'Confirm',
         icon: 'pi pi-info-circle',
         message: message,

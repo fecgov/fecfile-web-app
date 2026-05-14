@@ -1,11 +1,11 @@
 import { Component, computed, effect, input, viewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { DateUtils } from 'app/shared/utils/date.utils';
-import { DatePicker } from 'primeng/datepicker';
-import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ButtonModule } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
 import { InputMaskModule } from 'primeng/inputmask';
+import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 
 @Component({
   selector: 'app-calendar',
@@ -51,17 +51,19 @@ export class CalendarComponent {
     if (control) {
       const currentValue = this.datePicker().el.nativeElement.children[0].value;
 
-      if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
+      if ((currentValue && currentValue === 'MM/DD/YYYY') || currentValue.replaceAll(/[_/]/g, '') === '') {
         control.setValue(null);
       } else {
         const date = new Date(currentValue);
         if (date instanceof Date && !Number.isNaN(date.getTime())) {
-          control.setValue(date);
+          const isDifferentDate = !(control.value instanceof Date) || control.value.getTime() !== date.getTime();
+          if (isDifferentDate) {
+            control.setValue(date);
+            control.markAsTouched();
+            control.updateValueAndValidity();
+          }
         }
       }
-
-      control.markAsTouched();
-      control.updateValueAndValidity();
     }
   }
 

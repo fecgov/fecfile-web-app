@@ -11,7 +11,6 @@ import { TripleTransactionDetailComponent } from '../triple-transaction-detail/t
 import { ReattRedesTransactionTypeDetailComponent } from '../reatt-redes-transaction-type-detail/reatt-redes-transaction-type-detail.component';
 import { TransactionChildrenListContainerComponent } from '../transaction-children-list-container/transaction-children-list-container.component';
 import { TransactionNavigationComponent } from '../transaction-navigation/transaction-navigation.component';
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { injectRouteData } from 'ngxtension/inject-route-data';
 
 @Component({
@@ -25,7 +24,6 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
     ReattRedesTransactionTypeDetailComponent,
     TransactionChildrenListContainerComponent,
     TransactionNavigationComponent,
-    ConfirmDialog,
   ],
 })
 export class TransactionContainerComponent {

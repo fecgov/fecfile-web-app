@@ -267,7 +267,6 @@ describe('TransactionTypeBaseComponent', () => {
           contactConfig,
           component.getContact.bind(this),
           component.getTemplateMap.bind(this),
-          'dialog',
           component.transaction,
         ),
       ).rejects.toThrow('FECfile+: Cannot find template map when confirming transaction');
@@ -288,7 +287,6 @@ describe('TransactionTypeBaseComponent', () => {
         component.transaction.transactionType?.contactConfig ?? {},
         component.getContact.bind(this),
         component.getTemplateMap.bind(this),
-        'dialog',
         component.transaction,
       );
       expect(confirmSpy).toHaveBeenCalledTimes(0);
@@ -306,7 +304,6 @@ describe('TransactionTypeBaseComponent', () => {
         component.transaction.transactionType?.contactConfig ?? {},
         component.getContact.bind(this),
         component.getTemplateMap.bind(this),
-        'dialog',
         component.transaction,
       );
       expect(createMessageSpy).toHaveBeenCalled();
