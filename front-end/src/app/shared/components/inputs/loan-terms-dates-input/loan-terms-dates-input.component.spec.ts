@@ -41,10 +41,24 @@ describe('LoanTermsDatesInputComponent', () => {
     fixture.detectChanges();
   });
 
-  function testInterest(value: string, expectedValue: string, startSetting: boolean, toggleSetting?: boolean): void {
-    if (component.interestRateSetting !== startSetting) component.interestRateSetting = startSetting;
+  async function testInterest(
+    value: string,
+    expectedValue: string,
+    startSetting: boolean,
+    toggleSetting?: boolean,
+  ): Promise<void> {
+    if (component.interestRateSetting !== startSetting) {
+      component.interestRateSetting = startSetting;
+      await fixture.whenStable();
+    }
+
     component.interestRate = value;
-    if (toggleSetting && startSetting !== toggleSetting) component.interestRateSetting = toggleSetting;
+
+    if (toggleSetting && startSetting !== toggleSetting) {
+      component.interestRateSetting = toggleSetting;
+      await fixture.whenStable();
+    }
+
     expect(component.interestRate).toBe(expectedValue);
   }
 
@@ -61,7 +75,7 @@ describe('LoanTermsDatesInputComponent', () => {
     expect(control?.status).toBe('VALID');
   });
 
-  it('should handle interest_rate inputs correctly when clearValuesOnChange is true', () => {
+  it('should handle interest_rate inputs correctly when clearValuesOnChange is true', async () => {
     // Changing the interest rate setting to USER_DEFINED should clear the value
     testInterest('12.3%', '', component.termFieldSettings.EXACT_PERCENTAGE, component.termFieldSettings.USER_DEFINED);
     // While USER_DEFINED, non-percentage values should go unchanged
