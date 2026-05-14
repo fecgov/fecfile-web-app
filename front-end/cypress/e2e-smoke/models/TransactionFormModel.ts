@@ -71,10 +71,10 @@ export class LoanFormData extends ScheduleFormData {
   date_incurred: Date | undefined;
   date_signed: Date | undefined;
   due_date: Date | undefined;
-  due_date_setting: string | undefined;
+  loan_due_date_is_date: boolean | undefined;
   first_name: string;
   future_income: string;
-  interest_rate_setting: string | undefined;
+  loan_interest_rate_is_percent: boolean | undefined;
   interest_rate: number | undefined;
   last_name: string;
   line_of_credit: string;
@@ -91,10 +91,10 @@ export class LoanFormData extends ScheduleFormData {
     this.date_incurred = formData.date_incurred;
     this.date_signed = formData.date_signed;
     this.due_date = formData.due_date;
-    this.due_date_setting = formData.due_date_setting;
+    this.loan_due_date_is_date = formData.loan_due_date_is_date;
     this.first_name = formData.first_name;
     this.future_income = formData.future_income;
-    this.interest_rate_setting = formData.interest_rate_setting;
+    this.loan_interest_rate_is_percent = formData.loan_interest_rate_is_percent;
     this.interest_rate = formData.interest_rate;
     this.last_name = formData.last_name;
     this.loan_restructured = formData.loan_restructured;
@@ -118,13 +118,13 @@ export const defaultDebtFormData: DebtFormData = {
   date_received: undefined,
   date_signed: undefined,
   due_date: undefined,
-  due_date_setting: '',
+  loan_due_date_is_date: '',
   electionType: undefined,
   electionYear: undefined,
   election_other_description: '',
   first_name: '',
   future_income: '',
-  interest_rate_setting: '',
+  loan_interest_rate_is_percent: '',
   interest_rate: undefined,
   last_name: '',
   line_of_credit: '',
@@ -147,13 +147,13 @@ export const defaultLoanFormData: LoanFormData = {
   date_received: new Date(currentYear, 4 - 1, 27),
   date_signed: new Date(currentYear, 4 - 1, 27),
   due_date: new Date(currentYear, 4 - 1, 27),
-  due_date_setting: 'Enter a specific date',
+  loan_due_date_is_date: 'Enter a specific date',
   electionType: undefined,
   electionYear: undefined,
   election_other_description: '',
   first_name: faker.person.firstName(),
   future_income: 'NO',
-  interest_rate_setting: 'Enter an exact percentage',
+  loan_interest_rate_is_percent: 'Enter an exact percentage',
   interest_rate: 2.3,
   last_name: faker.person.lastName(),
   line_of_credit: 'NO',
@@ -170,8 +170,8 @@ const formTransactionDataForScheduleLoan: LoanFormData = {
   amount: 200.01,
   category_code: '005 Polling Expenses',
   date_incurred: undefined,
-  due_date_setting: undefined,
-  interest_rate_setting: undefined,
+  loan_due_date_is_date: undefined,
+  loan_interest_rate_is_percent: undefined,
   secured: undefined,
 };
 
