@@ -5,17 +5,6 @@
     <hr />
   </div>
   <h2>Report type</h2>
-  <div class="field">
-    <label for="report_type_category">TIME PERIOD</label>
-    <p-selectButton
-      data-cy="report-type-category"
-      [options]="reportTypeCategories"
-      [allowEmpty]="false"
-      formControlName="report_type_category"
-    />
-    <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" />
-  </div>
-
   @if (userCanSetFilingFrequency) {
     <div class="field">
       <label for="filing_frequency">REPORTING FREQUENCY</label>
@@ -28,6 +17,17 @@
       <app-error-messages fieldName="filing_frequency" [formSubmitted]="formSubmitted" />
     </div>
   }
+
+  <div class="field">
+    <label for="report_type_category">TIME PERIOD</label>
+    <p-selectButton
+      data-cy="report-type-category"
+      [options]="reportTypeCategories"
+      [allowEmpty]="false"
+      formControlName="report_type_category"
+    />
+    <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted" />
+  </div>
 
   <div class="field" data-cy="report_code">
     <label for="type">{{ filingFrequencyLabel() }}</label>

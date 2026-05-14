@@ -1,25 +1,24 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Form24, Form3, Form3X, ReportTypes } from 'app/shared/models';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ReportService } from 'app/shared/services/report.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Form24, Form3, Form3X } from 'app/shared/models';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ReportService } from 'app/shared/services/report.service';
 import { collectRouteData } from 'app/shared/utils/route.utils';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
-import { PanelMenuModule } from 'primeng/panelmenu';
 import { ReportSidebarSection } from './menu-info';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
-  selector: 'app-drawer',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
-  imports: [PanelMenuModule, FecDatePipe, RenameF24DialogComponent],
+  selector: 'app-report-sidebar',
+  standalone: true,
+  imports: [FecDatePipe, RenameF24DialogComponent, PanelMenu],
+  templateUrl: 'report-sidebar.component.html',
 })
-export class SidebarComponent {
+export class ReportSidebarComponent {
   private readonly navEnd = toSignal(injectNavigationEnd());
   private readonly store = inject(Store);
   private readonly reportService = inject(ReportService);

@@ -8,13 +8,13 @@ a {
 
 nav {
   background-color: white !important;
-  height: 80px;
+  height: var(--header-height);
   border-bottom: 2px solid #e8e8e8;
   padding-left: 32px;
   padding-right: 32px;
   z-index: 999;
   position: fixed;
-  top: 30px;
+  top: var(--header-top);
 }
 
 .seal-link {

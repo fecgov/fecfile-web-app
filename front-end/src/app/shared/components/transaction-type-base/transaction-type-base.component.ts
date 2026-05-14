@@ -174,7 +174,6 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.transaction.transactionType?.contactConfig ?? {},
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
-      'dialog',
       this.transaction,
     );
   }

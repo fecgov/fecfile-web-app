@@ -34,6 +34,7 @@
   --maskbg: rgba(0, 0, 0, 0.4);
   --focus-ring: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
   --fec-black: #212121;
+  --warning: #631010;
 
   --fec-grey-background: var(--surface-c);
   --fec-grey-alt: #aeb0b5;
@@ -77,6 +78,7 @@
   --p-datepicker-date-width: 2.5rem;
 
   /* Panel */
+  --p-navigation-item-padding: 8px 9px;
   --p-panelmenu-gap: 0;
   --p-panelmenu-panel-padding: 0;
   --p-panel-border-width: 0;
@@ -111,6 +113,9 @@
     Segoe UI Symbol;
   --gandhi-bold: 'gandhi-bold', serif;
   --gandhi: gandhi-regular, serif;
+
+  --input-font-size: 16px;
+  --input-height: 48px;
 
   /* Dialog */
   --p-dialog-header-padding: 1rem 1rem 1rem 1rem;
@@ -158,6 +163,10 @@
 
   --p-tieredmenu-item-color: var(--p-content-color);
   --p-tieredmenu-separator-border-color: #212121b3; // 70% opacity of #212121
+
+  --header-height: 80px;
+  --header-top: 30px;
+  --header-total: calc(var(--header-height) + var(--header-top));
 }
 
 $breakpoints: (
@@ -167,3 +176,4 @@ $breakpoints: (
   'xl': 1200px,
   'xxl': 1400px,
 );
+

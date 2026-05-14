@@ -1,11 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
+import {
+  setCommitteeAccountDetailsAction,
+  unsetCommitteeAccountDetailsAction,
+} from 'app/store/committee-account.actions';
 import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,36 +32,39 @@ export class CreateCommitteeComponent {
   protected readonly confirmationService = inject(ConfirmationService);
   private readonly userService = inject(UsersService);
   suggestions?: FecFiling[];
-  selectedCommittee?: CommitteeAccount;
   readonly explanationVisible = signal(false);
-  unableToCreateAccount = false;
+
+  readonly selectedCommittee = signal<CommitteeAccount | undefined>(undefined);
+  readonly unableToCreateAccount = signal(false);
+  readonly loading = signal(false);
+  readonly showResult = computed(() => !!this.selectedCommittee() || this.unableToCreateAccount() || this.loading());
 
   searchBoxFormControl = new SubscriptionFormControl('');
 
+  constructor() {
+    this.store.dispatch(unsetCommitteeAccountDetailsAction());
+  }
+
   search(committeeId: string | null) {
-    this.selectedCommittee = undefined;
-    this.unableToCreateAccount = false;
+    this.selectedCommittee.set(undefined);
+    this.unableToCreateAccount.set(false);
     if (committeeId) {
+      this.loading.set(true);
       this.committeeAccountService
         .getAvailableCommittee(committeeId)
-        .then(this.handleSuccessfulSearch.bind(this), this.handleFailedSearch.bind(this));
+        .then(
+          (committee) => this.selectedCommittee.set(committee),
+          () => this.unableToCreateAccount.set(true),
+        )
+        .finally(() => this.loading.set(false));
     }
   }
 
-  handleSuccessfulSearch(committee: CommitteeAccount) {
-    this.selectedCommittee = committee;
-  }
-
-  handleFailedSearch() {
-    this.unableToCreateAccount = true;
-    this.selectedCommittee = undefined;
-  }
-
   async createAccount() {
-    this.unableToCreateAccount = false;
+    this.unableToCreateAccount.set(false);
     try {
       const committeeAccount = await this.committeeAccountService.createCommitteeAccount(
-        this.selectedCommittee?.committee_id ?? '',
+        this.selectedCommittee()?.committee_id ?? '',
       );
       this.messageService.add({
         severity: 'success',
@@ -72,7 +78,8 @@ export class CreateCommitteeComponent {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
       await this.router.navigateByUrl(``);
     } catch {
-      this.handleFailedSearch();
+      this.selectedCommittee.set(undefined);
+      this.unableToCreateAccount.set(true);
     }
   }
 }

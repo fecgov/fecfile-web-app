@@ -30,26 +30,8 @@ describe('ConfirmDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should ignore confirmations with a different key', () => {
-    fixture.componentRef.setInput('key', 'expected');
-
-    confirmation$.next({
-      key: 'wrong',
-      message: 'Should not appear',
-    });
-
-    fixture.detectChanges();
-
-    expect(component.visible()).toBe(false);
-    expect(component.message()).toBeUndefined();
-    expect(component.confirmation()).toBeUndefined();
-  });
-
-  it('should update state when confirmation key matches', () => {
-    fixture.componentRef.setInput('key', 'expected');
-
+  it('should update when confirmation is emitted', () => {
     const conf: Confirmation = {
-      key: 'expected',
       message: 'Are you sure?',
     };
 
@@ -64,10 +46,7 @@ describe('ConfirmDialogComponent', () => {
   it('should call reject on cancel', () => {
     const rejectSpy = vi.fn();
 
-    fixture.componentRef.setInput('key', 'x');
-
     confirmation$.next({
-      key: 'x',
       message: 'rejectSpy',
       reject: rejectSpy,
     });
@@ -85,10 +64,7 @@ describe('ConfirmDialogComponent', () => {
   it('should call accept on confirm', () => {
     const acceptSpy = vi.fn();
 
-    fixture.componentRef.setInput('key', 'x');
-
     confirmation$.next({
-      key: 'x',
       message: 'acceptSpy',
       accept: acceptSpy,
     });
@@ -96,9 +72,18 @@ describe('ConfirmDialogComponent', () => {
     fixture.detectChanges();
 
     expect(component.visible()).toBe(true);
+
     component.confirmOption();
 
     expect(acceptSpy).toHaveBeenCalled();
     expect(component.visible()).toBe(false);
+  });
+
+  it('should not be visible when there is no confirmation', () => {
+    confirmation$.next(null);
+    fixture.detectChanges();
+
+    expect(component.visible()).toBe(false);
+    expect(component.confirmation()).toBeNull();
   });
 });

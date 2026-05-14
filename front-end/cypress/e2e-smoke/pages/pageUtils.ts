@@ -93,7 +93,7 @@ export class PageUtils {
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
-    cy.get(alias).find(calendar).first().click();
+    cy.get(alias).find(calendar).children().eq(1).click();
     cy.get('body').find('.p-datepicker-panel').as('calendarElement');
 
     PageUtils.pickYear(dateObj.getFullYear());

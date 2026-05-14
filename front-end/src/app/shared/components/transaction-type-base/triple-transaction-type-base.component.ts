@@ -154,7 +154,6 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childTransaction_2.transactionType?.contactConfig ?? {},
       this.getContact.bind(this),
       this.getTemplateMap.bind(this),
-      'childDialog_2',
       this.childTransaction_2,
     );
   }
