@@ -41,7 +41,7 @@ describe('LoanTermsDatesInputComponent', () => {
     fixture.detectChanges();
   });
 
-  function testInterest(value: string, expectedValue: string, startSetting: string, toggleSetting?: string): void {
+  function testInterest(value: string, expectedValue: string, startSetting: boolean, toggleSetting?: boolean): void {
     if (component.interestRateSetting !== startSetting) component.interestRateSetting = startSetting;
     component.interestRate = value;
     if (toggleSetting && startSetting !== toggleSetting) component.interestRateSetting = toggleSetting;
