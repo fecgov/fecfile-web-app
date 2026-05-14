@@ -19,7 +19,7 @@ describe('CommitteeInfoComponent', () => {
   let originalEnvironment = createEnvironment({
     production: false,
     name: 'development',
-    webForms: 'https://webforms.fec.gov',
+    externalLinks: 'prod',
     baseUri: 'http://localhost:8080',
   });
 
