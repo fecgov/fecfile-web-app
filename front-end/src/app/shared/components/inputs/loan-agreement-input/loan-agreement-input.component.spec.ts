@@ -23,9 +23,9 @@ describe('LoanAgreementInputComponent', () => {
       {
         lender_organization_name: new SubscriptionFormControl(),
         loan_interest_rate: new SubscriptionFormControl(),
-        loan_interest_rate_field_setting: new SubscriptionFormControl(),
+        loan_interest_rate_is_percent: new SubscriptionFormControl(),
         loan_due_date: new SubscriptionFormControl(),
-        loan_due_date_field_setting: new SubscriptionFormControl(),
+        loan_due_date_is_date: new SubscriptionFormControl(),
         collateral: new SubscriptionFormControl(),
         ind_name_account_location: new SubscriptionFormControl(),
         account_street_1: new SubscriptionFormControl(),
@@ -77,9 +77,9 @@ describe('LoanAgreementInputComponent', () => {
       ...{
         organization_name: 'lender_organization_name',
         interest_rate: 'loan_interest_rate',
-        interest_rate_setting: 'loan_interest_rate_field_setting',
+        interest_rate_setting: 'loan_interest_rate_is_percent',
         due_date: 'loan_due_date',
-        due_date_setting: 'loan_due_date_field_setting',
+        due_date_setting: 'loan_due_date_is_date',
         secured: 'collateral',
         secondary_name: 'ind_name_account_location',
         secondary_street_1: 'account_street_1',
