@@ -35,14 +35,14 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   readonly termFieldSettings = LoanTermsFieldSettings;
 
-  readonly dueDateSettingOptions = LabelUtils.getPrimeOptions([
-    [LoanTermsFieldSettings.SPECIFIC_DATE, 'Enter a specific date'],
-    [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
+  readonly dueDateSettingOptions = LabelUtils.getOptions([
+    [true, 'Enter a specific date'],
+    [false, 'Enter a user defined value'],
   ]);
 
-  readonly interestRateSettingOptions = LabelUtils.getPrimeOptions([
-    [LoanTermsFieldSettings.EXACT_PERCENTAGE, 'Enter an exact percentage'],
-    [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
+  readonly interestRateSettingOptions = LabelUtils.getOptions([
+    [true, 'Enter an exact percentage'],
+    [false, 'Enter a user defined value'],
   ]);
 
   readonly report = this.store.selectSignal(selectActiveReport);
