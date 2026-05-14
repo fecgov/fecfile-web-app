@@ -71,6 +71,7 @@
     "cypress": "15.13.0",
     "cypress-axe": "^1.7.0",
     "cypress-mochawesome-reporter": "4.0.2",
+    "cypress-network-idle": "~2.0.1",
     "eslint": "~10.2.0",
     "jsdom": "^29.0.1",
     "knip": "~6.4.1",

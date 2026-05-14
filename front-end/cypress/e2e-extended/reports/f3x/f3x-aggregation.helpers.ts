@@ -4,7 +4,11 @@ import { ReportListPage } from '../../../e2e-smoke/pages/reportListPage';
 import { StartTransaction } from '../../../e2e-smoke/F3X/utils/start-transaction/start-transaction';
 import { ContactLookup } from '../../../e2e-smoke/pages/contactLookup';
 import { TransactionDetailPage } from '../../../e2e-smoke/pages/transactionDetailPage';
-import { defaultDebtFormData, defaultScheduleFormData, DisbursementFormData } from '../../../e2e-smoke/models/TransactionFormModel';
+import {
+  defaultDebtFormData,
+  defaultScheduleFormData,
+  DisbursementFormData,
+} from '../../../e2e-smoke/models/TransactionFormModel';
 import { DataSetup } from '../../../e2e-smoke/F3X/setup';
 import { F3X, F3X_Q2 } from '../../../e2e-smoke/requests/library/reports';
 import { makeContact, makeF3x, makeTransaction } from '../../../e2e-smoke/requests/methods';
@@ -59,8 +63,7 @@ export class F3XAggregationHelpers {
   static readonly rowActionButtonSelector = 'app-table-actions-button button[aria-label="action"]:visible';
   static readonly rowActionMenuButtonSelector = '.p-popover:visible .table-action-button:visible';
   static readonly confirmDialogSelector = 'app-confirm-dialog dialog[open]';
-  static readonly confirmDialogSubmitSelector =
-    'app-confirm-dialog dialog[open] button[data-cy="membership-submit"]';
+  static readonly confirmDialogSubmitSelector = 'app-confirm-dialog dialog[open] button[data-cy="membership-submit"]';
   static readonly saveButtonSelector = 'button[data-cy="navigation-control-button"]';
 
   private static exactText(value: string): RegExp {
@@ -94,9 +97,7 @@ export class F3XAggregationHelpers {
   static transactionIdFromPayload(payload: unknown, context: string): string {
     const idFromString = typeof payload === 'string' ? payload : '';
     const idFromObject =
-      payload && typeof payload === 'object' && 'id' in payload
-        ? (payload as { id?: string }).id ?? ''
-        : '';
+      payload && typeof payload === 'object' && 'id' in payload ? ((payload as { id?: string }).id ?? '') : '';
     const transactionId = idFromString || idFromObject;
     this.assertTransactionId(transactionId, context);
     return transactionId;
@@ -220,8 +221,7 @@ export class F3XAggregationHelpers {
         return rows
           .filter(
             (transaction: any) =>
-              transaction?.transaction_type_identifier === 'LOAN_REPAYMENT_MADE' &&
-              transaction?.loan_id === loanId,
+              transaction?.transaction_type_identifier === 'LOAN_REPAYMENT_MADE' && transaction?.loan_id === loanId,
           )
           .map((transaction: any) => String(transaction.id))
           .filter((id: string) => !!id);
@@ -259,10 +259,12 @@ export class F3XAggregationHelpers {
 
   static getTransaction(transactionId: string): Cypress.Chainable<any> {
     this.assertTransactionId(transactionId, 'getTransaction');
-    return cy.request({
-      method: 'GET',
-      url: `http://localhost:8080/api/v1/transactions/${transactionId}/`,
-    }).its('body');
+    return cy
+      .request({
+        method: 'GET',
+        url: `http://localhost:8080/api/v1/transactions/${transactionId}/`,
+      })
+      .its('body');
   }
 
   static readLoanBalanceValueByApi(loanId: string): Cypress.Chainable<number> {
@@ -401,9 +403,11 @@ export class F3XAggregationHelpers {
     debtPurpose: string,
     amount: number,
   ): Cypress.Chainable<string> {
-    return this.createTransaction(buildDebtOwedByCommittee(committeeContact, reportId, debtPurpose, amount)).then((created) => {
-      return created.id;
-    });
+    return this.createTransaction(buildDebtOwedByCommittee(committeeContact, reportId, debtPurpose, amount)).then(
+      (created) => {
+        return created.id;
+      },
+    );
   }
 
   static seedLoanFromBank(reportId: string, organization: any): Cypress.Chainable<string> {
@@ -474,6 +478,7 @@ export class F3XAggregationHelpers {
     TransactionDetailPage.enterSheduleFormDataForVoidExpenditure(formData, args.candidate, false, '', 'date_signed');
     this.clearAndType('#electionYear', `${electionYearFromCode}`);
     cy.blurActiveField();
+    cy.waitForNetworkIdle(1000);
     this.clickSave();
 
     cy.wait('@CreateScheduleETransaction').then((interception) => {
@@ -617,7 +622,9 @@ export class F3XAggregationHelpers {
       cy.get(this.rowActionButtonSelector).first().click();
     });
     cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
-      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      const matchingButtons = $buttons.filter((_, button) =>
+        this.exactText(actionLabel).test(button.textContent ?? ''),
+      );
       expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(1);
       cy.wrap(matchingButtons.get(0)).click();
     });
@@ -633,7 +640,9 @@ export class F3XAggregationHelpers {
       });
 
     cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
-      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      const matchingButtons = $buttons.filter((_, button) =>
+        this.exactText(actionLabel).test(button.textContent ?? ''),
+      );
       expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(1);
       cy.wrap(matchingButtons.get(0)).click();
     });
@@ -678,7 +687,11 @@ export class F3XAggregationHelpers {
     this.rowById(this.receiptsTableRoot, transactionId).find('td').eq(6).should('contain', expected);
   }
 
-  static assertReceiptRowStatus(transactionId: string, statusLabel: 'Unitemized' | 'Unaggregated', present: boolean): void {
+  static assertReceiptRowStatus(
+    transactionId: string,
+    statusLabel: 'Unitemized' | 'Unaggregated',
+    present: boolean,
+  ): void {
     this.assertRowStatus(this.receiptsTableRoot, transactionId, statusLabel, present);
   }
 
@@ -958,7 +971,11 @@ export class F3XAggregationHelpers {
     cy.contains('Transactions in this report').should('exist');
   }
 
-  static assertLoanFieldsAfterOpenAndBack(transactionId: string, expectedBalance: string, expectedPaymentToDate: string): void {
+  static assertLoanFieldsAfterOpenAndBack(
+    transactionId: string,
+    expectedBalance: string,
+    expectedPaymentToDate: string,
+  ): void {
     this.openRowById(this.loansAndDebtsTableRoot, transactionId);
     this.assertLoanBalanceFields(expectedBalance, expectedPaymentToDate);
     this.clickSave();
@@ -1073,7 +1090,9 @@ export class F3XAggregationHelpers {
       cy.get(this.rowActionButtonSelector).first().click();
     });
     cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
-      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      const matchingButtons = $buttons.filter((_, button) =>
+        this.exactText(actionLabel).test(button.textContent ?? ''),
+      );
       expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(1);
       cy.wrap(matchingButtons.get(0)).should('be.visible');
     });
@@ -1084,7 +1103,9 @@ export class F3XAggregationHelpers {
       cy.get(this.rowActionButtonSelector).first().click();
     });
     cy.get(this.rowActionMenuButtonSelector).then(($buttons) => {
-      const matchingButtons = $buttons.filter((_, button) => this.exactText(actionLabel).test(button.textContent ?? ''));
+      const matchingButtons = $buttons.filter((_, button) =>
+        this.exactText(actionLabel).test(button.textContent ?? ''),
+      );
       expect(matchingButtons.length, `row action matches for ${actionLabel}`).to.eq(0);
     });
     cy.get('body').type('{esc}');
@@ -1103,5 +1124,4 @@ export class F3XAggregationHelpers {
       cy.get(this.rowActionButtonSelector).should('exist');
     });
   }
-
 }
