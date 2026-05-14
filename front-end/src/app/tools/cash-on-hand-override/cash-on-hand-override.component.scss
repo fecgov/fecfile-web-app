@@ -1,10 +1,5 @@
 @use 'mixins' as *;
 
-* {
-  --input-height: 36px;
-  --input-font-size: 14px;
-}
-
 .section-header {
   font-family: var(--karla-bold);
   margin-bottom: 8px;
