@@ -17,12 +17,22 @@ import { ButtonModule } from 'primeng/button';
 import { UsersService } from 'app/shared/services/users.service';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 
 @Component({
   selector: 'app-create-committee',
   templateUrl: './create-committee.component.html',
   styleUrls: ['./create-committee.component.scss'],
-  imports: [RouterLink, InputGroup, ReactiveFormsModule, PrimeTemplate, CheckboxModule, ButtonModule, DialogComponent],
+  imports: [
+    RouterLink,
+    InputGroup,
+    ReactiveFormsModule,
+    PrimeTemplate,
+    CheckboxModule,
+    ButtonModule,
+    DialogComponent,
+    ToUpperDirective,
+  ],
 })
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);
