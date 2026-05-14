@@ -53,6 +53,7 @@ export class NavigationControlComponent {
     { initialValue: [] },
   );
 
+  isProcessing = false;
   readonly items: MenuItem[] = [
     {
       label: 'Save and...',
@@ -61,8 +62,12 @@ export class NavigationControlComponent {
     { separator: true },
     {
       label: 'Add another',
+      disabled: this.isProcessing,
       command: () => {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
         this.saveAndAddAnother();
+        setTimeout(() => (this.isProcessing = false), 1000);
       },
     },
   ];
