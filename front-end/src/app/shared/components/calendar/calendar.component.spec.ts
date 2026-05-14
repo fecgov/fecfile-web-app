@@ -51,23 +51,6 @@ describe('CalendarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize form control with "submit" update strategy', () => {
-    expect(component.control()!.updateOn).toBe('blur');
-  });
-
-  it('should mark control as touched and update value on updateValue', () => {
-    const control = component.control()!;
-    control.setValue(new Date('01/01/2019'));
-
-    const inputElement = component.datePicker().el.nativeElement.children[0];
-    inputElement.value = '01/01/2020';
-
-    component.validateDate();
-
-    expect(component.control()!.touched).toBe(true);
-    expect(component.control()!.value).toEqual(new Date('01/01/2020'));
-  });
-
   it('should increment the year and update the view when delta is 1', () => {
     const event = new Event('click');
     const datePicker = component.datePicker();

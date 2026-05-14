@@ -25,6 +25,7 @@
   --content-padding: 1.25rem;
   --inline-spacing: 0.5rem;
   --border-radius: 4px;
+  --p-border-radius: var(--border-radius);
   --surface-ground: #f1f1f1;
   --surface-section: #ffffff;
   --surface-card: #ffffff;
@@ -51,6 +52,10 @@
   --p-select-option-focus-color: var(--p-content-color);
   --p-select-option-focus-background: var(--fec-grey-background);
   --p-select-option-border-radius: 0;
+  --select-border: 2px solid gray;
+  --select-border-disabled: 2px solid var(--fec-grey-alt);
+  --select-selectedcontent-color: var(--p-content-color);
+  --select-selectedcontent-font: var(--karla);
 
   --p-paginator-background: var(--p-primary-color);
   --p-paginator-padding: 0;
@@ -114,8 +119,10 @@
   --gandhi-bold: 'gandhi-bold', serif;
   --gandhi: gandhi-regular, serif;
 
-  --input-font-size: 16px;
-  --input-height: 48px;
+  --input-font-size: 14px;
+  --input-height: 36px;
+  --iti-font-family: var(--karla);
+  --iti-color: var(--p-content-color);
 
   /* Dialog */
   --p-dialog-header-padding: 1rem 1rem 1rem 1rem;

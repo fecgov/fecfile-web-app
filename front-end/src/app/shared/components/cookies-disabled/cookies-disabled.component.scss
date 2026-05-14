@@ -1,7 +1,7 @@
 .cookies-disabled-message {
   max-width: 552px;
   padding: 32px 0 16px 16px;
-  border-left: 3px solid #aeb0b5;
+  border-left: 3px solid var(--fec-grey-alt);
   background-color: #f8f8f8;
   text-align: left;
   font-family: var(--karla);
@@ -37,7 +37,7 @@ h1 {
 }
 
 hr {
-  color: #aeb0b5;
+  color: var(--fec-grey-alt);
   border-top-width: 1px;
 }
 

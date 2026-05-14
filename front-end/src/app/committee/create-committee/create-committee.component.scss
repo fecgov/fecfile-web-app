@@ -6,7 +6,7 @@
   .search-group {
     .p-button {
       border: none;
-      background-color: #aeb0b5;
+      background-color: var(--fec-grey-alt);
       padding: 0rem 20px;
       width: 61px;
       border-top-left-radius: 0;
@@ -14,7 +14,7 @@
     }
 
     .p-button:hover {
-      background-color: #aeb0b5;
+      background-color: var(--fec-grey-alt);
     }
 
     .p-button:focus {

@@ -1,11 +1,3 @@
-@use 'mixins' as *;
-
-:host::ng-deep {
-  .p-datatable {
-    @include standard-container();
-  }
-}
-
 .empty-message {
   height: 64px;
   padding: 0 16px;
