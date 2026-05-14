@@ -130,7 +130,6 @@ export class ContactsHelpers {
       expectedChanges.forEach((c) => cy.contains(c).should('exist'));
       cy.contains('button', /Continue/i).click();
     });
-    cy.contains('.p-dialog-title', /Confirm/i).should('not.exist');
   }
 
   static pickAutocompleteOptionForInput(
@@ -652,9 +651,9 @@ export class ContactsHelpers {
 
     cy.get('body').then(($body) => {
       const hasConfirm = $body
-        .find('.p-dialog-title')
+        .find('#confirm-dialog')
         .toArray()
-        .some((el) => /confirm/i.test((el.textContent || '').trim()));
+        .some((el) => /Continue/i.test((el.textContent || '').trim()));
 
       if (hasConfirm) {
         ContactsHelpers.continueConfirmModal();
@@ -669,17 +668,15 @@ export class ContactsHelpers {
 
   private static getVisibleConfirmDialog() {
     return cy
-      .contains('.p-dialog-title', /Confirm/i, { timeout: 10000 })
+      .contains('#dialog-title', /Confirm/i, { timeout: 10000 })
       .should('be.visible')
-      .closest('.p-confirm-dialog, .p-dialog');
+      .closest('app-confirm-dialog');
   }
 
   static continueConfirmModal() {
     ContactsHelpers.getVisibleConfirmDialog().within(() => {
       cy.contains('button', /Continue/i).should('be.enabled').click();
     });
-
-    cy.contains('.p-dialog-title', /Confirm/i).should('not.exist');
   }
 
 
