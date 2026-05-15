@@ -59,7 +59,7 @@ describe('ToUpperDirective', () => {
     expect(inputElement.selectionEnd).toBe(6);
   });
 
-  it('should NOT update form model on input when control is set to updateOn: "blur"', () => {
+  it('should NOT update form model validation on input when control is set to updateOn: "blur"', () => {
     fixture.detectChanges();
 
     inputElement.value = 'test';
@@ -67,6 +67,7 @@ describe('ToUpperDirective', () => {
     fixture.detectChanges();
 
     expect(inputElement.value).toBe('TEST');
-    expect(fixture.componentInstance.control.value).toBe('');
+    expect(fixture.componentInstance.control.value).toBe('TEST');
+    expect(fixture.componentInstance.control.pristine).toBe(true);
   });
 });
