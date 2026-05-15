@@ -24,8 +24,8 @@ describe('CommitteeInfoComponent', () => {
   });
 
   // This method sets the environment before TestBed.configureTestingModule() is called
-  async function setEnvironment(form1m_link?: string) {
-    if (form1m_link) Object.assign(environment, { form1m_link });
+  async function setEnvironment(form1_link?: string) {
+    if (form1_link) Object.assign(environment, { form1_link });
     // Now configure and compile TestBed with the updated environment
     await TestBed.configureTestingModule({
       providers: [

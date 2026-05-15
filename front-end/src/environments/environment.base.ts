@@ -36,7 +36,7 @@ export const createEnvironment = (params: {
     ...params,
     apiUrl,
     webForms,
-    form1m_link: `${webForms}/webforms/form1/index.htm`,
+    form1_link: `${webForms}/webforms/form1/index.htm`,
     loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
     loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
     ffapiTimeoutCookieName: `ffapi_timeout_${params.name}`,
