@@ -8,14 +8,3 @@ label {
   font-size: 14px;
   margin-bottom: 4px;
 }
-
-#report-selector {
-  height: var(--input-height);
-  font-size: 14px;
-  appearance: none;
-  background-image: url(assets/img/dropdown_arrow.svg);
-}
-
-#report-selector option {
-  font-size: 14px;
-}
