@@ -1,11 +1,12 @@
-import { Directive, HostListener } from '@angular/core';
+import { Directive, HostListener, inject } from '@angular/core';
+import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[appToUpper]',
   standalone: true,
 })
 export class ToUpperDirective {
-  constructor() {}
+  private readonly control = inject(NgControl);
 
   @HostListener('input', ['$event'])
   onInput(event: Event): void {
@@ -15,5 +16,15 @@ export class ToUpperDirective {
 
     inputElement.value = uppercaseValue;
     inputElement.setSelectionRange(cursorPosition, cursorPosition);
+  }
+
+  @HostListener('blur', ['$event'])
+  onBlur(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (this.control?.control) {
+      this.control.control.setValue(input.value.toUpperCase(), {
+        emitModelToViewChange: false,
+      });
+    }
   }
 }
