@@ -8,6 +8,9 @@ $sidebar-width: 284px;
   padding: 64px 24px 32px 24px;
   position: fixed;
   top: var(--header-total);
+  transition:
+    top 0.3s ease-in-out,
+    height 0.3s ease-in-out;
   z-index: 999;
   overflow-y: auto;
 }
@@ -23,6 +26,7 @@ $sidebar-width: 284px;
   display: flex;
   flex-direction: column;
   margin-top: var(--header-total);
+  transition: margin-top 0.3s ease-in-out;
 }
 
 .main-content {
@@ -58,6 +62,9 @@ app-footer {
   width: 100%;
   padding-left: $sidebar-width;
   margin-top: var(--header-total);
+  transition:
+    margin-top 0.3s ease-in-out,
+    min-height 0.3s ease-in-out;
   padding-top: 64px;
   & > .main-content {
     margin-left: 32px;
@@ -78,7 +85,7 @@ app-footer {
   background-position-x: 0px, 90%;
 
   & > #content-offset {
-    margin-top: 30.781px !important;
+    margin-top: var(--header-top);
     padding-top: 0 !important ;
 
     & > .main-content {
