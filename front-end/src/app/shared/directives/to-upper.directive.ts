@@ -14,11 +14,17 @@ export class ToUpperDirective {
     const uppercaseValue = inputElement.value.toUpperCase();
     const cursorPosition = inputElement.selectionStart;
 
-    if (this.control) {
-      this.control.control?.setValue(uppercaseValue, { emitEvent: false });
-    }
-
     inputElement.value = uppercaseValue;
     inputElement.setSelectionRange(cursorPosition, cursorPosition);
+  }
+
+  @HostListener('blur', ['$event'])
+  onBlur(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (this.control?.control) {
+      this.control.control.setValue(input.value.toUpperCase(), {
+        emitModelToViewChange: false,
+      });
+    }
   }
 }
