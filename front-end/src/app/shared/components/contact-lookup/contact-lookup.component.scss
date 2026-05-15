@@ -2,57 +2,11 @@
   .dropdown-with-search .p-select {
     border-radius: 4px 0 0 4px;
     border-right: 0;
-  }
-
-  .dropdown-with-search .p-select:hover {
-    border-color: #d6d7d9;
-  }
-
-  .p-autocomplete {
-    display: flex;
-    align-items: stretch;
-    border: 2px solid #aeb0b5;
-    border-radius: 0 4px 4px 0;
-    box-sizing: border-box;
-    overflow: hidden;
-    height: 3em;
-  }
-
-  .p-autocomplete:hover {
-    border-color: #d6d7d9;
-  }
-
-  .p-autocomplete-input {
-    display: block;
-    flex: 1;
-    height: 100%;
-    margin: 0;
-    padding: 0.5em 0.75em;
-    line-height: 1.25;
-    box-sizing: border-box;
-  }
-
-  .p-autocomplete-input.p-inputtext {
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .p-autocomplete-dropdown {
-    border: none !important;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .p-autocomplete:focus-within {
-    border-color: #112e51;
-    box-shadow: 0 0 0 3px #92c7ff;
-  }
-
-  .p-select {
     border: 2px solid var(--fec-grey-alt);
     background-color: var(--surface-ground);
+    &:hover {
+      border-color: #d6d7d9;
+    }
   }
 
   .p-select-label {
@@ -63,32 +17,9 @@
     height: 42px;
   }
 
-  .p-button-icon-only {
-    background-color: transparent;
-    pointer-events: none;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    min-width: 15px;
-    border: none;
-  }
-
   .readonly {
     pointer-events: none;
   }
-
-  .dropdownIcon {
-    color: #212121;
-    background-color: white;
-  }
-}
-
-.ng-submitted .transaction-contact-invalid :host ::ng-deep .p-autocomplete-input {
-  border-color: #dc3545;
-}
-
-.transaction-contact-invalid .contact-dialog-not-submitted :host ::ng-deep .p-autocomplete-input {
-  border: 2px solid var(--fec-grey-alt);
 }
 
 .contact-label-container {
@@ -120,17 +51,16 @@
   font-size: 1.2em;
   font-family: var(--karla);
   align-content: center;
-}
 
-.add-contact-container span {
-  padding: 0 0.3em;
-  cursor: pointer;
-  line-height: inherit;
-}
-
-.contact-lookup-container img {
-  margin-right: 5px;
-  vertical-align: middle;
+  & span {
+    padding: 0 0.3em;
+    cursor: pointer;
+    line-height: inherit;
+  }
+  & img {
+    margin-right: 5px;
+    vertical-align: middle;
+  }
 }
 
 .contact-lookup-container {

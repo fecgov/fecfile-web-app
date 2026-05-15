@@ -69,6 +69,23 @@ label.p-disabled {
   }
 }
 
+ .p-autocomplete {
+    display: flex;
+    align-items: stretch;
+    border: 2px solid #aeb0b5;
+    border-radius: 0 4px 4px 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    height: var(--input-height);
+    &:hover {
+       border-color: #d6d7d9;
+    }
+    &:focus-within {
+      border-color: #112e51;
+      box-shadow: 0 0 0 3px #92c7ff;
+    }
+  }
+
 .p-autocomplete .p-autocomplete-loader {
   right: 0.75rem;
 }
@@ -3118,8 +3135,12 @@ sortalticon {
 }
 
 .p-autocomplete-dropdown {
-  border: 2px solid var(--fec-grey-alt);
   border-left: 0;
+  border: none !important;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 mark {
@@ -3127,6 +3148,13 @@ mark {
 }
 
 .p-autocomplete-input {
+  display: block;
+  flex: 1;
+  height: 100%;
+  margin: 0;
+  padding: 0.5em 0.75em;
+  line-height: 1.25;
+  box-sizing: border-box;
   background-color: white;
   border: 2px solid var(--fec-grey-alt);
   border-left: 0;
@@ -3135,6 +3163,10 @@ mark {
   color: #212121;
   font-family: var(--karla);
   width: 342px;
+  &.p-inputtext {
+    border: none !important;
+    box-shadow: none !important;
+  }
 }
 
 .p-autocomplete-input::placeholder {
