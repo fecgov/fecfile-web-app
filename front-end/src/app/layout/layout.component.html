@@ -61,12 +61,12 @@
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
       [style.paddingTop]="topPadding()"
     >
-      <div class="main-content">
+      <div class="main-content" [class.standard-container]="isDefault()">
         @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner />
         }
         @if (isDefault()) {
-          <div class="container standard-container">
+          <div class="container">
             <router-outlet></router-outlet>
           </div>
         } @else {

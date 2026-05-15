@@ -1172,6 +1172,10 @@ p-multiselect.p-multiselect-clearable .p-multiselect-clear-icon {
   right: 2.357rem;
 }
 
+.p-password-input {
+  padding: 10px 36px 10px 10px !important;
+}
+
 .p-password.p-inputwrapper {
   width: 100%;
 }
