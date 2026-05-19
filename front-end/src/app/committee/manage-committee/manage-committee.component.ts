@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,7 @@ import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { EditNameDialogComponent } from '../edit-name-dialog/edit-name-dialog.component';
 
 @Component({
   selector: 'app-manage-committee',
@@ -24,6 +25,7 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
     TableActionsButtonComponent,
     CommitteeMemberDialogComponent,
     TableModule,
+    EditNameDialogComponent,
   ],
 })
 export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMember> {
@@ -32,10 +34,14 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly user = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
+  readonly editSelf = signal(false);
 
   protected readonly rowActions: TableAction<CommitteeMember>[] = [
     new TableAction<CommitteeMember>('Edit Role', this.openEdit.bind(this), undefined),
     new TableAction<CommitteeMember>('Delete', this.confirmDelete.bind(this)),
+  ];
+  protected readonly editName: TableAction<CommitteeMember>[] = [
+    new TableAction<CommitteeMember>('Edit Name', this.openSelf.bind(this), undefined),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
@@ -59,16 +65,14 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
         cssClass: 'status-column',
         bodyTpl: this.statusBodyTpl(),
       },
-    ];
-    if (this.isCommitteeAdministrator()) {
-      columns.push({
+      {
         field: 'actions',
         header: 'Actions',
         sortable: false,
         cssClass: 'actions-column',
         bodyTpl: this.actionsBodyTpl(),
-      });
-    }
+      },
+    ];
     return columns;
   });
 
@@ -110,6 +114,11 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     });
   }
 
+  async openSelf(member: CommitteeMember) {
+    this.member = member;
+    this.editSelf.set(true);
+  }
+
   async openEdit(member: CommitteeMember) {
     this.member = member;
     this.detailVisible.set(true);
@@ -124,7 +133,17 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     });
   }
 
-  isCurrentUser(member: CommitteeMember): boolean {
+  nameChanged() {
+    this.refreshTable();
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Name Updated',
+    });
+  }
+
+  isCurrentUser(member?: CommitteeMember): boolean {
+    if (!member) return false;
     return member.email.toLowerCase() === this.currentUserEmail().toLowerCase();
   }
 
