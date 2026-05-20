@@ -68,7 +68,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   });
   readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
   readonly showFilingFrequency = computed(() => {
-    return environment.fecSpec === 8.5 && this.documentType() in textCodesWithFilingFrequencies;
+    return this.documentType() in textCodesWithFilingFrequencies;
   });
 
   getReportPayload(): Form99 {
