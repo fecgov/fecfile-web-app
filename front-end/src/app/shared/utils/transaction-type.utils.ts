@@ -81,8 +81,8 @@ import { PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-type
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { PARTY_RECOUNT_RECEIPT } from '../models/transaction-types/PARTY_RECOUNT_RECEIPT.model';
 import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
-import { RECEIPT_FROM_UNREGISTERED_ENTITY } from '../models/transaction-types/RECEIPT_FROM_UNREGISTERED_ENTITY.model';
-import { RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN } from '../models/transaction-types/RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN.model';
+import { RECEIPT_FROM_UNREGISTERED_ORGANIZATION } from '../models/transaction-types/RECEIPT_FROM_UNREGISTERED_ORGANIZATION.model';
+import { RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN } from '../models/transaction-types/RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN.model';
 import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types/REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
 import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
@@ -273,8 +273,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-  RECEIPT_FROM_UNREGISTERED_ENTITY,
-  RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+  RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
+  RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
   PAC_RETURN,
   PARTY_RETURN,
   EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT,
