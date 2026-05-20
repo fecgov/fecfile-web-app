@@ -90,7 +90,9 @@
           <span class="paginator-text">Results per page:</span>
           <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage" appendTo="body">
             <ng-template pTemplate="dropdownicon">
-              <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+              <svg alt="dropdown icon" width="14" height="14" class="rotate-90">
+                <use href="assets/img/arrow.svg#arrow"></use>
+              </svg>
             </ng-template>
           </p-select>
         </div>
@@ -103,16 +105,24 @@
             (onPageChange)="changePage($event)"
           >
             <ng-template pTemplate="firstpagelinkicon">
-              <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+              <svg alt="first page icon" width="14" height="14" class="rotate-180">
+                <use href="assets/img/last-arrow.svg#last-arrow"></use>
+              </svg>
             </ng-template>
             <ng-template pTemplate="previouspagelinkicon">
-              <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+              <svg alt="previous page icon" width="14" height="14" class="rotate-180">
+                <use href="assets/img/arrow.svg#arrow"></use>
+              </svg>
             </ng-template>
             <ng-template pTemplate="nextpagelinkicon">
-              <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+              <svg alt="next page icon" width="14" height="14">
+                <use href="assets/img/arrow.svg#arrow"></use>
+              </svg>
             </ng-template>
             <ng-template pTemplate="lastpagelinkicon">
-              <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+              <svg alt="last page icon" width="14" height="14">
+                <use href="assets/img/last-arrow.svg#last-arrow"></use>
+              </svg>
             </ng-template>
           </p-paginator>
         </div>
@@ -127,22 +137,32 @@
       <span>Results per table:</span>
       <p-select [options]="paginationPageSizeOptions" [(ngModel)]="rowsPerPage">
         <ng-template pTemplate="dropdownicon">
-          <img alt="dropdown icon" src="/assets/img/dropdown_arrow.svg" />
+          <svg alt="dropdown icon" width="14" height="14" class="rotate-90">
+            <use href="assets/img/arrow.svg#arrow"></use>
+          </svg>
         </ng-template>
       </p-select>
     </div>
   </ng-template>
   <ng-template pTemplate="paginatorfirstpagelinkicon">
-    <img alt="first page icon" src="/assets/img/first_arrow.svg" />
+    <svg alt="first page icon" width="14" height="14" class="rotate-180">
+      <use href="assets/img/last-arrow.svg#last-arrow"></use>
+    </svg>
   </ng-template>
   <ng-template pTemplate="paginatorpreviouspagelinkicon">
-    <img alt="previous page icon" src="/assets/img/prev_arrow.svg" />
+    <svg alt="previous page icon" width="14" height="14" class="rotate-180">
+      <use href="assets/img/arrow.svg#arrow"></use>
+    </svg>
   </ng-template>
   <ng-template pTemplate="paginatornextpagelinkicon">
-    <img alt="next page icon" src="/assets/img/next_arrow.svg" />
+    <svg alt="next page icon" width="14" height="14">
+      <use href="assets/img/arrow.svg#arrow"></use>
+    </svg>
   </ng-template>
   <ng-template pTemplate="paginatorlastpagelinkicon">
-    <img alt="last page icon" src="/assets/img/last_arrow.svg" />
+    <svg alt="last page icon" width="14" height="14">
+      <use href="assets/img/last-arrow.svg#last-arrow"></use>
+    </svg>
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <td colspan="100" class="mx-3 empty-message">{{ emptyMessage() }}</td>

@@ -3,7 +3,7 @@
     @if (showTitleWarning()) {
       <div>
         <svg alt="Warning exclamation" height="20" width="20" class="warning-icon">
-          <use href="assets/img/exclamation.svg"></use>
+          <use href="assets/img/exclamation.svg#exclamation-icon"></use>
         </svg>
       </div>
     }
@@ -14,7 +14,7 @@
         </h1>
         @if (!noInput()) {
           <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
-            <img #icon src="assets/img/i-x-circle.svg" alt="close dialog" />
+            <img #icon src="assets/img/x-circle.svg" alt="close dialog" />
           </button>
         }
       </div>

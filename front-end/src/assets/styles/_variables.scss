@@ -36,6 +36,7 @@
   --focus-ring: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
   --fec-black: #212121;
   --warning: #631010;
+  --error: #CE2026;
 
   --fec-grey-background: var(--surface-c);
   --fec-grey-alt: #aeb0b5;
@@ -148,6 +149,8 @@
   /* Toggle Button */
   --p-togglebutton-padding: 1rem 1.25rem;
   --p-selectbutton-border-radius: 4px;
+
+  --p-form-field-padding-x: 14px;
 
   /* Toast */
   --p-toast-transition-duration: 3000;

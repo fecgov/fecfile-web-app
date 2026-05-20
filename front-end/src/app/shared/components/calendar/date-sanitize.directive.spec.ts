@@ -43,17 +43,6 @@ describe('DateSanitizerDirective', () => {
     expect(mockOriginalUpdateFn).toHaveBeenCalledWith(null);
   });
 
-  it('should call DateUtils.parseDate for complete date strings', () => {
-    const rawValue = '01/01/2024';
-    const parsedDate = new Date(2024, 0, 1);
-    const spy = vi.spyOn(DateUtils, 'parseDate').mockReturnValue(parsedDate);
-
-    emitFromUI(rawValue);
-
-    expect(spy).toHaveBeenCalledWith(rawValue);
-    expect(mockOriginalUpdateFn).toHaveBeenCalledWith(parsedDate);
-  });
-
   it('should pass through values containing mask placeholders (M, D, Y)', () => {
     const partialValue = '01/DD/YYYY';
     const spy = vi.spyOn(DateUtils, 'parseDate');

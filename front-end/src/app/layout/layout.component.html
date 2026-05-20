@@ -61,12 +61,12 @@
       [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
       [style.paddingTop]="topPadding()"
     >
-      <div class="main-content">
+      <div class="main-content" [class.standard-container]="isDefault()">
         @if (layoutControls().showCommitteeBanner) {
           <app-committee-banner />
         }
         @if (isDefault()) {
-          <div class="container standard-container">
+          <div class="container">
             <router-outlet></router-outlet>
           </div>
         } @else {
@@ -96,10 +96,10 @@
     [noInput]="true"
     [closeOnEscape]="false"
   >
-    <p class="font-karla mb-3">
+    <p class="karla mb-3">
       FECfile+ is experiencing an issue. Previously saved work should not be affected. Please close all instances of
       FECfile+ in your browser and attempt to log back in via the login page.
     </p>
-    <p class="font-karla mb-0">We apologize for the inconvenience.</p>
+    <p class="karla mb-0">We apologize for the inconvenience.</p>
   </app-dialog>
 }

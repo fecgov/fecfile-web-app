@@ -86,6 +86,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
   readonly getContinueUrl = injectRouteData<(report?: Report) => string | undefined | null>('getContinueUrl');
   readonly continueUrl = computed(() => this.getContinueUrl()?.(this.activeReport()) || '/reports/');
   readonly backUrl = computed(() => this.getBackUrl()?.(this.activeReport()) || '');
+  readonly form1Link = environment.form1_link;
 
   constructor() {
     super();

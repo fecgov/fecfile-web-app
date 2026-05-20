@@ -1,44 +1,11 @@
-const baseUri = 'http://localhost:8080';
-const apiUrl = `${baseUri}/api/v1`;
-export const environment = {
+import { createEnvironment } from './environment.base';
+
+export const environment = createEnvironment({
   production: false,
   name: 'local',
-  baseUri: baseUri,
-  apiUrl: apiUrl,
-  appTitle: 'FECfile+',
-  dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
-  fecApiUrl: 'https://api.open.fec.gov/v1/',
-  userCanSetFilingFrequency: true,
-  loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
-  loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
-  ffapiTimeoutCookieName: 'ffapi_timeout_local',
-  sessionIdCookieName: 'sessionid',
-  committee_data_source: 'test',
-  form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
-  showForm3: true,
-  showSchedF: true,
-  disableLogin: false,
-  fecSpec: 8.5,
-  IncludeMsaAndMsx: true,
-  showGlossary: true,
-  webForms: 'https://webforms.stage.efo.fec.gov',
-  whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
-  // run a dummy error reporting endpoint for local environment with:
-  // node -e "require('http').createServer((req,res)=>{let b='';req.on('data',d=>b+=d);req.on('end',()=>{console.log(req.method,req.url,b);res.writeHead(204);res.end();});}).listen(7777)"
-  errorReporting: {
-    enabled: true,
-    endpoint: '/frontend-error-report',
-    sampleRates: {
-      runtime: 1,
-      promise: 1,
-      http4xx: 1,
-      http5xx: 1,
-    },
-    dedupeWindowMs: 30000,
-    batchSize: 10,
-    flushIntervalMs: 5000,
-    maxMessageLength: 500,
-    maxStackLength: 2000,
-    maxPayloadBytes: 12000,
+  externalLinks: 'prod',
+  baseUri: 'http://localhost:8080',
+  overrides: {
+    showGlossary: true,
   },
-};
+});

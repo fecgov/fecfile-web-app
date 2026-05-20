@@ -16,22 +16,22 @@
     placeholder="MM/DD/YYYY"
     pInputMask="99/99/9999"
     slotChar="MM/DD/YYYY"
-    dataType="string"
     appDateSanitizer
+    (onSelect)="control().patchValue($event)"
   >
     <ng-template pTemplate="header">
       <div class="flex justify-content-between p-2 border-bottom-1 border-300">
         <div class="flex gap-1">
           @if (datepicker.currentView === 'date') {
             <button class="year-button" (click)="onYearChange($event, -1)">
-              <svg height="14" width="20">
-                <use href="assets/img/prev-year-arrow.svg"></use>
+              <svg height="20" width="20" class="primary-icon rotate-180">
+                <use href="assets/img/double-arrow.svg#double-arrow"></use>
               </svg>
             </button>
           }
           <button class="month-button" (click)="datepicker.onPrevButtonClick($event)">
-            <svg height="14" width="14">
-              <use href="assets/img/prev-month-arrow.svg"></use>
+            <svg height="14" width="14" class="rotate-180 primary-icon">
+              <use href="assets/img/arrow.svg#arrow"></use>
             </svg>
           </button>
         </div>
@@ -67,14 +67,14 @@
         </div>
         <div class="flex gap-1">
           <button class="month-button" (click)="datepicker.onNextButtonClick($event)">
-            <svg height="14" width="14" class="rotate-180">
-              <use href="assets/img/prev-month-arrow.svg"></use>
+            <svg height="14" width="14" class="primary-icon">
+              <use href="assets/img/arrow.svg#arrow"></use>
             </svg>
           </button>
           @if (datepicker.currentView === 'date') {
             <button class="year-button" (click)="onYearChange($event, 1)">
-              <svg height="14" width="20" class="rotate-180">
-                <use href="assets/img/prev-year-arrow.svg"></use>
+              <svg height="20" width="20" class="primary-icon">
+                <use href="assets/img/double-arrow.svg#double-arrow"></use>
               </svg>
             </button>
           }
