@@ -5,47 +5,38 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Component, viewChild } from '@angular/core';
 import { EditNameDialogComponent } from './edit-name-dialog.component';
-import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMember } from 'app/shared/models';
+import { UserLoginData } from 'app/shared/models';
+import { UsersService } from 'app/shared/services/users.service';
 
-const johnSmith = CommitteeMember.fromJSON({
+const johnSmith: UserLoginData = {
   first_name: 'John',
   last_name: 'Smith',
-  email: 'JS_Test@test.com',
-  role: 'COMMITTEE_ADMINISTRATOR',
-  is_active: true,
-  id: 'TEST',
-});
+};
 
 @Component({
   imports: [EditNameDialogComponent],
   standalone: true,
-  template: `<app-edit-name-dialog [(visible)]="visible" [member]="member" />`,
+  template: `<app-edit-name-dialog [(visible)]="visible" />`,
 })
 class TestHostComponent {
   component = viewChild.required(EditNameDialogComponent);
   visible = false;
-  member: CommitteeMember = johnSmith;
 }
 
 describe('EditNameDialogComponent', () => {
   let component: EditNameDialogComponent;
   let host: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let testCommitteeService: CommitteeMemberService;
+  let testUserService: UsersService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHostComponent, EditNameDialogComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideMockStore(testMockStore()),
-        CommitteeMemberService,
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideMockStore(testMockStore()), UsersService],
     }).compileComponents();
 
-    testCommitteeService = TestBed.inject(CommitteeMemberService);
+    testUserService = TestBed.inject(UsersService);
+    vi.spyOn(testUserService, 'getCurrentUser').mockResolvedValue(johnSmith);
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
 
@@ -58,23 +49,15 @@ describe('EditNameDialogComponent', () => {
   });
 
   describe('Prepopulation and Synchronization', () => {
-    it('should pre-populate the nameModel when visible turns true', () => {
+    it('should pre-populate the nameModel when visible turns true', async () => {
       component.nameModel.set({ first: '', last: '' });
 
       host.visible = true;
       fixture.detectChanges();
+      await fixture.whenStable();
 
       expect(component.nameModel().first).toBe('John');
       expect(component.nameModel().last).toBe('Smith');
-    });
-
-    it('should not update nameModel if visible remains false', () => {
-      component.nameModel.set({ first: 'Custom', last: 'Value' });
-
-      host.member = CommitteeMember.fromJSON({ first_name: 'Jane', last_name: 'Doe' });
-      fixture.detectChanges();
-
-      expect(component.nameModel().first).toBe('Custom');
     });
   });
 
@@ -86,7 +69,7 @@ describe('EditNameDialogComponent', () => {
       component.nameModel.set({ first: '', last: '' });
       fixture.detectChanges();
 
-      const updateSpy = vi.spyOn(testCommitteeService, 'update');
+      const updateSpy = vi.spyOn(testUserService, 'updateCurrentUser');
 
       await component.submit();
 
@@ -95,14 +78,15 @@ describe('EditNameDialogComponent', () => {
       expect(updateSpy).not.toHaveBeenCalled();
     });
 
-    it('should update member names and close dialog when form is valid', async () => {
+    it('should update user names and close dialog when form is valid', async () => {
       host.visible = true;
       fixture.detectChanges();
+      await fixture.whenStable();
 
       component.nameModel.set({ first: 'Johnny', last: 'Smithson' });
       fixture.detectChanges();
 
-      const updateSpy = vi.spyOn(testCommitteeService, 'update').mockResolvedValue(johnSmith);
+      const updateSpy = vi.spyOn(testUserService, 'updateCurrentUser').mockResolvedValue(johnSmith);
 
       await component.submit();
 
@@ -118,9 +102,10 @@ describe('EditNameDialogComponent', () => {
     it('should handle error gracefully and keep dialog open if update service fails', async () => {
       host.visible = true;
       fixture.detectChanges();
+      await fixture.whenStable();
 
       const error = new Error('Database disconnected');
-      const updateSpy = vi.spyOn(testCommitteeService, 'update').mockRejectedValue(error);
+      const updateSpy = vi.spyOn(testUserService, 'updateCurrentUser').mockRejectedValue(error);
       const consoleSpy = vi.spyOn(console, 'error');
 
       await component.submit();

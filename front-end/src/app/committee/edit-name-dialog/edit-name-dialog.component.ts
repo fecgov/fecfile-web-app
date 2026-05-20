@@ -1,19 +1,18 @@
-import { Component, effect, inject, input, model, output, signal } from '@angular/core';
+import { Component, effect, inject, model, output, signal } from '@angular/core';
 import { debounce, form, FormField, required } from '@angular/forms/signals';
-import { CommitteeMember } from 'app/shared/models';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
-import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-
+import { UserLoginData } from 'app/shared/models';
+import { UsersService } from 'app/shared/services/users.service';
 @Component({
   selector: 'app-edit-name-dialog',
   imports: [DialogComponent, FormField],
   templateUrl: './edit-name-dialog.component.html',
 })
 export class EditNameDialogComponent {
-  protected readonly committeeMemberService = inject(CommitteeMemberService);
-  readonly member = input.required<CommitteeMember>();
+  protected readonly userService = inject(UsersService);
   readonly visible = model(false);
   readonly nameChanged = output<void>();
+  private readonly user?: UserLoginData;
   readonly nameModel = signal({
     first: '',
     last: '',
@@ -31,12 +30,12 @@ export class EditNameDialogComponent {
   });
 
   constructor() {
-    effect(() => {
-      const member = this.member();
-      if (member && this.visible()) {
+    effect(async () => {
+      if (this.visible()) {
+        const user = await this.userService.getCurrentUser();
         this.nameModel.set({
-          first: member.first_name || '',
-          last: member.last_name || '',
+          first: user.first_name || '',
+          last: user.last_name || '',
         });
       }
     });
@@ -50,7 +49,7 @@ export class EditNameDialogComponent {
     }
     const { first: first_name, last: last_name } = this.nameForm().value();
     try {
-      await this.committeeMemberService.update({ ...this.member(), first_name, last_name } as CommitteeMember);
+      await this.userService.updateCurrentUser({ ...this.user, first_name, last_name });
       this.visible.set(false);
       this.nameChanged.emit();
     } catch (error) {
