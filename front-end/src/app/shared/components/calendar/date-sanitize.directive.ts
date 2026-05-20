@@ -1,6 +1,5 @@
 import { Directive, inject } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { DateUtils } from 'app/shared/utils/date.utils';
 
 export type DSN = Date | string | null;
 
@@ -15,15 +14,7 @@ export class DateSanitizerDirective {
     const originalRegisterOnChange = accessor.registerOnChange.bind(accessor);
     accessor.registerOnChange = (fn: (value: DSN) => void) => {
       originalRegisterOnChange((value: DSN) => {
-        if (value === 'MM/DD/YYYY' || !value) {
-          return fn(null);
-        }
-
-        if (typeof value === 'string' && value.length === 10 && !/[MDY]/.test(value)) {
-          const parsedDate = DateUtils.parseDate(value);
-          return fn(parsedDate || value);
-        }
-
+        if (value === 'MM/DD/YYYY' || !value) return fn(null);
         return fn(value);
       });
     };
