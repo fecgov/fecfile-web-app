@@ -11,11 +11,11 @@
     <div class="col-6"></div>
     <div class="col-6">
       <app-select
-        [inputId]="templateMap['due_date_setting']"
+        [inputId]="templateMap['loan_due_date_is_date']"
         label="DATE DUE"
         [options]="dueDateSettingOptions"
         [form]="form"
-        [formControlName]="templateMap['due_date_setting']"
+        [formControlName]="templateMap['loan_due_date_is_date']"
         [formSubmitted]="formSubmitted"
       />
     </div>
@@ -44,11 +44,11 @@
 
     <div class="col-6">
       <app-select
-        [inputId]="templateMap['interest_rate_setting']"
+        [inputId]="templateMap['loan_interest_rate_is_percent']"
         label="INTEREST RATE"
         [options]="interestRateSettingOptions"
         [form]="form"
-        [formControlName]="templateMap['interest_rate_setting']"
+        [formControlName]="templateMap['loan_interest_rate_is_percent']"
         [formSubmitted]="formSubmitted"
       />
     </div>

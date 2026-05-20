@@ -306,9 +306,13 @@ export class TransactionFormUtils {
     }
 
     let formValues = SchemaUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
+    console.log('getFormValues', formValues);
     formValues = TransactionFormUtils.retrieveMemoText(transaction, form, formValues);
     formValues = TransactionFormUtils.addExtraFormFields(transaction, form, formValues);
+    console.log('addExtraFormValues', formValues);
     formValues = TransactionFormUtils.removeUnsavedFormFields(transaction, formValues);
+
+    console.log('Finished Formvalues', formValues);
 
     const payload: ScheduleTransaction = getFromJSON({
       ...transaction,
