@@ -105,8 +105,8 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
     ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
     // CONTRIBUTIONS FROM REGISTERED FILERS
     ScheduleATransactionTypes.PARTY_RECEIPT,
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
