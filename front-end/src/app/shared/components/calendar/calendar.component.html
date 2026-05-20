@@ -16,8 +16,8 @@
     placeholder="MM/DD/YYYY"
     pInputMask="99/99/9999"
     slotChar="MM/DD/YYYY"
-    dataType="string"
     appDateSanitizer
+    (onSelect)="control().patchValue($event)"
   >
     <ng-template pTemplate="header">
       <div class="flex justify-content-between p-2 border-bottom-1 border-300">
