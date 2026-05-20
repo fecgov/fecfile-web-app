@@ -21,7 +21,6 @@ import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-main-form',
