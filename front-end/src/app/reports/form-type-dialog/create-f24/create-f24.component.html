@@ -12,25 +12,28 @@
   </div>
 
   <div class="w-full field">
-    <span class="dialog-label" id="form24Name_label">REPORT NAME</span>
+    <label class="dialog-label" id="form24Name_label" for="form24Name">REPORT NAME</label>
     <p-input-group>
       <div id="f24-input-container">
         @if (typeName()) {
           <span>{{ typeName() }}</span>
         }
-
-        <input
-          pInputText
-          type="text"
-          [(ngModel)]="form24Name"
-          id="form24Name"
-          aria-labelledby="form24Name_label"
-          [class]="selectedForm24Type() ? 'pl-1' : ''"
-        />
+        <p-inputgroup>
+          <input
+            #name="ngModel"
+            pInputText
+            [placeholder]="placeholder()"
+            type="text"
+            [(ngModel)]="form24Name"
+            id="form24Name"
+            [class.pl-1]="selectedForm24Type()"
+            [class.opacity-60]="selectedForm24Type() && !form24Name()"
+          />
+        </p-inputgroup>
       </div>
     </p-input-group>
 
-    @if (!isSubmitDisabled() && form24NameErrors()) {
+    @if (form24NameErrors() && name.control.touched) {
       <small class="p-error">{{ form24NameErrors() }}</small>
     }
   </div>

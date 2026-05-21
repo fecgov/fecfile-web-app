@@ -34,7 +34,7 @@ export class RenameF24DialogComponent extends FormComponent {
   readonly form24Service = inject(Form24Service);
   readonly f24UniqueNameValidator = inject(F24UniqueNameValidator);
   readonly dialogVisible = model(false);
-  readonly f24Report = input<Report | undefined>();
+  readonly f24Report = input<Form24>();
   readonly form = new FormGroup(
     {
       typeName: new SubscriptionFormControl(),
@@ -52,7 +52,7 @@ export class RenameF24DialogComponent extends FormComponent {
   constructor() {
     super();
     effect(() => {
-      const f24Report = this.f24Report() as Form24 | undefined;
+      const f24Report = this.f24Report();
       if (f24Report) {
         const regex = /^(24-Hour:\s|48-Hour:\s)(.*)$/;
         const match = f24Report.name?.match(regex);
