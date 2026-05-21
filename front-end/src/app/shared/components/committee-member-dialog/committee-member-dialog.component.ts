@@ -52,12 +52,16 @@ export class CommitteeMemberDialogComponent extends FormComponent {
     if (!member) return '';
     return Roles[member.role as keyof typeof Roles];
   });
+  submitDisabled = true;
 
   constructor() {
     super();
     effect(() => {
       if (!this.detailVisible()) this.resetForm();
+      if (this.member()) this.submitDisabled = false;
     });
+
+    this.form.controls['email'].statusChanges.subscribe((status) => (this.submitDisabled = status !== 'VALID'));
   }
 
   updateSelected(roleOption: (typeof this.roleOptions)[0]) {

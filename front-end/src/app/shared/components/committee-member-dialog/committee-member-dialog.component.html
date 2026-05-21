@@ -4,6 +4,7 @@
   [title]="member() ? 'Edit user' : 'Add user'"
   [submitLabel]="member() ? 'Change' : 'Add'"
   [(visible)]="detailVisible"
+  [submitDisabled]="submitDisabled"
   (confirm)="submitForm()"
 >
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
