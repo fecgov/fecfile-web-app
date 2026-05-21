@@ -9,6 +9,7 @@ export const environment = createEnvironment({
     ffapiTimeoutCookieName: 'ffapi_timeout_prod',
     showForm3: false,
     showSchedF: false,
+    IncludeMsaAndMsx: false,
     errorReporting: {
       ...baseEnvironment.errorReporting,
       sampleRates: {

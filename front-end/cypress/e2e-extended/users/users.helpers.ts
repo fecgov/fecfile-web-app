@@ -96,11 +96,6 @@ export class UsersHelpers {
     });
   }
 
-  static assertNoRowKebabs() {
-    cy.get('@table')
-      .find('.pi.pi-ellipsis-v, [data-cy="row-kebab"]')
-      .should('not.exist');
-  }
   
   static readonly assertEnabled = ($el: JQuery<HTMLElement>) => {
       const isAriaDisabled = ($el.attr("aria-disabled") || "").toLowerCase() === "true";
