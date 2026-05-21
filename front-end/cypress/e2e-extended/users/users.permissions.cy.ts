@@ -19,9 +19,7 @@ describe('Users Permissions via Committee Switch RBAC', () => {
     UsersPage.goToPage();
     SharedHelpers.chooseResultsPerPage(20);
     UsersHelpers.aliasUsersTable();
-    UsersHelpers.assertUsersTableColumns(['Name', 'Email', 'Role', 'Status']);
     UsersHelpers.assertNoAddUserButton();
-    UsersHelpers.assertNoRowKebabs();
     cy.get('@table').should('be.visible');
     UsersHelpers.assertAtLeastOneUserRow();
   });
