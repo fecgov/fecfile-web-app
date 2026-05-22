@@ -25,20 +25,19 @@
           class="p-inputtext search-input"
           [formControl]="searchBoxFormControl"
         />
-        <p-button
+        <button
+          pButton
+          pRipple
           class="search-button"
           (click)="search(searchBoxFormControl.value)"
           (keyUp.enter)="search(searchBoxFormControl.value)"
+          appSingleClick
+          [disabled]="!searchBoxFormControl.value"
         >
-          <ng-template pTemplate="iconTemplate">
-            <img
-              alt="Magnifying lens"
-              src="assets/img/contact_lookup_magnifying_glass.svg"
-              width="35px"
-              height="35px"
-            />
-          </ng-template>
-        </p-button>
+          <svg alt="Magnifying lens" width="35px" height="35px">
+            <use href="assets/img/contact_lookup_magnifying_glass.svg#magnifying-glass"></use>
+          </svg>
+        </button>
       </p-inputGroup>
       <p class="font-italic karla mt-1">Examples: C00431445, C00343509</p>
     </div>
@@ -63,7 +62,10 @@
               <div class="committee-info">
                 <h3>{{ selectedCommittee()!.name }}</h3>
                 <span class="h5 karla-bold mb-0">{{ selectedCommittee()!.committee_id }}</span>
-                <p-button
+                <button
+                  appSingleClick
+                  pButton
+                  pRipple
                   class="create-button"
                   label="Create account"
                   styleClass="p-button-primary"
@@ -71,8 +73,7 @@
                   (keyUp.enter)="createAccount()"
                   icon="pi pi-angle-right"
                   iconPos="right"
-                >
-                </p-button>
+                ></button>
               </div>
             </div>
           }
