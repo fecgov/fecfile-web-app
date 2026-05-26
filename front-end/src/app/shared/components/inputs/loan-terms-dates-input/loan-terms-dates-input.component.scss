@@ -1,0 +1,38 @@
+.percent-input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 11rem;
+  overflow: visible;
+
+  label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.grid {
+  display: flex;
+  align-items: flex-end;
+}
+
+.label-wrapper {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.percent-input {
+  width: 11rem;
+  box-sizing: border-box;
+  padding-right: 2.75rem;
+}
+
+.percent-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 1rem;
+  height: 1rem;
+  z-index: 2;
+}

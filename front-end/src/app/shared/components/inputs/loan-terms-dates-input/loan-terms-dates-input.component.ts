@@ -24,6 +24,7 @@ const LoanTermsFieldSettings = {
 @Component({
   selector: 'app-loan-terms-dates-input',
   templateUrl: './loan-terms-dates-input.component.html',
+  styleUrls: ['./loan-terms-dates-input.component.scss'],
   imports: [ReactiveFormsModule, CalendarComponent, ErrorMessagesComponent, InputText, SelectComponent],
   providers: [IdGeneratorService],
 })
@@ -36,13 +37,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   readonly termFieldSettings = LoanTermsFieldSettings;
 
   readonly dueDateSettingOptions = LabelUtils.getOptions([
-    [true, 'Enter a specific date'],
-    [false, 'Enter a user defined value'],
+    [true, 'Exact due date (MM/DD/YYYY)'],
+    [false, 'Other'],
   ]);
 
   readonly interestRateSettingOptions = LabelUtils.getOptions([
-    [true, 'Enter an exact percentage'],
-    [false, 'Enter a user defined value'],
+    [true, 'Exact interest rate (%)'],
+    [false, 'Other'],
   ]);
 
   readonly report = this.store.selectSignal(selectActiveReport);
@@ -135,7 +136,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         initialSelectionEnd = textInput.selectionEnd ?? 0;
       }
 
-      const validNumber = newInterestRate.replaceAll(/[^0-9.%]/g, '');
+      const validNumber = newInterestRate.replaceAll(/[^0-9.]/g, '');
       if (validNumber !== newInterestRate) {
         this.interestRate = validNumber;
         const lengthDifference = newInterestRate.length - validNumber.length;
@@ -143,17 +144,6 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
         textInput?.setSelectionRange(initialSelectionStart - lengthDifference, initialSelectionEnd - lengthDifference);
         this.interestRateField?.markAsTouched();
-      }
-
-      if (newInterestRate.length > 0) {
-        if (!newInterestRate.endsWith('%')) {
-          this.interestRate = newInterestRate + '%';
-          textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
-          this.interestRateField?.markAsTouched();
-        }
-      }
-      if (this.interestRate === '%') {
-        this.interestRate = '';
       }
     }
   }

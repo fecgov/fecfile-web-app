@@ -71,10 +71,10 @@ export class LoanFormData extends ScheduleFormData {
   date_incurred: Date | undefined;
   date_signed: Date | undefined;
   due_date: Date | undefined;
-  loan_due_date_is_date: boolean | undefined;
+  loan_due_date_is_date: string | undefined;
   first_name: string;
   future_income: string;
-  loan_interest_rate_is_percent: boolean | undefined;
+  loan_interest_rate_is_percent: string | undefined;
   interest_rate: number | undefined;
   last_name: string;
   line_of_credit: string;
@@ -147,13 +147,13 @@ export const defaultLoanFormData: LoanFormData = {
   date_received: new Date(currentYear, 4 - 1, 27),
   date_signed: new Date(currentYear, 4 - 1, 27),
   due_date: new Date(currentYear, 4 - 1, 27),
-  loan_due_date_is_date: 'Enter a specific date',
+  loan_due_date_is_date: 'Exact due date (MM/DD/YYYY)',
   electionType: undefined,
   electionYear: undefined,
   election_other_description: '',
   first_name: faker.person.firstName(),
   future_income: 'NO',
-  loan_interest_rate_is_percent: 'Enter an exact percentage',
+  loan_interest_rate_is_percent: 'Exact interest rate (%)',
   interest_rate: 2.3,
   last_name: faker.person.lastName(),
   line_of_credit: 'NO',
