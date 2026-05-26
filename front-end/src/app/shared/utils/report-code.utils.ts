@@ -30,7 +30,7 @@ export enum ReportCodes {
 
 export function getCoverageDatesFunction(
   reportCode: ReportCodes,
-): ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date]) | undefined {
+): ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date | undefined, Date]) | undefined {
   switch (reportCode) {
     case ReportCodes.Q1: {
       return createCoverageFunction(0, 2);
@@ -94,10 +94,10 @@ function createCoverageFunction(
   };
 }
 
-function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFrequency: string): [Date, Date] {
+function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFrequency: string): [Date | undefined, Date] {
   year = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
   if (isElectionYear) {
-    return [new Date(year, 9, 1), new Date(year, 11, 31)];
+    return [undefined, new Date(year, 11, 31)];
   } else if (filingFrequency === 'Q') {
     return [new Date(year, 6, 1), new Date(year, 11, 31)];
   }
