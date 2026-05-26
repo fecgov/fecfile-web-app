@@ -4,9 +4,9 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { FluidModule } from 'primeng/fluid';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { TransactionTemplateMapType } from 'app/shared/models';
 import { SearchableSelectComponent } from '../../searchable-select/searchable-select.component';
 import { SelectModule } from 'primeng/select';
+import type { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
 @Component({
   selector: 'app-address-input',

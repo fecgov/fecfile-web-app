@@ -1,6 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Form24, Form3, Form3X, ReportTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -11,6 +10,10 @@ import { ReportSidebarSection } from './menu-info';
 import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { PanelMenu } from 'primeng/panelmenu';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
+import { Form3 } from 'app/shared/models/reports/form-3.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 
 @Component({
   selector: 'app-report-sidebar',

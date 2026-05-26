@@ -5,9 +5,9 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { blurActiveInput, printFormErrors } from '../utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { NavigationEvent } from '../models';
 import { DestroyerComponent } from './destroyer.component';
 import { firstValueFrom } from 'rxjs';
+import { NavigationEvent } from '../models/transaction-navigation-controls.model';
 
 @Component({
   template: '',

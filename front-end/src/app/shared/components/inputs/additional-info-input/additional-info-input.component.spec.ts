@@ -8,8 +8,9 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
-import { Contact, Transaction } from 'app/shared/models';
 import { SelectItem } from 'primeng/api';
+import { Contact } from 'app/shared/models/contact.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [AdditionalInfoInputComponent],

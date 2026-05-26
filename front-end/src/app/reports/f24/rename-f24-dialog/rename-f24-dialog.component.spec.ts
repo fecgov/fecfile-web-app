@@ -3,12 +3,12 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form24 } from 'app/shared/models';
 import { F24UniqueNameValidator, Form24Service } from 'app/shared/services/form-24.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { RenameF24DialogComponent } from './rename-f24-dialog.component';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
 
 describe('RenameF24DialogComponent', () => {
   let component: RenameF24DialogComponent;

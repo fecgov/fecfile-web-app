@@ -5,7 +5,7 @@ import { testMockStore } from '../utils/unit-test.utils';
 import { F24UniqueNameValidator, Form24Service } from './form-24.service';
 import { provideHttpClient } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Form24 } from '../models';
+import { Form24 } from '../models/reports/form-24.model';
 
 describe('Form24Service', () => {
   let service: Form24Service;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReportService } from './report.service';
-import { Form1M } from '../models';
+import type { Form1M } from '../models/reports/form-1m.model';
 
 @Injectable({
   providedIn: 'root',

@@ -20,11 +20,11 @@ import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.mo
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
-import { Form3 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { Form3 } from 'app/shared/models/reports/form-3.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;

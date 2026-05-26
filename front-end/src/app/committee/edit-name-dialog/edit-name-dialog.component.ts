@@ -1,7 +1,7 @@
 import { Component, effect, inject, model, output, signal } from '@angular/core';
 import { debounce, form, FormField, required } from '@angular/forms/signals';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
-import { UserLoginData } from 'app/shared/models';
+import { UserLoginData } from 'app/shared/models/user.model';
 import { UsersService } from 'app/shared/services/users.service';
 @Component({
   selector: 'app-edit-name-dialog',

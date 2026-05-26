@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { Form3X, Report } from 'app/shared/models/';
+import { Report } from 'app/shared/models/reports/report.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -17,6 +17,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { BehaviorSubject } from 'rxjs';
 import { F3X_ROUTES } from '../f3x/routes';
 import { SubmitReportComponent } from './submit-report.component';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 const routeDataSubject = new BehaviorSubject<{
   report: Report;

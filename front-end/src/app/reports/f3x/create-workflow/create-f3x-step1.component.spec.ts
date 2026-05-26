@@ -5,13 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { Form3X, F3xFormTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 
 let component: CreateF3XStep1Component;
 let fixture: ComponentFixture<CreateF3XStep1Component>;

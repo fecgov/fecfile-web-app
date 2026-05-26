@@ -5,7 +5,6 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { FormTypeDialogComponent } from 'app/reports/form-type-dialog/form-type-dialog.component';
-import { CommitteeAccount, Form3X, ReportStatus, ReportTypes } from 'app/shared/models';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -19,6 +18,9 @@ import { of, Subject } from 'rxjs';
 import { ReportListComponent } from '../report-list.component';
 import { Form3XListComponent } from './form3x-list.component';
 import { ROUTES } from 'app/routes';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { ReportTypes, ReportStatus } from 'app/shared/models/reports/report.model';
 
 function getStatusLink(report: Form3X): string {
   return `/reports/f3x/submit/status/${report.id}`;

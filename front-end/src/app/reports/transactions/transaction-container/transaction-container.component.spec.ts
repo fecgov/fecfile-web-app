@@ -22,17 +22,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Title } from '@angular/platform-browser';
 import { ReportService } from 'app/shared/services/report.service';
-import {
-  SchATransaction,
-  SchCTransaction,
-  ScheduleATransactionTypes,
-  ScheduleCTransactionTypes,
-  Transaction,
-  TransactionTypes,
-} from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
+import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ScheduleCTransactionTypes, SchCTransaction } from 'app/shared/models/schc-transaction.model';
+import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 
 const mockTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,

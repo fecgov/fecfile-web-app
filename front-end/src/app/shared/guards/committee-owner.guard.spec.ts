@@ -8,9 +8,10 @@ import { CommitteeMemberService } from '../services/committee-member.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { testCommitteeMember, testMockStore } from '../utils/unit-test.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount, CommitteeMember } from '../models';
 import type { Mock } from 'vitest';
 import { signal } from '@angular/core';
+import { CommitteeAccount } from '../models/committee-account.model';
+import { CommitteeMember } from '../models/committee-member.model';
 
 let needsSecondAdminMock = signal(false);
 

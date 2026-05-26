@@ -16,7 +16,7 @@ import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.mode
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
-import { Form24 } from 'app/shared/models';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;

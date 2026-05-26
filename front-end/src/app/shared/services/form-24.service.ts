@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ReportService } from './report.service';
-import type { Form24 } from '../models';
 import { AsyncValidator, AbstractControl, ValidationErrors } from '@angular/forms';
+import type { Form24 } from '../models/reports/form-24.model';
 
 @Injectable({
   providedIn: 'root',

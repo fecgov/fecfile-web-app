@@ -7,7 +7,6 @@ import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils
 import { ReactiveFormsModule } from '@angular/forms';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { provideMockStore } from '@ngrx/store/testing';
-import { CommitteeMember, Roles } from 'app/shared/models';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +14,8 @@ import { DialogModule } from 'primeng/dialog';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZoneChangeDetection } from '@angular/core';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { Roles } from 'app/shared/models/role.model';
 
 describe('SecondCommitteeAdminDialogComponent', () => {
   let component: SecondCommitteeAdminDialogComponent;

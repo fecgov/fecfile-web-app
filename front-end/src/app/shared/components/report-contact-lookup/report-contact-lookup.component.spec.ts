@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, viewChild } from '@angular/core';
-import { ContactTypes } from 'app/shared/models';
 import { FormGroup } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ReportContactLookupComponent } from './report-contact-lookup.component';
+import { ContactTypes } from 'app/shared/models/contact.model';
 
 @Component({
   imports: [ReportContactLookupComponent],

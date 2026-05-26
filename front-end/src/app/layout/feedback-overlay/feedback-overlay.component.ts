@@ -1,12 +1,12 @@
 import { Component, ElementRef, HostListener, inject, viewChild } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Feedback } from 'app/shared/models';
 import { FeedbackService } from 'app/shared/services/feedback.service';
 import { ButtonDirective } from 'primeng/button';
 import { FormComponent } from 'app/shared/components/form.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
+import { Feedback } from 'app/shared/models/feedback.model';
 
 enum SubmissionStates {
   DRAFT,

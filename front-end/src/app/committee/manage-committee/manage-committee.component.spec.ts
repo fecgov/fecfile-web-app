@@ -9,13 +9,13 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
-import { CommitteeMember } from 'app/shared/models';
 import { CommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/committee-member-dialog.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
 
 describe('ManageCommitteeComponent', () => {
   let component: ManageCommitteeComponent;

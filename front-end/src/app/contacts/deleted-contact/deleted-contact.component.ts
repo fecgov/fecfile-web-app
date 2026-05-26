@@ -2,7 +2,7 @@ import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@an
 import { RouterLink } from '@angular/router';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from 'app/shared/components/table/table.component';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';

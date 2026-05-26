@@ -4,8 +4,8 @@ import { CalendarComponent } from './calendar.component';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { ScheduleATransactionTypes } from 'app/shared/models';
 import { Component, inject, viewChild } from '@angular/core';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 @Component({
   imports: [CalendarComponent],

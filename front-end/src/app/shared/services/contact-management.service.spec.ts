@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ContactManagementService, ContactManager } from './contact-management.service';
-import { ContactTypes, emptyContact } from '../models';
 import { testContact } from '../utils/unit-test.utils';
+import { emptyContact, ContactTypes } from '../models/contact.model';
 
 describe('ContactManagementService', () => {
   let service: ContactManagementService;

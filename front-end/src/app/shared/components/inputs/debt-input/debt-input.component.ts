@@ -4,7 +4,7 @@ import { BaseInputComponent } from '../base-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { SchDTransaction } from 'app/shared/models';
+import type { SchDTransaction } from 'app/shared/models/schd-transaction.model';
 
 @Component({
   selector: 'app-debt-input',
@@ -26,7 +26,7 @@ export class DebtInputComponent extends BaseInputComponent implements OnInit {
       .get('incurred_amount')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((amount) => {
-        const amountNumber = isNaN(parseFloat(amount)) ? 0 : parseFloat(amount);
+        const amountNumber = Number.isNaN(Number.parseFloat(amount)) ? 0 : Number.parseFloat(amount);
         const tx = this.transaction() as SchDTransaction | undefined;
         const beginning_balance = tx?.beginning_balance ?? 0;
         const payment_amount = tx?.payment_amount ?? 0;

@@ -23,8 +23,8 @@ import { provideRouter } from '@angular/router';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Form3X } from 'app/shared/models';
 import { provideZoneChangeDetection } from '@angular/core';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;

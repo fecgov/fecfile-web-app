@@ -5,8 +5,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Component, viewChild } from '@angular/core';
 import { EditNameDialogComponent } from './edit-name-dialog.component';
-import { UserLoginData } from 'app/shared/models';
 import { UsersService } from 'app/shared/services/users.service';
+import { UserLoginData } from 'app/shared/models/user.model';
 
 const johnSmith: UserLoginData = {
   first_name: 'John',

@@ -14,7 +14,8 @@ import { DialogModule, Dialog } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ReportListComponent } from '../report-list.component';
-import { Form1M, ReportTypes } from 'app/shared/models';
+import { Form1M } from 'app/shared/models/reports/form-1m.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
 
 describe('Form1MListComponent', () => {
   let component: Form1MListComponent;

@@ -13,11 +13,12 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { AmountInputComponent } from './amount-input.component';
 import { InputNumberComponent } from '../input-number/input-number.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ScheduleATransactionTypes, Transaction } from 'app/shared/models';
 import { Component, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [AmountInputComponent, AsyncPipe],

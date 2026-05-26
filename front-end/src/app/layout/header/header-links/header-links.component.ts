@@ -2,7 +2,6 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
 import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +11,7 @@ import { setServiceAvailableAction } from 'app/store/service-available.actions';
 import { HttpResponse } from '@angular/common/http';
 import { ApiService } from 'app/shared/services/api.service';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
+import { Roles } from 'app/shared/models/role.model';
 
 @Component({
   standalone: true,

@@ -1,6 +1,5 @@
 import { Component, computed, effect, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from '../../store/user-login-data.selectors';
 import { CommitteeMemberService } from '../../shared/services/committee-member.service';
@@ -13,6 +12,8 @@ import { TableModule } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { EditNameDialogComponent } from '../edit-name-dialog/edit-name-dialog.component';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models/role.model';
 
 @Component({
   selector: 'app-manage-committee',

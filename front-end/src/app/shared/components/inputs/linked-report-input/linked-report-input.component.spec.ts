@@ -7,10 +7,12 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, UploadSubmission } from 'app/shared/models';
 import { Component, viewChild } from '@angular/core';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { UploadSubmission } from 'app/shared/models/upload-submission.model';
 
 const mockReports: Form3X[] = [
   Form3X.fromJSON({
