@@ -94,7 +94,11 @@ function createCoverageFunction(
   };
 }
 
-function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFrequency: string): [Date | undefined, Date] {
+function getYearEndCoverageDates(
+  year: number,
+  isElectionYear: boolean,
+  filingFrequency: string,
+): [Date | undefined, Date] {
   year = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
   if (isElectionYear) {
     return [undefined, new Date(year, 11, 31)];
