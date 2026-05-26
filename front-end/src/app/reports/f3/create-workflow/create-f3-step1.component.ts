@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Form3Service } from 'app/shared/services/form-3.service';
@@ -8,7 +8,7 @@ import {
   ReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
-  getCoverageDatesFunction,
+  calculateDates,
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { environment } from 'environments/environment';
@@ -46,6 +46,7 @@ import { SearchableSelectComponent } from 'app/shared/components/searchable-sele
   ],
 })
 export class CreateF3Step1Component extends FormComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly form3Service = inject(Form3Service);
   private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -83,6 +84,26 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     return existingCoverage;
   });
 
+  readonly numReportCodeColumns = signal(3);
+  readonly reportCodesColumns = computed(() => {
+    const codes = this.reportCodes();
+    const numColumns = this.numReportCodeColumns();
+    const result: ReportCodes[][] = [];
+
+    let startIndex = 0;
+
+    for (let i = 0; i < numColumns; i++) {
+      const baseSize = Math.floor(codes.length / numColumns);
+      const extra = i < codes.length % numColumns ? 1 : 0;
+      const colSize = baseSize + extra;
+
+      const chunk = codes.slice(startIndex, startIndex + colSize);
+      result.push(chunk);
+      startIndex += colSize;
+    }
+
+    return result;
+  });
   readonly usedReportCodes = computed(() => {
     const existingCoverage = this.existingCoverage();
     if (!existingCoverage) return [];
@@ -113,15 +134,14 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   );
   private readonly isElectionYear = computed(() => F3ReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
   readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
-  private readonly coverages = computed(() => {
+  private readonly coverages = computed<[Date | undefined, Date | undefined] | undefined>(() => {
     const report = this.report();
-    const coverageDatesFunction = getCoverageDatesFunction(this.reportCode());
-    if (this.form.pristine && report) {
-      return [report.coverageDates!['coverage_from_date'], report.coverageDates!['coverage_through_date']];
+
+    if (this.form.pristine && report?.coverageDates) {
+      return [report.coverageDates['coverage_from_date'], report.coverageDates['coverage_through_date']];
     }
 
-    if (!coverageDatesFunction) return undefined;
-    return coverageDatesFunction(this.thisYear, this.isElectionYear(), 'Q');
+    return calculateDates(this.reportCode(), this.thisYear, this.isElectionYear(), 'Q');
   });
 
   public thisYear = new Date().getFullYear();
@@ -175,10 +195,23 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
       this.reportTypeCategory();
       this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
     });
+
+    this.detectScreenWidth();
   }
 
   ngOnInit() {
     this.form3Service.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
+  }
+
+  private detectScreenWidth() {
+    const mobileQuery = globalThis.matchMedia('(min-width: 992px)');
+    const mediaQueryListener = () => {
+      const isLargeScreen = mobileQuery.matches;
+      this.numReportCodeColumns.set(isLargeScreen ? 3 : 2);
+    };
+    mediaQueryListener();
+    mobileQuery.addEventListener('change', mediaQueryListener);
+    this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', mediaQueryListener));
   }
 
   private getFirstEnabledReportCode() {

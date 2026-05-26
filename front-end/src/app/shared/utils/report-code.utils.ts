@@ -28,81 +28,61 @@ export enum ReportCodes {
   M12 = 'M12',
 }
 
-export function getCoverageDatesFunction(
+export function calculateDates(
   reportCode: ReportCodes,
-): ((year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date]) | undefined {
-  switch (reportCode) {
-    case ReportCodes.Q1: {
-      return createCoverageFunction(0, 2);
-    }
-    case ReportCodes.Q2: {
-      return createCoverageFunction(3, 5);
-    }
-    case ReportCodes.Q3: {
-      return createCoverageFunction(6, 8);
-    }
-    case ReportCodes.YE: {
-      return getYearEndCoverageDates;
-    }
-    case ReportCodes.MY: {
-      return createCoverageFunction(0, 5);
-    }
-    case ReportCodes.M2: {
-      return createCoverageFunction(0, 0);
-    }
-    case ReportCodes.M3: {
-      return createCoverageFunction(1, 1);
-    }
-    case ReportCodes.M4: {
-      return createCoverageFunction(2, 2);
-    }
-    case ReportCodes.M5: {
-      return createCoverageFunction(3, 3);
-    }
-    case ReportCodes.M6: {
-      return createCoverageFunction(4, 4);
-    }
-    case ReportCodes.M7: {
-      return createCoverageFunction(5, 5);
-    }
-    case ReportCodes.M8: {
-      return createCoverageFunction(6, 6);
-    }
-    case ReportCodes.M9: {
-      return createCoverageFunction(7, 7);
-    }
-    case ReportCodes.M10: {
-      return createCoverageFunction(8, 8);
-    }
-    case ReportCodes.M11: {
-      return createCoverageFunction(9, 9);
-    }
-    case ReportCodes.M12: {
-      return createCoverageFunction(10, 10);
-    }
-    default:
-      return undefined;
+  year: number,
+  isElectionYear: boolean,
+  filingFrequency: 'Q' | 'M',
+) {
+  if (!reportCode) return undefined;
+  if (reportCode === ReportCodes.YE) {
+    return calculateYearEndDates(year, isElectionYear, filingFrequency);
   }
+  const bounds = MONTH_BOUNDS_MAP[reportCode];
+  if (bounds) {
+    return calculateStandardDates(year, bounds[0], bounds[1]);
+  }
+
+  return undefined;
 }
 
-function createCoverageFunction(
-  startMonth: number,
-  endMonth: number,
-): (year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date] {
-  return (year: number) => {
-    return [new Date(year, startMonth, 1), new Date(year, endMonth + 1, 0)];
-  };
+function calculateStandardDates(year: number, startMonth: number, endMonth: number): [Date, Date] {
+  return [new Date(year, startMonth, 1), new Date(year, endMonth + 1, 0)];
 }
 
-function getYearEndCoverageDates(year: number, isElectionYear: boolean, filingFrequency: string): [Date, Date] {
-  year = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
+function calculateYearEndDates(
+  year: number,
+  isElectionYear: boolean,
+  filingFrequency: 'Q' | 'M',
+): [Date | undefined, Date] {
+  const adjustedYear = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
+
   if (isElectionYear) {
-    return [new Date(year, 9, 1), new Date(year, 11, 31)];
-  } else if (filingFrequency === 'Q') {
-    return [new Date(year, 6, 1), new Date(year, 11, 31)];
+    return [undefined, new Date(year, 11, 31)];
   }
-  return [new Date(year, 11, 1), new Date(year, 11, 31)];
+  if (filingFrequency === 'Q') {
+    return [new Date(adjustedYear, 6, 1), new Date(adjustedYear, 11, 31)];
+  }
+  return [new Date(adjustedYear, 11, 1), new Date(adjustedYear, 11, 31)];
 }
+
+const MONTH_BOUNDS_MAP: Partial<Record<ReportCodes, [number, number]>> = {
+  [ReportCodes.Q1]: [0, 2],
+  [ReportCodes.Q2]: [3, 5],
+  [ReportCodes.Q3]: [6, 8],
+  [ReportCodes.MY]: [0, 5],
+  [ReportCodes.M2]: [0, 0],
+  [ReportCodes.M3]: [1, 1],
+  [ReportCodes.M4]: [2, 2],
+  [ReportCodes.M5]: [3, 3],
+  [ReportCodes.M6]: [4, 4],
+  [ReportCodes.M7]: [5, 5],
+  [ReportCodes.M8]: [6, 6],
+  [ReportCodes.M9]: [7, 7],
+  [ReportCodes.M10]: [8, 8],
+  [ReportCodes.M11]: [9, 9],
+  [ReportCodes.M12]: [10, 10],
+};
 
 export const monthlyElectionYearReportCodes: ReportCodes[] = [
   ReportCodes.M2,

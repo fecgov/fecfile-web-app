@@ -11,7 +11,7 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
-  getCoverageDatesFunction,
+  calculateDates,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
@@ -133,24 +133,17 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
 
   private readonly committeeFrequency = computed(() => (this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q'));
 
-  readonly form3x = computed(() => {
-    const report = this.report();
-    if (!report) return undefined;
-    return report as Form3X;
-  });
-
   private readonly isMonthly = computed(() => this.filingFrequency() === 'M');
 
   private readonly isElectionYear = computed(() => F3xReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
-  private readonly coverages = computed(() => {
+  private readonly coverages = computed<[Date | undefined, Date | undefined] | undefined>(() => {
     const report = this.report();
-    const coverageDatesFunction = getCoverageDatesFunction(this.reportCode());
-    if (this.form.pristine && report) {
-      return [report.coverageDates!['coverage_from_date'], report.coverageDates!['coverage_through_date']];
+
+    if (this.form.pristine && report?.coverageDates) {
+      return [report.coverageDates['coverage_from_date'], report.coverageDates['coverage_through_date']];
     }
 
-    if (!coverageDatesFunction) return undefined;
-    return coverageDatesFunction(this.year, this.isElectionYear(), this.filingFrequency());
+    return calculateDates(this.reportCode(), this.year, this.isElectionYear(), this.filingFrequency());
   });
 
   readonly disabledReportCodes = computed(() => {
@@ -229,7 +222,7 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
 
     effect(() => {
       this.filingFrequency();
-      const report = this.form3x();
+      const report = this.report();
       if (this.form.pristine && report) {
         this.form.patchValue({ report_type_category: report.report_type_category });
       } else {
@@ -250,9 +243,9 @@ export class CreateF3XStep1Component extends FormComponent implements OnInit {
   }
 
   private detectScreenWidth() {
-    const mobileQuery = window.matchMedia('(min-width: 992px)');
+    const mobileQuery = globalThis.matchMedia('(min-width: 992px)');
     const mediaQueryListener = () => {
-      const isLargeScreen = mobileQuery!.matches;
+      const isLargeScreen = mobileQuery.matches;
       this.numReportCodeColumns.set(isLargeScreen ? 3 : 2);
     };
     mediaQueryListener();
