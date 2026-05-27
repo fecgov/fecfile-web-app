@@ -125,7 +125,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   private onInterestRateInput(newInterestRateSetting: boolean) {
     const previousInterestRate = this.interestRate;
     if (newInterestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-      let newInterestRate = previousInterestRate ?? '';
+      const newInterestRate = previousInterestRate ?? '';
       let textInput!: HTMLInputElement;
       let initialSelectionStart = 0;
       let initialSelectionEnd = 0;
