@@ -54,7 +54,7 @@ export function testCommitteeAccount(): CommitteeAccount {
     designation_full: 'Unauthorized',
     email: 'USPOLITICALACTIONCOMMITTEES@GMAIL.COM',
     fax: undefined,
-    filing_frequency: 'A',
+    filing_frequency: 'Q',
     first_f1_date: '2016-01-01',
     first_file_date: '2016-01-01',
     form_type: 'F1',
