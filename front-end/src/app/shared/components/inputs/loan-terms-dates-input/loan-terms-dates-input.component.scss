@@ -10,14 +10,10 @@
   }
 }
 
-.grid {
-  display: flex;
-  align-items: flex-end;
-}
-
 .label-wrapper {
-  display: inline-block;
-  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .percent-input {
@@ -35,4 +31,29 @@
   width: 1rem;
   height: 1rem;
   z-index: 2;
+}
+
+:host ::ng-deep {
+  .field {
+    margin: 0;
+  }
+  .grid {
+    display: grid;
+    gap: 8px 16px;
+    & *:has(.field):not(.field) {
+      display: contents;
+    }
+    .field {
+      grid-row: span 3;
+      display: grid;
+      grid-template-rows: subgrid;
+      & > label,
+      > .span-label {
+        margin: 0;
+      }
+    }
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

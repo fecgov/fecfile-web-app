@@ -136,11 +136,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         initialSelectionEnd = textInput.selectionEnd ?? 0;
       }
 
-      const validNumber = newInterestRate.replaceAll(/[^0-9.]/g, '');
+      const validNumber = newInterestRate.replace(/[^0-9.]/g, '');
       if (validNumber !== newInterestRate) {
         this.interestRate = validNumber;
         const lengthDifference = newInterestRate.length - validNumber.length;
-        newInterestRate = validNumber;
 
         textInput?.setSelectionRange(initialSelectionStart - lengthDifference, initialSelectionEnd - lengthDifference);
         this.interestRateField?.markAsTouched();

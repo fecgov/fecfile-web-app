@@ -1,25 +1,21 @@
-<div [formGroup]="form">
-  <div class="grid">
-    <div class="col-6">
-      <app-calendar
-        [fieldName]="templateMap['date']"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        label="DATE INCURRED"
-      />
-    </div>
-    <div class="col-6"></div>
-    <div class="col-6">
-      <app-select
-        [inputId]="templateMap['loan_due_date_is_date']"
-        label="DATE DUE"
-        [options]="dueDateSettingOptions"
-        [form]="form"
-        [formControlName]="templateMap['loan_due_date_is_date']"
-        [formSubmitted]="formSubmitted"
-      />
-    </div>
-    <div class="col-6" data-cy="dueDateInput">
+<div [formGroup]="form" class="flex flex-column gap-4 ml-2 mt-5 mb-3">
+  <app-calendar
+    class="grid"
+    [fieldName]="templateMap['date']"
+    [form]="form"
+    [formSubmitted]="formSubmitted"
+    label="DATE INCURRED"
+  />
+  <div class="grid grid-cols-2">
+    <app-select
+      [inputId]="templateMap['loan_due_date_is_date']"
+      label="DATE DUE"
+      [options]="dueDateSettingOptions"
+      [form]="form"
+      [formControlName]="templateMap['loan_due_date_is_date']"
+      [formSubmitted]="formSubmitted"
+    />
+    <div data-cy="dueDateInput">
       @switch (dueDateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
@@ -44,18 +40,18 @@
         @default {}
       }
     </div>
+  </div>
 
-    <div class="col-6">
-      <app-select
-        [inputId]="templateMap['loan_interest_rate_is_percent']"
-        label="INTEREST RATE"
-        [options]="interestRateSettingOptions"
-        [form]="form"
-        [formControlName]="templateMap['loan_interest_rate_is_percent']"
-        [formSubmitted]="formSubmitted"
-      />
-    </div>
-    <div class="col-6" data-cy="interestRateInput">
+  <div class="grid grid-cols-2">
+    <app-select
+      [inputId]="templateMap['loan_interest_rate_is_percent']"
+      label="INTEREST RATE"
+      [options]="interestRateSettingOptions"
+      [form]="form"
+      [formControlName]="templateMap['loan_interest_rate_is_percent']"
+      [formSubmitted]="formSubmitted"
+    />
+    <div data-cy="interestRateInput">
       @switch (interestRateSetting) {
         @case (termFieldSettings.USER_DEFINED) {
           <div class="field">
