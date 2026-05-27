@@ -10,31 +10,32 @@
       optionValue="value"
     />
   </div>
+  @if (selectedForm24Type()) {
+    <div class="w-full field">
+      <label class="dialog-label" id="form24Name_label" for="form24Name">REPORT NAME</label>
+      <p-input-group>
+        <div id="f24-input-container">
+          @if (typeName()) {
+            <span>{{ typeName() }}</span>
+          }
+          <p-inputgroup>
+            <input
+              #name="ngModel"
+              pInputText
+              placeholder="Provide a custom report name"
+              type="text"
+              [(ngModel)]="form24Name"
+              id="form24Name"
+              class="pl-1"
+              [class.opacity-60]="!form24Name()"
+            />
+          </p-inputgroup>
+        </div>
+      </p-input-group>
 
-  <div class="w-full field">
-    <label class="dialog-label" id="form24Name_label" for="form24Name">REPORT NAME</label>
-    <p-input-group>
-      <div id="f24-input-container">
-        @if (typeName()) {
-          <span>{{ typeName() }}</span>
-        }
-        <p-inputgroup>
-          <input
-            #name="ngModel"
-            pInputText
-            [placeholder]="placeholder()"
-            type="text"
-            [(ngModel)]="form24Name"
-            id="form24Name"
-            [class.pl-1]="selectedForm24Type()"
-            [class.opacity-60]="selectedForm24Type() && !form24Name()"
-          />
-        </p-inputgroup>
-      </div>
-    </p-input-group>
-
-    @if (form24NameErrors() && name.control.touched) {
-      <small class="p-error">{{ form24NameErrors() }}</small>
-    }
-  </div>
+      @if (form24NameErrors() && name.control.touched) {
+        <small class="p-error">{{ form24NameErrors() }}</small>
+      }
+    </div>
+  }
 </div>

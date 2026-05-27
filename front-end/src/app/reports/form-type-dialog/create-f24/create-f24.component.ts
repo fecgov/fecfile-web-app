@@ -42,7 +42,6 @@ export class CreateF24Component {
   readonly typeName = computed(() => (this.selectedForm24Type() ? `${this.selectedForm24Type()}-Hour:` : null));
   readonly fullName = computed(() => (this.typeName() ? `${this.typeName()} ${this.form24Name()}` : this.form24Name()));
   readonly selectedForm24TypeValid = computed(() => this.selectedForm24Type() !== null);
-  readonly placeholder = computed(() => (this.selectedForm24Type() ? 'Provide a custom report name' : ''));
   readonly form24Name = signal('');
   readonly form24NameErrors = computed(() => {
     if (this.form24Name() === '') return 'Name is required';
