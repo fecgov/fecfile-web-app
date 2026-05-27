@@ -2,7 +2,7 @@
   [(visible)]="dialogVisible"
   title="Edit report name"
   (confirm)="submitForm()"
-  [submitDisabled]="!form24Name.value"
+  [submitDisabled]="submitDisabled"
 >
   <ng-container content>
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
@@ -11,7 +11,7 @@
         <div id="f24-input-container">
           <span>{{ form.get('typeName')?.value }}</span>
           <input
-            #form24Name
+            (input)="submitDisabled = !$event.target.value"
             id="form24Name"
             pInputText
             placeholder="Provide a custom report name"

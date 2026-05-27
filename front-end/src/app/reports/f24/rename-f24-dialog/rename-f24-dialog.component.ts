@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { FormComponent } from 'app/shared/components/form.component';
-import { Form24, Report } from 'app/shared/models';
+import { Form24 } from 'app/shared/models';
 import { F24UniqueNameValidator, Form24Service } from 'app/shared/services/form-24.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { MessageService } from 'primeng/api';
@@ -48,6 +48,7 @@ export class RenameF24DialogComponent extends FormComponent {
   readonly formParent: FormGroup = new FormGroup({
     form24NameGroup: this.form,
   });
+  submitDisabled = false;
 
   constructor() {
     super();
