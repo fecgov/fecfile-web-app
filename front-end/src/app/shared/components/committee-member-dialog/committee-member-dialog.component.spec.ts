@@ -73,8 +73,12 @@ describe('CommitteeMemberDialogComponent', () => {
 
   it('should add new users', () => {
     const newEmail = 'test_1234321@test.com';
+
     component.form.get('email')?.setValue(newEmail);
+    component.form.get('role')?.setValue('MANAGER');
+
     component.submitForm();
+
     expect(component.detailVisible()).toBe(false);
   });
 
@@ -94,8 +98,26 @@ describe('CommitteeMemberDialogComponent', () => {
     expect(component.form.valid).toBe(false);
   });
 
-  it('should default role to first in list', async () => {
-    expect(component.form.get('role')?.value).toBe('COMMITTEE_ADMINISTRATOR');
+  it('should default role to null', async () => {
+    expect(component.form.get('role')?.value).toBeNull();
+  });
+
+  it('should disable submit if no role is selected', async () => {
+    component.form.get('role')?.setValue(null);
+    component.form.get('email')?.setValue('test@test.com');
+
+    component.form.updateValueAndValidity();
+
+    expect(component.submitDisabled).toBe(true);
+  });
+
+  it('should enable submit when role is selected and email is valid', async () => {
+    component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
+    component.form.get('email')?.setValue('test@test.com');
+
+    component.form.updateValueAndValidity();
+
+    expect(component.submitDisabled).toBe(false);
   });
 
   describe('submit', () => {

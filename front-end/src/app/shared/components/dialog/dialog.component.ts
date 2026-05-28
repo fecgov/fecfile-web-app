@@ -24,27 +24,32 @@ export class DialogComponent {
   readonly hasCustomFooter = computed(() => !!this.projectedFooter());
   readonly closeOnEscape = input(true);
 
-  handleEscape(event: Event) {
-    if (this.closeOnEscape()) {
-      this.reject.emit();
-      this.visible.set(false);
-    } else {
-      event.preventDefault();
-    }
-  }
+  // handleEscape(event: Event) {
+  //   if (this.closeOnEscape()) {
+  //     this.reject.emit();
+  //     this.visible.set(false);
+  //   } else {
+  //     event.preventDefault();
+  //   }
+  // }
 
   close() {
-    if (!this.dialog().nativeElement.open) return;
     this.visible.set(false);
     this.reject.emit();
   }
 
   constructor() {
     effect(() => {
+      const dialog = this.dialog().nativeElement;
+
       if (this.visible()) {
-        this.dialog().nativeElement.showModal();
+        if (!dialog.open) {
+          dialog.showModal();
+        }
       } else {
-        this.dialog().nativeElement.close();
+        if (dialog.open) {
+          dialog.close();
+        }
       }
     });
   }
