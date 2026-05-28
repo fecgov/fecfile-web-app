@@ -40,6 +40,15 @@ export const F3_ROUTES: Route[] = [
     runGuardsAndResolvers: 'always',
   },
   {
+    path: 'edit/:reportId',
+    title: 'Edit a report',
+    component: CreateF3Step1Component,
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.CREATE },
+    runGuardsAndResolvers: 'always',
+  },
+  {
     path: 'summary/:reportId',
     title: 'View summary page',
     component: ReportSummaryComponent,
