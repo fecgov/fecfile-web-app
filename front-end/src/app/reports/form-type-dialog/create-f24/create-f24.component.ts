@@ -59,7 +59,7 @@ export class CreateF24Component {
 
   readonly form24NameValid = computed(() => !this.form24NameErrors());
   readonly form24Valid = computed(() => this.selectedForm24TypeValid() && this.form24NameValid());
-  readonly isSubmitDisabled = computed(() => this.form24Name() === '');
+  readonly isSubmitDisabled = computed(() => this.selectedForm24Type() == null || this.form24Name() === '');
 
   async createF24(): Promise<void> {
     const form24 = Form24.fromJSON({
