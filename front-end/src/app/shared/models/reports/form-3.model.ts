@@ -9,16 +9,17 @@ import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 
-export enum F3FormTypes {
-  F3N = 'F3N',
-  F3A = 'F3A',
-  F3T = 'F3T',
-}
+export const F3FormTypes = {
+  F3N: 'F3N',
+  F3A: 'F3A',
+  F3T: 'F3T',
+} as const;
+export type F3FormTypes = (typeof F3FormTypes)[keyof typeof F3FormTypes];
 
 export class Form3 extends BaseForm3 {
   schema = f3Schema;
   report_type = ReportTypes.F3;
-  form_type = F3FormTypes.F3N;
+  form_type: F3FormTypes = F3FormTypes.F3N;
   election_state: string | undefined;
   election_district: string | undefined;
 
