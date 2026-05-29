@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormGroup } from '@angular/forms';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
@@ -17,11 +18,16 @@ import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import {
   BehaviorSubject,
   combineLatestWith,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
   firstValueFrom,
   from,
+  map,
   merge,
   Observable,
   of,
+  shareReplay,
   startWith,
   switchMap,
   takeUntil,
@@ -113,11 +119,11 @@ export class TransactionFormUtils {
     }
 
     if (transactionType.showCalendarYTD) {
-      await this.handleShowCalendarYTD(component, form, transaction, templateMap);
+      this.handleShowCalendarYTD(component, form, transaction, templateMap);
     }
 
     if (transactionType.showPayeeCandidateYTD) {
-      await this.handleShowPayeeCandidateYTD(component, form, transaction, contactIdMap, templateMap);
+      this.handleShowPayeeCandidateYTD(component, form, transaction, contactIdMap, templateMap);
     }
 
     const schema = transaction.transactionType?.schema;
@@ -155,68 +161,68 @@ export class TransactionFormUtils {
   // Only dynamically update non-inherited calendar_ytd values on the form input.
   // Inherited calendar_ytd display the value of the parent transaction and do not
   // include or change with the amount value of the child transaction.
-  private static async handleShowCalendarYTD(
+  private static handleShowCalendarYTD(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup<any>,
     transaction: Transaction,
     templateMap: TransactionTemplateMapType,
   ) {
-    if (!transaction.transactionType.inheritCalendarYTD) {
-      const previous_election$: Observable<number | null> =
-        merge(
-          (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.election_code) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.candidate_office) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.candidate_state) as SubscriptionFormControl).valueChanges,
-          (form.get(templateMap.candidate_district) as SubscriptionFormControl).valueChanges,
-        ).pipe(
-          switchMap(() => {
-            const disbursement_date = form.get(templateMap.date)?.value as DateType;
-            const dissemination_date = form.get(templateMap.date2)?.value as DateType;
-            const election_code = form.get(templateMap.election_code)?.value;
-            const candidate_office = form.get(templateMap.candidate_office)?.value;
-            const candidate_state = form.get(templateMap.candidate_state)?.value;
-            const candidate_district = form.get(templateMap.candidate_district)?.value;
+    let previous_election$: Observable<number | null>;
 
-            return from(
-              component.transactionService.getPreviousElectionAggregate(
-                transaction,
-                disbursement_date,
-                dissemination_date,
-                election_code,
-                candidate_office,
-                candidate_state,
-                candidate_district,
-              ),
-            );
-          }),
-        ) || of(undefined);
-      form
-        .get(templateMap.amount)
-        ?.valueChanges.pipe(
-          startWith(form.get(templateMap.amount)?.value),
-          combineLatestWith(previous_election$, of(transaction)),
-          takeUntil(component.destroy$),
-        )
-        .subscribe(([amount, previousAggregate, transaction]) => {
-          this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previousAggregate, amount);
-        });
+    if (transaction.transactionType.inheritCalendarYTD) {
+      previous_election$ = from(component.transactionService.get(transaction.parent_transaction?.id ?? '')).pipe(
+        map((parent) => (parent as SchETransaction)?.calendar_ytd_per_election_office ?? null),
+        shareReplay(1),
+      );
     } else {
-      const parent = await component.transactionService.get(transaction.parent_transaction?.id ?? '');
-      const inheritedElectionAggregate = (parent as SchETransaction).calendar_ytd_per_election_office;
-      if (inheritedElectionAggregate) {
-        this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, null, inheritedElectionAggregate);
-      }
+      previous_election$ = merge(
+        (form.get(templateMap.date) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.date2) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.election_code) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.candidate_office) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.candidate_state) as SubscriptionFormControl).valueChanges,
+        (form.get(templateMap.candidate_district) as SubscriptionFormControl).valueChanges,
+      ).pipe(
+        debounceTime(100),
+        filter(() => {
+          const code = form.get(templateMap.election_code)?.value;
+          return !code || code.toString().length === 5;
+        }),
+        switchMap(() => {
+          return component.transactionService.getPreviousElectionAggregate(
+            transaction,
+            form.get(templateMap.date)?.value,
+            form.get(templateMap.date2)?.value,
+            form.get(templateMap.election_code)?.value,
+            form.get(templateMap.candidate_office)?.value,
+            form.get(templateMap.candidate_state)?.value,
+            form.get(templateMap.candidate_district)?.value,
+          );
+        }),
+        shareReplay(1),
+      );
     }
+
+    // Unified Subscription logic
+    form
+      .get(templateMap.amount)
+      ?.valueChanges.pipe(
+        startWith(form.get(templateMap.amount)?.value),
+        combineLatestWith(previous_election$),
+        debounceTime(50),
+        takeUntil(component.destroy$),
+      )
+      .subscribe(([amount, previousAggregate]) => {
+        this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previousAggregate, amount);
+      });
   }
 
   // Only dynamically update non-inherited calendar_ytd values on the form input.
   // Inherited calendar_ytd display the value of the parent transaction and do not
   // include or change with the amount value of the child transaction.
-  private static async handleShowPayeeCandidateYTD(
+  private static handleShowPayeeCandidateYTD(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup<any>,
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
@@ -325,7 +331,6 @@ export class TransactionFormUtils {
    * @param form
    * @param formValues
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static addExtraFormFields(transaction: Transaction, form: FormGroup, formValues: any) {
     transaction.transactionType?.formFields.forEach((field) => {
       if (!(field in formValues)) {
@@ -342,7 +347,6 @@ export class TransactionFormUtils {
    * @param transaction
    * @param formValues
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static removeUnsavedFormFields(transaction: Transaction, formValues: any) {
     transaction.getFieldsNotToSave().forEach((field: string) => delete formValues[field]);
     return formValues;
@@ -396,7 +400,7 @@ export class TransactionFormUtils {
   }
 
   // prettier-ignore
-  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { 
     const text = form.get('text4000')?.value;
     if (text && text.length > 0) {
       const memo_text = MemoText.fromJSON({
@@ -432,35 +436,42 @@ export class TransactionFormUtils {
 
   static handleShowAggregateValueChanges(
     component: TransactionTypeBaseComponent,
-    form: FormGroup<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+    form: FormGroup<any>,
     transaction: Transaction,
     contactIdMap: ContactIdMapType,
     templateMap: TransactionTemplateMapType,
   ) {
     const contactId$ = contactIdMap['contact_1'].asObservable();
+
     firstValueFrom(contactId$).then((contactIdStart) => {
       (form.get(templateMap.date) as SubscriptionFormControl).addSubscription(
-        async ([contribution_date, amount, contactId]) => {
-          const previousAggregate = await component.transactionService.getPreviousEntityAggregate(
+        (previousAggregate) => {
+          this.updateAggregate(
+            form,
+            'aggregate',
+            templateMap,
             transaction,
-            contactId,
-            contribution_date,
+            previousAggregate,
+            form.get(templateMap.amount)?.value,
           );
-          this.updateAggregate(form, 'aggregate', templateMap, transaction, previousAggregate, amount);
         },
         component.destroy$,
         [
-          // Emit the initial value of the date since the combineLatestWith below won't emit
-          // if the date hasn't emitted.  That's good for a fresh form, but opening an
-          // existing transaction would not emit the date.
-          startWith<Date>(form.get(templateMap.date)?.value),
+          startWith(form.get(templateMap.date)?.value),
           combineLatestWith(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (form.get(templateMap.amount)?.valueChanges as Observable<any>).pipe(
               startWith(form.get(templateMap.amount)?.value),
             ),
             contactId$.pipe(startWith(contactIdStart)),
           ),
+          debounceTime(150),
+          distinctUntilChanged((prev, curr) => {
+            return JSON.stringify(prev) === JSON.stringify(curr);
+          }),
+          switchMap(([date, amount, contactId]) => {
+            if (!date || !contactId || !amount) return of(null);
+            return component.transactionService.getPreviousEntityAggregate(transaction, contactId, date);
+          }),
         ],
       );
     });

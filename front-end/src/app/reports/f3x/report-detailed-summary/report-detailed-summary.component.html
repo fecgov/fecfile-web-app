@@ -92,7 +92,9 @@
       class="p-button-secondary icon-gap"
       (click)="router.navigateByUrl('/reports/f3x/summary/' + report().id)"
     >
-      <span class="prev-arrow-mask"></span>
+      <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
       <span>Review summary page</span>
     </button>
     <button
@@ -102,7 +104,9 @@
       (click)="router.navigateByUrl('/reports/f3x/web-print/' + report().id)"
     >
       <span>See print preview</span>
-      <span class="next-arrow-mask"></span>
+      <svg pButtonIcon alt="Next Arrow" width="10" height="10">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
     </button>
   </div>
 </div>

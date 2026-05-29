@@ -13,6 +13,7 @@ PORT="4200"
 TARGET_ENV="local"
 API_URL="http://localhost:8080"
 APP_URL=""
+STATIC_ASSET_CACHE_SECONDS="1814400" # 3 weeks
 DJANGO_SECRET_KEY="${DJANGO_SECRET_KEY:-If_using_test_db_use_secret_key_in_cloud.gov}"
 FEC_API="${FEC_API:-https://api.open.fec.gov/v1/}"
 FEC_API_KEY="${FEC_API_KEY:-DEMO_KEY}"
@@ -143,6 +144,7 @@ render_nginx_config() {
     -e "s|{{port}}|$NGINX_PORT|g" \
     -e "s|{{env \"FECFILE_APP_URL\"}}|$APP_URL|g" \
     -e "s|{{env \"FECFILE_API_URL\"}}|$CSP_API_ORIGIN|g" \
+    -e "s|{{env \"CDN_STATIC_ASSET_CACHE_LENGTH_SECONDS\"}}|$STATIC_ASSET_CACHE_SECONDS|g" \
     -e "s|root fecfile-web;|root /usr/share/nginx/html/fecfile-web;|g" \
     "$TEMPLATE_PATH" > "$TMP_CONF"
 

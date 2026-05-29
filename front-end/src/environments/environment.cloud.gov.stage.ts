@@ -1,53 +1,8 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --configuration=cloud.gov.stage` replaces `environment.ts` with `environment.cloud.gov.stage.ts`.
-// The list of file replacements can be found in `angular.json`.
+import { createEnvironment } from './environment.base';
 
-const baseUri = 'https://stage-api.fecfile.fec.gov';
-const apiUrl = `${baseUri}/api/v1`;
-export const environment = {
+export const environment = createEnvironment({
   production: false,
   name: 'stage',
-  baseUri: baseUri,
-  apiUrl: apiUrl,
-  appTitle: 'FECfile+',
-  dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
-  fecApiUrl: 'https://api.open.fec.gov/v1/',
-  userCanSetFilingFrequency: true,
-  loginDotGovAuthUrl: `${apiUrl}/oidc/authenticate`,
-  loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
-  ffapiTimeoutCookieName: 'ffapi_timeout_stage',
-  sessionIdCookieName: 'sessionid',
-  committee_data_source: 'test',
-  form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
-  showForm3: true,
-  showSchedF: true,
-  disableLogin: false,
-  fecSpec: 8.5,
-  showGlossary: false,
-  webForms: 'https://webforms.fec.gov',
-  whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
-  errorReporting: {
-    enabled: true,
-    endpoint: '/frontend-error-report',
-    sampleRates: {
-      runtime: 1,
-      promise: 1,
-      http4xx: 1,
-      http5xx: 1,
-    },
-    dedupeWindowMs: 30000,
-    batchSize: 10,
-    flushIntervalMs: 5000,
-    maxMessageLength: 500,
-    maxStackLength: 2000,
-    maxPayloadBytes: 12000,
-  },
-};
-
-/*
- * In development mode, to ignore zone related error stack frames such as
- * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
- * import the following file, but please comment it out in production mode
- * because it will have performance impact when throw error
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+  externalLinks: 'prod',
+  baseUri: 'https://stage-api.fecfile.fec.gov',
+});

@@ -40,7 +40,6 @@ h6 {
   font-size: 13px;
   font-weight: 700;
   line-height: 1.5;
-  border-bottom: 1px, $base;
 }
 p {
   color: inherit;
@@ -113,10 +112,10 @@ input,
 select,
 textarea {
   background-color: #fff;
-  border-color: #aeb0b5;
+  border-color: var(--fec-grey-alt);
   border-width: 2px;
   border-style: solid;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   font-family: var(--karla);
   font-size: var(--input-font-size);
   height: var(--input-height);
@@ -125,17 +124,24 @@ textarea {
   padding: 1rem;
   transition: border-color;
   width: 100%;
+  &:enabled {
+    &:hover {
+      border-color: var(--surface-border) !important;
+    }
+    &:focus {
+      box-shadow: var(--focus-ring);
+      border-color: var(--p-primary-color) !important;
+      color: var(--p-primary-color);
+    }
+  }
 }
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #112e51;
-  color: #112e51;
-}
+
 input:not([type="checkbox"]):disabled,
+select:disabled,
 textarea:disabled {
-  background: var(--surface-ground);
+  background-color: var(--surface-ground);
   color: var(--p-content-color);
+  opacity: .65;
 }
 
 textarea {
@@ -163,12 +169,6 @@ input[type='search'] {
   line-height: 1;
   text-decoration: none;
   user-select: none;
-}
-[type='button']:disabled,
-[type='submit']:disabled,
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 img {
   margin: 0;

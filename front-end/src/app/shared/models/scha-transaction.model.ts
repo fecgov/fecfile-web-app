@@ -104,8 +104,8 @@ export enum ScheduleATransactionTypes {
   CONDUIT_EARMARK_RECEIPT = 'CONDUIT_EARMARK_RECEIPT',
   CONDUIT_EARMARK_RECEIPT_DEPOSITED = 'CONDUIT_EARMARK_RECEIPT_DEPOSITED',
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED = 'CONDUIT_EARMARK_RECEIPT_UNDEPOSITED',
-  RECEIPT_FROM_UNREGISTERED_ENTITY = 'RECEIPT_FROM_UNREGISTERED_ENTITY',
-  RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN = 'RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN',
+  RECEIPT_FROM_UNREGISTERED_ORGANIZATION = 'RECEIPT_FROM_UNREGISTERED_ORGANIZATION',
+  RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN = 'RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
   PARTY_IN_KIND_RECEIPT = 'PARTY_IN_KIND_RECEIPT',
@@ -212,10 +212,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT, 'Conduit Earmark Receipt'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY, 'Receipt from Unregistered Entity'],
+  [ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION, 'Receipt from Unregistered Organization'],
   [
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
-    'Receipt from Unregistered Entity - Returned/Bounced Receipt',
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
+    'Receipt from Unregistered Organization - Returned/Bounced Receipt',
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],

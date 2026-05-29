@@ -11,28 +11,21 @@ import { environment } from 'environments/environment';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { createEnvironment } from 'environments/environment.base';
 
 describe('CommitteeInfoComponent', () => {
   let component: CommitteeInfoComponent;
   let fixture: ComponentFixture<CommitteeInfoComponent>;
-  let originalEnvironment = {
+  let originalEnvironment = createEnvironment({
     production: false,
     name: 'development',
-    apiUrl: 'https://localhost/api/v1',
-    appTitle: 'FECfile+',
-    dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
-    fecApiUrl: 'https://api.open.fec.gov/v1/',
-    userCanSetFilingFrequency: true,
-    loginDotGovAuthUrl: 'http://localhost:8080/oidc/authenticate',
-    loginDotGovLogoutUrl: '',
-    sessionIdCookieName: 'sessionid',
-    committee_data_source: 'test',
-    form1m_link: 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm',
-  };
+    externalLinks: 'prod',
+    baseUri: 'http://localhost:8080',
+  });
 
   // This method sets the environment before TestBed.configureTestingModule() is called
-  async function setEnvironment(form1m_link?: string) {
-    if (form1m_link) Object.assign(environment, { form1m_link });
+  async function setEnvironment(form1_link?: string) {
+    if (form1_link) Object.assign(environment, { form1_link });
     // Now configure and compile TestBed with the updated environment
     await TestBed.configureTestingModule({
       providers: [
@@ -77,7 +70,7 @@ describe('CommitteeInfoComponent', () => {
     const link = 'https://webforms.stage.gov/webforms/form1/index.htm';
     await setEnvironment(link);
 
-    const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    const windowOpenSpy = vi.spyOn(globalThis, 'open').mockImplementation(() => null);
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();
     expect(windowOpenSpy).toHaveBeenCalledWith(link, '_blank', 'noopener');
@@ -86,7 +79,7 @@ describe('CommitteeInfoComponent', () => {
   it('should use the staging link in non-production environment', async () => {
     const link = 'https://webforms.stage.efo.fec.gov/webforms/form1/index.htm';
     await setEnvironment(link);
-    const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    const windowOpenSpy = vi.spyOn(globalThis, 'open').mockImplementation(() => null);
     const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
     f1FormLink.click();
     expect(windowOpenSpy).toHaveBeenCalledWith(link, '_blank', 'noopener');

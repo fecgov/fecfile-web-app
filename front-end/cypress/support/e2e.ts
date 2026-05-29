@@ -4,6 +4,7 @@ import * as commands from './commands';
 import { registerFailOn5xx } from './fail-on-5xx';
 import 'cypress-axe';
 import 'cypress-mochawesome-reporter/register';
+import 'cypress-network-idle';
 
 Cypress.Commands.add('safeType', { prevSubject: true }, commands.safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, commands.overwrite);

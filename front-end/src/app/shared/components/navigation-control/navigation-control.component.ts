@@ -29,6 +29,7 @@ import { PopoverModule } from 'primeng/popover';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
+import { singleClickDisableAction } from 'app/store/single-click.actions';
 
 @Component({
   selector: 'app-navigation-control',
@@ -52,6 +53,7 @@ export class NavigationControlComponent {
     { initialValue: [] },
   );
 
+  isProcessing = false;
   readonly items: MenuItem[] = [
     {
       label: 'Save and...',
@@ -60,8 +62,12 @@ export class NavigationControlComponent {
     { separator: true },
     {
       label: 'Add another',
+      disabled: this.isProcessing,
       command: () => {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
         this.saveAndAddAnother();
+        setTimeout(() => (this.isProcessing = false), 1000);
       },
     },
   ];
@@ -72,6 +78,7 @@ export class NavigationControlComponent {
   readonly type = computed(() => this.navigationControl().controlType);
 
   saveAndAddAnother() {
+    this.store.dispatch(singleClickDisableAction());
     const navControl = this.navigationControl();
     const transaction = this.transaction();
     if (!transaction) return;

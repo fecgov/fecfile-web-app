@@ -2,7 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FecInternationalPhoneInputComponent } from './fec-international-phone-input.component';
-import { ElementRef } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { Country } from 'intl-tel-input/data';
 
 class MockNgControl extends NgControl {
@@ -14,9 +14,19 @@ class MockNgControl extends NgControl {
   }
 }
 
+@Component({
+  imports: [FecInternationalPhoneInputComponent],
+  standalone: true,
+  template: `<app-fec-international-phone-input />`,
+})
+class TestHostComponent {
+  component = viewChild.required(FecInternationalPhoneInputComponent);
+}
+
 describe('FecInternationalPhoneInputComponent', () => {
   let component: FecInternationalPhoneInputComponent;
-  let fixture: ComponentFixture<FecInternationalPhoneInputComponent>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,9 +36,9 @@ describe('FecInternationalPhoneInputComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FecInternationalPhoneInputComponent);
-    component = fixture.componentInstance;
-    component.internationalPhoneInputChild = new ElementRef(document.createElement('input'));
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
@@ -83,7 +93,7 @@ describe('FecInternationalPhoneInputComponent', () => {
     } as Country);
     const onChangeSpy = vi.spyOn(component, 'onChange');
 
-    component.internationalPhoneInputChild?.nativeElement.dispatchEvent(new Event('countrychange'));
+    component.internationalPhoneInputChild()?.nativeElement.dispatchEvent(new Event('countrychange'));
     fixture.detectChanges();
     expect(component['countryCode']).toEqual(testDialCode);
     expect(onChangeSpy).toHaveBeenCalledTimes(1);
@@ -91,7 +101,6 @@ describe('FecInternationalPhoneInputComponent', () => {
   });
 
   it('should blur properly', () => {
-    component.ngControl = new MockNgControl();
     const control = (component.ngControl as MockNgControl).control;
 
     vi.spyOn(control, 'setValue');
