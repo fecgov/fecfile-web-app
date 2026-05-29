@@ -34,6 +34,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         let errorMessage = '';
         if (error.status === 502) {
           this.store.dispatch(setServiceAvailableAction({ payload: false }));
+          this.errorReportingService.reportRuntimeError(
+            'API unavailable - service unavailable banner displayed',
+            'service-unavailability',
+          );
         }
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Outgoing HTTP Error: ${error.error.message}`;

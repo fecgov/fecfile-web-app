@@ -85,7 +85,9 @@
       class="p-button-secondary icon-gap"
       (click)="router.navigateByUrl(getBackUrl?.(report) ?? '')"
     >
-      <span class="prev-arrow-mask"></span>
+      <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
       <span>Back</span>
     </button>
 
@@ -96,7 +98,9 @@
       (click)="router.navigateByUrl(getContinueUrl?.(report) ?? '')"
     >
       <span>Sign & submit report</span>
-      <span class="next-arrow-mask"></span>
+      <svg pButtonIcon alt="Next Arrow" width="10" height="10">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
     </button>
   </div>
 </div>

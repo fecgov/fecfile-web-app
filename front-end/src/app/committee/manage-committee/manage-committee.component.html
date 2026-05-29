@@ -10,7 +10,15 @@
 <ng-template #roleBody let-item>{{ getRoleLabel(item.role) }}</ng-template>
 <ng-template #statusBody let-item>{{ item.is_active ? 'Active' : 'Pending' }}</ng-template>
 <ng-template #actionsBody let-item>
-  @if (canEditMember(item)) {
+  @if (isCurrentUser(item)) {
+    <app-table-actions-button
+      (tableActionClick)="$event.action.action($event.actionItem)"
+      [actionItem]="item"
+      [tableActions]="editName"
+      buttonIcon="pi pi-ellipsis-v"
+      buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary p-button-text mr-2"
+    />
+  } @else if (canEditMember(item)) {
     <app-table-actions-button
       (tableActionClick)="$event.action.action($event.actionItem)"
       [actionItem]="item"
@@ -47,3 +55,4 @@
   [(detailVisible)]="detailVisible"
   [member]="member"
 />
+<app-edit-name-dialog [(visible)]="editSelf" (nameChanged)="nameChanged()" />

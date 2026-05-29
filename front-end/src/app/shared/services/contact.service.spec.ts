@@ -288,7 +288,7 @@ describe('ContactService', () => {
       });
 
       const req = httpTestingController.expectOne(
-        'https://localhost/api/v1/contacts/candidate/?candidate_id=P12345678',
+        'http://localhost:8080/api/v1/contacts/candidate/?candidate_id=P12345678',
       );
 
       expect(req.request.method).toEqual('GET');
@@ -304,7 +304,9 @@ describe('ContactService', () => {
       expect(committeeAccountData).toEqual(committeeAccount);
     });
 
-    const req = httpTestingController.expectOne(`https://localhost/api/v1/contacts/committee/?committee_id=C00601211`);
+    const req = httpTestingController.expectOne(
+      `http://localhost:8080/api/v1/contacts/committee/?committee_id=C00601211`,
+    );
 
     expect(req.request.method).toEqual('GET');
     req.flush(response);

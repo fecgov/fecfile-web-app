@@ -146,10 +146,10 @@ describe('Loans', () => {
 
       ContactLookup.getContact(result.organization.name);
       formData.date_received = undefined;
-      TransactionDetailPage.enterLoanFormData(formData);
+      TransactionDetailPage.enterLoanFormData(formData, false, '[data-cy="accordion-1"]');
 
       PageUtils.clickAccordion('STEP TWO');
-      TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData);
+      TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData, '[data-cy="accordion-2"]');
       PageUtils.clickFormActionButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
       PageUtils.locationCheck('/list');
       cy.contains('Transactions in this report').should('be.visible');

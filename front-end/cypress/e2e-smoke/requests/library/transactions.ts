@@ -250,6 +250,35 @@ export function buildContributionToCandidate(
   };
 }
 
+export function buildBusinessLaborRefund(
+  expenditure_amount: number,
+  expenditure_date: string,
+  contact: Contact,
+  report_id: string,
+  extra_data?: any,
+) {
+  return {
+    schedule_id: 'B',
+    form_type: 'SB29',
+    entity_type: 'ORG',
+    transaction_type_identifier: 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
+    schema_name: 'NON_CONTRIBUTION_ACCOUNT_REFUNDS',
+    aggregation_group: 'NON_CONTRIBUTION_ACCOUNT',
+    category_code: null,
+    memo_code: null,
+    purpose_description: null,
+    text4000: null,
+    expenditure_amount,
+    expenditure_date,
+    expenditure_purpose_descrip:'Non-contribution Account Refund',
+    children: [],
+    report_ids: [report_id],
+    fields_to_validate: ['schedule_id'],
+    ...getContactFields('payee', contact),
+    ...extra_data,
+  };
+}
+
 function buildIndependentExpenditure(
   expenditure_amount: number,
   dates: [string, string],

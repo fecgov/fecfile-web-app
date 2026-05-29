@@ -1,5 +1,5 @@
 .calendar-icon-mask {
-  background-color: #aeb0b5;
+  background-color: var(--fec-grey-alt);
   width: 20px;
   height: 20px;
   mask-image: url('/assets/img/i-calendar.svg');
@@ -43,7 +43,9 @@
 .year-button,
 .month-button {
   border: none;
-  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .outlined-button {

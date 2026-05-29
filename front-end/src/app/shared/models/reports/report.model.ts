@@ -23,7 +23,7 @@ export abstract class Report extends BaseModel {
   submitAlertText =
     'Are you sure you want to submit this form electronically? Please note that you cannot undo this action. Any changes needed will need to be filed as an amended report.';
   report_version: string | undefined; // Tracks amendment versions
-  report_id: string | undefined; // FEC assigned report ID
+  fec_report_id: string | undefined; // FEC assigned report ID
   confirmation_email_1: string | undefined;
   confirmation_email_2: string | undefined;
   @Type(() => UploadSubmission)

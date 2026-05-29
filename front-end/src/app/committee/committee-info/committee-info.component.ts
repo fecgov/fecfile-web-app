@@ -75,6 +75,6 @@ export class CommitteeInfoComponent extends FormComponent {
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open(environment.form1m_link, '_blank', 'noopener');
+    window.open(environment.form1_link, '_blank', 'noopener');
   }
 }

@@ -1,0 +1,25 @@
+<app-dialog
+  tabindex="-1"
+  aria-labelledby="dialog-title"
+  title="Edit name"
+  submitLabel="Save"
+  [(visible)]="visible"
+  (confirm)="submit()"
+>
+  <form id="edit-name-form" class="flex flex-column gap-5">
+    <div class="field mb-0">
+      <label class="dialog-label" for="first-name">FIRST NAME</label>
+      <input autofocus type="text" pInputText id="first-name" [formField]="nameForm.first" />
+      @if (nameForm.first().touched() && nameForm.first().invalid()) {
+        <small class="p-error"> {{ nameForm.first().errors()[0].message }} </small>
+      }
+    </div>
+    <div class="field mb-0">
+      <label class="dialog-label" for="last-name">LAST NAME</label>
+      <input type="text" pInputText id="last-name" [formField]="nameForm.last" />
+      @if (nameForm.last().touched() && nameForm.last().invalid()) {
+        <small class="p-error"> {{ nameForm.last().errors()[0].message }} </small>
+      }
+    </div>
+  </form>
+</app-dialog>

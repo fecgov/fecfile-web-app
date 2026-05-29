@@ -1,12 +1,12 @@
-import { RECEIPT_FROM_UNREGISTERED_ENTITY } from './RECEIPT_FROM_UNREGISTERED_ENTITY.model';
+import { RECEIPT_FROM_UNREGISTERED_ORGANIZATION } from './RECEIPT_FROM_UNREGISTERED_ORGANIZATION.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 
-describe('RECEIPT_FROM_UNREGISTERED_ENTITY', () => {
-  let transactionType: RECEIPT_FROM_UNREGISTERED_ENTITY;
+describe('RECEIPT_FROM_UNREGISTERED_ORGANIZATION', () => {
+  let transactionType: RECEIPT_FROM_UNREGISTERED_ORGANIZATION;
 
   beforeEach(() => {
-    transactionType = new RECEIPT_FROM_UNREGISTERED_ENTITY();
+    transactionType = new RECEIPT_FROM_UNREGISTERED_ORGANIZATION();
   });
 
   it('should create an instance', () => {
@@ -17,7 +17,7 @@ describe('RECEIPT_FROM_UNREGISTERED_ENTITY', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA11AI');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION);
   });
   it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
