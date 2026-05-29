@@ -1,10 +1,10 @@
-import { Component, computed, inject, input, resource, signal } from '@angular/core';
+import { Component, computed, inject, input, resource, signal, viewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Form24 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { InputText } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel } from '@angular/forms';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { Router } from '@angular/router';
 import { InputGroup } from 'primeng/inputgroup';
@@ -27,9 +27,11 @@ export class CreateF24Component {
     loader: async ({ params }) => {
       if (!params.visible) return [];
       const reports = await this.form24Service.getAllReports();
-      return reports.map((report) => (report as Form24).name ?? '') ?? [];
+      return reports.map((report) => report.name ?? '') ?? [];
     },
   });
+
+  readonly nameInput = viewChild.required<NgModel>('name');
 
   readonly form24Options = [
     { label: '24-Hour ', value: '24' },
@@ -40,25 +42,24 @@ export class CreateF24Component {
   readonly typeName = computed(() => (this.selectedForm24Type() ? `${this.selectedForm24Type()}-Hour:` : null));
   readonly fullName = computed(() => (this.typeName() ? `${this.typeName()} ${this.form24Name()}` : this.form24Name()));
   readonly selectedForm24TypeValid = computed(() => this.selectedForm24Type() !== null);
-
   readonly form24Name = signal('');
   readonly form24NameErrors = computed(() => {
-    const name = this.fullName();
-    if (name === '') return 'Name is required';
-    const names = this.form24Names.value();
-    if (names?.includes(name)) return 'This name is already in use. Please choose a different name.';
+    if (this.form24Name() === '') return 'Name is required';
+    if (this.form24Names.value()?.includes(this.fullName()))
+      return 'This name is already in use. Please choose a different name.';
     return undefined;
   });
 
   // reset the form fields to their initial state
   reset(): void {
     this.form24Name.set('');
+    this.nameInput().control.markAsUntouched();
     this.selectedForm24Type.set(null);
   }
 
-  readonly form24NameValid = computed(() => !!this.form24NameErrors());
+  readonly form24NameValid = computed(() => !this.form24NameErrors());
   readonly form24Valid = computed(() => this.selectedForm24TypeValid() && this.form24NameValid());
-  readonly isSubmitDisabled = computed(() => !this.selectedForm24Type());
+  readonly isSubmitDisabled = computed(() => this.selectedForm24Type() == null || this.form24Name() === '');
 
   async createF24(): Promise<void> {
     const form24 = Form24.fromJSON({

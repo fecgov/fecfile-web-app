@@ -1,11 +1,25 @@
-<app-dialog [(visible)]="dialogVisible" title="Edit report name" (confirm)="submitForm()">
+<app-dialog
+  [(visible)]="dialogVisible"
+  title="Edit report name"
+  (confirm)="submitForm()"
+  [submitDisabled]="submitDisabled"
+>
   <ng-container content>
     <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
       <div class="dialog-body">
         <label for="form24Name" class="mb-1 dialog-label">REPORT NAME</label>
         <div id="f24-input-container">
-          <span>{{ this.form.get('typeName')?.value }}</span>
-          <input id="form24Name" type="text" class="pl-1" pInputText formControlName="form24Name" />
+          <span>{{ form.get('typeName')?.value }}</span>
+          <input
+            (input)="submitDisabled = !$event.target.value"
+            id="form24Name"
+            pInputText
+            placeholder="Provide a custom report name"
+            type="text"
+            class="pl-1"
+            pInputText
+            formControlName="form24Name"
+          />
         </div>
         <app-error-messages [form]="formParent" fieldName="form24NameGroup" [formSubmitted]="formSubmitted" />
       </div>
