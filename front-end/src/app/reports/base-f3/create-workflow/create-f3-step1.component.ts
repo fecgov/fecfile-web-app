@@ -164,7 +164,7 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     const report = this.report();
     const coverageDatesFunction = getCoverageDatesFunction(this.reportCode());
     if (this.form.pristine && report) {
-      return [report.coverageDates!['coverage_from_date'], report.coverageDates!['coverage_through_date']];
+      return [report.coverageDates['coverage_from_date'], report.coverageDates['coverage_through_date']];
     }
     if (!coverageDatesFunction) return undefined;
     return coverageDatesFunction(this.year, this.isElectionYear(), this.filingFrequency() ?? 'Q');
@@ -208,12 +208,10 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
   });
 
   readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
-  reportCodeLabelMap?: { [key in ReportCodes]: string };
+  readonly reportCodeLabelMap = derivedAsync(() => this.activeService.getReportCodeLabelMap());
 
   constructor() {
     super();
-    this.activeService.getReportCodeLabelMap().then((map) => (this.reportCodeLabelMap = map));
-
     effectOnceIf(
       () => this.existingCoverage() && !this.reportId(),
       () => {
@@ -294,18 +292,18 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
       return;
     }
 
-    const rawValues = SchemaUtils.getFormValues(this.form, this.activeSchema(), this.formProperties);
-    const summary = this.isF3X() ? Form3X.fromJSON(rawValues) : Form3.fromJSON(rawValues);
-    summary.report_type_category = this.form.get('report_type_category')?.value;
+    const reportData = SchemaUtils.getFormValues(this.form, this.activeSchema(), this.formProperties);
+    const reportStub: BaseForm3 | undefined = this.isF3X() ? Form3X.fromJSON(reportData) : Form3.fromJSON(reportData);
+    reportStub.report_type_category = this.form.get('report_type_category')?.value;
     if (this.isF3X()) {
-      (summary as Form3X).filing_frequency = this.form.get('filing_frequency')?.value;
-      if (summary.report_code === ReportCodes.TER) summary.form_type = F3xFormTypes.F3XT;
-    } else if (summary.report_code === ReportCodes.TER) summary.form_type = F3FormTypes.F3T;
+      (reportStub as Form3X).filing_frequency = this.form.get('filing_frequency')?.value;
+      if (reportStub.report_code === ReportCodes.TER) reportStub.form_type = F3xFormTypes.F3XT;
+    } else if (reportStub.report_code === ReportCodes.TER) reportStub.form_type = F3FormTypes.F3T;
 
     const reportId = this.reportId();
     const report = reportId
-      ? await this.update(summary, reportId)
-      : await this.activeService.create(summary, this.formProperties);
+      ? await this.update(reportStub, reportId)
+      : await this.activeService.create(reportStub, this.formProperties);
     if (!report) return;
 
     if (jump === 'continue') {
@@ -346,6 +344,17 @@ export class CreateF3Step1Component extends FormComponent implements OnInit {
     return this.usedReportCodes().includes(reportCode);
   }
 
+  /**
+   * FECFILE-2500
+   * ELECTION YEAR
+   *   current date is between Feb 1 – Dec 31 of an even-numbered year
+   *   current date is between Jan 1 – Jan 31 of an odd-numbered year
+   *
+   * NON-ELECTION YEAR
+   *   current date is between Feb 1 – Dec 31 of an odd-numbered year
+   *   current date is between Jan 1 – Jan 31 of an even-numbered year
+   * @returns F3xReportTypeCategories
+   */
   private getDefaultTypeCategory() {
     const isEvenYear = this.year % 2 === 0;
     const isJanuary = new Date().getMonth() === 0;

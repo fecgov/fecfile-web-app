@@ -58,7 +58,7 @@
                 formControlName="report_code"
               />
               <label [for]="reportCode" class="ml-2" [class]="disabledReportCodes()[reportCode] ? 'p-disabled' : ''">
-                {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
+                {{ reportCodeLabelMap()?.[reportCode] ?? '' }}
               </label>
             </div>
           }

@@ -9,11 +9,12 @@ import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleDTransactionTypes } from '../schd-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
 
-export enum F3xFormTypes {
-  F3XN = 'F3XN',
-  F3XA = 'F3XA',
-  F3XT = 'F3XT',
-}
+export const F3xFormTypes = {
+  F3XN: 'F3XN',
+  F3XA: 'F3XA',
+  F3XT: 'F3XT',
+} as const;
+export type F3xFormTypes = (typeof F3xFormTypes)[keyof typeof F3xFormTypes];
 
 export class Form3X extends BaseForm3 {
   schema = f3xSchema;

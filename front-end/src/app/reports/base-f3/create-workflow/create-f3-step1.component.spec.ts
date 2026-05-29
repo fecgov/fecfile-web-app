@@ -82,7 +82,6 @@ describe('CreateF3Step1Component: New', () => {
     fixture.detectChanges();
 
     expect(component.form.get('filing_frequency')?.value).toBe('Q');
-    expect(component.form.get('form_type')?.value).not.toBe(F3xFormTypes.F3XA);
     expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
     expect(coverageDateSpy).toHaveBeenCalled();
   });
@@ -111,7 +110,7 @@ describe('CreateF3Step1Component: New', () => {
 
     await fixture.whenStable();
     fixture.detectChanges();
-
+    // now invalidate the form
     component.form.patchValue({ coverage_from_date: null });
     expect(component.form.valid).toBe(false);
 
