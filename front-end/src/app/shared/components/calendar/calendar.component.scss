@@ -20,12 +20,12 @@
 
   .p-datepicker-input {
     padding-left: 10px;
-    width: 11em;
+    width: var(--date-field-width);
   }
 }
 
 .date-picker-field {
-  width: 11em;
+  width: var(--date-field-width);
 }
 
 .year-button,
