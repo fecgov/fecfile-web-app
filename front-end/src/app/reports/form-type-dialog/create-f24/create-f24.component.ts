@@ -44,7 +44,7 @@ export class CreateF24Component {
   readonly selectedForm24TypeValid = computed(() => this.selectedForm24Type() !== null);
   readonly form24Name = signal('');
   readonly form24NameErrors = computed(() => {
-    if (this.form24Name() === '') return 'Name is required';
+    if (this.form24Name() === '') return 'This is a required field.';
     if (this.form24Names.value()?.includes(this.fullName()))
       return 'This name is already in use. Please choose a different name.';
     return undefined;
