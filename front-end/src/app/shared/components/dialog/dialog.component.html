@@ -1,4 +1,4 @@
-<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()">
+<dialog #dialog tabindex="-1" aria-labelledby="dialog-title" (close)="close()" (keydown.escape)="handleEscape($event)">
   <div class="flex gap-2">
     @if (showTitleWarning()) {
       <div>
