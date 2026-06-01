@@ -45,9 +45,9 @@ export enum ReportTypeCategories {
 }
 
 @Component({
-  selector: 'app-create-f3-step1',
-  templateUrl: './create-f3-step1.component.html',
-  styleUrl: './create-f3-step1.component.scss',
+  selector: 'app-create-shared-f3',
+  templateUrl: './create-shared-f3.component.html',
+  styleUrl: './create-shared-f3.component.scss',
   imports: [
     ReactiveFormsModule,
     RadioButtonModule,
@@ -61,7 +61,7 @@ export enum ReportTypeCategories {
     DialogComponent,
   ],
 })
-export class CreateF3Step1Component extends FormComponent implements OnInit {
+export class CreateSharedF3Component extends FormComponent implements OnInit {
   // INJECTIONS
   private readonly activeService = inject(FORM_3_SERVICE);
   protected readonly messageService = inject(MessageService);

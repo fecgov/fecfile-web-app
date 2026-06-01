@@ -14,7 +14,7 @@ import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { BehaviorSubject } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
-import { F3X_ROUTES } from 'app/reports/base-f3/f3x/routes';
+import { F3X_ROUTES } from 'app/reports/f3-shared/f3x/routes';
 
 const routeDataSubject = new BehaviorSubject<{
   report: Report;

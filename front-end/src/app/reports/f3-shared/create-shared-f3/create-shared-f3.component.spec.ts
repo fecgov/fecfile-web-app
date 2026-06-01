@@ -11,12 +11,12 @@ import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { CreateF3Step1Component, ReportTypeCategories } from './create-f3-step1.component';
+import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
 import { FORM_3_SERVICE, BaseForm3Service } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
-let component: CreateF3Step1Component;
-let fixture: ComponentFixture<CreateF3Step1Component>;
+let component: CreateSharedF3Component;
+let fixture: ComponentFixture<CreateSharedF3Component>;
 let router: Router;
 let activeServiceInstance: BaseForm3Service<BaseForm3>;
 let store: MockStore;
@@ -24,7 +24,7 @@ let store: MockStore;
 async function setup(params: { reportId?: string; mockUrl?: string }) {
   const currentUrl = params.mockUrl ?? '/reports/f3x/create/step-1';
   await TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule, CreateF3Step1Component],
+    imports: [ReactiveFormsModule, CreateSharedF3Component],
     providers: [
       provideHttpClient(),
       provideHttpClientTesting(),
@@ -53,7 +53,7 @@ async function setup(params: { reportId?: string; mockUrl?: string }) {
   });
 }
 
-describe('CreateF3Step1Component: New', () => {
+describe('CreateSharedF3Component: New', () => {
   const mockCoverageDates = [
     {
       report_code: ReportCodes.Q1,
@@ -67,7 +67,7 @@ describe('CreateF3Step1Component: New', () => {
     await setup({});
 
     coverageDateSpy = vi.spyOn(activeServiceInstance, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
-    fixture = TestBed.createComponent(CreateF3Step1Component);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -124,7 +124,7 @@ describe('CreateF3Step1Component: New', () => {
   });
 });
 
-describe('CreateF3Step1Component: Edit', () => {
+describe('CreateSharedF3Component: Edit', () => {
   let messageService: MessageService;
   let getSpy: Mock;
   let messageSpy: Mock;
@@ -145,7 +145,7 @@ describe('CreateF3Step1Component: Edit', () => {
     getSpy = vi.spyOn(activeServiceInstance, 'get').mockResolvedValue(mockReport);
     messageSpy = vi.spyOn(messageService, 'add');
 
-    fixture = TestBed.createComponent(CreateF3Step1Component);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -212,7 +212,7 @@ describe('Default Report Type Category Logic', () => {
   });
 
   const setupComponent = () => {
-    fixture = TestBed.createComponent(CreateF3Step1Component);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   };
