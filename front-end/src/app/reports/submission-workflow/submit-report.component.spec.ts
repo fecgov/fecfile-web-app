@@ -15,8 +15,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { BehaviorSubject } from 'rxjs';
-import { F3X_ROUTES } from '../f3x/routes';
 import { SubmitReportComponent } from './submit-report.component';
+import { F3X_ROUTES } from '../f3-shared/f3x/routes';
 
 const routeDataSubject = new BehaviorSubject<{
   report: Report;
