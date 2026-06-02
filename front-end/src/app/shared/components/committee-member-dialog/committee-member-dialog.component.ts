@@ -66,7 +66,6 @@ export class CommitteeMemberDialogComponent extends FormComponent {
       if (!this.detailVisible()) this.resetForm();
     });
 
-    // this.form.controls['email'].statusChanges.subscribe((status) => (this.submitDisabled = status !== 'VALID'));
     this.form.statusChanges.subscribe(() => {
       this.updateSubmitDisabled();
     });
