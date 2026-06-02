@@ -168,7 +168,13 @@ export class TransactionDetailPage {
     if (formData.loan_due_date_is_date) {
       PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.loan_due_date_is_date, alias);
       if (formData.due_date) {
-        PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
+        // If due_date is a Date object, use the calendar; otherwise it's a user-defined string input
+        if (formData.due_date instanceof Date) {
+          PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
+        } else {
+          alias = PageUtils.getAlias(alias);
+          cy.get(alias).find('[data-cy="dueDateInput"]').find('input').first().clear().type(String(formData.due_date));
+        }
       }
     }
 
@@ -278,6 +284,39 @@ export class TransactionDetailPage {
 
     if (formData.category_code != '') {
       cy.get(alias).find('app-select[inputid="category_code"]').should('contain', formData.category_code);
+    }
+  }
+
+  static assertLoanFormData(formData: LoanFormData, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    if (formData.loan_due_date_is_date) {
+      cy.get(alias)
+        .find('[label="DATE DUE"]')
+        .find('select')
+        .find('option:selected')
+        .should('contain', formData.loan_due_date_is_date as string);
+
+      if (formData.due_date) {
+        if (formData.due_date instanceof Date) {
+          cy.get(alias)
+            .find('[data-cy="loan_due_date"]')
+            .find('.p-datepicker-input')
+            .should('have.value', PageUtils.dateToString(formData.due_date));
+        } else {
+          cy.get(alias).find('[data-cy="dueDateInput"]').find('input').first().should('have.value', String(formData.due_date));
+        }
+      }
+    }
+    if (formData.loan_interest_rate_is_percent) {
+      cy.get(alias)
+        .find('[label="INTEREST RATE"]')
+        .find('select')
+        .find('option:selected')
+        .should('contain', formData.loan_interest_rate_is_percent as string);
+
+      if (formData.interest_rate !== undefined && formData.interest_rate !== null) {
+        cy.get(alias).find('[data-cy="interestRateInput"]').find('input:visible:first').should('have.value', String(formData.interest_rate));
+      }
     }
   }
 
