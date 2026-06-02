@@ -29,37 +29,66 @@ describe('DialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should emit reject and close when closeOnEscape is true', () => {
-    host.closeOnEscape.set(true);
-    host.visible.set(true);
-    fixture.detectChanges();
-    const rejectSpy = vi.spyOn(component.reject, 'emit');
-    component.reject.subscribe(rejectSpy);
+  describe('handleEscape', () => {
+    it('should not prevent default when closeOnEscape is true', () => {
+      host.closeOnEscape.set(true);
+      fixture.detectChanges();
 
-    const event = new KeyboardEvent('keydown', { key: 'Escape' });
-    vi.spyOn(event, 'preventDefault');
+      const event = new KeyboardEvent('keydown', { key: 'Escape' });
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
 
-    component.handleEscape(event);
+      component.handleEscape(event);
 
-    expect(event.preventDefault).not.toHaveBeenCalled();
-    expect(rejectSpy).toHaveBeenCalled();
-    expect(component.visible()).toBeFalsy();
+      expect(preventDefaultSpy).not.toHaveBeenCalled();
+    });
+
+    it('should prevent default when closeOnEscape is false', () => {
+      host.closeOnEscape.set(false);
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'Escape' });
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+      component.handleEscape(event);
+
+      expect(preventDefaultSpy).toHaveBeenCalled();
+    });
   });
 
-  it('should prevent default when closeOnEscape is false', () => {
-    host.closeOnEscape.set(false);
-    fixture.detectChanges();
+  describe('handleCancel', () => {
+    it('should emit reject event and close the dialog when closeOnEscape is true', () => {
+      host.closeOnEscape.set(true);
+      host.visible.set(true);
+      fixture.detectChanges();
 
-    const rejectSpy = vi.spyOn(component.reject, 'emit');
-    component.reject.subscribe(rejectSpy);
+      const rejectSpy = vi.spyOn(component.reject, 'emit');
 
-    const event = new KeyboardEvent('keydown', { key: 'Escape' });
-    vi.spyOn(event, 'preventDefault');
+      const event = new Event('cancel');
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
 
-    component.handleEscape(event);
+      component.handleCancel(event);
 
-    expect(event.preventDefault).toHaveBeenCalled();
-    expect(rejectSpy).not.toHaveBeenCalled();
+      expect(preventDefaultSpy).toHaveBeenCalledTimes(1);
+      expect(rejectSpy).toHaveBeenCalledTimes(1);
+      expect(component.visible()).toBe(false);
+    });
+
+    it('should prevent default and not emit reject event when closeOnEscape is false', () => {
+      host.closeOnEscape.set(false);
+      host.visible.set(true);
+      fixture.detectChanges();
+
+      const rejectSpy = vi.spyOn(component.reject, 'emit');
+
+      const event = new Event('cancel');
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+      component.handleCancel(event);
+
+      expect(preventDefaultSpy).toHaveBeenCalledTimes(1);
+      expect(rejectSpy).not.toHaveBeenCalled();
+      expect(component.visible()).toBe(true);
+    });
   });
 
   it('should create', () => {
