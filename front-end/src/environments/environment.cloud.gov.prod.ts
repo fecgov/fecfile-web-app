@@ -10,6 +10,7 @@ export const environment = createEnvironment({
     showForm3: false,
     showSchedF: false,
     IncludeMsaAndMsx: false,
+    enableImport: false,
     errorReporting: {
       ...baseEnvironment.errorReporting,
       sampleRates: {
