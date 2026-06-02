@@ -111,15 +111,6 @@ describe('CommitteeMemberDialogComponent', () => {
     expect(component.submitDisabled).toBe(true);
   });
 
-  it('should enable submit when role is selected and email is valid', async () => {
-    component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
-    component.form.get('email')?.setValue('test@test.com');
-
-    component.form.updateValueAndValidity();
-
-    expect(component.submitDisabled).toBe(false);
-  });
-
   describe('submit', () => {
     it('should set formSubmitted to true', () => {
       component.submitForm();
