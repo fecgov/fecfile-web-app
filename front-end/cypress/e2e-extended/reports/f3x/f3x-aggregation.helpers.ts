@@ -267,6 +267,145 @@ export class F3XAggregationHelpers {
       .its('body');
   }
 
+  private static parseCurrencyToNumber(value: string): number {
+    const parsed = Number(value.replace(/[$,]/g, ''));
+    if (Number.isNaN(parsed)) {
+      throw new TypeError(`parseCurrencyToNumber: cannot parse "${value}"`);
+    }
+    return parsed;
+  }
+
+  private static buildPreviousElectionQuery(transactionId: string, transaction: any): Record<string, string> | null {
+    const disbursementDate = String(
+      transaction?.['disbursement_date'] ??
+        transaction?.['expenditure_date'] ??
+        transaction?.['date'] ??
+        transaction?.['dissemination_date'] ??
+        '',
+    );
+    const electionCode = String(transaction?.['election_code'] ?? '');
+    const candidateOffice = String(
+      transaction?.['candidate_office'] ??
+        transaction?.['so_candidate_office'] ??
+        transaction?.['payee_candidate_office'] ??
+        '',
+    );
+    const candidateState = String(
+      transaction?.['candidate_state'] ??
+        transaction?.['so_candidate_state'] ??
+        transaction?.['payee_candidate_state'] ??
+        '',
+    );
+    const candidateDistrict = String(
+      transaction?.['candidate_district'] ??
+        transaction?.['so_candidate_district'] ??
+        transaction?.['payee_candidate_district'] ??
+        '',
+    );
+
+    if (!disbursementDate || !electionCode || !candidateOffice) {
+      return null;
+    }
+
+    const query: Record<string, string> = {
+      transaction_id: transactionId,
+      aggregation_group: String(transaction?.['aggregation_group'] ?? 'INDEPENDENT_EXPENDITURE'),
+      date: disbursementDate,
+      election_code: electionCode,
+      candidate_office: candidateOffice,
+    };
+
+    if (candidateState) {
+      query['candidate_state'] = candidateState;
+    }
+    if (candidateDistrict) {
+      query['candidate_district'] = candidateDistrict;
+    }
+
+    return query;
+  }
+
+  private static queryValueMatches(actual: unknown, expected: string): boolean {
+    if (Array.isArray(actual)) {
+      return actual.some((value) => String(value) === expected);
+    }
+    return String(actual ?? '') === expected;
+  }
+
+  private static requestMatchesPreviousElectionQuery(
+    actualQuery: Record<string, unknown> | undefined,
+    expectedQuery: Record<string, string>,
+  ): boolean {
+    if (!actualQuery) {
+      return false;
+    }
+
+    return Object.entries(expectedQuery).every(([key, expected]) => {
+      return this.queryValueMatches(actualQuery[key], expected);
+    });
+  }
+
+  static waitForCalendarYtdByApi(
+    transactionId: string,
+    expectedFormatted: string,
+  ): Cypress.Chainable<void> {
+    this.assertTransactionId(transactionId, 'waitForCalendarYtdByApi');
+    const expectedValue = this.parseCurrencyToNumber(expectedFormatted);
+    const matchedAlias = 'CalendarYtdAggregateMatched';
+    const settleAttempts = 4;
+    const settleIntervalMs = 250;
+
+    const assertFieldWithSettle = (attempt: number): Cypress.Chainable<void> => {
+      return cy
+        .get('#calendar_ytd')
+        .invoke('val')
+        .then((rawValue) => {
+          const actual = String(rawValue ?? '').trim();
+          if (actual === expectedFormatted) {
+            return;
+          }
+
+          if (attempt >= settleAttempts) {
+            expect(actual, `calendar_ytd settle (${attempt + 1}/${settleAttempts + 1})`).to.equal(expectedFormatted);
+            return;
+          }
+
+          return cy.wait(settleIntervalMs).then(() => assertFieldWithSettle(attempt + 1));
+        }) as unknown as Cypress.Chainable<void>;
+    };
+
+    return this.getTransaction(transactionId).then((transaction) => {
+      const expectedQuery = this.buildPreviousElectionQuery(transactionId, transaction ?? {});
+
+      if (expectedQuery) {
+        cy.intercept(
+          {
+            method: 'GET',
+            pathname: /\/api\/v1\/transactions\/previous\/election\/$/,
+          },
+          (req) => {
+            const requestQuery = (req.query ?? {}) as Record<string, unknown>;
+            if (this.requestMatchesPreviousElectionQuery(requestQuery, expectedQuery)) {
+              req.alias = matchedAlias;
+            }
+          },
+        );
+      }
+
+      this.openDisbursement(transactionId);
+
+      if (!expectedQuery) {
+        cy.log(`waitForCalendarYtdByApi fallback: missing query fields for txn=${transactionId}`);
+        return assertFieldWithSettle(0);
+      }
+
+      return cy.wait(`@${matchedAlias}`).then(() => {
+        cy.log(`waitForCalendarYtdByApi matched request resolved: txn=${transactionId}, expected=${expectedValue}`);
+        return assertFieldWithSettle(0);
+      }) as unknown as Cypress.Chainable<void>;
+    }) as unknown as Cypress.Chainable<void>;
+  }
+
   static readLoanBalanceValueByApi(loanId: string): Cypress.Chainable<number> {
     this.assertTransactionId(loanId, 'readLoanBalanceValueByApi');
     return this.getTransaction(loanId).then((transaction) => {
@@ -883,8 +1022,7 @@ export class F3XAggregationHelpers {
   }
 
   static assertCalendarYtdFieldOnOpen(transactionId: string, expected: string): void {
-    this.openDisbursement(transactionId);
-    this.assertCalendarYtdField(expected);
+    this.waitForCalendarYtdByApi(transactionId, expected);
   }
 
   static assertScheduleEAggregateFieldOnOpen(transactionId: string, expected: string): void {
