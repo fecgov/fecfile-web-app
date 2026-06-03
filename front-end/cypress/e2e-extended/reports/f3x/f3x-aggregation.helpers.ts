@@ -14,7 +14,7 @@ import { F3X, F3X_Q2 } from '../../../e2e-smoke/requests/library/reports';
 import { makeContact, makeF3x, makeTransaction } from '../../../e2e-smoke/requests/methods';
 import {
   Authorizor,
-  buildContributionToCandidate,
+  buildBusinessLaborRefund,
   buildDebtOwedByCommittee,
   buildLoanAgreement,
   buildLoanFromBank,
@@ -354,7 +354,6 @@ export class F3XAggregationHelpers {
   static seedScheduleBChain(
     reportId: string,
     payee: any,
-    candidate: any,
     entries: SeedEntry[],
   ): Cypress.Chainable<string[]> {
     const transactionIds: string[] = [];
@@ -362,12 +361,7 @@ export class F3XAggregationHelpers {
     entries.forEach((entry) => {
       chain = chain.then(() => {
         return this.createTransaction(
-          buildContributionToCandidate(entry.amount, entry.date, [payee, candidate], reportId, {
-            election_code: `P${currentYear}`,
-            support_oppose_code: 'S',
-            date_signed: `${currentYear}-04-10`,
-            ...entry.extra,
-          }),
+          buildBusinessLaborRefund(entry.amount, entry.date, payee , reportId, entry.extra),
         ).then((created) => {
           transactionIds.push(created.id);
         });

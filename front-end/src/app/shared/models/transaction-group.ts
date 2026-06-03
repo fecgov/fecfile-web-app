@@ -95,8 +95,8 @@ export const Disbursement: TransactionGroup[] = [
       ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID,
       ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
       ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
-      ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
-      ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
+      ScheduleBTransactionTypes.REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION,
+      ScheduleBTransactionTypes.REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION_VOID,
     ]),
   },
   {
@@ -143,8 +143,8 @@ export const Receipt: TransactionGroup[] = [
       ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
       ScheduleATransactionTypes.EARMARK_RECEIPT,
       ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
-      ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
-      ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+      ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
+      ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
     ]),
   },
   {

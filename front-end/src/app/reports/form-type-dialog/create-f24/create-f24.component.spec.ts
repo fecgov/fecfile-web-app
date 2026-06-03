@@ -60,7 +60,7 @@ describe('CreateF24Component', () => {
     // Name is empty
     component.form24Name.set('');
     fixture.detectChanges();
-    expect(component.form24NameErrors()).toBe('Name is required');
+    expect(component.form24NameErrors()).toBe('This is a required field.');
 
     // Name is already in use
     component.form24Name.set('24 HOUR TEST');

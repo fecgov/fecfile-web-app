@@ -9,15 +9,15 @@ import { ReportService } from 'app/shared/services/report.service';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { Card } from 'primeng/card';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
-import { CalculationOverlayComponent } from '../../../shared/components/calculation-overlay/calculation-overlay.component';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { DefaultZeroPipe } from '../../../shared/pipes/default-zero.pipe';
+import { CalculationOverlayComponent } from 'app/shared/components/calculation-overlay/calculation-overlay.component';
+import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 
 @Component({
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
-  styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
+  styleUrls: ['../../../styles.scss', './report-detailed-summary.component.scss'],
   imports: [Card, CalculationOverlayComponent, ButtonDirective, Ripple, AsyncPipe, CurrencyPipe, DefaultZeroPipe],
 })
 export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
@@ -36,16 +36,16 @@ export class ReportDetailedSummaryComponent extends DestroyerComponent implement
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as Form3;
-        if (!(report as Form3).calculation_status) {
+        if (!this.report.calculation_status) {
           this.apiService
             .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })
             .then(() => this.refreshSummary());
-        } else if ((report as Form3).calculation_status != 'SUCCEEDED') {
+        } else if (this.report.calculation_status == 'SUCCEEDED') {
+          this.calculationFinished$.next(true);
+        } else {
           of(true)
             .pipe(delay(1000), takeUntil(this.destroy$))
             .subscribe(() => this.refreshSummary());
-        } else {
-          this.calculationFinished$.next(true);
         }
       });
   }

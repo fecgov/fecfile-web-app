@@ -6,11 +6,11 @@ import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { NgClass } from '@angular/common';
-import { CalculationOverlayComponent } from '../../../shared/components/calculation-overlay/calculation-overlay.component';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { ColumnDefinition, TableBodyContext, TableComponent } from 'app/shared/components/table/table.component';
 import { TableModule } from 'primeng/table';
+import { CalculationOverlayComponent } from 'app/shared/components/calculation-overlay/calculation-overlay.component';
 
 interface DetailedLineSummary {
   lineNumber: string;
@@ -26,7 +26,7 @@ interface DetailedLineSummary {
 @Component({
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
-  styleUrls: ['../../styles.scss', './report-detailed-summary.component.scss'],
+  styleUrls: ['../../../styles.scss', './report-detailed-summary.component.scss'],
   imports: [CalculationOverlayComponent, ButtonDirective, Ripple, TableModule, TableComponent, NgClass],
 })
 export class ReportDetailedSummaryComponent {
