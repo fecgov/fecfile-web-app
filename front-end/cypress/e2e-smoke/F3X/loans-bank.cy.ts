@@ -1,4 +1,4 @@
-import { defaultLoanFormData } from '../models/TransactionFormModel';
+import { defaultLoanFormData, LoanFormData } from '../models/TransactionFormModel';
 import { Initialize } from '../pages/loginPage';
 import { currentYear, PageUtils } from '../pages/pageUtils';
 import { TransactionDetailPage } from '../pages/transactionDetailPage';
@@ -90,7 +90,6 @@ function assertNoDeleteButtonInLoanReceivedFromBankRow() {
   });
 }
 
-// Helper to handle result of setupLoanFromBank for the first test
 function handleLoanAgreementSetup(q3: string) {
   return (result: any) => {
     ReportListPage.gotToReportTransactionListPage(q3);
@@ -156,6 +155,35 @@ describe('Loans', () => {
       cy.contains('Loan Received from Bank').should('exist');
 
       assertNoDeleteButtonInLoanReceivedFromBankRow();
+    });
+  });
+
+  it('should persist user-defined Date Due (Describe Due Date) after save', () => {
+    cy.wrap(DataSetup({ individual: true, organization: true })).then((result: any) => {
+      ReportListPage.gotToReportTransactionListPage(result.report);
+      StartTransaction.Loans().FromBank();
+
+      ContactLookup.getContact(result.organization.name);
+
+      const fd = {
+        ...defaultLoanFormData,
+        date_received: undefined,
+        loan_due_date_is_date: 'Other',
+        due_date: 'Test',
+      } as unknown as LoanFormData;
+
+      TransactionDetailPage.enterLoanFormData(fd, false, '[data-cy="accordion-1"]');
+      PageUtils.clickAccordion('STEP TWO');
+      TransactionDetailPage.enterLoanFormDataStepTwo(defaultLoanFormData, '[data-cy="accordion-2"]');
+
+      cy.intercept('POST', '**/api/v1/transactions/**').as('saveTxn');
+      PageUtils.clickFormActionButton('Save transactions', '[data-cy="navigation-control-button"]:visible');
+      cy.wait('@saveTxn');
+      PageUtils.locationCheck('/list');
+
+      cy.contains('Loan Received from Bank').should('exist');
+      clickLoan('Review loan agreement');
+      TransactionDetailPage.assertLoanFormData(fd);
     });
   });
 

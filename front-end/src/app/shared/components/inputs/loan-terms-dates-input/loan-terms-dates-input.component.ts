@@ -15,15 +15,16 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { SelectComponent } from '../../select/select.component';
 import { IdGeneratorService } from 'app/shared/services/id-generator.service';
 
-enum LoanTermsFieldSettings {
-  SPECIFIC_DATE = 'specific-date',
-  USER_DEFINED = 'user-defined',
-  EXACT_PERCENTAGE = 'exact-percentage',
-}
+const LoanTermsFieldSettings = {
+  USER_DEFINED: false,
+  SPECIFIC_DATE: true,
+  EXACT_PERCENTAGE: true,
+};
 
 @Component({
   selector: 'app-loan-terms-dates-input',
   templateUrl: './loan-terms-dates-input.component.html',
+  styleUrls: ['./loan-terms-dates-input.component.scss'],
   imports: [ReactiveFormsModule, CalendarComponent, ErrorMessagesComponent, InputText, SelectComponent],
   providers: [IdGeneratorService],
 })
@@ -35,14 +36,14 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
 
   readonly termFieldSettings = LoanTermsFieldSettings;
 
-  readonly dueDateSettingOptions = LabelUtils.getPrimeOptions([
-    [LoanTermsFieldSettings.SPECIFIC_DATE, 'Enter a specific date'],
-    [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
+  readonly dueDateSettingOptions = LabelUtils.getOptions([
+    [true, 'Exact due date (MM/DD/YYYY)'],
+    [false, 'Other'],
   ]);
 
-  readonly interestRateSettingOptions = LabelUtils.getPrimeOptions([
-    [LoanTermsFieldSettings.EXACT_PERCENTAGE, 'Enter an exact percentage'],
-    [LoanTermsFieldSettings.USER_DEFINED, 'Enter a user defined value'],
+  readonly interestRateSettingOptions = LabelUtils.getOptions([
+    [true, 'Exact interest rate (%)'],
+    [false, 'Other'],
   ]);
 
   readonly report = this.store.selectSignal(selectActiveReport);
@@ -73,7 +74,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
       this.convertDueDate(dueDateSetting);
     });
 
-    this.onInterestRateInput(this.interestRate);
+    this.onInterestRateInput(this.interestRateSetting);
     this.interestRateSettingField?.addSubscription((interestRateSetting) => {
       if (!this.interestRateField) return;
       if (interestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
@@ -121,10 +122,10 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
     this.clearValuesOnChange = true;
   }
 
-  private onInterestRateInput(newInterestRateSetting: string) {
+  private onInterestRateInput(newInterestRateSetting: boolean) {
     const previousInterestRate = this.interestRate;
     if (newInterestRateSetting === LoanTermsFieldSettings.EXACT_PERCENTAGE) {
-      let newInterestRate = previousInterestRate ?? '';
+      const newInterestRate = previousInterestRate ?? '';
       let textInput!: HTMLInputElement;
       let initialSelectionStart = 0;
       let initialSelectionEnd = 0;
@@ -135,25 +136,13 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
         initialSelectionEnd = textInput.selectionEnd ?? 0;
       }
 
-      const validNumber = newInterestRate.replaceAll(/[^0-9.%]/g, '');
+      const validNumber = newInterestRate.replace(/[^0-9.]/g, '');
       if (validNumber !== newInterestRate) {
         this.interestRate = validNumber;
         const lengthDifference = newInterestRate.length - validNumber.length;
-        newInterestRate = validNumber;
 
         textInput?.setSelectionRange(initialSelectionStart - lengthDifference, initialSelectionEnd - lengthDifference);
         this.interestRateField?.markAsTouched();
-      }
-
-      if (newInterestRate.length > 0) {
-        if (!newInterestRate.endsWith('%')) {
-          this.interestRate = newInterestRate + '%';
-          textInput?.setSelectionRange(newInterestRate.length, newInterestRate.length);
-          this.interestRateField?.markAsTouched();
-        }
-      }
-      if (this.interestRate === '%') {
-        this.interestRate = '';
       }
     }
   }
@@ -165,7 +154,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
    * This means when returning to the string control we need to recreate the control.
    * @param newDueDateSetting
    */
-  convertDueDate(newDueDateSetting: string) {
+  convertDueDate(newDueDateSetting: boolean) {
     if (this.clearValuesOnChange) {
       this.clearDueDate(newDueDateSetting);
     } else {
@@ -177,7 +166,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
    * If clearValuesOnChange is true, values are set to null or empty string
    * @param newDueDateSetting
    */
-  private clearDueDate(newDueDateSetting: string) {
+  private clearDueDate(newDueDateSetting: boolean) {
     if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
       this.dueDate = null;
     } else if (newDueDateSetting === LoanTermsFieldSettings.USER_DEFINED) {
@@ -190,7 +179,7 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
    * clearValuesOnChange is false when loading from backend, otherwise always true
    * @param newDueDateSetting
    */
-  private convertDueDateProper(newDueDateSetting: string) {
+  private convertDueDateProper(newDueDateSetting: boolean) {
     const fecDateFormat = /^\d{4}-\d{2}-\d{2}$/;
     const previous_due_date = this.dueDate;
     if (newDueDateSetting === LoanTermsFieldSettings.SPECIFIC_DATE) {
@@ -221,14 +210,14 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   }
 
   get dueDateSettingField(): SubscriptionFormControl | null {
-    return this.form.get(this.templateMap.due_date_setting) as SubscriptionFormControl;
+    return this.form.get(this.templateMap.loan_due_date_is_date) as SubscriptionFormControl;
   }
 
-  get dueDateSetting(): string {
+  get dueDateSetting(): boolean {
     return this.dueDateSettingField?.value ?? '';
   }
 
-  set dueDateSetting(value: string) {
+  set dueDateSetting(value: boolean) {
     this.dueDateSettingField?.setValue(value);
   }
 
@@ -245,14 +234,14 @@ export class LoanTermsDatesInputComponent extends BaseInputComponent implements 
   }
 
   get interestRateSettingField(): SubscriptionFormControl | null {
-    return this.form.get(this.templateMap['interest_rate_setting']) as SubscriptionFormControl;
+    return this.form.get(this.templateMap['loan_interest_rate_is_percent']) as SubscriptionFormControl;
   }
 
-  get interestRateSetting(): string {
+  get interestRateSetting(): boolean {
     return this.interestRateSettingField?.value ?? '';
   }
 
-  set interestRateSetting(value: string) {
+  set interestRateSetting(value: boolean) {
     this.interestRateSettingField?.setValue(value);
   }
 }
