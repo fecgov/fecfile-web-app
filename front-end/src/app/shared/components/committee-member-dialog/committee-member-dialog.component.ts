@@ -36,7 +36,7 @@ export class CommitteeMemberDialogComponent extends FormComponent {
 
   readonly form: FormGroup = new FormGroup(
     {
-      role: new SubscriptionFormControl(this.roleOptions[0].value),
+      role: new SubscriptionFormControl(null, { validators: [Validators.required] }),
       email: new SubscriptionFormControl('', {
         validators: [Validators.required, emailValidator],
         asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
@@ -54,14 +54,34 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   });
   submitDisabled = true;
 
+  protected readonly allRoleOptions = Object.keys(Roles).map((key) => ({
+    label: Roles[key as keyof typeof Roles],
+    value: key,
+  }));
+
+  readonly availableRoleOptions = computed(() => {
+    const member = this.member();
+    if (!member) return this.allRoleOptions;
+    return this.allRoleOptions.filter((option) => option.value !== member.role);
+  });
+
+  private updateSubmitDisabled() {
+    const role = this.form.controls['role'].value;
+    const emailValid = this.member() || this.form.controls['email'].valid;
+    this.submitDisabled = !role || !emailValid;
+  }
+
   constructor() {
     super();
     effect(() => {
       if (!this.detailVisible()) this.resetForm();
-      if (this.member()) this.submitDisabled = false;
     });
 
-    this.form.controls['email'].statusChanges.subscribe((status) => (this.submitDisabled = status !== 'VALID'));
+    this.form.statusChanges.subscribe(() => {
+      this.updateSubmitDisabled();
+    });
+
+    this.updateSubmitDisabled();
   }
 
   updateSelected(roleOption: (typeof this.roleOptions)[0]) {
@@ -91,7 +111,7 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   }
 
   resetForm() {
-    this.form.reset({ role: this.roleOptions[0].value, email: '' });
+    this.form.reset({ role: null, email: '' });
     this.formSubmitted = false;
   }
 

@@ -73,8 +73,12 @@ describe('CommitteeMemberDialogComponent', () => {
 
   it('should add new users', () => {
     const newEmail = 'test_1234321@test.com';
+
     component.form.get('email')?.setValue(newEmail);
+    component.form.get('role')?.setValue('MANAGER');
+
     component.submitForm();
+
     expect(component.detailVisible()).toBe(false);
   });
 
@@ -94,8 +98,17 @@ describe('CommitteeMemberDialogComponent', () => {
     expect(component.form.valid).toBe(false);
   });
 
-  it('should default role to first in list', async () => {
-    expect(component.form.get('role')?.value).toBe('COMMITTEE_ADMINISTRATOR');
+  it('should default role to null', async () => {
+    expect(component.form.get('role')?.value).toBeNull();
+  });
+
+  it('should disable submit if no role is selected', async () => {
+    component.form.get('role')?.setValue(null);
+    component.form.get('email')?.setValue('test@test.com');
+
+    component.form.updateValueAndValidity();
+
+    expect(component.submitDisabled).toBe(true);
   });
 
   describe('submit', () => {
@@ -157,6 +170,20 @@ describe('CommitteeMemberDialogComponent', () => {
       expect(updateSpy).toHaveBeenCalled();
       expect(resetSpy).not.toHaveBeenCalled();
     });
+
+    it('should exclude current role from available role options', () => {
+      host.member = johnSmith;
+      fixture.detectChanges();
+
+      expect(component.availableRoleOptions().some((option) => option.value === johnSmith.role)).toBe(false);
+    });
+
+    it('should include other roles when editing a user', () => {
+      host.member = johnSmith;
+      fixture.detectChanges();
+
+      expect(component.availableRoleOptions().some((option) => option.value === 'MANAGER')).toBe(true);
+    });
   });
 
   describe('addUser', () => {
@@ -165,6 +192,13 @@ describe('CommitteeMemberDialogComponent', () => {
       vi.spyOn(testCommitteeService, 'addMember');
       await component.submitForm();
       expect(testCommitteeService.addMember).not.toHaveBeenCalled();
+    });
+
+    it('should include all roles when adding a user', () => {
+      host.member = undefined;
+      fixture.detectChanges();
+
+      expect(component.availableRoleOptions().length).toBe(Object.keys(Roles).length);
     });
 
     it('should call committeeMemberService.addMember when form is valid', async () => {
