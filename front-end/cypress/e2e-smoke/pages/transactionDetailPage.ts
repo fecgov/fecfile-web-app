@@ -164,11 +164,9 @@ export class TransactionDetailPage {
       cy.get(alias).find('input[name="secured"]').first().click();
     }
 
-    // Set due date dropdown & date
     if (formData.loan_due_date_is_date) {
       PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.loan_due_date_is_date, alias);
       if (formData.due_date) {
-        // If due_date is a Date object, use the calendar; otherwise it's a user-defined string input
         if (formData.due_date instanceof Date) {
           PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
         } else {

@@ -169,7 +169,7 @@ describe('Loans', () => {
         ...defaultLoanFormData,
         date_received: undefined,
         loan_due_date_is_date: 'Other',
-        due_date: 'Payment due upon demand',
+        due_date: 'Test',
       } as unknown as LoanFormData;
 
       TransactionDetailPage.enterLoanFormData(fd, false, '[data-cy="accordion-1"]');
@@ -181,7 +181,6 @@ describe('Loans', () => {
       cy.wait('@saveTxn');
       PageUtils.locationCheck('/list');
 
-      // Review the saved transaction and assert the user-defined due date persisted
       cy.contains('Loan Received from Bank').should('exist');
       clickLoan('Review loan agreement');
       TransactionDetailPage.assertLoanFormData(fd);
