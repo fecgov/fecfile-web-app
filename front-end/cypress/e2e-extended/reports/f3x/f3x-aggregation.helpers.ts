@@ -600,7 +600,9 @@ export class F3XAggregationHelpers {
 
   static rowLinkById(tableRoot: string, transactionId: string): Cypress.Chainable<JQuery<HTMLElement>> {
     this.assertTransactionId(transactionId, 'rowLinkById');
-    return cy.get(`${tableRoot} a[href*="/list/${transactionId}"]`).first().should('exist');
+    const timeout = Number(Cypress.config('responseTimeout'));
+    cy.get(tableRoot, { timeout }).should('exist');
+    return cy.get(`${tableRoot} a[href*="/list/${transactionId}"]`, { timeout }).first().should('exist');
   }
 
   static rowById(tableRoot: string, transactionId: string): Cypress.Chainable<JQuery<HTMLTableRowElement>> {
@@ -882,113 +884,26 @@ export class F3XAggregationHelpers {
     this.assertAggregateField(expected);
   }
 
-  private static buildPreviousElectionQuery(transactionId: string, transaction: any): Record<string, string> | null {
-    const disbursementDate = String(
-      transaction?.['disbursement_date'] ??
-        transaction?.['expenditure_date'] ??
-        transaction?.['date'] ??
-        transaction?.['dissemination_date'] ??
-        '',
-    );
-    const electionCode = String(transaction?.['election_code'] ?? '');
-    const candidateOffice = String(
-      transaction?.['candidate_office'] ??
-        transaction?.['so_candidate_office'] ??
-        transaction?.['payee_candidate_office'] ??
-        '',
-    );
-    const candidateState = String(
-      transaction?.['candidate_state'] ??
-        transaction?.['so_candidate_state'] ??
-        transaction?.['payee_candidate_state'] ??
-        '',
-    );
-    const candidateDistrict = String(
-      transaction?.['candidate_district'] ??
-        transaction?.['so_candidate_district'] ??
-        transaction?.['payee_candidate_district'] ??
-        '',
-    );
-
-    if (!disbursementDate || !electionCode || !candidateOffice) {
-      return null;
-    }
-
-    const query: Record<string, string> = {
-      transaction_id: transactionId,
-      aggregation_group: String(transaction?.['aggregation_group'] ?? 'INDEPENDENT_EXPENDITURE'),
-      date: disbursementDate,
-      election_code: electionCode,
-      candidate_office: candidateOffice,
-    };
-
-    if (candidateState) {
-      query['candidate_state'] = candidateState;
-    }
-    if (candidateDistrict) {
-      query['candidate_district'] = candidateDistrict;
-    }
-
-    return query;
-  }
-
-  private static queryValueMatches(actual: unknown, expected: string): boolean {
-    if (Array.isArray(actual)) {
-      return actual.some((value) => String(value) === expected);
-    }
-    return String(actual ?? '') === expected;
-  }
-
-  private static requestMatchesPreviousElectionQuery(
-    actualQuery: Record<string, unknown> | undefined,
-    expectedQuery: Record<string, string>,
-  ): boolean {
-    if (!actualQuery) {
-      return false;
-    }
-
-    return Object.entries(expectedQuery).every(([key, expected]) => {
-      return this.queryValueMatches(actualQuery[key], expected);
-    });
-  }
-
   static assertCalendarYtdFieldOnOpen(
     transactionId: string,
     expectedFormatted: string,
   ): Cypress.Chainable<void> {
     this.assertTransactionId(transactionId, 'assertCalendarYtdFieldOnOpen');
-    const matchedAlias = 'CalendarYtdAggregateMatched';
-
-    return this.getTransaction(transactionId).then((transaction) => {
-      const expectedQuery = this.buildPreviousElectionQuery(transactionId, transaction ?? {});
-
-      if (expectedQuery) {
-        cy.intercept(
-          {
-            method: 'GET',
-            pathname: /\/api\/v1\/transactions\/previous\/election\/$/,
-          },
-          (req) => {
-            const requestQuery = (req.query ?? {}) as Record<string, unknown>;
-            if (this.requestMatchesPreviousElectionQuery(requestQuery, expectedQuery)) {
-              req.alias = matchedAlias;
-            }
-          },
-        );
-      }
-
-      this.openDisbursement(transactionId);
-
-      if (!expectedQuery) {
-        cy.log(`assertCalendarYtdFieldOnOpen fallback: missing query fields for txn=${transactionId}`);
-        return cy.get('#calendar_ytd', { timeout: 15000 }).should('have.value', expectedFormatted);
-      }
-
-      return cy.wait(`@${matchedAlias}`).then(() => {
-        cy.log(`assertCalendarYtdFieldOnOpen matched request resolved: txn=${transactionId}`);
-        return cy.get('#calendar_ytd', { timeout: 15000 }).should('have.value', expectedFormatted);
-      }) as unknown as Cypress.Chainable<void>;
+    const alias = `CalendarYtdAggregate_${transactionId}`;
+    cy.intercept(
+      { method: 'GET', pathname: /\/api\/v1\/transactions\/previous\/election\/$/, query: { transaction_id: transactionId }, times: 1 },
+    ).as(alias);
+    this.openDisbursement(transactionId);
+    return cy.wait(`@${alias}`).then(() => {
+      return cy.get('#calendar_ytd').should('have.value', expectedFormatted);
     }) as unknown as Cypress.Chainable<void>;
+  }
+
+  static assertCalendarYtdAfterBlur(expectedFormatted: string): Cypress.Chainable<void> {
+    const responseTimeout = Number(Cypress.config('responseTimeout'));
+    cy.blurActiveField();
+    cy.waitForNetworkIdle(1000);
+    return cy.get('#calendar_ytd', { timeout: responseTimeout }).should('have.value', expectedFormatted) as unknown as Cypress.Chainable<void>;
   }
 
   static assertScheduleEAggregateFieldOnOpen(transactionId: string, expected: string): void {
