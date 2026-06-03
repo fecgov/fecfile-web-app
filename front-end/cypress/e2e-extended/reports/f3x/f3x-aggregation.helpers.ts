@@ -882,14 +882,6 @@ export class F3XAggregationHelpers {
     this.assertAggregateField(expected);
   }
 
-  private static parseCurrencyToNumber(value: string): number {
-    const parsed = Number(value.replace(/[$,]/g, ''));
-    if (Number.isNaN(parsed)) {
-      throw new TypeError(`parseCurrencyToNumber: cannot parse "${value}"`);
-    }
-    return parsed;
-  }
-
   private static buildPreviousElectionQuery(transactionId: string, transaction: any): Record<string, string> | null {
     const disbursementDate = String(
       transaction?.['disbursement_date'] ??
@@ -965,29 +957,7 @@ export class F3XAggregationHelpers {
     expectedFormatted: string,
   ): Cypress.Chainable<void> {
     this.assertTransactionId(transactionId, 'assertCalendarYtdFieldOnOpen');
-    const expectedValue = this.parseCurrencyToNumber(expectedFormatted);
     const matchedAlias = 'CalendarYtdAggregateMatched';
-    const settleAttempts = 4;
-    const settleIntervalMs = 250;
-
-    const assertFieldWithSettle = (attempt: number): Cypress.Chainable<void> => {
-      return cy
-        .get('#calendar_ytd')
-        .invoke('val')
-        .then((rawValue) => {
-          const actual = String(rawValue ?? '').trim();
-          if (actual === expectedFormatted) {
-            return;
-          }
-
-          if (attempt >= settleAttempts) {
-            expect(actual, `calendar_ytd settle (${attempt + 1}/${settleAttempts + 1})`).to.equal(expectedFormatted);
-            return;
-          }
-
-          return cy.wait(settleIntervalMs).then(() => assertFieldWithSettle(attempt + 1));
-        }) as unknown as Cypress.Chainable<void>;
-    };
 
     return this.getTransaction(transactionId).then((transaction) => {
       const expectedQuery = this.buildPreviousElectionQuery(transactionId, transaction ?? {});
@@ -1011,12 +981,12 @@ export class F3XAggregationHelpers {
 
       if (!expectedQuery) {
         cy.log(`assertCalendarYtdFieldOnOpen fallback: missing query fields for txn=${transactionId}`);
-        return assertFieldWithSettle(0);
+        return cy.get('#calendar_ytd', { timeout: 15000 }).should('have.value', expectedFormatted);
       }
 
       return cy.wait(`@${matchedAlias}`).then(() => {
-        cy.log(`assertCalendarYtdFieldOnOpen matched request resolved: txn=${transactionId}, expected=${expectedValue}`);
-        return assertFieldWithSettle(0);
+        cy.log(`assertCalendarYtdFieldOnOpen matched request resolved: txn=${transactionId}`);
+        return cy.get('#calendar_ytd', { timeout: 15000 }).should('have.value', expectedFormatted);
       }) as unknown as Cypress.Chainable<void>;
     }) as unknown as Cypress.Chainable<void>;
   }
