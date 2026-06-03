@@ -170,6 +170,20 @@ describe('CommitteeMemberDialogComponent', () => {
       expect(updateSpy).toHaveBeenCalled();
       expect(resetSpy).not.toHaveBeenCalled();
     });
+
+    it('should exclude current role from available role options', () => {
+      host.member = johnSmith;
+      fixture.detectChanges();
+
+      expect(component.availableRoleOptions().some((option) => option.value === johnSmith.role)).toBe(false);
+    });
+
+    it('should include other roles when editing a user', () => {
+      host.member = johnSmith;
+      fixture.detectChanges();
+
+      expect(component.availableRoleOptions().some((option) => option.value === 'MANAGER')).toBe(true);
+    });
   });
 
   describe('addUser', () => {
@@ -178,6 +192,13 @@ describe('CommitteeMemberDialogComponent', () => {
       vi.spyOn(testCommitteeService, 'addMember');
       await component.submitForm();
       expect(testCommitteeService.addMember).not.toHaveBeenCalled();
+    });
+
+    it('should include all roles when adding a user', () => {
+      host.member = undefined;
+      fixture.detectChanges();
+
+      expect(component.availableRoleOptions().length).toBe(Object.keys(Roles).length);
     });
 
     it('should call committeeMemberService.addMember when form is valid', async () => {

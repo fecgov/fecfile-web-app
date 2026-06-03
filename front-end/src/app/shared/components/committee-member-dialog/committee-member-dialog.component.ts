@@ -54,6 +54,17 @@ export class CommitteeMemberDialogComponent extends FormComponent {
   });
   submitDisabled = true;
 
+  protected readonly allRoleOptions = Object.keys(Roles).map((key) => ({
+    label: Roles[key as keyof typeof Roles],
+    value: key,
+  }));
+
+  readonly availableRoleOptions = computed(() => {
+    const member = this.member();
+    if (!member) return this.allRoleOptions;
+    return this.allRoleOptions.filter((option) => option.value !== member.role);
+  });
+
   private updateSubmitDisabled() {
     const role = this.form.controls['role'].value;
     const emailValid = this.member() || this.form.controls['email'].valid;
