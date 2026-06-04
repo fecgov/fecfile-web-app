@@ -49,10 +49,8 @@
   </ng-template>
 </app-table>
 
-<app-committee-member-dialog
-  (userAdded)="userAdded($event)"
-  (roleEdited)="roleEdited()"
-  [(detailVisible)]="detailVisible"
-  [member]="member"
-/>
-<app-edit-name-dialog [(visible)]="editSelf" (nameChanged)="nameChanged()" />
+<app-add-committee-member-dialog (userAdded)="userAdded($event)" [(detailVisible)]="detailVisible" />
+<app-edit-name-dialog [(visible)]="editSelfVisible" (nameChanged)="nameChanged()" />
+@if (member) {
+  <app-edit-committee-member-dialog (roleEdited)="roleEdited()" [(detailVisible)]="editVisible" [member]="member" />
+}

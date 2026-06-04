@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
@@ -7,12 +7,14 @@ import { CommitteeMemberService } from '../../shared/services/committee-member.s
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
-import { CommitteeMemberDialogComponent } from '../../shared/components/committee-member-dialog/committee-member-dialog.component';
+
 import { ButtonDirective } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { EditNameDialogComponent } from '../edit-name-dialog/edit-name-dialog.component';
+import { AddCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/add-committee-member-dialog.component';
+import { EditCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/edit-committee-member-dialog.component';
 
 @Component({
   selector: 'app-manage-committee',
@@ -23,7 +25,8 @@ import { EditNameDialogComponent } from '../edit-name-dialog/edit-name-dialog.co
     ButtonDirective,
     Ripple,
     TableActionsButtonComponent,
-    CommitteeMemberDialogComponent,
+    AddCommitteeMemberDialogComponent,
+    EditCommitteeMemberDialogComponent,
     TableModule,
     EditNameDialogComponent,
   ],
@@ -34,14 +37,16 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   readonly user = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
   override item: CommitteeMember = this.getEmptyItem();
-  readonly editSelf = signal(false);
+
+  readonly editVisible = signal(false);
+  readonly editSelfVisible = signal(false);
 
   protected readonly rowActions: TableAction<CommitteeMember>[] = [
     new TableAction<CommitteeMember>('Edit Role', this.openEdit.bind(this), undefined),
     new TableAction<CommitteeMember>('Delete', this.confirmDelete.bind(this)),
   ];
   protected readonly editName: TableAction<CommitteeMember>[] = [
-    new TableAction<CommitteeMember>('Edit Name', this.openSelf.bind(this), undefined),
+    new TableAction<CommitteeMember>('Edit Name', () => this.editSelfVisible.set(true), undefined),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
@@ -76,15 +81,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     return columns;
   });
 
-  constructor() {
-    super();
-    effect(() => {
-      if (!this.detailVisible()) {
-        this.member = undefined;
-      }
-    });
-  }
-
   override readonly params: Signal<QueryParams> = computed(() => {
     return { page_size: this.rowsPerPage(), you_first: true };
   });
@@ -114,14 +110,9 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     });
   }
 
-  async openSelf(member: CommitteeMember) {
-    this.member = member;
-    this.editSelf.set(true);
-  }
-
   async openEdit(member: CommitteeMember) {
     this.member = member;
-    this.detailVisible.set(true);
+    this.editVisible.set(true);
   }
 
   roleEdited() {
