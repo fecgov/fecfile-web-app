@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Tooltip } from 'primeng/tooltip';
 
 @Component({
@@ -9,5 +9,7 @@ import { Tooltip } from 'primeng/tooltip';
 })
 export class TooltipComponent {
   readonly text = input<string>('');
-  readonly position = input<'right' | 'left' | 'top' | 'bottom'>('top');
+  readonly direction = input<'topright' | 'topleft' | 'bottomright' | 'bottomleft'>('topright');
+  readonly position = computed(() => this.direction() === 'topright' || this.direction() === 'topleft' ? 'top' : 'bottom');
+  readonly positionLeft = computed(() => this.direction() === 'topright' || this.direction() === 'bottomright' ? 125 : -125);
 }
