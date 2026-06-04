@@ -100,14 +100,14 @@ describe('AddCommitteeMemberDialogComponent', () => {
     expect(component.form.get('role')?.value).toBeNull();
   });
 
-  it('should disable submit if no role is selected', async () => {
+  it('should disable submit if form is not valid', async () => {
     component.form.get('role')?.setValue(null);
     component.form.get('email')?.setValue('test@test.com');
 
     component.form.updateValueAndValidity();
     fixture.detectChanges();
 
-    expect(component.submitDisabled()).toBe(true);
+    expect(component.form.valid).toBe(false);
   });
 
   describe('submit', () => {
@@ -117,7 +117,7 @@ describe('AddCommitteeMemberDialogComponent', () => {
     });
   });
 
-  describe('addUser', () => {
+  describe('submit', () => {
     it('should not proceed if form is invalid', async () => {
       component.form.get('email')?.setErrors({ required: true });
       vi.spyOn(testCommitteeService, 'addMember');
@@ -133,7 +133,7 @@ describe('AddCommitteeMemberDialogComponent', () => {
       component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
       const manager = component.form.get('role')?.value;
 
-      await component.addUser();
+      await component.submit();
       expect(updateSpy).toHaveBeenCalled();
       expect(component.form.valid).toBe(true);
       expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', manager);
@@ -147,7 +147,7 @@ describe('AddCommitteeMemberDialogComponent', () => {
       const consoleSpy = vi.spyOn(console, 'error');
       component.form.setControl('email', new SubscriptionFormControl('test@example.com'));
       component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
-      await component.addUser();
+      await component.submit();
       expect(consoleSpy).toHaveBeenCalledWith('Error adding member', error);
       expect(addSpy).toHaveBeenCalled();
       expect(resetSpy).not.toHaveBeenCalled();

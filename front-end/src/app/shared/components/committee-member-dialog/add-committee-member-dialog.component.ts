@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, model, output } from '@angular/core';
+import { Component, effect, inject, model, output } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { CommitteeMemberEmailValidator, emailValidator } from 'app/shared/utils/validators.utils';
@@ -9,7 +9,6 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { Roles } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
 import { DialogComponent } from '../dialog/dialog.component';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-committee-member-dialog',
@@ -20,7 +19,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
       title="Add user"
       submitLabel="Add"
       [(visible)]="detailVisible"
-      [submitDisabled]="submitDisabled()"
+      [submitDisabled]="!form.valid"
       (confirm)="submitForm()"
     >
       <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
@@ -59,21 +58,13 @@ export class AddCommitteeMemberDialogComponent extends FormComponent {
     };
   });
 
-  readonly roleControl = new SubscriptionFormControl<Roles | null>(null, { validators: [Validators.required] });
-  readonly form = new FormGroup(
-    {
-      role: this.roleControl,
-      email: new SubscriptionFormControl('', {
-        validators: [Validators.required, emailValidator],
-        asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
-        updateOn: 'change',
-      }),
-    },
-    { updateOn: 'blur' },
-  );
-  readonly roleValue = toSignal(this.roleControl.valueChanges);
-  readonly emailStatus = toSignal(this.form.controls['email'].statusChanges);
-  readonly submitDisabled = computed(() => !this.roleValue() || this.emailStatus() !== 'VALID');
+  readonly form = new FormGroup({
+    role: new SubscriptionFormControl<Roles | null>(null, { validators: [Validators.required] }),
+    email: new SubscriptionFormControl('', {
+      validators: [Validators.required, emailValidator],
+      asyncValidators: [this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator)],
+    }),
+  });
 
   constructor() {
     super();
@@ -82,22 +73,8 @@ export class AddCommitteeMemberDialogComponent extends FormComponent {
     });
   }
 
-  updateSelected(roleOption: (typeof this.roleOptions)[0]) {
-    this.form.get('role')?.setValue(roleOption);
-  }
-
-  submit(): Promise<void> {
-    return this.addUser();
-  }
-
-  resetForm() {
-    this.form.reset({ role: null, email: '' });
-    this.formSubmitted = false;
-  }
-
-  async addUser() {
-    const email = this.form.get('email')?.value as string;
-    const role = this.form.get('role')?.value;
+  async submit(): Promise<void> {
+    const { email, role } = this.form.value;
     try {
       const newUser = await this.committeeMemberService.addMember(email, role);
       this.detailVisible.set(false);
@@ -106,5 +83,10 @@ export class AddCommitteeMemberDialogComponent extends FormComponent {
     } catch (error) {
       console.error('Error adding member', error);
     }
+  }
+
+  resetForm() {
+    this.form.reset({ role: null, email: '' });
+    this.formSubmitted = false;
   }
 }

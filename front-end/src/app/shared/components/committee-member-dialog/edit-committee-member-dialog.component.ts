@@ -6,7 +6,6 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { Roles, CommitteeMember } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
 import { DialogComponent } from '../dialog/dialog.component';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-committee-member-dialog',
@@ -17,7 +16,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
       title="Edit Role"
       submitLabel="Change"
       [(visible)]="detailVisible"
-      [submitDisabled]="submitDisabled()"
+      [submitDisabled]="!form.valid"
       (confirm)="submitForm()"
     >
       <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
@@ -47,24 +46,18 @@ export class EditCommitteeMemberDialogComponent extends FormComponent {
   readonly detailVisible = model(false);
   readonly member = input.required<CommitteeMember>();
   readonly roleEdited = output<void>();
-
-  readonly roleControl = new SubscriptionFormControl<Roles | null>(null, { validators: [Validators.required] });
-  readonly form = new FormGroup({ role: this.roleControl });
-  readonly roleValue = toSignal(this.roleControl.valueChanges);
+  readonly form = new FormGroup({
+    role: new SubscriptionFormControl<Roles | null>(null, { validators: [Validators.required] }),
+  });
 
   readonly role = computed(() => Roles[this.member().role as keyof typeof Roles]);
 
-  protected readonly allRoleOptions = Object.keys(Roles).map((key) => ({
-    label: Roles[key as keyof typeof Roles],
-    value: key,
-  }));
-
   readonly availableRoleOptions = computed(() => {
-    const member = this.member();
-    return this.allRoleOptions.filter((option) => option.value !== member.role);
+    const memberRole = this.member().role;
+    return Object.entries(Roles)
+      .filter(([key]) => key !== memberRole)
+      .map(([key, label]) => ({ label, value: key }));
   });
-
-  readonly submitDisabled = computed(() => !this.roleValue());
 
   constructor() {
     super();
@@ -73,21 +66,8 @@ export class EditCommitteeMemberDialogComponent extends FormComponent {
     });
   }
 
-  updateSelected(roleOption: (typeof this.allRoleOptions)[0]) {
-    this.form.get('role')?.setValue(roleOption);
-  }
-
-  submit(): Promise<void> {
-    return this.editRole();
-  }
-
-  resetForm() {
-    this.form.reset({ role: null });
-    this.formSubmitted = false;
-  }
-
-  async editRole() {
-    const role = this.form.get('role')?.value;
+  async submit(): Promise<void> {
+    const { role } = this.form.value;
     try {
       await this.committeeMemberService.update({ ...this.member(), role } as CommitteeMember);
       this.detailVisible.set(false);
@@ -96,5 +76,10 @@ export class EditCommitteeMemberDialogComponent extends FormComponent {
     } catch (error) {
       console.error('Error updating member', error);
     }
+  }
+
+  resetForm() {
+    this.form.reset({ role: null });
+    this.formSubmitted = false;
   }
 }

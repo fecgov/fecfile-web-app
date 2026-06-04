@@ -78,7 +78,7 @@ describe('EditCommitteeMemberDialogComponent', () => {
     component.form.get('role')?.setValue(null);
     component.form.updateValueAndValidity();
     fixture.detectChanges();
-    expect(component.submitDisabled()).toBe(true);
+    expect(component.form.valid).toBe(false);
   });
 
   describe('submit', () => {
@@ -88,7 +88,7 @@ describe('EditCommitteeMemberDialogComponent', () => {
     });
   });
 
-  describe('editRole', () => {
+  describe('submit', () => {
     beforeEach(() => {
       component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
       fixture.detectChanges();
@@ -107,7 +107,7 @@ describe('EditCommitteeMemberDialogComponent', () => {
       host.member = johnSmith;
       fixture.detectChanges();
       component.form.get('role')?.setValue('MANAGER');
-      await component.editRole();
+      await component.submit();
 
       expect(updateSpy).toHaveBeenCalledWith({ ...johnSmith, role: 'MANAGER' } as CommitteeMember);
       expect(resetSpy).toHaveBeenCalled();
@@ -118,7 +118,7 @@ describe('EditCommitteeMemberDialogComponent', () => {
       const updateSpy = vi.spyOn(testCommitteeService, 'update').mockRejectedValue(error);
       const resetSpy = vi.spyOn(component, 'resetForm');
       const consoleSpy = vi.spyOn(console, 'error');
-      await component.editRole();
+      await component.submit();
       expect(consoleSpy).toHaveBeenCalledWith('Error updating member', error);
 
       expect(updateSpy).toHaveBeenCalled();
