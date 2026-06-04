@@ -30,7 +30,7 @@ sed \
   -e "s|{{port}}|$PORT|g" \
   -e "s|{{env \"FECFILE_APP_URL\"}}|$APP_URL|g" \
   -e "s|{{env \"FECFILE_API_URL\"}}|$CSP_API_ORIGIN|g" \
-  -e "s|root fecfile-web;|root /usr/share/nginx/html/fecfile-web;|g" \
+  -e "s|root fecfile-web;|root /workspace/front-end/dist/fecfile-web;|g" \
   "$TEMPLATE_PATH" > "$NGINX_CONF_PATH"
 
 if [[ "$WATCH" == "1" ]]; then

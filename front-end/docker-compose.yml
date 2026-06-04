@@ -28,7 +28,7 @@ services:
     ports:
       - "${PORT:-4200}:${PORT:-4200}"
     volumes:
-      - ./dist/fecfile-web:/usr/share/nginx/html/fecfile-web:ro
+      - ..:/workspace
       - ./.tmp/nginx.local.generated.conf:/etc/nginx/nginx.conf:ro
 
   browser-sync:
