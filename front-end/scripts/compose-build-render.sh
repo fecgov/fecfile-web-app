@@ -4,8 +4,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FRONTEND_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-MODE="${1:-prepare}"
-if [[ "$MODE" != "prepare" && "$MODE" != "rebuild" ]]; then
+# define our two modes as constants for clarity
+PREPARE_MODE="prepare"
+REBUILD_MODE="rebuild"
+
+MODE="${1:-$PREPARE_MODE}"
+if [[ "$MODE" != "$PREPARE_MODE" && "$MODE" != "$REBUILD_MODE" ]]; then
   echo "Usage: $0 <prepare|rebuild>" >&2
   exit 2
 fi
@@ -30,7 +34,7 @@ restore_angular_config() {
 mkdir -p "$FRONTEND_DIR/.tmp"
 trap restore_angular_config EXIT
 
-if [[ "$MODE" == "prepare" ]]; then
+if [[ "$MODE" == "$PREPARE_MODE" ]]; then
   : > "$RELOAD_TRIGGER_FILE"
 fi
 
@@ -52,14 +56,14 @@ if [[ "$LIKE_PROD" == "1" ]]; then
   fi
 fi
 
-if [[ "$MODE" == "prepare" ]]; then
+if [[ "$MODE" == "$PREPARE_MODE" ]]; then
   echo "Building frontend using npm run $BUILD_SCRIPT ..."
 else
   echo "Change detected. Rebuilding..."
 fi
 
 cd "$FRONTEND_DIR"
-if [[ "$MODE" == "prepare" ]]; then
+if [[ "$MODE" == "$PREPARE_MODE" ]]; then
   npm ci
 fi
 npm run "$BUILD_SCRIPT"
@@ -70,7 +74,7 @@ if [[ ! -f "$FRONTEND_DIR/dist/fecfile-web/index.html" ]]; then
 fi
 
 WATCH_FOR_RENDER="$WATCH"
-if [[ "$MODE" == "rebuild" ]]; then
+if [[ "$MODE" == "$REBUILD_MODE" ]]; then
   WATCH_FOR_RENDER="1"
 fi
 
@@ -83,7 +87,7 @@ NGINX_CONF_PATH="$NGINX_CONF_PATH" \
 
 chmod -R a+w "$FRONTEND_DIR/.tmp"
 
-if [[ "$MODE" == "rebuild" ]]; then
+if [[ "$MODE" == "$REBUILD_MODE" ]]; then
   echo "Rebuild complete."
   date +%s%N > "$RELOAD_TRIGGER_FILE"
 fi
