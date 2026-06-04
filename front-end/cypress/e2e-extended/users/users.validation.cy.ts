@@ -85,7 +85,7 @@ describe("Users: Validation and API failure states", () => {
     const adminUser = uniqueUser({ role: Roles.COMMITTEE_ADMINISTRATOR });
     UsersHelpers.stubOnce('POST', '**/committee-members/add-member/**', { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
     UsersPage.openAddUserDialog();
-    UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
+    UsersPage.enterFormData(adminUser, false, '@dialog');
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
