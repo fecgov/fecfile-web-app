@@ -59,6 +59,9 @@ else
 fi
 
 cd "$FRONTEND_DIR"
+if [[ "$MODE" == "prepare" ]]; then
+  npm ci
+fi
 npm run "$BUILD_SCRIPT"
 
 if [[ ! -f "$FRONTEND_DIR/dist/fecfile-web/index.html" ]]; then
