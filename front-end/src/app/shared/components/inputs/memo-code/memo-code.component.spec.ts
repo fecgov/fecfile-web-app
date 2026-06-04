@@ -16,7 +16,7 @@ import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Dialog } from 'primeng/dialog';
-import { Tooltip, TooltipModule } from 'primeng/tooltip';
+import { TooltipModule } from 'primeng/tooltip';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
