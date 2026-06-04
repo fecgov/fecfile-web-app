@@ -44,7 +44,7 @@
       </div>
     </p-accordion-header>
 
-    <p-accordion-content>
+    <p-accordion-content data-cy="accordion-1">
       <div class="accordion-content-wrapper">
         @if (transactionType?.formTitle) {
           <h2>
@@ -91,7 +91,7 @@
       </div>
     </p-accordion-header>
 
-    <p-accordion-content>
+    <p-accordion-content data-cy="accordion-2">
       <div class="accordion-content-wrapper">
         <h2>{{ childTransaction?.transactionType?.title }}</h2>
         @if (childTransactionType?.description) {

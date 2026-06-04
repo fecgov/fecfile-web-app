@@ -15,7 +15,7 @@ export const F1M_ROUTES: Route[] = [
     title: 'Create a report',
     component: MainFormComponent,
     data: {
-      showSidebar: false,
+      sidebar: null,
     },
   },
   {

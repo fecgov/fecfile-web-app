@@ -40,7 +40,6 @@ h6 {
   font-size: 13px;
   font-weight: 700;
   line-height: 1.5;
-  border-bottom: 1px, $base;
 }
 p {
   color: inherit;
@@ -85,9 +84,7 @@ ul {
   margin: 0;
   padding: 0;
 }
-ul ul {
-  margin-left: 2rem;
-}
+
 li p:last-child {
   margin-bottom: 0;
 }
@@ -115,29 +112,36 @@ input,
 select,
 textarea {
   background-color: #fff;
-  border-color: #aeb0b5;
+  border-color: var(--fec-grey-alt);
   border-width: 2px;
   border-style: solid;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   font-family: var(--karla);
-  font-size: 1.4rem;
-  height: 3.6rem;
-  line-height: 1.4rem;
+  font-size: var(--input-font-size);
+  height: var(--input-height);
+  line-height: 1.2;
   margin: 0;
   padding: 1rem;
   transition: border-color;
   width: 100%;
+  &:enabled {
+    &:hover {
+      border-color: var(--surface-border) !important;
+    }
+    &:focus {
+      box-shadow: var(--focus-ring);
+      border-color: var(--p-primary-color) !important;
+      color: var(--p-primary-color);
+    }
+  }
 }
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #112e51;
-  color: #112e51;
-}
+
 input:not([type="checkbox"]):disabled,
+select:disabled,
 textarea:disabled {
-  background: #f1f1f1;
+  background-color: var(--surface-ground);
   color: var(--p-content-color);
+  opacity: .65;
 }
 
 textarea {
@@ -166,12 +170,6 @@ input[type='search'] {
   text-decoration: none;
   user-select: none;
 }
-[type='button']:disabled,
-[type='submit']:disabled,
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
 img {
   margin: 0;
   max-width: 100%;
@@ -199,6 +197,15 @@ body {
   }
 }
 /* TYPOGRAHY */
-.ghandi {
+.gandhi {
   font-family: var(--gandhi)
+}
+.gandhi-bold {
+  font-family: var(--gandhi-bold)
+}
+.karla {
+  font-family: var(--karla);
+}
+.karla-bold {
+  font-family: var(--karla-bold);
 }

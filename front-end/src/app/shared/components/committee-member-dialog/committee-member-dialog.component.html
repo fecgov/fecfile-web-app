@@ -1,9 +1,10 @@
 <app-dialog
   tabindex="-1"
   aria-labelledby="dialog-title"
-  [title]="member() ? 'Edit user' : 'Add user'"
+  [title]="member() ? 'Edit Role' : 'Add user'"
   [submitLabel]="member() ? 'Change' : 'Add'"
   [(visible)]="detailVisible"
+  [submitDisabled]="submitDisabled"
   (confirm)="submitForm()"
 >
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
@@ -15,15 +16,15 @@
         </div>
       } @else {
         <div class="field">
-          <label class="dialog-label" for="email">ENTER EMAIL</label>
+          <label class="dialog-label" for="email">EMAIL</label>
           <input autofocus type="text" pInputText id="email" formControlName="email" />
-          <app-error-messages [form]="form" fieldName="email" [formSubmitted]="formSubmitted" />
+          <app-error-messages [form]="form" fieldName="email" [formSubmitted]="form.controls['email'].touched" />
         </div>
       }
       <app-select
         inputId="role"
         label="ROLE"
-        [options]="roleOptions"
+        [options]="availableRoleOptions()"
         [form]="form"
         formControlName="role"
         labelClass="dialog-label"

@@ -1,14 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  inject,
-  input,
-  Input,
-  OnChanges,
-  OnDestroy,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, input, OnChanges, OnDestroy, viewChild } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import intlTelInput, { Iti } from 'intl-tel-input';
 
@@ -19,11 +9,11 @@ type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
 export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
-  ngControl = inject(NgControl);
+  readonly ngControl = inject(NgControl);
   readonly inputId = input('telephone');
-  @Input() disabled = false;
-  @Input() labelName = '';
-  @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
+  readonly disabled = input(false);
+  readonly labelName = input('');
+  readonly internationalPhoneInputChild = viewChild.required<ElementRef<HTMLInputElement>>('internationalPhoneInput');
 
   private intlTelInput: Iti | undefined;
   private readonly intlTelInputOptions: IntlTelInputOptions = {
@@ -68,9 +58,10 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnCha
 
   ngAfterViewInit(): void {
     if (this.internationalPhoneInputChild) {
-      this.intlTelInput = intlTelInput(this.internationalPhoneInputChild.nativeElement, this.intlTelInputOptions);
+      this.intlTelInput = intlTelInput(this.internationalPhoneInputChild().nativeElement, this.intlTelInputOptions);
+      this.intlTelInput.setDisabled(this.disabled());
       this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
-      this.internationalPhoneInputChild.nativeElement.addEventListener('countrychange', () => {
+      this.internationalPhoneInputChild().nativeElement.addEventListener('countrychange', () => {
         this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
         this.onChange('+' + this.countryCode + ' ' + this.number);
       });

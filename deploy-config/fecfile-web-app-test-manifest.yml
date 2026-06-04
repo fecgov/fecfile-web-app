@@ -9,3 +9,4 @@ applications:
     env:
       FECFILE_APP_URL: https://test.fecfile.fec.gov/
       FECFILE_API_URL: https://test-api.fecfile.fec.gov
+      CDN_STATIC_ASSET_CACHE_LENGTH_SECONDS: 1814400 # 3 weeks

@@ -29,7 +29,6 @@ import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_vali
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
-import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
@@ -71,7 +70,6 @@ import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transacti
     TableComponent,
     ButtonDirective,
     Ripple,
-    ConfirmDialog,
     CurrencyPipe,
     DatePipe,
     LabelPipe,
@@ -393,7 +391,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
     const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
     this.confirmationService.confirm({
-      key: 'contactDialogDialog',
       header: 'Confirm',
       icon: 'pi pi-info-circle',
       message: changesMessage,

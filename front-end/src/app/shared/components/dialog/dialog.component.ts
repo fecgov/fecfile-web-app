@@ -11,8 +11,10 @@ export class DialogComponent {
   readonly submitDisabled = input<boolean>();
   readonly visible = model.required<boolean>();
   readonly title = input.required<string>();
+  readonly showTitleWarning = input(false);
   readonly submitLabel = input('Save');
   readonly closeOnly = input(false);
+  readonly noInput = input(false);
   readonly confirm = output<void>();
   readonly reject = output<void>();
 
@@ -23,12 +25,20 @@ export class DialogComponent {
   readonly closeOnEscape = input(true);
 
   handleEscape(event: Event) {
-    if (this.closeOnEscape()) {
-      this.reject.emit();
-      this.visible.set(false);
-    } else {
+    if (!this.closeOnEscape()) {
       event.preventDefault();
     }
+  }
+
+  handleCancel(event: Event) {
+    if (!this.closeOnEscape()) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+    this.visible.set(false);
+    this.reject.emit();
   }
 
   close() {

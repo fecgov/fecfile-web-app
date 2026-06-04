@@ -1,145 +1,133 @@
-<div class="anchor" #anchor></div>
-<p-popover
-  #op
-  [style]="{ width: '500px', height: '95vh', overflow: 'auto' }"
-  showTransitionOptions=".25s linear(0, 1)"
-  [appendTo]="anchor"
-  (onHide)="onHide()"
->
-  <ng-template #content let-closeCallback="closeCallback">
-    <div class="px-4 py-2">
-      @switch (submitStatus) {
-        @case (SubmissionStatesEnum.DRAFT) {
-          <div class="grid">
-            <div class="col-12">
-              <h2>Help improve FECfile+</h2>
-              <button (click)="closeCallback($event)" class="p-popover-close">
-                <img alt="Close icon" src="assets/img/feedback-close-icon.svg" />
-              </button>
-            </div>
-            <div class="col-12 mb-2">
-              <h3>Experiencing issues creating or filing reports?</h3>
-              <p class="mb-2">
-                Report issues to the Electronic Filing Office (EFO). This form should not be used to report technical
-                issues or ask questions about your filing.
-              </p>
-              <a href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
-                >Contact EFO for help with technical issues</a
-              >
-            </div>
+<button
+  #dialog
+  type="button"
+  pButton
+  pRipple
+  label="Feedback"
+  class="p-button-info feedback-button"
+  popovertarget="feedback-aside"
+  (click)="reset()"
+></button>
+<aside id="feedback-aside" popover="manual" #aside>
+  <div #container id="popover-container" [style.min-height.px]="minHeight">
+    <button class="popover-close" popovertarget="feedback-aside" popovertargetaction="hide">
+      <svg alt="Close icon" height="20" width="20" class="rotate-90">
+        <use href="assets/img/sort-arrow.svg#sort-arrow"></use>
+      </svg>
+    </button>
+    @switch (submitStatus) {
+      @case (SubmissionStatesEnum.DRAFT) {
+        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" class="flex flex-column gap-3">
+          <h2 class="mb-1 gandhi">Help improve FECfile+</h2>
+          <h3 class="mb-1">Experiencing issues creating or filing reports?</h3>
+          <p>
+            Report issues to the Electronic Filing Office (EFO). This form should not be used to report technical issues
+            or ask questions about your filing.
+          </p>
+          <a
+            pButton
+            severity="secondary"
+            class="w-max mb-1"
+            href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
+            target="_blank"
+          >
+            <span>Contact EFO for help with technical issues</span>
+            <svg width="7.946" height="9.084">
+              <use href="assets/img/arrow.svg#arrow"></use>
+            </svg>
+          </a>
+
+          <h3>Provide feedback anonymously about FECfile+</h3>
+          <p>
+            How can we improve FECfile+? When you submit your feedback, it will include your comments, browser
+            information, and the URL you were viewing at the time of submission - so don’t include sensitive information
+            like your name, contact information, or Social Security number.
+          </p>
+          <div class="field">
+            <label for="action">
+              WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?
+              <span class="font-italic">(Required)</span>
+            </label>
+            <textarea id="action" [rows]="3" appAutoResize formControlName="action"></textarea>
+            <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted" />
           </div>
-          <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
-            <div class="grid">
-              <div class="col-12">
-                <h3>Provide feedback anonymously about FECfile+</h3>
-                <p class="mb-4">
-                  How can we improve FECfile+? When you submit your feedback, it will include your comments, browser
-                  information, and the URL you were viewing at the time of submission - so don’t include sensitive
-                  information like your name, contact information, or Social Security number.
-                </p>
-                <div class="field">
-                  <label for="action"
-                    >WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?
-                    <span class="paren-label">(Required)</span></label
-                  >
-                  <textarea id="action" [rows]="3" appAutoResize formControlName="action"></textarea>
-                  <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted" />
-                </div>
-              </div>
-            </div>
-            <div class="grid">
-              <div class="col-12">
-                <div class="field">
-                  <label for="feedback">GENERAL FEEDBACK</label>
-                  <textarea id="feedback" [rows]="3" appAutoResize formControlName="feedback"></textarea>
-                  <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
-                </div>
-              </div>
-            </div>
-            <div class="grid">
-              <div class="col-12">
-                <div class="field">
-                  <label for="about">
-                    TELL US ABOUT YOURSELF<br />
-                    <span
-                      >I'm a <span class="solid-line">____</span> interested in
-                      <span class="solid-line">____________</span></span
-                    >
-                  </label>
-                  <textarea id="about" [rows]="3" appAutoResize formControlName="about"></textarea>
-                  <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted" />
-                </div>
-              </div>
-            </div>
-          </form>
-          <div class="grid">
-            <div class="col-1">
-              <button
-                appSingleClick
-                type="button"
-                pButton
-                pRipple
-                label="Submit"
-                class="p-button-primary"
-                (click)="submitForm()"
-              ></button>
-            </div>
+
+          <div class="field">
+            <label for="feedback">GENERAL FEEDBACK</label>
+            <textarea id="feedback" [rows]="3" appAutoResize formControlName="feedback"></textarea>
+            <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
           </div>
-          <div class="grid">
-            <div class="col-12">
-              <div class="flex gap-1 text-start">
-                <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener"
-                  >Contact the FEC about a specific question</a
-                >
-              </div>
-            </div>
+
+          <div class="field">
+            <label for="about">
+              TELL US ABOUT YOURSELF<br />
+              <span class="font-italic">
+                I'm a <span class="solid-line">____</span> interested in
+                <span class="solid-line">____________</span>
+              </span>
+            </label>
+            <textarea id="about" [rows]="3" appAutoResize formControlName="about"></textarea>
+            <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted" />
           </div>
-        }
-        @case (SubmissionStatesEnum.SUCCESS) {
-          <div class="flex">
-            <div class="success-verticle-bar"></div>
-            <img alt="Check mark" src="assets/img/check-circle.svg" class="mx-2" height="5%" width="5%" />
-            <div>
-              <h2>Thanks for helping us improve FECfile+</h2>
-              <p>This information has been reported.</p>
-            </div>
+
+          <button
+            appSingleClick
+            type="button"
+            pButton
+            pRipple
+            label="Submit"
+            class="p-button-primary w-max mb-1"
+            (click)="submitForm()"
+          ></button>
+
+          <div class="flex gap-1 text-start">
+            <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener">
+              Contact the FEC about a specific question
+            </a>
           </div>
-          <div class="grid">
-            <div class="col-6 flex">
-              <button
-                type="button"
-                pButton
-                pRipple
-                label="Submit more feedback"
-                class="p-button-info"
-                (click)="reset()"
-              ></button>
-            </div>
-          </div>
-        }
-        @case (SubmissionStatesEnum.FAIL) {
-          <div class="flex">
-            <div class="fail-verticle-bar"></div>
-            <img alt="Exclamation mark" src="assets/img/exclamation.svg" class="mx-2" height="5%" width="5%" />
-            <div>
-              <h2>Oops: Something went wrong.</h2>
-              <p>We had trouble processing your feedback.</p>
-            </div>
-          </div>
-          <div class="grid">
-            <div class="col-4">
-              <button
-                type="button"
-                pButton
-                pRipple
-                label="Try Again"
-                class="p-button-info"
-                (click)="tryAgain()"
-              ></button>
-            </div>
-          </div>
-        }
+        </form>
       }
-    </div>
-  </ng-template>
-</p-popover>
+      @case (SubmissionStatesEnum.SUCCESS) {
+        <div class="flex">
+          <div class="success-verticle-bar"></div>
+          <svg alt="Check mark" width="22" height="22" class="mx-2 my-1 primary-icon">
+            <use href="assets/img/check-circle.svg#check-circle"></use>
+          </svg>
+          <div>
+            <h2>Thanks for helping us improve FECfile+</h2>
+            <p>This information has been reported.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-6 flex">
+            <button
+              type="button"
+              pButton
+              pRipple
+              label="Submit more feedback"
+              class="p-button-info"
+              (click)="reset()"
+            ></button>
+          </div>
+        </div>
+      }
+      @case (SubmissionStatesEnum.FAIL) {
+        <div class="flex">
+          <div class="fail-verticle-bar"></div>
+          <svg alt="Exclamation mark" width="22" height="22" class="mx-2 my-1 primary-icon">
+            <use href="assets/img/exclamation.svg#exclamation-icon"></use>
+          </svg>
+          <div>
+            <h2>Oops: Something went wrong.</h2>
+            <p>We had trouble processing your feedback.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-4">
+            <button type="button" pButton pRipple label="Try Again" class="p-button-info" (click)="tryAgain()"></button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</aside>

@@ -1,7 +1,9 @@
-app-select {
-  --app-select-height: 42px;
-  --app-select-padding: 0 10px;
-  --app-select-border-disabled: 2px solid gray;
+* {
+  --select-border-disabled: 2px solid var(--fec-grey-alt);
+  --select-border: 2px solid var(--fec-grey-alt);
+  --select-selectedcontent-color: var(--fec-black);
+  --select-selectedcontent-font: var(--karla-bold);
+  --iti-font-family: var(--karla-bold);
 }
 
 .committee-info-footer > .col-12 {
@@ -16,32 +18,12 @@ app-select {
 
 input {
   font-family: var(--karla-bold);
-  font-size: 14px;
-  color: #212121;
-  height: 42px;
+  color: var(--fec-black);
 }
 
-:host ::ng-deep {
-  .p-select > .p-inputtext {
-    font-family: var(--karla-bold);
-    font-size: 14px;
-    color: #212121;
-  }
-
-  #treasurer_phone,
-  #treasurer_phone input {
-    height: 42px;
-    font-family: var(--karla-bold);
-    font-size: 14px;
-    color: #212121;
-  }
-
-  .p-disabled,
-  .p-component:disabled,
-  .p-select:disabled {
-    opacity: 1;
-    background: #f1f1f1;
-    border: 2px solid gray;
-    color: black;
-  }
+#treasurer_phone,
+#treasurer_phone div {
+  font-family: var(--karla-bold);
+  color: var(--fec-black);
+  opacity: 0.65;
 }

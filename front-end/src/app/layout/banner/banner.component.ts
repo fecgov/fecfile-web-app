@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, DOCUMENT, inject, OnDestroy, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -9,16 +9,25 @@ import { filter } from 'rxjs';
 })
 export class BannerComponent implements OnDestroy {
   private readonly router = inject(Router);
+  private readonly renderer = inject(Renderer2);
+  private readonly document = inject(DOCUMENT);
   private readonly routerEventsSubscription = this.router.events
     .pipe(filter((event) => event instanceof NavigationEnd))
     .subscribe(() => {
       this.expanded = false;
+      this.updateGlobalVariable();
     });
 
   expanded = false;
 
   onBannerClick() {
     this.expanded = !this.expanded;
+    this.updateGlobalVariable();
+  }
+
+  private updateGlobalVariable() {
+    const height = this.expanded ? '213px' : '30px';
+    this.renderer.setStyle(this.document.documentElement, '--header-top', height, 2);
   }
 
   ngOnDestroy(): void {

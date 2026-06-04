@@ -12,6 +12,7 @@ import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/c
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { ScheduleFTransactionTypes } from '../models/schf-transaction.model';
+import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -65,7 +66,7 @@ describe('TransactionService', () => {
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      service.getPreviousEntityAggregate(mockTransaction, '1', new Date()).then((response) => {
+      firstValueFrom(service.getPreviousEntityAggregate(mockTransaction, '1', new Date())).then((response) => {
         expect(response).toEqual(mockResponse.aggregate);
       });
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
@@ -82,7 +83,7 @@ describe('TransactionService', () => {
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      const promise = service.getPreviousEntityAggregate(mockTransaction, '1', new Date());
+      const promise = firstValueFrom(service.getPreviousEntityAggregate(mockTransaction, '1', new Date()));
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
       const req = httpTestingController.expectOne(
         `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&aggregation_group=${AggregationGroups.GENERAL}&contact_1_id=1&date=${formattedDate}`,
@@ -106,9 +107,11 @@ describe('TransactionService', () => {
         ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      service.getPreviousPayeeCandidateAggregate(mockTransaction, '1', new Date(), '2024').then((response) => {
-        expect(response).toEqual(mockResponse.aggregate_general_elec_expended);
-      });
+      firstValueFrom(service.getPreviousPayeeCandidateAggregate(mockTransaction, '1', new Date(), '2024')).then(
+        (response) => {
+          expect(response).toEqual(mockResponse.aggregate_general_elec_expended);
+        },
+      );
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
       const req = httpTestingController.expectOne(
         `${environment.apiUrl}/transactions/previous/payee-candidate/?transaction_id=abc&aggregation_group=${AggregationGroups.COORDINATED_PARTY_EXPENDITURES}&contact_2_id=1&date=${formattedDate}&general_election_year=2024`,
@@ -123,7 +126,9 @@ describe('TransactionService', () => {
         ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      const promise = service.getPreviousPayeeCandidateAggregate(mockTransaction, '1', new Date(), '2024');
+      const promise = firstValueFrom(
+        service.getPreviousPayeeCandidateAggregate(mockTransaction, '1', new Date(), '2024'),
+      );
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
 
       const req = httpTestingController.expectOne(
@@ -150,7 +155,9 @@ describe('TransactionService', () => {
         ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
       ).getNewTransaction();
       mockTransaction.id = 'abc';
-      const promise = service.getPreviousElectionAggregate(mockTransaction, new Date(), new Date(), '1', 'A', 'A', 'A');
+      const promise = firstValueFrom(
+        service.getPreviousElectionAggregate(mockTransaction, new Date(), new Date(), '1', 'A', 'A', 'A'),
+      );
 
       const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
       const req = httpTestingController.expectOne(

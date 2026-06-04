@@ -1,17 +1,24 @@
-import { Component, computed, effect, input, viewChild } from '@angular/core';
+import { Component, computed, input, viewChild } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { DateUtils } from 'app/shared/utils/date.utils';
-import { DatePicker } from 'primeng/datepicker';
-import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { ButtonModule } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
 import { InputMaskModule } from 'primeng/inputmask';
+import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
+import { DateSanitizerDirective } from './date-sanitize.directive';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
-  imports: [DatePicker, ReactiveFormsModule, ErrorMessagesComponent, InputMaskModule, ButtonModule],
+  imports: [
+    DatePicker,
+    ReactiveFormsModule,
+    ErrorMessagesComponent,
+    InputMaskModule,
+    ButtonModule,
+    DateSanitizerDirective,
+  ],
 })
 export class CalendarComponent {
   readonly form = input.required<FormGroup>();
@@ -22,51 +29,7 @@ export class CalendarComponent {
   readonly requiredErrorMessage = input('This is a required field.');
   readonly datePicker = viewChild.required(DatePicker);
   readonly invalidFormatMessage = input('This date does not follow the correct format, e.g. 01/01/2020');
-
-  calendarOpened = false;
-  readonly control = computed(() => {
-    const field = this.fieldName();
-    const control = this.form()?.get(field);
-    if (!control) return undefined;
-
-    return control as SubscriptionFormControl;
-  });
-
-  constructor() {
-    effect(() => {
-      const control = this.control();
-      const value = control?.value;
-      if (value && typeof value === 'string' && value.length === 10 && !value.includes('D')) {
-        const date = DateUtils.parseDate(value);
-
-        if (date) {
-          control.setValue(date, { emitEvent: false });
-        }
-      }
-    });
-  }
-
-  validateDate(calendarUpdate: boolean) {
-    this.calendarOpened = calendarUpdate;
-    const control = this.control();
-
-    if (!this.calendarOpened && control) {
-      const inputElement = document.getElementById(this.fieldName()) as HTMLInputElement;
-      const currentValue = inputElement?.value;
-
-      if ((!currentValue && currentValue !== 'MM/DD/YYYY') || currentValue.replace(/[_/]/g, '') === '') {
-        control.setValue(null);
-      } else {
-        const date = new Date(currentValue);
-        if (date instanceof Date && !Number.isNaN(date.getTime())) {
-          control.setValue(date);
-        }
-      }
-
-      control.markAsTouched();
-      control.updateValueAndValidity();
-    }
-  }
+  readonly control = computed(() => this.form().get(this.fieldName()) as SubscriptionFormControl);
 
   onYearChange(event: Event, delta: -1 | 1) {
     const datePicker = this.datePicker();

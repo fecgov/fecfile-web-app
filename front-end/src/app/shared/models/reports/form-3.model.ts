@@ -8,19 +8,18 @@ import { TransactionTypes } from '../transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { ScheduleDTransactionTypes } from '../schd-transaction.model';
-import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
 
-export enum F3FormTypes {
-  F3N = 'F3N',
-  F3A = 'F3A',
-  F3T = 'F3T',
-}
+export const F3FormTypes = {
+  F3N: 'F3N',
+  F3A: 'F3A',
+  F3T: 'F3T',
+} as const;
+export type F3FormTypes = (typeof F3FormTypes)[keyof typeof F3FormTypes];
 
 export class Form3 extends BaseForm3 {
   schema = f3Schema;
   report_type = ReportTypes.F3;
-  form_type = F3FormTypes.F3N;
+  form_type: F3FormTypes = F3FormTypes.F3N;
   election_state: string | undefined;
   election_district: string | undefined;
 
@@ -105,8 +104,8 @@ export class Form3 extends BaseForm3 {
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
     ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ENTITY_RETURN,
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
+    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
     // CONTRIBUTIONS FROM REGISTERED FILERS
     ScheduleATransactionTypes.PARTY_RECEIPT,
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
@@ -166,19 +165,5 @@ export class Form3 extends BaseForm3 {
 
   static fromJSON(json: unknown): Form3 {
     return plainToInstance(Form3, json);
-  }
-
-  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
-    const transactionItems = [MenuInfo.manageTransactions(this), ...MenuInfo.addTransactions(this)];
-    return [
-      MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
-      MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
-      MenuInfo.reviewReport(sidebarSection, [
-        ...MenuInfo.viewSummary(this),
-        MenuInfo.printPreview(this),
-        MenuInfo.addReportLevelMenu(this, isEditable),
-      ]),
-      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SUBMIT YOUR REPORT'),
-    ];
   }
 }

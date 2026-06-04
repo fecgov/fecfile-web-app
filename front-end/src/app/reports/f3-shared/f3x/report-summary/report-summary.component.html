@@ -1,0 +1,56 @@
+<div class="summary-container">
+  <h1>Summary page</h1>
+  <hr type="solid" class="mt-2 mb-5" />
+
+  @if (calculationFinished()) {
+    <app-table
+      [(first)]="first"
+      [items]="lines()"
+      title="Reports summary"
+      [(totalItems)]="lines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="lines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+  } @else {
+    <div class="fec-loader-div">
+      <img
+        class="max-w-full fec-loader-image"
+        src="assets/img/fec-loading-flag.gif"
+        draggable="false"
+        alt="The report's summary is loading..."
+      />
+    </div>
+  }
+
+  <hr class="mt-0 mb-3" />
+  <div class="flex justify-content-between">
+    <button
+      pButton
+      pRipple
+      class="p-button-secondary icon-gap"
+      (click)="router.navigateByUrl('/reports/transactions/report/' + report().id + '/list')"
+    >
+      <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
+      <span>Transactions in this report</span>
+    </button>
+    <button
+      pButton
+      pRipple
+      class="p-button-primary icon-gap"
+      (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report().id)"
+    >
+      <span>Review detailed summary page</span>
+      <svg pButtonIcon alt="Next Arrow" width="10" height="10">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
+    </button>
+  </div>
+</div>

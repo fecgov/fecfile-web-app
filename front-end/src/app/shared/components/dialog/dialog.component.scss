@@ -1,7 +1,3 @@
-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.3);
-}
-
 h1 {
   color: var(--p-content-color);
   font-size: 24px;
@@ -37,6 +33,12 @@ dialog {
   box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
   border: none;
   overflow: visible;
+  &:focus-visible {
+    outline: none;
+  }
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.3);
+  }
 }
 
 .dialog-header {
@@ -86,4 +88,8 @@ dialog {
   opacity: 30%;
   color: #ffffff;
   border: none;
+}
+
+.pi-exclamation-circle {
+  padding-top: 8px;
 }

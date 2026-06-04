@@ -15,7 +15,7 @@ export const REPORTS_ROUTES: Route[] = [
     component: ReportListComponent,
     pathMatch: 'full',
     data: {
-      showSidebar: false,
+      sidebar: null,
     },
   },
   {
@@ -27,12 +27,12 @@ export const REPORTS_ROUTES: Route[] = [
   {
     path: 'f3',
     providers: [{ provide: ReportService, useClass: Form3Service }],
-    loadChildren: () => import('./f3/routes').then((module) => module.F3_ROUTES),
+    loadChildren: () => import('./f3-shared/f3/routes').then((module) => module.F3_ROUTES),
   },
   {
     path: 'f3x',
     providers: [{ provide: ReportService, useClass: Form3XService }],
-    loadChildren: () => import('./f3x/routes').then((module) => module.F3X_ROUTES),
+    loadChildren: () => import('./f3-shared/f3x/routes').then((module) => module.F3X_ROUTES),
   },
   {
     path: 'f99',

@@ -1,0 +1,112 @@
+<ng-template #descriptionTpl let-line="$implicit">
+  <div
+    class="cell-with-overlay"
+    [ngClass]="{
+      'indent-1': line.indent === 1,
+      'indent-2': line.indent === 2,
+      'numeric-line': isNumericLine(line.lineNumber),
+      bold: line.bold,
+      italic: line.italic,
+    }"
+  >
+    <span class="description-text">
+      {{ line.description }}
+    </span>
+    @if (line.overlay) {
+      <app-calculation-overlay>
+        <span class="overlay-content">
+          {{ line.overlay }}
+        </span>
+      </app-calculation-overlay>
+    }
+  </div>
+</ng-template>
+
+<div class="summary-container">
+  <h1>Detailed summary page</h1>
+  <hr type="solid" class="mt-2 mb-5" />
+
+  @if (calculationFinished()) {
+    <app-table
+      class="has-federal-total"
+      [(first)]="first"
+      [items]="receiptLines()"
+      title="Receipts"
+      [(totalItems)]="receiptLines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="receiptLines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+    <hr class="table-bottom" />
+    <app-table
+      class="has-federal-total"
+      [(first)]="first"
+      [items]="disbursementLines()"
+      title="Disbursements"
+      [(totalItems)]="disbursementLines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="disbursementLines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+    <hr class="table-bottom" />
+    <app-table
+      [(first)]="first"
+      [items]="contributionsExpendituresLines()"
+      title="Net contributions/operating expenditures"
+      [(totalItems)]="contributionsExpendituresLines().length"
+      [loading]="!calculationFinished()"
+      sortField="name"
+      [rowsPerPage]="contributionsExpendituresLines().length"
+      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
+      itemName="users"
+      [columns]="columns()"
+      [showPaginationControls]="false"
+    >
+    </app-table>
+  } @else {
+    <div class="fec-loader-div">
+      <img
+        class="max-w-full fec-loader-image"
+        src="assets/img/fec-loading-flag.gif"
+        draggable="false"
+        alt="The report's detailed summary is loading..."
+      />
+    </div>
+  }
+
+  <hr class="mt-0 mb-3" />
+  <div class="flex justify-content-between">
+    <button
+      pButton
+      pRipple
+      class="p-button-secondary icon-gap"
+      (click)="router.navigateByUrl('/reports/f3x/summary/' + report().id)"
+    >
+      <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
+      <span>Review summary page</span>
+    </button>
+    <button
+      pButton
+      pRipple
+      class="p-button-primary icon-gap"
+      (click)="router.navigateByUrl('/reports/f3x/web-print/' + report().id)"
+    >
+      <span>See print preview</span>
+      <svg pButtonIcon alt="Next Arrow" width="10" height="10">
+        <use href="assets/img/arrow.svg#arrow"></use>
+      </svg>
+    </button>
+  </div>
+</div>

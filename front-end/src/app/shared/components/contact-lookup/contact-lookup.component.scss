@@ -1,15 +1,12 @@
 :host ::ng-deep {
   .dropdown-with-search .p-select {
     border-radius: 4px 0 0 4px;
-  }
-
-  .dropdown-with-search .p-select:hover {
-    border-color: #d6d7d9;
-  }
-
-  .p-select {
-    border: 2px solid #aeb0b5;
-    background-color: #f1f1f1;
+    border-right: 0;
+    border: 2px solid var(--fec-grey-alt);
+    background-color: var(--surface-ground);
+    &:hover {
+      border-color: #d6d7d9;
+    }
   }
 
   .p-select-label {
@@ -20,32 +17,9 @@
     height: 42px;
   }
 
-  .p-button-icon-only {
-    background-color: transparent;
-    pointer-events: none;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    min-width: 15px;
-    border: none;
-  }
-
   .readonly {
     pointer-events: none;
   }
-
-  .dropdownIcon {
-    color: #212121;
-    background-color: white;
-  }
-}
-
-.ng-submitted .transaction-contact-invalid :host ::ng-deep .p-autocomplete-input {
-  border-color: #dc3545;
-}
-
-.transaction-contact-invalid .contact-dialog-not-submitted :host ::ng-deep .p-autocomplete-input {
-  border: 2px solid #aeb0b5;
 }
 
 .contact-label-container {
@@ -77,17 +51,16 @@
   font-size: 1.2em;
   font-family: var(--karla);
   align-content: center;
-}
 
-.add-contact-container span {
-  padding: 0 0.3em;
-  cursor: pointer;
-  line-height: inherit;
-}
-
-.contact-lookup-container img {
-  margin-right: 5px;
-  vertical-align: middle;
+  & span {
+    padding: 0 0.3em;
+    cursor: pointer;
+    line-height: inherit;
+  }
+  & img {
+    margin-right: 5px;
+    vertical-align: middle;
+  }
 }
 
 .contact-lookup-container {
