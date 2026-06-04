@@ -1,0 +1,24 @@
+::ng-deep {
+  .app-tooltip {
+    --p-tooltip-gutter: 0.5rem;
+    --p-tooltip-max-width: 300px;
+  }
+  .app-tooltip .p-tooltip-text {
+    border: 2px solid #112e51;
+    padding: 15px;
+    color: #112e51;
+    text-align: left;
+  }
+  .app-tooltip .p-tooltip-arrow {
+    border-top-color: #112e51 !important;
+  }
+  .app-tooltip .p-tooltip-arrow::after {
+    border: inherit;
+    content: '';
+    position: relative;
+    border-top-color: white;
+    margin: inherit;
+    left: 0;
+    bottom: 3px;
+  }
+}

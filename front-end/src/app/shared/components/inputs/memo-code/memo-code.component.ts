@@ -10,10 +10,11 @@ import { SelectButton } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
 import { combineLatest, distinctUntilChanged, map, of, startWith, takeUntil } from 'rxjs';
 import { FecDatePipe } from '../../../pipes/fec-date.pipe';
+import { DialogComponent } from '../../dialog/dialog.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
-import { DialogComponent } from '../../dialog/dialog.component';
 
 @Component({
   selector: 'app-memo-code',
@@ -27,6 +28,7 @@ import { DialogComponent } from '../../dialog/dialog.component';
     DialogComponent,
     FecDatePipe,
     CheckboxModule,
+    TooltipComponent,
   ],
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {

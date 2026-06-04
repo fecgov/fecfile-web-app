@@ -22,6 +22,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Transaction } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { TooltipComponent } from '../../tooltip/tooltip.component';
 
 @Component({
   imports: [MemoCodeInputComponent],
@@ -81,7 +82,7 @@ describe('MemoCodeInputComponent', () => {
         ErrorMessagesComponent,
         FecDatePipe,
         Dialog,
-        Tooltip,
+        TooltipComponent,
       ],
       providers: [provideZoneChangeDetection(), provideMockStore(testMockStore()), ConfirmationService],
     }).compileComponents();
