@@ -10,6 +10,11 @@ import { Tooltip } from 'primeng/tooltip';
 export class TooltipComponent {
   readonly text = input<string>('');
   readonly direction = input<'topright' | 'topleft' | 'bottomright' | 'bottomleft'>('topright');
-  readonly position = computed(() => this.direction() === 'topright' || this.direction() === 'topleft' ? 'top' : 'bottom');
-  readonly positionLeft = computed(() => this.direction() === 'topright' || this.direction() === 'bottomright' ? 125 : -125);
+  readonly position = computed(() =>
+    this.direction() === 'topright' || this.direction() === 'topleft' ? 'top' : 'bottom',
+  );
+  readonly positionLeft = computed(() =>
+    this.direction() === 'topright' || this.direction() === 'bottomright' ? 125 : -125,
+  );
+  readonly tooltipStyleClass = computed(() => `app-tooltip app-tooltip-${this.direction()}`);
 }

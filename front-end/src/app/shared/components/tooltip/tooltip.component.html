@@ -1,3 +1,9 @@
-<div #tooltipContainer tooltipStyleClass="app-tooltip" pTooltip="{{ text() }}" tooltipPosition="{{ position() }}" positionLeft="{{ positionLeft() }}">
+<div
+  #tooltipContainer
+  tooltipStyleClass="{{ tooltipStyleClass() }}"
+  pTooltip="{{ text() }}"
+  tooltipPosition="{{ position() }}"
+  positionLeft="{{ positionLeft() }}"
+>
   <ng-content></ng-content>
 </div>
