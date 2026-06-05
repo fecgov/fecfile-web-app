@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, model, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, model, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { ButtonModule } from 'primeng/button';
@@ -10,6 +10,8 @@ import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
 import { ReportTypes } from 'app/shared/models';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { Store } from '@ngrx/store';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 
 @Component({
   selector: 'app-form-type-dialog',
@@ -20,13 +22,21 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);
   readonly router = inject(Router);
+  readonly store = inject(Store);
   readonly formTypeOptions: ReportTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
+  readonly filteredOptions: Signal<ReportTypes[]> = computed(() => {
+    return this.formTypeOptions.filter((type) => {
+      return this.eligibleReportTypes().includes(type);
+    });
+  });
 
   readonly dialogVisible = model(false);
+  readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly selectedType = signal<ReportTypes | undefined>(undefined);
   readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
+  readonly eligibleReportTypes = computed(() => this.committeeAccount().eligible_report_types);
   readonly isSubmitDisabled = computed(() =>
     this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
   );

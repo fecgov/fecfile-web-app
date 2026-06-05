@@ -11,7 +11,7 @@
       <span class="dialog-label" id="type-label">FORM TYPE</span>
       <p-select
         aria-labelledby="type-label"
-        [options]="formTypeOptions"
+        [options]="filteredOptions()"
         [(ngModel)]="selectedType"
         class="w-full"
         id="typeDropdown"
