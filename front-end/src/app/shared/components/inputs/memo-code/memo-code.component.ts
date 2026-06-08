@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, computed, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { TooltipDirective } from 'app/shared/directives/tooltip.directive';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -12,10 +13,8 @@ import { combineLatest, distinctUntilChanged, map, of, startWith, takeUntil } fr
 import { FecDatePipe } from '../../../pipes/fec-date.pipe';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
-import { TooltipDirective } from 'app/shared/directives/tooltip.directive';
 
 @Component({
   selector: 'app-memo-code',

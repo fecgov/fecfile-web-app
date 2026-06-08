@@ -19,9 +19,11 @@
             <span class="paren-label">{{ parenLabel() }}</span>
           }
         </span>
-        <svg appTooltip="{{ memoItemHelpText() }}" vposition="top" hposition="left" height="20" width="20">  
-          <use href="assets/img/i-info-circle.svg"></use>
-        </svg>
+        <div appTooltip="{{ memoItemHelpText() }}">
+          <svg height="20" width="20">
+            <use href="assets/img/i-info-circle.svg"></use>
+          </svg>
+        </div>
       </div>
       <app-error-messages
         [form]="form"
