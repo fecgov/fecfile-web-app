@@ -1,0 +1,11 @@
+FROM node:22-alpine
+WORKDIR /app/front-end
+
+COPY front-end/package*.json ./
+RUN npm install
+
+EXPOSE 4200
+
+# FIXED: Removed deprecated webpack parameters. 
+# --host=0.0.0.0 exposes the server to Docker's port mapping natively.
+CMD ["./node_modules/.bin/ng", "serve", "--host=0.0.0.0", "--port=4200"]

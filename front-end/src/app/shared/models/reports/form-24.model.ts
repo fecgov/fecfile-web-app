@@ -46,7 +46,7 @@ export class Form24 extends Report {
       },
     ];
 
-    return [
+    const menuItems = [
       MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
       MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
       MenuInfo.reviewReport(sidebarSection, [
@@ -55,5 +55,11 @@ export class Form24 extends Report {
       ]),
       MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
     ];
+
+    if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
+      menuItems.unshift(MenuInfo.updateVersion(sidebarSection, this));
+    }
+
+    return menuItems;
   }
 }

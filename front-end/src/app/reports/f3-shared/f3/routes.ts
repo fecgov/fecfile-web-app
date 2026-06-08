@@ -12,6 +12,7 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { ReportSummaryComponent } from './report-summary/report-summary.component';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
+import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-number/update-version-number.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -22,17 +23,7 @@ import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 
 export const F3_ROUTES: Route[] = [
   {
-    path: 'create/step1',
-    title: 'Create a report',
-    component: CreateSharedF3Component,
-    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
-    runGuardsAndResolvers: 'always',
-    data: {
-      sidebar: null,
-    },
-  },
-  {
-    path: 'create/step1/:reportId',
+    path: 'create/:reportId',
     title: 'Create a report',
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
@@ -45,7 +36,15 @@ export const F3_ROUTES: Route[] = [
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
     resolve: { report: ReportResolver },
-    data: { sidebarSection: ReportSidebarSection.CREATE },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'update-version-number/:reportId',
+    title: 'Update Version Number',
+    component: UpdateVersionNumberComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
   },
   {

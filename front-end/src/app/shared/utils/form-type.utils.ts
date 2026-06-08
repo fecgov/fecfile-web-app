@@ -17,7 +17,7 @@ export class FormType {
 const allFormTypes = new Map<ReportTypes, FormType>([
   [
     ReportTypes.F1M,
-    new FormType('F1M', 'Form 1M', 'Notification of Multicandidate Status', '/reports/f1m/create/step1'),
+    new FormType('F1M', 'Form 1M', 'Notification of Multicandidate Status', '/reports/f1m/create'),
   ],
   [
     ReportTypes.F3,
@@ -25,12 +25,12 @@ const allFormTypes = new Map<ReportTypes, FormType>([
       'F3',
       'Form 3',
       'Report of Receipts and Disbursements for an Authorized Committee',
-      '/reports/f3/create/step1',
+      '/reports/f3/create',
     ),
   ],
   [
     ReportTypes.F3X,
-    new FormType('F3X', 'Form 3X', 'Report of Receipts and Disbursements', '/reports/f3x/create/step1'),
+    new FormType('F3X', 'Form 3X', 'Report of Receipts and Disbursements', '/reports/f3x/create'),
   ],
   [ReportTypes.F24, new FormType('F24', 'Form 24', '24/48 Hour Report of Independent Expenditure')],
   [ReportTypes.F99, new FormType('F99', 'Form 99', 'Miscellaneous Report to FEC', '/reports/f99/create')],

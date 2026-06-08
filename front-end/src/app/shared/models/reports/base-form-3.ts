@@ -4,6 +4,7 @@ import { Report, ReportStatus } from './report.model';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import { label } from '@primeuix/themes/aura/metergroup';
 
 export class CoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
@@ -59,8 +60,11 @@ export abstract class BaseForm3 extends Report {
 
     // Add edit report item to menu if the report is in progress or submission failure
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
-      const editReportItem = MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS');
-      menuItems.unshift(editReportItem);
+      menuItems.unshift({
+        label: 'REPORT DETAILS',
+        expanded: sidebarSection === ReportSidebarSection.EDIT,
+        items: [MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS'), MenuInfo.updateVersion(sidebarSection, this)],
+      });
     }
     return menuItems;
   }

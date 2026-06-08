@@ -11,7 +11,7 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 
 export const F1M_ROUTES: Route[] = [
   {
-    path: 'create/step1',
+    path: 'create',
     title: 'Create a report',
     component: MainFormComponent,
     data: {

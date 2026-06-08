@@ -1,0 +1,21 @@
+p {
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  padding: 0;
+  width: 36px;
+  justify-items: center;
+}
+
+fieldset {
+  max-width: 310px;
+}

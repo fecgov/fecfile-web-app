@@ -1,0 +1,40 @@
+<h1 class="page-title">Update version number</h1>
+<hr type="solid" />
+<section class="w-8">
+  <p>Only update a version number if the original report or amendment is incorrect in FECfile+.</p>
+  <p>
+    To avoid filing errors, confirm this report’s last amendment number (if applicable) and the original report’s
+    efiling ID on your committee’s profile page on FEC.gov. Filing reports out of sequence can prevent the filing from
+    processing when submitted.
+  </p>
+  <p>If you’re unsure whether this is the right choice, contact your analyst.</p>
+</section>
+<form class="flex flex-column gap-4">
+  <fieldset class="flex justify-content-between align-items-center">
+    <label for="current-number">
+      CURRENT VERSION OR<br />
+      AMENDMENT NUMBER
+    </label>
+    <input id="current-number" type="number" readonly />
+  </fieldset>
+  <fieldset class="flex justify-content-between align-items-center">
+    <div class="flex flex-column">
+      <label for="new-number" class="mb-2"> NEW AMENDMENT </label>
+      <span class="font-italic karla text-sm">
+        Last amendment number + 1. Use 1<br />
+        if changing from original report. (ie.<br />
+        original=0, amendment 1=1)
+      </span>
+    </div>
+    <input id="new-number" type="number" />
+  </fieldset>
+  <fieldset>
+    <label for="e-filing-id" class="mb-2">
+      ORIGINAL REPORT<br />
+      E-FILING ID
+    </label>
+    <input id="e-filing-id" type="text" class="w-7" />
+  </fieldset>
+</form>
+<hr type="solid" />
+<app-save-cancel />

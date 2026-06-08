@@ -17,6 +17,6 @@ export class IndependentExpenditureCreateF3xInputComponent extends BaseInputComp
   }
 
   create(): void {
-    this.router.navigateByUrl('/reports/f3x/create/step1');
+    this.router.navigateByUrl('/reports/f3x/create');
   }
 }
