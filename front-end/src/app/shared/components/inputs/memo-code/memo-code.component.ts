@@ -15,6 +15,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { TransactionFormUtils } from '../../transaction-type-base/transaction-form.utils';
 import { BaseInputComponent } from '../base-input.component';
+import { TooltipDirective } from 'app/shared/directives/tooltip.directive';
 
 @Component({
   selector: 'app-memo-code',
@@ -28,7 +29,7 @@ import { BaseInputComponent } from '../base-input.component';
     DialogComponent,
     FecDatePipe,
     CheckboxModule,
-    TooltipComponent,
+    TooltipDirective,
   ],
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
