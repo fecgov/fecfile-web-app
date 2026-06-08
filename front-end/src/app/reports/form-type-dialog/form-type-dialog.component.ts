@@ -26,9 +26,7 @@ export class FormTypeDialogComponent {
   readonly formTypeOptions: ReportTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
   readonly filteredOptions: Signal<ReportTypes[]> = computed(() => {
     return this.formTypeOptions.filter((type) => {
-      // Filtering disabled until FECFILE-2245
-      // return this.eligibleReportTypes().includes(type);
-      return true;
+      return this.eligibleReportTypes().includes(type);
     });
   });
 

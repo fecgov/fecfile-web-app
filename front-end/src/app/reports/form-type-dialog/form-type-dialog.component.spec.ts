@@ -97,10 +97,9 @@ describe('FormTypeDialogComponent', () => {
     expect(create).toHaveBeenCalled();
   });
 
-  // Disabled until FECFILE-2245
-  /*it('should filter form types', () => {
+  it('should filter form types', () => {
     expect(component.eligibleReportTypes()).toEqual(testCommitteeAccount().eligible_report_types);
     expect(component.filteredOptions()).not.toContain('F3');
     expect(component.filteredOptions()).not.toContain('F24');
-  });*/
+  });
 });

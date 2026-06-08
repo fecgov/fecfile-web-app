@@ -6,7 +6,7 @@ describe('Manage profile', () => {
     LoginPage.login();
   });
 
-  xit('Should be able to create a Form 99 report', () => {
+  it('Should be able to create a Form 99 report', () => {
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('', false, false);
 
@@ -14,7 +14,7 @@ describe('Manage profile', () => {
     cy.get('p-selectitem').contains("Form 99").should('exist');
   });
 
-  xit('Should be able to create F99 and F3X reports when eligible', () => {
+  it('Should be able to create F99 and F3X reports when eligible', () => {
     setCommitteeEligibleReportTypes(["F99", "F3X"]);
 
     ReportListPage.goToPage();
@@ -25,7 +25,7 @@ describe('Manage profile', () => {
     cy.get('p-selectitem').contains("Form 3X").should('exist');
   });
 
-  xit('Should be able to create F99, F3X, F24, and F1M reports when eligible', () => {
+  it('Should be able to create F99, F3X, F24, and F1M reports when eligible', () => {
     setCommitteeEligibleReportTypes(["F99", "F3X", "F24", "F1M"]);
 
     ReportListPage.goToPage();
