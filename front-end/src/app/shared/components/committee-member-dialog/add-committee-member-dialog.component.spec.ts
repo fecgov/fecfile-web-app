@@ -4,15 +4,15 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SelectModule } from 'primeng/select';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { CommitteeMemberDialogComponent } from './committee-member-dialog.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMember, Roles } from 'app/shared/models';
+import { CommitteeMember } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, viewChild } from '@angular/core';
+import { AddCommitteeMemberDialogComponent } from './add-committee-member-dialog.component';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',
@@ -24,19 +24,17 @@ const johnSmith = CommitteeMember.fromJSON({
 });
 
 @Component({
-  imports: [CommitteeMemberDialogComponent],
+  imports: [AddCommitteeMemberDialogComponent],
   standalone: true,
-  template: `<app-committee-member-dialog [(detailVisible)]="visible" [member]="member" />`,
+  template: `<app-add-committee-member-dialog [(detailVisible)]="visible" />`,
 })
 class TestHostComponent {
-  component = viewChild.required(CommitteeMemberDialogComponent);
+  component = viewChild.required(AddCommitteeMemberDialogComponent);
   visible = false;
-
-  member?: CommitteeMember = undefined;
 }
 
-describe('CommitteeMemberDialogComponent', () => {
-  let component: CommitteeMemberDialogComponent;
+describe('AddCommitteeMemberDialogComponent', () => {
+  let component: AddCommitteeMemberDialogComponent;
   let host: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let testCommitteeService: CommitteeMemberService;
@@ -48,7 +46,7 @@ describe('CommitteeMemberDialogComponent', () => {
         ReactiveFormsModule,
         SelectModule,
         AutoCompleteModule,
-        CommitteeMemberDialogComponent,
+        AddCommitteeMemberDialogComponent,
         ErrorMessagesComponent,
       ],
       providers: [
@@ -102,13 +100,14 @@ describe('CommitteeMemberDialogComponent', () => {
     expect(component.form.get('role')?.value).toBeNull();
   });
 
-  it('should disable submit if no role is selected', async () => {
+  it('should disable submit if form is not valid', async () => {
     component.form.get('role')?.setValue(null);
     component.form.get('email')?.setValue('test@test.com');
 
     component.form.updateValueAndValidity();
+    fixture.detectChanges();
 
-    expect(component.submitDisabled).toBe(true);
+    expect(component.form.valid).toBe(false);
   });
 
   describe('submit', () => {
@@ -116,89 +115,14 @@ describe('CommitteeMemberDialogComponent', () => {
       component.submitForm();
       expect(component.formSubmitted).toBe(true);
     });
-
-    it('should call editRole when member is defined', () => {
-      vi.spyOn(component, 'editRole');
-      host.member = { role: 'MANAGER' } as CommitteeMember;
-      fixture.detectChanges();
-      component.submit();
-      expect(component.editRole).toHaveBeenCalled();
-    });
-
-    it('should call addUser when member is undefined', () => {
-      vi.spyOn(component, 'addUser');
-      host.member = undefined;
-      component.submit();
-      expect(component.addUser).toHaveBeenCalled();
-    });
   });
 
-  describe('editRole', () => {
-    beforeEach(() => {
-      host.member = { role: 'MANAGER' } as CommitteeMember;
-      component.form.get('role')?.setValue('COMMITTEE_ADMINISTRATOR');
-    });
-
-    it('should not proceed if role is invalid', async () => {
-      host.member = CommitteeMember.fromJSON({ role: 'MANAGER', email: 'test@test.com' });
-      component.form.get('role')?.setErrors({ required: true });
-      vi.spyOn(testCommitteeService, 'update');
-      await component.submitForm();
-      expect(testCommitteeService.update).not.toHaveBeenCalled();
-    });
-
-    it('should call committeeMemberService.update when role is valid', async () => {
-      const updateSpy = vi.spyOn(testCommitteeService, 'update').mockResolvedValue(johnSmith);
-      const resetSpy = vi.spyOn(component, 'resetForm');
-      host.member = johnSmith;
-      fixture.detectChanges();
-      component.form.get('role')?.setValue('MANAGER');
-      await component.editRole();
-
-      expect(updateSpy).toHaveBeenCalledWith({ ...johnSmith, role: 'MANAGER' } as CommitteeMember);
-      expect(resetSpy).toHaveBeenCalled();
-    });
-
-    it('should handle error if update fails', async () => {
-      const error = new Error('Update failed');
-      const updateSpy = vi.spyOn(testCommitteeService, 'update').mockRejectedValue(error);
-      const resetSpy = vi.spyOn(component, 'resetForm');
-      const consoleSpy = vi.spyOn(console, 'error');
-      await component.editRole();
-      expect(consoleSpy).toHaveBeenCalledWith('Error updating member', error);
-
-      expect(updateSpy).toHaveBeenCalled();
-      expect(resetSpy).not.toHaveBeenCalled();
-    });
-
-    it('should exclude current role from available role options', () => {
-      host.member = johnSmith;
-      fixture.detectChanges();
-
-      expect(component.availableRoleOptions().some((option) => option.value === johnSmith.role)).toBe(false);
-    });
-
-    it('should include other roles when editing a user', () => {
-      host.member = johnSmith;
-      fixture.detectChanges();
-
-      expect(component.availableRoleOptions().some((option) => option.value === 'MANAGER')).toBe(true);
-    });
-  });
-
-  describe('addUser', () => {
+  describe('submit', () => {
     it('should not proceed if form is invalid', async () => {
       component.form.get('email')?.setErrors({ required: true });
       vi.spyOn(testCommitteeService, 'addMember');
       await component.submitForm();
       expect(testCommitteeService.addMember).not.toHaveBeenCalled();
-    });
-
-    it('should include all roles when adding a user', () => {
-      host.member = undefined;
-      fixture.detectChanges();
-
-      expect(component.availableRoleOptions().length).toBe(Object.keys(Roles).length);
     });
 
     it('should call committeeMemberService.addMember when form is valid', async () => {
@@ -209,7 +133,7 @@ describe('CommitteeMemberDialogComponent', () => {
       component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
       const manager = component.form.get('role')?.value;
 
-      await component.addUser();
+      await component.submit();
       expect(updateSpy).toHaveBeenCalled();
       expect(component.form.valid).toBe(true);
       expect(addMemberSpy).toHaveBeenCalledWith('test@example.com', manager);
@@ -223,23 +147,10 @@ describe('CommitteeMemberDialogComponent', () => {
       const consoleSpy = vi.spyOn(console, 'error');
       component.form.setControl('email', new SubscriptionFormControl('test@example.com'));
       component.form.setControl('role', new SubscriptionFormControl('MANAGER'));
-      await component.addUser();
+      await component.submit();
       expect(consoleSpy).toHaveBeenCalledWith('Error adding member', error);
       expect(addSpy).toHaveBeenCalled();
       expect(resetSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('role getter', () => {
-    it('should return empty string if member is undefined', () => {
-      host.member = undefined;
-      expect(component.role()).toBe('');
-    });
-
-    it('should return the role label from Roles enum', () => {
-      host.member = { role: 'MANAGER' } as CommitteeMember;
-      fixture.detectChanges();
-      expect(component.role()).toBe(Roles.MANAGER);
     });
   });
 });

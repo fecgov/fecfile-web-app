@@ -2,15 +2,16 @@ import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
 
 export class UsersPage {
-  private static readonly dialogSelector = '#content-offset app-committee-member-dialog dialog[open]';
+  private static readonly addDialogSelector = '#content-offset app-add-committee-member-dialog dialog[open]';
+  private static readonly editDialogSelector = '#content-offset app-edit-committee-member-dialog dialog[open]';
 
   static openAddUserDialog() {
     cy.contains('h1', 'Manage users').should('be.visible');
-    cy.get(UsersPage.dialogSelector).should('have.length', 0);
+    cy.get(UsersPage.addDialogSelector).should('have.length', 0);
     cy.contains('button.add-button:visible', /^Add user$/)
       .should('have.length', 1)
       .click();
-    cy.get(UsersPage.dialogSelector)
+    cy.get(UsersPage.addDialogSelector)
       .should('have.length', 1)
       .first()
       .as('dialog');
@@ -48,7 +49,7 @@ export class UsersPage {
     cy.get('@dialog').find('[data-cy="membership-submit"]').click();
     cy.wait('@AddMember');
     cy.wait('@RefreshMembers');
-    cy.get(UsersPage.dialogSelector).should('have.length', 0);
+    cy.get(UsersPage.addDialogSelector).should('have.length', 0);
   }
 
 
@@ -57,7 +58,7 @@ export class UsersPage {
     cy.intercept('PUT', '**/committee-members/**').as('UpdateMember');
     cy.intercept('GET', '**/committee-members/?page=1**').as('RefreshMembers');
     PageUtils.clickKababItem(fd.email, 'Edit Role');
-    cy.get(UsersPage.dialogSelector)
+    cy.get(UsersPage.editDialogSelector)
       .should('have.length', 1)
       .first()
       .as('dialog');
@@ -70,7 +71,7 @@ export class UsersPage {
     cy.get('@dialog').find('[data-cy="membership-submit"]').click();
     cy.wait('@UpdateMember');
     cy.wait('@RefreshMembers');
-    cy.get(UsersPage.dialogSelector).should('have.length', 0);
+    cy.get(UsersPage.editDialogSelector).should('have.length', 0);
   }
 
   static delete(email: string) {

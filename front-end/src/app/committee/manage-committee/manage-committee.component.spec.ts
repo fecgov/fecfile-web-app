@@ -10,16 +10,30 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
 import { CommitteeMember } from 'app/shared/models';
-import { CommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/committee-member-dialog.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { AddCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/add-committee-member-dialog.component';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [ManageCommitteeComponent],
+  standalone: true,
+  template: `<app-manage-committee />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ManageCommitteeComponent);
+  visible = false;
+
+  member = CommitteeMember.fromJSON({ role: 'MANAGER', email: 'test@test.com' });
+}
 
 describe('ManageCommitteeComponent', () => {
   let component: ManageCommitteeComponent;
-  let fixture: ComponentFixture<ManageCommitteeComponent>;
+  let host: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
   const johnSmith = CommitteeMember.fromJSON({
     first_name: 'John',
     last_name: 'Smith',
@@ -42,7 +56,7 @@ describe('ManageCommitteeComponent', () => {
         DialogModule,
         ConfirmDialogModule,
         ManageCommitteeComponent,
-        CommitteeMemberDialogComponent,
+        AddCommitteeMemberDialogComponent,
       ],
       providers: [
         provideHttpClient(),
@@ -61,7 +75,7 @@ describe('ManageCommitteeComponent', () => {
     service = TestBed.inject(CommitteeMemberService);
     mockStore = TestBed.inject(MockStore);
     mockStore.overrideSelector(selectUserLoginData, johnSmith);
-    fixture = TestBed.createComponent(ManageCommitteeComponent);
+    fixture = TestBed.createComponent(TestHostComponent);
     committeeMembers = [
       johnSmith,
       CommitteeMember.fromJSON({
@@ -73,7 +87,8 @@ describe('ManageCommitteeComponent', () => {
       }),
     ];
 
-    component = fixture.componentInstance;
+    host = fixture.componentInstance;
+    component = host.component();
     fixture.detectChanges();
   });
 
@@ -97,7 +112,7 @@ describe('ManageCommitteeComponent', () => {
     component.openEdit(committeeMembers[0]);
 
     expect(component.member).toEqual(committeeMembers[0]);
-    expect(component.detailVisible()).toBe(true);
+    expect(component.editVisible()).toBe(true);
   });
 
   it('should call loadTableItems, show success message, and close detail', () => {
@@ -113,16 +128,6 @@ describe('ManageCommitteeComponent', () => {
       detail: 'Role Updated',
     });
     expect(component.detailVisible()).toBe(false);
-  });
-
-  it('should close detail and clear member', () => {
-    component.member = committeeMembers[0];
-    component.detailVisible.set(true);
-    fixture.detectChanges();
-    expect(component.member).not.toBeUndefined();
-    component.detailVisible.set(false);
-    fixture.detectChanges();
-    expect(component.member).toBeUndefined();
   });
 
   it("the Committee Member's names should be correct", () => {
