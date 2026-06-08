@@ -72,7 +72,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
   readonly disableTransactionLinks = computed(() => this.isF3() || this.isF3X());
 
-  readonly transactionGroups = computed(() => CategoryPicker.get(this.category()) ?? []);
+  readonly transactionGroups: Signal<Array<{ label: string; transactionTypes: Set<TransactionTypes> }>> = computed(
+    () => CategoryPicker.get(this.category()) ?? [],
+  );
 
   constructor() {
     super();
