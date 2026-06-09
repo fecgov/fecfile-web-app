@@ -1,4 +1,4 @@
-import { computed, Directive, effect, inject, input, } from '@angular/core';
+import { computed, Directive, effect, inject, input } from '@angular/core';
 import { Tooltip } from 'primeng/tooltip';
 
 @Directive({
@@ -12,8 +12,10 @@ export class TooltipDirective {
   readonly content = input<string>('', { alias: 'appTooltip' });
   readonly vposition = input<'top' | 'bottom'>('top');
   readonly hposition = input<'left' | 'right'>('right');
-  readonly tooltipStyleClass = computed(() => `app-tooltip app-tooltip-${this.vposition()} app-tooltip-${this.hposition()}`);
-  readonly positionLeft = computed(() => this.hposition() === 'left' ? -122 : 118);
+  readonly tooltipStyleClass = computed(
+    () => `app-tooltip app-tooltip-${this.vposition()} app-tooltip-${this.hposition()}`,
+  );
+  readonly positionLeft = computed(() => (this.hposition() === 'left' ? -122 : 118));
 
   constructor() {
     effect(() => {

@@ -28,7 +28,7 @@ import { TooltipDirective } from 'app/shared/directives/tooltip.directive';
     DialogComponent,
     FecDatePipe,
     CheckboxModule,
-    TooltipDirective
+    TooltipDirective,
   ],
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
