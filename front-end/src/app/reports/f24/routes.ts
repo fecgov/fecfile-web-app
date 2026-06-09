@@ -19,13 +19,13 @@ import { UpdateVersionNumberComponent } from '../shared/update-version-number/up
 
 export const F24_ROUTES: Route[] = [
   {
-      path: 'update-version-number/:reportId',
-      title: 'Update Version Number',
-      component: UpdateVersionNumberComponent,
-      resolve: { report: ReportResolver },
-      data: { sidebarSection: ReportSidebarSection.EDIT },
-      runGuardsAndResolvers: 'always',
-    },
+    path: 'update-version-number/:reportId',
+    title: 'Update Version Number',
+    component: UpdateVersionNumberComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
+    runGuardsAndResolvers: 'always',
+  },
   {
     path: 'report/:reportId/transactions/select/independent-expenditures',
     component: TransactionIndependentExpenditurePickerComponent,

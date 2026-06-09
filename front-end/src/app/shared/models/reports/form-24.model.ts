@@ -57,7 +57,14 @@ export class Form24 extends Report {
     ];
 
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
-      menuItems.unshift(MenuInfo.updateVersion(sidebarSection, this));
+      menuItems.unshift({
+        label: 'REPORT DETAILS',
+        expanded: sidebarSection === ReportSidebarSection.EDIT,
+        items: [
+          MenuInfo.editReport(sidebarSection, this, 'Edit report details'),
+          MenuInfo.updateVersion(sidebarSection, this),
+        ],
+      });
     }
 
     return menuItems;

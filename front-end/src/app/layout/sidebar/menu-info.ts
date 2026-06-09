@@ -21,7 +21,7 @@ export class MenuInfo {
   static updateVersion(
     sidebarSection: ReportSidebarSection,
     report: Report,
-    label = 'UPDATE VERSION NUMBER',
+    label = 'Update version number',
   ): MenuItem {
     return {
       label,

@@ -23,12 +23,13 @@ import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-
 
 export const F3X_ROUTES: Route[] = [
   {
-    path: 'create/:reportId',
+    path: 'create',
     title: 'Create a report',
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
-    canActivate: [ReportIsEditableGuard],
-    runGuardsAndResolvers: 'always',
+    data: {
+      sidebar: null,
+    },
   },
   {
     path: 'edit/:reportId',

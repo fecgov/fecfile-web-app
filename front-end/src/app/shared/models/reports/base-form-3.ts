@@ -63,7 +63,7 @@ export abstract class BaseForm3 extends Report {
       menuItems.unshift({
         label: 'REPORT DETAILS',
         expanded: sidebarSection === ReportSidebarSection.EDIT,
-        items: [MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS'), MenuInfo.updateVersion(sidebarSection, this)],
+        items: [MenuInfo.editReport(sidebarSection, this, 'Edit report details'), MenuInfo.updateVersion(sidebarSection, this)],
       });
     }
     return menuItems;
