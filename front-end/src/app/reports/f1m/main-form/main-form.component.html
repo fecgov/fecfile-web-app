@@ -210,8 +210,7 @@
         <div class="grid">
           <div class="col-3">
             <app-calendar
-              fieldName="affiliated_date_form_f1_filed"
-              [form]="form"
+              formControlName="affiliated_date_form_f1_filed"
               [formSubmitted]="formSubmitted"
               label="AFFILIATED DATE"
             />
@@ -232,20 +231,17 @@
       </div>
       <div class="flex gap-20px">
         <app-calendar
-          fieldName="date_of_51st_contributor"
-          [form]="form"
+          formControlName="date_of_51st_contributor"
           [formSubmitted]="formSubmitted"
           label="DATE OF 51st CONTRIBUTION"
         />
         <app-calendar
-          fieldName="date_of_original_registration"
-          [form]="form"
+          formControlName="date_of_original_registration"
           [formSubmitted]="formSubmitted"
           label="DATE OF ORIGINAL REGISTRATION"
         />
         <app-calendar
-          fieldName="date_committee_met_requirements"
-          [form]="form"
+          formControlName="date_committee_met_requirements"
           [formSubmitted]="formSubmitted"
           label="DATE COMMITTEE MET REQUIREMENTS"
         />
@@ -322,8 +318,7 @@
             <div class="grid">
               <div class="col-3">
                 <app-calendar
-                  [fieldName]="candidateContact.dateOfContributionField"
-                  [form]="form"
+                  [formControlName]="candidateContact.dateOfContributionField"
                   [formSubmitted]="formSubmitted"
                   label="DATE OF CONTRIBUTION"
                 />

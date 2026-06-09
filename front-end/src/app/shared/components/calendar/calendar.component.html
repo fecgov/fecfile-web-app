@@ -4,10 +4,9 @@
     #datepicker
     appendTo="body"
     [showOnFocus]="false"
-    [inputId]="fieldName()"
-    [name]="fieldName()"
-    [formControl]="control()!"
-    [attr.data-cy]="fieldName()"
+    [disabled]="disabled"
+    [ngModel]="value"
+    (ngModelChange)="onDateSelect($event)"
     [showIcon]="true"
     [iconDisplay]="'input'"
     ariaLabelledBy="date_picker_label"
@@ -17,7 +16,8 @@
     pInputMask="99/99/9999"
     slotChar="MM/DD/YYYY"
     appDateSanitizer
-    (onSelect)="control().patchValue($event)"
+    (onSelect)="onDateSelect($event)"
+    (onBlur)="onTouched()"
   >
     <ng-template pTemplate="header">
       <div class="flex justify-content-between p-2 border-bottom-1 border-300">
@@ -90,14 +90,13 @@
       ></div>
     </ng-template>
   </p-datepicker>
-  @if (control() && showErrors()) {
+  @if (showErrors() && ngControl?.control) {
     <app-error-messages
-      [attr.data-cy]="fieldName() + '-error'"
-      [form]="form()"
-      [control]="control()"
+      [control]="ngControl!.control!"
       [formSubmitted]="formSubmitted()"
       [requiredErrorMessage]="requiredErrorMessage()"
       [patternErrorMessage]="invalidFormatMessage()"
-    />
+    >
+    </app-error-messages>
   }
 </div>

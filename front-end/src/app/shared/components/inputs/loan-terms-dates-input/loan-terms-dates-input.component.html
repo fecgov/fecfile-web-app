@@ -1,8 +1,7 @@
 <div [formGroup]="form" class="flex flex-column gap-4 ml-2 mt-5 mb-3">
   <app-calendar
     class="grid"
-    [fieldName]="templateMap['date']"
-    [form]="form"
+    [formControlName]="templateMap['date']"
     [formSubmitted]="formSubmitted"
     label="DATE INCURRED"
   />
@@ -31,8 +30,7 @@
         }
         @case (termFieldSettings.SPECIFIC_DATE) {
           <app-calendar
-            [fieldName]="templateMap['due_date']"
-            [form]="form"
+            [formControlName]="templateMap['due_date']"
             [formSubmitted]="formSubmitted"
             label="SPECIFIC DATE"
           />
