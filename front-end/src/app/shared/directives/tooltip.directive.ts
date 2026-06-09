@@ -13,12 +13,14 @@ export class TooltipDirective {
   readonly vposition = input<'top' | 'bottom'>('top');
   readonly hposition = input<'left' | 'right'>('right');
   readonly tooltipStyleClass = computed(() => `app-tooltip app-tooltip-${this.vposition()} app-tooltip-${this.hposition()}`);
+  readonly positionLeft = computed(() => this.hposition() === 'left' ? -122 : 118);
 
   constructor() {
     effect(() => {
       this.primeTooltip.setOption({ tooltipLabel: this.content() });
       this.primeTooltip.setOption({ tooltipPosition: this.vposition() });
       this.primeTooltip.setOption({ tooltipStyleClass: this.tooltipStyleClass() });
+      this.primeTooltip.setOption({ positionLeft: this.positionLeft() });
     });
   }
 }
