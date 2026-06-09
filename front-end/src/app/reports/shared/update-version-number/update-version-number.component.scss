@@ -1,6 +1,6 @@
 p {
   line-height: 1;
-  margin-bottom: 16px;
+  margin: 0;
 }
 
 input::-webkit-outer-spin-button,
@@ -12,10 +12,22 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
   padding: 0;
-  width: 36px;
-  justify-items: center;
+  height: 36px;
+  width: 40px;
+  text-align: center;
 }
 
-fieldset {
-  max-width: 310px;
+.horizontal-field {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  > :first-child {
+    width: 226px;
+  }
+}
+
+:host ::ng-deep {
+  .field {
+    margin: 0;
+  }
 }
