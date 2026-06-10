@@ -71,6 +71,7 @@ describe('Extended F3X Schedule E Aggregation', () => {
         F3XAggregationHelpers.openDisbursement(secondId);
         PageUtils.selectDropdownSetValue('[inputid="electionType"]', 'G');
         F3XAggregationHelpers.clearAndType('#electionYear', `${currentYear}`);
+        F3XAggregationHelpers.assertCalendarYtdAfterBlur('$40.00');
         F3XAggregationHelpers.clickSave();
         F3XAggregationHelpers.goToReport(result.report);
 
