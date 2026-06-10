@@ -63,7 +63,7 @@ export class UpdateVersionNumberComponent {
     {
       submission: {
         ignoreValidators: 'none',
-        action: async (field) => {
+        action: async () => {
           this.formSubmitted = true;
           try {
             await this.reportService.updateVersionNumber(this.report(), this.versionForm().value());

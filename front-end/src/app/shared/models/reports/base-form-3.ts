@@ -4,7 +4,6 @@ import { Report, ReportStatus } from './report.model';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
-import { label } from '@primeuix/themes/aura/metergroup';
 
 export class CoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
@@ -63,7 +62,10 @@ export abstract class BaseForm3 extends Report {
       menuItems.unshift({
         label: 'REPORT DETAILS',
         expanded: sidebarSection === ReportSidebarSection.EDIT,
-        items: [MenuInfo.editReport(sidebarSection, this, 'Edit report details'), MenuInfo.updateVersion(sidebarSection, this)],
+        items: [
+          MenuInfo.editReport(sidebarSection, this, 'Edit report details'),
+          MenuInfo.updateVersion(sidebarSection, this),
+        ],
       });
     }
     return menuItems;
