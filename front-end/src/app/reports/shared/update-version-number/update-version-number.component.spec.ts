@@ -6,31 +6,24 @@ import { ReportService } from 'app/shared/services/report.service';
 import { MessageService } from 'primeng/api';
 import { testActiveReport, testF24, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { submit } from '@angular/forms/signals';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
 
 describe('UpdateVersionNumberComponent', () => {
   let component: UpdateVersionNumberComponent;
   let fixture: ComponentFixture<UpdateVersionNumberComponent>;
   let store: MockStore;
-  let reportServiceMock: any;
   let messageService: MessageService;
+  let f3xService: ReportService<Form3X>;
 
   beforeEach(async () => {
-    reportServiceMock = {
-      updateVersionNumber: vi.fn().mockResolvedValue(undefined),
-      setActiveReportById: vi.fn(),
-    };
-
     await TestBed.configureTestingModule({
       imports: [UpdateVersionNumberComponent],
-      providers: [
-        provideMockStore(testMockStore()),
-        MessageService,
-        { provide: ReportService, useValue: reportServiceMock },
-      ],
+      providers: [provideMockStore(testMockStore()), MessageService, ReportService],
     }).compileComponents();
 
     store = TestBed.inject(MockStore);
     messageService = TestBed.inject(MessageService);
+    f3xService = TestBed.inject(ReportService<Form3X>);
     fixture = TestBed.createComponent(UpdateVersionNumberComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -89,29 +82,32 @@ describe('UpdateVersionNumberComponent', () => {
 
   it('should trigger error banner and reject submission if form is invalid', async () => {
     vi.spyOn(messageService, 'add');
+    const updateSpy = vi.spyOn(f3xService, 'updateVersionNumber');
     await submit(component.versionForm);
     expect(component.formSubmitted).toBe(true);
-    expect(reportServiceMock.updateVersionNumber).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
   });
 
   it('should successfully update and reset form on a valid submission', async () => {
     const report = testActiveReport();
+    const newReport = { ...report, report_version: '3' } as Form3X;
+    const updateSpy = vi.spyOn(f3xService, 'updateVersionNumber').mockResolvedValueOnce(newReport);
+    vi.spyOn(f3xService, 'get').mockResolvedValueOnce(newReport);
+    const setActiveReportSpy = vi.spyOn(f3xService, 'setActiveReportById');
     const messageSpy = vi.spyOn(messageService, 'add');
     component.versionForm.amendment().value.set('3');
     component.versionForm.eFilingId().value.set('FEC-123456');
 
     await submit(component.versionForm);
+    await fixture.whenStable();
 
-    expect(reportServiceMock.updateVersionNumber).toHaveBeenCalledWith(report, {
+    expect(updateSpy).toHaveBeenCalledWith(report, {
       original: 0,
       amendment: '3',
       eFilingId: 'FEC-123456',
       previousSubmissionDate: null,
     });
-    expect(reportServiceMock.setActiveReportById).toHaveBeenCalledWith(report.id);
-
-    expect(component.versionForm.amendment().value()).toBe('');
-    expect(component.versionForm.eFilingId().value()).toBe('');
+    expect(setActiveReportSpy).toHaveBeenCalledWith(report.id);
 
     expect(messageSpy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -119,11 +115,15 @@ describe('UpdateVersionNumberComponent', () => {
         summary: 'Successful',
       }),
     );
+
+    expect(component.versionForm.amendment().value()).toBe('');
+    expect(component.versionForm.eFilingId().value()).toBe('');
+    expect(component.versionForm.original().value()).toBe('3');
   });
 
   it('should handle service errors gracefully during submission rejection cascades', async () => {
     const messageSpy = vi.spyOn(messageService, 'add');
-    reportServiceMock.updateVersionNumber.mockRejectedValueOnce(new Error('Server Drop'));
+    vi.spyOn(f3xService, 'updateVersionNumber').mockRejectedValueOnce(new Error('Server Drop'));
 
     component.versionForm.amendment().value.set('1');
     component.versionForm.eFilingId().value.set('FEC-0000');

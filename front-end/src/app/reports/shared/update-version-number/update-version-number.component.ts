@@ -67,9 +67,9 @@ export class UpdateVersionNumberComponent {
           this.formSubmitted = true;
           try {
             await this.reportService.updateVersionNumber(this.report(), this.versionForm().value());
-            this.reportService.setActiveReportById(this.report().id);
+            const report = await this.reportService.setActiveReportById(this.report().id);
             this.versionForm().reset({
-              original: this.report().report_version ?? 0,
+              original: report.report_version ?? 0,
               amendment: '',
               eFilingId: '',
               previousSubmissionDate: null,

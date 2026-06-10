@@ -3,6 +3,8 @@
   <p-datepicker
     #datepicker
     appendTo="body"
+    [attr.data-cy]="ngControl!.name"
+    [inputId]="'' + (ngControl!.name ?? '')"
     [showOnFocus]="false"
     [disabled]="disabled"
     [ngModel]="value"
@@ -92,6 +94,7 @@
   </p-datepicker>
   @if (showErrors() && ngControl?.control) {
     <app-error-messages
+      [attr.data-cy]="ngControl!.name + '-error'"
       [control]="ngControl!.control!"
       [formSubmitted]="formSubmitted()"
       [requiredErrorMessage]="requiredErrorMessage()"
