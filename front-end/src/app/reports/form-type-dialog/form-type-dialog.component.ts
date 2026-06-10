@@ -26,7 +26,13 @@ export class FormTypeDialogComponent {
   readonly formTypeOptions: ReportTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
   readonly filteredOptions: Signal<ReportTypes[]> = computed(() => {
     return this.formTypeOptions.filter((type) => {
-      return this.eligibleReportTypes().includes(type);
+      const eligible_report_types = this.eligibleReportTypes();
+      if (eligible_report_types) {
+        return eligible_report_types.includes(type);
+      }
+
+      console.error('No eligible report types on active committee');
+      return false;
     });
   });
 
