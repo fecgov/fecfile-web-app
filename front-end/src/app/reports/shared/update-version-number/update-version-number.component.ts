@@ -22,7 +22,7 @@ export class UpdateVersionNumberComponent {
   private readonly store = inject(Store);
   protected readonly messageService = inject(MessageService);
   protected readonly report = this.store.selectSignal(selectActiveReport);
-  protected readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
+  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
 
   private readonly versionModel = signal<VersionData>({
     original: '',
@@ -30,7 +30,7 @@ export class UpdateVersionNumberComponent {
     eFilingId: '',
     previousSubmissionDate: null,
   });
-  protected readonly versionForm = form(
+  readonly versionForm = form(
     this.versionModel,
     (schema) => {
       disabled(schema.original);
@@ -99,7 +99,7 @@ export class UpdateVersionNumberComponent {
       },
     },
   );
-  protected formSubmitted = false;
+  formSubmitted = false;
 
   constructor() {
     effect(() => {
