@@ -10,11 +10,17 @@ export enum ReportSidebarSection {
 }
 
 export class MenuInfo {
-  static editReport(sidebarSection: ReportSidebarSection, report: Report, label = 'EDIT A REPORT'): MenuItem {
+  static editReport(
+    sidebarSection: ReportSidebarSection,
+    report: Report,
+    label = 'EDIT A REPORT',
+    disabled = false,
+  ): MenuItem {
     return {
       label,
       routerLink: [`/reports/${report.report_type.toLowerCase()}/edit/${report.id}`],
       expanded: sidebarSection === ReportSidebarSection.CREATE,
+      disabled,
     };
   }
 

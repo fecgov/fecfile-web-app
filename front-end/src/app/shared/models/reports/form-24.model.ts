@@ -61,7 +61,7 @@ export class Form24 extends Report {
         label: 'REPORT DETAILS',
         expanded: sidebarSection === ReportSidebarSection.EDIT,
         items: [
-          MenuInfo.editReport(sidebarSection, this, 'Edit report details'),
+          MenuInfo.editReport(sidebarSection, this, 'Edit report details', true),
           MenuInfo.updateVersion(sidebarSection, this),
         ],
       });
