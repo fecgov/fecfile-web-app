@@ -98,7 +98,7 @@ describe('FormTypeDialogComponent', () => {
   });
 
   it('should filter form types', () => {
-    expect(component.eligibleReportTypes()).toEqual(testCommitteeAccount().eligible_report_types);
+    expect(component.eligibleReportTypes()).toEqual(new Set(testCommitteeAccount().eligible_report_types));
     expect(component.filteredOptions()).not.toContain('F3');
     expect(component.filteredOptions()).not.toContain('F24');
   });
