@@ -22,9 +22,9 @@ describe('LoanTermsDatesInputComponent', () => {
       {
         loan_incurred_date: new SubscriptionFormControl(''),
         loan_interest_rate: new SubscriptionFormControl(''),
-        loan_interest_rate_field_setting: new SubscriptionFormControl(''),
+        loan_interest_rate_is_percent: new SubscriptionFormControl(''),
         loan_due_date: new SubscriptionFormControl(''),
-        loan_due_date_field_setting: new SubscriptionFormControl(''),
+        loan_due_date_is_date: new SubscriptionFormControl(''),
       },
       { updateOn: 'blur' },
     );
@@ -32,19 +32,33 @@ describe('LoanTermsDatesInputComponent', () => {
       ...testTemplateMap(),
       ...{
         interest_rate: 'loan_interest_rate',
-        interest_rate_setting: 'loan_interest_rate_field_setting',
+        loan_interest_rate_is_percent: 'loan_interest_rate_is_percent',
         date: 'loan_incurred_date',
         due_date: 'loan_due_date',
-        due_date_setting: 'loan_due_date_field_setting',
+        loan_due_date_is_date: 'loan_due_date_is_date',
       },
     };
     fixture.detectChanges();
   });
 
-  function testInterest(value: string, expectedValue: string, startSetting: string, toggleSetting?: string): void {
-    if (component.interestRateSetting !== startSetting) component.interestRateSetting = startSetting;
+  async function testInterest(
+    value: string,
+    expectedValue: string,
+    startSetting: boolean,
+    toggleSetting?: boolean,
+  ): Promise<void> {
+    if (component.interestRateSetting !== startSetting) {
+      component.interestRateSetting = startSetting;
+      await fixture.whenStable();
+    }
+
     component.interestRate = value;
-    if (toggleSetting && startSetting !== toggleSetting) component.interestRateSetting = toggleSetting;
+
+    if (toggleSetting && startSetting !== toggleSetting) {
+      component.interestRateSetting = toggleSetting;
+      await fixture.whenStable();
+    }
+
     expect(component.interestRate).toBe(expectedValue);
   }
 
@@ -61,17 +75,17 @@ describe('LoanTermsDatesInputComponent', () => {
     expect(control?.status).toBe('VALID');
   });
 
-  it('should handle interest_rate inputs correctly when clearValuesOnChange is true', () => {
+  it('should handle interest_rate inputs correctly when clearValuesOnChange is true', async () => {
     // Changing the interest rate setting to USER_DEFINED should clear the value
-    testInterest('12.3%', '', component.termFieldSettings.EXACT_PERCENTAGE, component.termFieldSettings.USER_DEFINED);
+    testInterest('12.3', '', component.termFieldSettings.EXACT_PERCENTAGE, component.termFieldSettings.USER_DEFINED);
     // While USER_DEFINED, non-percentage values should go unchanged
     testInterest('12.3', '12.3', component.termFieldSettings.USER_DEFINED);
     // Changing the interest rate setting to EXACT_PERCENTAGE should clear the value
     testInterest('12.3', '', component.termFieldSettings.USER_DEFINED, component.termFieldSettings.EXACT_PERCENTAGE);
-    // You should be unable to delete the % symbol on EXACT_PERCENTAGE
-    testInterest('12.3', '12.3%', component.termFieldSettings.EXACT_PERCENTAGE);
-    // If the value would only be '%', clear the field
-    testInterest('%', '', component.termFieldSettings.EXACT_PERCENTAGE);
+    // Invlalid characters should be removed
+    testInterest('abc12.3def', '12.3', component.termFieldSettings.EXACT_PERCENTAGE);
+    // Decimal points are valid input
+    testInterest('.', '.', component.termFieldSettings.EXACT_PERCENTAGE);
   });
 
   it('should handle interest_rate inputs correctly when clearValuesOnChange is false ', () => {
@@ -79,8 +93,8 @@ describe('LoanTermsDatesInputComponent', () => {
 
     // Changing the interest rate setting to USER_DEFINED should NOT clear the value
     testInterest(
-      '12.3%',
-      '12.3%',
+      '12.3',
+      '12.3',
       component.termFieldSettings.EXACT_PERCENTAGE,
       component.termFieldSettings.USER_DEFINED,
     );
@@ -88,20 +102,12 @@ describe('LoanTermsDatesInputComponent', () => {
     // While USER_DEFINED, non-percentage values should go unchanged
     testInterest('12.3', '12.3', component.termFieldSettings.USER_DEFINED);
 
-    // Changing the interest rate setting to EXACT_PERCENTAGE should NOT clear the value and add %
-    testInterest(
-      '12.3',
-      '12.3%',
-      component.termFieldSettings.USER_DEFINED,
-      component.termFieldSettings.EXACT_PERCENTAGE,
-    );
-
     // Changing back and forth between field settings should NOT clear the value
     component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    component.interestRate = '12.3%';
+    component.interestRate = '12.3';
     component.interestRateSetting = component.termFieldSettings.USER_DEFINED;
     component.interestRateSetting = component.termFieldSettings.EXACT_PERCENTAGE;
-    expect(component.interestRate).toBe('12.3%');
+    expect(component.interestRate).toBe('12.3');
   });
 
   it('should add and remove the percentage pattern validator', () => {

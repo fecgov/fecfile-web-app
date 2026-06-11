@@ -1,11 +1,18 @@
-<form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+<form
+  id="form"
+  [formGroup]="form"
+  [class.ng-submitted]="formSubmitted"
+  class="standard-container flex flex-column gap-5 mb-3"
+>
   <div>
-    <h1>Form 3X</h1>
-    <span class="span-label m-0">REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</span>
+    <h1>{{ title() }}</h1>
+    <span class="span-label m-0">{{ subLabel() }}</span>
     <hr />
   </div>
+
   <h2>Report type</h2>
-  @if (userCanSetFilingFrequency) {
+
+  @if (isF3X() && userCanSetFilingFrequency) {
     <div class="field">
       <label for="filing_frequency">REPORTING FREQUENCY</label>
       <p-selectButton
@@ -30,7 +37,10 @@
   </div>
 
   <div class="field" data-cy="report_code">
-    <label for="type">{{ filingFrequencyLabel() }}</label>
+    @if (isF3X()) {
+      <label for="type">{{ filingFrequencyLabel() }}</label>
+    }
+
     <div class="flex gap-20px">
       @for (reportCodeColumn of reportCodesColumns(); track reportCodeColumn) {
         <div class="flex flex-column gap-20px">
@@ -48,7 +58,7 @@
                 formControlName="report_code"
               />
               <label [for]="reportCode" class="ml-2" [class]="disabledReportCodes()[reportCode] ? 'p-disabled' : ''">
-                {{ reportCodeLabelMap ? reportCodeLabelMap[reportCode] : '' }}
+                {{ reportCodeLabelMap()?.[reportCode] ?? '' }}
               </label>
             </div>
           }
@@ -56,6 +66,7 @@
       }
     </div>
   </div>
+
   @if (isElectionReport()) {
     <div class="flex gap-20px">
       <app-calendar fieldName="date_of_election" [form]="form" [formSubmitted]="formSubmitted" label="ELECTION ON" />
@@ -73,12 +84,14 @@
       </div>
     </div>
   }
+
   <hr class="mt-0" />
   <h2 class="m-0">Covering period</h2>
   <div class="flex gap-20px">
     <app-calendar fieldName="coverage_from_date" [form]="form" [formSubmitted]="formSubmitted" label="FROM" />
     <app-calendar fieldName="coverage_through_date" [form]="form" [formSubmitted]="formSubmitted" label="TO" />
   </div>
+
   <hr class="mt-0" />
   <app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
 </form>
@@ -97,14 +110,11 @@
     <div class="flex justify-content-center">
       <p-button
         type="button"
-        pButton
-        pRipple
         label="Manage your transactions"
         class="p-button-primary dialog-button"
         [routerLink]="['/reports/transactions/report', reportId(), 'list']"
         [autofocus]="true"
-      >
-      </p-button>
+      ></p-button>
     </div>
   </ng-container>
 </app-dialog>

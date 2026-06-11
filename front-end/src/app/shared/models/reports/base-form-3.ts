@@ -2,6 +2,8 @@ import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus } from './report.model';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
+import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
+import { MenuItem } from 'primeng/api';
 
 export class CoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
@@ -32,6 +34,7 @@ export abstract class BaseForm3 extends Report {
   treasurer_prefix: string | undefined;
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
+  report_type_category: string | undefined;
 
   get coverageDates(): { [date: string]: Date | undefined } {
     return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };
@@ -39,5 +42,26 @@ export abstract class BaseForm3 extends Report {
 
   override get canAmend(): boolean {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
+  }
+
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+    const transactionItems = [MenuInfo.manageTransactions(this), ...MenuInfo.addTransactions(this)];
+    const menuItems = [
+      MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
+      MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
+      MenuInfo.reviewReport(sidebarSection, [
+        ...MenuInfo.viewSummary(this),
+        MenuInfo.printPreview(this),
+        MenuInfo.addReportLevelMenu(this, isEditable),
+      ]),
+      MenuInfo.submitReport(sidebarSection, this, isEditable, 'SUBMIT YOUR REPORT'),
+    ];
+
+    // Add edit report item to menu if the report is in progress or submission failure
+    if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
+      const editReportItem = MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS');
+      menuItems.unshift(editReportItem);
+    }
+    return menuItems;
   }
 }

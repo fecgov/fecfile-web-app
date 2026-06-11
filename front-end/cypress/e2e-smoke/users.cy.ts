@@ -26,8 +26,7 @@ describe('Manage Users', () => {
     UsersPage.goToPage();
     UsersPage.openAddUserDialog();
     cy.get('@dialog').find('#email').clear({ force: true }).should('have.value', '');
-    cy.get('@dialog').find('[data-cy="membership-submit"]').click();
-    cy.get('@dialog').find('[data-cy="membership-submit"]').should('be.visible');
+    cy.get('@dialog').find('[data-cy="membership-submit"]').should('be.disabled');
   });
 
   it('should edit role', () => {
