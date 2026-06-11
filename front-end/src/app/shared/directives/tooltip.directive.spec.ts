@@ -19,7 +19,6 @@ describe('TooltipDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let component: TestComponent;
   let tooltipDirective: TooltipDirective;
-  let inputElement: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -32,7 +31,6 @@ describe('TooltipDirective', () => {
 
     const debugElement = fixture.debugElement.query(By.directive(TooltipDirective));
     tooltipDirective = debugElement.injector.get(TooltipDirective);
-    inputElement = component.inputElement.nativeElement;
   });
 
   it('should create the directive', () => {
