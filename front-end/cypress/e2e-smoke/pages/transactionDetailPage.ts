@@ -153,8 +153,8 @@ export class TransactionDetailPage {
     }
 
     // set interest dropdown and rate
-    if (formData.interest_rate_setting) {
-      PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.interest_rate_setting, alias);
+    if (formData.loan_interest_rate_is_percent) {
+      PageUtils.selectDropdownSetValue('[label="INTEREST RATE"]', formData.loan_interest_rate_is_percent, alias);
       if (formData.interest_rate) {
         cy.get('[data-cy="interestRateInput"]').find('input:visible:first').safeType(formData.interest_rate);
       }
@@ -164,11 +164,15 @@ export class TransactionDetailPage {
       cy.get(alias).find('input[name="secured"]').first().click();
     }
 
-    // Set due date dropdown & date
-    if (formData.due_date_setting) {
-      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.due_date_setting, alias);
+    if (formData.loan_due_date_is_date) {
+      PageUtils.selectDropdownSetValue('[label="DATE DUE"]', formData.loan_due_date_is_date, alias);
       if (formData.due_date) {
-        PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
+        if (formData.due_date instanceof Date) {
+          PageUtils.calendarSetValue(`[data-cy="loan_due_date"]`, formData.due_date, alias);
+        } else {
+          alias = PageUtils.getAlias(alias);
+          cy.get(alias).find('[data-cy="dueDateInput"]').find('input').first().clear().type(String(formData.due_date));
+        }
       }
     }
 
@@ -278,6 +282,39 @@ export class TransactionDetailPage {
 
     if (formData.category_code != '') {
       cy.get(alias).find('app-select[inputid="category_code"]').should('contain', formData.category_code);
+    }
+  }
+
+  static assertLoanFormData(formData: LoanFormData, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    if (formData.loan_due_date_is_date) {
+      cy.get(alias)
+        .find('[label="DATE DUE"]')
+        .find('select')
+        .find('option:selected')
+        .should('contain', formData.loan_due_date_is_date as string);
+
+      if (formData.due_date) {
+        if (formData.due_date instanceof Date) {
+          cy.get(alias)
+            .find('[data-cy="loan_due_date"]')
+            .find('.p-datepicker-input')
+            .should('have.value', PageUtils.dateToString(formData.due_date));
+        } else {
+          cy.get(alias).find('[data-cy="dueDateInput"]').find('input').first().should('have.value', String(formData.due_date));
+        }
+      }
+    }
+    if (formData.loan_interest_rate_is_percent) {
+      cy.get(alias)
+        .find('[label="INTEREST RATE"]')
+        .find('select')
+        .find('option:selected')
+        .should('contain', formData.loan_interest_rate_is_percent as string);
+
+      if (formData.interest_rate !== undefined && formData.interest_rate !== null) {
+        cy.get(alias).find('[data-cy="interestRateInput"]').find('input:visible:first').should('have.value', String(formData.interest_rate));
+      }
     }
   }
 
