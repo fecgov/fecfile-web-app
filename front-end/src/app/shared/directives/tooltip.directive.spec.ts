@@ -17,7 +17,6 @@ class TestComponent {
 
 describe('TooltipDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
-  let component: TestComponent;
   let tooltipDirective: TooltipDirective;
 
   beforeEach(async () => {
@@ -26,7 +25,6 @@ describe('TooltipDirective', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
 
     const debugElement = fixture.debugElement.query(By.directive(TooltipDirective));
