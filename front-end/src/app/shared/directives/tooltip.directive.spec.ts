@@ -5,14 +5,7 @@ import { TooltipDirective } from './tooltip.directive';
 
 @Component({
   standalone: true,
-  template: `
-        <input
-            #inputElement
-            appTooltip="Test appTooltip content"
-            type="text"
-            placeholder="Hover me"
-        />
-    `,
+  template: ` <input #inputElement appTooltip="Test appTooltip content" type="text" placeholder="Hover me" /> `,
   imports: [TooltipDirective],
 })
 class TestComponent {
@@ -21,7 +14,6 @@ class TestComponent {
   tooltipPosition: 'right' | 'left' | 'top' | 'bottom' = 'right';
   tooltipEvent: 'hover' | 'focus' | 'both' = 'hover';
 }
-
 
 describe('TooltipDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
@@ -43,7 +35,6 @@ describe('TooltipDirective', () => {
     inputElement = component.inputElement.nativeElement;
   });
 
-
   it('should create the directive', () => {
     expect(tooltipDirective).toBeTruthy();
   });
@@ -55,5 +46,4 @@ describe('TooltipDirective', () => {
     expect(tooltipDirective.tooltipStyleClass()).toBe('app-tooltip app-tooltip-top app-tooltip-right');
     expect(tooltipDirective.positionLeft()).toBe(118);
   });
-
 });
