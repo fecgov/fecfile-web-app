@@ -26,13 +26,7 @@ export class FormTypeDialogComponent {
   readonly formTypeOptions: ReportTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
   readonly filteredOptions: Signal<ReportTypes[]> = computed(() => {
     return this.formTypeOptions.filter((type) => {
-      const eligible_report_types = this.eligibleReportTypes();
-      if (eligible_report_types) {
-        return eligible_report_types.includes(type);
-      }
-
-      console.error('No eligible report types on active committee');
-      return false;
+      return this.eligibleReportTypes().has(type);
     });
   });
 
@@ -42,7 +36,13 @@ export class FormTypeDialogComponent {
   readonly selectedType = signal<ReportTypes | undefined>(undefined);
   readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
-  readonly eligibleReportTypes = computed(() => this.committeeAccount().eligible_report_types);
+  readonly eligibleReportTypes = computed(() => {
+    const eligible_report_types = this.committeeAccount().eligible_report_types;
+    if (!eligible_report_types) {
+      console.error('No eligible report types in committee data');
+    }
+    return new Set(eligible_report_types);
+  });
   readonly isSubmitDisabled = computed(() =>
     this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
   );
