@@ -1,15 +1,17 @@
 import { Route } from '@angular/router';
-import { CreateF3XStep1Component } from './create-workflow/create-f3x-step1.component';
-import { ReportSummaryComponent } from './report-summary/report-summary.component';
-import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
+import { ReportLevelMemoComponent } from '../../shared/report-level-memo/report-level-memo.component';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
-import { ReportIsEditableGuard } from '../../shared/guards/report-is-editable.guard';
-import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
+import { ReportIsEditableGuard } from '../../../shared/guards/report-is-editable.guard';
+import { SubmitReportComponent } from '../../submission-workflow/submit-report.component';
 import { Report } from 'app/shared/models/reports/report.model';
-import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
+import { SubmitReportStatusComponent } from '../../submission-workflow/submit-report-status.component';
+import { CreateSharedF3Component } from '../create-shared-f3/create-shared-f3.component';
+import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportSummaryComponent } from './report-summary/report-summary.component';
+import { Form3Service } from 'app/shared/services/form-3.service';
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -18,11 +20,12 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 // 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
-export const F3X_ROUTES: Route[] = [
+export const F3_ROUTES: Route[] = [
   {
     path: 'create/step1',
     title: 'Create a report',
-    component: CreateF3XStep1Component,
+    component: CreateSharedF3Component,
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
     runGuardsAndResolvers: 'always',
     data: {
       sidebar: null,
@@ -31,14 +34,16 @@ export const F3X_ROUTES: Route[] = [
   {
     path: 'create/step1/:reportId',
     title: 'Create a report',
-    component: CreateF3XStep1Component,
+    component: CreateSharedF3Component,
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
     canActivate: [ReportIsEditableGuard],
     runGuardsAndResolvers: 'always',
   },
   {
     path: 'edit/:reportId',
     title: 'Edit a report',
-    component: CreateF3XStep1Component,
+    component: CreateSharedF3Component,
+    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
     resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },
     runGuardsAndResolvers: 'always',
@@ -66,8 +71,8 @@ export const F3X_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
-      getBackUrl: (report?: Report) => '/reports/f3x/detailed-summary/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
+      getBackUrl: (report?: Report) => '/reports/f3/detailed-summary/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
@@ -79,7 +84,7 @@ export const F3X_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.REVIEW,
-      getNextUrl: (report?: Report) => '/reports/f3x/submit/' + report?.id,
+      getNextUrl: (report?: Report) => '/reports/f3/submit/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },
@@ -91,8 +96,8 @@ export const F3X_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: {
       sidebarSection: ReportSidebarSection.SUBMISSION,
-      getBackUrl: (report?: Report) => '/reports/f3x/memo/' + report?.id,
-      getContinueUrl: (report?: Report) => '/reports/f3x/submit/status/' + report?.id,
+      getBackUrl: (report?: Report) => '/reports/f3/memo/' + report?.id,
+      getContinueUrl: (report?: Report) => '/reports/f3/submit/status/' + report?.id,
     },
     runGuardsAndResolvers: 'always',
   },

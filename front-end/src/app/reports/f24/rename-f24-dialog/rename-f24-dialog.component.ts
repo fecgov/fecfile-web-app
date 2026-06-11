@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { FormComponent } from 'app/shared/components/form.component';
-import { Form24, Report } from 'app/shared/models';
+import { Form24 } from 'app/shared/models';
 import { F24UniqueNameValidator, Form24Service } from 'app/shared/services/form-24.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { MessageService } from 'primeng/api';
@@ -34,7 +34,7 @@ export class RenameF24DialogComponent extends FormComponent {
   readonly form24Service = inject(Form24Service);
   readonly f24UniqueNameValidator = inject(F24UniqueNameValidator);
   readonly dialogVisible = model(false);
-  readonly f24Report = input<Report | undefined>();
+  readonly f24Report = input<Form24>();
   readonly form = new FormGroup(
     {
       typeName: new SubscriptionFormControl(),
@@ -48,11 +48,12 @@ export class RenameF24DialogComponent extends FormComponent {
   readonly formParent: FormGroup = new FormGroup({
     form24NameGroup: this.form,
   });
+  submitDisabled = false;
 
   constructor() {
     super();
     effect(() => {
-      const f24Report = this.f24Report() as Form24 | undefined;
+      const f24Report = this.f24Report();
       if (f24Report) {
         const regex = /^(24-Hour:\s|48-Hour:\s)(.*)$/;
         const match = f24Report.name?.match(regex);

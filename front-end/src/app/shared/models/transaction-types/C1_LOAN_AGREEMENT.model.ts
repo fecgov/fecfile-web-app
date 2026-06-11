@@ -75,9 +75,9 @@ export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
     'amount',
     'date',
     'due_date',
-    'due_date_setting',
+    'loan_due_date_is_date',
     'interest_rate',
-    'interest_rate_setting',
+    'loan_interest_rate_is_percent',
   ] as TemplateMapKeyType[];
 
   // override description =

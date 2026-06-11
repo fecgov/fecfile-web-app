@@ -9,7 +9,7 @@ import {
   setCommitteeAccountDetailsAction,
   unsetCommitteeAccountDetailsAction,
 } from 'app/store/committee-account.actions';
-import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputGroup } from 'primeng/inputgroup';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -18,6 +18,8 @@ import { UsersService } from 'app/shared/services/users.service';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
 
 @Component({
   selector: 'app-create-committee',
@@ -27,11 +29,11 @@ import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
     RouterLink,
     InputGroup,
     ReactiveFormsModule,
-    PrimeTemplate,
     CheckboxModule,
     ButtonModule,
     DialogComponent,
     ToUpperDirective,
+    SingleClickDirective,
   ],
 })
 export class CreateCommitteeComponent {
@@ -50,23 +52,27 @@ export class CreateCommitteeComponent {
   readonly showResult = computed(() => !!this.selectedCommittee() || this.unableToCreateAccount() || this.loading());
 
   searchBoxFormControl = new SubscriptionFormControl('');
-
   constructor() {
     this.store.dispatch(unsetCommitteeAccountDetailsAction());
   }
 
-  search(committeeId: string | null) {
+  async search(committeeId: string | null) {
     this.selectedCommittee.set(undefined);
     this.unableToCreateAccount.set(false);
+
     if (committeeId) {
       this.loading.set(true);
+
       this.committeeAccountService
         .getAvailableCommittee(committeeId)
         .then(
           (committee) => this.selectedCommittee.set(committee),
           () => this.unableToCreateAccount.set(true),
         )
-        .finally(() => this.loading.set(false));
+        .finally(() => {
+          this.loading.set(false);
+          this.store.dispatch(singleClickEnableAction());
+        });
     }
   }
 
@@ -90,6 +96,7 @@ export class CreateCommitteeComponent {
     } catch {
       this.selectedCommittee.set(undefined);
       this.unableToCreateAccount.set(true);
+      this.store.dispatch(singleClickEnableAction());
     }
   }
 }

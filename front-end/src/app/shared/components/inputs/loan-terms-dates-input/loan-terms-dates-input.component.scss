@@ -1,0 +1,59 @@
+.percent-input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  overflow: visible;
+}
+
+.label-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.percent-input {
+  width: var(--date-field-width);
+  box-sizing: border-box;
+  padding-right: 2.75rem;
+}
+
+.percent-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  z-index: 2;
+}
+
+.other-subtext {
+  font-family: var(--karla);
+}
+
+:host ::ng-deep {
+  .field {
+    margin: 0;
+  }
+  .grid {
+    display: grid;
+    gap: 8px 16px;
+    & *:has(.field):not(.field) {
+      display: contents;
+    }
+    .field {
+      grid-row: span 3;
+      display: grid;
+      grid-template-rows: subgrid;
+      & > label,
+      > .span-label {
+        margin: 0;
+        align-self: end;
+      }
+    }
+  }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

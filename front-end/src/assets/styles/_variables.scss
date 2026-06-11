@@ -177,6 +177,8 @@
   --header-height: 80px;
   --header-top: 30px;
   --header-total: calc(var(--header-height) + var(--header-top));
+
+  --date-field-width: 11rem;
 }
 
 $breakpoints: (

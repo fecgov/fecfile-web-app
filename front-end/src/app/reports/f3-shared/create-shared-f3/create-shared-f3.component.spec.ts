@@ -8,25 +8,29 @@ import { of } from 'rxjs';
 import { Form3X, F3xFormTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
+import { FORM_3_SERVICE, BaseForm3Service } from 'app/shared/services/base-form-3.service';
+import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
-let component: CreateF3XStep1Component;
-let fixture: ComponentFixture<CreateF3XStep1Component>;
+let component: CreateSharedF3Component;
+let fixture: ComponentFixture<CreateSharedF3Component>;
 let router: Router;
-let form3XService: Form3XService;
+let activeServiceInstance: BaseForm3Service<BaseForm3>;
 let store: MockStore;
 
-async function setup(params: { reportId?: string }) {
+async function setup(params: { reportId?: string; mockUrl?: string }) {
+  const currentUrl = params.mockUrl ?? '/reports/f3x/create/step-1';
   await TestBed.configureTestingModule({
-    imports: [ReactiveFormsModule, CreateF3XStep1Component],
+    imports: [ReactiveFormsModule, CreateSharedF3Component],
     providers: [
       provideHttpClient(),
       provideHttpClientTesting(),
       Form3XService,
       MessageService,
+      { provide: FORM_3_SERVICE, useClass: Form3XService },
       {
         provide: ActivatedRoute,
         useValue: {
@@ -41,11 +45,15 @@ async function setup(params: { reportId?: string }) {
   store = TestBed.inject(MockStore);
   vi.spyOn(store, 'dispatch');
   router = TestBed.inject(Router);
-  form3XService = TestBed.inject(Form3XService);
+  activeServiceInstance = TestBed.inject(FORM_3_SERVICE);
   vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+  Object.defineProperty(router, 'url', {
+    get: () => currentUrl,
+    configurable: true,
+  });
 }
 
-describe('CreateF3XStep1Component: New', () => {
+describe('CreateSharedF3Component: New', () => {
   const mockCoverageDates = [
     {
       report_code: ReportCodes.Q1,
@@ -58,18 +66,22 @@ describe('CreateF3XStep1Component: New', () => {
   beforeEach(async () => {
     await setup({});
 
-    coverageDateSpy = vi.spyOn(form3XService, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
-    fixture = TestBed.createComponent(CreateF3XStep1Component);
+    coverageDateSpy = vi.spyOn(activeServiceInstance, 'getCoverageDates').mockResolvedValue(mockCoverageDates);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create and initialize the form for a new report', () => {
+  it('should create and initialize the form for a new report', async () => {
     expect(component).toBeTruthy();
+    expect(component.isF3X()).toBe(true);
+    expect(component.title()).toBe('Form 3X');
     expect(component.reportId()).toBeNull();
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
     expect(component.form.get('filing_frequency')?.value).toBe('Q');
-    // the next line is redundant given the one following it but ensures F3XA member is referenced in codebase for knip
-    expect(component.form.get('form_type')?.value).not.toBe(F3xFormTypes.F3XA);
     expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
     expect(coverageDateSpy).toHaveBeenCalled();
   });
@@ -77,7 +89,7 @@ describe('CreateF3XStep1Component: New', () => {
   it('should call create method on save when form is valid', async () => {
     const mockForm3X = new Form3X();
     mockForm3X.id = '999';
-    const createSpy = vi.spyOn(form3XService, 'create').mockResolvedValue(mockForm3X);
+    const createSpy = vi.spyOn(activeServiceInstance, 'create').mockResolvedValue(mockForm3X);
 
     component.form.patchValue({
       report_code: ReportCodes.Q2,
@@ -93,12 +105,11 @@ describe('CreateF3XStep1Component: New', () => {
   });
 
   it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
-    const createSpy = vi.spyOn(form3XService, 'create');
-    const updateSpy = vi.spyOn(form3XService, 'updateWithAllowedErrorCodes');
+    const createSpy = vi.spyOn(activeServiceInstance, 'create');
+    const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes');
 
     await fixture.whenStable();
     fixture.detectChanges();
-
     // now invalidate the form
     component.form.patchValue({ coverage_from_date: null });
     expect(component.form.valid).toBe(false);
@@ -113,7 +124,7 @@ describe('CreateF3XStep1Component: New', () => {
   });
 });
 
-describe('CreateF3XStep1Component: Edit', () => {
+describe('CreateSharedF3Component: Edit', () => {
   let messageService: MessageService;
   let getSpy: Mock;
   let messageSpy: Mock;
@@ -121,7 +132,7 @@ describe('CreateF3XStep1Component: Edit', () => {
   const mockReport = Form3X.fromJSON({
     id: mockReportId,
     filing_frequency: 'M',
-    report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
+    report_type_category: ReportTypeCategories.ELECTION_YEAR,
     report_code: ReportCodes.M4,
     coverage_from_date: '2024-04-05',
     coverage_through_date: '2024-04-30',
@@ -131,10 +142,10 @@ describe('CreateF3XStep1Component: Edit', () => {
     await setup({ reportId: mockReportId });
 
     messageService = TestBed.inject(MessageService);
-    getSpy = vi.spyOn(form3XService, 'get').mockResolvedValue(mockReport);
+    getSpy = vi.spyOn(activeServiceInstance, 'get').mockResolvedValue(mockReport);
     messageSpy = vi.spyOn(messageService, 'add');
 
-    fixture = TestBed.createComponent(CreateF3XStep1Component);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -145,14 +156,14 @@ describe('CreateF3XStep1Component: Edit', () => {
     fixture.detectChanges();
     expect(component.form.get('report_code')?.value).toBe(ReportCodes.M4);
     expect(component.form.get('filing_frequency')?.value).toBe('M');
-    const coverage_from_date: Date = component.form.get('coverage_from_date')!.value;
+    const coverage_from_date: Date = component.form.get('coverage_from_date')?.value;
     expect(coverage_from_date.getMonth()).toEqual(3); // April
     expect(coverage_from_date.getDate()).toEqual(5); // 5th
     expect(coverage_from_date.getFullYear()).toEqual(2024); // 2024
   });
 
   it('should call update method on save', async () => {
-    const updateSpy = vi.spyOn(form3XService, 'updateWithAllowedErrorCodes').mockResolvedValue(mockReport);
+    const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes').mockResolvedValue(mockReport);
     component.form.patchValue({ coverage_from_date: new Date('2024-06-01') });
     component.form.patchValue({ coverage_through_date: new Date('2024-07-01') });
     await component.submitForm();
@@ -166,7 +177,7 @@ describe('CreateF3XStep1Component: Edit', () => {
     it('should update reportCodes when filing frequency and category change', () => {
       component.form.patchValue({
         filing_frequency: 'M',
-        report_type_category: F3xReportTypeCategories.ELECTION_YEAR,
+        report_type_category: ReportTypeCategories.ELECTION_YEAR,
       });
       fixture.detectChanges();
       expect(component.reportCodes()).toContainEqual(ReportCodes.M2);
@@ -201,7 +212,7 @@ describe('Default Report Type Category Logic', () => {
   });
 
   const setupComponent = () => {
-    fixture = TestBed.createComponent(CreateF3XStep1Component);
+    fixture = TestBed.createComponent(CreateSharedF3Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   };
@@ -209,24 +220,24 @@ describe('Default Report Type Category Logic', () => {
   it('should be ELECTION_YEAR in an even year after January', () => {
     vi.setSystemTime(new Date(2024, 1, 1));
     setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.ELECTION_YEAR);
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
   });
 
   it('should be ELECTION_YEAR in an odd year during January', () => {
     vi.setSystemTime(new Date(2025, 0, 15));
     setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.ELECTION_YEAR);
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.ELECTION_YEAR);
   });
 
   it('should be NON_ELECTION_YEAR in an odd year after January', () => {
     vi.setSystemTime(new Date(2025, 2, 20));
     setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
   });
 
   it('should be NON_ELECTION_YEAR in an even year during January', () => {
     vi.setSystemTime(new Date(2024, 0, 10));
     setupComponent();
-    expect(component.defaultReportTypeCategory).toBe(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    expect(component.defaultReportTypeCategory).toBe(ReportTypeCategories.NON_ELECTION_YEAR);
   });
 });

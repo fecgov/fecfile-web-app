@@ -22,9 +22,8 @@ describe("Users: Validation and API failure states", () => {
   it('shows required inline validation when email is empty', () => {
     UsersPage.goToPage();
     UsersPage.openAddUserDialog();
-    UsersHelpers.emailInput().clear({ force: true }).should('have.value', '');
-    UsersHelpers.submitBtn().click();
-    UsersHelpers.submitBtn().should('be.visible');
+    UsersHelpers.emailInput().clear({ force: true }).blur().should('have.value', '');
+    UsersHelpers.submitBtn().should('be.disabled');
     cy.get('body')
       .find('.p-error')
       .first()
@@ -56,8 +55,7 @@ describe("Users: Validation and API failure states", () => {
 
     for (const badEmail of invalidEmails) {
       UsersHelpers.emailInput().clear({ force: true }).type(badEmail, { delay: 0 });
-      UsersHelpers.submitBtn().click();
-      UsersHelpers.submitBtn().should('be.visible');
+      UsersHelpers.submitBtn().should('be.disabled');
       findEmailError()
         .should('be.visible')
         .and('contain.text', 'This email is invalid');
@@ -87,7 +85,7 @@ describe("Users: Validation and API failure states", () => {
     const adminUser = uniqueUser({ role: Roles.COMMITTEE_ADMINISTRATOR });
     UsersHelpers.stubOnce('POST', '**/committee-members/add-member/**', { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
     UsersPage.openAddUserDialog();
-    UsersHelpers.emailInput().clear().type(adminUser.email).should('have.value', adminUser.email);
+    UsersPage.enterFormData(adminUser, false, '@dialog');
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
