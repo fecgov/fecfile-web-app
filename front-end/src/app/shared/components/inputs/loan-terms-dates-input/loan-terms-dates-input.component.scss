@@ -28,6 +28,10 @@
   z-index: 2;
 }
 
+.other-subtext {
+  font-family: var(--karla);
+}
+
 :host ::ng-deep {
   .field {
     margin: 0;
@@ -45,6 +49,7 @@
       & > label,
       > .span-label {
         margin: 0;
+        align-self: end;
       }
     }
   }
