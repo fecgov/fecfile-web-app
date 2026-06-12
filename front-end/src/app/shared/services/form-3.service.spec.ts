@@ -1,11 +1,12 @@
 import type { Mock, MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3Service } from './form-3.service';
 import { ApiService } from './api.service';
 import { Form3 } from '../models/reports/form-3.model';
 import { CommitteeAccount } from '../models/committee-account.model';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('Form3Service', () => {
   let service: Form3Service;
@@ -17,8 +18,13 @@ describe('Form3Service', () => {
       put: vi.fn().mockName('ApiService.put'),
     };
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Form3Service, { provide: ApiService, useValue: spy }, provideMockStore()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        Form3Service,
+        { provide: ApiService, useValue: spy },
+        provideMockStore(),
+      ],
     });
     service = TestBed.inject(Form3Service);
     apiService = TestBed.inject(ApiService) as MockedObject<ApiService>;
@@ -33,11 +39,12 @@ describe('Form3Service', () => {
     const mockMap = { Q1: 'Quarter 1' };
     apiService.get
       .mockReturnValueOnce(Promise.resolve(mockCoverageDates))
+      .mockReturnValueOnce(Promise.resolve([]))
       .mockReturnValueOnce(Promise.resolve(mockMap));
 
     const result = await service.getCoverageDates();
     expect(result.length).toBe(1);
-    expect(apiService.get).toHaveBeenCalledTimes(2);
+    expect(apiService.get).toHaveBeenCalledTimes(3);
   });
 
   it('should get future reports', async () => {
