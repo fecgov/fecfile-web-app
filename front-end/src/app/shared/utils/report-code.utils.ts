@@ -1,7 +1,7 @@
 import { DateUtils } from './date.utils';
 
 export type FilingFrequency = 'Q' | 'M';
-export type Form3Situation =
+type Form3Situation =
   | 'Form3_Quarterly_Election'
   | 'Form3_Quarterly_NonElection'
   | 'Form3X_Quarterly_Election'
@@ -83,7 +83,7 @@ export function getReportCodes(isElectionYear: boolean, filingFrequency: FilingF
   return SITUATION_REPORT_MAP[situationKey] || [];
 }
 
-export const SITUATION_REPORT_MAP: Record<Form3Situation, ReportCodes[]> = {
+const SITUATION_REPORT_MAP: Record<Form3Situation, ReportCodes[]> = {
   Form3_Quarterly_Election: [
     ReportCodes.Q1,
     ReportCodes.Q2,

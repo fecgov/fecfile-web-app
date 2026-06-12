@@ -14,12 +14,13 @@ export class BaseForm3Service<T extends BaseForm3> extends ReportService<T> {
   reportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
 
   public async getCoverageDates(): Promise<CoverageDates[]> {
-    const [response, reportCodeLabelMap] = await Promise.all([
-      this.apiService.get<CoverageDates[]>(`${this.apiEndpoint}/coverage_dates/`),
+    const [f3Response, f3xResponse, reportCodeLabelMap] = await Promise.all([
+      this.apiService.get<CoverageDates[]>('/reports/form-3/coverage_dates/'),
+      this.apiService.get<CoverageDates[]>('/reports/form-3x/coverage_dates/'),
       this.getReportCodeLabelMap(),
     ]);
-    return response.map((f3CoverageDate) =>
-      CoverageDates.fromJSON(f3CoverageDate, reportCodeLabelMap[f3CoverageDate.report_code!]),
+    return [...f3Response, ...f3xResponse].map((coverageDate) =>
+      CoverageDates.fromJSON(coverageDate, reportCodeLabelMap[coverageDate.report_code!]),
     );
   }
 
