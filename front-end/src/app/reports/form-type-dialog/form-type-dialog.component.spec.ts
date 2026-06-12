@@ -4,7 +4,7 @@ import { FormTypeDialogComponent } from './form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
 import { Form24 } from 'app/shared/models/reports/form-24.model';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
@@ -95,5 +95,11 @@ describe('FormTypeDialogComponent', () => {
 
     component.goToReportForm();
     expect(create).toHaveBeenCalled();
+  });
+
+  it('should filter form types', () => {
+    expect(component.eligibleReportTypes()).toEqual(new Set(testCommitteeAccount().eligible_report_types));
+    expect(component.filteredOptions()).not.toContain('F3');
+    expect(component.filteredOptions()).not.toContain('F24');
   });
 });

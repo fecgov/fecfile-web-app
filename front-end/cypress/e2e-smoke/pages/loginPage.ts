@@ -103,3 +103,11 @@ export function setCommitteeToPTY() {
   json.isPTY = true;
   localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
 }
+
+export function setCommitteeEligibleReportTypes(report_types: string[]){
+  const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
+  if (!fecfile_online_committeeAccount) return;
+  const json = JSON.parse(fecfile_online_committeeAccount);
+  json.eligible_report_types = report_types;
+  localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(json));
+}

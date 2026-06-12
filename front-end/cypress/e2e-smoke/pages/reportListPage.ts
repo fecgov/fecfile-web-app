@@ -70,7 +70,9 @@ export class ReportListPage {
     if (formType === 'F24') {
       cy.get(`[data-cy="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
     }
-    cy.get(`[data-cy="${formType}"]`).click();
+    if (formType != ''){
+      cy.get(`[data-cy="${formType}"]`).click();
+    }
     if (submit) {
       cy.contains('Start building report').click();
     }
