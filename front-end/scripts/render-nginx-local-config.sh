@@ -11,6 +11,7 @@ PORT="${PORT:-4200}"
 WATCH="${WATCH:-0}"
 API_URL="${API_URL:-http://localhost:8080}"
 APP_URL="${APP_URL:-http://localhost:$PORT}"
+CDN_STATIC_ASSET_CACHE_LENGTH_SECONDS="${CDN_STATIC_ASSET_CACHE_LENGTH_SECONDS:-1814400}"
 
 if [[ ! -f "$TEMPLATE_PATH" ]]; then
   echo "Nginx template not found at $TEMPLATE_PATH" >&2
@@ -30,6 +31,7 @@ sed \
   -e "s|{{port}}|$PORT|g" \
   -e "s|{{env \"FECFILE_APP_URL\"}}|$APP_URL|g" \
   -e "s|{{env \"FECFILE_API_URL\"}}|$CSP_API_ORIGIN|g" \
+  -e "s|{{env \"CDN_STATIC_ASSET_CACHE_LENGTH_SECONDS\"}}|$CDN_STATIC_ASSET_CACHE_LENGTH_SECONDS|g" \
   -e "s|root fecfile-web;|root /workspace/front-end/dist/fecfile-web;|g" \
   "$TEMPLATE_PATH" > "$NGINX_CONF_PATH"
 
