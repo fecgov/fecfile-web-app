@@ -163,7 +163,7 @@
                             "namedChunks": true
                         },
                         "development": {
-                          "optimization": true,
+                            "optimization": true,
                             "extractLicenses": false,
                             "sourceMap": true,
                             "namedChunks": true

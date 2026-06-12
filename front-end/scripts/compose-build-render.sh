@@ -48,7 +48,7 @@ if [[ "$LIKE_PROD" == "1" ]]; then
   ANGULAR_CONFIG_BACKUP="$(mktemp "$FRONTEND_DIR/.tmp/angular.json.backup.XXXXXX")"
   cp -p "$ANGULAR_CONFIG_PATH" "$ANGULAR_CONFIG_BACKUP"
 
-  perl -0pi -e 's|("with":\s*"src/environments/environment\.local\.ts"\s*\n\s*}\s*\n\s*],\s*\n)\s*"optimization":\s*true,\s*\n\s*"extractLicenses":\s*false,\s*\n\s*"sourceMap":\s*true,\s*\n\s*"namedChunks":\s*true|$1                            "outputHashing": "all",\n                            "optimization": true|s' "$ANGULAR_CONFIG_PATH"
+  perl -0pi -e 's|("with":\s*"src/environments/environment\.local\.ts"\s*\n\s*}\s*\n\s*],\s*\n)(\s*"optimization":\s*true)|$1                            "outputHashing": "all",\n$2|s' "$ANGULAR_CONFIG_PATH"
 
   if cmp -s "$ANGULAR_CONFIG_PATH" "$ANGULAR_CONFIG_BACKUP"; then
     echo "LIKE_PROD=1 was set, but local angular.json settings were not updated." >&2
