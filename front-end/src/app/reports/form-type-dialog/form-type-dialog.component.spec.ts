@@ -68,7 +68,7 @@ describe('FormTypeDialogComponent', () => {
       const navigateSpy = vi.spyOn(router, 'navigateByUrl');
       component.selectedType.set(ReportTypes.F3X);
       component.goToReportForm();
-      expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
+      expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create');
     });
   });
 

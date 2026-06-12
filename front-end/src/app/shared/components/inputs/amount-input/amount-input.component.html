@@ -11,8 +11,7 @@
     <div class="flex gap-20px pl-2">
       @if (templateMap['date2']) {
         <app-calendar
-          [fieldName]="templateMap['date2']"
-          [form]="form"
+          [formControlName]="templateMap['date2']"
           [formSubmitted]="formSubmitted"
           [label]="transactionType()?.date2Label || ''"
           requiredErrorMessage="At least ONE date field must be entered."
@@ -20,8 +19,7 @@
       }
 
       <app-calendar
-        [fieldName]="templateMap['date']"
-        [form]="form"
+        [formControlName]="templateMap['date']"
         [formSubmitted]="formSubmitted"
         [label]="transactionType()?.dateLabel || ''"
         [showErrors]="!templateMap['date2']"

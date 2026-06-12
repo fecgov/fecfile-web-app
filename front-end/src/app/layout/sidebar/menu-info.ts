@@ -2,6 +2,7 @@ import { Report, ReportStatus } from 'app/shared/models/reports/report.model';
 import { MenuItem } from 'primeng/api';
 
 export enum ReportSidebarSection {
+  'EDIT',
   'TRANSACTIONS',
   'REVIEW',
   'SUBMISSION',
@@ -9,11 +10,29 @@ export enum ReportSidebarSection {
 }
 
 export class MenuInfo {
-  static editReport(sidebarSection: ReportSidebarSection, report: Report, label = 'EDIT A REPORT'): MenuItem {
+  static editReport(
+    sidebarSection: ReportSidebarSection,
+    report: Report,
+    label = 'EDIT A REPORT',
+    disabled = false,
+  ): MenuItem {
     return {
       label,
       routerLink: [`/reports/${report.report_type.toLowerCase()}/edit/${report.id}`],
       expanded: sidebarSection === ReportSidebarSection.CREATE,
+      disabled,
+    };
+  }
+
+  static updateVersion(
+    sidebarSection: ReportSidebarSection,
+    report: Report,
+    label = 'Update version number',
+  ): MenuItem {
+    return {
+      label,
+      routerLink: [`/reports/${report.report_type.toLowerCase()}/update-version-number/${report.id}`],
+      expanded: sidebarSection === ReportSidebarSection.EDIT,
     };
   }
 

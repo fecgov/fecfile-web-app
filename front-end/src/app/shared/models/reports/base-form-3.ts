@@ -59,8 +59,14 @@ export abstract class BaseForm3 extends Report {
 
     // Add edit report item to menu if the report is in progress or submission failure
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
-      const editReportItem = MenuInfo.editReport(sidebarSection, this, 'EDIT REPORT DETAILS');
-      menuItems.unshift(editReportItem);
+      menuItems.unshift({
+        label: 'REPORT DETAILS',
+        expanded: sidebarSection === ReportSidebarSection.EDIT,
+        items: [
+          MenuInfo.editReport(sidebarSection, this, 'Edit report details'),
+          MenuInfo.updateVersion(sidebarSection, this),
+        ],
+      });
     }
     return menuItems;
   }

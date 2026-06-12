@@ -1,0 +1,64 @@
+<h1 class="page-title">Update version number</h1>
+<hr type="solid" />
+<section class="w-8 flex flex-column gap-3">
+  <p>Only update a version number if the original report or amendment is incorrect in FECfile+.</p>
+  <p>
+    To avoid filing errors, confirm this report's last amendment number (if applicable) and the original report's
+    efiling ID on your committee's profile page on FEC.gov. Filing reports out of sequence can prevent the filing from
+    processing when submitted.
+  </p>
+  <p>If you're unsure whether this is the right choice, contact your analyst.</p>
+</section>
+<form #form [formRoot]="versionForm" class="flex flex-column gap-4 my-5">
+  <fieldset class="horizontal-field">
+    <label for="current-number">
+      CURRENT VERSION OR<br />
+      AMENDMENT NUMBER
+    </label>
+    <input id="current-number" type="number" [formField]="versionForm.original" />
+  </fieldset>
+  <fieldset class="horizontal-field">
+    <div class="flex flex-column gap-2">
+      <label for="new-number"> NEW AMENDMENT </label>
+      <span class="font-italic karla text-sm">
+        Last amendment number + 1. Use 1<br />
+        if changing from original report. (ie.<br />
+        original=0, amendment 1=1)
+      </span>
+    </div>
+    <div class="flex flex-column gap-2">
+      <input id="new-number" type="number" [formField]="versionForm.amendment" (keydown)="blockInvalidKeys($event)" />
+      @if (versionForm.amendment().touched() && versionForm.amendment().invalid()) {
+        <small class="p-error">{{ versionForm.amendment().errors()[0].message }}</small>
+      }
+    </div>
+  </fieldset>
+  <div class="flex gap-20px">
+    @if (isF24()) {
+      <app-calendar
+        [formSubmitted]="formSubmitted"
+        [formField]="versionForm.previousSubmissionDate"
+        label="PREVIOUS REPORT<br/>SUBMISSION DATE"
+      />
+    }
+    <fieldset>
+      <label for="e-filing-id" class="mb-2">
+        ORIGINAL REPORT<br />
+        E-FILING ID
+      </label>
+      <input id="e-filing-id" type="text" [formField]="versionForm.eFilingId" />
+      @if (versionForm.eFilingId().touched() && versionForm.eFilingId().invalid()) {
+        <small class="p-error">{{ versionForm.eFilingId().errors()[0].message }}</small>
+      }
+    </fieldset>
+  </div>
+  <hr type="solid" class="m-0" />
+  <div class="flex justify-content-between">
+    <div>
+      <button pButton pRipple class="p-button-secondary">Cancel</button>
+    </div>
+    <div>
+      <button pButton pRipple appSingleClick type="submit" class="p-button-primary">Update</button>
+    </div>
+  </div>
+</form>

@@ -11,6 +11,7 @@ import { Form99 } from '../models/reports/form-99.model';
 import { Report, ReportTypes } from '../models/reports/report.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
+import { VersionData } from 'app/reports/shared/update-version-number/version-data';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON<T extends Report>(json: any): T {
@@ -142,5 +143,10 @@ export class ReportService<T extends Report> implements TableListService<Report>
       zip: report.zip ?? committeeAccount?.zip,
     });
     return this.update(payload, ['committee_name', 'street_1', 'street_2', 'city', 'state', 'zip']);
+  }
+
+  public async updateVersionNumber(report: T, payload: VersionData): Promise<T> {
+    const response = await this.apiService.post(`/reports/${report.id}/update-version-number/`, payload);
+    return getReportFromJSON<T>(response);
   }
 }

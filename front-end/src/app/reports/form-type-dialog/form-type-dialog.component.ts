@@ -27,9 +27,7 @@ export class FormTypeDialogComponent {
   readonly selectedType = signal<ReportTypes | undefined>(undefined);
   readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
   readonly formType = computed(() => this.getFormType(this.selectedType()));
-  readonly isSubmitDisabled = computed(() =>
-    this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
-  );
+  readonly isSubmitDisabled = computed(() => (this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()));
 
   readonly f24 = viewChild.required(CreateF24Component);
 
@@ -39,8 +37,8 @@ export class FormTypeDialogComponent {
     try {
       if (this.isF24()) {
         await this.f24().createF24();
-      } else if (this.formType()?.createRoute) {
-        this.router.navigateByUrl(this.formType()?.createRoute ?? '');
+      } else {
+        this.router.navigateByUrl(`/reports/${type.toLowerCase()}/create`);
       }
       this.selectedType.set(undefined);
       this.dialogVisible.set(false);

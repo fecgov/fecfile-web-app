@@ -1,60 +1,60 @@
 @if (formSubmitted || (control?.invalid && (control?.dirty || (control?.touched && control?.updateOn === 'blur')))) {
-  @if (control?.hasError('required')) {
+  @if (control?.errors?.['required']) {
     <small class="p-error">{{ requiredErrorMessage }}</small>
   }
-  @if (control?.hasError('fecIdMustBeUnique')) {
+  @if (control?.errors?.['fecIdMustBeUnique']) {
     <small class="p-error">{{ uniqueFecIdMessage }}</small>
   }
-  @if (control?.hasError('requiredTrue')) {
+  @if (control?.errors?.['requiredTrue']) {
     <small class="p-error">{{ requiredTrueErrorMessage }}</small>
   }
-  @if (control?.hasError('minlength')) {
+  @if (control?.errors?.['minlength']) {
     <small class="p-error">{{ minLengthErrorMessage }}</small>
   }
-  @if (!control?.hasError('max') && control?.hasError('maxlength')) {
+  @if (!control?.errors?.['max'] && control?.errors?.['maxlength']) {
     <small class="p-error">{{ maxLengthErrorMessage }}</small>
   }
-  @if (control?.hasError('min')) {
+  @if (control?.errors?.['min']) {
     <small class="p-error">{{ minErrorMessage }}</small>
   }
-  @if (control?.hasError('max')) {
+  @if (control?.errors?.['max']) {
     <small class="p-error">{{ maxErrorMessage }}</small>
   }
-  @if (control?.hasError('exclusiveMax')) {
+  @if (control?.errors?.['exclusiveMax']) {
     <small class="p-error">{{ exclusiveMaxErrorMessage }}</small>
   }
-  @if (control?.hasError('exclusiveMin')) {
+  @if (control?.errors?.['exclusiveMin']) {
     <small class="p-error">{{ exclusiveMinErrorMessage }}</small>
   }
-  @if (control?.hasError('invaliddate')) {
+  @if (control?.errors?.['invaliddate']) {
     <small class="p-error">{{ invalidDateErrorMessage }}</small>
   }
-  @if (control?.hasError('noDateProvided')) {
+  @if (control?.errors?.['noDateProvided']) {
     <small class="p-error">{{ noDateProvidedErrorMessage }}</small>
   }
-  @if (control?.hasError('noCorrespondingForm3X')) {
+  @if (control?.errors?.['noCorrespondingForm3X']) {
     <small class="p-error">{{ noCorrespondingForm3XErrorMessage }}</small>
   }
-  @if (!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')) {
+  @if (!control?.errors?.['maxlength'] && !control?.errors?.['required'] && control?.errors?.['email']) {
     <small class="p-error">{{ emailErrorMessage }}</small>
   }
-  @if (control?.hasError('isAfter')) {
+  @if (control?.errors?.['isAfter']) {
     <small class="p-error">{{ isAfterMessage }}</small>
   }
-  @if (control?.hasError('duplicateName')) {
+  @if (control?.errors?.['duplicateName']) {
     <small class="p-error">{{ duplicateNameErrorMessage }}</small>
   }
   @if (
-    !control?.hasError('required') &&
-    !control?.hasError('minlength') &&
-    !control?.hasError('maxlength') &&
-    !control?.hasError('min') &&
-    !control?.hasError('max') &&
-    !control?.hasError('exclusiveMax') &&
-    !control?.hasError('exclusiveMin') &&
-    !control?.hasError('invaliddate') &&
-    !control?.hasError('isAfter') &&
-    control?.hasError('pattern')
+    !control?.errors?.['required'] &&
+    !control?.errors?.['minlength'] &&
+    !control?.errors?.['maxlength'] &&
+    !control?.errors?.['min'] &&
+    !control?.errors?.['max'] &&
+    !control?.errors?.['exclusiveMax'] &&
+    !control?.errors?.['exclusiveMin'] &&
+    !control?.errors?.['invaliddate'] &&
+    !control?.errors?.['isAfter'] &&
+    control?.errors?.['pattern']
   ) {
     <small class="p-error">{{ patternErrorMessage }}</small>
   }

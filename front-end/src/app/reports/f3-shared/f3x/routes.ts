@@ -12,6 +12,7 @@ import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guar
 import { CreateSharedF3Component } from '../create-shared-f3/create-shared-f3.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
+import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-number/update-version-number.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -22,22 +23,13 @@ import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 
 export const F3X_ROUTES: Route[] = [
   {
-    path: 'create/step1',
+    path: 'create',
     title: 'Create a report',
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
-    runGuardsAndResolvers: 'always',
     data: {
       sidebar: null,
     },
-  },
-  {
-    path: 'create/step1/:reportId',
-    title: 'Create a report',
-    component: CreateSharedF3Component,
-    providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
-    canActivate: [ReportIsEditableGuard],
-    runGuardsAndResolvers: 'always',
   },
   {
     path: 'edit/:reportId',
@@ -45,7 +37,15 @@ export const F3X_ROUTES: Route[] = [
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3XService }],
     resolve: { report: ReportResolver },
-    data: { sidebarSection: ReportSidebarSection.CREATE },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
+    runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'update-version-number/:reportId',
+    title: 'Update Version Number',
+    component: UpdateVersionNumberComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
   },
   {
