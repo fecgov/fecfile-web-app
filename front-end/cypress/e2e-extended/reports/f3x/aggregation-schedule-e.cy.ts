@@ -34,8 +34,7 @@ describe('Extended F3X Schedule E Aggregation', () => {
 
         F3XAggregationHelpers.openDisbursement(secondId);
         ContactLookup.getCandidate(result.candidateSenate, [], [], '#contact_2_lookup');
-        cy.blurActiveField();
-        F3XAggregationHelpers.assertCalendarYtdField('$50.00');
+        F3XAggregationHelpers.assertCalendarYtdAfterBlur('$50.00');
         F3XAggregationHelpers.clickSave();
 
         F3XAggregationHelpers.assertCalendarYtdFieldOnOpen(firstId, '$100.00');
@@ -72,9 +71,9 @@ describe('Extended F3X Schedule E Aggregation', () => {
         F3XAggregationHelpers.openDisbursement(secondId);
         PageUtils.selectDropdownSetValue('[inputid="electionType"]', 'G');
         F3XAggregationHelpers.clearAndType('#electionYear', `${currentYear}`);
-        cy.blurActiveField();
-        F3XAggregationHelpers.assertCalendarYtdField('$40.00');
+        F3XAggregationHelpers.assertCalendarYtdAfterBlur('$40.00');
         F3XAggregationHelpers.clickSave();
+        F3XAggregationHelpers.goToReport(result.report);
 
         F3XAggregationHelpers.assertCalendarYtdFieldOnOpen(firstId, '$80.00');
         F3XAggregationHelpers.clickSave();

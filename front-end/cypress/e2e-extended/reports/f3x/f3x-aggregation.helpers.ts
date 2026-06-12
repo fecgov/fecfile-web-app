@@ -600,7 +600,9 @@ export class F3XAggregationHelpers {
 
   static rowLinkById(tableRoot: string, transactionId: string): Cypress.Chainable<JQuery<HTMLElement>> {
     this.assertTransactionId(transactionId, 'rowLinkById');
-    return cy.get(`${tableRoot} a[href*="/list/${transactionId}"]`).first().should('exist');
+    const timeout = Number(Cypress.config('responseTimeout'));
+    cy.get(tableRoot, { timeout }).should('exist');
+    return cy.get(`${tableRoot} a[href*="/list/${transactionId}"]`, { timeout }).first().should('exist');
   }
 
   static rowById(tableRoot: string, transactionId: string): Cypress.Chainable<JQuery<HTMLTableRowElement>> {
@@ -882,9 +884,26 @@ export class F3XAggregationHelpers {
     this.assertAggregateField(expected);
   }
 
-  static assertCalendarYtdFieldOnOpen(transactionId: string, expected: string): void {
+  static assertCalendarYtdFieldOnOpen(
+    transactionId: string,
+    expectedFormatted: string,
+  ): Cypress.Chainable<void> {
+    this.assertTransactionId(transactionId, 'assertCalendarYtdFieldOnOpen');
+    const alias = `CalendarYtdAggregate_${transactionId}`;
+    cy.intercept(
+      { method: 'GET', pathname: /\/api\/v1\/transactions\/previous\/election\/$/, query: { transaction_id: transactionId }, times: 1 },
+    ).as(alias);
     this.openDisbursement(transactionId);
-    this.assertCalendarYtdField(expected);
+    return cy.wait(`@${alias}`).then(() => {
+      return cy.get('#calendar_ytd').should('have.value', expectedFormatted);
+    }) as unknown as Cypress.Chainable<void>;
+  }
+
+  static assertCalendarYtdAfterBlur(expectedFormatted: string): Cypress.Chainable<void> {
+    const responseTimeout = Number(Cypress.config('responseTimeout'));
+    cy.blurActiveField();
+    cy.waitForNetworkIdle(1000);
+    return cy.get('#calendar_ytd', { timeout: responseTimeout }).should('have.value', expectedFormatted) as unknown as Cypress.Chainable<void>;
   }
 
   static assertScheduleEAggregateFieldOnOpen(transactionId: string, expected: string): void {
