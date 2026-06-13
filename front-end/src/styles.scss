@@ -951,46 +951,54 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 .app-tooltip {
   --p-tooltip-gutter: 0.5rem !important;
   --p-tooltip-max-width: 300px !important;
-}
-.app-tooltip .p-tooltip-text {
-  border: 2px solid #112e51;
-  padding: 15px;
-  color: #112e51;
-  text-align: left;
-}
-.app-tooltip .p-tooltip-arrow {
-  content: '';
-  margin: inherit;
+  .p-tooltip-text {
+    border: 2px solid #112e51;
+    padding: 15px;
+    color: #112e51;
+    text-align: left;
+  }
+
+  .p-tooltip-arrow {
+    content: '';
+    margin: inherit;
+    &::after {
+      border: inherit;
+      content: '';
+      position: relative;
+      margin: inherit;
+    }
+  }
 }
 
-.app-tooltip .p-tooltip-arrow::after {
-  border: inherit;
-  content: '';
-  position: relative;
-  margin: inherit;
+.p-tooltip-top {
+  .p-tooltip-arrow {
+    border-top-color: #112e51 !important;
+    &::after {
+      border-top-color: white;
+      left: -8px;
+      bottom: 3px;
+    }
+  }
 }
 
-.app-tooltip-top .p-tooltip-arrow {
-  border-top-color: #112e51 !important;
-}
-.app-tooltip-top .p-tooltip-arrow::after {
-  border-top-color: white;
-  left: -8px;
-  bottom: 3px;
-}
-
-.app-tooltip-bottom .p-tooltip-arrow {
-  border-bottom-color: #112e51 !important;
-}
-.app-tooltip-bottom .p-tooltip-arrow::after {
-  border-bottom-color: white;
-  left: -8px;
-  top: -16px;
+.p-tooltip-bottom {
+  .p-tooltip-arrow {
+    border-bottom-color: #112e51 !important;
+    &::after {
+      border-bottom-color: white;
+      left: -8px;
+      top: -16px;
+    }
+  }
 }
 
-.app-tooltip-left .p-tooltip-arrow {
-  left: 265px !important;
+.app-tooltip-left {
+  .p-tooltip-arrow {
+    left: 265px !important;
+  }
 }
-.app-tooltip-right .p-tooltip-arrow {
-  left: 25px !important;
+.app-tooltip-right {
+  .p-tooltip-arrow {
+    left: 25px !important;
+  }
 }

@@ -39,7 +39,7 @@ describe('TooltipDirective', () => {
     expect(tooltipDirective.content()).toBe('Test appTooltip content');
     expect(tooltipDirective.vposition()).toBe('top');
     expect(tooltipDirective.hposition()).toBe('right');
-    expect(tooltipDirective.tooltipStyleClass()).toBe('app-tooltip app-tooltip-top app-tooltip-right');
+    expect(tooltipDirective.tooltipStyleClass()).toBe('app-tooltip app-tooltip-right');
     expect(tooltipDirective.positionLeft()).toBe(118);
   });
 });
