@@ -35,9 +35,19 @@ export class UpdateVersionNumberComponent {
     (schema) => {
       disabled(schema.original);
       required(schema.amendment, { message: 'This is a required field' });
-      min(schema.amendment, 1, { message: 'Invalid number' });
+      min(schema.amendment, 0, { message: 'Invalid number' });
       pattern(schema.amendment, /^\d+$/, { message: 'Invalid number' });
-      required(schema.eFilingId, { message: 'This is a required field' });
+      validate(schema.amendment, ({ value, valueOf }) => {
+        if (valueOf(schema.original) === value()) {
+          return { kind: 'mismatch', message: 'Amendment number must be different from current version.' };
+        }
+        return null;
+      });
+      disabled(schema.eFilingId, ({ valueOf }) => valueOf(schema.amendment) === '0');
+      required(schema.eFilingId, {
+        when: ({ valueOf }) => valueOf(schema.amendment) !== '0',
+        message: 'This is a required field',
+      });
       required(schema.previousSubmissionDate, {
         when: () => this.isF24(),
         message: 'This is a required field',
