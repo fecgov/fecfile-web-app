@@ -5,7 +5,7 @@ import { isTransactionTypeDisabledForReport, DISABLED_TRANSACTION_TYPES } from '
 describe('transaction readiness utils', () => {
   beforeEach(() => {
     vi.spyOn(DISABLED_TRANSACTION_TYPES[ReportTypes.F3]!, 'has').mockImplementation(
-      (type) => type === ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      (type) => type === ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
     );
   });
 

@@ -18,6 +18,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TransactionListService } from '../services/transaction-list.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { testF3 } from '../utils/unit-test.utils';
+import { ReportTypes } from '../models/reports/report.model';
+import { DISABLED_TRANSACTION_TYPES } from '../utils/transaction-readiness.utils';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -421,7 +423,10 @@ describe('TransactionResolver', () => {
       ).resolves.not.toThrow();
     });
 
-    it('should block new transaction creation for disabled F3 transaction types', async () => {
+    it('should block new transaction creation for disabled transaction type', async () => {
+      vi.spyOn(DISABLED_TRANSACTION_TYPES[ReportTypes.F3]!, 'has').mockImplementation(
+        (type) => type === ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      );
       mockStore.overrideSelector(selectActiveReport, testF3());
       mockStore.refreshState();
 
