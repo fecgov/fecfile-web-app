@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, Signal, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -11,11 +11,9 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import {
   electionReportCodes,
-  getCoverageDatesFunction,
-  monthlyElectionYearReportCodes,
-  monthlyNonElectionYearReportCodes,
-  quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes,
+  FilingFrequency,
+  getCoverageDates,
+  getReportCodes,
   ReportCodes,
 } from 'app/shared/utils/report-code.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -110,7 +108,9 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   // OBSERVABLES TO SIGNALS
   readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
-  readonly filingFrequency = toSignal(this.form.controls['filing_frequency'].valueChanges);
+  readonly filingFrequency: Signal<FilingFrequency> = toSignal(this.form.controls['filing_frequency'].valueChanges, {
+    initialValue: 'Q',
+  });
   readonly filingFrequencyLabel = computed(() => (this.filingFrequency() === 'M' ? 'MONTHLY' : 'QUARTERLY'));
   readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
 
@@ -162,12 +162,10 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   private readonly coverages = computed(() => {
     const report = this.report();
-    const coverageDatesFunction = getCoverageDatesFunction(this.reportCode());
     if (this.form.pristine && report) {
       return [report.coverageDates['coverage_from_date'], report.coverageDates['coverage_through_date']];
     }
-    if (!coverageDatesFunction) return undefined;
-    return coverageDatesFunction(this.year, this.isElectionYear(), this.filingFrequency() ?? 'Q');
+    return getCoverageDates(this.reportCode(), this.year, this.isElectionYear(), this.filingFrequency());
   });
 
   readonly disabledReportCodes = computed(() => {
@@ -180,14 +178,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
     );
   });
 
-  readonly reportCodes = computed(() => {
-    const isMonthly = this.filingFrequency() === 'M';
-    if (this.isElectionYear()) {
-      return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
-    } else {
-      return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
-    }
-  });
+  readonly reportCodes = computed(() => getReportCodes(this.isElectionYear(), this.filingFrequency(), this.isF3X()));
 
   readonly numReportCodeColumns = signal(3);
   readonly reportCodesColumns = computed(() => {
