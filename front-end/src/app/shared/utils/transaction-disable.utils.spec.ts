@@ -1,8 +1,8 @@
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { isTransactionTypeDisabledForReport, DISABLED_TRANSACTION_TYPES } from './transaction-readiness.utils';
+import { isTransactionTypeDisabledForReport, DISABLED_TRANSACTION_TYPES } from './transaction-disable.utils';
 
-describe('transaction readiness utils', () => {
+describe('transaction disable utils', () => {
   beforeEach(() => {
     vi.spyOn(DISABLED_TRANSACTION_TYPES[ReportTypes.F3]!, 'has').mockImplementation(
       (type) => type === ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,

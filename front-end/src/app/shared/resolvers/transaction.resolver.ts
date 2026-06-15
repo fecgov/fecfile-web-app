@@ -16,7 +16,7 @@ import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/tr
 import { TransactionListService } from '../services/transaction-list.service';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { isTransactionTypeDisabledForReport } from '../utils/transaction-readiness.utils';
+import { isTransactionTypeDisabledForReport } from '../utils/transaction-disable.utils';
 
 @Injectable({
   providedIn: 'root',

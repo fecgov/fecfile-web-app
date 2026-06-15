@@ -6,7 +6,7 @@ import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.mo
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
 
-// Remove transaction types from this list as each report type becomes ready.
+// Add transaction types per report type to disable them.
 export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<TransactionTypes>>> = {
   [ReportTypes.F3]: new Set<TransactionTypes>([
     /*** RECEIPTS **********************************************/

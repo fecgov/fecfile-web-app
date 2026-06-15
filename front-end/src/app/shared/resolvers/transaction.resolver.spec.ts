@@ -19,7 +19,7 @@ import { TransactionListService } from '../services/transaction-list.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { testF3 } from '../utils/unit-test.utils';
 import { ReportTypes } from '../models/reports/report.model';
-import { DISABLED_TRANSACTION_TYPES } from '../utils/transaction-readiness.utils';
+import { DISABLED_TRANSACTION_TYPES } from '../utils/transaction-disable.utils';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;

@@ -26,7 +26,7 @@ import { environment } from '../../../../environments/environment';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
 import { scrollToTop } from 'app/shared/utils/form.utils';
-import { isTransactionTypeDisabledForReport } from 'app/shared/utils/transaction-readiness.utils';
+import { isTransactionTypeDisabledForReport } from 'app/shared/utils/transaction-disable.utils';
 
 @Component({
   selector: 'app-transaction-type-picker',
