@@ -1,5 +1,5 @@
 export interface VersionData {
-  original: number | string;
+  original: string;
   amendment: string;
   eFilingId: string;
   previousSubmissionDate: Date | string | null;

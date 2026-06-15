@@ -34,7 +34,7 @@ describe('UpdateVersionNumberComponent', () => {
   });
 
   it('should sync original version from store selector on initialization', () => {
-    expect(component.versionForm.original().value()).toBe(0);
+    expect(component.versionForm.original().value()).toBe('0');
   });
 
   it('should disable previousSubmissionDate if report is NOT F24', () => {
@@ -51,11 +51,12 @@ describe('UpdateVersionNumberComponent', () => {
     expect(component.versionForm.previousSubmissionDate().disabled()).toBe(false);
   });
 
-  it('should validate amendment constraints (required, min, pattern)', () => {
+  it('should validate amendment constraints (required, min, pattern, mismatch)', () => {
     const amendmentField = component.versionForm.amendment;
+    const originalValue = component.versionForm.original().value() + '';
     expect(amendmentField().valid()).toBe(false);
 
-    amendmentField().value.set('0');
+    amendmentField().value.set('-1');
     expect(amendmentField().valid()).toBe(false);
 
     amendmentField().value.set('1.5');
@@ -63,6 +64,10 @@ describe('UpdateVersionNumberComponent', () => {
 
     amendmentField().value.set('1');
     expect(amendmentField().valid()).toBe(true);
+
+    console.log(originalValue);
+    amendmentField().value.set(originalValue);
+    expect(amendmentField().valid()).toBe(false);
   });
 
   it('should catch invalid date string formats on previousSubmissionDate', () => {
@@ -102,7 +107,7 @@ describe('UpdateVersionNumberComponent', () => {
     await fixture.whenStable();
 
     expect(updateSpy).toHaveBeenCalledWith(report, {
-      original: 0,
+      original: '0',
       amendment: '3',
       eFilingId: 'FEC-123456',
       previousSubmissionDate: null,

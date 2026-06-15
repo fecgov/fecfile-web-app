@@ -89,6 +89,7 @@ export function testCommitteeAccount(): CommitteeAccount {
     treasurer_zip: '33310',
     website: 'WWW.UNITEDSTATESPOLITICALACTIONCOMMITTEESDIRECTORY.COM',
     zip: '33310',
+    eligible_report_types: ['F3X', 'F99', 'F1M'],
   });
 }
 

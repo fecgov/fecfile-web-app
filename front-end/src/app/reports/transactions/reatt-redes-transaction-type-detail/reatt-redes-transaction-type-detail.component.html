@@ -1,6 +1,6 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
 @if (transactionType?.subTitle) {
-  <div>{{ transactionType?.subTitle }}</div>
+  <div class="transaction-type-subtitle">{{ transactionType?.subTitle }}</div>
 }
 @if (!isEditable()) {
   <h4 class="read-only-tag subtitle">READ ONLY</h4>

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
-import { disabled, form, FormField, FormRoot, min, pattern, required, validate } from '@angular/forms/signals';
+import { disabled, form, FormField, FormRoot, pattern, required, validate } from '@angular/forms/signals';
 import { Store } from '@ngrx/store';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -35,7 +35,6 @@ export class UpdateVersionNumberComponent {
     (schema) => {
       disabled(schema.original);
       required(schema.amendment, { message: 'This is a required field' });
-      min(schema.amendment, 0, { message: 'Invalid number' });
       pattern(schema.amendment, /^\d+$/, { message: 'Invalid number' });
       validate(schema.amendment, ({ value, valueOf }) => {
         if (valueOf(schema.original) === value()) {
@@ -114,7 +113,7 @@ export class UpdateVersionNumberComponent {
   constructor() {
     effect(() => {
       const report = this.report();
-      this.versionForm.original().value.set(report.report_version ?? 0);
+      this.versionForm.original().value.set(report.report_version ?? '0');
     });
   }
 
