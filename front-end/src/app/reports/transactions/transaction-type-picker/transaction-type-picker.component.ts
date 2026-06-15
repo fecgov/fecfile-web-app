@@ -26,6 +26,7 @@ import { environment } from '../../../../environments/environment';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
 import { scrollToTop } from 'app/shared/utils/form.utils';
+import { isTransactionTypeDisabledForReport } from 'app/shared/utils/transaction-readiness.utils';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -67,10 +68,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly active = model<number>(-1);
-
-  readonly isF3X = computed(() => this.report().report_type === ReportTypes.F3X);
   readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
-  readonly disableTransactionLinks = computed(() => this.isF3());
 
   readonly transactionGroups: Signal<Array<{ label: string; transactionTypes: Set<TransactionTypes> }>> = computed(
     () => CategoryPicker.get(this.category()) ?? [],
@@ -153,7 +151,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   });
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {
-    return this.disableTransactionLinks() || !getTransactionTypeClass(transactionTypeIdentifier);
+    return (
+      isTransactionTypeDisabledForReport(this.report().report_type, transactionTypeIdentifier) ||
+      !getTransactionTypeClass(transactionTypeIdentifier)
+    );
   }
 
   showTransaction(transactionTypeIdentifier: string): boolean {

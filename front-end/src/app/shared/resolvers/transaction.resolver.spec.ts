@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
-import { provideMockStore } from '@ngrx/store/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Contact, ContactTypes } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
@@ -16,10 +16,13 @@ import { TransactionResolver } from './transaction.resolver';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TransactionListService } from '../services/transaction-list.service';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { testF3 } from '../utils/unit-test.utils';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
   let testContactService: ContactService;
+  let mockStore: MockStore;
 
   const testBedConfig = {
     providers: [
@@ -59,6 +62,7 @@ describe('TransactionResolver', () => {
     TestBed.configureTestingModule(testBedConfig);
     resolver = TestBed.inject(TransactionResolver);
     testContactService = TestBed.inject(ContactService);
+    mockStore = TestBed.inject(MockStore);
     vi.restoreAllMocks();
   });
 
@@ -413,6 +417,19 @@ describe('TransactionResolver', () => {
           .then((transaction: Transaction | undefined) => {
             if (transaction?.children)
               expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
+          }),
+      ).resolves.not.toThrow();
+    });
+
+    it('should block new transaction creation for disabled F3 transaction types', async () => {
+      mockStore.overrideSelector(selectActiveReport, testF3());
+      mockStore.refreshState();
+
+      await expect(
+        resolver
+          .resolveNewTransaction('10', ScheduleATransactionTypes.INDIVIDUAL_RECEIPT)
+          .then((transaction: Transaction | undefined) => {
+            expect(transaction).toBeUndefined();
           }),
       ).resolves.not.toThrow();
     });

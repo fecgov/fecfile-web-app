@@ -14,6 +14,9 @@ import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { TransactionListService } from '../services/transaction-list.service';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { isTransactionTypeDisabledForReport } from '../utils/transaction-readiness.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +24,8 @@ import { TransactionListService } from '../services/transaction-list.service';
 export class TransactionResolver {
   readonly service = inject(TransactionService);
   readonly listService = inject(TransactionListService);
+  readonly store = inject(Store);
+  readonly report = this.store.selectSignal(selectActiveReport);
 
   async resolve(route: ActivatedRouteSnapshot): Promise<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -38,6 +43,9 @@ export class TransactionResolver {
     }
     // New
     if (reportId && transactionTypeName) {
+      if (isTransactionTypeDisabledForReport(this.report().report_type, transactionTypeName)) {
+        return undefined;
+      }
       if (parentTransactionId) {
         const parentTransaction = await this.service.get(String(parentTransactionId));
         return this.getNewChildTransaction(parentTransaction, transactionTypeName);
@@ -101,6 +109,10 @@ export class TransactionResolver {
   }
 
   async resolveNewTransaction(reportId: string, transactionTypeName: string): Promise<Transaction | undefined> {
+    if (isTransactionTypeDisabledForReport(this.report().report_type, transactionTypeName)) {
+      return undefined;
+    }
+
     const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_ids = [String(reportId)];
