@@ -67,14 +67,14 @@ BUILD_LOG_PATH="$(mktemp "$FRONTEND_DIR/.tmp/build.output.XXXXXX.log")"
 if npm run "$BUILD_SCRIPT" 2>&1 | tee "$BUILD_LOG_PATH"; then
   :
 else
-  BUILD_EXIT_CODE=$?
-  if grep -Eq 'Specifically the "@esbuild/[^"]+" package is present but this platform' "$BUILD_LOG_PATH"; then
-    echo "Detected esbuild platform mismatch. Running npm ci and then retrying build..."
+  # BUILD_EXIT_CODE=$?
+  # if grep -Eq 'Specifically the "@esbuild/[^"]+" package is present but this platform' "$BUILD_LOG_PATH"; then
+  #   echo "Detected esbuild platform mismatch. Running npm ci and then retrying build..."
     npm ci
     npm run "$BUILD_SCRIPT"
-  else
-    exit "$BUILD_EXIT_CODE"
-  fi
+  # else
+  #   exit "$BUILD_EXIT_CODE"
+  # fi
 fi
 
 if [[ ! -f "$FRONTEND_DIR/dist/fecfile-web/index.html" ]]; then
