@@ -25,14 +25,31 @@ RELOAD_TRIGGER_FILE="${RELOAD_TRIGGER_FILE:-$FRONTEND_DIR/.tmp/browser-sync.relo
 ANGULAR_CONFIG_PATH="${ANGULAR_CONFIG_PATH:-$FRONTEND_DIR/angular.json}"
 ANGULAR_CONFIG_BACKUP=""
 
+# get user:group of host frontend to maintain ownership of mounted volumes
+HOST_UID=$(stat -c "%u" "$FRONTEND_DIR" 2>/dev/null || echo 0)
+HOST_GID=$(stat -c "%g" "$FRONTEND_DIR" 2>/dev/null || echo 0)
+
 restore_angular_config() {
   if [[ -n "$ANGULAR_CONFIG_BACKUP" && -f "$ANGULAR_CONFIG_BACKUP" ]]; then
     mv "$ANGULAR_CONFIG_BACKUP" "$ANGULAR_CONFIG_PATH"
   fi
 }
 
+cleanup() {
+  restore_angular_config
+  if [[ "$HOST_UID" != "0" ]]; then
+    # chown dist and node_modules to host user just in case we did a fresh install
+    chown -R $HOST_UID:$HOST_GID "$FRONTEND_DIR/dist" "$FRONTEND_DIR/node_modules" 2>/dev/null || true
+  fi
+}
+
+trap cleanup EXIT
+
 mkdir -p "$FRONTEND_DIR/.tmp"
-trap restore_angular_config EXIT
+if [[ "$HOST_UID" != "0" ]]; then
+  # immediately chown .tmp to host user
+  chown -R $HOST_UID:$HOST_GID "$FRONTEND_DIR/.tmp" 2>/dev/null || true
+fi
 
 if [[ "$MODE" == "$PREPARE_MODE" ]]; then
   : > "$RELOAD_TRIGGER_FILE"
@@ -67,14 +84,9 @@ BUILD_LOG_PATH="$(mktemp "$FRONTEND_DIR/.tmp/build.output.XXXXXX.log")"
 if npm run "$BUILD_SCRIPT" 2>&1 | tee "$BUILD_LOG_PATH"; then
   :
 else
-  # BUILD_EXIT_CODE=$?
-  # if grep -Eq 'Specifically the "@esbuild/[^"]+" package is present but this platform' "$BUILD_LOG_PATH"; then
-  #   echo "Detected esbuild platform mismatch. Running npm ci and then retrying build..."
-    npm ci
-    npm run "$BUILD_SCRIPT"
-  # else
-  #   exit "$BUILD_EXIT_CODE"
-  # fi
+  echo "Initial build failed. Running npm ci and then retrying build..."
+  npm ci
+  npm run "$BUILD_SCRIPT"
 fi
 
 if [[ ! -f "$FRONTEND_DIR/dist/fecfile-web/index.html" ]]; then
