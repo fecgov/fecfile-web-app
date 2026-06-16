@@ -39,7 +39,7 @@ if [[ "$WATCH" == "1" ]]; then
   connect_src_replacement="connect-src 'self' $CSP_API_ORIGIN http://localhost:3001 ws://localhost:3001;"
   browser_sync_script='sub_filter '\''</body>'\'' '\''<script nonce="$nonce" async src="http://localhost:'"$PORT"'/browser-sync/browser-sync-client.js"></script></body>'\'';'
   browser_sync_script=${browser_sync_script/http:\/\/localhost:${PORT}\/browser-sync\/browser-sync-client.js/\/browser-sync\/browser-sync-client.js}
-  browser_sync_proxy_location='location /browser-sync/ { proxy_pass http://browser-sync:3000/browser-sync/; proxy_http_version 1.1; proxy_set_header Host $host; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection "upgrade"; proxy_intercept_errors on; error_page 502 503 504 =204 /browser-sync-empty; }'
+  browser_sync_proxy_location='location /browser-sync/ { resolver 127.0.0.11 valid=30s; set $bs_upstream http://browser-sync:3000; proxy_pass $bs_upstream/browser-sync/; proxy_http_version 1.1; proxy_set_header Host $host; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection "upgrade"; proxy_intercept_errors on; error_page 502 503 504 =204 /browser-sync-empty; }'
   browser_sync_empty_location='location = /browser-sync-empty { access_log off; return 204; }'
 
   sed -i \
