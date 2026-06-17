@@ -10,6 +10,7 @@ export const baseEnvironment = {
   showForm3: true,
   showSchedF: true,
   enableImport: true,
+  manualReportVersion: true,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {
     enabled: true,

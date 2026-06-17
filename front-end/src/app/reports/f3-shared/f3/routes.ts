@@ -13,6 +13,7 @@ import { ReportSummaryComponent } from './report-summary/report-summary.componen
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-number/update-version-number.component';
+import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -47,6 +48,7 @@ export const F3_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
+    canActivate: [featureFlagGuard('manualReportVersion')],
   },
   {
     path: 'summary/:reportId',
