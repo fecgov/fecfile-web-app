@@ -1,31 +1,32 @@
 import { Component, computed, effect, inject, model, Signal, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { DestroyerComponent } from 'app/shared/components/destroyer.component';
+import { Form3 } from 'app/shared/models';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
-import { LabelList } from 'app/shared/utils/label.utils';
-import {
-  PAC_ONLY,
-  PTY_ONLY,
-  TransactionTypeUtils,
-  getTransactionTypeClass,
-} from 'app/shared/utils/transaction-type.utils';
-import { DestroyerComponent } from 'app/shared/components/destroyer.component';
 import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
+import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
+import { TransactionGroupTypes, TransactionTypes } from 'app/shared/models/transaction.model';
+import { scrollToTop } from 'app/shared/utils/form.utils';
+import { LabelList } from 'app/shared/utils/label.utils';
+import {
+  getTransactionTypeClass,
+  PAC_ONLY,
+  PTY_ONLY,
+  TransactionTypeUtils,
+} from 'app/shared/utils/transaction-type.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
-import { LabelPipe } from '../../../shared/pipes/label.pipe';
 import { environment } from '../../../../environments/environment';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
-import { scrollToTop } from 'app/shared/utils/form.utils';
+import { LabelPipe } from '../../../shared/pipes/label.pipe';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -70,7 +71,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
 
   readonly isF3X = computed(() => this.report().report_type === ReportTypes.F3X);
   readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
-  readonly disableTransactionLinks = computed(() => this.isF3());
 
   readonly transactionGroups: Signal<Array<{ label: string; transactionTypes: Set<TransactionTypes> }>> = computed(
     () => CategoryPicker.get(this.category()) ?? [],
@@ -153,7 +153,11 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   });
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {
-    return this.disableTransactionLinks() || !getTransactionTypeClass(transactionTypeIdentifier);
+    const transactionTypeClass = getTransactionTypeClass(transactionTypeIdentifier);
+    return (
+      !transactionTypeClass ||
+      (this.isF3() && !Form3.activeTransactionTypes.includes(transactionTypeIdentifier))
+    );
   }
 
   showTransaction(transactionTypeIdentifier: string): boolean {

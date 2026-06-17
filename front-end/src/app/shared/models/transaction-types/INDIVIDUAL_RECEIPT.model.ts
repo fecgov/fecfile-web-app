@@ -1,13 +1,16 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { ELECTION_FIELDS, INDIVIDUAL, INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { INDIVIDUAL, INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_RECEIPT extends SchATransactionType {
-  formFields = INDIVIDUAL_FORM_FIELDS;
+  formFields = [
+    ...INDIVIDUAL_FORM_FIELDS,
+    ...ELECTION_FIELDS,
+  ];
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;

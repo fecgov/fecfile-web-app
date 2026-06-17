@@ -249,6 +249,12 @@ export class Form3X extends BaseForm3 {
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
   ];
 
+  @Exclude()
+  activeTransactionTypes = [
+    // RECEIPTS
+    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+  ];
+
   get formLabel() {
     return 'Form 3X';
   }
