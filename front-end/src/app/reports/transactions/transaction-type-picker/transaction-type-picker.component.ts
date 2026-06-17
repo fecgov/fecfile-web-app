@@ -4,7 +4,6 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
-import { Form3 } from 'app/shared/models';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
@@ -16,6 +15,7 @@ import { Categories, CategoryPicker } from 'app/shared/models/transaction-group'
 import { TransactionGroupTypes, TransactionTypes } from 'app/shared/models/transaction.model';
 import { scrollToTop } from 'app/shared/utils/form.utils';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { isTransactionTypeDisabledForReport } from 'app/shared/utils/transaction-disable.utils';
 import {
   getTransactionTypeClass,
   PAC_ONLY,
@@ -68,8 +68,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly active = model<number>(-1);
-
-  readonly isF3X = computed(() => this.report().report_type === ReportTypes.F3X);
   readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
 
   readonly transactionGroups: Signal<Array<{ label: string; transactionTypes: Set<TransactionTypes> }>> = computed(
@@ -153,8 +151,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   });
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {
-    const transactionTypeClass = getTransactionTypeClass(transactionTypeIdentifier);
-    return !transactionTypeClass || (this.isF3() && !Form3.activeTransactionTypes.includes(transactionTypeIdentifier));
+    return (
+      isTransactionTypeDisabledForReport(this.report().report_type, transactionTypeIdentifier) ||
+      !getTransactionTypeClass(transactionTypeIdentifier)
+    );
   }
 
   showTransaction(transactionTypeIdentifier: string): boolean {
