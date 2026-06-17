@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, Signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import {
@@ -66,9 +66,16 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
     initialValue: '',
   });
   readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
-  readonly showFilingFrequency = computed(() => {
-    return this.documentType() in textCodesWithFilingFrequencies;
-  });
+  readonly showFilingFrequency = computed(() => this.documentType() in textCodesWithFilingFrequencies);
+
+  constructor() {
+    super();
+    effect(() => {
+      if (!this.showFilingFrequency()) {
+        this.form.controls['filing_frequency'].updateValueAndValidity();
+      }
+    });
+  }
 
   getReportPayload(): Form99 {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
