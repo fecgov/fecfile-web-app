@@ -1,13 +1,13 @@
 import { Exclude, plainToInstance } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { ReportTypes } from './report.model';
-import { BaseForm3 } from './base-form-3';
-import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { ScheduleFTransactionTypes } from '../schf-transaction.model';
-import { ScheduleETransactionTypes } from '../sche-transaction.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
-import { ScheduleDTransactionTypes } from '../schd-transaction.model';
+import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { ScheduleCTransactionTypes } from '../schc-transaction.model';
+import { ScheduleDTransactionTypes } from '../schd-transaction.model';
+import { ScheduleETransactionTypes } from '../sche-transaction.model';
+import { ScheduleFTransactionTypes } from '../schf-transaction.model';
+import { BaseForm3 } from './base-form-3';
+import { ReportTypes } from './report.model';
 
 export const F3xFormTypes = {
   F3XN: 'F3XN',
@@ -247,12 +247,6 @@ export class Form3X extends BaseForm3 {
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
-  ];
-
-  @Exclude()
-  activeTransactionTypes = [
-    // RECEIPTS
-    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
   ];
 
   get formLabel() {

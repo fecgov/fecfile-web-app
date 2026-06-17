@@ -159,11 +159,6 @@ export class Form3 extends BaseForm3 {
     ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID,
   ];
 
-  static activeTransactionTypes: string[] = [
-    // RECEIPTS
-    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-  ];
-
   get formLabel() {
     return 'Form 3';
   }
