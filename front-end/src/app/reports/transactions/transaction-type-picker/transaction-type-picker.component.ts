@@ -154,10 +154,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
 
   isTransactionDisabled(transactionTypeIdentifier: string): boolean {
     const transactionTypeClass = getTransactionTypeClass(transactionTypeIdentifier);
-    return (
-      !transactionTypeClass ||
-      (this.isF3() && !Form3.activeTransactionTypes.includes(transactionTypeIdentifier))
-    );
+    return !transactionTypeClass || (this.isF3() && !Form3.activeTransactionTypes.includes(transactionTypeIdentifier));
   }
 
   showTransaction(transactionTypeIdentifier: string): boolean {

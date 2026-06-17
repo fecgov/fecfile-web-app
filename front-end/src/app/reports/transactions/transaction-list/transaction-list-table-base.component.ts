@@ -5,15 +5,15 @@ import { TableAction } from 'app/shared/components/table-actions-button/table-ac
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
 import {
+  isPulledForwardLoan,
   Report,
   ReportTypes,
-  ScheduleIds,
-  ScheduleCTransactionTypes,
-  isPulledForwardLoan,
-  ScheduleDTransactionTypes,
-  ScheduleC1TransactionTypes,
   ScheduleATransactionTypes,
   ScheduleBTransactionTypes,
+  ScheduleC1TransactionTypes,
+  ScheduleCTransactionTypes,
+  ScheduleDTransactionTypes,
+  ScheduleIds,
 } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
@@ -187,7 +187,7 @@ export abstract class TransactionListTableBaseComponent
       this.createRedesignation.bind(this),
       (transaction: TransactionListRecord) =>
         transaction.transactionType.scheduleId === ScheduleIds.B &&
-        transaction.transactionType.hasElectionInformation() &&
+        transaction.transactionType.hasElectionInformation(this.report().report_type) &&
         !transaction.transactionType.negativeAmountValueOnly &&
         !transaction.parent_transaction_id &&
         !ReattRedesUtils.isReattRedes(transaction, [
