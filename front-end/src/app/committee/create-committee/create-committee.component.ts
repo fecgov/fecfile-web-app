@@ -1,25 +1,25 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
+import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
+import { UsersService } from 'app/shared/services/users.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import {
   setCommitteeAccountDetailsAction,
   unsetCommitteeAccountDetailsAction,
 } from 'app/store/committee-account.actions';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { InputGroup } from 'primeng/inputgroup';
-import { ReactiveFormsModule } from '@angular/forms';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ButtonModule } from 'primeng/button';
-import { UsersService } from 'app/shared/services/users.service';
-import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
-import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
-import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputGroup } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-create-committee',
@@ -88,7 +88,10 @@ export class CreateCommitteeComponent {
         detail: `Committee Account ${committeeAccount.committee_id} Created`,
         life: 3000,
       });
-      await this.committeeAccountService.activateCommittee(committeeAccount.id);
+      await this.committeeAccountService.activateCommittee(
+        committeeAccount.id,
+        this.selectedCommittee()?.filing_frequency,
+      );
       this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
       const userLoginData = await this.userService.getCurrentUser();
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
