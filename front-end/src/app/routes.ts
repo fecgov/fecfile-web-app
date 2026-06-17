@@ -22,7 +22,7 @@ export const ROUTES: Route[] = [
           backgroundStyle: BackgroundStyles.SECURITY_NOTICE,
           showHeader: false,
           showFeedbackButton: false,
-          showUpperFooter: false,
+          showCommitteeBanner: false,
         },
       },
       {
