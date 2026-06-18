@@ -38,7 +38,7 @@ export class UpdateVersionNumberComponent {
       pattern(schema.amendment, /^\d+$/, { message: 'Invalid number' });
       validate(schema.amendment, ({ value, valueOf }) => {
         if (valueOf(schema.original) === value()) {
-          return { kind: 'mismatch', message: 'Amendment number must be different from current version.' };
+          return { kind: 'mismatch', message: 'Invalid number' };
         }
         return null;
       });
