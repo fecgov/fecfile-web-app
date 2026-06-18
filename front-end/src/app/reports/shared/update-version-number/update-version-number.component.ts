@@ -47,8 +47,9 @@ export class UpdateVersionNumberComponent {
         when: ({ valueOf }) => valueOf(schema.amendment) !== '0',
         message: 'This is a required field',
       });
+      disabled(schema.previousSubmissionDate, ({ valueOf }) => valueOf(schema.amendment) === '0');
       required(schema.previousSubmissionDate, {
-        when: () => this.isF24(),
+        when: ({ valueOf }) => this.isF24() && valueOf(schema.amendment) !== '0',
         message: 'This is a required field',
       });
       validate(schema.previousSubmissionDate, ({ value }) => {
