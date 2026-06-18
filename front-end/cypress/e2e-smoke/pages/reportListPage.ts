@@ -133,10 +133,10 @@ export class ReportListPage {
     const fx = () => {
       cy.visit(`/reports/transactions/report/${reportId}/list`);
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
-      cy.contains('Transactions in this report').should('be.visible');
     };
 
     ReportListPage.interceptTransactions(reportId, fx, includeReceipts, includeDisbursements, includeLoans);
+    cy.contains('Transactions in this report').should('be.visible');
   }
   
 

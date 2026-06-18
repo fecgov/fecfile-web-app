@@ -889,14 +889,17 @@ export class F3XAggregationHelpers {
     expectedFormatted: string,
   ): Cypress.Chainable<void> {
     this.assertTransactionId(transactionId, 'assertCalendarYtdFieldOnOpen');
-    const alias = `CalendarYtdAggregate_${transactionId}`;
-    cy.intercept(
-      { method: 'GET', pathname: /\/api\/v1\/transactions\/previous\/election\/$/, query: { transaction_id: transactionId }, times: 1 },
-    ).as(alias);
+    const txAlias = `GetTransaction_${transactionId}`;
+    cy.intercept({ method: 'GET', pathname: `/api/v1/transactions/${transactionId}/` }).as(txAlias);
+
     this.openDisbursement(transactionId);
-    return cy.wait(`@${alias}`).then(() => {
-      return cy.get('#calendar_ytd').should('have.value', expectedFormatted);
-    }) as unknown as Cypress.Chainable<void>;
+    
+    cy.wait(`@${txAlias}`);
+    
+    const responseTimeout = Number(Cypress.config('responseTimeout'));
+    cy.waitForNetworkIdle('**/api/v1/transactions/previous/election/**', 1000, { timeout: responseTimeout });
+    
+    return cy.get('#calendar_ytd', { timeout: responseTimeout }).should('have.value', expectedFormatted) as unknown as Cypress.Chainable<void>;
   }
 
   static assertCalendarYtdAfterBlur(expectedFormatted: string): Cypress.Chainable<void> {

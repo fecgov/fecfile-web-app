@@ -59,6 +59,8 @@ describe('Extended F3X Cross-Committee Aggregation Isolation', () => {
         F3XAggregationHelpers.goToReport(primaryReportId);
         F3XAggregationHelpers.assertScheduleEAggregateFieldOnOpen(primaryTxnId, '$100.00');
         F3XAggregationHelpers.clickSave();
+        // Wait for the save redirect to finish before navigating away
+        cy.contains('Transactions in this report').should('be.visible');
       })
       .then(() => {
         F3XAggregationHelpers.switchCommittee(F3XAggregationHelpers.committeeSecondaryId);
