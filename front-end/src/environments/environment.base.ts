@@ -5,7 +5,6 @@ export const baseEnvironment = {
   userCanSetFilingFrequency: true,
   disableLogin: false,
   fecSpec: 8.5,
-  IncludeMsaAndMsx: true,
   showGlossary: false,
   showForm3: true,
   showSchedF: true,
