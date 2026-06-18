@@ -12,6 +12,7 @@ import { Report, ReportTypes } from '../models/reports/report.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
 import { VersionData } from 'app/reports/shared/update-version-number/version-data';
+import { DateUtils } from '../utils/date.utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON<T extends Report>(json: any): T {
@@ -146,6 +147,9 @@ export class ReportService<T extends Report> implements TableListService<Report>
   }
 
   public async updateVersionNumber(report: T, payload: VersionData): Promise<T> {
+    if (payload.previousSubmissionDate instanceof Date) {
+      payload.previousSubmissionDate = DateUtils.convertDateToFecFormat(payload.previousSubmissionDate);
+    }
     const response = await this.apiService.post(`/reports/${report.id}/update-version-number/`, payload);
     return getReportFromJSON<T>(response);
   }

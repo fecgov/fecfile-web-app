@@ -89,6 +89,7 @@ export class UpdateVersionNumberComponent {
               detail: 'Amendment version updated',
               life: 3000,
             });
+            this.formSubmitted = false;
             return;
           } catch {
             this.messageService.add({
