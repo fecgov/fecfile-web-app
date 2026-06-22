@@ -8,6 +8,7 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { Form24EditComponent } from './form-24-edit/form-24-edit.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -17,6 +18,14 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 export const F24_ROUTES: Route[] = [
+  {
+    path: 'edit/:reportId',
+    title: 'Edit a report',
+    component: Form24EditComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.CREATE },
+    runGuardsAndResolvers: 'always',
+  },
   {
     path: 'report/:reportId/transactions/select/independent-expenditures',
     component: TransactionIndependentExpenditurePickerComponent,
