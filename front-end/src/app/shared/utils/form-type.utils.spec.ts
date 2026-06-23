@@ -1,14 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { getFormTypes } from './form-type.utils';
-import { FormType } from './form-type.utils';
+import { FormType, getFormTypes } from './form-type.utils';
 import { ReportTypes } from '../models';
 
 describe('FormTypeUtils', () => {
   describe('FormType', () => {
     it('should carry properties', () => {
-      const f1FormType = new FormType('F1', 'Form 1', 'Statement of organization', '/');
+      const f1FormType = new FormType('F1', 'Form 1', 'Statement of organization');
       expect(f1FormType.label).toBe('Form 1');
-      expect(f1FormType.createRoute).toEqual('/');
     });
   });
 

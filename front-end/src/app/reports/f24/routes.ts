@@ -8,6 +8,8 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { UpdateVersionNumberComponent } from '../shared/update-version-number/update-version-number.component';
+import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -17,6 +19,15 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 export const F24_ROUTES: Route[] = [
+  {
+    path: 'update-version-number/:reportId',
+    title: 'Update Version Number',
+    component: UpdateVersionNumberComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
+    runGuardsAndResolvers: 'always',
+    canActivate: [featureFlagGuard('manualReportVersion')],
+  },
   {
     path: 'report/:reportId/transactions/select/independent-expenditures',
     component: TransactionIndependentExpenditurePickerComponent,
