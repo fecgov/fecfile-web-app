@@ -4,6 +4,7 @@ import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import { environment } from 'environments/environment';
 
 export type Type24_48 = '24' | '48';
 
@@ -60,6 +61,7 @@ export class Form24 extends Report {
 
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
       const items = [MenuInfo.editReport(sidebarSection, this, 'Edit report details')];
+      if (environment.manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
       menuItems.unshift({
         label: 'REPORT DETAILS',
         expanded: sidebarSection === ReportSidebarSection.EDIT,

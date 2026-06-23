@@ -9,6 +9,8 @@ import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-lev
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { Form24EditComponent } from './form-24-edit/form-24-edit.component';
+import { UpdateVersionNumberComponent } from '../shared/update-version-number/update-version-number.component';
+import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -25,6 +27,15 @@ export const F24_ROUTES: Route[] = [
     resolve: { report: ReportResolver },
     data: { sidebarSection: ReportSidebarSection.CREATE },
     runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'update-version-number/:reportId',
+    title: 'Update Version Number',
+    component: UpdateVersionNumberComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
+    runGuardsAndResolvers: 'always',
+    canActivate: [featureFlagGuard('manualReportVersion')],
   },
   {
     path: 'report/:reportId/transactions/select/independent-expenditures',

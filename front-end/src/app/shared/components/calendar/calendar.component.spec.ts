@@ -8,10 +8,14 @@ import { ScheduleATransactionTypes } from 'app/shared/models';
 import { Component, inject, viewChild } from '@angular/core';
 
 @Component({
-  imports: [CalendarComponent],
+  imports: [CalendarComponent, ReactiveFormsModule],
   standalone: true,
   providers: [FormBuilder],
-  template: `<app-calendar [form]="form" [formSubmitted]="formSubmitted" [fieldName]="fieldName" [label]="label" />`,
+  template: `
+    <form [formGroup]="form" [class.ng-submitted]="formSubmitted">
+      <app-calendar [formSubmitted]="formSubmitted" [formControlName]="fieldName" [label]="label" />
+    </form>
+  `,
 })
 class TestHostComponent {
   readonly fb = inject(FormBuilder);
