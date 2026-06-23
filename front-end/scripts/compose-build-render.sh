@@ -73,14 +73,24 @@ if [[ "$LIKE_PROD" == "1" ]]; then
   fi
 fi
 
-if [[ "$MODE" == "$PREPARE_MODE" ]]; then
-  echo "Building frontend using npm run $BUILD_SCRIPT ..."
-else
-  echo "Change detected. Rebuilding..."
-fi
-
 cd "$FRONTEND_DIR"
 BUILD_LOG_PATH="$(mktemp "$FRONTEND_DIR/.tmp/build.output.XXXXXX.log")"
+
+if [[ "$MODE" == "$PREPARE_MODE" ]]; then
+  echo "Building frontend using npm run $BUILD_SCRIPT ..."
+
+  if npm run "$BUILD_SCRIPT" 2>&1 | tee "$BUILD_LOG_PATH"; then
+    :
+  else
+    echo "Initial build failed. Running npm ci and then retrying build..."
+    npm ci
+    npm run "$BUILD_SCRIPT"
+  fi
+else
+  echo "Change detected. Rebuilding..."
+  npm run "$BUILD_SCRIPT"
+fi
+
 if npm run "$BUILD_SCRIPT" 2>&1 | tee "$BUILD_LOG_PATH"; then
   :
 else
