@@ -45,9 +45,11 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
   override showCalendarYTD = true;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  override generatePurposeDescription(transaction: Transaction): string {
-    return 'Payroll: See Below';
+  override generatePurposeDescription(transaction: SchETransaction): string {
+    if (transaction.children && transaction.children.length > 0 && transaction.children.some(child => child.itemized === true)) {
+      return 'Payroll Memo: See Below';
+    }
+    return 'Payroll memo entries do not meet itemization threshold.';
   }
 
   getNewTransaction() {
