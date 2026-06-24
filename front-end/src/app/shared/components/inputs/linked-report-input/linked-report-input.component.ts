@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
@@ -10,6 +10,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { Form3X } from 'app/shared/models';
 
 export const LinkedReportTooltipText =
   'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +
@@ -32,7 +33,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   readonly userTouchedValues = signal(false);
   readonly tooltipText = LinkedReportTooltipText;
 
-  readonly committeeF3xReports = derivedAsync(() => this.form3XService.getAllReports(), { initialValue: [] });
+  readonly committeeF3xReports = signal<Form3X[]>([]);
 
   // the form3X that is associated with the transaction on load
   private readonly initialForm3X = derivedAsync(async () => {
@@ -54,15 +55,21 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     if (report && !this.userTouchedValues()) {
       return report;
     }
-    const date = disbursementDate ?? disseminationDate;
-    if (date) {
-      for (const report of this.committeeF3xReports()) {
-        if (report.coverage_from_date && report.coverage_through_date) {
-          if (date >= report.coverage_from_date && date <= report.coverage_through_date) {
-            return report;
-          }
-        }
-      }
+
+    const candidateDates = [disbursementDate, disseminationDate].filter((date): date is Date => !!date);
+    const reports = this.committeeF3xReports();
+    for (const date of candidateDates) {
+      const matchingReport = reports.find((report) => {
+        return (
+          report.report_status === ReportStatus.IN_PROGRESS &&
+          !!report.coverage_from_date &&
+          !!report.coverage_through_date &&
+          date >= report.coverage_from_date &&
+          date <= report.coverage_through_date
+        );
+      });
+
+      if (matchingReport) return matchingReport;
     }
 
     this.form.get('linkedF3x')?.updateValueAndValidity();
@@ -107,9 +114,17 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
       (this.form.get(this.templateMap['date']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
     const date2Control =
       (this.form.get(this.templateMap['date2']) as SubscriptionFormControl) ?? new SubscriptionFormControl();
-    linkedF3xControl.addValidators(
-      buildCorrespondingForm3XValidator(this.form, this.templateMap['date'], this.templateMap['date2']),
-    );
+    this.form3XService.getAllReports().then((reports) => {
+      this.committeeF3xReports.set(reports);
+      linkedF3xControl.addValidators(
+        buildCorrespondingForm3XValidator(
+          this.form,
+          this.templateMap['date'],
+          this.templateMap['date2'],
+          this.committeeF3xReports(),
+        ),
+      );
+    });
 
     this.disbursementDate.set(dateControl.value);
     this.disseminationDate.set(date2Control.value);

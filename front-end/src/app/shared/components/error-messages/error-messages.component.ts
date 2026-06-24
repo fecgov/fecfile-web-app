@@ -183,6 +183,9 @@ export class ErrorMessagesComponent implements OnInit {
     return 'There is no Form 3X with corresponding coverage dates currently in progress. Create a new Form 3X to save this transaction.';
   }
 
+  noInprogressForm3XErrorMessage =
+    'There are no in progress Form 3X reports with corresponding dates. Amend or create a new Form 3X to save this transaction.';
+
   ngOnInit(): void {
     if (!this.control) {
       this.control = this.form?.get(this.fieldName) as SubscriptionFormControl;

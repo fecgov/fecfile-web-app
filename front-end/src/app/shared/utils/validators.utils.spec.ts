@@ -15,6 +15,8 @@ import { SchATransaction } from '../models/scha-transaction.model';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { TestBed } from '@angular/core/testing';
 import { CommitteeMember } from '../models/committee-member.model';
+import { testActiveReport } from './unit-test.utils';
+import { ReportStatus } from '../models';
 
 describe('ValidatorsUtils', () => {
   describe('emailValidator', () => {
@@ -126,16 +128,27 @@ describe('ValidatorsUtils', () => {
       const form = new FormGroup({
         date1: new FormControl('2023-01-01'),
       });
-      const validator = buildCorrespondingForm3XValidator(form, 'date1', 'date2');
+      const validator = buildCorrespondingForm3XValidator(form, 'date1', 'date2', []);
       const control = new FormControl(null);
       expect(validator(control)).toEqual({ noCorrespondingForm3X: true });
+    });
+
+    it('should return error if no in progress form 3x', () => {
+      const form = new FormGroup({
+        date1: new FormControl(new Date('2022-05-26')),
+      });
+      const f3x = testActiveReport();
+      f3x.report_status = ReportStatus.SUBMIT_SUCCESS;
+      const validator = buildCorrespondingForm3XValidator(form, 'date1', 'date2', [f3x]);
+      const control = new FormControl(null);
+      expect(validator(control)).toEqual({ noInprogressForm3X: true });
     });
 
     it('should return null if corresponding form 3x exists', () => {
       const form = new FormGroup({
         date1: new FormControl('2023-01-01'),
       });
-      const validator = buildCorrespondingForm3XValidator(form, 'date1', 'date2');
+      const validator = buildCorrespondingForm3XValidator(form, 'date1', 'date2', []);
       const control = new FormControl('some-value');
       expect(validator(control)).toBeNull();
     });

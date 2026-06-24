@@ -6,6 +6,7 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { DateUtils } from './date.utils';
+import { Form3X } from '../models/reports/form-3x.model';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;
@@ -116,7 +117,12 @@ function getCoverageOverlapError(collision: CoverageDates): ValidationErrors {
   return { invaliddate: { msg: message } };
 }
 
-export function buildCorrespondingForm3XValidator(form: FormGroup, dateField: string, date2Field: string): ValidatorFn {
+export function buildCorrespondingForm3XValidator(
+  form: FormGroup,
+  dateField: string,
+  date2Field: string,
+  reports: Form3X[],
+): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const date = form.get(dateField)?.value;
     const date2 = form.get(date2Field)?.value;
@@ -125,9 +131,21 @@ export function buildCorrespondingForm3XValidator(form: FormGroup, dateField: st
         noDateProvided: true,
       };
     } else if (!control.value) {
-      return {
-        noCorrespondingForm3X: true,
-      };
+      const candidateDates = [date, date2].filter((d): d is Date => !!d);
+      const hasMatchingReportButWrongStatus = candidateDates.some((candDate) =>
+        reports.some(
+          (report) =>
+            !!report.coverage_from_date &&
+            !!report.coverage_through_date &&
+            candDate >= report.coverage_from_date &&
+            candDate <= report.coverage_through_date,
+        ),
+      );
+      return hasMatchingReportButWrongStatus
+        ? { noInprogressForm3X: true }
+        : {
+            noCorrespondingForm3X: true,
+          };
     }
 
     return null;
