@@ -3271,6 +3271,10 @@ input {
   padding: 0;
 }
 
+.p-disabled.p-panelmenu-item {
+  background: transparent !important;
+}
+
 .p-panelmenu-item-link,
 .p-panelmenu-header-label {
   color: var(--p-primary-contrast-color);

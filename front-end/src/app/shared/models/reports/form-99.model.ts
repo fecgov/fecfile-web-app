@@ -1,6 +1,5 @@
 import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { plainToInstance, Transform } from 'class-transformer';
-import { environment } from 'environments/environment';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
 import { MenuItem } from 'primeng/api';
 import { BaseModel } from '../base.model';
@@ -13,9 +12,9 @@ export enum F99FormTypes {
 export const TextCodes = {
   MST: 'Miscellaneous Electronic Submission to the FEC',
   MSM: 'Filing Frequency Change Notice',
-  ...(environment.IncludeMsaAndMsx && { MSX: 'Loan Forgiveness' }),
+  MSX: 'Loan Forgiveness',
   MSW: 'C-1/Loan Agreement',
-  ...(environment.IncludeMsaAndMsx && { MSA: 'Debt Settlement Plan' }),
+  MSA: 'Debt Settlement Plan',
   MSI: 'Disavowal Response',
   MSR: 'Form 3L Filing Frequency Change Notice',
 } as const;

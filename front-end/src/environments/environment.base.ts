@@ -5,11 +5,11 @@ export const baseEnvironment = {
   userCanSetFilingFrequency: true,
   disableLogin: false,
   fecSpec: 8.5,
-  IncludeMsaAndMsx: true,
   showGlossary: false,
   showForm3: true,
   showSchedF: true,
   enableImport: true,
+  manualReportVersion: true,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {
     enabled: true,

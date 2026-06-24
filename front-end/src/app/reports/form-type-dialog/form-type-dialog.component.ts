@@ -43,9 +43,7 @@ export class FormTypeDialogComponent {
     }
     return new Set(eligible_report_types);
   });
-  readonly isSubmitDisabled = computed(() =>
-    this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()?.createRoute,
-  );
+  readonly isSubmitDisabled = computed(() => (this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()));
 
   readonly f24 = viewChild.required(CreateF24Component);
 
@@ -55,8 +53,8 @@ export class FormTypeDialogComponent {
     try {
       if (this.isF24()) {
         await this.f24().createF24();
-      } else if (this.formType()?.createRoute) {
-        this.router.navigateByUrl(this.formType()?.createRoute ?? '');
+      } else {
+        this.router.navigateByUrl(`/reports/${type.toLowerCase()}/create`);
       }
       this.selectedType.set(undefined);
       this.dialogVisible.set(false);

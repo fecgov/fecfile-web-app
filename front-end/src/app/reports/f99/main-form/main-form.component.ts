@@ -67,12 +67,20 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   });
   readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
   readonly showFilingFrequency = computed(() => this.documentType() in textCodesWithFilingFrequencies);
+  private pageIsLoaded = false;
 
   constructor() {
     super();
     effect(() => {
-      if (!this.showFilingFrequency()) {
-        this.form.controls['filing_frequency'].updateValueAndValidity();
+      this.documentType();
+      /**
+       * Reset the filing frequency field when the document type changes, but only after the initial load.
+       * On load we want the filing frequency from the data.
+       */
+      if (this.pageIsLoaded) {
+        this.form.controls['filing_frequency'].reset();
+      } else {
+        this.pageIsLoaded = true;
       }
     });
   }
@@ -82,11 +90,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   }
 
   override async submit(jump: 'continue' | void) {
-    const filingFrequency = this.form.get('filing_frequency');
-    if (filingFrequency) {
-      this.form.get('filing_frequency')?.updateValueAndValidity();
-      this.form.updateValueAndValidity();
-    }
     await super.submit(jump);
   }
 }

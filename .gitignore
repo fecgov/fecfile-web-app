@@ -21,6 +21,7 @@ local_settings.py
 /dist
 /tmp
 /out-tsc
+front-end/.tmp
 
 # dependencies
 */node_modules
@@ -66,8 +67,6 @@ testem.log
 *.bower-cache
 *.bower-registry
 *.bower-tmp
-
-
 
 # System Files
 .DS_Store
