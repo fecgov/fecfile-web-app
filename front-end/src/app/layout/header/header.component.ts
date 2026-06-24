@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, HostListener, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './header-links/header-links.component';
 import { HeaderStyles } from './header-styles';
@@ -15,6 +15,13 @@ export class HeaderComponent {
   readonly layoutService = inject(LayoutService);
   readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   readonly headerStyle = input(HeaderStyles.DEFAULT);
+
+  isCompact = false;
+
+  @HostListener('window:scroll')
+  onScroll() {
+    this.isCompact = window.scrollY > 30;
+  }
 
   toggleSidebar() {
     this.layoutService.showSidebar.update((v) => !v);
