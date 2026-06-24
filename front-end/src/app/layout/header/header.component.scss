@@ -2,21 +2,32 @@
   height: 48px;
 }
 
+nav.compact .seal-and-title {
+  height: 32px;
+}
+
 a {
   border: none;
 }
 
 nav {
   background-color: white !important;
-  height: var(--header-height);
   border-bottom: 2px solid #e8e8e8;
+
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  height: var(--header-height);
+  width: 100%;
+
   padding-left: 32px;
   padding-right: 32px;
-  z-index: 999;
-  position: fixed;
-  top: var(--header-top);
   transition: top 0.3s ease-in-out;
   overflow: hidden;
+}
+
+nav.compact {
+  height: 54px;
 }
 
 .seal-link {
