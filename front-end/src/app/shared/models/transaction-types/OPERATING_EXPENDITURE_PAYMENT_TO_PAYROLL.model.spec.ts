@@ -21,6 +21,8 @@ describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     const txn = transactionType.getNewTransaction();
-    expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll memo entries do not meet itemization threshold.');
+    expect(transactionType.generatePurposeDescription(txn)).toBe(
+      'Payroll memo entries do not meet itemization threshold.',
+    );
   });
 });

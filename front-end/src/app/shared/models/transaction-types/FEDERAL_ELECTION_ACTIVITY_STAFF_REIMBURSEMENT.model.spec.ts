@@ -23,6 +23,8 @@ describe('FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT', () => {
 
   it('#generatePurposeDescription() should be the correct value', () => {
     const txn = transactionType.getNewTransaction();
-    expect(transactionType.generatePurposeDescription(txn)).toBe('Reimbursement memo entries do not meet itemization threshold.');
+    expect(transactionType.generatePurposeDescription(txn)).toBe(
+      'Reimbursement memo entries do not meet itemization threshold.',
+    );
   });
 });

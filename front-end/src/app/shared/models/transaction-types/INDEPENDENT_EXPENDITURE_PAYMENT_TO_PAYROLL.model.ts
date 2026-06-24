@@ -46,7 +46,11 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
   override showCalendarYTD = true;
 
   override generatePurposeDescription(transaction: SchETransaction): string {
-    if (transaction.children && transaction.children.length > 0 && transaction.children.some(child => child.itemized === true)) {
+    if (
+      transaction.children &&
+      transaction.children.length > 0 &&
+      transaction.children.some((child) => child.itemized === true)
+    ) {
       return 'Payroll Memo: See Below';
     }
     return 'Payroll memo entries do not meet itemization threshold.';

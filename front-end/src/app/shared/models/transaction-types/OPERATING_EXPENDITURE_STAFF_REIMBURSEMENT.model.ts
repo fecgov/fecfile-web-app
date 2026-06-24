@@ -18,7 +18,11 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionTy
   override subTransactionConfig = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
 
   override generatePurposeDescription(transaction: SchBTransaction): string {
-    if (transaction.children && transaction.children.length > 0 && transaction.children.some(child => child.itemized === true)) {
+    if (
+      transaction.children &&
+      transaction.children.length > 0 &&
+      transaction.children.some((child) => child.itemized === true)
+    ) {
       return 'Reimbursement Memo: See Below';
     }
     return 'Reimbursement memo entries do not meet itemization threshold.';

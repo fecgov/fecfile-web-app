@@ -24,7 +24,9 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
 
   it('#generatePurposeDescription() should be the correct value', () => {
     const txn = transactionType.getNewTransaction();
-    expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll memo entries do not meet itemization threshold.');
+    expect(transactionType.generatePurposeDescription(txn)).toBe(
+      'Payroll memo entries do not meet itemization threshold.',
+    );
   });
 
   it('#contextTypeOptions should be org', () => {

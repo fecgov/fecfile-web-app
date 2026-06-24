@@ -21,6 +21,8 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     const txn = transactionType.getNewTransaction();
-    expect(transactionType.generatePurposeDescription(txn)).toBe('Credit card memo entries do not meet itemization threshold.');
+    expect(transactionType.generatePurposeDescription(txn)).toBe(
+      'Credit card memo entries do not meet itemization threshold.',
+    );
   });
 });
