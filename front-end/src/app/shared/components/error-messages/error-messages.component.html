@@ -35,9 +35,6 @@
   @if (control?.errors?.['noCorrespondingForm3X']) {
     <small class="p-error">{{ noCorrespondingForm3XErrorMessage }}</small>
   }
-  @if (control?.errors?.['noInprogressForm3X']) {
-    <small class="p-error">{{ noInprogressForm3XErrorMessage }}</small>
-  }
   @if (!control?.errors?.['maxlength'] && !control?.errors?.['required'] && control?.errors?.['email']) {
     <small class="p-error">{{ emailErrorMessage }}</small>
   }
