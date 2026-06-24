@@ -10,7 +10,7 @@ import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
@@ -41,6 +41,7 @@ describe('TransactionContactLookupComponent', () => {
         ConfirmationService,
         FormBuilder,
         EventEmitter,
+        MessageService,
         provideMockStore(testMockStore()),
         DatePipe,
         LabelPipe,

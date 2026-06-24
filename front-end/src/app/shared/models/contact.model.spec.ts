@@ -21,7 +21,7 @@ describe('Contact', () => {
 
   it('#FecApiCommitteeLookupData.toSelectItem() should return propertly marked', () => {
     const data: FecApiCommitteeLookupData = new FecApiCommitteeLookupData({
-      id: 'C99999999',
+      committee_id: 'C99999999',
       is_active: true,
       name: 'this_is_a_test_name',
     } as FecApiCommitteeLookupData);
@@ -37,7 +37,7 @@ describe('Contact', () => {
 
   it('#FecApiCommitteeLookupData.toSelectItem() should return propertly marked name only', () => {
     const data: FecApiCommitteeLookupData = new FecApiCommitteeLookupData({
-      id: 'C99999999',
+      committee_id: 'C99999999',
       is_active: true,
       name: 'actblue',
     } as FecApiCommitteeLookupData);

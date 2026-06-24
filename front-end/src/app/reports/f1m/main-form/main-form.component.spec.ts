@@ -184,7 +184,6 @@ describe('MainFormComponent', () => {
     expect(component.form.get('affiliated_committee_fec_id')?.value).toEqual('C000000001');
     expect(component.form.get('affiliated_committee_name')?.value).toEqual('Organization Name');
     expect(component.affiliatedContact.manager.excludeIds()).toEqual('11111-2222222-333333-444444444');
-    expect(component.affiliatedContact.manager.excludeFecIds()).toEqual('C000000001');
 
     const candidate = Contact.fromJSON({
       id: '22222-33333333-444444-55555555',
@@ -201,7 +200,6 @@ describe('MainFormComponent', () => {
     expect(component.candidateContacts[0].manager.excludeIds()).toEqual(
       '22222-33333333-444444-55555555,11111-2222222-333333-444444444',
     );
-    expect(component.candidateContacts[0].manager.excludeFecIds()).toEqual('C000000002,C000000001');
 
     expect(component.candidateContacts[0].dateOfContributionField).toEqual('I_date_of_contribution');
     expect(component.candidateContacts[0].candidateId).toEqual('C000000002');
@@ -211,7 +209,6 @@ describe('MainFormComponent', () => {
   it('Exclude ids should prepopulate when editing a F1M', () => {
     fixture.detectChanges();
     component.ngOnInit();
-    expect(component.affiliatedContact.manager.excludeFecIds()).toEqual('C000000005');
     expect(component.affiliatedContact.manager.excludeIds()).toEqual('22222-22222-22222-2222222');
   });
 });

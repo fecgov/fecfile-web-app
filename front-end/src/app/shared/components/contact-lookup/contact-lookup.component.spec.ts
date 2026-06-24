@@ -26,17 +26,20 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+import { AutoCompleteCompleteEvent, AutoCompleteModule, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from './contact-lookup.component';
 
+const queryEvent = { query: 'hi' } as AutoCompleteCompleteEvent;
+const emptyQueryEvent = { query: '' } as AutoCompleteCompleteEvent;
+
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
   let fixture: ComponentFixture<ContactLookupComponent>;
 
-  let testContactService: ContactService;
+  let contactService: ContactService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -60,7 +63,7 @@ describe('ContactLookupComponent', () => {
       ],
     }).compileComponents();
 
-    testContactService = TestBed.inject(ContactService);
+    contactService = TestBed.inject(ContactService);
     fixture = TestBed.createComponent(ContactLookupComponent);
     component = fixture.componentInstance;
     component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
@@ -80,8 +83,7 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch empty search', async () => {
     fixture.detectChanges();
-    const testEvent = { query: null };
-    await component.onDropdownSearch(testEvent);
+    await component.onDropdownSearch(emptyQueryEvent);
     fixture.detectChanges();
     expect(component.contactLookupList.length === 0).toBe(true);
   });
@@ -102,19 +104,18 @@ describe('ContactLookupComponent', () => {
             last_na2me: 'testLastName',
           } as unknown as FecfileCandidateLookupData,
         ];
-        vi.spyOn(testContactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
+
         component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(component.contactLookupList[1].items.length === 0).toBe(true);
       });
 
       it('#onDropdownSearch CAN undefined fecfile_candidates', async () => {
-        vi.spyOn(testContactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(component.contactLookupList[0].items.length === 0).toBe(true);
       });
@@ -128,10 +129,9 @@ describe('ContactLookupComponent', () => {
             type: ContactTypes.CANDIDATE,
           } as unknown as FecfileCandidateLookupData),
         ];
-        vi.spyOn(testContactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(
           JSON.stringify(component.contactLookupList) ===
@@ -160,32 +160,30 @@ describe('ContactLookupComponent', () => {
             name: 'testName',
           } as unknown as FecfileCommitteeLookupData,
         ];
-        vi.spyOn(testContactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         expect(component.contactLookupList[1].items.length === 0).toBe(true);
       });
 
       it('#onDropdownSearch COM undefined fecfile_committees', async () => {
         testCommitteeLookupResponse.fec_api_committees = [
           {
-            id: 'testId',
+            committee_id: 'testId',
             name: 'testName',
             is_active: true,
           } as FecApiCommitteeLookupData,
         ];
-        vi.spyOn(testContactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         expect(component.contactLookupList[0].items.length === 0).toBe(true);
       });
 
       it('#onDropdownSearch COM happy path', async () => {
         testCommitteeLookupResponse.fec_api_committees = [
           {
-            id: 'testId',
+            committee_id: 'testId',
             name: 'testName',
             is_active: true,
           } as FecApiCommitteeLookupData,
@@ -196,10 +194,9 @@ describe('ContactLookupComponent', () => {
             name: 'testName',
           } as unknown as FecfileCommitteeLookupData,
         ];
-        vi.spyOn(testContactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         expect(
           JSON.stringify(component.contactLookupList) ===
             JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true, 'hi')),
@@ -221,10 +218,9 @@ describe('ContactLookupComponent', () => {
       });
 
       it('#onDropdownSearch IND undefined fecfile_individuals', async () => {
-        vi.spyOn(testContactService, 'individualLookup').mockReturnValue(Promise.resolve(testIndividualLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'individualLookup').mockReturnValue(Promise.resolve(testIndividualLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(component.contactLookupList[0].items.length === 0).toBe(true);
       });
@@ -238,10 +234,9 @@ describe('ContactLookupComponent', () => {
             type: ContactTypes.INDIVIDUAL,
           } as unknown as FecfileIndividualLookupData),
         ];
-        vi.spyOn(testContactService, 'individualLookup').mockReturnValue(Promise.resolve(testIndividualLookupResponse));
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'individualLookup').mockReturnValue(Promise.resolve(testIndividualLookupResponse));
         component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(
           JSON.stringify(component.contactLookupList) ===
@@ -266,10 +261,9 @@ describe('ContactLookupComponent', () => {
       });
 
       it('#onDropdownSearch ORG undefined fecfile_organizations', async () => {
-        vi.spyOn(testContactService, 'organizationLookup').mockResolvedValue(testOrganizationLookupResponse);
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'organizationLookup').mockResolvedValue(testOrganizationLookupResponse);
         component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(component.contactLookupList[0].items.length === 0).toBe(true);
       });
@@ -282,10 +276,9 @@ describe('ContactLookupComponent', () => {
             type: ContactTypes.ORGANIZATION,
           } as unknown as FecfileOrganizationLookupData),
         ];
-        vi.spyOn(testContactService, 'organizationLookup').mockResolvedValue(testOrganizationLookupResponse);
-        const testEvent = { query: 'hi' };
+        vi.spyOn(contactService, 'organizationLookup').mockResolvedValue(testOrganizationLookupResponse);
         component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
-        await component.onDropdownSearch(testEvent);
+        await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
         expect(
           JSON.stringify(component.contactLookupList) ===
@@ -364,11 +357,38 @@ describe('ContactLookupComponent', () => {
     });
 
     async function testCandidate(candidate: Candidate) {
+      const nameSplit = candidate.name?.split(', ');
+      const contact = Contact.fromJSON({
+        type: ContactTypes.CANDIDATE,
+        candidate_id: candidate.candidate_id,
+        last_name:
+          candidate.candidate_first_name && candidate.candidate_last_name
+            ? candidate.candidate_last_name
+            : nameSplit?.[0],
+        first_name:
+          candidate.candidate_first_name && candidate.candidate_last_name
+            ? candidate.candidate_first_name
+            : nameSplit?.[1],
+        middle_name: candidate.candidate_middle_name,
+        prefix: candidate.candidate_prefix,
+        suffix: candidate.candidate_suffix,
+        street_1: candidate.address_street_1,
+        street_2: candidate.address_street_2,
+        city: candidate.address_city,
+        state: candidate.address_state,
+        zip: candidate.address_zip,
+        employer: '',
+        occupation: '',
+        candidate_office: candidate.office,
+        candidate_state: candidate.state === 'US' ? '' : candidate.state,
+        candidate_district: candidate.state === 'US' || candidate.office === 'S' ? '' : candidate.district,
+      });
+      vi.spyOn(contactService, 'create').mockResolvedValue(contact);
       const getCandidateDetailsSpy = vi
         .spyOn(component.contactService, 'getCandidateDetails')
         .mockResolvedValue(candidate);
 
-      component.onFecApiCandidateLookupDataSelect(testFecApiCandidateLookupData);
+      await component.onContactLookupSelect({ value: testFecApiCandidateLookupData } as AutoCompleteSelectEvent);
       fixture.detectChanges();
       await fixture.whenStable();
       expect(getCandidateDetailsSpy).toHaveBeenCalledTimes(1);
@@ -514,7 +534,7 @@ describe('ContactLookupComponent', () => {
   it('#onContactLookupSelect should call proper lookup', () => {
     vi.spyOn(component, 'onContactSelect');
     const contact = testContact();
-    component.onContactLookupSelect({ value: contact });
+    component.onContactLookupSelect({ value: contact } as AutoCompleteSelectEvent);
     expect(component.onContactSelect).toHaveBeenCalledWith(contact);
   });
 });

@@ -15,7 +15,7 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
-import { AutoComplete } from 'primeng/autocomplete';
+import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../destroyer.component';
@@ -76,8 +76,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async onDropdownSearch(event: any) {
+  async onDropdownSearch(event: AutoCompleteCompleteEvent) {
     const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
@@ -116,17 +115,18 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     return value instanceof Contact;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onContactLookupSelect(event: any) {
-    if (event?.value) {
-      if (event.value instanceof Contact) {
-        this.onContactSelect(event.value);
-      } else if (event.value instanceof FecApiCandidateLookupData) {
-        this.onFecApiCandidateLookupDataSelect(event.value);
-      } else if (event.value instanceof FecApiCommitteeLookupData) {
-        this.onFecApiCommitteeLookupDataSelect(event.value);
-      }
+  async onContactLookupSelect(event: AutoCompleteSelectEvent) {
+    if (!event?.value) return;
+    let payload: Contact;
+    if (event.value instanceof Contact) {
+      payload = event.value;
+    } else if (event.value.candidate_id) {
+      payload = await this.onFecApiCandidateLookupDataSelect(event.value);
+    } else {
+      payload = await this.onFecApiCommitteeLookupDataSelect(event.value);
     }
+    const contact = payload.id ? payload : await this.contactService.create(payload);
+    this.onContactSelect(contact);
     this.searchBoxFormControl.patchValue('');
   }
 
@@ -136,62 +136,55 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }
   }
 
-  onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
-    if (data.candidate_id) {
-      this.contactService.getCandidateDetails(data.candidate_id).then((candidate) => {
-        const nameSplit = candidate.name?.split(', ');
-        this.contactLookupSelect.emit(
-          Contact.fromJSON({
-            type: ContactTypes.CANDIDATE,
-            candidate_id: candidate.candidate_id,
-            last_name:
-              candidate.candidate_first_name && candidate.candidate_last_name
-                ? candidate.candidate_last_name
-                : nameSplit?.[0], // namesplit to account for paper filers
-            first_name:
-              candidate.candidate_first_name && candidate.candidate_last_name
-                ? candidate.candidate_first_name
-                : nameSplit?.[1], // namesplit to account for paper filers
-            middle_name: candidate.candidate_middle_name,
-            prefix: candidate.candidate_prefix,
-            suffix: candidate.candidate_suffix,
-            street_1: candidate.address_street_1,
-            street_2: candidate.address_street_2,
-            city: candidate.address_city,
-            state: candidate.address_state,
-            zip: candidate.address_zip,
-            employer: '',
-            occupation: '',
-            candidate_office: candidate.office,
-            candidate_state: candidate.state === 'US' ? '' : candidate.state,
-            candidate_district: candidate.state === 'US' || candidate.office === 'S' ? '' : candidate.district,
-          }),
-        );
-      });
-    }
+  async onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
+    if (!data.candidate_id) throw new Error('Invalid Candidate');
+    const candidate = await this.contactService.getCandidateDetails(data.candidate_id);
+    const nameSplit = candidate.name?.split(', ');
+    return Contact.fromJSON({
+      type: ContactTypes.CANDIDATE,
+      candidate_id: candidate.candidate_id,
+      last_name:
+        candidate.candidate_first_name && candidate.candidate_last_name
+          ? candidate.candidate_last_name
+          : nameSplit?.[0], // namesplit to account for paper filers
+      first_name:
+        candidate.candidate_first_name && candidate.candidate_last_name
+          ? candidate.candidate_first_name
+          : nameSplit?.[1], // namesplit to account for paper filers
+      middle_name: candidate.candidate_middle_name,
+      prefix: candidate.candidate_prefix,
+      suffix: candidate.candidate_suffix,
+      street_1: candidate.address_street_1,
+      street_2: candidate.address_street_2,
+      city: candidate.address_city,
+      state: candidate.address_state,
+      zip: candidate.address_zip,
+      employer: '',
+      occupation: '',
+      candidate_office: candidate.office,
+      candidate_state: candidate.state === 'US' ? '' : candidate.state,
+      candidate_district: candidate.state === 'US' || candidate.office === 'S' ? '' : candidate.district,
+    });
   }
 
-  onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
-    if (data.id) {
-      this.contactService.getCommitteeDetails(data.id).then((committeeAccount) => {
-        let phone;
-        if (committeeAccount?.treasurer_phone) {
-          phone = '+1 ' + committeeAccount.treasurer_phone;
-        }
-        this.contactLookupSelect.emit(
-          Contact.fromJSON({
-            type: ContactTypes.COMMITTEE,
-            committee_id: committeeAccount.committee_id,
-            name: committeeAccount.name,
-            street_1: committeeAccount.street_1,
-            street_2: committeeAccount.street_2,
-            city: committeeAccount.city,
-            state: committeeAccount.state,
-            zip: committeeAccount.zip,
-            telephone: phone,
-          }),
-        );
-      });
+  private async onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
+    if (!data.committee_id) throw new Error('Invalid Committee');
+    const committee = await this.contactService.getCommitteeDetails(data.committee_id);
+
+    let phone;
+    if (committee.treasurer_phone) {
+      phone = '+1 ' + committee.treasurer_phone;
     }
+    return Contact.fromJSON({
+      type: ContactTypes.COMMITTEE,
+      committee_id: committee.committee_id,
+      name: committee.name,
+      street_1: committee.street_1,
+      street_2: committee.street_2,
+      city: committee.city,
+      state: committee.state,
+      zip: committee.zip,
+      telephone: phone,
+    });
   }
 }
