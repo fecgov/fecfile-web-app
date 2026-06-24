@@ -20,6 +20,7 @@ describe('OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
   });
 
   it('#generatePurposeDescription() should be defined', () => {
-    expect(transactionType.generatePurposeDescription()).toBe('Reimbursement: See Below');
+    const txn = transactionType.getNewTransaction();
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Reimbursement memo entries do not meet itemization threshold.');
   });
 });

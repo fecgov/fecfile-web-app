@@ -22,7 +22,8 @@ describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account - Reimbursement: See Below');
+    const txn = transactionType.getNewTransaction();
+    const descrip = transactionType.generatePurposeDescription(txn);
+    expect(descrip).toBe('Reimbursement memo entries do not meet itemization threshold.');
   });
 });

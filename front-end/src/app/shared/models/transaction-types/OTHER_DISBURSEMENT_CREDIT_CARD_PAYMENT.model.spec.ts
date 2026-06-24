@@ -20,6 +20,7 @@ describe('OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT', () => {
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
-    expect(transactionType.generatePurposeDescription()).toBe('Credit Card: See Below');
+    const txn = transactionType.getNewTransaction();
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Credit card memo entries do not meet itemization threshold.');
   });
 });

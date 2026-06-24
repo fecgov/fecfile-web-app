@@ -16,7 +16,7 @@ import {
   INDIVIDUAL_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
-import { AggregationGroups, Transaction } from '../transaction.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransactionType {
   formFields = [

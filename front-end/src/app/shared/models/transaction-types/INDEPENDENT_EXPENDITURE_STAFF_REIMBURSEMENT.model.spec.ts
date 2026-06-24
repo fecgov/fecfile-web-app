@@ -22,7 +22,6 @@ describe('INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
-
-    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Reimbursement: See Below');
+    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Reimbursement memo entries do not meet itemization threshold.');
   });
 });

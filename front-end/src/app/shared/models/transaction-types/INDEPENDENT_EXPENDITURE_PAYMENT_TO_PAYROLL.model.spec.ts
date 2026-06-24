@@ -22,7 +22,6 @@ describe('INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL', () => {
 
   it('#generatePurposeDescription() should not be defined', () => {
     const txn: SchETransaction = transactionType.getNewTransaction();
-
-    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Payroll: See Below');
+    expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual('Payroll memo entries do not meet itemization threshold.');
   });
 });

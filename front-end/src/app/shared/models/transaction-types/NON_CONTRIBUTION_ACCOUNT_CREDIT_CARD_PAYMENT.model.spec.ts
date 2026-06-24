@@ -22,7 +22,8 @@ describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT', () => {
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account - Credit Card: See Below');
+    const txn = transactionType.getNewTransaction();
+    const descrip = transactionType.generatePurposeDescription(txn);
+    expect(descrip).toBe('Credit card memo entries do not meet itemization threshold.');
   });
 });
