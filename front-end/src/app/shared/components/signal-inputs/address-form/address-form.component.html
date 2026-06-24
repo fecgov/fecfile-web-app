@@ -1,0 +1,27 @@
+@if (fields().country) {
+  <app-select-input
+    class="grid-col-6"
+    id="country"
+    label="COUNTRY/REGION"
+    [field]="fields().country!"
+    [options]="countryOptions"
+  />
+}
+
+<app-text-input class="start-row grid-col-6" label="STREET ADDRESS" id="street_1" [field]="fields().street_1" />
+<app-text-input
+  class="grid-col-6"
+  label="APARTMENT, SUITE, ETC. (OPTIONAL)"
+  id="street_2"
+  [field]="fields().street_2"
+/>
+<app-text-input class="grid-col-6" label="CITY" id="city" [field]="fields().city" />
+<app-select-input
+  class="grid-col-3"
+  id="state"
+  label="STATE/TERRITORY"
+  [field]="fields().state"
+  [options]="stateOptions()"
+  [searchable]="true"
+/>
+<app-text-input class="grid-col-3" label="ZIP/POSTAL CODE" id="zip" [field]="fields().zip" />

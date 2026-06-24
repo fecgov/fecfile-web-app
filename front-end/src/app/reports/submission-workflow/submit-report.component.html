@@ -58,13 +58,7 @@
         </fieldset>
         <fieldset class="w-15">
           <label for="state">STATE/TERRITORY</label>
-          <app-searchable-select
-            inputId="state"
-            controlName="state"
-            [form]="form"
-            [options]="stateOptions"
-            appendTo="body"
-          />
+          <app-searchable-select inputId="state" formControlName="state" [options]="stateOptions" appendTo="body" />
           <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
         </fieldset>
         <fieldset class="w-9">

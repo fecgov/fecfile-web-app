@@ -5,7 +5,6 @@
         inputId="candidate_office"
         label="CANDIDATE OFFICE"
         [options]="candidateOfficeTypeOptions"
-        [form]="form()"
         [formControlName]="officeFormControlName()"
         [formSubmitted]="formSubmitted()"
       />
@@ -15,7 +14,6 @@
         inputId="candidate_state"
         label="CANDIDATE STATE"
         [options]="candidateStateOptions"
-        [form]="form()"
         [formControlName]="stateFormControlName()"
         [formSubmitted]="formSubmitted()"
       />
@@ -42,7 +40,6 @@
           inputId="candidate_district"
           label="CANDIDATE DISTRICT"
           [options]="candidateDistrictOptions"
-          [form]="form()"
           [formControlName]="districtFormControlName()"
           [formSubmitted]="formSubmitted()"
         />

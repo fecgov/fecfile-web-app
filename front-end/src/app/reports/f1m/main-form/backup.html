@@ -1,0 +1,348 @@
+<!-- <div data-cy="form-1m-component" class="form-container">
+  <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
+    <h1>FORM 1M</h1>
+    <span class="subheader">NOTIFICATION OF MULTICANDIDATE STATUS</span>
+    <hr />
+    <h2>Committee</h2>
+    <div class="grid">
+      <div class="col-9">
+        <div class="field">
+          <label for="committee_name">COMMITTEE NAME</label>
+          <input
+            class="readonly"
+            type="text"
+            pInputText
+            id="committee_name"
+            [readonly]="true"
+            formControlName="committee_name"
+          />
+          <app-error-messages [form]="form" fieldName="committee_name" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="filer_committee_id_number">COMMITTEE ID</label>
+          <input
+            class="readonly"
+            type="text"
+            [readonly]="true"
+            pInputText
+            id="filer_committee_id_number"
+            data-cy="committee-id-input"
+            formControlName="filer_committee_id_number"
+          />
+          <app-error-messages [form]="form" fieldName="committee_id" [formSubmitted]="formSubmitted" />
+        </div>
+      </div>
+    </div>
+
+    <fieldset class="field">
+      <legend>TYPE OF COMMITTEE</legend>
+      <div class="col-12 flex">
+        <p-radioButton
+          inputId="X"
+          name="committee_type"
+          value="X"
+          data-cy="state-party-radio"
+          formControlName="committee_type"
+          [class]="
+            committeeTypeControl?.invalid &&
+            (formSubmitted || committeeTypeControl?.dirty || committeeTypeControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        />
+        <label for="X" class="ml-2">STATE PARTY</label>
+      </div>
+      <div class="col-12 flex">
+        <p-radioButton
+          inputId="N"
+          name="committee_type"
+          value="N"
+          formControlName="committee_type"
+          [class]="
+            committeeTypeControl?.invalid &&
+            (formSubmitted || committeeTypeControl?.dirty || committeeTypeControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        />
+        <label for="N" class="ml-2">OTHER</label>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <app-error-messages
+            [form]="form"
+            fieldName="committee_type"
+            [formSubmitted]="formSubmitted"
+            requiredErrorMessage="An answer is required."
+          />
+        </div>
+      </div>
+    </fieldset>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h2>Address</h2>
+      </div>
+    </div>
+    <app-address-input [readonly]="true" [formSubmitted]="formSubmitted" [form]="form" />
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <p>I certify that one of the following situations is correct:</p>
+      </div>
+    </div>
+
+    <fieldset class="field">
+      <legend>STATUS BY</legend>
+      <div class="col-12 flex">
+        <p-radioButton
+          inputId="affiliation"
+          name="statusBy"
+          value="affiliation"
+          data-cy="affiliation-radio"
+          formControlName="statusBy"
+          [class]="
+            statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+              ? 'ng-invalid ng-dirty'
+              : ''
+          "
+        />
+        <label for="affiliation" class="ml-2">AFFILIATION</label>
+      </div>
+      <div class="grid">
+        <div class="col-12 flex">
+          <p-radioButton
+            inputId="qualification"
+            name="statusBy"
+            value="qualification"
+            data-cy="qualification-radio"
+            formControlName="statusBy"
+            [class]="
+              statusByControl?.invalid && (formSubmitted || statusByControl?.dirty || statusByControl?.touched)
+                ? 'ng-invalid ng-dirty'
+                : ''
+            "
+          />
+          <label for="qualification" class="ml-2">QUALIFICATION</label>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <app-error-messages
+            [form]="form"
+            fieldName="statusBy"
+            [formSubmitted]="formSubmitted"
+            requiredErrorMessage="An answer is required."
+          />
+        </div>
+      </div>
+    </fieldset>
+    @if (statusByControl?.value === 'affiliation') {
+      <div class="grid">
+        <div class="col-12">
+          <h2>Affiliation</h2>
+          <p>
+            The committee submitted its Statement of Organization (FORM 1) and simultaneously qualified as a
+            multicandidate committee through its affiliation with:
+          </p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <div class="field" [class.report-contact-invalid]="affiliatedContact.control?.status === 'INVALID'">
+            <app-report-contact-lookup
+              [form]="form"
+              key="contact_affiliated"
+              [formSubmitted]="formSubmitted"
+              [contactType]="affiliatedContact.contactType"
+              (openDialog)="openDialog($event)"
+            />
+            <app-error-messages
+              [form]="form"
+              [fieldName]="affiliatedContact.contactLookupKey"
+              [formSubmitted]="formSubmitted"
+            />
+          </div>
+        </div>
+      </div>
+      @if (report.contact_affiliated) {
+        <div class="grid">
+          <div class="col-9">
+            <div class="field">
+              <label for="affiliated_committee_name">AFFILIATED COMMITTEE NAME</label>
+              <input
+                type="text"
+                pInputText
+                id="affiliated_committee_name"
+                formControlName="affiliated_committee_name"
+              />
+              <app-error-messages [form]="form" fieldName="affiliated_committee_name" [formSubmitted]="formSubmitted" />
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="field">
+              <label for="affiliated_committee_fec_id">AFFILIATED COMMITTEE ID</label>
+              <input
+                type="text"
+                pInputText
+                appToUpper
+                id="affiliated_committee_fec_id"
+                formControlName="affiliated_committee_fec_id"
+              />
+              <app-error-messages
+                [form]="form"
+                fieldName="affiliated_committee_fec_id"
+                [patternErrorMessage]="committeePatternMessage"
+                [formSubmitted]="formSubmitted"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-3">
+            <app-calendar
+              formControlName="affiliated_date_form_f1_filed"
+              [formSubmitted]="formSubmitted"
+              label="AFFILIATED DATE"
+            />
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <hr />
+          </div>
+        </div>
+      }
+    }
+    @if (statusByControl?.value === 'qualification') {
+      <div class="grid">
+        <div class="col-12">
+          <h2>Qualification</h2>
+        </div>
+      </div>
+      <div class="flex gap-20px">
+        <app-calendar
+          formControlName="date_of_51st_contributor"
+          [formSubmitted]="formSubmitted"
+          label="DATE OF 51st CONTRIBUTION"
+        />
+        <app-calendar
+          formControlName="date_of_original_registration"
+          [formSubmitted]="formSubmitted"
+          label="DATE OF ORIGINAL REGISTRATION"
+        />
+        <app-calendar
+          formControlName="date_committee_met_requirements"
+          [formSubmitted]="formSubmitted"
+          label="DATE COMMITTEE MET REQUIREMENTS"
+        />
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <p>The committee has made contributions to the five (5) federal candidates listed below:</p>
+        </div>
+      </div>
+      @for (candidateContact of candidateContacts; track candidateContact; let i = $index) {
+        <div attr.data-cy="candidate-{{ i }}">
+          <div class="grid">
+            <div class="col-12">
+              <h3 class="candidate-header">Candidate #{{ i + 1 }}</h3>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="col-12">
+              <div class="field" [class.report-contact-invalid]="candidateContact.control?.status === 'INVALID'">
+                <app-report-contact-lookup
+                  [form]="form"
+                  [formSubmitted]="formSubmitted"
+                  [key]="'contact_candidate_' + f1mCandidateTags[i]"
+                  [contactType]="candidateContact.contactType"
+                  (openDialog)="openDialog($event)"
+                />
+                <app-error-messages
+                  [form]="form"
+                  [fieldName]="candidateContact.contactLookupKey"
+                  [formSubmitted]="formSubmitted"
+                  requiredErrorMessage="Candidate information is required"
+                />
+              </div>
+            </div>
+          </div>
+          @if (report[candidateContact.key]) {
+            <app-name-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="templateMapConfigs[candidateContact.key]"
+              templateMapKeyPrefix="candidate"
+              labelPrefix="CANDIDATE"
+            />
+            <div class="grid">
+              <div class="col-3">
+                <div class="field">
+                  <label [for]="templateMapConfigs[candidateContact.key]['candidate_fec_id']">CANDIDATE ID</label>
+                  <input
+                    type="text"
+                    pInputText
+                    appToUpper
+                    [id]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
+                    [formControlName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
+                  />
+                  <app-error-messages
+                    [form]="form"
+                    [fieldName]="templateMapConfigs[candidateContact.key]['candidate_fec_id']"
+                    [formSubmitted]="formSubmitted"
+                    [patternErrorMessage]="candidatePatternMessage"
+                    uniqueFecIdMessage="Candidate already entered in form."
+                  />
+                </div>
+              </div>
+              <div class="col-9 co-input-container">
+                <app-candidate-office-input
+                  [form]="form"
+                  [formSubmitted]="formSubmitted"
+                  [officeFormControlName]="templateMapConfigs[candidateContact.key]['candidate_office']"
+                  [stateFormControlName]="templateMapConfigs[candidateContact.key]['candidate_state']"
+                  [districtFormControlName]="templateMapConfigs[candidateContact.key]['candidate_district']"
+                />
+              </div>
+            </div>
+            <div class="grid">
+              <div class="col-3">
+                <app-calendar
+                  [formControlName]="candidateContact.dateOfContributionField"
+                  [formSubmitted]="formSubmitted"
+                  label="DATE OF CONTRIBUTION"
+                />
+              </div>
+            </div>
+          }
+          <div class="grid">
+            <div class="col-12">
+              <hr />
+            </div>
+          </div>
+        </div>
+      }
+    }
+    <app-save-cancel (save)="submitForm($event)" (cancelForm)="goBack()" />
+  </form>
+</div>
+
+<p-confirmDialog key="dialog" class="confirm-dialog" />
+<app-contact-modal
+  [availableContactTypes]="availableContactTypes()"
+  [(contactType)]="contactType"
+  [(visible)]="dialogVisible"
+  title="Create contact"
+  (contactCreated)="populateContact($event)"
+/> -->

@@ -2,14 +2,13 @@
   #pSelect
   [options]="options()"
   [inputId]="inputId()"
-  [readonly]="readonly()"
+  [readonly]="readonly() || disabled"
   [styleClass]="styleClass()"
-  [formControl]="control()"
-  (onChange)="changeOut.emit($event)"
-  (onFocus)="focusOut.emit($event)"
-  (onBlur)="blurOut.emit($event)"
-  (onShow)="showOut.emit($event)"
-  (onHide)="hideOut.emit($event)"
+  [disabled]="disabled"
+  [class.p-disabled]="disabled"
+  [ngModel]="value"
+  (ngModelChange)="change($event)"
+  (onBlur)="blur()"
   [pt]="pt()"
   fluid
 >

@@ -81,6 +81,12 @@ export class LabelUtils {
     return labelList;
   }
 
+  static getDistrictOptionsForState(stateCode: string | null): PrimeOptions {
+    if (!stateCode) return [];
+    const labels = LabelUtils.getCongressionalDistrictLabels(stateCode);
+    return LabelUtils.getPrimeOptions(labels);
+  }
+
   /**
    * Returns the state listing without the military and foreign country entries
    * @returns {LabelList}

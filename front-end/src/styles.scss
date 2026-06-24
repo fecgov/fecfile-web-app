@@ -726,7 +726,7 @@ select {
   height: var(--input-height);
   padding: 0 0 0 10px;
   transition: 0.4s;
-  border: var(--select-border);
+  border: var(--select-border-disabled);
   display: flex;
   align-items: center;
 
@@ -734,11 +734,11 @@ select {
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: var(--input-font-size);
-  line-height: 1.2;
+  line-height: 1;
 
   &:not(:disabled) {
     cursor: pointer;
-    border: var(--select-border-disabled);
+    border: var(--select-border);
     background-color: var(--p-content-background);
     &:hover {
       border-color: var(--surface-border);
@@ -756,7 +756,6 @@ select {
 @supports (appearance: base-select) {
   ::picker(select) {
     appearance: base-select;
-    top: calc(anchor(bottom) + 1px);
     max-height: 200px;
     overflow: auto;
     border-radius: var(--border-radius);
@@ -1001,4 +1000,31 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   .p-tooltip-arrow {
     left: 25px !important;
   }
+}
+
+.start-row {
+  grid-column-start: 1;
+}
+@for $i from 1 through 12 {
+  .grid-col-#{$i} {
+    grid-column-end: span #{$i};
+    margin: 0;
+  }
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+
+  & > label,
+  > .span-label {
+    margin-bottom: 8px;
+  }
+  & > .p-error {
+    margin-top: 4px;
+  }
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
 }

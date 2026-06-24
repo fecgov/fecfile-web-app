@@ -17,7 +17,7 @@
       party service to meet reporting obligations.
     </p>
     <div class="flex justify-content-center gap-3 mb-3">
-      <a pButton [href]="whoCanUseLink" target="_blank">Is FECfile+ right for my committee?</a>
+      <button pButton [routerLink]="whoCanUseLink" target="_blank">Is FECfile+ right for my committee?</button>
       @if (!disableLogin) {
         <p-button
           (click)="navigateToLoginDotGov()"

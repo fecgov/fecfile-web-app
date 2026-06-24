@@ -36,7 +36,14 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import {
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
+  IND_CAND,
+  ORG_COMM,
+} from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
@@ -95,6 +102,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly first = signal(0);
   readonly sortField = signal('transaction_type_identifier');
   readonly sortOrder = signal<'asc' | 'desc'>('asc');
+  IND_CAND = IND_CAND;
+  ORG_COMM = ORG_COMM;
 
   transactions: TransactionListRecord[] = [];
   tableLoading = true;
@@ -130,7 +139,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   isNewItem = true;
-  contactType = ContactTypes.INDIVIDUAL;
+  contactType: ContactTypes = ContactTypes.INDIVIDUAL;
 
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];

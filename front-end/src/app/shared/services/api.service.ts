@@ -14,15 +14,8 @@ export interface QueryParams {
     | readonly (string | number | boolean)[];
 }
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ApiService {
-  private readonly http = inject(HttpClient);
-  private readonly cookieService = inject(CookieService);
-
-  getHeaders(headersToAdd: object = {}) {
-    const csrfToken = `${this.cookieService.get('csrftoken')}`;
+export function getHeaders(cookieService: CookieService, headersToAdd: object = {}) {
+    const csrfToken = `${cookieService.get('csrftoken')}`;
     const baseHeaders = {
       'Content-Type': 'application/json',
       // If using different cache headers,
@@ -32,6 +25,15 @@ export class ApiService {
     };
     return { ...baseHeaders, ...headersToAdd };
   }
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  private readonly http = inject(HttpClient);
+  private readonly cookieService = inject(CookieService);
+
+  
 
   getQueryParams(queryParams: QueryParams = {}) {
     return new HttpParams({ fromObject: queryParams });
@@ -44,7 +46,7 @@ export class ApiService {
     params: QueryParams = {},
     allowedErrorCodes?: number[],
   ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     if (allowedErrorCodes) {
       return firstValueFrom(
         this.http
@@ -81,7 +83,7 @@ export class ApiService {
     params: QueryParams = {},
     allowedErrorCodes: number[] = [],
   ): Observable<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return this.http
       .get<T>(`${environment.apiUrl}${endpoint}`, {
         headers,
@@ -102,7 +104,7 @@ export class ApiService {
   }
 
   public get_from_base_uri<T>(endpoint: string, params?: QueryParams): Promise<T> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return firstValueFrom(
       this.http.get<T>(`${environment.baseUri}${endpoint}`, {
         headers,
@@ -113,7 +115,7 @@ export class ApiService {
   }
 
   public getString(endpoint: string): Promise<string> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return firstValueFrom(
       this.http.get(`${environment.apiUrl}${endpoint}`, {
         headers: headers,
@@ -136,7 +138,7 @@ export class ApiService {
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
   ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
@@ -171,7 +173,7 @@ export class ApiService {
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
   ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
@@ -194,7 +196,7 @@ export class ApiService {
   }
 
   public delete<T>(endpoint: string): Promise<T> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return firstValueFrom(this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers, withCredentials: true }));
   }
 }

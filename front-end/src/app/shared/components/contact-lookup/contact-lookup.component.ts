@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } fro
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
-  CandidateOfficeType,
+  CandidateOfficeTypes,
   CandidateOfficeTypeLabels,
   Contact,
   ContactTypeLabels,
@@ -34,7 +34,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() showSearchBoxCallback = () => true;
 
   @Input() includeFecfileResults = true;
-  @Input() candidateOffice?: CandidateOfficeType;
+  @Input() candidateOffice?: CandidateOfficeTypes;
 
   @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
@@ -49,7 +49,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }, 0);
   }
 
-  contactType = ContactTypes.INDIVIDUAL;
+  contactType: ContactTypes = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];

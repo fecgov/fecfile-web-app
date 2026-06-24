@@ -6,7 +6,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { DateSanitizerDirective } from './date-sanitize.directive';
 
-type StringDate = Date | string | null;
+export type StringDate = Date | string | null;
 
 @Component({
   selector: 'app-calendar',

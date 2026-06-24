@@ -1,51 +1,69 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, input, viewChild, output, computed } from '@angular/core';
+import { Component, input, viewChild, inject } from '@angular/core';
 import { Select, SelectModule, SelectPassThrough, SelectStyle } from 'primeng/select';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NgControl } from '@angular/forms';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-searchable-select',
   templateUrl: './searchable-select.component.html',
-  imports: [SelectModule, ReactiveFormsModule],
+  imports: [SelectModule, FormsModule],
   providers: [SelectStyle, Select],
 })
-export class SearchableSelectComponent {
+export class SearchableSelectComponent implements ControlValueAccessor {
+  readonly ngControl = inject(NgControl, { self: true, optional: true });
   readonly pSelectInstance = viewChild(Select);
 
   readonly options = input.required<PrimeOptions>();
   readonly inputId = input.required<string>();
-  readonly controlName = input.required<string>();
-  readonly form = input.required<FormGroup>();
   readonly autoDisplayFirst = input(true);
   readonly readonly = input(false);
   readonly styleClass = input('');
   readonly pt = input<SelectPassThrough>();
+  readonly appendTo = input('self');
 
-  readonly changeOut = output<any>();
-  readonly focusOut = output<any>();
-  readonly blurOut = output<any>();
-  readonly showOut = output<any>();
-  readonly hideOut = output<any>();
+  protected value: string | null = null;
+  protected disabled = false;
 
-  private lastCycleSearchChar: string = '';
-  private currentCycleIndex: number = -1;
-
-  readonly control = computed(() => this.form().get(this.controlName()) as FormControl);
+  protected onChange: (value: any) => void = () => {};
+  protected onTouched: () => void = () => {};
 
   constructor() {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
     effectOnceIf(
       () => this.pSelectInstance(),
-      () => {
-        const select = this.pSelectInstance();
+      (select) => {
         select!.searchOptions = (event: KeyboardEvent, char: string) => this.customSearch(event, char);
       },
     );
   }
 
-  private searchValue = '';
+  /* CVA FUNCTIONALITY */
+  writeValue(value: string | null): void {
+    this.value = value;
+  }
+  registerOnChange = (fn: () => void) => (this.onChange = fn);
+  registerOnTouched = (fn: () => void) => (this.onTouched = fn);
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
 
+  protected change(newValue: string | null): void {
+    this.onChange(newValue);
+    this.onTouched();
+  }
+
+  protected blur(): void {
+    this.onTouched();
+  }
+
+  /* SEARCH FUNCTIONALITY */
+  private lastCycleSearchChar: string = '';
+  private currentCycleIndex: number = -1;
+  private searchValue = '';
   private customSearch(event: KeyboardEvent, char: string): boolean {
     char = char.toLowerCase();
     const isCycleTrigger = this.searchValue === '' || char === this.searchValue.slice(-1);

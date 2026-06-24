@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
-import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { VersionData } from './version-data';
 import { ReportService } from 'app/shared/services/report.service';
@@ -12,7 +11,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-update-version-number',
-  imports: [ButtonModule, FormsModule, CalendarComponent, FormField, FormRoot],
+  imports: [ButtonModule, CalendarComponent, FormField, FormRoot],
   templateUrl: './update-version-number.component.html',
   styleUrl: './update-version-number.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

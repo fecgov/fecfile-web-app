@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -45,8 +45,8 @@ export class TransactionContactLookupComponent implements OnInit {
   );
   errorMessageFormControl?: SubscriptionFormControl;
   currentContactLabel = 'Individual';
-  currentType = ContactTypes.INDIVIDUAL;
-  mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
+  currentType: ContactTypes = ContactTypes.INDIVIDUAL;
+  mandatoryCandidateOffice?: CandidateOfficeTypes; // If the candidate is limited to one type of office, that office is set here.
 
   ngOnInit(): void {
     // Set the contact type options in the child dialog component to the first contact type option
@@ -72,7 +72,7 @@ export class TransactionContactLookupComponent implements OnInit {
     ) {
       this.mandatoryCandidateOffice = this.transaction.transactionType.mandatoryFormValues[
         this.transaction.transactionType.templateMap.candidate_office
-      ] as CandidateOfficeType;
+      ] as CandidateOfficeTypes;
     }
 
     // If needed, create a local form control to manage validation and add the

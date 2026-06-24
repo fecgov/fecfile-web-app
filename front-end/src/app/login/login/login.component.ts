@@ -11,12 +11,13 @@ import { DialogModule } from 'primeng/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [ButtonModule, DialogModule, DialogComponent],
+  imports: [ButtonModule, DialogModule, DialogComponent, RouterLink],
 })
 export class LoginComponent extends DestroyerComponent implements OnInit, AfterViewChecked {
   private readonly store = inject(Store);

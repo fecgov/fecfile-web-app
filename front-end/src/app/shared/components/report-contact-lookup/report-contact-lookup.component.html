@@ -1,10 +1,16 @@
 <div class="flex">
-  <app-contact-search [key]="key()" />
+  <app-contact-search
+    [key]="key()"
+    [(contactType)]="contactType"
+    [contactTypeOptions]="_contactTypeOptions()"
+    [excludeIds]="excludeIds()"
+    (contactSelect)="contactSelect.emit($event)"
+  />
   <div class="add-contact-container">
     or
-    <span tabindex="0" (click)="openDialog()" (keydown.enter)="openDialog()" (keydown.space)="openDialog()">
+    <button pButton [text]="true" (click)="open()">
       <img alt="Plus" src="assets/img/i-plus-circle.svg" height="20px" width="20px" />
       <a>Create a new contact</a>
-    </span>
+    </button>
   </div>
 </div>

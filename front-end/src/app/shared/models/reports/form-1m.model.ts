@@ -1,7 +1,7 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { BaseModel } from '../base.model';
-import { CandidateOfficeType, Contact } from '../contact.model';
+import { CandidateOfficeTypes, Contact } from '../contact.model';
 import { Report, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
@@ -41,7 +41,7 @@ export class Form1M extends Report {
   I_candidate_middle_name?: string;
   I_candidate_prefix?: string;
   I_candidate_suffix?: string;
-  I_candidate_office?: CandidateOfficeType;
+  I_candidate_office?: CandidateOfficeTypes;
   I_candidate_state?: string;
   I_candidate_district?: string;
   @Transform(BaseModel.dateTransform) I_date_of_contribution?: Date;
@@ -52,7 +52,7 @@ export class Form1M extends Report {
   II_candidate_middle_name?: string;
   II_candidate_prefix?: string;
   II_candidate_suffix?: string;
-  II_candidate_office?: CandidateOfficeType;
+  II_candidate_office?: CandidateOfficeTypes;
   II_candidate_state?: string;
   II_candidate_district?: string;
   @Transform(BaseModel.dateTransform) II_date_of_contribution?: Date;
@@ -63,7 +63,7 @@ export class Form1M extends Report {
   III_candidate_middle_name?: string;
   III_candidate_prefix?: string;
   III_candidate_suffix?: string;
-  III_candidate_office?: CandidateOfficeType;
+  III_candidate_office?: CandidateOfficeTypes;
   III_candidate_state?: string;
   III_candidate_district?: string;
   @Transform(BaseModel.dateTransform) III_date_of_contribution?: Date;
@@ -74,7 +74,7 @@ export class Form1M extends Report {
   IV_candidate_middle_name?: string;
   IV_candidate_prefix?: string;
   IV_candidate_suffix?: string;
-  IV_candidate_office?: CandidateOfficeType;
+  IV_candidate_office?: CandidateOfficeTypes;
   IV_candidate_state?: string;
   IV_candidate_district?: string;
   @Transform(BaseModel.dateTransform) IV_date_of_contribution?: Date;
@@ -85,7 +85,7 @@ export class Form1M extends Report {
   V_candidate_middle_name?: string;
   V_candidate_prefix?: string;
   V_candidate_suffix?: string;
-  V_candidate_office?: CandidateOfficeType;
+  V_candidate_office?: CandidateOfficeTypes;
   V_candidate_state?: string;
   V_candidate_district?: string;
   @Transform(BaseModel.dateTransform) V_date_of_contribution?: Date;

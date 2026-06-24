@@ -3,9 +3,9 @@
   <div class="grid contact-lookup-container">
     <div class="px-0" [class.dropdown-with-search]="isBare()">
       <p-select
-        [(ngModel)]="manager().contactType"
+        [(ngModel)]="contactType"
         inputId="entity_type"
-        [options]="manager().contactTypeOptions()"
+        [options]="contactTypeOptions()"
         [readonly]="true"
         styleClass="readonly"
         id="entity_type_dropdown"

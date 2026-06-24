@@ -544,10 +544,11 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   border-radius: var(--border-radius);
   align-items: center;
   font-size: var(--input-font-size);
+  border: var(--select-border-disabled);
 }
 .p-select:not(.p-disabled) {
   background: var(--p-content-background);
-  border: 2px solid var(--fec-grey-alt);
+  border: var(--select-border);
   transition:
     background-color 0.15s,
     border-color 0.15s,
@@ -1428,7 +1429,6 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
     box-shadow 0.15s;
   border-radius: var(--border-radius);
   border: 0;
-  color: white;
 }
 .p-button:enabled:hover,
 .p-button:enabled:active {
@@ -1464,13 +1464,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
 }
 .p-button.p-button-text {
   background-color: transparent;
-  color: var(--p-primary-color);
+  color: var(--p-content-color);
   border-color: transparent;
 }
 .p-button.p-button-text:enabled:hover {
-  background: rgba(0, 123, 255, 0.04);
-  color: var(--p-primary-color);
-  border-color: transparent;
+  background: transparent;
+  color: var(--p-content-color);
 }
 
 .p-button.p-component.p-button-icon-only.p-button-text:enabled:hover {
@@ -1479,7 +1478,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
 
 .p-button.p-button-text:enabled:active {
   background: rgba(0, 123, 255, 0.16);
-  color: var(--p-primary-color);
+  color: var(--p-content-color);
   border-color: transparent;
 }
 .p-button.p-button-text.p-button-plain {

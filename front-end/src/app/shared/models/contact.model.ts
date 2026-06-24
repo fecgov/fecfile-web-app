@@ -3,18 +3,15 @@ import { SelectItem, SelectItemGroup } from 'primeng/api';
 import { LabelList, LabelUtils } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
-export enum ContactTypes {
-  CANDIDATE = 'CAN',
-  COMMITTEE = 'COM',
-  INDIVIDUAL = 'IND',
-  ORGANIZATION = 'ORG',
-}
-
-export type ContactType =
-  | ContactTypes.CANDIDATE
-  | ContactTypes.COMMITTEE
-  | ContactTypes.INDIVIDUAL
-  | ContactTypes.ORGANIZATION;
+export const ContactTypes = {
+  CANDIDATE: 'CAN',
+  COMMITTEE: 'COM',
+  INDIVIDUAL: 'IND',
+  ORGANIZATION: 'ORG',
+} as const;
+export type ContactTypes = (typeof ContactTypes)[keyof typeof ContactTypes];
+export const IND_CAND = new Set<ContactTypes>([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE]);
+export const ORG_COMM = new Set<ContactTypes>([ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE]);
 
 export const ContactTypeLabels: LabelList = [
   [ContactTypes.INDIVIDUAL, 'Individual'],
@@ -23,16 +20,12 @@ export const ContactTypeLabels: LabelList = [
   [ContactTypes.ORGANIZATION, 'Organization'],
 ];
 
-export enum CandidateOfficeTypes {
-  HOUSE = 'H',
-  PRESIDENTIAL = 'P',
-  SENATE = 'S',
-}
-
-export type CandidateOfficeType =
-  | CandidateOfficeTypes.HOUSE
-  | CandidateOfficeTypes.PRESIDENTIAL
-  | CandidateOfficeTypes.SENATE;
+export const CandidateOfficeTypes = {
+  HOUSE: 'H',
+  PRESIDENTIAL: 'P',
+  SENATE: 'S',
+} as const;
+export type CandidateOfficeTypes = (typeof CandidateOfficeTypes)[keyof typeof CandidateOfficeTypes];
 
 export const CandidateOfficeTypeLabels = [
   [CandidateOfficeTypes.HOUSE, 'House'],
@@ -66,7 +59,7 @@ export enum ContactFields {
 
 export class Contact extends BaseModel {
   id: string | undefined;
-  type: ContactType = ContactTypes.INDIVIDUAL;
+  type: ContactTypes = ContactTypes.INDIVIDUAL;
   candidate_id: string | undefined;
   committee_id: string | undefined;
   name: string | undefined;
@@ -82,7 +75,7 @@ export class Contact extends BaseModel {
   zip = '';
   employer: string | undefined;
   occupation: string | undefined;
-  candidate_office: CandidateOfficeType | undefined;
+  candidate_office: CandidateOfficeTypes | undefined;
   candidate_state: string | undefined;
   candidate_district: string | undefined;
   telephone: string | undefined;

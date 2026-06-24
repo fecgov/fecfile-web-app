@@ -1,30 +1,29 @@
-import { Component, computed, inject, input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { Component, computed, input, model, output } from '@angular/core';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
-import { ContactManagementService } from 'app/shared/services/contact-management.service';
+import { ButtonDirective } from 'primeng/button';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-report-contact-lookup',
   templateUrl: './report-contact-lookup.component.html',
   styleUrls: ['./report-contact-lookup.component.scss'],
-  imports: [ContactSearchComponent],
+  imports: [ContactSearchComponent, ButtonDirective],
 })
-export class ReportContactLookupComponent implements OnInit {
-  readonly cmservice = inject(ContactManagementService);
+export class ReportContactLookupComponent {
   readonly key = input('contact_1');
-  readonly form = input.required<FormGroup>();
-  readonly formSubmitted = input.required<boolean>();
-  readonly contactType = input.required<ContactTypes>();
+  readonly contactType = model.required<ContactTypes>();
+  readonly contactTypeOptions = input<ContactTypes[]>();
+  readonly excludeIds = input<string[]>([]);
+  readonly openDialog = output<{ key: string; contactType: ContactTypes; options: PrimeOptions }>();
+  readonly contactSelect = output<Contact>();
 
-  readonly manager = computed(() => this.cmservice.get(this.key()));
+  readonly _contactTypeOptions = computed(() => {
+    const contactTypes = this.contactTypeOptions() ?? [this.contactType()];
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, contactTypes);
+  });
 
-  ngOnInit(): void {
-    this.manager().setAsSingle(this.contactType());
-  }
-
-  openDialog() {
-    this.cmservice.activeKey.set(this.key());
-    this.cmservice.showDialog.set(true);
+  open() {
+    this.openDialog.emit({ key: this.key(), contactType: this.contactType(), options: this._contactTypeOptions() });
   }
 }

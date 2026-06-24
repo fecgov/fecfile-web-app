@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   Contact,
@@ -7,8 +7,8 @@ import {
   FecApiCommitteeLookupData,
   FecApiLookupData,
 } from 'app/shared/models/contact.model';
-import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactService } from 'app/shared/services/contact.service';
+import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
@@ -21,12 +21,14 @@ import { SelectModule } from 'primeng/select';
 })
 export class ContactSearchComponent {
   readonly contactService = inject(ContactService);
-  readonly cmservice = inject(ContactManagementService);
-
   readonly key = input.required<string>();
+  readonly contactTypeOptions = input.required<PrimeOptions>();
+  readonly contactType = model.required<ContactTypes>();
+  readonly excludeIds = input<string[]>([]);
   readonly isBare = input(true);
+  readonly contactSelect = output<Contact>();
 
-  readonly manager = computed(() => this.cmservice.get(this.key()));
+  readonly _excludeIds = computed(() => this.excludeIds().join(','));
 
   contactLookupList: SelectItemGroup[] = [];
   searchTerm = '';
@@ -35,30 +37,24 @@ export class ContactSearchComponent {
     const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
-      switch (this.manager().contactType()) {
+      switch (this.contactType()) {
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
-            await this.contactService.candidateLookup(
-              searchTerm,
-              this.manager().excludeFecIds(),
-              this.manager().excludeIds(),
-            )
+            await this.contactService.candidateLookup(searchTerm, '', this._excludeIds())
           ).toSelectItemGroups(this.isBare(), searchTerm);
           break;
         case ContactTypes.COMMITTEE:
-          this.contactService
-            .committeeLookup(searchTerm, this.manager().excludeFecIds(), this.manager().excludeIds())
-            .then((response) => {
-              this.contactLookupList = response?.toSelectItemGroups(this.isBare(), searchTerm);
-            });
+          this.contactService.committeeLookup(searchTerm, '', this._excludeIds()).then((response) => {
+            this.contactLookupList = response?.toSelectItemGroups(this.isBare(), searchTerm);
+          });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm, this.manager().excludeIds()).then((response) => {
+          this.contactService.individualLookup(searchTerm, this._excludeIds()).then((response) => {
             this.contactLookupList = response?.toSelectItemGroups(searchTerm);
           });
           break;
         case ContactTypes.ORGANIZATION:
-          this.contactService.organizationLookup(searchTerm, this.manager().excludeIds()).then((response) => {
+          this.contactService.organizationLookup(searchTerm, this._excludeIds()).then((response) => {
             this.contactLookupList = response?.toSelectItemGroups(searchTerm);
           });
           break;
@@ -83,15 +79,14 @@ export class ContactSearchComponent {
     } else {
       contact = await this.onFecApiCommitteeLookupDataSelect(event.value);
     }
-    this.manager().contact.set(contact);
-    if (this.isBare()) this.manager().outerContact.set(contact);
+    this.contactSelect.emit(contact);
   }
 
   private async onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
     if (!data.candidate_id) throw new Error('Invalid Candidate');
     const candidate = await this.contactService.getCandidateDetails(data.candidate_id);
     const nameSplit = candidate.name?.split(', ');
-    return Contact.fromJSON({
+    const payload = Contact.fromJSON({
       type: ContactTypes.CANDIDATE,
       candidate_id: candidate.candidate_id,
       last_name:
@@ -116,6 +111,7 @@ export class ContactSearchComponent {
       candidate_state: candidate.state === 'US' ? '' : candidate.state,
       candidate_district: candidate.state === 'US' || candidate.office === 'S' ? '' : candidate.district,
     });
+    return this.contactService.create(payload);
   }
 
   private async onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {

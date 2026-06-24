@@ -8,11 +8,11 @@
   <div class="select-wrapper">
     <select
       #selectElement
-      [formControl]="control()"
+      [ngModel]="value"
       [id]="selectId().id"
-      (change)="handleChange()"
-      [disabled]="control().disabled"
-      (blur)="update.emit(control().value)"
+      (ngModelChange)="change($event)"
+      [disabled]="disabled"
+      (blur)="onTouched()"
     >
       <button [attr.aria-labelledby]="selectId().label">
         <selectedcontent #selected></selectedcontent>
@@ -27,13 +27,13 @@
         </option>
       }
     </select>
-    @if (showClear() && control().value && !control().disabled) {
+    @if (showClear() && value !== null && value !== undefined && !disabled) {
       <button type="button" class="select-clear-button" aria-label="Clear selection" (click)="clear($event)">
         <i class="pi pi-times"></i>
       </button>
     }
   </div>
   @if (includeErrorMessages()) {
-    <app-error-messages [form]="form()" [fieldName]="formControlName()" [formSubmitted]="formSubmitted()" />
+    <app-error-messages [fieldName]="fieldName" [formSubmitted]="formSubmitted()" />
   }
 </div>

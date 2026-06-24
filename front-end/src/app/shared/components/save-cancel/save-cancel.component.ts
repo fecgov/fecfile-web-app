@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../directives/single-click.directive';
@@ -11,4 +11,5 @@ import { SingleClickDirective } from '../../directives/single-click.directive';
 export class SaveCancelComponent {
   readonly save = output<'continue' | void>();
   readonly cancelForm = output<void>();
+  readonly saveDisabled = input(false);
 }

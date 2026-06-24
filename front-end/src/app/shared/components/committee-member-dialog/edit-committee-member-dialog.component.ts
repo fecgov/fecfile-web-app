@@ -29,7 +29,6 @@ import { DialogComponent } from '../dialog/dialog.component';
             inputId="role"
             label="ROLE"
             [options]="availableRoleOptions()"
-            [form]="form"
             formControlName="role"
             labelClass="dialog-label"
           />

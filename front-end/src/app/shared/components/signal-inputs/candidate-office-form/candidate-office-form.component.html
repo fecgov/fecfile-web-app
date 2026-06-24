@@ -1,0 +1,22 @@
+<app-select-input
+  class="grid-col-6"
+  id="candidate-office"
+  label="CANDIDATE OFFICE"
+  [field]="fields().candidate_office"
+  [options]="candidateOfficeTypeOptions"
+/>
+<app-select-input
+  class="grid-col-3"
+  id="candidate-state"
+  label="CANDIDATE STATE"
+  [field]="fields().candidate_state"
+  [options]="stateOptions"
+  [searchable]="true"
+/>
+<app-select-input
+  class="grid-col-3"
+  id="candidate-district"
+  label="CANDIDATE DISTRICT"
+  [field]="fields().candidate_district"
+  [options]="candidateDistrictOptions()"
+/>

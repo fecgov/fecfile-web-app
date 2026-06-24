@@ -54,8 +54,7 @@
         <span class="span-label" id="state-label">STATE/TERRITORY</span>
         <app-searchable-select
           inputId="state"
-          [controlName]="stateFieldName()"
-          [form]="form()"
+          [formControlName]="stateFieldName()"
           [options]="stateOptions"
           appendTo="body"
           [readonly]="readonly()"
