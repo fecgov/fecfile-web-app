@@ -13,6 +13,7 @@ import {
   SIGNATORY_2_FIELDS,
 } from '../utils/transaction-type-properties';
 import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
+import { ReportTypes } from './reports/report.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
@@ -173,7 +174,8 @@ export abstract class TransactionType {
   hasAmountInput = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
   hasDebtInput = false;
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
-  hasElectionInformation(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hasElectionInformation(report_type: ReportTypes): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
 
