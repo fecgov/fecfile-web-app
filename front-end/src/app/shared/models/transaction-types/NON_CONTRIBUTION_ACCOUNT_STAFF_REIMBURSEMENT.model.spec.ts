@@ -25,5 +25,11 @@ describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {
     const txn = transactionType.getNewTransaction();
     const descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Reimbursement memo entries do not meet itemization threshold.');
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Reimbursement Memo: See Below');
   });
 });

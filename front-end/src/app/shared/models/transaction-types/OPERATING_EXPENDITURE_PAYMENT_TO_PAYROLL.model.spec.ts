@@ -24,5 +24,11 @@ describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL', () => {
     expect(transactionType.generatePurposeDescription(txn)).toBe(
       'Payroll memo entries do not meet itemization threshold.',
     );
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll Memo: See Below');
   });
 });

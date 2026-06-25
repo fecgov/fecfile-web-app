@@ -27,6 +27,12 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
     expect(transactionType.generatePurposeDescription(txn)).toBe(
       'Payroll memo entries do not meet itemization threshold.',
     );
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll Memo: See Below');
   });
 
   it('#contextTypeOptions should be org', () => {

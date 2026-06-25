@@ -25,5 +25,11 @@ describe('INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
     expect((transactionType as TransactionType).generatePurposeDescription?.(txn)).toEqual(
       'Credit card memo entries do not meet itemization threshold.',
     );
+    txn.children = [
+      {
+        itemized: true,
+      } as SchETransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Credit Card Memo: See Below');
   });
 });

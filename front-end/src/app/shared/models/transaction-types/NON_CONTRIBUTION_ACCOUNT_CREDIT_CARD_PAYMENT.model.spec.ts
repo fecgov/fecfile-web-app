@@ -25,5 +25,11 @@ describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT', () => {
     const txn = transactionType.getNewTransaction();
     const descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Credit card memo entries do not meet itemization threshold.');
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Credit Card Memo: See Below');
   });
 });

@@ -24,5 +24,11 @@ describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT', () => {
     expect(transactionType.generatePurposeDescription(txn)).toBe(
       'Reimbursement memo entries do not meet itemization threshold.',
     );
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Reimbursement Memo: See Below');
   });
 });
