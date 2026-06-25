@@ -20,7 +20,6 @@ export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType 
   override generatePurposeDescription(transaction: SchBTransaction): string {
     if (
       transaction.children &&
-      transaction.children.length > 0 &&
       transaction.children.some((child) => child.itemized === true)
     ) {
       return 'Reimbursement Memo: See Below';

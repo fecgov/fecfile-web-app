@@ -28,7 +28,6 @@ export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionTy
   override generatePurposeDescription(transaction: SchBTransaction): string {
     if (
       transaction.children &&
-      transaction.children.length > 0 &&
       transaction.children.some((child) => child.itemized === true)
     ) {
       return 'Credit Card Memo: See Below';

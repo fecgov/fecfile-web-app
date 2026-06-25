@@ -28,7 +28,6 @@ export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchBTransactionTyp
   override generatePurposeDescription(transaction: SchBTransaction): string {
     if (
       transaction.children &&
-      transaction.children.length > 0 &&
       transaction.children.some((child) => child.itemized === true)
     ) {
       return 'Payroll Memo: See Below';

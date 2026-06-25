@@ -48,7 +48,6 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransaction
   override generatePurposeDescription(transaction: SchETransaction): string {
     if (
       transaction.children &&
-      transaction.children.length > 0 &&
       transaction.children.some((child) => child.itemized === true)
     ) {
       return 'Credit Card Memo: See Below';
