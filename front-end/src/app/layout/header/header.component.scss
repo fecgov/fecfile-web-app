@@ -1,5 +1,6 @@
 .seal-and-title {
   height: 48px;
+  transition: height 0.3s ease-in-out;
 }
 
 nav.compact .seal-and-title {
@@ -11,19 +12,14 @@ a {
 }
 
 nav {
+  box-sizing: border-box;
   background-color: white !important;
   border-bottom: 2px solid #e8e8e8;
-
-  position: sticky;
-  top: 0;
-  z-index: 999;
   height: var(--header-height);
   width: 100%;
-
   padding-left: 32px;
   padding-right: 32px;
-  transition: top 0.3s ease-in-out;
-  overflow: hidden;
+  transition: height 0.3s ease-in-out;
 }
 
 nav.compact {
