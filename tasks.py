@@ -243,10 +243,10 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
     if not nobuild:
         _build_angular_app(ctx, space)
 
+    _prep_distribution_directory(ctx)
+
     # run script to create block list
     ctx.run("./deploy-config/front-end-nginx-config/generate_blockips.sh {0} {1} {2}".format(APP_NAME, space, ORG_NAME), echo=True)
-
-    _prep_distribution_directory(ctx)
 
     # Target space
     ctx.run("cf target -o {0} -s {1}".format(ORG_NAME, space), echo=True)
