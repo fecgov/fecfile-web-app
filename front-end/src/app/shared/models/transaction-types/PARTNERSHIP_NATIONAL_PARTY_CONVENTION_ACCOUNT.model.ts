@@ -23,7 +23,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not meet itemization threshold". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    if (transaction.children && transaction.children.length > 0) {
+    if (transaction.children.some((child) => child.itemized === true)) {
       return 'Pres. Nominating Convention Account (See Partnership Attribution(s) below)';
     }
     return 'Pres. Nominating Convention Account (Partnership attributions do not meet itemization threshold)';

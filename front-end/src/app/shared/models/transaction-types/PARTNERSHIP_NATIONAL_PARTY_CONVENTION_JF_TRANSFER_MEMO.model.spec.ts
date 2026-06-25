@@ -36,6 +36,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
     (transaction.parent_transaction as SchATransaction).contributor_organization_name =
       'Super Duper Long Committee Name That Needs to Shrink';
     transaction.children = [{} as SchATransaction];
+    transaction.children[0].itemized = true;
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
       'Pres. Nominating Convention Account JF Memo: Super Duper ' + 'L... (See Partnership Attribution(s) below)',
