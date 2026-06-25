@@ -7,7 +7,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, UploadSubmission } from 'app/shared/models';
+import { Transaction, Form3X, UploadSubmission, ReportStatus } from 'app/shared/models';
 import { Component, viewChild } from '@angular/core';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
@@ -20,22 +20,9 @@ const mockReports: Form3X[] = [
     form_type: 'F3XN',
     report_type: 'F3X',
     report_code: 'Q1',
-    report_status: 'In progress',
+    report_status: ReportStatus.IN_PROGRESS,
     report_code_label: 'MID-YEAR-REPORT',
     upload_submission: UploadSubmission.fromJSON({}),
-    webprint_submission: {
-      fec_email: 'test@test.com',
-      fec_batch_id: '1234',
-      fec_image_url: 'image.test.com',
-      fec_submission_id: 'FEC-1234567',
-      fec_message: 'Message Goes Here',
-      fec_status: 'COMPLETED',
-      fecfile_error: '',
-      fecfile_task_state: 'COMPLETED',
-      id: 0,
-      created: '10/10/2010',
-      updated: '10/12/2010',
-    },
   }),
   Form3X.fromJSON({
     id: '2',
@@ -43,23 +30,21 @@ const mockReports: Form3X[] = [
     coverage_through_date: '2024-06-30',
     form_type: 'F3XN',
     report_type: 'F3X',
-    report_code: 'Q1',
-    report_status: 'In progress',
+    report_code: 'Q2',
+    report_status: ReportStatus.IN_PROGRESS,
     report_code_label: 'YEAR-END',
     upload_submission: UploadSubmission.fromJSON({}),
-    webprint_submission: {
-      fec_email: 'test@test.com',
-      fec_batch_id: '1234',
-      fec_image_url: 'image.test.com',
-      fec_submission_id: 'FEC-1234567',
-      fec_message: 'Message Goes Here',
-      fec_status: 'COMPLETED',
-      fecfile_error: '',
-      fecfile_task_state: 'COMPLETED',
-      id: 0,
-      created: '10/10/2010',
-      updated: '10/12/2010',
-    },
+  }),
+  Form3X.fromJSON({
+    id: '3',
+    coverage_from_date: '2024-07-01',
+    coverage_through_date: '2024-10-31',
+    form_type: 'F3XN',
+    report_type: 'F3X',
+    report_code: 'Q3',
+    report_status: 'Submission success',
+    report_code_label: 'YEAR-END',
+    upload_submission: UploadSubmission.fromJSON({}),
   }),
 ];
 
@@ -71,8 +56,8 @@ const mockReports: Form3X[] = [
 class TestHostComponent {
   templateMap = testTemplateMap();
   form: FormGroup = new FormGroup({
-    [this.templateMap['date']]: new SubscriptionFormControl(new Date('06/01/2024')),
-    [this.templateMap['date2']]: new SubscriptionFormControl(new Date('06/02/2024')),
+    [this.templateMap['date']]: new SubscriptionFormControl(null),
+    [this.templateMap['date2']]: new SubscriptionFormControl(null),
     [this.templateMap['memo_code']]: new SubscriptionFormControl(),
   });
   transaction: Transaction = testScheduleATransaction();
@@ -97,9 +82,11 @@ describe('LinkedReportInputComponent', () => {
     }).compileComponents();
     form3XService = TestBed.inject(Form3XService);
     vi.spyOn(form3XService, 'getAllReports').mockResolvedValue(mockReports);
-    vi.spyOn(form3XService, 'get').mockImplementation((id: string) =>
-      Promise.resolve(mockReports.find((r) => r.id === id)!),
-    );
+    vi.spyOn(form3XService, 'get').mockImplementation((id: string) => {
+      const report = mockReports.find((r) => r.id === id);
+      if (!report) return Promise.reject(new Error('No report found'));
+      return Promise.resolve(report);
+    });
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
@@ -118,13 +105,26 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should set associated F3X based on disbursement date', async () => {
-    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-06-15'));
+    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-04-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
     const associatedF3X = component.associatedF3X();
     expect(associatedF3X).toBeTruthy();
     expect(associatedF3X!.id).toBe('2');
+    expect(associatedF3X).not.toBe(component.initialForm3X());
+  });
+
+  it('should not set associated F3X if report not in progress', async () => {
+    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-04-15'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-09-15'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const associatedF3X = component.associatedF3X();
+    expect(associatedF3X).toBeFalsy();
   });
 
   it('should set associated F3X based on dissemination date if disbursement date missing', async () => {
@@ -186,6 +186,6 @@ describe('LinkedReportInputComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(component.associatedF3X()?.id).toBe('2');
+    expect(component.associatedF3X()?.id).toBeUndefined();
   });
 });
