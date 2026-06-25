@@ -26,10 +26,7 @@ export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactio
   }
 
   override generatePurposeDescription(transaction: SchBTransaction): string {
-    if (
-      transaction.children &&
-      transaction.children.some((child) => child.itemized === true)
-    ) {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
       return 'Payroll Memo: See Below';
     }
     return 'Payroll memo entries do not meet itemization threshold.';

@@ -25,10 +25,7 @@ export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT extends SchBTransactio
     });
   }
   override generatePurposeDescription(transaction: SchBTransaction): string {
-    if (
-      transaction.children &&
-      transaction.children.some((child) => child.itemized === true)
-    ) {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
       return 'Reimbursement Memo: See Below';
     }
     return 'Reimbursement memo entries do not meet itemization threshold.';

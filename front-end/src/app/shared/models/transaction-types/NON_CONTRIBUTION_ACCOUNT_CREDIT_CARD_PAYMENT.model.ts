@@ -25,10 +25,7 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT extends SchBTransactio
     });
   }
   override generatePurposeDescription(transaction: SchBTransaction): string {
-    if (
-      transaction.children &&
-      transaction.children.some((child) => child.itemized === true)
-    ) {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
       return 'Credit Card Memo: See Below';
     }
     return 'Credit card memo entries do not meet itemization threshold.';

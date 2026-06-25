@@ -26,10 +26,7 @@ export class FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT extends SchBTransacti
   }
 
   override generatePurposeDescription(transaction: SchBTransaction): string {
-    if (
-      transaction.children &&
-      transaction.children.some((child) => child.itemized === true)
-    ) {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
       return 'Reimbursement Memo: See Below';
     }
     return 'Reimbursement memo entries do not meet itemization threshold.';
