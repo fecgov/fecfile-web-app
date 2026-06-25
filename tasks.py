@@ -48,7 +48,7 @@ DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("test", lambda _, branch: branch == "release/test"),
     ("stage", lambda _, branch: branch.startswith("release/sprint")),
-    ("dev", lambda _, branch: branch == "template/load-test-mirror"),
+    ("dev", lambda _, branch: branch == "feature/FOSEC-118-IP_blocking-test"),
 )
 
 
