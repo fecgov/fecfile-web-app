@@ -19,14 +19,14 @@ BLOCKED_IPS=$(echo "$VCAP_SERVICES" | jq -r '
 
 if [[ -z "$BLOCKED_IPS" || "$BLOCKED_IPS" == "null" ]]; then
   echo "No BLOCKED_IPS set in cloud.gov for app '${app}', skipping blockips.conf generation"
-  echo "# No blocked IPs configured" > ./deploy-config/front-end-nginx-config/blockips.conf
+  echo "# No blocked IPs configured" > blockips.conf
 else
-  echo "# Auto-generated list of blocked IPs" > ./deploy-config/front-end-nginx-config/blockips.conf
+  echo "# Auto-generated list of blocked IPs" > blockips.conf
   IFS=',' read -ra IPS <<< "$BLOCKED_IPS"
   for ip in "${IPS[@]}"; do
     escaped_ip=$(echo "$ip" | sed 's/\./\\./g')
     echo "if (\$http_x_forwarded_for ~* \"(^|,\\s*)${escaped_ip}(\\s*,|$)\") {" >> blockips.conf
     echo "    return 403;" >> blockips.conf
-    echo "}" >> ./deploy-config/front-end-nginx-config/blockips.conf
+    echo "}" >> blockips.conf
   done
 fi

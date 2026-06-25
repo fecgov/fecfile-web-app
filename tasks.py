@@ -85,7 +85,7 @@ def _prep_distribution_directory(ctx):
         os.path.join(dist_directory, "nginx.conf"),
     )
     copyfile(
-        os.path.join(nginx_config_dir, "blockips.conf"),
+        os.path.join(os.getcwd(), "blockips.conf"),
         os.path.join(dist_directory, "blockips.conf"),
     )
     copyfile(
