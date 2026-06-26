@@ -1576,6 +1576,12 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   flex: 1;
 }
 
+.p-button-primary:disabled {
+  background: var(--p-button-primary-background);
+  opacity: 50%;
+  color: white;
+}
+
 .p-button.p-button-secondary,
 .p-buttonset.p-button-secondary > .p-button,
 .p-splitbutton.p-button-secondary > .p-button {
