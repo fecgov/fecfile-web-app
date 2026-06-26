@@ -20,6 +20,7 @@ export class HeaderComponent {
 
   isCompact = false;
   private resizeObserver?: ResizeObserver;
+  private bannerHeight: number = 30;
 
   ngOnInit() {
     const navElement = this.elementRef.nativeElement.querySelector('nav');
@@ -33,25 +34,24 @@ export class HeaderComponent {
 
   @HostListener('window:scroll')
   onScroll() {
-    const bannerHeightStr = getComputedStyle(this.document.documentElement).getPropertyValue('--header-top') || '30px';
-    const bannerHeight = parseInt(bannerHeightStr, 10);
-
-    this.isCompact = window.scrollY > bannerHeight;
-
+    this.updateBannerHeight();
+    this.isCompact = window.scrollY > this.bannerHeight;
     this.recalculateLayoutFootprint();
   }
 
-  private recalculateLayoutFootprint() {
+  private updateBannerHeight() {
     const bannerHeightStr = getComputedStyle(this.document.documentElement).getPropertyValue('--header-top') || '30px';
-    const bannerHeight = parseInt(bannerHeightStr, 10);
+    this.bannerHeight = parseInt(bannerHeightStr, 10);
+  }
 
+  private recalculateLayoutFootprint() {
     const headerElement = this.elementRef.nativeElement.querySelector('nav');
     const currentHeaderHeight = headerElement ? headerElement.getBoundingClientRect().height : 74;
 
     let currentTotalFootprint = 0;
 
-    if (window.scrollY < bannerHeight) {
-      currentTotalFootprint = bannerHeight - window.scrollY + currentHeaderHeight;
+    if (window.scrollY < this.bannerHeight) {
+      currentTotalFootprint = this.bannerHeight - window.scrollY + currentHeaderHeight;
     } else {
       currentTotalFootprint = currentHeaderHeight;
     }

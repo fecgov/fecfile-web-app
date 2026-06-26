@@ -78,6 +78,12 @@ app-footer {
   }
 }
 
+#sidebar-container,
+.sidebar-content-container,
+#content-offset {
+  transition: --header-total 0.3s ease-in-out;
+}
+
 .login-background {
   background-color: #ffffff;
   max-height: 100vh;
