@@ -71,16 +71,17 @@ describe('HeaderComponent', () => {
   it('should toggle compact mode and update the header footprint on scroll', () => {
     const setPropertySpy = vi.spyOn(component['document'].documentElement.style, 'setProperty');
     const navElement = fixture.nativeElement.querySelector('nav');
+
     vi.spyOn(navElement, 'getBoundingClientRect').mockReturnValue({ height: 64 } as DOMRect);
 
-    // Use Vitest's stubGlobal for window/global properties too
-    vi.stubGlobal('scrollY', 10);
+    document.documentElement.style.setProperty('--header-top', '30px');
 
-    component['bannerHeight'] = 30;
+    vi.stubGlobal('scrollY', 40);
+
     component.onScroll();
 
     expect(component.isCompact).toBe(true);
-    expect(setPropertySpy).toHaveBeenCalledWith('--header-total', '84px');
+    expect(setPropertySpy).toHaveBeenCalledWith('--header-total', '64px');
   });
 
   it('should toggle the sidebar when the seal image is clicked', () => {

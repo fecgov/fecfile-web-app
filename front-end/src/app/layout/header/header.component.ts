@@ -26,15 +26,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const navElement = this.elementRef.nativeElement.querySelector('nav');
     if (navElement) {
-      this.resizeObserver = new ResizeObserver(() => {
-        this.recalculateLayoutFootprint();
-      });
+      if (typeof ResizeObserver !== 'undefined') {
+        this.resizeObserver = new ResizeObserver(() => {
+          this.recalculateLayoutFootprint();
+        });
 
-      this.observeLayoutElement(navElement);
+        this.observeLayoutElement(navElement);
 
-      const bannerElement = this.document.querySelector('section.usa-banner');
-      if (bannerElement) {
-        this.observeLayoutElement(bannerElement);
+        const bannerElement = this.document.querySelector('section.usa-banner');
+        if (bannerElement) {
+          this.observeLayoutElement(bannerElement);
+        }
       }
 
       this.recalculateLayoutFootprint();
