@@ -86,7 +86,7 @@ class MockResizeObserver implements ResizeObserver {
   unobserve = vi.fn();
   disconnect = vi.fn();
 
-  constructor(_: ResizeObserverCallback) {}
+  constructor(_unused: ResizeObserverCallback) {}
 }
 
 globalThis.ResizeObserver = MockResizeObserver;
