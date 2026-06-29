@@ -1,4 +1,13 @@
-import { effect, inject, Injectable, Renderer2, RendererFactory2, signal, WritableSignal } from '@angular/core';
+import {
+  effect,
+  inject,
+  Injectable,
+  linkedSignal,
+  Renderer2,
+  RendererFactory2,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { ApiService } from './api.service';
 import { Report } from '../models/reports/report.model';
 import { Actions } from '@ngrx/effects';
@@ -24,6 +33,7 @@ export class DotFecService {
   private readonly actions = inject(Actions);
   readonly rendererFactory = inject(RendererFactory2);
   readonly downloads: WritableSignal<Download[]> = signal([]);
+  readonly showTray = linkedSignal(() => this.downloads().length > 0);
   readonly renderer: Renderer2 = this.rendererFactory.createRenderer(null, null);
 
   private readonly loggedOut = toSignal(
@@ -38,6 +48,7 @@ export class DotFecService {
   }
 
   async generateFecFile(report: Report): Promise<Download> {
+    this.showTray.set(true);
     const response = await this.apiService.post<{ status: string; file_name: string; task_id: string }>(
       `/web-services/dot-fec/`,
       {
@@ -82,7 +93,7 @@ export class DotFecService {
   async downloadFecFile(download: Download): Promise<void> {
     const dotFEC = await this.apiService.getString(`/web-services/dot-fec/${download.id}/`);
     const newBlob = new Blob([dotFEC], { type: 'application/text' });
-    const data = window.URL.createObjectURL(newBlob);
+    const data = globalThis.URL.createObjectURL(newBlob);
     const link = this.renderer.createElement('a');
     this.renderer.setAttribute(link, 'href', data);
     this.renderer.setAttribute(link, 'download', download.name);

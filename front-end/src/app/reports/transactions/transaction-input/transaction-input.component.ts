@@ -1,10 +1,12 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { SelectItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
@@ -69,6 +71,9 @@ export class TransactionInputComponent implements OnInit {
   @Output() quaternaryContactClear = new EventEmitter<void>();
   @Output() quinaryContactSelect = new EventEmitter<SelectItem<Contact>>();
   @Output() quinaryContactClear = new EventEmitter<void>();
+
+  readonly store = inject(Store);
+  readonly activeReport = this.store.selectSignal(selectActiveReport);
 
   ContactTypes = ContactTypes;
   transactionType?: TransactionType;
