@@ -7,6 +7,9 @@
   .p-checkbox-label {
     font-style: italic;
     font-family: var(--gandhi);
+    &.p-disabled {
+      opacity: 50%;
+    }
   }
 
   .security-button {
