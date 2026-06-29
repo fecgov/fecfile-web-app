@@ -1,14 +1,4 @@
-.download-text {
-  font-family: var(--karla);
-  color: #112e51;
-  font-size: 12px;
-}
-
-td {
-  padding-right: 1.5rem;
-  padding-bottom: 0.5rem;
-}
-
-th {
-  display: none;
+table {
+  border-collapse: separate;
+  border-spacing: 1.5rem 0.5rem;
 }
