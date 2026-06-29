@@ -20,7 +20,14 @@ describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL', () => {
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account - Payroll: See Below');
+    const txn = transactionType.getNewTransaction();
+    const descrip = transactionType.generatePurposeDescription(txn);
+    expect(descrip).toBe('Payroll memo entries do not meet itemization threshold.');
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll Memo: See Below');
   });
 });
