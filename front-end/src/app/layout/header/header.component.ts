@@ -1,4 +1,4 @@
-import { Component, DOCUMENT, ElementRef, HostListener, inject, input } from '@angular/core';
+import { Component, DOCUMENT, ElementRef, HostListener, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './header-links/header-links.component';
 import { HeaderStyles } from './header-styles';
@@ -11,7 +11,7 @@ import { LayoutService, USE_DYNAMIC_SIDEBAR } from '../layout.service';
   styleUrls: ['./header.component.scss'],
   imports: [NgOptimizedImage, HeaderLinksComponent],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject(ElementRef);
   readonly layoutService = inject(LayoutService);
@@ -21,6 +21,7 @@ export class HeaderComponent {
   isCompact = false;
   private resizeObserver?: ResizeObserver;
   private bannerHeight: number = 30;
+  private readonly observedElements = new Set<Element>();
 
   ngOnInit() {
     const navElement = this.elementRef.nativeElement.querySelector('nav');
@@ -28,7 +29,15 @@ export class HeaderComponent {
       this.resizeObserver = new ResizeObserver(() => {
         this.recalculateLayoutFootprint();
       });
-      this.resizeObserver.observe(navElement);
+
+      this.observeLayoutElement(navElement);
+
+      const bannerElement = this.document.querySelector('section.usa-banner');
+      if (bannerElement) {
+        this.observeLayoutElement(bannerElement);
+      }
+
+      this.recalculateLayoutFootprint();
     }
   }
 
@@ -44,17 +53,24 @@ export class HeaderComponent {
     this.bannerHeight = parseInt(bannerHeightStr, 10);
   }
 
+  private observeLayoutElement(element: Element) {
+    if (!this.resizeObserver || this.observedElements.has(element)) {
+      return;
+    }
+
+    this.observedElements.add(element);
+    this.resizeObserver.observe(element);
+  }
+
   private recalculateLayoutFootprint() {
     const headerElement = this.elementRef.nativeElement.querySelector('nav');
     const currentHeaderHeight = headerElement ? headerElement.getBoundingClientRect().height : 74;
 
-    let currentTotalFootprint = 0;
+    const bannerElement = this.document.querySelector('section.usa-banner');
+    const bannerHeight = bannerElement ? bannerElement.getBoundingClientRect().height : this.bannerHeight;
 
-    if (window.scrollY < this.bannerHeight) {
-      currentTotalFootprint = this.bannerHeight - window.scrollY + currentHeaderHeight;
-    } else {
-      currentTotalFootprint = currentHeaderHeight;
-    }
+    const currentTotalFootprint =
+      window.scrollY < bannerHeight ? bannerHeight - window.scrollY + currentHeaderHeight : currentHeaderHeight;
 
     this.document.documentElement.style.setProperty('--header-total', `${currentTotalFootprint}px`);
   }

@@ -8,8 +8,6 @@ $sidebar-width: 284px;
   padding: 64px 24px 32px 24px;
   position: fixed;
   top: var(--header-total);
-
-  transition: none;
   z-index: 999;
   overflow-y: auto;
 }
@@ -78,15 +76,9 @@ app-footer {
   }
 }
 
-#sidebar-container,
-.sidebar-content-container,
-#content-offset {
-  transition: --header-total 0.3s ease-in-out;
-}
-
 .login-background {
   background-color: #ffffff;
-  max-height: 100vh;
+  min-height: 100vh;
 }
 
 .security-notice-background {
