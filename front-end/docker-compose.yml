@@ -29,7 +29,8 @@ services:
       - "${PORT:-4200}:${PORT:-4200}"
     volumes:
       - ..:/workspace
-      - ./.tmp/nginx.local.generated.conf:/etc/nginx/nginx.conf:ro
+      - ../deploy-config/front-end-nginx-config/blockips.conf:/etc/nginx/blockips.conf
+      - ./.tmp/nginx.local.generated.conf:/etc/nginx/nginx.conf
 
   browser-sync:
     image: node:22
