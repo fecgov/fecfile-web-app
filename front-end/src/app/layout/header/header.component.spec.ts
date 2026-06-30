@@ -9,7 +9,6 @@ import { provideRouter } from '@angular/router';
 import { USE_DYNAMIC_SIDEBAR, LayoutService } from '../layout.service';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 
-// 1. Correct, strict implementation of a ResizeObserver Mock
 class MockResizeObserver implements ResizeObserver {
   static instances: MockResizeObserver[] = [];
 
@@ -30,7 +29,6 @@ describe('HeaderComponent', () => {
   beforeEach(async () => {
     MockResizeObserver.instances = [];
 
-    // 2. Safely mock globalThis using Vitest's built-in tool
     vi.stubGlobal('ResizeObserver', MockResizeObserver);
 
     await TestBed.configureTestingModule({
@@ -45,7 +43,6 @@ describe('HeaderComponent', () => {
     }).compileComponents();
   });
 
-  // 3. Critically important: Clean up the global scope after every test
   afterEach(() => {
     vi.unstubAllGlobals();
   });
@@ -63,7 +60,6 @@ describe('HeaderComponent', () => {
 
   it('should create a ResizeObserver for the nav element on init', () => {
     expect(MockResizeObserver.instances).not.toHaveLength(0);
-    // Find the last created instance to protect against 3rd-party libs creating them
     const latestInstance = MockResizeObserver.instances[MockResizeObserver.instances.length - 1];
     expect(latestInstance.observe).toHaveBeenCalled();
   });
