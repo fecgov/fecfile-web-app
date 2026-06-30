@@ -1,22 +1,22 @@
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testF24, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Form24EditComponent } from './form-24-edit.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { submit } from '@angular/forms/signals';
+import { Form24 } from 'app/shared/models';
+
+const usedReports: Form24[] = [testF24(), Form24.fromJSON({ name: '24-Hour: Taken Name' })];
 
 describe('Form24EditComponent', () => {
   let component: Form24EditComponent;
   let fixture: ComponentFixture<Form24EditComponent>;
   let form24Service: Form24Service;
-  let httpMock: HttpTestingController;
   let router: Router;
   let messageService: MessageService;
 
@@ -35,10 +35,10 @@ describe('Form24EditComponent', () => {
       ],
     }).compileComponents();
 
+    form24Service = TestBed.inject(Form24Service);
+    vi.spyOn(form24Service, 'getAllReports').mockResolvedValue(usedReports);
     fixture = TestBed.createComponent(Form24EditComponent);
     component = fixture.componentInstance;
-    form24Service = TestBed.inject(Form24Service);
-    httpMock = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
     messageService = TestBed.inject(MessageService);
 
@@ -58,35 +58,17 @@ describe('Form24EditComponent', () => {
     expect(component.typeName()).toBe('24-Hour:');
   });
 
-  it('should validate name uniqueness against the backend when modified', async () => {
+  it('should validate name uniqueness', async () => {
     component.f24Form.form24Name().value.set('Brand New Name');
-
     fixture.detectChanges();
-
-    const expectedUrl = `${environment.apiUrl}${form24Service.apiEndpoint}/check/?name=24-Hour: Brand New Name`;
-    const req = httpMock.expectOne((request) => request.url === expectedUrl);
-    expect(req.request.method).toBe('GET');
-
-    req.flush({ available: true });
-    await fixture.whenStable();
-
     expect(component.f24Form.form24Name().invalid()).toBe(false);
-    httpMock.verify();
   });
 
-  it('should fail validation if the backend responds that the name is taken', async () => {
+  it('should fail validation if the name is taken', async () => {
     component.f24Form.form24Name().value.set('Taken Name');
-
     fixture.detectChanges();
-
-    const expectedUrl = `${environment.apiUrl}${form24Service.apiEndpoint}/check/?name=24-Hour: Taken Name`;
-    const req = httpMock.expectOne((request) => request.url === expectedUrl);
-    req.flush({ available: false });
-    await fixture.whenStable();
-
     expect(component.f24Form.form24Name().invalid()).toBe(true);
     expect(component.f24Form.form24Name().errors()[0].message).toContain('already in use');
-    httpMock.verify();
   });
 
   describe('Form Submissions', () => {
@@ -98,30 +80,21 @@ describe('Form24EditComponent', () => {
     });
 
     it('should route to summary page when intent is "save"', async () => {
-      component.setIntent('save');
-
-      await submit(component.f24Form);
-
+      await component.submitForm();
       expect(form24Service.update).toHaveBeenCalled();
       expect(messageService.add).toHaveBeenCalledWith(expect.objectContaining({ severity: 'success' }));
       expect(router.navigateByUrl).toHaveBeenCalledWith('/reports');
     });
 
     it('should route deeper into transactions subview when intent is "continue"', async () => {
-      component.setIntent('continue');
-
-      await submit(component.f24Form);
-
+      await component.submitForm('continue');
       expect(form24Service.update).toHaveBeenCalled();
       expect(router.navigate).toHaveBeenCalledWith(['/reports/transactions/report/', '999', 'list']);
     });
 
     it('should pop error toast message if network update falls over', async () => {
       vi.spyOn(form24Service, 'update').mockRejectedValue(new Error('DB connection timeout'));
-      component.setIntent('save');
-
-      await submit(component.f24Form);
-
+      await component.submitForm();
       expect(messageService.add).toHaveBeenCalledWith(
         expect.objectContaining({
           severity: 'error',

@@ -1,7 +1,7 @@
 <h1>Form 24</h1>
 <span class="karla text-sm font-bold">24/48 Hour Report of Independent Expenditure</span>
 <hr />
-<form [formRoot]="f24Form" class="flex flex-column gap-4">
+<form novalidate (submit)="$event.preventDefault()" class="flex flex-column gap-4">
   <fieldset>
     <h2 for="form24Options">Report type</h2>
     <p-selectbutton
@@ -41,31 +41,9 @@
     }
   </fieldset>
   <hr type="solid" class="m-0" />
-  <div class="flex justify-content-between">
-    <button pButton pRipple label="Back" (click)="router.navigateByUrl('/reports')" class="p-button-secondary"></button>
-    <div class="flex gap-4">
-      <button
-        pButton
-        pRipple
-        appSingleClick
-        label="Save"
-        type="submit"
-        class="p-button-primary"
-        data-cy="save-cancel-actions"
-        [disabled]="f24Form().invalid()"
-        (click)="setIntent('save')"
-      ></button>
-      <button
-        pButton
-        pRipple
-        appSingleClick
-        label="Save & continue"
-        type="submit"
-        class="p-button-info"
-        data-cy="save-cancel-actions"
-        [disabled]="f24Form().invalid()"
-        (click)="setIntent('continue')"
-      ></button>
-    </div>
-  </div>
+  <app-save-cancel
+    [submitDisabled]="f24Form().invalid()"
+    (cancelForm)="router.navigateByUrl('/reports')"
+    (save)="submitForm($event)"
+  />
 </form>
