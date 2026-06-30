@@ -15,8 +15,8 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 
 interface Form24Data {
-  typeName: Type24_48 | null;
-  form24Name: string;
+  type: Type24_48 | null;
+  typelessName: string;
 }
 
 @Component({
@@ -43,8 +43,8 @@ export class Form24EditComponent {
   );
 
   private readonly f24Model = signal<Form24Data>({
-    typeName: null,
-    form24Name: '',
+    type: null,
+    typelessName: '',
   });
 
   readonly form24Options = [
@@ -53,13 +53,11 @@ export class Form24EditComponent {
   ];
 
   readonly f24Form = form(this.f24Model, (schema) => {
-    required(schema.typeName, { message: 'This is a required field' });
-    required(schema.form24Name, { message: 'This is a required field' });
-    debounce(schema.form24Name, 300);
-    validate(schema.form24Name, ({ value, valueOf }) => {
-      const typeName = valueOf(schema.typeName);
-      if (typeName === null) return null;
-      const name = `${typeName}-Hour: ${value()}`;
+    required(schema.type, { message: 'This is a required field' });
+    required(schema.typelessName, { message: 'This is a required field' });
+    debounce(schema.typelessName, 300);
+    validate(schema.typelessName, () => {
+      const name = this.fullName();
       if (name === this.report().name || !this.form24Names().has(name)) return null;
       return {
         kind: 'exists',
@@ -68,9 +66,8 @@ export class Form24EditComponent {
     });
   });
 
-  readonly typeName = computed(() =>
-    this.f24Form.typeName().value() ? `${this.f24Form.typeName().value()}-Hour:` : '',
-  );
+  readonly typeHour = computed(() => `${this.f24Form.type().value()}-Hour:`);
+  private readonly fullName = computed(() => `${this.typeHour()} ${this.f24Form.typelessName().value()}`);
 
   constructor() {
     effectOnceIf(
@@ -80,8 +77,8 @@ export class Form24EditComponent {
         const match = report.name?.match(regex);
         if (match) {
           this.f24Form().reset({
-            typeName: match[1].includes('24') ? '24' : '48',
-            form24Name: match[2],
+            type: match[1].includes('24') ? '24' : '48',
+            typelessName: match[2],
           });
         }
       },
@@ -93,10 +90,9 @@ export class Form24EditComponent {
       ignoreValidators: 'none',
       action: async () => {
         try {
-          const { typeName, form24Name } = this.f24Form().value();
           const payload = Form24.fromJSON({
             ...this.report()!,
-            name: `${typeName}-Hour: ${form24Name}`,
+            name: this.fullName(),
           });
           await this.form24Service.update(payload, ['name']);
 

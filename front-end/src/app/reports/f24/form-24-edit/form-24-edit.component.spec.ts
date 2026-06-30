@@ -50,25 +50,25 @@ describe('Form24EditComponent', () => {
   });
 
   it('should seed form values on initialization based on activeReport store signal', () => {
-    expect(component.f24Form.typeName().value()).toBe('24');
-    expect(component.f24Form.form24Name().value()).toBe('Initial Name');
+    expect(component.f24Form.type().value()).toBe('24');
+    expect(component.f24Form.typelessName().value()).toBe('Initial Name');
   });
 
-  it('should compute the correct prefix title via typeName() helper', () => {
-    expect(component.typeName()).toBe('24-Hour:');
+  it('should compute the correct prefix title via type() helper', () => {
+    expect(component.typeHour()).toBe('24-Hour:');
   });
 
   it('should validate name uniqueness', async () => {
-    component.f24Form.form24Name().value.set('Brand New Name');
+    component.f24Form.typelessName().value.set('Brand New Name');
     fixture.detectChanges();
-    expect(component.f24Form.form24Name().invalid()).toBe(false);
+    expect(component.f24Form.typelessName().invalid()).toBe(false);
   });
 
   it('should fail validation if the name is taken', async () => {
-    component.f24Form.form24Name().value.set('Taken Name');
+    component.f24Form.typelessName().value.set('Taken Name');
     fixture.detectChanges();
-    expect(component.f24Form.form24Name().invalid()).toBe(true);
-    expect(component.f24Form.form24Name().errors()[0].message).toContain('already in use');
+    expect(component.f24Form.typelessName().invalid()).toBe(true);
+    expect(component.f24Form.typelessName().errors()[0].message).toContain('already in use');
   });
 
   describe('Form Submissions', () => {

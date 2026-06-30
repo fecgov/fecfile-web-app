@@ -8,36 +8,36 @@
       inputId="form24Options"
       id="form24Options"
       [options]="form24Options"
-      [formField]="f24Form.typeName"
+      [formField]="f24Form.type"
       optionLabel="label"
       optionValue="value"
     />
-    @if (f24Form.typeName().dirty() && f24Form.typeName().invalid()) {
-      <small class="p-error">{{ f24Form.typeName().errors()[0].message }}</small>
+    @if (f24Form.type().dirty() && f24Form.type().invalid()) {
+      <small class="p-error">{{ f24Form.type().errors()[0].message }}</small>
     }
   </fieldset>
   <fieldset>
     <label for="report-name" class="mb-1"> REPORT NAME </label>
     <p-input-group>
       <div id="f24-input-container">
-        @if (typeName()) {
-          <span>{{ typeName() }}</span>
+        @if (this.f24Form.type().value() != null) {
+          <span>{{ typeHour() }}</span>
         }
         <p-inputgroup>
           <input
             pInputText
             placeholder="Provide a custom report name"
             type="text"
-            [formField]="f24Form.form24Name"
+            [formField]="f24Form.typelessName"
             id="report-name"
             class="pl-1"
-            [class.opacity-60]="!f24Form.form24Name()"
+            [class.opacity-60]="!f24Form.typelessName()"
           />
         </p-inputgroup>
       </div>
     </p-input-group>
-    @if (f24Form.form24Name().touched() && f24Form.form24Name().invalid()) {
-      <small class="p-error">{{ f24Form.form24Name().errors()[0].message }}</small>
+    @if (f24Form.typelessName().touched() && f24Form.typelessName().invalid()) {
+      <small class="p-error">{{ f24Form.typelessName().errors()[0].message }}</small>
     }
   </fieldset>
   <hr type="solid" class="m-0" />
