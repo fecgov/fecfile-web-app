@@ -338,4 +338,9 @@
 </div>
 
 <p-confirmDialog key="dialog" class="confirm-dialog" />
-<app-contact-modal />
+<app-contact-modal
+  [(visible)]="dialogVisible"
+  [availableContactTypes]="availableContactTypes()"
+  [contactType]="contactType()"
+  (contactCreated)="populateContact($event)"
+/>

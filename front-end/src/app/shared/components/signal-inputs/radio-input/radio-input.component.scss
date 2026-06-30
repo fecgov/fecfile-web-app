@@ -1,0 +1,21 @@
+input[type='radio'] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid var(--text-color-secondary);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:focus {
+    box-shadow: none;
+  }
+  &:checked {
+    background-color: var(--text-color-secondary);
+    box-shadow: inset 0 0 0 3px #ffffff;
+  }
+  &:hover {
+    border-color: var(--text-color-secondary) !important;
+  }
+}

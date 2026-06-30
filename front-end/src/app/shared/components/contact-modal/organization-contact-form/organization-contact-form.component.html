@@ -1,0 +1,9 @@
+<app-text-input class="grid-col-6 start-row" label="NAME" id="name" [field]="fields().name" />
+<hr />
+
+<h3>Address</h3>
+<app-address-form [fields]="fields().address" />
+<fieldset class="grid-col-6">
+  <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+  <app-fec-international-phone-input [formField]="fields().telephone" />
+</fieldset>

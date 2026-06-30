@@ -1002,3 +1002,30 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
     left: 25px !important;
   }
 }
+
+.start-row {
+  grid-column-start: 1;
+}
+@for $i from 1 through 12 {
+  .grid-col-#{$i} {
+    grid-column-end: span #{$i};
+    margin: 0;
+  }
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+
+  & > label,
+  > .span-label {
+    margin-bottom: 8px;
+  }
+  & > .p-error {
+    margin-top: 4px;
+  }
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}

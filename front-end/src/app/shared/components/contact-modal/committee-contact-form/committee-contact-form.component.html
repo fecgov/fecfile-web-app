@@ -1,0 +1,16 @@
+<app-text-input
+  class="grid-col-6 start-row"
+  [field]="fields().committee_id"
+  id="committee_id"
+  label="COMMITTEE ID"
+  [forceUpper]="true"
+/>
+<app-text-input class="grid-col-6" [field]="fields().name" id="name" label="NAME" />
+<hr />
+
+<h3>Address</h3>
+<app-address-form [fields]="fields().address" />
+<fieldset class="grid-col-6">
+  <label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+  <app-fec-international-phone-input [formField]="fields().telephone" />
+</fieldset>

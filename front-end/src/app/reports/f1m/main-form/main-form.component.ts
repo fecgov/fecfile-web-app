@@ -1,8 +1,8 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import { TransactionContactUtils } from 'app/shared/components/transaction-type-base/transaction-contact.utils';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/reports/form-1m.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Form1MService } from 'app/shared/services/form-1m.service';
@@ -27,6 +27,7 @@ import { ContactModalComponent } from 'app/shared/components/contact-modal/conta
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-main-form',
@@ -139,6 +140,22 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   candidateContacts: CandidateContact[] = [];
 
   report = new Form1M();
+  readonly dialogVisible = signal(false);
+  readonly manager = computed(() => this.cmservice.activeManager());
+  readonly contactType = computed(() => this.manager().contactType());
+  readonly availableContactTypes = computed(() => this.manager().contactTypeOptions());
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.cmservice.showDialog()) {
+        this.dialogVisible.set(true);
+      }
+    });
+    effect(() => {
+      if (!this.dialogVisible()) this.cmservice.showDialog.set(false);
+    });
+  }
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -268,5 +285,10 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
         });
       }
     });
+  }
+
+  populateContact(contact: Contact) {
+    this.manager().contact.set(contact);
+    this.manager().outerContact.set(contact);
   }
 }

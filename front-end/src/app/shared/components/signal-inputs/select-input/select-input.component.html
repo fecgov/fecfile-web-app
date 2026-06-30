@@ -1,0 +1,16 @@
+<label [for]="id()">{{ label() }}</label>
+@if (searchable()) {
+  <app-searchable-select-input [id]="id()" [formField]="field()" [options]="options()" />
+} @else {
+  <div class="select-wrapper">
+    <select [id]="id()" [formField]="field()">
+      @for (option of options(); track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </div>
+}
+
+@if (fieldState().touched() && fieldState().invalid()) {
+  <small class="p-error"> {{ fieldState().errors()[0].message }} </small>
+}

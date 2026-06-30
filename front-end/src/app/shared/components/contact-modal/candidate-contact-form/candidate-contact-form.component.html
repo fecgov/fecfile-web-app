@@ -1,0 +1,22 @@
+<app-text-input
+  class="grid-col-6 start-row"
+  [field]="fields().candidate_id"
+  id="candidate_id"
+  label="CANDIDATE ID"
+  [forceUpper]="true"
+/>
+<app-name-form [fields]="fields().name" />
+<hr />
+
+<h3>Address</h3>
+<app-address-form [fields]="fields().address" />
+<app-telephone-input class="grid-col-6" [formField]="fields().telephone" id="telephone" />
+
+<hr />
+<h3>Employer</h3>
+<app-text-input class="grid-col-6 start-row" label="EMPLOYER (OPTIONAL)" id="employer" [field]="fields().employer" />
+<app-text-input class="grid-col-6" label="OCCUPATION (OPTIONAL)" id="occupation" [field]="fields().occupation" />
+
+<hr />
+<h3>Office</h3>
+<app-candidate-office-form [fields]="fields().office" />

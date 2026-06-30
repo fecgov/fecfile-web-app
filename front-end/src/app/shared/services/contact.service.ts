@@ -18,7 +18,43 @@ import {
   OrganizationLookupResponse,
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService, QueryParams } from './api.service';
+import { ApiService, getHeaders, QueryParams } from './api.service';
+import { HttpValidatorOptions, PathKind } from '@angular/forms/signals';
+import { environment } from 'environments/environment';
+import { CookieService } from 'ngx-cookie-service';
+
+export function getFecUniqueValidator(
+  cookieService: CookieService,
+): HttpValidatorOptions<string, string, PathKind.Child> {
+  return {
+    request: ({ value }) => {
+      return {
+        url: `${environment.apiUrl}/contacts/get_contact_id/`,
+        method: 'GET',
+        headers: getHeaders(cookieService),
+        withCredentials: true,
+        params: { fec_id: value() },
+      };
+    },
+    onSuccess: (response: string, { state }) => {
+      if (response === '') {
+        return null;
+      }
+      state.markAsTouched();
+      return {
+        kind: 'idTaken',
+        message: 'FEC IDs must be unique.',
+      };
+    },
+    onError: () => {
+      console.error('Validation request failed:');
+      return {
+        kind: 'serverError',
+        message: 'Could not verify id availability',
+      };
+    },
+  };
+}
 
 @Injectable({
   providedIn: 'root',
