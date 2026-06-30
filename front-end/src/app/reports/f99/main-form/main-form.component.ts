@@ -72,15 +72,15 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   constructor() {
     super();
     effect(() => {
-      this.showFilingFrequency();
+      this.documentType();
       /**
        * Reset the filing frequency field when the document type changes, but only after the initial load.
        * On load we want the filing frequency from the data.
        */
-      if (!this.pageIsLoaded) {
-        this.pageIsLoaded = true;
-      } else {
+      if (this.pageIsLoaded) {
         this.form.controls['filing_frequency'].reset();
+      } else {
+        this.pageIsLoaded = true;
       }
     });
   }

@@ -1,18 +1,15 @@
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
   ErrorHandler,
   enableProdMode,
-  provideAppInitializer,
-  inject,
   importProvidersFrom,
+  inject,
+  provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { environment } from './environments/environment';
-import { providePrimeNG } from 'primeng/config';
-import { CookieService } from 'ngx-cookie-service';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
-import { HttpErrorInterceptor } from './app/shared/interceptors/http-error.interceptor';
-import { FecDatePipe } from './app/shared/pipes/fec-date.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import {
   InMemoryScrollingFeature,
   InMemoryScrollingOptions,
@@ -21,44 +18,47 @@ import {
   provideRouter,
   withInMemoryScrolling,
 } from '@angular/router';
-import { CustomRouteReuseStrategy } from './app/custom-route-reuse-strategy';
-import { LoginService } from './app/shared/services/login.service';
-import { SchedulerAction, asyncScheduler } from 'rxjs';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { StoreModule, MetaReducer, ActionReducer, Action } from '@ngrx/store';
-import { committeeAccountReducer } from './app/store/committee-account.reducer';
-import { singleClickReducer } from './app/store/single-click.reducer';
-import { loginReducer } from './app/store/user-login-data.reducer';
-import { activeReportReducer } from './app/store/active-report.reducer';
-import { navigationEventReducer } from './app/store/navigation-event.reducer';
-import { serviceAvailableReducer } from './app/store/service-available.reducer';
-import { AppState } from './app/store/app-state.model';
-import { localStorageSync } from 'ngrx-store-localstorage';
 import { EffectsModule } from '@ngrx/effects';
-import { MenubarModule } from 'primeng/menubar';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { PanelModule } from 'primeng/panel';
-import { ButtonModule } from 'primeng/button';
-import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { PopoverModule } from 'primeng/popover';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
-import { AppComponent } from './app/app.component';
-import { ROUTES } from 'app/routes';
-import { CheckboxModule } from 'primeng/checkbox';
+import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import Aura from '@primeuix/themes/aura';
-import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 import { USE_DYNAMIC_SIDEBAR } from 'app/layout/layout.service';
+import { ROUTES } from 'app/routes';
+import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
 import { DynamicPipe } from 'app/shared/pipes/dynamic.pipe';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
-import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { CookieCheckService } from 'app/shared/services/cookie-check.service';
 import { FrontendErrorReportingService } from 'app/shared/services/frontend-error-reporting.service';
 import { FrontendGlobalErrorHandlerService } from 'app/shared/services/frontend-global-error-handler.service';
+import { localStorageSync } from 'ngrx-store-localstorage';
+import { CookieService } from 'ngx-cookie-service';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { providePrimeNG } from 'primeng/config';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { MenubarModule } from 'primeng/menubar';
+import { PanelModule } from 'primeng/panel';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { PopoverModule } from 'primeng/popover';
+import { ToastModule } from 'primeng/toast';
+import { SchedulerAction, asyncScheduler } from 'rxjs';
+import { AppComponent } from './app/app.component';
+import { CustomRouteReuseStrategy } from './app/custom-route-reuse-strategy';
+import { HttpErrorInterceptor } from './app/shared/interceptors/http-error.interceptor';
+import { FecDatePipe } from './app/shared/pipes/fec-date.pipe';
+import { LoginService } from './app/shared/services/login.service';
+import { activeReportReducer } from './app/store/active-report.reducer';
+import { AppState } from './app/store/app-state.model';
+import { committeeAccountReducer } from './app/store/committee-account.reducer';
+import { navigationEventReducer } from './app/store/navigation-event.reducer';
+import { serviceAvailableReducer } from './app/store/service-available.reducer';
+import { singleClickReducer } from './app/store/single-click.reducer';
+import { loginReducer } from './app/store/user-login-data.reducer';
+import { environment } from './environments/environment';
 
 function initializeAppFactory(
   loginService: LoginService,
@@ -77,7 +77,9 @@ function initializeAppFactory(
     }
     asyncScheduler.schedule(checkSession, 1000);
     try {
-      return await loginService.retrieveUserLoginData();
+      if (loginService.userIsAuthenticated()) {
+        return await loginService.retrieveUserLoginData();
+      }
     } catch (e) {
       console.log(e);
     }

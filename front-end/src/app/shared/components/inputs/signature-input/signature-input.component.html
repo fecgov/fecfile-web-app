@@ -17,12 +17,7 @@
     }
 
     <div class="col-4">
-      <app-calendar
-        [fieldName]="dateSignedFieldName"
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        label="DATE SIGNED"
-      />
+      <app-calendar [formControlName]="dateSignedFieldName" [formSubmitted]="formSubmitted" label="DATE SIGNED" />
     </div>
   </div>
 </div>

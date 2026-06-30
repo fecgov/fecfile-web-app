@@ -1,0 +1,33 @@
+p {
+  line-height: 1;
+  margin: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  padding: 0;
+  height: 36px;
+  width: 40px;
+  text-align: center;
+}
+
+.horizontal-field {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  > :first-child {
+    width: 226px;
+  }
+}
+
+:host ::ng-deep {
+  .field {
+    margin: 0;
+  }
+}
