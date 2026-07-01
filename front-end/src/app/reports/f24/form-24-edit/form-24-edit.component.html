@@ -36,7 +36,7 @@
         </p-inputgroup>
       </div>
     </p-input-group>
-    @if (f24Form.typelessName().touched() && f24Form.typelessName().invalid()) {
+    @if (f24Form().dirty() && f24Form.typelessName().invalid()) {
       <small class="p-error">{{ f24Form.typelessName().errors()[0].message }}</small>
     }
   </fieldset>
