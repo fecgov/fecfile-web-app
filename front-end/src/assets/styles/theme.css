@@ -9,6 +9,10 @@
   font-weight: normal;
 }
 
+.p-select {
+  border: 2px solid var(--p-select-border-color)
+}
+
 .p-disabled,
 .p-component:disabled,
 .p-select:disabled {

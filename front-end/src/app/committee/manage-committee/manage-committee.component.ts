@@ -36,7 +36,6 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   protected readonly itemService = inject(CommitteeMemberService);
   readonly user = this.store.selectSignal(selectUserLoginData);
   protected readonly getRoleLabel = getRoleLabel;
-  override item: CommitteeMember = this.getEmptyItem();
 
   readonly editVisible = signal(false);
   readonly editSelfVisible = signal(false);

@@ -1,17 +1,17 @@
-import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, inject, linkedSignal, Signal, TemplateRef, viewChild } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
 import { ButtonDirective, ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
-import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { RouterLink } from '@angular/router';
+import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
 
 @Component({
   selector: 'app-contact-list',
@@ -22,28 +22,22 @@ import { RouterLink } from '@angular/router';
     ButtonDirective,
     Ripple,
     TableActionsButtonComponent,
-    ContactDialogComponent,
     ButtonModule,
     LabelPipe,
     SelectModule,
     RouterLink,
+    ContactModalComponent,
   ],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   protected readonly itemService = inject(ContactService);
   public readonly deletedContactService = inject(DeletedContactService);
 
-  contactTypeLabels: LabelList = ContactTypeLabels;
-  dialogContactTypeOptions: PrimeOptions = [];
+  contactTypeLabels = ContactTypeLabels;
+  readonly dialogContactTypeOptions = linkedSignal<PrimeOptions>(() => LabelUtils.getPrimeOptions(ContactTypeLabels));
 
   restoreContactsButtonIsVisible = false;
   searchTerm = '';
-
-  // contact lookup
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-    ContactTypes.COMMITTEE,
-    ContactTypes.INDIVIDUAL,
-  ]);
 
   readonly nameBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('nameBody');
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<Contact>>>('roleBody');
@@ -108,12 +102,12 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public override addItem() {
-    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    this.dialogContactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels));
     super.addItem();
   }
 
   public override editItem(item: Contact) {
-    this.dialogContactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]);
+    this.dialogContactTypeOptions.set(LabelUtils.getPrimeOptions(ContactTypeLabels, [item.type]));
     super.editItem(item);
     this.isNewItem = false;
   }
@@ -139,6 +133,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     return !item.has_transaction_or_report;
   }
 
+  readonly contactType = computed(() => this.item()?.type ?? ContactTypes.INDIVIDUAL);
   saveContact(contact: Contact) {
     const request = contact.id ? this.itemService.update(contact) : this.itemService.create(contact);
 

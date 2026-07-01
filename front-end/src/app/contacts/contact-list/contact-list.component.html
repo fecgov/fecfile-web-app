@@ -52,10 +52,10 @@
   </ng-template>
 </app-table>
 
-<app-contact-dialog
-  [contactTypeOptions]="dialogContactTypeOptions"
-  [contact]="item"
-  [(detailVisible)]="detailVisible"
-  [showHistory]="true"
-  (savedContact)="saveContact($event)"
+<app-contact-modal
+  [(visible)]="detailVisible"
+  [availableContactTypes]="dialogContactTypeOptions()"
+  [contactType]="contactType()"
+  (contactCreated)="saveContact($event)"
+  [contact]="item()"
 />

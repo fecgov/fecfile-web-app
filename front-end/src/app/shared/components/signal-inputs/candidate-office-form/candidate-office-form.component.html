@@ -1,22 +1,22 @@
 <app-select-input
   class="grid-col-6"
-  id="candidate-office"
+  labelId="candidate-office-label"
   label="CANDIDATE OFFICE"
-  [field]="fields().candidate_office"
+  [formField]="fields().candidate_office"
   [options]="candidateOfficeTypeOptions"
 />
 <app-select-input
   class="grid-col-3"
-  id="candidate-state"
+  labelId="candidate-state-label"
   label="CANDIDATE STATE"
-  [field]="fields().candidate_state"
+  [formField]="fields().candidate_state"
   [options]="stateOptions"
   [searchable]="true"
 />
 <app-select-input
   class="grid-col-3"
-  id="candidate-district"
+  labelId="candidate-district-label"
   label="CANDIDATE DISTRICT"
-  [field]="fields().candidate_district"
+  [formField]="fields().candidate_district"
   [options]="candidateDistrictOptions()"
 />

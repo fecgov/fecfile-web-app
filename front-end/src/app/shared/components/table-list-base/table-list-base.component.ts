@@ -25,7 +25,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   protected readonly elementRef = inject(ElementRef);
   protected abstract readonly itemService: TableListService<T>;
 
-  item!: T;
+  readonly item = signal<T | undefined>(undefined);
   readonly items = signal<T[]>([]);
   readonly rowsPerPage = signal(10);
   readonly totalItems = signal(0);
@@ -118,13 +118,13 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
   }
 
   public addItem() {
-    this.item = this.getEmptyItem();
+    this.item.set(this.getEmptyItem());
     this.detailVisible.set(true);
     this.isNewItem = true;
   }
 
   public editItem(item: T): Promise<boolean> | void {
-    this.item = item;
+    this.item.set(item);
     this.detailVisible.set(true);
     this.isNewItem = false;
   }
@@ -136,7 +136,7 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.itemService.delete(item).then(() => {
-          this.item = this.getEmptyItem();
+          this.item.set(this.getEmptyItem());
           this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });

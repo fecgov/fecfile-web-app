@@ -1,7 +1,17 @@
-import { SchemaPathTree, PathKind, required, minLength, maxLength, pattern } from '@angular/forms/signals';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  SchemaPathTree,
+  PathKind,
+  required,
+  minLength,
+  maxLength,
+  pattern,
+  createMetadataKey,
+} from '@angular/forms/signals';
 import { JsonSchema } from 'fecfile-validate';
 
-export const requiredMessage = 'This is a required field.';
+export const requiredMessage = 'This is a required field';
+export const PLACEHOLDER = createMetadataKey<string>();
 
 export function schemaFormValidatorBuilder<T>(
   schema: JsonSchema,

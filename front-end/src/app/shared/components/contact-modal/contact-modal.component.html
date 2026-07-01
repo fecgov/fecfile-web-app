@@ -1,18 +1,18 @@
 <app-dialog
   tabindex="-1"
   aria-labelledby="dialog-title"
-  title="Add contact"
+  [title]="contact() ? 'Edit contact' : 'Add contact'"
   [(visible)]="visible"
   [submitDisabled]="contactForm().invalid()"
   (confirm)="submitForm()"
 >
-  <form novalidate (submit)="$event.preventDefault()">
+  <form novalidate (submit)="$event.preventDefault()" class="grid-form">
     <app-select-input
       label="CONTACT TYPE"
-      [field]="contactForm.type"
-      id="contact-type"
+      [formField]="contactForm.type"
+      labelId="contact-type-label"
       [options]="availableContactTypes()"
-      class="grid-col-2"
+      class="grid-col-12 w-max"
     />
     @if (!contactForm.IND().hidden()) {
       <app-individual-contact-form [fields]="contactForm.IND" />

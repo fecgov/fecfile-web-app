@@ -1,6 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { FieldTree } from '@angular/forms/signals';
-import { TextInputComponent } from '../text-input/text-input.component';
+import { FieldTree, FormField } from '@angular/forms/signals';
+import { TextInput } from '../text-input/text.input';
+import type { Contact } from 'app/shared/models/contact.model';
 
 export interface NameFields {
   last_name: string;
@@ -10,9 +11,19 @@ export interface NameFields {
   suffix: string;
 }
 
+export function populateName(contact: Contact): NameFields {
+  return {
+    last_name: contact.last_name ?? '',
+    first_name: contact.first_name ?? '',
+    middle_name: contact.middle_name ?? '',
+    prefix: contact.prefix ?? '',
+    suffix: contact.suffix ?? '',
+  };
+}
+
 @Component({
   selector: 'app-name-form',
-  imports: [TextInputComponent],
+  imports: [TextInput, FormField],
   templateUrl: './name-form.component.html',
   styleUrl: './name-form.component.scss',
 })
@@ -21,27 +32,27 @@ export class NameFormComponent {
   readonly prefix = input<string>();
   readonly lastNameLabel = computed(() => {
     const prefix = this.prefix();
-    let label = 'LAST NAME';
+    const label = 'LAST NAME';
     return prefix ? `${prefix} ${label}` : label;
   });
   readonly firstNameLabel = computed(() => {
     const prefix = this.prefix();
-    let label = 'FIRST NAME';
+    const label = 'FIRST NAME';
     return prefix ? `${prefix} ${label}` : label;
   });
   readonly middleNameLabel = computed(() => {
     const prefix = this.prefix();
-    let label = 'MIDDLE NAME';
+    const label = 'MIDDLE NAME';
     return prefix ? `${prefix} ${label}` : label;
   });
   readonly prefixLabel = computed(() => {
     const prefix = this.prefix();
-    let label = 'PREFIX';
+    const label = 'PREFIX';
     return prefix ? `${prefix} ${label}` : label;
   });
   readonly suffixLabel = computed(() => {
     const prefix = this.prefix();
-    let label = 'SUFFIX';
+    const label = 'SUFFIX';
     return prefix ? `${prefix} ${label}` : label;
   });
 }

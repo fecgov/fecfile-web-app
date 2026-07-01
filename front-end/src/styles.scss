@@ -1008,21 +1008,40 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 }
 @for $i from 1 through 12 {
   .grid-col-#{$i} {
-    grid-column-end: span #{$i};
-    margin: 0;
+    grid-column-end: span #{$i} !important;
+    margin: 0 0 24px 0;
   }
 }
 
-fieldset {
-  display: flex;
-  flex-direction: column;
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0 8px;
+  align-items: start;
+  grid-auto-rows: auto auto auto;
 
-  & > label,
-  > .span-label {
-    margin-bottom: 8px;
+  & > *,
+  & hr,
+  & h3 {
+    margin: 0 0 24px 0;
+    grid-column-end: span 12;
+    &:nth-last-child(-n + 1) {
+      margin-bottom: 0;
+    }
   }
-  & > .p-error {
-    margin-top: 4px;
+  & > div,
+  & > fieldset {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    & > label,
+    & > span {
+      margin: 0 0 8px 0;
+      align-self: end;
+    }
+    & > .p-error {
+      margin-top: 4px;
+    }
   }
 }
 

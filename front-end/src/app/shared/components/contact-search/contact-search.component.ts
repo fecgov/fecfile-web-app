@@ -77,7 +77,7 @@ export class ContactSearchComponent {
     } else {
       payload = await this.onFecApiCommitteeLookupDataSelect(event.value);
     }
-    const contact = payload.id ? payload : await this.contactService.create(payload) 
+    const contact = payload.id ? payload : await this.contactService.create(payload);
     this.manager().contact.set(contact);
     if (this.isBare()) this.manager().outerContact.set(contact);
   }

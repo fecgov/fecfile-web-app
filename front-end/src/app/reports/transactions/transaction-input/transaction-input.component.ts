@@ -97,13 +97,13 @@ export class TransactionInputComponent implements OnInit {
     }
   }
 
-  contactTypeSelected(contactType: ContactTypes) {
-    const currentType = this.form.get('entity_type')?.value;
-    if (contactType !== currentType) {
-      this.form.get('entity_type')?.setValue(contactType);
-      this.clearFormPrimaryContact();
-    }
-  }
+  // contactTypeSelected(contactType: ContactTypes) {
+  //   const currentType = this.form.get('entity_type')?.value;
+  //   if (contactType !== currentType) {
+  //     this.form.get('entity_type')?.setValue(contactType);
+  //     this.clearFormPrimaryContact();
+  //   }
+  // }
 
   updateFormWithPrimaryContact(selectItem: SelectItem<Contact>) {
     this.form.get('entity_type')?.setValue(selectItem.value.type);

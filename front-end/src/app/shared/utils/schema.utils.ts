@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
 import { JsonSchema, validate } from 'fecfile-validate';
 import { Transaction } from '../models/transaction.model';
@@ -24,7 +25,7 @@ export class SchemaUtils {
    * @returns data structure to pass to the FormBuilder group() method
    */
   static getFormGroupFields(properties: string[]) {
-    const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const group: any = {};
     properties.forEach((property) => (group[property] = new SubscriptionFormControl('')));
     return group;
   }
@@ -50,7 +51,7 @@ export class SchemaUtils {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static getFormGroupFieldsNoBlur(properties: string[], _jsonSchema?: JsonSchema) {
-    const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const group: any = {};
     properties.forEach((property) => {
       const updateOn = SchemaUtils.getUpdateOn(property);
       group[property] = new SubscriptionFormControl<string | Date | null | undefined>('', {
@@ -76,7 +77,7 @@ export class SchemaUtils {
    * strings to number types when necessary.
    */
   static getFormValues(form: FormGroup, jsonSchema?: JsonSchema, propertiesSubset: string[] = []) {
-    const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const formValues: any = {};
 
     if (jsonSchema) {
       SchemaUtils.getSchemaProperties(jsonSchema).forEach((property: string) => {
@@ -97,7 +98,7 @@ export class SchemaUtils {
    * for validation of form fields.
    */
   static getNonFormValues(transaction?: Transaction) {
-    const values: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const values: any = {};
     if (transaction) {
       values['transaction_type_identifier'] = transaction.transaction_type_identifier;
     }

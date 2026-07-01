@@ -1,9 +1,9 @@
 import { Component, computed, effect, input, untracked } from '@angular/core';
-import { SelectInputComponent } from '../select-input/select-input.component';
-import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
-import { disabled, FieldTree, required, schema } from '@angular/forms/signals';
+import { SelectInput } from '../select-input/select.input';
+import { CandidateOfficeTypeLabels, CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
+import { disabled, FieldTree, required, schema, FormField } from '@angular/forms/signals';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { requiredMessage } from 'app/shared/utils/schema-signal.utils';
+import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 
 export interface CandidateOfficeData {
   candidate_office: CandidateOfficeTypes | '';
@@ -16,6 +16,14 @@ export const defaultCandidateOfficeData: CandidateOfficeData = {
   candidate_state: '',
   candidate_district: '',
 };
+
+export function populateOffice(contact: Contact): CandidateOfficeData {
+  return {
+    candidate_office: contact.candidate_office ?? '',
+    candidate_state: contact.candidate_state ?? '',
+    candidate_district: contact.candidate_district ?? '',
+  };
+}
 
 export const candidateOfficeSchema = schema<CandidateOfficeData>((schemaPath) => {
   disabled(schemaPath.candidate_state, ({ valueOf }) => {
@@ -38,7 +46,7 @@ export const candidateOfficeSchema = schema<CandidateOfficeData>((schemaPath) =>
 
 @Component({
   selector: 'app-candidate-office-form',
-  imports: [SelectInputComponent],
+  imports: [SelectInput, FormField],
   templateUrl: './candidate-office-form.component.html',
   styleUrl: './candidate-office-form.component.scss',
 })

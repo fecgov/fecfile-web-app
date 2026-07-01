@@ -1,26 +1,29 @@
 import { Component, input } from '@angular/core';
-import { FormField, schema, FieldTree, apply, validateHttp, debounce } from '@angular/forms/signals';
+import { FormField, schema, FieldTree, apply, debounce } from '@angular/forms/signals';
 import { schema as CandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import {
   Address,
   AddressFormComponent,
   addressSchema,
   defaultAddressData,
+  populateAddress,
 } from '../../signal-inputs/address-form/address-form.component';
-import { NameFields, NameFormComponent } from '../../signal-inputs/name-form/name-form.component';
-import { TextInputComponent } from '../../signal-inputs/text-input/text-input.component';
+import { NameFields, NameFormComponent, populateName } from '../../signal-inputs/name-form/name-form.component';
+import { TextInput } from '../../signal-inputs/text-input/text.input';
 import {
   CandidateOfficeData,
   CandidateOfficeFormComponent,
   candidateOfficeSchema,
   defaultCandidateOfficeData,
+  populateOffice,
 } from '../../signal-inputs/candidate-office-form/candidate-office-form.component';
 import { TelephoneInputComponent } from '../../signal-inputs/telephone-input/telephone-input.component';
-import { CookieService } from 'ngx-cookie-service';
-import { getFecUniqueValidator } from 'app/shared/services/contact.service';
-import { generatePathMapFromForm, schemaFormValidatorBuilder } from 'app/shared/utils/schema-signal.utils';
+import { generatePathMapFromForm, schemaFormValidatorBuilder } from 'app/shared/utils/signal-schema.utils';
+import { ContactTypes, type Contact } from 'app/shared/models/contact.model';
+import { validateFecUnique } from 'app/shared/utils/validators.signals.utils';
 
 export interface CandidateContactData {
+  id: string | null;
   candidate_id: string;
   name: NameFields;
   address: Address;
@@ -30,7 +33,22 @@ export interface CandidateContactData {
   telephone: string | null;
 }
 
+export function populateCandidate(contact: Contact): CandidateContactData {
+  if (contact.type !== ContactTypes.CANDIDATE) return { ...defaultCandidateData };
+  return {
+    id: contact.id!,
+    candidate_id: contact.candidate_id!,
+    name: populateName(contact),
+    address: populateAddress(contact),
+    employer: contact.employer ?? '',
+    occupation: contact.occupation ?? '',
+    office: populateOffice(contact),
+    telephone: contact.telephone ?? null,
+  };
+}
+
 export const defaultCandidateData: CandidateContactData = {
+  id: null,
   candidate_id: '',
   name: { last_name: '', first_name: '', middle_name: '', prefix: '', suffix: '' },
   address: { ...defaultAddressData, country: '' },
@@ -40,16 +58,14 @@ export const defaultCandidateData: CandidateContactData = {
   telephone: null,
 };
 
-export function getCandidateSchema(cookieService: CookieService) {
-  return schema<CandidateContactData>((schemaPath) => {
-    const schemaFieldMap = generatePathMapFromForm(defaultCandidateData);
-    schemaFormValidatorBuilder(CandidateSchema, schemaPath, schemaFieldMap);
-    apply(schemaPath.office, candidateOfficeSchema);
-    apply(schemaPath.address, addressSchema);
-    validateHttp(schemaPath.candidate_id, getFecUniqueValidator(cookieService));
-    debounce(schemaPath.candidate_id, 300);
-  });
-}
+export const candidateSchema = schema<CandidateContactData>((schemaPath) => {
+  const schemaFieldMap = generatePathMapFromForm(defaultCandidateData);
+  schemaFormValidatorBuilder(CandidateSchema, schemaPath, schemaFieldMap);
+  apply(schemaPath.office, candidateOfficeSchema);
+  apply(schemaPath.address, addressSchema);
+  validateFecUnique(schemaPath.candidate_id, schemaPath);
+  debounce(schemaPath.candidate_id, 300);
+});
 
 @Component({
   selector: 'app-candidate-contact-form',
@@ -57,7 +73,7 @@ export function getCandidateSchema(cookieService: CookieService) {
     FormField,
     AddressFormComponent,
     NameFormComponent,
-    TextInputComponent,
+    TextInput,
     CandidateOfficeFormComponent,
     TelephoneInputComponent,
   ],

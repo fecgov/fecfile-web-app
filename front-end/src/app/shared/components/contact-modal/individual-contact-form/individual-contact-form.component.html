@@ -10,5 +10,15 @@
 
 <hr />
 <h3>Employer</h3>
-<app-text-input class="grid-col-6 start-row" label="EMPLOYER (OPTIONAL)" id="employer" [field]="fields().employer" />
-<app-text-input class="grid-col-6" label="OCCUPATION (OPTIONAL)" id="occupation" [field]="fields().occupation" />
+<app-text-input
+  class="grid-col-6 start-row"
+  label="EMPLOYER (OPTIONAL)"
+  inputId="employer"
+  [formField]="fields().employer"
+/>
+<app-text-input
+  class="grid-col-6"
+  label="OCCUPATION (OPTIONAL)"
+  inputId="occupation"
+  [formField]="fields().occupation"
+/>

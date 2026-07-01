@@ -7,14 +7,14 @@ type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
 
 @Component({
   selector: 'app-telephone-input',
-  template: `<label id="telephone-label" for="telephone">TELEPHONE (OPTIONAL)</label>
+  template: `<label id="telephone-label" for="telephone">TELEPHONE <span class="paren-label">(OPTIONAL)</span></label>
     <input
       [attr.aria-labelledby]="labelName()"
       [class.p-disabled]="disabled()"
       [disabled]="disabled()"
       #internationalPhoneInput
       type="tel"
-      [id]="id()"
+      [id]="inputId()"
       [attr.labelName]="labelName()"
       (keyup)="onKey($event)"
       (blur)="onBlur()"
@@ -24,9 +24,18 @@ type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
     }`,
   styles: `
     :host {
-      display: contents;
-      display: flex;
-      flex-direction: column;
+      grid-row: span 3;
+      display: grid;
+      grid-template-rows: subgrid;
+      gap: 0;
+
+      & > label {
+        margin-bottom: 8px;
+        align-self: end;
+      }
+      & > .p-error {
+        margin-top: 4px;
+      }
     }
 
     .iti__flag {
@@ -48,7 +57,7 @@ export class TelephoneInputComponent implements FormValueControl<string | null>,
   readonly value = model<string | null>(null);
   readonly disabled = input(false);
   readonly labelName = input('');
-  readonly id = input.required<string>();
+  readonly inputId = input.required<string>();
   readonly touched = model(false);
   readonly invalid = input(false);
   readonly errors = input<readonly ValidationError.WithOptionalFieldTree[]>([]);

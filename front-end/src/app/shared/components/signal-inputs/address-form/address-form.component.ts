@@ -1,8 +1,9 @@
 import { Component, effect, input, untracked } from '@angular/core';
-import { disabled, FieldTree, schema } from '@angular/forms/signals';
+import { disabled, FieldTree, FormField, schema } from '@angular/forms/signals';
 import { CountryCodeLabels, LabelUtils, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { TextInputComponent } from '../text-input/text-input.component';
-import { SelectInputComponent } from '../select-input/select-input.component';
+import { TextInput } from '../text-input/text.input';
+import { SelectInput } from '../select-input/select.input';
+import type { Contact } from 'app/shared/models/contact.model';
 
 export interface Address {
   street_1: string;
@@ -21,6 +22,17 @@ export const defaultAddressData: Address = {
   zip: '',
 };
 
+export function populateAddress(contact: Contact): Address {
+  return {
+    street_1: contact.street_1 ?? '',
+    street_2: contact.street_2 ?? '',
+    city: contact.city ?? '',
+    state: contact.state ?? '',
+    zip: contact.zip ?? '',
+    country: contact.country ?? '',
+  };
+}
+
 export const addressSchema = schema<Address>((schemaPath) => {
   disabled(schemaPath.state, ({ valueOf }) => {
     if (!schemaPath.country) return false;
@@ -31,7 +43,7 @@ export const addressSchema = schema<Address>((schemaPath) => {
 
 @Component({
   selector: 'app-address-form',
-  imports: [TextInputComponent, SelectInputComponent],
+  imports: [FormField, TextInput, SelectInput],
   templateUrl: './address-form.component.html',
   styleUrl: './address-form.component.scss',
 })
@@ -44,13 +56,21 @@ export class AddressFormComponent {
     effect(() => {
       const countryField = this.fields().country;
       if (!countryField) return;
+
       const country = countryField().value();
       if (country === '') return;
+
       untracked(() => {
+        const currentState = this.fields().state().value();
+
         if (country === 'USA') {
-          this.fields().state().value.set('');
+          if (currentState === 'ZZ') {
+            this.fields().state().value.set('');
+          }
         } else {
-          this.fields().state().value.set('ZZ');
+          if (currentState !== 'ZZ') {
+            this.fields().state().value.set('ZZ');
+          }
         }
       });
     });
