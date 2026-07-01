@@ -27,6 +27,7 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT', () => {
     expect(descrip).toBe('Recount Account (Partnership attributions do not meet itemization threshold)');
 
     transaction.children = [transaction.transactionType?.getNewTransaction() as Transaction];
+    transaction.children[0].itemized = true;
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Recount Account (See Partnership Attribution(s) below)');
   });

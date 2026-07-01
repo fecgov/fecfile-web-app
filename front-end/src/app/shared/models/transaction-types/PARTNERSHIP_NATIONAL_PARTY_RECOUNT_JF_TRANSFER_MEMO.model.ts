@@ -35,8 +35,8 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDUL
     const committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
       (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
-    const hasChildren = transaction.children && transaction.children.length > 0;
-    const parenthetical = hasChildren
+    const hasItemizedChildren = transaction.children.some((child) => child.itemized === true);
+    const parenthetical = hasItemizedChildren
       ? ' (See Partnership Attribution(s) below)'
       : ' (Partnership attributions do not meet itemization threshold)';
     const purposeDescription = committeeClause + parenthetical;
