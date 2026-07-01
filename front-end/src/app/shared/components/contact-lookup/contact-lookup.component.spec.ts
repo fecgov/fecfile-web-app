@@ -169,7 +169,7 @@ describe('ContactLookupComponent', () => {
       it('#onDropdownSearch COM undefined fecfile_committees', async () => {
         testCommitteeLookupResponse.fec_api_committees = [
           {
-            committee_id: 'testId',
+            id: 'testId',
             name: 'testName',
             is_active: true,
           } as FecApiCommitteeLookupData,
@@ -183,7 +183,7 @@ describe('ContactLookupComponent', () => {
       it('#onDropdownSearch COM happy path', async () => {
         testCommitteeLookupResponse.fec_api_committees = [
           {
-            committee_id: 'testId',
+            id: 'testId',
             name: 'testName',
             is_active: true,
           } as FecApiCommitteeLookupData,

@@ -393,7 +393,7 @@ export class CandidateLookupResponse {
 }
 
 export class FecApiCommitteeLookupData extends FecApiLookupData {
-  committee_id: string | undefined;
+  id: string | undefined;
   is_active: boolean | undefined;
   name: string | undefined;
 
@@ -404,7 +404,7 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
 
   toSelectItem(searchTerm: string): SelectItem<FecApiCommitteeLookupData> {
     const markedName = LabelUtils.htmlHighlightTerm(this.name, searchTerm);
-    const markedId = LabelUtils.htmlHighlightTerm(this.committee_id, searchTerm);
+    const markedId = LabelUtils.htmlHighlightTerm(this.id, searchTerm);
     const statusCircle = `<span
         class="pi pi-circle-on ${this.is_active ? 'active-status-circle' : 'inactive-status-circle'}" 
         aria-label="${this.is_active ? 'Active' : 'Inactive'}" 

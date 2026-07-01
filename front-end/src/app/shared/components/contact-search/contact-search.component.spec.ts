@@ -159,7 +159,7 @@ describe('ContactSearchComponent', () => {
 
     it('should handle selection of FecApiCommitteeLookupData and update manager', async () => {
       const committeeData = {
-        committee_id: 'C456',
+        id: 'C456',
       } as FecApiCommitteeLookupData;
 
       const committeeDetails = CommitteeAccount.fromJSON({
