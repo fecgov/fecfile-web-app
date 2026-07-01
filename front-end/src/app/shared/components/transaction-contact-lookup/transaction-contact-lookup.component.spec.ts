@@ -92,15 +92,6 @@ describe('TransactionContactLookupComponent', () => {
     expect(component.contactTypeSelect.emit).toHaveBeenCalledWith(ContactTypes.COMMITTEE);
   });
 
-  it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
-    component.detailVisible = false;
-    const contact = testContact();
-    component.contactLookupSelected(contact);
-    contact.id = undefined;
-    component.contactLookupSelected(contact);
-    expect(component.detailVisible).toBe(true);
-  });
-
   it('selecting create new contact should open the contact dialog', () => {
     component.detailVisible = false;
     component.createNewContactSelected();

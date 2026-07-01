@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -35,6 +35,8 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
 
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
+
+  readonly autosave = input(true);
 
   @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
@@ -125,8 +127,13 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     } else {
       payload = await this.onFecApiCommitteeLookupDataSelect(event.value);
     }
-    const contact = payload.id ? payload : await this.contactService.create(payload);
-    this.onContactSelect(contact);
+    if (this.autosave()) {
+      const contact = payload.id ? payload : await this.contactService.create(payload);
+      this.onContactSelect(contact);
+    } else {
+      this.onContactSelect(payload);
+    }
+
     this.searchBoxFormControl.patchValue('');
   }
 
