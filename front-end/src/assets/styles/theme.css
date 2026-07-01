@@ -752,6 +752,53 @@ p-select.ng-dirty.ng-invalid > .p-select {
   border-bottom-right-radius: var(--border-radius);
 }
 
+.p-inputgroup {
+  & > div {
+    border: 2px solid var(--fec-grey-alt);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    max-width: 448px;
+    height: var(--input-height);
+    width: 100%;
+
+    &:focus-within {
+      outline: 0 none;
+      outline-offset: 0;
+      box-shadow: var(--focus-ring);
+      border-color: var(--p-primary-color);
+    }
+
+    &:hover {
+      border-color: var(--surface-border);
+    }
+
+    & > span {
+      background: var(--p-content-background);
+      font-family: var(--karla-bold);
+      font-size: var(--input-font-size);
+      padding: 0 0 0 10px;
+      text-wrap-mode: nowrap;
+      line-height: 1;
+    }
+
+    & input {
+      height: 100%;
+      flex: 1 1 auto;
+      border: 0;
+      outline: 0;
+      box-shadow: none;
+      padding: 0 10px;
+      border: 0;
+      box-shadow: none;
+      &:focus {
+        border: 0;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
 .p-fluid .p-inputgroup .p-button {
   width: auto;
 }

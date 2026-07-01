@@ -1016,21 +1016,22 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 .grid-form {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: max-content;
-  column-gap: 8px;
-  row-gap: 24px;
+  gap: 0 8px;
   align-items: start;
+  grid-auto-rows: auto auto auto;
 
   & > * {
-    margin: 0;
+    margin: 0 0 24px 0;
     grid-column-end: span 12;
+    &:nth-last-child(-n + 1) {
+      margin-bottom: 0;
+    }
   }
   & > div,
   & > fieldset {
     display: grid;
     grid-row: span 3;
     grid-template-rows: subgrid;
-    gap: 0;
     & > label,
     & > span {
       margin: 0 0 8px 0;

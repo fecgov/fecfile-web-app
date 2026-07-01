@@ -7,14 +7,14 @@
   [submitDisabled]="reportForm().invalid()"
 >
   <form novalidate (submit)="$event.preventDefault()" class="grid-form">
-    <div class="dropdown">
+    <div>
       <span class="dialog-label" id="type-label">FORM TYPE</span>
       <p-select
         aria-labelledby="type-label"
         [options]="filteredOptions()"
         [formField]="$any(reportForm.type)"
         class="w-full"
-        id="typeDropdown"
+        inputId="typeDropdown"
       >
         <ng-template #selectedItem let-selectedOption>
           <span class="option">
@@ -29,7 +29,7 @@
       </p-select>
     </div>
     @if (!reportForm.f24().hidden()) {
-      <div class="">
+      <div>
         <span class="dialog-label" for="form24Options">REPORT TYPE</span>
         <p-selectbutton
           inputId="form24Options"
@@ -44,24 +44,22 @@
         }
       </div>
       @if (!reportForm.f24.typelessName().hidden()) {
-        <div class="">
-          <label id="form24Name_label" for="form24Name">REPORT NAME</label>
+        <div>
+          <label class="dialog-label" id="form24Name_label" for="form24Name">REPORT NAME</label>
           <p-input-group>
             <div id="f24-input-container">
               @if (this.reportForm.f24.type().value() != null) {
                 <span>{{ typeHour() }}</span>
               }
-              <p-inputgroup>
-                <input
-                  pInputText
-                  placeholder="Provide a custom report name"
-                  type="text"
-                  [formField]="reportForm.f24.typelessName"
-                  id="form24Name"
-                  class="pl-1"
-                  [class.opacity-60]="!reportForm.f24.typelessName()"
-                />
-              </p-inputgroup>
+              <input
+                pInputText
+                placeholder="Provide a custom report name"
+                type="text"
+                [formField]="reportForm.f24.typelessName"
+                id="form24Name"
+                class="pl-1"
+                [class.opacity-60]="!reportForm.f24.typelessName()"
+              />
             </div>
           </p-input-group>
 

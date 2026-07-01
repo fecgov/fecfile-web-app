@@ -15,12 +15,19 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 import { form24Options } from 'app/shared/utils/label.utils';
 
-interface Form24Data {
+export interface Form24Data {
   type: Type24_48 | null;
   typelessName: string;
   existingNames: Set<string>;
   currentName: string | null;
 }
+
+export const defaultForm24Data = {
+  type: null,
+  typelessName: '',
+  existingNames: new Set<string>(),
+  currentName: null,
+};
 
 export const buildF24Name = (type: Type24_48, name: string) => `${type}-Hour: ${name}`;
 
@@ -63,20 +70,13 @@ export class Form24EditComponent {
     { initialValue: new Set<string>() },
   );
 
-  private readonly f24Model = signal<Form24Data>({
-    type: null,
-    typelessName: '',
-    existingNames: new Set<string>(),
-    currentName: null,
-  });
-
-  readonly form24Options = form24Options;
-
-  readonly f24Form = form(this.f24Model, (schema) => {
+  protected readonly form24Options = form24Options;
+  private readonly f24Model = signal<Form24Data>(defaultForm24Data);
+  protected readonly f24Form = form(this.f24Model, (schema) => {
     apply(schema, f24Schema);
   });
 
-  readonly typeHour = computed(() => `${this.f24Form.type().value()}-Hour:`);
+  protected readonly typeHour = computed(() => `${this.f24Form.type().value()}-Hour:`);
   private readonly fullName = computed(() => `${this.typeHour()} ${this.f24Form.typelessName().value()}`);
 
   constructor() {
@@ -103,7 +103,7 @@ export class Form24EditComponent {
     );
   }
 
-  submitForm(action: 'continue' | void) {
+  protected submitForm(action: 'continue' | void) {
     return submit(this.f24Form, {
       ignoreValidators: 'none',
       action: async () => {
