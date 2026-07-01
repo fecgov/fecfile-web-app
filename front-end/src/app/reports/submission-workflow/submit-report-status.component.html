@@ -2,7 +2,7 @@
 <hr type="solid" />
 <div class="flex">
   <div class="col-4 pl-0">
-    @if (reportStatus() === reportStatusEnum.SUBMIT_FAILURE) {
+    @if (reportStatus() === ReportStatus.SUBMIT_FAILURE) {
       <h2 class="submission-status-heading">Report submission failed</h2>
       <p class="submission-status-text">Please contact the Electronic Filing Office or visit FEC.gov for help.</p>
       @if (fecStatus() === 'REJECTED' && fecMessage()) {
@@ -38,10 +38,10 @@
         (click)="backToReports()"
       ></button>
     } @else {
-      @if (reportStatus() === reportStatusEnum.SUBMIT_PENDING) {
+      @if (reportStatus() === ReportStatus.SUBMIT_PENDING) {
         <h2 class="submission-status-heading">Report submission pending</h2>
         <p class="submission-status-text">Your submission has been sent to the FEC.</p>
-      } @else if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
+      } @else if (reportStatus() === ReportStatus.SUBMIT_SUCCESS) {
         <h2 class="submission-status-heading">Report submission received</h2>
         <p class="submission-status-text">Your submission to the FEC has been received.</p>
       } @else {
@@ -73,7 +73,7 @@
         {{ report().confirmation_email_1 }} <br />
         {{ report().confirmation_email_2 }}
       </p>
-      @if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
+      @if (reportStatus() === ReportStatus.SUBMIT_SUCCESS) {
         <h2 class="submission-info-heading">E-filing ID:</h2>
         <p class="submission-info-text">
           {{ report().upload_submission?.fec_report_id }}
@@ -89,17 +89,13 @@
     }
   </div>
   <div class="col-4 img-container">
-    @if (reportStatus() === reportStatusEnum.SUBMIT_SUCCESS) {
-      <img
-        class="status-image"
-        src="assets/img/report-submission-received.svg"
-        alt="Report submission received image"
-      />
+    @if (reportStatus() === ReportStatus.SUBMIT_SUCCESS) {
+      <img class="status-image" src="assets/img/report-submission-received.svg" alt="Report submission received" />
     } @else {
       <img
         class="status-image"
         src="assets/img/report-submission-not-received.svg"
-        alt="Report submission not received image"
+        alt="Report submission not received"
       />
     }
   </div>
