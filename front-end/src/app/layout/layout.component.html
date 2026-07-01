@@ -1,13 +1,13 @@
 <div id="page-container" [class]="[layoutControls().backgroundStyle]">
   <app-banner #bannerRef />
-  @if (layoutControls().showHeader) {
-    <div class="header-container">
+  <div class="header-container">
+    @if (layoutControls().showHeader) {
       <app-header [headerStyle]="layoutControls().headerStyle" />
-    </div>
-  }
-  @if (layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
-    <app-service-unavailable-banner />
-  }
+    }
+    @if (layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
+      <app-service-unavailable-banner />
+    }
+  </div>
 
   <!--  Begin Sidebar section -->
   @if (layoutControls().sidebar === Sidebar.Report && layoutService.showSidebar()) {

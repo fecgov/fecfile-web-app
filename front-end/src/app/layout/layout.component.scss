@@ -8,9 +8,6 @@ $sidebar-width: 284px;
   padding: 64px 24px 32px 24px;
   position: fixed;
   top: var(--header-total);
-  transition:
-    top 0.3s ease-in-out,
-    height 0.3s ease-in-out;
   z-index: 999;
   overflow-y: auto;
 }
@@ -19,6 +16,13 @@ $sidebar-width: 284px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.header-container {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  width: 100%;
 }
 
 #content-offset {
@@ -62,9 +66,8 @@ app-footer {
   width: 100%;
   padding-left: $sidebar-width;
   margin-top: var(--header-total);
-  transition:
-    margin-top 0.3s ease-in-out,
-    min-height 0.3s ease-in-out;
+
+  transition: none;
   padding-top: 64px;
   & > .main-content {
     margin-left: 32px;
@@ -75,7 +78,7 @@ app-footer {
 
 .login-background {
   background-color: #ffffff;
-  max-height: 100vh;
+  min-height: 100vh;
 }
 
 .security-notice-background {
