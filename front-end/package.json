@@ -91,7 +91,8 @@
     "rollup": "~4.59.0",
     "qs": "~6.15.0",
     "@isaacs/brace-expansion": "~5.0.1",
-    "uuid": "~11.1.1"
+    "uuid": "~11.1.1",
+    "undici": "~7.28.0"
   },
   "browser": {
     "crypto": false
