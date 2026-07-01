@@ -3,16 +3,16 @@
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
-  (confirm)="goToReportForm()"
-  [submitDisabled]="isSubmitDisabled()"
+  (confirm)="submitForm()"
+  [submitDisabled]="reportForm().invalid()"
 >
-  <div class="dialog-body">
+  <form novalidate (submit)="$event.preventDefault()" class="grid-form">
     <div class="dropdown">
       <span class="dialog-label" id="type-label">FORM TYPE</span>
       <p-select
         aria-labelledby="type-label"
         [options]="filteredOptions()"
-        [(ngModel)]="selectedType"
+        [formField]="$any(reportForm.type)"
         class="w-full"
         id="typeDropdown"
       >
@@ -28,6 +28,48 @@
         </ng-template>
       </p-select>
     </div>
-    <app-create-f24 [visible]="isF24()" />
-  </div>
+    @if (!reportForm.f24().hidden()) {
+      <div class="">
+        <span class="dialog-label" for="form24Options">REPORT TYPE</span>
+        <p-selectbutton
+          inputId="form24Options"
+          id="form24Options"
+          [options]="form24Options"
+          [formField]="reportForm.f24.type"
+          optionLabel="label"
+          optionValue="value"
+        />
+        @if (reportForm.f24.type().dirty() && reportForm.f24.type().invalid()) {
+          <small class="p-error">{{ reportForm.f24.type().errors()[0].message }}</small>
+        }
+      </div>
+      @if (!reportForm.f24.typelessName().hidden()) {
+        <div class="">
+          <label id="form24Name_label" for="form24Name">REPORT NAME</label>
+          <p-input-group>
+            <div id="f24-input-container">
+              @if (this.reportForm.f24.type().value() != null) {
+                <span>{{ typeHour() }}</span>
+              }
+              <p-inputgroup>
+                <input
+                  pInputText
+                  placeholder="Provide a custom report name"
+                  type="text"
+                  [formField]="reportForm.f24.typelessName"
+                  id="form24Name"
+                  class="pl-1"
+                  [class.opacity-60]="!reportForm.f24.typelessName()"
+                />
+              </p-inputgroup>
+            </div>
+          </p-input-group>
+
+          @if (reportForm.f24.typelessName().touched() && reportForm.f24.typelessName().invalid()) {
+            <small class="p-error">{{ reportForm.f24.typelessName().errors()[0].message }}</small>
+          }
+        </div>
+      }
+    }
+  </form>
 </app-dialog>

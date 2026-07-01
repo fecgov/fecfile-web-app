@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { debounce, form, FormField, required, submit, validate } from '@angular/forms/signals';
+import { apply, debounce, form, FormField, required, schema, submit, validate } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { Form24, Type24_48 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -13,11 +13,32 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
+import { form24Options } from 'app/shared/utils/label.utils';
 
 interface Form24Data {
   type: Type24_48 | null;
   typelessName: string;
+  existingNames: Set<string>;
+  currentName: string | null;
 }
+
+export const buildF24Name = (type: Type24_48, name: string) => `${type}-Hour: ${name}`;
+
+export const f24Schema = schema<Form24Data>((schemaPath) => {
+  required(schemaPath.type, { message: 'This is a required field' });
+  required(schemaPath.typelessName, { message: 'This is a required field' });
+  debounce(schemaPath.typelessName, 300);
+  validate(schemaPath.typelessName, ({ value, valueOf }) => {
+    const type = valueOf(schemaPath.type);
+    if (type === null) return null;
+    const name = buildF24Name(type, value());
+    if (name === valueOf(schemaPath.currentName) || !valueOf(schemaPath.existingNames).has(name)) return null;
+    return {
+      kind: 'exists',
+      message: 'This name is already in use. Please choose a different name.',
+    };
+  });
+});
 
 @Component({
   selector: 'app-f24-edit',
@@ -45,25 +66,14 @@ export class Form24EditComponent {
   private readonly f24Model = signal<Form24Data>({
     type: null,
     typelessName: '',
+    existingNames: new Set<string>(),
+    currentName: null,
   });
 
-  readonly form24Options = [
-    { label: '24-Hour ', value: '24' },
-    { label: '48-Hour', value: '48' },
-  ];
+  readonly form24Options = form24Options;
 
   readonly f24Form = form(this.f24Model, (schema) => {
-    required(schema.type, { message: 'This is a required field' });
-    required(schema.typelessName, { message: 'This is a required field' });
-    debounce(schema.typelessName, 300);
-    validate(schema.typelessName, () => {
-      const name = this.fullName();
-      if (name === this.report().name || !this.form24Names().has(name)) return null;
-      return {
-        kind: 'exists',
-        message: 'This name is already in use. Please choose a different name.',
-      };
-    });
+    apply(schema, f24Schema);
   });
 
   readonly typeHour = computed(() => `${this.f24Form.type().value()}-Hour:`);
@@ -76,12 +86,20 @@ export class Form24EditComponent {
         const regex = /^(24-Hour:\s|48-Hour:\s)(.*)$/;
         const match = report.name?.match(regex);
         if (match) {
-          this.f24Form().reset({
-            type: match[1].includes('24') ? '24' : '48',
-            typelessName: match[2],
+          this.f24Form().value.update((value) => {
+            return {
+              type: match[1].includes('24') ? '24' : '48',
+              typelessName: match[2],
+              currentName: report.name ?? null,
+              existingNames: value.existingNames,
+            };
           });
         }
       },
+    );
+    effectOnceIf(
+      () => this.form24Names(),
+      (names) => this.f24Form.existingNames().value.set(names),
     );
   }
 

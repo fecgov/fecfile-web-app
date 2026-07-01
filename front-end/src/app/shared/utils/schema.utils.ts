@@ -4,6 +4,8 @@ import { Transaction } from '../models/transaction.model';
 import { DateUtils } from './date.utils';
 import { SubscriptionFormControl } from './subscription-form-control';
 
+export const requiredMessage = 'This is a required field';
+
 export class SchemaUtils {
   /**
    * Returns an array of the property fields for a given JSON schema.

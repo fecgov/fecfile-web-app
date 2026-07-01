@@ -93,9 +93,8 @@ caption {
   border-radius: var(--border-radius);
   display: flex;
   align-items: center;
-  width: 448px;
+  max-width: 448px;
   height: var(--input-height);
-  line-height: 1.2;
 
   &:focus-within {
     outline: 0 none;

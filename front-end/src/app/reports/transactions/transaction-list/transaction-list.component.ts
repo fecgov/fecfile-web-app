@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report, ReportTypes } from 'app/shared/models/reports/report.model';
+import { isForm3Group, Report, ReportTypes } from 'app/shared/models/reports/report.model';
 
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
@@ -49,7 +49,7 @@ export class TransactionListComponent {
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
       (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
+        return isForm3Group(report.report_type);
       },
       () => true,
     ),
@@ -57,7 +57,7 @@ export class TransactionListComponent {
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
       (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
+        return isForm3Group(report.report_type);
       },
       () => true,
     ),
@@ -65,7 +65,7 @@ export class TransactionListComponent {
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
       (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
+        return isForm3Group(report.report_type);
       },
       () => true,
     ),
@@ -73,7 +73,7 @@ export class TransactionListComponent {
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
       (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
+        return isForm3Group(report.report_type);
       },
       () => false,
     ),

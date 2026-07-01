@@ -1,28 +1,41 @@
-import { Component, computed, effect, inject, model, Signal, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, model, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { DialogModule } from 'primeng/dialog';
-import { CreateF24Component } from './create-f24/create-f24.component';
-import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { environment } from 'environments/environment';
-import { ReportTypes } from 'app/shared/models';
+import { Form24, ReportTypes, Type24_48 } from 'app/shared/models';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { form, FormField, hidden, required, submit } from '@angular/forms/signals';
+import { requiredMessage } from 'app/shared/utils/schema.utils';
+import { validate } from 'fecfile-validate';
+import { SelectButton } from 'primeng/selectbutton';
+import { InputGroup } from 'primeng/inputgroup';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { form24Options } from 'app/shared/utils/label.utils';
+
+interface ReportFormData {
+  type: ReportTypes | '';
+  f24: {
+    type: Type24_48 | null;
+    typelessName: string;
+  };
+}
 
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
-  imports: [ButtonModule, SelectModule, FormsModule, DialogModule, CreateF24Component, DialogComponent],
+  imports: [ButtonModule, SelectModule, DialogComponent, FormField, SelectButton, InputGroup],
 })
 export class FormTypeDialogComponent {
   readonly messageService = inject(MessageService);
   readonly router = inject(Router);
   readonly store = inject(Store);
+  private readonly form24Service = inject(Form24Service);
   readonly formTypeOptions: ReportTypes[] = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[0]);
   readonly filteredOptions: Signal<ReportTypes[]> = computed(() => {
     return this.formTypeOptions.filter((type) => {
@@ -33,9 +46,21 @@ export class FormTypeDialogComponent {
   readonly dialogVisible = model(false);
   readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
-  readonly selectedType = signal<ReportTypes | undefined>(undefined);
-  readonly isF24 = computed(() => this.selectedType() === ReportTypes.F24);
-  readonly formType = computed(() => this.getFormType(this.selectedType()));
+  readonly reportFormModel = signal<ReportFormData>({ type: '', f24: { type: null, typelessName: '' } });
+  readonly reportForm = form(this.reportFormModel, (schemaPath) => {
+    required(schemaPath.type, { message: requiredMessage });
+    hidden(schemaPath.f24, ({ valueOf }) => valueOf(schemaPath.type) !== ReportTypes.F24);
+    hidden(schemaPath.f24.typelessName, ({ valueOf }) => valueOf(schemaPath.f24.type) === null);
+    required(schemaPath.f24.type, {
+      when: ({ valueOf }) => valueOf(schemaPath.type) === ReportTypes.F24,
+      message: requiredMessage,
+    });
+    required(schemaPath.f24.typelessName, {
+      when: ({ valueOf }) => valueOf(schemaPath.type) === ReportTypes.F24,
+      message: requiredMessage,
+    });
+  });
+
   readonly eligibleReportTypes = computed(() => {
     const eligible_report_types = this.committeeAccount().eligible_report_types;
     if (!eligible_report_types) {
@@ -43,44 +68,47 @@ export class FormTypeDialogComponent {
     }
     return new Set(eligible_report_types);
   });
-  readonly isSubmitDisabled = computed(() => (this.isF24() ? this.f24().isSubmitDisabled() : !this.formType()));
 
-  readonly f24 = viewChild.required(CreateF24Component);
+  readonly form24Options = form24Options;
+  readonly typeHour = computed(() => `${this.reportForm.f24.type().value()}-Hour:`);
+  private readonly fullName = computed(() => `${this.typeHour()} ${this.reportForm.f24.typelessName().value()}`);
+  readonly formType = computed(() => this.getFormType(this.reportForm.type().value()));
 
-  async goToReportForm(): Promise<void> {
-    const type = this.selectedType();
-    if (!type) return;
-    try {
-      if (this.isF24()) {
-        await this.f24().createF24();
-      } else {
-        this.router.navigateByUrl(`/reports/${type.toLowerCase()}/create`);
-      }
-      this.selectedType.set(undefined);
-      this.dialogVisible.set(false);
-    } catch (err) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error creating this Form 24',
-        life: 3000,
-      });
-      throw err;
-    }
-  }
-
-  getFormType(type?: ReportTypes): FormType | undefined {
-    return type ? getFormTypes(environment.showForm3).get(type) : undefined;
-  }
-
-  constructor() {
-    effect(() => {
-      if (!this.dialogVisible()) {
-        if (this.isF24()) {
-          this.f24().reset();
+  submitForm() {
+    return submit(this.reportForm, {
+      action: async () => {
+        try {
+          const type = this.reportForm.type().value();
+          if (type === ReportTypes.F24) {
+            const form24 = Form24.fromJSON({
+              name: this.fullName(),
+              report_type_24_48: this.reportForm.f24.type(),
+              street_1: this.committeeAccount().street_1,
+              street_2: this.committeeAccount().street_2,
+              city: this.committeeAccount().city,
+              state: this.committeeAccount().state,
+              zip: this.committeeAccount().zip,
+              filer_committee_id_number: this.committeeAccount().committee_id,
+              committee_name: this.committeeAccount().name,
+            });
+            const report = await this.form24Service.create(form24, ['report_type_24_48']);
+            this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+          } else {
+            this.router.navigateByUrl(`/reports/${type.toLowerCase()}/create`);
+          }
+        } catch {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error creating this Form 24',
+            life: 3000,
+          });
         }
-        this.selectedType.set(undefined);
-      }
+      },
     });
+  }
+
+  getFormType(type?: ReportTypes | ''): FormType | undefined {
+    return type === undefined || type === '' ? undefined : getFormTypes(environment.showForm3).get(type as ReportTypes);
   }
 }

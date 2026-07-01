@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Form3, Form3X, ReportTypes } from 'app/shared/models';
+import { Form3, Form3X, isForm3Group, ReportTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -35,9 +35,9 @@ export class ReportSidebarComponent {
 
   readonly formLabel = computed(() => this.report().formLabel);
   readonly subHeading = computed(() => this.report().report_code_label);
-  readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
-  readonly isAmmendable = computed(() =>
-    [ReportTypes.F3, ReportTypes.F3X, ReportTypes.F24].includes(this.report().report_type),
+  readonly hasCoverage = computed(() => isForm3Group(this.report().report_type));
+  readonly isAmmendable = computed(
+    () => isForm3Group(this.report().report_type) || this.report().report_type === ReportTypes.F24,
   );
   readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);
   readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
