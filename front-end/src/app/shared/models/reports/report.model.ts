@@ -61,12 +61,16 @@ export abstract class Report extends BaseModel {
   }
 }
 
-export enum ReportTypes {
-  F3 = 'F3',
-  F3X = 'F3X',
-  F24 = 'F24',
-  F99 = 'F99',
-  F1M = 'F1M',
+export const ReportTypes = {
+  F3: 'F3',
+  F3X: 'F3X',
+  F24: 'F24',
+  F99: 'F99',
+  F1M: 'F1M',
+} as const;
+export type ReportTypes = (typeof ReportTypes)[keyof typeof ReportTypes];
+export function isForm3Group(reportType: ReportTypes) {
+  return reportType === ReportTypes.F3 || reportType === ReportTypes.F3X;
 }
 
 export const reportLabelList: LabelList = [
