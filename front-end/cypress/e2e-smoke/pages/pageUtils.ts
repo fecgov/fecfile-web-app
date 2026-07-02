@@ -394,10 +394,13 @@ export class PageUtils {
   }
 
   static switchCommittee(committeeId: string) {
+    cy.intercept('POST', `http://localhost:8080/api/v1/committees/${committeeId}/activate/`).as('ActivateCommittee');
     cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
     cy.visit('/login/select-committee');
     cy.get('.committee-list .committee-info').get(`[id="${committeeId}"]`).click();
+    cy.wait('@ActivateCommittee');
     cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
+    cy.location('pathname', { timeout: 20000 }).should('not.include', '/login/select-committee');
     cy.wait(1000);
     this.enterSecondCommitteeEmailIfneeded();
   }

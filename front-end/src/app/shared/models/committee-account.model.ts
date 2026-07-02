@@ -67,6 +67,7 @@ export class CommitteeAccount extends BaseModel {
   state_full: string | undefined;
   custodian_zip: string | undefined;
   affiliated_committee_name: string | undefined;
+  eligible_report_types: string[] = [];
   website: string | undefined;
   cycles: number[] = [];
   @Transform(BaseModel.dateTransform) disabled: Date | undefined;

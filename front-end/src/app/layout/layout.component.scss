@@ -82,7 +82,7 @@ app-footer {
   background-image: linear-gradient(90deg, #1a4f82, #ffffff00), url('/assets/img/security-notice-flag-background.jpg');
   background-repeat: no-repeat, no-repeat;
   background-size: cover, cover;
-  background-position-x: 0px, 90%;
+  background-position-x: 0px, 100%;
 
   & > #content-offset {
     margin-top: var(--header-top);
