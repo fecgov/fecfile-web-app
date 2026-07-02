@@ -6,21 +6,22 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_B_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
-export class REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION extends SchBTransactionType {
+export class REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID extends SchBTransactionType {
   formFields = ORGANIZATION_B_FORM_FIELDS;
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION,
+    ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID,
   );
   schema = schema;
+  override negativeAmountValueOnly = true;
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB28A',
-      transaction_type_identifier: ScheduleBTransactionTypes.REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION,
+      transaction_type_identifier: ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID,
       aggregation_group: AggregationGroups.GENERAL,
     });
   }

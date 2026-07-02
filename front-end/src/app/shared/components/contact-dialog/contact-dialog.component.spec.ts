@@ -1,13 +1,17 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideZoneChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Contact } from 'app/shared/models/contact.model';
+import { ROUTES } from 'app/routes';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService } from 'primeng/api';
@@ -17,10 +21,6 @@ import { ContactLookupComponent } from '../contact-lookup/contact-lookup.compone
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
-import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { provideZoneChangeDetection } from '@angular/core';
-import { ROUTES } from 'app/routes';
-import { provideRouter } from '@angular/router';
 
 describe('ContactDialogComponent', () => {
   let component: ContactDialogComponent;
@@ -115,6 +115,28 @@ describe('ContactDialogComponent', () => {
     });
     component.confirmPropagation();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('#updateContact happy path', () => {
+    const testContact1 = new Contact();
+    testContact1.id = 'test_contact_1_id';
+    testContact1.type = ContactTypes.ORGANIZATION;
+
+    const testContact2 = new Contact();
+    testContact2.id = 'test_contact_2_id';
+    testContact2.type = ContactTypes.COMMITTEE;
+
+    component.contact.set(testContact1);
+
+    expect(component.contact()?.id).toBe(testContact1.id);
+    expect(component.contact()?.type).toBe(testContact1.type);
+    expect(component.form.dirty).toBe(false);
+
+    component.updateContact(testContact2);
+
+    expect(component.contact()?.id).toBe(testContact2.id);
+    expect(component.contact()?.type).toBe(testContact2.type);
+    expect(component.form.dirty).toBe(true);
   });
 
   describe('transactions', () => {

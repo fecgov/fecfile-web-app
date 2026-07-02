@@ -95,8 +95,8 @@ export const Disbursement: TransactionGroup[] = [
       ScheduleBTransactionTypes.REFUND_FEDERAL_COMMITTEE_CONTRIBUTION_VOID,
       ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
       ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
-      ScheduleBTransactionTypes.REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION,
-      ScheduleBTransactionTypes.REFUND_RECEIPTS_FROM_UNREGISTERED_ORGANIZATION_VOID,
+      ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
+      ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID,
     ]),
   },
   {

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, Signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MainFormBaseComponent } from 'app/reports/shared/main-form-base.component';
 import {
@@ -66,20 +66,30 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
     initialValue: '',
   });
   readonly isLoanAgreement = computed(() => this.documentType() === 'MSW');
-  readonly showFilingFrequency = computed(() => {
-    return this.documentType() in textCodesWithFilingFrequencies;
-  });
+  readonly showFilingFrequency = computed(() => this.documentType() in textCodesWithFilingFrequencies);
+  private pageIsLoaded = false;
+
+  constructor() {
+    super();
+    effect(() => {
+      this.showFilingFrequency();
+      /**
+       * Reset the filing frequency field when the document type changes, but only after the initial load.
+       * On load we want the filing frequency from the data.
+       */
+      if (!this.pageIsLoaded) {
+        this.pageIsLoaded = true;
+      } else {
+        this.form.controls['filing_frequency'].reset();
+      }
+    });
+  }
 
   getReportPayload(): Form99 {
     return Form99.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
   }
 
   override async submit(jump: 'continue' | void) {
-    const filingFrequency = this.form.get('filing_frequency');
-    if (filingFrequency) {
-      this.form.get('filing_frequency')?.updateValueAndValidity();
-      this.form.updateValueAndValidity();
-    }
     await super.submit(jump);
   }
 }

@@ -17,9 +17,11 @@ import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ContactService } from 'app/shared/services/contact.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -51,8 +53,6 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
-import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -370,6 +370,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   updateContact(contact: Contact) {
     this.contact.set(contact);
     this.contactType = contact.type;
+    this.form.markAllAsDirty();
     this.form.patchValue(contact);
   }
 
