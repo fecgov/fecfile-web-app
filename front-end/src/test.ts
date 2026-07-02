@@ -81,16 +81,11 @@ if (globalThis.window !== undefined && !globalThis.window.matchMedia) {
   });
 }
 
-class MockResizeObserver implements ResizeObserver {
-  observe = vi.fn();
-  unobserve = vi.fn();
-  disconnect = vi.fn();
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(_unused: ResizeObserverCallback) {}
-}
-
-globalThis.ResizeObserver = MockResizeObserver;
+globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
 
 globalThis.window.scrollTo = vi.fn();
 
