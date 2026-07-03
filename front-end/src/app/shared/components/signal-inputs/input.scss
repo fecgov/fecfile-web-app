@@ -1,0 +1,13 @@
+:host {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  & > label,
+  & > span {
+    margin: 0 0 8px 0;
+    align-self: end;
+  }
+  & > .p-error {
+    margin-top: 4px;
+  }
+}

@@ -1,18 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { debounce, form, FormField, required, submit, validate } from '@angular/forms/signals';
+import { apply, form, FormField, submit } from '@angular/forms/signals';
 import { Router } from '@angular/router';
-import { Form24, Type24_48 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { MessageService } from 'primeng/api';
-import { AutoFocusModule } from 'primeng/autofocus';
-import { ButtonModule } from 'primeng/button';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
-import { InputGroup } from 'primeng/inputgroup';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
+import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
+import { form24Options } from 'app/shared/utils/label.utils';
+import { buildF24Name, Form24, form24Schema, Type24_48 } from 'app/shared/models/reports/form-24.model';
+import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
 
 interface Form24Data {
   type: Type24_48 | null;
@@ -22,11 +21,12 @@ interface Form24Data {
 @Component({
   selector: 'app-f24-edit',
   templateUrl: './form-24-edit.component.html',
-  styleUrls: ['./form-24-edit.component.scss', '../../styles.scss'],
-  imports: [ButtonModule, FormField, AutoFocusModule, SelectButtonModule, InputGroup, SaveCancelComponent],
+  styleUrls: [],
+  imports: [FormField, SaveCancelComponent, SelectButtonInput, InputGroupInput],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Form24EditComponent {
+  readonly form24Options = form24Options;
   protected readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
   private readonly form24Service = inject(Form24Service);
@@ -34,40 +34,27 @@ export class Form24EditComponent {
 
   private readonly activeReport = this.store.selectSignal(selectActiveReport);
   private readonly report = computed(() => this.activeReport() as Form24);
+  readonly typeHour = computed(() => {
+    const type = this.f24Form.type().value();
+    return type ? `${type}-Hour:` : null;
+  });
   private readonly form24Names = derivedAsync(
     async () => {
       const reports = await this.form24Service.getAllReports();
-      return new Set<string>(reports.map((r) => r.name!));
+      return new Set<string>(reports.filter((r) => r.id !== this.report().id).map((r) => r.name!));
     },
     { initialValue: new Set<string>() },
   );
 
-  private readonly f24Model = signal<Form24Data>({
-    type: null,
-    typelessName: '',
+  private readonly f24Model = signal<Form24Data>({ type: null, typelessName: '' });
+  readonly f24Form = form(this.f24Model, (schemaPath) => {
+    apply(
+      schemaPath,
+      form24Schema({
+        existingNames: this.form24Names,
+      }),
+    );
   });
-
-  readonly form24Options = [
-    { label: '24-Hour ', value: '24' },
-    { label: '48-Hour', value: '48' },
-  ];
-
-  readonly f24Form = form(this.f24Model, (schema) => {
-    required(schema.type, { message: 'This is a required field' });
-    required(schema.typelessName, { message: 'This is a required field' });
-    debounce(schema.typelessName, 300);
-    validate(schema.typelessName, () => {
-      const name = this.fullName();
-      if (name === this.report().name || !this.form24Names().has(name)) return null;
-      return {
-        kind: 'exists',
-        message: 'This name is already in use. Please choose a different name.',
-      };
-    });
-  });
-
-  readonly typeHour = computed(() => `${this.f24Form.type().value()}-Hour:`);
-  private readonly fullName = computed(() => `${this.typeHour()} ${this.f24Form.typelessName().value()}`);
 
   constructor() {
     effectOnceIf(
@@ -90,9 +77,10 @@ export class Form24EditComponent {
       ignoreValidators: 'none',
       action: async () => {
         try {
+          const { type, typelessName } = this.f24Form().value();
           const payload = Form24.fromJSON({
             ...this.report()!,
-            name: this.fullName(),
+            name: buildF24Name(type!, typelessName),
           });
           await this.form24Service.update(payload, ['name']);
 

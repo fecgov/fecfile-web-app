@@ -14,9 +14,6 @@
       [disabled]="control().disabled"
       (blur)="update.emit(control().value)"
     >
-      <button [attr.aria-labelledby]="selectId().label">
-        <selectedcontent #selected></selectedcontent>
-      </button>
       @for (option of options(); track option.value) {
         <option [ngValue]="option.value">
           @if (customTemplate()) {

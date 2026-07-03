@@ -3,31 +3,41 @@
   title="Create a new report"
   submitLabel="Start building report"
   [(visible)]="dialogVisible"
-  (confirm)="goToReportForm()"
-  [submitDisabled]="isSubmitDisabled()"
+  (confirm)="submitForm()"
+  [submitDisabled]="reportForm().invalid()"
 >
-  <div class="dialog-body">
-    <div class="dropdown">
-      <span class="dialog-label" id="type-label">FORM TYPE</span>
-      <p-select
-        aria-labelledby="type-label"
-        [options]="filteredOptions()"
-        [(ngModel)]="selectedType"
-        class="w-full"
-        id="typeDropdown"
-      >
-        <ng-template #selectedItem let-selectedOption>
-          <span class="option">
-            <b>{{ this.formType()?.label }}:</b> {{ this.formType()?.description }}
-          </span>
-        </ng-template>
-        <ng-template let-type #item>
-          <span class="option" [attr.data-cy]="type">
-            <b>{{ getFormType(type)?.label }}:</b> {{ getFormType(type)?.description }}
-          </span>
-        </ng-template>
-      </p-select>
-    </div>
-    <app-create-f24 [visible]="isF24()" />
-  </div>
+  <form novalidate (submit)="$event.preventDefault()" class="grid-form">
+    <app-select-input
+      [options]="filteredOptions()"
+      [formField]="reportForm.type"
+      labelId="type-dropdown-label"
+      labelSyleClass="dialog-label"
+    >
+      <ng-template #selectedItem let-selectedOption>
+        <span class="option">
+          <b>{{ selectedLabel() }}:</b> {{ selectedDescription() }}
+        </span>
+      </ng-template>
+      <ng-template #item let-type>
+        <span class="option" [attr.data-cy]="type">
+          <b>{{ type.label }}:</b> {{ type.description }}
+        </span>
+      </ng-template>
+    </app-select-input>
+    @if (!reportForm.f24().hidden()) {
+      <app-select-button-input
+        [options]="form24Options"
+        label="REPORT TYPE"
+        labelId="form24-type-label"
+        labelStyleClass="dialog-label"
+        [formField]="reportForm.f24.type"
+      />
+      <app-input-group
+        [formField]="reportForm.f24.typelessName"
+        [pretext]="typeHour()"
+        inputId="form24Name"
+        labelStyleClass="dialog-label"
+      />
+    }
+  </form>
 </app-dialog>
