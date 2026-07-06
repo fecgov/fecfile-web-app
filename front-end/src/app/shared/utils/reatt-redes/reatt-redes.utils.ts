@@ -1,6 +1,7 @@
 import { FormGroup } from '@angular/forms';
-import { cloneInstance, Transaction } from '../../models/transaction.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import { cloneInstance, Transaction, TransactionTypes } from '../../models/transaction.model';
+import { ContactTypes } from '../../models/contact.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
@@ -9,6 +10,7 @@ import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ReportTypes } from '../../models/reports/report.model';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -20,6 +22,26 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
+  private static F3F3X_REATTRIBUTION_ALLOWED_TRANSACTION_TYPES: Set<TransactionTypes> | undefined;
+
+  private static getF3F3XReattributionAllowedTransactionTypes(): Set<TransactionTypes> {
+    if (!ReattRedesUtils.F3F3X_REATTRIBUTION_ALLOWED_TRANSACTION_TYPES) {
+      ReattRedesUtils.F3F3X_REATTRIBUTION_ALLOWED_TRANSACTION_TYPES = new Set<TransactionTypes>([
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+        ScheduleATransactionTypes.EARMARK_RECEIPT,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+        ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
+        ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+        ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+        ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+        ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
+        ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
+        ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
+      ]);
+    }
+    return ReattRedesUtils.F3F3X_REATTRIBUTION_ALLOWED_TRANSACTION_TYPES;
+  }
+
   public static readonly selectReportDialogSubject = new Subject<
     [TransactionListRecord, ReattRedesTypes] | undefined
   >();
@@ -39,6 +61,44 @@ export class ReattRedesUtils {
       type === ReattRedesTypes.REATTRIBUTION_TO ||
       type === ReattRedesTypes.REATTRIBUTION_FROM
     );
+  }
+
+  public static canReattribute(
+    transaction: Transaction | TransactionListRecord | undefined,
+    reportType?: ReportTypes | string,
+  ): boolean {
+    if (!transaction) return false;
+    if (!transaction.transactionType?.isReattributable) return false;
+    if (
+      ReattRedesUtils.isReattRedes(transaction, [ReattRedesTypes.REATTRIBUTION_FROM, ReattRedesTypes.REATTRIBUTION_TO])
+    )
+      return false;
+    if (ReattRedesUtils.isAtAmountLimit(transaction)) return false;
+
+    if (reportType === ReportTypes.F3 || reportType === ReportTypes.F3X) {
+      if (
+        transaction.transaction_type_identifier &&
+        !ReattRedesUtils.getF3F3XReattributionAllowedTransactionTypes().has(
+          transaction.transaction_type_identifier as TransactionTypes,
+        )
+      ) {
+        return false;
+      }
+    }
+
+    const transactionWithOptionalFields = transaction as TransactionListRecord & {
+      entity_type?: string;
+      amount?: number | string;
+    };
+
+    const entityType = 'entity_type' in transaction ? transactionWithOptionalFields.entity_type : undefined;
+    if (entityType !== undefined && entityType !== ContactTypes.INDIVIDUAL) return false;
+
+    const amount = 'amount' in transaction ? transactionWithOptionalFields.amount : undefined;
+    if (typeof amount === 'number' && amount < 0) return false;
+    if (typeof amount === 'string' && Number(amount) < 0) return false;
+
+    return true;
   }
 
   public static isAtAmountLimit(transaction: Transaction | TransactionListRecord | undefined): boolean {

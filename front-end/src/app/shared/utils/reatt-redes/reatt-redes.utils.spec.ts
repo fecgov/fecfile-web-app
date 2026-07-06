@@ -1,5 +1,7 @@
-import { SchATransaction } from '../../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { FormGroup } from '@angular/forms';
+import { ContactTypes } from '../../models/contact.model';
+import { ReportTypes } from '../../models/reports/report.model';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
@@ -42,6 +44,40 @@ describe('ReattRedesUtils', () => {
       txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
       result = ReattRedesUtils.isAtAmountLimit(txn);
       expect(result).toBe(true);
+    });
+  });
+
+  describe('canReattribute', () => {
+    const setAmount = (txn: SchATransaction, amount: number | string) => {
+      Object.assign(txn as SchATransaction & { amount?: number | string }, { amount });
+    };
+
+    it('should allow reattribution for supported F3/F3X transaction types', () => {
+      const txn = getTestIndividualReceipt();
+      txn.transaction_type_identifier = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
+      setAmount(txn, 100);
+      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(true);
+      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3X)).toBe(true);
+    });
+
+    it('should block reattribution for unsupported F3/F3X transaction types', () => {
+      const txn = getTestIndividualReceipt();
+      txn.transaction_type_identifier = ScheduleATransactionTypes.PAC_RECEIPT;
+      setAmount(txn, 100);
+      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(false);
+      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3X)).toBe(false);
+    });
+
+    it('should require individual entity_type and non-negative amount', () => {
+      const txn = getTestIndividualReceipt();
+      txn.transaction_type_identifier = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
+      txn.entity_type = ContactTypes.COMMITTEE;
+      setAmount(txn, 100);
+      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(false);
+
+      txn.entity_type = ContactTypes.INDIVIDUAL;
+      setAmount(txn, -50);
+      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(false);
     });
   });
 

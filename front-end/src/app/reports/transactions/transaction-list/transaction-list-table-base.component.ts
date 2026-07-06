@@ -171,13 +171,9 @@ export abstract class TransactionListTableBaseComponent
       this.createReattribution.bind(this),
       (transaction: TransactionListRecord) => {
         return (
-          transaction.transactionType.isReattributable &&
+          this.reportIsEditable() &&
           !transaction.parent_transaction_id &&
-          !ReattRedesUtils.isReattRedes(transaction, [
-            ReattRedesTypes.REATTRIBUTION_FROM,
-            ReattRedesTypes.REATTRIBUTION_TO,
-          ]) &&
-          !ReattRedesUtils.isAtAmountLimit(transaction)
+          ReattRedesUtils.canReattribute(transaction, this.report().report_type)
         );
       },
       () => true,
