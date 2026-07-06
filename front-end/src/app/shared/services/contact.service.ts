@@ -60,6 +60,11 @@ export class ContactService implements TableListService<Contact> {
     return response;
   }
 
+  public async getAll(): Promise<Contact[]> {
+    const response = await this.apiService.get<Contact[]>('/contacts/');
+    return response.map((r) => Contact.fromJSON(r));
+  }
+
   public async get(id: string): Promise<Contact> {
     const response = await this.apiService.get<Contact>(`/contacts/${id}/`);
     return Contact.fromJSON(response);

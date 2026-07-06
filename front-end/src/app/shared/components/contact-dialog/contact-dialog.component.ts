@@ -35,7 +35,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
+import { combineLatest, merge, takeUntil } from 'rxjs';
 import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
@@ -53,6 +53,7 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -177,6 +178,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
+  readonly allContacts = derivedAsync(() => this.contactService.getAll(), { initialValue: [] });
+  hideDuplicateWarning = false;
+  readonly potentialDuplicate = signal<Contact | undefined>(undefined);
   readonly table = viewChild(TableComponent);
   constructor() {
     super();
@@ -274,6 +278,23 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     this.contactTypeChanged(this.contactType);
+
+    const firstName$ = this.form.get('first_name')?.valueChanges;
+    const lastName$ = this.form.get('last_name')?.valueChanges;
+
+    if (firstName$ && lastName$) {
+      // merge emits the value of whichever control just changed
+      combineLatest([firstName$, lastName$])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(([firstName, lastName]) => {
+          if (this.contactType !== ContactTypes.INDIVIDUAL) return;
+          this.potentialDuplicate.set(
+            this.allContacts().find(
+              (c) => c.type === this.contactType && c.last_name === lastName && c.first_name === firstName,
+            ),
+          );
+        });
+    }
   }
 
   /**
@@ -432,5 +453,13 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       ]);
     }
     return Promise.resolve(false);
+  }
+
+  closeDuplicateWarning() {
+    this.hideDuplicateWarning = true;
+  }
+
+  useContact() {
+    this.savedContact.emit(this.potentialDuplicate()!);
   }
 }

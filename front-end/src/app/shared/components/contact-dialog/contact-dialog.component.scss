@@ -67,3 +67,10 @@
 th {
   border-top: 0 !important;
 }
+
+.background-box {
+  padding: 10px 15px;
+  margin-left: 8px;
+  background-color: var(--surface-ground);
+  border-radius: var(--border-radius);
+}

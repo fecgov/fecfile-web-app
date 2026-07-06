@@ -107,6 +107,28 @@
             </div>
           </div>
         </div>
+        @if (!hideDuplicateWarning && isNewItem) {
+          @if (potentialDuplicate()) {
+            <div class="background-box">
+              <div class="flex justify-content-between">
+                <span class="font-bold">We found an existing contact</span>
+                <button class="rounded-image-button" (click)="closeDuplicateWarning()" aria-label="Cancel">
+                  <img #icon src="assets/img/x-circle.svg" alt="close dialog" />
+                </button>
+              </div>
+              <hr class="my-2" />
+              <div class="flex justify-content-between">
+                <div class="flex gap-40px">
+                  <span>{{ potentialDuplicate()!.last_name }}, {{ potentialDuplicate()!.first_name }} </span>
+                  <span>{{ potentialDuplicate()!.city }}, {{ potentialDuplicate()!.state }}</span>
+                </div>
+                <button pButton class="p-button-primary" label="Use this contact" (click)="useContact()"></button>
+              </div>
+            </div>
+          } @else if (form.get('last_name')?.value && form.get('first_name')?.value) {
+            <span class="font-italic font-karla color-light-grey pl-2">No duplicate contacts found</span>
+          }
+        }
         <div class="grid">
           <div class="col-3">
             <div class="field">
