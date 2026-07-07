@@ -16,7 +16,8 @@ const placeholderText = 'Enter name...';
       <app-input-group
         [formField]="testForm.reportName"
         [pretext]="pretext()"
-        inputId="reportInput"
+        id="reportInput"
+        label="TEST"
         [labelStyleClass]="customLabelClass()"
       />
     </form>

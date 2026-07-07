@@ -11,7 +11,7 @@ import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
   imports: [SelectInput, FormField],
   template: `
     <form novalidate (submit)="$event.preventDefault()">
-      <app-select-input [options]="mockOptions" labelId="test-label" [formField]="testForm.test">
+      <app-select-input [options]="mockOptions" [formField]="testForm.test" label="TEST">
         <ng-template #selectedItem let-selectedOption>
           <span class="custom-selected">SELECTED: {{ selectedOption?.label }}</span>
         </ng-template>

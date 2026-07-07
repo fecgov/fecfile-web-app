@@ -5,11 +5,10 @@
   <app-select-button-input
     [options]="form24Options"
     label="Report type"
-    labelId="report-type-label"
     labelStyleClass="h2 mb-4"
     [formField]="f24Form.type"
   />
-  <app-input-group [formField]="f24Form.typelessName" [pretext]="typeHour()" inputId="form24Name" />
+  <app-input-group [formField]="f24Form.typelessName" [pretext]="typeHour()" label="REPORT NAME" />
   <hr type="solid" />
   <app-save-cancel
     [submitDisabled]="f24Form().invalid()"

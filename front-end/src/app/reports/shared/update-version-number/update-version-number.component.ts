@@ -3,16 +3,18 @@ import { disabled, form, FormField, FormRoot, pattern, required, validate } from
 import { Store } from '@ngrx/store';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { VersionData } from './version-data';
 import { ReportService } from 'app/shared/services/report.service';
 import { MessageService } from 'primeng/api';
+import { NumberInput } from 'app/shared/components/signal-inputs/number-input/number.input';
+import { DateInput, validateDate } from 'app/shared/components/signal-inputs/date-input/date.input';
+import { TextInput } from 'app/shared/components/signal-inputs/text-input/text.input';
 
 @Component({
   selector: 'app-update-version-number',
-  imports: [ButtonModule, FormsModule, CalendarComponent, FormField, FormRoot],
+  imports: [ButtonModule, FormsModule, FormField, FormRoot, NumberInput, DateInput, TextInput],
   templateUrl: './update-version-number.component.html',
   styleUrl: './update-version-number.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,22 +54,7 @@ export class UpdateVersionNumberComponent {
         when: ({ valueOf }) => this.isF24() && valueOf(schema.amendment) !== '0',
         message: 'This is a required field',
       });
-      validate(schema.previousSubmissionDate, ({ value }) => {
-        const rawValue = value();
-        if (!rawValue) return null;
-        if (typeof rawValue === 'string') {
-          const parsedTimestamp = Date.parse(rawValue);
-          if (Number.isNaN(parsedTimestamp) || /[a-zA-Z]/.test(rawValue)) {
-            return { kind: 'pattern' };
-          }
-        }
-
-        if (rawValue instanceof Date && Number.isNaN(rawValue.getTime())) {
-          return { kind: 'pattern' };
-        }
-
-        return null;
-      });
+      validateDate(schema.previousSubmissionDate);
       disabled(schema.previousSubmissionDate, () => !this.isF24());
     },
     {

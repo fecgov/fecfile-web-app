@@ -1050,3 +1050,36 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
     }
   }
 }
+
+.horizontal-field {
+  grid-row: auto !important;
+  grid-template-rows: min-content auto !important;
+  grid-template-columns: max-content 1fr;
+  column-gap: 32px;
+
+  & label,
+  & span,
+  & small {
+    margin: 0 !important;
+  }
+
+  & > app-label {
+    display: grid;
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: start;
+    max-width: 226px;
+    width: 226px;
+  }
+
+  & > input {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    align-self: start;
+  }
+  & > .p-error {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}

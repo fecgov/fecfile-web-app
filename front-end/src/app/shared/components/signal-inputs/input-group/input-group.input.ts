@@ -1,14 +1,21 @@
 import { Component, computed, inject, input, model } from '@angular/core';
-import { FormValueControl, ValidationError, FORM_FIELD, FormField } from '@angular/forms/signals';
+import { FORM_FIELD, FormField } from '@angular/forms/signals';
 import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 import { InputGroupModule } from 'primeng/inputgroup';
+import { LabelComponent } from '../label.component';
+import { BaseInput } from '../base.input';
 
 @Component({
   selector: 'app-input-group',
-  imports: [InputGroupModule],
+  imports: [InputGroupModule, LabelComponent],
   template: `
     @if (!hidden()) {
-      <label [class]="labelStyleClass()" [for]="inputId()">REPORT NAME</label>
+      <app-label
+        [label]="label()"
+        [inputId]="inputId()"
+        [optional]="!required()"
+        [labelStyleClass]="labelStyleClass()"
+      />
       <p-input-group>
         @if (pretext()) {
           <span>{{ pretext() }}</span>
@@ -32,16 +39,10 @@ import { InputGroupModule } from 'primeng/inputgroup';
   `,
   styleUrls: ['../input.scss'],
 })
-export class InputGroupInput implements FormValueControl<string> {
+export class InputGroupInput extends BaseInput<string> {
   readonly field = inject<FormField<string>>(FORM_FIELD, { self: true, optional: true });
-  readonly value = model.required<string>();
   readonly pretext = input.required<string | null>();
-  readonly inputId = input.required<string>();
   readonly dirty = model(false);
-  readonly invalid = input(false);
-  readonly hidden = input(false);
-  readonly errors = input<readonly ValidationError.WithOptionalFieldTree[]>([]);
-  readonly labelStyleClass = input<string>('');
 
   readonly placeholder = computed(() => this.field?.state()?.metadata(PLACEHOLDER)?.() ?? '');
 }
