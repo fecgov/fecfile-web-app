@@ -61,7 +61,6 @@ export class UpdateVersionNumberComponent {
       submission: {
         ignoreValidators: 'none',
         action: async () => {
-          this.formSubmitted = true;
           try {
             await this.reportService.updateVersionNumber(this.report(), this.versionForm().value());
             const report = await this.reportService.setActiveReportById(this.report().id);
@@ -77,7 +76,6 @@ export class UpdateVersionNumberComponent {
               detail: 'Amendment version updated',
               life: 3000,
             });
-            this.formSubmitted = false;
             return;
           } catch {
             this.messageService.add({
@@ -90,14 +88,12 @@ export class UpdateVersionNumberComponent {
           }
         },
         onInvalid: (field) => {
-          this.formSubmitted = true;
           const firstError = field().errorSummary()[0];
           firstError?.fieldTree().focusBoundControl();
         },
       },
     },
   );
-  formSubmitted = false;
 
   constructor() {
     effect(() => {

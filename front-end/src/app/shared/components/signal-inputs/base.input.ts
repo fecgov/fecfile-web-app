@@ -15,8 +15,8 @@ export abstract class BaseInput<T> implements FormValueControl<T> {
   readonly errors = input<readonly ValidationError.WithOptionalFieldTree[]>([]);
 
   readonly labelStyleClass = input<string>();
-  readonly id = input<string | undefined>();
+  readonly overrideId = input<string | undefined>();
 
   readonly optional = computed(() => !this.required() && !this.disabled());
-  readonly inputId = computed(() => this.id() ?? this.name());
+  readonly inputId = computed(() => this.overrideId() ?? this.name());
 }

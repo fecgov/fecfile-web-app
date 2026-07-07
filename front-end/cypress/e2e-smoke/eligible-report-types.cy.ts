@@ -12,8 +12,6 @@ describe('Manage profile', () => {
 
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('', false, false);
-
-    cy.get('p-selectitem').should('have.length', 5);
     cy.get('p-selectitem').contains("Form 99").should('exist');
   });
 

@@ -10,7 +10,7 @@
     <app-select-input
       [options]="filteredOptions()"
       [formField]="reportForm.type"
-      id="type-dropdown"
+      overrideId="type-dropdown"
       label="FORM TYPE"
       labelSyleClass="dialog-label"
     >
@@ -20,7 +20,7 @@
         </span>
       </ng-template>
       <ng-template #item let-type>
-        <span class="option" [attr.data-cy]="type">
+        <span class="option" [attr.data-cy]="type.value">
           <b>{{ type.label }}:</b> {{ type.description }}
         </span>
       </ng-template>
@@ -29,14 +29,14 @@
       <app-select-button-input
         [options]="form24Options"
         label="REPORT TYPE"
-        id="form24-type"
+        overrideId="form24-type"
         labelStyleClass="dialog-label"
         [formField]="reportForm.f24.type"
       />
       <app-input-group
         [formField]="reportForm.f24.typelessName"
         [pretext]="typeHour()"
-        inputId="form24Name"
+        overrideId="form24Name"
         label="REPORT NAME"
         labelStyleClass="dialog-label"
       />

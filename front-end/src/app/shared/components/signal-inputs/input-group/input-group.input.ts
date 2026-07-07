@@ -2,8 +2,8 @@ import { Component, computed, inject, input, model } from '@angular/core';
 import { FORM_FIELD, FormField } from '@angular/forms/signals';
 import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 import { InputGroupModule } from 'primeng/inputgroup';
-import { LabelComponent } from '../label.component';
 import { BaseInput } from '../base.input';
+import { LabelComponent } from '../label.component';
 
 @Component({
   selector: 'app-input-group',
