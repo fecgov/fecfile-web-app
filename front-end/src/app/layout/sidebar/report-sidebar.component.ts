@@ -37,7 +37,7 @@ export class ReportSidebarComponent {
   readonly formLabel = computed(() => this.report().formLabel);
   readonly subHeading = computed(() => this.report().report_code_label);
   readonly hasCoverage = computed(() => isForm3Group(this.report().report_type));
-  readonly isAmmendable = computed(
+  readonly isAmendable = computed(
     () => isForm3Group(this.report().report_type) || this.report().report_type === ReportTypes.F24,
   );
   readonly coverageFrom = computed(() => (this.report() as BaseForm3).coverage_from_date);
