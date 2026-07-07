@@ -10,7 +10,7 @@ import {
   ContactTypes,
   IndividualLookupResponse,
   OrganizationLookupResponse,
-} from '../models/contact.model';
+} from '../models/contacts/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';

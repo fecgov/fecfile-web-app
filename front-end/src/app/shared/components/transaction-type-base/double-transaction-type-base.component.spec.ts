@@ -7,7 +7,7 @@ import { FormBuilder } from '@angular/forms';
 import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ROUTES } from 'app/routes';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {

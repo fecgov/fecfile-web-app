@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ConfirmationWrapperService } from './confirmation-wrapper.service';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Contact, ContactTypes } from '../models/contact.model';
+import { Contact, ContactTypes } from '../models/contacts/contact.model';
 import { TransactionTemplateMapType } from '../models/transaction-type.model';
 
 describe('ConfirmationWrapperService', () => {

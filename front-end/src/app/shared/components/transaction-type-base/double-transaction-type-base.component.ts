@@ -12,7 +12,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
 import { firstValueFrom, of } from 'rxjs';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { Contact, ContactTypeLabels } from '../../models/contacts/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';

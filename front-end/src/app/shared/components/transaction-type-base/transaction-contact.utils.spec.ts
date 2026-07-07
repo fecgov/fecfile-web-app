@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
@@ -11,6 +11,7 @@ import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models';
+import { Candidate, CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
 
 describe('ContactUtils', () => {
   let form: FormGroup;
@@ -207,7 +208,7 @@ describe('ContactUtils', () => {
     const formProperties = transaction.transactionType.getFormControlNames();
     const formBuilder = new FormBuilder();
     const form = formBuilder.group(SchemaUtils.getFormGroupFields(formProperties));
-    transaction.contact_2 = Contact.fromJSON({
+    transaction.contact_2 = Candidate.fromJSON({
       first_name: 'Changed',
       candidate_state: 'GA',
     });

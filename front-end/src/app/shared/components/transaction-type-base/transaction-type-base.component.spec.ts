@@ -23,7 +23,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { Contact, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contacts/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';

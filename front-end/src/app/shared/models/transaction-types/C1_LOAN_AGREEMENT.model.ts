@@ -9,7 +9,7 @@ import {
   SIGNATORY_2_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C1_LOAN_AGREEMENT';
-import { STANDARD_AND_SECONDARY } from '../contact.model';
+import { STANDARD_AND_SECONDARY } from '../contacts/contact.model';
 import { SchC1TransactionType } from '../schc1-transaction-type.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';

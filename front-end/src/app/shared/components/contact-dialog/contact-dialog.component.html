@@ -55,7 +55,7 @@
           <div class="col-4"></div>
         </div>
       }
-      @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
+      @if (contactType === ContactTypes.COMMITTEE || contactType === ContactTypes.ORGANIZATION) {
         <div class="grid">
           @if (contactType === ContactTypes.COMMITTEE) {
             <div class="col-4">
@@ -83,7 +83,7 @@
           }
         </div>
       }
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (contactType === ContactTypes.CANDIDATE || contactType === ContactTypes.INDIVIDUAL) {
         <div class="grid">
           <div class="col-4">
             <div class="field">
@@ -232,7 +232,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (contactType === ContactTypes.CANDIDATE || contactType === ContactTypes.INDIVIDUAL) {
         <div class="grid">
           <div class="col-12">
             <hr />

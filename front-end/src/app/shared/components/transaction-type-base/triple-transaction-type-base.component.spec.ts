@@ -14,7 +14,7 @@ import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/
 import { TripleTransactionDetailComponent } from 'app/reports/transactions/triple-transaction-detail/triple-transaction-detail.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { Contact } from '../../models/contact.model';
+import { Contact } from '../../models/contacts/contact.model';
 import {
   NavigationAction,
   NavigationDestination,

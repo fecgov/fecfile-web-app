@@ -1,12 +1,16 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { LabelUtils, PrimeOptions } from '../utils/label.utils';
-import { Contact, ContactTypeLabels, ContactTypes, emptyContact } from '../models';
+import { Contact, ContactTypeLabels, ContactTypes } from '../models/contacts/contact.model';
+import { Candidate } from '../models/contacts/candidate.model';
+import { Committee } from '../models/contacts/committee.model';
+import { createContact } from './contact.service';
+import { Individual } from '../models/contacts/individual.model';
 
 @Injectable()
 export class ContactManager {
   readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly contactTypeOptions = signal<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
-  readonly contact = signal<Contact>(new Contact());
+  readonly contact = signal<Contact>(new Individual());
   readonly outerContact = signal<Contact | null>(null);
   readonly clearOnLoad = signal(true);
   readonly relatedManagers = signal<ContactManager[]>([]);
@@ -27,12 +31,12 @@ export class ContactManager {
     const ids: string[] = [];
     if (this.relatedManagers().length === 0) return ids.join(',');
     const contact = this.outerContact();
-    if (contact?.candidate_id) ids.push(contact.candidate_id);
-    if (contact?.committee_id) ids.push(contact.committee_id);
+    if (contact instanceof Candidate && contact.candidate_id) ids.push(contact.candidate_id);
+    if (contact instanceof Committee && contact.committee_id) ids.push(contact.committee_id);
     for (const manager of this.relatedManagers()) {
       const contact = manager.outerContact();
-      if (contact?.candidate_id) ids.push(contact.candidate_id);
-      if (contact?.committee_id) ids.push(contact.committee_id);
+      if (contact instanceof Candidate && contact.candidate_id) ids.push(contact.candidate_id);
+      if (contact instanceof Committee && contact.committee_id) ids.push(contact.committee_id);
     }
     return ids.join(',');
   });
@@ -62,7 +66,7 @@ export class ContactManagementService {
     // set the contact to a new Empty Contact of the appropriate contact type.
     effect(() => {
       if (this.showDialog() && this.activeManager().clearOnLoad()) {
-        this.activeManager().contact.set(emptyContact(this.activeManager().contactType()));
+        this.activeManager().contact.set(createContact({ type: this.activeManager().contactType() }));
       }
     });
   }

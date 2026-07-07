@@ -13,7 +13,7 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { singleClickEnableAction } from '../../../store/single-click.actions';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { Contact, ContactTypeLabels } from '../../models/contacts/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';

@@ -12,7 +12,7 @@ import {
   EMPLOYEE_INFO_FIELDS,
   INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_SINGLE_CONTACT } from '../contact.model';
+import { STANDARD_SINGLE_CONTACT } from '../contacts/contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   TransactionNavigationControls,

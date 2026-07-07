@@ -3,7 +3,11 @@ import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.m
 import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactFields, ContactTypes } from '../../models/contacts/contact.model';
+import { Candidate, CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
+import { Individual } from 'app/shared/models/contacts/individual.model';
+import { Committee } from 'app/shared/models/contacts/committee.model';
+import { Organization } from 'app/shared/models/contacts/organization.model';
 
 export class TransactionContactUtils {
   /**
@@ -136,21 +140,23 @@ export class TransactionContactUtils {
     if (!(contact && templateMap)) return;
     switch (contact.type) {
       case ContactTypes.INDIVIDUAL:
-        form.get(templateMap.last_name)?.setValue(contact.last_name);
-        form.get(templateMap.first_name)?.setValue(contact.first_name);
-        form.get(templateMap.middle_name)?.setValue(contact.middle_name);
-        form.get(templateMap.prefix)?.setValue(contact.prefix);
-        form.get(templateMap.suffix)?.setValue(contact.suffix);
-        form.get(templateMap.employer)?.setValue(contact.employer);
-        form.get(templateMap.occupation)?.setValue(contact.occupation);
+        const individual = contact as Individual;
+        form.get(templateMap.last_name)?.setValue(individual.last_name);
+        form.get(templateMap.first_name)?.setValue(individual.first_name);
+        form.get(templateMap.middle_name)?.setValue(individual.middle_name);
+        form.get(templateMap.prefix)?.setValue(individual.prefix);
+        form.get(templateMap.suffix)?.setValue(individual.suffix);
+        form.get(templateMap.employer)?.setValue(individual.employer);
+        form.get(templateMap.occupation)?.setValue(individual.occupation);
         break;
       case ContactTypes.COMMITTEE:
-        form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
-        form.get(templateMap.organization_name)?.setValue(contact.name);
-        form.get(templateMap.committee_name)?.setValue(contact.name);
+        const committee = contact as Committee;
+        form.get(templateMap.committee_fec_id)?.setValue(committee.committee_id);
+        form.get(templateMap.organization_name)?.setValue(committee.name);
+        form.get(templateMap.committee_name)?.setValue(committee.name);
         break;
       case ContactTypes.ORGANIZATION:
-        form.get(templateMap.organization_name)?.setValue(contact.name);
+        form.get(templateMap.organization_name)?.setValue((contact as Organization).name);
         break;
     }
     form.get(templateMap.street_1)?.setValue(contact.street_1);
@@ -207,15 +213,16 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
-    form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
-    form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
-    form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
-    form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
-    form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
-    form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
-    form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
-    form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
+    const candidate = contact as Candidate;
+    form.get(templateMap.candidate_fec_id)?.setValue(candidate.candidate_id);
+    form.get(templateMap.candidate_last_name)?.setValue(candidate.last_name);
+    form.get(templateMap.candidate_first_name)?.setValue(candidate.first_name);
+    form.get(templateMap.candidate_middle_name)?.setValue(candidate.middle_name);
+    form.get(templateMap.candidate_prefix)?.setValue(candidate.prefix);
+    form.get(templateMap.candidate_suffix)?.setValue(candidate.suffix);
+    form.get(templateMap.candidate_office)?.setValue(candidate.candidate_office);
+    form.get(templateMap.candidate_state)?.setValue(candidate.candidate_state);
+    form.get(templateMap.candidate_district)?.setValue(candidate.candidate_district);
     if (transaction) {
       transaction.contact_2 = contact;
     }
@@ -239,7 +246,7 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    form.get(templateMap.secondary_name)?.setValue(contact.name);
+    form.get(templateMap.secondary_name)?.setValue((contact as Organization).name);
     form.get(templateMap.secondary_street_1)?.setValue(contact.street_1);
     form.get(templateMap.secondary_street_2)?.setValue(contact.street_2);
     form.get(templateMap.secondary_city)?.setValue(contact.city);
@@ -260,8 +267,8 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
-    form.get(templateMap.committee_name)?.setValue(contact.name);
+    form.get(templateMap.committee_fec_id)?.setValue((contact as Committee).committee_id);
+    form.get(templateMap.committee_name)?.setValue((contact as Committee).name);
     if (transaction) {
       transaction.contact_3 = contact;
     }
@@ -277,8 +284,8 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    form.get(templateMap.quaternary_committee_fec_id)?.setValue(contact.committee_id);
-    form.get(templateMap.quaternary_committee_name)?.setValue(contact.name);
+    form.get(templateMap.quaternary_committee_fec_id)?.setValue((contact as Committee).committee_id);
+    form.get(templateMap.quaternary_committee_name)?.setValue((contact as Committee).name);
     if (transaction) {
       transaction.contact_4 = contact;
       transaction.contact_4_id = contact.id;
@@ -312,8 +319,8 @@ export class TransactionContactUtils {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
-    form.get(templateMap.quinary_committee_fec_id)?.setValue(contact.committee_id);
-    form.get(templateMap.quinary_committee_name)?.setValue(contact.name);
+    form.get(templateMap.quinary_committee_fec_id)?.setValue((contact as Committee).committee_id);
+    form.get(templateMap.quinary_committee_name)?.setValue((contact as Committee).name);
     form.get(templateMap.quinary_street_1)?.setValue(contact.street_1);
     form.get(templateMap.quinary_street_2)?.setValue(contact.street_2);
     form.get(templateMap.quinary_city)?.setValue(contact.city);

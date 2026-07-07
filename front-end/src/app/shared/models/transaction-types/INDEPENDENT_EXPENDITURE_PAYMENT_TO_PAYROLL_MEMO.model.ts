@@ -16,7 +16,7 @@ import {
   CANDIDATE_OFFICE_FIELDS,
   INDIVIDUAL_ORGANIZATION,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 
 export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchETransactionType {
   formFields = [

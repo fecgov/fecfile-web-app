@@ -3,7 +3,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
 import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,

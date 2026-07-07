@@ -14,7 +14,7 @@ import { DividerModule } from 'primeng/divider';
 import { SelectModule } from 'primeng/select';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { Form1M } from 'app/shared/models/reports/form-1m.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';

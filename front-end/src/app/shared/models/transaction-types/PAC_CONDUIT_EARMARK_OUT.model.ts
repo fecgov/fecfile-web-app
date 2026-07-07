@@ -7,7 +7,7 @@ import {
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK_OUT } from './common-types/CONDUIT_EARMARK_OUT.model';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 import { conduitClause } from '../clause';
 
 export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {

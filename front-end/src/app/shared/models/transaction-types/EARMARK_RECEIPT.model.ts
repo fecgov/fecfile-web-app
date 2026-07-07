@@ -1,6 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
-import { ContactTypes } from '../contact.model';
+import { ContactTypes } from '../contacts/contact.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
 import { EARMARK } from './common-types/EARMARK.model';

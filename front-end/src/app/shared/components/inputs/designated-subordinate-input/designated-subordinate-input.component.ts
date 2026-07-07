@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';

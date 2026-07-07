@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { combineLatest, of } from 'rxjs';
-import { ContactTypes } from '../../models/contact.model';
+import { ContactTypes } from '../../models/contacts/contact.model';
 
 export class ReattributionFromUtils {
   private static readOnlyFields = [

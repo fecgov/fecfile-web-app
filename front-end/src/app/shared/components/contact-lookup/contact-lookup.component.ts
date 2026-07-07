@@ -1,16 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  CandidateOfficeType,
-  CandidateOfficeTypeLabels,
-  Contact,
-  ContactTypeLabels,
-  ContactTypes,
-  FecApiCandidateLookupData,
-  FecApiCommitteeLookupData,
-  FecApiLookupData,
-} from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -19,6 +10,13 @@ import { AutoComplete } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
 import { DestroyerComponent } from '../destroyer.component';
+import {
+  FecApiLookupData,
+  FecApiCandidateLookupData,
+  FecApiCommitteeLookupData,
+} from 'app/shared/models/contacts/contact-lookups.model';
+import { Candidate, CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
+import { Committee } from 'app/shared/models/contacts/committee.model';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -34,7 +32,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   @Input() showSearchBoxCallback = () => true;
 
   @Input() includeFecfileResults = true;
-  @Input() candidateOffice?: CandidateOfficeType;
+  @Input() candidateOffice?: CandidateOfficeTypes;
 
   @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
   @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
@@ -49,7 +47,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }, 0);
   }
 
-  contactType = ContactTypes.INDIVIDUAL;
+  contactType: ContactTypes = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
@@ -141,7 +139,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       this.contactService.getCandidateDetails(data.candidate_id).then((candidate) => {
         const nameSplit = candidate.name?.split(', ');
         this.contactLookupSelect.emit(
-          Contact.fromJSON({
+          Candidate.fromJSON({
             type: ContactTypes.CANDIDATE,
             candidate_id: candidate.candidate_id,
             last_name:
@@ -179,7 +177,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
           phone = '+1 ' + committeeAccount.treasurer_phone;
         }
         this.contactLookupSelect.emit(
-          Contact.fromJSON({
+          Committee.fromJSON({
             type: ContactTypes.COMMITTEE,
             committee_id: committeeAccount.committee_id,
             name: committeeAccount.name,

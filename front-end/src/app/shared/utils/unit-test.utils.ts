@@ -10,7 +10,7 @@ import { initialState as initUserLoginData } from 'app/store/user-login-data.red
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { CommitteeMember, Form24, Form3, Report } from '../models';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
+import { ContactTypes } from '../models/contacts/contact.model';
 import { MemoText } from '../models/memo-text.model';
 import { Form3X } from '../models/reports/form-3x.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
@@ -27,6 +27,7 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { Individual } from '../models/contacts/individual.model';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -256,12 +257,9 @@ export function testMockStore(): {
 }
 
 export function testContact() {
-  return Contact.fromJSON({
+  return Individual.fromJSON({
     id: '111',
     type: ContactTypes.INDIVIDUAL,
-    candidate_id: '999',
-    committee_id: '888',
-    name: 'Organization LLC',
     last_name: 'Smith',
     first_name: 'Joe',
     middle_name: 'James',
@@ -274,9 +272,6 @@ export function testContact() {
     zip: '22201',
     employer: 'Plumbing, Inc.',
     occupation: 'plumber',
-    candidate_office: CandidateOfficeTypes.HOUSE,
-    candidate_state: 'VA',
-    candidate_district: '1',
     telephone: '555-555-5555',
     country: 'USA',
     created: '8/27/2023',
@@ -303,7 +298,7 @@ export function getTestIndividualReceipt(): SchATransaction {
     contributor_occupation: 'occupation',
     memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
     contact_1_id: '456',
-    contact_1: Contact.fromJSON({
+    contact_1: Individual.fromJSON({
       id: 'testId',
       type: ContactTypes.INDIVIDUAL,
       last_name: 'testLn1',

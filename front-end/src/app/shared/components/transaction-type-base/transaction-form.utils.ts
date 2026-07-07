@@ -32,7 +32,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { Contact, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contacts/contact.model';
 import { ContactIdMapType } from './transaction-contact.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 

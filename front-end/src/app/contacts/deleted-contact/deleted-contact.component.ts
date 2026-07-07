@@ -2,7 +2,13 @@ import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@an
 import { RouterLink } from '@angular/router';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from 'app/shared/components/table/table.component';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import {
+  Contact,
+  ContactTypeLabels,
+  fullNameContact,
+  SimpleNameContact,
+} from 'app/shared/models/contacts/contact.model';
+import { Individual } from 'app/shared/models/contacts/individual.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { LabelList } from 'app/shared/utils/label.utils';
@@ -60,7 +66,7 @@ export class DeletedContactComponent extends TableListBaseComponent<Contact> {
   }
 
   protected getEmptyItem(): Contact {
-    return new Contact();
+    return new Individual();
   }
 
   /**
@@ -69,10 +75,10 @@ export class DeletedContactComponent extends TableListBaseComponent<Contact> {
    * @returns {string} Returns the appropriate name of the contact for display in the table.
    */
   public displayName(item: Contact): string {
-    if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
+    if (fullNameContact(item)) {
       return `${item.last_name}, ${item.first_name}`;
     } else {
-      return item.name || '';
+      return (item as SimpleNameContact).name || '';
     }
   }
 }

@@ -2,7 +2,7 @@ import { Component, inject, OnInit, output } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { takeUntil } from 'rxjs';
 import { SelectItem } from 'primeng/api';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { getContactTypeOptions, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { ReactiveFormsModule } from '@angular/forms';

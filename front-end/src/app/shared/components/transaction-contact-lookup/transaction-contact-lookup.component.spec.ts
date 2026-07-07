@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';

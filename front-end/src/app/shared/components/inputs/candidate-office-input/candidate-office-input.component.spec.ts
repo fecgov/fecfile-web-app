@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CandidateOfficeTypes } from 'app/shared/models/contact.model';
+import { CandidateOfficeTypes } from 'app/shared/models/contacts/contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';

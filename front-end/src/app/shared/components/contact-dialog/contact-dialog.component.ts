@@ -20,7 +20,7 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
-import { ContactService } from 'app/shared/services/contact.service';
+import { ContactService, createContact } from 'app/shared/services/contact.service';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -35,8 +35,8 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { combineLatest, merge, takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { combineLatest, takeUntil } from 'rxjs';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contacts/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
@@ -54,6 +54,10 @@ import { SearchableSelectComponent } from '../searchable-select/searchable-selec
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { Candidate, CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
+import { Individual } from 'app/shared/models/contacts/individual.model';
+import { Committee } from 'app/shared/models/contacts/committee.model';
+import { Organization } from 'app/shared/models/contacts/organization.model';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -131,7 +135,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   isNewItem = true;
-  contactType = ContactTypes.INDIVIDUAL;
+  contactType: ContactTypes = ContactTypes.INDIVIDUAL;
 
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -178,9 +182,21 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
-  readonly allContacts = derivedAsync(() => this.contactService.getAll(), { initialValue: [] });
+  private readonly allContacts = derivedAsync(() => this.contactService.getAll(), { initialValue: [] });
+  readonly existingCandidates = computed(
+    () => this.allContacts().filter((c) => c.type === ContactTypes.CANDIDATE) as Candidate[],
+  );
+  readonly existingCommittees = computed(
+    () => this.allContacts().filter((c) => c.type === ContactTypes.COMMITTEE) as Committee[],
+  );
+  readonly existingIndividuals = computed(
+    () => this.allContacts().filter((c) => c.type === ContactTypes.INDIVIDUAL) as Individual[],
+  );
+  readonly existingOrganizations = computed(
+    () => this.allContacts().filter((c) => c.type === ContactTypes.ORGANIZATION) as Organization[],
+  );
   hideDuplicateWarning = false;
-  readonly potentialDuplicate = signal<Contact | undefined>(undefined);
+  readonly potentialDuplicate = signal<Individual | undefined>(undefined);
   readonly table = viewChild(TableComponent);
   constructor() {
     super();
@@ -289,7 +305,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         .subscribe(([firstName, lastName]) => {
           if (this.contactType !== ContactTypes.INDIVIDUAL) return;
           this.potentialDuplicate.set(
-            this.allContacts().find(
+            this.existingIndividuals().find(
               (c) => c.type === this.contactType && c.last_name === lastName && c.first_name === firstName,
             ),
           );
@@ -306,7 +322,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contactTypeOptions.some((opt) => opt.value === contactType)) return;
     this.contactType = contactType;
-    if (!this.contact()) this.contact.set(new Contact());
+    // if (!this.contact()) this.contact.set(new Contact());
 
     // The type form control is not displayed on the form page because we are
     // displaying the contact lookup component which operates independently, so
@@ -433,10 +449,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       return;
     }
 
-    const contact: Contact = Contact.fromJSON({
+    const contact = createContact({
       ...this.contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
     });
+
     contact.type = this.contactType;
     this.savedContact.emit(contact);
 

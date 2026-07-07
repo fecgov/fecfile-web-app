@@ -1,7 +1,7 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { ContactTypes } from '../contact.model';
+import { ContactTypes } from '../contacts/contact.model';
 import { PAC_CONDUIT_EARMARK_OUT } from './PAC_CONDUIT_EARMARK_OUT.model';
 
 describe('PAC_CONDUIT_EARMARK_OUT', () => {

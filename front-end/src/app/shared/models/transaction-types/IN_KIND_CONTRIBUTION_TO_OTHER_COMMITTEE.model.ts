@@ -7,7 +7,7 @@ import {
   ORGANIZATION_INDIVIDUAL,
   INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_TERTIARY } from '../contact.model';
+import { STANDARD_AND_TERTIARY } from '../contacts/contact.model';
 
 export class IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType {
   formFields = INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_B_FORM_FIELDS;

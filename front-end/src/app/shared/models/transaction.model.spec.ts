@@ -1,5 +1,5 @@
 import { getTestTransactionByType } from '../utils/unit-test.utils';
-import { ContactTypes } from './contact.model';
+import { ContactTypes } from './contacts/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
 import { Transaction, getTransactionName } from './transaction.model';
 

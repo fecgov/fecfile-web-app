@@ -12,7 +12,7 @@ import {
   SIGNATORY_1_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_PARENTS';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 import { SchETransactionType } from '../sche-transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';

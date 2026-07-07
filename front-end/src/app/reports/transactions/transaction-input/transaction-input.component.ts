@@ -2,7 +2,7 @@ import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';

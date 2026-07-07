@@ -7,7 +7,7 @@ import {
   COMMITTEE,
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 
 export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;

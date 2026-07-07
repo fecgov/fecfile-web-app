@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { Contact, ContactTypes } from '../models/contact.model';
+import { Contact, ContactTypes } from '../models/contacts/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';

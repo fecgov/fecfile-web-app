@@ -1,12 +1,13 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Candidate } from 'app/shared/models/contacts/candidate.model';
+import { Committee } from 'app/shared/models/contacts/committee.model';
 import {
-  Contact,
-  ContactTypes,
+  FecApiLookupData,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
-  FecApiLookupData,
-} from 'app/shared/models/contact.model';
+} from 'app/shared/models/contacts/contact-lookups.model';
+import { Contact, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
@@ -91,7 +92,7 @@ export class ContactSearchComponent {
     if (!data.candidate_id) throw new Error('Invalid Candidate');
     const candidate = await this.contactService.getCandidateDetails(data.candidate_id);
     const nameSplit = candidate.name?.split(', ');
-    return Contact.fromJSON({
+    return Candidate.fromJSON({
       type: ContactTypes.CANDIDATE,
       candidate_id: candidate.candidate_id,
       last_name:
@@ -126,7 +127,7 @@ export class ContactSearchComponent {
     if (committee.treasurer_phone) {
       phone = '+1 ' + committee.treasurer_phone;
     }
-    return Contact.fromJSON({
+    return Committee.fromJSON({
       type: ContactTypes.COMMITTEE,
       committee_id: committee.committee_id,
       name: committee.name,

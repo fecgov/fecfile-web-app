@@ -15,7 +15,7 @@ import {
   INDIVIDUAL,
   INDIVIDUAL_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransactionType {

@@ -2,11 +2,11 @@ import { formatDate } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
-import { CandidateOfficeTypes } from '../models/contact.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { ApiService } from './api.service';
 import { map, Observable, of } from 'rxjs';
+import { CandidateOfficeTypes } from '../models/contacts/candidate.model';
 
 interface PreviousAggregate {
   aggregate: number;

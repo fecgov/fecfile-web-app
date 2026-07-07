@@ -16,7 +16,7 @@ import {
   CANDIDATE_OFFICE_FIELDS,
   ORGANIZATION_INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 
 export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransactionType {
   formFields = [

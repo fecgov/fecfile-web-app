@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, OnInit, untracked } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContactService } from 'app/shared/services/contact.service';
+import { ContactService, createContact } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -16,7 +16,7 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypes } from '../../models/contacts/contact.model';
 import { DestroyerComponent } from '../destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -26,6 +26,7 @@ import { ContactSearchComponent } from '../contact-search/contact-search.compone
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
 
 @Component({
   selector: 'app-contact-modal',
@@ -177,7 +178,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       return;
     }
 
-    const contact: Contact = Contact.fromJSON({
+    const contact = createContact({
       ...this.manager().contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
     });

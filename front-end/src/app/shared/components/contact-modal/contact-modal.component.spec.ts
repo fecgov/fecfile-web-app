@@ -6,11 +6,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService, ContactManager } from 'app/shared/services/contact-management.service';
 import { provideRouter } from '@angular/router';
-import { ContactTypes, CandidateOfficeTypes, Contact } from '../../models/contact.model';
+import { ContactTypes, Contact } from '../../models/contacts/contact.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom } from 'rxjs';
 import { provideZoneChangeDetection } from '@angular/core';
+import { Individual } from 'app/shared/models/contacts/individual.model';
+import { CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
 
 describe('ContactModalComponent', () => {
   let component: ContactModalComponent;
@@ -40,7 +42,7 @@ describe('ContactModalComponent', () => {
     contactManagementService.activeKey.set('testKey');
     manager = contactManagementService.get('testKey');
     manager.contactType.set(ContactTypes.INDIVIDUAL);
-    manager.contact.set(new Contact());
+    manager.contact.set(new Individual());
 
     fixture.detectChanges();
   });
@@ -114,7 +116,7 @@ describe('ContactModalComponent', () => {
     expect(component.form.valid).toBe(true);
     component.saveContact();
 
-    expect(manager.contact().first_name).toEqual('Joe');
+    expect((manager.contact() as Individual).first_name).toEqual('Joe');
     expect(manager.outerContact()).toEqual(manager.contact());
   });
 
@@ -146,7 +148,7 @@ describe('ContactModalComponent', () => {
 
   it('should patch form value when manager contact changes', () => {
     vi.spyOn(component.form, 'patchValue');
-    const newContact = new Contact();
+    const newContact = new Individual();
     newContact.first_name = 'Jane';
     manager.contact.set(newContact);
     fixture.detectChanges();

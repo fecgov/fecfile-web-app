@@ -1,7 +1,7 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { ContactTypes, STANDARD_AND_CANDIDATE } from '../contact.model';
+import { ContactTypes, STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 import { SchATransaction } from '../scha-transaction.model';
 import {
   COMMITTEE,

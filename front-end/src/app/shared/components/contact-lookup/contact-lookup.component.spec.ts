@@ -6,22 +6,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Candidate } from 'app/shared/models/candidate.model';
-import {
-  CandidateLookupResponse,
-  CandidateOfficeTypes,
-  CommitteeLookupResponse,
-  Contact,
-  ContactTypeLabels,
-  ContactTypes,
-  FecApiCandidateLookupData,
-  FecApiCommitteeLookupData,
-  FecfileCandidateLookupData,
-  FecfileCommitteeLookupData,
-  FecfileIndividualLookupData,
-  FecfileOrganizationLookupData,
-  IndividualLookupResponse,
-  OrganizationLookupResponse,
-} from 'app/shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -31,6 +16,20 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from './contact-lookup.component';
+import { CandidateOfficeTypes } from 'app/shared/models/contacts/candidate.model';
+import {
+  CandidateLookupResponse,
+  CommitteeLookupResponse,
+  FecApiCandidateLookupData,
+  FecApiCommitteeLookupData,
+  FecfileCandidateLookupData,
+  FecfileCommitteeLookupData,
+  FecfileIndividualLookupData,
+  FecfileOrganizationLookupData,
+  IndividualLookupResponse,
+  OrganizationLookupResponse,
+} from 'app/shared/models/contacts/contact-lookups.model';
+import { Committee } from 'app/shared/models/contacts/committee.model';
 
 describe('ContactLookupComponent', () => {
   let component: ContactLookupComponent;
@@ -306,7 +305,7 @@ describe('ContactLookupComponent', () => {
   it('#onContactSelect Contact happy path', () => {
     fixture.detectChanges();
     const eventEmitterEmitSpy = vi.spyOn(component.contactLookupSelect, 'emit');
-    const testContact = Contact.fromJSON({
+    const testContact = Committee.fromJSON({
       id: 123,
       last_name: 'testLastName',
       first_name: 'testFirstName',
@@ -386,7 +385,7 @@ describe('ContactLookupComponent', () => {
       expect(eventEmitterEmitSpy).toHaveBeenCalledTimes(1);
 
       expect(eventEmitterEmitSpy).toHaveBeenCalledWith(
-        Contact.fromJSON({
+        Candidate.fromJSON({
           type: ContactTypes.CANDIDATE,
           candidate_id: 'P80000722',
           last_name: 'BIDEN',
@@ -414,7 +413,7 @@ describe('ContactLookupComponent', () => {
       expect(eventEmitterEmitSpy).toHaveBeenCalledTimes(1);
 
       expect(eventEmitterEmitSpy).toHaveBeenCalledWith(
-        Contact.fromJSON({
+        Candidate.fromJSON({
           ...baseContact,
           candidate_office: undefined,
           candidate_state: undefined,
@@ -438,7 +437,7 @@ describe('ContactLookupComponent', () => {
       expect(eventEmitterEmitSpy).toHaveBeenCalledTimes(1);
 
       expect(eventEmitterEmitSpy).toHaveBeenCalledWith(
-        Contact.fromJSON({
+        Candidate.fromJSON({
           ...baseContact,
           candidate_office: 'H',
           candidate_state: 'WY',
@@ -462,7 +461,7 @@ describe('ContactLookupComponent', () => {
       expect(eventEmitterEmitSpy).toHaveBeenCalledTimes(1);
 
       expect(eventEmitterEmitSpy).toHaveBeenCalledWith(
-        Contact.fromJSON({
+        Candidate.fromJSON({
           ...baseContact,
           candidate_office: 'H',
           candidate_state: '',
@@ -486,7 +485,7 @@ describe('ContactLookupComponent', () => {
       expect(eventEmitterEmitSpy).toHaveBeenCalledTimes(1);
 
       expect(eventEmitterEmitSpy).toHaveBeenCalledWith(
-        Contact.fromJSON({
+        Candidate.fromJSON({
           ...baseContact,
           candidate_office: 'S',
           candidate_state: 'AZ',
@@ -506,7 +505,7 @@ describe('ContactLookupComponent', () => {
 
   it('#isContact happy path', () => {
     const expectedRetval = true;
-    const retval = component.isContact(new Contact());
+    const retval = component.isContact(new Candidate());
 
     expect(retval).toEqual(expectedRetval);
   });

@@ -6,19 +6,34 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { Candidate } from '../models/candidate.model';
+import { Candidate as CandidateDetails } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
-import {
-  CandidateLookupResponse,
-  CandidateOfficeType,
-  CommitteeLookupResponse,
-  Contact,
-  ContactTypes,
-  IndividualLookupResponse,
-  OrganizationLookupResponse,
-} from '../models/contact.model';
+import { Contact, ContactTypes } from '../models/contacts/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
+import { Candidate, CandidateOfficeTypes } from '../models/contacts/candidate.model';
+import {
+  CandidateLookupResponse,
+  CommitteeLookupResponse,
+  IndividualLookupResponse,
+  OrganizationLookupResponse,
+} from '../models/contacts/contact-lookups.model';
+import { Committee } from '../models/contacts/committee.model';
+import { Individual } from '../models/contacts/individual.model';
+import { Organization } from '../models/contacts/organization.model';
+
+export function createContact(json: { type: ContactTypes }): Contact {
+  switch (json.type) {
+    case ContactTypes.CANDIDATE:
+      return Candidate.fromJSON(json);
+    case ContactTypes.COMMITTEE:
+      return Committee.fromJSON(json);
+    case ContactTypes.INDIVIDUAL:
+      return Individual.fromJSON(json);
+    case ContactTypes.ORGANIZATION:
+      return Organization.fromJSON(json);
+  }
+}
 
 @Injectable({
   providedIn: 'root',
@@ -56,29 +71,29 @@ export class ContactService implements TableListService<Contact> {
       `/contacts/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map((item) => Contact.fromJSON(item));
+    response.results = response.results.map((item) => createContact(item));
     return response;
   }
 
   public async getAll(): Promise<Contact[]> {
     const response = await this.apiService.get<Contact[]>('/contacts/');
-    return response.map((r) => Contact.fromJSON(r));
+    return response.map((r) => createContact(r));
   }
 
   public async get(id: string): Promise<Contact> {
     const response = await this.apiService.get<Contact>(`/contacts/${id}/`);
-    return Contact.fromJSON(response);
+    return createContact(response);
   }
 
   public async create(contact: Contact): Promise<Contact> {
     const payload = this.preparePayload(contact);
     const response = await this.apiService.post<Contact>(`/contacts/`, payload);
-    return Contact.fromJSON(response);
+    return createContact(response);
   }
 
   public async update(updated: Contact): Promise<Contact> {
     const response = await this.apiService.put<Contact>(`/contacts/${updated.id}/`, updated);
-    return Contact.fromJSON(response);
+    return createContact(response);
   }
 
   public delete(contact: Contact): Promise<null> {
@@ -90,11 +105,11 @@ export class ContactService implements TableListService<Contact> {
    *
    * @return     {Promise}  The candidate details.
    */
-  public async getCandidateDetails(candidate_id: string | null): Promise<Candidate> {
+  public async getCandidateDetails(candidate_id: string | null): Promise<CandidateDetails> {
     if (!candidate_id) {
       throw new Error('FECfile+: No Candidate Id provided in getCandidateDetails()');
     }
-    return this.apiService.get<Candidate>('/contacts/candidate/', { candidate_id });
+    return this.apiService.get<CandidateDetails>('/contacts/candidate/', { candidate_id });
   }
 
   /**
@@ -113,7 +128,7 @@ export class ContactService implements TableListService<Contact> {
     search: string,
     exclude_fec_ids: string,
     exclude_ids: string,
-    office?: CandidateOfficeType,
+    office?: CandidateOfficeTypes,
   ): Promise<CandidateLookupResponse> {
     const response = await this.apiService.get<CandidateLookupResponse>('/contacts/candidate_lookup/', {
       q: search,
@@ -198,7 +213,7 @@ export class DeletedContactService implements TableListService<Contact> {
       `/contacts-deleted/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
-    response.results = response.results.map(Contact.fromJSON);
+    response.results = response.results.map((r) => createContact(r));
     return response;
   }
 

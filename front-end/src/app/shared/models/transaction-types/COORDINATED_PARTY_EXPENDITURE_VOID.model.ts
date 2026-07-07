@@ -13,7 +13,7 @@ import {
   QUINARY_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COORDINATED_PARTY_EXPENDITURES';
-import { CONTACTS_ONE_THROUGH_FIVE } from '../contact.model';
+import { CONTACTS_ONE_THROUGH_FIVE } from '../contacts/contact.model';
 import { SchFTransactionType } from '../schf-transaction-type.model';
 import { SchFTransaction, ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes } from '../schf-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';

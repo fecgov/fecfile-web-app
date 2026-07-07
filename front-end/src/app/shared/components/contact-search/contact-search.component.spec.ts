@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { Component, NO_ERRORS_SCHEMA, viewChild } from '@angular/core';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
-import { ContactTypes, Contact } from 'app/shared/models/contact.model';
+import { ContactTypes, Contact } from 'app/shared/models/contacts/contact.model';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';

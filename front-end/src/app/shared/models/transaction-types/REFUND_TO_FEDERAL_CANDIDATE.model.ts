@@ -5,7 +5,7 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { COMMITTEE, COMMITTEE_WITH_CANDIDATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 
 export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   formFields = COMMITTEE_WITH_CANDIDATE_FORM_FIELDS;

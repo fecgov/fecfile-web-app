@@ -1,5 +1,5 @@
 import { BaseModel } from './base.model';
-import { Contact, ContactTypes } from './contact.model';
+import { Contact, ContactTypes } from './contacts/contact.model';
 import { MemoText } from './memo-text.model';
 import { TransactionType } from './transaction-type.model';
 import { ClassConstructor, Exclude, instanceToPlain, plainToInstance, Type } from 'class-transformer';
