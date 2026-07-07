@@ -1050,3 +1050,6 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
     grid-row: 2;
   }
 }
+#confirm-dialog dialog[open] {
+  z-index: 9999 !important;
+}

@@ -46,6 +46,7 @@ export class SelectComponent {
   readonly selectId = computed(() => this.idGen.getIdLabel(this.inputId()));
 
   readonly selectElement = viewChild.required<ElementRef<HTMLSelectElement>>('selectElement');
+  readonly selected = viewChild.required<ElementRef>('selected');
   readonly update = output<string>();
 
   constructor() {

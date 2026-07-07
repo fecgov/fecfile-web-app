@@ -476,11 +476,11 @@ describe('Contacts Edit', () => {
     cy.contains(/Edit Contact/i).should('exist');
 
     cy.get('#candidate_id').should('have.value', originalCandidateId).clear();
-    cy.get('#last_name').clear();
-    cy.get('#first_name').clear();
-    cy.get('#street_1').clear();
-    cy.get('#city').clear();
-    cy.get('#zip').clear();
+    cy.get('#last_name').clear().blur();
+    cy.get('#first_name').clear().blur();
+    cy.get('#street_1').clear().blur();
+    cy.get('#city').clear().blur();
+    cy.get('#zip').clear().blur();
 
     ContactsHelpers.clickSaveAndHandleConfirm();
 

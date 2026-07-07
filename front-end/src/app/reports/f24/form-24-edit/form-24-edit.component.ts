@@ -48,12 +48,7 @@ export class Form24EditComponent {
 
   private readonly f24Model = signal<Form24Data>({ type: null, typelessName: '' });
   readonly f24Form = form(this.f24Model, (schemaPath) => {
-    apply(
-      schemaPath,
-      form24Schema({
-        existingNames: this.form24Names,
-      }),
-    );
+    apply(schemaPath, form24Schema({ existingNames: this.form24Names }));
   });
 
   constructor() {
