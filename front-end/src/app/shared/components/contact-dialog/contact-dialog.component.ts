@@ -35,12 +35,13 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
+import { combineLatest, startWith, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypes,
   Contact,
   ContactTypeLabels,
   ContactTypes,
+  hasFecId,
   isEntity,
   isPerson,
 } from '../../models/contact.model';
@@ -60,6 +61,8 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { DuplicateContactComponent } from './duplicate-contact/duplicate-contact.component';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -82,6 +85,7 @@ import { TransactionContactUtils } from '../transaction-type-base/transaction-co
     LabelPipe,
     SearchableSelectComponent,
     ToUpperDirective,
+    DuplicateContactComponent,
   ],
   providers: [SearchableSelectComponent],
 })
@@ -102,6 +106,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly first = signal(0);
   readonly sortField = signal('transaction_type_identifier');
   readonly sortOrder = signal<'asc' | 'desc'>('asc');
+
+  readonly allContacts = derivedAsync(() => this.contactService.getAll(), { initialValue: [] });
+  readonly existingContactMap = computed(() => Map.groupBy(this.allContacts(), (contact) => contact.type));
+  readonly hideDuplicateWarning = signal(false);
 
   transactions: TransactionListRecord[] = [];
   tableLoading = true;
@@ -140,9 +148,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly isPerson = computed(() => isPerson(this.contactType()));
   readonly isEntity = computed(() => isEntity(this.contactType()));
-  readonly showSearchBox = computed(
-    () => this.contactType() === ContactTypes.CANDIDATE || this.contactType() === ContactTypes.COMMITTEE,
-  );
+  readonly showSearchBox = computed(() => hasFecId(this.contactType()));
 
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -190,6 +196,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly committeePatternMessage = committeePatternMessage;
 
   readonly table = viewChild(TableComponent);
+
+  readonly personName = signal<string>('');
+
   constructor() {
     super();
     effect(() => {
@@ -286,6 +295,17 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     this.contactTypeChanged(this.contactType());
+    this.buildDuplicateNameListeners();
+  }
+
+  private buildDuplicateNameListeners() {
+    const firstName$ = this.form.get('first_name')?.valueChanges.pipe(startWith(this.form.get('first_name')?.value));
+    const lastName$ = this.form.get('last_name')?.valueChanges.pipe(startWith(this.form.get('last_name')?.value));
+    if (firstName$ && lastName$) {
+      combineLatest([lastName$, firstName$]).subscribe(([last, first]) => {
+        this.personName.set(`${last ?? ''}, ${first ?? ''}`);
+      });
+    }
   }
 
   /**
@@ -331,6 +351,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     } else {
       this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     }
+    this.hideDuplicateWarning.set(false);
   }
 
   public openDialog() {
@@ -359,12 +380,13 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   private resetForm() {
+    this.hideDuplicateWarning.set(false);
     this.form.reset();
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
     this.isNewItem = true;
     this.contactLookup().contactTypeFormControl.enable();
-    this.contactLookup().contactTypeFormControl.setValue(this.contactType);
+    this.contactLookup().contactTypeFormControl.setValue(this.contactType());
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
@@ -405,6 +427,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         this.saveContact();
       },
     });
+  }
+
+  useContact(contact: Contact) {
+    this.savedContact.emit(contact);
+    this.closeDialog();
   }
 
   public saveContact(closeDialog = true) {

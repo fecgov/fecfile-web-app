@@ -29,7 +29,7 @@ export type CandidateOfficeType =
   | CandidateOfficeTypes.PRESIDENTIAL
   | CandidateOfficeTypes.SENATE;
 
-export const CandidateOfficeTypeLabels = [
+export const CandidateOfficeTypeLabels: LabelList = [
   [CandidateOfficeTypes.HOUSE, 'House'],
   [CandidateOfficeTypes.PRESIDENTIAL, 'Presidential'],
   [CandidateOfficeTypes.SENATE, 'Senate'],
@@ -102,6 +102,9 @@ export function isEntity(type: ContactTypes) {
 }
 export function isPerson(type: ContactTypes) {
   return type === ContactTypes.CANDIDATE || type === ContactTypes.INDIVIDUAL;
+}
+export function hasFecId(type: ContactTypes) {
+  return type === ContactTypes.CANDIDATE || type === ContactTypes.COMMITTEE;
 }
 
 export function emptyContact(type: ContactTypes) {

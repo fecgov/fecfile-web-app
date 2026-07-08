@@ -1,12 +1,19 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
 import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
+import {
+  getTestTransactionByType,
+  testCandidate,
+  testCommittee,
+  testContact,
+  testOrganization,
+  testScheduleATransaction,
+} from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
@@ -92,13 +99,13 @@ describe('ContactUtils', () => {
     expect(form.get('contributor_state')?.value).toBe('VA');
     expect(form.get('contributor_zip')?.value).toBe('22201');
 
-    selectItem.value.type = ContactTypes.COMMITTEE;
+    selectItem.value = testCommittee();
     TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
     expect(form.get('donor_committee_fec_id')?.value).toBe('888');
     expect(form.get('donor_committee_name')?.value).toBe('Organization LLC');
 
-    selectItem.value.type = ContactTypes.ORGANIZATION;
+    selectItem.value = testOrganization();
     TransactionContactUtils.updateFormWithPrimaryContact(selectItem, form, testScheduleATransaction(), contactId$);
     expect(form.get('contributor_organization_name')?.value).toBe('Organization LLC');
   });
@@ -114,6 +121,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithCandidateContact', () => {
+    selectItem.value = testCandidate();
     const transaction = testScheduleATransaction();
     TransactionContactUtils.updateFormWithCandidateContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('donor_candidate_fec_id')?.value).toBe('999');
@@ -129,6 +137,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithSecondaryContact', () => {
+    selectItem.value = testOrganization();
     const transaction = getTestTransactionByType(ScheduleC1TransactionTypes.C1_LOAN_AGREEMENT) as SchC1Transaction;
     TransactionContactUtils.updateFormWithSecondaryContact(selectItem, form, transaction, new Subject<string>());
     expect(form.get('ind_name_account_location')?.value).toBe('Organization LLC');
@@ -141,6 +150,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithTertiaryContact', () => {
+    selectItem.value = testCommittee();
     const transaction = getTestTransactionByType(
       ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
     ) as SchBTransaction;
@@ -151,6 +161,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithQuaternaryContact', () => {
+    selectItem.value = testCommittee();
     const transaction = getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
@@ -161,6 +172,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithQuaternaryContact and clearFormQuaternaryContact', () => {
+    selectItem.value = testCommittee();
     const transaction = getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;
@@ -177,6 +189,7 @@ describe('ContactUtils', () => {
   });
 
   it('test updateFormWithQuinaryContact and clearFormQuinaryContact', () => {
+    selectItem.value = testCommittee();
     const transaction = getTestTransactionByType(
       ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
     ) as SchFTransaction;

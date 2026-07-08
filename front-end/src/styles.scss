@@ -1002,3 +1002,8 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
     left: 25px !important;
   }
 }
+
+.transparent-grey {
+  color: transparent;
+  --icon-symbol: var(--text-color-secondary);
+}

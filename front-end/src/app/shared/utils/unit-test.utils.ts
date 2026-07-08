@@ -255,13 +255,11 @@ export function testMockStore(): {
   };
 }
 
-export function testContact() {
+export function testCandidate() {
   return Contact.fromJSON({
     id: '111',
-    type: ContactTypes.INDIVIDUAL,
+    type: ContactTypes.CANDIDATE,
     candidate_id: '999',
-    committee_id: '888',
-    name: 'Organization LLC',
     last_name: 'Smith',
     first_name: 'Joe',
     middle_name: 'James',
@@ -277,6 +275,74 @@ export function testContact() {
     candidate_office: CandidateOfficeTypes.HOUSE,
     candidate_state: 'VA',
     candidate_district: '1',
+    telephone: '555-555-5555',
+    country: 'USA',
+    created: '8/27/2023',
+    updated: null,
+    deleted: null,
+    has_transaction_or_report: true,
+  });
+}
+
+export function testCommittee() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.COMMITTEE,
+    committee_id: '888',
+    name: 'Organization LLC',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    employer: 'Plumbing, Inc.',
+    occupation: 'plumber',
+    telephone: '555-555-5555',
+    country: 'USA',
+    created: '8/27/2023',
+    updated: null,
+    deleted: null,
+    has_transaction_or_report: true,
+  });
+}
+
+export function testContact() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.INDIVIDUAL,
+    last_name: 'Smith',
+    first_name: 'Joe',
+    middle_name: 'James',
+    prefix: 'Mr',
+    suffix: 'Jr',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    employer: 'Plumbing, Inc.',
+    occupation: 'plumber',
+    telephone: '555-555-5555',
+    country: 'USA',
+    created: '8/27/2023',
+    updated: null,
+    deleted: null,
+    has_transaction_or_report: true,
+  });
+}
+
+export function testOrganization() {
+  return Contact.fromJSON({
+    id: '111',
+    type: ContactTypes.ORGANIZATION,
+    name: 'Organization LLC',
+    street_1: '123 Main St',
+    street_2: 'Apt B',
+    city: 'Anytown',
+    state: 'VA',
+    zip: '22201',
+    employer: 'Plumbing, Inc.',
+    occupation: 'plumber',
     telephone: '555-555-5555',
     country: 'USA',
     created: '8/27/2023',

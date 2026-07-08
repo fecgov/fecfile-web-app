@@ -32,8 +32,7 @@
               [candidateOffice]="defaultCandidateOffice"
               (contactTypeSelect)="contactTypeChanged($event)"
               (contactLookupSelect)="updateContact($event)"
-            >
-            </app-contact-lookup>
+            />
           </div>
         </div>
         <div class="col-6"></div>
@@ -107,6 +106,17 @@
             </div>
           </div>
         </div>
+        <!-- headerTitle means it is from Transaction. 
+        In future change this to isNewItem when enabling for opening on Contact Management -->
+        @if (headerTitle && contactType() === ContactTypes.INDIVIDUAL) {
+          <app-duplicate-contact
+            [name]="personName()"
+            [existingContacts]="existingContactMap().get(contactType()) ?? []"
+            [(hideDuplicateWarning)]="hideDuplicateWarning"
+            (useContact)="useContact($event)"
+          />
+        }
+
         <div class="grid">
           <div class="col-3">
             <div class="field">

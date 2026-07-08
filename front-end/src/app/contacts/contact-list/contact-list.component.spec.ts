@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testCandidate, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -141,7 +141,7 @@ describe('ContactListComponent', () => {
     });
 
     it('renders contact row and edit link', async () => {
-      const rowContact = testContact();
+      const rowContact = testCandidate();
       component.items.set([rowContact]);
       component.totalItems.set(1);
       component.loading.set(false);
