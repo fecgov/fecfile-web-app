@@ -7,11 +7,12 @@ describe('Manage profile', () => {
   });
 
   it('Should be able to create a Form 99 report', () => {
-    // Tests with the mocked committee data from the API, which is treated as Processed,
-    // and the default committee for E2E currently has access to all five report types.
+    // Tests with the mocked committee data from the API, which is treated as Processed
 
     ReportListPage.goToPage();
     ReportListPage.clickCreateAndSelectForm('', false, false);
+
+    cy.get('p-selectitem').should('have.length', 4);
     cy.get('p-selectitem').contains("Form 99").should('exist');
   });
 
