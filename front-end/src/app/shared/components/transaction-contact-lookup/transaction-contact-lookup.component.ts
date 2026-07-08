@@ -45,7 +45,7 @@ export class TransactionContactLookupComponent implements OnInit {
   );
   errorMessageFormControl?: SubscriptionFormControl;
   currentContactLabel = 'Individual';
-  currentType = ContactTypes.INDIVIDUAL;
+  currentType: ContactTypes = ContactTypes.INDIVIDUAL;
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
   ngOnInit(): void {
