@@ -4,23 +4,21 @@
   <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
     <h2>Verify confirmation email addresses</h2>
     <div class="row">
-      <fieldset class="w-28">
-        <legend class="hidden">Confirmation email 1</legend>
+      <div class="w-28">
         <label for="confirmation_email_1"><strong>EMAIL #1</strong></label>
         <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
         <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted" />
-      </fieldset>
-      <fieldset class="w-28">
-        <legend class="hidden">Confirmation email 2</legend>
+      </div>
+      <div class="w-28">
         <label for="confirmation_email_2"><strong>EMAIL #2 </strong> <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
         <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted" />
-      </fieldset>
+      </div>
     </div>
     @if (activeReport().hasChangeOfAddress) {
       <hr type="solid" />
       <div class="row">
-        <fieldset>
+        <div>
           <legend class="p-0 mb-2">
             <h2>Verify physical address</h2>
             <span>HAS YOUR ADDRESS CHANGED IN THE LAST 10 DAYS?</span>
@@ -31,7 +29,7 @@
             [allowEmpty]="false"
             formControlName="change_of_address"
           />
-        </fieldset>
+        </div>
       </div>
     }
 
@@ -42,27 +40,23 @@
         <a [href]="form1Link" target="_blank" rel="noopener">Update your committee address</a>.
       </div>
       <div class="row mt-5">
-        <fieldset class="w-32">
-          <legend class="hidden">Street address</legend>
+        <div class="w-32">
           <label for="street_1">STREET ADDRESS</label>
           <input type="text" pInputText id="street_1" formControlName="street_1" />
           <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted" />
-        </fieldset>
-        <fieldset class="w-32">
-          <legend class="hidden">Apartment, suite, etc.</legend>
+        </div>
+        <div class="w-32">
           <label for="street_2">APARTMENT, SUITE, ETC. <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="street_2" formControlName="street_2" />
           <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted" />
-        </fieldset>
+        </div>
 
-        <fieldset class="w-28">
-          <legend class="hidden">City</legend>
+        <div class="w-28">
           <label for="city">CITY</label>
           <input type="text" pInputText id="city" formControlName="city" />
           <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted" />
-        </fieldset>
-        <fieldset class="w-15">
-          <legend class="hidden">State and territory</legend>
+        </div>
+        <div class="w-15">
           <label for="state">STATE/TERRITORY</label>
           <app-searchable-select
             inputId="state"
@@ -72,49 +66,43 @@
             appendTo="body"
           />
           <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
-        </fieldset>
-        <fieldset class="w-9">
-          <legend class="hidden">Zip and postal code</legend>
+        </div>
+        <div class="w-9">
           <label for="zip">ZIP/POSTAL CODE</label>
           <input type="text" pInputText id="zip" formControlName="zip" />
           <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted" />
-        </fieldset>
+        </div>
       </div>
     }
     <hr type="solid" />
     <h2>Committee treasurer</h2>
     <div class="row">
-      <fieldset class="w-28">
-        <legend class="hidden">Treasurer last name</legend>
+      <div class="w-28">
         <label for="treasurer_last_name">LAST NAME</label>
         <input type="text" pInputText id="treasurer_last_name" formControlName="treasurer_last_name" />
         <app-error-messages [form]="form" fieldName="treasurer_last_name" [formSubmitted]="formSubmitted" />
-      </fieldset>
-      <fieldset class="w-19">
-        <legend class="hidden">Treasurer first name</legend>
+      </div>
+      <div class="w-19">
         <label for="treasurer_first_name">FIRST NAME</label>
         <input type="text" pInputText id="treasurer_first_name" formControlName="treasurer_first_name" />
         <app-error-messages [form]="form" fieldName="treasurer_first_name" [formSubmitted]="formSubmitted" />
-      </fieldset>
-      <fieldset class="w-19">
-        <legend class="hidden">Treasurer middle name</legend>
+      </div>
+      <div class="w-19">
         <label for="treasurer_middle_name">MIDDLE NAME <span class="paren-label">(OPTIONAL)</span></label>
         <input type="text" pInputText id="treasurer_middle_name" formControlName="treasurer_middle_name" />
         <app-error-messages [form]="form" fieldName="treasurer_middle_name" [formSubmitted]="formSubmitted" />
-      </fieldset>
+      </div>
       <div class="row">
-        <fieldset class="w-10">
-          <legend class="hidden">Treasurer prefix</legend>
+        <div class="w-10">
           <label for="treasurer_prefix">PREFIX <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_prefix" formControlName="treasurer_prefix" />
           <app-error-messages [form]="form" fieldName="treasurer_prefix" [formSubmitted]="formSubmitted" />
-        </fieldset>
-        <fieldset class="w-10">
-          <legend class="hidden">Treasurer suffix</legend>
+        </div>
+        <div class="w-10">
           <label for="treasurer_suffix">SUFFIX <span class="paren-label">(OPTIONAL)</span></label>
           <input type="text" pInputText id="treasurer_suffix" formControlName="treasurer_suffix" />
           <app-error-messages [form]="form" fieldName="treasurer_suffix" [formSubmitted]="formSubmitted" />
-        </fieldset>
+        </div>
       </div>
     </div>
     <hr type="solid" />
@@ -131,8 +119,7 @@
       </span>
     </p>
 
-    <fieldset class="w-20 mb-5">
-      <legend class="hidden">Electronic filing password</legend>
+    <div class="w-20 mb-5">
       <label for="filingPassword"> ELECTRONIC FILING PASSWORD </label>
       <p-password
         inputId="filingPassword"
@@ -144,7 +131,7 @@
       />
       <app-error-messages [form]="form" fieldName="filingPassword" [formSubmitted]="formSubmitted" />
       <a [href]="psaIndex" target="_blank" rel="noopener" class="gandhi w-max text-sm pt-1"> Forgot your password? </a>
-    </fieldset>
+    </div>
 
     @if (activeReport().report_version) {
       <div class="field-row mb-5">
@@ -162,12 +149,11 @@
       </div>
       @if (showBackdoorCode) {
         <div class="row mb-5">
-          <fieldset class="w-15">
-            <legend class="hidden">Backdoor code</legend>
+          <div class="w-15">
             <label for="backdoor_code" class="d-none">BACKDOOR CODE</label>
             <input type="text" pInputText id="backdoor_code" formControlName="backdoor_code" />
             <app-error-messages [form]="form" fieldName="backdoor_code" [formSubmitted]="formSubmitted" />
-          </fieldset>
+          </div>
         </div>
       }
     }
