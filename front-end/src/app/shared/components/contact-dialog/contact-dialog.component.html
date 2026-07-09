@@ -77,10 +77,15 @@
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
-          @if (contactType() === ContactTypes.ORGANIZATION) {
-            <div class="col-4"></div>
-          }
         </div>
+        @if (headerTitle && contactType() === ContactTypes.ORGANIZATION) {
+          <app-duplicate-contact
+            [name]="entityName()"
+            [existingContacts]="existingContactMap().get(contactType()) ?? []"
+            [(hideDuplicateWarning)]="hideDuplicateWarning"
+            (useContact)="useContact($event)"
+          />
+        }
       }
       @if (isPerson()) {
         <div class="grid">

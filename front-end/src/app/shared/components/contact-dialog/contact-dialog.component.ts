@@ -198,6 +198,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly table = viewChild(TableComponent);
 
   readonly personName = signal<string>('');
+  readonly entityName = signal<string>('');
 
   constructor() {
     super();
@@ -299,6 +300,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   private buildDuplicateNameListeners() {
+    this.form
+      .get('name')
+      ?.valueChanges.pipe(startWith(this.form.get('name')?.value))
+      ?.subscribe((name) => this.entityName.set(name ?? ''));
     const firstName$ = this.form.get('first_name')?.valueChanges.pipe(startWith(this.form.get('first_name')?.value));
     const lastName$ = this.form.get('last_name')?.valueChanges.pipe(startWith(this.form.get('last_name')?.value));
     if (firstName$ && lastName$) {
