@@ -7,12 +7,12 @@ import {
   defaultAddressData,
   populateAddress,
 } from '../../signal-inputs/address-form/address-form.component';
-import { FecInternationalPhoneInputComponent } from '../../fec-international-phone-input/fec-international-phone-input.component';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
 import { apply, FieldTree, FormField, schema } from '@angular/forms/signals';
 import { schema as IndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { generatePathMapFromForm, schemaFormValidatorBuilder } from 'app/shared/utils/signal-schema.utils';
 import { ContactTypes, type Contact } from 'app/shared/models/contact.model';
+import { TelephoneInputComponent } from '../../signal-inputs/telephone-input/telephone-input.component';
 
 export interface IndividualContactData {
   id: string | null;
@@ -55,7 +55,7 @@ export const individualSchema = schema<IndividualContactData>((schemaPath) => {
 
 @Component({
   selector: 'app-individual-contact-form',
-  imports: [FormField, NameFormComponent, AddressFormComponent, FecInternationalPhoneInputComponent, TextInput],
+  imports: [FormField, NameFormComponent, AddressFormComponent, TelephoneInputComponent, TextInput],
   templateUrl: './individual-contact-form.component.html',
   styleUrl: './individual-contact-form.component.scss',
 })

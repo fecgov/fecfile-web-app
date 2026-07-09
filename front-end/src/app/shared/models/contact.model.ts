@@ -64,6 +64,7 @@ export enum ContactFields {
   country = 'Country',
 }
 
+
 export class Contact extends BaseModel {
   id: string | undefined;
   type: ContactType = ContactTypes.INDIVIDUAL;
