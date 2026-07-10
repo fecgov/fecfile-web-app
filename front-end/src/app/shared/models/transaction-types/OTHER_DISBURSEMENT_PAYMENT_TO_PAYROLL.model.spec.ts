@@ -20,6 +20,15 @@ describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL', () => {
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
-    expect(transactionType.generatePurposeDescription()).toBe('Payroll: See Below');
+    const txn = transactionType.getNewTransaction();
+    expect(transactionType.generatePurposeDescription(txn)).toBe(
+      'Payroll memo entries do not meet itemization threshold.',
+    );
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Payroll Memo: See Below');
   });
 });

@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -34,6 +34,8 @@ export class SecurityNoticeComponent implements OnInit {
   showForm = true;
   readonly userLoginData = this.store.selectSignal(selectUserLoginData);
 
+  readonly hasScrolledToBottom = signal(false);
+
   readonly form = new FormGroup(
     {
       'security-consent-annual': new SubscriptionFormControl(false),
@@ -57,7 +59,19 @@ export class SecurityNoticeComponent implements OnInit {
     this.formSubmitted = false;
   }
 
+  onScroll(event: Event): void {
+    const element = event.target as HTMLElement;
+    if (!element) return;
+
+    const isAtBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 5;
+
+    if (isAtBottom && !this.hasScrolledToBottom()) {
+      this.hasScrolledToBottom.set(true);
+    }
+  }
+
   async signConsentForm() {
+    if (!this.hasScrolledToBottom()) return;
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) printFormErrors(this.form);

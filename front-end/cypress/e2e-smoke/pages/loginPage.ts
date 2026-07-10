@@ -61,6 +61,7 @@ function loginDotGovLogin() {
   cy.wait('@GetStatus');
   cy.wait('@GetLoggedIn');
   cy.visit('/login/security-notice');
+  cy.get('.notice-box-form').scrollTo('bottom')
   cy.get('#security-consent-annual').click();
   cy.get('[data-cy="consent-button"]').click();
   cy.wait('@GetCommitteeAccounts');

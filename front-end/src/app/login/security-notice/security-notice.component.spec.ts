@@ -28,7 +28,7 @@ describe('SecurityNoticeComponent', () => {
             component: ReportListComponent,
           },
         ]),
-        { provide: Window, useValue: window },
+        { provide: Window, useValue: globalThis },
         provideMockStore(testMockStore()),
       ],
     }).compileComponents();
@@ -46,10 +46,19 @@ describe('SecurityNoticeComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should be disabled until scroll to bottom', () => {
+    const expectedUserLoginData = testUserLoginData();
+    expectedUserLoginData.consent_for_one_year = false;
+    const spy = vi.spyOn(usersService, 'updateCurrentUser').mockResolvedValue(expectedUserLoginData);
+    component.signConsentForm();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it('should submit', () => {
     const expectedUserLoginData = testUserLoginData();
     expectedUserLoginData.consent_for_one_year = false;
-    const spy = vi.spyOn(usersService, 'updateCurrentUser').mockReturnValue(Promise.resolve(expectedUserLoginData));
+    const spy = vi.spyOn(usersService, 'updateCurrentUser').mockResolvedValue(expectedUserLoginData);
+    component.hasScrolledToBottom.set(true);
     component.signConsentForm();
 
     expect(spy).toHaveBeenCalledTimes(1);

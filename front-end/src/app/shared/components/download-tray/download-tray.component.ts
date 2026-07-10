@@ -21,11 +21,7 @@ export class DownloadTrayComponent {
   private readonly routerEvents$ = toSignal(this.router.events.pipe(filter((event) => event instanceof NavigationEnd)));
   readonly sidebarVisible = computed(() => {
     const event = this.routerEvents$();
-    return (
-      event instanceof NavigationEnd &&
-      event.urlAfterRedirects === '/reports' &&
-      this.dotFecService.downloads().length > 0
-    );
+    return event instanceof NavigationEnd && event.urlAfterRedirects === '/reports' && this.dotFecService.showTray();
   });
 
   removeDownload(download: Download) {

@@ -1,22 +1,22 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_PARENTS';
-import { SchETransactionType } from '../sche-transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import {
-  ORG_FIELDS,
   ADDRESS_FIELDS,
-  ELECTION_FIELDS,
-  COMMON_FIELDS,
-  CATEGORY_CODE,
-  SIGNATORY_1_FIELDS,
   AGGREGATE,
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,
+  CATEGORY_CODE,
+  COMMON_FIELDS,
+  ELECTION_FIELDS,
   ORGANIZATION,
+  ORG_FIELDS,
+  SIGNATORY_1_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_PARENTS';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
-import { AggregationGroups, Transaction } from '../transaction.model';
+import { SchETransactionType } from '../sche-transaction-type.model';
+import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransactionType {
   formFields = [
@@ -45,9 +45,11 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchETransaction
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO];
   override showCalendarYTD = true;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  override generatePurposeDescription(transaction: Transaction): string {
-    return 'Credit Card: See Below';
+  override generatePurposeDescription(transaction: SchETransaction): string {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
+      return 'Credit Card Memo: See Below';
+    }
+    return 'Credit card memo entries do not meet itemization threshold.';
   }
 
   getNewTransaction() {

@@ -10,6 +10,8 @@
       label="Save"
       (click)="save.emit()"
       class="p-button-primary"
+      [class.p-disabled]="submitDisabled()"
+      [disabled]="submitDisabled()"
       data-cy="save-cancel-actions"
     ></button>
     <button
@@ -19,6 +21,8 @@
       label="Save & continue"
       (click)="save.emit('continue')"
       class="p-button-info ml-4"
+      [class.p-disabled]="submitDisabled()"
+      [disabled]="submitDisabled()"
       data-cy="save-cancel-actions"
     ></button>
   </div>

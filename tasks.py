@@ -85,6 +85,10 @@ def _prep_distribution_directory(ctx):
         os.path.join(dist_directory, "nginx.conf"),
     )
     copyfile(
+        os.path.join(os.getcwd(), "blockips.conf"),
+        os.path.join(dist_directory, "blockips.conf"),
+    )
+    copyfile(
         os.path.join(nginx_config_dir, "mime.types"),
         os.path.join(dist_directory, "mime.types"),
     )
@@ -238,6 +242,9 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
 
     if not nobuild:
         _build_angular_app(ctx, space)
+
+    # run script to create block list
+    ctx.run("./deploy-config/front-end-nginx-config/generate_blockips.sh {0} {1} {2}".format(APP_NAME, space, ORG_NAME), echo=True)
 
     _prep_distribution_directory(ctx)
 

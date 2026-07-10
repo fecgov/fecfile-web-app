@@ -200,7 +200,7 @@ export function testF24() {
     report_code: 'Q1',
     report_status: 'In progress',
     report_code_label: '24 HOUR',
-    name: '24 HOUR TEST',
+    name: '24-Hour: Initial Name',
     upload_submission: UploadSubmission.fromJSON({}),
     webprint_submission: {
       fec_email: 'test@test.com',

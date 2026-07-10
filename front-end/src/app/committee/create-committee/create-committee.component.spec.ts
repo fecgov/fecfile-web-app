@@ -1,17 +1,17 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
+import { UsersService } from 'app/shared/services/users.service';
 import { testCommitteeAdminLoginData, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { CreateCommitteeComponent } from './create-committee.component';
-import { provideRouter, Router } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { UsersService } from 'app/shared/services/users.service';
 import { Mock } from 'vitest';
+import { CreateCommitteeComponent } from './create-committee.component';
 
 describe('CreateCommitteeComponent', () => {
   let component: CreateCommitteeComponent;
@@ -103,14 +103,16 @@ describe('CreateCommitteeComponent', () => {
       .spyOn(testUserService, 'getCurrentUser')
       .mockReturnValue(Promise.resolve(testCommitteeAdminLoginData()));
     const testCommitteeId = 'C12345678';
+    const testFilingFrequency = 'Q';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
+    testCommittee.filing_frequency = testFilingFrequency;
 
     component.selectedCommittee.set(testCommittee);
     await component.createAccount();
 
     expect(createSpy).toHaveBeenCalledWith(testCommitteeId);
-    expect(activateSpy).toHaveBeenCalledWith('123');
+    expect(activateSpy).toHaveBeenCalledWith('123', testCommittee.filing_frequency);
     expect(userSpy).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('');
   });
