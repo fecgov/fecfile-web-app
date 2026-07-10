@@ -31,7 +31,7 @@ export class LabelComponent {
   readonly fullLabel = computed(() => {
     let label = this.label();
     if (this.optional()) {
-      label += '<span class="paren-label">(OPTIONAL)</span>';
+      label += '<span class="paren-label"> (OPTIONAL)</span>';
     }
     return label;
   });
