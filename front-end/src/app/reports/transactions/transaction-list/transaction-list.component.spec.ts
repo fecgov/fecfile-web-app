@@ -17,11 +17,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { Form24 } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
   let router: Router;
+  const cloneSingleTransaction = vi.fn();
+  const isCloneable = vi.fn();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -45,6 +49,8 @@ describe('TransactionListComponent', () => {
               ),
             getTableData: () => of([]),
             update: () => of([]),
+            cloneSingleTransaction,
+            isCloneable,
           },
         },
         {
@@ -65,6 +71,15 @@ describe('TransactionListComponent', () => {
   });
 
   beforeEach(() => {
+    cloneSingleTransaction.mockReset();
+    cloneSingleTransaction.mockResolvedValue(
+      SchATransaction.fromJSON({
+        id: 'cloned-id',
+        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      }),
+    );
+    isCloneable.mockReset();
+    isCloneable.mockReturnValue(true);
     fixture = TestBed.createComponent(TransactionListComponent);
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
@@ -135,5 +150,56 @@ describe('TransactionListComponent', () => {
     expect(receiptSpy).toHaveBeenCalled();
     expect(disbursementsSpy).toHaveBeenCalled();
     expect(loanSpy).toHaveBeenCalled();
+  });
+
+  it('should show Clone only for allowed editable single transactions', () => {
+    const receipts = component.receipts() as unknown as {
+      rowActions: { label: string; isAvailable: (item: TransactionListRecord) => boolean }[];
+      reportService: { isEditable: (report: unknown) => boolean };
+    };
+    isCloneable.mockImplementation((transaction: TransactionListRecord) => !transaction.parent_transaction_id);
+    vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
+    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+
+    expect(cloneAction).toBeDefined();
+
+    const allowedTransaction = TransactionListRecord.fromJSON({
+      id: '100',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    });
+    const childTransaction = TransactionListRecord.fromJSON({
+      id: '101',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      parent_transaction_id: '10',
+    });
+
+    expect(cloneAction?.isAvailable(allowedTransaction)).toBe(true);
+    expect(cloneAction?.isAvailable(childTransaction)).toBe(false);
+  });
+
+  it('should acknowledge Clone and navigate to the cloned transaction edit page', async () => {
+    const receipts = component.receipts() as unknown as {
+      rowActions: { label: string; action: (item: TransactionListRecord) => void }[];
+      reportService: { isEditable: (report: unknown) => boolean };
+    };
+    vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(TestBed.inject(ConfirmationService), 'confirm');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+    const transaction = TransactionListRecord.fromJSON({
+      id: '100',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    });
+
+    cloneAction?.action(transaction);
+
+    expect(confirmSpy).toHaveBeenCalled();
+
+    const confirmConfig = confirmSpy.mock.calls[0]?.[0];
+    expect(confirmConfig?.accept).toBeDefined();
+    await confirmConfig?.accept?.();
+
+    expect(cloneSingleTransaction).toHaveBeenCalledWith('100', '999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list/cloned-id');
   });
 });
