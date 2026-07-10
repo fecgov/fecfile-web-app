@@ -15,7 +15,7 @@ export type CloneEligibilityTransaction = {
   reattribution_redesignation_tag?: string | undefined;
 };
 
-export const CLONEABLE_TRANSACTION_TYPES = new Set<TransactionTypes>([
+const CLONEABLE_TRANSACTION_TYPES = new Set<TransactionTypes>([
   ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
   ScheduleATransactionTypes.TRIBAL_RECEIPT,
   ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
