@@ -12,6 +12,8 @@ import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { ReportSummaryComponent } from './report-summary/report-summary.component';
 import { Form3Service } from 'app/shared/services/form-3.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
+import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-number/update-version-number.component';
+import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -22,22 +24,13 @@ import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 
 export const F3_ROUTES: Route[] = [
   {
-    path: 'create/step1',
+    path: 'create',
     title: 'Create a report',
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
-    runGuardsAndResolvers: 'always',
     data: {
       sidebar: null,
     },
-  },
-  {
-    path: 'create/step1/:reportId',
-    title: 'Create a report',
-    component: CreateSharedF3Component,
-    providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
-    canActivate: [ReportIsEditableGuard],
-    runGuardsAndResolvers: 'always',
   },
   {
     path: 'edit/:reportId',
@@ -45,8 +38,17 @@ export const F3_ROUTES: Route[] = [
     component: CreateSharedF3Component,
     providers: [{ provide: FORM_3_SERVICE, useClass: Form3Service }],
     resolve: { report: ReportResolver },
-    data: { sidebarSection: ReportSidebarSection.CREATE },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
     runGuardsAndResolvers: 'always',
+  },
+  {
+    path: 'update-version-number/:reportId',
+    title: 'Update Version Number',
+    component: UpdateVersionNumberComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.EDIT },
+    runGuardsAndResolvers: 'always',
+    canActivate: [featureFlagGuard('manualReportVersion')],
   },
   {
     path: 'summary/:reportId',

@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, resource, signal, viewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Form24 } from 'app/shared/models';
+import { Form24, Type24_48 } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { InputText } from 'primeng/inputtext';
@@ -38,7 +38,7 @@ export class CreateF24Component {
     { label: '48-Hour', value: '48' },
   ];
 
-  readonly selectedForm24Type = signal<'24' | '48' | null>(null);
+  readonly selectedForm24Type = signal<Type24_48 | null>(null);
   readonly typeName = computed(() => (this.selectedForm24Type() ? `${this.selectedForm24Type()}-Hour:` : null));
   readonly fullName = computed(() => (this.typeName() ? `${this.typeName()} ${this.form24Name()}` : this.form24Name()));
   readonly selectedForm24TypeValid = computed(() => this.selectedForm24Type() !== null);

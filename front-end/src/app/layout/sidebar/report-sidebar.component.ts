@@ -1,6 +1,6 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Form24, Form3, Form3X, ReportTypes } from 'app/shared/models';
+import { Form3, Form3X, ReportTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -8,14 +8,13 @@ import { ActivatedRoute } from '@angular/router';
 import { collectRouteData } from 'app/shared/utils/route.utils';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { ReportSidebarSection } from './menu-info';
-import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-report-sidebar',
   standalone: true,
-  imports: [FecDatePipe, RenameF24DialogComponent, PanelMenu],
+  imports: [FecDatePipe, PanelMenu],
   templateUrl: 'report-sidebar.component.html',
 })
 export class ReportSidebarComponent {
@@ -44,22 +43,4 @@ export class ReportSidebarComponent {
   readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
 
   readonly version = computed(() => this.report().version_label ?? 'Original');
-
-  readonly renameF24DialogVisible = signal(false);
-  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
-  form24ToUpdate?: Form24;
-
-  constructor() {
-    effect(() => {
-      if (!this.renameF24DialogVisible() && this.form24ToUpdate) {
-        this.form24ToUpdate = undefined;
-        this.reportService.setActiveReportById(this.report().id);
-      }
-    });
-  }
-
-  public renameForm24(): void {
-    this.form24ToUpdate = this.report() as Form24;
-    this.renameF24DialogVisible.set(true);
-  }
 }

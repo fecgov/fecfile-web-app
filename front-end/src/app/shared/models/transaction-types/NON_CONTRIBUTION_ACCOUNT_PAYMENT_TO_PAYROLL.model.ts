@@ -24,7 +24,10 @@ export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL extends SchBTransaction
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }
-  override generatePurposeDescription(): string {
-    return 'Non-contribution Account - Payroll: See Below';
+  override generatePurposeDescription(transaction: SchBTransaction): string {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
+      return 'Payroll Memo: See Below';
+    }
+    return 'Payroll memo entries do not meet itemization threshold.';
   }
 }

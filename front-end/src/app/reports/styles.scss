@@ -114,16 +114,16 @@ caption {
     font-size: var(--input-font-size);
     padding: 0 0 0 10px;
     text-wrap-mode: nowrap;
+    line-height: 1;
   }
-}
-
-#f24-input-container input {
-  height: 100%;
-  flex: 1 1 auto;
-  border: 0;
-  outline: 0;
-  box-shadow: none;
-  padding: 0 10px;
+  & input {
+    height: 100%;
+    flex: 1 1 auto;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+    padding: 0 10px;
+  }
 }
 
 #form24Name {

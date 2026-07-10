@@ -4,6 +4,9 @@ import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
+import { environment } from 'environments/environment';
+
+export type Type24_48 = '24' | '48';
 
 export enum F24FormTypes {
   F24N = 'F24N',
@@ -24,7 +27,7 @@ export class Form24 extends Report {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
 
-  report_type_24_48: '24' | '48' | undefined;
+  report_type_24_48: Type24_48 | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   treasurer_last_name: string | undefined;
   treasurer_first_name: string | undefined;
@@ -46,7 +49,7 @@ export class Form24 extends Report {
       },
     ];
 
-    return [
+    const menuItems = [
       MenuInfo.enterTransaction(sidebarSection, isEditable, transactionItems),
       MenuInfo.reviewTransactions(sidebarSection, this, isEditable),
       MenuInfo.reviewReport(sidebarSection, [
@@ -55,5 +58,17 @@ export class Form24 extends Report {
       ]),
       MenuInfo.submitReport(sidebarSection, this, isEditable, 'SIGN & SUBMIT'),
     ];
+
+    if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
+      const items = [MenuInfo.editReport(sidebarSection, this, 'Edit report details')];
+      if (environment.manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
+      menuItems.unshift({
+        label: 'REPORT DETAILS',
+        expanded: sidebarSection === ReportSidebarSection.EDIT,
+        items,
+      });
+    }
+
+    return menuItems;
   }
 }

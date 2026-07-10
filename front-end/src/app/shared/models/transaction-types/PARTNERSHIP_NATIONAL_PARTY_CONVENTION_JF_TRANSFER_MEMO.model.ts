@@ -28,8 +28,8 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SCHE
     const base = 'Pres. Nominating Convention Account JF Memo: ';
     const committeeName = (transaction.parent_transaction as SchATransaction).contributor_organization_name;
     const committeeClause = `${base}${committeeName}`;
-    const hasChildren = transaction.children && transaction.children.length > 0;
-    if (hasChildren) {
+    const hasItemizedChildren = transaction.children.some((child) => child.itemized === true);
+    if (hasItemizedChildren) {
       const parenthetical = ' (See Partnership Attribution(s) below)';
       return shortenClause(committeeClause, parenthetical);
     }

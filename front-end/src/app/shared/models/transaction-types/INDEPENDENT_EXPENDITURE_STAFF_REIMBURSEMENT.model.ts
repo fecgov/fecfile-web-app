@@ -16,7 +16,7 @@ import {
   INDIVIDUAL_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { STANDARD_AND_CANDIDATE } from '../contact.model';
-import { AggregationGroups, Transaction } from '../transaction.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransactionType {
   formFields = [
@@ -45,9 +45,11 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
   override showCalendarYTD = true;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  override generatePurposeDescription(transaction: Transaction): string {
-    return 'Reimbursement: See Below';
+  override generatePurposeDescription(transaction: SchETransaction): string {
+    if (transaction.children && transaction.children.some((child) => child.itemized === true)) {
+      return 'Reimbursement Memo: See Below';
+    }
+    return 'Reimbursement memo entries do not meet itemization threshold.';
   }
 
   getNewTransaction() {

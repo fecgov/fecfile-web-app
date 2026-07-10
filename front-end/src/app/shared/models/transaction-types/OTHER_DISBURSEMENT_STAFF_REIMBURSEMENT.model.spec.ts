@@ -20,6 +20,15 @@ describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT', () => {
   });
 
   it('#generatePurposeDescription() should be defined', () => {
-    expect(transactionType.generatePurposeDescription()).toBe('Reimbursement: See Below');
+    const txn = transactionType.getNewTransaction();
+    expect(transactionType.generatePurposeDescription(txn)).toBe(
+      'Reimbursement memo entries do not meet itemization threshold.',
+    );
+    txn.children = [
+      {
+        itemized: true,
+      } as SchBTransaction,
+    ];
+    expect(transactionType.generatePurposeDescription(txn)).toBe('Reimbursement Memo: See Below');
   });
 });

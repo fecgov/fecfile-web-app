@@ -9,6 +9,10 @@
     "local_memory": "npx --node-options='--max-old-space-size=4000' -y -p @angular/cli ng serve --configuration=local",
     "local_aot": "npx @angular/cli ng serve --configuration=local --aot",
     "local_aot_memory": "npx --node-options='--max-old-space-size=4000' -y -p @angular/cli ng serve --configuration=local --aot",
+    "local:up": "bash -lc 'trap \"docker compose down --volumes --remove-orphans; rm -rf .tmp\" EXIT INT TERM;docker compose up'",
+    "local:watch:up": "bash -lc 'trap \"docker compose --profile watch down --volumes --remove-orphans; rm -rf .tmp\" EXIT INT TERM; WATCH=1 docker compose --profile watch up'",
+    "local:down": "bash -lc 'docker compose down --volumes --remove-orphans; rm -rf .tmp'",
+    "local:watch:down": "bash -lc 'docker compose --profile watch down --volumes --remove-orphans; rm -rf .tmp'",
     "build-dev": "npx ng build --configuration=cloud.gov.dev",
     "build-stage": "npx ng build --configuration=cloud.gov.stage",
     "build-prod": "npx ng build --configuration=cloud.gov.prod",
@@ -34,7 +38,7 @@
     "@ngrx/store": "21.0.1",
     "@primeuix/themes": "2.0.3",
     "class-transformer": "0.5.1",
-    "fecfile-validate": "https://github.com/fecgov/fecfile-validate#dd4279172d9c348563250c9bb8929856aaffe3b6",
+    "fecfile-validate": "https://github.com/fecgov/fecfile-validate#9f0990ecc0206f401482d8c0bc7b109f4805a410",
     "intl-tel-input": "26.8.1",
     "ngrx-store-localstorage": "20.1.0",
     "ngx-cookie-service": "21.3.1",
@@ -87,7 +91,9 @@
     "rollup": "~4.59.0",
     "qs": "~6.15.0",
     "@isaacs/brace-expansion": "~5.0.1",
-    "uuid": "~11.1.1"
+    "uuid": "~11.1.1",
+    "undici": "~7.28.0",
+    "vite": "~7.3.5"
   },
   "browser": {
     "crypto": false

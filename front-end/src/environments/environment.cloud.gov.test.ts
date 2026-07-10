@@ -9,6 +9,7 @@ export const environment = createEnvironment({
     showForm3: false,
     showSchedF: false,
     enableImport: false,
+    manualReportVersion: false,
     whoCanUseLink:
       'https://www.fec.gov/help-candidates-and-committees/filing-reports/electronic-filing/create-fecfile-plus-test-committee/',
   },

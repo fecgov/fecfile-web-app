@@ -257,7 +257,7 @@
       }
     }
   }
-  @if (transactionType?.hasElectionInformation()) {
+  @if (transactionType?.hasElectionInformation(activeReport().report_type)) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Election information" />
     <app-election-input

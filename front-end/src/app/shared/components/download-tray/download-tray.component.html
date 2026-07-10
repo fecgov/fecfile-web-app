@@ -2,13 +2,12 @@
   <ng-template pTemplate="header">Your downloads</ng-template>
   <ng-template pTemplate="content">
     <table>
-      <thead>
+      <thead class="hidden">
         <tr>
           <th>isComplete</th>
           <th>Name</th>
           <th>Download Button</th>
           <th>Remove Button</th>
-          <th>Downloading text</th>
         </tr>
       </thead>
       <tbody>
@@ -21,7 +20,9 @@
                 <img src="assets/img/loading-dots.gif" draggable="false" alt="Loading dots gif" />
               }
             </td>
-            <td class="download-text">{{ item.name }}</td>
+            <td class="text-primary karla text-xs">
+              {{ item.isComplete ? item.name : 'We’re preparing your download' }}
+            </td>
             <td>
               <button
                 pButton
@@ -37,14 +38,6 @@
               <button pButton pRipple [rounded]="true" [text]="true" class="p-1" (click)="removeDownload(item)">
                 <img src="assets/img/x-circle.svg" draggable="false" alt="X in a circle" />
               </button>
-            </td>
-            <td class="download-text">
-              @if (!item.isComplete) {
-                <span>
-                  We are preparing your download. Your wait will vary depending on how many records you requested and
-                  how many downloads we are processing
-                </span>
-              }
             </td>
           </tr>
         }
