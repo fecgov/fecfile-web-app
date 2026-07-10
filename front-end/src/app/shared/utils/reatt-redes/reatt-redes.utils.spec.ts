@@ -1,7 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { FormGroup } from '@angular/forms';
 import { ContactTypes } from '../../models/contact.model';
-import { ReportTypes } from '../../models/reports/report.model';
 import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
@@ -9,6 +8,7 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { TransactionListRecord } from '../../models/transaction-list-record.model';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -48,36 +48,23 @@ describe('ReattRedesUtils', () => {
   });
 
   describe('canReattribute', () => {
-    const setAmount = (txn: SchATransaction, amount: number | string) => {
-      Object.assign(txn as SchATransaction & { amount?: number | string }, { amount });
-    };
+    const asListRecord = (txn: SchATransaction): TransactionListRecord => txn as unknown as TransactionListRecord;
 
-    it('should allow reattribution for supported F3/F3X transaction types', () => {
+    it('should allow reattribution for eligible transactions', () => {
       const txn = getTestIndividualReceipt();
-      txn.transaction_type_identifier = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
-      setAmount(txn, 100);
-      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(true);
-      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3X)).toBe(true);
+      expect(ReattRedesUtils.canReattribute(asListRecord(txn))).toBe(true);
     });
 
-    it('should block reattribution for unsupported F3/F3X transaction types', () => {
+    it('should block reattribution for transactions that are already linked or at the amount limit', () => {
       const txn = getTestIndividualReceipt();
-      txn.transaction_type_identifier = ScheduleATransactionTypes.PAC_RECEIPT;
-      setAmount(txn, 100);
-      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(false);
-      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3X)).toBe(false);
-    });
+      txn.parent_transaction_id = 'parent-123';
+      expect(ReattRedesUtils.canReattribute(asListRecord(txn))).toBe(false);
 
-    it('should require individual entity_type and non-negative amount', () => {
-      const txn = getTestIndividualReceipt();
-      txn.transaction_type_identifier = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
-      txn.entity_type = ContactTypes.COMMITTEE;
-      setAmount(txn, 100);
-      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(false);
-
-      txn.entity_type = ContactTypes.INDIVIDUAL;
-      setAmount(txn, -50);
-      expect(ReattRedesUtils.canReattribute(txn, ReportTypes.F3)).toBe(false);
+      const limitTxn = getTestIndividualReceipt();
+      limitTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+      limitTxn.reatt_redes_total = 100;
+      limitTxn.contribution_amount = 100;
+      expect(ReattRedesUtils.canReattribute(asListRecord(limitTxn))).toBe(false);
     });
   });
 

@@ -21,7 +21,7 @@ export const LinkedReportTooltipText =
   selector: 'app-linked-report-input',
   styleUrls: ['./linked-report-input.component.scss'],
   templateUrl: './linked-report-input.component.html',
-  imports: [ReactiveFormsModule, Tooltip, InputText, ErrorMessagesComponent],
+  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent],
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
   private readonly form3XService = inject(Form3XService);
