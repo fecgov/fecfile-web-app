@@ -9,10 +9,23 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ConfirmationService } from 'primeng/api';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [TransactionInputComponent],
+  standalone: true,
+  template: `<app-transaction-input [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(TransactionInputComponent);
+  transaction?: Transaction;
+}
 
 describe('TransactionInputComponent', () => {
+  let host: TestHostComponent;
   let component: TransactionInputComponent;
-  let fixture: ComponentFixture<TransactionInputComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   const selectItem = {
     value: testContact(),
@@ -29,17 +42,19 @@ describe('TransactionInputComponent', () => {
         ReportService,
       ],
     });
-    fixture = TestBed.createComponent(TransactionInputComponent);
-    component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction();
-    component.transaction.transactionType.mandatoryFormValues = {
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    const transaction = testScheduleATransaction();
+    transaction.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };
+    host.transaction = transaction;
     component.form.setControl('loan_balance', new SubscriptionFormControl());
     component.form.setControl('contribution_amount', new SubscriptionFormControl());
     component.form.setControl('payment_amount', new SubscriptionFormControl());
     component.form.setControl('balance_at_close', new SubscriptionFormControl());
-    component.ngOnInit();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

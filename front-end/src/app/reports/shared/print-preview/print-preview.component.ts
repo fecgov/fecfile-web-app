@@ -9,12 +9,12 @@ import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { takeUntil } from 'rxjs';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
 import { LayoutService } from 'app/layout/layout.service';
+import { StoreService } from 'app/shared/services/store.service';
 
 @Component({
   selector: 'app-print-preview',
@@ -24,6 +24,7 @@ import { LayoutService } from 'app/layout/layout.service';
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly storeService = inject(StoreService);
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
   private readonly webPrintService = inject(WebPrintService);
@@ -103,7 +104,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
          * a failure in the EFO service or a failure on our side while creating the .fec,
          * for example)
          * */
-        this.store.dispatch(singleClickEnableAction());
+        this.storeService.enableSingleClick();
         this.webPrintStage = 'failure';
         this.printError = report.webprint_submission.fec_message || report.webprint_submission.fecfile_error;
         return;
@@ -113,7 +114,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
          * we want to see a completed status from EFO and a succeeded
          * task state from our celery task.
          */
-        this.store.dispatch(singleClickEnableAction());
+        this.storeService.enableSingleClick();
         this.webPrintStage = 'success';
         this.downloadURL = report.webprint_submission.fec_image_url;
         this.submitDate.set(report.webprint_submission.created);

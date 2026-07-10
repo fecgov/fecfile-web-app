@@ -33,21 +33,23 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   override ngOnInit(): void {
     super.ngOnInit();
+    const transaction = this.transaction();
+
     this.childUpdateFormWithPrimaryContact({
-      value: this.transaction?.reatt_redes?.contact_1,
+      value: transaction?.reatt_redes?.contact_1,
     } as SelectItem);
     if (
-      (this.transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag ===
+      (transaction as SchATransaction | SchBTransaction).reattribution_redesignation_tag ===
       ReattRedesTypes.REDESIGNATION_TO
     ) {
       this.updateFormWithPrimaryContact({
-        value: this.transaction?.reatt_redes?.contact_1,
+        value: transaction?.reatt_redes?.contact_1,
       } as SelectItem);
       this.updateFormWithSecondaryContact({
-        value: this.transaction?.reatt_redes?.contact_2,
+        value: transaction?.reatt_redes?.contact_2,
       } as SelectItem);
       this.childUpdateFormWithSecondaryContact({
-        value: this.transaction?.reatt_redes?.contact_2,
+        value: transaction?.reatt_redes?.contact_2,
       } as SelectItem);
       this.updateElectionData();
     }
@@ -56,7 +58,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
     // its specialized validation rules and form element behavior.
     ReattRedesUtils.overlayForms(
       this.form,
-      this.transaction as SchATransaction | SchBTransaction,
+      transaction as SchATransaction | SchBTransaction,
       this.childForm,
       this.childTransaction as SchATransaction | SchBTransaction,
     );
@@ -96,7 +98,7 @@ export abstract class ReattRedesTransactionTypeBaseComponent
 
   private async initializePullForward() {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    const reatRedes = this.transaction?.reatt_redes;
+    const reatRedes = this.transaction()?.reatt_redes;
     if (!reatRedes) return;
     this.pullForward = reatRedes.report_ids?.includes(reportId) === false;
     if (!this.pullForward) return;

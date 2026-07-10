@@ -1,9 +1,9 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, computed, EventEmitter, inject, Input, model, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -54,7 +54,7 @@ import { SectionHeaderComponent } from './section-header/section-header.componen
 export class TransactionInputComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
   @Input() formSubmitted = false;
-  @Input() transaction?: Transaction;
+  readonly transaction = model<Transaction>();
   @Input() isEditable = true;
   @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   @Input() memoHasOptional$?: Observable<boolean>;
@@ -76,23 +76,31 @@ export class TransactionInputComponent implements OnInit {
   readonly activeReport = this.store.selectSignal(selectActiveReport);
 
   ContactTypes = ContactTypes;
-  transactionType?: TransactionType;
-  templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  readonly transactionType = computed(() => this.transaction()?.transactionType);
+  readonly templateMap = computed(() => this.transactionType()?.templateMap ?? ({} as TransactionTemplateMapType));
   candidateContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   committeeContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
+  readonly showLookup = computed(() => {
+    const transaction = this.transaction();
+    if (!transaction) return false;
+    return (
+      this.isEditable &&
+      !transaction.transactionType.getUseParentContact(transaction) &&
+      !transaction.transactionType.hideContactLookup &&
+      transaction.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
+      transaction.transaction_type_identifier !== 'LOAN_REPAYMENT_RECEIVED'
+    );
+  });
+
   ngOnInit(): void {
-    if (this.transaction) {
-      this.transactionType = this.transaction.transactionType;
-      this.candidateInfoPosition = this.transactionType.candidateInfoPosition || 'low';
-      this.templateMap = this.transaction.transactionType.templateMap;
-    } else {
-      throw new Error('FECfile+: No transaction passed to TransactionInputComponent');
-    }
+    const transactionType = this.transactionType();
+    if (!transactionType) throw new Error('FECfile+: No transaction passed to TransactionInputComponent');
+    this.candidateInfoPosition = transactionType.candidateInfoPosition || 'low';
 
     // If there are mandatory values for any form fields, populate the form field and make it read-only
-    for (const field in this.transaction.transactionType.mandatoryFormValues) {
-      this.form.get(field)?.setValue(this.transaction.transactionType.mandatoryFormValues[field]);
+    for (const field in transactionType.mandatoryFormValues) {
+      this.form.get(field)?.setValue(transactionType.mandatoryFormValues[field]);
       this.form.get(field)?.disable();
     }
   }

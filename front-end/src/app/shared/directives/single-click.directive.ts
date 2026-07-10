@@ -1,37 +1,24 @@
-import { Directive, ElementRef, inject, OnDestroy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectSingleClickDisabled } from '../../store/single-click.selectors';
-import { singleClickDisableAction, singleClickEnableAction } from '../../store/single-click.actions';
-import { SplitButton } from 'primeng/splitbutton';
+import { Directive, HostListener, inject } from '@angular/core';
+import { StoreService } from '../services/store.service';
 
-@Directive({ selector: '[appSingleClick]' })
-export class SingleClickDirective implements OnDestroy {
-  private readonly el = inject(ElementRef);
-  private readonly store = inject(Store);
-  private readonly splitBtn = inject(SplitButton, { optional: true });
+@Directive({
+  selector: '[appSingleClick]',
+  standalone: true,
+  host: {
+    '[attr.disabled]': 'storeService.singleClickDisabled() ? true : null',
+  },
+})
+export class SingleClickDirective {
+  protected storeService = inject(StoreService);
 
-  constructor() {
-    this.el.nativeElement.addEventListener('click', this.handleCaptureClick, true);
-    this.store.select(selectSingleClickDisabled).subscribe((disabled) => {
-      if (this.splitBtn) {
-        this.splitBtn.disabled = disabled;
-      }
+  @HostListener('click', ['$event'])
+  onClick(event: Event) {
+    if (this.storeService.singleClickDisabled()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
 
-      if (disabled) this.el.nativeElement.setAttribute('disabled', 'true');
-      else this.el.nativeElement.removeAttribute('disabled');
-    });
-  }
-
-  private readonly handleCaptureClick = (event: MouseEvent) => {
-    if ((event.target as HTMLElement).closest('.p-splitbutton-dropdown')) return;
-    this.store.dispatch(singleClickDisableAction());
-  };
-
-  ngOnDestroy(): void {
-    // If the single-click button disabled flag in the store has not been
-    // reset to false within the code itself, set the flag when routed away
-    // from the page as the button is destroyed.
-    this.el.nativeElement.removeEventListener('click', this.handleCaptureClick, true);
-    this.store.dispatch(singleClickEnableAction());
+    this.storeService.disableSingleClick();
   }
 }

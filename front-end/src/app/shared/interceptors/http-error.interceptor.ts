@@ -11,16 +11,17 @@ import {
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { catchError, Observable, of, throwError } from 'rxjs';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { LoginService } from '../services/login.service';
 import { setServiceAvailableAction } from 'app/store/service-available.actions';
 import { FrontendErrorReportingService } from '../services/frontend-error-reporting.service';
+import { StoreService } from '../services/store.service';
 
 export const ALLOW_ERROR_CODES = new HttpContextToken<number[]>(() => [200]);
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
   private readonly store = inject(Store);
+  private readonly storeService = inject(StoreService);
   private readonly loginService = inject(LoginService);
   private readonly errorReportingService = inject(FrontendErrorReportingService);
 
@@ -52,10 +53,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           status: error.status,
           message: errorMessage,
         });
-        if (error && error.status === HttpStatusCode.Forbidden) {
+        if (error?.status === HttpStatusCode.Forbidden) {
           this.loginService.logOut();
         } else {
-          this.store.dispatch(singleClickEnableAction());
+          this.storeService.enableSingleClick();
         }
         return throwError(() => errorMessage);
       }),

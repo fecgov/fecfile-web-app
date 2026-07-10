@@ -14,12 +14,14 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
 import { FORM_3_SERVICE, BaseForm3Service } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { StoreService } from 'app/shared/services/store.service';
 
 let component: CreateSharedF3Component;
 let fixture: ComponentFixture<CreateSharedF3Component>;
 let router: Router;
 let activeServiceInstance: BaseForm3Service<BaseForm3>;
 let store: MockStore;
+let storeService: StoreService;
 
 async function setup(params: { reportId?: string; mockUrl?: string }) {
   const currentUrl = params.mockUrl ?? '/reports/f3x/create/step-1';
@@ -39,10 +41,12 @@ async function setup(params: { reportId?: string; mockUrl?: string }) {
         },
       },
       provideMockStore(testMockStore()),
+      StoreService,
     ],
   }).compileComponents();
 
   store = TestBed.inject(MockStore);
+  storeService = TestBed.inject(StoreService);
   vi.spyOn(store, 'dispatch');
   router = TestBed.inject(Router);
   activeServiceInstance = TestBed.inject(FORM_3_SERVICE);
@@ -104,10 +108,10 @@ describe('CreateSharedF3Component: New', () => {
     expect(router.navigateByUrl).toHaveBeenCalledWith(`/reports/transactions/report/999/list`);
   });
 
-  it('should not save and should dispatch singleClickEnableAction if form is invalid', async () => {
+  it('should not save and should enable singleClick if form is invalid', async () => {
     const createSpy = vi.spyOn(activeServiceInstance, 'create');
     const updateSpy = vi.spyOn(activeServiceInstance, 'updateWithAllowedErrorCodes');
-
+    const enableSpy = vi.spyOn(storeService, 'enableSingleClick');
     await fixture.whenStable();
     fixture.detectChanges();
     // now invalidate the form
@@ -119,8 +123,8 @@ describe('CreateSharedF3Component: New', () => {
     expect(component.formSubmitted).toBe(true);
     expect(createSpy).not.toHaveBeenCalled();
     expect(updateSpy).not.toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: '[SingleClickButtonDisabled] False' }));
+
+    expect(enableSpy).toHaveBeenCalled();
   });
 });
 

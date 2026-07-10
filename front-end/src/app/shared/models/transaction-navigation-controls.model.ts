@@ -10,6 +10,7 @@ export enum NavigationDestination {
   LIST,
   PARENT,
   ANOTHER,
+  CLONE,
   CHILD,
 }
 

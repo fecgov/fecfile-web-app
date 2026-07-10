@@ -10,7 +10,7 @@ import { NavigationControlComponent } from '../navigation-control/navigation-con
 })
 export class NavigationControlBarComponent {
   readonly navigationControls = input.required<TransactionNavigationControls>();
-  readonly transaction = input<Transaction | undefined>(undefined);
+  readonly transaction = input<Transaction>();
   readonly cancelControls = computed(() =>
     this.navigationControls().getNavigationControls('cancel', this.transaction()),
   );

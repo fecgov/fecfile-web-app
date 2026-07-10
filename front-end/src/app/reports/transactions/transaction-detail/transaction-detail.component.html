@@ -1,11 +1,11 @@
 <div class="flex gap-2">
-  @if (transactionType?.showParentTransactionTitle) {
+  @if (transactionType()?.showParentTransactionTitle) {
     <h1>
-      {{ transaction?.parent_transaction?.transactionType?.title }}
+      {{ transaction()?.parent_transaction?.transactionType?.title }}
     </h1>
   } @else {
     <h1>
-      {{ transactionType?.title }}
+      {{ transactionType()?.title }}
     </h1>
   }
 
@@ -21,13 +21,13 @@
   }
 </div>
 <hr class="solid" />
-@if (transactionType?.showParentTransactionTitle) {
+@if (transactionType()?.showParentTransactionTitle) {
   <h1 class="mt-5">
-    {{ transactionType?.title }}
+    {{ transactionType()?.title }}
   </h1>
 }
-@if (transactionType?.subTitle) {
-  <div>{{ transactionType?.subTitle }}</div>
+@if (transactionType()?.subTitle) {
+  <div>{{ transactionType()?.subTitle }}</div>
 }
 
 @if (activeReport().report_type === reportTypes.F24) {
@@ -36,18 +36,18 @@
 @if (!isEditable()) {
   <h4 class="read-only-tag subtitle">READ ONLY</h4>
 }
-@if (isDebtRepayment(transaction)) {
+@if (isDebtRepayment(transaction())) {
   <h4 class="read-only-tag subtitle">DEBT REPAYMENT</h4>
 }
 
-<h2 class="top-margin-32">{{ transactionType?.contactTitle || 'Contact' }}</h2>
+<h2 class="top-margin-32">{{ transactionType()?.contactTitle || 'Contact' }}</h2>
 <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
   <app-transaction-input
     [isEditable]="isEditable()"
     [isSingle]="true"
     [form]="form"
     [formSubmitted]="formSubmitted"
-    [transaction]="transaction"
+    [(transaction)]="transaction"
     [contactTypeOptions]="contactTypeOptions"
     [memoHasOptional$]="memoHasOptional$"
     (primaryContactSelect)="updateFormWithPrimaryContact($event)"

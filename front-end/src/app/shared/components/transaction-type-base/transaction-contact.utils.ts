@@ -158,10 +158,11 @@ export class TransactionContactUtils {
     form.get(templateMap.city)?.setValue(contact.city);
     form.get(templateMap.state)?.setValue(contact.state);
     form.get(templateMap.zip)?.setValue(contact.zip);
+    contactId$.next(contact.id ?? '');
     if (transaction) {
       transaction.contact_1 = contact;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next(contact.id ?? '');
   }
 
   static clearFormPrimaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
@@ -182,12 +183,13 @@ export class TransactionContactUtils {
     form.get(templateMap.suffix)?.setValue(null);
     form.get(templateMap.employer)?.setValue(null);
     form.get(templateMap.occupation)?.setValue(null);
+    contactId$.next('');
     if (transaction) {
       // force serializer to send nulls
       transaction.contact_1 = null as unknown as undefined;
       transaction.contact_1_id = null as unknown as undefined;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next('');
   }
 
   /**
@@ -216,10 +218,11 @@ export class TransactionContactUtils {
     form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
     form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
     form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
+    contactId$.next(contact.id ?? '');
     if (transaction) {
       transaction.contact_2 = contact;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next(contact.id ?? '');
   }
 
   /**
@@ -245,10 +248,11 @@ export class TransactionContactUtils {
     form.get(templateMap.secondary_city)?.setValue(contact.city);
     form.get(templateMap.secondary_state)?.setValue(contact.state);
     form.get(templateMap.secondary_zip)?.setValue(contact.zip);
+    contactId$.next(contact.id ?? '');
     if (transaction) {
       transaction.contact_2 = contact;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next(contact.id ?? '');
   }
 
   static updateFormWithTertiaryContact(
@@ -262,10 +266,11 @@ export class TransactionContactUtils {
     if (!(contact && templateMap)) return;
     form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
     form.get(templateMap.committee_name)?.setValue(contact.name);
+    contactId$.next(contact.id ?? '');
     if (transaction) {
       transaction.contact_3 = contact;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next(contact.id ?? '');
   }
 
   static updateFormWithQuaternaryContact(
@@ -279,11 +284,12 @@ export class TransactionContactUtils {
     if (!(contact && templateMap)) return;
     form.get(templateMap.quaternary_committee_fec_id)?.setValue(contact.committee_id);
     form.get(templateMap.quaternary_committee_name)?.setValue(contact.name);
+    contactId$.next(contact.id ?? '');
     if (transaction) {
       transaction.contact_4 = contact;
       transaction.contact_4_id = contact.id;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next(contact.id ?? '');
   }
 
   static clearFormQuaternaryContact(
@@ -295,12 +301,13 @@ export class TransactionContactUtils {
     if (!templateMap) return;
     form.get(templateMap.quaternary_committee_fec_id)?.setValue(null);
     form.get(templateMap.quaternary_committee_name)?.setValue(null);
+    contactId$.next('');
     if (transaction) {
       // force serializer to send nulls
       transaction.contact_4 = null as unknown as undefined;
       transaction.contact_4_id = null as unknown as undefined;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next('');
   }
 
   static updateFormWithQuinaryContact(
@@ -319,11 +326,12 @@ export class TransactionContactUtils {
     form.get(templateMap.quinary_city)?.setValue(contact.city);
     form.get(templateMap.quinary_state)?.setValue(contact.state);
     form.get(templateMap.quinary_zip)?.setValue(contact.zip);
+    contactId$.next(contact.id ?? '');
     if (transaction) {
       transaction.contact_5 = contact;
       transaction.contact_5_id = contact.id;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next(contact.id ?? '');
   }
 
   static clearFormQuinaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
@@ -336,12 +344,13 @@ export class TransactionContactUtils {
     form.get(templateMap.quinary_city)?.setValue(null);
     form.get(templateMap.quinary_state)?.setValue(null);
     form.get(templateMap.quinary_zip)?.setValue(null);
+    contactId$.next('');
     if (transaction) {
       // force serializer to send nulls
       transaction.contact_5 = null as unknown as undefined;
       transaction.contact_5_id = null as unknown as undefined;
+      return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
-    contactId$.next('');
   }
 }
 

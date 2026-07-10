@@ -17,7 +17,6 @@ import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
 import { AccordionPanel } from 'primeng/accordion';
 
@@ -84,8 +83,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    if (this.transaction) {
-      this.childTransaction = this.getChildTransaction(this.transaction, 0);
+    const transaction = this.transaction();
+    if (transaction) {
+      this.childTransaction = this.getChildTransaction(transaction, 0);
     } else {
       throw new Error('FECfile+: Transaction not found for double-entry transaction form');
     }
@@ -110,7 +110,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransactionType
         ?.getInheritedFields(this.childTransaction)
         ?.includes('memo_code' as TemplateMapKeyType) &&
-      this.transactionType
+      this.transactionType()
     ) {
       this.childMemoHasOptional$ = this.memoHasOptional$;
     } else {
@@ -157,7 +157,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   override submit(navigationEvent: NavigationEvent): Promise<void> {
     this.updateContactData();
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
-      this.transaction,
+      this.transaction(),
       this.activeReportId,
       this.form,
       this.formProperties,
@@ -180,11 +180,12 @@ export abstract class DoubleTransactionTypeBaseComponent
    * update all contacts with changes from form.
    */
   protected updateContactData() {
-    if (this.transaction && this.childTransaction) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+    const transaction = this.transaction();
+    if (transaction && this.childTransaction) {
+      TransactionContactUtils.updateContactsWithForm(transaction, this.templateMap(), this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
     } else {
-      this.store.dispatch(singleClickEnableAction());
+      this.storeService.enableSingleClick();
       throw new Error('FECfile+: No transactions submitted for double-entry transaction form.');
     }
   }
@@ -216,7 +217,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.scrollToError = false;
       return true;
     } else {
-      this.store.dispatch(singleClickEnableAction());
+      this.storeService.enableSingleClick();
       if (this.accordionValue() === invalid) {
         afterNextRender(() => this.scrollToFirstInvalidControl(), { injector: this.injector });
       } else {
@@ -254,9 +255,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.updateFormWithPrimaryContact(selectItem);
     if (
       this.childTransaction?.transactionType?.getUseParentContact(this.childTransaction) &&
-      this.transaction?.contact_1
+      this.transaction()?.contact_1
     ) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childTransaction.contact_1 = this.transaction()?.contact_1;
       this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
@@ -293,7 +294,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       if (childTransaction.transactionType) {
         const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
         childFieldControl?.enable();
-        const value = this.form.get(this.templateMap[inherittedField])?.value;
+        const value = this.form.get(this.templateMap()[inherittedField])?.value;
         if (value !== undefined) {
           childFieldControl?.setValue(value);
           childFieldControl?.updateValueAndValidity();

@@ -112,7 +112,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   describe('init', () => {
     it('should fail to initialize if no transaction', () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
       try {
         component.ngOnInit();
       } catch (err: any) {
@@ -168,14 +168,14 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
     host.transaction = trans;
     vi.spyOn(component, 'getChildTransaction').mockImplementation(() => {
-      childTransaction.parent_transaction = component.transaction;
+      childTransaction.parent_transaction = component.transaction();
       return childTransaction;
     });
     component.ngOnInit();
 
     expect(component.childTransaction?.parent_transaction).toBeTruthy();
-    component.form.get(component.templateMap.first_name)?.setValue('First');
-    component.form.get(component.templateMap.last_name)?.setValue('Last');
+    component.form.get(component.templateMap().first_name)?.setValue('First');
+    component.form.get(component.templateMap().last_name)?.setValue('Last');
 
     expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
       'Earmarked from First Last',
@@ -193,7 +193,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       'amount',
     );
     component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
-    component.form.get(component.templateMap.amount)?.setValue(250);
+    component.form.get(component.templateMap().amount)?.setValue(250);
     expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
   });
 
@@ -203,10 +203,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     testTransaction.id = undefined;
     if (testTransaction.children) {
       component.childTransaction = testTransaction.children[0];
-      component.childTransaction.parent_transaction = component.transaction;
+      component.childTransaction.parent_transaction = component.transaction();
     }
 
-    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction());
 
     // Save valid form values
     component.form.patchValue({
@@ -266,10 +266,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   describe('save', () => {
     it('should bail out if transactions are invalid', async () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
+      await fixture.whenStable();
       try {
         await component.submitForm(
-          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()),
         );
       } catch (error: any) {
         expect(error.message).toBe('FECfile+: No transactions submitted for double-entry transaction form.');
@@ -285,7 +286,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     });
 
     it('should return false if reject parent confirmation', async () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
+      await fixture.whenStable();
       const v = await component.getConfirmations();
       expect(v).toBe(false);
     });

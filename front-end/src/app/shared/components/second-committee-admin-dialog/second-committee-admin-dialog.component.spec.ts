@@ -5,7 +5,6 @@ import { CommitteeMemberService } from 'app/shared/services/committee-member.ser
 import { MessageService } from 'primeng/api';
 import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils';
 import { ReactiveFormsModule } from '@angular/forms';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeMember, Roles } from 'app/shared/models';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -15,11 +14,13 @@ import { DialogModule } from 'primeng/dialog';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZoneChangeDetection } from '@angular/core';
+import { StoreService } from 'app/shared/services/store.service';
 
 describe('SecondCommitteeAdminDialogComponent', () => {
   let component: SecondCommitteeAdminDialogComponent;
   let fixture: ComponentFixture<SecondCommitteeAdminDialogComponent>;
   let store: Store;
+  let storeService: StoreService;
   let messageService: MessageService;
 
   beforeEach(async () => {
@@ -39,12 +40,14 @@ describe('SecondCommitteeAdminDialogComponent', () => {
         CommitteeMemberService,
         MessageService,
         CommitteeMemberEmailValidator,
+        StoreService,
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SecondCommitteeAdminDialogComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(Store);
+    storeService = TestBed.inject(StoreService);
     messageService = TestBed.inject(MessageService);
     fixture.detectChanges();
   });
@@ -65,11 +68,11 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     expect(component.form.invalid).toBe(true);
   });
 
-  it('should dispatch singleClickEnableAction when form is invalid on save', async () => {
-    vi.spyOn(store, 'dispatch');
+  it('should enable singleClick when form is invalid on save', async () => {
+    const enableSpy = vi.spyOn(storeService, 'enableSingleClick');
     component.form.get('email')?.setValue('');
     await component.submitForm();
-    expect(store.dispatch).toHaveBeenCalledWith(singleClickEnableAction());
+    expect(enableSpy).toHaveBeenCalled();
   });
 
   it('should call addMember and show success message on valid form submission', async () => {

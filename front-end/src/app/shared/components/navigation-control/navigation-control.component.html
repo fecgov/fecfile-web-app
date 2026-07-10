@@ -9,7 +9,6 @@
       (click)="clickButton()"
       [disabled]="isDisabled()"
       data-cy="navigation-control-button"
-      appSingleClick
     ></button>
   }
   @case (controlType.DROPDOWN) {
@@ -76,7 +75,6 @@
       data-cy="navigation-control-splitbutton"
       [disabled]="isDisabled()"
       [model]="items"
-      appSingleClick
     >
       <ng-template #dropdownicon>
         <svg pButtonIcon alt="Dropdown icon" width="10" height="10" class="rotate-90">

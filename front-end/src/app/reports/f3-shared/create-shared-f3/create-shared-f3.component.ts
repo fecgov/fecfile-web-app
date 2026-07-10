@@ -31,7 +31,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { injectParams } from 'ngxtension/inject-params';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 import { F3FormTypes, Form3 } from 'app/shared/models/reports/form-3.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
@@ -271,7 +270,9 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
     this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', mediaQueryListener));
   }
 
-  readonly onHide = () => this.store.dispatch(singleClickEnableAction());
+  readonly onHide = () => {
+    this.storeService.enableSingleClick();
+  };
 
   async submit(jump: 'continue' | void) {
     this.formSubmitted = true;
@@ -279,7 +280,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
     if (this.form.invalid) {
       printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
+      this.storeService.enableSingleClick();
       return;
     }
 

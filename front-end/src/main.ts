@@ -54,9 +54,7 @@ import { LoginService } from './app/shared/services/login.service';
 import { activeReportReducer } from './app/store/active-report.reducer';
 import { AppState } from './app/store/app-state.model';
 import { committeeAccountReducer } from './app/store/committee-account.reducer';
-import { navigationEventReducer } from './app/store/navigation-event.reducer';
 import { serviceAvailableReducer } from './app/store/service-available.reducer';
-import { singleClickReducer } from './app/store/single-click.reducer';
 import { loginReducer } from './app/store/user-login-data.reducer';
 import { environment } from './environments/environment';
 
@@ -90,7 +88,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   try {
     return localStorageSync({
-      keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport'],
+      keys: ['committeeAccount', 'userLoginData', 'activeReport'],
       storageKeySerializer: (key) => `fecfile_online_${key}`,
       rehydrate: true,
     })(reducer);
@@ -122,10 +120,8 @@ bootstrapApplication(AppComponent, {
       StoreModule.forRoot(
         {
           committeeAccount: committeeAccountReducer,
-          singleClickDisabled: singleClickReducer,
           userLoginData: loginReducer,
           activeReport: activeReportReducer,
-          navigationEvent: navigationEventReducer,
           serviceAvailable: serviceAvailableReducer,
         },
         { metaReducers },

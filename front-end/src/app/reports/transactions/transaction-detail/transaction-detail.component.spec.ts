@@ -28,11 +28,24 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { firstValueFrom } from 'rxjs';
-import { provideZoneChangeDetection } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { StoreService } from 'app/shared/services/store.service';
+
+@Component({
+  imports: [TransactionDetailComponent],
+  standalone: true,
+  template: `<app-transaction-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(TransactionDetailComponent);
+  transaction?: Transaction;
+}
 
 describe('TransactionDetailComponent', () => {
+  let host: TestHostComponent;
   let component: TransactionDetailComponent;
-  let fixture: ComponentFixture<TransactionDetailComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
   let reportService: Form3XService;
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
 
@@ -69,6 +82,7 @@ describe('TransactionDetailComponent', () => {
         provideMockStore(testMockStore()),
         FecDatePipe,
         Form3XService,
+        StoreService,
       ],
     }).compileComponents();
   });
@@ -76,11 +90,12 @@ describe('TransactionDetailComponent', () => {
   beforeEach(() => {
     reportService = TestBed.inject(Form3XService);
     vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
-    fixture = TestBed.createComponent(TransactionDetailComponent);
-    component = fixture.componentInstance;
-    component.transaction = transaction;
-    component.templateMap = testTemplateMap();
-    component.ngOnInit();
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    transaction.transactionType.templateMap = testTemplateMap();
+    host.transaction = transaction;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -89,6 +104,7 @@ describe('TransactionDetailComponent', () => {
   });
 
   it('#handleNavigate() should not save an invalid record', async () => {
+    component.ngOnInit();
     const navSpy = vi.spyOn(component, 'navigateTo');
     const saveSpy = vi.spyOn(component, 'submit');
 
@@ -98,7 +114,7 @@ describe('TransactionDetailComponent', () => {
         await firstValueFrom(component.form.controls[control].statusChanges);
     }
     await component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
-    expect(component.form.invalid).toBe(true);
+    expect(component.form.valid).toBe(false);
     expect(navSpy).not.toHaveBeenCalled();
     expect(saveSpy).not.toHaveBeenCalled();
   });

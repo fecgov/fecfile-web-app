@@ -1,5 +1,5 @@
 <div class="flex gap-2">
-  <h1>{{ transaction?.transactionType?.title }}</h1>
+  <h1>{{ transactionType()?.title }}</h1>
   @if (showGlossary) {
     <img
       class="cursor-pointer"
@@ -12,8 +12,8 @@
   }
 </div>
 
-@if (transactionType?.subTitle) {
-  <div>{{ transactionType?.subTitle }}</div>
+@if (transactionType()?.subTitle) {
+  <div>{{ transactionType()?.subTitle }}</div>
 }
 @if (activeReport().report_type === reportTypes.F24) {
   <app-independent-expenditure-create-f3x-input />
@@ -22,7 +22,7 @@
   <h4 class="read-only-tag subtitle">READ ONLY</h4>
 }
 
-<p class="group-description">{{ transactionType?.description }}</p>
+<p class="group-description">{{ transactionType()?.description }}</p>
 <p-accordion [(value)]="accordionValue" [transitionOptions]="animationTime + 'ms cubic-bezier(0.86, 0, 0.07, 1)'">
   <p-accordion-panel [value]="0" data-cy="accordion-panel-0">
     <p-accordion-header>
@@ -30,10 +30,10 @@
         <img class="accordion-number-icon" src="assets/img/ONE-icon.svg" alt="Step one" />
 
         <div class="accordion-text">
-          <strong>{{ transactionType?.accordionTitle }}</strong>
+          <strong>{{ transactionType()?.accordionTitle }}</strong>
           <br />
           <p class="accordion-subtext">
-            {{ transactionType?.accordionSubText }}
+            {{ transactionType()?.accordionSubText }}
           </p>
         </div>
         <img
@@ -46,18 +46,18 @@
 
     <p-accordion-content data-cy="accordion-1">
       <div class="accordion-content-wrapper">
-        @if (transactionType?.formTitle) {
+        @if (transactionType()?.formTitle) {
           <h2>
-            {{ transactionType?.formTitle }}
+            {{ transactionType()?.formTitle }}
           </h2>
         }
-        <h2>{{ transactionType?.contactTitle }}</h2>
+        <h2>{{ transactionType()?.contactTitle }}</h2>
         <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted">
           <app-transaction-input
             [isEditable]="isEditable()"
             [form]="form"
             [formSubmitted]="formSubmitted"
-            [transaction]="transaction"
+            [(transaction)]="transaction"
             [contactTypeOptions]="contactTypeOptions"
             [memoHasOptional$]="memoHasOptional$"
             (primaryContactSelect)="updateFormWithPrimaryContact($event)"

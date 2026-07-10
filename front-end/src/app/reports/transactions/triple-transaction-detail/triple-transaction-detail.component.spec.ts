@@ -20,10 +20,23 @@ import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [TripleTransactionDetailComponent],
+  standalone: true,
+  template: `<app-triple-transaction-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(TripleTransactionDetailComponent);
+  transaction?: Transaction;
+}
 
 describe('TripleTransactionDetailComponent', () => {
+  let host: TestHostComponent
   let component: TripleTransactionDetailComponent;
-  let fixture: ComponentFixture<TripleTransactionDetailComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   const transaction = getTestTransactionByType(ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK);
   transaction.children = [
@@ -61,11 +74,12 @@ describe('TripleTransactionDetailComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TripleTransactionDetailComponent);
-    component = fixture.componentInstance;
-    component.transaction = transaction;
-    component.templateMap = testTemplateMap();
-    component.ngOnInit();
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    transaction.transactionType.templateMap = testTemplateMap();
+    host.transaction = transaction;
+    component = host.component();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

@@ -29,11 +29,11 @@
           <p-checkbox
             formControlName="security-consent-annual"
             [binary]="true"
-            [disabled]="!hasScrolledToBottom()"
+            [disabled]="disabled()"
             inputId="security-consent-annual"
             ariaLabel="You consent to the security notification for one year"
           />
-          <label for="security-consent-annual" class="p-checkbox-label" [class.p-disabled]="!hasScrolledToBottom()">
+          <label for="security-consent-annual" class="p-checkbox-label" [class.p-disabled]="disabled()">
             You consent to the security notification for one year
           </label>
         </div>
@@ -50,7 +50,7 @@
           [pt]="{ root: 'security-button' }"
           data-cy="consent-button"
           label="Consent"
-          [disabled]="!hasScrolledToBottom()"
+          [disabled]="disabled()"
           (click)="signConsentForm()"
           (keypress)="signConsentForm()"
         />

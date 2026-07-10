@@ -18,10 +18,23 @@ import { DoubleTransactionDetailComponent } from './double-transaction-detail.co
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [DoubleTransactionDetailComponent],
+  standalone: true,
+  template: `<app-double-transaction-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(DoubleTransactionDetailComponent);
+  transaction?: Transaction;
+}
 
 describe('DoubleTransactionDetailComponent', () => {
+  let host: TestHostComponent;
   let component: DoubleTransactionDetailComponent;
-  let fixture: ComponentFixture<DoubleTransactionDetailComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
   const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO);
@@ -57,11 +70,12 @@ describe('DoubleTransactionDetailComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DoubleTransactionDetailComponent);
-    component = fixture.componentInstance;
-    component.transaction = transaction;
-    component.templateMap = testTemplateMap();
-    component.ngOnInit();
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    transaction.transactionType.templateMap = testTemplateMap();
+    host.transaction = transaction;
+    fixture.detectChanges();
   });
 
   it('should create', () => {

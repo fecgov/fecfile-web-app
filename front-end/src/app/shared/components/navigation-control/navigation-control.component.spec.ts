@@ -15,9 +15,9 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import { Component, viewChild } from '@angular/core';
+import { StoreService } from 'app/shared/services/store.service';
 
 @Component({
   imports: [NavigationControlComponent],
@@ -37,15 +37,14 @@ describe('NavigationControlComponent', () => {
   let host: TestHostComponent;
   let component: NavigationControlComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let store: Store;
+  let storeService: StoreService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ButtonModule, SelectModule, ReactiveFormsModule, NavigationControlComponent],
-      providers: [FormBuilder, provideMockStore(testMockStore())],
+      providers: [FormBuilder, StoreService],
     }).compileComponents();
-    store = TestBed.inject(Store);
-
+    storeService = TestBed.inject(StoreService);
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
@@ -61,8 +60,7 @@ describe('NavigationControlComponent', () => {
     });
 
     it('should dispatch a navigationEvent', () => {
-      // spy on event emitter
-      const storeSpy = vi.spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(storeService, 'navigate');
 
       // trigger the click
       const nativeElement = fixture.nativeElement;
@@ -75,8 +73,7 @@ describe('NavigationControlComponent', () => {
     });
 
     it('should allow adding another', () => {
-      // spy on event emitter
-      const storeSpy = vi.spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(storeService, 'navigate');
 
       component.saveAndAddAnother();
 
@@ -87,7 +84,7 @@ describe('NavigationControlComponent', () => {
         cloneInstance(component.transaction() as Transaction),
         component.transaction()?.transaction_type_identifier as TransactionTypes,
       );
-      expect(storeSpy).toHaveBeenCalledWith(navigationEventSetAction(navigationEvent));
+      expect(storeSpy).toHaveBeenCalledWith(navigationEvent);
     });
 
     it('should have grouped options', () => {
@@ -121,20 +118,17 @@ describe('NavigationControlComponent', () => {
     });
 
     it('should dispatch a navigationEvent with a transaction', () => {
-      // spy on event emitter
-      const storeSpy = vi.spyOn(store, 'dispatch');
+      const storeSpy = vi.spyOn(storeService, 'navigate');
 
       component.onDropdownChange(component.dropdownOptions()[0]); // simulate selecting the first dropdown option
 
       fixture.detectChanges();
-      expect(storeSpy).toHaveBeenCalledWith(
-        navigationEventSetAction({
-          action: NavigationAction.SAVE,
-          destination: NavigationDestination.CHILD,
-          transaction: cloneInstance(component.transaction() as Transaction),
-          destinationTransactionType: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
-        }),
-      );
+      expect(storeSpy).toHaveBeenCalledWith({
+        action: NavigationAction.SAVE,
+        destination: NavigationDestination.CHILD,
+        transaction: cloneInstance(component.transaction() as Transaction),
+        destinationTransactionType: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION,
+      });
     });
   });
 });

@@ -15,7 +15,7 @@ import { NavigationControlBarComponent } from '../../../shared/components/naviga
 })
 export class TransactionNavigationComponent {
   readonly isEditable = input(true);
-  readonly transaction = input<Transaction | undefined>(undefined);
+  readonly transaction = input<Transaction>();
   readonly navigationControls = computed(() => {
     const isEditable = this.isEditable();
     const transaction = this.transaction();

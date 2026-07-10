@@ -23,8 +23,9 @@ import {
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { provideZoneChangeDetection } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Subject } from 'rxjs';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;
@@ -52,9 +53,20 @@ function dummy() {
   };
 }
 
+@Component({
+  imports: [TripleTransactionDetailComponent],
+  standalone: true,
+  template: `<app-triple-transaction-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(TripleTransactionDetailComponent);
+  transaction?: Transaction;
+}
+
 describe('TripleTransactionTypeBaseComponent', () => {
+  let host: TestHostComponent;
   let component: TripleTransactionTypeBaseComponent;
-  let fixture: ComponentFixture<TripleTransactionTypeBaseComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -87,9 +99,10 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
     testTransaction.report_ids = ['123'];
     testTransaction.children = [child1, child2];
-    fixture = TestBed.createComponent(TripleTransactionDetailComponent);
-    component = fixture.componentInstance;
-    component.transaction = testTransaction;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    host.transaction = testTransaction;
     component.childTransaction = child1;
     component.childTransaction_2 = child2;
     component.childContactIdMap_2 = { contact_1: new Subject(), contact_2: new Subject(), contact_3: new Subject() };
@@ -103,7 +116,7 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.transactionType?.title).toBe('Loan Received from Bank');
+    expect(component.transactionType()?.title).toBe('Loan Received from Bank');
   });
 
   describe('getConfirmations()', () => {
@@ -120,19 +133,20 @@ describe('TripleTransactionTypeBaseComponent', () => {
     });
 
     it('should return false if reject parent confirmation', async () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
+      fixture.detectChanges();
       const v = await component.getConfirmations();
       expect(v).toBe(false);
     });
 
     it('should confirm with user', async () => {
-      component.transaction!.contact_1 = testContact();
+      host.transaction!.contact_1 = testContact();
       await component.getConfirmations();
       expect(confirmSpy).toHaveBeenCalled();
     });
 
     it('should confirm with user 1 time if only primary transaction contact updated', async () => {
-      component.transaction!.contact_1 = testContact();
+      host.transaction!.contact_1 = testContact();
       await component.getConfirmations();
 
       expect(confirmSpy).toHaveBeenCalledTimes(1);
@@ -176,16 +190,16 @@ describe('TripleTransactionTypeBaseComponent', () => {
     it('should run the super version and then update data if ', () => {
       if (!component.childTransaction_2 || !component.transaction) throw new Error('Bad test');
       component.childTransaction_2.transactionType.useParentContact = true;
-      component.transaction.contact_1 = testContact();
+      host.transaction!.contact_1 = testContact();
       expect(
         component.childTransaction_2?.transactionType?.getUseParentContact(component.childTransaction_2),
       ).toBeTruthy();
-      expect(component.transaction.contact_1).toBeTruthy();
+      expect(host.transaction!.contact_1).toBeTruthy();
       const spy = vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
-      const selectItem: SelectItem<Contact> = { value: component.transaction.contact_1 };
+      const selectItem: SelectItem<Contact> = { value: component.transaction()!.contact_1! };
       component.updateFormWithPrimaryContact(selectItem);
       expect(spy).toHaveBeenCalled();
-      expect(component.childTransaction_2.contact_1).toEqual(component.transaction.contact_1);
+      expect(component.childTransaction_2.contact_1).toEqual(component.transaction()!.contact_1);
     });
   });
 
@@ -248,10 +262,11 @@ describe('TripleTransactionTypeBaseComponent', () => {
 
   describe('save', () => {
     it('should bail out if transactions are invalid', async () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
+      fixture.detectChanges();
       try {
         await component.submitForm(
-          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()),
         );
       } catch (error: any) {
         expect(error.message).toBe('FECfile+: No transactions submitted for triple-entry transaction form.');

@@ -12,7 +12,6 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
-import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
@@ -54,8 +53,9 @@ export abstract class TripleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    if (this.transaction) {
-      this.childTransaction_2 = this.getChildTransaction(this.transaction, 1);
+    const transaction = this.transaction();
+    if (transaction) {
+      this.childTransaction_2 = this.getChildTransaction(transaction, 1);
     } else {
       throw new Error('FECfile+: Transaction not found for triple-entry transaction form');
     }
@@ -80,7 +80,7 @@ export abstract class TripleTransactionTypeBaseComponent
       this.childTransactionType_2
         ?.getInheritedFields(this.childTransaction_2)
         ?.includes('memo_code' as TemplateMapKeyType) &&
-      this.transactionType
+      this.transactionType()
     ) {
       this.memoHasOptional_2$ = this.memoHasOptional$;
     } else {
@@ -101,7 +101,7 @@ export abstract class TripleTransactionTypeBaseComponent
   override async submit(navigationEvent: NavigationEvent): Promise<void> {
     this.updateContactData();
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
-      this.transaction,
+      this.transaction(),
       this.activeReportId,
       this.form,
       this.formProperties,
@@ -131,8 +131,9 @@ export abstract class TripleTransactionTypeBaseComponent
    * update all contacts with changes from form.
    */
   protected override updateContactData() {
-    if (this.transaction && this.childTransaction && this.childTransaction_2) {
-      TransactionContactUtils.updateContactsWithForm(this.transaction, this.templateMap, this.form);
+    const transaction = this.transaction();
+    if (transaction && this.childTransaction && this.childTransaction_2) {
+      TransactionContactUtils.updateContactsWithForm(transaction, this.templateMap(), this.form);
       TransactionContactUtils.updateContactsWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
       TransactionContactUtils.updateContactsWithForm(
         this.childTransaction_2,
@@ -140,7 +141,7 @@ export abstract class TripleTransactionTypeBaseComponent
         this.childForm_2,
       );
     } else {
-      this.store.dispatch(singleClickEnableAction());
+      this.storeService.enableSingleClick();
       throw new Error('FECfile+: No transactions submitted for triple-entry transaction form.');
     }
   }
@@ -172,9 +173,9 @@ export abstract class TripleTransactionTypeBaseComponent
     super.updateFormWithPrimaryContact(selectItem);
     if (
       this.childTransaction_2?.transactionType?.getUseParentContact(this.childTransaction_2) &&
-      this.transaction?.contact_1
+      this.transaction()?.contact_1
     ) {
-      this.childTransaction_2.contact_1 = this.transaction.contact_1;
+      this.childTransaction_2.contact_1 = this.transaction()?.contact_1;
       this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
     }
   }

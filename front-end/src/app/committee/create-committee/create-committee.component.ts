@@ -8,13 +8,13 @@ import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
+import { StoreService } from 'app/shared/services/store.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import {
   setCommitteeAccountDetailsAction,
   unsetCommitteeAccountDetailsAction,
 } from 'app/store/committee-account.actions';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -39,6 +39,7 @@ import { InputGroup } from 'primeng/inputgroup';
 export class CreateCommitteeComponent {
   private readonly router = inject(Router);
   protected readonly store = inject(Store);
+  private readonly storeService = inject(StoreService);
   protected readonly committeeAccountService = inject(CommitteeAccountService);
   protected readonly messageService = inject(MessageService);
   protected readonly confirmationService = inject(ConfirmationService);
@@ -71,7 +72,7 @@ export class CreateCommitteeComponent {
         )
         .finally(() => {
           this.loading.set(false);
-          this.store.dispatch(singleClickEnableAction());
+          this.storeService.enableSingleClick();
         });
     }
   }
@@ -99,7 +100,7 @@ export class CreateCommitteeComponent {
     } catch {
       this.selectedCommittee.set(undefined);
       this.unableToCreateAccount.set(true);
-      this.store.dispatch(singleClickEnableAction());
+      this.storeService.enableSingleClick();
     }
   }
 }

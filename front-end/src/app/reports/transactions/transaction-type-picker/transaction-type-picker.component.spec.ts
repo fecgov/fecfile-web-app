@@ -23,7 +23,6 @@ import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transact
 import { Form3 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 
 describe('TransactionTypePickerComponent', () => {
@@ -124,7 +123,6 @@ describe('TransactionTypePickerComponent', () => {
       { selector: selectCommitteeAccount, value: testPTY() },
       { selector: selectUserLoginData, value: testUserLoginData() },
       { selector: selectActiveReport, value: testF3() },
-      { selector: selectNavigationEvent, value: testNavigationEvent() },
     ];
     beforeEach(async () => {
       routeParams$ = new BehaviorSubject({ category: 'receipt' });

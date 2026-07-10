@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -6,7 +6,6 @@ import { LoginService } from 'app/shared/services/login.service';
 import { UsersService } from 'app/shared/services/users.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { Checkbox } from 'primeng/checkbox';
@@ -15,6 +14,7 @@ import { environment } from 'environments/environment';
 import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
 import { NgComponentOutlet } from '@angular/common';
+import { StoreService } from 'app/shared/services/store.service';
 
 export const SECURITY_CONSENT_VERSION = '1';
 
@@ -26,6 +26,7 @@ export const SECURITY_CONSENT_VERSION = '1';
 })
 export class SecurityNoticeComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly storeService = inject(StoreService);
   private readonly router = inject(Router);
   public readonly loginService = inject(LoginService);
   private readonly usersService = inject(UsersService);
@@ -35,6 +36,7 @@ export class SecurityNoticeComponent implements OnInit {
   readonly userLoginData = this.store.selectSignal(selectUserLoginData);
 
   readonly hasScrolledToBottom = signal(false);
+  readonly disabled = computed(() => !this.hasScrolledToBottom() || this.storeService.singleClickDisabled());
 
   readonly form = new FormGroup(
     {
@@ -72,11 +74,12 @@ export class SecurityNoticeComponent implements OnInit {
 
   async signConsentForm() {
     if (!this.hasScrolledToBottom()) return;
+    this.storeService.disableSingleClick();
     this.formSubmitted = true;
     blurActiveInput(this.form);
     if (this.form.invalid) printFormErrors(this.form);
     if (this.form.invalid || !this.userLoginData()) {
-      this.store.dispatch(singleClickEnableAction());
+      this.storeService.enableSingleClick();
       return;
     }
     const updatedUserLoginData = {
@@ -96,5 +99,6 @@ export class SecurityNoticeComponent implements OnInit {
       }),
     );
     this.router.navigate(['/select-committee']);
+    this.storeService.enableSingleClick();
   }
 }

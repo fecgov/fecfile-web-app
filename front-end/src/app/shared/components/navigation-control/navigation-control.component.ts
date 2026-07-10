@@ -19,28 +19,25 @@ import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transacti
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
-import { Store } from '@ngrx/store';
-import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
-import { singleClickDisableAction } from 'app/store/single-click.actions';
+import { StoreService } from 'app/shared/services/store.service';
 
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
   styleUrls: ['./navigation-control.component.scss'],
-  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule, SplitButtonModule],
+  imports: [ButtonModule, Ripple, PopoverModule, FormsModule, SplitButtonModule],
 })
 export class NavigationControlComponent {
-  private readonly store = inject(Store);
+  private readonly store = inject(StoreService);
   readonly navigationControl = input.required<NavigationControl>();
-  readonly transaction = input<Transaction | undefined>(undefined);
+  readonly transaction = input<Transaction>();
 
   readonly dropdownOptions = derivedAsync(
     () => {
@@ -70,15 +67,27 @@ export class NavigationControlComponent {
         setTimeout(() => (this.isProcessing = false), 1000);
       },
     },
+    {
+      label: 'Clone',
+      disabled: this.isProcessing,
+      command: () => {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+        this.saveAndClone();
+        setTimeout(() => (this.isProcessing = false), 1000);
+      },
+    },
   ];
 
   // This could be a signal but the transaction data is getting updated out of sync
-  readonly isDisabled = () => !!this.navigationControl()?.disabledCondition(this.transaction());
+  readonly isDisabled = computed(
+    () => this.navigationControl()?.disabledCondition(this.transaction()) || this.store.singleClickDisabled(),
+  );
   readonly controlType = ControlType;
   readonly type = computed(() => this.navigationControl().controlType);
 
   saveAndAddAnother() {
-    this.store.dispatch(singleClickDisableAction());
+    this.store.disableSingleClick();
     const navControl = this.navigationControl();
     const transaction = this.transaction();
     if (!transaction) return;
@@ -88,7 +97,21 @@ export class NavigationControlComponent {
       cloneInstance(transaction),
       transaction.transaction_type_identifier as TransactionTypes,
     );
-    this.store.dispatch(navigationEventSetAction(navigationEvent));
+    this.store.navigate(navigationEvent);
+  }
+
+  saveAndClone() {
+    this.store.disableSingleClick();
+    const navControl = this.navigationControl();
+    const transaction = this.transaction();
+    if (!transaction) return;
+    const navigationEvent = new NavigationEvent(
+      navControl.navigationAction,
+      NavigationDestination.CLONE,
+      cloneInstance(transaction),
+      transaction.transaction_type_identifier as TransactionTypes,
+    );
+    this.store.navigate(navigationEvent);
   }
 
   clickButton(): void {
@@ -99,6 +122,7 @@ export class NavigationControlComponent {
      * if the navigation destination is ANOTHER, then the destination transaction type is the
      *    same as the current transaction
      */
+    this.store.singleClickDisabled();
     let destinationTransactionType: TransactionTypes | undefined;
     const navControl = this.navigationControl();
     const transaction = this.transaction();
@@ -122,14 +146,14 @@ export class NavigationControlComponent {
       cloneInstance(transaction),
       destinationTransactionType,
     );
-    this.store.dispatch(navigationEventSetAction(navigationEvent));
+    this.store.navigate(navigationEvent);
   }
 
   onDropdownChange(event: { value: NavigationEvent }): void {
     // Handle click event for dropdown version of control
     if (event.value.action) {
       const navigationEvent = cloneNavigationEvent(event.value);
-      this.store.dispatch(navigationEventSetAction(navigationEvent));
+      this.store.navigate(navigationEvent);
     }
   }
 

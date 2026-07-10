@@ -19,11 +19,23 @@ import { ScheduleATransactionTypes } from '../../../shared/models/scha-transacti
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { provideZoneChangeDetection } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import { Transaction } from 'app/shared/models/transaction.model';
+
+@Component({
+  imports: [ReattRedesTransactionTypeDetailComponent],
+  standalone: true,
+  template: `<app-reatt-redes-transaction-type-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ReattRedesTransactionTypeDetailComponent);
+  transaction?: Transaction;
+}
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
+  let host: TestHostComponent;
   let component: ReattRedesTransactionTypeDetailComponent;
-  let fixture: ComponentFixture<ReattRedesTransactionTypeDetailComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
 
   beforeEach(async () => {
@@ -57,12 +69,14 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
     vi.spyOn(component, 'getChildTransaction').mockImplementation(() => transaction);
-    component.transaction = transaction;
-    component.templateMap = testTemplateMap();
-    component.ngOnInit();
+
+    transaction.transactionType.templateMap = testTemplateMap();
+    host.transaction = transaction;
+    fixture.detectChanges();
   });
 
   it('should create', () => {

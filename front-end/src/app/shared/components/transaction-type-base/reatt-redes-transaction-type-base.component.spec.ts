@@ -23,12 +23,24 @@ import { provideRouter } from '@angular/router';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Form3X } from 'app/shared/models';
-import { provideZoneChangeDetection } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
+
+@Component({
+  imports: [ReattRedesTransactionTypeDetailComponent],
+  standalone: true,
+  template: `<app-reatt-redes-transaction-type-detail [transaction]="transaction" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ReattRedesTransactionTypeDetailComponent);
+  transaction?: Transaction;
+}
 
 describe('ReattTransactionTypeBaseComponent', () => {
+  let host: TestHostComponent;
   let component: ReattRedesTransactionTypeDetailComponent;
-  let fixture: ComponentFixture<ReattRedesTransactionTypeDetailComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionService;
@@ -71,14 +83,15 @@ describe('ReattTransactionTypeBaseComponent', () => {
     });
     transactionService = TestBed.inject(TransactionService);
 
-    fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
-    component = fixture.componentInstance;
-    component.transaction = testTransaction;
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    host.transaction = testTransaction;
     component.childTransaction = testTransaction;
     let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
     reattRedes.reports = [testActiveReport()];
     reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
-    component.transaction.reatt_redes = reattRedes;
+    host.transaction.reatt_redes = reattRedes;
     component.ngOnInit();
   });
 
@@ -94,7 +107,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       const primaryContactSpy = vi.spyOn(component, 'updateFormWithPrimaryContact');
       const updateElectionDataSpy = vi.spyOn(component, 'updateElectionData');
 
-      (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      (host.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
       component.ngOnInit();
       expect(overlaySpy).toHaveBeenCalledTimes(1);
       expect(childFormSpy).toHaveBeenCalledTimes(1);
@@ -109,7 +122,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       const navSpy = vi.spyOn(component, 'navigateTo').mockResolvedValue(true);
       component.ngOnInit();
       await component.submit(
-        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()),
       );
 
       expect(multiSaveSpy).toHaveBeenCalledTimes(1);
@@ -143,8 +156,8 @@ describe('ReattTransactionTypeBaseComponent', () => {
         beneficiary_candidate_district: 'A',
         category_code: 'A',
       };
-      component.transaction = RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      expect(component.transaction.transactionType.templateMap).toBeTruthy();
+      host.transaction = RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
+      expect(host.transaction.transactionType.templateMap).toBeTruthy();
       component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
       component.childTransaction.reatt_redes = SchBTransaction.fromJSON(data);
       component.childForm.addControl('election_code', new SubscriptionFormControl(''));

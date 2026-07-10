@@ -1,10 +1,4 @@
-@if (
-  isEditable &&
-  !transactionType?.getUseParentContact(transaction) &&
-  !transactionType?.hideContactLookup &&
-  transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_MADE' &&
-  transaction?.transaction_type_identifier !== 'LOAN_REPAYMENT_RECEIVED'
-) {
+@if (showLookup()) {
   <div class="grid">
     <div class="col-12">
       <div class="field">
@@ -12,7 +6,7 @@
         <app-transaction-contact-lookup
           id="contact_1_lookup"
           contactProperty="contact_1"
-          [transaction]="transaction"
+          [transaction]="transaction()"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [contactTypeOptions]="contactTypeOptions"
@@ -25,154 +19,154 @@
   </div>
 }
 
-@if (transaction?.contact_1) {
+@if (transaction()?.contact_1) {
   @switch (entityType) {
     @case (ContactTypes.ORGANIZATION) {
       <app-committee-input
         [form]="form"
         [formSubmitted]="formSubmitted"
-        [templateMap]="templateMap"
+        [templateMap]="templateMap()"
         entityRole="ORGANIZATION"
-        [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+        [includeFecId]="transactionType()?.hasCommitteeFecId() ?? false"
       />
     }
     @case (ContactTypes.COMMITTEE) {
       <app-committee-input
         [form]="form"
         [formSubmitted]="formSubmitted"
-        [templateMap]="templateMap"
+        [templateMap]="templateMap()"
         entityRole="COMMITTEE"
-        [includeFecId]="transactionType?.hasCommitteeFecId() ?? false"
+        [includeFecId]="transactionType()?.hasCommitteeFecId() ?? false"
       />
     }
     @case (ContactTypes.INDIVIDUAL) {
-      <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
+      <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap()" />
     }
   }
 
   <hr class="solid" />
   <app-section-header [isSingle]="isSingle" text="Address" />
-  <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
-  @if (transactionType?.hasEmployeeFields() && entityType === ContactTypes.INDIVIDUAL) {
+  <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap()" />
+  @if (transactionType()?.hasEmployeeFields() && entityType === ContactTypes.INDIVIDUAL) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Employer" />
-    <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap" />
+    <app-employer-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap()" />
   }
   @if (candidateInfoPosition === 'high') {
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   }
-  @if (transaction?.transactionType?.hasAmountInput) {
+  @if (transactionType()?.hasAmountInput) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transaction?.transactionType?.amountInputHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType()?.amountInputHeader" />
     <app-amount-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
+      [templateMap]="templateMap()"
       [contributionAmountReadOnly]="contributionAmountReadOnly"
-      [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
-      [showAggregate]="!!transaction?.transactionType?.showAggregate"
-      [showCalendarYTD]="!!transaction?.transactionType?.showCalendarYTD"
-      [showPayeeCandidateYTD]="!!transaction?.transactionType?.showPayeeCandidateYTD"
-      [transaction]="transaction"
+      [negativeAmountValueOnly]="!!transactionType()?.negativeAmountValueOnly"
+      [showAggregate]="!!transactionType()?.showAggregate"
+      [showCalendarYTD]="!!transactionType()?.showCalendarYTD"
+      [showPayeeCandidateYTD]="!!transactionType()?.showPayeeCandidateYTD"
+      [transaction]="transaction()"
       [memoHasOptional]="(memoHasOptional$ | async)!"
     />
   }
-  @if (transaction?.transactionType?.hasDebtInput) {
+  @if (transactionType()?.hasDebtInput) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transaction?.transactionType?.debtInputHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType()?.debtInputHeader" />
     <app-debt-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      [transaction]="transaction"
+      [templateMap]="templateMap()"
+      [transaction]="transaction()"
     />
   }
-  @if (transactionType?.hasLoanFinanceFields()) {
+  @if (transactionType()?.hasLoanFinanceFields()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.amountInputHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType()?.amountInputHeader" />
     <app-loan-info-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
+      [templateMap]="templateMap()"
       [readonly]="false"
-      [transaction]="transaction"
+      [transaction]="transaction()"
     />
   }
-  @if (transactionType?.hasLoanTermsFields() && !transactionType?.hasLoanAgreement) {
+  @if (transactionType()?.hasLoanTermsFields() && !transactionType()?.hasLoanAgreement) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Terms" />
     <app-loan-terms-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      [transaction]="transaction"
+      [templateMap]="templateMap()"
+      [transaction]="transaction()"
     />
   }
-  @if (transactionType?.hasLoanAgreement) {
+  @if (transactionType()?.hasLoanAgreement) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Loan information" />
     <app-loan-agreement-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      [transaction]="transaction"
+      [templateMap]="templateMap()"
+      [transaction]="transaction()"
       (contactSelect)="updateFormWithSecondaryContact($event)"
     />
   }
   @if (candidateInfoPosition === 'low') {
     <ng-container *ngTemplateOutlet="candidateInfo"></ng-container>
   }
-  @if (transactionType?.hasAdditionalInfo) {
+  @if (transactionType()?.hasAdditionalInfo) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Additional information" />
     <app-additional-info-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
-      [transaction]="transaction"
+      [templateMap]="templateMap()"
+      [transaction]="transaction()"
       (designatingCommitteeSelect)="updateFormWithQuaternaryContact($event)"
       (designatingCommitteeClear)="clearFormQuaternaryContact()"
       (subordinateCommitteeSelect)="updateFormWithQuinaryContact($event)"
       (subordinateCommitteeClear)="clearFormQuinaryContact()"
     />
   }
-  @if (transactionType?.hasSignature1()) {
+  @if (transactionType()?.hasSignature1()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.signatoryOneHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType()?.signatoryOneHeader" />
     <app-signature-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
+      [templateMap]="templateMap()"
       class="signatory_1_input"
       templateMapKeyPrefix="signatory_1"
     />
   }
-  @if (transactionType?.hasSignature2()) {
+  @if (transactionType()?.hasSignature2()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.signatoryTwoHeader" />
+    <app-section-header [isSingle]="isSingle" [text]="transactionType()?.signatoryTwoHeader" />
     <app-signature-input
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
+      [templateMap]="templateMap()"
       class="signatory_2_input"
       templateMapKeyPrefix="signatory_2"
     />
   }
-  @if (transactionType?.getFooter(transaction)) {
+  @if (transactionType()?.getFooter(transaction())) {
     <hr class="solid" />
     <div class="grid">
       <span class="transaction-type-footer">
-        <b>{{ transactionType?.getFooter(transaction) }}</b>
+        <b>{{ transactionType()?.getFooter(transaction()) }}</b>
       </span>
     </div>
   }
 }
 
 <ng-template #candidateInfo>
-  @if (transactionType?.hasCommitteeOrCandidateInformation()) {
+  @if (transactionType()?.hasCommitteeOrCandidateInformation()) {
     <hr class="solid" />
-    <app-section-header [isSingle]="isSingle" [text]="transactionType?.committeeCandidateHeader" />
-    @if (transactionType?.contact3IsRequired) {
+    <app-section-header [isSingle]="isSingle" [text]="transactionType()?.committeeCandidateHeader" />
+    @if (transactionType()?.contact3IsRequired) {
       <div class="candidate_committee_lookup">
         <div class="grid">
           <div class="col-12">
@@ -182,7 +176,7 @@
                 id="contact_3_lookup"
                 aria-label="contact_3_lookup"
                 contactProperty="contact_3"
-                [transaction]="transaction"
+                [transaction]="transaction()"
                 [form]="form"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="committeeContactTypeOptions"
@@ -191,42 +185,42 @@
             </div>
           </div>
         </div>
-        @if (transaction?.contact_3) {
+        @if (transaction()?.contact_3) {
           <app-committee-input
             [form]="form"
             [formSubmitted]="formSubmitted"
-            [templateMap]="templateMap"
+            [templateMap]="templateMap()"
             entityRole="COMMITTEE"
             [includeFecId]="true"
             [readonly]="false"
-            [transaction]="transaction"
+            [transaction]="transaction()"
             [tertiaryContact]="true"
           />
         }
       </div>
-    } @else if (transaction?.transactionType?.hasCandidateCommittee) {
+    } @else if (transactionType()?.hasCandidateCommittee) {
       <app-committee-input
         [form]="form"
         [formSubmitted]="formSubmitted"
-        [templateMap]="templateMap"
+        [templateMap]="templateMap()"
         entityRole="COMMITTEE"
         [includeFecId]="true"
         [readonly]="true"
-        [transaction]="transaction"
+        [transaction]="transaction()"
       />
     }
-    @if (transaction?.transactionType?.hasSupportOpposeCode()) {
+    @if (transactionType()?.hasSupportOpposeCode()) {
       <app-support-oppose-input [form]="form" [formSubmitted]="formSubmitted" />
     }
 
-    @if (transaction?.transactionType?.hasCandidateInformation(form)) {
-      @if (!transactionType?.hideContactLookup) {
+    @if (transactionType()?.hasCandidateInformation(form)) {
+      @if (!transactionType()?.hideContactLookup) {
         <div class="grid candidate_committee_lookup">
           <div class="col-12">
             <div class="field">
-              <span class="span-label"
-                >LOOKUP
-                @if (!transaction?.transactionType?.contact2IsRequired(form)) {
+              <span class="span-label">
+                LOOKUP
+                @if (!transactionType()?.contact2IsRequired(form)) {
                   <span class="paren-label">(OPTIONAL)</span>
                 }
               </span>
@@ -234,7 +228,7 @@
                 id="contact_2_lookup"
                 aria-labelledby="contact_2_lookup"
                 contactProperty="contact_2"
-                [transaction]="transaction"
+                [transaction]="transaction()"
                 [form]="form"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="candidateContactTypeOptions"
@@ -244,27 +238,27 @@
           </div>
         </div>
       }
-      @if (transaction?.contact_2) {
+      @if (transaction()?.contact_2) {
         <div class="candidate_committee_lookup">
           <app-candidate-input
-            [transaction]="transaction"
+            [transaction]="transaction()"
             [form]="form"
             [formSubmitted]="formSubmitted"
-            [templateMap]="templateMap"
-            [hasCandidateOfficeInput]="transactionType?.hasCandidateOffice() ?? false"
+            [templateMap]="templateMap()"
+            [hasCandidateOfficeInput]="transactionType()?.hasCandidateOffice() ?? false"
           />
         </div>
       }
     }
   }
-  @if (transactionType?.hasElectionInformation(activeReport().report_type)) {
+  @if (transactionType()?.hasElectionInformation(activeReport().report_type)) {
     <hr class="solid" />
     <app-section-header [isSingle]="isSingle" text="Election information" />
     <app-election-input
-      [transaction]="transaction"
+      [transaction]="transaction()"
       [form]="form"
       [formSubmitted]="formSubmitted"
-      [templateMap]="templateMap"
+      [templateMap]="templateMap()"
     />
   }
 </ng-template>

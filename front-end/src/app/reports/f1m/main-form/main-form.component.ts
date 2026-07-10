@@ -8,7 +8,6 @@ import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.m
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputText } from 'primeng/inputtext';
@@ -249,7 +248,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     const confirmed = await this.getConfirmations();
     // if every confirmation was accepted
     if (confirmed) super.submit(jump);
-    else this.store.dispatch(singleClickEnableAction());
+    else this.storeService.enableSingleClick();
   }
 
   updateContactsWithForm(report: Form1M, form: FormGroup) {
