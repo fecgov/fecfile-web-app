@@ -21,4 +21,8 @@ export abstract class CONDUIT_EARMARK extends SchATransactionType {
   override footer = undefined;
   override contactTitle = 'Contact';
   override showAggregate = false;
+
+  override get isReattributable(): boolean {
+    return false;
+  }
 }

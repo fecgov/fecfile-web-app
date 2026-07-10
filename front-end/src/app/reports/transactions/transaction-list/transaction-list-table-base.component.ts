@@ -169,13 +169,7 @@ export abstract class TransactionListTableBaseComponent
     new TableAction(
       'Reattribute',
       this.createReattribution.bind(this),
-      (transaction: TransactionListRecord) => {
-        return (
-          this.reportIsEditable() &&
-          !transaction.parent_transaction_id &&
-          ReattRedesUtils.canReattribute(transaction, this.report().report_type)
-        );
-      },
+      (transaction: TransactionListRecord) => this.reportIsEditable() && ReattRedesUtils.canReattribute(transaction),
       () => true,
     ),
     new TableAction(

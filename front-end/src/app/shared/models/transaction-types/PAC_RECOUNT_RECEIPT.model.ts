@@ -17,6 +17,10 @@ export class PAC_RECOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

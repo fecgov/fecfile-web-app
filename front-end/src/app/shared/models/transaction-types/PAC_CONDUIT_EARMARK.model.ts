@@ -16,6 +16,10 @@ export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
     false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;

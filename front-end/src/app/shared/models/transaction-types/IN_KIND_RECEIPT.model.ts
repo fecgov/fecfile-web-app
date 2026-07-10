@@ -18,7 +18,7 @@ export class IN_KIND_RECEIPT extends IN_KIND {
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.IN_KIND_OUT];
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
 
-  override get isReattributable() {
+  override get isReattributable(): boolean {
     return false;
   }
 

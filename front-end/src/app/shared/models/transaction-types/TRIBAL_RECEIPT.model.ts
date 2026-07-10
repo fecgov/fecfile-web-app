@@ -17,6 +17,10 @@ export class TRIBAL_RECEIPT extends SchATransactionType {
     return 'Tribal Receipt';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
