@@ -1,12 +1,10 @@
-@if (fields().country) {
-  <app-select-input
-    class="grid-col-6"
-    labelId="country-label"
-    label="COUNTRY/<wbr />REGION"
-    [formField]="fields().country!"
-    [options]="countryOptions"
-  />
-}
+<app-select-input
+  class="grid-col-6"
+  labelId="country-label"
+  label="COUNTRY/<wbr />REGION"
+  [formField]="fields().country!"
+  [options]="countryOptions"
+/>
 
 <app-text-input
   class="start-row grid-col-6"
@@ -17,7 +15,6 @@
 <app-text-input
   class="grid-col-6"
   label="APARTMENT, SUITE, ETC."
-  [optional]="true"
   inputId="street_2"
   [formField]="fields().street_2"
 />

@@ -3,14 +3,13 @@ import { NameFields, NameFormComponent, populateName } from '../../signal-inputs
 import {
   Address,
   AddressFormComponent,
-  addressSchema,
   defaultAddressData,
   populateAddress,
 } from '../../signal-inputs/address-form/address-form.component';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
-import { apply, FieldTree, FormField, schema } from '@angular/forms/signals';
+import { FieldTree, FormField, schema } from '@angular/forms/signals';
 import { schema as IndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
-import { generatePathMapFromForm, schemaFormValidatorBuilder } from 'app/shared/utils/signal-schema.utils';
+import { generatePathMapFromForm, validateAllFields } from 'app/shared/utils/signal-schema.utils';
 import { ContactTypes, type Contact } from 'app/shared/models/contact.model';
 import { TelephoneInputComponent } from '../../signal-inputs/telephone-input/telephone-input.component';
 
@@ -26,10 +25,7 @@ export interface IndividualContactData {
 export const defaultIndividualData = {
   id: null,
   name: { last_name: '', first_name: '', middle_name: '', prefix: '', suffix: '' },
-  address: {
-    ...defaultAddressData,
-    country: '',
-  },
+  address: { ...defaultAddressData },
   employer: '',
   occupation: '',
   telephone: null,
@@ -49,8 +45,8 @@ export function populateIndividual(contact: Contact): IndividualContactData {
 
 export const individualSchema = schema<IndividualContactData>((schemaPath) => {
   const schemaFieldMap = generatePathMapFromForm(defaultIndividualData);
-  schemaFormValidatorBuilder(IndividualSchema, schemaPath, schemaFieldMap);
-  apply(schemaPath.address, addressSchema);
+  const crossFieldDependencies = { zip: [schemaPath.address.country] };
+  validateAllFields(schemaPath, schemaPath, IndividualSchema, schemaFieldMap, crossFieldDependencies);
 });
 
 @Component({

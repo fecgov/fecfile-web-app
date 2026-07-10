@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { formatCurrency } from '@angular/common';
+import { resource, untracked } from '@angular/core';
 import {
   SchemaPathTree,
   PathKind,
@@ -7,11 +9,152 @@ import {
   maxLength,
   pattern,
   createMetadataKey,
+  validateAsync,
+  SchemaPath,
+  ValidationError,
 } from '@angular/forms/signals';
-import { JsonSchema } from 'fecfile-validate';
+import { JsonSchema, validate, ValidationError as FecValidationError } from 'fecfile-validate';
 
 export const requiredMessage = 'This is a required field';
+export const patternErrorMessage = 'This field contains characters that are not allowed.';
 export const PLACEHOLDER = createMetadataKey<string>();
+
+export type CrossFieldDependencies = Record<string, SchemaPath<any>[]>;
+
+export function validateAllFields<T>(
+  schemaPath: SchemaPath<any>,
+  rootPath: SchemaPath<T>,
+  jsonSchema: JsonSchema,
+  schemaFieldMap: Record<string, string[]>,
+  dependencies: CrossFieldDependencies = {},
+) {
+  Object.keys(jsonSchema.properties).forEach((key) => {
+    const path = schemaFieldMap[key];
+    if (!path) return;
+
+    const fieldPath = resolveFieldPath(schemaPath, path);
+    if (!fieldPath) return;
+    const fieldDeps = dependencies[key] || [];
+    if (fieldDeps.length > 0) console.log('fieldDeps', fieldDeps);
+    validateAJV(fieldPath, jsonSchema, rootPath, key, fieldDeps);
+  });
+}
+
+export function validateAJV<T>(
+  schemaPath: SchemaPath<string>,
+  jsonSchema: JsonSchema,
+  rootPath: SchemaPath<T>,
+  property: string,
+  dependencies: SchemaPath<any>[] = [],
+) {
+  validateAsync(schemaPath, {
+    params: ({ value, valueOf }) => {
+      const data = untracked(() => flattenPayload(valueOf(rootPath)));
+      dependencies.forEach((dep) => {
+        const depValue = valueOf(dep);
+        console.log(dep, depValue);
+      });
+      return {
+        data,
+        value: value(),
+      };
+    },
+
+    factory: (params) =>
+      resource({
+        params,
+        loader: async ({ params }) => {
+          const errors = await validate(jsonSchema, params.data, [property]);
+          return {
+            isValid: errors.length === 0,
+            errors: errors || [],
+            value: params.value,
+          };
+        },
+      }),
+    onSuccess: (result) => {
+      if (result.isValid) return null;
+      return parseErrors(result.errors, result.value);
+    },
+
+    onError: () => ({
+      kind: 'validatorError',
+      message: 'An error occurred during asynchronous AJV validation execution.',
+    }),
+  });
+}
+
+function parseErrors(errors: FecValidationError[], value: string): ValidationError[] {
+  const results: ValidationError[] = [];
+  errors.forEach((error) => {
+    if (error.keyword === 'required' || (error.keyword === 'type' && error['params']['type'] === 'string')) {
+      results.push({ kind: 'required', message: requiredMessage });
+    }
+    if (error.keyword === 'minLength') {
+      results.push({
+        kind: 'minlength',
+        message: `This field must contain at least ${error.params['limit']} alphanumeric characters.`,
+      });
+    }
+    if (error.keyword === 'maxLength' || error.keyword === 'maximum') {
+      results.push({
+        kind: 'maxlength',
+        message: `This field cannot contain more than ${error.params['limit']} alphanumeric characters.`,
+      });
+    }
+    if (error.keyword === 'minimum') {
+      results.push({
+        kind: 'min',
+        message: `This field must be greater than or equal to ${formatCurrency(
+          error.params['limit'],
+          'en-US',
+          '$',
+          'USD',
+        )}.`,
+      });
+    }
+    if (error.keyword === 'exclusiveMinimum') {
+      results.push({
+        kind: 'exclusiveMin',
+        message: `This field must be greater than ${formatCurrency(error.params['limit'], 'en-US', '$', 'USD')}.`,
+      });
+    }
+    if (error.keyword === 'maximum') {
+      results.push({
+        kind: 'max',
+        message: `This field must be less than or equal to ${formatCurrency(
+          error.params['limit'],
+          'en-US',
+          '$',
+          'USD',
+        )}.`,
+      });
+    }
+    if (error.keyword === 'exclusiveMaximum') {
+      results.push({
+        kind: 'exclusiveMax',
+        message: `This field must be less than ${formatCurrency(error.params['limit'], 'en-US', '$', 'USD')}.`,
+      });
+    }
+    if (error.keyword === 'pattern') {
+      results.push({ kind: 'pattern', message: patternErrorMessage });
+    }
+    if (error.keyword === 'enum') {
+      results.push({ kind: 'pattern', message: patternErrorMessage });
+    }
+    if (error.keyword === 'type' && error.params['type'] === 'number') {
+      if (value === '' || value === null || value === undefined) {
+        results.push({ kind: 'required', message: requiredMessage });
+      } else {
+        results.push({ kind: 'pattern', message: patternErrorMessage });
+      }
+    }
+    if (error.keyword === 'type' && error.params['type'].includes('boolean')) {
+      results.push({ kind: 'pattern', message: patternErrorMessage });
+    }
+  });
+  return results;
+}
 
 export function schemaFormValidatorBuilder<T>(
   schema: JsonSchema,
@@ -146,6 +289,6 @@ export function flattenPayload(data: any): Record<string, any> {
   return flat2;
 }
 
-function resolveFieldPath<T>(schemaPath: SchemaPathTree<T, PathKind.Root>, path: string[]): any {
+function resolveFieldPath<T>(schemaPath: SchemaPathTree<T, PathKind.Root> | SchemaPath<T>, path: string[]): any {
   return path.reduce((current: any, key: string) => current?.[key], schemaPath);
 }

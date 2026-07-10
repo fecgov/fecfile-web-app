@@ -10,7 +10,7 @@ import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
     <label [for]="inputId()">
       {{ label() }}
       @if (optional()) {
-        <span class="paren-label">(OPTIONAL)</span>
+        <span class="paren-label"> (OPTIONAL)</span>
       }
     </label>
     <input
@@ -38,6 +38,7 @@ export class TextInput implements FormValueControl<string> {
   readonly invalid = input(false);
   readonly errors = input<readonly ValidationError.WithOptionalFieldTree[]>([]);
   readonly forceUpper = input(false);
+  readonly disabled = input(false);
   readonly optional = input(false);
 
   readonly placeholder = computed(() => this.field?.state()?.metadata(PLACEHOLDER)?.() ?? '');

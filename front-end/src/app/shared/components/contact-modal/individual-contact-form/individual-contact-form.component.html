@@ -3,19 +3,21 @@
 
 <h3>Address</h3>
 <app-address-form [fields]="fields().address" />
-<app-telephone-input [formField]="fields().telephone" inputId="telephone" />
+<app-telephone-input class="grid-col-3" [formField]="fields().telephone" inputId="telephone" />
 
 <hr />
 <h3>Employer</h3>
 <app-text-input
   class="grid-col-6 start-row"
-  label="EMPLOYER (OPTIONAL)"
+  label="EMPLOYER"
   inputId="employer"
+  [optional]="true"
   [formField]="fields().employer"
 />
 <app-text-input
   class="grid-col-6"
-  label="OCCUPATION (OPTIONAL)"
+  label="OCCUPATION"
   inputId="occupation"
+  [optional]="true"
   [formField]="fields().occupation"
 />

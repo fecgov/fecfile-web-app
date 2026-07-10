@@ -11,7 +11,7 @@ export interface Address {
   city: string;
   state: string;
   zip: string;
-  country?: string;
+  country: string;
 }
 
 export const defaultAddressData: Address = {
@@ -20,6 +20,7 @@ export const defaultAddressData: Address = {
   city: '',
   state: '',
   zip: '',
+  country: '',
 };
 
 export function populateAddress(contact: Contact): Address {
