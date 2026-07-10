@@ -98,7 +98,9 @@ export const CLONEABLE_TRANSACTION_TYPES = new Set<TransactionTypes>([
   ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
 ]);
 
-function isCloneableTransactionType(transactionTypeIdentifier: string | undefined): transactionTypeIdentifier is TransactionTypes {
+function isCloneableTransactionType(
+  transactionTypeIdentifier: string | undefined,
+): transactionTypeIdentifier is TransactionTypes {
   return !!transactionTypeIdentifier && CLONEABLE_TRANSACTION_TYPES.has(transactionTypeIdentifier as TransactionTypes);
 }
 
