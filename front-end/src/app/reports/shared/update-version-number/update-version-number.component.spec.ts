@@ -89,7 +89,6 @@ describe('UpdateVersionNumberComponent', () => {
     vi.spyOn(messageService, 'add');
     const updateSpy = vi.spyOn(f3xService, 'updateVersionNumber');
     await submit(component.versionForm);
-    expect(component.formSubmitted).toBe(true);
     expect(updateSpy).not.toHaveBeenCalled();
   });
 

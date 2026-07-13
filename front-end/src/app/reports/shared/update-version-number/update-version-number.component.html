@@ -9,56 +9,33 @@
   </p>
   <p>If you're unsure whether this is the right choice, contact your analyst.</p>
 </section>
-<form #form [formRoot]="versionForm" class="flex flex-column gap-4 my-5">
-  <fieldset class="horizontal-field">
-    <label for="current-number">
-      CURRENT VERSION OR<br />
-      AMENDMENT NUMBER
-    </label>
-    <input id="current-number" type="number" [formField]="versionForm.original" />
-  </fieldset>
-  <fieldset class="horizontal-field">
-    <div class="flex flex-column gap-2">
-      <label for="new-number"> NEW AMENDMENT </label>
-      <span class="font-italic karla text-sm">
+<form [formRoot]="versionForm" class="grid-form mt-5">
+  <app-number-input
+    class="horizontal-field"
+    label="CURRENT VERSION OR<br />AMENDMENT NUMBER"
+    [formField]="versionForm.original"
+  />
+  <app-number-input
+    class="horizontal-field"
+    label="NEW AMENDMENT<br /><span class='font-italic karla text-sm'>
         Last amendment number + 1. Use 1<br />
         if changing from original report. (ie.<br />
         original=0, amendment 1=1)
-      </span>
-    </div>
-    <div class="flex flex-column gap-2">
-      <input id="new-number" type="number" [formField]="versionForm.amendment" (keydown)="blockInvalidKeys($event)" />
-      @if (versionForm.amendment().touched() && versionForm.amendment().invalid()) {
-        <small class="p-error">{{ versionForm.amendment().errors()[0].message }}</small>
-      }
-    </div>
-  </fieldset>
-  <div class="flex gap-20px">
-    @if (isF24()) {
-      <app-calendar
-        [formSubmitted]="formSubmitted"
-        [formField]="versionForm.previousSubmissionDate"
-        label="PREVIOUS REPORT<br/>SUBMISSION DATE"
-      />
-    }
-    <fieldset>
-      <label for="e-filing-id" class="mb-2">
-        ORIGINAL REPORT<br />
-        E-FILING ID
-      </label>
-      <input id="e-filing-id" type="text" [formField]="versionForm.eFilingId" />
-      @if (versionForm.eFilingId().touched() && versionForm.eFilingId().invalid()) {
-        <small class="p-error">{{ versionForm.eFilingId().errors()[0].message }}</small>
-      }
-    </fieldset>
-  </div>
-  <hr type="solid" class="m-0" />
+      </span>"
+    [formField]="versionForm.amendment"
+  />
+
+  @if (isF24()) {
+    <app-date-input
+      class="grid-col-3"
+      [formField]="versionForm.previousSubmissionDate"
+      label="PREVIOUS REPORT<br/>SUBMISSION DATE"
+    />
+  }
+  <app-text-input class="grid-col-3" [formField]="versionForm.eFilingId" label="ORIGINAL REPORT<br />E-FILING ID" />
+  <hr type="solid" />
   <div class="flex justify-content-between">
-    <div>
-      <button pButton pRipple class="p-button-secondary">Cancel</button>
-    </div>
-    <div>
-      <button pButton pRipple appSingleClick type="submit" class="p-button-primary">Update</button>
-    </div>
+    <button pButton pRipple class="p-button-secondary">Cancel</button>
+    <button pButton pRipple appSingleClick type="submit" class="p-button-primary">Update</button>
   </div>
 </form>

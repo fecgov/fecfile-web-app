@@ -13,7 +13,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { createTestTransactionListRecord, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
@@ -171,18 +171,17 @@ describe('ContactDialogComponent', () => {
     });
 
     it('should not show Form 24s', async () => {
+      component.contact.set(testContact());
       const testReportCodeLabel = 'APRIL 15 QUARTERLY REPORT (Q1)';
       const transactionListRecord = new TransactionListRecord();
       transactionListRecord.report_code_label = testReportCodeLabel;
-      vi.spyOn(transactionService, 'getTableData').mockReturnValue(
-        Promise.resolve({
-          results: [transactionListRecord],
-          count: 1,
-          pageNumber: 1,
-          next: '',
-          previous: '',
-        } as ListRestResponse),
-      );
+      vi.spyOn(transactionService, 'getTableData').mockResolvedValue({
+        results: [transactionListRecord],
+        count: 1,
+        pageNumber: 1,
+        next: '',
+        previous: '',
+      } as ListRestResponse);
       await component.loadTransactions();
 
       expect(component.transactions[0].report_code_label).toBe(testReportCodeLabel);

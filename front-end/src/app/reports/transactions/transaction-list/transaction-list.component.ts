@@ -2,8 +2,7 @@ import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Report, ReportTypes } from 'app/shared/models/reports/report.model';
-
+import { isForm3Group, Report, ReportTypes } from 'app/shared/models/reports/report.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
@@ -48,41 +47,31 @@ export class TransactionListComponent {
     new TableAction(
       'Add a receipt',
       this.createTransactions.bind(this, 'receipt'),
-      (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
-      },
+      (report: Report) => isForm3Group(report.report_type),
       () => true,
     ),
     new TableAction(
       'Add a disbursement',
       this.createTransactions.bind(this, 'disbursement'),
-      (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
-      },
+      (report: Report) => isForm3Group(report.report_type),
       () => true,
     ),
     new TableAction(
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
-      (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
-      },
+      (report: Report) => isForm3Group(report.report_type),
       () => true,
     ),
     new TableAction(
       'Add other transactions',
       this.createTransactions.bind(this, 'other-transactions'),
-      (report: Report) => {
-        return [ReportTypes.F3, ReportTypes.F3X].includes(report.report_type);
-      },
+      (report: Report) => isForm3Group(report.report_type),
       () => false,
     ),
     new TableAction(
       'Add an independent expenditure',
       this.createF24Transactions.bind(this),
-      (report: Report) => {
-        return report.report_type === ReportTypes.F24;
-      },
+      (report: Report) => report.report_type === ReportTypes.F24,
       () => true,
     ),
   ];

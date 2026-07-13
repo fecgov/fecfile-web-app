@@ -1,0 +1,55 @@
+.calendar-icon-mask {
+  background-color: var(--fec-grey-alt);
+  width: 20px;
+  height: 20px;
+  mask-image: url('/assets/img/i-calendar.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  transform: translateY(-2px);
+}
+
+:host ::ng-deep {
+  .p-datepicker-input-icon-container {
+    inset-inline-end: 10px;
+  }
+
+  .p-datepicker:not(.p-datepicker-inline) {
+    border: none;
+  }
+
+  .p-datepicker-input {
+    padding-left: 10px;
+    width: var(--date-field-width);
+  }
+}
+
+.date-picker-field {
+  width: var(--date-field-width);
+}
+
+.year-button,
+.month-button,
+.outlined-button {
+  border-radius: var(--border-radius);
+  background-color: transparent;
+  height: 24px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--p-datepicker-select-month-hover-background);
+  }
+}
+
+.year-button,
+.month-button {
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.outlined-button {
+  border: 1px solid var(--primary-color);
+  font-family: var(--karla-bold);
+  padding: 4px 8px;
+}
