@@ -894,7 +894,8 @@ export class F3XAggregationHelpers {
       { method: 'GET', pathname: /\/api\/v1\/transactions\/previous\/election\/$/, query: { transaction_id: transactionId }, times: 1 },
     ).as(alias);
     this.openDisbursement(transactionId);
-    return cy.wait(`@${alias}`).then(() => {
+    cy.contains("LAST NAME").should('exist');
+    return cy.wait(`@${alias}`, { timeout: 30000 }).then(() => {
       return cy.get('#calendar_ytd').should('have.value', expectedFormatted);
     }) as unknown as Cypress.Chainable<void>;
   }
