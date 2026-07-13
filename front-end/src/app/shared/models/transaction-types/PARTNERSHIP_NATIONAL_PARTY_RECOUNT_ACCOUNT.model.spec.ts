@@ -37,6 +37,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     );
 
     txn.children = [transactionType.getNewTransaction()];
+    txn.children[0].itemized = true;
     descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Recount/Legal Proceedings Account (See Partnership Attribution(s) below)');
   });

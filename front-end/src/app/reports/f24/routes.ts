@@ -8,6 +8,7 @@ import { SubmitReportStatusComponent } from '../submission-workflow/submit-repor
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { Form24EditComponent } from './form-24-edit/form-24-edit.component';
 import { UpdateVersionNumberComponent } from '../shared/update-version-number/update-version-number.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
@@ -19,6 +20,14 @@ import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 // 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 export const F24_ROUTES: Route[] = [
+  {
+    path: 'edit/:reportId',
+    title: 'Edit a report',
+    component: Form24EditComponent,
+    resolve: { report: ReportResolver },
+    data: { sidebarSection: ReportSidebarSection.CREATE },
+    runGuardsAndResolvers: 'always',
+  },
   {
     path: 'update-version-number/:reportId',
     title: 'Update Version Number',

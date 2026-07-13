@@ -5,6 +5,11 @@ import { Report, ReportStatus, ReportTypes } from './report.model';
 import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
 import { MenuItem } from 'primeng/api';
 import { environment } from 'environments/environment';
+import { Signal } from '@angular/core';
+import { ChildFieldContext, metadata, PathKind, required, schema, SchemaPath, validate } from '@angular/forms/signals';
+import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
+
+export type Type24_48 = '24' | '48';
 
 export enum F24FormTypes {
   F24N = 'F24N',
@@ -25,7 +30,7 @@ export class Form24 extends Report {
     return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
 
-  report_type_24_48: '24' | '48' | undefined;
+  report_type_24_48: Type24_48 | undefined;
   @Transform(BaseModel.dateTransform) original_amendment_date: Date | undefined;
   treasurer_last_name: string | undefined;
   treasurer_first_name: string | undefined;
@@ -58,7 +63,7 @@ export class Form24 extends Report {
     ];
 
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
-      const items = [MenuInfo.editReport(sidebarSection, this, 'Edit report details', true)];
+      const items = [MenuInfo.editReport(sidebarSection, this, 'Edit report details')];
       if (environment.manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
       menuItems.unshift({
         label: 'REPORT DETAILS',
@@ -69,4 +74,44 @@ export class Form24 extends Report {
 
     return menuItems;
   }
+}
+
+export interface Form24Data {
+  type: Type24_48 | null;
+  typelessName: string;
+}
+interface UniqueNameOptions {
+  existingNames: Signal<Set<string>>;
+}
+export const buildF24Name = (type: Type24_48, name: string) => `${type}-Hour: ${name}`;
+export const form24Schema = (options: UniqueNameOptions) =>
+  schema<Form24Data>((schemaPath) => {
+    required(schemaPath.type, { message: 'This is a required field' });
+    required(schemaPath.typelessName, { message: 'This is a required field' });
+    metadata(schemaPath.typelessName, PLACEHOLDER, () => 'Provide a custom report name');
+    validate(
+      schemaPath.typelessName,
+      uniqueForm24Name(
+        {
+          existingNames: options.existingNames,
+        },
+        schemaPath.type,
+      ),
+    );
+  });
+
+function uniqueForm24Name(options: UniqueNameOptions, typeField: SchemaPath<Type24_48 | null, 1, PathKind.Child>) {
+  return (ctx: ChildFieldContext<string>) => {
+    const type = ctx.valueOf(typeField);
+    if (!type) return null;
+    const fullName = buildF24Name(type, ctx.value());
+
+    if (options.existingNames().has(fullName)) {
+      return {
+        kind: 'exists',
+        message: 'This name is already in use. Please choose a different name.',
+      };
+    }
+    return null;
+  };
 }

@@ -25,6 +25,7 @@ describe('PARTNERSHIP_RECEIPT', () => {
     expect(descrip).toBe('Partnership attributions do not meet itemization threshold');
 
     transaction.children = [{ ...transaction } as SchATransaction];
+    transaction.children[0].itemized = true;
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('See Partnership Attribution(s) below');
   });

@@ -1,12 +1,11 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Tooltip } from 'primeng/tooltip';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
@@ -21,7 +20,7 @@ export const LinkedReportTooltipText =
   selector: 'app-linked-report-input',
   styleUrls: ['./linked-report-input.component.scss'],
   templateUrl: './linked-report-input.component.html',
-  imports: [ReactiveFormsModule, Tooltip, InputText, ErrorMessagesComponent],
+  imports: [ReactiveFormsModule, InputText, ErrorMessagesComponent],
 })
 export class LinkedReportInputComponent extends BaseInputComponent implements OnInit {
   private readonly form3XService = inject(Form3XService);
@@ -35,7 +34,7 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
   readonly committeeF3xReports = derivedAsync(() => this.form3XService.getAllReports(), { initialValue: [] });
 
   // the form3X that is associated with the transaction on load
-  private readonly initialForm3X = derivedAsync(async () => {
+  readonly initialForm3X = derivedAsync(async () => {
     const reports = this.transaction()?.reports;
     if (!reports) return undefined;
     const report = reports.find((report) => report.report_type === ReportTypes.F3X);
@@ -54,15 +53,22 @@ export class LinkedReportInputComponent extends BaseInputComponent implements On
     if (report && !this.userTouchedValues()) {
       return report;
     }
-    const date = disbursementDate ?? disseminationDate;
-    if (date) {
-      for (const report of this.committeeF3xReports()) {
-        if (report.coverage_from_date && report.coverage_through_date) {
-          if (date >= report.coverage_from_date && date <= report.coverage_through_date) {
-            return report;
-          }
-        }
-      }
+
+    const candidateDates = [disbursementDate, disseminationDate].filter((date): date is Date => !!date);
+    const reports = this.committeeF3xReports();
+
+    for (const date of candidateDates) {
+      const matchingReport = reports.find((report) => {
+        return (
+          report.report_status === ReportStatus.IN_PROGRESS &&
+          !!report.coverage_from_date &&
+          !!report.coverage_through_date &&
+          date >= report.coverage_from_date &&
+          date <= report.coverage_through_date
+        );
+      });
+
+      if (matchingReport) return matchingReport;
     }
 
     this.form.get('linkedF3x')?.updateValueAndValidity();

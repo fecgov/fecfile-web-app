@@ -1,6 +1,5 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Form24, Form3, Form3X, ReportTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -8,14 +7,15 @@ import { ActivatedRoute } from '@angular/router';
 import { collectRouteData } from 'app/shared/utils/route.utils';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { ReportSidebarSection } from './menu-info';
-import { RenameF24DialogComponent } from 'app/reports/f24/rename-f24-dialog/rename-f24-dialog.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { PanelMenu } from 'primeng/panelmenu';
+import { isForm3Group, ReportTypes } from 'app/shared/models/reports/report.model';
+import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
 @Component({
   selector: 'app-report-sidebar',
   standalone: true,
-  imports: [FecDatePipe, RenameF24DialogComponent, PanelMenu],
+  imports: [FecDatePipe, PanelMenu],
   templateUrl: 'report-sidebar.component.html',
 })
 export class ReportSidebarComponent {
@@ -36,30 +36,12 @@ export class ReportSidebarComponent {
 
   readonly formLabel = computed(() => this.report().formLabel);
   readonly subHeading = computed(() => this.report().report_code_label);
-  readonly hasCoverage = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
-  readonly isAmmendable = computed(() =>
-    [ReportTypes.F3, ReportTypes.F3X, ReportTypes.F24].includes(this.report().report_type),
+  readonly hasCoverage = computed(() => isForm3Group(this.report().report_type));
+  readonly isAmendable = computed(
+    () => isForm3Group(this.report().report_type) || this.report().report_type === ReportTypes.F24,
   );
-  readonly coverageFrom = computed(() => (this.report() as Form3 | Form3X).coverage_from_date);
-  readonly coverageThrough = computed(() => (this.report() as Form3 | Form3X).coverage_through_date);
+  readonly coverageFrom = computed(() => (this.report() as BaseForm3).coverage_from_date);
+  readonly coverageThrough = computed(() => (this.report() as BaseForm3).coverage_through_date);
 
   readonly version = computed(() => this.report().version_label ?? 'Original');
-
-  readonly renameF24DialogVisible = signal(false);
-  readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
-  form24ToUpdate?: Form24;
-
-  constructor() {
-    effect(() => {
-      if (!this.renameF24DialogVisible() && this.form24ToUpdate) {
-        this.form24ToUpdate = undefined;
-        this.reportService.setActiveReportById(this.report().id);
-      }
-    });
-  }
-
-  public renameForm24(): void {
-    this.form24ToUpdate = this.report() as Form24;
-    this.renameF24DialogVisible.set(true);
-  }
 }

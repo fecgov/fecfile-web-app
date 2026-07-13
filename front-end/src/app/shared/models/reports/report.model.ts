@@ -57,17 +57,20 @@ export abstract class Report extends BaseModel {
   transactionTypes: TransactionTypes[] = [];
 
   get canEdit(): boolean {
-    if (!this.report_status) return false;
-    return [ReportStatus.IN_PROGRESS, ReportStatus.SUBMIT_FAILURE].includes(this.report_status);
+    return this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE;
   }
 }
 
-export enum ReportTypes {
-  F3 = 'F3',
-  F3X = 'F3X',
-  F24 = 'F24',
-  F99 = 'F99',
-  F1M = 'F1M',
+export const ReportTypes = {
+  F3: 'F3',
+  F3X: 'F3X',
+  F24: 'F24',
+  F99: 'F99',
+  F1M: 'F1M',
+} as const;
+export type ReportTypes = (typeof ReportTypes)[keyof typeof ReportTypes];
+export function isForm3Group(reportType: ReportTypes) {
+  return reportType === ReportTypes.F3 || reportType === ReportTypes.F3X;
 }
 
 export const reportLabelList: LabelList = [
@@ -78,9 +81,10 @@ export const reportLabelList: LabelList = [
   [ReportTypes.F1M, 'Form 1M'],
 ];
 
-export enum ReportStatus {
-  IN_PROGRESS = 'In progress',
-  SUBMIT_PENDING = 'Submission pending',
-  SUBMIT_SUCCESS = 'Submission success',
-  SUBMIT_FAILURE = 'Submission failure',
-}
+export const ReportStatus = {
+  IN_PROGRESS: 'In progress',
+  SUBMIT_PENDING: 'Submission pending',
+  SUBMIT_SUCCESS: 'Submission success',
+  SUBMIT_FAILURE: 'Submission failure',
+} as const;
+export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus];

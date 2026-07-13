@@ -31,6 +31,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     );
 
     transaction.children = [transactionType.getNewTransaction()];
+    transaction.children[0].itemized = true;
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Pres. Nominating Convention Account (See Partnership Attribution(s) below)');
   });

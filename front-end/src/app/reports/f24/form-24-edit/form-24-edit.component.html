@@ -1,0 +1,18 @@
+<h1>Form 24</h1>
+<span class="karla text-sm font-bold">24/48 Hour Report of Independent Expenditure</span>
+<hr />
+<form novalidate (submit)="$event.preventDefault()" class="grid-form">
+  <app-select-button-input
+    [options]="form24Options"
+    label="Report type"
+    labelStyleClass="h2 mb-4"
+    [formField]="f24Form.type"
+  />
+  <app-input-group [formField]="f24Form.typelessName" [pretext]="typeHour()" label="REPORT NAME" />
+  <hr type="solid" />
+  <app-save-cancel
+    [submitDisabled]="f24Form().invalid()"
+    (cancelForm)="router.navigateByUrl('/reports')"
+    (save)="submitForm($event)"
+  />
+</form>

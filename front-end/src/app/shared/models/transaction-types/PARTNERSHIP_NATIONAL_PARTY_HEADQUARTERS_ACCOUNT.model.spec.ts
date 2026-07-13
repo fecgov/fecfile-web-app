@@ -27,6 +27,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
     expect(descrip).toBe('Headquarters Buildings Account (Partnership attributions do not meet itemization threshold)');
 
     transaction.children = [transaction.transactionType?.getNewTransaction() as SchATransaction];
+    transaction.children[0].itemized = true;
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Headquarters Buildings Account (See Partnership Attribution(s) below)');
   });
