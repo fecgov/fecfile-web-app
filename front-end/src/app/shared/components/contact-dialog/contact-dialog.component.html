@@ -4,7 +4,7 @@
   [class.contact-dialog-not-submitted]="!formSubmitted"
 >
   <p-dialog
-    [visible]="detailVisible"
+    [(visible)]="detailVisible"
     [style]="{ width: '90%' }"
     [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
@@ -87,14 +87,26 @@
           <div class="col-4">
             <div class="field">
               <label for="last_name">LAST NAME</label>
-              <input type="text" pInputText id="last_name" formControlName="last_name" />
+              <input
+                type="text"
+                pInputText
+                id="last_name"
+                formControlName="last_name"
+                (input)="duplicateContact()?.updateName($event, 'last_name')"
+              />
               <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="first_name">FIRST NAME</label>
-              <input type="text" pInputText id="first_name" formControlName="first_name" />
+              <input
+                type="text"
+                pInputText
+                id="first_name"
+                formControlName="first_name"
+                (input)="duplicateContact()?.updateName($event, 'first_name')"
+              />
               <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
@@ -110,7 +122,7 @@
         In future change this to isNewItem when enabling for opening on Contact Management -->
         @if (headerTitle && contactType() === ContactTypes.INDIVIDUAL) {
           <app-duplicate-contact
-            [name]="personName()"
+            #duplicateContact
             [existingContacts]="existingContactMap().get(contactType()) ?? []"
             [(hideDuplicateWarning)]="hideDuplicateWarning"
             (useContact)="useContact($event)"

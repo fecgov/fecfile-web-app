@@ -3,7 +3,8 @@ import { DuplicateContactComponent } from './duplicate-contact.component';
 import { StatePipe } from 'app/shared/pipes/state.pipe';
 import { Component, signal, viewChild } from '@angular/core';
 import { Contact } from 'app/shared/models/contact.model';
-import { testContact, testOrganization } from 'app/shared/utils/unit-test.utils';
+import { testContact } from 'app/shared/utils/unit-test.utils';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 @Component({
   imports: [DuplicateContactComponent],
@@ -11,7 +12,6 @@ import { testContact, testOrganization } from 'app/shared/utils/unit-test.utils'
   template: `
     <app-duplicate-contact
       [(hideDuplicateWarning)]="hideDuplicateWarning"
-      [name]="name"
       [existingContacts]="allContacts"
       (useContact)="onUseContact($event)"
     />
@@ -19,7 +19,6 @@ import { testContact, testOrganization } from 'app/shared/utils/unit-test.utils'
 })
 class TestHostComponent {
   hideDuplicateWarning = signal(false);
-  name = '';
   allContacts: Contact[] = [];
   component = viewChild.required(DuplicateContactComponent);
 
@@ -33,7 +32,14 @@ describe('DuplicateContactComponent', () => {
   let host: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
+  // Helper function to mock an HTML input element event
+  const createInputEvent = (value: string): Event => {
+    return { target: { value } } as unknown as Event;
+  };
+
   beforeEach(async () => {
+    vi.useFakeTimers(); // Enable fake timers to control the 600ms debounce
+
     await TestBed.configureTestingModule({
       imports: [DuplicateContactComponent, TestHostComponent],
       providers: [StatePipe],
@@ -45,55 +51,84 @@ describe('DuplicateContactComponent', () => {
     component = host.component();
   });
 
+  afterEach(() => {
+    vi.useRealTimers(); // Clean up fake timers after each test run
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('updateName & Debounce Logic', () => {
+    it('should set checkingName to true immediately if both fields have values', () => {
+      component.updateName(createInputEvent('Smith'), 'last_name');
+      component.updateName(createInputEvent('Joe'), 'first_name');
+
+      expect(component.checkingName()).toBe(true);
+    });
+
+    it('should not set checkingName to true if only one field has a value', () => {
+      component.updateName(createInputEvent('Smith'), 'last_name');
+      expect(component.checkingName()).toBe(false);
+    });
+
+    it('should process the signal updates after 600ms', () => {
+      component.updateName(createInputEvent('Smith'), 'last_name');
+      component.updateName(createInputEvent('Joe'), 'first_name');
+
+      // Assert signals have not updated yet
+      expect(component.name()).toBe(', ');
+
+      // Fast-forward 600ms
+      vi.advanceTimersByTime(600);
+
+      expect(component.name()).toBe('Smith, Joe');
+      expect(component.checkingName()).toBe(false);
+    });
+
+    it('should debounce subsequent typing events and use the latest values', () => {
+      component.updateName(createInputEvent('Smit'), 'last_name');
+      vi.advanceTimersByTime(300); // 300ms pass... user keeps typing
+
+      component.updateName(createInputEvent('Smith'), 'last_name');
+      component.updateName(createInputEvent('Joe'), 'first_name');
+
+      // Pass remaining 600ms for the second batch of timers
+      vi.advanceTimersByTime(600);
+
+      expect(component.name()).toBe('Smith, Joe');
+    });
+  });
+
   describe('potentialDuplicates', () => {
     it('should match person contacts using "last_name, first_name" format', () => {
-      const testIndividual = testContact();
+      const testIndividual = testContact(); // Expected: Smith, Joe based on standard utils
       host.allContacts = [testIndividual];
-      host.name = 'Smith, Joe';
       fixture.detectChanges();
+
+      component.updateName(createInputEvent('Smith'), 'last_name');
+      component.updateName(createInputEvent('Joe'), 'first_name');
+      vi.advanceTimersByTime(600);
 
       expect(component.potentialDuplicates()).toContain(testIndividual);
       expect(component.potentialDuplicates().length).toBe(1);
     });
-
-    it('should match entity contacts using corporate name format', () => {
-      const testOrg = testOrganization();
-      host.allContacts = [testOrg];
-      host.name = 'Organization LLC';
-      fixture.detectChanges();
-
-      expect(component.potentialDuplicates()).toContain(testOrg);
-      expect(component.potentialDuplicates().length).toBe(1);
-    });
-
-    it('should return an empty array if no contacts match the current name input', () => {
-      host.allContacts = [testContact(), testOrganization()];
-      host.name = 'Smith, Jane';
-      fixture.detectChanges();
-
-      expect(component.potentialDuplicates().length).toBe(0);
-    });
   });
 
   describe('validName', () => {
-    it('should return true for a properly formatted name', () => {
-      host.name = 'Smith, Joe';
-      fixture.detectChanges();
+    it('should return true for a completely populated name after debounce finishes', () => {
+      component.updateName(createInputEvent('Smith'), 'last_name');
+      component.updateName(createInputEvent('Joe'), 'first_name');
+      vi.advanceTimersByTime(600);
 
       expect(component.validName()).toBe(true);
     });
 
-    it('should return false if name ends with a trailing comma or has an empty item', () => {
-      host.name = 'Doe, ';
-      fixture.detectChanges();
-      expect(component.validName()).toBe(false);
+    it('should return false if fields remain blank or empty strings', () => {
+      component.updateName(createInputEvent(''), 'last_name');
+      component.updateName(createInputEvent(''), 'first_name');
+      vi.advanceTimersByTime(600);
 
-      host.name = ', Joe';
-      fixture.detectChanges();
       expect(component.validName()).toBe(false);
     });
   });

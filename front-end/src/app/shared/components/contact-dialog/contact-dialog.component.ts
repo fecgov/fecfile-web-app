@@ -35,7 +35,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
-import { combineLatest, startWith, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypes,
   Contact,
@@ -90,24 +90,27 @@ import { DuplicateContactComponent } from './duplicate-contact/duplicate-contact
   providers: [SearchableSelectComponent],
 })
 export class ContactDialogComponent extends FormComponent implements OnInit {
-  private readonly contactService = inject(ContactService);
+  readonly contactService = inject(ContactService);
   private readonly transactionService = inject(TransactionListService);
   protected readonly confirmationService = inject(ConfirmationService);
   public readonly router = inject(Router);
   readonly ContactTypes = ContactTypes;
   readonly contact = model<Contact>();
   @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() detailVisible = false;
+  readonly detailVisible = model(false);
   @Input() showHistory = false;
   @Input() headerTitle?: string;
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
-  readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
   readonly first = signal(0);
   readonly sortField = signal('transaction_type_identifier');
   readonly sortOrder = signal<'asc' | 'desc'>('asc');
 
-  readonly allContacts = derivedAsync(() => this.contactService.getAll(), { initialValue: [] });
+  readonly duplicateContact = viewChild(DuplicateContactComponent);
+
+  readonly allContacts = derivedAsync(() => this.contactService.getAll(), {
+    initialValue: [],
+  });
   readonly existingContactMap = computed(() => Map.groupBy(this.allContacts(), (contact) => contact.type));
   readonly hideDuplicateWarning = signal(false);
 
@@ -141,7 +144,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
-    { updateOn: 'blur' },
   );
 
   isNewItem = true;
@@ -173,8 +175,18 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         cssClass: 'type-column',
         bodyTpl: type,
       },
-      { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column' },
-      { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
+      {
+        field: 'report_type',
+        header: 'Form',
+        sortable: true,
+        cssClass: 'form-column',
+      },
+      {
+        field: 'report_code_label',
+        header: 'Report',
+        sortable: true,
+        cssClass: 'report-column',
+      },
       {
         field: 'date',
         header: 'Date',
@@ -196,8 +208,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly committeePatternMessage = committeePatternMessage;
 
   readonly table = viewChild(TableComponent);
-
-  readonly personName = signal<string>('');
 
   constructor() {
     super();
@@ -295,17 +305,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
 
     this.contactTypeChanged(this.contactType());
-    this.buildDuplicateNameListeners();
-  }
-
-  private buildDuplicateNameListeners() {
-    const firstName$ = this.form.get('first_name')?.valueChanges.pipe(startWith(this.form.get('first_name')?.value));
-    const lastName$ = this.form.get('last_name')?.valueChanges.pipe(startWith(this.form.get('last_name')?.value));
-    if (firstName$ && lastName$) {
-      combineLatest([lastName$, firstName$]).subscribe(([last, first]) => {
-        this.personName.set(`${last ?? ''}, ${first ?? ''}`);
-      });
-    }
   }
 
   /**
@@ -373,8 +372,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.detailVisible = false;
+      this.detailVisible.set(false);
       this.dialogVisible.set(false);
     }
   }

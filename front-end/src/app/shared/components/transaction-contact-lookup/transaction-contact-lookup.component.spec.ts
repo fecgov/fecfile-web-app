@@ -92,18 +92,19 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
-    component.detailVisible = false;
+    component.detailVisible.set(false);
     const contact = testContact();
     component.contactLookupSelected(contact);
     contact.id = undefined;
     component.contactLookupSelected(contact);
-    expect(component.detailVisible).toBe(true);
+    expect(component.detailVisible()).toBe(true);
   });
 
   it('selecting create new contact should open the contact dialog', () => {
-    component.detailVisible = false;
+    component.detailVisible.set(false);
+    fixture.detectChanges();
     component.createNewContactSelected();
-    expect(component.detailVisible).toBe(true);
+    expect(component.detailVisible()).toBe(true);
   });
 
   it('saving a contact should emit the contact', () => {

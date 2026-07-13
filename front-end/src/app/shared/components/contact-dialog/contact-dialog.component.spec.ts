@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideZoneChangeDetection } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideRouter } from '@angular/router';
@@ -13,7 +13,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { createTestTransactionListRecord, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
@@ -22,9 +22,20 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
 
+@Component({
+  imports: [ContactDialogComponent],
+  standalone: true,
+  template: `<app-contact-dialog [(detailVisible)]="visible" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ContactDialogComponent);
+  visible = false;
+}
+
 describe('ContactDialogComponent', () => {
+  let host: TestHostComponent;
   let component: ContactDialogComponent;
-  let fixture: ComponentFixture<ContactDialogComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionListService;
 
@@ -55,9 +66,9 @@ describe('ContactDialogComponent', () => {
 
     testConfirmationService = TestBed.inject(ConfirmationService);
     transactionService = TestBed.inject(TransactionListService);
-    fixture = TestBed.createComponent(ContactDialogComponent);
-    component = fixture.componentInstance;
-    component.contact.set(testContact());
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
 
     component.ngOnInit();
   });
@@ -80,10 +91,10 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should close dialog with flags set', () => {
-    component.detailVisible = true;
+    component.detailVisible.set(true);
     component.dialogVisible.set(true);
     component.closeDialog();
-    expect(component.detailVisible).toBe(false);
+    expect(component.detailVisible()).toBe(false);
     expect(component.dialogVisible()).toBe(false);
   });
 
