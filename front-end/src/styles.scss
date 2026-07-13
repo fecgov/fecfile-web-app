@@ -542,31 +542,6 @@ legend {
   font-family: var(--karla-bold);
 }
 
-.h1 {
-  margin: 0;
-  font-family: var(--gandhi-bold);
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.h3 {
-  margin: 0 0 1em 0;
-  margin-top: 0px;
-  margin-bottom: 1em;
-  font-family: var(--gandhi-bold);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.6;
-}
-
-.h5 {
-  font-family: var(--gandhi-bold);
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
 .custom-header {
   display: flex;
   justify-content: space-between;
@@ -1001,4 +976,80 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   .p-tooltip-arrow {
     left: 25px !important;
   }
+}
+
+.start-row {
+  grid-column-start: 1;
+}
+@for $i from 1 through 12 {
+  .grid-col-#{$i} {
+    grid-column-end: span #{$i} !important;
+    margin: 0;
+  }
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0 8px;
+  align-items: start;
+  grid-auto-rows: auto auto auto;
+
+  & > * {
+    margin: 0 0 24px 0;
+    grid-column-end: span 12;
+    &:nth-last-child(-n + 1) {
+      margin-bottom: 0;
+    }
+  }
+  & > div,
+  & > fieldset {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    & > label,
+    & > span {
+      margin: 0 0 8px 0;
+      align-self: end;
+    }
+    & > .p-error {
+      margin-top: 4px;
+    }
+  }
+}
+
+.horizontal-field {
+  grid-row: auto !important;
+  grid-template-rows: min-content auto !important;
+  grid-template-columns: max-content 1fr;
+  column-gap: 32px;
+
+  & label,
+  & span,
+  & small {
+    margin: 0 !important;
+  }
+
+  & > app-label {
+    display: grid;
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: start;
+    max-width: 226px;
+    width: 226px;
+  }
+
+  & > input {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    align-self: start;
+  }
+  & > .p-error {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+#confirm-dialog dialog[open] {
+  z-index: 9999 !important;
 }

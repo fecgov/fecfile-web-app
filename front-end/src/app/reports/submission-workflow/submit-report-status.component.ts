@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReportStatus, ReportTypes } from 'app/shared/models';
+import { isForm3Group, ReportStatus } from 'app/shared/models';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
@@ -24,7 +24,7 @@ export class SubmitReportStatusComponent {
   private readonly reportService = inject(ReportService);
   readonly report = this.store.selectSignal(selectActiveReport);
   readonly reportCode = computed(() => this.report().report_code as ReportCodes);
-  readonly isBaseF3 = computed(() => [ReportTypes.F3, ReportTypes.F3X].includes(this.report().report_type));
+  readonly isBaseF3 = computed(() => isForm3Group(this.report().report_type));
   readonly coverageDates = computed(() => (this.isBaseF3() ? (this.report() as BaseForm3).coverageDates : undefined));
   readonly fecStatus = computed(() => this.report().upload_submission?.fec_status);
   readonly fecMessage = computed(() => this.report().upload_submission?.fec_message);
