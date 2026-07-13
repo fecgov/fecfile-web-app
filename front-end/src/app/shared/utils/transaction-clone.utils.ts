@@ -3,8 +3,8 @@ import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { ScheduleFTransactionTypes } from '../models/schf-transaction.model';
-import { ScheduleTransaction, Transaction, TransactionTypes } from '../models/transaction.model';
-import { getFromJSON, TransactionTypeUtils } from './transaction-type.utils';
+import { cloneInstance, ScheduleTransaction, Transaction, TransactionTypes } from '../models/transaction.model';
+import { TransactionTypeUtils } from './transaction-type.utils';
 
 export type CloneEligibilityTransaction = {
   transaction_type_identifier: string | undefined;
@@ -119,15 +119,17 @@ export function isCloneable(transaction: CloneEligibilityTransaction | undefined
 
 export function buildClonedTransaction(source: ScheduleTransaction, reportId: string): Transaction {
   if (!isCloneable(source)) {
-    throw new Error(`FECfile+: transaction type ${source.transaction_type_identifier} is not eligible for cloning.`);
+    throw new Error(`FECfile+: This transaction (${source.transaction_type_identifier}) is not eligible for cloning.`);
   }
 
   const transactionTypeIdentifier = source.transaction_type_identifier as TransactionTypes;
   const transactionType = TransactionTypeUtils.factory(transactionTypeIdentifier);
   const clone = transactionType.getNewTransaction();
-  const sourceCopy = getFromJSON(source.toJson());
+  const sourceCopy = cloneInstance(source);
 
-  Object.assign(clone, sourceCopy);
+  if (sourceCopy) {
+    Object.assign(clone, sourceCopy);
+  }
 
   clone.id = undefined;
   clone.transaction_id = undefined;

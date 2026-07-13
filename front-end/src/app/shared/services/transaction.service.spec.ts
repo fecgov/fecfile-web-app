@@ -267,7 +267,7 @@ describe('TransactionService', () => {
 
       const clonePromise = service.cloneSingleTransaction('source-id', 'new-report');
 
-      await expect(clonePromise).rejects.toThrow('FECfile+: transaction type is not eligible for cloning.');
+      await expect(clonePromise).rejects.toThrow('FECfile+: This transaction (EARMARK_MEMO) is not eligible for cloning.');
       expect(createSpy).not.toHaveBeenCalled();
       httpTestingController.verify();
     });
@@ -284,7 +284,7 @@ describe('TransactionService', () => {
       const createSpy = vi.spyOn(service, 'create');
 
       await expect(service.cloneSingleTransaction('source-id', 'new-report')).rejects.toThrow(
-        'FECfile+: transaction type is not eligible for cloning.',
+        'FECfile+: This transaction (INDIVIDUAL_RECEIPT) is not eligible for cloning.',
       );
 
       expect(createSpy).not.toHaveBeenCalled();
