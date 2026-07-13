@@ -8,11 +8,11 @@ import { getFromJSON, TransactionTypeUtils } from './transaction-type.utils';
 
 export type CloneEligibilityTransaction = {
   transaction_type_identifier: string | undefined;
-  parent_transaction_id?: string | undefined;
-  loan_id?: string | undefined;
-  debt_id?: string | undefined;
-  reatt_redes_id?: string | undefined;
-  reattribution_redesignation_tag?: string | undefined;
+  parent_transaction_id: string | undefined;
+  loan_id: string | undefined;
+  debt_id: string | undefined;
+  reatt_redes_id: string | undefined;
+  reattribution_redesignation_tag: string | undefined;
 };
 
 const CLONEABLE_TRANSACTION_TYPES = new Set<TransactionTypes>([
