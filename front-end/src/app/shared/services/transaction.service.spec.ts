@@ -267,7 +267,9 @@ describe('TransactionService', () => {
 
       const clonePromise = service.cloneSingleTransaction('source-id', 'new-report');
 
-      await expect(clonePromise).rejects.toThrow('FECfile+: This transaction (EARMARK_MEMO) is not eligible for cloning.');
+      await expect(clonePromise).rejects.toThrow(
+        'FECfile+: This transaction (EARMARK_MEMO) is not eligible for cloning.',
+      );
       expect(createSpy).not.toHaveBeenCalled();
       httpTestingController.verify();
     });
