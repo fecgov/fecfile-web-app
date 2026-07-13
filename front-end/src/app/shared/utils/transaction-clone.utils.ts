@@ -156,7 +156,9 @@ function getCloneableTransactionTypes(): Set<TransactionTypes> {
 function isCloneableTransactionType(
   transactionTypeIdentifier: string | undefined,
 ): transactionTypeIdentifier is TransactionTypes {
-  return !!transactionTypeIdentifier && getCloneableTransactionTypes().has(transactionTypeIdentifier as TransactionTypes);
+  return (
+    !!transactionTypeIdentifier && getCloneableTransactionTypes().has(transactionTypeIdentifier as TransactionTypes)
+  );
 }
 
 export function isCloneable(transaction: CloneEligibilityTransaction | undefined): boolean {
