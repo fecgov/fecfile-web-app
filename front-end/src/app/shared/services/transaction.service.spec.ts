@@ -342,6 +342,13 @@ describe('TransactionService', () => {
           parent_transaction_id: '10',
         }),
       ).toBe(false);
+      expect(
+        service.isCloneable({
+          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          reatt_redes_id: 'original-id',
+          reattribution_redesignation_tag: 'REATTRIBUTED',
+        }),
+      ).toBe(false);
       expect(service.isCloneable(undefined)).toBe(false);
     });
   });
