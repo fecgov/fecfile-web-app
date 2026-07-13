@@ -1,6 +1,11 @@
 @if (!hideDuplicateWarning()) {
   @if (checkingName()) {
-    <p-progress-spinner ariaLabel="checking name" strokeWidth="9" [style]="{ width: '20px', height: '20px' }" />
+    <p-progress-spinner
+      ariaLabel="checking name"
+      strokeWidth="9"
+      [style]="{ width: '20px', height: '20px' }"
+      [pt]="{ root: 'ml-2' }"
+    />
   } @else {
     @if (potentialDuplicates().length > 0) {
       <div class="background-box">

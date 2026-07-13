@@ -29,6 +29,7 @@
               [showSearchBox]="showSearchBox()"
               [showCreateNewContactButton]="false"
               [includeFecfileResults]="false"
+              [autosave]="false"
               [candidateOffice]="defaultCandidateOffice"
               (contactTypeSelect)="contactTypeChanged($event)"
               (contactLookupSelect)="updateContact($event)"
@@ -124,7 +125,6 @@
           <app-duplicate-contact
             #duplicateContact
             [existingContacts]="existingContactMap().get(contactType()) ?? []"
-            [(hideDuplicateWarning)]="hideDuplicateWarning"
             (useContact)="useContact($event)"
           />
         }

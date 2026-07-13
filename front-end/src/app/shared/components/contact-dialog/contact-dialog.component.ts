@@ -8,6 +8,7 @@ import {
   model,
   OnInit,
   output,
+  resource,
   Signal,
   signal,
   TemplateRef,
@@ -29,7 +30,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
@@ -61,7 +62,6 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
-import { derivedAsync } from 'ngxtension/derived-async';
 import { DuplicateContactComponent } from './duplicate-contact/duplicate-contact.component';
 
 @Component({
@@ -93,6 +93,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly contactService = inject(ContactService);
   private readonly transactionService = inject(TransactionListService);
   protected readonly confirmationService = inject(ConfirmationService);
+  private readonly messageService = inject(MessageService);
   public readonly router = inject(Router);
   readonly ContactTypes = ContactTypes;
   readonly contact = model<Contact>();
@@ -108,11 +109,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   readonly duplicateContact = viewChild(DuplicateContactComponent);
 
-  readonly allContacts = derivedAsync(() => this.contactService.getAll(), {
-    initialValue: [],
-  });
-  readonly existingContactMap = computed(() => Map.groupBy(this.allContacts(), (contact) => contact.type));
-  readonly hideDuplicateWarning = signal(false);
+  readonly allContacts = resource({ loader: () => this.contactService.getAll(), defaultValue: [] as Contact[] });
+  readonly existingContactMap = computed(() => Map.groupBy(this.allContacts.value(), (contact) => contact.type));
 
   transactions: TransactionListRecord[] = [];
   tableLoading = true;
@@ -168,39 +166,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const amount = this.amountBodyTpl();
     if (!type || !date || !amount) return [];
     return [
-      {
-        field: 'transaction_type_identifier',
-        header: 'Type',
-        sortable: true,
-        cssClass: 'type-column',
-        bodyTpl: type,
-      },
-      {
-        field: 'report_type',
-        header: 'Form',
-        sortable: true,
-        cssClass: 'form-column',
-      },
-      {
-        field: 'report_code_label',
-        header: 'Report',
-        sortable: true,
-        cssClass: 'report-column',
-      },
-      {
-        field: 'date',
-        header: 'Date',
-        sortable: true,
-        cssClass: 'date-column',
-        bodyTpl: date,
-      },
-      {
-        field: 'amount',
-        header: 'Amount',
-        sortable: true,
-        cssClass: 'amount-column',
-        bodyTpl: amount,
-      },
+      { field: 'transaction_type_identifier', header: 'Type', sortable: true, cssClass: 'type-column', bodyTpl: type },
+      { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column' },
+      { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
+      { field: 'date', header: 'Date', sortable: true, cssClass: 'date-column', bodyTpl: date },
+      { field: 'amount', header: 'Amount', sortable: true, cssClass: 'amount-column', bodyTpl: amount },
     ];
   });
 
@@ -350,7 +320,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     } else {
       this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     }
-    this.hideDuplicateWarning.set(false);
+    this.duplicateContact()?.refresh();
   }
 
   public openDialog() {
@@ -378,7 +348,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   private resetForm() {
-    this.hideDuplicateWarning.set(false);
+    this.duplicateContact()?.refresh();
     this.form.reset();
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
@@ -432,7 +402,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     this.closeDialog();
   }
 
-  public saveContact(closeDialog = true) {
+  public async saveContact(closeDialog = true) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -440,12 +410,21 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       printFormErrors(this.form);
       return;
     }
-
-    const contact: Contact = Contact.fromJSON({
+    const payload: Contact = Contact.fromJSON({
       ...this.contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
+      type: this.contactType(),
     });
-    contact.type = this.contactType();
+
+    const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: payload.id ? 'Contact Updated' : 'Contact Created',
+      life: 3000,
+    });
+
+    this.allContacts.reload();
     this.savedContact.emit(contact);
 
     if (closeDialog) {

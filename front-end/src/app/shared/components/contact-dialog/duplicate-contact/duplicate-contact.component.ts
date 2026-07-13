@@ -1,4 +1,4 @@
-import { Component, computed, input, model, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { Contact, isEntity } from 'app/shared/models/contact.model';
 import { StatePipe } from '../../../pipes/state.pipe';
 import { ButtonModule } from 'primeng/button';
@@ -11,10 +11,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   styleUrl: './duplicate-contact.component.scss',
 })
 export class DuplicateContactComponent {
-  readonly hideDuplicateWarning = model.required<boolean>();
   readonly existingContacts = input.required<Contact[]>();
   readonly useContact = output<Contact>();
 
+  readonly hideDuplicateWarning = signal(false);
   readonly potentialDuplicates = computed(() => {
     const name = this.name().toLowerCase();
     return this.existingContacts().filter(
@@ -51,7 +51,7 @@ export class DuplicateContactComponent {
     }
 
     const [last, first] = this.currentInputValues;
-    // don't mark checkingName unless we would end up with a valid name (both first and last)
+    // don't mark checkingName unless we would end up with a valid name
     if (last.trim() !== '' && first.trim() !== '') {
       this.checkingName.set(true);
     }
@@ -59,6 +59,13 @@ export class DuplicateContactComponent {
     this.debounceTimer = setTimeout(() => {
       this.personName.set([last, first]);
       this.checkingName.set(false);
-    }, 600);
+    }, 400);
+  }
+
+  refresh() {
+    this.personName.set(['', '']);
+    this.currentInputValues = ['', ''];
+    this.checkingName.set(false);
+    this.hideDuplicateWarning.set(false);
   }
 }

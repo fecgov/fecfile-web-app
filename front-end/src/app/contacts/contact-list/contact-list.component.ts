@@ -139,17 +139,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     return !item.has_transaction_or_report;
   }
 
-  saveContact(contact: Contact) {
-    const request = contact.id ? this.itemService.update(contact) : this.itemService.create(contact);
-
-    request.then(() => {
-      this.loadTableItems();
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: contact.id ? 'Contact Updated' : 'Contact Created',
-        life: 3000,
-      });
-    });
+  saveContact() {
+    this.loadTableItems();
   }
 }

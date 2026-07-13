@@ -167,7 +167,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.form.updateValueAndValidity();
   }
 
-  saveContact() {
+  async saveContact() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -177,11 +177,13 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       return;
     }
 
-    const contact: Contact = Contact.fromJSON({
+    const payload: Contact = Contact.fromJSON({
       ...this.manager().contact(),
       ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
+      type: this.manager().contactType(),
     });
-    contact.type = this.manager().contactType();
+    const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));
+
     this.manager().contact.set(contact);
 
     this.cmservice.showDialog.set(false);

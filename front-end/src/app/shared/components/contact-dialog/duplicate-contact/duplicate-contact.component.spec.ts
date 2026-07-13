@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DuplicateContactComponent } from './duplicate-contact.component';
 import { StatePipe } from 'app/shared/pipes/state.pipe';
-import { Component, signal, viewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { Contact } from 'app/shared/models/contact.model';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
@@ -9,16 +9,9 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 @Component({
   imports: [DuplicateContactComponent],
   standalone: true,
-  template: `
-    <app-duplicate-contact
-      [(hideDuplicateWarning)]="hideDuplicateWarning"
-      [existingContacts]="allContacts"
-      (useContact)="onUseContact($event)"
-    />
-  `,
+  template: ` <app-duplicate-contact [existingContacts]="allContacts" (useContact)="onUseContact($event)" /> `,
 })
 class TestHostComponent {
-  hideDuplicateWarning = signal(false);
   allContacts: Contact[] = [];
   component = viewChild.required(DuplicateContactComponent);
 
@@ -32,13 +25,12 @@ describe('DuplicateContactComponent', () => {
   let host: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
-  // Helper function to mock an HTML input element event
   const createInputEvent = (value: string): Event => {
     return { target: { value } } as unknown as Event;
   };
 
   beforeEach(async () => {
-    vi.useFakeTimers(); // Enable fake timers to control the 600ms debounce
+    vi.useFakeTimers();
 
     await TestBed.configureTestingModule({
       imports: [DuplicateContactComponent, TestHostComponent],
@@ -52,7 +44,7 @@ describe('DuplicateContactComponent', () => {
   });
 
   afterEach(() => {
-    vi.useRealTimers(); // Clean up fake timers after each test run
+    vi.useRealTimers();
   });
 
   it('should create', () => {
@@ -63,7 +55,6 @@ describe('DuplicateContactComponent', () => {
     it('should set checkingName to true immediately if both fields have values', () => {
       component.updateName(createInputEvent('Smith'), 'last_name');
       component.updateName(createInputEvent('Joe'), 'first_name');
-
       expect(component.checkingName()).toBe(true);
     });
 
@@ -76,11 +67,9 @@ describe('DuplicateContactComponent', () => {
       component.updateName(createInputEvent('Smith'), 'last_name');
       component.updateName(createInputEvent('Joe'), 'first_name');
 
-      // Assert signals have not updated yet
       expect(component.name()).toBe(', ');
 
-      // Fast-forward 600ms
-      vi.advanceTimersByTime(600);
+      vi.advanceTimersByTime(400);
 
       expect(component.name()).toBe('Smith, Joe');
       expect(component.checkingName()).toBe(false);
@@ -88,12 +77,11 @@ describe('DuplicateContactComponent', () => {
 
     it('should debounce subsequent typing events and use the latest values', () => {
       component.updateName(createInputEvent('Smit'), 'last_name');
-      vi.advanceTimersByTime(300); // 300ms pass... user keeps typing
+      vi.advanceTimersByTime(300);
 
       component.updateName(createInputEvent('Smith'), 'last_name');
       component.updateName(createInputEvent('Joe'), 'first_name');
 
-      // Pass remaining 600ms for the second batch of timers
       vi.advanceTimersByTime(600);
 
       expect(component.name()).toBe('Smith, Joe');
@@ -102,7 +90,7 @@ describe('DuplicateContactComponent', () => {
 
   describe('potentialDuplicates', () => {
     it('should match person contacts using "last_name, first_name" format', () => {
-      const testIndividual = testContact(); // Expected: Smith, Joe based on standard utils
+      const testIndividual = testContact();
       host.allContacts = [testIndividual];
       fixture.detectChanges();
 
@@ -135,14 +123,13 @@ describe('DuplicateContactComponent', () => {
 
   describe('closeDuplicateWarning', () => {
     it('should set hideDuplicateWarning model to true', () => {
-      host.hideDuplicateWarning.set(false);
+      component.hideDuplicateWarning.set(false);
       fixture.detectChanges();
 
       component.closeDuplicateWarning();
       fixture.detectChanges();
 
       expect(component.hideDuplicateWarning()).toBe(true);
-      expect(host.hideDuplicateWarning()).toBe(true);
     });
   });
 

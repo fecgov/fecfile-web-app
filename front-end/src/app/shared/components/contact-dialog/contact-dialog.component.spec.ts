@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ROUTES } from 'app/routes';
@@ -12,15 +12,15 @@ import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Confirmation, ConfirmationService } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
+import { ContactService } from 'app/shared/services/contact.service';
 
 @Component({
   imports: [ContactDialogComponent],
@@ -38,6 +38,8 @@ describe('ContactDialogComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionListService;
+  let contactService: ContactService;
+  let messageService: MessageService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,18 +60,22 @@ describe('ContactDialogComponent', () => {
         provideZoneChangeDetection(),
         ConfirmationService,
         FormBuilder,
+        MessageService,
         provideMockStore(testMockStore()),
         provideRouter(ROUTES),
         DatePipe,
+        ContactService,
       ],
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
     transactionService = TestBed.inject(TransactionListService);
+    contactService = TestBed.inject(ContactService);
+    messageService = TestBed.inject(MessageService);
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
-
+    component.contact.set(testContact());
     component.ngOnInit();
   });
 
@@ -98,25 +104,20 @@ describe('ContactDialogComponent', () => {
     expect(component.dialogVisible()).toBe(false);
   });
 
-  it('should save contact', () => {
-    component.formSubmitted = false;
-    const fb: FormBuilder = new FormBuilder();
-    const form = fb.group({
-      test: new SubscriptionFormControl('', Validators.required),
-    });
-    component.form = form;
-    component.saveContact();
-    expect(component.formSubmitted).toBe(true);
+  it('should save contact', async () => {
+    const contactEmitSpy = vi.spyOn(component.savedContact, 'emit');
+    const messageSpy = vi.spyOn(messageService, 'add');
+    const tester = testContact();
+    component.updateContact(tester);
+    fixture.detectChanges();
+    tester.first_name = 'Changed name';
+    const updateSpy = vi.spyOn(contactService, 'update').mockResolvedValueOnce(tester);
 
-    vi.spyOn(component.savedContact, 'emit');
-    component.form.get('test')?.setValue('abc');
-    component.saveContact();
-    expect(component.savedContact.emit).toHaveBeenCalledTimes(1);
-
-    component.isNewItem = false;
-    component.form.get('test')?.setValue('abc');
-    component.saveContact(false);
-    expect(component.isNewItem).toBe(true);
+    await component.saveContact(false);
+    fixture.detectChanges();
+    expect(contactEmitSpy).toHaveBeenCalledTimes(1);
+    expect(updateSpy).toHaveBeenCalledTimes(1);
+    expect(messageSpy).toHaveBeenCalledTimes(1);
   });
 
   it('should raise confirmation dialog', () => {
