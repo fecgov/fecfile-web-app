@@ -119,7 +119,7 @@ export function isCloneable(transaction: CloneEligibilityTransaction | undefined
 
 export function buildClonedTransaction(source: ScheduleTransaction, reportId: string): Transaction {
   if (!isCloneable(source)) {
-    throw new Error('FECfile+: transaction type is not eligible for cloning.');
+    throw new Error(`FECfile+: transaction type ${source.transaction_type_identifier} is not eligible for cloning.`);
   }
 
   const transactionTypeIdentifier = source.transaction_type_identifier as TransactionTypes;
