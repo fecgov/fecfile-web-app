@@ -415,7 +415,7 @@ export abstract class TransactionListTableBaseComponent
           const clone = await this.transactionService.cloneSingleTransaction(String(transaction.id), this.reportId);
           await this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${clone.id}`);
         } catch (error) {
-          console.error('Error cloning transaction:', error);
+          console.error(`Error cloning transaction ${transaction.id} of report ${this.reportId}:`, error);
           this.messageService.add({
             severity: 'error',
             summary: 'Unable to clone transaction',
@@ -427,7 +427,7 @@ export abstract class TransactionListTableBaseComponent
     });
   }
 
-  private canClone(transaction: TransactionListRecord): boolean {
+  public canClone(transaction: TransactionListRecord): boolean {
     return this.reportIsEditable() && this.transactionService.isCloneable(transaction);
   }
 
