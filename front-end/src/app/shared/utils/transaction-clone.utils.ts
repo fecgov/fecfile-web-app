@@ -15,9 +15,9 @@ export type CloneEligibilityTransaction = {
   reattribution_redesignation_tag?: string;
 };
 
-export type CloneMemoResetMode = 'always' | 'whenMemoTextPresent';
+type CloneMemoResetMode = 'always' | 'whenMemoTextPresent';
 
-export type ResetCloneMemoTextOptions = {
+type ResetCloneMemoTextOptions = {
   rebuildFromJson?: boolean;
   resetMemoTextId?: CloneMemoResetMode;
 };
