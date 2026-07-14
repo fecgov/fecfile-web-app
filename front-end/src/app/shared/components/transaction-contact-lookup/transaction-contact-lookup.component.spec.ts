@@ -93,9 +93,10 @@ describe('TransactionContactLookupComponent', () => {
   });
 
   it('selecting create new contact should open the contact dialog', () => {
-    component.detailVisible = false;
+    component.detailVisible.set(false);
+    fixture.detectChanges();
     component.createNewContactSelected();
-    expect(component.detailVisible).toBe(true);
+    expect(component.detailVisible()).toBe(true);
   });
 
   it('saving a contact should emit the contact', () => {

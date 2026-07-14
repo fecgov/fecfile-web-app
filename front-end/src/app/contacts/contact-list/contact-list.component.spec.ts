@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testCandidate, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -14,7 +14,7 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
-import { Contact, ContactTypes } from 'app/shared/models';
+import { Contact, ContactTypes, ListRestResponse } from 'app/shared/models';
 import { CurrencyPipe } from '@angular/common';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -86,10 +86,6 @@ describe('ContactListComponent', () => {
   });
 
   describe('typical', () => {
-    beforeEach(() => {
-      fixture.detectChanges();
-    });
-
     it('should create', () => {
       expect(component).toBeTruthy();
     });
@@ -141,13 +137,17 @@ describe('ContactListComponent', () => {
     });
 
     it('renders contact row and edit link', async () => {
-      const rowContact = testContact();
-      component.items.set([rowContact]);
-      component.totalItems.set(1);
-      component.loading.set(false);
-
+      const rowContact = testCandidate();
+      vi.spyOn(service, 'getTableData').mockResolvedValue({
+        count: 1,
+        results: [rowContact],
+      } as ListRestResponse);
+      vi.spyOn(deletedContactService, 'getTableData').mockResolvedValue({
+        count: 0,
+        results: [] as Contact[],
+      } as ListRestResponse);
+      await component.loadTableItems();
       fixture.detectChanges();
-      await fixture.whenStable();
 
       const nameLink = fixture.nativeElement.querySelector('tbody a');
       expect(nameLink).not.toBeNull();
@@ -156,7 +156,6 @@ describe('ContactListComponent', () => {
       const fecIdCell = fixture.nativeElement.querySelector('td.fec-id-column');
       expect(fecIdCell).not.toBeNull();
       expect(fecIdCell.textContent).toContain('999');
-
       const editSpy = vi.spyOn(component, 'editItem');
       nameLink.click();
       expect(editSpy).toHaveBeenCalledWith(rowContact);
