@@ -2,16 +2,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DuplicateContactComponent } from './duplicate-contact.component';
 import { StatePipe } from 'app/shared/pipes/state.pipe';
 import { Component, viewChild } from '@angular/core';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 @Component({
   imports: [DuplicateContactComponent],
   standalone: true,
-  template: ` <app-duplicate-contact [existingContacts]="allContacts" (useContact)="onUseContact($event)" /> `,
+  template: `
+    <app-duplicate-contact [type]="type" [existingContacts]="allContacts" (useContact)="onUseContact($event)" />
+  `,
 })
 class TestHostComponent {
+  type: ContactTypes = ContactTypes.INDIVIDUAL;
   allContacts: Contact[] = [];
   component = viewChild.required(DuplicateContactComponent);
 
