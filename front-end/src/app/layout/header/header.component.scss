@@ -1,14 +1,5 @@
 .seal-and-title {
   height: 48px;
-  transition:
-    height 0.3s cubic-bezier(0.22, 0.98, 0.36, 1),
-    transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform-origin: left center;
-  will-change: transform, height;
-}
-
-nav.compact .seal-and-title {
-  transform: translateZ(0) scale(0.66667);
 }
 
 a {
@@ -16,18 +7,16 @@ a {
 }
 
 nav {
-  box-sizing: border-box;
   background-color: white !important;
-  border-bottom: 2px solid #e8e8e8;
   height: var(--header-height);
-  width: 100%;
+  border-bottom: 2px solid #e8e8e8;
   padding-left: 32px;
   padding-right: 32px;
-  transition: height 0.3s ease-in-out;
-}
-
-nav.compact {
-  height: 54px;
+  z-index: 999;
+  position: fixed;
+  top: var(--header-top);
+  transition: top 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 .seal-link {

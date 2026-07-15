@@ -1,24 +1,16 @@
 .banner {
-  min-height: 43px;
-  background-color: #631010;
-  color: #fff;
-  display: grid;
-  place-items: center;
-  box-sizing: border-box;
+  height: 43px;
+  width: 100%;
+  background-color: var(--warning);
+  color: #ffffff;
+  position: fixed;
+  top: 110px;
 }
 
-.banner-inner {
-  width: min(100%, 1200px);
-  padding: 0 24px;
-}
-
-.banner-text {
-  margin: 0;
-  font-family: var(--karla);
+.banner-header-text {
+  font-weight: bold;
   line-height: 19px;
+  padding-bottom: 12px;
+  padding-top: 12px;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }

@@ -4,7 +4,7 @@
   </div>
 }
 <div class="grid contact-lookup-container">
-  <div class="px-0" [class.dropdown-with-search]="showSearchBoxCallback()">
+  <div class="px-0" [class.dropdown-with-search]="showSearchBox()">
     <p-select
       [formControl]="contactTypeFormControl"
       inputId="entity_type"
@@ -16,7 +16,7 @@
       [pt]="{ dropdown: contactTypeOptions.length > 1 ? '' : 'no-dropdown-icon' }"
     />
   </div>
-  @if (showSearchBoxCallback()) {
+  @if (showSearchBox()) {
     <div class="pl-0">
       <p-autoComplete
         id="searchBox"

@@ -8,6 +8,7 @@ import {
   model,
   OnInit,
   output,
+  resource,
   Signal,
   signal,
   TemplateRef,
@@ -29,14 +30,22 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import {
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
+  hasFecId,
+  isEntity,
+  isPerson,
+} from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
@@ -53,6 +62,7 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { DuplicateContactComponent } from './duplicate-contact/duplicate-contact.component';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -75,26 +85,32 @@ import { TransactionContactUtils } from '../transaction-type-base/transaction-co
     LabelPipe,
     SearchableSelectComponent,
     ToUpperDirective,
+    DuplicateContactComponent,
   ],
   providers: [SearchableSelectComponent],
 })
 export class ContactDialogComponent extends FormComponent implements OnInit {
-  private readonly contactService = inject(ContactService);
+  readonly contactService = inject(ContactService);
   private readonly transactionService = inject(TransactionListService);
   protected readonly confirmationService = inject(ConfirmationService);
+  private readonly messageService = inject(MessageService);
   public readonly router = inject(Router);
   readonly ContactTypes = ContactTypes;
   readonly contact = model<Contact>();
   @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() detailVisible = false;
+  readonly detailVisible = model(false);
   @Input() showHistory = false;
   @Input() headerTitle?: string;
   @Input() defaultCandidateOffice?: CandidateOfficeTypes;
-  readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
   readonly first = signal(0);
   readonly sortField = signal('transaction_type_identifier');
   readonly sortOrder = signal<'asc' | 'desc'>('asc');
+
+  readonly duplicateContact = viewChild(DuplicateContactComponent);
+
+  readonly allContacts = resource({ loader: () => this.contactService.getAll(), defaultValue: [] as Contact[] });
+  readonly existingContactMap = computed(() => Map.groupBy(this.allContacts.value(), (contact) => contact.type));
 
   transactions: TransactionListRecord[] = [];
   tableLoading = true;
@@ -126,11 +142,13 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
         ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ]),
-    { updateOn: 'blur' },
   );
 
   isNewItem = true;
-  contactType = ContactTypes.INDIVIDUAL;
+  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
+  readonly isPerson = computed(() => isPerson(this.contactType()));
+  readonly isEntity = computed(() => isEntity(this.contactType()));
+  readonly showSearchBox = computed(() => hasFecId(this.contactType()));
 
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -148,29 +166,11 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const amount = this.amountBodyTpl();
     if (!type || !date || !amount) return [];
     return [
-      {
-        field: 'transaction_type_identifier',
-        header: 'Type',
-        sortable: true,
-        cssClass: 'type-column',
-        bodyTpl: type,
-      },
+      { field: 'transaction_type_identifier', header: 'Type', sortable: true, cssClass: 'type-column', bodyTpl: type },
       { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column' },
       { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
-      {
-        field: 'date',
-        header: 'Date',
-        sortable: true,
-        cssClass: 'date-column',
-        bodyTpl: date,
-      },
-      {
-        field: 'amount',
-        header: 'Amount',
-        sortable: true,
-        cssClass: 'amount-column',
-        bodyTpl: amount,
-      },
+      { field: 'date', header: 'Date', sortable: true, cssClass: 'date-column', bodyTpl: date },
+      { field: 'amount', header: 'Amount', sortable: true, cssClass: 'amount-column', bodyTpl: amount },
     ];
   });
 
@@ -178,6 +178,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly committeePatternMessage = committeePatternMessage;
 
   readonly table = viewChild(TableComponent);
+
   constructor() {
     super();
     effect(() => {
@@ -234,7 +235,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (this.contactTypeOptions.length === 0) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     }
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
+    this.contactType.set(this.contactTypeOptions[0].value as ContactTypes);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
@@ -273,7 +274,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       this.form.get('candidate_office')?.disable();
     }
 
-    this.contactTypeChanged(this.contactType);
+    this.contactTypeChanged(this.contactType());
   }
 
   /**
@@ -284,7 +285,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    */
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contactTypeOptions.some((opt) => opt.value === contactType)) return;
-    this.contactType = contactType;
+    this.contactType.set(contactType);
     if (!this.contact()) this.contact.set(new Contact());
 
     // The type form control is not displayed on the form page because we are
@@ -319,6 +320,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     } else {
       this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     }
+    this.duplicateContact()?.refresh();
   }
 
   public openDialog() {
@@ -340,27 +342,19 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   public closeDialog(visibleChangeFlag = false) {
     if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.detailVisible = false;
+      this.detailVisible.set(false);
       this.dialogVisible.set(false);
     }
   }
 
-  /**
-   * Callback passed to the contact-lookup component to show/hide lookup input box
-   * @returns boolean
-   */
-  public showSearchBox() {
-    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
-  }
-
   private resetForm() {
+    this.duplicateContact()?.refresh();
     this.form.reset();
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
     this.isNewItem = true;
     this.contactLookup().contactTypeFormControl.enable();
-    this.contactLookup().contactTypeFormControl.setValue(this.contactType);
+    this.contactLookup().contactTypeFormControl.setValue(this.contactType());
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
@@ -369,7 +363,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   updateContact(contact: Contact) {
     this.contact.set(contact);
-    this.contactType = contact.type;
+    this.contactType.set(contact.type);
     this.form.markAllAsDirty();
     this.form.patchValue(contact);
   }
@@ -403,7 +397,12 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     });
   }
 
-  public saveContact(closeDialog = true) {
+  useContact(contact: Contact) {
+    this.savedContact.emit(contact);
+    this.closeDialog();
+  }
+
+  public async saveContact(closeDialog = true) {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -411,12 +410,21 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       printFormErrors(this.form);
       return;
     }
-
-    const contact: Contact = Contact.fromJSON({
+    const payload: Contact = Contact.fromJSON({
       ...this.contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
+      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
+      type: this.contactType(),
     });
-    contact.type = this.contactType;
+
+    const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: payload.id ? 'Contact Updated' : 'Contact Created',
+      life: 3000,
+    });
+
+    this.allContacts.reload();
     this.savedContact.emit(contact);
 
     if (closeDialog) {

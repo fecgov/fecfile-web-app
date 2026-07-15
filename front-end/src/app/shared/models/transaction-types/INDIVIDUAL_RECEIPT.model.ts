@@ -15,7 +15,7 @@ export class INDIVIDUAL_RECEIPT extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override hasElectionInformation(report_type: ReportTypes): boolean {
-    return [ReportTypes.F3].includes(report_type);
+    return report_type === ReportTypes.F3;
   }
 
   getNewTransaction() {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactModalComponent } from './contact-modal.component';
 import { provideHttpClient } from '@angular/common/http';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService, ContactManager } from 'app/shared/services/contact-management.service';
@@ -17,6 +17,7 @@ describe('ContactModalComponent', () => {
   let fixture: ComponentFixture<ContactModalComponent>;
 
   let contactManagementService: ContactManagementService;
+  let contactService: ContactService;
   let manager: ContactManager;
 
   beforeEach(async () => {
@@ -29,6 +30,7 @@ describe('ContactModalComponent', () => {
         ConfirmationService,
         provideRouter([]),
         ContactManagementService,
+        MessageService,
       ],
     }).compileComponents();
 
@@ -36,6 +38,7 @@ describe('ContactModalComponent', () => {
     component = fixture.componentInstance;
 
     contactManagementService = TestBed.inject(ContactManagementService);
+    contactService = TestBed.inject(ContactService);
 
     contactManagementService.activeKey.set('testKey');
     manager = contactManagementService.get('testKey');
@@ -104,7 +107,9 @@ describe('ContactModalComponent', () => {
   });
 
   it('should save contact if form is valid', async () => {
-    component.form.patchValue(testContact());
+    const contact = testContact();
+    vi.spyOn(contactService, 'create').mockResolvedValue(contact);
+    component.form.patchValue(contact);
     component.form.patchValue({ telephone: null });
     for (const control in component.form.controls) {
       if (component.form.controls[control].pending)
@@ -112,7 +117,7 @@ describe('ContactModalComponent', () => {
     }
 
     expect(component.form.valid).toBe(true);
-    component.saveContact();
+    await component.saveContact();
 
     expect(manager.contact().first_name).toEqual('Joe');
     expect(manager.outerContact()).toEqual(manager.contact());
