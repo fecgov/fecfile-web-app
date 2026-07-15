@@ -102,12 +102,6 @@ export class TransactionService {
     return transaction;
   }
 
-  public async cloneSingleTransaction(transactionId: string, reportId: string): Promise<Transaction> {
-    const source = await this.get(transactionId);
-    const clone = buildClonedTransaction(source, reportId);
-    return this.create(clone);
-  }
-
   public async update(transaction: Transaction): Promise<Transaction> {
     const payload = this.preparePayload(transaction);
     await this.apiService.put<string>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload, {});

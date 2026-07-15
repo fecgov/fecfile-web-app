@@ -1,5 +1,6 @@
 import { getTestIndividualReceipt } from './unit-test.utils';
-import { resetCloneCoreFields, resetCloneMemoText } from './transaction-clone.utils';
+import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { isCloneable, resetCloneCoreFields, resetCloneMemoText } from './transaction-clone.utils';
 
 describe('transaction-clone.utils', () => {
   describe('resetCloneCoreFields', () => {
@@ -49,6 +50,16 @@ describe('transaction-clone.utils', () => {
       });
 
       expect(clone.memo_text_id).toBe('preserve-me');
+    });
+  });
+
+  describe('isCloneable', () => {
+    it('should reject multi-entry transaction types', () => {
+      expect(
+        isCloneable({
+          transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
+        }),
+      ).toBe(false);
     });
   });
 });

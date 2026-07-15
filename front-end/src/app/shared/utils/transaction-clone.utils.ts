@@ -156,8 +156,15 @@ function getCloneableTransactionTypes(): Set<TransactionTypes> {
 function isCloneableTransactionType(
   transactionTypeIdentifier: string | undefined,
 ): transactionTypeIdentifier is TransactionTypes {
+  if (!transactionTypeIdentifier) {
+    return false;
+  }
+
+  const transactionType = TransactionTypeUtils.factory(transactionTypeIdentifier);
+
   return (
-    !!transactionTypeIdentifier && getCloneableTransactionTypes().has(transactionTypeIdentifier as TransactionTypes)
+    getCloneableTransactionTypes().has(transactionTypeIdentifier as TransactionTypes) &&
+    !transactionType.dependentChildTransactionTypes?.length
   );
 }
 

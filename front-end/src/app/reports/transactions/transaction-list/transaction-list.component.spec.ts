@@ -24,7 +24,6 @@ describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
   let router: Router;
-  const cloneSingleTransaction = vi.fn();
   const isCloneable = vi.fn();
 
   beforeEach(async () => {
@@ -49,7 +48,6 @@ describe('TransactionListComponent', () => {
               ),
             getTableData: () => of([]),
             update: () => of([]),
-            cloneSingleTransaction,
             isCloneable,
           },
         },
@@ -71,13 +69,6 @@ describe('TransactionListComponent', () => {
   });
 
   beforeEach(() => {
-    cloneSingleTransaction.mockReset();
-    cloneSingleTransaction.mockResolvedValue(
-      SchATransaction.fromJSON({
-        id: 'cloned-id',
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-      }),
-    );
     isCloneable.mockReset();
     isCloneable.mockReturnValue(true);
     fixture = TestBed.createComponent(TransactionListComponent);
@@ -177,7 +168,7 @@ describe('TransactionListComponent', () => {
     expect(cloneAction?.isAvailable(childTransaction)).toBe(false);
   });
 
-  it('should acknowledge Clone and navigate to the cloned transaction edit page', async () => {
+  it('should acknowledge Clone and navigate to the pre-filled create page', async () => {
     const receipts = component.receipts() as unknown as {
       rowActions: { label: string; action: (item: TransactionListRecord) => void }[];
       reportService: { isEditable: (report: unknown) => boolean };
@@ -199,7 +190,6 @@ describe('TransactionListComponent', () => {
     expect(confirmConfig?.accept).toBeDefined();
     await confirmConfig?.accept?.();
 
-    expect(cloneSingleTransaction).toHaveBeenCalledWith('100', '999');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list/cloned-id');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/create/INDIVIDUAL_RECEIPT?clone=100');
   });
 });

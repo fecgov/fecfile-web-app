@@ -39,6 +39,17 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 export type DateType = Date | string | undefined;
 
 export class TransactionFormUtils {
+  private static readonly initOnlyTransactionFields = new Set([
+    'id',
+    'transactionType',
+    'transaction_type_identifier',
+    'report_ids',
+    'reports',
+    'children',
+    'can_delete',
+    'line_label',
+  ]);
+
   /**
    * The parameters after the "component" parameter need to be set to either the primary (parent)
    * component values or, if they are the second transaction type of a "double" transaction
@@ -57,11 +68,19 @@ export class TransactionFormUtils {
     contactIdMap: ContactIdMapType,
     contactService: ContactService,
   ): Promise<void> {
+    const shouldPatchFromTransaction =
+      !!transaction && TransactionFormUtils.shouldInitializeFromTransaction(transaction);
+
     if (transaction?.id) {
       form.patchValue({ ...transaction });
 
       TransactionFormUtils.patchMemoText(transaction, form);
       form.get('entity_type')?.disable();
+    } else if (shouldPatchFromTransaction && transaction) {
+      component.resetForm();
+      form.patchValue({ ...transaction });
+      TransactionFormUtils.patchMemoText(transaction, form);
+      form.get('entity_type')?.enable();
     } else {
       component.resetForm();
       form.get('entity_type')?.enable();
@@ -215,6 +234,24 @@ export class TransactionFormUtils {
       .subscribe(([amount, previousAggregate]) => {
         this.updateAggregate(form, 'calendar_ytd', templateMap, transaction, previousAggregate, amount);
       });
+  }
+
+  private static shouldInitializeFromTransaction(transaction: Transaction): boolean {
+    return Object.entries(transaction.toJson()).some(([field, value]) => {
+      if (TransactionFormUtils.initOnlyTransactionFields.has(field)) {
+        return false;
+      }
+
+      if (value === undefined || value === null || value === '') {
+        return false;
+      }
+
+      if (Array.isArray(value)) {
+        return value.length > 0;
+      }
+
+      return true;
+    });
   }
 
   // Only dynamically update non-inherited calendar_ytd values on the form input.

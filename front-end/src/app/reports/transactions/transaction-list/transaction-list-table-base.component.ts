@@ -412,14 +412,15 @@ export abstract class TransactionListTableBaseComponent
       rejectLabel: 'Cancel',
       accept: async () => {
         try {
-          const clone = await this.transactionService.cloneSingleTransaction(String(transaction.id), this.reportId);
-          await this.router.navigateByUrl(`/reports/transactions/report/${this.reportId}/list/${clone.id}`);
+          await this.router.navigateByUrl(
+            `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?clone=${transaction.id}`,
+          );
         } catch (error) {
           console.error(`Error cloning transaction ${transaction.id} of report ${this.reportId}:`, error);
           this.messageService.add({
             severity: 'error',
             summary: 'Unable to clone transaction',
-            detail: 'The selected transaction could not be cloned.',
+            detail: 'The selected transaction could not be opened for cloning.',
             life: 3000,
           });
         }

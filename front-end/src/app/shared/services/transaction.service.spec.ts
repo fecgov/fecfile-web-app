@@ -196,104 +196,6 @@ describe('TransactionService', () => {
     });
   });
 
-  describe('cloneSingleTransaction', () => {
-    it('should clone an eligible transaction, scrub persisted fields, and create a new record', async () => {
-      const source = SchATransaction.fromJSON({
-        id: 'source-id',
-        transaction_id: 'T-100',
-        report_ids: ['old-report'],
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        contribution_amount: 125,
-        contribution_aggregate: 500,
-        force_unaggregated: true,
-        force_itemized: true,
-        itemized: true,
-        created: '2026-01-01',
-        updated: '2026-01-02',
-        contact_1: { id: 'contact-id' },
-        memo_text: {
-          id: 'memo-id',
-          report_id: 'old-report',
-          transaction_id_number: 'OLD-TRAN-ID',
-          transaction_uuid: 'memo-uuid',
-          text4000: 'Memo text',
-        },
-      });
-
-      vi.spyOn(service, 'get').mockResolvedValue(source);
-      let createPayload: SchATransaction | undefined;
-      const createSpy = vi.spyOn(service, 'create').mockImplementation(async (transaction) => {
-        createPayload = SchATransaction.fromJSON(transaction.toJson());
-        transaction.id = 'new-id';
-        return transaction;
-      });
-
-      const clonePromise = service.cloneSingleTransaction('source-id', 'new-report');
-
-      const clone = await clonePromise;
-
-      expect(createSpy).toHaveBeenCalledTimes(1);
-      expect(createPayload).toBeDefined();
-      const clonedPayload = createPayload as SchATransaction;
-      expect(clonedPayload.id).toBeUndefined();
-      expect(clonedPayload.transaction_id).toBeUndefined();
-      expect(clonedPayload.report_ids).toEqual(['new-report']);
-      expect(clonedPayload.force_unaggregated).toBeUndefined();
-      expect(clonedPayload.force_itemized).toBeUndefined();
-      expect(clonedPayload.itemized).toBeUndefined();
-      expect(clonedPayload.contribution_aggregate).toBeUndefined();
-      expect(clonedPayload.contact_1?.id).toEqual('contact-id');
-      expect(clonedPayload.contact_1_id).toEqual('contact-id');
-      expect(clonedPayload.memo_text?.id).toBeUndefined();
-      expect(clonedPayload.memo_text?.report_id).toEqual('new-report');
-      expect(clonedPayload.memo_text?.transaction_id_number).toBeUndefined();
-      expect(clonedPayload.memo_text?.transaction_uuid).toBeUndefined();
-      expect(clonedPayload.memo_text_id).toBeUndefined();
-      expect(clone.id).toEqual('new-id');
-      expect(clone.report_ids).toEqual(['new-report']);
-      expect(clone.contact_1?.id).toEqual('contact-id');
-
-      httpTestingController.verify();
-    });
-
-    it('should reject non-cloneable transaction types before create', async () => {
-      const source = SchATransaction.fromJSON({
-        id: 'source-id',
-        transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
-      });
-
-      vi.spyOn(service, 'get').mockResolvedValue(source);
-      const createSpy = vi.spyOn(service, 'create');
-
-      const clonePromise = service.cloneSingleTransaction('source-id', 'new-report');
-
-      await expect(clonePromise).rejects.toThrow(
-        'FECfile+: This transaction (EARMARK_MEMO) is not eligible for cloning.',
-      );
-      expect(createSpy).not.toHaveBeenCalled();
-      httpTestingController.verify();
-    });
-
-    it('should reject allowed types that are reattribution or redesignation copies before create', async () => {
-      const source = SchATransaction.fromJSON({
-        id: 'source-id',
-        transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-        reatt_redes_id: 'original-id',
-        reattribution_redesignation_tag: 'REATTRIBUTED',
-      });
-
-      vi.spyOn(service, 'get').mockResolvedValue(source);
-      const createSpy = vi.spyOn(service, 'create');
-
-      await expect(service.cloneSingleTransaction('source-id', 'new-report')).rejects.toThrow(
-        'FECfile+: This transaction (INDIVIDUAL_RECEIPT) is not eligible for cloning.',
-      );
-
-      expect(createSpy).not.toHaveBeenCalled();
-      httpTestingController.verify();
-    });
-  });
-
   describe('update', () => {
     it('should PUT  a record', () => {
       const schATransaction: SchATransaction = SchATransaction.fromJSON({
@@ -349,6 +251,11 @@ describe('TransactionService', () => {
           transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
           reatt_redes_id: 'original-id',
           reattribution_redesignation_tag: 'REATTRIBUTED',
+        }),
+      ).toBe(false);
+      expect(
+        service.isCloneable({
+          transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
         }),
       ).toBe(false);
       expect(service.isCloneable(undefined)).toBe(false);

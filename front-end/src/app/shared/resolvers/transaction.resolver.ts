@@ -12,6 +12,7 @@ import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.util
 import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
+import { buildClonedTransaction } from '../utils/transaction-clone.utils';
 import { MultipleEntryTransactionTypes, TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { TransactionListService } from '../services/transaction-list.service';
 import { Store } from '@ngrx/store';
@@ -34,6 +35,7 @@ export class TransactionResolver {
     const parentTransactionId = route.paramMap.get('parentTransactionId');
     const debtId = route.queryParamMap.get('debt');
     const loanId = route.queryParamMap.get('loan');
+    const cloneId = route.queryParamMap.get('clone');
     const reattributionId = route.queryParamMap.get('reattribution');
     const redesignationId = route.queryParamMap.get('redesignation');
 
@@ -55,6 +57,9 @@ export class TransactionResolver {
       }
       if (loanId) {
         return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
+      }
+      if (cloneId) {
+        return this.resolveNewClone(reportId, cloneId);
       }
       if (reattributionId) {
         return this.resolveNewReattribution(reportId, reattributionId);
@@ -140,6 +145,11 @@ export class TransactionResolver {
     }
     repayment.report_ids = to.report_ids;
     return repayment;
+  }
+
+  async resolveNewClone(reportId: string, cloneId: string) {
+    const sourceTransaction = await this.service.get(cloneId);
+    return buildClonedTransaction(sourceTransaction, reportId);
   }
 
   async resolveNewReattribution(reportId: string, originatingId: string) {
