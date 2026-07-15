@@ -224,47 +224,6 @@ describe('ContactListComponent', () => {
 
       expect(component.restoreContactsButtonIsVisible).toBe(true);
     });
-
-    it('#saveContact calls itemService', async () => {
-      const updatedContact = testContact();
-      const createdContact = testContact();
-      createdContact.id = undefined;
-
-      const updatePromise = Promise.resolve(updatedContact);
-      const createPromise = Promise.resolve(createdContact);
-      vi.spyOn(service, 'update').mockReturnValue(updatePromise);
-      vi.spyOn(service, 'create').mockReturnValue(createPromise);
-      vi.spyOn(service, 'getTableData').mockReturnValue(Promise.resolve(tableDataResponse));
-      const loadSpy = vi.spyOn(component, 'loadTableItems').mockReturnValue(Promise.resolve());
-      const toastSpy = vi.spyOn(component.messageService, 'add');
-
-      component.saveContact(updatedContact);
-      await updatePromise;
-      await Promise.resolve();
-
-      expect(service.update).toHaveBeenCalledTimes(1);
-      expect(loadSpy).toHaveBeenCalled();
-      expect(
-        (
-          vi.mocked(toastSpy).mock.lastCall![0] as {
-            detail?: string;
-          }
-        ).detail,
-      ).toBe('Contact Updated');
-
-      component.saveContact(createdContact);
-      await createPromise;
-      await Promise.resolve();
-
-      expect(service.create).toHaveBeenCalledTimes(1);
-      expect(
-        (
-          vi.mocked(toastSpy).mock.lastCall![0] as {
-            detail?: string;
-          }
-        ).detail,
-      ).toBe('Contact Created');
-    });
   });
 
   describe('restoreContactsButtonIsVisible true', () => {

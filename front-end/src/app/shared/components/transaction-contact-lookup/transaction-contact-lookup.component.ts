@@ -130,14 +130,9 @@ export class TransactionContactLookupComponent implements OnInit {
   }
 
   contactLookupSelected(contact: Contact) {
-    if (contact.id) {
-      this.contactSelect.emit({
-        value: contact,
-      });
-    } else {
-      this.contactDialog.updateContact(contact);
-      this.detailVisible = true;
-    }
+    this.contactSelect.emit({
+      value: contact,
+    });
   }
 
   createNewContactSelected() {

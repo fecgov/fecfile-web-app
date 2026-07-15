@@ -195,20 +195,6 @@ const assertCreatesNewContactConfirmMessage = (contactTypeLower: ContactTypeLowe
   });
 };
 
-const clickSaveAndConfirmCreatesNewContact = (
-  reportId: string,
-  contactTypeLower: ContactTypeLower,
-  contactDisplay: string,
-) => {
-  const fx = () => {
-    TransactionDetailPage.clickSave();
-    assertCreatesNewContactConfirmMessage(contactTypeLower, contactDisplay);
-    PageUtils.clickButton('Continue');
-  };
-
-  ReportListPage.interceptTransactions(reportId, fx);
-};
-
 const assertSuggestedChangesConfirmDialog = (displayName: string, expectedItems: string[]) => {
   getVisibleConfirmDialog().within(() => {
     cy.get('p').should(($msg) => {
@@ -367,7 +353,7 @@ describe('Contacts: Transactions integration', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(indData, false, '', true, 'contribution_date');
-      clickSaveAndConfirmCreatesNewContact(rid, 'individual', individual.display);
+      TransactionDetailPage.clickSave();
 
       cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(individual.display, /Individual Receipt/i, 10);
@@ -396,7 +382,7 @@ describe('Contacts: Transactions integration', () => {
       };
 
       TransactionDetailPage.enterScheduleFormData(transferData, false, '', true, 'contribution_date');
-      clickSaveAndConfirmCreatesNewContact(rid, 'committee', committee.display);
+      TransactionDetailPage.clickSave();
 
       cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(committee.display, /Transfer/i, 30);
@@ -427,7 +413,7 @@ describe('Contacts: Transactions integration', () => {
         TransactionDetailPage.enterScheduleFormData(opExpData, false, '', true, dateField);
       });
 
-      clickSaveAndConfirmCreatesNewContact(rid, 'organization', organization.display);
+      TransactionDetailPage.clickSave();
 
       cy.url({ timeout: DEFAULT_TIMEOUT }).should('include', `/reports/transactions/report/${rid}/list`);
       assertTxnRowByContact(organization.display, /Operating Expenditure/i, 40);

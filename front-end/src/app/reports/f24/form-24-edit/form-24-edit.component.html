@@ -1,46 +1,15 @@
 <h1>Form 24</h1>
 <span class="karla text-sm font-bold">24/48 Hour Report of Independent Expenditure</span>
 <hr />
-<form novalidate (submit)="$event.preventDefault()" class="flex flex-column gap-4">
-  <fieldset>
-    <h2 for="form24Options">Report type</h2>
-    <p-selectbutton
-      inputId="form24Options"
-      id="form24Options"
-      [options]="form24Options"
-      [formField]="f24Form.type"
-      optionLabel="label"
-      optionValue="value"
-    />
-    @if (f24Form.type().dirty() && f24Form.type().invalid()) {
-      <small class="p-error">{{ f24Form.type().errors()[0].message }}</small>
-    }
-  </fieldset>
-  <fieldset>
-    <label for="report-name" class="mb-1"> REPORT NAME </label>
-    <p-input-group>
-      <div id="f24-input-container">
-        @if (this.f24Form.type().value() != null) {
-          <span>{{ typeHour() }}</span>
-        }
-        <p-inputgroup>
-          <input
-            pInputText
-            placeholder="Provide a custom report name"
-            type="text"
-            [formField]="f24Form.typelessName"
-            id="report-name"
-            class="pl-1"
-            [class.opacity-60]="!f24Form.typelessName()"
-          />
-        </p-inputgroup>
-      </div>
-    </p-input-group>
-    @if (f24Form().dirty() && f24Form.typelessName().invalid()) {
-      <small class="p-error">{{ f24Form.typelessName().errors()[0].message }}</small>
-    }
-  </fieldset>
-  <hr type="solid" class="m-0" />
+<form novalidate (submit)="$event.preventDefault()" class="grid-form">
+  <app-select-button-input
+    [options]="form24Options"
+    label="Report type"
+    labelStyleClass="h2 mb-4"
+    [formField]="f24Form.type"
+  />
+  <app-input-group [formField]="f24Form.typelessName" [pretext]="typeHour()" label="REPORT NAME" />
+  <hr type="solid" />
   <app-save-cancel
     [submitDisabled]="f24Form().invalid()"
     (cancelForm)="router.navigateByUrl('/reports')"
