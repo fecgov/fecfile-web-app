@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { Component, NO_ERRORS_SCHEMA, viewChild } from '@angular/core';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
-import { ContactTypes, Contact } from 'app/shared/models/contact.model';
+import { ContactTypes, Contact, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
@@ -161,7 +160,7 @@ describe('ContactSearchComponent', () => {
     it('should handle selection of FecApiCommitteeLookupData and update manager', async () => {
       const committeeData = {
         id: 'C456',
-      } as any;
+      } as FecApiCommitteeLookupData;
 
       const committeeDetails = CommitteeAccount.fromJSON({
         committee_id: 'C456',
@@ -174,7 +173,18 @@ describe('ContactSearchComponent', () => {
       });
 
       const spy = vi.spyOn(component.contactService, 'getCommitteeDetails').mockResolvedValue(committeeDetails);
-
+      const committeeContact = Contact.fromJSON({
+        type: ContactTypes.COMMITTEE,
+        committee_id: committeeDetails.committee_id,
+        name: committeeDetails.name,
+        street_1: committeeDetails.street_1,
+        street_2: committeeDetails.street_2,
+        city: committeeDetails.city,
+        state: committeeDetails.state,
+        zip: committeeDetails.zip,
+        telephone: `+1 ${committeeDetails.treasurer_phone}`,
+      });
+      vi.spyOn(component.contactService, 'create').mockResolvedValue(committeeContact);
       vi.spyOn(component.manager().contact, 'set');
       vi.spyOn(component.manager().outerContact, 'set');
 

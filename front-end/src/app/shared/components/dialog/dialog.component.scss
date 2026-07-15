@@ -93,3 +93,23 @@ dialog {
 .pi-exclamation-circle {
   padding-top: 8px;
 }
+
+dialog:not([open]) {
+  display: none;
+}
+
+dialog[open] {
+  display: block;
+  position: fixed;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: none;
+  border-radius: 8px;
+}

@@ -1,5 +1,7 @@
 <div>
-  <app-second-committee-admin-dialog />
+  @if (memberService.needsSecondAdmin()) {
+    <app-second-committee-admin-dialog />
+  }
   <app-poller />
   <router-outlet />
   <app-confirm-dialog id="confirm-dialog" />
