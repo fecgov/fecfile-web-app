@@ -135,7 +135,7 @@ export class ReportListPage {
     const fx = () => {
       cy.visit(`/reports/transactions/report/${reportId}/list`);
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
-      cy.waitForNetworkIdle('GET', '*.js', 2000)
+      cy.waitForNetworkIdle( 2000)
       cy.contains('Transactions in this report').should('be.visible');
     };
 
