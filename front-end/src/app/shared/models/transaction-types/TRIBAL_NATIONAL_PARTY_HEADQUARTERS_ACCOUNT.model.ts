@@ -20,6 +20,10 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionT
     return 'Headquarters Buildings Account';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

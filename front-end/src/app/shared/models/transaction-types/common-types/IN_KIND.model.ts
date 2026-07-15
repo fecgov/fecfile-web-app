@@ -21,4 +21,8 @@ export abstract class IN_KIND extends SchATransactionType {
   override contactTitle = 'Contact'; // Title for primary contact
 
   override purposeDescriptionPrefix = 'In-Kind: ';
+
+  override get isReattributable(): boolean {
+    return false;
+  }
 }

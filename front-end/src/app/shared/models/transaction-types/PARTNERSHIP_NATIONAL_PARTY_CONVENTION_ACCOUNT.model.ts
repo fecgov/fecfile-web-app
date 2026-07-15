@@ -29,6 +29,10 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
     return 'Pres. Nominating Convention Account (Partnership attributions do not meet itemization threshold)';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

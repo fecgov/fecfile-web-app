@@ -21,6 +21,10 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
   ]);
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   override generatePurposeDescription(): string {
     return 'Transfer of Joint Fundraising Proceeds';
   }

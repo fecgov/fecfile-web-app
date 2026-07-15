@@ -13,6 +13,7 @@ export class INDIVIDUAL_RECEIPT extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+
   override hasElectionInformation(report_type: ReportTypes): boolean {
     return report_type === ReportTypes.F3;
   }
