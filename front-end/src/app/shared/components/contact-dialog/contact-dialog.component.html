@@ -74,14 +74,24 @@
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" />
+              <input
+                type="text"
+                pInputText
+                id="name"
+                formControlName="name"
+                (input)="duplicateContact()?.updateName($event, 'name')"
+              />
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
-          @if (contactType() === ContactTypes.ORGANIZATION) {
-            <div class="col-4"></div>
-          }
         </div>
+        @if (headerTitle && contactType() === ContactTypes.ORGANIZATION) {
+          <app-duplicate-contact
+            [type]="contactType()"
+            [existingContacts]="existingContactMap().get(contactType()) ?? []"
+            (useContact)="useContact($event)"
+          />
+        }
       }
       @if (isPerson()) {
         <div class="grid">
@@ -123,7 +133,7 @@
         In future change this to isNewItem when enabling for opening on Contact Management -->
         @if (headerTitle && contactType() === ContactTypes.INDIVIDUAL) {
           <app-duplicate-contact
-            #duplicateContact
+            [type]="contactType()"
             [existingContacts]="existingContactMap().get(contactType()) ?? []"
             (useContact)="useContact($event)"
           />
