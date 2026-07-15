@@ -88,10 +88,7 @@ export class CreateCommitteeComponent {
         detail: `Committee Account ${committeeAccount.committee_id} Created`,
         life: 3000,
       });
-      await this.committeeAccountService.activateCommittee(
-        committeeAccount.id,
-        this.selectedCommittee()?.filing_frequency,
-      );
+      await this.committeeAccountService.activateCommittee(committeeAccount.id);
       this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
       const userLoginData = await this.userService.getCurrentUser();
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
