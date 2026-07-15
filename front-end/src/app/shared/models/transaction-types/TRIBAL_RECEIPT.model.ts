@@ -19,7 +19,7 @@ export class TRIBAL_RECEIPT extends SchATransactionType {
   }
 
   override hasElectionInformation(report_type: ReportTypes): boolean {
-    return [ReportTypes.F3].includes(report_type);
+    return report_type === ReportTypes.F3;
   }
 
   override get isReattributable() {
