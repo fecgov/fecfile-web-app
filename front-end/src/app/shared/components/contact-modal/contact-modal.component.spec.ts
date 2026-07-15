@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactModalComponent } from './contact-modal.component';
 import { provideHttpClient } from '@angular/common/http';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService, ContactManager } from 'app/shared/services/contact-management.service';
@@ -30,6 +30,7 @@ describe('ContactModalComponent', () => {
         ConfirmationService,
         provideRouter([]),
         ContactManagementService,
+        MessageService,
       ],
     }).compileComponents();
 
