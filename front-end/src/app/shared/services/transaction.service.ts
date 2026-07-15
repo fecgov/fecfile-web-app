@@ -5,7 +5,7 @@ import { DateType } from '../components/transaction-type-base/transaction-form.u
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
-import { buildClonedTransaction, CloneEligibilityTransaction, isCloneable } from '../utils/transaction-clone.utils';
+import { CloneEligibilityTransaction, isCloneable } from '../utils/transaction-clone.utils';
 import { ApiService } from './api.service';
 import { map, Observable, of } from 'rxjs';
 
