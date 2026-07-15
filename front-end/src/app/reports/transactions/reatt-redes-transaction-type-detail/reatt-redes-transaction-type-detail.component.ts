@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primeng/accordion';
 import { Ripple } from 'primeng/ripple';
@@ -20,10 +20,11 @@ import { ReattRedesTransactionTypeBaseComponent } from 'app/shared/components/tr
   ],
 })
 export class ReattRedesTransactionTypeDetailComponent extends ReattRedesTransactionTypeBaseComponent implements OnInit {
+  readonly reatt_redes = computed(() => this.transaction()?.reatt_redes);
   override ngOnInit(): void {
     super.ngOnInit();
     const transactionId = this.activatedRoute.snapshot.params['transactionId'];
-    if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
+    if (transactionId && this.childTransaction()?.id === transactionId) {
       this.accordionValue.set(1);
     }
   }

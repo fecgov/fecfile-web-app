@@ -79,6 +79,10 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   protected readonly isDebtRepayment = computed(
     () => !!this.transaction()?.debt_id && this.transactionType()?.scheduleId !== ScheduleIds.D,
   );
+  protected readonly hasDate = computed(() => this.transactionType()?.hasDate() ?? false);
+  protected readonly showMemoCode = computed(
+    () => this.transactionType()?.hasMemoCode() && !this.isDebtRepayment() && !this.isLoanRepayment(),
+  );
 
   ngOnInit(): void {
     if (this.isDebtRepayment() || this.isLoanRepayment()) {

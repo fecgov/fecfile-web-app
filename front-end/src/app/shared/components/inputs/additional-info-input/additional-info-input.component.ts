@@ -40,6 +40,10 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
 
 Add additional information as needed in the following Note or Memo Text box.`;
 
+  readonly hasDesignatedSubordinate = computed(() => !!this.transactionType()?.hasDesignatedSubordinate());
+  readonly hasMemoText = computed(() => !!this.transactionType()?.hasMemoText());
+  readonly purposeDescriptionLabel = computed(() => this.transactionType()?.generatePurposeDescriptionLabel() ?? '');
+  readonly hasCategoryCode = computed(() => this.transactionType()?.hasCategoryCode());
   constructor() {
     super();
     effect(() => {

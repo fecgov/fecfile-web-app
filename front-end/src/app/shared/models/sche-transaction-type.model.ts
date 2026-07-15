@@ -1,7 +1,5 @@
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
-import { CANDIDATE_FIELDS, hasFields } from '../utils/transaction-type-properties';
-import { FormGroup } from '@angular/forms';
 
 export abstract class SchETransactionType extends TransactionType {
   scheduleId = ScheduleIds.E;
@@ -14,10 +12,6 @@ export abstract class SchETransactionType extends TransactionType {
   override signatoryOneHeader = 'Committee treasurer';
   override committeeCandidateHeader = 'Candidate information';
   override populateSignatoryOneWithTreasurer = true;
-
-  override hasCandidateInformation(form?: FormGroup): boolean {
-    return hasFields(this.formFields, CANDIDATE_FIELDS) && !!form?.get('support_oppose_code')?.value;
-  }
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {

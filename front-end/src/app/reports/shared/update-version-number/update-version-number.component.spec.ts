@@ -65,7 +65,6 @@ describe('UpdateVersionNumberComponent', () => {
     amendmentField().value.set('1');
     expect(amendmentField().valid()).toBe(true);
 
-    console.log(originalValue);
     amendmentField().value.set(originalValue);
     expect(amendmentField().valid()).toBe(false);
   });

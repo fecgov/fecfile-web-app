@@ -13,7 +13,7 @@ import { ReportService } from '../../services/report.service';
 import { DatePipe } from '@angular/common';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getTestTransactionByType, testActiveReport, testMockStore } from '../../utils/unit-test.utils';
+import { getTestTransactionByType, testActiveReport, testContact, testMockStore } from '../../utils/unit-test.utils';
 import { FecDatePipe } from '../../pipes/fec-date.pipe';
 import { RedesignationToUtils } from '../../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../../utils/reatt-redes/redesignation-from.utils';
@@ -62,6 +62,11 @@ describe('ReattTransactionTypeBaseComponent', () => {
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
+    let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    reattRedes.reports = [testActiveReport()];
+    reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
+    reattRedes.contact_1 = testContact();
+    testTransaction.reatt_redes = reattRedes;
 
     reportService = TestBed.inject(ReportService<Form3X>);
     vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
@@ -73,29 +78,26 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
     fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = testTransaction;
-    component.childTransaction = testTransaction;
-    let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
-    reattRedes.reports = [testActiveReport()];
-    reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
-    component.transaction.reatt_redes = reattRedes;
-    component.ngOnInit();
+    component.transaction.set(testTransaction);
   });
 
   it('should create', () => {
+    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 
   describe('reattribution and redesignation', () => {
     it('should update child primary contacts', () => {
-      if (!component.transaction) throw Error('Bad test setup');
+      const transaction = component.transaction() as SchBTransaction;
+      if (!transaction) throw Error('Bad test setup');
+      transaction.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      component.transaction.set(transaction);
       const overlaySpy = vi.spyOn(ReattRedesUtils, 'overlayForms');
       const childFormSpy = vi.spyOn(component, 'childUpdateFormWithPrimaryContact');
       const primaryContactSpy = vi.spyOn(component, 'updateFormWithPrimaryContact');
       const updateElectionDataSpy = vi.spyOn(component, 'updateElectionData');
-
-      (component.transaction as SchBTransaction).reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
       component.ngOnInit();
+
       expect(overlaySpy).toHaveBeenCalledTimes(1);
       expect(childFormSpy).toHaveBeenCalledTimes(1);
       expect(primaryContactSpy).toHaveBeenCalledTimes(1);
@@ -109,7 +111,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
       const navSpy = vi.spyOn(component, 'navigateTo').mockResolvedValue(true);
       component.ngOnInit();
       await component.submit(
-        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+        new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()),
       );
 
       expect(multiSaveSpy).toHaveBeenCalledTimes(1);
@@ -119,7 +121,7 @@ describe('ReattTransactionTypeBaseComponent', () => {
 
   describe('updateElectionData', () => {
     it("should bail if no templatemap or it's not schedule B", () => {
-      component.childTransaction = undefined;
+      component.childTransaction.set(undefined);
       component.updateElectionData();
       expect(component.childForm.get('election_code')).toBeFalsy();
     });
@@ -143,10 +145,12 @@ describe('ReattTransactionTypeBaseComponent', () => {
         beneficiary_candidate_district: 'A',
         category_code: 'A',
       };
-      component.transaction = RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      expect(component.transaction.transactionType.templateMap).toBeTruthy();
-      component.childTransaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
-      component.childTransaction.reatt_redes = SchBTransaction.fromJSON(data);
+      component.ngOnInit();
+      component.transaction.set(RedesignationToUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data)));
+      expect(component.transaction()?.transactionType.templateMap).toBeTruthy();
+      const transaction = RedesignationFromUtils.overlayTransactionProperties(SchBTransaction.fromJSON(data));
+      transaction.reatt_redes = SchBTransaction.fromJSON(data);
+      component.childTransaction.set(transaction);
       component.childForm.addControl('election_code', new SubscriptionFormControl(''));
       component.childForm.addControl('election_other_description', new SubscriptionFormControl(''));
       component.childForm.addControl('category_code', new SubscriptionFormControl(''));

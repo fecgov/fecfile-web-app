@@ -13,13 +13,20 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { provideMockStore } from '@ngrx/store/testing';
-import { getTestTransactionByType, testMockStore, testTemplateMap } from '../../../shared/utils/unit-test.utils';
+import {
+  getTestTransactionByType,
+  testActiveReport,
+  testContact,
+  testMockStore,
+  testTemplateMap,
+} from '../../../shared/utils/unit-test.utils';
 import { FecDatePipe } from '../../../shared/pipes/fec-date.pipe';
-import { ScheduleATransactionTypes } from '../../../shared/models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../../shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideZoneChangeDetection } from '@angular/core';
+import { ReattributedUtils } from 'app/shared/utils/reatt-redes/reattributed.utils';
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;
@@ -57,11 +64,16 @@ describe('ReattRedesTransactionTypeDetailComponent', () => {
   });
 
   beforeEach(() => {
+    let reattRedes = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    reattRedes.reports = [testActiveReport()];
+    reattRedes = ReattributedUtils.overlayTransactionProperties(reattRedes);
+    reattRedes.contact_1 = testContact();
     fixture = TestBed.createComponent(ReattRedesTransactionTypeDetailComponent);
     component = fixture.componentInstance;
     vi.spyOn(component, 'getChildTransaction').mockImplementation(() => transaction);
-    component.transaction = transaction;
-    component.templateMap = testTemplateMap();
+    transaction.transactionType.templateMap = testTemplateMap();
+    transaction.reatt_redes = reattRedes;
+    component.transaction.set(transaction);
     component.ngOnInit();
   });
 

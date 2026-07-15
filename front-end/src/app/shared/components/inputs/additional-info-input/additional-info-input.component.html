@@ -5,7 +5,7 @@
         <div class="field">
           <span class="span-label" id="purpose_description_label">
             {{ transactionType()?.purposeDescripLabel }}
-            <span class="paren-label">{{ transactionType()?.generatePurposeDescriptionLabel() }}</span>
+            <span class="paren-label">{{ purposeDescriptionLabel() }}</span>
           </span>
           @if (transactionType()?.purposeDescriptionLabelNotice) {
             <em>
@@ -33,7 +33,7 @@
       </div>
     </div>
   }
-  @if (transactionType()?.hasDesignatedSubordinate()) {
+  @if (hasDesignatedSubordinate()) {
     <app-designated-subordinate-input
       [form]="form"
       [formSubmitted]="formSubmitted"
@@ -45,7 +45,7 @@
       (subordinateCommitteeClear)="onSubordinateCommitteeClear()"
     />
   }
-  @if (transactionType()?.hasMemoText()) {
+  @if (hasMemoText()) {
     <div class="grid">
       <div class="col-12">
         <div class="field">
@@ -68,7 +68,7 @@
       </div>
     </div>
   }
-  @if (transactionType()?.hasCategoryCode()) {
+  @if (hasCategoryCode()) {
     <div class="grid">
       <div class="col-6">
         <app-select

@@ -1,42 +1,72 @@
-import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SingleClickDirective } from './single-click.directive';
+import { Component } from '@angular/core';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Store, StoreModule } from '@ngrx/store';
-import { singleClickEnableAction } from '../../store/single-click.actions';
-import { singleClickReducer } from '../../store/single-click.reducer';
+import { Store } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
+
+import { SingleClickDirective } from './single-click.directive';
+import { selectSingleClickDisabled } from '../../store/single-click.selectors';
+import { singleClickDisableAction } from '../../store/single-click.actions';
 
 @Component({
-  template: '<button #box appSingleClick>Test</button>',
+  standalone: true,
   imports: [SingleClickDirective],
+  template: `<button appSingleClick>Click Me</button>`,
 })
-class TestComponent {}
+class TestHostComponent {}
 
 describe('SingleClickDirective', () => {
-  let des: DebugElement[];
-  let fixture: ComponentFixture<TestComponent>;
-  let store: Store;
-  beforeEach(() => {
-    fixture = TestBed.configureTestingModule({
-      imports: [TestComponent, SingleClickDirective, StoreModule.forRoot({ singleClickDisabled: singleClickReducer })],
-    }).createComponent(TestComponent);
-    store = TestBed.inject(Store);
-    fixture.detectChanges(); // initial binding
-    // all elements with an attached SingleClickDirective
-    des = fixture.debugElement.queryAll(By.directive(SingleClickDirective));
+  let fixture: ComponentFixture<TestHostComponent>;
+  let store: MockStore;
+  let buttonEl: HTMLButtonElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: selectSingleClickDisabled, value: false }],
+        }),
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    store = TestBed.inject(Store) as MockStore;
+
+    const buttonDebugEl = fixture.debugElement.query(By.directive(SingleClickDirective));
+    buttonEl = buttonDebugEl.nativeElement;
+
+    fixture.detectChanges();
   });
 
-  it('should create instance and add+remove disabled attribute', () => {
-    expect(des.length).toBe(1);
-    const button = des[0].nativeElement as HTMLButtonElement;
-    vi.spyOn(button, 'setAttribute');
-    vi.spyOn(button, 'removeAttribute');
-    button.click();
+  it('should create the host component', () => {
+    expect(fixture).toBeTruthy();
+  });
+
+  it('should dispatch singleClickDisableAction on click when single-click is NOT disabled', () => {
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+    buttonEl.dispatchEvent(clickEvent);
+
+    expect(dispatchSpy).toHaveBeenCalledWith(singleClickDisableAction());
+    expect(clickEvent.defaultPrevented).toBe(false);
+  });
+
+  it('should prevent default and stop propagation when single-click IS disabled', () => {
+    store.overrideSelector(selectSingleClickDisabled, true);
+    store.refreshState();
     fixture.detectChanges();
-    expect(button.setAttribute).toHaveBeenCalledWith('disabled', 'true');
-    expect(button.setAttribute).toHaveBeenCalledTimes(1);
-    store.dispatch(singleClickEnableAction());
-    fixture.detectChanges();
-    expect(button.removeAttribute).toHaveBeenCalledTimes(1);
+
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+    const stopImmediatePropagationSpy = vi.spyOn(clickEvent, 'stopImmediatePropagation');
+
+    buttonEl.dispatchEvent(clickEvent);
+
+    expect(dispatchSpy).not.toHaveBeenCalled();
+    expect(clickEvent.defaultPrevented).toBe(true);
+    expect(stopImmediatePropagationSpy).toHaveBeenCalled();
   });
 });

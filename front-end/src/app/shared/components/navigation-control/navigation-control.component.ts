@@ -23,19 +23,19 @@ import { Store } from '@ngrx/store';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { SingleClickDirective } from '../../directives/single-click.directive';
 import { FormsModule } from '@angular/forms';
 import { PopoverModule } from 'primeng/popover';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { singleClickDisableAction } from 'app/store/single-click.actions';
+import { selectSingleClickDisabled } from 'app/store/single-click.selectors';
 
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
   styleUrls: ['./navigation-control.component.scss'],
-  imports: [ButtonModule, Ripple, SingleClickDirective, PopoverModule, FormsModule, SplitButtonModule],
+  imports: [ButtonModule, Ripple, PopoverModule, FormsModule, SplitButtonModule],
 })
 export class NavigationControlComponent {
   private readonly store = inject(Store);
@@ -70,10 +70,22 @@ export class NavigationControlComponent {
         setTimeout(() => (this.isProcessing = false), 1000);
       },
     },
+    {
+      label: 'Clone',
+      disabled: this.isProcessing,
+      command: () => {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+        this.saveAndClone();
+        setTimeout(() => (this.isProcessing = false), 1000);
+      },
+    },
   ];
 
-  // This could be a signal but the transaction data is getting updated out of sync
-  readonly isDisabled = () => !!this.navigationControl()?.disabledCondition(this.transaction());
+  private readonly singleClickDisabled$ = this.store.selectSignal(selectSingleClickDisabled);
+  readonly isDisabled = computed(
+    () => this.singleClickDisabled$() || !!this.navigationControl()?.disabledCondition(this.transaction()),
+  );
   readonly controlType = ControlType;
   readonly type = computed(() => this.navigationControl().controlType);
 
@@ -85,6 +97,20 @@ export class NavigationControlComponent {
     const navigationEvent = new NavigationEvent(
       navControl.navigationAction,
       NavigationDestination.ANOTHER,
+      cloneInstance(transaction),
+      transaction.transaction_type_identifier as TransactionTypes,
+    );
+    this.store.dispatch(navigationEventSetAction(navigationEvent));
+  }
+
+  saveAndClone() {
+    this.store.dispatch(singleClickDisableAction());
+    const navControl = this.navigationControl();
+    const transaction = this.transaction();
+    if (!transaction) return;
+    const navigationEvent = new NavigationEvent(
+      navControl.navigationAction,
+      NavigationDestination.CLONE,
       cloneInstance(transaction),
       transaction.transaction_type_identifier as TransactionTypes,
     );

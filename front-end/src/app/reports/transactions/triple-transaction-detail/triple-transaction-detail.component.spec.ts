@@ -63,8 +63,8 @@ describe('TripleTransactionDetailComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TripleTransactionDetailComponent);
     component = fixture.componentInstance;
-    component.transaction = transaction;
-    component.templateMap = testTemplateMap();
+    transaction.transactionType.templateMap = testTemplateMap();
+    component.transaction.set(transaction);
     component.ngOnInit();
   });
 

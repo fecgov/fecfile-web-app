@@ -17,6 +17,8 @@ import { ReportTypes } from './reports/report.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
+export type HighLow = 'high' | 'low';
+
 /**
  * Class that defines the meta data associated with a transaction type.
  * Populated and used by the transaction resovler for use in the transaction components.
@@ -46,7 +48,7 @@ export abstract class TransactionType {
   contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contact5IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
-  candidateInfoPosition = 'low'; // Position of candidate info in the form. 'low' or 'high'
+  candidateInfoPosition: HighLow = 'low'; // Position of candidate info in the form. 'low' or 'high'
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
   // Double-entry settings
@@ -183,8 +185,7 @@ export abstract class TransactionType {
     return this.formFields.includes('filer_designated_to_make_coordinated_expenditures');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  hasCandidateInformation(form?: FormGroup): boolean {
+  hasCandidateInformation(): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
 

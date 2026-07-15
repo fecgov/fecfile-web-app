@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
+import { TransactionType, TransactionTemplateMapType, HighLow } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
 
 export abstract class SchFTransactionType extends TransactionType {
@@ -12,7 +12,7 @@ export abstract class SchFTransactionType extends TransactionType {
     form.get('filer_designated_to_make_coordinated_expenditures')?.value === true;
   override contact5IsRequired = (form: FormGroup) =>
     form.get('filer_designated_to_make_coordinated_expenditures')?.value === false;
-  override candidateInfoPosition = 'high';
+  override candidateInfoPosition: HighLow = 'high';
 
   //Labels
   override amountInputHeader = 'Expenditure information';

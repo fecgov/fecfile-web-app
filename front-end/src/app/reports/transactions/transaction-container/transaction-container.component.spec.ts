@@ -139,7 +139,7 @@ describe('TransactionContainerComponent', () => {
   });
 
   describe('transactionCardinality', () => {
-    it('should return -1 for a new Re-Att/Re-Des transaction without an ID', () => {
+    it('should return -1 for a new Re-Att/Re-Des transaction without an ID', async () => {
       const child = getTestTransactionByType(
         ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       ) as SchATransaction;
@@ -150,8 +150,8 @@ describe('TransactionContainerComponent', () => {
       reatt.transactionType.dependentChildTransactionTypes = [reatt.transaction_type_identifier as TransactionTypes];
       reatt.children = [child];
       reatt.reatt_redes = child;
-      routeDataSubject.next({ transaction: reatt });
-      fixture.detectChanges();
+      component.transaction.set(reatt);
+      await fixture.whenStable();
       expect(component.transactionCardinality()).toBe(-1);
     });
 
@@ -167,7 +167,7 @@ describe('TransactionContainerComponent', () => {
       ];
       loanTransaction.children = [originalLoan];
       loanTransaction.loan_id = '111';
-      routeDataSubject.next({ transaction: loanTransaction });
+      component.transaction.set(loanTransaction);
       fixture.detectChanges();
       expect(component.transactionCardinality()).toBe(1);
     });
@@ -181,7 +181,7 @@ describe('TransactionContainerComponent', () => {
       ) as SchATransaction;
       parent.transactionType.dependentChildTransactionTypes = [child.transaction_type_identifier as TransactionTypes];
       parent.children = [child];
-      routeDataSubject.next({ transaction: parent });
+      component.transaction.set(parent);
       fixture.detectChanges();
       expect(component.transactionCardinality()).toBe(2);
     });
@@ -201,7 +201,7 @@ describe('TransactionContainerComponent', () => {
         child2.transaction_type_identifier as TransactionTypes,
       ];
       parent.children = [child, child2];
-      routeDataSubject.next({ transaction: parent });
+      component.transaction.set(parent);
       fixture.detectChanges();
       expect(component.transactionCardinality()).toBe(3);
     });

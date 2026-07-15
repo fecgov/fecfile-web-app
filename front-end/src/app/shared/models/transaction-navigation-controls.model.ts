@@ -6,12 +6,14 @@ export enum NavigationAction {
   SAVE,
 }
 
-export enum NavigationDestination {
-  LIST,
-  PARENT,
-  ANOTHER,
-  CHILD,
-}
+export const NavigationDestination = {
+  LIST: 'LIST',
+  PARENT: 'PARENT',
+  ANOTHER: 'ANOTHER',
+  CLONE: 'CLONE',
+  CHILD: 'CHILD',
+} as const;
+export type NavigationDestination = (typeof NavigationDestination)[keyof typeof NavigationDestination];
 
 export enum ControlType {
   BUTTON,

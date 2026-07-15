@@ -8,8 +8,8 @@
       [class]="navigationControl().ngClass || ''"
       (click)="clickButton()"
       [disabled]="isDisabled()"
+      [class.p-disabled]="isDisabled()"
       data-cy="navigation-control-button"
-      appSingleClick
     ></button>
   }
   @case (controlType.DROPDOWN) {
@@ -18,6 +18,7 @@
       pRipple
       class="dd-button"
       [disabled]="isDisabled()"
+      [class.p-disabled]="isDisabled()"
       (click)="op.toggle($event)"
       data-cy="navigation-control-dropdown"
     >
@@ -42,6 +43,7 @@
                     (keyup.enter)="onDropdownChange(childOption)"
                     (keyup.space)="onDropdownChange(childOption)"
                     [disabled]="!childOption.value"
+                    [class.p-disabled]="!childOption.value"
                     class="w-full flex justify-content-start"
                   >
                     {{ childOption.label }}
@@ -59,6 +61,7 @@
               (keyup.enter)="onDropdownChange(option)"
               (keyup.space)="onDropdownChange(option)"
               [disabled]="!option.value"
+              [class.p-disabled]="!option.value"
               class="w-full flex justify-content-start"
             >
               {{ option.label }}
@@ -75,8 +78,8 @@
       (onClick)="clickButton()"
       data-cy="navigation-control-splitbutton"
       [disabled]="isDisabled()"
+      [class.p-disabled]="isDisabled()"
       [model]="items"
-      appSingleClick
     >
       <ng-template #dropdownicon>
         <svg pButtonIcon alt="Dropdown icon" width="10" height="10" class="rotate-90">

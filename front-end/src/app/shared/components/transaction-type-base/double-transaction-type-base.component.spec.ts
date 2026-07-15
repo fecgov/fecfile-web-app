@@ -112,7 +112,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   describe('init', () => {
     it('should fail to initialize if no transaction', () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
       try {
         component.ngOnInit();
       } catch (err: any) {
@@ -157,7 +157,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     };
     fixture.detectChanges();
     component.updateFormWithPrimaryContact(selectContact);
-    expect(component.childTransaction?.contact_1?.name).toEqual('Name');
+    expect(component.childTransaction()?.contact_1?.name).toEqual('Name');
   });
 
   it.skip("should auto-generate the child transaction's purpose description", () => {
@@ -168,16 +168,16 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
     host.transaction = trans;
     vi.spyOn(component, 'getChildTransaction').mockImplementation(() => {
-      childTransaction.parent_transaction = component.transaction;
+      childTransaction.parent_transaction = component.transaction();
       return childTransaction;
     });
     component.ngOnInit();
 
-    expect(component.childTransaction?.parent_transaction).toBeTruthy();
-    component.form.get(component.templateMap.first_name)?.setValue('First');
-    component.form.get(component.templateMap.last_name)?.setValue('Last');
+    expect(component.childTransaction()?.parent_transaction).toBeTruthy();
+    component.form.get(component.templateMap().first_name)?.setValue('First');
+    component.form.get(component.templateMap().last_name)?.setValue('Last');
 
-    expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
+    expect(component.childForm.get(component.childTemplateMap().purpose_description)?.value).toEqual(
       'Earmarked from First Last',
     );
   });
@@ -189,12 +189,12 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED),
     );
     component.ngOnInit();
-    expect(component.childTransaction?.transactionType?.getInheritedFields(component.childTransaction)).toContainEqual(
-      'amount',
-    );
-    component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
-    component.form.get(component.templateMap.amount)?.setValue(250);
-    expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
+    expect(
+      component.childTransaction()?.transactionType?.getInheritedFields(component.childTransaction()!),
+    ).toContainEqual('amount');
+    component.childForm.get(component.childTemplateMap().amount)?.setValue(0);
+    component.form.get(component.templateMap().amount)?.setValue(250);
+    expect(component.childForm.get(component.childTemplateMap().amount)?.value).toEqual(250);
   });
 
   it('should save a parent and child transaction', async () => {
@@ -202,11 +202,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     vi.spyOn(testRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
     testTransaction.id = undefined;
     if (testTransaction.children) {
-      component.childTransaction = testTransaction.children[0];
-      component.childTransaction.parent_transaction = component.transaction;
+      testTransaction.children[0].parent_transaction = component.transaction();
+      component.childTransaction.set(testTransaction.children[0]);
     }
 
-    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction());
 
     // Save valid form values
     component.form.patchValue({
@@ -266,10 +266,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   describe('save', () => {
     it('should bail out if transactions are invalid', async () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
+      await fixture.whenStable();
       try {
         await component.submitForm(
-          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction),
+          new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction()),
         );
       } catch (error: any) {
         expect(error.message).toBe('FECfile+: No transactions submitted for double-entry transaction form.');
@@ -279,13 +280,14 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   describe('getConfirmations()', () => {
     it('should return false if not child transaction', async () => {
-      component.childTransaction = undefined;
+      component.childTransaction.set(undefined);
       const v = await component.getConfirmations();
       expect(v).toBe(false);
     });
 
     it('should return false if reject parent confirmation', async () => {
-      component.transaction = undefined;
+      host.transaction = undefined;
+      fixture.detectChanges();
       const v = await component.getConfirmations();
       expect(v).toBe(false);
     });
@@ -298,25 +300,26 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   describe('childUpdateFormWithPrimaryContact', () => {
-    it('should throw an error if no child transaction', () => {
-      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {
-        return;
-      });
-      const contact = new Contact();
-      component.childTransaction = undefined;
-      expect(function () {
-        component.childUpdateFormWithPrimaryContact({ value: contact });
-      }).toThrow(new Error('FECfile+: Missing child transaction.'));
-    });
-
     it('should call updateInheritedFields', () => {
+      component.ngOnInit();
       const updateInheritedFieldsSpy = vi.spyOn(component, 'updateInheritedFields');
-      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {
-        return;
-      });
+      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact');
+      component.childTransaction.set(
+        getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
+      );
       const contact = new Contact();
       component.childUpdateFormWithPrimaryContact({ value: contact });
       expect(updateInheritedFieldsSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw an error if no child transaction', () => {
+      vi.spyOn(TransactionContactUtils, 'updateFormWithPrimaryContact').mockImplementation(() => {
+        return undefined;
+      });
+      const contact = new Contact();
+      expect(function () {
+        component.childUpdateFormWithPrimaryContact({ value: contact });
+      }).toThrow(new Error('FECfile+: Missing child transaction.'));
     });
   });
 });

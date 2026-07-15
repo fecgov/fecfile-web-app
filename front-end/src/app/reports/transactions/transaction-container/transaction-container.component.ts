@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, Signal } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
@@ -34,7 +34,7 @@ export class TransactionContainerComponent {
   readonly isEditableReport = computed(() => this.reportService.isEditable(this.report()));
 
   private readonly _transaction: Signal<Transaction | null> = injectRouteData('transaction');
-  readonly transaction = computed(() => this._transaction() ?? undefined);
+  readonly transaction = linkedSignal(() => this._transaction() ?? undefined);
   readonly isEditableTransaction = computed(() => !ReattRedesUtils.isCopyFromPreviousReport(this.transaction()));
 
   readonly transactionCardinality = computed(() => {

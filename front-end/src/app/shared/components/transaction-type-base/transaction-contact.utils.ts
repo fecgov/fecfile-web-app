@@ -130,7 +130,7 @@ export class TransactionContactUtils {
     form: FormGroup,
     transaction: Transaction | undefined,
     contactId$: Subject<string>,
-  ) {
+  ): Transaction | undefined {
     const contact: Contact = selectItem?.value;
     const templateMap = transaction?.transactionType?.templateMap;
     if (!(contact && templateMap)) return;
@@ -160,8 +160,10 @@ export class TransactionContactUtils {
     form.get(templateMap.zip)?.setValue(contact.zip);
     if (transaction) {
       transaction.contact_1 = contact;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next(contact.id ?? '');
+    return transaction;
   }
 
   static clearFormPrimaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
@@ -186,8 +188,10 @@ export class TransactionContactUtils {
       // force serializer to send nulls
       transaction.contact_1 = null as unknown as undefined;
       transaction.contact_1_id = null as unknown as undefined;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next('');
+    return transaction;
   }
 
   /**
@@ -218,8 +222,10 @@ export class TransactionContactUtils {
     form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
     if (transaction) {
       transaction.contact_2 = contact;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next(contact.id ?? '');
+    return transaction;
   }
 
   /**
@@ -247,8 +253,10 @@ export class TransactionContactUtils {
     form.get(templateMap.secondary_zip)?.setValue(contact.zip);
     if (transaction) {
       transaction.contact_2 = contact;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next(contact.id ?? '');
+    return transaction;
   }
 
   static updateFormWithTertiaryContact(
@@ -264,8 +272,10 @@ export class TransactionContactUtils {
     form.get(templateMap.committee_name)?.setValue(contact.name);
     if (transaction) {
       transaction.contact_3 = contact;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next(contact.id ?? '');
+    return transaction;
   }
 
   static updateFormWithQuaternaryContact(
@@ -282,8 +292,10 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_4 = contact;
       transaction.contact_4_id = contact.id;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next(contact.id ?? '');
+    return transaction;
   }
 
   static clearFormQuaternaryContact(
@@ -299,8 +311,10 @@ export class TransactionContactUtils {
       // force serializer to send nulls
       transaction.contact_4 = null as unknown as undefined;
       transaction.contact_4_id = null as unknown as undefined;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next('');
+    return transaction;
   }
 
   static updateFormWithQuinaryContact(
@@ -322,8 +336,10 @@ export class TransactionContactUtils {
     if (transaction) {
       transaction.contact_5 = contact;
       transaction.contact_5_id = contact.id;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next(contact.id ?? '');
+    return transaction;
   }
 
   static clearFormQuinaryContact(form: FormGroup, transaction: Transaction | undefined, contactId$: Subject<string>) {
@@ -340,8 +356,10 @@ export class TransactionContactUtils {
       // force serializer to send nulls
       transaction.contact_5 = null as unknown as undefined;
       transaction.contact_5_id = null as unknown as undefined;
+      transaction = Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction);
     }
     contactId$.next('');
+    return transaction;
   }
 }
 

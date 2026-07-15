@@ -8,11 +8,32 @@ import { ReportService } from 'app/shared/services/report.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { Component, viewChild } from '@angular/core';
+
+@Component({
+  imports: [TransactionInputComponent],
+  standalone: true,
+  template: `<app-transaction-input [transaction]="transaction" [form]="form" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(TransactionInputComponent);
+  transaction?: Transaction;
+  fb = new FormBuilder();
+  form = this.fb.group({
+    loan_balance: new SubscriptionFormControl(),
+    contribution_amount: new SubscriptionFormControl(),
+    payment_amount: new SubscriptionFormControl(),
+    balance_at_close: new SubscriptionFormControl(),
+    entity_type: new SubscriptionFormControl(),
+  });
+}
 
 describe('TransactionInputComponent', () => {
+  let host: TestHostComponent;
   let component: TransactionInputComponent;
-  let fixture: ComponentFixture<TransactionInputComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   const selectItem = {
     value: testContact(),
@@ -27,19 +48,18 @@ describe('TransactionInputComponent', () => {
         provideMockStore(testMockStore()),
         ConfirmationService,
         ReportService,
+        MessageService,
       ],
     });
-    fixture = TestBed.createComponent(TransactionInputComponent);
-    component = fixture.componentInstance;
-    component.transaction = testScheduleATransaction();
-    component.transaction.transactionType.mandatoryFormValues = {
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    const transaction = testScheduleATransaction();
+    transaction.transactionType.mandatoryFormValues = {
       candidate_office: 'P',
     };
-    component.form.setControl('loan_balance', new SubscriptionFormControl());
-    component.form.setControl('contribution_amount', new SubscriptionFormControl());
-    component.form.setControl('payment_amount', new SubscriptionFormControl());
-    component.form.setControl('balance_at_close', new SubscriptionFormControl());
-    component.ngOnInit();
+    host.transaction = transaction;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -77,10 +97,7 @@ describe('TransactionInputComponent', () => {
   });
 
   it('contactTypeSelected should update entity_type form control', () => {
-    const fb = new FormBuilder();
-    const form = fb.group({ entity_type: new SubscriptionFormControl() });
-    component.form = form;
     component.contactTypeSelected(ContactTypes.ORGANIZATION);
-    expect(component.form.get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);
+    expect(component.form().get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);
   });
 });
