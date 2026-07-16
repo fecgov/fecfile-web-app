@@ -322,6 +322,10 @@ export class TransactionDetailPage {
     PageUtils.clickFormActionButton('Save', `app-navigation-control-bar,[data-cy="${buttonType}"]:visible`);
   }
 
+  static clickConfirmContactUpdate(){
+    cy.get('[data-cy="membership-submit"]').click();
+  }
+
   static clickInlineSave() {
     PageUtils.clickFormActionButton('Save', `[data-cy="${this.BUTTON}"]:visible`);
   }
