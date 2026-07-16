@@ -29,47 +29,52 @@ export class TransactionResolver {
   readonly report = this.store.selectSignal(selectActiveReport);
 
   async resolve(route: ActivatedRouteSnapshot): Promise<Transaction | undefined> {
-    const reportId = route.paramMap.get('reportId');
-    const transactionTypeName = route.paramMap.get('transactionType');
     const transactionId = route.paramMap.get('transactionId');
-    const parentTransactionId = route.paramMap.get('parentTransactionId');
-    const debtId = route.queryParamMap.get('debt');
-    const loanId = route.queryParamMap.get('loan');
-    const cloneId = route.queryParamMap.get('clone');
-    const reattributionId = route.queryParamMap.get('reattribution');
-    const redesignationId = route.queryParamMap.get('redesignation');
 
     // Existing
     if (transactionId) {
       return this.resolveExistingTransactionFromId(transactionId);
     }
-    // New
-    if (reportId && transactionTypeName) {
-      if (isTransactionTypeDisabledForReport(this.report().report_type, transactionTypeName)) {
-        return undefined;
-      }
-      if (parentTransactionId) {
-        const parentTransaction = await this.service.get(String(parentTransactionId));
-        return this.getNewChildTransaction(parentTransaction, transactionTypeName);
-      }
-      if (debtId) {
-        return this.resolveNewRepayment(debtId, transactionTypeName, 'debt');
-      }
-      if (loanId) {
-        return this.resolveNewRepayment(loanId, transactionTypeName, 'loan');
-      }
-      if (cloneId) {
-        return this.resolveNewClone(reportId, cloneId);
-      }
-      if (reattributionId) {
-        return this.resolveNewReattribution(reportId, reattributionId);
-      }
-      if (redesignationId) {
-        return this.resolveNewRedesignation(reportId, redesignationId);
-      }
-      return this.resolveNewTransaction(reportId, transactionTypeName);
+
+    const reportId = route.paramMap.get('reportId');
+    const transactionTypeName = route.paramMap.get('transactionType');
+
+    if (
+      !reportId ||
+      !transactionTypeName ||
+      isTransactionTypeDisabledForReport(this.report().report_type, transactionTypeName)
+    ) {
+      return undefined;
     }
-    return undefined;
+
+    return this.resolveNewTransactionFlow(route, reportId, transactionTypeName);
+  }
+
+  async resolveNewTransactionFlow(
+    route: ActivatedRouteSnapshot,
+    reportId: string,
+    transactionTypeName: string,
+  ): Promise<Transaction | undefined> {
+    const parentTransactionId = route.paramMap.get('parentTransactionId');
+    if (parentTransactionId) {
+      const parentTransaction = await this.service.get(String(parentTransactionId));
+      return this.getNewChildTransaction(parentTransaction, transactionTypeName);
+    }
+
+    const resolverMap: Record<string, (id: string) => Promise<Transaction | undefined>> = {
+      debt: (id) => this.resolveNewRepayment(id, transactionTypeName, 'debt'),
+      loan: (id) => this.resolveNewRepayment(id, transactionTypeName, 'loan'),
+      clone: (id) => this.resolveNewClone(reportId, id),
+      reattribution: (id) => this.resolveNewReattribution(reportId, id),
+      redesignation: (id) => this.resolveNewRedesignation(reportId, id),
+    };
+
+    for (const [key, resolverFn] of Object.entries(resolverMap)) {
+      const id = route.queryParamMap.get(key);
+      if (id) return resolverFn(id);
+    }
+
+    return this.resolveNewTransaction(reportId, transactionTypeName);
   }
 
   async resolveExistingTransactionFromId(transactionId: string): Promise<Transaction | undefined> {
