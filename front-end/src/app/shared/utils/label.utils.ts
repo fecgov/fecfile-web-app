@@ -1,4 +1,4 @@
-export type LabelList = string[][];
+export type LabelList = [string, string][];
 export type PrimeOptions = { label: string; value: string }[];
 type OptionList = [string | boolean | null, string][];
 export type Options = { label: string; value: string | boolean | null }[];
@@ -105,6 +105,11 @@ export class LabelUtils {
   }
 }
 
+export const form24Options = [
+  { label: '24-Hour ', value: '24' },
+  { label: '48-Hour', value: '48' },
+];
+
 export const StatesCodeLabels: LabelList = [
   ['AL', 'Alabama'],
   ['AK', 'Alaska'],
@@ -167,6 +172,7 @@ export const StatesCodeLabels: LabelList = [
   ['WI', 'Wisconsin'],
   ['WY', 'Wyoming'],
 ];
+export const StatesCodeMap = new Map<string, string>(StatesCodeLabels);
 
 export const CountryCodeLabels: LabelList = [
   ['USA', 'United States of America'],

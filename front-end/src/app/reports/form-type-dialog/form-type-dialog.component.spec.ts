@@ -64,36 +64,27 @@ describe('FormTypeDialogComponent', () => {
   });
 
   describe('goToReportForm', () => {
-    it('should route properly', () => {
+    it('should route properly', async () => {
       const navigateSpy = vi.spyOn(router, 'navigateByUrl');
-      component.selectedType.set(ReportTypes.F3X);
-      component.goToReportForm();
+      component.reportForm.type().value.set(ReportTypes.F3X);
+      await component.submitForm();
       expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create');
     });
   });
 
-  describe('updateSelected', () => {
-    it('should set the selectedType to the provided type', () => {
-      component.selectedType.set(ReportTypes.F3X);
-      expect(component.selectedType()).toEqual(ReportTypes.F3X);
+  it('should create Form24', async () => {
+    const f24 = Form24.fromJSON({
+      id: 2401,
+      report_type_24_48: '24',
+      name: '24-Hour: test',
     });
-  });
+    component.reportForm().value.set({
+      type: ReportTypes.F24,
+      f24: { type: f24.report_type_24_48!, typelessName: 'test' },
+    });
+    const create = vi.spyOn(form24Service, 'create').mockResolvedValue(f24);
 
-  it('should create Form24', () => {
-    component.selectedType.set(ReportTypes.F24);
-    expect(component.selectedType()).toEqual(ReportTypes.F24);
-
-    component.f24().selectedForm24Type.set('48');
-
-    const create = vi.spyOn(form24Service, 'create').mockReturnValue(
-      Promise.resolve(
-        Form24.fromJSON({
-          id: 2401,
-        }),
-      ),
-    );
-
-    component.goToReportForm();
+    await component.submitForm();
     expect(create).toHaveBeenCalled();
   });
 

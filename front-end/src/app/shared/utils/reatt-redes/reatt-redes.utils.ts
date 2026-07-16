@@ -42,6 +42,14 @@ export class ReattRedesUtils {
     );
   }
 
+  public static canReattribute(transaction: TransactionListRecord): boolean {
+    return (
+      !transaction.parent_transaction_id &&
+      transaction.transactionType.isReattributable &&
+      !ReattRedesUtils.isAtAmountLimit(transaction)
+    );
+  }
+
   public static isAtAmountLimit(transaction: Transaction | TransactionListRecord | undefined): boolean {
     const txn = transaction as SchATransaction | SchBTransaction;
     if (

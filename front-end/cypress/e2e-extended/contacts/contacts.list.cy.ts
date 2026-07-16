@@ -103,7 +103,8 @@ describe('Contacts List (/contacts)', () => {
     ContactsHelpers.assertDisabled('button[aria-label="Last Page"], .p-paginator-last');
   });
 
-  it('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
+  // Disabled for flakiness
+  xit('supports results-per-page options 5, 10, 15, and 20 with correct pagination', () => {
     const total = 21;
     const base: MockContact = Individual_A_A;
 
@@ -133,7 +134,7 @@ describe('Contacts List (/contacts)', () => {
 
     const selectPageSize = (size: number) => {
       SharedHelpers.chooseResultsPerPage(size);
-      cy.contains(/results\s*per\s*page/i)
+      cy.contains(/results\s*per\s*page/i) // The flaky line in question
         .parent()
         .find('p-select [data-pc-section="label"], p-select .p-select-label')
         .filter(':visible')

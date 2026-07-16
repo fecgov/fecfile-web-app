@@ -9,7 +9,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
@@ -47,6 +47,7 @@ import { candidatePatternMessage, committeePatternMessage } from 'app/shared/mod
   ],
 })
 export class ContactModalComponent extends DestroyerComponent implements OnInit {
+  readonly messageService = inject(MessageService);
   readonly fb = inject(FormBuilder);
   private readonly contactService = inject(ContactService);
   readonly cmservice = inject(ContactManagementService);
@@ -167,7 +168,7 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
     this.form.updateValueAndValidity();
   }
 
-  saveContact() {
+  async saveContact() {
     this.formSubmitted = true;
     blurActiveInput(this.form);
     this.form.updateValueAndValidity();
@@ -176,16 +177,33 @@ export class ContactModalComponent extends DestroyerComponent implements OnInit 
       printFormErrors(this.form);
       return;
     }
+    try {
+      const payload: Contact = Contact.fromJSON({
+        ...this.manager().contact(),
+        ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
+        type: this.manager().contactType(),
+      });
+      const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: payload.id ? 'Contact Updated' : 'Contact Created',
+        life: 3000,
+      });
 
-    const contact: Contact = Contact.fromJSON({
-      ...this.manager().contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.manager().contactType())),
-    });
-    contact.type = this.manager().contactType();
-    this.manager().contact.set(contact);
+      this.manager().contact.set(contact);
 
-    this.cmservice.showDialog.set(false);
-    this.manager().outerContact.set(contact);
+      this.cmservice.showDialog.set(false);
+      this.manager().outerContact.set(contact);
+    } catch {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error adding the contact',
+        life: 3000,
+      });
+    }
+
     this.formSubmitted = false;
   }
 }

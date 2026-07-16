@@ -12,6 +12,7 @@ export class ContactListPage {
 
   static goToPage() {
     cy.visit('/contacts');
+    cy.waitForNetworkIdle('GET', '*.js', 2000)
   }
 
   static openAddContactDialog() {

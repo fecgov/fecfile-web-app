@@ -91,6 +91,8 @@
   <div class="col-4 img-container">
     @if (reportStatus() === ReportStatus.SUBMIT_SUCCESS) {
       <img class="status-image" src="assets/img/report-submission-received.svg" alt="Report submission received" />
+    } @else if (reportStatus() === ReportStatus.SUBMIT_PENDING) {
+      <img class="status-image" src="assets/img/report-submission-not-received.svg" alt="Report submission pending" />
     } @else {
       <img
         class="status-image"

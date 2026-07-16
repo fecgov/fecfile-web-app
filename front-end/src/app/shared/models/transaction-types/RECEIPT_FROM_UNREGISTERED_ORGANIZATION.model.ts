@@ -15,7 +15,7 @@ export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchATransactionType 
   );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override get isReattributable() {
+  override get isReattributable(): boolean {
     return false;
   }
 

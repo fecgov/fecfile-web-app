@@ -66,7 +66,7 @@ export class ReportListPage {
 
   static clickCreateAndSelectForm(formType: string, force = false, submit = true) {
     cy.get('[data-cy="create-report"]:visible').click({ force });
-    cy.get('#typeDropdown:visible').click();
+    cy.get('#type-dropdown:visible').click();
     if (formType === 'F24') {
       cy.get(`[data-cy="${formType}"]`).should('contain', ' 24/48 Hour Report of Independent Expenditure');
     }
@@ -135,6 +135,7 @@ export class ReportListPage {
     const fx = () => {
       cy.visit(`/reports/transactions/report/${reportId}/list`);
       cy.location('pathname').should('include', `/reports/transactions/report/${reportId}/list`);
+      cy.waitForNetworkIdle('GET', '*.js', 2000)
       cy.contains('Transactions in this report').should('be.visible');
     };
 

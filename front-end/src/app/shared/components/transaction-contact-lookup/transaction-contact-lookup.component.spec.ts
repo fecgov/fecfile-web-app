@@ -10,7 +10,7 @@ import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
@@ -41,6 +41,7 @@ describe('TransactionContactLookupComponent', () => {
         ConfirmationService,
         FormBuilder,
         EventEmitter,
+        MessageService,
         provideMockStore(testMockStore()),
         DatePipe,
         LabelPipe,
@@ -91,19 +92,11 @@ describe('TransactionContactLookupComponent', () => {
     expect(component.contactTypeSelect.emit).toHaveBeenCalledWith(ContactTypes.COMMITTEE);
   });
 
-  it('selecting a contactLookup should emit the contact or update the contact dialog', () => {
-    component.detailVisible = false;
-    const contact = testContact();
-    component.contactLookupSelected(contact);
-    contact.id = undefined;
-    component.contactLookupSelected(contact);
-    expect(component.detailVisible).toBe(true);
-  });
-
   it('selecting create new contact should open the contact dialog', () => {
-    component.detailVisible = false;
+    component.detailVisible.set(false);
+    fixture.detectChanges();
     component.createNewContactSelected();
-    expect(component.detailVisible).toBe(true);
+    expect(component.detailVisible()).toBe(true);
   });
 
   it('saving a contact should emit the contact', () => {
