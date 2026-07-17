@@ -43,7 +43,14 @@
           <div class="col-6">
             <div class="field">
               <label for="candidate_id">CANDIDATE ID</label>
-              <input type="text" pInputText id="candidate_id" appToUpper formControlName="candidate_id" />
+              <input
+                type="text"
+                pInputText
+                id="candidate_id"
+                appToUpper
+                formControlName="candidate_id"
+                (input)="duplicateContact()?.updateCheckedData($event, 'candidate_id')"
+              />
               <app-error-messages
                 [form]="form"
                 fieldName="candidate_id"
@@ -52,8 +59,8 @@
               />
             </div>
           </div>
-          <div class="col-4"></div>
         </div>
+        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
       }
       @if (isEntity()) {
         <div class="grid">
@@ -61,7 +68,14 @@
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
-                <input type="text" pInputText id="committee_id" appToUpper formControlName="committee_id" />
+                <input
+                  type="text"
+                  pInputText
+                  id="committee_id"
+                  appToUpper
+                  formControlName="committee_id"
+                  (input)="duplicateContact()?.updateCheckedData($event, 'committee_id')"
+                />
                 <app-error-messages
                   [form]="form"
                   fieldName="committee_id"
@@ -79,19 +93,13 @@
                 pInputText
                 id="name"
                 formControlName="name"
-                (input)="duplicateContact()?.updateName($event, 'name')"
+                (input)="duplicateContact()?.updateCheckedData($event, 'name')"
               />
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
         </div>
-        @if (headerTitle && contactType() === ContactTypes.ORGANIZATION) {
-          <app-duplicate-contact
-            [type]="contactType()"
-            [existingContacts]="existingContactMap().get(contactType()) ?? []"
-            (useContact)="useContact($event)"
-          />
-        }
+        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
       }
       @if (isPerson()) {
         <div class="grid">
@@ -103,7 +111,7 @@
                 pInputText
                 id="last_name"
                 formControlName="last_name"
-                (input)="duplicateContact()?.updateName($event, 'last_name')"
+                (input)="duplicateContact()?.updateCheckedData($event, 'last_name')"
               />
               <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
             </div>
@@ -116,7 +124,7 @@
                 pInputText
                 id="first_name"
                 formControlName="first_name"
-                (input)="duplicateContact()?.updateName($event, 'first_name')"
+                (input)="duplicateContact()?.updateCheckedData($event, 'first_name')"
               />
               <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
             </div>
@@ -131,12 +139,8 @@
         </div>
         <!-- headerTitle means it is from Transaction. 
         In future change this to isNewItem when enabling for opening on Contact Management -->
-        @if (headerTitle && contactType() === ContactTypes.INDIVIDUAL) {
-          <app-duplicate-contact
-            [type]="contactType()"
-            [existingContacts]="existingContactMap().get(contactType()) ?? []"
-            (useContact)="useContact($event)"
-          />
+        @if (contactType() === ContactTypes.INDIVIDUAL) {
+          <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
         }
 
         <div class="grid">
@@ -364,3 +368,13 @@
     </ng-template>
   </p-dialog>
 </div>
+
+<ng-template #duplicateContactTemplate>
+  @if (headerTitle) {
+    <app-duplicate-contact
+      [type]="contactType()"
+      [existingContacts]="existingContactMap().get(contactType()) ?? []"
+      (useContact)="useContact($event)"
+    />
+  }
+</ng-template>

@@ -1,5 +1,5 @@
 @if (!hideDuplicateWarning()) {
-  @if (checkingName()) {
+  @if (checkingForDuplicate()) {
     <p-progress-spinner
       ariaLabel="checking name"
       strokeWidth="9"
@@ -23,7 +23,11 @@
             <div class="flex justify-content-between align-items-center">
               <div class="name-location">
                 <span>{{ `${dup.name ?? dup.last_name + ', ' + dup.first_name}` }} </span>
-                <span>{{ dup.city }}, {{ dup.state | state }}</span>
+                @if (hasFecId()) {
+                  <span>{{ dup.candidate_id ? dup.candidate_id : dup.committee_id }}</span>
+                } @else {
+                  <span>{{ dup.city }}, {{ dup.state | state }}</span>
+                }
               </div>
               <button
                 pButton
@@ -35,7 +39,7 @@
           }
         </div>
       </div>
-    } @else if (validName()) {
+    } @else if (validEntry()) {
       <span class="font-italic font-karla color-light-grey pl-2">No duplicate contacts found</span>
     }
   }

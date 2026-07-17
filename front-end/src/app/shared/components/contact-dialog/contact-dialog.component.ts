@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   computed,
@@ -86,6 +86,7 @@ import { DuplicateContactComponent } from './duplicate-contact/duplicate-contact
     SearchableSelectComponent,
     ToUpperDirective,
     DuplicateContactComponent,
+    NgTemplateOutlet,
   ],
   providers: [SearchableSelectComponent],
 })

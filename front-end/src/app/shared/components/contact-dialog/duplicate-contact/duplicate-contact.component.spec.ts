@@ -54,40 +54,40 @@ describe('DuplicateContactComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('updateName & Debounce Logic', () => {
-    it('should set checkingName to true immediately if both fields have values', () => {
-      component.updateName(createInputEvent('Smith'), 'last_name');
-      component.updateName(createInputEvent('Joe'), 'first_name');
-      expect(component.checkingName()).toBe(true);
+  describe('updateCheckedData & Debounce Logic', () => {
+    it('should set checkingForDuplicate to true immediately if both fields have values', () => {
+      component.updateCheckedData(createInputEvent('Smith'), 'last_name');
+      component.updateCheckedData(createInputEvent('Joe'), 'first_name');
+      expect(component.checkingForDuplicate()).toBe(true);
     });
 
-    it('should not set checkingName to true if only one field has a value', () => {
-      component.updateName(createInputEvent('Smith'), 'last_name');
-      expect(component.checkingName()).toBe(false);
+    it('should not set checkingForDuplicate to true if only one field has a value', () => {
+      component.updateCheckedData(createInputEvent('Smith'), 'last_name');
+      expect(component.checkingForDuplicate()).toBe(false);
     });
 
     it('should process the signal updates after 600ms', () => {
-      component.updateName(createInputEvent('Smith'), 'last_name');
-      component.updateName(createInputEvent('Joe'), 'first_name');
+      component.updateCheckedData(createInputEvent('Smith'), 'last_name');
+      component.updateCheckedData(createInputEvent('Joe'), 'first_name');
 
-      expect(component.name()).toBe(', ');
+      expect(component.checkedValue()).toBe('');
 
       vi.advanceTimersByTime(400);
 
-      expect(component.name()).toBe('Smith, Joe');
-      expect(component.checkingName()).toBe(false);
+      expect(component.checkedValue()).toBe('Smith, Joe');
+      expect(component.checkingForDuplicate()).toBe(false);
     });
 
     it('should debounce subsequent typing events and use the latest values', () => {
-      component.updateName(createInputEvent('Smit'), 'last_name');
+      component.updateCheckedData(createInputEvent('Smit'), 'last_name');
       vi.advanceTimersByTime(300);
 
-      component.updateName(createInputEvent('Smith'), 'last_name');
-      component.updateName(createInputEvent('Joe'), 'first_name');
+      component.updateCheckedData(createInputEvent('Smith'), 'last_name');
+      component.updateCheckedData(createInputEvent('Joe'), 'first_name');
 
       vi.advanceTimersByTime(600);
 
-      expect(component.name()).toBe('Smith, Joe');
+      expect(component.checkedValue()).toBe('Smith, Joe');
     });
   });
 
@@ -97,30 +97,30 @@ describe('DuplicateContactComponent', () => {
       host.allContacts = [testIndividual];
       fixture.detectChanges();
 
-      component.updateName(createInputEvent('Smith'), 'last_name');
-      component.updateName(createInputEvent('Joe'), 'first_name');
+      component.updateCheckedData(createInputEvent('Smith'), 'last_name');
+      component.updateCheckedData(createInputEvent('Joe'), 'first_name');
       vi.advanceTimersByTime(600);
 
       expect(component.potentialDuplicates()).toContain(testIndividual);
-      expect(component.potentialDuplicates().length).toBe(1);
+      expect(component.potentialDuplicates()).toHaveLength(1);
     });
   });
 
-  describe('validName', () => {
+  describe('validEntry', () => {
     it('should return true for a completely populated name after debounce finishes', () => {
-      component.updateName(createInputEvent('Smith'), 'last_name');
-      component.updateName(createInputEvent('Joe'), 'first_name');
+      component.updateCheckedData(createInputEvent('Smith'), 'last_name');
+      component.updateCheckedData(createInputEvent('Joe'), 'first_name');
       vi.advanceTimersByTime(600);
 
-      expect(component.validName()).toBe(true);
+      expect(component.validEntry()).toBe(true);
     });
 
     it('should return false if fields remain blank or empty strings', () => {
-      component.updateName(createInputEvent(''), 'last_name');
-      component.updateName(createInputEvent(''), 'first_name');
+      component.updateCheckedData(createInputEvent(''), 'last_name');
+      component.updateCheckedData(createInputEvent(''), 'first_name');
       vi.advanceTimersByTime(600);
 
-      expect(component.validName()).toBe(false);
+      expect(component.validEntry()).toBe(false);
     });
   });
 
