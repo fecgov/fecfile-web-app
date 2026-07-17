@@ -24,6 +24,10 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType
     return false;
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

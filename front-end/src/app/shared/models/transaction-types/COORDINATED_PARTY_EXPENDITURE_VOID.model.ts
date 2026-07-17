@@ -45,6 +45,10 @@ export class COORDINATED_PARTY_EXPENDITURE_VOID extends SchFTransactionType {
   override showPayeeCandidateYTD = true;
   override dateLabel = 'DATE';
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchFTransaction.fromJSON({
       form_type: 'SF',

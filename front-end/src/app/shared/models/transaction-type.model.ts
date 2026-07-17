@@ -98,6 +98,10 @@ export abstract class TransactionType {
     return false;
   }
 
+  get isCloneableTransactionType() {
+    return false;
+  }
+
   // Labels
   abstract title: string;
   subTitle?: string;

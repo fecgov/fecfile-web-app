@@ -20,6 +20,10 @@ export class NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT extends SchBTransact
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Pres. Nominating Convention Account: ';
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB21B',

@@ -1,8 +1,4 @@
 import { MemoText } from '../models/memo-text.model';
-import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
-import { ScheduleFTransactionTypes } from '../models/schf-transaction.model';
 import { cloneInstance, ScheduleTransaction, Transaction, TransactionTypes } from '../models/transaction.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
 
@@ -60,99 +56,6 @@ export function resetCloneMemoText(
   clone.memo_text_id = undefined;
 }
 
-let cloneableTransactionTypes: Set<TransactionTypes> | undefined;
-
-function getCloneableTransactionTypes(): Set<TransactionTypes> {
-  if (cloneableTransactionTypes) {
-    return cloneableTransactionTypes;
-  }
-
-  cloneableTransactionTypes = new Set<TransactionTypes>([
-    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-    ScheduleATransactionTypes.TRIBAL_RECEIPT,
-    ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
-    ScheduleATransactionTypes.PARTY_RECEIPT,
-    ScheduleATransactionTypes.PARTY_RETURN,
-    ScheduleATransactionTypes.PAC_RECEIPT,
-    ScheduleATransactionTypes.PAC_RETURN,
-    ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
-    ScheduleATransactionTypes.TRANSFER,
-    ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
-    ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
-    ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
-    ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-    ScheduleATransactionTypes.OTHER_RECEIPTS,
-    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
-    ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
-    ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
-    ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
-    ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,
-    ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
-    ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
-    ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
-    ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
-    ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
-    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
-    ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_OTHER_COMMITTEE,
-    ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID,
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
-    ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE,
-    ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID,
-    ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
-    ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE_VOID,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
-    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
-    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
-    ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
-    ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
-    ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT,
-    ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
-    ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
-    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
-    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
-    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
-    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
-    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
-    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
-    ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
-    ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
-    ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
-    ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
-    ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
-    ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
-    ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
-    ScheduleBTransactionTypes.REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID,
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
-  ]);
-
-  return cloneableTransactionTypes;
-}
-
 function isCloneableTransactionType(
   transactionTypeIdentifier: string | undefined,
 ): transactionTypeIdentifier is TransactionTypes {
@@ -162,10 +65,7 @@ function isCloneableTransactionType(
 
   const transactionType = TransactionTypeUtils.factory(transactionTypeIdentifier);
 
-  return (
-    getCloneableTransactionTypes().has(transactionTypeIdentifier as TransactionTypes) &&
-    !transactionType.dependentChildTransactionTypes?.length
-  );
+  return transactionType.isCloneableTransactionType && !transactionType.dependentChildTransactionTypes?.length;
 }
 
 export function isCloneable(transaction: CloneEligibilityTransaction | undefined): boolean {
