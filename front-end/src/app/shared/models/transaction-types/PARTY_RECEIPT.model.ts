@@ -22,6 +22,10 @@ export class PARTY_RECEIPT extends SchATransactionType {
     return false;
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11B',

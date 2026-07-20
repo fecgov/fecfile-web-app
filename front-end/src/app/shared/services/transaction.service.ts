@@ -5,6 +5,7 @@ import { DateType } from '../components/transaction-type-base/transaction-form.u
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
+import { CloneEligibilityTransaction, isCloneable } from '../utils/transaction-clone.utils';
 import { ApiService } from './api.service';
 import { map, Observable, of } from 'rxjs';
 
@@ -30,6 +31,11 @@ export class TransactionService {
     const response = await this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`);
     return getFromJSON(response);
   };
+
+  public isCloneable(transaction: CloneEligibilityTransaction | undefined): boolean {
+    // wrapper so we don't have to import/directly call the transaction-clone.utils in components
+    return isCloneable(transaction);
+  }
 
   public getPreviousEntityAggregate(
     transaction: Transaction,

@@ -20,6 +20,10 @@ export class NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT extends SchBTransa
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Headquarters Buildings Account: ';
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB21B',

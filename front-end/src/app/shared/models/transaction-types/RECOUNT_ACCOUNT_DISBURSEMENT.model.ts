@@ -17,6 +17,10 @@ export class RECOUNT_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Recount Account: ';
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

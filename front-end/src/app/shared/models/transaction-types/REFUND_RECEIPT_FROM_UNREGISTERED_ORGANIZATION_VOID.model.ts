@@ -18,6 +18,10 @@ export class REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION_VOID extends SchBTran
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB28A',

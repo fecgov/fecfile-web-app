@@ -18,6 +18,7 @@ import {
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
+import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -39,6 +40,7 @@ export abstract class TransactionListTableBaseComponent
   implements OnInit
 {
   protected readonly reportService = inject(ReportService);
+  protected readonly transactionService = inject(TransactionService);
   protected readonly router = inject(Router);
   protected readonly store = inject(Store);
   protected readonly activatedRoute = inject(ActivatedRoute);
@@ -61,6 +63,12 @@ export abstract class TransactionListTableBaseComponent
       'Edit',
       this.editItem.bind(this),
       () => this.reportIsEditable(),
+      () => true,
+    ),
+    new TableAction(
+      'Clone',
+      this.cloneItem.bind(this),
+      (transaction: TransactionListRecord) => this.canClone(transaction),
       () => true,
     ),
     new TableAction(
@@ -383,6 +391,35 @@ export abstract class TransactionListTableBaseComponent
     } else {
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
     }
+  }
+
+  public cloneItem(transaction: TransactionListRecord): void {
+    this.confirmationService.confirm({
+      header: 'Clone transaction?',
+      message:
+        'This will create a copy of the selected transaction. The clone will use the same contact; itemization and aggregation will be determined by the system.',
+      acceptLabel: 'Acknowledge',
+      rejectLabel: 'Cancel',
+      accept: async () => {
+        try {
+          await this.router.navigateByUrl(
+            `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?clone=${transaction.id}`,
+          );
+        } catch (error) {
+          console.error(`Error cloning transaction ${transaction.id} of report ${this.reportId}:`, error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Unable to clone transaction',
+            detail: 'The selected transaction could not be opened for cloning.',
+            life: 3000,
+          });
+        }
+      },
+    });
+  }
+
+  public canClone(transaction: TransactionListRecord): boolean {
+    return this.reportIsEditable() && this.transactionService.isCloneable(transaction);
   }
 
   private canDelete(transaction: TransactionListRecord): boolean {

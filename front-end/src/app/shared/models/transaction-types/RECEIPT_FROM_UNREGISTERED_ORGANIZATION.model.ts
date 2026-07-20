@@ -19,6 +19,10 @@ export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchATransactionType 
     return false;
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',

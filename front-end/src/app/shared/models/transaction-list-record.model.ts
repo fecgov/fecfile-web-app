@@ -30,6 +30,8 @@ export class TransactionListRecord extends BaseModel {
   debt_id?: string;
   loan_agreement_id?: string;
   force_itemized?: boolean;
+  reatt_redes_id?: string;
+  reattribution_redesignation_tag?: string;
 
   // prettier-ignore
   static fromJSON(json: any): TransactionListRecord { // eslint-disable-line @typescript-eslint/no-explicit-any

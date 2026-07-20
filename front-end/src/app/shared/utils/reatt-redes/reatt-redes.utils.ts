@@ -9,6 +9,7 @@ import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { resetCloneCoreFields, resetCloneMemoText } from '../transaction-clone.utils';
 
 export enum ReattRedesTypes {
   REATTRIBUTED = 'REATTRIBUTED',
@@ -124,21 +125,16 @@ export class ReattRedesUtils {
       payload instanceof SchATransaction
         ? (cloneInstance(payload.reatt_redes) as SchATransaction)
         : (cloneInstance(payload.reatt_redes) as SchBTransaction);
-    if (clone.memo_text) {
-      clone.memo_text.id = undefined;
-      clone.memo_text.report_id = payload.report_ids?.[0];
-      clone.memo_text.transaction_id_number = undefined;
-      clone.memo_text.transaction_uuid = undefined;
-      clone.memo_text_id = undefined;
-    }
+
+    resetCloneMemoText(clone, payload.report_ids?.[0], {
+      rebuildFromJson: false,
+      resetMemoTextId: 'whenMemoTextPresent',
+    });
 
     clone.reatt_redes_id = payload.reatt_redes.id;
     clone.report_ids = payload.report_ids;
-    clone.id = undefined;
-    clone.reports = undefined;
     clone.memo_code = true;
-    clone.force_unaggregated = true;
-    clone.children = []; // Children of original transaction do not copy over.
+    resetCloneCoreFields(clone, true); // Children of original transaction do not copy over.
 
     return clone;
   }
