@@ -1,4 +1,4 @@
-import { getTestIndividualReceipt } from './unit-test.utils';
+import { getTestIndividualReceipt, getTestTransactionByType } from './unit-test.utils';
 import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { isCloneable, resetCloneCoreFields, resetCloneMemoText } from './transaction-clone.utils';
 
@@ -55,11 +55,8 @@ describe('transaction-clone.utils', () => {
 
   describe('isCloneable', () => {
     it('should reject multi-entry transaction types', () => {
-      expect(
-        isCloneable({
-          transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
-        }),
-      ).toBe(false);
+      const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+      expect(isCloneable(transaction)).toBe(false);
     });
   });
 });

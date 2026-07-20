@@ -1,9 +1,9 @@
 import { MemoText } from '../models/memo-text.model';
-import { cloneInstance, ScheduleTransaction, Transaction, TransactionTypes } from '../models/transaction.model';
-import { TransactionTypeUtils } from './transaction-type.utils';
+import type { TransactionType } from '../models/transaction-type.model';
+import { cloneInstance, ScheduleTransaction, Transaction } from '../models/transaction.model';
 
 export type CloneEligibilityTransaction = {
-  transaction_type_identifier: string | undefined;
+  transactionType: TransactionType;
   parent_transaction_id?: string;
   loan_id?: string;
   debt_id?: string;
@@ -56,23 +56,10 @@ export function resetCloneMemoText(
   clone.memo_text_id = undefined;
 }
 
-function isCloneableTransactionType(
-  transactionTypeIdentifier: string | undefined,
-): transactionTypeIdentifier is TransactionTypes {
-  if (!transactionTypeIdentifier) {
-    return false;
-  }
-
-  const transactionType = TransactionTypeUtils.factory(transactionTypeIdentifier);
-
-  return transactionType.isCloneableTransactionType && !transactionType.dependentChildTransactionTypes?.length;
-}
-
 export function isCloneable(transaction: CloneEligibilityTransaction | undefined): boolean {
-  if (!transaction) return false;
-
   return (
-    isCloneableTransactionType(transaction.transaction_type_identifier) &&
+    !!transaction?.transactionType.isCloneableTransactionType &&
+    !transaction.transactionType.dependentChildTransactionTypes?.length &&
     !transaction.parent_transaction_id &&
     !transaction.loan_id &&
     !transaction.debt_id &&
@@ -82,15 +69,10 @@ export function isCloneable(transaction: CloneEligibilityTransaction | undefined
 }
 
 export function buildClonedTransaction(source: ScheduleTransaction, reportId: string): Transaction {
-  if (!source.transaction_type_identifier) {
-    throw new Error('FECfile+: Cannot clone a transaction without a transaction_type_identifier.');
-  }
   if (!isCloneable(source)) {
     throw new Error(`FECfile+: This transaction (${source.transaction_type_identifier}) is not eligible for cloning.`);
   }
-
-  const transactionType = TransactionTypeUtils.factory(source.transaction_type_identifier);
-  const clone = transactionType.getNewTransaction();
+  const clone = source.transactionType.getNewTransaction();
   const sourceCopy = cloneInstance(source);
 
   if (sourceCopy) {
@@ -148,7 +130,7 @@ export function buildClonedTransaction(source: ScheduleTransaction, reportId: st
 
   resetCloneMemoText(clone, reportId);
 
-  clone.setMetaProperties(transactionType);
+  clone.setMetaProperties(source.transactionType);
 
   return clone;
 }
