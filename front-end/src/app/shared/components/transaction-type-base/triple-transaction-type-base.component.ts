@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -28,9 +28,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
  * in turn. This abstract component class adds a child_2 transaction that is defined in the parent
  * transaction's TransactionType class.
  */
-@Component({
-  template: '',
-})
+@Directive()
 export abstract class TripleTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
