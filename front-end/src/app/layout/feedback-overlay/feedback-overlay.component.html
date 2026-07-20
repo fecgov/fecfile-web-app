@@ -16,18 +16,18 @@
       </svg>
     </button>
     @switch (submitStatus) {
-      @case (SubmissionStatesEnum.DRAFT) {
-        <form id="form" [formGroup]="form" [class.ng-submitted]="formSubmitted" class="flex flex-column gap-3">
-          <h2 class="mb-1 gandhi">Help improve FECfile+</h2>
-          <h3 class="mb-1">Experiencing issues creating or filing reports?</h3>
-          <p>
+      @case (SubmissionStates.DRAFT) {
+        <form id="form" [formRoot]="form" class="grid-form">
+          <h2 class="gandhi">Help improve FECfile+</h2>
+          <h3>Experiencing issues creating or filing reports?</h3>
+          <p class="mb-3">
             Report issues to the Electronic Filing Office (EFO). This form should not be used to report technical issues
             or ask questions about your filing.
           </p>
           <a
             pButton
             severity="secondary"
-            class="w-max mb-1"
+            class="w-max"
             href="https://www.fec.gov/contact/#filing-reports-and-amendments-reporting-specific-transactions"
             target="_blank"
           >
@@ -37,57 +37,38 @@
             </svg>
           </a>
 
-          <h3>Provide feedback anonymously about FECfile+</h3>
-          <p>
+          <h3 class="mb-3">Provide feedback anonymously about FECfile+</h3>
+          <p class="mb-3">
             How can we improve FECfile+? When you submit your feedback, it will include your comments, browser
             information, and the URL you were viewing at the time of submission - so don’t include sensitive information
             like your name, contact information, or Social Security number.
           </p>
-          <div class="field">
-            <label for="action">
-              WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?
-              <span class="font-italic">(Required)</span>
-            </label>
-            <textarea id="action" [rows]="3" appAutoResize formControlName="action"></textarea>
-            <app-error-messages [form]="form" fieldName="action" [formSubmitted]="formSubmitted" />
-          </div>
-
-          <div class="field">
-            <label for="feedback">GENERAL FEEDBACK</label>
-            <textarea id="feedback" [rows]="3" appAutoResize formControlName="feedback"></textarea>
-            <app-error-messages [form]="form" fieldName="feedback" [formSubmitted]="formSubmitted" />
-          </div>
-
-          <div class="field">
-            <label for="about">
-              TELL US ABOUT YOURSELF<br />
-              <span class="font-italic">
-                I'm a <span class="solid-line">____</span> interested in
-                <span class="solid-line">____________</span>
-              </span>
-            </label>
-            <textarea id="about" [rows]="3" appAutoResize formControlName="about"></textarea>
-            <app-error-messages [form]="form" fieldName="about" [formSubmitted]="formSubmitted" />
-          </div>
+          <app-text-area-input
+            [formField]="form.action"
+            label="WHAT WERE YOU TRYING TO DO ON FECFILE+, AND HOW CAN WE IMPROVE IT?<span class='font-italic karla text-sm'> (Required)</span>"
+          />
+          <app-text-area-input [formField]="form.feedback" label="GENERAL FEEDBACK" [showOptional]="false" />
+          <app-text-area-input
+            [formField]="form.about"
+            [showOptional]="false"
+            label="TELL US ABOUT YOURSELF<br /><span class='font-italic text-sm karla'>I'm a <span class='solid-line'>____</span> interested in<span class='solid-line'>____________</span></span>"
+          />
 
           <button
-            appSingleClick
-            type="button"
-            pButton
+            [disabled]="disableSubmission()"
             pRipple
+            pButton
+            type="submit"
             label="Submit"
-            class="p-button-primary w-max mb-1"
-            (click)="submitForm()"
+            class="p-button-primary w-max"
           ></button>
 
-          <div class="flex gap-1 text-start">
-            <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener">
-              Contact the FEC about a specific question
-            </a>
-          </div>
+          <a href="https://www.fec.gov/contact/" target="_blank" rel="noopener">
+            Contact the FEC about a specific question
+          </a>
         </form>
       }
-      @case (SubmissionStatesEnum.SUCCESS) {
+      @case (SubmissionStates.SUCCESS) {
         <div class="flex">
           <div class="success-verticle-bar"></div>
           <svg alt="Check mark" width="22" height="22" class="mx-2 my-1 primary-icon">
@@ -95,23 +76,19 @@
           </svg>
           <div>
             <h2>Thanks for helping us improve FECfile+</h2>
-            <p>This information has been reported.</p>
+            <p class="m-0">This information has been reported.</p>
           </div>
         </div>
-        <div class="grid">
-          <div class="col-6 flex">
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Submit more feedback"
-              class="p-button-info"
-              (click)="reset()"
-            ></button>
-          </div>
-        </div>
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Submit more feedback"
+          class="p-button-info m-2"
+          (click)="reset()"
+        ></button>
       }
-      @case (SubmissionStatesEnum.FAIL) {
+      @case (SubmissionStates.FAIL) {
         <div class="flex">
           <div class="fail-verticle-bar"></div>
           <svg alt="Exclamation mark" width="22" height="22" class="mx-2 my-1 primary-icon">
@@ -119,14 +96,10 @@
           </svg>
           <div>
             <h2>Oops: Something went wrong.</h2>
-            <p>We had trouble processing your feedback.</p>
+            <p class="m-0">We had trouble processing your feedback.</p>
           </div>
         </div>
-        <div class="grid">
-          <div class="col-4">
-            <button type="button" pButton pRipple label="Try Again" class="p-button-info" (click)="tryAgain()"></button>
-          </div>
-        </div>
+        <button pButton label="Try Again" class="p-button-info m-2" (click)="reset(false)"></button>
       }
     }
   </div>

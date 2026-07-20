@@ -1,6 +1,5 @@
 export type Feedback = {
   action: string;
-  feedback?: string;
-  about?: string;
-  location: string;
+  feedback: string;
+  about: string;
 };

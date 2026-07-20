@@ -9,6 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { FeedbackOverlayComponent } from './feedback-overlay.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { submit } from '@angular/forms/signals';
 
 describe('FeedbackOverlayComponent', () => {
   let component: FeedbackOverlayComponent;
@@ -49,14 +50,12 @@ describe('FeedbackOverlayComponent', () => {
 
   it('#show happy path', () => {
     component.aside().nativeElement.showPopover();
-    expect(component.formSubmitted).toBe(false);
-    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
+    expect(component.submitStatus).toEqual(component.SubmissionStates.DRAFT);
   });
 
   it('#hide happy path', () => {
     component.aside().nativeElement.hidePopover();
-    expect(component.formSubmitted).toBe(false);
-    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
+    expect(component.submitStatus).toEqual(component.SubmissionStates.DRAFT);
   });
 
   it('should hide popover on Escape key', () => {
@@ -74,55 +73,49 @@ describe('FeedbackOverlayComponent', () => {
   });
 
   it('#save happy path', async () => {
-    const test_action = 'test_action';
-    const test_feedback = 'test_feedback';
-    const test_about = 'test_about';
-    component.form.get('action')?.setValue(test_action);
-    component.form.get('feedback')?.setValue(test_feedback);
-    component.form.get('about')?.setValue(test_about);
+    const action = 'test_action';
+    const feedback = 'test_feedback';
+    const about = 'test_about';
+    component.form().reset({ action, about, feedback });
 
     const submitFeedbackSpy = vi.spyOn(component.feedbackService, 'submitFeedback').mockResolvedValue();
-    await component.submitForm();
+    await submit(component.form);
     expect(submitFeedbackSpy).toHaveBeenCalledTimes(1);
-    expect(submitFeedbackSpy).toHaveBeenCalledWith({
-      action: test_action,
-      feedback: test_feedback,
-      about: test_about,
-      location: globalThis.location.href,
-    });
-    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.SUCCESS);
+    expect(submitFeedbackSpy).toHaveBeenCalledWith({ action, feedback, about });
+    expect(component.submitStatus).toEqual(component.SubmissionStates.SUCCESS);
   });
 
   it('#save error', async () => {
-    const test_action = 'test_action';
-    const test_feedback = 'test_feedback';
-    const test_about = 'test_about';
-    component.form.get('action')?.setValue(test_action);
-    component.form.get('feedback')?.setValue(test_feedback);
-    component.form.get('about')?.setValue(test_about);
+    const action = 'test_action';
+    const feedback = 'test_feedback';
+    const about = 'test_about';
+    component.form().reset({ action, about, feedback });
 
     const submitFeedbackSpy = vi
       .spyOn(component.feedbackService, 'submitFeedback')
       .mockRejectedValue(new Error('Async error'));
-    await component.submitForm();
+    await submit(component.form);
     expect(submitFeedbackSpy).toHaveBeenCalledTimes(1);
-    expect(submitFeedbackSpy).toHaveBeenCalledWith({
-      action: test_action,
-      feedback: test_feedback,
-      about: test_about,
-      location: globalThis.location.href,
-    });
-    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.FAIL);
+    expect(submitFeedbackSpy).toHaveBeenCalledWith({ action, feedback, about });
+    expect(component.submitStatus).toEqual(component.SubmissionStates.FAIL);
+  });
+
+  it('is unable to save without action', async () => {
+    component.form().reset({ action: '', feedback: '', about: 'test' });
+    expect(component.form().valid()).toBe(false);
+    const submitFeedbackSpy = vi.spyOn(component.feedbackService, 'submitFeedback').mockResolvedValue();
+    await submit(component.form);
+    expect(submitFeedbackSpy).not.toHaveBeenCalled();
+    expect(component.submitStatus).toEqual(component.SubmissionStates.DRAFT);
   });
 
   it('#reset happy path', () => {
     component.reset();
-    expect(component.formSubmitted).toBe(false);
-    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
+    expect(component.submitStatus).toEqual(component.SubmissionStates.DRAFT);
   });
 
   it('#tryAgain happy path', () => {
-    component.tryAgain();
-    expect(component.submitStatus).toEqual(component.SubmissionStatesEnum.DRAFT);
+    component.reset(false);
+    expect(component.submitStatus).toEqual(component.SubmissionStates.DRAFT);
   });
 });
