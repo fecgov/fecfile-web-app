@@ -1,5 +1,4 @@
 import { formatDate } from '@angular/common';
-import { HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { CandidateOfficeTypes } from '../models/contact.model';
@@ -191,7 +190,7 @@ export class TransactionService {
     }
 
     return this.apiService
-      .getObs<PreviousAggregate>(endpoint, { transaction_id, aggregation_group, ...params }, [HttpStatusCode.NotFound])
+      .getObs<PreviousAggregate>(endpoint, { transaction_id, aggregation_group, ...params })
       .pipe(map((response) => response.body?.[resultField] ?? null));
   }
 }
