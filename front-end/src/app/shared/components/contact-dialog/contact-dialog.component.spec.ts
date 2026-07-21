@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
+import { provideZoneChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
@@ -22,20 +22,9 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { ContactDialogComponent } from './contact-dialog.component';
 import { ContactService } from 'app/shared/services/contact.service';
 
-@Component({
-  imports: [ContactDialogComponent],
-  standalone: true,
-  template: `<app-contact-dialog [(detailVisible)]="visible" />`,
-})
-class TestHostComponent {
-  component = viewChild.required(ContactDialogComponent);
-  visible = false;
-}
-
 describe('ContactDialogComponent', () => {
-  let host: TestHostComponent;
   let component: ContactDialogComponent;
-  let fixture: ComponentFixture<TestHostComponent>;
+  let fixture: ComponentFixture<ContactDialogComponent>;
   let testConfirmationService: ConfirmationService;
   let transactionService: TransactionListService;
   let contactService: ContactService;
@@ -72,10 +61,10 @@ describe('ContactDialogComponent', () => {
     transactionService = TestBed.inject(TransactionListService);
     contactService = TestBed.inject(ContactService);
     messageService = TestBed.inject(MessageService);
-    fixture = TestBed.createComponent(TestHostComponent);
-    host = fixture.componentInstance;
-    component = host.component();
+    fixture = TestBed.createComponent(ContactDialogComponent);
+    component = fixture.componentInstance;
     component.contact.set(testContact());
+
     component.ngOnInit();
   });
 
@@ -97,10 +86,10 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should close dialog with flags set', () => {
-    component.detailVisible.set(true);
+    component.detailVisible = true;
     component.dialogVisible.set(true);
     component.closeDialog();
-    expect(component.detailVisible()).toBe(false);
+    expect(component.detailVisible).toBe(false);
     expect(component.dialogVisible()).toBe(false);
   });
 
@@ -172,17 +161,18 @@ describe('ContactDialogComponent', () => {
     });
 
     it('should not show Form 24s', async () => {
-      component.contact.set(testContact());
       const testReportCodeLabel = 'APRIL 15 QUARTERLY REPORT (Q1)';
       const transactionListRecord = new TransactionListRecord();
       transactionListRecord.report_code_label = testReportCodeLabel;
-      vi.spyOn(transactionService, 'getTableData').mockResolvedValue({
-        results: [transactionListRecord],
-        count: 1,
-        pageNumber: 1,
-        next: '',
-        previous: '',
-      } as ListRestResponse);
+      vi.spyOn(transactionService, 'getTableData').mockReturnValue(
+        Promise.resolve({
+          results: [transactionListRecord],
+          count: 1,
+          pageNumber: 1,
+          next: '',
+          previous: '',
+        } as ListRestResponse),
+      );
       await component.loadTransactions();
 
       expect(component.transactions[0].report_code_label).toBe(testReportCodeLabel);
