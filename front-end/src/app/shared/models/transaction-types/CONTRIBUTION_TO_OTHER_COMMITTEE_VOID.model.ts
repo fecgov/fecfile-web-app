@@ -19,6 +19,10 @@ export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
   override negativeAmountValueOnly = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB23',

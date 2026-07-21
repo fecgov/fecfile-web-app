@@ -17,6 +17,14 @@ export class PARTY_RECOUNT_RECEIPT extends SchATransactionType {
     return `Recount Account`;
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

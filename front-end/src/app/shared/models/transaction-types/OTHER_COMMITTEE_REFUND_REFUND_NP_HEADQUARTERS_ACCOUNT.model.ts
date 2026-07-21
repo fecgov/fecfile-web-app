@@ -21,6 +21,10 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBT
     return 'Headquarters Buildings Account: Refund';
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB21B',

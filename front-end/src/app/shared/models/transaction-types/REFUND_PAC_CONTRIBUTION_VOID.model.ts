@@ -15,6 +15,10 @@ export class REFUND_PAC_CONTRIBUTION_VOID extends SchBTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override negativeAmountValueOnly = true;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB28C',

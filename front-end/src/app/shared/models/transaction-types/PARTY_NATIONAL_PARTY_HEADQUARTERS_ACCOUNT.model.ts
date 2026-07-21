@@ -20,6 +20,14 @@ export class PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionTy
     return 'Headquarters Buildings Account';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

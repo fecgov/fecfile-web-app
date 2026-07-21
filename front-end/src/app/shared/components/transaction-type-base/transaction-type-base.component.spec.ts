@@ -164,6 +164,18 @@ describe('TransactionTypeBaseComponent', () => {
       expect(component.contactTypeOptions).toContainEqual({ label: 'Individual', value: ContactTypes.INDIVIDUAL });
       expect(component.contactTypeOptions.length).toEqual(1);
     });
+
+    it('should pre-populate clone-like transactions without an id', () => {
+      component.transaction = getTestIndividualReceipt();
+      component.transaction.id = undefined;
+
+      fixture.detectChanges();
+
+      expect(component.form.get('contribution_amount')?.value).toBe('202.2');
+      expect(component.form.get('contribution_date')?.value?.toISOString().slice(0, 10)).toBe('2022-02-02');
+      expect(component.form.get('entity_type')?.value).toBe(ContactTypes.INDIVIDUAL);
+      expect(component.form.get('text4000')?.value).toBe('Memo!');
+    });
   });
 
   it('positive contribution_amount values should be overridden when the schema requires a negative value', async () => {

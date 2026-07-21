@@ -21,6 +21,10 @@ export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB30B',

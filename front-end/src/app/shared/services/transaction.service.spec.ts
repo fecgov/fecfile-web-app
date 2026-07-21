@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { AggregationGroups, Transaction } from '../models/transaction.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { testMockStore } from '../utils/unit-test.utils';
+import { getTestIndividualReceipt, getTestTransactionByType, testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
@@ -230,6 +230,22 @@ describe('TransactionService', () => {
       expect(req.request.method).toEqual('DELETE');
       req.flush(mockResponse);
       httpTestingController.verify();
+    });
+  });
+
+  describe('isCloneable', () => {
+    it('should return true only for clone-eligible transactions', () => {
+      let individualReceipt = getTestIndividualReceipt();
+      expect(service.isCloneable(individualReceipt)).toBe(true);
+      individualReceipt.parent_transaction_id = '10';
+      expect(service.isCloneable(individualReceipt)).toBe(false);
+      individualReceipt = getTestIndividualReceipt();
+      individualReceipt.reatt_redes_id = 'original-id';
+      individualReceipt.reattribution_redesignation_tag = 'REATTRIBUTED';
+      expect(service.isCloneable(individualReceipt)).toBe(false);
+      const earmarkReceipt = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+      expect(service.isCloneable(earmarkReceipt)).toBe(false);
+      expect(service.isCloneable(undefined)).toBe(false);
     });
   });
 

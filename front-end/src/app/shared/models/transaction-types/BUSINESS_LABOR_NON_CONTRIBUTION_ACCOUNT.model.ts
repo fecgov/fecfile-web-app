@@ -20,6 +20,14 @@ export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT extends SchATransactionType
     return 'Non-contribution Account';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

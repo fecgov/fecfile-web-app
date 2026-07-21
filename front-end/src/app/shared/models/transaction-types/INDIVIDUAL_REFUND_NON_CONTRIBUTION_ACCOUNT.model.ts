@@ -16,6 +16,10 @@ export class INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionT
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

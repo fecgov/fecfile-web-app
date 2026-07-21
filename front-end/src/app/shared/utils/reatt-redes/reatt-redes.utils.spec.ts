@@ -7,6 +7,7 @@ import { SchBTransaction } from '../../models/schb-transaction.model';
 import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { TransactionListRecord } from '../../models/transaction-list-record.model';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {
@@ -42,6 +43,27 @@ describe('ReattRedesUtils', () => {
       txn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
       result = ReattRedesUtils.isAtAmountLimit(txn);
       expect(result).toBe(true);
+    });
+  });
+
+  describe('canReattribute', () => {
+    const asListRecord = (txn: SchATransaction): TransactionListRecord => txn as unknown as TransactionListRecord;
+
+    it('should allow reattribution for eligible transactions', () => {
+      const txn = getTestIndividualReceipt();
+      expect(ReattRedesUtils.canReattribute(asListRecord(txn))).toBe(true);
+    });
+
+    it('should block reattribution for transactions that are already linked or at the amount limit', () => {
+      const txn = getTestIndividualReceipt();
+      txn.parent_transaction_id = 'parent-123';
+      expect(ReattRedesUtils.canReattribute(asListRecord(txn))).toBe(false);
+
+      const limitTxn = getTestIndividualReceipt();
+      limitTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+      limitTxn.reatt_redes_total = 100;
+      limitTxn.contribution_amount = 100;
+      expect(ReattRedesUtils.canReattribute(asListRecord(limitTxn))).toBe(false);
     });
   });
 

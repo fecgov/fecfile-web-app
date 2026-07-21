@@ -43,6 +43,10 @@ export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchETransaction.fromJSON({
       form_type: 'SE',

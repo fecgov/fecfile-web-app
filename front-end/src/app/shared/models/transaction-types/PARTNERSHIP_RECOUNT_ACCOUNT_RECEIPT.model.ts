@@ -22,6 +22,10 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account (Partnership attributions do not meet itemization threshold)';
   }
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

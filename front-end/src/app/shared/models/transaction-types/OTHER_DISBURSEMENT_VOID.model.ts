@@ -17,6 +17,10 @@ export class OTHER_DISBURSEMENT_VOID extends SchBTransactionType {
   override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

@@ -16,6 +16,10 @@ export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransact
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',
