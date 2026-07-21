@@ -21,9 +21,7 @@
         </h1>
         @if (!noInput()) {
           <button class="rounded-image-button" (click)="close()" aria-label="Cancel">
-            <svg alt="close dialog" height="20" width="20">
-              <use href="assets/img/x-circle.svg#x-icon"></use>
-            </svg>
+            <img #icon src="assets/img/x-circle.svg" alt="close dialog" />
           </button>
         }
       </div>

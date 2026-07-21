@@ -4,12 +4,11 @@ import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
 } from '../../transaction-navigation-controls.model';
-import { ContactTypes } from '../../contact.model';
 
 export abstract class IN_KIND extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFields = COMMITTEE_FORM_FIELDS;
-  contactTypeOptions: ContactTypes[] = COMMITTEE;
+  contactTypeOptions = COMMITTEE;
 
   override description =
     'This receipt type automatically creates an associated transaction. Saving an in-kind receipt will automatically create an in-kind out.'; // Prose describing transaction and filling out the form
