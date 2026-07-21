@@ -1,14 +1,8 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-import { Contact, ContactTypes, isEntity } from 'app/shared/models/contact.model';
+import { Contact, isEntity } from 'app/shared/models/contact.model';
 import { StatePipe } from '../../../pipes/state.pipe';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
-interface Names {
-  first_name: string;
-  last_name: string;
-  name: string;
-}
 
 @Component({
   selector: 'app-duplicate-contact',
@@ -18,16 +12,13 @@ interface Names {
 })
 export class DuplicateContactComponent {
   readonly existingContacts = input.required<Contact[]>();
-  readonly type = input.required<ContactTypes>();
-  readonly isEntity = computed(() => isEntity(this.type()));
   readonly useContact = output<Contact>();
 
   readonly hideDuplicateWarning = signal(false);
   readonly potentialDuplicates = computed(() => {
     const name = this.name().toLowerCase();
-    const type = this.type();
     return this.existingContacts().filter(
-      (c) => type === c.type && name === (isEntity(c.type) ? c.name : `${c.last_name}, ${c.first_name}`)?.toLowerCase(),
+      (c) => name === (isEntity(c.type) ? c.name : `${c.last_name}, ${c.first_name}`)?.toLowerCase(),
     );
   });
   readonly validName = computed(() => {
@@ -39,34 +30,41 @@ export class DuplicateContactComponent {
   readonly closeDuplicateWarning = () => this.hideDuplicateWarning.set(true);
 
   readonly checkingName = signal(false);
-  private currentInputValues: Names = { first_name: '', last_name: '', name: '' };
-  private readonly names = signal<Names>({ first_name: '', last_name: '', name: '' });
+  private currentInputValues: [string, string] = ['', ''];
+  private readonly personName = signal<[string, string]>(['', '']);
   readonly name = computed(() => {
-    const { last_name, first_name, name } = this.names();
-    return this.isEntity() ? name : `${last_name ?? ''}, ${first_name ?? ''}`;
+    const [last, first] = this.personName();
+    return `${last ?? ''}, ${first ?? ''}`;
   });
 
   private debounceTimer: string | number | NodeJS.Timeout | undefined = undefined;
-  updateName(event: Event, fieldName: keyof Names) {
-    if (this.debounceTimer) clearTimeout(this.debounceTimer);
+  updateName(event: Event, fieldName: 'last_name' | 'first_name') {
     const target = event.target as HTMLInputElement;
     const value = target.value;
-    this.currentInputValues[fieldName] = value;
-    const { last_name, first_name, name } = this.currentInputValues;
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    if (fieldName === 'last_name') {
+      this.currentInputValues[0] = value;
+    } else {
+      this.currentInputValues[1] = value;
+    }
+
+    const [last, first] = this.currentInputValues;
     // don't mark checkingName unless we would end up with a valid name
-    if (this.isEntity() ? name.trim() !== '' : last_name.trim() !== '' && first_name.trim() !== '') {
+    if (last.trim() !== '' && first.trim() !== '') {
       this.checkingName.set(true);
     }
 
     this.debounceTimer = setTimeout(() => {
-      this.names.set({ last_name, first_name, name });
+      this.personName.set([last, first]);
       this.checkingName.set(false);
     }, 400);
   }
 
   refresh() {
-    this.names.set({ first_name: '', last_name: '', name: '' });
-    this.currentInputValues = { first_name: '', last_name: '', name: '' };
+    this.personName.set(['', '']);
+    this.currentInputValues = ['', ''];
     this.checkingName.set(false);
     this.hideDuplicateWarning.set(false);
   }
