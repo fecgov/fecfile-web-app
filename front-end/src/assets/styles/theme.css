@@ -545,6 +545,10 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   align-items: center;
   font-size: var(--input-font-size);
 }
+.p-select.readonly,
+ .p-select.readonly >.p-select-label {
+  cursor: unset;
+}
 .p-select:not(.p-disabled) {
   background: var(--p-content-background);
   border: 2px solid var(--fec-grey-alt);

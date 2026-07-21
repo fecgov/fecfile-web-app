@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { form, FormField, required } from '@angular/forms/signals';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { DateInput, StringDate, validateDate } from './date.input';
 
 @Component({
@@ -16,7 +15,7 @@ import { DateInput, StringDate, validateDate } from './date.input';
 class TestHostComponent {
   testModel = signal<{ testDate: StringDate }>({ testDate: null });
   testForm = form(this.testModel, (schemaPath) => {
-    required(schemaPath.testDate, { message: requiredMessage });
+    required(schemaPath.testDate);
     validateDate(schemaPath.testDate);
   });
   readonly component = viewChild.required(DateInput);

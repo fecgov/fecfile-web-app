@@ -3,8 +3,9 @@ import { ComponentFixture, TestBed, ComponentFixtureAutoDetect } from '@angular/
 import { By } from '@angular/platform-browser';
 import { InputGroupInput } from './input-group.input';
 import { form, FormField, metadata, required } from '@angular/forms/signals';
-import { requiredMessage, PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
+import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 import { describe, it, expect, beforeEach } from 'vitest';
+import { requiredMessage } from 'app/shared/utils/signal-validator.utils';
 
 const placeholderText = 'Enter name...';
 

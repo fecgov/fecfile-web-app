@@ -2,6 +2,7 @@
   display: grid;
   grid-row: span 3;
   grid-template-rows: subgrid;
+  margin: 0 0 24px 0;
   & > .p-error {
     margin-top: 4px;
   }

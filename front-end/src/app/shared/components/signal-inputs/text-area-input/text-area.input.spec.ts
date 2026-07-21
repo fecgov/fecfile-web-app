@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { form, FormField, required } from '@angular/forms/signals';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { TextAreaInput } from './text-area.input';
+import { requiredMessage } from 'app/shared/utils/signal-validator.utils';
 
 @Component({
   standalone: true,

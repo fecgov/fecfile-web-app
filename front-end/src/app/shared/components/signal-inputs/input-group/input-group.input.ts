@@ -13,7 +13,7 @@ import { LabelComponent } from '../label.component';
       <app-label
         [label]="label()"
         [inputId]="inputId()"
-        [optional]="!required()"
+        [optional]="optional()"
         [labelStyleClass]="labelStyleClass()"
       />
       <p-input-group>

@@ -15,7 +15,7 @@ import { BaseInput } from '../base.input';
         [span]="true"
         [label]="label()"
         [inputId]="inputId()"
-        [optional]="!required()"
+        [optional]="optional()"
         [labelStyleClass]="labelStyleClass()"
       />
       <p-select
@@ -26,6 +26,8 @@ import { BaseInput } from '../base.input';
         (onHide)="touched.set(true)"
         [disabled]="disabled()"
         [class.p-disabled]="disabled()"
+        [readonly]="readonly()"
+        [class.readonly]="readonly()"
         appendTo="body"
       >
         @if (selectedItemTemplate()) {

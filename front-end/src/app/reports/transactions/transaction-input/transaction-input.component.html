@@ -13,10 +13,8 @@
           id="contact_1_lookup"
           contactProperty="contact_1"
           [transaction]="transaction"
-          [form]="form"
           [formSubmitted]="formSubmitted"
           [contactTypeOptions]="contactTypeOptions"
-          (contactTypeSelect)="contactTypeSelected($event)"
           (contactSelect)="updateFormWithPrimaryContact($event)"
         >
         </app-transaction-contact-lookup>
@@ -183,7 +181,6 @@
                 aria-label="contact_3_lookup"
                 contactProperty="contact_3"
                 [transaction]="transaction"
-                [form]="form"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="committeeContactTypeOptions"
                 (contactSelect)="updateFormWithTertiaryContact($event)"
@@ -235,7 +232,6 @@
                 aria-labelledby="contact_2_lookup"
                 contactProperty="contact_2"
                 [transaction]="transaction"
-                [form]="form"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="candidateContactTypeOptions"
                 (contactSelect)="updateFormWithCandidateContact($event)"

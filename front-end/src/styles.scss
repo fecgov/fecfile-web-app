@@ -995,7 +995,9 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   align-items: start;
   grid-auto-rows: auto auto auto;
 
-  & > * {
+  & > *,
+  & hr,
+  & h3 {
     margin: 0 0 24px 0;
     grid-column-end: span 12;
     &:nth-last-child(-n + 1) {

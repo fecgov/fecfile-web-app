@@ -102,6 +102,10 @@ export class Contact extends BaseModel {
   }
 }
 
+export function hasFecId(type: ContactTypes) {
+  return type === ContactTypes.CANDIDATE || type === ContactTypes.COMMITTEE;
+}
+
 export function emptyContact(type: ContactTypes) {
   return Contact.fromJSON({
     type,

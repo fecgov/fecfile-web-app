@@ -53,9 +53,9 @@
 </app-table>
 
 <app-contact-dialog
-  [contactTypeOptions]="dialogContactTypeOptions"
+  [availableContactTypes]="dialogContactTypeOptions"
   [contact]="item"
-  [(detailVisible)]="detailVisible"
+  [(visible)]="detailVisible"
   [showHistory]="true"
   (savedContact)="saveContact()"
 />

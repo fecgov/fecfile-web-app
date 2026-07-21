@@ -11,13 +11,13 @@ export abstract class BaseInput<T> implements FormValueControl<T> {
   readonly required = input(false);
   readonly touched = model(false);
   readonly disabled = input(false);
+  readonly readonly = input(false);
   readonly invalid = input(false);
   readonly name = input<string>('');
   readonly errors = input<readonly ValidationError.WithOptionalFieldTree[]>([]);
 
   readonly labelStyleClass = input<string>();
   readonly overrideId = input<string | undefined>();
-
   readonly optional = computed(() => this.showOptional() && !this.required() && !this.disabled());
   readonly inputId = computed(() => this.overrideId() ?? this.name());
 }

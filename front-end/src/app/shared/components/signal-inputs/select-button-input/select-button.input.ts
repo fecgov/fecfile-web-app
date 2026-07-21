@@ -13,7 +13,7 @@ import { BaseInput } from '../base.input';
       [span]="true"
       [label]="label()"
       [inputId]="inputId()"
-      [optional]="!required()"
+      [optional]="optional()"
       [labelStyleClass]="labelStyleClass()"
     />
     <p-selectbutton [ariaLabelledBy]="labelId()" [options]="options()" [(ngModel)]="value" [id]="inputId()" />

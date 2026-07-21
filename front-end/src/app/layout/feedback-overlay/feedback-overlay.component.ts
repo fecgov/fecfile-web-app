@@ -3,9 +3,9 @@ import { FeedbackService } from 'app/shared/services/feedback.service';
 import { ButtonDirective } from 'primeng/button';
 import { Feedback } from 'app/shared/models/feedback.model';
 import { form, maxLength, required, FormRoot, FormField } from '@angular/forms/signals';
-import { maxLengthMessage, requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { TextAreaInput } from 'app/shared/components/signal-inputs/text-area-input/text-area.input';
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
+import { requiredMessage, maxLengthMessage } from 'app/shared/utils/signal-validator.utils';
 
 enum SubmissionStates {
   DRAFT,

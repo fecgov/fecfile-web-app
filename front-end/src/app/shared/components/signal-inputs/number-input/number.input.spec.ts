@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NumberInput } from './number.input';
 import { Component, signal, viewChild } from '@angular/core';
 import { form, FormField, required } from '@angular/forms/signals';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 
 @Component({
   standalone: true,
@@ -15,7 +14,7 @@ import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 })
 class TestHostComponent {
   testModel = signal<{ testNum: string }>({ testNum: '' });
-  testForm = form(this.testModel, (schemaPath) => required(schemaPath.testNum, { message: requiredMessage }));
+  testForm = form(this.testModel, (schemaPath) => required(schemaPath.testNum));
   readonly component = viewChild.required(NumberInput);
 }
 

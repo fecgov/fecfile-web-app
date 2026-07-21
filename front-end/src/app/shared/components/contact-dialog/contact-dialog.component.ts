@@ -1,445 +1,203 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  Input,
-  model,
-  OnInit,
-  output,
-  Signal,
-  signal,
-  TemplateRef,
-  viewChild,
-} from '@angular/core';
-import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
-import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { QueryParams } from 'app/shared/services/api.service';
+import { Component, computed, effect, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
-import { CountryCodeLabels, LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
-import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
-import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
-import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ButtonDirective } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
-import { InputText } from 'primeng/inputtext';
-import { Ripple } from 'primeng/ripple';
-import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
-import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
-import { ScheduleC1TransactionTypeLabels } from '../../models/schc1-transaction.model';
-import { ScheduleC2TransactionTypeLabels } from '../../models/schc2-transaction.model';
-import { ScheduleDTransactionTypeLabels } from '../../models/schd-transaction.model';
-import { ScheduleETransactionTypeLabels } from '../../models/sche-transaction.model';
-import { LabelPipe } from '../../pipes/label.pipe';
+import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { CandidateOfficeTypes, Contact, ContactTypes, hasFecId } from '../../models/contact.model';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
-import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
-import { FormComponent } from '../form.component';
-import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/candidate-office-input.component';
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
-import { ColumnDefinition, TableBodyContext, TableComponent } from '../table/table.component';
-import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import {
+  apply,
+  applyWhen,
+  disabled,
+  form,
+  FormField,
+  hidden,
+  readonly,
+  required,
+  submit,
+} from '@angular/forms/signals';
+import {
+  CandidateContactData,
+  CandidateContactFormComponent,
+  candidateSchema,
+  populateCandidate,
+} from './candidate-contact-form/candidate-contact-form.component';
+import {
+  CommitteeContactData,
+  CommitteeContactFormComponent,
+  committeeSchema,
+  populateCommittee,
+} from './committee-contact-form/committee-contact-form.component';
+import {
+  IndividualContactData,
+  IndividualContactFormComponent,
+  individualSchema,
+  populateIndividual,
+} from './individual-contact-form/individual-contact-form.component';
+import {
+  OrganizationContactData,
+  OrganizationContactFormComponent,
+  organizationSchema,
+  populateOrganization,
+} from './organization-contact-form/organization-contact-form.component';
+import { DialogComponent } from '../dialog/dialog.component';
+import { SelectInput } from '../signal-inputs/select-input/select.input';
+import { MessageService } from 'primeng/api';
+import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
+import { flattenPayload } from 'app/shared/utils/signal-schema.utils';
+
+interface ContactData {
+  type: ContactTypes;
+  [ContactTypes.CANDIDATE]: CandidateContactData;
+  [ContactTypes.INDIVIDUAL]: IndividualContactData;
+  [ContactTypes.COMMITTEE]: CommitteeContactData;
+  [ContactTypes.ORGANIZATION]: OrganizationContactData;
+}
+
+const initialData: ContactData = {
+  type: ContactTypes.INDIVIDUAL,
+  [ContactTypes.CANDIDATE]: populateCandidate(),
+  [ContactTypes.INDIVIDUAL]: populateIndividual(),
+  [ContactTypes.COMMITTEE]: populateCommittee(),
+  [ContactTypes.ORGANIZATION]: populateOrganization(),
+};
 
 @Component({
   selector: 'app-contact-dialog',
   templateUrl: './contact-dialog.component.html',
   styleUrls: ['./contact-dialog.component.scss'],
   imports: [
-    Dialog,
-    ReactiveFormsModule,
-    ContactLookupComponent,
-    InputText,
-    ErrorMessagesComponent,
-    Select,
-    FecInternationalPhoneInputComponent,
-    CandidateOfficeInputComponent,
-    TableComponent,
-    ButtonDirective,
-    Ripple,
-    CurrencyPipe,
-    DatePipe,
-    LabelPipe,
-    SearchableSelectComponent,
-    ToUpperDirective,
+    DialogComponent,
+    CandidateContactFormComponent,
+    CommitteeContactFormComponent,
+    IndividualContactFormComponent,
+    OrganizationContactFormComponent,
+    SelectInput,
+    FormField,
+    ContactTransactionTableComponent,
   ],
   providers: [SearchableSelectComponent],
 })
-export class ContactDialogComponent extends FormComponent implements OnInit {
+export class ContactDialogComponent {
   private readonly contactService = inject(ContactService);
-  private readonly transactionService = inject(TransactionListService);
-  protected readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
-  public readonly router = inject(Router);
-  readonly ContactTypes = ContactTypes;
-  readonly contact = model<Contact>();
-  @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() detailVisible = false;
-  @Input() showHistory = false;
-  @Input() headerTitle?: string;
-  @Input() defaultCandidateOffice?: CandidateOfficeTypes;
-  readonly detailVisibleChange = output<boolean>();
+
+  readonly visible = model.required<boolean>();
+
+  readonly availableContactTypes = input.required<PrimeOptions>();
+  readonly contact = input<Contact>();
+  readonly showHistory = input(false);
+  readonly headerTitle = input<string>();
+  readonly defaultCandidateOffice = input<CandidateOfficeTypes>();
+
   readonly savedContact = output<Contact>();
-  readonly first = signal(0);
-  readonly sortField = signal('transaction_type_identifier');
-  readonly sortOrder = signal<'asc' | 'desc'>('asc');
-
-  transactions: TransactionListRecord[] = [];
-  tableLoading = true;
-  readonly totalTransactions = signal(0);
-  readonly rowsPerPage = signal(5);
-  readonly params: Signal<QueryParams | undefined> = computed(() => {
-    const contact = this.contact()?.id;
-    if (!contact) return undefined;
-    return { page_size: this.rowsPerPage(), contact };
-  });
-  readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels.concat(
-    ScheduleBTransactionTypeLabels,
-    ScheduleCTransactionTypeLabels,
-    ScheduleC1TransactionTypeLabels,
-    ScheduleC2TransactionTypeLabels,
-    ScheduleDTransactionTypeLabels,
-    ScheduleETransactionTypeLabels,
-    ScheduleFTransactionTypeLabels,
-  );
-
   readonly contactLookup = viewChild.required(ContactLookupComponent);
 
-  form: FormGroup = this.fb.group(
-    SchemaUtils.getFormGroupFields([
-      ...new Set([
-        ...SchemaUtils.getSchemaProperties(contactIndividualSchema),
-        ...SchemaUtils.getSchemaProperties(contactCandidateSchema),
-        ...SchemaUtils.getSchemaProperties(contactCommitteeSchema),
-        ...SchemaUtils.getSchemaProperties(contactOrganizationSchema),
-      ]),
-    ]),
-    { updateOn: 'blur' },
-  );
+  readonly model = signal<ContactData>(initialData);
+  readonly form = form(this.model, (schemaPath) => {
+    required(schemaPath.type);
+    readonly(schemaPath.type, () => this.availableContactTypes().length < 2);
+    hidden(schemaPath.CAN, ({ valueOf }) => valueOf(schemaPath.type) !== ContactTypes.CANDIDATE);
+    apply(schemaPath.CAN, candidateSchema);
 
-  isNewItem = true;
-  contactType = ContactTypes.INDIVIDUAL;
+    hidden(schemaPath.IND, ({ valueOf }) => valueOf(schemaPath.type) !== ContactTypes.INDIVIDUAL);
+    apply(schemaPath.IND, individualSchema);
 
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
-  candidateStateOptions: PrimeOptions = [];
-  candidateDistrictOptions: PrimeOptions = [];
-  readonly dialogVisible = signal(false);
-  emptyMessage = 'No data available in table';
+    hidden(schemaPath.COM, ({ valueOf }) => valueOf(schemaPath.type) !== ContactTypes.COMMITTEE);
+    apply(schemaPath.COM, committeeSchema);
 
-  readonly typeBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
-  readonly dateBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('dateBody');
-  readonly amountBodyTpl = viewChild<TemplateRef<TableBodyContext<TransactionListRecord>>>('amountBody');
-  readonly columns: Signal<ColumnDefinition<TransactionListRecord>[]> = computed(() => {
-    const type = this.typeBodyTpl();
-    const date = this.dateBodyTpl();
-    const amount = this.amountBodyTpl();
-    if (!type || !date || !amount) return [];
-    return [
-      {
-        field: 'transaction_type_identifier',
-        header: 'Type',
-        sortable: true,
-        cssClass: 'type-column',
-        bodyTpl: type,
+    hidden(schemaPath.ORG, ({ valueOf }) => valueOf(schemaPath.type) !== ContactTypes.ORGANIZATION);
+    apply(schemaPath.ORG, organizationSchema);
+
+    applyWhen(
+      schemaPath.CAN.office.candidate_office,
+      () => !!this.defaultCandidateOffice(),
+      (office) => {
+        disabled(office);
       },
-      { field: 'report_type', header: 'Form', sortable: true, cssClass: 'form-column' },
-      { field: 'report_code_label', header: 'Report', sortable: true, cssClass: 'report-column' },
-      {
-        field: 'date',
-        header: 'Date',
-        sortable: true,
-        cssClass: 'date-column',
-        bodyTpl: date,
-      },
-      {
-        field: 'amount',
-        header: 'Amount',
-        sortable: true,
-        cssClass: 'amount-column',
-        bodyTpl: amount,
-      },
-    ];
+    );
   });
 
-  readonly candidatePatternMessage = candidatePatternMessage;
-  readonly committeePatternMessage = committeePatternMessage;
+  readonly isNewItem = computed(() => !this.contact()?.id);
+  readonly showSearchBox = computed(() => hasFecId(this.form.type().value()));
+  readonly dialogVisible = signal(false);
 
-  readonly table = viewChild(TableComponent);
   constructor() {
-    super();
     effect(() => {
-      this.rowsPerPage();
-      this.first.set(0);
+      const defaultCandidateOffice = this.defaultCandidateOffice();
+      if (defaultCandidateOffice) this.form.CAN.office.candidate_office().value.set(defaultCandidateOffice);
+    });
+    effect(() => {
+      const contact = this.contact();
+      this.form().reset({
+        type: contact?.type ?? this.getFromAvailable(),
+        [ContactTypes.CANDIDATE]: populateCandidate(contact),
+        [ContactTypes.INDIVIDUAL]: populateIndividual(contact),
+        [ContactTypes.COMMITTEE]: populateCommittee(contact),
+        [ContactTypes.ORGANIZATION]: populateOrganization(contact),
+      });
     });
 
     effect(() => {
-      if (!this.dialogVisible()) return;
-      this.sortField();
-      this.sortOrder();
-      this.first();
-      this.rowsPerPage();
-      this.loadTransactions();
+      const types = this.availableContactTypes();
+      const currentType = this.form.type().value();
+      if (types.some((t) => t.value === currentType)) return;
+      this.form.type().value.set(types[0].value as ContactTypes);
     });
   }
 
-  async loadTransactions() {
-    const params = this.params();
-    if (!params) return;
-    this.tableLoading = true;
-
-    // event is undefined when triggered from the detail page because
-    // the detail doesn't know what page we are on. We check the local
-    // pagerState variable to retrieve the page state.
-
-    const sortField = this.sortField();
-    const sortOrder = this.sortOrder() === 'asc' ? 1 : -1;
-    const first = this.first();
-    const rows = this.rowsPerPage();
-    const pageNumber: number = Math.floor(first / rows) + 1;
-
-    // Determine query sort ordering
-    let ordering: string | string[] = sortField ?? 'transaction_type_identifier';
-    if (ordering && sortOrder === -1) {
-      ordering = `-${ordering}`;
-    } else {
-      ordering = `${ordering}`;
-    }
-
-    try {
-      const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, this.params());
-      this.transactions = transactionsPage.results;
-      this.totalTransactions.set(transactionsPage.count);
-      this.tableLoading = false;
-      this.emptyMessage = 'No data available in table';
-    } catch {
-      this.tableLoading = false;
-      this.emptyMessage = 'Error loading transactions for contact';
-    }
+  private getFromAvailable(): ContactTypes {
+    const types = this.availableContactTypes();
+    const currentType = this.form.type().value();
+    if (types.some((t) => t.value === currentType)) return currentType;
+    return types[0].value as ContactTypes;
   }
 
-  ngOnInit(): void {
-    if (this.contactTypeOptions.length === 0) {
-      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-    }
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-
-    this.form
-      ?.get('country')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (value !== 'USA') {
-          this.form.patchValue({
-            state: 'ZZ',
+  submitForm() {
+    submit(this.form, {
+      ignoreValidators: 'none',
+      action: async () => {
+        try {
+          const payload = this.buildContact();
+          if (!payload) throw new Error('Error creating contact');
+          const contact = await (this.isNewItem()
+            ? this.contactService.create(payload)
+            : this.contactService.update(payload));
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Contact created',
           });
-          // ajv does not un-require zip when country is not USA
-          this.form.patchValue({ zip: this.form.get('zip')?.value ?? '' });
-          this.form.get('state')?.disable();
-        } else {
-          this.form.patchValue({ zip: this.form.get('zip')?.value ?? null });
-          this.form.get('state')?.enable();
+          this.savedContact.emit(contact);
+          this.form().reset({ ...initialData, type: this.form.type().value() });
+          this.visible.set(false);
+        } catch {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error creating the contact',
+            life: 3000,
+          });
         }
-      });
-
-    this.form
-      ?.get('candidate_state')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
-          this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
-        } else {
-          this.candidateDistrictOptions = [];
-        }
-      });
-
-    // If there is a default candidate office (e.g. 'P') set, then make the
-    // candidate office select read-only disabled.
-    if (this.defaultCandidateOffice) {
-      this.form.get('candidate_office')?.disable();
-    }
-
-    this.contactTypeChanged(this.contactType);
-  }
-
-  /**
-   * On ngOnInit and when a user changes the selection of the ContactType for the contact
-   * entry form (as known by the emitter from the contact-lookup component), update the necessary
-   * FormControl elements for the ContactType selected by the user.
-   * @param contactType
-   */
-  contactTypeChanged(contactType: ContactTypes) {
-    if (!this.contactTypeOptions.some((opt) => opt.value === contactType)) return;
-    this.contactType = contactType;
-    if (!this.contact()) this.contact.set(new Contact());
-
-    // The type form control is not displayed on the form page because we are
-    // displaying the contact lookup component which operates independently, so
-    // we keep the 'type' value on the contact dialog form up-to-date in the background.
-    this.form.get('type')?.setValue(contactType);
-
-    const schema = ContactService.getSchemaByType(contactType);
-    SchemaUtils.addJsonSchemaValidators(this.form, schema, true);
-    switch (contactType) {
-      case ContactTypes.CANDIDATE:
-        this.form.get('candidate_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
-        break;
-      case ContactTypes.COMMITTEE:
-        this.form.get('committee_id')?.addAsyncValidators(this.contactService.getFecIdValidator(this.contact()!.id));
-        break;
-    }
-    this.form.updateValueAndValidity();
-
-    // Clear out non-schema form values
-    const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const schemaProperties: string[] = SchemaUtils.getSchemaProperties(schema);
-    Object.keys(this.form.controls).forEach((property: string) => {
-      if (!schemaProperties.includes(property)) {
-        formValues[property] = null;
-      }
-    });
-    this.form.patchValue(formValues);
-
-    if (contactType === ContactTypes.CANDIDATE) {
-      this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-    } else {
-      this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    }
-  }
-
-  public openDialog() {
-    this.resetForm();
-    const contact = this.contact()!;
-    this.form.patchValue(contact);
-    if (contact.id) {
-      this.isNewItem = false;
-      // Update the value of the Contact Type select box in the Contact Lookup
-      // component because the Contact Dialog is hidden and not destroyed on close,
-      // so we need to directly update the lookup "type" form control value
-      this.contactLookup().contactTypeFormControl.setValue(contact.type);
-      this.contactLookup().contactTypeFormControl.enable();
-    } else if (this.contactTypeOptions.length === 1) {
-      this.contactLookup().contactTypeFormControl.enable();
-    }
-    this.dialogVisible.set(true);
-  }
-
-  public closeDialog(visibleChangeFlag = false) {
-    if (!visibleChangeFlag) {
-      this.detailVisibleChange.emit(false);
-      this.detailVisible = false;
-      this.dialogVisible.set(false);
-    }
-  }
-
-  /**
-   * Callback passed to the contact-lookup component to show/hide lookup input box
-   * @returns boolean
-   */
-  public showSearchBox() {
-    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
-  }
-
-  private resetForm() {
-    this.form.reset();
-    this.form.get('country')?.setValue(this.countryOptions[0]['value']);
-    this.form.get('state')?.setValue(null);
-    this.isNewItem = true;
-    this.contactLookup().contactTypeFormControl.enable();
-    this.contactLookup().contactTypeFormControl.setValue(this.contactType);
-    if (this.defaultCandidateOffice) {
-      this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
-    }
-    this.formSubmitted = false;
-  }
-
-  updateContact(contact: Contact) {
-    this.contact.set(contact);
-    this.contactType = contact.type;
-    this.form.markAllAsDirty();
-    this.form.patchValue(contact);
-  }
-
-  override async submit(jump: 'continue' | void): Promise<void> {
-    if (jump === 'continue') return this.saveContact(false);
-    if (this.headerTitle || this.isNewItem) return this.saveContact();
-    return this.confirmPropagation();
-  }
-
-  confirmPropagation() {
-    const changes = Object.entries(this.form.controls)
-      .map(([field, control]: [string, AbstractControl]) => {
-        const contactValue = this.contact()![field as keyof Contact];
-        if (control?.value !== contactValue) {
-          return [field, control.value];
-        }
-        return undefined;
-      })
-      .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
-    this.confirmationService.confirm({
-      header: 'Confirm',
-      icon: 'pi pi-info-circle',
-      message: changesMessage,
-      acceptLabel: 'Continue',
-      rejectLabel: 'Cancel',
-      accept: () => {
-        this.saveContact();
+      },
+      onInvalid: (field) => {
+        const firstError = field().errorSummary()[0];
+        firstError?.fieldTree().focusBoundControl();
+        console.log('error', firstError);
       },
     });
   }
 
-  public async saveContact(closeDialog = true) {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-    this.form.updateValueAndValidity();
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      return;
-    }
-    const payload: Contact = Contact.fromJSON({
-      ...this.contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
-      type: this.contactType,
-    });
+  private buildContact() {
+    const currentType = this.form.type().value();
+    const activeData = this.form[currentType]().value();
 
-    const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successful',
-      detail: payload.id ? 'Contact Updated' : 'Contact Created',
-      life: 3000,
-    });
+    const payload = {
+      type: currentType,
+      ...flattenPayload(activeData),
+    };
 
-    this.savedContact.emit(contact);
-
-    if (closeDialog) {
-      this.closeDialog();
-    }
-    this.resetForm();
-  }
-
-  openTransaction(transactionListRecord: TransactionListRecord) {
-    if (transactionListRecord.report_ids?.length) {
-      return this.router.navigate([
-        `reports/transactions/report/${transactionListRecord.report_ids[0]}/list/${transactionListRecord.id}`,
-      ]);
-    }
-    return Promise.resolve(false);
+    const contact = Contact.fromJSON(payload);
+    if (contact.id === null) contact.id = undefined;
+    return contact;
   }
 }

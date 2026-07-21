@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal, viewChild } from '@angular/core';
 import { form, FormField, required } from '@angular/forms/signals';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { TextInput } from './text.input';
 
 @Component({
@@ -15,7 +14,7 @@ import { TextInput } from './text.input';
 })
 class TestHostComponent {
   testModel = signal<{ testText: string }>({ testText: '' });
-  testForm = form(this.testModel, (schemaPath) => required(schemaPath.testText, { message: requiredMessage }));
+  testForm = form(this.testModel, (schemaPath) => required(schemaPath.testText));
   readonly component = viewChild.required(TextInput);
 }
 

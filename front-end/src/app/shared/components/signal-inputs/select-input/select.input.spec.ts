@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectInput } from './select.input';
 import { form, FormField, required } from '@angular/forms/signals';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
+import { requiredMessage } from 'app/shared/utils/signal-validator.utils';
 
 @Component({
   standalone: true,
