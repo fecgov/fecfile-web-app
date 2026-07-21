@@ -31,7 +31,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
-  readonly showSearchBox = input(true);
+  @Input() showSearchBoxCallback = () => true;
 
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
@@ -51,7 +51,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }, 0);
   }
 
-  contactType: ContactTypes = ContactTypes.INDIVIDUAL;
+  contactType = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
