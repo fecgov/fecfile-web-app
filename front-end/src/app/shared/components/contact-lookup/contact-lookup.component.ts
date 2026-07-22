@@ -51,7 +51,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }, 0);
   }
 
-  contactType = ContactTypes.INDIVIDUAL;
+  contactType: ContactTypes = ContactTypes.INDIVIDUAL;
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];

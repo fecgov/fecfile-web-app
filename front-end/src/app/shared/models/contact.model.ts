@@ -3,18 +3,13 @@ import { SelectItem, SelectItemGroup } from 'primeng/api';
 import { LabelList, LabelUtils } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
-export enum ContactTypes {
-  CANDIDATE = 'CAN',
-  COMMITTEE = 'COM',
-  INDIVIDUAL = 'IND',
-  ORGANIZATION = 'ORG',
-}
-
-export type ContactType =
-  | ContactTypes.CANDIDATE
-  | ContactTypes.COMMITTEE
-  | ContactTypes.INDIVIDUAL
-  | ContactTypes.ORGANIZATION;
+export const ContactTypes = {
+  CANDIDATE: 'CAN',
+  COMMITTEE: 'COM',
+  INDIVIDUAL: 'IND',
+  ORGANIZATION: 'ORG',
+} as const;
+export type ContactTypes = (typeof ContactTypes)[keyof typeof ContactTypes];
 
 export const ContactTypeLabels: LabelList = [
   [ContactTypes.INDIVIDUAL, 'Individual'],
@@ -34,7 +29,7 @@ export type CandidateOfficeType =
   | CandidateOfficeTypes.PRESIDENTIAL
   | CandidateOfficeTypes.SENATE;
 
-export const CandidateOfficeTypeLabels = [
+export const CandidateOfficeTypeLabels: LabelList = [
   [CandidateOfficeTypes.HOUSE, 'House'],
   [CandidateOfficeTypes.PRESIDENTIAL, 'Presidential'],
   [CandidateOfficeTypes.SENATE, 'Senate'],
@@ -66,7 +61,7 @@ export enum ContactFields {
 
 export class Contact extends BaseModel {
   id: string | undefined;
-  type: ContactType = ContactTypes.INDIVIDUAL;
+  type: ContactTypes = ContactTypes.INDIVIDUAL;
   candidate_id: string | undefined;
   committee_id: string | undefined;
   name: string | undefined;
@@ -102,6 +97,12 @@ export class Contact extends BaseModel {
   }
 }
 
+export function isEntity(type: ContactTypes) {
+  return type === ContactTypes.COMMITTEE || type === ContactTypes.ORGANIZATION;
+}
+export function isPerson(type: ContactTypes) {
+  return type === ContactTypes.CANDIDATE || type === ContactTypes.INDIVIDUAL;
+}
 export function hasFecId(type: ContactTypes) {
   return type === ContactTypes.CANDIDATE || type === ContactTypes.COMMITTEE;
 }
