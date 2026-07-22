@@ -1,6 +1,6 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
-import { LabelList, LabelUtils, StatesCodeMap } from '../utils/label.utils';
+import { LabelList, LabelUtils } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
 export const ContactTypes = {
@@ -97,9 +97,6 @@ export class Contact extends BaseModel {
   }
 }
 
-export function isEntity(type: ContactTypes) {
-  return type === ContactTypes.COMMITTEE || type === ContactTypes.ORGANIZATION;
-}
 export function isPerson(type: ContactTypes) {
   return type === ContactTypes.CANDIDATE || type === ContactTypes.INDIVIDUAL;
 }

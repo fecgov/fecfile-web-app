@@ -5,9 +5,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ContactService } from 'app/shared/services/contact.service';
 import { AddressPipe } from '../../../pipes/address.pipe';
 
-export type ValidatingFields = Partial<
-  Pick<Contact, 'name' | 'first_name' | 'last_name' | 'candidate_id' | 'committee_id'>
->;
+type ValidatingFields = Partial<Pick<Contact, 'name' | 'first_name' | 'last_name' | 'candidate_id' | 'committee_id'>>;
 
 @Component({
   selector: 'app-duplicate-contact',

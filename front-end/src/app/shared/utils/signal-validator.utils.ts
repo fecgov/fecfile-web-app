@@ -7,8 +7,8 @@ import { inject } from '@angular/core';
 export const patternMessage = 'This field contains characters that are not allowed.';
 export const requiredMessage = 'This is a required field';
 export const maxLengthMessage = (num: number) => `This field cannot contain more than ${num} alphanumeric characters.`;
-export const minLengthMessage = (num: number) => `This field must contain at least ${num} alphanumeric characters.`;
-export const debounceTime = 300;
+const minLengthMessage = (num: number) => `This field must contain at least ${num} alphanumeric characters.`;
+const debounceTime = 300;
 
 export function validateFecUnique(fecIdPath: SchemaPath<string>, rootPath: { id: SchemaPath<string | null> }) {
   const cookieService = inject(CookieService);
