@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnDestroy, viewChild } from '@angular/core';
-import { BaseInput } from '../base.input';
-import { LabelComponent } from '../label.component';
-import intlTelInput, { Iti } from 'intl-tel-input';
+import { Component, ElementRef, effect, viewChild } from '@angular/core';
 import { pattern, SchemaPath } from '@angular/forms/signals';
 import { patternMessage } from 'app/shared/utils/signal-validator.utils';
+import intlTelInput, { Iti } from 'intl-tel-input';
+import { BaseInput } from '../base.input';
+import { LabelComponent } from '../label.component';
 
 type IntlTelInputOptions = NonNullable<Parameters<typeof intlTelInput>[1]>;
 
@@ -13,61 +13,94 @@ export function validateTelephone(path: SchemaPath<string>) {
 
 @Component({
   selector: 'app-telephone-input',
-  imports: [LabelComponent],
-  template: `<app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" />
+  template: ` <app-label [label]="label()" [inputId]="inputId()" [optional]="optional()" />
     <input
-      #internationalPhoneInput
-      [class.p-disabled]="disabled()"
-      [disabled]="disabled()"
       type="tel"
+      #internationalPhoneInput
       [id]="inputId()"
+      [disabled]="disabled()"
+      [class.p-disabled]="disabled()"
       (keyup)="onKey($event)"
-      (blur)="onBlur()"
-      (countryChange)="countryChange()"
+      (blur)="onBlur($event)"
     />
-    @if (this.touched() && this.invalid()) {
-      <small class="p-error" role="alert"> {{ this.errors()[0].message }} </small>
+    @if (touched() && invalid()) {
+      <small class="p-error" role="alert"> {{ errors()[0].message }} </small>
     }`,
   styleUrls: ['../input.scss', './telephone.input.scss'],
+  imports: [LabelComponent],
 })
-export class TelephoneInput extends BaseInput<string | null> implements OnDestroy {
+export class TelephoneInput extends BaseInput<string | null> {
   readonly internationalPhoneInputChild = viewChild.required<ElementRef<HTMLInputElement>>('internationalPhoneInput');
 
   private intlTelInput: Iti | undefined;
   private countryCode: string | undefined;
   private number = '';
-  private isUpdatingInternally = false;
 
-  private readonly intlTelInputOptions: IntlTelInputOptions = {
-    separateDialCode: true,
-    initialCountry: 'us',
-    countryOrder: ['us'],
-    allowDropdown: !this.disabled(),
-  };
+  constructor() {
+    super();
+    effect((onCleanup) => {
+      const inputElem = this.internationalPhoneInputChild().nativeElement;
 
-  countryChange() {
+      const options: IntlTelInputOptions = {
+        separateDialCode: true,
+        initialCountry: 'us',
+        countryOrder: ['us'],
+        allowDropdown: !this.disabled(),
+      };
+
+      this.intlTelInput = intlTelInput(inputElem, options);
+      this.intlTelInput.setDisabled(this.disabled());
+      this.countryCode = this.intlTelInput.getSelectedCountryData().dialCode;
+
+      inputElem.addEventListener('countrychange', this.handleCountryChange);
+
+      onCleanup(() => {
+        inputElem.removeEventListener('countrychange', this.handleCountryChange);
+        this.intlTelInput?.destroy();
+        this.intlTelInput = undefined;
+      });
+    });
+
+    effect(() => {
+      const val = this.value();
+      if (this.intlTelInput && val !== null) {
+        this.intlTelInput.setNumber(val);
+      }
+    });
+
+    effect(() => {
+      if (this.intlTelInput) {
+        this.intlTelInput.setDisabled(this.disabled());
+      }
+    });
+  }
+
+  handleCountryChange() {
     this.countryCode = this.intlTelInput?.getSelectedCountryData().dialCode;
-    this.propagateValue();
+    this.updateValue();
   }
 
   onKey(event: KeyboardEvent) {
     this.number = (event.target as HTMLInputElement).value;
-    this.propagateValue();
+    this.updateValue();
   }
 
-  onBlur() {
+  onBlur(event: FocusEvent) {
+    const inputValue = (event.target as HTMLInputElement).value.trim();
+    if (!inputValue) {
+      this.value.set(null);
+    } else {
+      this.updateValue();
+    }
     this.touched.set(true);
   }
 
-  private propagateValue(): void {
-    const fullNumber = this.number ? `+${this.countryCode} ${this.number}` : null;
-
-    this.isUpdatingInternally = true;
-    this.value.set(fullNumber);
-    this.isUpdatingInternally = false;
-  }
-
-  ngOnDestroy() {
-    this.intlTelInput?.destroy();
+  private updateValue(): void {
+    if (this.number) {
+      const fullNumber = `+${this.countryCode} ${this.number}`;
+      this.value.set(fullNumber);
+    } else {
+      this.value.set(null);
+    }
   }
 }
