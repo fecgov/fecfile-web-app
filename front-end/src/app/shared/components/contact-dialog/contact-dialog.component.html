@@ -1,7 +1,7 @@
 <app-dialog
   tabindex="-1"
   aria-labelledby="dialog-title"
-  [title]="contact() ? 'Edit contact' : 'Add contact'"
+  [title]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
   [(visible)]="visible"
   [submitDisabled]="form().invalid()"
   (confirm)="submitForm()"
@@ -15,16 +15,17 @@
       class="grid-col-12 w-max"
     />
     @if (!form.IND().hidden()) {
-      <app-individual-contact-form [fields]="form.IND" />
+      <!-- For now we pass in headerTitle to limit dup check to transactions, eventually use isNewItem -->
+      <app-individual-contact-form [fields]="form.IND" [isNewItem]="!!headerTitle()" />
     }
     @if (!form.CAN().hidden()) {
-      <app-candidate-contact-form [fields]="form.CAN" />
+      <app-candidate-contact-form [fields]="form.CAN" [isNewItem]="!!headerTitle()" />
     }
     @if (!form.COM().hidden()) {
-      <app-committee-contact-form [fields]="form.COM" />
+      <app-committee-contact-form [fields]="form.COM" [isNewItem]="!!headerTitle()" />
     }
     @if (!form.ORG().hidden()) {
-      <app-organization-contact-form [fields]="form.ORG" />
+      <app-organization-contact-form [fields]="form.ORG" [isNewItem]="!!headerTitle()" />
     }
 
     @if (showHistory() && !isNewItem()) {

@@ -3,6 +3,7 @@ import { TextInput } from '../text-input/text.input';
 import { FieldTree, FormField, schema } from '@angular/forms/signals';
 import type { Contact } from 'app/shared/models/contact.model';
 import { validatePattern } from 'app/shared/utils/signal-validator.utils';
+import { DuplicateContactComponent } from '../../contact-dialog/duplicate-contact/duplicate-contact.component';
 
 export interface NameData {
   last_name: string;
@@ -13,8 +14,8 @@ export interface NameData {
 }
 
 export const nameSchema = schema<NameData>((schemaPath) => {
-  validatePattern(schemaPath.first_name, /^[ -~]{0,20}$/, { required: true, max: 20 });
-  validatePattern(schemaPath.last_name, /^[ -~]{0,30}$/, { required: true, max: 30 });
+  validatePattern(schemaPath.first_name, /^[ -~]{0,20}$/, { required: true, max: 20, debounce: 'time' });
+  validatePattern(schemaPath.last_name, /^[ -~]{0,30}$/, { required: true, max: 30, debounce: 'time' });
   validatePattern(schemaPath.middle_name, /^[ -~]{0,20}$/, { max: 20 });
   validatePattern(schemaPath.prefix, /^[ -~]{0,10}$/, { max: 10 });
   validatePattern(schemaPath.suffix, /^[ -~]{0,10}$/, { max: 10 });
@@ -32,7 +33,7 @@ export function populateName(contact?: Contact): NameData {
 
 @Component({
   selector: 'app-name-form',
-  imports: [TextInput, FormField],
+  imports: [TextInput, FormField, DuplicateContactComponent],
   template: `
     <app-text-input
       class="start-row grid-col-4"
@@ -52,6 +53,10 @@ export function populateName(contact?: Contact): NameData {
       inputId="middle_name"
       [formField]="fields().middle_name"
     />
+    @if (checkForDuplicates()) {
+      <app-duplicate-contact type="IND" [data]="{ first_name: firstName(), last_name: lastName() }" />
+    }
+
     <app-text-input class="grid-col-3" [label]="prefixLabel()" inputId="prefix" [formField]="fields().prefix" />
     <app-text-input class="grid-col-3" [label]="suffixLabel()" inputId="suffix" [formField]="fields().suffix" />
   `,
@@ -64,6 +69,7 @@ export function populateName(contact?: Contact): NameData {
 export class NameFormComponent {
   readonly fields = input.required<FieldTree<NameData, string>>();
   readonly prefix = input<string>();
+  readonly checkForDuplicates = input(false);
   readonly lastNameLabel = computed(() => {
     const prefix = this.prefix();
     const label = 'LAST NAME';
@@ -89,4 +95,7 @@ export class NameFormComponent {
     const label = 'SUFFIX';
     return prefix ? `${prefix} ${label}` : label;
   });
+
+  readonly firstName = computed(() => this.fields().first_name().value()?.trim());
+  readonly lastName = computed(() => this.fields().last_name().value()?.trim());
 }

@@ -1,4 +1,4 @@
-import { maxLength, minLength, pattern, required, SchemaPath, validateHttp } from '@angular/forms/signals';
+import { debounce, maxLength, minLength, pattern, required, SchemaPath, validateHttp } from '@angular/forms/signals';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { getHeaders } from '../services/api.service';
@@ -8,6 +8,7 @@ export const patternMessage = 'This field contains characters that are not allow
 export const requiredMessage = 'This is a required field';
 export const maxLengthMessage = (num: number) => `This field cannot contain more than ${num} alphanumeric characters.`;
 export const minLengthMessage = (num: number) => `This field must contain at least ${num} alphanumeric characters.`;
+export const debounceTime = 300;
 
 export function validateFecUnique(fecIdPath: SchemaPath<string>, rootPath: { id: SchemaPath<string | null> }) {
   const cookieService = inject(CookieService);
@@ -45,8 +46,9 @@ export function validateFecUnique(fecIdPath: SchemaPath<string>, rootPath: { id:
 export function validatePattern(
   path: SchemaPath<string>,
   regex: RegExp,
-  extra?: { required?: boolean; max?: number; min?: number },
+  extra?: { required?: boolean; max?: number; min?: number; debounce?: 'time' | 'blur' },
 ) {
+  if (extra?.debounce) debounce(path, extra.debounce === 'blur' ? 'blur' : debounceTime);
   if (extra?.required) required(path, { message: requiredMessage });
   if (extra?.max) maxLength(path, extra.max, { message: maxLengthMessage(extra.max) });
   if (extra?.min) minLength(path, extra.min, { message: minLengthMessage(extra.min) });

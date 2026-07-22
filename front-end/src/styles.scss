@@ -652,6 +652,11 @@ textarea {
   gap: 5px;
 }
 
+.transparent-grey {
+  color: transparent;
+  --icon-symbol: var(--text-color-secondary);
+}
+
 .fec-loader-div {
   height: 450px;
   display: flex;

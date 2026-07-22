@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   NameData,
   NameFormComponent,
@@ -13,9 +13,10 @@ import {
 } from '../../signal-inputs/address-form/address-form.component';
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
-import { apply, FieldTree, FormField, schema } from '@angular/forms/signals';
+import { apply, FormField, schema } from '@angular/forms/signals';
 import { Contact } from 'app/shared/models/contact.model';
 import { validatePattern } from 'app/shared/utils/signal-validator.utils';
+import { BaseContactForm } from '../base-contact-form';
 
 export interface IndividualContactData {
   id: string | null;
@@ -48,7 +49,7 @@ export const individualSchema = schema<IndividualContactData>((schemaPath) => {
 @Component({
   selector: 'app-individual-contact-form',
   imports: [NameFormComponent, AddressFormComponent, TelephoneInput, TextInput, FormField],
-  template: ` <app-name-form [fields]="fields().name" />
+  template: `<app-name-form [fields]="fields().name" [checkForDuplicates]="isNewItem()" />
     <hr />
     <h3>Address</h3>
     <app-address-form [fields]="fields().address" />
@@ -63,6 +64,4 @@ export const individualSchema = schema<IndividualContactData>((schemaPath) => {
     }
   `,
 })
-export class IndividualContactFormComponent {
-  readonly fields = input.required<FieldTree<IndividualContactData, string>>();
-}
+export class IndividualContactFormComponent extends BaseContactForm<IndividualContactData> {}

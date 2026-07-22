@@ -1,6 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
-import { apply, debounce, FieldTree, FormField, schema } from '@angular/forms/signals';
+import { apply, debounce, FormField, schema } from '@angular/forms/signals';
 import {
   AddressData,
   AddressFormComponent,
@@ -10,6 +10,8 @@ import {
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { validateFecUnique, validatePattern } from 'app/shared/utils/signal-validator.utils';
 import type { Contact } from 'app/shared/models/contact.model';
+import { DuplicateContactComponent } from '../duplicate-contact/duplicate-contact.component';
+import { BaseContactForm } from '../base-contact-form';
 
 export interface CommitteeContactData {
   id: string | null;
@@ -40,7 +42,7 @@ export const committeeSchema = schema<CommitteeContactData>((schemaPath) => {
 
 @Component({
   selector: 'app-committee-contact-form',
-  imports: [TextInput, FormField, AddressFormComponent, TelephoneInput],
+  imports: [TextInput, FormField, AddressFormComponent, TelephoneInput, DuplicateContactComponent],
   template: `
     <app-text-input
       class="grid-col-6 start-row"
@@ -49,6 +51,9 @@ export const committeeSchema = schema<CommitteeContactData>((schemaPath) => {
       label="COMMITTEE ID"
       [forceUpper]="true"
     />
+    @if (isNewItem()) {
+      <app-duplicate-contact type="COM" [data]="{ committee_id: this.fields().committee_id().value() }" />
+    }
     <app-text-input class="grid-col-6" [formField]="fields().name" inputId="name" label="NAME" />
     <hr />
 
@@ -62,6 +67,4 @@ export const committeeSchema = schema<CommitteeContactData>((schemaPath) => {
     }
   `,
 })
-export class CommitteeContactFormComponent {
-  readonly fields = input.required<FieldTree<CommitteeContactData, string>>();
-}
+export class CommitteeContactFormComponent extends BaseContactForm<CommitteeContactData> {}

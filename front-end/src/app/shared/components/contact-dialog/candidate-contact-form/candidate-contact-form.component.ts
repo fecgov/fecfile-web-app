@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
 import {
   AddressData,
@@ -6,7 +6,7 @@ import {
   addressSchema,
   populateAddress,
 } from '../../signal-inputs/address-form/address-form.component';
-import { apply, debounce, FieldTree, FormField, schema } from '@angular/forms/signals';
+import { apply, debounce, FormField, schema } from '@angular/forms/signals';
 import {
   NameData,
   NameFormComponent,
@@ -22,6 +22,8 @@ import {
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { validateFecUnique, validatePattern } from 'app/shared/utils/signal-validator.utils';
 import type { Contact } from 'app/shared/models/contact.model';
+import { DuplicateContactComponent } from '../duplicate-contact/duplicate-contact.component';
+import { BaseContactForm } from '../base-contact-form';
 
 export interface CandidateContactData {
   id: string | null;
@@ -70,6 +72,7 @@ export const candidateSchema = schema<CandidateContactData>((schemaPath) => {
     CandidateOfficeFormComponent,
     NameFormComponent,
     FormField,
+    DuplicateContactComponent,
   ],
   template: ` <app-text-input
       class="grid-col-6 start-row"
@@ -78,6 +81,10 @@ export const candidateSchema = schema<CandidateContactData>((schemaPath) => {
       label="CANDIDATE ID"
       [forceUpper]="true"
     />
+    @if (isNewItem()) {
+      <app-duplicate-contact type="CAN" [data]="{ candidate_id: this.fields().candidate_id().value() }" />
+    }
+
     <app-name-form [fields]="fields().name" />
     <hr />
     <h3>Address</h3>
@@ -96,6 +103,4 @@ export const candidateSchema = schema<CandidateContactData>((schemaPath) => {
     }
   `,
 })
-export class CandidateContactFormComponent {
-  readonly fields = input.required<FieldTree<CandidateContactData, string>>();
-}
+export class CandidateContactFormComponent extends BaseContactForm<CandidateContactData> {}

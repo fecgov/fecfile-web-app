@@ -5,11 +5,13 @@ import {
   addressSchema,
   populateAddress,
 } from '../../signal-inputs/address-form/address-form.component';
-import { apply, FieldTree, FormField, schema } from '@angular/forms/signals';
+import { apply, FormField, schema } from '@angular/forms/signals';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { Contact } from 'app/shared/models/contact.model';
 import { validatePattern } from 'app/shared/utils/signal-validator.utils';
+import { DuplicateContactComponent } from '../duplicate-contact/duplicate-contact.component';
+import { BaseContactForm } from '../base-contact-form';
 
 export interface OrganizationContactData {
   id: string | null;
@@ -35,9 +37,12 @@ export const organizationSchema = schema<OrganizationContactData>((schemaPath) =
 
 @Component({
   selector: 'app-organization-contact-form',
-  imports: [TextInput, AddressFormComponent, TelephoneInput, FormField],
+  imports: [TextInput, AddressFormComponent, TelephoneInput, FormField, DuplicateContactComponent],
   template: `
     <app-text-input class="grid-col-6 start-row" label="NAME" inputId="name" [formField]="fields().name" />
+    @if (isNewItem()) {
+      <app-duplicate-contact type="ORG" [data]="{ name: this.fields().name().value() }" />
+    }
     <hr />
     <h3>Address</h3>
     <app-address-form [fields]="fields().address" />
@@ -49,6 +54,4 @@ export const organizationSchema = schema<OrganizationContactData>((schemaPath) =
     }
   `,
 })
-export class OrganizationContactFormComponent {
-  readonly fields = input.required<FieldTree<OrganizationContactData, string>>();
-}
+export class OrganizationContactFormComponent extends BaseContactForm<OrganizationContactData> {}

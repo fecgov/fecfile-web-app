@@ -37,6 +37,16 @@ export class ApiService {
     return new HttpParams({ fromObject: queryParams });
   }
 
+  public async fetch<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
+    const response = await fetch(`${environment.apiUrl}${endpoint}`, {
+      method: 'GET',
+      headers: getHeaders(this.cookieService),
+      credentials: 'include',
+      signal,
+    });
+    return response.json();
+  }
+
   public get<T>(endpoint: string, params?: QueryParams): Promise<T>;
   public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Promise<T>;
   public get<T>(

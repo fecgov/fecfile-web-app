@@ -1,0 +1,43 @@
+@if (!hideDuplicateWarning()) {
+  @if (duplicateCheck.isLoading()) {
+    <p-progress-spinner
+      ariaLabel="checking name"
+      strokeWidth="9"
+      [style]="{ width: '20px', height: '20px' }"
+      [pt]="{ root: 'ml-2' }"
+    />
+  } @else {
+    @if (duplicateCheck.value().length > 0) {
+      <div class="background-box">
+        <div class="flex justify-content-between">
+          <span class="font-bold">We found an existing contact</span>
+          <button class="rounded-image-button" (click)="closeDuplicateWarning()" aria-label="Cancel">
+            <svg class="transparent-grey" alt="close duplicate view" height="20" width="20">
+              <use href="assets/img/x-circle.svg#x-icon"></use>
+            </svg>
+          </button>
+        </div>
+        <hr class="my-2" />
+        <div class="flex flex-column gap-20px">
+          @for (dup of duplicateCheck.value(); track dup) {
+            <div class="flex justify-content-between align-items-center">
+              <div class="name-location">
+                <span>{{ `${dup.name ?? dup.last_name + ', ' + dup.first_name}` }} </span>
+                @if (hasFecId()) {
+                  <span>{{ dup.candidate_id ? dup.candidate_id : dup.committee_id }}</span>
+                }
+                <span [innerHTML]="dup | address"></span>
+              </div>
+              <button
+                pButton
+                class="p-button-primary fit-button"
+                label="Use this contact"
+                (click)="useContact.emit(dup)"
+              ></button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+}

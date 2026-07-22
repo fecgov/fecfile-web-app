@@ -1,6 +1,6 @@
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
-import { LabelList, LabelUtils } from '../utils/label.utils';
+import { LabelList, LabelUtils, StatesCodeMap } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
 export const ContactTypes = {
