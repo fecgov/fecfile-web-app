@@ -6,12 +6,12 @@
     [options]="form24Options"
     label="Report type"
     labelStyleClass="h2 mb-4"
-    [formField]="f24Form.type"
+    [formField]="form.type"
   />
-  <app-input-group [formField]="f24Form.typelessName" [pretext]="typeHour()" label="REPORT NAME" />
+  <app-input-group [formField]="form.typelessName" [pretext]="typeHour()" label="REPORT NAME" />
   <hr type="solid" />
   <app-save-cancel
-    [submitDisabled]="f24Form().invalid()"
+    [submitDisabled]="disableSubmission()"
     (cancelForm)="router.navigateByUrl('/reports')"
     (save)="submitForm($event)"
   />

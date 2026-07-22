@@ -1050,6 +1050,14 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
     grid-row: 2;
   }
 }
+
 #confirm-dialog dialog[open] {
   z-index: 9999 !important;
+}
+
+.solid-line {
+  border-bottom: 1px solid black;
+  color: transparent;
+  display: inline-block;
+  vertical-align: 4px;
 }

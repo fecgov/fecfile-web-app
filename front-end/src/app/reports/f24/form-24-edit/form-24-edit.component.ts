@@ -12,6 +12,7 @@ import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-bu
 import { form24Options } from 'app/shared/utils/label.utils';
 import { buildF24Name, Form24, form24Schema, Type24_48 } from 'app/shared/models/reports/form-24.model';
 import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
+import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 
 interface Form24Data {
   type: Type24_48 | null;
@@ -25,7 +26,7 @@ interface Form24Data {
   imports: [FormField, SaveCancelComponent, SelectButtonInput, InputGroupInput],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Form24EditComponent {
+export class Form24EditComponent extends SignalFormComponent<Form24Data> {
   readonly form24Options = form24Options;
   protected readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
@@ -35,7 +36,7 @@ export class Form24EditComponent {
   private readonly activeReport = this.store.selectSignal(selectActiveReport);
   private readonly report = computed(() => this.activeReport() as Form24);
   readonly typeHour = computed(() => {
-    const type = this.f24Form.type().value();
+    const type = this.form.type().value();
     return type ? `${type}-Hour:` : null;
   });
   private readonly form24Names = derivedAsync(
@@ -46,19 +47,20 @@ export class Form24EditComponent {
     { initialValue: new Set<string>() },
   );
 
-  private readonly f24Model = signal<Form24Data>({ type: null, typelessName: '' });
-  readonly f24Form = form(this.f24Model, (schemaPath) => {
+  readonly model = signal<Form24Data>({ type: null, typelessName: '' });
+  readonly form = form(this.model, (schemaPath) => {
     apply(schemaPath, form24Schema({ existingNames: this.form24Names }));
   });
 
   constructor() {
+    super();
     effectOnceIf(
       () => this.report(),
       (report) => {
         const regex = /^(24-Hour:\s|48-Hour:\s)(.*)$/;
         const match = report.name?.match(regex);
         if (match) {
-          this.f24Form().reset({
+          this.form().reset({
             type: match[1].includes('24') ? '24' : '48',
             typelessName: match[2],
           });
@@ -68,11 +70,11 @@ export class Form24EditComponent {
   }
 
   submitForm(action: 'continue' | void) {
-    return submit(this.f24Form, {
+    return submit(this.form, {
       ignoreValidators: 'none',
       action: async () => {
         try {
-          const { type, typelessName } = this.f24Form().value();
+          const { type, typelessName } = this.form().value();
           const payload = Form24.fromJSON({
             ...this.report()!,
             name: buildF24Name(type!, typelessName),
