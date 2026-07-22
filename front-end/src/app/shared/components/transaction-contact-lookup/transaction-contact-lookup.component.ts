@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -32,7 +32,7 @@ export class TransactionContactLookupComponent implements OnInit {
 
   @ViewChild(ContactDialogComponent) contactDialog!: ContactDialogComponent;
 
-  readonly detailVisible = signal(false);
+  detailVisible = false;
   createContactForm: FormGroup = this.formBuilder.group(
     SchemaUtils.getFormGroupFields([
       ...new Set([
@@ -45,7 +45,7 @@ export class TransactionContactLookupComponent implements OnInit {
   );
   errorMessageFormControl?: SubscriptionFormControl;
   currentContactLabel = 'Individual';
-  currentType: ContactTypes = ContactTypes.INDIVIDUAL;
+  currentType = ContactTypes.INDIVIDUAL;
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
   ngOnInit(): void {
@@ -137,13 +137,13 @@ export class TransactionContactLookupComponent implements OnInit {
 
   createNewContactSelected() {
     this.contactDialog.updateContact(Contact.fromJSON({ type: this.currentType }));
-    this.detailVisible.set(true);
+    this.detailVisible = true;
   }
 
   saveContact(contact: Contact) {
     this.contactSelect.emit({
       value: contact,
     });
-    this.detailVisible.set(false);
+    this.detailVisible = false;
   }
 }

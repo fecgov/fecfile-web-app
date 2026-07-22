@@ -494,6 +494,7 @@ describe('Contacts Edit', () => {
 
 
     cy.get('select[id^="candidate_office-"]').select('Senate');
+    ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
     ContactsHelpers.fieldForLabel(/^Candidate district/i)
@@ -502,6 +503,7 @@ describe('Contacts Edit', () => {
 
       
     cy.get('select[id^="candidate_office-"]').select('House');
+    ContactsHelpers.clickSaveAndHandleConfirm();
     cy.contains(/Edit Contact/i).should('exist');
 
     expectRequiredNearLabel(/^Candidate district/i);

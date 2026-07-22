@@ -103,16 +103,14 @@ describe('CreateCommitteeComponent', () => {
       .spyOn(testUserService, 'getCurrentUser')
       .mockReturnValue(Promise.resolve(testCommitteeAdminLoginData()));
     const testCommitteeId = 'C12345678';
-    const testFilingFrequency = 'Q';
     const testCommittee = new CommitteeAccount();
     testCommittee.committee_id = testCommitteeId;
-    testCommittee.filing_frequency = testFilingFrequency;
 
     component.selectedCommittee.set(testCommittee);
     await component.createAccount();
 
     expect(createSpy).toHaveBeenCalledWith(testCommitteeId);
-    expect(activateSpy).toHaveBeenCalledWith('123', testCommittee.filing_frequency);
+    expect(activateSpy).toHaveBeenCalledWith('123');
     expect(userSpy).toHaveBeenCalled();
     expect(routerSpy).toHaveBeenCalledWith('');
   });

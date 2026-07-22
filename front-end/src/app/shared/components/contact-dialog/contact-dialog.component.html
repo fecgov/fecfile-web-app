@@ -4,7 +4,7 @@
   [class.contact-dialog-not-submitted]="!formSubmitted"
 >
   <p-dialog
-    [(visible)]="detailVisible"
+    [visible]="detailVisible"
     [style]="{ width: '90%' }"
     [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
@@ -26,19 +26,20 @@
             <app-contact-lookup
               ariaLabelledBy="contact_type_label"
               [contactTypeOptions]="contactTypeOptions"
-              [showSearchBox]="showSearchBox()"
+              [showSearchBoxCallback]="showSearchBox"
               [showCreateNewContactButton]="false"
               [includeFecfileResults]="false"
               [autosave]="false"
               [candidateOffice]="defaultCandidateOffice"
               (contactTypeSelect)="contactTypeChanged($event)"
               (contactLookupSelect)="updateContact($event)"
-            />
+            >
+            </app-contact-lookup>
           </div>
         </div>
         <div class="col-6"></div>
       </div>
-      @if (contactType() === ContactTypes.CANDIDATE) {
+      @if (contactType === ContactTypes.CANDIDATE) {
         <div class="grid">
           <div class="col-6">
             <div class="field">
@@ -55,9 +56,9 @@
           <div class="col-4"></div>
         </div>
       }
-      @if (isEntity()) {
+      @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
         <div class="grid">
-          @if (contactType() === ContactTypes.COMMITTEE) {
+          @if (contactType === ContactTypes.COMMITTEE) {
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
@@ -74,50 +75,28 @@
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input
-                type="text"
-                pInputText
-                id="name"
-                formControlName="name"
-                (input)="duplicateContact()?.updateName($event, 'name')"
-              />
+              <input type="text" pInputText id="name" formControlName="name" />
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
+          @if (contactType === ContactTypes.ORGANIZATION) {
+            <div class="col-4"></div>
+          }
         </div>
-        @if (headerTitle && contactType() === ContactTypes.ORGANIZATION) {
-          <app-duplicate-contact
-            [type]="contactType()"
-            [existingContacts]="existingContactMap().get(contactType()) ?? []"
-            (useContact)="useContact($event)"
-          />
-        }
       }
-      @if (isPerson()) {
+      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
         <div class="grid">
           <div class="col-4">
             <div class="field">
               <label for="last_name">LAST NAME</label>
-              <input
-                type="text"
-                pInputText
-                id="last_name"
-                formControlName="last_name"
-                (input)="duplicateContact()?.updateName($event, 'last_name')"
-              />
+              <input type="text" pInputText id="last_name" formControlName="last_name" />
               <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="first_name">FIRST NAME</label>
-              <input
-                type="text"
-                pInputText
-                id="first_name"
-                formControlName="first_name"
-                (input)="duplicateContact()?.updateName($event, 'first_name')"
-              />
+              <input type="text" pInputText id="first_name" formControlName="first_name" />
               <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
@@ -129,16 +108,6 @@
             </div>
           </div>
         </div>
-        <!-- headerTitle means it is from Transaction. 
-        In future change this to isNewItem when enabling for opening on Contact Management -->
-        @if (headerTitle && contactType() === ContactTypes.INDIVIDUAL) {
-          <app-duplicate-contact
-            [type]="contactType()"
-            [existingContacts]="existingContactMap().get(contactType()) ?? []"
-            (useContact)="useContact($event)"
-          />
-        }
-
         <div class="grid">
           <div class="col-3">
             <div class="field">
@@ -242,7 +211,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if (isPerson()) {
+      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -270,7 +239,7 @@
           </div>
         </div>
       }
-      @if (contactType() === ContactTypes.CANDIDATE) {
+      @if (contactType === ContactTypes.CANDIDATE) {
         <div class="grid">
           <div class="col-12">
             <hr />
