@@ -19,8 +19,8 @@ export class CommitteeAccountService {
     return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
   }
 
-  public activateCommittee(committeeUUID?: string): Promise<boolean> {
-    return this.apiService.post(`/committees/${committeeUUID}/activate/`, {});
+  public activateCommittee(committeeUUID?: string): Promise<CommitteeAccount> {
+    return this.apiService.post<CommitteeAccount>(`/committees/${committeeUUID}/activate/`, {});
   }
 
   public getActiveCommittee(): Promise<CommitteeAccount> {
