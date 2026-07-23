@@ -1,0 +1,8 @@
+:host {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  & > .p-error {
+    margin-top: 4px;
+  }
+}

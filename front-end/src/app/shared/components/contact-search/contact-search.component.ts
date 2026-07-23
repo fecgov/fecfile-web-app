@@ -38,19 +38,13 @@ export class ContactSearchComponent {
       switch (this.manager().contactType()) {
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
-            await this.contactService.candidateLookup(
-              searchTerm,
-              this.manager().excludeFecIds(),
-              this.manager().excludeIds(),
-            )
+            await this.contactService.candidateLookup(searchTerm, '', this.manager().excludeIds())
           ).toSelectItemGroups(this.isBare(), searchTerm);
           break;
         case ContactTypes.COMMITTEE:
-          this.contactService
-            .committeeLookup(searchTerm, this.manager().excludeFecIds(), this.manager().excludeIds())
-            .then((response) => {
-              this.contactLookupList = response?.toSelectItemGroups(this.isBare(), searchTerm);
-            });
+          this.contactService.committeeLookup(searchTerm, '', this.manager().excludeIds()).then((response) => {
+            this.contactLookupList = response?.toSelectItemGroups(this.isBare(), searchTerm);
+          });
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService.individualLookup(searchTerm, this.manager().excludeIds()).then((response) => {
@@ -74,15 +68,16 @@ export class ContactSearchComponent {
 
   async onContactLookupSelect(event: AutoCompleteSelectEvent) {
     this.searchTerm = '';
-    let contact: Contact;
+    let payload: Contact;
     if (!event?.value) return;
     if (event.value instanceof Contact) {
-      contact = event.value;
+      payload = event.value;
     } else if (event.value instanceof FecApiCandidateLookupData) {
-      contact = await this.onFecApiCandidateLookupDataSelect(event.value);
+      payload = await this.onFecApiCandidateLookupDataSelect(event.value);
     } else {
-      contact = await this.onFecApiCommitteeLookupDataSelect(event.value);
+      payload = await this.onFecApiCommitteeLookupDataSelect(event.value);
     }
+    const contact = payload.id ? payload : await this.contactService.create(payload);
     this.manager().contact.set(contact);
     if (this.isBare()) this.manager().outerContact.set(contact);
   }

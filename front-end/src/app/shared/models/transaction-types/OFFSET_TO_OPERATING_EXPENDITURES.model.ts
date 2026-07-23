@@ -16,6 +16,10 @@ export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA15',

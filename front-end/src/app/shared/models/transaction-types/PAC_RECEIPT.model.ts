@@ -13,6 +13,10 @@ export class PAC_RECEIPT extends SchATransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11C',

@@ -1,3 +1,4 @@
+import { INDIVIDUAL } from '../utils/transaction-type-properties';
 import { TransactionType, TransactionTemplateMapType } from './transaction-type.model';
 import { ScheduleIds } from './transaction.model';
 
@@ -9,7 +10,7 @@ export abstract class SchATransactionType extends TransactionType {
   override amountInputHeader = 'Receipt information';
   override purposeDescripLabel = 'PURPOSE OF RECEIPT';
   override get isReattributable() {
-    return !this.negativeAmountValueOnly;
+    return !this.negativeAmountValueOnly || this.contactTypeOptions === INDIVIDUAL;
   }
 
   // Mapping of schedule fields to the group input component form templates

@@ -10,6 +10,10 @@ export class PAC_IN_KIND_RECEIPT extends IN_KIND {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.PAC_IN_KIND_OUT];
 
+  override get isReattributable(): boolean {
+    return false;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11C',
