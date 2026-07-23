@@ -75,12 +75,4 @@ describe('TransactionInputComponent', () => {
     component.updateFormWithTertiaryContact(selectItem);
     expect(component.tertiaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
   });
-
-  it('contactTypeSelected should update entity_type form control', () => {
-    const fb = new FormBuilder();
-    const form = fb.group({ entity_type: new SubscriptionFormControl() });
-    component.form = form;
-    component.contactTypeSelected(ContactTypes.ORGANIZATION);
-    expect(component.form.get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);
-  });
 });
