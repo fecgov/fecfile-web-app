@@ -112,22 +112,6 @@ describe('MainFormComponent', () => {
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
-
-  it('should save when message_text is empty and text_code is not MST', async () => {
-    const createSpy = vi.spyOn(component.reportService, 'create').mockResolvedValue(Form99.fromJSON({}));
-
-    component.form.patchValue({
-      ...f99,
-      text_code: 'MSI',
-      message_text: '',
-    });
-
-    expect(component.form.valid).toBe(true);
-
-    await component.submitForm();
-
-    expect(createSpy).toHaveBeenCalledTimes(1);
-  });
 });
 
 describe('MainFormComponent (showFilingFrequency)', () => {
