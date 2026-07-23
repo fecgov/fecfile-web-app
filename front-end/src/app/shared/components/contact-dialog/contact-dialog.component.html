@@ -26,7 +26,7 @@
             <app-contact-lookup
               ariaLabelledBy="contact_type_label"
               [contactTypeOptions]="contactTypeOptions"
-              [showSearchBoxCallback]="showSearchBox"
+              [showSearchBox]="showSearchBox()"
               [showCreateNewContactButton]="false"
               [includeFecfileResults]="false"
               [autosave]="false"
@@ -39,7 +39,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if (contactType === ContactTypes.CANDIDATE) {
+      @if (contactType() === ContactTypes.CANDIDATE) {
         <div class="grid">
           <div class="col-6">
             <div class="field">
@@ -56,9 +56,9 @@
           <div class="col-4"></div>
         </div>
       }
-      @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
+      @if (isEntity()) {
         <div class="grid">
-          @if (contactType === ContactTypes.COMMITTEE) {
+          @if (contactType() === ContactTypes.COMMITTEE) {
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
@@ -79,12 +79,12 @@
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
-          @if (contactType === ContactTypes.ORGANIZATION) {
+          @if (contactType() === ContactTypes.ORGANIZATION) {
             <div class="col-4"></div>
           }
         </div>
       }
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (isPerson()) {
         <div class="grid">
           <div class="col-4">
             <div class="field">
@@ -211,7 +211,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (isPerson()) {
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -239,7 +239,7 @@
           </div>
         </div>
       }
-      @if (contactType === ContactTypes.CANDIDATE) {
+      @if (contactType() === ContactTypes.CANDIDATE) {
         <div class="grid">
           <div class="col-12">
             <hr />

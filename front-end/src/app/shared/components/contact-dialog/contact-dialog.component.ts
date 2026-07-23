@@ -36,7 +36,15 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import {
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
+  hasFecId,
+  isEntity,
+  isPerson,
+} from '../../models/contact.model';
 import { ScheduleATransactionTypeLabels } from '../../models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from '../../models/schb-transaction.model';
 import { ScheduleCTransactionTypeLabels } from '../../models/schc-transaction.model';
@@ -131,7 +139,9 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   isNewItem = true;
-  contactType = ContactTypes.INDIVIDUAL;
+  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
+  readonly isEntity = computed(() => isEntity(this.contactType()));
+  readonly isPerson = computed(() => isPerson(this.contactType()));
 
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -235,7 +245,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     if (this.contactTypeOptions.length === 0) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     }
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
+    this.contactType.set(this.contactTypeOptions[0].value as ContactTypes);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
@@ -274,7 +284,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       this.form.get('candidate_office')?.disable();
     }
 
-    this.contactTypeChanged(this.contactType);
+    this.contactTypeChanged(this.contactType());
   }
 
   /**
@@ -285,7 +295,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
    */
   contactTypeChanged(contactType: ContactTypes) {
     if (!this.contactTypeOptions.some((opt) => opt.value === contactType)) return;
-    this.contactType = contactType;
+    this.contactType.set(contactType);
     if (!this.contact()) this.contact.set(new Contact());
 
     // The type form control is not displayed on the form page because we are
@@ -347,13 +357,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
   }
 
-  /**
-   * Callback passed to the contact-lookup component to show/hide lookup input box
-   * @returns boolean
-   */
-  public showSearchBox() {
-    return this.contactType === ContactTypes.CANDIDATE || this.contactType === ContactTypes.COMMITTEE;
-  }
+  readonly showSearchBox = computed(() => hasFecId(this.contactType()));
 
   private resetForm() {
     this.form.reset();
@@ -370,7 +374,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   updateContact(contact: Contact) {
     this.contact.set(contact);
-    this.contactType = contact.type;
+    this.contactType.set(contact.type);
     this.form.markAllAsDirty();
     this.form.patchValue(contact);
   }
@@ -414,7 +418,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
     const payload: Contact = Contact.fromJSON({
       ...this.contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType)),
+      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
       type: this.contactType,
     });
 

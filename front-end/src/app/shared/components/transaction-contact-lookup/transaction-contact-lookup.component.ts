@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -45,7 +45,7 @@ export class TransactionContactLookupComponent implements OnInit {
   );
   errorMessageFormControl?: SubscriptionFormControl;
   currentContactLabel = 'Individual';
-  currentType = ContactTypes.INDIVIDUAL;
+  readonly currentType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
   mandatoryCandidateOffice?: CandidateOfficeType; // If the candidate is limited to one type of office, that office is set here.
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class TransactionContactLookupComponent implements OnInit {
     // content type from the transaction contact lookup and make the second in the lookup in the dialog to readonly.
 
     this.currentContactLabel = this.contactTypeOptions[0].label;
-    this.currentType = this.contactTypeOptions[0].value as ContactTypes;
+    this.currentType.set(this.contactTypeOptions[0].value as ContactTypes);
 
     // Limit contact type options in contact lookup to one when editing a transaction
     if (this.transaction?.id) {
@@ -125,7 +125,7 @@ export class TransactionContactLookupComponent implements OnInit {
   contactTypeSelected(contactType: ContactTypes) {
     this.contactDialog.contactTypeChanged(contactType);
     this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
-    this.currentType = this.contactDialog.contactTypeOptions[0].value as ContactTypes;
+    this.currentType.set(this.contactDialog.contactTypeOptions[0].value as ContactTypes);
     this.contactTypeSelect.emit(contactType);
   }
 

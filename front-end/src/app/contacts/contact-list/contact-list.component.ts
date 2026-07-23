@@ -7,7 +7,7 @@ import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
 import { ContactDialogComponent } from '../../shared/components/contact-dialog/contact-dialog.component';
 import { LabelPipe } from '../../shared/pipes/label.pipe';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models';
+import { Contact, ContactTypeLabels, ContactTypes, isPerson } from 'app/shared/models/contact.model';
 import { ContactService, DeletedContactService } from 'app/shared/services/contact.service';
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -124,7 +124,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
    * @returns {string} Returns the appropriate name of the contact for display in the table.
    */
   public displayName(item: Contact): string {
-    if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
+    if (isPerson(item.type)) {
       return `${item.last_name}, ${item.first_name}`;
     } else {
       return item.name || '';

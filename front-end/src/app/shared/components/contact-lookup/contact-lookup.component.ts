@@ -1,5 +1,4 @@
-import { Component, EventEmitter, inject, input, Input, OnInit, Output, ViewChild } from '@angular/core';
-
+import { Component, EventEmitter, inject, input, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   CandidateOfficeType,
@@ -31,7 +30,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() showCreateNewContactButton = true;
-  @Input() showSearchBoxCallback = () => true;
+  readonly showSearchBox = input(true);
 
   @Input() includeFecfileResults = true;
   @Input() candidateOffice?: CandidateOfficeType;
@@ -51,7 +50,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
     }, 0);
   }
 
-  contactType = ContactTypes.INDIVIDUAL;
+  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
   contactTypes = ContactTypes;
   contactTypeReadOnly = false;
   contactLookupList: SelectItemGroup[] = [];
@@ -62,7 +61,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
   searchTerm = '';
 
   ngOnInit(): void {
-    this.contactType = this.contactTypeOptions[0].value as ContactTypes;
+    this.contactType.set(this.contactTypeOptions[0].value as ContactTypes);
     this.contactTypeFormControl.setValue(this.contactType);
     this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
     if (this.candidateOffice) {
@@ -73,7 +72,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       .pipe(takeUntil(this.destroy$))
       .subscribe((contactType: ContactTypes | null) => {
         if (!contactType) return;
-        this.contactType = contactType;
+        this.contactType.set(contactType);
         this.contactTypeSelect.emit(contactType);
       });
   }
