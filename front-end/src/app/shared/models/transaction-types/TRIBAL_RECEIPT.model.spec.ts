@@ -1,3 +1,4 @@
+import { ReportTypes } from '..';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 
@@ -22,5 +23,20 @@ describe('TRIBAL_RECEIPT', () => {
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Tribal Receipt');
+  });
+
+  it('#hasElectionInformation() should return true for F3 report type', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3);
+    expect(result).toBe(true);
+  });
+
+  it('#hasElectionInformation() should return false for F3X', () => {
+    const result = transactionType.hasElectionInformation(ReportTypes.F3X);
+    expect(result).toBe(false);
+  });
+
+  it('#isReattributable() should return false', () => {
+    const result = transactionType.isReattributable;
+    expect(result).toBe(false);
   });
 });

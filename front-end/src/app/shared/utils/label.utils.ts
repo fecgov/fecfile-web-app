@@ -105,6 +105,11 @@ export class LabelUtils {
   }
 }
 
+export const form24Options = [
+  { label: '24-Hour ', value: '24' },
+  { label: '48-Hour', value: '48' },
+];
+
 export const StatesCodeLabels: LabelList = [
   ['AL', 'Alabama'],
   ['AK', 'Alaska'],
