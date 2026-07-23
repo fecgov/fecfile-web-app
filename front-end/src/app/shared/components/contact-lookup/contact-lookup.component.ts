@@ -1,5 +1,5 @@
-import { Component, EventEmitter, inject, input, Input, OnInit, Output, signal, ViewChild } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, inject, input, model, output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
@@ -12,84 +12,65 @@ import {
 } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
 import { Select } from 'primeng/select';
-import { takeUntil } from 'rxjs';
-import { DestroyerComponent } from '../destroyer.component';
 
 @Component({
   selector: 'app-contact-lookup',
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
-  imports: [Select, ReactiveFormsModule, PrimeTemplate, AutoComplete],
+  imports: [Select, PrimeTemplate, AutoComplete, FormsModule],
 })
-export class ContactLookupComponent extends DestroyerComponent implements OnInit {
+export class ContactLookupComponent {
   public readonly contactService = inject(ContactService);
   readonly contactTypeLabels: LabelList = ContactTypeLabels;
-  @Input() contactTypeOptions: PrimeOptions = [];
-  @Input() showCreateNewContactButton = true;
+  readonly contactType = model<ContactTypes>(ContactTypes.INDIVIDUAL);
+  readonly contactTypeOptions = input<PrimeOptions>([]);
+  readonly showCreateNewContactButton = input(true);
   readonly showSearchBox = input(true);
 
-  @Input() includeFecfileResults = true;
-  @Input() candidateOffice?: CandidateOfficeType;
+  readonly includeFecfileResults = input(true);
+  readonly candidateOffice = input<CandidateOfficeType>();
 
   readonly autosave = input(true);
 
-  @Output() readonly contactTypeSelect = new EventEmitter<ContactTypes>();
-  @Output() readonly contactLookupSelect = new EventEmitter<Contact>();
-  @Output() readonly createNewContactSelect = new EventEmitter<void>();
+  readonly contactTypeSelect = output<ContactTypes>();
+  readonly contactLookupSelect = output<Contact>();
+  readonly createNewContactSelect = output<void>();
 
-  @ViewChild(AutoComplete)
-  set autoComplete(ac: AutoComplete) {
-    setTimeout(() => {
-      if (ac?.dropdownButton) {
-        ac.dropdownButton.nativeElement.tabIndex = -1;
-      }
-    }, 0);
-  }
-
-  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
   contactTypes = ContactTypes;
-  contactTypeReadOnly = false;
+  contactTypeReadOnly = computed(() => this.contactTypeOptions().length < 2);
   contactLookupList: SelectItemGroup[] = [];
-  candidateOfficeLabel?: string;
-  contactTypeFormControl = new SubscriptionFormControl<ContactTypes | null>(null, { updateOn: 'change' });
-  searchBoxFormControl = new SubscriptionFormControl('', { updateOn: 'change' });
+  readonly candidateOfficeLabel = computed(() => LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice()));
 
   searchTerm = '';
 
-  ngOnInit(): void {
-    this.contactType.set(this.contactTypeOptions[0].value as ContactTypes);
-    this.contactTypeFormControl.setValue(this.contactType);
-    this.contactTypeReadOnly = this.contactTypeOptions.length === 1;
-    if (this.candidateOffice) {
-      this.candidateOfficeLabel = LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice);
-    }
-
-    this.contactTypeFormControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((contactType: ContactTypes | null) => {
-        if (!contactType) return;
-        this.contactType.set(contactType);
-        this.contactTypeSelect.emit(contactType);
-      });
+  constructor() {
+    effectOnceIf(
+      () => {
+        const options = this.contactTypeOptions();
+        if (options.length === 0) return null;
+        return options[0].value as ContactTypes;
+      },
+      (type) => this.contactType.set(type),
+    );
   }
 
   async onDropdownSearch(event: AutoCompleteCompleteEvent) {
     const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
-      switch (this.contactTypeFormControl.value) {
+      switch (this.contactType()) {
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
-            await this.contactService.candidateLookup(searchTerm, '', '', this.candidateOffice)
-          ).toSelectItemGroups(this.includeFecfileResults, searchTerm);
+            await this.contactService.candidateLookup(searchTerm, '', '', this.candidateOffice())
+          ).toSelectItemGroups(this.includeFecfileResults(), searchTerm);
           break;
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(searchTerm, '', '').then((response) => {
-            this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults, this.searchTerm);
+            this.contactLookupList = response.toSelectItemGroups(this.includeFecfileResults(), this.searchTerm);
           });
           break;
         case ContactTypes.INDIVIDUAL:
@@ -133,7 +114,7 @@ export class ContactLookupComponent extends DestroyerComponent implements OnInit
       this.onContactSelect(payload);
     }
 
-    this.searchBoxFormControl.patchValue('');
+    this.searchTerm = '';
   }
 
   onContactSelect(contact: Contact) {

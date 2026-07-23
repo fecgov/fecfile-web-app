@@ -124,8 +124,8 @@ export class TransactionContactLookupComponent implements OnInit {
    */
   contactTypeSelected(contactType: ContactTypes) {
     this.contactDialog.contactTypeChanged(contactType);
-    this.currentContactLabel = this.contactDialog.contactTypeOptions[0].label;
-    this.currentType.set(this.contactDialog.contactTypeOptions[0].value as ContactTypes);
+    this.currentContactLabel = this.contactDialog.contactTypeOptions()[0].label;
+    this.currentType.set(this.contactDialog.contactTypeOptions()[0].value as ContactTypes);
     this.contactTypeSelect.emit(contactType);
   }
 
