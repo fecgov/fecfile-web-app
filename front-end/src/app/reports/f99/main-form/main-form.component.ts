@@ -69,14 +69,33 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   readonly showFilingFrequency = computed(() => this.documentType() in textCodesWithFilingFrequencies);
   private pageIsLoaded = false;
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+
+    const messageControl = this.form.controls['message_text'];
+    messageControl.clearAsyncValidators();
+
+    const schemaValidator = SchemaUtils.jsonSchemaValidator('message_text', this.form, this.schema);
+
+    messageControl.addAsyncValidators(async (control) => {
+      if (this.form.controls['text_code'].value !== 'MST' && !control.value) {
+        return null;
+      }
+      return schemaValidator(control);
+    });
+
+    messageControl.updateValueAndValidity();
+  }
+
   constructor() {
     super();
     effect(() => {
       this.documentType();
-      /**
-       * Reset the filing frequency field when the document type changes, but only after the initial load.
-       * On load we want the filing frequency from the data.
-       */
+
+      this.form.controls['message_text'].updateValueAndValidity({
+        emitEvent: false,
+      });
+
       if (this.pageIsLoaded) {
         this.form.controls['filing_frequency'].reset();
       } else {

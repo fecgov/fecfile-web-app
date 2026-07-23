@@ -112,6 +112,22 @@ describe('MainFormComponent', () => {
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
+
+  it('should save when message_text is empty and text_code is not MST', async () => {
+    const createSpy = vi.spyOn(component.reportService, 'create').mockResolvedValue(Form99.fromJSON({}));
+
+    component.form.patchValue({
+      ...f99,
+      text_code: 'MSI',
+      message_text: '',
+    });
+
+    expect(component.form.valid).toBe(true);
+
+    await component.submitForm();
+
+    expect(createSpy).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('MainFormComponent (showFilingFrequency)', () => {
@@ -158,5 +174,35 @@ describe('MainFormComponent (showFilingFrequency)', () => {
     component.form.controls['text_code'].setValue('MST');
     fixture.detectChanges();
     expect(component.showFilingFrequency()).toBe(false);
+  });
+
+  it('does not require message_text when text_code is not MST', async () => {
+    component.form.patchValue({
+      text_code: 'MSI',
+      message_text: '',
+    });
+
+    component.form.controls['message_text'].updateValueAndValidity();
+
+    await fixture.whenStable();
+
+    expect(component.form.controls['message_text'].errors).toBeNull();
+  });
+
+  it('requires message_text when text_code is MST', async () => {
+    component.form.patchValue({
+      text_code: 'MST',
+      message_text: '',
+    });
+
+    component.form.controls['message_text'].updateValueAndValidity();
+
+    await fixture.whenStable();
+
+    expect(component.form.controls['message_text'].errors).toEqual(
+      expect.objectContaining({
+        required: true,
+      }),
+    );
   });
 });
