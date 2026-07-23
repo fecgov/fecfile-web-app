@@ -4,7 +4,7 @@ import {
   AddressFormComponent,
   addressSchema,
   populateAddress,
-} from '../../signal-inputs/address-form/address-form.component';
+} from '../../signal-inputs/forms/address-form/address-form.component';
 import { apply, FormField, schema } from '@angular/forms/signals';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';

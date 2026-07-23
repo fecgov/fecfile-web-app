@@ -1,18 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideZoneChangeDetection } from '@angular/core';
+import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ROUTES } from 'app/routes';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { ListRestResponse } from 'app/shared/models/rest-api.model';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { createTestTransactionListRecord, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
@@ -21,12 +18,30 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactDialogComponent } from './contact-dialog.component';
 import { ContactService } from 'app/shared/services/contact.service';
+import { LabelUtils } from 'app/shared/utils/label.utils';
+
+@Component({
+  imports: [ContactDialogComponent],
+  standalone: true,
+  template: `<app-contact-dialog
+    [(visible)]="visible"
+    [availableContactTypes]="contactTypeOptions"
+    [contact]="contact()"
+  />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ContactDialogComponent);
+  visible = signal(false);
+  contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+  contact = signal(new Contact());
+}
 
 describe('ContactDialogComponent', () => {
+  let host: TestHostComponent;
   let component: ContactDialogComponent;
-  let fixture: ComponentFixture<ContactDialogComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
   let testConfirmationService: ConfirmationService;
-  let transactionService: TransactionListService;
+
   let contactService: ContactService;
   let messageService: MessageService;
 
@@ -58,14 +73,15 @@ describe('ContactDialogComponent', () => {
     }).compileComponents();
 
     testConfirmationService = TestBed.inject(ConfirmationService);
-    transactionService = TestBed.inject(TransactionListService);
+
     contactService = TestBed.inject(ContactService);
     messageService = TestBed.inject(MessageService);
-    fixture = TestBed.createComponent(ContactDialogComponent);
-    component = fixture.componentInstance;
-    component.contact.set(testContact());
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
+    host.contact.set(testContact());
 
-    component.ngOnInit();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -73,36 +89,27 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should open dialog with new or edit contact', () => {
-    component.contact()!.id = '123';
-    component.openDialog();
-    expect(component.isNewItem).toBe(false);
-    expect(component.contactLookup().contactTypeFormControl.disabled).toBe(false);
+    host.contact.update((c) => Contact.fromJSON({ ...c, id: '123' }));
+    host.visible.set(true);
+    expect(component.isNewItem()).toBe(false);
+    expect(component.contactLookup().contactTypeReadOnly()).toBe(true);
 
-    component.contact()!.id = undefined;
-    component.contactTypeOptions = [{ label: 'org', value: 'ORG' }];
-    component.contactLookup().contactTypeFormControl.enable();
-    component.openDialog();
-    expect(component.contactLookup().contactTypeFormControl.disabled).toBe(false);
-  });
-
-  it('should close dialog with flags set', () => {
-    component.detailVisible = true;
-    component.dialogVisible.set(true);
-    component.closeDialog();
-    expect(component.detailVisible).toBe(false);
-    expect(component.dialogVisible()).toBe(false);
+    host.contact.update((c) => Contact.fromJSON({ ...c, id: undefined }));
+    host.contactTypeOptions = [{ label: 'org', value: 'ORG' }];
+    host.visible.set(true);
+    expect(component.contactLookup().contactTypeReadOnly()).toBe(false);
   });
 
   it('should save contact', async () => {
     const contactEmitSpy = vi.spyOn(component.savedContact, 'emit');
     const messageSpy = vi.spyOn(messageService, 'add');
     const tester = testContact();
-    component.updateContact(tester);
+    component.submitForm();
     fixture.detectChanges();
     tester.first_name = 'Changed name';
     const updateSpy = vi.spyOn(contactService, 'update').mockResolvedValueOnce(tester);
 
-    await component.saveContact(false);
+    component.submitForm();
     fixture.detectChanges();
     expect(contactEmitSpy).toHaveBeenCalledTimes(1);
     expect(updateSpy).toHaveBeenCalledTimes(1);
@@ -110,11 +117,11 @@ describe('ContactDialogComponent', () => {
   });
 
   it('should raise confirmation dialog', () => {
-    component.contact.set(new Contact());
+    host.contact.set(new Contact());
     const spy = vi.spyOn(testConfirmationService, 'confirm').mockImplementation((confirmation: Confirmation) => {
       if (confirmation.accept) return confirmation?.accept();
     });
-    component.confirmPropagation();
+    component.confirmUpdate(host.contact());
     expect(spy).toHaveBeenCalled();
   });
 
@@ -127,82 +134,16 @@ describe('ContactDialogComponent', () => {
     testContact2.id = 'test_contact_2_id';
     testContact2.type = ContactTypes.COMMITTEE;
 
-    component.contact.set(testContact1);
+    host.contact.set(testContact1);
 
     expect(component.contact()?.id).toBe(testContact1.id);
     expect(component.contact()?.type).toBe(testContact1.type);
-    expect(component.form.dirty).toBe(false);
+    expect(component.form().dirty()).toBe(false);
 
     component.updateContact(testContact2);
 
     expect(component.contact()?.id).toBe(testContact2.id);
     expect(component.contact()?.type).toBe(testContact2.type);
-    expect(component.form.dirty).toBe(true);
-  });
-
-  describe('transactions', () => {
-    it('should route to transaction', async () => {
-      const spy = vi.spyOn(component.router, 'navigate').mockResolvedValue(true);
-      const testTransactionListRecord = createTestTransactionListRecord();
-      testTransactionListRecord.report_ids = ['abc'];
-      await component.openTransaction(testTransactionListRecord);
-      expect(spy).toHaveBeenCalledWith([
-        `reports/transactions/report/${testTransactionListRecord.report_ids?.[0]}/list/${testTransactionListRecord.id}`,
-      ]);
-    });
-
-    it('should handle pagination', async () => {
-      vi.spyOn(transactionService, 'getTableData').mockReturnValue(
-        Promise.resolve({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
-      );
-      await component.loadTransactions();
-
-      expect(component.transactions).toEqual([]);
-    });
-
-    it('should not show Form 24s', async () => {
-      const testReportCodeLabel = 'APRIL 15 QUARTERLY REPORT (Q1)';
-      const transactionListRecord = new TransactionListRecord();
-      transactionListRecord.report_code_label = testReportCodeLabel;
-      vi.spyOn(transactionService, 'getTableData').mockReturnValue(
-        Promise.resolve({
-          results: [transactionListRecord],
-          count: 1,
-          pageNumber: 1,
-          next: '',
-          previous: '',
-        } as ListRestResponse),
-      );
-      await component.loadTransactions();
-
-      expect(component.transactions[0].report_code_label).toBe(testReportCodeLabel);
-    });
-
-    describe('loadTransactions', () => {
-      it('should load even without first in event or pagerState', async () => {
-        vi.spyOn(transactionService, 'getTableData').mockReturnValue(
-          Promise.resolve({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
-        );
-        await component.loadTransactions();
-
-        expect(component.transactions).toEqual([]);
-      });
-
-      it('should load even without first in event', async () => {
-        vi.spyOn(transactionService, 'getTableData').mockReturnValue(
-          Promise.resolve({ results: [], count: 5, pageNumber: 0, next: '', previous: '' } as ListRestResponse),
-        );
-        await component.loadTransactions();
-
-        expect(component.transactions).toEqual([]);
-      });
-    });
-
-    it('should get params', () => {
-      component.rowsPerPage.set(5);
-      component.contact()!.id = '123';
-      expect(component.params()!['page_size']).toBe(5);
-      expect(component.params()!['contact']).toBe('123');
-    });
+    expect(component.form().dirty()).toBe(true);
   });
 });

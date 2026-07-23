@@ -1,14 +1,13 @@
 import type { Mock } from 'vitest';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { EventEmitter, provideZoneChangeDetection } from '@angular/core';
+import { Component, EventEmitter, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Candidate } from 'app/shared/models/candidate.model';
 import {
   CandidateLookupResponse,
-  CandidateOfficeTypes,
   CommitteeLookupResponse,
   Contact,
   ContactTypeLabels,
@@ -35,9 +34,21 @@ import { ContactLookupComponent } from './contact-lookup.component';
 const queryEvent = { query: 'hi' } as AutoCompleteCompleteEvent;
 const emptyQueryEvent = { query: '' } as AutoCompleteCompleteEvent;
 
+@Component({
+  imports: [ContactLookupComponent],
+  standalone: true,
+  template: `<app-contact-lookup [(contactType)]="contactType" [contactTypeOptions]="options" />`,
+})
+class TestHostComponent {
+  component = viewChild.required(ContactLookupComponent);
+  contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
+  options = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
+}
+
 describe('ContactLookupComponent', () => {
+  let host: TestHostComponent;
   let component: ContactLookupComponent;
-  let fixture: ComponentFixture<ContactLookupComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   let contactService: ContactService;
 
@@ -64,9 +75,9 @@ describe('ContactLookupComponent', () => {
     }).compileComponents();
 
     contactService = TestBed.inject(ContactService);
-    fixture = TestBed.createComponent(ContactLookupComponent);
-    component = fixture.componentInstance;
-    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
+    fixture = TestBed.createComponent(TestHostComponent);
+    host = fixture.componentInstance;
+    component = host.component();
   });
 
   it('should create', () => {
@@ -74,18 +85,11 @@ describe('ContactLookupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#ngOnInit', () => {
-    component.candidateOffice = CandidateOfficeTypes.PRESIDENTIAL;
-    fixture.detectChanges();
-    component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
-    expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);
-  });
-
   it('#onDropdownSearch empty search', async () => {
     fixture.detectChanges();
     await component.onDropdownSearch(emptyQueryEvent);
     fixture.detectChanges();
-    expect(component.contactLookupList.length === 0).toBe(true);
+    expect(component.contactLookupList).toHaveLength(0);
   });
 
   describe('onDropdownSearch', () => {
@@ -106,18 +110,18 @@ describe('ContactLookupComponent', () => {
         ];
         vi.spyOn(contactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
 
-        component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+        component.contactType.set(ContactTypes.CANDIDATE);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(component.contactLookupList[1].items.length === 0).toBe(true);
+        expect(component.contactLookupList[1].items).toHaveLength(0);
       });
 
       it('#onDropdownSearch CAN undefined fecfile_candidates', async () => {
         vi.spyOn(contactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+        component.contactType.set(ContactTypes.CANDIDATE);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(component.contactLookupList[0].items.length === 0).toBe(true);
+        expect(component.contactLookupList[0].items).toHaveLength(0);
       });
 
       it('#onDropdownSearch CAN happy path', async () => {
@@ -130,19 +134,18 @@ describe('ContactLookupComponent', () => {
           } as unknown as FecfileCandidateLookupData),
         ];
         vi.spyOn(contactService, 'candidateLookup').mockReturnValue(Promise.resolve(testCandidateLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+        component.contactType.set(ContactTypes.CANDIDATE);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(
-          JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true, 'hi')),
-        ).toBe(true);
+        expect(JSON.stringify(component.contactLookupList)).toBe(
+          JSON.stringify(testCandidateLookupResponse.toSelectItemGroups(true, 'hi')),
+        );
         expect(
           JSON.stringify([
             { label: 'There are no matching candidate contacts', items: [] },
             { label: 'There are no matching registered candidates', items: [] },
-          ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true, 'hi')),
-        ).toBe(true);
+          ]),
+        ).toBe(JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true, 'hi')));
       });
     });
 
@@ -161,9 +164,9 @@ describe('ContactLookupComponent', () => {
           } as unknown as FecfileCommitteeLookupData,
         ];
         vi.spyOn(contactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
+        component.contactType.set(ContactTypes.COMMITTEE);
         await component.onDropdownSearch(queryEvent);
-        expect(component.contactLookupList[1].items.length === 0).toBe(true);
+        expect(component.contactLookupList[1].items).toHaveLength(0);
       });
 
       it('#onDropdownSearch COM undefined fecfile_committees', async () => {
@@ -175,9 +178,9 @@ describe('ContactLookupComponent', () => {
           } as FecApiCommitteeLookupData,
         ];
         vi.spyOn(contactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
+        component.contactType.set(ContactTypes.COMMITTEE);
         await component.onDropdownSearch(queryEvent);
-        expect(component.contactLookupList[0].items.length === 0).toBe(true);
+        expect(component.contactLookupList[0].items).toHaveLength(0);
       });
 
       it('#onDropdownSearch COM happy path', async () => {
@@ -195,18 +198,17 @@ describe('ContactLookupComponent', () => {
           } as unknown as FecfileCommitteeLookupData,
         ];
         vi.spyOn(contactService, 'committeeLookup').mockReturnValue(Promise.resolve(testCommitteeLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.COMMITTEE);
+        component.contactType.set(ContactTypes.COMMITTEE);
         await component.onDropdownSearch(queryEvent);
-        expect(
-          JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true, 'hi')),
-        ).toBe(true);
+        expect(JSON.stringify(component.contactLookupList)).toBe(
+          JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups(true, 'hi')),
+        );
         expect(
           JSON.stringify([
             { label: 'There are no matching committee contacts', items: [] },
             { label: 'There are no matching registered committees', items: [] },
-          ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true, 'hi')),
-        ).toBe(true);
+          ]),
+        ).toBe(JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups(true, 'hi')));
       });
     });
 
@@ -219,10 +221,10 @@ describe('ContactLookupComponent', () => {
 
       it('#onDropdownSearch IND undefined fecfile_individuals', async () => {
         vi.spyOn(contactService, 'individualLookup').mockReturnValue(Promise.resolve(testIndividualLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+        component.contactType.set(ContactTypes.INDIVIDUAL);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(component.contactLookupList[0].items.length === 0).toBe(true);
+        expect(component.contactLookupList[0].items).toHaveLength(0);
       });
 
       it('#onDropdownSearch IND happy path', async () => {
@@ -235,21 +237,20 @@ describe('ContactLookupComponent', () => {
           } as unknown as FecfileIndividualLookupData),
         ];
         vi.spyOn(contactService, 'individualLookup').mockReturnValue(Promise.resolve(testIndividualLookupResponse));
-        component.contactTypeFormControl.setValue(ContactTypes.INDIVIDUAL);
+        component.contactType.set(ContactTypes.INDIVIDUAL);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(
-          JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testIndividualLookupResponse.toSelectItemGroups('hi')),
-        ).toBe(true);
+        expect(JSON.stringify(component.contactLookupList)).toBe(
+          JSON.stringify(testIndividualLookupResponse.toSelectItemGroups('hi')),
+        );
         expect(
           JSON.stringify([
             {
               label: 'There are no matching individuals',
               items: [],
             },
-          ]) === JSON.stringify(new IndividualLookupResponse().toSelectItemGroups('hi')),
-        ).toBe(true);
+          ]),
+        ).toBe(JSON.stringify(new IndividualLookupResponse().toSelectItemGroups('hi')));
       });
     });
 
@@ -262,10 +263,10 @@ describe('ContactLookupComponent', () => {
 
       it('#onDropdownSearch ORG undefined fecfile_organizations', async () => {
         vi.spyOn(contactService, 'organizationLookup').mockResolvedValue(testOrganizationLookupResponse);
-        component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
+        component.contactType.set(ContactTypes.ORGANIZATION);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(component.contactLookupList[0].items.length === 0).toBe(true);
+        expect(component.contactLookupList[0].items).toHaveLength(0);
       });
 
       it('#onDropdownSearch ORG happy path', async () => {
@@ -277,21 +278,20 @@ describe('ContactLookupComponent', () => {
           } as unknown as FecfileOrganizationLookupData),
         ];
         vi.spyOn(contactService, 'organizationLookup').mockResolvedValue(testOrganizationLookupResponse);
-        component.contactTypeFormControl.setValue(ContactTypes.ORGANIZATION);
+        component.contactType.set(ContactTypes.ORGANIZATION);
         await component.onDropdownSearch(queryEvent);
         fixture.detectChanges();
-        expect(
-          JSON.stringify(component.contactLookupList) ===
-            JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups('hi')),
-        ).toBe(true);
+        expect(JSON.stringify(component.contactLookupList)).toBe(
+          JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups('hi')),
+        );
         expect(
           JSON.stringify([
             {
               label: 'There are no matching organizations',
               items: [],
             },
-          ]) === JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups('hi')),
-        ).toBe(true);
+          ]),
+        ).toBe(JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups('hi')));
       });
     });
   });

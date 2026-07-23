@@ -1,32 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  OrganizationContactData,
-  OrganizationContactFormComponent,
-  organizationSchema,
-  populateOrganization,
-} from './organization-contact-form.component';
+  CandidateOfficeData,
+  CandidateOfficeFormComponent,
+  candidateOfficeSchema,
+  populateOffice,
+} from './candidate-office-form.component';
 import { Component, viewChild, signal } from '@angular/core';
 import { apply, form } from '@angular/forms/signals';
 
 @Component({
-  imports: [OrganizationContactFormComponent],
+  imports: [CandidateOfficeFormComponent],
   standalone: true,
-  template: `<app-organization-contact-form [fields]="form.ORG" />`,
+  template: `<app-candidate-office-form [fields]="form.office" />`,
 })
 class TestHostComponent {
-  component = viewChild.required(OrganizationContactFormComponent);
-  model = signal<{ ORG: OrganizationContactData }>({ ORG: populateOrganization() });
-  form = form(this.model, (schemaPath) => apply(schemaPath.ORG, organizationSchema));
+  component = viewChild.required(CandidateOfficeFormComponent);
+  model = signal<{ office: CandidateOfficeData }>({ office: populateOffice() });
+  form = form(this.model, (schemaPath) => apply(schemaPath.office, candidateOfficeSchema));
 }
 
-describe('OrganizationContactFormComponent', () => {
+describe('CandidateOfficeFormComponent', () => {
   let host: TestHostComponent;
-  let component: OrganizationContactFormComponent;
+  let component: CandidateOfficeFormComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrganizationContactFormComponent],
+      imports: [CandidateOfficeFormComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

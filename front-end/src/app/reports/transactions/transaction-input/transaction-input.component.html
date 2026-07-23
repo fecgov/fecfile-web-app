@@ -12,6 +12,7 @@
         <app-transaction-contact-lookup
           id="contact_1_lookup"
           contactProperty="contact_1"
+          [form]="form"
           [transaction]="transaction"
           [formSubmitted]="formSubmitted"
           [contactTypeOptions]="contactTypeOptions"
@@ -180,6 +181,7 @@
                 id="contact_3_lookup"
                 aria-label="contact_3_lookup"
                 contactProperty="contact_3"
+                [form]="form"
                 [transaction]="transaction"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="committeeContactTypeOptions"
@@ -231,6 +233,7 @@
                 id="contact_2_lookup"
                 aria-labelledby="contact_2_lookup"
                 contactProperty="contact_2"
+                [form]="form"
                 [transaction]="transaction"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="candidateContactTypeOptions"

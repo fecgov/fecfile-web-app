@@ -1,9 +1,10 @@
 import { Component, computed, input } from '@angular/core';
-import { TextInput } from '../text-input/text.input';
-import { FieldTree, FormField, schema } from '@angular/forms/signals';
+import { TextInput } from '../../text-input/text.input';
+import { FormField, schema } from '@angular/forms/signals';
 import type { Contact } from 'app/shared/models/contact.model';
 import { validatePattern } from 'app/shared/utils/signal-validator.utils';
-import { DuplicateContactComponent } from '../../contact-dialog/duplicate-contact/duplicate-contact.component';
+import { DuplicateContactComponent } from '../../../contact-dialog/duplicate-contact/duplicate-contact.component';
+import { BaseForm } from '../base-form';
 
 export interface NameData {
   last_name: string;
@@ -66,8 +67,7 @@ export function populateName(contact?: Contact): NameData {
     }
   `,
 })
-export class NameFormComponent {
-  readonly fields = input.required<FieldTree<NameData, string>>();
+export class NameFormComponent extends BaseForm<NameData> {
   readonly prefix = input<string>();
   readonly checkForDuplicates = input(false);
   readonly lastNameLabel = computed(() => {

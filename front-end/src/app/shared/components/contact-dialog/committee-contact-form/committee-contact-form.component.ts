@@ -6,7 +6,7 @@ import {
   AddressFormComponent,
   addressSchema,
   populateAddress,
-} from '../../signal-inputs/address-form/address-form.component';
+} from '../../signal-inputs/forms/address-form/address-form.component';
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { validateFecUnique, validatePattern } from 'app/shared/utils/signal-validator.utils';
 import type { Contact } from 'app/shared/models/contact.model';

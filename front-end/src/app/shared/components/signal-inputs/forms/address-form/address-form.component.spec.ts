@@ -1,32 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  IndividualContactData,
-  IndividualContactFormComponent,
-  individualSchema,
-  populateIndividual,
-} from './individual-contact-form.component';
+import { AddressData, AddressFormComponent, addressSchema, populateAddress } from './address-form.component';
 import { apply, form } from '@angular/forms/signals';
 import { Component, viewChild, signal } from '@angular/core';
 
 @Component({
-  imports: [IndividualContactFormComponent],
+  imports: [AddressFormComponent],
   standalone: true,
-  template: `<app-individual-contact-form [fields]="form.IND" />`,
+  template: `<app-address-form [fields]="form.address" />`,
 })
 class TestHostComponent {
-  component = viewChild.required(IndividualContactFormComponent);
-  model = signal<{ IND: IndividualContactData }>({ IND: populateIndividual() });
-  form = form(this.model, (schemaPath) => apply(schemaPath.IND, individualSchema));
+  component = viewChild.required(AddressFormComponent);
+  model = signal<{ address: AddressData }>({ address: populateAddress() });
+  form = form(this.model, (schemaPath) => apply(schemaPath.address, addressSchema));
 }
 
-describe('IndividualContactFormComponent', () => {
+describe('AddressFormComponent', () => {
   let host: TestHostComponent;
-  let component: IndividualContactFormComponent;
+  let component: AddressFormComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IndividualContactFormComponent],
+      imports: [AddressFormComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

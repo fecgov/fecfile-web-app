@@ -1,10 +1,11 @@
 import { Component, effect, input, untracked } from '@angular/core';
-import { SelectInput } from '../select-input/select.input';
-import { TextInput } from '../text-input/text.input';
-import { disabled, FieldTree, FormField, required, schema } from '@angular/forms/signals';
+import { SelectInput } from '../../select-input/select.input';
+import { TextInput } from '../../text-input/text.input';
+import { disabled, FormField, required, schema } from '@angular/forms/signals';
 import { LabelUtils, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import type { Contact } from 'app/shared/models/contact.model';
 import { requiredMessage, validatePattern } from 'app/shared/utils/signal-validator.utils';
+import { BaseForm } from '../base-form';
 
 export interface AddressData {
   street_1: string;
@@ -81,12 +82,12 @@ export const addressSchema = schema<AddressData>((schemaPath) => {
     }
   `,
 })
-export class AddressFormComponent {
-  readonly fields = input.required<FieldTree<AddressData, string>>();
+export class AddressFormComponent extends BaseForm<AddressData> {
   readonly stateOptions = input(LabelUtils.getPrimeOptions(StatesCodeLabels));
   readonly countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
   constructor() {
+    super();
     effect(() => {
       const countryField = this.fields().country;
       if (!countryField) return;

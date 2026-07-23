@@ -5,20 +5,20 @@ import {
   AddressFormComponent,
   addressSchema,
   populateAddress,
-} from '../../signal-inputs/address-form/address-form.component';
+} from '../../signal-inputs/forms/address-form/address-form.component';
 import { apply, debounce, FormField, schema } from '@angular/forms/signals';
 import {
   NameData,
   NameFormComponent,
   nameSchema,
   populateName,
-} from '../../signal-inputs/name-form/name-form.component';
+} from '../../signal-inputs/forms/name-form/name-form.component';
 import {
   CandidateOfficeData,
   CandidateOfficeFormComponent,
   candidateOfficeSchema,
   populateOffice,
-} from '../../signal-inputs/candidate-office-form/candidate-office-form.component';
+} from '../../signal-inputs/forms/candidate-office-form/candidate-office-form.component';
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { validateFecUnique, validatePattern } from 'app/shared/utils/signal-validator.utils';
 import type { Contact } from 'app/shared/models/contact.model';

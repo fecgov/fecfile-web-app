@@ -1,8 +1,7 @@
 import { Directive, input } from '@angular/core';
-import { FieldTree } from '@angular/forms/signals';
+import { BaseForm } from '../signal-inputs/forms/base-form';
 
 @Directive()
-export abstract class BaseContactForm<T> {
-  readonly fields = input.required<FieldTree<T, string>>();
+export abstract class BaseContactForm<T> extends BaseForm<T> {
   readonly isNewItem = input.required<boolean>();
 }

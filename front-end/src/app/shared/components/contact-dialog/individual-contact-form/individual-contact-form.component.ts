@@ -4,13 +4,13 @@ import {
   NameFormComponent,
   nameSchema,
   populateName,
-} from '../../signal-inputs/name-form/name-form.component';
+} from '../../signal-inputs/forms/name-form/name-form.component';
 import {
   AddressData,
   AddressFormComponent,
   addressSchema,
   populateAddress,
-} from '../../signal-inputs/address-form/address-form.component';
+} from '../../signal-inputs/forms/address-form/address-form.component';
 import { TelephoneInput, validateTelephone } from '../../signal-inputs/telephone-input/telephone.input';
 import { TextInput } from '../../signal-inputs/text-input/text.input';
 import { apply, FormField, schema } from '@angular/forms/signals';

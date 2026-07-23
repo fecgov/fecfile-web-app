@@ -3,7 +3,7 @@
   aria-labelledby="dialog-title"
   [title]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
   [(visible)]="visible"
-  [submitDisabled]="form().invalid()"
+  [submitDisabled]="disableSubmission()"
   (confirm)="submitForm()"
 >
   <form novalidate (submit)="$event.preventDefault()" class="grid-form">

@@ -1,9 +1,10 @@
-import { Component, computed, effect, input, untracked } from '@angular/core';
-import { SelectInput } from '../select-input/select.input';
+import { Component, computed, effect, untracked } from '@angular/core';
+import { SelectInput } from '../../select-input/select.input';
 import { CandidateOfficeTypeLabels, CandidateOfficeTypes, Contact } from 'app/shared/models/contact.model';
-import { disabled, FieldTree, FormField, required, schema } from '@angular/forms/signals';
+import { disabled, FormField, required, schema } from '@angular/forms/signals';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { requiredMessage } from 'app/shared/utils/signal-validator.utils';
+import { BaseForm } from '../base-form';
 
 export interface CandidateOfficeData {
   candidate_office: CandidateOfficeTypes | '';
@@ -76,8 +77,7 @@ export const candidateOfficeSchema = schema<CandidateOfficeData>((schemaPath) =>
     }
   `,
 })
-export class CandidateOfficeFormComponent {
-  readonly fields = input.required<FieldTree<CandidateOfficeData, string>>();
+export class CandidateOfficeFormComponent extends BaseForm<CandidateOfficeData> {
   readonly candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
   readonly stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   readonly candidateDistrictOptions = computed(() =>
@@ -85,6 +85,7 @@ export class CandidateOfficeFormComponent {
   );
 
   constructor() {
+    super();
     effect(() => {
       const office = this.fields().candidate_office().value();
       const state = this.fields().candidate_state();

@@ -41,9 +41,11 @@ import {
 } from './organization-contact-form/organization-contact-form.component';
 import { DialogComponent } from '../dialog/dialog.component';
 import { SelectInput } from '../signal-inputs/select-input/select.input';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
 import { flattenPayload } from 'app/shared/utils/signal-schema.utils';
+import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
+import { SignalFormComponent } from '../signal-form/signal-form.component';
 
 interface ContactData {
   type: ContactTypes;
@@ -77,7 +79,8 @@ const initialData: ContactData = {
   ],
   providers: [SearchableSelectComponent],
 })
-export class ContactDialogComponent {
+export class ContactDialogComponent extends SignalFormComponent<ContactData> {
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly contactService = inject(ContactService);
   private readonly messageService = inject(MessageService);
 
@@ -122,6 +125,7 @@ export class ContactDialogComponent {
   readonly dialogVisible = signal(false);
 
   constructor() {
+    super();
     effect(() => {
       const defaultCandidateOffice = this.defaultCandidateOffice();
       if (defaultCandidateOffice) this.form.CAN.office.candidate_office().value.set(defaultCandidateOffice);
@@ -159,17 +163,8 @@ export class ContactDialogComponent {
         try {
           const payload = this.buildContact();
           if (!payload) throw new Error('Error creating contact');
-          const contact = await (this.isNewItem()
-            ? this.contactService.create(payload)
-            : this.contactService.update(payload));
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Contact created',
-          });
-          this.savedContact.emit(contact);
-          this.form().reset({ ...initialData, type: this.form.type().value() });
-          this.visible.set(false);
+          if (this.isNewItem()) this.createContact(payload);
+          else this.confirmUpdate(payload);
         } catch {
           this.messageService.add({
             severity: 'error',
@@ -185,6 +180,49 @@ export class ContactDialogComponent {
         console.log('error', firstError);
       },
     });
+  }
+
+  confirmUpdate(payload: Contact) {
+    const contact = this.contact()!;
+    const changes = Object.entries(payload).filter(([key, value]) => value !== contact[key as keyof Contact]);
+
+    const changesMessage = TransactionContactUtils.getContactChangesMessage(contact, changes);
+    this.confirmationService.confirm({
+      header: 'Confirm',
+      icon: 'pi pi-info-circle',
+      message: changesMessage,
+      acceptLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        this.updateContact(payload);
+      },
+    });
+  }
+
+  async updateContact(payload: Contact) {
+    const contact = await this.contactService.update(payload);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Contact updated',
+    });
+
+    this.savedContact.emit(contact);
+    this.form().reset({ ...initialData, type: this.form.type().value() });
+    this.visible.set(false);
+  }
+
+  async createContact(payload: Contact) {
+    const contact = await this.contactService.create(payload);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Contact created',
+    });
+
+    this.savedContact.emit(contact);
+    this.form().reset({ ...initialData, type: this.form.type().value() });
+    this.visible.set(false);
   }
 
   private buildContact() {
