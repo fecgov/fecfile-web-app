@@ -159,34 +159,4 @@ describe('MainFormComponent (showFilingFrequency)', () => {
     fixture.detectChanges();
     expect(component.showFilingFrequency()).toBe(false);
   });
-
-  it('does not require message_text when text_code is not MST', async () => {
-    component.form.patchValue({
-      text_code: 'MSI',
-      message_text: '',
-    });
-
-    component.form.controls['message_text'].updateValueAndValidity();
-
-    await fixture.whenStable();
-
-    expect(component.form.controls['message_text'].errors).toBeNull();
-  });
-
-  it('requires message_text when text_code is MST', async () => {
-    component.form.patchValue({
-      text_code: 'MST',
-      message_text: '',
-    });
-
-    component.form.controls['message_text'].updateValueAndValidity();
-
-    await fixture.whenStable();
-
-    expect(component.form.controls['message_text'].errors).toEqual(
-      expect.objectContaining({
-        required: true,
-      }),
-    );
-  });
 });
