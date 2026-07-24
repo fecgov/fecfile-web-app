@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { TransactionInputComponent } from './transaction-input.component';
-import { FormBuilder } from '@angular/forms';
-import { ContactTypes } from 'app/shared/models/contact.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';

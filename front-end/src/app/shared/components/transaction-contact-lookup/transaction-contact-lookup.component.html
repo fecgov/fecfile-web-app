@@ -1,7 +1,7 @@
 <div class="p-fluid">
   <div [class.transaction-contact-invalid]="errorMessageFormControl?.status === 'INVALID'">
     <app-contact-lookup
-      [(contactType)]="currentType"
+      [(type)]="currentType"
       [contactTypeOptions]="contactTypeOptions()"
       [candidateOffice]="mandatoryCandidateOffice()"
       (contactLookupSelect)="setContact($event)"
@@ -11,6 +11,7 @@
   </div>
   <app-contact-dialog
     headerTitle="Create a new contact"
+    [(type)]="currentType"
     [contactTypeOptions]="contactTypeOptions()"
     [defaultCandidateOffice]="mandatoryCandidateOffice()"
     [(visible)]="detailVisible"

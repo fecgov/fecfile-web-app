@@ -1,4 +1,4 @@
-@if (candidateOffice() && contactType() === contactTypes.CANDIDATE) {
+@if (candidateOffice() && type() === 'CAN') {
   <div class="grid">
     <em>{{ candidateOfficeLabel() }} candidates only</em>
   </div>
@@ -6,7 +6,7 @@
 <div class="grid contact-lookup-container">
   <div class="px-0" [class.dropdown-with-search]="showSearchBox()">
     <p-select
-      [(ngModel)]="contactType"
+      [(ngModel)]="type"
       inputId="entity_type"
       [options]="contactTypeOptions()"
       [readonly]="contactTypeReadOnly()"

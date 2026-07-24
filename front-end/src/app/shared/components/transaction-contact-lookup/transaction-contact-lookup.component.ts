@@ -23,17 +23,17 @@ export class TransactionContactLookupComponent {
   readonly form = input.required<FormGroup>();
   readonly formSubmitted = input(false);
   readonly contactTypeOptions = model.required<PrimeOptions>();
+
   readonly contactSelect = output<SelectItem<Contact>>();
 
   readonly detailVisible = signal(false);
+  readonly currentType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
 
-  errorMessageFormControl?: SubscriptionFormControl;
   readonly errorMessage = computed(() => {
     const type = this.currentType();
     const label = ContactTypeLabels.find((c) => c[0] === type)?.[1] ?? '';
     return `${label} information is required`;
   });
-  readonly currentType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
 
   // If the candidate is limited to one type of office, that office is set here.
   readonly mandatoryCandidateOffice = computed(() => {
@@ -48,6 +48,8 @@ export class TransactionContactLookupComponent {
     }
     return undefined;
   });
+
+  errorMessageFormControl?: SubscriptionFormControl;
 
   constructor() {
     effectOnceIf(
@@ -96,9 +98,7 @@ export class TransactionContactLookupComponent {
   }
 
   setContact(contact: Contact) {
-    this.contactSelect.emit({
-      value: contact,
-    });
+    this.contactSelect.emit({ value: contact });
     this.detailVisible.set(false);
   }
 }

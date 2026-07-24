@@ -77,18 +77,6 @@ describe('ContactDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open dialog with new or edit contact', () => {
-    component.contact()!.id = '123';
-    component.openDialog();
-    expect(component.isNewItem()).toBe(false);
-    expect(component.contactLookup().contactTypeReadOnly()).toBe(false);
-
-    component.contact()!.id = undefined;
-    host.contactTypeOptions = [{ label: 'org', value: 'ORG' }];
-    component.openDialog();
-    expect(component.contactLookup().contactTypeReadOnly()).toBe(false);
-  });
-
   it('should close dialog with flags set', () => {
     component.visible.set(true);
     component.dialogVisible.set(true);

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, model, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
@@ -34,7 +34,8 @@ import { CandidateOfficeInputComponent } from '../inputs/candidate-office-input/
 import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
 import { TransactionContactUtils } from '../transaction-type-base/transaction-contact.utils';
 import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact/duplicate-contact.component';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -54,6 +55,8 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
     SearchableSelectComponent,
     ToUpperDirective,
     ContactTransactionTableComponent,
+    DuplicateContactComponent,
+    NgTemplateOutlet,
   ],
   providers: [SearchableSelectComponent],
 })
@@ -63,6 +66,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   private readonly messageService = inject(MessageService);
 
   readonly contact = model<Contact>();
+  readonly type = model<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly visible = model(false);
   readonly contactTypeOptions = input<PrimeOptions>(LabelUtils.getPrimeOptions(ContactTypeLabels));
   readonly showHistory = input(false);
@@ -71,10 +75,6 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
 
   readonly detailVisibleChange = output<boolean>();
   readonly savedContact = output<Contact>();
-
-  readonly ContactTypes = ContactTypes;
-
-  readonly contactLookup = viewChild.required(ContactLookupComponent);
 
   form: FormGroup = this.fb.group(
     SchemaUtils.getFormGroupFields([
@@ -89,12 +89,13 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   );
 
   readonly isNewItem = computed(() => !this.contact()?.id);
-  readonly contactType = signal<ContactTypes>(ContactTypes.INDIVIDUAL);
-  readonly isEntity = computed(() => isEntity(this.contactType()));
-  readonly isPerson = computed(() => isPerson(this.contactType()));
+
+  readonly isEntity = computed(() => isEntity(this.type()));
+  readonly isPerson = computed(() => isPerson(this.type()));
+  readonly showSearchBox = computed(() => hasFecId(this.type()));
 
   readonly stateOptions = computed(() =>
-    this.contactType() === ContactTypes.CANDIDATE
+    this.type() === ContactTypes.CANDIDATE
       ? LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary())
       : LabelUtils.getPrimeOptions(StatesCodeLabels),
   );
@@ -106,10 +107,19 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   readonly candidatePatternMessage = candidatePatternMessage;
   readonly committeePatternMessage = committeePatternMessage;
 
+  readonly hideDuplicate = signal(false);
+  readonly data = signal<ValidatingFields>({
+    name: '',
+    first_name: '',
+    last_name: '',
+    candidate_id: '',
+    committee_id: '',
+  });
+
   constructor() {
     super();
     effect(() => {
-      this.contactTypeChanged(this.contactType());
+      this.contactTypeChanged(this.type());
     });
   }
 
@@ -148,7 +158,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       this.form.get('candidate_office')?.disable();
     }
 
-    this.contactTypeChanged(this.contactType());
+    this.contactTypeChanged(this.type());
   }
 
   /**
@@ -193,10 +203,7 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     const contact = this.contact()!;
     this.form.patchValue(contact);
     if (contact.id) {
-      // Update the value of the Contact Type select box in the Contact Lookup
-      // component because the Contact Dialog is hidden and not destroyed on close,
-      // so we need to directly update the lookup "type" form control value
-      this.contactLookup().contactType.set(contact.type);
+      this.type.set(contact.type);
     }
     this.dialogVisible.set(true);
   }
@@ -209,22 +216,21 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
   }
 
-  readonly showSearchBox = computed(() => hasFecId(this.contactType()));
-
   private resetForm() {
     this.form.reset();
     this.form.get('country')?.setValue(this.countryOptions[0]['value']);
     this.form.get('state')?.setValue(null);
-    this.contactLookup().contactType.set(this.contactType());
     if (this.defaultCandidateOffice) {
       this.form.get('candidate_office')?.setValue(this.defaultCandidateOffice);
     }
     this.formSubmitted = false;
+    this.data.set({ name: '', first_name: '', last_name: '', candidate_id: '', committee_id: '' });
+    this.hideDuplicate.set(false);
   }
 
   updateContact(contact: Contact) {
     this.contact.set(contact);
-    this.contactType.set(contact.type);
+    this.type.set(contact.type);
     this.form.markAllAsDirty();
     this.form.patchValue(contact);
   }
@@ -236,15 +242,10 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   confirmPropagation() {
+    const contact = this.contact()!;
     const changes = Object.entries(this.form.controls)
-      .map(([field, control]: [string, AbstractControl]) => {
-        const contactValue = this.contact()![field as keyof Contact];
-        if (control?.value !== contactValue) {
-          return [field, control.value];
-        }
-        return undefined;
-      })
-      .filter((change) => !!change) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
+      .filter(([field, control]: [string, AbstractControl]) => control?.value !== contact[field as keyof Contact])
+      .map(([field, control]: [string, AbstractControl]) => [field, control.value]) as [string, any][]; // eslint-disable-line @typescript-eslint/no-explicit-any
     const changesMessage = TransactionContactUtils.getContactChangesMessage(this.contact()!, changes);
     this.confirmationService.confirm({
       header: 'Confirm',
@@ -268,8 +269,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
     }
     const payload: Contact = Contact.fromJSON({
       ...this.contact(),
-      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.contactType())),
-      type: this.contactType,
+      ...SchemaUtils.getFormValues(this.form, ContactService.getSchemaByType(this.type())),
+      type: this.type(),
     });
 
     const contact = await (payload.id ? this.contactService.update(payload) : this.contactService.create(payload));
@@ -286,5 +287,15 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
       this.closeDialog();
     }
     this.resetForm();
+  }
+
+  useContact(contact: Contact) {
+    this.savedContact.emit(contact);
+    this.closeDialog();
+  }
+
+  updateData(event: Event, key: keyof ValidatingFields) {
+    const value = (event.target as HTMLInputElement).value ?? '';
+    this.data.update((d) => ({ ...d, [key]: value }));
   }
 }

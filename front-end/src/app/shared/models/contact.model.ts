@@ -29,7 +29,7 @@ export type CandidateOfficeType =
   | CandidateOfficeTypes.PRESIDENTIAL
   | CandidateOfficeTypes.SENATE;
 
-export const CandidateOfficeTypeLabels = [
+export const CandidateOfficeTypeLabels: LabelList = [
   [CandidateOfficeTypes.HOUSE, 'House'],
   [CandidateOfficeTypes.PRESIDENTIAL, 'Presidential'],
   [CandidateOfficeTypes.SENATE, 'Senate'],

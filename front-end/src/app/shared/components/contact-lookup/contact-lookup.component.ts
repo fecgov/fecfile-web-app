@@ -25,27 +25,24 @@ import { Select } from 'primeng/select';
 })
 export class ContactLookupComponent {
   public readonly contactService = inject(ContactService);
-  readonly contactTypeLabels: LabelList = ContactTypeLabels;
-  readonly contactType = model<ContactTypes>(ContactTypes.INDIVIDUAL);
+
+  readonly type = model<ContactTypes>(ContactTypes.INDIVIDUAL);
   readonly contactTypeOptions = input<PrimeOptions>([]);
   readonly showCreateNewContactButton = input(true);
-  readonly showSearchBox = input(true);
-
   readonly includeFecfileResults = input(true);
   readonly candidateOffice = input<CandidateOfficeType>();
-
   readonly autosave = input(true);
 
-  readonly contactTypeSelect = output<ContactTypes>();
   readonly contactLookupSelect = output<Contact>();
   readonly createNewContactSelect = output<void>();
 
-  contactTypes = ContactTypes;
-  contactTypeReadOnly = computed(() => this.contactTypeOptions().length < 2);
-  contactLookupList: SelectItemGroup[] = [];
+  readonly contactTypeReadOnly = computed(() => this.contactTypeOptions().length < 2);
   readonly candidateOfficeLabel = computed(() => LabelUtils.get(CandidateOfficeTypeLabels, this.candidateOffice()));
+  readonly showSearchBox = input(true);
 
+  readonly contactTypeLabels: LabelList = ContactTypeLabels;
   searchTerm = '';
+  contactLookupList: SelectItemGroup[] = [];
 
   constructor() {
     effectOnceIf(
@@ -54,7 +51,7 @@ export class ContactLookupComponent {
         if (options.length === 0) return null;
         return options[0].value as ContactTypes;
       },
-      (type) => this.contactType.set(type),
+      (type) => this.type.set(type),
     );
   }
 
@@ -62,7 +59,7 @@ export class ContactLookupComponent {
     const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
-      switch (this.contactType()) {
+      switch (this.type()) {
         case ContactTypes.CANDIDATE:
           this.contactLookupList = (
             await this.contactService.candidateLookup(searchTerm, '', '', this.candidateOffice())

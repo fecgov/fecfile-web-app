@@ -9,7 +9,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { ContactTypeLabels } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { testIndependentExpenditure, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
+import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
@@ -33,7 +33,7 @@ class TestHostComponent {
   component = viewChild.required(TransactionContactLookupComponent);
   form = new FormGroup({});
   contactProperty: ContactProperty = 'contact_1';
-  transaction: Transaction = testIndependentExpenditure();
+  transaction?: Transaction;
   contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 }
 
@@ -87,28 +87,22 @@ describe('TransactionContactLookupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create a component for "contact_2" or "contact_3', () => {
-    host.contactProperty = 'contact_2';
-    host.transaction = testScheduleATransaction();
-    fixture.detectChanges();
-    expect(component.form().get('contact_2_lookup')).toBeTruthy();
-
-    host.contactProperty = 'contact_3';
-    fixture.detectChanges();
-    expect(component.form().get('contact_3_lookup')).toBeTruthy();
-
-    host.contactProperty = 'contact_4';
-    fixture.detectChanges();
-    expect(component.form().get('contact_4_lookup')).toBeTruthy();
-
-    host.contactProperty = 'contact_5';
-    fixture.detectChanges();
-    expect(component.form().get('contact_5_lookup')).toBeTruthy();
-  });
+  for (let i = 2; i <= 5; i++) {
+    it(`should create a component for contact_${i}`, () => {
+      testContactLookupByProperty(`contact_${i}` as ContactProperty, `contact_${i}_lookup`);
+    });
+  }
 
   it('selecting create new contact should open the contact dialog', () => {
     component.detailVisible.set(false);
     component.createNewContactSelected();
-    expect(component.detailVisible).toBe(true);
+    expect(component.detailVisible()).toBe(true);
   });
+
+  function testContactLookupByProperty(contactProperty: ContactProperty, lookup: string) {
+    host.contactProperty = contactProperty;
+    host.transaction = testScheduleATransaction();
+    fixture.detectChanges();
+    expect(component.form().get(lookup)).toBeTruthy();
+  }
 });

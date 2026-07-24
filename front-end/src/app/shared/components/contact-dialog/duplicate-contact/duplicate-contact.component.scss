@@ -1,0 +1,42 @@
+:host {
+  grid-column-end: span 12 !important;
+  margin: 0;
+}
+.background-box {
+  padding: 10px 15px;
+  margin-bottom: 24px;
+  background-color: var(--surface-ground);
+  border-radius: var(--border-radius);
+  box-shadow: var(--p-dialog-shadow);
+}
+
+.name-location {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  span:nth-of-type(2) {
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 577px) {
+    align-items: center;
+    gap: 40px;
+    flex-direction: row;
+
+    span {
+      &:nth-of-type(1) {
+        width: 60%;
+      }
+      &:nth-of-type(2) {
+        width: 40%;
+      }
+    }
+  }
+}
+
+.fit-button {
+  height: fit-content;
+  width: fit-content;
+  margin-left: 10px;
+}

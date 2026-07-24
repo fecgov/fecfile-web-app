@@ -136,6 +136,24 @@ export class ContactService implements TableListService<Contact> {
     return CommitteeLookupResponse.fromJSON(response);
   }
 
+  async checkForDuplicates(
+    value: { first_name?: string; last_name?: string; name?: string; candidate_id?: string; committee_id?: string },
+    type: ContactTypes,
+    signal: AbortSignal,
+  ): Promise<Contact[]> {
+    const params: Record<ContactTypes, (v: typeof value) => string> = {
+      [ContactTypes.CANDIDATE]: (v) => `candidate_id=${v.candidate_id}`,
+      [ContactTypes.COMMITTEE]: (v) => `committee_id=${v.committee_id}`,
+      [ContactTypes.INDIVIDUAL]: (v) => `last_name=${v.last_name}&first_name=${v.first_name}`,
+      [ContactTypes.ORGANIZATION]: (v) => `name=${v.name}`,
+    };
+    const results = await this.apiService.fetch<ListRestResponse>(
+      `/contacts/duplicate_check/?${params[type]?.(value)}`,
+      signal,
+    );
+    return results.results.map((item) => Contact.fromJSON(item));
+  }
+
   public async checkFecIdForUniqueness(fecId: string, contactId?: string): Promise<boolean> {
     if (fecId) {
       const matchingContactId = await this.apiService.get<string>(`/contacts/get_contact_id/`, { fec_id: fecId });
