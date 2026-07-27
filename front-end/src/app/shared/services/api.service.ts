@@ -38,7 +38,6 @@ export class ApiService {
   }
 
   public get<T>(endpoint: string, params?: QueryParams): Promise<T>;
-  public get<T>(endpoint: string, params?: QueryParams): Promise<T>;
   public get<T>(endpoint: string, params: QueryParams = {}): Promise<T> | Promise<HttpResponse<T>> {
     const headers = this.getHeaders();
 
