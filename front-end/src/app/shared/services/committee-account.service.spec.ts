@@ -70,17 +70,6 @@ describe('CommitteeAccountService', () => {
     httpTestingController.verify();
   });
 
-  it('should call api get active committee', () => {
-    const committeeId = '123';
-    service.getActiveCommittee().then((committee) => {
-      expect(committee.id).toBe(committeeId);
-    });
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/active/`);
-    expect(request.request.method).toEqual('GET');
-    request.flush({ id: committeeId });
-    httpTestingController.verify();
-  });
-
   it('should calle api to create committee account', () => {
     const committeeId = '123';
     service.createCommitteeAccount(committeeId).then((committee) => {

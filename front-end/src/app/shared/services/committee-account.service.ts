@@ -23,10 +23,6 @@ export class CommitteeAccountService {
     return this.apiService.post<CommitteeAccount>(`/committees/${committeeUUID}/activate/`, {});
   }
 
-  public getActiveCommittee(): Promise<CommitteeAccount> {
-    return this.apiService.get(`/committees/active/`);
-  }
-
   public async createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {
     const response = await this.apiService.post<CommitteeAccount>(
       '/committees/create_account/',
