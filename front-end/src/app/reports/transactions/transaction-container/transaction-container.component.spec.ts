@@ -42,11 +42,13 @@ const routeDataSubject = new BehaviorSubject<{
   transaction?: Transaction | null;
 }>({ transaction: mockTransaction });
 
+let cloneQueryParamValue: string | null = null;
+
 const routeMock = {
   data: routeDataSubject.asObservable(),
   snapshot: {
     queryParamMap: {
-      get: () => 'b49f0957-4404-4237-95ec-0df053083b19',
+      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
     },
     params: {
       reportId: '999',
@@ -100,6 +102,7 @@ describe('TransactionContainerComponent', () => {
   });
 
   beforeEach(() => {
+    cloneQueryParamValue = null;
     const title = TestBed.inject(Title);
     titleSpy = vi.spyOn(title, 'setTitle');
     const reportService = TestBed.inject(ReportService);
@@ -136,6 +139,24 @@ describe('TransactionContainerComponent', () => {
     routeDataSubject.next({ transaction: mockTransaction });
     fixture.detectChanges();
     expect(component.transaction()).toEqual(mockTransaction);
+  });
+
+  it('should show the cloned transaction modal when clone query param is present', () => {
+    cloneQueryParamValue = 'b49f0957-4404-4237-95ec-0df053083b19';
+    fixture = TestBed.createComponent(TransactionContainerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.showClonedTransactionDialog()).toBe(true);
+  });
+
+  it('should not show the cloned transaction modal when clone query param is absent', () => {
+    cloneQueryParamValue = null;
+    fixture = TestBed.createComponent(TransactionContainerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.showClonedTransactionDialog()).toBe(false);
   });
 
   describe('transactionCardinality', () => {
