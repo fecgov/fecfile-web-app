@@ -357,6 +357,9 @@ export class TransactionFormUtils {
     const secondaryReportId = form.get('linkedF3xId')?.value;
     if (secondaryReportId) {
       payload['report_ids'] = [activeReportId, secondaryReportId];
+    } else if (!payload.report_ids?.length) {
+      // If the payload doesn't have any report_ids, defensively add the active report id to it
+      payload.report_ids = transaction.report_ids?.length ? [...transaction.report_ids] : [activeReportId];
     }
 
     return payload;

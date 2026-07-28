@@ -6,6 +6,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { getTestIndividualReceipt } from 'app/shared/utils/unit-test.utils';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -67,6 +68,15 @@ describe('FormUtils', () => {
 
     const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
     expect(aggregateFormControl.value).toEqual(50);
+  });
+
+  it('should preserve report_ids on payload when linkedF3xId is not provided', () => {
+    const transaction = getTestIndividualReceipt();
+    transaction.report_ids = ['report-1'];
+
+    const payload = TransactionFormUtils.getPayloadTransaction(transaction, 'active-report', new FormGroup({}), []);
+
+    expect(payload.report_ids).toEqual(['report-1']);
   });
 });
 

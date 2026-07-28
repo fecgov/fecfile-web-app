@@ -133,6 +133,34 @@ describe('ReattRedesUtils', () => {
         ReattRedesTypes.REATTRIBUTION_FROM,
       );
     });
+
+    it('should copy report_ids from TO transaction to originating transaction when missing', () => {
+      const reattributed = getTestIndividualReceipt();
+      reattributed.report_ids = undefined;
+      reattributed.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTED;
+
+      const toTxn = getTestIndividualReceipt();
+      toTxn.report_ids = ['999'];
+      toTxn.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+      toTxn.reatt_redes = reattributed;
+
+      const [originating, to] = ReattRedesUtils.getPayloads(toTxn, false);
+
+      expect(originating.report_ids).toEqual(['999']);
+      expect(to.report_ids).toEqual(['999']);
+    });
+
+    it('should preserve report_ids for cloned originating transactions on pull-forward', () => {
+      const payload = testScheduleBTransaction();
+      payload.reattribution_redesignation_tag = ReattRedesTypes.REDESIGNATION_TO;
+      payload.report_ids = ['abc'];
+      payload.reatt_redes = RedesignatedUtils.overlayTransactionProperties(testScheduleBTransaction());
+
+      const [originating, to] = ReattRedesUtils.getPayloads(payload, true);
+
+      expect(originating.report_ids).toEqual(['abc']);
+      expect(to.report_ids).toEqual(['abc']);
+    });
   });
 
   describe('amountValidator', () => {

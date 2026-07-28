@@ -255,14 +255,17 @@ describe('TransactionService', () => {
         SchATransaction.fromJSON({
           id: '1',
           transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          report_ids: ['report-1'],
         }),
         SchATransaction.fromJSON({
           id: '2',
           transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          report_ids: ['report-1'],
         }),
         SchATransaction.fromJSON({
           id: '3',
           transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          report_ids: ['report-1'],
         }),
       ];
 
@@ -274,6 +277,9 @@ describe('TransactionService', () => {
 
       const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/multisave/reattribution/`);
       expect(req.request.method).toEqual('PUT');
+      expect(req.request.body[0].report_ids).toEqual(['report-1']);
+      expect(req.request.body[1].report_ids).toEqual(['report-1']);
+      expect(req.request.body[2].report_ids).toEqual(['report-1']);
       req.flush(transactions.map((t) => t.id));
       httpTestingController.verify();
     });
