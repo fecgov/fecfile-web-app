@@ -97,7 +97,11 @@ export class ReattRedesUtils {
       reattRedes = payload.reatt_redes as SchATransaction | SchBTransaction;
     }
 
-    const reportIds = to.report_ids?.length ? [...to.report_ids] : reattRedes.report_ids?.length ? [...reattRedes.report_ids] : undefined;
+    const reportIds = to.report_ids?.length
+      ? [...to.report_ids]
+      : reattRedes.report_ids?.length
+        ? [...reattRedes.report_ids]
+        : undefined;
     if (reportIds?.length) {
       to.report_ids = reportIds;
       reattRedes.report_ids = reportIds;
