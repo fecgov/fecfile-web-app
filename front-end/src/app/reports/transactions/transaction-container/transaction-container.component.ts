@@ -1,7 +1,6 @@
-import { Component, computed, effect, inject, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, Signal, linkedSignal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
 import { ReattRedesTypes, ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from '../../../store/active-report.selectors';
@@ -13,6 +12,7 @@ import { ReattRedesTransactionTypeDetailComponent } from '../reatt-redes-transac
 import { TransactionChildrenListContainerComponent } from '../transaction-children-list-container/transaction-children-list-container.component';
 import { TransactionNavigationComponent } from '../transaction-navigation/transaction-navigation.component';
 import { injectRouteData } from 'ngxtension/inject-route-data';
+import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ButtonDirective } from 'primeng/button';
 
@@ -35,10 +35,10 @@ export class TransactionContainerComponent {
   private readonly store = inject(Store);
   private readonly titleService = inject(Title);
   private readonly reportService = inject(ReportService);
-  private readonly activatedRoute = inject(ActivatedRoute);
   readonly report = this.store.selectSignal(selectActiveReport);
   readonly isEditableReport = computed(() => this.reportService.isEditable(this.report()));
-  readonly showClonedTransactionDialog = signal(false);
+  private readonly cloneParam = injectQueryParams('clone');
+  readonly showClonedTransactionDialog = linkedSignal(() => !!this.cloneParam());
 
   private readonly _transaction: Signal<Transaction | null> = injectRouteData('transaction');
   readonly transaction = computed(() => this._transaction() ?? undefined);
@@ -62,6 +62,5 @@ export class TransactionContainerComponent {
 
   constructor() {
     effect(() => this.titleService.setTitle(this.transaction()?.transactionType?.title ?? ''));
-    this.showClonedTransactionDialog.set(!!this.activatedRoute.snapshot.queryParamMap.get('clone'));
   }
 }
