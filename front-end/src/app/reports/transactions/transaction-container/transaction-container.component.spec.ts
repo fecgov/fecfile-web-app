@@ -155,9 +155,6 @@ describe('TransactionContainerComponent', () => {
   it('should show the cloned transaction modal when clone query param is present', () => {
     cloneQueryParamValue = 'b49f0957-4404-4237-95ec-0df053083b19';
     queryParamsSubject.next({ clone: cloneQueryParamValue });
-    queryParamMapSubject.next({
-      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
-    });
     fixture = TestBed.createComponent(TransactionContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -166,11 +163,6 @@ describe('TransactionContainerComponent', () => {
   });
 
   it('should not show the cloned transaction modal when clone query param is absent', () => {
-    cloneQueryParamValue = null;
-    queryParamsSubject.next({});
-    queryParamMapSubject.next({
-      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
-    });
     fixture = TestBed.createComponent(TransactionContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
