@@ -86,10 +86,13 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
     super();
     effect(() => {
       this.documentType();
+
+      this.form.controls['message_text'].updateValueAndValidity();
       /**
        * Reset the filing frequency field when the document type changes, but only after the initial load.
        * On load we want the filing frequency from the data.
        */
+
       if (this.pageIsLoaded) {
         this.form.controls['filing_frequency'].reset();
       } else {
