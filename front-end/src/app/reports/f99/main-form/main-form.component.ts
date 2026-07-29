@@ -19,7 +19,7 @@ import { AddressInputComponent } from '../../../shared/components/inputs/address
 import { SaveCancelComponent } from '../../../shared/components/save-cancel/save-cancel.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 
 @Component({
@@ -69,19 +69,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
   readonly showFilingFrequency = computed(() => this.documentType() in textCodesWithFilingFrequencies);
   private pageIsLoaded = false;
 
-  override ngOnInit(): void {
-    super.ngOnInit();
-
-    this.form
-      .get('text_code')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.form.patchValue({
-          message_text: this.form.get('message_text')?.value ?? '',
-        });
-      });
-  }
-
   constructor() {
     super();
     effect(() => {
@@ -92,7 +79,6 @@ export class MainFormComponent extends MainFormBaseComponent<Form99> implements 
        * Reset the filing frequency field when the document type changes, but only after the initial load.
        * On load we want the filing frequency from the data.
        */
-
       if (this.pageIsLoaded) {
         this.form.controls['filing_frequency'].reset();
       } else {
