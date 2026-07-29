@@ -13,7 +13,6 @@
 .name-location {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
 
   span:nth-of-type(2) {
     overflow-wrap: anywhere;
@@ -26,17 +25,17 @@
 
     span {
       &:nth-of-type(1) {
-        width: 60%;
+        max-width: 60%;
+        flex-shrink: 0;
       }
       &:nth-of-type(2) {
-        width: 40%;
+        flex: 1;
       }
     }
   }
 }
 
 .fit-button {
-  height: fit-content;
-  width: fit-content;
+  min-width: 145px;
   margin-left: 10px;
 }
