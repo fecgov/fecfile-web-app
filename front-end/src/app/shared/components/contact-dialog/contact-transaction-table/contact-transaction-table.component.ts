@@ -20,26 +20,7 @@ import type { Contact } from 'app/shared/models/contact.model';
 @Component({
   selector: 'app-contact-transaction-table',
   imports: [TableComponent, CurrencyPipe, DatePipe, LabelPipe],
-  template: `<ng-template #typeBody let-transaction>
-      <a (click)="openTransaction(transaction)">
-        {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
-      </a>
-    </ng-template>
-    <ng-template #dateBody let-transaction>{{ transaction.date | date: 'MM/dd/yyyy' }}</ng-template>
-    <ng-template #amountBody let-transaction>{{ transaction.amount | currency }}</ng-template>
-
-    <app-table
-      [(first)]="first"
-      title="Transaction history"
-      [(sortField)]="sortField"
-      [items]="transactions"
-      [(totalItems)]="totalTransactions"
-      [columns]="columns()"
-      [loading]="tableLoading"
-      [(rowsPerPage)]="rowsPerPage"
-      itemName="transactions"
-      [emptyMessage]="emptyMessage"
-    />`,
+  templateUrl: './contact-transaction-table.component.html',
   styleUrl: './contact-transaction-table.component.scss',
 })
 export class ContactTransactionTableComponent {
