@@ -42,11 +42,20 @@ const routeDataSubject = new BehaviorSubject<{
   transaction?: Transaction | null;
 }>({ transaction: mockTransaction });
 
+let cloneQueryParamValue: string | null = null;
+const queryParamsSubject = new BehaviorSubject<Record<string, string>>({});
+const queryParamMapSubject = new BehaviorSubject({
+  get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
+});
+
 const routeMock = {
   data: routeDataSubject.asObservable(),
+  queryParams: queryParamsSubject.asObservable(),
+  queryParamMap: queryParamMapSubject.asObservable(),
   snapshot: {
+    queryParams: {},
     queryParamMap: {
-      get: () => 'b49f0957-4404-4237-95ec-0df053083b19',
+      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
     },
     params: {
       reportId: '999',
@@ -100,6 +109,11 @@ describe('TransactionContainerComponent', () => {
   });
 
   beforeEach(() => {
+    cloneQueryParamValue = null;
+    queryParamsSubject.next({});
+    queryParamMapSubject.next({
+      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
+    });
     const title = TestBed.inject(Title);
     titleSpy = vi.spyOn(title, 'setTitle');
     const reportService = TestBed.inject(ReportService);
@@ -136,6 +150,49 @@ describe('TransactionContainerComponent', () => {
     routeDataSubject.next({ transaction: mockTransaction });
     fixture.detectChanges();
     expect(component.transaction()).toEqual(mockTransaction);
+  });
+
+  it('should show the cloned transaction modal when clone query param is present', () => {
+    cloneQueryParamValue = 'b49f0957-4404-4237-95ec-0df053083b19';
+    queryParamsSubject.next({ clone: cloneQueryParamValue });
+    fixture = TestBed.createComponent(TransactionContainerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.showClonedTransactionDialog()).toBe(true);
+  });
+
+  it('should not show the cloned transaction modal when clone query param is absent', () => {
+    fixture = TestBed.createComponent(TransactionContainerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.showClonedTransactionDialog()).toBe(false);
+  });
+
+  it('should react to clone query param changes without recreating the component', () => {
+    expect(component.showClonedTransactionDialog()).toBe(false);
+
+    cloneQueryParamValue = 'b49f0957-4404-4237-95ec-0df053083b19';
+    queryParamsSubject.next({ clone: cloneQueryParamValue });
+    queryParamMapSubject.next({
+      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
+    });
+    fixture.detectChanges();
+
+    expect(component.showClonedTransactionDialog()).toBe(true);
+
+    component.showClonedTransactionDialog.set(false);
+    expect(component.showClonedTransactionDialog()).toBe(false);
+
+    cloneQueryParamValue = null;
+    queryParamsSubject.next({});
+    queryParamMapSubject.next({
+      get: (key: string) => (key === 'clone' ? cloneQueryParamValue : null),
+    });
+    fixture.detectChanges();
+
+    expect(component.showClonedTransactionDialog()).toBe(false);
   });
 
   describe('transactionCardinality', () => {
