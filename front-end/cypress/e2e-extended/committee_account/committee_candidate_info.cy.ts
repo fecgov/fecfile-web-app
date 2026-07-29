@@ -10,7 +10,7 @@ describe('Users Permissions via Committee Switch RBAC', () => {
 	const fecfile_online_committeeAccount = localStorage.getItem('fecfile_online_committeeAccount');
 	if (!fecfile_online_committeeAccount) return;
 	const json = JSON.parse(fecfile_online_committeeAccount);
-	expect(json.candidate_district).to.equal('2');
+	expect(json.candidate_district).to.equal('02');
 	expect(json.candidate_office).to.equal('P');
 	expect(json.candidate_state).to.equal('DC');
   });
