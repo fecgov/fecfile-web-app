@@ -168,7 +168,7 @@ describe('TransactionListComponent', () => {
     expect(cloneAction?.isAvailable(childTransaction)).toBe(false);
   });
 
-  it('should acknowledge Clone and navigate to the pre-filled create page', async () => {
+  it('should navigate directly to the pre-filled create page when Clone is selected', () => {
     const receipts = component.receipts() as unknown as {
       rowActions: { label: string; action: (item: TransactionListRecord) => void }[];
       reportService: { isEditable: (report: unknown) => boolean };
@@ -184,11 +184,7 @@ describe('TransactionListComponent', () => {
 
     cloneAction?.action(transaction);
 
-    expect(confirmSpy).toHaveBeenCalled();
-
-    const confirmConfig = confirmSpy.mock.calls[0]?.[0];
-    expect(confirmConfig?.accept).toBeDefined();
-    await confirmConfig?.accept?.();
+    expect(confirmSpy).not.toHaveBeenCalled();
 
     expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/create/INDIVIDUAL_RECEIPT?clone=100');
   });

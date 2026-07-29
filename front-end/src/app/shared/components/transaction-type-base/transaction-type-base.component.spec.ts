@@ -75,8 +75,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   async function testNavigate(navEvent: NavigationEvent, route: string, options?: NavigationBehaviorOptions) {
     await component.navigateTo(navEvent);
-    if (options) expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route, options);
-    else expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(...[route, options].filter(Boolean));
   }
 
   beforeAll(async () => {
@@ -496,6 +495,25 @@ describe('TransactionTypeBaseComponent', () => {
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
+      });
+    });
+
+    describe('NavigationDestination.CLONE', () => {
+      it('should route to clone url without resetting url', async () => {
+        const resetSpy = vi.spyOn(component, 'resetForm');
+        const transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+        transaction.id = '1';
+        await testNavigate(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.CLONE,
+            transaction,
+            ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          ),
+          '/reports/transactions/report/999/create/INDIVIDUAL_RECEIPT?clone=1',
+          { onSameUrlNavigation: 'reload' },
+        );
+        expect(resetSpy).not.toHaveBeenCalled();
       });
     });
   });

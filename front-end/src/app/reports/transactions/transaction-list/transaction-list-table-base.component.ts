@@ -394,28 +394,19 @@ export abstract class TransactionListTableBaseComponent
   }
 
   public cloneItem(transaction: TransactionListRecord): void {
-    this.confirmationService.confirm({
-      header: 'Clone transaction?',
-      message:
-        'This will create a copy of the selected transaction. The clone will use the same contact; itemization and aggregation will be determined by the system.',
-      acceptLabel: 'Acknowledge',
-      rejectLabel: 'Cancel',
-      accept: async () => {
-        try {
-          await this.router.navigateByUrl(
-            `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?clone=${transaction.id}`,
-          );
-        } catch (error) {
-          console.error(`Error cloning transaction ${transaction.id} of report ${this.reportId}:`, error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Unable to clone transaction',
-            detail: 'The selected transaction could not be opened for cloning.',
-            life: 3000,
-          });
-        }
-      },
-    });
+    this.router
+      .navigateByUrl(
+        `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?clone=${transaction.id}`,
+      )
+      .catch((error) => {
+        console.error(`Error cloning transaction ${transaction.id} of report ${this.reportId}:`, error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Unable to clone transaction',
+          detail: 'The selected transaction could not be opened for cloning.',
+          life: 3000,
+        });
+      });
   }
 
   public canClone(transaction: TransactionListRecord): boolean {
