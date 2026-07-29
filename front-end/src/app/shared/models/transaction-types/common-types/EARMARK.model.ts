@@ -5,11 +5,12 @@ import {
   TransactionNavigationControls,
 } from '../../transaction-navigation-controls.model';
 import { TemplateMapKeyType } from '../../transaction-type.model';
+import { ContactTypes } from '../../contact.model';
 
 export abstract class EARMARK extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFields = INDIVIDUAL_FORM_FIELDS;
-  contactTypeOptions = INDIVIDUAL;
+  contactTypeOptions: ContactTypes[] = INDIVIDUAL;
   override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
 
   override description =

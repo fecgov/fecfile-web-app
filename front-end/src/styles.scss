@@ -652,6 +652,11 @@ textarea {
   gap: 5px;
 }
 
+.transparent-grey {
+  color: transparent;
+  --icon-symbol: var(--text-color-secondary);
+}
+
 .fec-loader-div {
   height: 450px;
   display: flex;
@@ -1060,4 +1065,9 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
   color: transparent;
   display: inline-block;
   vertical-align: 4px;
+}
+
+.addr-street,
+.addr-city-state {
+  display: inline-block;
 }
