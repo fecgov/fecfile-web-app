@@ -1,7 +1,7 @@
-import { Component, computed, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -17,25 +17,20 @@ import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils'
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { navigationEventClearAction } from 'app/store/navigation-event.actions';
 import { FormComponent } from '../form.component';
-import {
-  TransactionType,
-  ContactTypeLabels,
-  ReportTypes,
-  TransactionTemplateMapType,
-  Contact,
-  NavigationAction,
-  NavigationDestination,
-  NavigationEvent,
-  cloneNavigationEvent,
-} from 'app/shared/models';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { GlossaryService } from '../glossary/glossary.service';
 import { environment } from 'environments/environment';
+import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import { Contact, ContactTypeLabels } from 'app/shared/models/contact.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
+import {
+  cloneNavigationEvent,
+  NavigationAction,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 
-@Component({
-  template: '',
-})
+@Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
   private readonly glossaryService = inject(GlossaryService);
   protected readonly messageService = inject(MessageService);
@@ -223,29 +218,39 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
     if (event.action === NavigationAction.SAVE) {
       this.messageService.add(this.saveSuccessMessage);
     }
-    if (event.destination === NavigationDestination.ANOTHER) {
-      // If the transaction has a parent, navigate to create another sub-transaction of it
-      if (event.transaction?.parent_transaction_id) {
+    switch (event.destination) {
+      case 'LIST':
+        result = await this.router.navigateByUrl(`${reportPath}/list`);
+        break;
+      case 'PARENT':
+        result = await this.router.navigateByUrl(`${reportPath}/list/${event.transaction?.parent_transaction_id}`);
+        break;
+      case 'CHILD':
         result = await this.router.navigateByUrl(
-          `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`,
+          `${reportPath}/list/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`,
+        );
+        break;
+      case 'ANOTHER':
+        if (event.transaction?.parent_transaction_id) {
+          result = await this.router.navigateByUrl(
+            `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`,
+            { onSameUrlNavigation: 'reload' },
+          );
+          // Otherwise, navigate to create another tier 1 transaction
+        } else {
+          result = await this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`, {
+            onSameUrlNavigation: 'reload',
+          });
+        }
+        break;
+      case 'CLONE':
+        // Return immediately so we don't reset the form.
+        return await this.router.navigateByUrl(
+          `${reportPath}/create/${event.destinationTransactionType}?clone=${event.transaction?.id}`,
           { onSameUrlNavigation: 'reload' },
         );
-        // Otherwise, navigate to create another tier 1 transaction
-      } else {
-        result = await this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`, {
-          onSameUrlNavigation: 'reload',
-        });
-      }
-    } else if (event.destination === NavigationDestination.CHILD) {
-      // Navigate to create a sub-transaction of the current transaction
-      result = await this.router.navigateByUrl(
-        `${reportPath}/list/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`,
-      );
-    } else if (event.destination === NavigationDestination.PARENT) {
-      result = await this.router.navigateByUrl(`${reportPath}/list/${event.transaction?.parent_transaction_id}`);
-    } else {
-      result = await this.router.navigateByUrl(`${reportPath}/list`);
     }
+
     this.resetForm();
     return result;
   }

@@ -70,6 +70,16 @@ export class NavigationControlComponent {
         setTimeout(() => (this.isProcessing = false), 1000);
       },
     },
+    {
+      label: 'Clone',
+      disabled: this.isProcessing,
+      command: () => {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+        this.saveAndClone();
+        setTimeout(() => (this.isProcessing = false), 1000);
+      },
+    },
   ];
 
   // This could be a signal but the transaction data is getting updated out of sync
@@ -85,6 +95,20 @@ export class NavigationControlComponent {
     const navigationEvent = new NavigationEvent(
       navControl.navigationAction,
       NavigationDestination.ANOTHER,
+      cloneInstance(transaction),
+      transaction.transaction_type_identifier as TransactionTypes,
+    );
+    this.store.dispatch(navigationEventSetAction(navigationEvent));
+  }
+
+  saveAndClone() {
+    this.store.dispatch(singleClickDisableAction());
+    const navControl = this.navigationControl();
+    const transaction = this.transaction();
+    if (!transaction) return;
+    const navigationEvent = new NavigationEvent(
+      navControl.navigationAction,
+      NavigationDestination.CLONE,
       cloneInstance(transaction),
       transaction.transaction_type_identifier as TransactionTypes,
     );
