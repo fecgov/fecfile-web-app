@@ -6,9 +6,7 @@ import { ScheduleETransactionTypes } from './sche-transaction.model';
 describe('Transaction Type Model', () => {
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
-    if (!transaction.transactionType) throw new Error('FECfile+: transactionType method does not exist');
-    // prettier-ignore
-    const spy = vi.spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const spy = vi.spyOn(transaction.transactionType, 'generatePurposeDescription');
     spy.mockReturnValue('A short response');
 
     const originalDescrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
@@ -16,11 +14,9 @@ describe('Transaction Type Model', () => {
     expect(originalDescrip).toEqual(modifiedDescrip);
   });
 
-  it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
+  it('#generatePurposeDescriptionWrapper() should truncate long purpose descriptions', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
-    if (!transaction.transactionType) throw new Error('FECfile+: transactionType method does not exist');
-    // prettier-ignore
-    const spy = vi.spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const spy = vi.spyOn(transaction.transactionType, 'generatePurposeDescription');
     spy.mockReturnValue(
       'An absurdly long response' +
         'Just the biggest; no corners cut.' +

@@ -1,4 +1,4 @@
-import { STANDARD_CONTROLS } from './transaction-navigation-controls.model';
+import { STANDARD_LIST_CONTROLS } from './transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
 import { isPulledForwardLoan, ScheduleIds } from './transaction.model';
 import type { Transaction } from './transaction.model';
@@ -13,7 +13,7 @@ export abstract class SchC1TransactionType extends TransactionType {
     isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.inheritedFields;
 
   override getNavigationControls = (transaction: Transaction) =>
-    isPulledForwardLoan(transaction?.parent_transaction) ? STANDARD_CONTROLS : this.navigationControls;
+    isPulledForwardLoan(transaction?.parent_transaction) ? STANDARD_LIST_CONTROLS : super.getNavigationControls(transaction);
 
   override getFooter = (transaction?: Transaction) =>
     isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.footer;

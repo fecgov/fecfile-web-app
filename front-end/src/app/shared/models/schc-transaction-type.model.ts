@@ -9,14 +9,14 @@ export abstract class SchCTransactionType extends TransactionType {
   override amountInputHeader = 'Loan information';
 
   override getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
-    if (isPulledForwardLoan(transaction) && this.navigationControls) {
+    if (isPulledForwardLoan(transaction)) {
       return new TransactionNavigationControls(
         this.navigationControls.inlineControls,
         this.navigationControls.cancelControls,
         [SAVE_LIST_CONTROL],
       );
     }
-    return this.navigationControls;
+    return super.getNavigationControls(transaction);
   }
 
   override getFooter(transaction?: Transaction): string | undefined {

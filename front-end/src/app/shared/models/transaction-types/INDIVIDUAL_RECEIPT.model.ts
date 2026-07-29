@@ -4,7 +4,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_REC
 import { ReportTypes } from '..';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { AggregationGroups } from '../transaction.model';
 
 export class INDIVIDUAL_RECEIPT extends SchATransactionType {
@@ -12,15 +12,12 @@ export class INDIVIDUAL_RECEIPT extends SchATransactionType {
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override hasElectionInformation(report_type: ReportTypes): boolean {
     return report_type === ReportTypes.F3;
   }
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

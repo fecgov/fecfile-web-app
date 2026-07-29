@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FormGroup } from '@angular/forms';
 import { JsonSchema } from 'fecfile-validate';
 import {
@@ -14,7 +15,11 @@ import {
 } from '../utils/transaction-type-properties';
 import { ContactTypes, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { ReportTypes } from './reports/report.model';
-import { TransactionNavigationControls } from './transaction-navigation-controls.model';
+import {
+  STANDARD_LIST_CONTROLS,
+  STANDARD_SPLIT_CONTROLS,
+  TransactionNavigationControls,
+} from './transaction-navigation-controls.model';
 import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
 /**
@@ -39,27 +44,27 @@ export abstract class TransactionType {
   showCalendarYTD = false;
   showPayeeCandidateYTD = false;
   inheritCalendarYTD = false; // When true, the transaction (memo) will inherit the calendar_ytd of its parent transaction
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   contact2IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_2 required to be added to the form validation
   contact3IsRequired = false; // Boolean flag to cause contact_3 required to be added to the form validation
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   contact4IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_4 required to be added to the form validation
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   contact5IsRequired = (form: FormGroup) => false; // Boolean flag to cause contact_5 required to be added to the form validation
   candidateInfoPosition = 'low'; // Position of candidate info in the form. 'low' or 'high'
   showGuarantorTable = false; // Boolean flag to cause a table of Loan Guarantors to be displayed under the transaction form
   showParentTransactionTitle = false; // Boolean flag to cause parent transaction title to display above transaction title in single transaction detail screen
   // Double-entry settings
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   isDependentChild = (transaction: Transaction) => false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionTypes?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   getInheritedFields = (transaction: Transaction) => this.inheritedFields;
 
   hideContactLookup = false; // Set to true to hide the contact lookup for the primary contact
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   getUseParentContact = (transaction?: Transaction) => this.useParentContact;
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
   parentTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the parent, trigger the child to regenerate its description
@@ -67,10 +72,15 @@ export abstract class TransactionType {
   // Navigations settings
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
-  navigationControls?: TransactionNavigationControls;
+  navigationControls = STANDARD_LIST_CONTROLS;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
+    if (
+      this.isCloneableTransactionType &&
+      !transaction.reatt_redes_id &&
+      this.navigationControls === STANDARD_LIST_CONTROLS
+    )
+      return STANDARD_SPLIT_CONTROLS;
     return this.navigationControls;
   }
 
@@ -98,9 +108,7 @@ export abstract class TransactionType {
     return false;
   }
 
-  get isCloneableTransactionType() {
-    return false;
-  }
+  isCloneableTransactionType = false;
 
   // Labels
   abstract title: string;
@@ -120,7 +128,7 @@ export abstract class TransactionType {
   accordionSubText?: string; // Text after title in accordion handle
   formTitle?: string; // Title of form within accordion section
   footer?: string; // Text at the end of form
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   getFooter(transaction?: Transaction): string | undefined {
     return this.footer;
   }
@@ -178,7 +186,7 @@ export abstract class TransactionType {
   hasAmountInput = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
   hasDebtInput = false;
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   hasElectionInformation(report_type: ReportTypes): boolean {
     return hasFields(this.formFields, ELECTION_FIELDS);
   }
@@ -187,7 +195,6 @@ export abstract class TransactionType {
     return this.formFields.includes('filer_designated_to_make_coordinated_expenditures');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasCandidateInformation(form?: FormGroup): boolean {
     return hasFields(this.formFields, CANDIDATE_FIELDS);
   }
