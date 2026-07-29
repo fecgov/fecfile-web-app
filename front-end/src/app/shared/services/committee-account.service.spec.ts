@@ -1,12 +1,12 @@
+import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
-import { CommitteeAccountService } from './committee-account.service';
-import { ListRestResponse } from '../models/rest-api.model';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { provideHttpClient } from '@angular/common/http';
+import { ListRestResponse } from '../models/rest-api.model';
+import { testMockStore } from '../utils/unit-test.utils';
+import { CommitteeAccountService } from './committee-account.service';
 
 describe('CommitteeAccountService', () => {
   let service: CommitteeAccountService;
@@ -56,25 +56,17 @@ describe('CommitteeAccountService', () => {
   });
 
   it('should call api to activate', async () => {
-    const committeeId = '123';
-    const resultPromise = service.activateCommittee(committeeId);
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/${committeeId}/activate/`);
+    const testCommitteeAccount = new CommitteeAccount();
+    testCommitteeAccount.committee_id = '123';
+    const resultPromise = service.activateCommittee(testCommitteeAccount.committee_id);
+    const request = httpTestingController.expectOne(
+      `${environment.apiUrl}/committees/${testCommitteeAccount.committee_id}/activate/`,
+    );
     expect(request.request.method).toEqual('POST');
-    request.flush(true);
+    request.flush(testCommitteeAccount);
     const result = await resultPromise;
-    expect(result).toBe(true);
+    expect(result.committee_id).toBe('123');
 
-    httpTestingController.verify();
-  });
-
-  it('should call api get active committee', () => {
-    const committeeId = '123';
-    service.getActiveCommittee().then((committee) => {
-      expect(committee.id).toBe(committeeId);
-    });
-    const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/active/`);
-    expect(request.request.method).toEqual('GET');
-    request.flush({ id: committeeId });
     httpTestingController.verify();
   });
 

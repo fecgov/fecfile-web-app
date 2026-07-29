@@ -98,7 +98,7 @@ describe('CreateCommitteeComponent', () => {
     });
     const activateSpy = vi
       .spyOn(testCommitteeAccountService, 'activateCommittee')
-      .mockImplementation(() => Promise.resolve(true));
+      .mockImplementation(() => Promise.resolve(new CommitteeAccount()));
     const userSpy = vi
       .spyOn(testUserService, 'getCurrentUser')
       .mockReturnValue(Promise.resolve(testCommitteeAdminLoginData()));
