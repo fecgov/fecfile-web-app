@@ -45,6 +45,7 @@ export class CommitteeAccount extends BaseModel {
   filing_frequency: string | undefined;
   candidate_office: string | undefined;
   candidate_state: string | undefined;
+  candidate_district: string | undefined;
   committee_id: string | undefined;
   treasurer_name_2: string | undefined;
   name: string | undefined;
