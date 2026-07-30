@@ -80,6 +80,8 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
         const navigationEvent = cloneNavigationEvent(navEvent);
         this.handleNavigate(navigationEvent);
         this.store.dispatch(navigationEventClearAction());
+        // Hack until we can fix single click directive
+        this.store.dispatch(singleClickEnableAction());
       }
     });
   }
