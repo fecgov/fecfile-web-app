@@ -229,6 +229,8 @@ export class ContactDialogComponent extends FormComponent implements OnInit {
   }
 
   updateContact(contact: Contact) {
+    const current = this.contact();
+    if (current?.id && !contact.id) contact.id = current.id;
     this.contact.set(contact);
     this.type.set(contact.type);
     this.form.markAllAsDirty();
