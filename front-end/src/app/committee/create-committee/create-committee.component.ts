@@ -79,7 +79,7 @@ export class CreateCommitteeComponent {
   async createAccount() {
     this.unableToCreateAccount.set(false);
     try {
-      const committeeAccount = await this.committeeAccountService.createCommitteeAccount(
+      let committeeAccount = await this.committeeAccountService.createCommitteeAccount(
         this.selectedCommittee()?.committee_id ?? '',
       );
       this.messageService.add({
@@ -88,7 +88,7 @@ export class CreateCommitteeComponent {
         detail: `Committee Account ${committeeAccount.committee_id} Created`,
         life: 3000,
       });
-      await this.committeeAccountService.activateCommittee(committeeAccount.id);
+      committeeAccount = await this.committeeAccountService.activateCommittee(committeeAccount.id);
       this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committeeAccount }));
       const userLoginData = await this.userService.getCurrentUser();
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));

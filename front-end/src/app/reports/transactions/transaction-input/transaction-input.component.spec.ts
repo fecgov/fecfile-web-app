@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { testContact, testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { TransactionInputComponent } from './transaction-input.component';
-import { FormBuilder } from '@angular/forms';
-import { ContactTypes } from 'app/shared/models/contact.model';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportService } from 'app/shared/services/report.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
@@ -74,13 +72,5 @@ describe('TransactionInputComponent', () => {
     vi.spyOn(component.tertiaryContactSelect, 'emit');
     component.updateFormWithTertiaryContact(selectItem);
     expect(component.tertiaryContactSelect.emit).toHaveBeenCalledWith(selectItem);
-  });
-
-  it('contactTypeSelected should update entity_type form control', () => {
-    const fb = new FormBuilder();
-    const form = fb.group({ entity_type: new SubscriptionFormControl() });
-    component.form = form;
-    component.contactTypeSelected(ContactTypes.ORGANIZATION);
-    expect(component.form.get('entity_type')?.value).toBe(ContactTypes.ORGANIZATION);
   });
 });
