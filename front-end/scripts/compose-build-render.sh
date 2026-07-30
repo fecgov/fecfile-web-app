@@ -17,6 +17,7 @@ fi
 BUILD_SCRIPT="${BUILD_SCRIPT:-build-local}"
 PORT="${PORT:-4200}"
 WATCH="${WATCH:-0}"
+CLEAN="${CLEAN:-0}"
 LIKE_PROD="${LIKE_PROD:-0}"
 API_URL="${API_URL:-http://localhost:8080}"
 APP_URL="${APP_URL:-http://localhost:${PORT}}"
@@ -79,6 +80,11 @@ BUILD_LOG_PATH="$(mktemp "$FRONTEND_DIR/.tmp/build.output.XXXXXX.log")"
 if [[ "$MODE" == "$PREPARE_MODE" ]]; then
   echo "Building frontend using npm run $BUILD_SCRIPT ..."
 
+  if [[ "$CLEAN" == "1" ]]; then
+    echo "CLEAN requested. Running npm ci to clean install dependencies..."
+    npm ci
+  fi
+
   if npm run "$BUILD_SCRIPT" 2>&1 | tee "$BUILD_LOG_PATH"; then
     :
   else
@@ -88,14 +94,6 @@ if [[ "$MODE" == "$PREPARE_MODE" ]]; then
   fi
 else
   echo "Change detected. Rebuilding..."
-  npm run "$BUILD_SCRIPT"
-fi
-
-if npm run "$BUILD_SCRIPT" 2>&1 | tee "$BUILD_LOG_PATH"; then
-  :
-else
-  echo "Initial build failed. Running npm ci and then retrying build..."
-  npm ci
   npm run "$BUILD_SCRIPT"
 fi
 
