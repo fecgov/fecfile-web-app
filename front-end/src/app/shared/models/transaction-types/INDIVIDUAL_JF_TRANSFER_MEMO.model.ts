@@ -12,7 +12,7 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Individual';
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;

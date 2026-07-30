@@ -15,7 +15,7 @@ export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactio
   );
   schema = schema;
   override subTransactionConfig = [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO];
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

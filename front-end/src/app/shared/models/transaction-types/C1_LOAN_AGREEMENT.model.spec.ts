@@ -37,8 +37,7 @@ describe('C1_LOAN_AGREEMENT', () => {
     expect(transaction.transactionType.getInheritedFields(transaction)?.length).toBeGreaterThan(0);
 
     // getNavigationControls()
-    expect(transaction.transactionType.navigationControls).toBeUndefined();
-    expect(transaction.transactionType.getNavigationControls(transaction)).toBeUndefined();
+    expect(transaction.transactionType.getNavigationControls(transaction)).toBe(STANDARD_LIST_CONTROLS);
 
     // getFooter()
     const expectedFooterText =

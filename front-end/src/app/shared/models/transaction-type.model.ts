@@ -72,16 +72,16 @@ export abstract class TransactionType {
   // Navigations settings
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
-  navigationControls = STANDARD_LIST_CONTROLS;
+  protected readonly _navigationControls = STANDARD_LIST_CONTROLS;
 
   getNavigationControls(transaction: Transaction): TransactionNavigationControls | undefined {
     if (
       this.isCloneableTransactionType &&
       !transaction.reatt_redes_id &&
-      this.navigationControls === STANDARD_LIST_CONTROLS
+      this._navigationControls === STANDARD_LIST_CONTROLS
     )
       return STANDARD_SPLIT_CONTROLS;
-    return this.navigationControls;
+    return this._navigationControls;
   }
 
   // Memo Code settings

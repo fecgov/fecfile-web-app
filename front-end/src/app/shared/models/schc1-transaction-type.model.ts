@@ -13,7 +13,9 @@ export abstract class SchC1TransactionType extends TransactionType {
     isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.inheritedFields;
 
   override getNavigationControls = (transaction: Transaction) =>
-    isPulledForwardLoan(transaction?.parent_transaction) ? STANDARD_LIST_CONTROLS : super.getNavigationControls(transaction);
+    isPulledForwardLoan(transaction?.parent_transaction)
+      ? STANDARD_LIST_CONTROLS
+      : super.getNavigationControls(transaction);
 
   override getFooter = (transaction?: Transaction) =>
     isPulledForwardLoan(transaction?.parent_transaction) ? undefined : this.footer;
