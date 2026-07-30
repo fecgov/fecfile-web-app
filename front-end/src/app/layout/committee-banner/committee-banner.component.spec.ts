@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CommitteeBannerComponent } from './committee-banner.component';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { CommitteeStore } from 'app/committee/committee.store';
+import { CommitteeAccount } from 'app/shared/models';
 
 describe('CommitteeBannerComponent', () => {
   let component: CommitteeBannerComponent;
   let fixture: ComponentFixture<CommitteeBannerComponent>;
+  let committeeStore: CommitteeStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CommitteeBannerComponent],
-      providers: [CommitteeBannerComponent, provideMockStore(testMockStore())],
+      providers: [CommitteeBannerComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    committeeStore = TestBed.inject(CommitteeStore);
     fixture = TestBed.createComponent(CommitteeBannerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -28,11 +28,10 @@ describe('CommitteeBannerComponent', () => {
 
   it('should display the committee type label', () => {
     const pacQualifiedUnauthorized = 'PAC - Qualified - Unauthorized';
-    TestBed.inject(MockStore).overrideSelector(
-      selectCommitteeAccount,
-      CommitteeAccount.fromJSON({ id: '123', committee_type_label: pacQualifiedUnauthorized }),
+    const committee = committeeStore.committee()!;
+    committeeStore.setCommittee(
+      CommitteeAccount.fromJSON({ ...committee, committee_type_label: pacQualifiedUnauthorized }),
     );
-    TestBed.inject(MockStore).refreshState();
     expect(component.committeeTypeLabel()).toEqual(pacQualifiedUnauthorized);
   });
 });

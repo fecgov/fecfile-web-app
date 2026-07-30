@@ -1,6 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 const committeeStatusCodes: { [key: string]: string } = {
   T: 'Terminated (T)',
@@ -11,7 +10,7 @@ const committeeStatusCodes: { [key: string]: string } = {
   Q: 'Quarterly (Q)',
 };
 
-const activeStatusCodes = ['M', 'Q', 'W', 'D'];
+const activeStatusCodes = new Set(['M', 'Q', 'W', 'D']);
 
 @Component({
   selector: 'app-committee-banner',
@@ -19,14 +18,12 @@ const activeStatusCodes = ['M', 'Q', 'W', 'D'];
   styleUrls: ['./committee-banner.component.scss'],
 })
 export class CommitteeBannerComponent {
-  private readonly store = inject(Store);
-  readonly committee = this.store.selectSignal(selectCommitteeAccount);
-  readonly committeeName = computed(() => this.committee().name);
-  readonly committeeTypeLabel = computed(() => this.committee().committee_type_label ?? '');
-  readonly committeeID = computed(() => this.committee().committee_id);
-
-  private readonly frequencyCode = computed(() => this.committee().filing_frequency ?? '');
+  private readonly committeeStore = inject(CommitteeStore);
+  readonly committeeName = computed(() => this.committeeStore.committee()?.name);
+  readonly committeeTypeLabel = computed(() => this.committeeStore.committee()?.committee_type_label ?? '');
+  readonly committeeID = computed(() => this.committeeStore.committee()?.committee_id);
+  private readonly frequencyCode = computed(() => this.committeeStore.committee()?.filing_frequency ?? '');
   readonly committeeFrequency = computed(() => committeeStatusCodes[this.frequencyCode()] ?? '');
-  readonly committeeStatus = computed(() => (activeStatusCodes.includes(this.frequencyCode()) ? 'Active' : 'Inactive'));
+  readonly committeeStatus = computed(() => (activeStatusCodes.has(this.frequencyCode()) ? 'Active' : 'Inactive'));
   readonly frequencyColor = computed(() => (this.committeeStatus() === 'Active' ? '#4AA564' : '#AEB0B5'));
 }

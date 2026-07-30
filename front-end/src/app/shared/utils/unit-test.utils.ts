@@ -2,8 +2,6 @@ import { DefaultProjectorFn, MemoizedSelector } from '@ngrx/store';
 import { SECURITY_CONSENT_VERSION } from 'app/login/security-notice/security-notice.component';
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { initialState as initNavigationEvent } from 'app/store/navigation-event.reducer';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
@@ -232,22 +230,19 @@ interface Selector<T> {
 
 export function testMockStore(): {
   initialState: {
-    fecfile_online_committeeAccount: CommitteeAccount;
     fecfile_online_userLoginData: UserLoginData;
     fecfile_online_activeReport: Report | undefined;
     fecfile_online_navigationEvent: NavigationEvent | undefined;
   };
-  selectors: [Selector<CommitteeAccount>, Selector<UserLoginData>, Selector<Report>, Selector<NavigationEvent>];
+  selectors: [Selector<UserLoginData>, Selector<Report>, Selector<NavigationEvent>];
 } {
   return {
     initialState: {
-      fecfile_online_committeeAccount: initCommitteeAccount,
       fecfile_online_userLoginData: initUserLoginData,
       fecfile_online_activeReport: initActiveReport,
       fecfile_online_navigationEvent: initNavigationEvent,
     },
     selectors: [
-      { selector: selectCommitteeAccount, value: testCommitteeAccount() },
       { selector: selectUserLoginData, value: testUserLoginData() },
       { selector: selectActiveReport, value: testActiveReport() },
       { selector: selectNavigationEvent, value: testNavigationEvent() },

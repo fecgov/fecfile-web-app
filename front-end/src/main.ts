@@ -53,7 +53,6 @@ import { FecDatePipe } from './app/shared/pipes/fec-date.pipe';
 import { LoginService } from './app/shared/services/login.service';
 import { activeReportReducer } from './app/store/active-report.reducer';
 import { AppState } from './app/store/app-state.model';
-import { committeeAccountReducer } from './app/store/committee-account.reducer';
 import { navigationEventReducer } from './app/store/navigation-event.reducer';
 import { serviceAvailableReducer } from './app/store/service-available.reducer';
 import { singleClickReducer } from './app/store/single-click.reducer';
@@ -90,7 +89,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   try {
     return localStorageSync({
-      keys: ['committeeAccount', 'singleClickDisabled', 'userLoginData', 'activeReport'],
+      keys: ['singleClickDisabled', 'userLoginData', 'activeReport'],
       storageKeySerializer: (key) => `fecfile_online_${key}`,
       rehydrate: true,
     })(reducer);
@@ -121,7 +120,6 @@ bootstrapApplication(AppComponent, {
       LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
       StoreModule.forRoot(
         {
-          committeeAccount: committeeAccountReducer,
           singleClickDisabled: singleClickReducer,
           userLoginData: loginReducer,
           activeReport: activeReportReducer,

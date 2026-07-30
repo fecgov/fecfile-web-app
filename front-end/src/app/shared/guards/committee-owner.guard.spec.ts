@@ -5,12 +5,12 @@ import { committeeOwnerGuard } from './committee-owner.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testCommitteeMember, testMockStore } from '../utils/unit-test.utils';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount, CommitteeMember } from '../models';
+import { testCommitteeMember } from '../utils/unit-test.utils';
 import type { Mock } from 'vitest';
 import { signal } from '@angular/core';
+import { CommitteeStore } from 'app/committee/committee.store';
+import { CommitteeMember } from '../models/committee-member.model';
+import { CommitteeAccount } from '../models/committee-account.model';
 
 let needsSecondAdminMock = signal(false);
 
@@ -19,7 +19,7 @@ describe('committeeOwnerGuard', () => {
   let memberService: CommitteeMemberService;
   const route: ActivatedRouteSnapshot = {} as any;
   const state: RouterStateSnapshot = {} as any;
-  let store: MockStore;
+  let committeeStore: CommitteeStore;
   let router: Router;
   let getMemberSpy: Mock<() => Promise<CommitteeMember[]>>;
 
@@ -36,10 +36,9 @@ describe('committeeOwnerGuard', () => {
             needsSecondAdmin: needsSecondAdminMock,
           },
         },
-        provideMockStore(testMockStore()),
       ],
     });
-    store = TestBed.inject(MockStore);
+    committeeStore = TestBed.inject(CommitteeStore);
     memberService = TestBed.inject(CommitteeMemberService);
     getMemberSpy = vi.spyOn(memberService, 'getMembers');
     router = TestBed.inject(Router);
@@ -63,7 +62,7 @@ describe('committeeOwnerGuard', () => {
   it('should not hit backend for members if no committee info yet', async () => {
     needsSecondAdminMock.set(true);
     getMemberSpy.mockResolvedValue([testCommitteeMember(), testCommitteeMember(), testCommitteeMember()]);
-    store.overrideSelector(selectCommitteeAccount, {} as CommitteeAccount);
+    committeeStore.setCommittee({} as CommitteeAccount);
     const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
     expect(safe).toEqual(router.createUrlTree(['/select-committee']));
   });

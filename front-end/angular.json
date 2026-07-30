@@ -174,7 +174,7 @@
                 "serve": {
                     "builder": "@angular/build:dev-server",
                     "options": {
-                        "buildTarget": "fecfile-web:build",
+                    "buildTarget": "fecfile-web:build",
                         "headers": {
                             "Content-Security-Policy": "default-src 'self'; script-src 'self' 'nonce-web_app_nonce'; style-src 'self' 'nonce-web_app_nonce'; connect-src 'self' http://localhost:* https://dev-api.fecfile.fec.gov https://stage-api.fecfile.fec.gov https://test-api.fecfile.fec.gov; frame-ancestors 'none'; object-src 'none'"
                         }
@@ -200,7 +200,7 @@
                     "builder": "@angular/build:unit-test",
                     "options": {
                         "tsConfig": "tsconfig.spec.json",
-                        "setupFiles": ["src/test.ts"],
+                        "setupFiles": ["node_modules/vitest-localstorage-mock", "src/test.ts" ],
                         "exclude": ["src/environments/environment.cloud.gov.test.ts"],
                         "coverage": true,
                         "coverageReporters": ["lcov"],

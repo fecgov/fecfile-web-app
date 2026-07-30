@@ -23,10 +23,10 @@ import {
   TransactionTypeUtils,
 } from 'app/shared/utils/transaction-type.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
 import { environment } from '../../../../environments/environment';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -35,6 +35,7 @@ import { LabelPipe } from '../../../shared/pipes/label.pipe';
   imports: [RouterLink, LabelPipe, AccordionModule],
 })
 export class TransactionTypePickerComponent extends DestroyerComponent {
+  private readonly committeeStore = inject(CommitteeStore);
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
   private readonly titleService = inject(Title);
@@ -65,7 +66,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
     }
   });
   readonly debtId: Signal<string | undefined> = computed(() => this.queryParams$()?.get('debt') ?? undefined);
-  private readonly committeeAccount = this.store.selectSignal(selectCommitteeAccount);
 
   readonly active = model<number>(-1);
   readonly isF3 = computed(() => this.report().report_type === ReportTypes.F3);
@@ -97,36 +97,41 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
       const transactionTypes = report.transactionTypes.filter(
         (t) =>
           group.transactionTypes.has(t) &&
-          (this.committeeAccount().isPAC || !PAC_ONLY().has(t)) &&
-          (this.committeeAccount().isPTY || !PTY_ONLY().has(t)),
+          (this.committeeStore.committee()!.isPAC || !PAC_ONLY().has(t)) &&
+          (this.committeeStore.committee()!.isPTY || !PTY_ONLY().has(t)),
       );
 
       if (this.debtId()) {
-        const debtPaymentLines = [
-          ...[
-            'SB21A',
-            'SB21B',
-            'SB22',
-            'SB23',
-            'SB24',
-            'SE',
-            'SF',
-            'SB25',
-            'SB28A',
-            'SB28B',
-            'SB28C',
-            'SB29',
-            'H6',
-            'SB30B',
-          ],
-          ...['SA11AI', 'SA11B', 'SA11C', 'SA12', 'SA15', 'SA16', 'SA17', 'H3'],
-        ];
+        const debtPaymentLines = new Set([
+          'SB21A',
+          'SB21B',
+          'SB22',
+          'SB23',
+          'SB24',
+          'SE',
+          'SF',
+          'SB25',
+          'SB28A',
+          'SB28B',
+          'SB28C',
+          'SB29',
+          'H6',
+          'SB30B',
+          'SA11AI',
+          'SA11B',
+          'SA11C',
+          'SA12',
+          'SA15',
+          'SA16',
+          'SA17',
+          'H3',
+        ]);
         typeMap.set(
           group,
           transactionTypes.filter((transactionType) => {
             if (this.isTransactionDisabled(transactionType)) return false;
             const lineNumber = TransactionTypeUtils.factory(transactionType).getNewTransaction().form_type ?? '';
-            return debtPaymentLines.includes(lineNumber);
+            return debtPaymentLines.has(lineNumber);
           }),
         );
       } else {

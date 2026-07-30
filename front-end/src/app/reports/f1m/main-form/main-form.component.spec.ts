@@ -18,8 +18,6 @@ import { Contact } from 'app/shared/models/contact.model';
 import { Form1M } from 'app/shared/models/reports/form-1m.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { firstValueFrom } from 'rxjs';
 
 describe('MainFormComponent', () => {
@@ -38,10 +36,7 @@ describe('MainFormComponent', () => {
     initialState: {
       fecfile_online_activeReport: initActiveReport,
     },
-    selectors: [
-      { selector: selectActiveReport, value: testActiveReport },
-      { selector: selectCommitteeAccount, value: testCommitteeAccount() },
-    ],
+    selectors: [{ selector: selectActiveReport, value: testActiveReport }],
   };
 
   beforeAll(async () => {

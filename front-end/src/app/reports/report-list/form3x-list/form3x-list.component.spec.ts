@@ -3,14 +3,13 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { Actions } from '@ngrx/effects';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { FormTypeDialogComponent } from 'app/reports/form-type-dialog/form-type-dialog.component';
 import { CommitteeAccount, Form3X, ReportStatus, ReportTypes } from 'app/shared/models';
 import { ApiService } from 'app/shared/services/api.service';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { testActiveReport, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
@@ -19,6 +18,7 @@ import { of, Subject } from 'rxjs';
 import { ReportListComponent } from '../report-list.component';
 import { Form3XListComponent } from './form3x-list.component';
 import { ROUTES } from 'app/routes';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 function getStatusLink(report: Form3X): string {
   return `/reports/f3x/submit/status/${report.id}`;
@@ -57,7 +57,7 @@ describe('Form3XListComponent', () => {
   const actions$ = new Subject<{
     type: string;
   }>();
-  let store: MockStore;
+  let committeeStore: CommitteeStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -70,6 +70,7 @@ describe('Form3XListComponent', () => {
         MessageService,
         ApiService,
         provideMockStore(testMockStore()),
+        CommitteeStore,
         provideRouter(ROUTES),
         { provide: Actions, useValue: actions$ },
         {
@@ -80,7 +81,7 @@ describe('Form3XListComponent', () => {
         },
       ],
     }).compileComponents();
-    store = TestBed.inject(MockStore);
+    committeeStore = TestBed.inject(CommitteeStore);
   });
 
   beforeEach(() => {
@@ -173,7 +174,7 @@ describe('Form3XListComponent', () => {
   it('#onDownload should open download panel properly', async () => {
     const testCommitteeAccount = new CommitteeAccount();
     testCommitteeAccount.id = '12346';
-    store.overrideSelector(selectCommitteeAccount, testCommitteeAccount);
+    committeeStore.setCommittee(testCommitteeAccount);
     const report = { id: '888', report_type: ReportTypes.F3X } as Form3X;
     const mockDownload = {
       taskId: 'test-task-123',

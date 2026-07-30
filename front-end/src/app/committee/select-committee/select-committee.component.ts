@@ -4,13 +4,10 @@ import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountService } from 'app/shared/services/committee-account.service';
 import { UsersService } from 'app/shared/services/users.service';
-import {
-  setCommitteeAccountDetailsAction,
-  unsetCommitteeAccountDetailsAction,
-} from 'app/store/committee-account.actions';
 import { userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { AccordionModule } from 'primeng/accordion';
+import { CommitteeStore } from '../committee.store';
 
 @Component({
   selector: 'app-select-committee',
@@ -20,7 +17,8 @@ import { AccordionModule } from 'primeng/accordion';
 })
 export class SelectCommitteeComponent {
   protected readonly committeeAccountService = inject(CommitteeAccountService);
-  protected readonly store = inject(Store);
+  private readonly committeeStore = inject(CommitteeStore);
+  private readonly store = inject(Store);
   protected readonly router = inject(Router);
   private readonly userService = inject(UsersService);
   readonly committees = derivedAsync(
@@ -40,7 +38,7 @@ export class SelectCommitteeComponent {
   readonly isLoading = signal(true);
 
   constructor() {
-    this.store.dispatch(unsetCommitteeAccountDetailsAction());
+    this.committeeStore.clearCommittee();
     afterRenderEffect(() => {
       const isShown = this.disabledShown();
       const contentEl = this.content()?.nativeElement;
@@ -55,7 +53,7 @@ export class SelectCommitteeComponent {
 
   async activateCommittee(committee: CommitteeAccount): Promise<void> {
     const activatedCommittee = await this.committeeAccountService.activateCommittee(committee.id);
-    this.store.dispatch(setCommitteeAccountDetailsAction({ payload: activatedCommittee }));
+    this.committeeStore.setCommittee(activatedCommittee);
     this.userService.getCurrentUser().then((userLoginData) => {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });

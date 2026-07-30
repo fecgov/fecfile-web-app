@@ -2,19 +2,18 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Report } from 'app/shared/models/reports/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { WebPrintService } from 'app/shared/services/web-print.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { takeUntil } from 'rxjs';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { SingleClickDirective } from '../../../shared/directives/single-click.directive';
 import { LayoutService } from 'app/layout/layout.service';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 @Component({
   selector: 'app-print-preview',
@@ -23,6 +22,7 @@ import { LayoutService } from 'app/layout/layout.service';
   imports: [ButtonDirective, Ripple, SingleClickDirective],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {
+  private readonly committeeStore = inject(CommitteeStore);
   private readonly store = inject(Store);
   public readonly router = inject(Router);
   public readonly route = inject(ActivatedRoute);
@@ -30,7 +30,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
   private readonly reportService = inject(ReportService);
   readonly layoutService = inject(LayoutService);
   report: Report = new Form3X() as unknown as Report;
-  committeeAccount?: CommitteeAccount;
   readonly submitDate = signal<Date | undefined>(undefined);
   readonly formattedDate = computed(() => {
     const date = this.submitDate();
@@ -72,13 +71,6 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
             this.pollPrintStatus();
           }
         }
-      });
-
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
-        this.committeeAccount = committeeAccount;
       });
 
     this.route.data.subscribe(({ getBackUrl, getContinueUrl }) => {
@@ -149,7 +141,7 @@ export class PrintPreviewComponent extends DestroyerComponent implements OnInit 
     if (this.report.id) {
       /** Update the report with the committee information
        * this is a must because the .fec requires this information */
-      await this.reportService.fecUpdate(this.report, this.committeeAccount);
+      await this.reportService.fecUpdate(this.report, this.committeeStore.committee()!);
       try {
         await this.webPrintService.submitPrintJob(this.report.id);
         // Start polling for a completed status
