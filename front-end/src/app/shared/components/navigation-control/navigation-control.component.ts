@@ -61,22 +61,22 @@ export class NavigationControlComponent {
     },
     { separator: true },
     {
-      label: 'Add another',
-      disabled: this.isProcessing,
-      command: () => {
-        if (this.isProcessing) return;
-        this.isProcessing = true;
-        this.saveAndAddAnother();
-        setTimeout(() => (this.isProcessing = false), 1000);
-      },
-    },
-    {
       label: 'Clone',
       disabled: this.isProcessing,
       command: () => {
         if (this.isProcessing) return;
         this.isProcessing = true;
         this.saveAndClone();
+        setTimeout(() => (this.isProcessing = false), 1000);
+      },
+    },
+    {
+      label: 'Add another',
+      disabled: this.isProcessing,
+      command: () => {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+        this.saveAndAddAnother();
         setTimeout(() => (this.isProcessing = false), 1000);
       },
     },

@@ -1,7 +1,7 @@
-import { HttpClient, HttpContext, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { catchError, firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
@@ -14,6 +14,18 @@ export interface QueryParams {
     | readonly (string | number | boolean)[];
 }
 
+function getHeaders(cookieService: CookieService, headersToAdd: object = {}) {
+  const csrfToken = `${cookieService.get('csrftoken')}`;
+  const baseHeaders = {
+    'Content-Type': 'application/json',
+    // If using different cache headers,
+    // modify CORS_ALLOW_HEADERS in API settings
+    'cache-control': 'no-cache, no-store',
+    ...(csrfToken && { 'x-csrftoken': `${csrfToken}` }),
+  };
+  return { ...baseHeaders, ...headersToAdd };
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,51 +33,23 @@ export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly cookieService = inject(CookieService);
 
-  getHeaders(headersToAdd: object = {}) {
-    const csrfToken = `${this.cookieService.get('csrftoken')}`;
-    const baseHeaders = {
-      'Content-Type': 'application/json',
-      // If using different cache headers,
-      // modify CORS_ALLOW_HEADERS in API settings
-      'cache-control': 'no-cache, no-store',
-      ...(csrfToken && { 'x-csrftoken': `${csrfToken}` }),
-    };
-    return { ...baseHeaders, ...headersToAdd };
-  }
-
   getQueryParams(queryParams: QueryParams = {}) {
     return new HttpParams({ fromObject: queryParams });
   }
 
+  public async fetch<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
+    const response = await fetch(`${environment.apiUrl}${endpoint}`, {
+      method: 'GET',
+      headers: getHeaders(this.cookieService),
+      credentials: 'include',
+      signal,
+    });
+    return response.json();
+  }
+
   public get<T>(endpoint: string, params?: QueryParams): Promise<T>;
-  public get<T>(endpoint: string, params?: QueryParams, allowedErrorCodes?: number[]): Promise<T>;
-  public get<T>(
-    endpoint: string,
-    params: QueryParams = {},
-    allowedErrorCodes?: number[],
-  ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
-    if (allowedErrorCodes) {
-      return firstValueFrom(
-        this.http
-          .get<T>(`${environment.apiUrl}${endpoint}`, {
-            headers,
-            params,
-            withCredentials: true,
-            observe: 'response',
-            responseType: 'json',
-            context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
-          })
-          .pipe(
-            catchError((error: HttpErrorResponse) => {
-              if (allowedErrorCodes.includes(error.status)) {
-                return of(error as unknown as HttpResponse<T>);
-              }
-              throw error;
-            }),
-          ),
-      );
-    }
+  public get<T>(endpoint: string, params: QueryParams = {}): Promise<T> | Promise<HttpResponse<T>> {
+    const headers = getHeaders(this.cookieService);
 
     return firstValueFrom(
       this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
@@ -76,33 +60,19 @@ export class ApiService {
     );
   }
 
-  public getObs<T>(
-    endpoint: string,
-    params: QueryParams = {},
-    allowedErrorCodes: number[] = [],
-  ): Observable<HttpResponse<T>> {
-    const headers = this.getHeaders();
-    return this.http
-      .get<T>(`${environment.apiUrl}${endpoint}`, {
-        headers,
-        params,
-        withCredentials: true,
-        observe: 'response',
-        responseType: 'json',
-        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
-      })
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (allowedErrorCodes.includes(error.status)) {
-            return of(error as unknown as HttpResponse<T>);
-          }
-          throw error;
-        }),
-      );
+  public getObs<T>(endpoint: string, params: QueryParams = {}): Observable<HttpResponse<T>> {
+    const headers = getHeaders(this.cookieService);
+    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+      headers,
+      params,
+      withCredentials: true,
+      observe: 'response',
+      responseType: 'json',
+    });
   }
 
   public get_from_base_uri<T>(endpoint: string, params?: QueryParams): Promise<T> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return firstValueFrom(
       this.http.get<T>(`${environment.baseUri}${endpoint}`, {
         headers,
@@ -113,7 +83,7 @@ export class ApiService {
   }
 
   public getString(endpoint: string): Promise<string> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return firstValueFrom(
       this.http.get(`${environment.apiUrl}${endpoint}`, {
         headers: headers,
@@ -136,7 +106,7 @@ export class ApiService {
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
   ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
@@ -171,7 +141,7 @@ export class ApiService {
     queryParams: QueryParams = {},
     allowedErrorCodes?: number[],
   ): Promise<T> | Promise<HttpResponse<T>> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
@@ -194,7 +164,7 @@ export class ApiService {
   }
 
   public delete<T>(endpoint: string): Promise<T> {
-    const headers = this.getHeaders();
+    const headers = getHeaders(this.cookieService);
     return firstValueFrom(this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers, withCredentials: true }));
   }
 }

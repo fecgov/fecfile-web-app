@@ -11,14 +11,7 @@ export class CashOnHandService {
   readonly apiEndpoint = '/cash_on_hand';
 
   public async getCashOnHand(year: number): Promise<CashOnHand | undefined> {
-    const response = await this.apiService.get<HttpResponse<CashOnHand>>(
-      `${this.apiEndpoint}/year/${year}/`,
-      {},
-      [404],
-    );
-    if (response.status === 404) {
-      return undefined;
-    }
+    const response = await this.apiService.get<HttpResponse<CashOnHand>>(`${this.apiEndpoint}/year/${year}/`);
     return CashOnHand.fromJSON(response.body);
   }
   public async setCashOnHand(year: number, cashOnHand: number): Promise<CashOnHand> {

@@ -8,11 +8,18 @@ import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-trans
 import { getTestIndividualReceipt, getTestTransactionByType, testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { HTTP_INTERCEPTORS, HttpStatusCode, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
 import { ScheduleFTransactionTypes } from '../models/schf-transaction.model';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
+import { isCloneable } from '../utils/transaction-clone.utils';
+
+const allZeroesResponse = {
+  aggregate: 0,
+  calendar_ytd_per_election_office: 0,
+  aggregate_general_elec_expended: 0,
+};
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -78,7 +85,7 @@ describe('TransactionService', () => {
       httpTestingController.verify();
     });
 
-    it('should return null', async () => {
+    it('should return zero if no result', async () => {
       const mockTransaction: Transaction = TransactionTypeUtils.factory(
         ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
       ).getNewTransaction();
@@ -89,9 +96,9 @@ describe('TransactionService', () => {
         `${environment.apiUrl}/transactions/previous/entity/?transaction_id=abc&aggregation_group=${AggregationGroups.GENERAL}&contact_1_id=1&date=${formattedDate}`,
       );
       expect(req.request.method).toEqual('GET');
-      req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
+      req.flush(allZeroesResponse);
       const response = await promise;
-      expect(response).toBeNull();
+      expect(response).toBe(0);
       httpTestingController.verify();
     });
   });
@@ -121,7 +128,7 @@ describe('TransactionService', () => {
       httpTestingController.verify();
     });
 
-    it('should return null', async () => {
+    it('should return zero if no result', async () => {
       const mockTransaction: Transaction = TransactionTypeUtils.factory(
         ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE,
       ).getNewTransaction();
@@ -135,22 +142,15 @@ describe('TransactionService', () => {
         `${environment.apiUrl}/transactions/previous/payee-candidate/?transaction_id=abc&aggregation_group=${AggregationGroups.COORDINATED_PARTY_EXPENDITURES}&contact_2_id=1&date=${formattedDate}&general_election_year=2024`,
       );
       expect(req.request.method).toEqual('GET');
-      req.flush(
-        {
-          aggregate: 0,
-          calendar_ytd_per_election_office: 0,
-          aggregate_general_elec_expended: 0,
-        },
-        { status: HttpStatusCode.NotFound, statusText: 'not found' },
-      );
+      req.flush(allZeroesResponse);
       const response = await promise;
-      expect(response).toBeNull();
+      expect(response).toBe(0);
       httpTestingController.verify();
     });
   });
 
   describe('getPreviousElectionAggregate', () => {
-    it('should return null', async () => {
+    it('should return zero if no result', async () => {
       const mockTransaction: Transaction = TransactionTypeUtils.factory(
         ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE,
       ).getNewTransaction();
@@ -164,16 +164,9 @@ describe('TransactionService', () => {
         `${environment.apiUrl}/transactions/previous/election/?transaction_id=abc&aggregation_group=${AggregationGroups.INDEPENDENT_EXPENDITURE}&date=${formattedDate}&election_code=1&candidate_office=A&candidate_state=A&candidate_district=A`,
       );
       expect(req.request.method).toEqual('GET');
-      req.flush(
-        {
-          aggregate: 0,
-          calendar_ytd_per_election_office: 0,
-          aggregate_general_elec_expended: 0,
-        },
-        { status: HttpStatusCode.NotFound, statusText: 'not found' },
-      );
+      req.flush(allZeroesResponse);
       const response = await promise;
-      expect(response).toBeNull();
+      expect(response).toBe(0);
       httpTestingController.verify();
     });
   });
@@ -236,16 +229,16 @@ describe('TransactionService', () => {
   describe('isCloneable', () => {
     it('should return true only for clone-eligible transactions', () => {
       let individualReceipt = getTestIndividualReceipt();
-      expect(service.isCloneable(individualReceipt)).toBe(true);
+      expect(isCloneable(individualReceipt)).toBe(true);
       individualReceipt.parent_transaction_id = '10';
-      expect(service.isCloneable(individualReceipt)).toBe(false);
+      expect(isCloneable(individualReceipt)).toBe(false);
       individualReceipt = getTestIndividualReceipt();
       individualReceipt.reatt_redes_id = 'original-id';
       individualReceipt.reattribution_redesignation_tag = 'REATTRIBUTED';
-      expect(service.isCloneable(individualReceipt)).toBe(false);
+      expect(isCloneable(individualReceipt)).toBe(false);
       const earmarkReceipt = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
-      expect(service.isCloneable(earmarkReceipt)).toBe(false);
-      expect(service.isCloneable(undefined)).toBe(false);
+      expect(isCloneable(earmarkReceipt)).toBe(false);
+      expect(isCloneable(undefined)).toBe(false);
     });
   });
 
