@@ -8,6 +8,8 @@ import { ContactLookup } from '../pages/contactLookup';
 import { ReportListPage } from '../pages/reportListPage';
 import { buildScheduleA } from '../requests/library/transactions';
 import { makeTransaction } from '../requests/methods';
+import { F3X_Q2, F3X_Q3 } from '../requests/library/reports';
+import { TransactionListPage } from '../pages/f3xTransactionListPage';
 
 const reattributeData: ScheduleFormData = {
   amount: 100.55,
@@ -61,6 +63,20 @@ describe('Reattributions', () => {
     });
   });
   // Test disabled until a mock is set up for submitting a report.
-  xit('should test reattributing a Schedule A in a submitted report', () => {
+  it('should test reattributing a Schedule A in a submitted report', () => {
+    DataSetup({ individual: true, candidate: true, reports: [F3X_Q2, F3X_Q3] }).then((result: any) => {
+      const receipt = buildScheduleA('INDIVIDUAL_RECEIPT', 100.55, `${currentYear}-04-12`, result.individual, result.report);
+      makeTransaction(receipt, () => {
+        cy.intercept('POST', '**/api/v1/web-services/submit-to-fec/**').as('SubmitToFec');
+        ReportListPage.goToReportSubmitPage(result.report, 'f3x');
+        cy.get('#userCertified').check()
+        cy.get('input[type="password"]').type('your_secure_password')
+        cy.get('#form button[type="submit"]:enabled').click();
+        TransactionDetailPage.clickConfirmContactUpdate();
+        cy.wait('@SubmitToFec')
+        ReportListPage.gotToReportTransactionListPage(result.report);
+        TransactionListPage.assertTransactionActionExists('Individual Receipt','Reattribute')
+      });
+    });
   });
 });
