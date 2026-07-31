@@ -46,10 +46,12 @@ cleanup() {
 
 trap cleanup EXIT
 
-mkdir -p "$FRONTEND_DIR/.tmp"
-if [[ "$HOST_UID" != "0" ]]; then
-  # immediately chown .tmp to host user
-  chown -R $HOST_UID:$HOST_GID "$FRONTEND_DIR/.tmp" 2>/dev/null || true
+if [[ "$MODE" == "$PREPARE_MODE" ]]; then
+  # create and chown .tmp during prepare only
+  mkdir -p "$FRONTEND_DIR/.tmp"
+  if [[ "$HOST_UID" != "0" ]]; then
+    chown -R $HOST_UID:$HOST_GID "$FRONTEND_DIR/.tmp" 2>/dev/null || true
+  fi
 fi
 
 if [[ "$MODE" == "$PREPARE_MODE" ]]; then
@@ -114,7 +116,9 @@ APP_URL="$APP_URL" \
 NGINX_CONF_PATH="$NGINX_CONF_PATH" \
 "$SCRIPT_DIR/render-nginx-local-config.sh"
 
-chmod -R a+w "$FRONTEND_DIR/.tmp"
+if [[ "$MODE" == "$PREPARE_MODE" ]]; then
+  chmod -R a+w "$FRONTEND_DIR/.tmp"
+fi
 
 if [[ "$MODE" == "$REBUILD_MODE" ]]; then
   echo "Rebuild complete."
