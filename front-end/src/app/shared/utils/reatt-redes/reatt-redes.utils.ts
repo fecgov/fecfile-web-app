@@ -46,6 +46,10 @@ export class ReattRedesUtils {
     return (
       !transaction.parent_transaction_id &&
       transaction.transactionType.isReattributable &&
+      !ReattRedesUtils.isReattRedes(transaction, [
+        ReattRedesTypes.REATTRIBUTION_FROM,
+        ReattRedesTypes.REATTRIBUTION_TO,
+      ]) &&
       !ReattRedesUtils.isAtAmountLimit(transaction)
     );
   }
