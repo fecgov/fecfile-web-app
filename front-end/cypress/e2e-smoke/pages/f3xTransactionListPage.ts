@@ -24,6 +24,15 @@ export class TransactionListPage {
     TransactionListPage.closeTransactionActions();
   }
 
+  static clickTransactionAction(identifier: string, action: string) {
+    TransactionListPage.openTransactionActions(identifier);
+    cy.get(TransactionListPage.transactionActionsPopoverSelector)
+      .find(`[data-cy="${TransactionListPage.actionDataCy(action)}"]`)
+      .should('exist')
+      .and('be.visible')
+      .click();
+  }
+
   static assertTransactionActionDoesNotExist(identifier: string, action: string) {
     TransactionListPage.openTransactionActions(identifier);
     cy.get(TransactionListPage.transactionActionsPopoverSelector)
