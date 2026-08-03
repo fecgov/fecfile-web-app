@@ -1,4 +1,6 @@
-<div class="summary-container">
+<app-shared-summary-templates />
+
+<div class="standard-container">
   <h1>Summary page</h1>
   <hr type="solid" class="mt-2 mb-5" />
 
@@ -11,7 +13,6 @@
       [loading]="!calculationFinished()"
       sortField="name"
       [rowsPerPage]="lines().length"
-      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
