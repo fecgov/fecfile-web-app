@@ -23,9 +23,15 @@
 </div>
 
 <app-dialog [(visible)]="showClonedTransactionDialog" header="Cloned transaction">
-  <p>
-    This is a copy of the previous transaction. Please review the details and make any necessary changes before saving.
-  </p>
+  <div class="flex gap-4 align-items-center">
+    <svg alt="Exclamation mark" width="24" height="24" class="primary-icon">
+      <use href="assets/img/exclamation.svg#exclamation-icon"></use>
+    </svg>
+    <p class="karla m-0">
+      This is a copy of the previous transaction. Please review the details and make any necessary changes before
+      saving.
+    </p>
+  </div>
   <ng-container dialog-footer #dialogFooterRef>
     <div class="flex justify-content-center">
       <button

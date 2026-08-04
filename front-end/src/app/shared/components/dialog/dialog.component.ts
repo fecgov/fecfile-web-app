@@ -50,7 +50,7 @@ export class DialogComponent {
   constructor() {
     effect(() => {
       if (this.visible()) {
-        this.dialog().nativeElement.show();
+        this.dialog().nativeElement.showModal();
       } else {
         this.dialog().nativeElement.close();
       }
