@@ -13,7 +13,7 @@ import { DialogComponent } from '../dialog/dialog.component';
     <app-dialog
       tabindex="-1"
       aria-labelledby="dialog-title"
-      title="Edit Role"
+      header="Edit Role"
       submitLabel="Change"
       [(visible)]="detailVisible"
       [submitDisabled]="!form.valid"
