@@ -30,6 +30,7 @@ export abstract class BaseSummaryComponent {
   readonly activeReport = this.store.selectSignal(selectActiveReport);
   readonly report = computed(() => this.activeReport() as BaseForm3);
   readonly isF3X = computed(() => this.router.url.includes('/f3x/'));
+  readonly formText = computed(() => (this.isF3X() ? 'f3x' : 'f3'));
 
   readonly calculationFinished = computed(() => this.report().calculation_status === 'SUCCEEDED');
 

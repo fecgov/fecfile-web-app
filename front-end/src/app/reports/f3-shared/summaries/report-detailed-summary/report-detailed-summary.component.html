@@ -61,7 +61,7 @@
       pButton
       pRipple
       class="p-button-secondary icon-gap"
-      (click)="router.navigateByUrl('/reports/f3x/summary/' + report().id)"
+      (click)="router.navigate(['/reports', this.formText(), 'summary', report().id])"
     >
       <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
         <use href="assets/img/arrow.svg#arrow"></use>
@@ -72,7 +72,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
-      (click)="router.navigateByUrl('/reports/f3x/web-print/' + report().id)"
+      (click)="router.navigate(['/reports', this.formText(), 'web-print', report().id])"
     >
       <span>See print preview</span>
       <svg pButtonIcon alt="Next Arrow" width="10" height="10">

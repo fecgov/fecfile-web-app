@@ -46,7 +46,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
-      (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report().id)"
+      (click)="router.navigate(['/reports', this.formText(), 'detailed-summary', report().id])"
     >
       <span>Review detailed summary page</span>
       <svg pButtonIcon alt="Next Arrow" width="10" height="10">
