@@ -26,7 +26,7 @@ describe('Form-1M', () => {
       form_type: F1MFormTypes.F1MN,
       committee_name: 'foo',
     };
-    let form = Form1M.fromJSON(data);
+    const form = Form1M.fromJSON(data);
     expect(form.canAmend).toEqual(false);
 
     form.report_status = ReportStatus.SUBMIT_SUCCESS;
