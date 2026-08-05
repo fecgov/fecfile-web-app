@@ -12,10 +12,6 @@ nav {
   border-bottom: 2px solid #e8e8e8;
   padding-left: 32px;
   padding-right: 32px;
-  z-index: 999;
-  position: fixed;
-  top: var(--header-top);
-  transition: top 0.3s ease-in-out;
   overflow: hidden;
 }
 

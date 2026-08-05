@@ -1,11 +1,7 @@
 .usa-banner {
   background-color: #f0f0f0;
-  position: fixed;
-  top: 0px;
-  z-index: 1000;
   width: 100%;
   height: var(--header-top);
-  transition: height 0.3s ease-in-out;
   overflow: hidden;
 }
 

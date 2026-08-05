@@ -175,9 +175,20 @@
   --p-tieredmenu-item-color: var(--p-content-color);
   --p-tieredmenu-separator-border-color: #212121b3; // 70% opacity of #212121
 
-  --header-height: 80px;
+  --environment-banner-height: 64px;
+
   --header-top: 30px;
-  --header-total: calc(var(--header-height) + var(--header-top));
+  --header-height: 64px;
+
+  --header-stack-height: calc(
+    var(--header-height) +
+    var(--header-top)
+  );
+
+  --header-total: calc(
+  var(--header-height) +
+  var(--header-top)
+);
 
   --date-field-width: 11rem;
 }

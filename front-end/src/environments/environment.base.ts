@@ -29,6 +29,7 @@ export const createEnvironment = (params: {
   name: string;
   externalLinks: 'stage' | 'prod';
   baseUri: string;
+  environmentBanner?: 'development' | 'stage' | 'test';
   overrides?: Partial<typeof baseEnvironment>;
 }) => {
   const apiUrl = `${params.baseUri}/api/v1`;

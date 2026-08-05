@@ -1,10 +1,16 @@
-<div id="page-container" [class]="[layoutControls().backgroundStyle]">
-  <app-banner #bannerRef />
+<div
+  id="page-container"
+  [class]="[layoutControls().backgroundStyle]"
+  [class.environment-hidden]="!environmentBannerVisible() || environmentBannerDismissed()"
+>
+  <app-environment-banner #environmentBanner (dismissedChange)="dismissEnvironmentBanner()" />
+  <app-banner />
   @if (layoutControls().showHeader) {
-    <div class="header-container">
+    <div class="header-container sticky-header">
       <app-header [headerStyle]="layoutControls().headerStyle" />
     </div>
   }
+
   @if (layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
     <app-service-unavailable-banner />
   }

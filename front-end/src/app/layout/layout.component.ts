@@ -1,11 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, AfterViewChecked, inject, viewChild, computed, signal, DestroyRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  AfterViewChecked,
+  inject,
+  viewChild,
+  computed,
+  signal,
+  DestroyRef,
+  ElementRef,
+} from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
+import { EnvironmentBannerComponent } from './environment-banner/environment-banner.component';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
@@ -36,6 +47,7 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   imports: [
+    EnvironmentBannerComponent,
     BannerComponent,
     HeaderComponent,
     ReportSidebarComponent,
@@ -49,7 +61,7 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
     DialogComponent,
   ],
 })
-export class LayoutComponent implements AfterViewChecked {
+export class LayoutComponent implements AfterViewChecked, AfterViewInit {
   Sidebar = Sidebar;
   readonly layoutService = inject(LayoutService);
   private readonly store = inject(Store);
@@ -83,6 +95,15 @@ export class LayoutComponent implements AfterViewChecked {
     else return '64px';
   });
 
+  readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
+
+  environmentBannerVisible = signal(true);
+  environmentBannerDismissed = signal(false);
+
+  dismissEnvironmentBanner(): void {
+    this.environmentBannerDismissed.set(true);
+  }
+
   constructor() {
     if (this.useDynamicSidebar) {
       const mobileQuery = globalThis.matchMedia('(max-width: 991.98px)');
@@ -106,6 +127,28 @@ export class LayoutComponent implements AfterViewChecked {
 
   ngAfterViewChecked(): void {
     this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
+  }
+
+  ngAfterViewInit(): void {
+    const banner = this.environmentBanner()?.nativeElement;
+
+    if (!banner) {
+      this.environmentBannerVisible.set(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        this.environmentBannerVisible.set(entry.isIntersecting);
+      },
+      {
+        threshold: 0,
+      },
+    );
+
+    observer.observe(banner);
+
+    this.destroyRef.onDestroy(() => observer.disconnect());
   }
 }
 
