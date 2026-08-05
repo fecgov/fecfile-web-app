@@ -11,19 +11,17 @@
   border: none;
   background: transparent;
   width: 100%;
-  justify-content: center;
+
+  &.disabled {
+    color: rgba(0, 0, 0, 0.3) !important;
+    &:hover {
+      cursor: default;
+    }
+  }
 }
 
 li:hover {
   background: var(--surface-hover);
-}
-
-.nav-item.disabled {
-  color: rgba(0, 0, 0, 0.3) !important;
-}
-
-.nav-item.disabled:hover {
-  cursor: default;
 }
 
 .header-navbar-icon-disabled {
@@ -47,4 +45,36 @@ li:hover {
   flex: 0 0 8px;
   height: 8px;
   width: 8px;
+}
+
+.nav-menu {
+  display: none;
+}
+@media (min-width: 768px) {
+  .nav-menu {
+    display: flex;
+  }
+  .menu-toggle {
+    display: none;
+  }
+  .nav-item {
+    justify-content: center;
+  }
+}
+
+.mobile-nav-menu {
+  .mobile-submenu {
+    &:hover {
+      background: transparent;
+    }
+    .title {
+      font-weight: bold;
+      color: var(--text-color-secondary, #6c757d);
+      cursor: default;
+    }
+
+    .indent {
+      padding-left: 2.5rem;
+    }
+  }
 }

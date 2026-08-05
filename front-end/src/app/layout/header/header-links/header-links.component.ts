@@ -2,7 +2,6 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
 import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
@@ -31,8 +30,6 @@ export class HeaderLinksComponent {
   readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
   headerStyles = HeaderStyles;
-
-  role?: Roles;
 
   async navigateToLoginDotGov() {
     const available = this.serviceAvailable();

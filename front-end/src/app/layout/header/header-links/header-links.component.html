@@ -1,4 +1,5 @@
-<ul class="flex">
+<!-- Desktop Appearance -->
+<ul class="nav-menu">
   @switch (headerStyle()) {
     @case (headerStyles.DEFAULT) {
       <li><a class="nav-item" routerLink="/reports">Reports</a></li>
@@ -48,19 +49,71 @@
 
 <p-popover #accountOp>
   <ul>
-    <li>
-      <button class="popover-button" (click)="openLink('/committee/', accountOp)" autofocus>Account</button>
-    </li>
-    <li>
-      <button class="popover-button" (click)="openLink('/committee/members', accountOp)">Users</button>
-    </li>
+    <li><button class="popover-button" (click)="openLink('/committee/', accountOp)" autofocus>Account</button></li>
+    <li><button class="popover-button" (click)="openLink('/committee/members', accountOp)">Users</button></li>
     <li>
       <button class="popover-button" (click)="openLink('/login/select-committee/', accountOp)">
         Switch Committees
       </button>
     </li>
-    <li>
-      <button class="popover-button" (click)="logOut()">Logout</button>
-    </li>
+    <li><button class="popover-button" (click)="logOut()">Logout</button></li>
+  </ul>
+</p-popover>
+
+<!-- Mobile Appearance -->
+<button
+  pButton
+  pRipple
+  class="p-button-icon-only p-button-text menu-toggle"
+  (click)="mobileMenu.toggle($event)"
+  aria-label="Toggle mobile menu"
+>
+  <svg alt="menu icon" width="20" height="17" class="primary-icon">
+    <use href="assets/img/i-menu.svg#i-menu-icon"></use>
+  </svg>
+</button>
+<p-popover #mobileMenu styleClass="mobile-nav-popover">
+  <ul class="mobile-nav-menu">
+    @switch (headerStyle()) {
+      @case (headerStyles.DEFAULT) {
+        <li><a class="nav-item" routerLink="/reports" (click)="mobileMenu.hide()">Reports</a></li>
+        <li><a class="nav-item" routerLink="/contacts" (click)="mobileMenu.hide()">Contacts</a></li>
+        <li class="mobile-submenu">
+          <span class="nav-item title">Tools</span>
+          <ul>
+            <li>
+              <button class="popover-button indent" (click)="openLink('/tools/update-cash-on-hand', mobileMenu)">
+                Update cash on hand
+              </button>
+            </li>
+          </ul>
+        </li>
+        <li class="mobile-submenu">
+          <span class="nav-item title">Account & Settings</span>
+          <ul>
+            <li>
+              <button class="popover-button indent" (click)="openLink('/committee/', mobileMenu)">Account</button>
+            </li>
+            <li>
+              <button class="popover-button indent" (click)="openLink('/committee/members', mobileMenu)">Users</button>
+            </li>
+            <li>
+              <button class="popover-button indent" (click)="openLink('/login/select-committee/', mobileMenu)">
+                Switch Committees
+              </button>
+            </li>
+          </ul>
+        </li>
+        <li><button class="nav-item" (click)="logOut()">Logout</button></li>
+      }
+      @case (headerStyles.LOGIN) {
+        @if (!disableLogin) {
+          <li><button class="nav-item" (click)="navigateToLoginDotGov()">SIGN IN</button></li>
+        }
+      }
+      @case (headerStyles.LOGOUT) {
+        <li><button class="nav-item" (click)="logOut()">Log Out</button></li>
+      }
+    }
   </ul>
 </p-popover>
