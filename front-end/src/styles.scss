@@ -657,6 +657,11 @@ textarea {
   --icon-symbol: var(--text-color-secondary);
 }
 
+.transparent-black {
+  color: transparent;
+  --icon-symbol: #212121;
+}
+
 .fec-loader-div {
   height: 450px;
   display: flex;
