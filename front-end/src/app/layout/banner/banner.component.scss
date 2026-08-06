@@ -3,6 +3,7 @@
   width: 100%;
   height: var(--header-top);
   overflow: hidden;
+  transition: var(--header-transition);
 }
 
 .usa-banner .grid-row {

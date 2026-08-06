@@ -98,11 +98,7 @@ export class LayoutComponent implements AfterViewChecked, AfterViewInit {
   readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
 
   environmentBannerVisible = signal(true);
-  environmentBannerDismissed = signal(false);
-
-  dismissEnvironmentBanner(): void {
-    this.environmentBannerDismissed.set(true);
-  }
+  readonly environmentBannerDismissed = signal(false);
 
   constructor() {
     if (this.useDynamicSidebar) {

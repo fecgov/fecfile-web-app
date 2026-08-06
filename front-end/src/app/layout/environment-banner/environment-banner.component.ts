@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, computed, model } from '@angular/core';
 import { environment } from 'environments/environment';
 
 type BannerType = 'development' | 'stage' | 'test';
@@ -9,10 +9,8 @@ type BannerType = 'development' | 'stage' | 'test';
   styleUrls: ['./environment-banner.component.scss'],
 })
 export class EnvironmentBannerComponent {
-  @Output()
-  dismissedChange = new EventEmitter<void>();
-
-  dismissed = false;
+  readonly dismissed = model(false);
+  readonly showBanner = computed(() => !!this.bannerConfig && !this.dismissed());
 
   readonly subtitle = 'This site is for testing ideas and code.';
 
@@ -33,12 +31,7 @@ export class EnvironmentBannerComponent {
 
   readonly bannerConfig = environment.environmentBanner ? this.config[environment.environmentBanner] : null;
 
-  get showBanner(): boolean {
-    return !!this.bannerConfig && !this.dismissed;
-  }
-
   dismiss(): void {
-    this.dismissed = true;
-    this.dismissedChange.emit();
+    this.dismissed.set(true);
   }
 }

@@ -1,18 +1,14 @@
 $sidebar-width: 284px;
 
 #sidebar-container {
-  height: calc(100% - var(--header-total));
+  height: calc(100vh - var(--header-total));
   width: $sidebar-width;
   min-width: $sidebar-width;
   max-width: $sidebar-width;
-
   padding: 64px 24px 32px 24px;
-  position: fixed;
+  position: sticky;
   top: var(--header-total);
-
-  transition:
-    top 0.3s ease-in-out,
-    height 0.3s ease-in-out;
+  transition: var(--header-transition);
   z-index: 999;
   overflow-y: auto;
 }
@@ -61,7 +57,6 @@ app-footer {
   flex-direction: column;
   min-height: calc(100vh - var(--header-total));
   width: 100%;
-  padding-left: $sidebar-width;
   margin-top: 0;
   transition:
     margin-top 0.3s ease-in-out,
@@ -115,5 +110,6 @@ app-banner {
   display: block;
   position: sticky;
   top: var(--header-top);
+  transition: var(--header-transition);
   z-index: 1000;
 }
