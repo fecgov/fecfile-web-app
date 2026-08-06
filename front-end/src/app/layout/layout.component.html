@@ -3,7 +3,7 @@
   [class]="[layoutControls().backgroundStyle]"
   [class.environment-hidden]="!environmentBannerVisible() || environmentBannerDismissed()"
 >
-  <app-environment-banner #environmentBanner (dismissedChange)="dismissEnvironmentBanner()" />
+  <app-environment-banner #environmentBanner [(dismissed)]="environmentBannerDismissed" />
   <app-banner />
   @if (layoutControls().showHeader) {
     <div class="header-container sticky-header">

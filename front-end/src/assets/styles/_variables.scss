@@ -179,6 +179,7 @@
 
   --header-top: 30px;
   --header-height: 64px;
+  --header-transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
 
   --header-stack-height: calc(
     var(--header-height) +
