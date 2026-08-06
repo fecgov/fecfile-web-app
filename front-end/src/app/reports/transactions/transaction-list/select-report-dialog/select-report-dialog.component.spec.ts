@@ -27,9 +27,6 @@ describe('SelectReportDialogComponent', () => {
       ],
     });
     service = TestBed.inject(Form3XService);
-    fixture = TestBed.createComponent(SelectReportDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
     const data = {
       id: '999',
       form_type: F3xFormTypes.F3XT,
@@ -38,6 +35,9 @@ describe('SelectReportDialogComponent', () => {
     };
 
     futureSpy = vi.spyOn(service, 'getFutureReports').mockResolvedValue([Form3X.fromJSON(data)]);
+    fixture = TestBed.createComponent(SelectReportDialogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -62,7 +62,7 @@ describe('SelectReportDialogComponent', () => {
     await fixture.whenStable();
     expect(component.transaction()).toBeTruthy();
     expect(futureSpy).toHaveBeenCalled();
-    expect(component.availableReports().length).toBe(1);
+    expect(component.availableReports()!).toHaveLength(1);
   });
 
   it('should clear and close on cancel', async () => {
@@ -137,7 +137,7 @@ describe('SelectReportDialogComponent', () => {
         report_type: 'Form 3X',
       } as unknown as TransactionListRecord;
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-      component.selectedReport = component.availableReports()[0];
+      component.selectedReport = component.availableReports()![0];
       component.selectedReport = testActiveReport();
       try {
         await component.createReattribution();

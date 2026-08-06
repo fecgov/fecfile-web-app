@@ -9,8 +9,8 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Form3X } from 'app/shared/models';
 import { DateUtils } from 'app/shared/utils/date.utils';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { derivedAsync } from 'ngxtension/derived-async';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-select-report-dialog',
@@ -25,26 +25,17 @@ export class SelectReportDialogComponent {
   readonly report = this.store.selectSignal(selectActiveReport);
 
   readonly selectReportDialogSignal = toSignal(ReattRedesUtils.selectReportDialogSubject, { initialValue: undefined });
-
   readonly transaction = computed(() => this.selectReportDialogSignal()?.[0]);
   readonly type = computed(() => this.selectReportDialogSignal()?.[1]);
   readonly visible = computed(() => !!this.transaction());
+
   readonly dialogVisible = signal(false);
 
-  readonly availableReports = derivedAsync(
-    () => {
-      const visible = this.visible();
-      if (!visible) return [];
-      const coverageThroughDate = DateUtils.convertDateToFecFormat((this.report() as Form3X).coverage_through_date!);
-      if (!coverageThroughDate) {
-        console.error('No coverage through date found for transaction');
-        return [];
-      }
-      return this.service.getFutureReports(coverageThroughDate);
-    },
-    { initialValue: [] },
-  );
-  readonly hasAvailableReports = computed(() => this.availableReports().length > 0);
+  readonly availableReports = signal<Report[] | null>(null);
+  readonly hasAvailableReports = computed(() => {
+    const reports = this.availableReports();
+    return reports && reports.length > 0;
+  });
 
   readonly actionLabel = computed(() => (ReattRedesUtils.isReattribute(this.type()) ? 'reattribute' : 'redesignate'));
   readonly urlParameter = computed(() =>
@@ -57,9 +48,19 @@ export class SelectReportDialogComponent {
   selectedReport?: Report;
 
   constructor() {
+    effectOnceIf(
+      () => {
+        this.visible();
+        return this.report();
+      },
+      (report) => {
+        const coverageThroughDate = DateUtils.convertDateToFecFormat((report as Form3X).coverage_through_date!);
+        this.service.getFutureReports(coverageThroughDate).then((reports) => this.availableReports.set(reports));
+      },
+    );
     effect(() => {
       const data = this.selectReportDialogSignal();
-      if (data) {
+      if (data && this.availableReports()) {
         this.dialogVisible.set(true);
         this.selectedReport = undefined;
       } else {
