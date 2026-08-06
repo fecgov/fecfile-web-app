@@ -1,11 +1,11 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECEIPT';
-import { ReportTypes } from '..';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { ReportTypes } from '../reports/report.model';
 
 export class TRIBAL_RECEIPT extends SchATransactionType {
   formFields = [...ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];

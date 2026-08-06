@@ -6,9 +6,9 @@ import { FormComponent } from '../form.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { Roles } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
 import { DialogComponent } from '../dialog/dialog.component';
+import { Roles } from 'app/shared/models/role.model';
 
 @Component({
   selector: 'app-add-committee-member-dialog',

@@ -9,8 +9,8 @@ import { TableActionsButtonComponent } from '../../../../shared/components/table
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { Transaction } from 'app/shared/models';
 import { instanceToPlain } from 'class-transformer';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-guarantors',

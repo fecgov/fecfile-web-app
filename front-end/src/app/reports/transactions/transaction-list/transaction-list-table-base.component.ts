@@ -4,34 +4,30 @@ import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ColumnDefinition, TableBodyContext } from 'app/shared/components/table/table.component';
-import {
-  isPulledForwardLoan,
-  Report,
-  ReportTypes,
-  ScheduleATransactionTypes,
-  ScheduleBTransactionTypes,
-  ScheduleC1TransactionTypes,
-  ScheduleCTransactionTypes,
-  ScheduleDTransactionTypes,
-  ScheduleIds,
-} from 'app/shared/models';
+import { Report, ReportTypes } from 'app/shared/models/reports/report.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ScheduleIds, isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
-import {  ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 
-const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
-const loansDebts = [
+const loanReceipts = new Set(['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE']);
+const loansDebts = new Set([
   'LOAN_RECEIVED_FROM_INDIVIDUAL',
   'LOAN_RECEIVED_FROM_BANK',
   'LOAN_BY_COMMITTEE',
   'DEBT_OWED_BY_COMMITTEE',
   'DEBT_OWED_TO_COMMITTEE',
-];
+]);
 
 @Component({
   template: '',
@@ -417,9 +413,9 @@ export abstract class TransactionListTableBaseComponent
   private canDelete(transaction: TransactionListRecord): boolean {
     if (transaction.transaction_type_identifier) {
       // Shouldn't be able to delete loan receipts
-      if (loanReceipts.includes(transaction.transaction_type_identifier)) return false;
+      if (loanReceipts.has(transaction.transaction_type_identifier)) return false;
       // Shouldn't be able to delete pulled forward loans and debts
-      if (loansDebts.includes(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
+      if (loansDebts.has(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
         return false;
     }
 

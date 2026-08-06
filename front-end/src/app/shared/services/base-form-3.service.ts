@@ -3,7 +3,7 @@ import { getReportFromJSON, ReportService } from './report.service';
 import { BaseForm3, CoverageDates } from '../models/reports/base-form-3';
 import { BehaviorSubject } from 'rxjs';
 import { ReportCodes } from '../utils/report-code.utils';
-import { CommitteeAccount } from '../models';
+import type { CommitteeAccount } from '../models/committee-account.model';
 
 export const FORM_3_SERVICE = new InjectionToken<BaseForm3Service<BaseForm3>>('FORM_3_SERVICE');
 

@@ -8,8 +8,8 @@ import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit
 import { ElectionInputComponent } from './election-input.component';
 import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Transaction } from 'app/shared/models';
 import { Component, viewChild } from '@angular/core';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [ElectionInputComponent],

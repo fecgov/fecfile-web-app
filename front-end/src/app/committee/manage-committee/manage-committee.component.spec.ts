@@ -9,7 +9,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ManageCommitteeComponent } from './manage-committee.component';
-import { CommitteeMember } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
@@ -17,6 +16,7 @@ import { CommitteeMemberService } from 'app/shared/services/committee-member.ser
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { AddCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/add-committee-member-dialog.component';
 import { Component, viewChild } from '@angular/core';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
 
 @Component({
   imports: [ManageCommitteeComponent],

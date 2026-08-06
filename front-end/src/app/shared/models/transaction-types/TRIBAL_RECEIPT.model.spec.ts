@@ -1,4 +1,4 @@
-import { ReportTypes } from '..';
+import { ReportTypes } from '../reports/report.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 

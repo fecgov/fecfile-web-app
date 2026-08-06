@@ -1,10 +1,12 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ApiService, QueryParams } from './api.service';
-import { CommitteeMember, ListRestResponse, Roles } from '../models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeMember } from '../models/committee-member.model';
+import type { ListRestResponse } from '../models/rest-api.model';
+import { Roles } from '../models/role.model';
 
 @Injectable({
   providedIn: 'root',

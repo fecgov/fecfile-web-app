@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { Form1M } from 'app/shared/models';
 import { AbstractFormListComponent } from '../abstract-form-list.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { SharedTemplatesComponent } from '../shared-templates.component';
+import { Form1M } from 'app/shared/models/reports/form-1m.model';
 
 @Component({
   selector: 'app-form1m-list',

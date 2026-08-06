@@ -1,7 +1,6 @@
 import { Component, computed, effect, inject, input, model, OnInit, output, signal } from '@angular/core';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
 import { ContactService } from 'app/shared/services/contact.service';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -36,6 +35,8 @@ import { TransactionContactUtils } from '../transaction-type-base/transaction-co
 import { ContactTransactionTableComponent } from './contact-transaction-table/contact-transaction-table.component';
 import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact/duplicate-contact.component';
 import { NgTemplateOutlet } from '@angular/common';
+import { candidatePatternMessage } from 'app/shared/models/candidate.model';
+import { committeePatternMessage } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-contact-dialog',

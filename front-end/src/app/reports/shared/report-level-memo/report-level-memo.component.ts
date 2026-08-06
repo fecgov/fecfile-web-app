@@ -4,7 +4,7 @@ import { FormComponent } from 'app/shared/components/form.component';
 import { Router } from '@angular/router';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
-import { Report } from 'app/shared/models';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';

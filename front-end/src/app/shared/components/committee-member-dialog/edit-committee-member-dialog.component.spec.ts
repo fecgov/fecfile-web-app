@@ -7,11 +7,12 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ConfirmationService } from 'primeng/api';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMember, Roles } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, viewChild } from '@angular/core';
 import { EditCommitteeMemberDialogComponent } from './edit-committee-member-dialog.component';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { Roles } from 'app/shared/models/role.model';
 
 const johnSmith = CommitteeMember.fromJSON({
   first_name: 'John',

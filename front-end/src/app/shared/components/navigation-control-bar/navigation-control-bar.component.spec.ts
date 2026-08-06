@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavigationControlBarComponent } from './navigation-control-bar.component';
 import { Component, viewChild } from '@angular/core';
-import { STANDARD_CONTROLS, Transaction } from 'app/shared/models';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { STANDARD_CONTROLS } from 'app/shared/models/transaction-navigation-controls.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [NavigationControlBarComponent],

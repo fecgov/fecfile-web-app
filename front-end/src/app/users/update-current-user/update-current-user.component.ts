@@ -8,10 +8,10 @@ import { userLoginDataUpdatedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Card } from 'primeng/card';
-import { UserLoginData } from 'app/shared/models';
 import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
 import { SingleClickDirective } from 'app/shared/directives/single-click.directive';
 import { ButtonModule } from 'primeng/button';
+import type { UserLoginData } from 'app/shared/models/user.model';
 
 @Component({
   selector: 'app-update-current-user',

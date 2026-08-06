@@ -1,7 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { isForm3Group, ReportStatus } from 'app/shared/models';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ButtonDirective } from 'primeng/button';
@@ -10,6 +9,7 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
 import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 import { filter } from 'rxjs';
 import { ReportService } from 'app/shared/services/report.service';
+import { isForm3Group, ReportStatus } from 'app/shared/models/reports/report.model';
 
 @Component({
   selector: 'app-report-summary',

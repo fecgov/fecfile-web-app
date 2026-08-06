@@ -26,7 +26,8 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ContactModalComponent } from 'app/shared/components/contact-modal/contact-modal.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { candidatePatternMessage, committeePatternMessage } from 'app/shared/models';
+import { candidatePatternMessage } from 'app/shared/models/candidate.model';
+import { committeePatternMessage } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-main-form',

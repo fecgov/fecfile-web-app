@@ -6,7 +6,7 @@ import { ErrorMessagesComponent } from '../../error-messages/error-messages.comp
 import { AddressInputComponent } from './address-input.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
-import { TransactionTemplateMapType } from 'app/shared/models';
+import type { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
 const testTemplateMap = {
   street_1: 'street_1',

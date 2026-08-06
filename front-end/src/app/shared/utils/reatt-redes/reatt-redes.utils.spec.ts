@@ -1,6 +1,6 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormGroup } from '@angular/forms';
-import {  ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
 import { SchBTransaction } from '../../models/schb-transaction.model';

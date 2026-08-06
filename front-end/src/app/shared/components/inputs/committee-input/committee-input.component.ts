@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
-import { committeePatternMessage } from 'app/shared/models';
+import { committeePatternMessage } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-committee-input',

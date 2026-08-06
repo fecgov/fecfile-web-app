@@ -25,8 +25,9 @@ import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
-import { Form3X, Transaction } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [DoubleTransactionDetailComponent],

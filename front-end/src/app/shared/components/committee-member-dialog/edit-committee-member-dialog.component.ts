@@ -3,9 +3,10 @@ import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { FormComponent } from '../form.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Roles, CommitteeMember } from 'app/shared/models';
 import { SelectComponent } from '../select/select.component';
 import { DialogComponent } from '../dialog/dialog.component';
+import { CommitteeMember } from 'app/shared/models/committee-member.model';
+import { Roles } from 'app/shared/models/role.model';
 
 @Component({
   selector: 'app-edit-committee-member-dialog',

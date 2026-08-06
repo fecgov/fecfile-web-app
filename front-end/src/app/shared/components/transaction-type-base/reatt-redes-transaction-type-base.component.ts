@@ -1,6 +1,6 @@
 import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import {  ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { SelectItem } from 'primeng/api';

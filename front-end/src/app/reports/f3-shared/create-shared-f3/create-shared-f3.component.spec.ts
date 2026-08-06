@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { Form3X, F3xFormTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -14,6 +13,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
 import { FORM_3_SERVICE, BaseForm3Service } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 
 let component: CreateSharedF3Component;
 let fixture: ComponentFixture<CreateSharedF3Component>;

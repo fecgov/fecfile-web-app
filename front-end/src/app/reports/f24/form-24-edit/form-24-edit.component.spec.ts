@@ -9,7 +9,7 @@ import { MessageService } from 'primeng/api';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Form24EditComponent } from './form-24-edit.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Form24 } from 'app/shared/models';
+import { Form24 } from 'app/shared/models/reports/form-24.model';
 
 const usedReports: Form24[] = [testF24(), Form24.fromJSON({ name: '24-Hour: Taken Name' })];
 

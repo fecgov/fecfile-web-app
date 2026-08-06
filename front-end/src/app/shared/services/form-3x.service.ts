@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Form3X } from '../models';
 import { BaseForm3Service } from './base-form-3.service';
+import type { Form3X } from '../models/reports/form-3x.model';
 
 @Injectable({
   providedIn: 'root',

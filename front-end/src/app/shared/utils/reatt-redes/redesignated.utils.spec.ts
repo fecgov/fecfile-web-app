@@ -1,6 +1,6 @@
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { RedesignatedUtils } from './redesignated.utils';
-import {  ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesUtils } from './reatt-redes.utils';
 import { testScheduleBTransaction } from '../unit-test.utils';
 import { ReportCodes } from '../report-code.utils';
 import { ReattRedesTypes } from './reatt-redes.types';

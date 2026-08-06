@@ -16,7 +16,8 @@ import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
-import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
+import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import type { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   imports: [TransactionGuarantorsComponent],

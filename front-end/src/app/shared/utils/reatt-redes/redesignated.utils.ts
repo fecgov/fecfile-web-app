@@ -1,4 +1,4 @@
-import {  ReattRedesUtils } from './reatt-redes.utils';
+import { ReattRedesUtils } from './reatt-redes.utils';
 import type { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattRedesTypes } from './reatt-redes.types';
 
