@@ -1,0 +1,9 @@
+export const ReattRedesTypes = {
+  REATTRIBUTED: 'REATTRIBUTED',
+  REDESIGNATED: 'REDESIGNATED',
+  REATTRIBUTION_FROM: 'REATTRIBUTION_FROM',
+  REATTRIBUTION_TO: 'REATTRIBUTION_TO',
+  REDESIGNATION_FROM: 'REDESIGNATION_FROM',
+  REDESIGNATION_TO: 'REDESIGNATION_TO',
+} as const;
+export type ReattRedesTypes = (typeof ReattRedesTypes)[keyof typeof ReattRedesTypes];

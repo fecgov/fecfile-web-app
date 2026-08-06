@@ -1,6 +1,6 @@
 import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
+import {  ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { SelectItem } from 'primeng/api';
@@ -12,6 +12,7 @@ import { PrimeOptions } from '../../utils/label.utils';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ContactIdMapType } from './transaction-contact.utils';
+import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 interface AccordionData {
   formProperties: string[];

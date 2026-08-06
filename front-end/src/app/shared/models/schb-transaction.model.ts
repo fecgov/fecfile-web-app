@@ -3,10 +3,10 @@ import { AggregationGroups, Transaction } from './transaction.model';
 import type { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.types';
 
 export class SchBTransaction extends Transaction {
   entity_type: string | undefined;

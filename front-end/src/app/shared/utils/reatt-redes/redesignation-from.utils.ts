@@ -2,44 +2,44 @@ import { FormGroup, Validators } from '@angular/forms';
 import type { SchBTransaction } from '../../models/schb-transaction.model';
 import type { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { DateUtils } from '../date.utils';
-import { ReattRedesTypes } from './reatt-redes.utils';
 import type { SubscriptionFormControl } from '../subscription-form-control';
+import { ReattRedesTypes } from './reatt-redes.types';
+
+const readOnlyFields = [
+  'organization_name',
+  'last_name',
+  'first_name',
+  'middle_name',
+  'prefix',
+  'suffix',
+  'employer',
+  'occupation',
+  'street_1',
+  'street_2',
+  'city',
+  'state',
+  'zip',
+  'date',
+  'amount',
+  'purpose_description',
+  'committee_fec_id',
+  'committee_name',
+  'election_code',
+  'election_other_description',
+  'category_code',
+  'candidate_fec_id',
+  'candidate_last_name',
+  'candidate_first_name',
+  'candidate_middle_name',
+  'candidate_prefix',
+  'candidate_suffix',
+  'candidate_office',
+  'candidate_state',
+  'candidate_district',
+  'memo_code',
+];
 
 export class RedesignationFromUtils {
-  private static readOnlyFields = [
-    'organization_name',
-    'last_name',
-    'first_name',
-    'middle_name',
-    'prefix',
-    'suffix',
-    'employer',
-    'occupation',
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
-    'date',
-    'amount',
-    'purpose_description',
-    'committee_fec_id',
-    'committee_name',
-    'election_code',
-    'election_other_description',
-    'category_code',
-    'candidate_fec_id',
-    'candidate_last_name',
-    'candidate_first_name',
-    'candidate_middle_name',
-    'candidate_prefix',
-    'candidate_suffix',
-    'candidate_office',
-    'candidate_state',
-    'candidate_district',
-    'memo_code',
-  ];
-
   public static overlayTransactionProperties(
     transaction: SchBTransaction,
     redesignatedTransaction?: SchBTransaction,
@@ -99,9 +99,7 @@ export class RedesignationFromUtils {
       fromForm.get(templateMap.date)?.setValue(date);
     });
 
-    RedesignationFromUtils.readOnlyFields.forEach((field) =>
-      fromForm.get(templateMap[field as TemplateMapKeyType])?.disable(),
-    );
+    readOnlyFields.forEach((field) => fromForm.get(templateMap[field as TemplateMapKeyType])?.disable());
 
     return fromForm;
   }

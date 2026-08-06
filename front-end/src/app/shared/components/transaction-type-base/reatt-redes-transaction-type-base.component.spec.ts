@@ -1,5 +1,5 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
-import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
 import {
   NavigationAction,
@@ -25,6 +25,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Form3X } from 'app/shared/models';
 import { provideZoneChangeDetection } from '@angular/core';
+import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;

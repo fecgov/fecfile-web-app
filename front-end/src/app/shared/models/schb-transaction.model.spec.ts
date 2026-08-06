@@ -1,9 +1,9 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.utils';
 import { RedesignationFromUtils } from '../utils/reatt-redes/redesignation-from.utils';
 import { RedesignationToUtils } from '../utils/reatt-redes/redesignation-to.utils';
 import { testScheduleBTransaction } from '../utils/unit-test.utils';
 import { RedesignatedUtils } from '../utils/reatt-redes/redesignated.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.types';
 
 describe('SchBTransaction', () => {
   beforeEach(() => {

@@ -1,31 +1,31 @@
-import { ReattRedesTypes } from './reatt-redes.utils';
 import { FormGroup } from '@angular/forms';
 import { TemplateMapKeyType } from '../../models/transaction-type.model';
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { combineLatest, of } from 'rxjs';
 import { ContactTypes } from '../../models/contact.model';
+import { ReattRedesTypes } from './reatt-redes.types';
+
+const readOnlyFields = [
+  'organization_name',
+  'last_name',
+  'first_name',
+  'middle_name',
+  'prefix',
+  'suffix',
+  'employer',
+  'occupation',
+  'street_1',
+  'street_2',
+  'city',
+  'state',
+  'zip',
+  'amount',
+  'purpose_description',
+  'committee_fec_id',
+  'committee_name',
+];
 
 export class ReattributionFromUtils {
-  private static readOnlyFields = [
-    'organization_name',
-    'last_name',
-    'first_name',
-    'middle_name',
-    'prefix',
-    'suffix',
-    'employer',
-    'occupation',
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
-    'amount',
-    'purpose_description',
-    'committee_fec_id',
-    'committee_name',
-  ];
-
   public static overlayTransactionProperties(
     transaction: SchATransaction,
     reattributedTransaction?: SchATransaction,
@@ -91,7 +91,7 @@ export class ReattributionFromUtils {
       fromForm.get(transaction.transactionType.templateMap.amount)?.setValue(-1 * parseFloat(amount));
     });
 
-    ReattributionFromUtils.readOnlyFields.forEach((field) =>
+    readOnlyFields.forEach((field) =>
       fromForm.get(transaction.transactionType.templateMap[field as TemplateMapKeyType])?.disable(),
     );
 

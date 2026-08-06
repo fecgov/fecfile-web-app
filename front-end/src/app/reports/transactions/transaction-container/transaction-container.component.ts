@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, Signal, linkedSignal } from '@angu
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
-import { ReattRedesTypes, ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
+import {  ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportService } from '../../../shared/services/report.service';
 import { TransactionDetailComponent } from '../transaction-detail/transaction-detail.component';
@@ -15,6 +15,7 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ButtonDirective } from 'primeng/button';
+import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 @Component({
   selector: 'app-transaction-container',

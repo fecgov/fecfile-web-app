@@ -2,11 +2,12 @@ import { Component, computed, OnInit } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
-import { ReattRedesTypes, ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
+import {  ReattRedesUtils } from '../../../utils/reatt-redes/reatt-redes.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
 import { SelectComponent } from '../../select/select.component';
+import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 @Component({
   selector: 'app-election-input',

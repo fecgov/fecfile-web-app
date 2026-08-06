@@ -5,7 +5,7 @@ import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { Transaction } from '../models/transaction.model';
 import { TransactionService } from '../services/transaction.service';
-import { ReattRedesTypes, ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
+import {  ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
 import { ReattributionFromUtils } from '../utils/reatt-redes/reattribution-from.utils';
 import { ReattributionToUtils } from '../utils/reatt-redes/reattribution-to.utils';
@@ -18,6 +18,7 @@ import { TransactionListService } from '../services/transaction-list.service';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { isTransactionTypeDisabledForReport } from '../utils/transaction-disable.utils';
+import { ReattRedesTypes } from '../utils/reatt-redes/reatt-redes.types';
 
 @Injectable({
   providedIn: 'root',

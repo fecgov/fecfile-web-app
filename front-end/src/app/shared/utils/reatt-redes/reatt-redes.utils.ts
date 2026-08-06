@@ -10,15 +10,7 @@ import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { resetCloneCoreFields, resetCloneMemoText } from '../transaction-clone.utils';
-
-export enum ReattRedesTypes {
-  REATTRIBUTED = 'REATTRIBUTED',
-  REDESIGNATED = 'REDESIGNATED',
-  REATTRIBUTION_FROM = 'REATTRIBUTION_FROM',
-  REATTRIBUTION_TO = 'REATTRIBUTION_TO',
-  REDESIGNATION_FROM = 'REDESIGNATION_FROM',
-  REDESIGNATION_TO = 'REDESIGNATION_TO',
-}
+import { ReattRedesTypes } from './reatt-redes.types';
 
 export class ReattRedesUtils {
   public static readonly selectReportDialogSubject = new Subject<

@@ -1,5 +1,6 @@
-import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
+import {  ReattRedesUtils } from './reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
+import { ReattRedesTypes } from './reatt-redes.types';
 
 export class ReattributedUtils {
   public static overlayTransactionProperties(transaction: SchATransaction, activeReportId?: string): SchATransaction {

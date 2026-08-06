@@ -1,6 +1,6 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { FormGroup } from '@angular/forms';
-import { ReattRedesTypes, ReattRedesUtils } from './reatt-redes.utils';
+import {  ReattRedesUtils } from './reatt-redes.utils';
 import { getTestIndividualReceipt, testScheduleATransaction, testScheduleBTransaction } from '../unit-test.utils';
 import { RedesignatedUtils } from './redesignated.utils';
 import { SchBTransaction } from '../../models/schb-transaction.model';
@@ -8,6 +8,7 @@ import { MemoText } from '../../models/memo-text.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 import { SubscriptionFormControl } from '../subscription-form-control';
 import { TransactionListRecord } from '../../models/transaction-list-record.model';
+import { ReattRedesTypes } from './reatt-redes.types';
 
 describe('ReattRedesUtils', () => {
   describe('isReattRedes', () => {

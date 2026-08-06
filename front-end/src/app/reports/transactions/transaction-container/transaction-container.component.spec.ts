@@ -31,8 +31,8 @@ import {
   TransactionTypes,
 } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
+import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 const mockTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,

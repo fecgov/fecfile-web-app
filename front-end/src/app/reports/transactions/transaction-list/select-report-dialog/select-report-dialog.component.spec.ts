@@ -4,12 +4,13 @@ import { SelectReportDialogComponent } from './select-report-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testActiveReport, testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
 import { F3xFormTypes, Form3X } from '../../../../shared/models/reports/form-3x.model';
-import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
+import {  ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -62,7 +63,7 @@ describe('SelectReportDialogComponent', () => {
     await fixture.whenStable();
     expect(component.transaction()).toBeTruthy();
     expect(futureSpy).toHaveBeenCalled();
-    expect(component.availableReports().length).toBe(1);
+    expect(component.availableReports()).toHaveLength(1);
   });
 
   it('should clear and close on cancel', async () => {

@@ -1,7 +1,7 @@
 import { SchATransaction } from '../../models/scha-transaction.model';
 import { testScheduleATransaction } from '../unit-test.utils';
+import { ReattRedesTypes } from './reatt-redes.types';
 import { ReattributedUtils } from './reattributed.utils';
-import { ReattRedesTypes } from './reatt-redes.utils';
 
 describe('Reattributed Utils', () => {
   let payload: SchATransaction;
