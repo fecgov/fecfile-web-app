@@ -903,9 +903,7 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 
 .primary-icon {
   color: var(--primary-color);
-}
-svg {
-  overflow: visible;
+  flex-shrink: 0;
 }
 
 .warning-icon {
