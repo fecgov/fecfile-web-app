@@ -46,6 +46,10 @@ export class ReattRedesUtils {
     return (
       !transaction.parent_transaction_id &&
       transaction.transactionType.isReattributable &&
+      !ReattRedesUtils.isReattRedes(transaction, [
+        ReattRedesTypes.REATTRIBUTION_FROM,
+        ReattRedesTypes.REATTRIBUTION_TO,
+      ]) &&
       !ReattRedesUtils.isAtAmountLimit(transaction)
     );
   }
@@ -125,7 +129,7 @@ export class ReattRedesUtils {
       payload instanceof SchATransaction
         ? (cloneInstance(payload.reatt_redes) as SchATransaction)
         : (cloneInstance(payload.reatt_redes) as SchBTransaction);
-
+    clone.transactionType = payload.transactionType;
     resetCloneMemoText(clone, payload.report_ids?.[0], {
       rebuildFromJson: false,
       resetMemoTextId: 'whenMemoTextPresent',
