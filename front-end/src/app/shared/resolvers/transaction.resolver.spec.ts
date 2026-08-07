@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { Contact, ContactTypes } from '../models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from '../models/schd-transaction.model';
-import { Transaction } from '../models/transaction.model';
+import { Contact } from '../models/contacts/contact.model';
+import { SchATransaction } from '../models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../models/transaction/schedule-b/schb-transaction.model';
+import { SchCTransaction } from '../models/transaction/schedule-c/schc-transaction.model';
+import { SchDTransaction } from '../models/transaction/schedule-d/schd-transaction.model';
+import { Transaction } from '../models/transaction/transaction.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
 import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';
@@ -18,8 +18,13 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TransactionListService } from '../services/transaction-list.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { testF3 } from '../utils/unit-test.utils';
-import { ReportTypes } from '../models/reports/report.model';
 import { DISABLED_TRANSACTION_TYPES } from '../utils/transaction-disable.utils';
+import { ContactTypes } from '../models/contacts/contact-types.model';
+import { ReportTypes } from '../models/reports/report-types.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleCTransactionTypes } from '../models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleDTransactionTypes } from '../models/transaction/schedule-d/schedule-d-transaction-types.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;

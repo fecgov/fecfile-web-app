@@ -1,16 +1,17 @@
-import { FormGroup } from '@angular/forms';
-import { cloneInstance, Transaction } from '../../models/transaction.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
-import { SchBTransaction } from '../../models/schb-transaction.model';
+import type { FormGroup } from '@angular/forms';
+import type { Transaction } from '../../models/transaction/transaction.model';
+import { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
 import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import { resetCloneCoreFields, resetCloneMemoText } from '../transaction-clone.utils';
 import { ReattRedesTypes } from './reatt-redes.types';
+import { cloneInstance } from 'app/shared/models/transaction/transaction-model.utils';
 
 export class ReattRedesUtils {
   public static readonly selectReportDialogSubject = new Subject<

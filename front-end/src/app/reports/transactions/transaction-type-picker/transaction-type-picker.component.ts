@@ -4,17 +4,9 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
-import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
-import { ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
-import { Categories, CategoryPicker } from 'app/shared/models/transaction-group';
-import { TransactionGroupTypes, TransactionTypes } from 'app/shared/models/transaction.model';
+import { Categories, CategoryPicker, TransactionGroupTypes } from 'app/shared/models/transaction/transaction-group';
 import { scrollToTop } from 'app/shared/utils/form.utils';
-import { LabelList } from 'app/shared/utils/label.utils';
+import type { LabelList } from 'app/shared/utils/label.utils';
 import { isTransactionTypeDisabledForReport } from 'app/shared/utils/transaction-disable.utils';
 import {
   getTransactionTypeClass,
@@ -27,6 +19,17 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
 import { environment } from '../../../../environments/environment';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
+import { ScheduleATransactionTypeLabels } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypeLabels } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleCTransactionTypeLabels } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleDTransactionTypeLabels } from 'app/shared/models/transaction/schedule-d/schedule-d-transaction-types.model';
+import { ScheduleETransactionTypeLabels } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
+import {
+  ScheduleFTransactionTypeLabels,
+  ScheduleFTransactionTypes,
+} from 'app/shared/models/transaction/schedule-f/schedule-f-transaction-types.model';
+import type { TransactionTypes } from 'app/shared/models/transaction/transaction-types';
 
 @Component({
   selector: 'app-transaction-type-picker',

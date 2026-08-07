@@ -1,4 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT } from './JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 
 describe('JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {

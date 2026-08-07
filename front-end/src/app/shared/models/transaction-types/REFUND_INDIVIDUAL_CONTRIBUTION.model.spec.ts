@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { REFUND_INDIVIDUAL_CONTRIBUTION } from './REFUND_INDIVIDUAL_CONTRIBUTION.model';
 
 describe('REFUND_INDIVIDUAL_CONTRIBUTION', () => {

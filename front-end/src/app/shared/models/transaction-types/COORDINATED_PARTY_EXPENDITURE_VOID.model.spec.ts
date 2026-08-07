@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchFTransaction, ScheduleFTransactionTypes } from '../schf-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchFTransaction } from '../transaction/schedule-f/schf-transaction.model';
 import { COORDINATED_PARTY_EXPENDITURE_VOID } from './COORDINATED_PARTY_EXPENDITURE_VOID.model';
+import { ScheduleFTransactionTypes } from '../transaction/schedule-f/schedule-f-transaction-types.model';
 
 describe('COORDINATED_PARTY_EXPENDITURE_VOID', () => {
   let transactionType: COORDINATED_PARTY_EXPENDITURE_VOID;

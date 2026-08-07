@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchETransaction } from '../transaction/schedule-e/sche-transaction.model';
 import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL } from './INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL.model';
+import { ScheduleETransactionTypes } from '../transaction/schedule-e/schedule-e-transaction-types.model';
 
 describe('INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL', () => {
   let transactionType: INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL;

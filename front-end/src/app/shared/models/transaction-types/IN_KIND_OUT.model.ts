@@ -1,10 +1,14 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_OUT';
-import { AggregationGroups } from '../transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { TemplateMapKeyType } from '../transaction/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { INDIVIDUAL_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND_OUT as CommonInKindOut } from './common-types/IN_KIND_OUT.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleBTransactionTypeLabels,
+  ScheduleBTransactionTypes,
+} from '../transaction/schedule-b/schedule-b-transaction-types.model';
 export class IN_KIND_OUT extends CommonInKindOut {
   override formFields = INDIVIDUAL_B_FORM_FIELDS;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);

@@ -1,8 +1,8 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURE_MEMOS';
-import { SchETransactionType } from '../sche-transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { CHILD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { SchETransactionType } from '../transaction/schedule-e/sche-transaction-type.model';
+import { SchETransaction } from '../transaction/schedule-e/sche-transaction.model';
+import { CHILD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
 import {
   ORG_FIELDS,
   INDIVIDUAL_FIELDS,
@@ -16,7 +16,11 @@ import {
   CANDIDATE_OFFICE_FIELDS,
   ORGANIZATION_INDIVIDUAL,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
+import {
+  ScheduleETransactionTypeLabels,
+  ScheduleETransactionTypes,
+} from '../transaction/schedule-e/schedule-e-transaction-types.model';
 
 export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransactionType {
   formFields = [

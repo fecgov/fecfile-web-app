@@ -20,7 +20,8 @@ import { Form3XListComponent } from './form3x-list.component';
 import { ROUTES } from 'app/routes';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { ReportTypes, ReportStatus } from 'app/shared/models/reports/report.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 function getStatusLink(report: Form3X): string {
   return `/reports/f3x/submit/status/${report.id}`;

@@ -1,6 +1,7 @@
 import { OFFSET_TO_OPERATING_EXPENDITURES } from './OFFSET_TO_OPERATING_EXPENDITURES.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
   let transactionType: OFFSET_TO_OPERATING_EXPENDITURES;

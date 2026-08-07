@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { FormType, getFormTypes } from './form-type.utils';
-import { ReportTypes } from '../models/reports/report.model';
+import { ReportTypes } from '../models/reports/report-types.model';
 
 describe('FormTypeUtils', () => {
   describe('FormType', () => {

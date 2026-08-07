@@ -1,12 +1,8 @@
 import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
-import { LabelList } from 'app/shared/utils/label.utils';
+import type { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
-import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
 import {
   ColumnDefinition,
   TableBodyContext,
@@ -14,7 +10,11 @@ import {
 } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from '../../../../shared/pipes/label.pipe';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
+import { ScheduleCTransactionTypeLabels } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/transaction/schedule-c1/schedule-c1-transaction-types.model';
+import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/transaction/schedule-c2/schedule-c2-transaction-types.model';
+import { ScheduleDTransactionTypeLabels } from 'app/shared/models/transaction/schedule-d/schedule-d-transaction-types.model';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',

@@ -8,11 +8,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Candidate } from 'app/shared/models/candidate.model';
 import {
   CandidateLookupResponse,
-  CandidateOfficeType,
   CommitteeLookupResponse,
   Contact,
-  ContactTypeLabels,
-  ContactTypes,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
   FecfileCandidateLookupData,
@@ -21,7 +18,7 @@ import {
   FecfileOrganizationLookupData,
   IndividualLookupResponse,
   OrganizationLookupResponse,
-} from 'app/shared/models/contact.model';
+} from 'app/shared/models/contacts/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -31,6 +28,7 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { LabelPipe } from '../../pipes/label.pipe';
 import { ContactLookupComponent } from './contact-lookup.component';
+import { ContactTypes, ContactTypeLabels, CandidateOfficeType } from 'app/shared/models/contacts/contact-types.model';
 
 const queryEvent = { query: 'hi' } as AutoCompleteCompleteEvent;
 const emptyQueryEvent = { query: '' } as AutoCompleteCompleteEvent;

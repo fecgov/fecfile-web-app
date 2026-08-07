@@ -10,15 +10,14 @@ import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import {
   CandidateLookupResponse,
-  CandidateOfficeType,
   CommitteeLookupResponse,
   Contact,
-  ContactTypes,
   IndividualLookupResponse,
   OrganizationLookupResponse,
-} from '../models/contact.model';
+} from '../models/contacts/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
+import { ContactTypes, CandidateOfficeType } from '../models/contacts/contact-types.model';
 
 @Injectable({
   providedIn: 'root',

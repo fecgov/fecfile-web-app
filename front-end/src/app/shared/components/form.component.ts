@@ -7,7 +7,7 @@ import { blurActiveInput, printFormErrors } from '../utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { DestroyerComponent } from './destroyer.component';
 import { firstValueFrom } from 'rxjs';
-import type { NavigationEvent } from '../models/transaction-navigation-controls.model';
+import type { NavigationEvent } from '../models/transaction/transaction-navigation-controls.model';
 
 @Directive()
 export abstract class FormComponent extends DestroyerComponent {

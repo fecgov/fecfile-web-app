@@ -1,5 +1,6 @@
 import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT } from './OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT', () => {
   let transactionType: OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT;

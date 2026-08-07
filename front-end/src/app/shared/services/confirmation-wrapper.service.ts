@@ -2,9 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TransactionContactUtils } from '../components/transaction-type-base/transaction-contact.utils';
 import { ConfirmationService } from 'primeng/api';
-import { Contact, ContactTypes } from '../models/contact.model';
-import type { TransactionTemplateMapType } from '../models/transaction-type.model';
-import type { Transaction } from '../models/transaction.model';
+import type { Contact } from '../models/contacts/contact.model';
+import type { TransactionTemplateMapType } from '../models/transaction/transaction-type.model';
+import type { Transaction } from '../models/transaction/transaction.model';
+import { ContactTypes } from '../models/contacts/contact-types.model';
 
 @Injectable({
   providedIn: 'root',

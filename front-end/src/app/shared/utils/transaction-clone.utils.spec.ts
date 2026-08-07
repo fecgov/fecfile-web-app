@@ -1,6 +1,6 @@
 import { getTestIndividualReceipt, getTestTransactionByType } from './unit-test.utils';
-import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { isCloneable, resetCloneCoreFields, resetCloneMemoText } from './transaction-clone.utils';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('transaction-clone.utils', () => {
   describe('resetCloneCoreFields', () => {

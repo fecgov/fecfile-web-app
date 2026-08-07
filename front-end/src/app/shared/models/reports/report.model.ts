@@ -1,12 +1,13 @@
 import { Exclude, Transform, Type } from 'class-transformer';
-import { JsonSchema } from 'fecfile-validate';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
-import { LabelList } from '../../utils/label.utils';
 import { BaseModel } from '../base.model';
 import { UploadSubmission } from '../upload-submission.model';
 import { WebPrintSubmission } from '../webprint-submission.model';
-import { TransactionTypes } from '../transaction.model';
+import type { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
+import type { ReportTypes } from './report-types.model';
+import type { JsonSchema } from 'fecfile-validate';
+import type { MenuItem } from 'primeng/api';
+import type { TransactionTypes } from '../transaction/transaction-types';
+import { ReportStatus } from './report-status.model';
 
 export abstract class Report extends BaseModel {
   id: string | undefined;
@@ -60,31 +61,3 @@ export abstract class Report extends BaseModel {
     return this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE;
   }
 }
-
-export const ReportTypes = {
-  F3: 'F3',
-  F3X: 'F3X',
-  F24: 'F24',
-  F99: 'F99',
-  F1M: 'F1M',
-} as const;
-export type ReportTypes = (typeof ReportTypes)[keyof typeof ReportTypes];
-export function isForm3Group(reportType: ReportTypes) {
-  return reportType === ReportTypes.F3 || reportType === ReportTypes.F3X;
-}
-
-export const reportLabelList: LabelList = [
-  [ReportTypes.F3, 'Form 3'],
-  [ReportTypes.F3X, 'Form 3X'],
-  [ReportTypes.F24, 'Form 24'],
-  [ReportTypes.F99, 'Form 99'],
-  [ReportTypes.F1M, 'Form 1M'],
-];
-
-export const ReportStatus = {
-  IN_PROGRESS: 'In progress',
-  SUBMIT_PENDING: 'Submission pending',
-  SUBMIT_SUCCESS: 'Submission success',
-  SUBMIT_FAILURE: 'Submission failure',
-} as const;
-export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus];

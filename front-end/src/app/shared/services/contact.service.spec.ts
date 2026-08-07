@@ -7,10 +7,9 @@ import {
   CandidateLookupResponse,
   CommitteeLookupResponse,
   Contact,
-  ContactTypes,
   IndividualLookupResponse,
   OrganizationLookupResponse,
-} from '../models/contact.model';
+} from '../models/contacts/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
@@ -18,6 +17,7 @@ import { ContactService, DeletedContactService } from './contact.service';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { Candidate } from '../models/candidate.model';
 import { provideHttpClient } from '@angular/common/http';
+import { ContactTypes } from '../models/contacts/contact-types.model';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;

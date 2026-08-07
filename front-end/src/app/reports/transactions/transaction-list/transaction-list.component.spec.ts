@@ -3,7 +3,7 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -12,13 +12,14 @@ import { TableModule } from 'primeng/table';
 import { TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import type { Form24 } from 'app/shared/models/reports/form-24.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;

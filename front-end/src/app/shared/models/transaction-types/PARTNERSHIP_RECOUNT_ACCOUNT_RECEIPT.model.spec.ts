@@ -1,6 +1,7 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { Transaction } from '../transaction.model';
+import { Transaction } from '../transaction/transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT', () => {
   let transaction: SchATransaction;

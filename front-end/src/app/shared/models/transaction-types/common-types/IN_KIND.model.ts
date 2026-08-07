@@ -1,10 +1,10 @@
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { SchATransactionType } from '../../scha-transaction-type.model';
+import { SchATransactionType } from '../../transaction/schedule-a/scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
-} from '../../transaction-navigation-controls.model';
-import { ContactTypes } from '../../contact.model';
+} from '../../transaction/transaction-navigation-controls.model';
+import type { ContactTypes } from '../../contacts/contact-types.model';
 
 export abstract class IN_KIND extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;

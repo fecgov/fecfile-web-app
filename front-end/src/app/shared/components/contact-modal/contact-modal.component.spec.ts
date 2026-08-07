@@ -6,11 +6,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ContactManagementService, ContactManager } from 'app/shared/services/contact-management.service';
 import { provideRouter } from '@angular/router';
-import { ContactTypes, CandidateOfficeTypes, Contact } from '../../models/contact.model';
+import { Contact } from '../../models/contacts/contact.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { testContact } from 'app/shared/utils/unit-test.utils';
 import { firstValueFrom } from 'rxjs';
 import { provideZoneChangeDetection } from '@angular/core';
+import { ContactTypes, CandidateOfficeTypes } from 'app/shared/models/contacts/contact-types.model';
 
 describe('ContactModalComponent', () => {
   let component: ContactModalComponent;

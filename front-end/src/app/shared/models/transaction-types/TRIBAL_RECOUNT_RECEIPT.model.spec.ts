@@ -1,4 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { TRIBAL_RECOUNT_RECEIPT } from './TRIBAL_RECOUNT_RECEIPT.model';
 
 describe('TRIBAL_RECOUNT_RECEIPT', () => {

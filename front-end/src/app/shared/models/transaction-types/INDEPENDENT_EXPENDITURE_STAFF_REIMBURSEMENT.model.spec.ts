@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchETransaction } from '../transaction/schedule-e/sche-transaction.model';
 import { INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT } from './INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT.model';
+import { ScheduleETransactionTypes } from '../transaction/schedule-e/schedule-e-transaction-types.model';
 
 describe('INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
   let transactionType: INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT;

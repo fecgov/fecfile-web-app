@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, computed, inject, input } from '@angular/core';
-import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import {
   cloneNavigationEvent,
   ControlType,
@@ -8,17 +8,10 @@ import {
   NavigationControl,
   NavigationDestination,
   NavigationEvent,
-} from 'app/shared/models/transaction-navigation-controls.model';
-import { SubTransactionGroup } from 'app/shared/models/transaction-type.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
+import { SubTransactionGroup } from 'app/shared/models/transaction/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import {
-  ScheduleATransactionTypeLabels,
-  UnimplementedTypeEntityCategories,
-} from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Store } from '@ngrx/store';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +24,15 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { singleClickDisableAction } from 'app/store/single-click.actions';
 import { selectSingleClickDisabled } from 'app/store/single-click.selectors';
+import {
+  UnimplementedTypeEntityCategories,
+  ScheduleATransactionTypeLabels,
+} from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypeLabels } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/transaction/schedule-c2/schedule-c2-transaction-types.model';
+import { ScheduleETransactionTypeLabels } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
+import type { TransactionTypes } from 'app/shared/models/transaction/transaction-types';
+import { cloneInstance } from 'app/shared/models/transaction/transaction-model.utils';
 
 @Component({
   selector: 'app-navigation-control',

@@ -1,9 +1,11 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_CONDUIT_EARMARKS';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
 import { COMMITTEE, COMMITTEE_NO_AGGREGATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
 import { conduitClause } from '../clause';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class PAC_CONDUIT_EARMARK extends CONDUIT_EARMARK {
   formFields = COMMITTEE_NO_AGGREGATE_FORM_FIELDS;

@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
-import { Transaction } from 'app/shared/models/transaction.model';
-import type { TransactionNavigationControls } from 'app/shared/models/transaction-navigation-controls.model';
+import { Transaction } from 'app/shared/models/transaction/transaction.model';
+import type { TransactionNavigationControls } from 'app/shared/models/transaction/transaction-navigation-controls.model';
 import { NavigationControlComponent } from '../navigation-control/navigation-control.component';
 
 @Component({

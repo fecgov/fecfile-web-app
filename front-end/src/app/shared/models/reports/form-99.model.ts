@@ -1,9 +1,11 @@
-import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { MenuInfo } from 'app/layout/sidebar/menu-info';
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f99Schema } from 'fecfile-validate/fecfile_validate_js/dist/F99';
-import { MenuItem } from 'primeng/api';
+import type { MenuItem } from 'primeng/api';
 import { BaseModel } from '../base.model';
-import { Report, ReportTypes } from './report.model';
+import { Report } from './report.model';
+import type { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
+import { ReportTypes } from './report-types.model';
 
 export enum F99FormTypes {
   F99 = 'F99',

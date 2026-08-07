@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchETransaction } from '../transaction/schedule-e/sche-transaction.model';
 import { MULTISTATE_INDEPENDENT_EXPENDITURE } from './MULTISTATE_INDEPENDENT_EXPENDITURE.model';
+import { ScheduleETransactionTypes } from '../transaction/schedule-e/schedule-e-transaction-types.model';
 
 describe('MULTISTATE_INDEPENDENT_EXPENDITURE', () => {
   let transactionType: MULTISTATE_INDEPENDENT_EXPENDITURE;

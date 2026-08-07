@@ -3,12 +3,13 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { ColumnDefinition } from 'app/shared/components/table/table.component';
-import { Report, ReportStatus } from 'app/shared/models/reports/report.model';
+import type { ColumnDefinition } from 'app/shared/components/table/table.component';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { DotFecService } from 'app/shared/services/dot-fec.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SharedTemplatesComponent } from './shared-templates.component';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
 
 @Component({ template: '' })
 export abstract class AbstractFormListComponent<T extends Report> extends TableListBaseComponent<T> {

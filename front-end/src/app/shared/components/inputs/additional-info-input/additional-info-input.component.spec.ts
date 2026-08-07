@@ -9,8 +9,8 @@ import { DesignatedSubordinateInputComponent } from '../designated-subordinate-i
 import { AdditionalInfoInputComponent } from './additional-info-input.component';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import type { Contact } from 'app/shared/models/contact.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 
 @Component({
   imports: [AdditionalInfoInputComponent],

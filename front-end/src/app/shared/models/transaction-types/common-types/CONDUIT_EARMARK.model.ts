@@ -1,9 +1,9 @@
-import { SchATransactionType } from '../../scha-transaction-type.model';
+import { SchATransactionType } from '../../transaction/schedule-a/scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
-} from '../../transaction-navigation-controls.model';
-import { TemplateMapKeyType } from '../../transaction-type.model';
+} from '../../transaction/transaction-navigation-controls.model';
+import type { TemplateMapKeyType } from '../../transaction/transaction-type.model';
 
 export abstract class CONDUIT_EARMARK extends SchATransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;

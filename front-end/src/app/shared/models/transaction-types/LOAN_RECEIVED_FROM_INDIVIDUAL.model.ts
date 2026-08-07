@@ -1,7 +1,7 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS';
-import { SchCTransactionType } from '../schc-transaction-type.model';
-import { SchCTransaction, ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes } from '../schc-transaction.model';
+import { SchCTransactionType } from '../transaction/schedule-c/schc-transaction-type.model';
+import { SchCTransaction } from '../transaction/schedule-c/schc-transaction.model';
 import {
   CANCEL_CONTROL,
   SAVE_DOUBLE_ENTRY_LIST_CONTROL,
@@ -10,9 +10,7 @@ import {
   NavigationAction,
   NavigationDestination,
   ControlType,
-} from '../transaction-navigation-controls.model';
-import { hasNoContact } from '../transaction.model';
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
+} from '../transaction/transaction-navigation-controls.model';
 import {
   COM_FIELDS,
   COMMON_FIELDS,
@@ -22,7 +20,13 @@ import {
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { ScheduleC2TransactionTypes } from '../schc2-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
+import {
+  ScheduleCTransactionTypeLabels,
+  ScheduleCTransactionTypes,
+} from '../transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleC2TransactionTypes } from '../transaction/schedule-c2/schedule-c2-transaction-types.model';
+import { hasNoContact } from '../transaction/transaction-model.utils';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override formFields = [

@@ -1,5 +1,5 @@
 import { ReattRedesUtils } from './reatt-redes.utils';
-import type { SchBTransaction } from '../../models/schb-transaction.model';
+import type { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
 import { ReattRedesTypes } from './reatt-redes.types';
 
 export class RedesignatedUtils {

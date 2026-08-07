@@ -10,26 +10,32 @@ import { initialState as initUserLoginData } from 'app/store/user-login-data.red
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import type { Report } from '../models/reports/report.model';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
+import { Contact } from '../models/contacts/contact.model';
 import { MemoText } from '../models/memo-text.model';
 import { Form3X } from '../models/reports/form-3x.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { ScheduleETransactionTypes, SchETransaction } from '../models/sche-transaction.model';
-import { TransactionListRecord } from '../models/transaction-list-record.model';
+import { SchATransaction } from '../models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../models/transaction/schedule-b/schb-transaction.model';
+import { SchETransaction } from '../models/transaction/schedule-e/sche-transaction.model';
+import { TransactionListRecord } from '../models/transaction/transaction-list-record.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-} from '../models/transaction-navigation-controls.model';
-import { TransactionTemplateMapType } from '../models/transaction-type.model';
-import { AggregationGroups, Transaction, TransactionTypes } from '../models/transaction.model';
+} from '../models/transaction/transaction-navigation-controls.model';
+import type { TransactionTemplateMapType } from '../models/transaction/transaction-type.model';
+import type { Transaction } from '../models/transaction/transaction.model';
 import { UploadSubmission } from '../models/upload-submission.model';
-import { UserLoginData } from '../models/user.model';
+import type { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
 import { CommitteeMember } from '../models/committee-member.model';
 import { Form24 } from '../models/reports/form-24.model';
 import { Form3 } from '../models/reports/form-3.model';
+import { CandidateOfficeTypes, ContactTypes } from '../models/contacts/contact-types.model';
+import { AggregationGroups } from '../models/transaction/agregation-groups.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleETransactionTypes } from '../models/transaction/schedule-e/schedule-e-transaction-types.model';
+import type { TransactionTypes } from '../models/transaction/transaction-types';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({

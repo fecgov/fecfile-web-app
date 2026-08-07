@@ -1,7 +1,7 @@
 import { computed, Directive, effect, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -21,14 +21,15 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { GlossaryService } from '../glossary/glossary.service';
 import { environment } from 'environments/environment';
-import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { Contact, ContactTypeLabels } from 'app/shared/models/contact.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
 import {
   cloneNavigationEvent,
   NavigationAction,
   NavigationEvent,
-} from 'app/shared/models/transaction-navigation-controls.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
+import { ContactTypeLabels } from 'app/shared/models/contacts/contact-types.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {

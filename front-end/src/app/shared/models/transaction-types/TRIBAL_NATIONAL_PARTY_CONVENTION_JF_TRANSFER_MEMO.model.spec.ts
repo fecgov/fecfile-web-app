@@ -1,6 +1,7 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { Transaction } from '../transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { Transaction } from '../transaction/transaction.model';
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   let transaction: Transaction;

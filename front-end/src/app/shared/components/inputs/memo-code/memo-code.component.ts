@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, computed, inject, input, OnChanges, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import type { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -15,6 +14,7 @@ import { TransactionFormUtils } from '../../transaction-type-base/transaction-fo
 import { BaseInputComponent } from '../base-input.component';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { TooltipDirective } from 'app/shared/directives/tooltip.directive';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 @Component({
   selector: 'app-memo-code',

@@ -6,9 +6,9 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker.component';
 import { of } from 'rxjs';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 describe('TransactionIndependentExpenditurePickerComponent', () => {
   let component: TransactionIndependentExpenditurePickerComponent;

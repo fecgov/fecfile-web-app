@@ -1,5 +1,6 @@
 import { INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from './INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;

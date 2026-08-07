@@ -1,8 +1,7 @@
 import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { LabelList } from 'app/shared/utils/label.utils';
+import type { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import {
   ColumnDefinition,
@@ -11,7 +10,8 @@ import {
 } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
+import { ScheduleATransactionTypeLabels } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 @Component({
   selector: 'app-transaction-receipts',

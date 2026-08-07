@@ -7,9 +7,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { REPORTS_ROUTES } from 'app/reports/routes';
-import { ReportSidebarSection } from './menu-info';
 import { MessageService } from 'primeng/api';
 import { ReportSidebarComponent } from './report-sidebar.component';
+import { ReportSidebarSection } from './report-sidebar-section.model';
 
 describe('ReportSidebarComponent', () => {
   let component: ReportSidebarComponent;

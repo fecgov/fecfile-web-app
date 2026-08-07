@@ -2,13 +2,13 @@ import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
+import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { SelectItem } from 'primeng/api';
-import { Observable } from 'rxjs';
+import type { SelectItem } from 'primeng/api';
+import type { Observable } from 'rxjs';
 import { AdditionalInfoInputComponent } from '../../../shared/components/inputs/additional-info-input/additional-info-input.component';
 import { AddressInputComponent } from '../../../shared/components/inputs/address-input/address-input.component';
 import { AmountInputComponent } from '../../../shared/components/inputs/amount-input/amount-input.component';
@@ -25,6 +25,7 @@ import { SignatureInputComponent } from '../../../shared/components/inputs/signa
 import { SupportOpposeInputComponent } from '../../../shared/components/inputs/support-oppose-input/support-oppose-input.component';
 import { TransactionContactLookupComponent } from '../../../shared/components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
+import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   selector: 'app-transaction-input',

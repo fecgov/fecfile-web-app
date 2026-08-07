@@ -5,7 +5,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
 import { provideHttpClient } from '@angular/common/http';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ReportContactLookupComponent } from './report-contact-lookup.component';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   imports: [ReportContactLookupComponent],

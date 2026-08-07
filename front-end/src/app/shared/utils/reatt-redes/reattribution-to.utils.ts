@@ -1,8 +1,9 @@
-import { FormGroup } from '@angular/forms';
-import { TransactionTypes, getTransactionName } from '../../models/transaction.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import type { FormGroup } from '@angular/forms';
+import type { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 import { ReattRedesTypes } from './reatt-redes.types';
+import type { TransactionTypes } from 'app/shared/models/transaction/transaction-types';
+import { getTransactionName } from 'app/shared/models/transaction/transaction-model.utils';
 
 export class ReattributionToUtils {
   public static overlayTransactionProperties(

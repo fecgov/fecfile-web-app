@@ -2,10 +2,11 @@ import { Component, signal, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { vi, describe, beforeEach, afterEach, it, expect, Mock } from 'vitest';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { AddressPipe } from '../../../pipes/address.pipe';
 import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact.component';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   standalone: true,

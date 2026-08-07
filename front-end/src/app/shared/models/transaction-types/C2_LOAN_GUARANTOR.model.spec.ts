@@ -1,5 +1,6 @@
 import { C2_LOAN_GUARANTOR } from './C2_LOAN_GUARANTOR.model';
-import { SchC2Transaction, ScheduleC2TransactionTypes } from '../schc2-transaction.model';
+import { SchC2Transaction } from '../transaction/schedule-c2/schc2-transaction.model';
+import { ScheduleC2TransactionTypes } from '../transaction/schedule-c2/schedule-c2-transaction-types.model';
 
 describe('C2_LOAN_GUARANTOR', () => {
   let transactionType: C2_LOAN_GUARANTOR;

@@ -1,10 +1,6 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C2_LOAN_GUARANTOR';
-import {
-  SchC2Transaction,
-  ScheduleC2TransactionTypeLabels,
-  ScheduleC2TransactionTypes,
-} from '../schc2-transaction.model';
-import { SchC2TransactionType } from '../schc2-transaction-type.model';
+import { SchC2Transaction } from '../transaction/schedule-c2/schc2-transaction.model';
+import { SchC2TransactionType } from '../transaction/schedule-c2/schc2-transaction-type.model';
 import {
   COM_FIELDS,
   ADDRESS_FIELDS,
@@ -12,7 +8,7 @@ import {
   EMPLOYEE_INFO_FIELDS,
   INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_SINGLE_CONTACT } from '../contact.model';
+import { STANDARD_SINGLE_CONTACT } from '../contacts/contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   TransactionNavigationControls,
@@ -22,8 +18,12 @@ import {
   CANCEL_CONTROL,
   SAVE_LIST_CONTROL,
   ControlType,
-} from '../transaction-navigation-controls.model';
-import { hasNoContact } from '../transaction.model';
+} from '../transaction/transaction-navigation-controls.model';
+import {
+  ScheduleC2TransactionTypeLabels,
+  ScheduleC2TransactionTypes,
+} from '../transaction/schedule-c2/schedule-c2-transaction-types.model';
+import { hasNoContact } from '../transaction/transaction-model.utils';
 
 export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   readonly title = LabelUtils.get(ScheduleC2TransactionTypeLabels, ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR);

@@ -1,5 +1,5 @@
 import { ReattRedesUtils } from './reatt-redes.utils';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import type { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
 import { ReattRedesTypes } from './reatt-redes.types';
 
 export class ReattributedUtils {

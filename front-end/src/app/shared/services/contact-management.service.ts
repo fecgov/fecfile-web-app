@@ -1,6 +1,7 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { LabelUtils, PrimeOptions } from '../utils/label.utils';
-import { ContactTypes, ContactTypeLabels, Contact, emptyContact } from '../models/contact.model';
+import { Contact, emptyContact } from '../models/contacts/contact.model';
+import { ContactTypes, ContactTypeLabels } from '../models/contacts/contact-types.model';
 
 @Injectable()
 export class ContactManager {

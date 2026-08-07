@@ -1,10 +1,12 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from '../base.model';
-import { Report, ReportStatus } from './report.model';
-import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
+import { Report } from './report.model';
+import type { ReportCodes } from 'app/shared/utils/report-code.utils';
+import { MenuInfo } from 'app/layout/sidebar/menu-info';
+import type { MenuItem } from 'primeng/api';
 import { environment } from 'environments/environment';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
+import { ReportStatus } from './report-status.model';
 
 export class CoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;

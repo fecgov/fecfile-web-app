@@ -13,18 +13,18 @@ import {
 } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { BehaviorSubject, of } from 'rxjs';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction-group';
+import { Disbursement, LoansAndDebts, Receipt } from 'app/shared/models/transaction/transaction-group';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
 import { Form3 } from 'app/shared/models/reports/form-3.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/transaction/schedule-d/schedule-d-transaction-types.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;

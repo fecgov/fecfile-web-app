@@ -1,10 +1,10 @@
 import { FormGroup } from '@angular/forms';
-import type { TransactionTypes } from '../../models/transaction.model';
-import type { SchBTransaction } from '../../models/schb-transaction.model';
-import type { TemplateMapKeyType } from '../../models/transaction-type.model';
+import type { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
+import type { TemplateMapKeyType } from '../../models/transaction/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import { buildReattRedesTransactionValidator } from 'app/shared/utils/validators.utils';
 import { ReattRedesTypes } from './reatt-redes.types';
+import type { TransactionTypes } from 'app/shared/models/transaction/transaction-types';
 
 export class RedesignationToUtils {
   public static overlayTransactionProperties(

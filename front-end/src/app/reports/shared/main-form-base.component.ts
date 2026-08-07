@@ -1,11 +1,11 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Report } from 'app/shared/models/reports/report.model';
+import type { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { ReportService } from 'app/shared/services/report.service';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { JsonSchema } from 'fecfile-validate';
+import type { JsonSchema } from 'fecfile-validate';
 import { MessageService } from 'primeng/api';
 @Component({
   template: '',

@@ -1,9 +1,9 @@
-import { FormGroup } from '@angular/forms';
-import { TemplateMapKeyType } from '../../models/transaction-type.model';
-import { SchATransaction } from '../../models/scha-transaction.model';
+import type { FormGroup } from '@angular/forms';
+import type { TemplateMapKeyType } from '../../models/transaction/transaction-type.model';
+import type { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
 import { combineLatest, of } from 'rxjs';
-import { ContactTypes } from '../../models/contact.model';
 import { ReattRedesTypes } from './reatt-redes.types';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 const readOnlyFields = [
   'organization_name',

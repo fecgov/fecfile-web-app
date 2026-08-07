@@ -1,10 +1,10 @@
 import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
-import { SchATransaction } from '../../models/scha-transaction.model';
-import { SchBTransaction } from '../../models/schb-transaction.model';
+import { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
 import { SelectItem } from 'primeng/api';
-import { NavigationEvent } from '../../models/transaction-navigation-controls.model';
+import { NavigationEvent } from '../../models/transaction/transaction-navigation-controls.model';
 import { getContactTypeOptions } from '../../utils/transaction-type-properties';
 import { SchemaUtils } from '../../utils/schema.utils';
 import { TransactionFormUtils } from './transaction-form.utils';

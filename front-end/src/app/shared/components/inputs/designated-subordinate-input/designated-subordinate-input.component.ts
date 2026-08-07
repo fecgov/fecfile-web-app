@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
@@ -9,6 +9,7 @@ import { TransactionContactLookupComponent } from '../../transaction-contact-loo
 import { AddressInputComponent } from '../address-input/address-input.component';
 import { BaseInputComponent } from '../base-input.component';
 import { SelectComponent } from '../../select/select.component';
+import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   selector: 'app-designated-subordinate-input',

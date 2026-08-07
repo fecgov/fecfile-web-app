@@ -1,4 +1,4 @@
-import { ReportTypes } from '../models/reports/report.model';
+import { ReportTypes } from '../models/reports/report-types.model';
 
 export class FormType {
   code: string;

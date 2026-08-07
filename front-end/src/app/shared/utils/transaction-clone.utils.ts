@@ -1,6 +1,8 @@
 import { MemoText } from '../models/memo-text.model';
-import type { TransactionType } from '../models/transaction-type.model';
-import { cloneInstance, ScheduleTransaction, Transaction } from '../models/transaction.model';
+import type { ScheduleTransaction } from '../models/transaction/schedule-transaction.model';
+import { cloneInstance } from '../models/transaction/transaction-model.utils';
+import type { TransactionType } from '../models/transaction/transaction-type.model';
+import type { Transaction } from '../models/transaction/transaction.model';
 
 export type CloneEligibilityTransaction = {
   transactionType: TransactionType;

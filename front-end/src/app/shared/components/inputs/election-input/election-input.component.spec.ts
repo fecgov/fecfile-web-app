@@ -6,10 +6,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ElectionInputComponent } from './election-input.component';
-import { ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, viewChild } from '@angular/core';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ScheduleETransactionTypes } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
 
 @Component({
   imports: [ElectionInputComponent],

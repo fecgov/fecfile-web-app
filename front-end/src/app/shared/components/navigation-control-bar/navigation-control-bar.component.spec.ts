@@ -3,8 +3,8 @@ import { NavigationControlBarComponent } from './navigation-control-bar.componen
 import { Component, viewChild } from '@angular/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { STANDARD_CONTROLS } from 'app/shared/models/transaction-navigation-controls.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import { STANDARD_CONTROLS } from 'app/shared/models/transaction/transaction-navigation-controls.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 
 @Component({
   imports: [NavigationControlBarComponent],

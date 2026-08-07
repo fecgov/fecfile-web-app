@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
 import { CONTRIBUTION_TO_CANDIDATE_VOID } from './CONTRIBUTION_TO_CANDIDATE_VOID.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('CONTRIBUTION_TO_CANDIDATE_VOID', () => {
   let transactionType: CONTRIBUTION_TO_CANDIDATE_VOID;

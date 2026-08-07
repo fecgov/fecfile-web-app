@@ -1,7 +1,9 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { ContactTypes } from '../contact.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ContactTypes } from '../contacts/contact-types.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('PAC_PAC_CONDUIT_EARMARK', () => {
   let transaction: SchATransaction;

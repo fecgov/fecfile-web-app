@@ -2,20 +2,20 @@ import { Component, computed, effect, inject, input, signal, Signal, TemplateRef
 import { ColumnDefinition, TableBodyContext, TableComponent } from '../../table/table.component';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
-import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypeLabels } from 'app/shared/models/schc-transaction.model';
-import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { ScheduleDTransactionTypeLabels } from 'app/shared/models/schd-transaction.model';
-import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { Router } from '@angular/router';
-import type { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import type { QueryParams } from 'app/shared/services/api.service';
-import type { Contact } from 'app/shared/models/contact.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
+import { ScheduleATransactionTypeLabels } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypeLabels } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleCTransactionTypeLabels } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/transaction/schedule-c1/schedule-c1-transaction-types.model';
+import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/transaction/schedule-c2/schedule-c2-transaction-types.model';
+import { ScheduleDTransactionTypeLabels } from 'app/shared/models/transaction/schedule-d/schedule-d-transaction-types.model';
+import { ScheduleETransactionTypeLabels } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
+import { ScheduleFTransactionTypeLabels } from 'app/shared/models/transaction/schedule-f/schedule-f-transaction-types.model';
 
 @Component({
   selector: 'app-contact-transaction-table',

@@ -8,10 +8,10 @@ import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.
 import { of } from 'rxjs';
 import { Form24 } from 'app/shared/models/reports/form-24.model';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;

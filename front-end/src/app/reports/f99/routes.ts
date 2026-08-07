@@ -6,7 +6,7 @@ import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-pr
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
 import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the

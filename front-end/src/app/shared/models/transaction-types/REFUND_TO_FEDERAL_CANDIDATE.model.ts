@@ -1,11 +1,15 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/REFUND_TO_FEDERAL_CANDIDATE';
-import { SchATransactionType } from '../scha-transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
+import { SchATransactionType } from '../transaction/schedule-a/scha-transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
 import { COMMITTEE, COMMITTEE_WITH_CANDIDATE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   formFields = COMMITTEE_WITH_CANDIDATE_FORM_FIELDS;

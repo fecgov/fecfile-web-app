@@ -1,8 +1,8 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_REPAYMENT_MADE';
-import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { SchBTransactionType } from '../transaction/schedule-b/schb-transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
 import {
   ORG_FIELDS,
   ADDRESS_FIELDS,
@@ -10,7 +10,11 @@ import {
   INDIVIDUAL_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
-import { TemplateMapKeyType } from '../transaction-type.model';
+import { TemplateMapKeyType } from '../transaction/transaction-type.model';
+import {
+  ScheduleBTransactionTypeLabels,
+  ScheduleBTransactionTypes,
+} from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
   formFields = [...ADDRESS_FIELDS, ...COMMON_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];

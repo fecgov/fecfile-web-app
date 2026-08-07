@@ -1,9 +1,11 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARKS';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import type { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
 import { INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK } from './common-types/CONDUIT_EARMARK.model';
 import { conduitClause } from '../clause';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class CONDUIT_EARMARK_RECEIPT extends CONDUIT_EARMARK {
   formFields = INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS;

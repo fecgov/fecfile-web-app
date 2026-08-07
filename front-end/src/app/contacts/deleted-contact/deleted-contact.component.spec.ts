@@ -7,12 +7,13 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { DeletedContactService } from 'app/shared/services/contact.service';
 import { Component, viewChild } from '@angular/core';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   imports: [DeletedContactComponent],

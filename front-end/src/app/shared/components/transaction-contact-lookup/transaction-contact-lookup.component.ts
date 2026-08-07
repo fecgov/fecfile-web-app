@@ -1,14 +1,15 @@
 import { Component, computed, input, model, output, signal } from '@angular/core';
-import { CandidateOfficeType, Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItem } from 'primeng/api';
+import type { SelectItem } from 'primeng/api';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { FormGroup } from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { ContactTypes, ContactTypeLabels, CandidateOfficeType } from 'app/shared/models/contacts/contact-types.model';
 
 export type ContactProperty = 'contact_1' | 'contact_2' | 'contact_3' | 'contact_4' | 'contact_5';
 

@@ -1,13 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_CONTRIBUTIONS';
-import { SchBTransactionType } from '../schb-transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { SchBTransactionType } from '../transaction/schedule-b/schb-transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
 import {
   ORGANIZATION_INDIVIDUAL,
   INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE_AND_SHORT_COMMITTEE } from '../contacts/contact.model';
+import {
+  ScheduleBTransactionTypeLabels,
+  ScheduleBTransactionTypes,
+} from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   formFields = INDIVIDUAL_OR_ORGANIZATION_WITH_COMMITTEE_AND_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;

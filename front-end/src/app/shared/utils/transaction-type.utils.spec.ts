@@ -1,4 +1,4 @@
-import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
 import { PAC_ONLY, PTY_ONLY, TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
 
 describe('TransactionTypeUtils', () => {

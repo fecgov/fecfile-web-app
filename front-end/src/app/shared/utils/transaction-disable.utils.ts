@@ -1,10 +1,10 @@
-import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { TransactionTypes } from 'app/shared/models/transaction.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
+import { ReportTypes } from '../models/reports/report-types.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleCTransactionTypes } from '../models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleDTransactionTypes } from '../models/transaction/schedule-d/schedule-d-transaction-types.model';
+import { ScheduleFTransactionTypes } from '../models/transaction/schedule-f/schedule-f-transaction-types.model';
+import type { TransactionTypes } from '../models/transaction/transaction-types';
 
 // Add transaction types per report type to disable them.
 export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<TransactionTypes>>> = {

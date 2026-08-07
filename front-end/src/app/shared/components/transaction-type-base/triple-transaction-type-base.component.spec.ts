@@ -4,27 +4,30 @@ import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, Validators } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
+import { SchCTransaction } from 'app/shared/models/transaction/schedule-c/schc-transaction.model';
+import { SchC1Transaction } from 'app/shared/models/transaction/schedule-c1/schc1-transaction.model';
 import { TripleTransactionDetailComponent } from 'app/reports/transactions/triple-transaction-detail/triple-transaction-detail.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { Contact } from '../../models/contact.model';
+import { Contact } from '../../models/contacts/contact.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-} from '../../models/transaction-navigation-controls.model';
+} from '../../models/transaction/transaction-navigation-controls.model';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideZoneChangeDetection } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/transaction/schedule-c1/schedule-c1-transaction-types.model';
 
 let testTransaction: SchCTransaction;
 let testConfirmationService: ConfirmationService;

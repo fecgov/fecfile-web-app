@@ -1,6 +1,6 @@
 import { FormGroup, Validators } from '@angular/forms';
-import type { SchBTransaction } from '../../models/schb-transaction.model';
-import type { TemplateMapKeyType } from '../../models/transaction-type.model';
+import type { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
+import type { TemplateMapKeyType } from '../../models/transaction/transaction-type.model';
 import { DateUtils } from '../date.utils';
 import type { SubscriptionFormControl } from '../subscription-form-control';
 import { ReattRedesTypes } from './reatt-redes.types';

@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { isForm3Group, Report, ReportTypes } from 'app/shared/models/reports/report.model';
+import type { Report } from 'app/shared/models/reports/report.model';
 import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
 import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
@@ -12,7 +12,8 @@ import { TableActionsButtonComponent } from '../../../shared/components/table-ac
 import { SelectReportDialogComponent } from './select-report-dialog/select-report-dialog.component';
 import { SecondaryReportSelectionDialogComponent } from '../secondary-report-selection-dialog/secondary-report-selection-dialog.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import type { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
+import { ReportTypes, isForm3Group } from 'app/shared/models/reports/report-types.model';
 
 @Component({
   selector: 'app-transaction-list',

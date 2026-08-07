@@ -1,12 +1,13 @@
 import { Component, computed, input, OnInit } from '@angular/core';
-import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { InputText } from 'primeng/inputtext';
 import { SelectComponent } from '../../select/select.component';
+import { CandidateOfficeTypeLabels, CandidateOfficeTypes } from 'app/shared/models/contacts/contact-types.model';
+import { ScheduleIds } from 'app/shared/models/transaction/schedule-ids.model';
 
 @Component({
   selector: 'app-candidate-office-input',

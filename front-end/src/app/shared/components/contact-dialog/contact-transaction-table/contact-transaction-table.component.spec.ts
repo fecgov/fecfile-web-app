@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactTransactionTableComponent } from './contact-transaction-table.component';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import { createTestTransactionListRecord } from 'app/shared/utils/unit-test.utils';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { Component, signal, viewChild } from '@angular/core';
 
 @Component({

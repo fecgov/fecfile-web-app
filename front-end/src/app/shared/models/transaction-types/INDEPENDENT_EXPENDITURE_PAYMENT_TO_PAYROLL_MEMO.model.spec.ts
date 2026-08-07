@@ -1,4 +1,5 @@
-import { SchETransaction, ScheduleETransactionTypes } from '../sche-transaction.model';
+import { SchETransaction } from '../transaction/schedule-e/sche-transaction.model';
+import { ScheduleETransactionTypes } from '../transaction/schedule-e/schedule-e-transaction-types.model';
 import { INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from './INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
 
 describe('INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO', () => {

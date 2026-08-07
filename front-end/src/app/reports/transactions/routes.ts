@@ -5,7 +5,7 @@ import { TransactionContainerComponent } from './transaction-container/transacti
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the

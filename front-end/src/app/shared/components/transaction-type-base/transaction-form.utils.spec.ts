@@ -1,11 +1,15 @@
 import { FormGroup } from '@angular/forms';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { AggregationGroups } from 'app/shared/models/transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/transaction/schedule-b/schb-transaction.model';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
+import { SchETransaction } from 'app/shared/models/transaction/schedule-e/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { SchFTransaction } from 'app/shared/models/transaction/schedule-f/schf-transaction.model';
+import { AggregationGroups } from 'app/shared/models/transaction/agregation-groups.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleETransactionTypes } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
+import { ScheduleFTransactionTypes } from 'app/shared/models/transaction/schedule-f/schedule-f-transaction-types.model';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();

@@ -16,15 +16,7 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import {
-  CandidateOfficeTypes,
-  Contact,
-  ContactTypeLabels,
-  ContactTypes,
-  hasFecId,
-  isEntity,
-  isPerson,
-} from '../../models/contact.model';
+import { Contact } from '../../models/contacts/contact.model';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -37,6 +29,14 @@ import { DuplicateContactComponent, ValidatingFields } from './duplicate-contact
 import { NgTemplateOutlet } from '@angular/common';
 import { candidatePatternMessage } from 'app/shared/models/candidate.model';
 import { committeePatternMessage } from 'app/shared/models/committee-account.model';
+import {
+  ContactTypes,
+  ContactTypeLabels,
+  isEntity,
+  isPerson,
+  hasFecId,
+  CandidateOfficeTypes,
+} from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   selector: 'app-contact-dialog',

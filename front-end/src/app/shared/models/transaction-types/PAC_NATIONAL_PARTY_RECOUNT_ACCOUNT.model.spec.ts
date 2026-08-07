@@ -1,4 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 
 describe('PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {

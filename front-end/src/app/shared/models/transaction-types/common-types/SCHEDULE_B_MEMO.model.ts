@@ -1,4 +1,4 @@
-import { SchBTransactionType } from '../../schb-transaction-type.model';
+import { SchBTransactionType } from '../../transaction/schedule-b/schb-transaction-type.model';
 
 export abstract class SCHEDULE_B_MEMO extends SchBTransactionType {
   override mandatoryFormValues = {

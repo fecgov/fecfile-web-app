@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { TRANSFER_TO_AFFILIATES } from './TRANSFER_TO_AFFILIATES.model';
 
 describe('TRANSFER_TO_AFFILIATES', () => {

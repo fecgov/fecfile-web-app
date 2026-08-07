@@ -1,12 +1,14 @@
 import { formatDate } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
-import { CandidateOfficeTypes } from '../models/contact.model';
-import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { CloneEligibilityTransaction, isCloneable } from '../utils/transaction-clone.utils';
 import { ApiService } from './api.service';
 import { map, Observable, of } from 'rxjs';
+import { CandidateOfficeTypes } from '../models/contacts/contact-types.model';
+import { AggregationGroups } from '../models/transaction/agregation-groups.model';
+import type { ScheduleTransaction } from '../models/transaction/schedule-transaction.model';
+import { Transaction } from '../models/transaction/transaction.model';
 
 interface PreviousAggregate {
   aggregate: number;

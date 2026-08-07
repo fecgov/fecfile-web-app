@@ -1,15 +1,17 @@
 import { Component, computed, inject, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  ContactTypes,
   CandidateOfficeType,
   CandidateOfficeTypeLabels,
-  Contact,
   ContactTypeLabels,
-  ContactTypes,
+} from 'app/shared/models/contacts/contact-types.model';
+import {
+  Contact,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
   FecApiLookupData,
-} from 'app/shared/models/contact.model';
+} from 'app/shared/models/contacts/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { effectOnceIf } from 'ngxtension/effect-once-if';

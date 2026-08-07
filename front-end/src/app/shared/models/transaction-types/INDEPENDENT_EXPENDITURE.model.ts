@@ -1,8 +1,8 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURES';
-import { SchETransactionType } from '../sche-transaction-type.model';
-import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { SchETransactionType } from '../transaction/schedule-e/sche-transaction-type.model';
+import { SchETransaction } from '../transaction/schedule-e/sche-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
 import {
   ORGANIZATION_INDIVIDUAL,
   ORG_FIELDS,
@@ -16,8 +16,12 @@ import {
   CANDIDATE_FIELDS,
   CANDIDATE_OFFICE_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
-import { AggregationGroups } from '../transaction.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleETransactionTypeLabels,
+  ScheduleETransactionTypes,
+} from '../transaction/schedule-e/schedule-e-transaction-types.model';
 
 export class INDEPENDENT_EXPENDITURE extends SchETransactionType {
   formFields = [

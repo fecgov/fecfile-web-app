@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT } from './NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT.model';
 
 describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {

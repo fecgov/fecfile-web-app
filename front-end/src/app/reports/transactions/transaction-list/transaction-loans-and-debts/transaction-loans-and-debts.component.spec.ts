@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { SchCTransaction } from 'app/shared/models/transaction/schedule-c/schc-transaction.model';
+import { SchDTransaction } from 'app/shared/models/transaction/schedule-d/schd-transaction.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -14,8 +14,10 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import { ReportService } from 'app/shared/services/report.service';
+import { ScheduleCTransactionTypes } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleDTransactionTypes } from 'app/shared/models/transaction/schedule-d/schedule-d-transaction-types.model';
 
 describe('TransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;

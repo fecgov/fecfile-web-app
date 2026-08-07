@@ -6,11 +6,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { collectRouteData } from 'app/shared/utils/route.utils';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
-import { ReportSidebarSection } from './menu-info';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { PanelMenu } from 'primeng/panelmenu';
-import { isForm3Group, ReportTypes } from 'app/shared/models/reports/report.model';
 import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import type { ReportSidebarSection } from './report-sidebar-section.model';
+import { isForm3Group, ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 @Component({
   selector: 'app-report-sidebar',

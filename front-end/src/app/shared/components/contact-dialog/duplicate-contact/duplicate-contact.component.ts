@@ -1,9 +1,10 @@
 import { Component, computed, inject, input, model, output, resource, signal } from '@angular/core';
-import { Contact, ContactTypes, hasFecId } from 'app/shared/models/contact.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ContactService } from 'app/shared/services/contact.service';
 import { AddressPipe } from '../../../pipes/address.pipe';
+import { ContactTypes, hasFecId } from 'app/shared/models/contacts/contact-types.model';
 
 export type ValidatingFields = Partial<
   Pick<Contact, 'name' | 'first_name' | 'last_name' | 'candidate_id' | 'committee_id'>

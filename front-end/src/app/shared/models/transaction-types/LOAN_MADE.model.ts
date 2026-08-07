@@ -1,9 +1,13 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_MADE';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { TemplateMapKeyType } from '../transaction/transaction-type.model';
+import { SchBTransactionType } from '../transaction/schedule-b/schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { COMMITTEE, COMMON_FIELDS, ADDRESS_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import {
+  ScheduleBTransactionTypeLabels,
+  ScheduleBTransactionTypes,
+} from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class LOAN_MADE extends SchBTransactionType {
   override formFields = [...COMMON_FIELDS, ...ADDRESS_FIELDS, 'organization_name', 'committee_fec_id'];

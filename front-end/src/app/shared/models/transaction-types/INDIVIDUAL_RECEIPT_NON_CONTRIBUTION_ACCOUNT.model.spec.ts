@@ -1,5 +1,6 @@
 import { INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT } from './INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT;

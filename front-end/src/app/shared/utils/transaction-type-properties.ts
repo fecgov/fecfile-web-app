@@ -1,4 +1,4 @@
-import { ContactTypeLabels, ContactTypes } from '../models/contact.model';
+import { ContactTypes, ContactTypeLabels } from '../models/contacts/contact-types.model';
 import { LabelUtils } from './label.utils';
 
 /**

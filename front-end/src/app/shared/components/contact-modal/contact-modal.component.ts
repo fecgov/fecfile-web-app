@@ -16,7 +16,7 @@ import { InputText } from 'primeng/inputtext';
 import { Ripple } from 'primeng/ripple';
 import { Select } from 'primeng/select';
 import { takeUntil } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
+import { Contact } from '../../models/contacts/contact.model';
 import { DestroyerComponent } from '../destroyer.component';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
@@ -27,6 +27,7 @@ import { SearchableSelectComponent } from '../searchable-select/searchable-selec
 import { ToUpperDirective } from 'app/shared/directives/to-upper.directive';
 import { candidatePatternMessage } from 'app/shared/models/candidate.model';
 import { committeePatternMessage } from 'app/shared/models/committee-account.model';
+import { ContactTypes, CandidateOfficeTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   selector: 'app-contact-modal',

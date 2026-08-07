@@ -4,11 +4,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { getTestTransactionByType, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { CommitteeInputComponent } from './committee-input.component';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, viewChild } from '@angular/core';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 @Component({
   imports: [CommitteeInputComponent],

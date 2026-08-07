@@ -11,7 +11,7 @@ import {
   CommitteeMemberEmailValidator,
 } from './validators.utils';
 import { CoverageDates } from '../models/reports/base-form-3';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { SchATransaction } from '../models/transaction/schedule-a/scha-transaction.model';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { TestBed } from '@angular/core/testing';
 import { CommitteeMember } from '../models/committee-member.model';

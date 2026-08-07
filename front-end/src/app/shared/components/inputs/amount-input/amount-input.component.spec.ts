@@ -17,8 +17,8 @@ import { Component, viewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 @Component({
   imports: [AmountInputComponent, AsyncPipe],

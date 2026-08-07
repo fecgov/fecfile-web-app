@@ -1,4 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT } from './OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT', () => {

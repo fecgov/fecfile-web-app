@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import type { FormGroup } from '@angular/forms';
 import {
   ADDRESS_FIELDS,
   LOAN_TERMS_FIELDS,
@@ -9,11 +9,13 @@ import {
   SIGNATORY_2_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/C1_LOAN_AGREEMENT';
-import { STANDARD_AND_SECONDARY } from '../contact.model';
-import { SchC1TransactionType } from '../schc1-transaction-type.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { Transaction, isPulledForwardLoan } from '../transaction.model';
+import { STANDARD_AND_SECONDARY } from '../contacts/contact.model';
+import { SchC1TransactionType } from '../transaction/schedule-c1/schc1-transaction-type.model';
+import { SchC1Transaction } from '../transaction/schedule-c1/schc1-transaction.model';
+import type { TemplateMapKeyType } from '../transaction/transaction-type.model';
+import type { Transaction } from '../transaction/transaction.model';
+import { isPulledForwardLoan } from '../transaction/transaction-model.utils';
+import { ScheduleC1TransactionTypes } from '../transaction/schedule-c1/schedule-c1-transaction-types.model';
 
 export class C1_LOAN_AGREEMENT extends SchC1TransactionType {
   formFields = [

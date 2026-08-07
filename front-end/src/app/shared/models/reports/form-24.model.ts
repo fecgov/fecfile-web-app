@@ -1,13 +1,16 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
 import { BaseModel } from '../base.model';
-import { Report, ReportStatus, ReportTypes } from './report.model';
-import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
+import { Report } from './report.model';
+import type { MenuItem } from 'primeng/api';
 import { environment } from 'environments/environment';
 import { Signal } from '@angular/core';
 import { ChildFieldContext, metadata, PathKind, required, schema, SchemaPath, validate } from '@angular/forms/signals';
 import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
+import { MenuInfo } from 'app/layout/sidebar/menu-info';
+import { ReportStatus } from './report-status.model';
+import { ReportTypes } from './report-types.model';
 
 export type Type24_48 = '24' | '48';
 

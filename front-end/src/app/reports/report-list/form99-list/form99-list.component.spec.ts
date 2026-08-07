@@ -17,7 +17,8 @@ import { of } from 'rxjs';
 import { ReportListComponent } from '../report-list.component';
 import { ROUTES } from 'app/routes';
 import { Form99 } from 'app/shared/models/reports/form-99.model';
-import { ReportTypes, ReportStatus } from 'app/shared/models/reports/report.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 function getStatusLink(report: Form99): string {
   return `/reports/f99/submit/status/${report.id}`;

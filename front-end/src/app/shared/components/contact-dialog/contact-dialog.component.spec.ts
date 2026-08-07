@@ -3,7 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
@@ -16,6 +16,7 @@ import { ContactDialogComponent } from './contact-dialog.component';
 import { ContactService } from 'app/shared/services/contact.service';
 import { Component, signal, viewChild } from '@angular/core';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   imports: [ContactDialogComponent],

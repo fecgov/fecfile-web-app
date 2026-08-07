@@ -1,16 +1,22 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from 'app/shared/models/schc1-transaction.model';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
-import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
+import { SchBTransaction } from 'app/shared/models/transaction/schedule-b/schb-transaction.model';
+import { SchC1Transaction } from 'app/shared/models/transaction/schedule-c1/schc1-transaction.model';
+import { SchETransaction } from 'app/shared/models/transaction/schedule-e/sche-transaction.model';
+import { SchFTransaction } from 'app/shared/models/transaction/schedule-f/schf-transaction.model';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { getTestTransactionByType, testContact, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
+import { ContactTypes, CandidateOfficeTypes } from 'app/shared/models/contacts/contact-types.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleC1TransactionTypes } from 'app/shared/models/transaction/schedule-c1/schedule-c1-transaction-types.model';
+import { ScheduleETransactionTypes } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
+import { ScheduleFTransactionTypes } from 'app/shared/models/transaction/schedule-f/schedule-f-transaction-types.model';
 
 describe('ContactUtils', () => {
   let form: FormGroup;

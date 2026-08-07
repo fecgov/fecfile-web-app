@@ -14,12 +14,13 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ContactDialogComponent } from 'app/shared/components/contact-dialog/contact-dialog.component';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
 import { CurrencyPipe } from '@angular/common';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;

@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
 import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from './IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('IN_KIND_CONTRIBUTION_TO_CANDIDATE', () => {
   let transactionType: IN_KIND_CONTRIBUTION_TO_CANDIDATE;

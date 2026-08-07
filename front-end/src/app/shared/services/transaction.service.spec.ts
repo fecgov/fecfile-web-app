@@ -3,17 +3,19 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { AggregationGroups, Transaction } from '../models/transaction.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { Transaction } from '../models/transaction/transaction.model';
+import { SchATransaction } from '../models/transaction/schedule-a/scha-transaction.model';
 import { getTestIndividualReceipt, getTestTransactionByType, testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
-import { ScheduleETransactionTypes } from '../models/sche-transaction.model';
-import { ScheduleFTransactionTypes } from '../models/schf-transaction.model';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { isCloneable } from '../utils/transaction-clone.utils';
+import { AggregationGroups } from '../models/transaction/agregation-groups.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleETransactionTypes } from '../models/transaction/schedule-e/schedule-e-transaction-types.model';
+import { ScheduleFTransactionTypes } from '../models/transaction/schedule-f/schedule-f-transaction-types.model';
 
 const allZeroesResponse = {
   aggregate: 0,

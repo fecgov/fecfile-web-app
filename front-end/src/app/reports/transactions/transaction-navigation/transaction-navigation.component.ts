@@ -1,9 +1,9 @@
 import { Component, computed, input } from '@angular/core';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import {
   GO_BACK_CONTROL,
   TransactionNavigationControls,
-} from 'app/shared/models/transaction-navigation-controls.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
 
 import { NavigationControlComponent } from '../../../shared/components/navigation-control/navigation-control.component';
 import { NavigationControlBarComponent } from '../../../shared/components/navigation-control-bar/navigation-control-bar.component';

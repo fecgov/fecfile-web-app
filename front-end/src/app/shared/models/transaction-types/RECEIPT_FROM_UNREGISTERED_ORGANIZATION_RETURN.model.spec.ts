@@ -1,6 +1,7 @@
 import { RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN } from './RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN', () => {
   let transactionType: RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN;

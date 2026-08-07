@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import type { FormGroup } from '@angular/forms';
 import { ContactSearchComponent } from '../contact-search/contact-search.component';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
+import type { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   selector: 'app-report-contact-lookup',

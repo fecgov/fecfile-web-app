@@ -3,13 +3,11 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { AmountInputComponent } from 'app/shared/components/inputs/amount-input/amount-input.component';
 import { NavigationControlComponent } from 'app/shared/components/navigation-control/navigation-control.component';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-} from 'app/shared/models/transaction-navigation-controls.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -29,6 +27,8 @@ import { provideRouter } from '@angular/router';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { firstValueFrom } from 'rxjs';
 import { provideZoneChangeDetection } from '@angular/core';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('TransactionDetailComponent', () => {
   let component: TransactionDetailComponent;

@@ -1,15 +1,14 @@
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { SchCTransaction, ScheduleCTransactionTypes } from '../models/schc-transaction.model';
-import { SchC1Transaction } from '../models/schc1-transaction.model';
-import { SchC2Transaction } from '../models/schc2-transaction.model';
-import { SchDTransaction } from '../models/schd-transaction.model';
-import { SchETransaction } from '../models/sche-transaction.model';
-import { SchFTransaction, ScheduleFTransactionTypes } from '../models/schf-transaction.model';
-import { ScheduleIds, ScheduleTransaction, TransactionTypes } from '../models/transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../models/transaction/schedule-b/schb-transaction.model';
+import { SchCTransaction } from '../models/transaction/schedule-c/schc-transaction.model';
+import { SchC1Transaction } from '../models/transaction/schedule-c1/schc1-transaction.model';
+import { SchC2Transaction } from '../models/transaction/schedule-c2/schc2-transaction.model';
+import { SchDTransaction } from '../models/transaction/schedule-d/schd-transaction.model';
+import { SchETransaction } from '../models/transaction/schedule-e/sche-transaction.model';
+import { SchFTransaction } from '../models/transaction/schedule-f/schf-transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
-import { TransactionType } from '../models/transaction-type.model';
+import { TransactionType } from '../models/transaction/transaction-type.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { CONDUIT_EARMARK_RECEIPT } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
@@ -202,6 +201,13 @@ import { MULTISTATE_INDEPENDENT_EXPENDITURE } from '../models/transaction-types/
 // Schedule F ////////////////////////////////////////////////////
 import { COORDINATED_PARTY_EXPENDITURE } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE.model';
 import { COORDINATED_PARTY_EXPENDITURE_VOID } from '../models/transaction-types/COORDINATED_PARTY_EXPENDITURE_VOID.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleCTransactionTypes } from '../models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleFTransactionTypes } from '../models/transaction/schedule-f/schedule-f-transaction-types.model';
+import { ScheduleTransaction } from '../models/transaction/schedule-transaction.model';
+import { TransactionTypes } from '../models/transaction/transaction-types';
+import { ScheduleIds } from '../models/transaction/schedule-ids.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any

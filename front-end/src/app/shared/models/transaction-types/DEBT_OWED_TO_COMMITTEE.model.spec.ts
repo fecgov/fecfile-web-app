@@ -1,6 +1,7 @@
 import { DEBT_OWED_TO_COMMITTEE } from './DEBT_OWED_TO_COMMITTEE.model';
-import { SchDTransaction, ScheduleDTransactionTypes } from '../schd-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { SchDTransaction } from '../transaction/schedule-d/schd-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { ScheduleDTransactionTypes } from '../transaction/schedule-d/schedule-d-transaction-types.model';
 
 describe('DEBT_OWED_TO_COMMITTEE', () => {
   let transactionType: DEBT_OWED_TO_COMMITTEE;

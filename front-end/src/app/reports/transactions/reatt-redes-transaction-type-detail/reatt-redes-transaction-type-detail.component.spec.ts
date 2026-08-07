@@ -15,11 +15,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { provideMockStore } from '@ngrx/store/testing';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from '../../../shared/utils/unit-test.utils';
 import { FecDatePipe } from '../../../shared/pipes/fec-date.pipe';
-import { ScheduleATransactionTypes } from '../../../shared/models/scha-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideZoneChangeDetection } from '@angular/core';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('ReattRedesTransactionTypeDetailComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;

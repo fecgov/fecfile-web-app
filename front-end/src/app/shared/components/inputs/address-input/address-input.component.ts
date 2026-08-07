@@ -6,7 +6,7 @@ import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { SearchableSelectComponent } from '../../searchable-select/searchable-select.component';
 import { SelectModule } from 'primeng/select';
-import type { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import type { TransactionTemplateMapType } from 'app/shared/models/transaction/transaction-type.model';
 
 @Component({
   selector: 'app-address-input',

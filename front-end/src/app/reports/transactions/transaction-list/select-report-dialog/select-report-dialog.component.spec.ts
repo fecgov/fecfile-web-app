@@ -9,7 +9,7 @@ import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 
 describe('SelectReportDialogComponent', () => {

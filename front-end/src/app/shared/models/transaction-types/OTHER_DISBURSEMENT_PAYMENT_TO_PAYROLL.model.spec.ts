@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from './OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL.model';
 
 describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL', () => {

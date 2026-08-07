@@ -1,8 +1,10 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { SchCTransaction, ScheduleCTransactionTypes } from '../schc-transaction.model';
-import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
-import { STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
+import { SchCTransaction } from '../transaction/schedule-c/schc-transaction.model';
+import { SchC1Transaction } from '../transaction/schedule-c1/schc1-transaction.model';
+import { STANDARD_CONTROLS } from '../transaction/transaction-navigation-controls.model';
 import { C1_LOAN_AGREEMENT } from './C1_LOAN_AGREEMENT.model';
+import { ScheduleCTransactionTypes } from '../transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleC1TransactionTypes } from '../transaction/schedule-c1/schedule-c1-transaction-types.model';
 
 describe('C1_LOAN_AGREEMENT', () => {
   let transactionType: C1_LOAN_AGREEMENT;

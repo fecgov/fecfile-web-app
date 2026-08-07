@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CandidateOfficeTypes } from 'app/shared/models/contact.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,7 +8,8 @@ import { CandidateOfficeInputComponent } from './candidate-office-input.componen
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testScheduleATransaction, testIndependentExpenditure } from 'app/shared/utils/unit-test.utils';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { CandidateOfficeTypes } from 'app/shared/models/contacts/contact-types.model';
 
 const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
 const testCandidateStateFormControlName = 'testCandidateStateFormControlName';

@@ -12,10 +12,10 @@ import { form24Options } from 'app/shared/utils/label.utils';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { buildF24Name, Form24, Form24Data, form24Schema } from 'app/shared/models/reports/form-24.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
 import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
 import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 interface ReportFormData {
   type: ReportTypes | '';

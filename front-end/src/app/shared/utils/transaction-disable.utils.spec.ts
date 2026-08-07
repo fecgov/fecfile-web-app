@@ -1,5 +1,5 @@
-import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ReportTypes } from '../models/reports/report-types.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
 import { isTransactionTypeDisabledForReport, DISABLED_TRANSACTION_TYPES } from './transaction-disable.utils';
 
 describe('transaction disable utils', () => {

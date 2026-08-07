@@ -1,5 +1,5 @@
-import { TemplateMapKeyType } from '../../transaction-type.model';
-import { SchBTransactionType } from '../../schb-transaction-type.model';
+import type { TemplateMapKeyType } from '../../transaction/transaction-type.model';
+import { SchBTransactionType } from '../../transaction/schedule-b/schb-transaction-type.model';
 
 export abstract class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   override isDependentChild = () => true;

@@ -12,12 +12,12 @@ import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
 import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
-import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
+import { SchC2Transaction } from 'app/shared/models/transaction/schedule-c2/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
-import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
 
 @Component({
   imports: [TransactionGuarantorsComponent],

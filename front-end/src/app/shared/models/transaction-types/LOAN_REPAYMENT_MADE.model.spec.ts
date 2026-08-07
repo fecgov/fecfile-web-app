@@ -1,5 +1,6 @@
 import { LOAN_REPAYMENT_MADE } from './LOAN_REPAYMENT_MADE.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('LOAN_REPAYMENT_MADE', () => {
   let transactionType: LOAN_REPAYMENT_MADE;

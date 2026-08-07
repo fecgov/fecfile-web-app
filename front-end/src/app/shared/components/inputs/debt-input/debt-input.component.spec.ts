@@ -5,7 +5,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction/transaction.model';
 
 describe('DebtInputComponent', () => {
   let component: DebtInputComponent;

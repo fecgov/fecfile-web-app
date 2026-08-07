@@ -1,6 +1,5 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
-import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { buildCorrespondingForm3XValidator } from 'app/shared/utils/validators.utils';
@@ -9,6 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 export const LinkedReportTooltipText =
   'Transactions created in Form 24 must be linked to a Form 3X with corresponding coverage dates. ' +

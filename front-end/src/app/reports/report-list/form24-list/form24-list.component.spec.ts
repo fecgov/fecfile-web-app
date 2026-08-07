@@ -16,7 +16,8 @@ import { ReportListComponent } from '../report-list.component';
 import { ScannedActionsSubject } from '@ngrx/store';
 import { ROUTES } from 'app/routes';
 import { Form24 } from 'app/shared/models/reports/form-24.model';
-import { ReportTypes, ReportStatus } from 'app/shared/models/reports/report.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 describe('Form24ListComponent', () => {
   let component: Form24ListComponent;

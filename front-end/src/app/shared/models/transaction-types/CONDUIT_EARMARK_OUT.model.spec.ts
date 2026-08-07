@@ -1,8 +1,10 @@
 import { CONDUIT_EARMARK_OUT } from './CONDUIT_EARMARK_OUT.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { ContactTypes } from '../contact.model';
+import { ContactTypes } from '../contacts/contact-types.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('CONDUIT_EARMARK_OUT', () => {
   let transactionType: CONDUIT_EARMARK_OUT;

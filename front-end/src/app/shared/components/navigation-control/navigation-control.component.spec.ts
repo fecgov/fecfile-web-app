@@ -6,7 +6,7 @@ import {
   NavigationDestination,
   NavigationEvent,
   SAVE_LIST_CONTROL,
-} from 'app/shared/models/transaction-navigation-controls.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -14,10 +14,12 @@ import { getTestTransactionByType, testMockStore, testScheduleATransaction } fro
 import { provideMockStore } from '@ngrx/store/testing';
 import { Store } from '@ngrx/store';
 import { SelectModule } from 'primeng/select';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
-import { cloneInstance, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { Component, viewChild } from '@angular/core';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { cloneInstance } from 'app/shared/models/transaction/transaction-model.utils';
+import type { TransactionTypes } from 'app/shared/models/transaction/transaction-types';
 
 @Component({
   imports: [NavigationControlComponent],

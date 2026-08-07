@@ -6,7 +6,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ContactTypeLabels } from 'app/shared/models/contact.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
@@ -17,7 +16,8 @@ import { SelectModule } from 'primeng/select';
 import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { ContactProperty, TransactionContactLookupComponent } from './transaction-contact-lookup.component';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ContactTypeLabels } from 'app/shared/models/contacts/contact-types.model';
 
 @Component({
   imports: [TransactionContactLookupComponent],

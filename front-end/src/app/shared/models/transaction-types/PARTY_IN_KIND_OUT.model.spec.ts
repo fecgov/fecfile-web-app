@@ -1,5 +1,6 @@
 import { PARTY_IN_KIND_OUT } from './PARTY_IN_KIND_OUT.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('IN_KIND_OUT', () => {
   let transactionType: PARTY_IN_KIND_OUT;

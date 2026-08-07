@@ -2,17 +2,18 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { CommitteeAccount } from '../models/committee-account.model';
+import type { CommitteeAccount } from '../models/committee-account.model';
 import { Form1M } from '../models/reports/form-1m.model';
 import { Form24 } from '../models/reports/form-24.model';
 import { Form3 } from '../models/reports/form-3.model';
 import { Form3X } from '../models/reports/form-3x.model';
 import { Form99 } from '../models/reports/form-99.model';
-import { Report, ReportTypes } from '../models/reports/report.model';
-import { ListRestResponse } from '../models/rest-api.model';
+import type { Report } from '../models/reports/report.model';
+import type { ListRestResponse } from '../models/rest-api.model';
 import { ApiService, QueryParams } from './api.service';
-import { VersionData } from 'app/reports/shared/update-version-number/version-data';
+import type { VersionData } from 'app/reports/shared/update-version-number/version-data';
 import { DateUtils } from '../utils/date.utils';
+import { ReportTypes } from '../models/reports/report-types.model';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON<T extends Report>(json: any): T {

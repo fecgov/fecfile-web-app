@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { REFUND_PAC_CONTRIBUTION_VOID } from './REFUND_PAC_CONTRIBUTION_VOID.model';
 
 describe('REFUND_PAC_CONTRIBUTION_VOID', () => {

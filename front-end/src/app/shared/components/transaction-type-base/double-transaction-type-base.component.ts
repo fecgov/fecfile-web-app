@@ -1,18 +1,18 @@
 import { afterNextRender, Directive, effect, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
+import { NavigationEvent } from 'app/shared/models/transaction/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
   TransactionType,
-} from 'app/shared/models/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+} from 'app/shared/models/transaction/transaction-type.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SelectItem } from 'primeng/api';
 import { firstValueFrom, of } from 'rxjs';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import type { Contact } from '../../models/contacts/contact.model';
 import { TransactionChildFormUtils } from './transaction-child-form.utils';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -20,6 +20,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { singleClickEnableAction } from '../../../store/single-click.actions';
 import { blurActiveInput, printFormErrors, scrollToTop } from 'app/shared/utils/form.utils';
 import { AccordionPanel } from 'primeng/accordion';
+import { ContactTypeLabels } from 'app/shared/models/contacts/contact-types.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the

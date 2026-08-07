@@ -7,27 +7,29 @@ import { FormBuilder } from '@angular/forms';
 import { provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ROUTES } from 'app/routes';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
+import { Contact } from 'app/shared/models/contacts/contact.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-} from 'app/shared/models/transaction-navigation-controls.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { TransactionType } from '../../models/transaction-type.model';
+import { TransactionType } from '../../models/transaction/transaction-type.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { DoubleTransactionDetailComponent } from 'app/reports/transactions/double-transaction-detail/double-transaction-detail.component';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import type { Form3X } from 'app/shared/models/reports/form-3x.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
 
 @Component({
   imports: [DoubleTransactionDetailComponent],

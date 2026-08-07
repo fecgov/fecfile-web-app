@@ -1,6 +1,7 @@
 import { LOAN_RECEIVED_FROM_BANK_RECEIPT } from './LOAN_RECEIVED_FROM_BANK_RECEIPT.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { AggregationGroups } from '../transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('LOAN_RECEIVED_FROM_BANK_RECEIPT', () => {
   let transactionType: LOAN_RECEIVED_FROM_BANK_RECEIPT;

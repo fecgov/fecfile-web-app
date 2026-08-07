@@ -1,14 +1,18 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DEBTS';
-import { SchDTransactionType } from '../schd-transaction-type.model';
-import { SchDTransaction, ScheduleDTransactionTypeLabels, ScheduleDTransactionTypes } from '../schd-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { SchDTransactionType } from '../transaction/schedule-d/schd-transaction-type.model';
+import { SchDTransaction } from '../transaction/schedule-d/schd-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
 import {
   COMMITTEE_ORGANIZATION_INDIVIDUAL,
   ORG_FIELDS,
   INDIVIDUAL_FIELDS,
   ADDRESS_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import {
+  ScheduleDTransactionTypeLabels,
+  ScheduleDTransactionTypes,
+} from '../transaction/schedule-d/schedule-d-transaction-types.model';
 
 export class DEBT_OWED_TO_COMMITTEE extends SchDTransactionType {
   formFields = [

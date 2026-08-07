@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction } from '../models/scha-transaction.model';
-import { SchBTransaction } from '../models/schb-transaction.model';
-import { Transaction } from '../models/transaction.model';
+import { SchATransaction } from '../models/transaction/schedule-a/scha-transaction.model';
+import { SchBTransaction } from '../models/transaction/schedule-b/schb-transaction.model';
+import { Transaction } from '../models/transaction/transaction.model';
 import { TransactionService } from '../services/transaction.service';
 import { ReattRedesUtils } from '../utils/reatt-redes/reatt-redes.utils';
 import { ReattributedUtils } from '../utils/reatt-redes/reattributed.utils';

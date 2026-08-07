@@ -1,5 +1,6 @@
 import { PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT } from './PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('PARTY_NATIONAL_PARTY_CONVENTION_BUILDINGS_ACCOUNT', () => {
   let transactionType: PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT;

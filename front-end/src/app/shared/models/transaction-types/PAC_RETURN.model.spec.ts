@@ -1,5 +1,6 @@
-import { SchATransactionType } from '../scha-transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransactionType } from '../transaction/schedule-a/scha-transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { PAC_RETURN } from './PAC_RETURN.model';
 
 describe('PAC_RETURN', () => {

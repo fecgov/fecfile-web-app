@@ -4,13 +4,14 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { SchATransaction } from '../models/transaction/schedule-a/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 import { Form3X } from '../models/reports/form-3x.model';
 import { TransactionListService } from './transaction-list.service';
-import { TransactionListRecord } from '../models/transaction-list-record.model';
+import { TransactionListRecord } from '../models/transaction/transaction-list-record.model';
+import { ScheduleATransactionTypes } from '../models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('TransactionListService', () => {
   let service: TransactionListService;

@@ -4,7 +4,6 @@ import { ReportDetailedSummaryComponent } from './report-detailed-summary/report
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { Report } from 'app/shared/models/reports/report.model';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { ReportLevelMemoComponent } from 'app/reports/shared/report-level-memo/report-level-memo.component';
 import { SubmitReportStatusComponent } from 'app/reports/submission-workflow/submit-report-status.component';
 import { SubmitReportComponent } from 'app/reports/submission-workflow/submit-report.component';
@@ -14,6 +13,7 @@ import { Form3XService } from 'app/shared/services/form-3x.service';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { UpdateVersionNumberComponent } from 'app/reports/shared/update-version-number/update-version-number.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the

@@ -9,7 +9,8 @@ import { LongDatePipe } from '../../shared/pipes/long-date.pipe';
 import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 import { filter } from 'rxjs';
 import { ReportService } from 'app/shared/services/report.service';
-import { isForm3Group, ReportStatus } from 'app/shared/models/reports/report.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { isForm3Group } from 'app/shared/models/reports/report-types.model';
 
 @Component({
   selector: 'app-report-summary',

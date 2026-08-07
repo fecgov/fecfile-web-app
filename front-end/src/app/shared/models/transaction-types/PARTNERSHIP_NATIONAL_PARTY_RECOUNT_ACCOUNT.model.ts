@@ -1,10 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_PARTNERSHIP_RECEIPTS';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import {
+  STANDARD_PARENT_CONTROLS,
+  TransactionNavigationControls,
+} from '../transaction/transaction-navigation-controls.model';
+import { SchATransactionType } from '../transaction/schedule-a/scha-transaction-type.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
   formFields = ORGANIZATION_FORM_FIELDS;

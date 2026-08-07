@@ -17,11 +17,11 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
 
 @Component({
   imports: [MemoCodeInputComponent],

@@ -4,7 +4,6 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
-import { ReportStatus, ReportTypes } from 'app/shared/models/reports/report.model';
 import { SecondaryReportSelectionDialogComponent } from './secondary-report-selection-dialog.component';
 import { DatePipe } from '@angular/common';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
@@ -15,8 +14,10 @@ import { Component, signal, viewChild } from '@angular/core';
 import { of } from 'rxjs';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { TransactionListService } from 'app/shared/services/transaction-list.service';
-import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { TransactionListRecord } from 'app/shared/models/transaction/transaction-list-record.model';
 import { Form24, F24FormTypes } from 'app/shared/models/reports/form-24.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
+import { ReportTypes } from 'app/shared/models/reports/report-types.model';
 
 const mockReports = [
   Form24.fromJSON({

@@ -11,7 +11,7 @@ const committeeStatusCodes: { [key: string]: string } = {
   Q: 'Quarterly (Q)',
 };
 
-const activeStatusCodes = ['M', 'Q', 'W', 'D'];
+const activeStatusCodes = new Set(['M', 'Q', 'W', 'D']);
 
 @Component({
   selector: 'app-committee-banner',
@@ -27,6 +27,6 @@ export class CommitteeBannerComponent {
 
   private readonly frequencyCode = computed(() => this.committee().filing_frequency ?? '');
   readonly committeeFrequency = computed(() => committeeStatusCodes[this.frequencyCode()] ?? '');
-  readonly committeeStatus = computed(() => (activeStatusCodes.includes(this.frequencyCode()) ? 'Active' : 'Inactive'));
+  readonly committeeStatus = computed(() => (activeStatusCodes.has(this.frequencyCode()) ? 'Active' : 'Inactive'));
   readonly frequencyColor = computed(() => (this.committeeStatus() === 'Active' ? '#4AA564' : '#AEB0B5'));
 }

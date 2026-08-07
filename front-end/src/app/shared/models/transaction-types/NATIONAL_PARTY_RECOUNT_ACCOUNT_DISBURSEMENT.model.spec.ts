@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT } from './NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT.model';
 
 describe('NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT', () => {

@@ -13,11 +13,15 @@ import {
   QUINARY_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COORDINATED_PARTY_EXPENDITURES';
-import { CONTACTS_ONE_THROUGH_FIVE } from '../contact.model';
-import { SchFTransactionType } from '../schf-transaction-type.model';
-import { SchFTransaction, ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes } from '../schf-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
+import { CONTACTS_ONE_THROUGH_FIVE } from '../contacts/contact.model';
+import { SchFTransactionType } from '../transaction/schedule-f/schf-transaction-type.model';
+import { SchFTransaction } from '../transaction/schedule-f/schf-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction/transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleFTransactionTypeLabels,
+  ScheduleFTransactionTypes,
+} from '../transaction/schedule-f/schedule-f-transaction-types.model';
 
 export class COORDINATED_PARTY_EXPENDITURE_VOID extends SchFTransactionType {
   formFields = [

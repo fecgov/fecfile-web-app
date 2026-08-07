@@ -1,14 +1,15 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchATransaction } from '../scha-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { TemplateMapKeyType } from '../transaction/transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
 import {
   COMMITTEE,
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK_OUT } from './common-types/CONDUIT_EARMARK_OUT.model';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
 import { conduitClause } from '../clause';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
   formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;

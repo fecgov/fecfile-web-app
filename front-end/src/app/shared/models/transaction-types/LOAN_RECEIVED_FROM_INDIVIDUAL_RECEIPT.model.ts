@@ -1,14 +1,15 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS_RECEIVED';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { TemplateMapKeyType } from '../transaction/transaction-type.model';
+import { SchATransactionType } from '../transaction/schedule-a/scha-transaction-type.model';
 import {
   INDIVIDUAL_ORGANIZATION_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
   INDIVIDUAL_FIELDS,
   ORG_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   override formFields = INDIVIDUAL_ORGANIZATION_FORM_FIELDS;

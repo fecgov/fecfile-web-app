@@ -1,4 +1,4 @@
-import { SchATransaction } from '../../models/scha-transaction.model';
+import { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
 import { testScheduleATransaction } from '../unit-test.utils';
 import { ReattRedesTypes } from './reatt-redes.types';
 import { ReattributedUtils } from './reattributed.utils';

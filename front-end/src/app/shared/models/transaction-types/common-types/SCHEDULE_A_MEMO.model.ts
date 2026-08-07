@@ -1,4 +1,4 @@
-import { SchATransactionType } from '../../scha-transaction-type.model';
+import { SchATransactionType } from '../../transaction/schedule-a/scha-transaction-type.model';
 
 export abstract class SCHEDULE_A_MEMO extends SchATransactionType {
   override mandatoryFormValues = {

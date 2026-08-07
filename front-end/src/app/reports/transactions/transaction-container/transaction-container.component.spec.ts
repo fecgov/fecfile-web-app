@@ -26,9 +26,12 @@ import { ReportService } from 'app/shared/services/report.service';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
-import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { ScheduleCTransactionTypes, SchCTransaction } from 'app/shared/models/schc-transaction.model';
-import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import { SchATransaction } from 'app/shared/models/transaction/schedule-a/scha-transaction.model';
+import { SchCTransaction } from 'app/shared/models/transaction/schedule-c/schc-transaction.model';
+import { Transaction } from 'app/shared/models/transaction/transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleCTransactionTypes } from 'app/shared/models/transaction/schedule-c/schedule-c-transaction-types.model';
+import { TransactionTypes } from 'app/shared/models/transaction/transaction-types';
 
 const mockTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,

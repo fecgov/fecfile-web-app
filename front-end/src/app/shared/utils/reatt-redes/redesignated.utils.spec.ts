@@ -1,4 +1,4 @@
-import { SchBTransaction } from '../../models/schb-transaction.model';
+import { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
 import { RedesignatedUtils } from './redesignated.utils';
 import { ReattRedesUtils } from './reatt-redes.utils';
 import { testScheduleBTransaction } from '../unit-test.utils';

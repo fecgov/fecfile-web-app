@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { StatesCodeMap } from '../utils/label.utils';
-import type { Contact } from '../models/contact.model';
+import type { Contact } from '../models/contacts/contact.model';
 
 @Pipe({ name: 'address' })
 export class AddressPipe implements PipeTransform {

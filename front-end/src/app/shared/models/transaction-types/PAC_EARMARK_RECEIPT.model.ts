@@ -1,10 +1,14 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RECEIPT';
-import { ContactTypes } from '../contact.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { AggregationGroups } from '../transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK } from './common-types/EARMARK.model';
+import { ContactTypes } from '../contacts/contact-types.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 export class PAC_EARMARK_RECEIPT extends EARMARK {
   override formFields = COMMITTEE_FORM_FIELDS;

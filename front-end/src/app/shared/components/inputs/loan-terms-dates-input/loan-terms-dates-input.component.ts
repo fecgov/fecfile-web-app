@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, inject, OnInit, viewChild } from '@angular/core';
 import { Validators, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { isPulledForwardLoan } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { InputText } from 'primeng/inputtext';
@@ -14,6 +13,7 @@ import { CalendarComponent } from '../../calendar/calendar.component';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import { SelectComponent } from '../../select/select.component';
 import { IdGeneratorService } from 'app/shared/services/id-generator.service';
+import { isPulledForwardLoan } from 'app/shared/models/transaction/transaction-model.utils';
 
 const LoanTermsFieldSettings = {
   USER_DEFINED: false,

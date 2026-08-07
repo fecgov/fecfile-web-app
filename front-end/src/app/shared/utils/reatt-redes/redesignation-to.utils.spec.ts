@@ -1,8 +1,9 @@
 import { getTestTransactionByType, testScheduleBTransaction } from '../unit-test.utils';
 import { FormGroup } from '@angular/forms';
 import { RedesignationToUtils } from './redesignation-to.utils';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
+import type { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
 import { SubscriptionFormControl } from '../subscription-form-control';
+import { ScheduleBTransactionTypes } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('RedesignationToUtils', () => {
   describe('overlayTransactionProperties', () => {

@@ -1,9 +1,11 @@
 import { FormGroup } from '@angular/forms';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { ScheduleIds, Transaction } from 'app/shared/models/transaction.model';
+import type { TransactionTemplateMapType } from 'app/shared/models/transaction/transaction-type.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { CandidateOfficeTypes, Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import type { Contact } from '../../models/contacts/contact.model';
+import { CandidateOfficeTypes, ContactFields, ContactTypes } from 'app/shared/models/contacts/contact-types.model';
+import { ScheduleIds } from 'app/shared/models/transaction/schedule-ids.model';
 
 export class TransactionContactUtils {
   /**

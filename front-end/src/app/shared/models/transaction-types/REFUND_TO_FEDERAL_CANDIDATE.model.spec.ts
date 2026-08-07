@@ -1,6 +1,7 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
 import { REFUND_TO_FEDERAL_CANDIDATE } from './REFUND_TO_FEDERAL_CANDIDATE.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('REFUND_TO_FEDERAL_CANDIDATE', () => {
   let transactionType: REFUND_TO_FEDERAL_CANDIDATE;

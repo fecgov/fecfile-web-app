@@ -7,10 +7,10 @@ import { Report } from 'app/shared/models/reports/report.model';
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { TransactionIndependentExpenditurePickerComponent } from './transaction-independent-expenditure-picker/transaction-independent-expenditure-picker.component';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { Form24EditComponent } from './form-24-edit/form-24-edit.component';
 import { UpdateVersionNumberComponent } from '../shared/update-version-number/update-version-number.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the

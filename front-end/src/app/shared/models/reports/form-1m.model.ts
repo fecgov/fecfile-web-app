@@ -1,10 +1,13 @@
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
 import { BaseModel } from '../base.model';
-import { CandidateOfficeType, Contact } from '../contact.model';
-import { Report, ReportTypes } from './report.model';
-import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
+import type { Contact } from '../contacts/contact.model';
+import { Report } from './report.model';
+import { MenuInfo } from 'app/layout/sidebar/menu-info';
+import type { MenuItem } from 'primeng/api';
+import type { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
+import type { CandidateOfficeType } from '../contacts/contact-types.model';
+import { ReportTypes } from './report-types.model';
 
 enum CommitteeTypes {
   STATE_PTY = 'X',

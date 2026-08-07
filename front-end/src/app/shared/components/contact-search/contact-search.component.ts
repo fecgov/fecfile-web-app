@@ -1,12 +1,12 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
 import {
   Contact,
-  ContactTypes,
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
   FecApiLookupData,
-} from 'app/shared/models/contact.model';
+} from 'app/shared/models/contacts/contact.model';
 import { ContactManagementService } from 'app/shared/services/contact-management.service';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeTemplate, SelectItemGroup } from 'primeng/api';

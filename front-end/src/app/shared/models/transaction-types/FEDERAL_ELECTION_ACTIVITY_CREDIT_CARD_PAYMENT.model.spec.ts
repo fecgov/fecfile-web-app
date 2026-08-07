@@ -1,4 +1,5 @@
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from './FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT', () => {

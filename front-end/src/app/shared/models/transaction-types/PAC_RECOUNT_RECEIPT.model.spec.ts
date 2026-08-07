@@ -1,4 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { PAC_RECOUNT_RECEIPT } from './PAC_RECOUNT_RECEIPT.model';
 
 describe('PAC_RECOUNT_RECEIPT', () => {

@@ -7,7 +7,7 @@ import { PrintPreviewComponent } from '../shared/print-preview/print-preview.com
 import { SubmitReportStatusComponent } from '../submission-workflow/submit-report-status.component';
 import { ReportLevelMemoComponent } from '../shared/report-level-memo/report-level-memo.component';
 import { SubmitReportComponent } from '../submission-workflow/submit-report.component';
-import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReportSidebarSection } from 'app/layout/sidebar/report-sidebar-section.model';
 
 export const F1M_ROUTES: Route[] = [
   {

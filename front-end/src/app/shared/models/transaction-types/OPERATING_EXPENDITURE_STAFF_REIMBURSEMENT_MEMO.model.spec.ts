@@ -1,6 +1,7 @@
 import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from './OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO', () => {
   let transactionType: OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO;

@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, Signal, linkedSignal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
-import { isPulledForwardLoan, Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { ReattRedesUtils } from '../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { ReportService } from '../../../shared/services/report.service';
@@ -16,6 +16,7 @@ import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ButtonDirective } from 'primeng/button';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
+import { isPulledForwardLoan } from 'app/shared/models/transaction/transaction-model.utils';
 
 @Component({
   selector: 'app-transaction-container',

@@ -1,7 +1,8 @@
-import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionType } from 'app/shared/models/transaction/transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
 import { PARTY_RETURN } from './PARTY_RETURN.model';
-import { ReportTypes } from '../reports/report.model';
+import { ReportTypes } from '../reports/report-types.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 describe('PARTY_RETURN', () => {
   let transactionType: PARTY_RETURN;

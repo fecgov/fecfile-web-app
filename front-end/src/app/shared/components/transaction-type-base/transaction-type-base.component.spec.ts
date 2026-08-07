@@ -7,7 +7,7 @@ import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-} from 'app/shared/models/transaction-navigation-controls.model';
+} from 'app/shared/models/transaction/transaction-navigation-controls.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import {
   getTestIndividualReceipt,
@@ -18,24 +18,28 @@ import {
 } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { firstValueFrom, of, Subject } from 'rxjs';
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionDetailComponent } from 'app/reports/transactions/transaction-detail/transaction-detail.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
-import { Contact, ContactTypes } from '../../models/contact.model';
+import { Contact } from '../../models/contacts/contact.model';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { TransactionTemplateMapType, TransactionType } from '../../models/transaction-type.model';
+import { TransactionTemplateMapType, TransactionType } from '../../models/transaction/transaction-type.model';
 import { ActivatedRoute, NavigationBehaviorOptions, Router } from '@angular/router';
-import { AggregationGroups, Transaction } from '../../models/transaction.model';
+import { Transaction } from '../../models/transaction/transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ScheduleETransactionTypes, SchETransaction } from 'app/shared/models/sche-transaction.model';
+import { SchETransaction } from 'app/shared/models/transaction/schedule-e/sche-transaction.model';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { provideZoneChangeDetection } from '@angular/core';
 import { navigationEventSetAction } from 'app/store/navigation-event.actions';
+import { ContactTypes } from 'app/shared/models/contacts/contact-types.model';
+import { AggregationGroups } from 'app/shared/models/transaction/agregation-groups.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleETransactionTypes } from 'app/shared/models/transaction/schedule-e/schedule-e-transaction-types.model';
 
 let testTransaction: SchATransaction;
 

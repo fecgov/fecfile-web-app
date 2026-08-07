@@ -1,11 +1,11 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SchATransaction } from '../../models/transaction/schedule-a/scha-transaction.model';
 import { ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../../models/schb-transaction.model';
+import { SchBTransaction } from '../../models/transaction/schedule-b/schb-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
-} from '../../models/transaction-navigation-controls.model';
+} from '../../models/transaction/transaction-navigation-controls.model';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from '../../services/transaction.service';
@@ -26,6 +26,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZoneChangeDetection } from '@angular/core';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.types';
 import type { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/transaction/schedule-b/schedule-b-transaction-types.model';
 
 describe('ReattTransactionTypeBaseComponent', () => {
   let component: ReattRedesTransactionTypeDetailComponent;

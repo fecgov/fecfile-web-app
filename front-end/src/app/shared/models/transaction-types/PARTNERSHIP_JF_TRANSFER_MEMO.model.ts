@@ -1,12 +1,19 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_JF_TRANSFER_MEMO';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
-import { SubTransactionGroup } from '../transaction-type.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import {
+  TransactionNavigationControls,
+  STANDARD_PARENT_CONTROLS,
+} from '../transaction/transaction-navigation-controls.model';
+import { SubTransactionGroup } from '../transaction/transaction-type.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 import { shortenClause } from '../clause';
 import { SCHEDULE_A_MEMO } from './common-types/SCHEDULE_A_MEMO.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../transaction/schedule-a/schedule-a-transaction-types.model';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   formFields = ORGANIZATION_FORM_FIELDS;

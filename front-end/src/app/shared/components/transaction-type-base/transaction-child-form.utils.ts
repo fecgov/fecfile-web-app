@@ -1,8 +1,9 @@
-import { FormGroup } from '@angular/forms';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import type { FormGroup } from '@angular/forms';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TripleTransactionTypeBaseComponent } from './triple-transaction-type-base.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import type { ScheduleTransaction } from 'app/shared/models/transaction/schedule-transaction.model';
 
 function updatePurposeDescription(form: FormGroup, transaction: Transaction) {
   if (transaction?.transactionType?.generatePurposeDescription) {

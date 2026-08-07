@@ -10,7 +10,7 @@ import { BaseInputComponent } from '../base-input.component';
 import { DesignatedSubordinateInputComponent } from '../designated-subordinate-input/designated-subordinate-input.component';
 import { AutoResizeDirective } from 'app/shared/directives/auto-resize.directive';
 import { SelectComponent } from '../../select/select.component';
-import type { Contact } from 'app/shared/models/contact.model';
+import type { Contact } from 'app/shared/models/contacts/contact.model';
 
 @Component({
   selector: 'app-additional-info-input',

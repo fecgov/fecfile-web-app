@@ -1,14 +1,18 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_MEMOS_FEA';
 import { SCHEDULE_B_MEMO } from './common-types/SCHEDULE_B_MEMO.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { CHILD_CONTROLS } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
+import { SchBTransaction } from '../transaction/schedule-b/schb-transaction.model';
+import { CHILD_CONTROLS } from '../transaction/transaction-navigation-controls.model';
 import {
   INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS,
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
-import { STANDARD_AND_CANDIDATE } from '../contact.model';
+import { STANDARD_AND_CANDIDATE } from '../contacts/contact.model';
+import { AggregationGroups } from '../transaction/agregation-groups.model';
+import {
+  ScheduleBTransactionTypeLabels,
+  ScheduleBTransactionTypes,
+} from '../transaction/schedule-b/schedule-b-transaction-types.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SCHEDULE_B_MEMO {
   formFields = INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS;

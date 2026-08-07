@@ -1,13 +1,13 @@
 import { Exclude, plainToInstance } from 'class-transformer';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
-import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { ScheduleCTransactionTypes } from '../schc-transaction.model';
-import { ScheduleDTransactionTypes } from '../schd-transaction.model';
-import { ScheduleETransactionTypes } from '../sche-transaction.model';
-import { ScheduleFTransactionTypes } from '../schf-transaction.model';
 import { BaseForm3 } from './base-form-3';
-import { ReportTypes } from './report.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
+import { ScheduleBTransactionTypes } from '../transaction/schedule-b/schedule-b-transaction-types.model';
+import { ScheduleCTransactionTypes } from '../transaction/schedule-c/schedule-c-transaction-types.model';
+import { ScheduleDTransactionTypes } from '../transaction/schedule-d/schedule-d-transaction-types.model';
+import { ScheduleETransactionTypes } from '../transaction/schedule-e/schedule-e-transaction-types.model';
+import { ScheduleFTransactionTypes } from '../transaction/schedule-f/schedule-f-transaction-types.model';
+import { ReportTypes } from './report-types.model';
 
 export const F3xFormTypes = {
   F3XN: 'F3XN',

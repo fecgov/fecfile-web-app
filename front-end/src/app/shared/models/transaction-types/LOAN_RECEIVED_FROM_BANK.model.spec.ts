@@ -1,5 +1,6 @@
-import { SchCTransaction, ScheduleCTransactionTypes } from '../schc-transaction.model';
+import { SchCTransaction } from '../transaction/schedule-c/schc-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { ScheduleCTransactionTypes } from '../transaction/schedule-c/schedule-c-transaction-types.model';
 
 describe('LOAN_RECEIVED_FROM_BANK', () => {
   let transaction: SchCTransaction;

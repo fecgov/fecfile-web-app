@@ -11,9 +11,9 @@ import { Component, viewChild } from '@angular/core';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { ReportStatus } from 'app/shared/models/reports/report.model';
-import type { Transaction } from 'app/shared/models/transaction.model';
+import type { Transaction } from 'app/shared/models/transaction/transaction.model';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';
+import { ReportStatus } from 'app/shared/models/reports/report-status.model';
 
 const mockReports: Form3X[] = [
   Form3X.fromJSON({

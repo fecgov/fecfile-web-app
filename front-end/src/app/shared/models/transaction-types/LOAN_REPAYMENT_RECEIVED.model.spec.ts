@@ -1,4 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction } from '../transaction/schedule-a/scha-transaction.model';
+import { ScheduleATransactionTypes } from '../transaction/schedule-a/schedule-a-transaction-types.model';
 import { LOAN_REPAYMENT_RECEIVED } from './LOAN_REPAYMENT_RECEIVED.model';
 
 describe('LOAN_REPAYMENT_RECEIVED', () => {
