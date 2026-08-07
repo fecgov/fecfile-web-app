@@ -84,12 +84,7 @@ export class NavigationControlComponent {
   ];
 
   // This could be a signal but the transaction data is getting updated out of sync
-  readonly isDisabled = () => {
-    return (
-      this.store.selectSignal(selectSingleClickDisabled)() ||
-      !!this.navigationControl()?.disabledCondition(this.transaction())
-    );
-  };
+  readonly isDisabled = () => !!this.navigationControl()?.disabledCondition(this.transaction());
   readonly controlType = ControlType;
   readonly type = computed(() => this.navigationControl().controlType);
 
