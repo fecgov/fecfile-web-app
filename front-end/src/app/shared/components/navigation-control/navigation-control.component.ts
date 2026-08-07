@@ -30,7 +30,6 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MenuItem } from 'primeng/api';
 import { singleClickDisableAction } from 'app/store/single-click.actions';
-import { selectSingleClickDisabled } from 'app/store/single-click.selectors';
 
 @Component({
   selector: 'app-navigation-control',
