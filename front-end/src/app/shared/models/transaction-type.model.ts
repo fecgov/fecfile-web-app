@@ -12,7 +12,7 @@ import {
   SIGNATORY_1_FIELDS,
   SIGNATORY_2_FIELDS,
 } from '../utils/transaction-type-properties';
-import { ContactType, STANDARD_SINGLE_CONTACT } from './contact.model';
+import { ContactTypes, STANDARD_SINGLE_CONTACT } from './contact.model';
 import { ReportTypes } from './reports/report.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
@@ -25,7 +25,7 @@ export abstract class TransactionType {
   abstract scheduleId: ScheduleIds;
   apiEndpoint = '/transactions'; // Root URL to API endpoint for CRUDing transaction
   abstract formFields: string[];
-  abstract contactTypeOptions?: ContactType[];
+  abstract contactTypeOptions?: ContactTypes[];
   contactConfig: { [contactKey: string]: { [formField: string]: string } } = STANDARD_SINGLE_CONTACT;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
@@ -95,6 +95,10 @@ export abstract class TransactionType {
   mandatoryFormValues: { [field: string]: string | boolean | undefined } = {};
 
   get isReattributable() {
+    return false;
+  }
+
+  get isCloneableTransactionType() {
     return false;
   }
 

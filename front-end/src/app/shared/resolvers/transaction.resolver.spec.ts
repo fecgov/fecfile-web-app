@@ -214,6 +214,70 @@ describe('TransactionResolver', () => {
       ).resolves.not.toThrow();
     });
 
+    it('should build a clone without persisting it', async () => {
+      vi.spyOn(resolver.service, 'get').mockResolvedValue(
+        SchATransaction.fromJSON({
+          id: '1',
+          transaction_id: 'T-100',
+          report_ids: ['old-report'],
+          transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          contribution_amount: 125,
+          contribution_aggregate: 500,
+          contact_1: Contact.fromJSON({ id: 123 }),
+          memo_text: {
+            id: 'memo-id',
+            report_id: 'old-report',
+            transaction_id_number: 'OLD-TRAN-ID',
+            transaction_uuid: 'memo-uuid',
+            text4000: 'Memo text',
+          },
+        }),
+      );
+      const route = {
+        queryParamMap: convertToParamMap({ clone: '1' }),
+        paramMap: convertToParamMap({
+          reportId: 1,
+          transactionType: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+        }),
+      };
+
+      await expect(
+        resolver.resolve(route as ActivatedRouteSnapshot).then((transaction: Transaction | undefined) => {
+          expect(transaction).toBeTruthy();
+          if (transaction) {
+            expect(transaction.id).toBeUndefined();
+            expect(transaction.transaction_id).toBeUndefined();
+            expect(transaction.report_ids).toHaveLength(1);
+            expect(String(transaction.report_ids?.[0])).toBe('1');
+            expect(transaction.transaction_type_identifier).toEqual(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+            expect((transaction as SchATransaction).contribution_aggregate).toBeUndefined();
+            expect(transaction.memo_text?.id).toBeUndefined();
+            expect(String(transaction.memo_text?.report_id)).toBe('1');
+          }
+        }),
+      ).resolves.not.toThrow();
+    });
+
+    it('should reject clone requests for multi-entry transaction types', async () => {
+      vi.spyOn(resolver.service, 'get').mockResolvedValue(
+        SchATransaction.fromJSON({
+          id: '1',
+          transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
+        }),
+      );
+      const route = {
+        queryParamMap: convertToParamMap({ clone: '1' }),
+        paramMap: convertToParamMap({
+          reportId: 1,
+          transactionType: ScheduleATransactionTypes.EARMARK_RECEIPT,
+        }),
+      };
+
+      await expect(resolver.resolve(route as ActivatedRouteSnapshot)).rejects.toThrow(
+        'FECfile+: This transaction (EARMARK_RECEIPT) is not eligible for cloning.',
+      );
+    });
+
     it('should add redesignation', async () => {
       vi.spyOn(resolver.service, 'get').mockImplementation((id) => {
         return Promise.resolve(

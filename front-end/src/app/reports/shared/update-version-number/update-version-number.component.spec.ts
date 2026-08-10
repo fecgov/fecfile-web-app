@@ -34,12 +34,12 @@ describe('UpdateVersionNumberComponent', () => {
   });
 
   it('should sync original version from store selector on initialization', () => {
-    expect(component.versionForm.original().value()).toBe('0');
+    expect(component.form.original().value()).toBe('0');
   });
 
   it('should disable previousSubmissionDate if report is NOT F24', () => {
     expect(component.isF24()).toBe(false);
-    expect(component.versionForm.previousSubmissionDate().disabled()).toBe(true);
+    expect(component.form.previousSubmissionDate().disabled()).toBe(true);
   });
 
   it('should enable previousSubmissionDate if report is F24', () => {
@@ -48,12 +48,12 @@ describe('UpdateVersionNumberComponent', () => {
     fixture.detectChanges();
 
     expect(component.isF24()).toBe(true);
-    expect(component.versionForm.previousSubmissionDate().disabled()).toBe(false);
+    expect(component.form.previousSubmissionDate().disabled()).toBe(false);
   });
 
   it('should validate amendment constraints (required, min, pattern, mismatch)', () => {
-    const amendmentField = component.versionForm.amendment;
-    const originalValue = component.versionForm.original().value() + '';
+    const amendmentField = component.form.amendment;
+    const originalValue = component.form.original().value() + '';
     expect(amendmentField().valid()).toBe(false);
 
     amendmentField().value.set('-1');
@@ -75,7 +75,7 @@ describe('UpdateVersionNumberComponent', () => {
     store.refreshState();
     fixture.detectChanges();
 
-    const dateField = component.versionForm.previousSubmissionDate;
+    const dateField = component.form.previousSubmissionDate;
 
     dateField().value.set('01/01/20YY');
     expect(dateField().valid()).toBe(false);
@@ -88,7 +88,7 @@ describe('UpdateVersionNumberComponent', () => {
   it('should trigger error banner and reject submission if form is invalid', async () => {
     vi.spyOn(messageService, 'add');
     const updateSpy = vi.spyOn(f3xService, 'updateVersionNumber');
-    await submit(component.versionForm);
+    await submit(component.form);
     expect(updateSpy).not.toHaveBeenCalled();
   });
 
@@ -99,10 +99,10 @@ describe('UpdateVersionNumberComponent', () => {
     vi.spyOn(f3xService, 'get').mockResolvedValueOnce(newReport);
     const setActiveReportSpy = vi.spyOn(f3xService, 'setActiveReportById');
     const messageSpy = vi.spyOn(messageService, 'add');
-    component.versionForm.amendment().value.set('3');
-    component.versionForm.eFilingId().value.set('FEC-123456');
+    component.form.amendment().value.set('3');
+    component.form.eFilingId().value.set('FEC-123456');
 
-    await submit(component.versionForm);
+    await submit(component.form);
     await fixture.whenStable();
 
     expect(updateSpy).toHaveBeenCalledWith(report, {
@@ -120,19 +120,19 @@ describe('UpdateVersionNumberComponent', () => {
       }),
     );
 
-    expect(component.versionForm.amendment().value()).toBe('');
-    expect(component.versionForm.eFilingId().value()).toBe('');
-    expect(component.versionForm.original().value()).toBe('3');
+    expect(component.form.amendment().value()).toBe('');
+    expect(component.form.eFilingId().value()).toBe('');
+    expect(component.form.original().value()).toBe('3');
   });
 
   it('should handle service errors gracefully during submission rejection cascades', async () => {
     const messageSpy = vi.spyOn(messageService, 'add');
     vi.spyOn(f3xService, 'updateVersionNumber').mockRejectedValueOnce(new Error('Server Drop'));
 
-    component.versionForm.amendment().value.set('1');
-    component.versionForm.eFilingId().value.set('FEC-0000');
+    component.form.amendment().value.set('1');
+    component.form.eFilingId().value.set('FEC-0000');
 
-    await submit(component.versionForm);
+    await submit(component.form);
 
     expect(messageSpy).toHaveBeenCalledWith(
       expect.objectContaining({

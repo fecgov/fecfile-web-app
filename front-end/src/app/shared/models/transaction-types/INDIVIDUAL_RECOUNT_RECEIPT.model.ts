@@ -17,6 +17,10 @@ export class INDIVIDUAL_RECOUNT_RECEIPT extends SchATransactionType {
     return 'Recount Account';
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

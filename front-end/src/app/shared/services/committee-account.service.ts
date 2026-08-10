@@ -19,12 +19,8 @@ export class CommitteeAccountService {
     return this.apiService.get(`/committees/get-available-committee/?committee_id=${committeeId}`);
   }
 
-  public activateCommittee(committeeUUID?: string, filingFrequency?: string): Promise<boolean> {
-    return this.apiService.post(`/committees/${committeeUUID}/activate/`, { filing_frequency: filingFrequency });
-  }
-
-  public getActiveCommittee(): Promise<CommitteeAccount> {
-    return this.apiService.get(`/committees/active/`);
+  public activateCommittee(committeeUUID?: string): Promise<CommitteeAccount> {
+    return this.apiService.post<CommitteeAccount>(`/committees/${committeeUUID}/activate/`, {});
   }
 
   public async createCommitteeAccount(committeeId: string): Promise<CommitteeAccount> {

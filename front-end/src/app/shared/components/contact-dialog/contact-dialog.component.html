@@ -4,9 +4,9 @@
   [class.contact-dialog-not-submitted]="!formSubmitted"
 >
   <p-dialog
-    [visible]="detailVisible"
+    [(visible)]="visible"
     [style]="{ width: '90%' }"
-    [header]="headerTitle ?? (isNewItem ? 'Add Contact' : 'Edit Contact')"
+    [header]="headerTitle() ?? (isNewItem() ? 'Add Contact' : 'Edit Contact')"
     [modal]="true"
     (onShow)="openDialog()"
     (onHide)="closeDialog()"
@@ -25,13 +25,13 @@
             <span class="span-label" id="contact_type_label">CONTACT TYPE</span>
             <app-contact-lookup
               ariaLabelledBy="contact_type_label"
-              [contactTypeOptions]="contactTypeOptions"
-              [showSearchBoxCallback]="showSearchBox"
+              [contactTypeOptions]="contactTypeOptions()"
+              [(type)]="type"
+              [showSearchBox]="showSearchBox()"
               [showCreateNewContactButton]="false"
               [includeFecfileResults]="false"
               [autosave]="false"
-              [candidateOffice]="defaultCandidateOffice"
-              (contactTypeSelect)="contactTypeChanged($event)"
+              [candidateOffice]="defaultCandidateOffice()"
               (contactLookupSelect)="updateContact($event)"
             >
             </app-contact-lookup>
@@ -39,12 +39,19 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if (contactType === ContactTypes.CANDIDATE) {
+      @if (type() === 'CAN') {
         <div class="grid">
           <div class="col-6">
             <div class="field">
               <label for="candidate_id">CANDIDATE ID</label>
-              <input type="text" pInputText id="candidate_id" appToUpper formControlName="candidate_id" />
+              <input
+                type="text"
+                pInputText
+                id="candidate_id"
+                appToUpper
+                formControlName="candidate_id"
+                (input)="updateData($event, 'candidate_id')"
+              />
               <app-error-messages
                 [form]="form"
                 fieldName="candidate_id"
@@ -53,16 +60,23 @@
               />
             </div>
           </div>
-          <div class="col-4"></div>
         </div>
+        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
       }
-      @if ([ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(contactType)) {
+      @if (isEntity()) {
         <div class="grid">
-          @if (contactType === ContactTypes.COMMITTEE) {
+          @if (type() === 'COM') {
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
-                <input type="text" pInputText id="committee_id" appToUpper formControlName="committee_id" />
+                <input
+                  type="text"
+                  pInputText
+                  id="committee_id"
+                  appToUpper
+                  formControlName="committee_id"
+                  (input)="updateData($event, 'committee_id')"
+                />
                 <app-error-messages
                   [form]="form"
                   fieldName="committee_id"
@@ -75,28 +89,38 @@
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" />
+              <input type="text" pInputText id="name" formControlName="name" (input)="updateData($event, 'name')" />
               <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
-          @if (contactType === ContactTypes.ORGANIZATION) {
-            <div class="col-4"></div>
-          }
         </div>
+        <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
       }
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
+      @if (isPerson()) {
         <div class="grid">
           <div class="col-4">
             <div class="field">
               <label for="last_name">LAST NAME</label>
-              <input type="text" pInputText id="last_name" formControlName="last_name" />
+              <input
+                type="text"
+                pInputText
+                id="last_name"
+                formControlName="last_name"
+                (input)="updateData($event, 'last_name')"
+              />
               <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
           <div class="col-4">
             <div class="field">
               <label for="first_name">FIRST NAME</label>
-              <input type="text" pInputText id="first_name" formControlName="first_name" />
+              <input
+                type="text"
+                pInputText
+                id="first_name"
+                formControlName="first_name"
+                (input)="updateData($event, 'first_name')"
+              />
               <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted" />
             </div>
           </div>
@@ -108,6 +132,9 @@
             </div>
           </div>
         </div>
+        @if (type() === 'IND') {
+          <ng-container [ngTemplateOutlet]="duplicateContactTemplate" />
+        }
         <div class="grid">
           <div class="col-3">
             <div class="field">
@@ -123,14 +150,9 @@
               <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted" />
             </div>
           </div>
-          <div class="col-6"></div>
         </div>
       }
-      <div class="grid">
-        <div class="col-12">
-          <hr />
-        </div>
-      </div>
+      <hr />
       <div class="grid">
         <div class="col-12">
           <h3>Address</h3>
@@ -182,7 +204,7 @@
               aria-labelledby="state_territory_label"
               controlName="state"
               [form]="form"
-              [options]="stateOptions"
+              [options]="stateOptions()"
               appendTo="body"
             />
             <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted" />
@@ -211,12 +233,8 @@
         </div>
         <div class="col-6"></div>
       </div>
-      @if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(contactType)) {
-        <div class="grid">
-          <div class="col-12">
-            <hr />
-          </div>
-        </div>
+      @if (isPerson()) {
+        <hr />
         <div class="grid">
           <div class="col-12">
             <h3>Employer</h3>
@@ -239,12 +257,8 @@
           </div>
         </div>
       }
-      @if (contactType === ContactTypes.CANDIDATE) {
-        <div class="grid">
-          <div class="col-12">
-            <hr />
-          </div>
-        </div>
+      @if (type() === 'CAN') {
+        <hr />
         <div class="grid">
           <div class="col-12">
             <h3>Office</h3>
@@ -261,27 +275,8 @@
       }
     </form>
 
-    @if (showHistory && !isNewItem) {
-      <ng-template #typeBody let-transaction>
-        <a (click)="openTransaction(transaction)">
-          {{ transaction.transaction_type_identifier | label: scheduleTransactionTypeLabels }}
-        </a>
-      </ng-template>
-      <ng-template #dateBody let-transaction>{{ transaction.date | date: 'MM/dd/yyyy' }}</ng-template>
-      <ng-template #amountBody let-transaction>{{ transaction.amount | currency }}</ng-template>
-
-      <app-table
-        [(first)]="first"
-        title="Transaction history"
-        [(sortField)]="sortField"
-        [items]="transactions"
-        [(totalItems)]="totalTransactions"
-        [columns]="columns()"
-        [loading]="tableLoading"
-        [(rowsPerPage)]="rowsPerPage"
-        itemName="transactions"
-        [emptyMessage]="emptyMessage"
-      />
+    @if (showHistory() && !isNewItem()) {
+      <app-contact-transaction-table [contact]="contact()" />
     }
     <ng-template #footer>
       <div class="top-border-footer">
@@ -294,7 +289,7 @@
           data-cy="cancel"
           (click)="closeDialog()"
         ></button>
-        @if (headerTitle) {
+        @if (headerTitle()) {
           <button
             type="button"
             pButton
@@ -316,7 +311,7 @@
             data-cy="save"
             (click)="submitForm()"
           ></button>
-          @if (isNewItem) {
+          @if (isNewItem()) {
             <button
               type="button"
               pButton
@@ -333,3 +328,14 @@
     </ng-template>
   </p-dialog>
 </div>
+
+<ng-template #duplicateContactTemplate>
+  @if (headerTitle()) {
+    <app-duplicate-contact
+      [type]="type()"
+      [data]="data()"
+      [(hideDuplicate)]="hideDuplicate"
+      (useContact)="useContact($event)"
+    />
+  }
+</ng-template>

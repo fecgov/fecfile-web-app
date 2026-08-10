@@ -213,6 +213,18 @@ describe('TransactionReceiptsComponent', () => {
     ).toEqual(false);
   });
 
+  it('test canClone', () => {
+    const transaction = getTestIndividualReceipt() as unknown as TransactionListRecord;
+    const isCloneableSpy = vi.spyOn((component as any).transactionService, 'isCloneable').mockReturnValue(true);
+
+    (component.reportIsEditable as any) = signal(true);
+    expect(component.canClone(transaction)).toBe(true);
+    expect(isCloneableSpy).toHaveBeenCalledWith(transaction);
+
+    (component.reportIsEditable as any) = signal(false);
+    expect(component.canClone(transaction)).toBe(false);
+  });
+
   it('test forceAggregate', async () => {
     const testTransaction: TransactionListRecord = { force_aggregated: null } as unknown as TransactionListRecord;
     vi.spyOn(testItemService, 'unaggregate').mockResolvedValue('');

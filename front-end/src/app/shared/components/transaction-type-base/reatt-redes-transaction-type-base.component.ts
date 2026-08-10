@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Directive, OnDestroy, OnInit } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { ReattRedesTypes, ReattRedesUtils } from '../../utils/reatt-redes/reatt-redes.utils';
 import { SchATransaction } from '../../models/scha-transaction.model';
@@ -21,9 +21,7 @@ interface AccordionData {
   contactIdMap: ContactIdMapType;
 }
 
-@Component({
-  template: '',
-})
+@Directive()
 export abstract class ReattRedesTransactionTypeBaseComponent
   extends DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy

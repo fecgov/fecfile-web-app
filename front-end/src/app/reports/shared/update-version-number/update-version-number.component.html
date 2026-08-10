@@ -9,11 +9,11 @@
   </p>
   <p>If you're unsure whether this is the right choice, contact your analyst.</p>
 </section>
-<form [formRoot]="versionForm" class="grid-form mt-5">
+<form [formRoot]="form" class="grid-form mt-5">
   <app-number-input
     class="horizontal-field"
     label="CURRENT VERSION OR<br />AMENDMENT NUMBER"
-    [formField]="versionForm.original"
+    [formField]="form.original"
   />
   <app-number-input
     class="horizontal-field"
@@ -22,20 +22,20 @@
         if changing from original report. (ie.<br />
         original=0, amendment 1=1)
       </span>"
-    [formField]="versionForm.amendment"
+    [formField]="form.amendment"
   />
 
   @if (isF24()) {
     <app-date-input
       class="grid-col-3"
-      [formField]="versionForm.previousSubmissionDate"
+      [formField]="form.previousSubmissionDate"
       label="PREVIOUS REPORT<br/>SUBMISSION DATE"
     />
   }
-  <app-text-input class="grid-col-3" [formField]="versionForm.eFilingId" label="ORIGINAL REPORT<br />E-FILING ID" />
+  <app-text-input class="grid-col-3" [formField]="form.eFilingId" label="ORIGINAL REPORT<br />E-FILING ID" />
   <hr type="solid" />
   <div class="flex justify-content-between">
     <button pButton pRipple class="p-button-secondary">Cancel</button>
-    <button pButton pRipple appSingleClick type="submit" class="p-button-primary">Update</button>
+    <button pButton pRipple [disabled]="disableSubmission()" type="submit" class="p-button-primary">Update</button>
   </div>
 </form>

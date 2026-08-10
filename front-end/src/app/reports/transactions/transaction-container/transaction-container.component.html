@@ -21,3 +21,20 @@
     [transaction]="transaction()"
   />
 </div>
+
+<app-dialog [(visible)]="showClonedTransactionDialog" title="Cloned transaction">
+  <p>
+    This is a copy of the previous transaction. Please review the details and make any necessary changes before saving.
+  </p>
+  <ng-container dialog-footer #dialogFooterRef>
+    <div class="flex justify-content-center">
+      <button
+        type="button"
+        pButton
+        label="Okay"
+        class="p-button-primary"
+        (click)="showClonedTransactionDialog.set(false)"
+      ></button>
+    </div>
+  </ng-container>
+</app-dialog>

@@ -24,6 +24,10 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
     return false;
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
