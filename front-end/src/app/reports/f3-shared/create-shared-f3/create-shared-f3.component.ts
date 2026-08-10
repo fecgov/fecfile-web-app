@@ -245,7 +245,12 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     const defaultFormType = this.isF3X() ? 'F3XN' : F3FormTypes.F3N;
-    this.form.patchValue({ filing_frequency: this.committeeFrequency(), form_type: defaultFormType });
+    const candidateState = this.committeeAccount().candidate_state;
+    this.form.patchValue({
+      filing_frequency: this.committeeFrequency(),
+      form_type: defaultFormType,
+      state_of_election: candidateState,
+    });
 
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([

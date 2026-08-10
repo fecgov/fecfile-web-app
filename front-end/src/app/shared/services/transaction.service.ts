@@ -1,10 +1,10 @@
 import { formatDate } from '@angular/common';
-import { HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DateType } from '../components/transaction-type-base/transaction-form.utils';
 import { CandidateOfficeTypes } from '../models/contact.model';
 import { AggregationGroups, ScheduleTransaction, Transaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
+import { CloneEligibilityTransaction, isCloneable } from '../utils/transaction-clone.utils';
 import { ApiService } from './api.service';
 import { map, Observable, of } from 'rxjs';
 
@@ -30,6 +30,11 @@ export class TransactionService {
     const response = await this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`);
     return getFromJSON(response);
   };
+
+  public isCloneable(transaction: CloneEligibilityTransaction | undefined): boolean {
+    // wrapper so we don't have to import/directly call the transaction-clone.utils in components
+    return isCloneable(transaction);
+  }
 
   public getPreviousEntityAggregate(
     transaction: Transaction,
@@ -185,7 +190,7 @@ export class TransactionService {
     }
 
     return this.apiService
-      .getObs<PreviousAggregate>(endpoint, { transaction_id, aggregation_group, ...params }, [HttpStatusCode.NotFound])
+      .getObs<PreviousAggregate>(endpoint, { transaction_id, aggregation_group, ...params })
       .pipe(map((response) => response.body?.[resultField] ?? null));
   }
 }

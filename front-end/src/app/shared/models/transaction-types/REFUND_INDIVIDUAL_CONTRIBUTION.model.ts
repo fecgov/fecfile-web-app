@@ -17,6 +17,10 @@ export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB28A',

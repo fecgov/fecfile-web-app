@@ -54,8 +54,8 @@ export class SelectCommitteeComponent {
   }
 
   async activateCommittee(committee: CommitteeAccount): Promise<void> {
-    await this.committeeAccountService.activateCommittee(committee.id, committee.filing_frequency);
-    this.store.dispatch(setCommitteeAccountDetailsAction({ payload: committee }));
+    const activatedCommittee = await this.committeeAccountService.activateCommittee(committee.id);
+    this.store.dispatch(setCommitteeAccountDetailsAction({ payload: activatedCommittee }));
     this.userService.getCurrentUser().then((userLoginData) => {
       this.store.dispatch(userLoginDataRetrievedAction({ payload: userLoginData }));
     });

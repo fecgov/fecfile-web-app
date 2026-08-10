@@ -1,6 +1,7 @@
 import { STANDARD_CONTROLS } from './transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from './transaction-type.model';
-import { isPulledForwardLoan, ScheduleIds, Transaction } from './transaction.model';
+import { isPulledForwardLoan, ScheduleIds } from './transaction.model';
+import type { Transaction } from './transaction.model';
 
 export abstract class SchC1TransactionType extends TransactionType {
   scheduleId = ScheduleIds.C1;

@@ -20,6 +20,10 @@ export class INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT extends SchATransaction
     return 'Non-contribution Account';
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',

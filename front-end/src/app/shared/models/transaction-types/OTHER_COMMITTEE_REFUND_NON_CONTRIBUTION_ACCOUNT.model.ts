@@ -17,6 +17,10 @@ export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransac
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

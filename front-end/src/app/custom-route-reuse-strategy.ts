@@ -12,7 +12,7 @@ export class CustomRouteReuseStrategy extends BaseRouteReuseStrategy {
     // which will return true, when we are navigating from the same component to itself
     let shouldReuse = super.shouldReuseRoute(future, current);
 
-    if (shouldReuse && current.data['noComponentReuse']) {
+    if (shouldReuse && (current.data['noComponentReuse'] || !!future.queryParams['clone'])) {
       shouldReuse = false;
     }
 

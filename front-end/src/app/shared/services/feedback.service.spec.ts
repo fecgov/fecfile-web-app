@@ -39,7 +39,6 @@ describe('FeedbackService', () => {
       action: 'test_action',
       feedback: 'test_feedback',
       about: 'test_about',
-      location: 'test_location',
     };
 
     const feedbackPromise = service.submitFeedback(feedback);

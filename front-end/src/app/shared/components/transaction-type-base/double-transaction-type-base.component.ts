@@ -1,4 +1,4 @@
-import { afterNextRender, Component, effect, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
+import { afterNextRender, Directive, effect, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
@@ -29,9 +29,7 @@ import { AccordionPanel } from 'primeng/accordion';
  * abstract component class adds a child transaction that is defined in the parent
  * transaction's TransactionType class.
  */
-@Component({
-  template: '',
-})
+@Directive()
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy

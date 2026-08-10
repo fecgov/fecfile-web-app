@@ -17,6 +17,10 @@ export class REFUND_TO_OTHER_POLITICAL_COMMITTEE extends SchATransactionType {
     return false;
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA16',

@@ -21,6 +21,10 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransa
     return 'Recount/Legal Proceedings Account: Refund';
   }
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

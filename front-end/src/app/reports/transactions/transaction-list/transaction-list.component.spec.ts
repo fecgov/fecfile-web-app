@@ -17,11 +17,14 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { Form24 } from 'app/shared/models';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
   let router: Router;
+  const isCloneable = vi.fn();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -45,6 +48,7 @@ describe('TransactionListComponent', () => {
               ),
             getTableData: () => of([]),
             update: () => of([]),
+            isCloneable,
           },
         },
         {
@@ -65,6 +69,8 @@ describe('TransactionListComponent', () => {
   });
 
   beforeEach(() => {
+    isCloneable.mockReset();
+    isCloneable.mockReturnValue(true);
     fixture = TestBed.createComponent(TransactionListComponent);
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
@@ -135,5 +141,51 @@ describe('TransactionListComponent', () => {
     expect(receiptSpy).toHaveBeenCalled();
     expect(disbursementsSpy).toHaveBeenCalled();
     expect(loanSpy).toHaveBeenCalled();
+  });
+
+  it('should show Clone only for allowed editable single transactions', () => {
+    const receipts = component.receipts() as unknown as {
+      rowActions: { label: string; isAvailable: (item: TransactionListRecord) => boolean }[];
+      reportService: { isEditable: (report: unknown) => boolean };
+    };
+    isCloneable.mockImplementation((transaction: TransactionListRecord) => !transaction.parent_transaction_id);
+    vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
+    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+
+    expect(cloneAction).toBeDefined();
+
+    const allowedTransaction = TransactionListRecord.fromJSON({
+      id: '100',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    });
+    const childTransaction = TransactionListRecord.fromJSON({
+      id: '101',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      parent_transaction_id: '10',
+    });
+
+    expect(cloneAction?.isAvailable(allowedTransaction)).toBe(true);
+    expect(cloneAction?.isAvailable(childTransaction)).toBe(false);
+  });
+
+  it('should navigate directly to the pre-filled create page when Clone is selected', () => {
+    const receipts = component.receipts() as unknown as {
+      rowActions: { label: string; action: (item: TransactionListRecord) => void }[];
+      reportService: { isEditable: (report: unknown) => boolean };
+    };
+    vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(TestBed.inject(ConfirmationService), 'confirm');
+    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+    const transaction = TransactionListRecord.fromJSON({
+      id: '100',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    });
+
+    cloneAction?.action(transaction);
+
+    expect(confirmSpy).not.toHaveBeenCalled();
+
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/create/INDIVIDUAL_RECEIPT?clone=100');
   });
 });

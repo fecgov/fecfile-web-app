@@ -75,8 +75,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   async function testNavigate(navEvent: NavigationEvent, route: string, options?: NavigationBehaviorOptions) {
     await component.navigateTo(navEvent);
-    if (options) expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route, options);
-    else expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(route);
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(...[route, options].filter(Boolean));
   }
 
   beforeAll(async () => {
@@ -163,6 +162,18 @@ describe('TransactionTypeBaseComponent', () => {
       fixture.detectChanges();
       expect(component.contactTypeOptions).toContainEqual({ label: 'Individual', value: ContactTypes.INDIVIDUAL });
       expect(component.contactTypeOptions.length).toEqual(1);
+    });
+
+    it('should pre-populate clone-like transactions without an id', () => {
+      component.transaction = getTestIndividualReceipt();
+      component.transaction.id = undefined;
+
+      fixture.detectChanges();
+
+      expect(component.form.get('contribution_amount')?.value).toBe('202.2');
+      expect(component.form.get('contribution_date')?.value?.toISOString().slice(0, 10)).toBe('2022-02-02');
+      expect(component.form.get('entity_type')?.value).toBe(ContactTypes.INDIVIDUAL);
+      expect(component.form.get('text4000')?.value).toBe('Memo!');
     });
   });
 
@@ -484,6 +495,25 @@ describe('TransactionTypeBaseComponent', () => {
             ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ),
         );
+      });
+    });
+
+    describe('NavigationDestination.CLONE', () => {
+      it('should route to clone url without resetting url', async () => {
+        const resetSpy = vi.spyOn(component, 'resetForm');
+        const transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+        transaction.id = '1';
+        await testNavigate(
+          new NavigationEvent(
+            NavigationAction.SAVE,
+            NavigationDestination.CLONE,
+            transaction,
+            ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+          ),
+          '/reports/transactions/report/999/create/INDIVIDUAL_RECEIPT?clone=1',
+          { onSameUrlNavigation: 'reload' },
+        );
+        expect(resetSpy).not.toHaveBeenCalled();
       });
     });
   });

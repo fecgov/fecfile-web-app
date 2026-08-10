@@ -49,15 +49,15 @@ describe('EditNameDialogComponent', () => {
   });
 
   describe('Prepopulation and Synchronization', () => {
-    it('should pre-populate the nameModel when visible turns true', async () => {
-      component.nameModel.set({ first: '', last: '' });
+    it('should pre-populate the model when visible turns true', async () => {
+      component.model.set({ first: '', last: '' });
 
       host.visible = true;
       fixture.detectChanges();
       await fixture.whenStable();
 
-      expect(component.nameModel().first).toBe('John');
-      expect(component.nameModel().last).toBe('Smith');
+      expect(component.model().first).toBe('John');
+      expect(component.model().last).toBe('Smith');
     });
   });
 
@@ -66,15 +66,15 @@ describe('EditNameDialogComponent', () => {
       host.visible = true;
       fixture.detectChanges();
 
-      component.nameModel.set({ first: '', last: '' });
+      component.model.set({ first: '', last: '' });
       fixture.detectChanges();
 
       const updateSpy = vi.spyOn(testUserService, 'updateCurrentUser');
 
       await component.submit();
 
-      expect(component.nameForm.first().touched()).toBe(true);
-      expect(component.nameForm.last().touched()).toBe(true);
+      expect(component.form.first().touched()).toBe(true);
+      expect(component.form.last().touched()).toBe(true);
       expect(updateSpy).not.toHaveBeenCalled();
     });
 
@@ -83,7 +83,7 @@ describe('EditNameDialogComponent', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      component.nameModel.set({ first: 'Johnny', last: 'Smithson' });
+      component.model.set({ first: 'Johnny', last: 'Smithson' });
       fixture.detectChanges();
 
       const updateSpy = vi.spyOn(testUserService, 'updateCurrentUser').mockResolvedValue(johnSmith);

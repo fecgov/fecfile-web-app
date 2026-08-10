@@ -50,6 +50,10 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
     electionType: 'P',
   };
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchETransaction.fromJSON({
       form_type: 'SE',

@@ -14,6 +14,10 @@ export class TRIBAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
   override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB21B',

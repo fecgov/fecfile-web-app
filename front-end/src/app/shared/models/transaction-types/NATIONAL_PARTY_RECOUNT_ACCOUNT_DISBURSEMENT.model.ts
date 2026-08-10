@@ -20,6 +20,10 @@ export class NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT extends SchBTransaction
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Recount/Legal Proceedings Account: ';
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

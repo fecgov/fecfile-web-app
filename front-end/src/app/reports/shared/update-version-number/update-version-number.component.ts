@@ -11,6 +11,7 @@ import { MessageService } from 'primeng/api';
 import { NumberInput } from 'app/shared/components/signal-inputs/number-input/number.input';
 import { DateInput, validateDate } from 'app/shared/components/signal-inputs/date-input/date.input';
 import { TextInput } from 'app/shared/components/signal-inputs/text-input/text.input';
+import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 
 @Component({
   selector: 'app-update-version-number',
@@ -19,21 +20,21 @@ import { TextInput } from 'app/shared/components/signal-inputs/text-input/text.i
   styleUrl: './update-version-number.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UpdateVersionNumberComponent {
+export class UpdateVersionNumberComponent extends SignalFormComponent<VersionData> {
   private readonly reportService = inject(ReportService);
   private readonly store = inject(Store);
   protected readonly messageService = inject(MessageService);
   protected readonly report = this.store.selectSignal(selectActiveReport);
   readonly isF24 = computed(() => this.report().report_type === ReportTypes.F24);
 
-  private readonly versionModel = signal<VersionData>({
+  protected readonly model = signal<VersionData>({
     original: '',
     amendment: '',
     eFilingId: '',
     previousSubmissionDate: null,
   });
-  readonly versionForm = form(
-    this.versionModel,
+  readonly form = form(
+    this.model,
     (schema) => {
       disabled(schema.original);
       required(schema.amendment, { message: 'This is a required field' });
@@ -62,9 +63,9 @@ export class UpdateVersionNumberComponent {
         ignoreValidators: 'none',
         action: async () => {
           try {
-            await this.reportService.updateVersionNumber(this.report(), this.versionForm().value());
+            await this.reportService.updateVersionNumber(this.report(), this.form().value());
             const report = await this.reportService.setActiveReportById(this.report().id);
-            this.versionForm().reset({
+            this.form().reset({
               original: report.report_version ?? 0,
               amendment: '',
               eFilingId: '',
@@ -96,9 +97,10 @@ export class UpdateVersionNumberComponent {
   );
 
   constructor() {
+    super();
     effect(() => {
       const report = this.report();
-      this.versionForm.original().value.set(report.report_version ?? '0');
+      this.form.original().value.set(report.report_version ?? '0');
     });
   }
 

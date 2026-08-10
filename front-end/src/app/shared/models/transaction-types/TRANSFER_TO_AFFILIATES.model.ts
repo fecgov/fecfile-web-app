@@ -12,6 +12,10 @@ export class TRANSFER_TO_AFFILIATES extends SchBTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
+  override get isCloneableTransactionType(): boolean {
+    return true;
+  }
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB22',
