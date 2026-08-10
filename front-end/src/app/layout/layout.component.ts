@@ -1,16 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  AfterViewInit,
-  Component,
-  AfterViewChecked,
-  inject,
-  viewChild,
-  computed,
-  signal,
-  DestroyRef,
-  ElementRef,
-} from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Component, inject, viewChild, computed, signal, DestroyRef, ElementRef, effect } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderComponent } from './header/header.component';
@@ -61,26 +50,28 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
     DialogComponent,
   ],
 })
-export class LayoutComponent implements AfterViewChecked, AfterViewInit {
+export class LayoutComponent {
   Sidebar = Sidebar;
+  private readonly router = inject(Router);
   readonly layoutService = inject(LayoutService);
   private readonly store = inject(Store);
-  readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
+  private readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
 
-  readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
   private readonly navEnd = toSignal(injectNavigationEnd());
-
-  readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
   readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
+  readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
   readonly layoutControls = computed(() => {
     this.navEnd();
     return new LayoutControls(collectRouteData(this.route.snapshot));
   });
 
-  isCookiesDisabled = signal(false);
+  readonly isCookiesDisabled = computed(() => {
+    this.navEnd();
+    return this.router.url === '/cookies-disabled';
+  });
 
   readonly topPadding = computed(() => {
     if (this.isCookiesDisabled()) return '165px';
@@ -97,7 +88,7 @@ export class LayoutComponent implements AfterViewChecked, AfterViewInit {
 
   readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
 
-  environmentBannerVisible = signal(true);
+  readonly environmentBannerVisible = signal(true);
   readonly environmentBannerDismissed = signal(false);
 
   constructor() {
@@ -119,32 +110,23 @@ export class LayoutComponent implements AfterViewChecked, AfterViewInit {
       mobileQuery.addEventListener('change', listener);
       this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
     }
-  }
 
-  ngAfterViewChecked(): void {
-    this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
-  }
+    effect((onCleanup) => {
+      const banner = this.environmentBanner()?.nativeElement;
 
-  ngAfterViewInit(): void {
-    const banner = this.environmentBanner()?.nativeElement;
+      if (!banner) {
+        this.environmentBannerVisible.set(false);
+        return;
+      }
 
-    if (!banner) {
-      this.environmentBannerVisible.set(false);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        this.environmentBannerVisible.set(entry.isIntersecting);
-      },
-      {
+      const observer = new IntersectionObserver(([entry]) => this.environmentBannerVisible.set(entry.isIntersecting), {
         threshold: 0,
-      },
-    );
+      });
 
-    observer.observe(banner);
+      observer.observe(banner);
 
-    this.destroyRef.onDestroy(() => observer.disconnect());
+      onCleanup(() => observer.disconnect());
+    });
   }
 }
 
