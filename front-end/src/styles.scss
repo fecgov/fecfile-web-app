@@ -903,6 +903,7 @@ p-accordion-content[data-p-active='false'] > div.p-accordioncontent-content {
 
 .primary-icon {
   color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 .warning-icon {

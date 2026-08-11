@@ -1,6 +1,6 @@
 <app-dialog
   [(visible)]="dialogVisible"
-  [title]="hasAvailableReports() ? 'Select a report' : 'Hang on...'"
+  [header]="hasAvailableReports() ? 'Select a report' : 'Hang on...'"
   submitLabel="Continue"
   (confirm)="createReattribution()"
   [closeOnly]="!hasAvailableReports()"

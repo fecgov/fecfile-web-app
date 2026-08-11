@@ -10,7 +10,7 @@ import { ButtonDirective } from 'primeng/button';
 export class DialogComponent {
   readonly submitDisabled = input<boolean>();
   readonly visible = model.required<boolean>();
-  readonly title = input.required<string>();
+  readonly header = input.required<string>();
   readonly showTitleWarning = input(false);
   readonly submitLabel = input('Save');
   readonly closeOnly = input(false);
@@ -50,7 +50,7 @@ export class DialogComponent {
   constructor() {
     effect(() => {
       if (this.visible()) {
-        this.dialog().nativeElement.show();
+        this.dialog().nativeElement.showModal();
       } else {
         this.dialog().nativeElement.close();
       }
