@@ -47,7 +47,7 @@
     "ngxtension": "7.2.0",
     "primeflex": "4.0.0",
     "primeicons": "7.0.0",
-    "primeng": "~21.1.6"
+    "primeng": "~21.1.9"
   },
   "devDependencies": {
     "@angular-eslint/builder": "~21.3.1",
