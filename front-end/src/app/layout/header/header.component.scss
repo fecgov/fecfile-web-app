@@ -22,3 +22,12 @@ nav {
 :host ::ng-deep .dead-link {
   color: #d6d7d9 !important;
 }
+
+.navbar-brand {
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  color: rgba(0, 0, 0, 1);
+  text-decoration: none;
+  white-space: nowrap;
+  height: 53px;
+}

@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
 import { DialogModule } from 'primeng/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { LoginService } from 'app/shared/services/login.service';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -54,6 +55,7 @@ export class LayoutComponent {
   Sidebar = Sidebar;
   private readonly router = inject(Router);
   readonly layoutService = inject(LayoutService);
+  readonly loginService = inject(LoginService);
   private readonly store = inject(Store);
   private readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   private readonly destroyRef = inject(DestroyRef);
@@ -71,19 +73,6 @@ export class LayoutComponent {
   readonly isCookiesDisabled = computed(() => {
     this.navEnd();
     return this.router.url === '/cookies-disabled';
-  });
-
-  readonly topPadding = computed(() => {
-    if (this.isCookiesDisabled()) return '165px';
-    else if (this.serviceAvailable() === false) return '107px';
-    else return '64px';
-  });
-
-  readonly footerTopPadding = computed(() => {
-    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) return '0px';
-    else if (this.isCookiesDisabled()) return '165px';
-    else if (this.serviceAvailable() === false) return '107px';
-    else return '64px';
   });
 
   readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
