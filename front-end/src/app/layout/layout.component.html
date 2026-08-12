@@ -6,9 +6,7 @@
   <app-environment-banner #environmentBanner />
   <app-banner />
   @if (layoutControls().showHeader) {
-    <div class="header-container sticky-header">
-      <app-header [headerStyle]="layoutControls().headerStyle" />
-    </div>
+    <app-header [headerStyle]="layoutControls().headerStyle" />
   }
 
   @if (layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
@@ -17,7 +15,7 @@
 
   <!--  Begin Sidebar section -->
   @if (layoutControls().sidebar === Sidebar.Report && layoutService.showSidebar()) {
-    <div class="inline-flex w-100">
+    <div class="flex flex-grow-1 fec-background-color">
       <div
         [class]="layoutControls().sidebar === Sidebar.Security ? 'gray' : 'fec-background-color'"
         class="flex-shrink-1"
@@ -34,10 +32,7 @@
             <router-outlet></router-outlet>
           </div>
         </div>
-        <div class="flex-grow-1 flex flex-column">
-          <div class="flex-grow-1 footer-spacer"></div>
-          <app-footer [showSidebar]="true" />
-        </div>
+        <app-footer [showSidebar]="true" />
       </div>
     </div>
   } @else if (layoutControls().sidebar === Sidebar.Security) {
@@ -49,10 +44,7 @@
         <div class="router-outlet">
           <router-outlet></router-outlet>
         </div>
-        <div class="flex-grow-1 flex flex-column">
-          <div class="flex-grow-1 footer-spacer"></div>
-          <app-footer [showSidebar]="true" />
-        </div>
+        <app-footer [showSidebar]="true" />
       </div>
     </div>
   }
