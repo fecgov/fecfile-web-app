@@ -352,7 +352,8 @@ label.disabled {
 }
 
 .p-select {
-  height: var(--input-height);
+  min-height: var(--input-height);
+  height: fit-content;
 }
 
 .dialog-label {
