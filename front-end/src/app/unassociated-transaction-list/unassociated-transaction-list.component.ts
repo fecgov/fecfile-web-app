@@ -5,7 +5,6 @@ import { UnassociatedTransactionLoansAndDebtsComponent } from './unassociated-tr
 import { Toolbar } from 'primeng/toolbar';
 import { TabsModule } from 'primeng/tabs';
 import { PrimeTemplate } from 'primeng/api';
-import { TableActionsButtonComponent } from '../shared/components/table-actions-button/table-actions-button.component';
 import { TransactionListComponent } from 'app/reports/transactions/transaction-list/transaction-list.component';
 
 @Component({
@@ -16,7 +15,6 @@ import { TransactionListComponent } from 'app/reports/transactions/transaction-l
     Toolbar,
     PrimeTemplate,
     TabsModule,
-    TableActionsButtonComponent,
     UnassociatedTransactionReceiptsComponent,
     UnassociatedTransactionDisbursementsComponent,
     UnassociatedTransactionLoansAndDebtsComponent,
