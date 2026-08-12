@@ -500,17 +500,6 @@ table {
   }
 }
 
-.navbar-brand {
-  padding-top: 0.3125rem;
-  padding-bottom: 0.3125rem;
-  margin-right: 1rem;
-  font-size: 1.25rem;
-  color: rgba(0, 0, 0, 1);
-  text-decoration: none;
-  white-space: nowrap;
-  height: 53px;
-}
-
 .circle-icon-tooltip {
   font-size: 1.5rem;
   margin-left: 0.5rem;
@@ -656,6 +645,11 @@ textarea {
 .transparent-grey {
   color: transparent;
   --icon-symbol: var(--text-color-secondary);
+}
+
+.transparent-black {
+  color: transparent;
+  --icon-symbol: #212121;
 }
 
 .fec-loader-div {
