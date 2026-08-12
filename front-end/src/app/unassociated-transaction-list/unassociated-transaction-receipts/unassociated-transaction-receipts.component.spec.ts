@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,10 +38,7 @@ describe('UnassociatedTransactionReceiptsComponent', () => {
         TransactionSchAService,
       ],
     }).compileComponents();
-    const store = TestBed.inject(Store);
-    selectSignalSpy = vi.spyOn(store, 'selectSignal');
     fixture = TestBed.createComponent(UnassociatedTransactionReceiptsComponent);
-    router = TestBed.inject(Router);
     testItemService = TestBed.inject(TransactionSchAService);
     testItemService.delete = async (): Promise<null> => {
       return null;

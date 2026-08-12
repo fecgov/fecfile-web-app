@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models';
 import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { QueryParams } from './api.service';

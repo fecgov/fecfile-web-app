@@ -56,7 +56,6 @@ describe('UnassociatedTransactionListComponent', () => {
     isCloneable.mockReset();
     isCloneable.mockReturnValue(true);
     fixture = TestBed.createComponent(UnassociatedTransactionListComponent);
-    router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -39,7 +39,6 @@ describe('UnassociatedTransactionLoansAndDebtsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UnassociatedTransactionLoansAndDebtsComponent);
-    router = TestBed.inject(Router);
     reportService = TestBed.inject(ReportService);
     vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
     component = fixture.componentInstance;
