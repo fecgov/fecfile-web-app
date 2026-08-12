@@ -1,0 +1,55 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { provideMockStore } from '@ngrx/store/testing';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
+import { SchDTransaction, ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
+import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
+import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { UnassociatedTransactionLoansAndDebtsComponent } from './unassociated-transaction-loans-and-debts.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { ReportService } from 'app/shared/services/report.service';
+
+describe('UnassociatedTransactionLoansAndDebtsComponent', () => {
+  let fixture: ComponentFixture<UnassociatedTransactionLoansAndDebtsComponent>;
+  let component: UnassociatedTransactionLoansAndDebtsComponent;
+  let reportService: ReportService<Form3X>;
+  let router: Router;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ToolbarModule, TableModule, SelectModule, FormsModule, UnassociatedTransactionLoansAndDebtsComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        MessageService,
+        ConfirmationService,
+        provideMockStore(testMockStore()),
+        {
+          provide: ActivatedRoute,
+        },
+        TransactionSchCService,
+      ],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UnassociatedTransactionLoansAndDebtsComponent);
+    router = TestBed.inject(Router);
+    reportService = TestBed.inject(ReportService);
+    vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

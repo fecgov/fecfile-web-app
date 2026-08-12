@@ -7,5 +7,6 @@ export const environment = createEnvironment({
   baseUri: 'https://dev-api.fecfile.fec.gov',
   overrides: {
     ffapiTimeoutCookieName: 'ffapi_timeout_dev',
+    showAllTransactionsPage: true,
   },
 });
