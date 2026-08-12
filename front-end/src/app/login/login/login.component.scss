@@ -30,6 +30,8 @@
   cursor: pointer;
   text-decoration: none;
   transition: color 0.1s linear;
+  width: fit-content;
+  align-self: center;
 }
 
 .login-page {
@@ -43,11 +45,10 @@
 }
 
 .top-section {
-  padding-bottom: 32px;
   flex: 0 0 auto;
-
+  margin-bottom: 32px;
   @media (min-width: 992px) {
-    padding-bottom: 64px;
+    margin-bottom: 64px;
   }
 }
 
@@ -55,29 +56,14 @@
   box-sizing: border-box;
   width: calc(100vw - var(--scrollbar-width));
   position: relative;
-  padding-bottom: 64px;
-  height: calc(100% - 301px);
   flex: 1;
   display: flex;
   justify-content: center;
-
-  @media (min-width: 596px) {
-    height: calc(100% - 274px);
-  }
-  @media (min-width: 768px) {
-    height: calc(100% - 274px);
-  }
-  @media (min-width: 992px) {
-    height: calc(100% - 306px);
-  }
-  @media (min-width: 1200px) {
-    height: calc(100% - 263px);
-  }
 }
 
 #blue-background {
   background-color: #0bacfa;
-  height: calc(100% - 80px);
+  height: calc(100% - 16px);
   position: absolute;
   top: 80px;
   left: 0;
