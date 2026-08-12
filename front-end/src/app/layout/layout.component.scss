@@ -1,7 +1,7 @@
 $sidebar-width: 284px;
 
 #sidebar-container {
-  height: calc(100vh - var(--header-total));
+  height: fit-content;
   width: $sidebar-width;
   min-width: $sidebar-width;
   max-width: $sidebar-width;
@@ -17,6 +17,8 @@ $sidebar-width: 284px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: min-content;
+  max-width: 100vw;
 }
 
 #content-offset {
@@ -35,7 +37,7 @@ $sidebar-width: 284px;
   flex-direction: column;
 }
 
-.sidebar-content-container .header-container {
+.sidebar-content-container app-header {
   padding: 0;
   padding-bottom: var(--header-total);
 }
@@ -55,7 +57,7 @@ app-footer {
 .sidebar-content-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-total));
+  background-color: white;
   width: 100%;
   margin-top: 0;
   transition:
@@ -63,9 +65,7 @@ app-footer {
     min-height 0.3s ease-in-out;
   padding-top: 64px;
   & > .main-content {
-    margin-left: 32px;
-    margin-right: 0;
-    width: calc(100% - 64px);
+    margin: 0 0 64px 32px;
   }
 }
 
@@ -91,23 +91,13 @@ app-footer {
   }
 }
 
-app-environment-banner {
-  display: block;
-}
-
-.header-container {
-  display: block;
-}
-
 app-banner {
-  display: block;
   position: sticky;
   top: 0;
   z-index: 1001;
 }
 
-.header-container.sticky-header {
-  display: block;
+app-header {
   position: sticky;
   top: var(--header-top);
   transition: var(--header-transition);

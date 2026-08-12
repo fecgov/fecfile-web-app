@@ -1,4 +1,4 @@
-import { Component, computed, model } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { environment } from 'environments/environment';
 
 type BannerType = 'development' | 'stage' | 'test';
@@ -9,8 +9,7 @@ type BannerType = 'development' | 'stage' | 'test';
   styleUrls: ['./environment-banner.component.scss'],
 })
 export class EnvironmentBannerComponent {
-  readonly dismissed = model(false);
-  readonly showBanner = computed(() => !!this.bannerConfig && !this.dismissed());
+  readonly showBanner = computed(() => !!this.bannerConfig);
 
   readonly subtitle = 'This site is for testing ideas and code.';
 
@@ -30,8 +29,4 @@ export class EnvironmentBannerComponent {
   };
 
   readonly bannerConfig = environment.environmentBanner ? this.config[environment.environmentBanner] : null;
-
-  dismiss(): void {
-    this.dismissed.set(true);
-  }
 }

@@ -89,7 +89,6 @@ export class LayoutComponent {
   readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
 
   readonly environmentBannerVisible = signal(true);
-  readonly environmentBannerDismissed = signal(false);
 
   constructor() {
     if (this.useDynamicSidebar) {
