@@ -1,8 +1,6 @@
 import type { Mock } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
@@ -17,10 +15,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 describe('UnassociatedTransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<UnassociatedTransactionReceiptsComponent>;
   let component: UnassociatedTransactionReceiptsComponent;
-  let router: Router;
   let testItemService: TransactionSchAService;
   let testConfirmationService: ConfirmationService;
-  let selectSignalSpy: Mock;
   let confirmSpy: Mock;
 
   beforeEach(async () => {
@@ -32,9 +28,6 @@ describe('UnassociatedTransactionReceiptsComponent', () => {
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore()),
-        {
-          provide: ActivatedRoute,
-        },
         TransactionSchAService,
       ],
     }).compileComponents();

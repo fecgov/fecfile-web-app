@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -26,9 +26,6 @@ describe('UnassociatedTransactionDisbursementsComponent', () => {
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore()),
-        {
-          provide: ActivatedRoute,
-        },
       ],
     }).compileComponents();
   });

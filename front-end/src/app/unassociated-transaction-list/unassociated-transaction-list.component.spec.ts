@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
@@ -17,7 +17,6 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 describe('UnassociatedTransactionListComponent', () => {
   let component: UnassociatedTransactionListComponent;
   let fixture: ComponentFixture<UnassociatedTransactionListComponent>;
-  let router: Router;
   const isCloneable = vi.fn();
 
   beforeEach(async () => {

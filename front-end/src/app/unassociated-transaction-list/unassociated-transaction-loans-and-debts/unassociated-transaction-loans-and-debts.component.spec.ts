@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
@@ -18,7 +17,6 @@ describe('UnassociatedTransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<UnassociatedTransactionLoansAndDebtsComponent>;
   let component: UnassociatedTransactionLoansAndDebtsComponent;
   let reportService: ReportService<Form3X>;
-  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,9 +27,6 @@ describe('UnassociatedTransactionLoansAndDebtsComponent', () => {
         MessageService,
         ConfirmationService,
         provideMockStore(testMockStore()),
-        {
-          provide: ActivatedRoute,
-        },
         TransactionSchCService,
       ],
     }).compileComponents();

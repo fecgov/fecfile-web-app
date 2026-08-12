@@ -5,15 +5,6 @@ import { QueryParams } from 'app/shared/services/api.service';
 import { UnassociatedTransactionListService } from 'app/shared/services/transaction-list-unassociated.service';
 import { TransactionListTableBaseComponent } from '../reports/transactions/transaction-list/transaction-list-table-base.component';
 
-const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
-const loansDebts = [
-  'LOAN_RECEIVED_FROM_INDIVIDUAL',
-  'LOAN_RECEIVED_FROM_BANK',
-  'LOAN_BY_COMMITTEE',
-  'DEBT_OWED_BY_COMMITTEE',
-  'DEBT_OWED_TO_COMMITTEE',
-];
-
 @Component({
   template: '',
 })
