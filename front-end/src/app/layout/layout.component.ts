@@ -87,7 +87,6 @@ export class LayoutComponent {
   });
 
   readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
-
   readonly environmentBannerVisible = signal(true);
 
   constructor() {
