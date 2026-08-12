@@ -53,7 +53,7 @@ export class LOAN_RECEIVED_FROM_BANK extends SchCTransactionType {
     ScheduleATransactionTypes.LOAN_RECEIVED_FROM_BANK_RECEIPT,
   ];
   override subTransactionConfig = [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR];
-  override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
+  override _navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
