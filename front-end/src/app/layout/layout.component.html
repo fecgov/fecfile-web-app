@@ -1,9 +1,9 @@
 <div
   id="page-container"
   [class]="[layoutControls().backgroundStyle]"
-  [class.environment-hidden]="!environmentBannerVisible() || environmentBannerDismissed()"
+  [class.environment-hidden]="!environmentBannerVisible()"
 >
-  <app-environment-banner #environmentBanner [(dismissed)]="environmentBannerDismissed" />
+  <app-environment-banner #environmentBanner />
   <app-banner />
   @if (layoutControls().showHeader) {
     <div class="header-container sticky-header">
