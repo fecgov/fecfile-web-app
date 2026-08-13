@@ -7,6 +7,8 @@ import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
+import { UnassociatedTransactionListComponent } from './unassociated-transaction-list/unassociated-transaction-list.component';
+import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
 
 export const ROUTES: Route[] = [
   {
@@ -46,6 +48,17 @@ export const ROUTES: Route[] = [
           sidebar: Sidebar.Report,
         },
         canActivate: [loggedInGuard, nameGuard, securityNoticeGuard, committeeGuard],
+      },
+      {
+        path: 'transactions',
+        component: UnassociatedTransactionListComponent,
+        canActivate: [
+          loggedInGuard,
+          nameGuard,
+          securityNoticeGuard,
+          committeeGuard,
+          featureFlagGuard('showAllTransactionsPage'),
+        ],
       },
       {
         path: 'contacts',
