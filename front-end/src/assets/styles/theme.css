@@ -3478,3 +3478,7 @@ td {
 .surface-ground {
   background-color: var(--surface-ground) !important;
 }
+
+.p-tablist-tab-list {
+    font-size: 18px;
+  }

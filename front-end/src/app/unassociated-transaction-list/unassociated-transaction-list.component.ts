@@ -10,7 +10,7 @@ import { TransactionReceiptsComponent } from 'app/reports/transactions/transacti
 @Component({
   selector: 'app-unassociated-transactions-list',
   templateUrl: './unassociated-transaction-list.component.html',
-  styleUrls: ['../reports/transactions/transaction.scss', './unassociated-transaction-list.component.scss'],
+  styleUrls: ['../reports/transactions/transaction.scss'],
   imports: [
     Toolbar,
     PrimeTemplate,
