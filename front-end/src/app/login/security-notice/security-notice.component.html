@@ -5,31 +5,6 @@
   </div>
 
   @if (showForm()) {
-    <form [formRoot]="form" class="footer">
-      <hr type="solid" />
-      <app-checkbox-input
-        [formField]="form.annualConsent"
-        label="You consent to the security notification for one year"
-      />
-
-      <div class="flex justify-content-center gap-6">
-        <p-button
-          [pt]="{ root: 'security-button' }"
-          severity="secondary"
-          label="Decline and exit"
-          (click)="loginService.logOut()"
-          (keypress)="loginService.logOut()"
-        />
-        <p-button
-          [pt]="{ root: 'security-button' }"
-          data-cy="consent-button"
-          label="Consent"
-          type="submit"
-          [disabled]="!hasScrolledToBottom() || disableSubmission()"
-        />
-      </div>
-    </form>
-
-    <div class="consent-box"></div>
+    <app-security-notice-form [hasScrolledToBottom]="hasScrolledToBottom()" />
   }
 </div>
