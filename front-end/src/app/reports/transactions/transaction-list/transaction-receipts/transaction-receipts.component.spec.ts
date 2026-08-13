@@ -12,7 +12,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
-import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
@@ -20,12 +19,13 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { TRANSACTION_LIST_SERVICE, TransactionListService } from 'app/shared/services/transaction-list.service';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
   let component: TransactionReceiptsComponent;
   let router: Router;
-  let testItemService: TransactionSchAService;
+  let testItemService: TransactionListService;
   let testConfirmationService: ConfirmationService;
   let selectSignalSpy: Mock;
   let confirmSpy: Mock;
@@ -52,14 +52,14 @@ describe('TransactionReceiptsComponent', () => {
             },
           },
         },
-        TransactionSchAService,
+        { provide: TRANSACTION_LIST_SERVICE, useClass: TransactionListService },
       ],
     }).compileComponents();
     const store = TestBed.inject(Store);
     selectSignalSpy = vi.spyOn(store, 'selectSignal');
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchAService);
+    testItemService = TestBed.inject(TRANSACTION_LIST_SERVICE);
     testItemService.delete = async (): Promise<null> => {
       return null;
     };

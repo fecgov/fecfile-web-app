@@ -25,14 +25,14 @@
     </p-tabpanels>
   </p-tabs>
 
-  <app-unassociated-transaction-receipts (reloadTables)="refreshTables()" />
+  <app-transaction-receipts (reloadTables)="refreshTables()" />
 
-  <app-unassociated-transaction-disbursements
+  <app-transaction-disbursements
     (requestReportSelection)="
       openSecondaryReportSelectionDialog($event.transaction, $event.formType, $event.createMethod)
     "
     (reloadTables)="refreshTables()"
   />
 
-  <app-unassociated-transaction-loans-and-debts (reloadTables)="refreshTables()" />
+  <app-transaction-loans-and-debts (reloadTables)="refreshTables()" />
 </div>

@@ -18,19 +18,20 @@ import {
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
+import { TRANSACTION_LIST_SERVICE } from 'app/shared/services/transaction-list.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 
-const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
-const loansDebts = [
+const loanReceipts = new Set(['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE']);
+const loansDebts = new Set([
   'LOAN_RECEIVED_FROM_INDIVIDUAL',
   'LOAN_RECEIVED_FROM_BANK',
   'LOAN_BY_COMMITTEE',
   'DEBT_OWED_BY_COMMITTEE',
   'DEBT_OWED_TO_COMMITTEE',
-];
+]);
 
 @Component({
   template: '',
@@ -39,6 +40,7 @@ export abstract class TransactionListTableBaseComponent
   extends TableListBaseComponent<TransactionListRecord>
   implements OnInit
 {
+  protected readonly itemService = inject(TRANSACTION_LIST_SERVICE);
   protected readonly reportService = inject(ReportService);
   protected readonly transactionService = inject(TransactionService);
   protected readonly router = inject(Router);
@@ -282,11 +284,13 @@ export abstract class TransactionListTableBaseComponent
     return {} as TransactionListRecord;
   }
 
+  abstract readonly schedules: string;
   override readonly params = computed(() => {
     const params: QueryParams = { page_size: this.rowsPerPage() };
     if (this.reportId) params['report_id'] = this.reportId;
     params['report_type'] = this.report().report_type;
     params['report_code_label'] = this.report().report_code_label ?? '';
+    params['schedules'] = this.schedules;
     return params;
   });
 
@@ -416,9 +420,9 @@ export abstract class TransactionListTableBaseComponent
   private canDelete(transaction: TransactionListRecord): boolean {
     if (transaction.transaction_type_identifier) {
       // Shouldn't be able to delete loan receipts
-      if (loanReceipts.includes(transaction.transaction_type_identifier)) return false;
+      if (loanReceipts.has(transaction.transaction_type_identifier)) return false;
       // Shouldn't be able to delete pulled forward loans and debts
-      if (loansDebts.includes(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
+      if (loansDebts.has(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
         return false;
     }
 

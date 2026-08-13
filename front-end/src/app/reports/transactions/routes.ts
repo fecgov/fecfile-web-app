@@ -6,6 +6,7 @@ import { TransactionTypePickerComponent } from './transaction-type-picker/transa
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { TRANSACTION_LIST_SERVICE, TransactionListService } from 'app/shared/services/transaction-list.service';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -20,6 +21,7 @@ export const TRANSACTION_ROUTES: Route[] = [
     title: 'Manage your transactions',
     component: TransactionListComponent,
     resolve: { report: ReportResolver },
+    providers: [{ provide: TRANSACTION_LIST_SERVICE, useClass: TransactionListService }],
     data: {
       sidebarSection: ReportSidebarSection.TRANSACTIONS,
     },

@@ -1,6 +1,5 @@
-import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
@@ -23,7 +22,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent {
-  override readonly itemService = inject(TransactionSchCService);
+  readonly schedules = 'C,D';
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleCTransactionTypeLabels,
     ...ScheduleC1TransactionTypeLabels,

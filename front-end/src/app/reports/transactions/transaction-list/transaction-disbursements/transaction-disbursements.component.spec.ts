@@ -12,6 +12,7 @@ import { TransactionDisbursementsComponent } from './transaction-disbursements.c
 import { SelectModule } from 'primeng/select';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TRANSACTION_LIST_SERVICE, TransactionListService } from 'app/shared/services/transaction-list.service';
 
 describe('TransactionDisbursementsComponent', () => {
   let fixture: ComponentFixture<TransactionDisbursementsComponent>;
@@ -40,6 +41,7 @@ describe('TransactionDisbursementsComponent', () => {
             },
           },
         },
+        { provide: TRANSACTION_LIST_SERVICE, useClass: TransactionListService },
       ],
     }).compileComponents();
   });

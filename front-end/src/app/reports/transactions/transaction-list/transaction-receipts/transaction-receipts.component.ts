@@ -1,7 +1,6 @@
-import { Component, computed, inject, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import {
@@ -20,7 +19,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionReceiptsComponent extends TransactionListTableBaseComponent {
-  override readonly itemService = inject(TransactionSchAService);
+  readonly schedules = 'A';
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
   override readonly caption =
     'Data table of all reports created by the committee broken down by Line, Type, Name, Date, Memo, Amount, Aggregate, Transaction ID, Associated with, and Actions.';

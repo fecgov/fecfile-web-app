@@ -9,6 +9,8 @@ import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
 import { UnassociatedTransactionListComponent } from './unassociated-transaction-list/unassociated-transaction-list.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
+import { UnassociatedTransactionListService } from './shared/services/transaction-list-unassociated.service';
+import { TRANSACTION_LIST_SERVICE } from './shared/services/transaction-list.service';
 
 export const ROUTES: Route[] = [
   {
@@ -52,6 +54,7 @@ export const ROUTES: Route[] = [
       {
         path: 'transactions',
         component: UnassociatedTransactionListComponent,
+        providers: [{ provide: TRANSACTION_LIST_SERVICE, useClass: UnassociatedTransactionListService }],
         canActivate: [
           loggedInGuard,
           nameGuard,

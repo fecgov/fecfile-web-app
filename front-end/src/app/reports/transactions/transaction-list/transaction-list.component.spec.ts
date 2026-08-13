@@ -19,6 +19,7 @@ import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { Form24 } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { TRANSACTION_LIST_SERVICE, TransactionListService } from 'app/shared/services/transaction-list.service';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -64,6 +65,7 @@ describe('TransactionListComponent', () => {
             },
           },
         },
+        { provide: TRANSACTION_LIST_SERVICE, useClass: TransactionListService },
       ],
     }).compileComponents();
   });

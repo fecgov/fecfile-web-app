@@ -5,7 +5,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { SchCTransaction, ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { SchDTransaction, ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
-import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
@@ -16,6 +15,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { ReportService } from 'app/shared/services/report.service';
+import { TRANSACTION_LIST_SERVICE, TransactionListService } from 'app/shared/services/transaction-list.service';
 
 describe('TransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -45,7 +45,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
             },
           },
         },
-        TransactionSchCService,
+        { provide: TRANSACTION_LIST_SERVICE, useClass: TransactionListService },
       ],
     }).compileComponents();
   });
