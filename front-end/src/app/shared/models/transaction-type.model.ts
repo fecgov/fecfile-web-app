@@ -20,7 +20,7 @@ import {
   STANDARD_SPLIT_CONTROLS,
   TransactionNavigationControls,
 } from './transaction-navigation-controls.model';
-import { ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
+import { isDebtRepayment, ScheduleIds, Transaction, TransactionTypes } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
@@ -78,6 +78,7 @@ export abstract class TransactionType {
     if (
       this.isCloneableTransactionType &&
       !transaction.reatt_redes_id &&
+      !isDebtRepayment(transaction) &&
       this._navigationControls === STANDARD_LIST_CONTROLS
     )
       return STANDARD_SPLIT_CONTROLS;
