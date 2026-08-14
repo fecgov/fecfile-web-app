@@ -5,6 +5,13 @@
     @include standard-container();
   }
 
+  .p-tab {
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 8px;
+  }
+
   .p-tablist-active-bar {
     height: 4px;
     background-color: #2e79d4;
