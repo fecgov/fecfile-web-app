@@ -1,5 +1,4 @@
 import { Component, computed, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { environment } from 'environments/environment';
 import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
@@ -13,7 +12,7 @@ export const SECURITY_CONSENT_VERSION = '1';
   selector: 'app-security-notice',
   templateUrl: './security-notice.component.html',
   styleUrls: ['./security-notice.component.scss'],
-  imports: [ButtonModule, NgComponentOutlet, SecurityNoticeFormComponent],
+  imports: [NgComponentOutlet, SecurityNoticeFormComponent],
 })
 export class SecurityNoticeComponent {
   readonly backgroundStyle = injectRouteData('backgroundStyle');
