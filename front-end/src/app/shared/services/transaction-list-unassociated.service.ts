@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ListRestResponse } from '../models';
-import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { QueryParams } from './api.service';
 import { TransactionListService } from './transaction-list.service';
 
@@ -8,7 +7,7 @@ import { TransactionListService } from './transaction-list.service';
   providedIn: 'root',
 })
 export class UnassociatedTransactionListService extends TransactionListService {
-  override async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
+  override async getTableData(_pageNumber = 1, ordering = '', _params: QueryParams = {}): Promise<ListRestResponse> {
     if (!ordering) {
       ordering = 'line_label,created';
     }
@@ -16,12 +15,21 @@ export class UnassociatedTransactionListService extends TransactionListService {
       ordering = '-line_label,-created';
     }
 
-    const response = await this.apiService.get<ListRestResponse>(
+    /*const response = await this.apiService.get<ListRestResponse>(
       `/transactions/list/unassociated/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
     response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
     response.pageNumber = pageNumber;
-    return response;
+    return response;*/
+
+    // Stubbing out the return for the moment, since the tables aren't yet configured for real use
+    return {
+      count: 0,
+      next: '',
+      previous: '',
+      pageNumber: 1,
+      results: [],
+    };
   }
 }
