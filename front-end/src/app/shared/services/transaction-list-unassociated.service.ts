@@ -7,15 +7,16 @@ import { TransactionListService } from './transaction-list.service';
   providedIn: 'root',
 })
 export class UnassociatedTransactionListService extends TransactionListService {
-  override async getTableData(_pageNumber = 1, ordering = '', _params: QueryParams = {}): Promise<ListRestResponse> {
-    if (!ordering) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  override async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
+    /*if (!ordering) {
       ordering = 'line_label,created';
     }
     if (ordering === '-line_label,created') {
       ordering = '-line_label,-created';
     }
 
-    /*const response = await this.apiService.get<ListRestResponse>(
+    const response = await this.apiService.get<ListRestResponse>(
       `/transactions/list/unassociated/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
