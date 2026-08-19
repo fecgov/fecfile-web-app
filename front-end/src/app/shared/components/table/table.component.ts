@@ -30,6 +30,7 @@ export interface ColumnDefinition<T> {
   field: string;
   header: string;
   cssClass?: string;
+  width?: string;
   sortable?: boolean;
   bodyTpl?: TemplateRef<TableBodyContext<T>>;
   actions?: TableAction<T>[];

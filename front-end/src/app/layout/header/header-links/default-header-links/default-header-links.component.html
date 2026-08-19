@@ -1,0 +1,38 @@
+<ul class="flex">
+  <li><a routerLink="/reports">Reports</a></li>
+  @if (showAllTransactionsPage) {
+    <li><a routerLink="/transactions">Transactions</a></li>
+  }
+  <li><a routerLink="/contacts">Contacts</a></li>
+  <li>
+    <a (click)="toolsOp.toggle($event)">
+      <span>Tools</span>
+      <svg class="dropdown-icon"><use href="assets/img/arrow.svg#arrow"></use></svg>
+    </a>
+  </li>
+
+  <li id="navbarProfileDropdownMenuLink">
+    <a (click)="accountOp.toggle($event)">
+      <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
+      <svg class="dropdown-icon"><use href="assets/img/arrow.svg#arrow"></use></svg>
+    </a>
+  </li>
+</ul>
+
+<p-popover #toolsOp>
+  <ul>
+    <li><button appPopoverLink="/tools/update-cash-on-hand" [popover]="toolsOp">Update cash on hand</button></li>
+    @if (electionCycleStore.showElectionCycles() && showForm3) {
+      <li><button appPopoverLink="/tools/election-cycles" [popover]="toolsOp">Election Cycles</button></li>
+    }
+  </ul>
+</p-popover>
+
+<p-popover #accountOp>
+  <ul>
+    <li><button appPopoverLink="/committee/" [popover]="accountOp">Account</button></li>
+    <li><button appPopoverLink="/committee/members" [popover]="accountOp">Users</button></li>
+    <li><button appPopoverLink="/login/select-committee/" [popover]="accountOp">Switch Committees</button></li>
+    <li><button (click)="loginService.logOut()">Logout</button></li>
+  </ul>
+</p-popover>

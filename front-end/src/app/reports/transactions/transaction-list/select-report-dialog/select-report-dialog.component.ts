@@ -17,6 +17,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
   templateUrl: './select-report-dialog.component.html',
   styleUrls: ['./select-report-dialog.component.scss'],
   imports: [ReactiveFormsModule, FormsModule, DialogComponent],
+  providers: [Form3XService],
 })
 export class SelectReportDialogComponent {
   public readonly router = inject(Router);

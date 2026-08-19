@@ -1,0 +1,28 @@
+@use 'breakpoints' as *;
+
+span {
+  display: block;
+  font-family: var(--karla);
+}
+
+#election-cycle-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 512px;
+  margin-bottom: 32px;
+}
+
+:host::ng-deep {
+  @media (max-width: $md) {
+    th {
+      padding: 10px 6px !important;
+    }
+  }
+
+  @media (min-width: $md) {
+    #election-cycle-text-container {
+      width: 562px;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
@@ -24,10 +25,19 @@ describe('SelectReportDialogComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
+        Form3XService,
+        { provide: FORM_3_SERVICE, useClass: Form3XService },
       ],
-    });
-    service = TestBed.inject(Form3XService);
+    })
+      .overrideComponent(SelectReportDialogComponent, {
+        set: {
+          providers: [Form3XService, { provide: FORM_3_SERVICE, useClass: Form3XService }],
+        },
+      })
+      .compileComponents();
+
     fixture = TestBed.createComponent(SelectReportDialogComponent);
+    service = fixture.debugElement.injector.get(Form3XService);
     component = fixture.componentInstance;
     fixture.detectChanges();
     const data = {
@@ -62,7 +72,7 @@ describe('SelectReportDialogComponent', () => {
     await fixture.whenStable();
     expect(component.transaction()).toBeTruthy();
     expect(futureSpy).toHaveBeenCalled();
-    expect(component.availableReports().length).toBe(1);
+    expect(component.availableReports()).toHaveLength(1);
   });
 
   it('should clear and close on cancel', async () => {

@@ -41,6 +41,7 @@
         <th
           [pSortableColumn]="col.sortable ? col.field : undefined"
           [ngClass]="col.cssClass"
+          [style.width]="col.width"
           [id]="col.field + '-column'"
         >
           @if (col.checkbox) {

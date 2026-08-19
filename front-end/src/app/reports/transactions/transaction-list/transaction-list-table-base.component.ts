@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, TemplateRef } from '@angular/core';
+import { computed, Directive, inject, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -32,9 +32,7 @@ const loansDebts = [
   'DEBT_OWED_TO_COMMITTEE',
 ];
 
-@Component({
-  template: '',
-})
+@Directive()
 export abstract class TransactionListTableBaseComponent
   extends TableListBaseComponent<TransactionListRecord>
   implements OnInit

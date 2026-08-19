@@ -1,0 +1,46 @@
+<h1>Election cycles</h1>
+<hr />
+<div id="election-cycle-text-container">
+  <span>
+    To create and file a Form 3, you’ll need to provide the dates of the election cycle. An election cycle begins the
+    day after the previous general election for a given federal office and ends on the date of the general election for
+    that office.
+  </span>
+  <span>
+    For current election cycle dates or information on special elections, visit <a href="https://fec.gov">FEC.gov</a>.
+  </span>
+  <span>
+    Keep in mind that election cycles cannot overlap, so if you’ve already created future cycles, you may need to update
+    those cycles as well to reflect the new dates. In the event of a runoff, the cycle end date should be updated to the
+    day of the runoff election.
+  </span>
+</div>
+<app-table
+  [(first)]="first"
+  [items]="items()"
+  title="Manage election cycles"
+  [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+  [(totalItems)]="totalItems"
+  [loading]="loading()"
+  [(rowsPerPage)]="rowsPerPage"
+  [(selectedItems)]="selectedItems"
+  itemName="contacts"
+  sortField="sort_name"
+  [columns]="columns()"
+>
+  <ng-template #caption>
+    <button
+      id="button-contacts-new"
+      pButton
+      pRipple
+      label="Add new cycle"
+      icon="pi pi-plus"
+      class="add-button"
+      (click)="addItem()"
+    ></button>
+  </ng-template>
+</app-table>
+
+<ng-template #actionsBody let-item>
+  <button>Edit</button>
+</ng-template>
