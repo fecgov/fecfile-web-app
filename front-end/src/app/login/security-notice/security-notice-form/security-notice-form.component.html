@@ -1,6 +1,10 @@
 <form [formRoot]="form" class="footer">
   <hr type="solid" />
-  <app-checkbox-input [formField]="form.annualConsent" label="You consent to the security notification for one year" />
+  <app-checkbox-input
+    id="security-consent-annual"
+    [formField]="form.annualConsent"
+    label="You consent to the security notification for one year"
+  />
 
   <div class="flex justify-content-center gap-6">
     <p-button
