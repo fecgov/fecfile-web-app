@@ -1,0 +1,10 @@
+:host::ng-deep {
+  .has-federal-total .p-datatable-tbody > tr:last-child {
+    background-color: #d6d7d9 !important;
+  }
+}
+
+.table-bottom {
+  margin-top: 0rem;
+  margin-bottom: 32px;
+}

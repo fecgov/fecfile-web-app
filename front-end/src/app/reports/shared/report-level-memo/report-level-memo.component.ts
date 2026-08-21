@@ -17,7 +17,7 @@ import { Ripple } from 'primeng/ripple';
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
+  styleUrls: ['./report-level-memo.component.scss'],
   imports: [ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {

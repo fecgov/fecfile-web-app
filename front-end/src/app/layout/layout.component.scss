@@ -1,16 +1,14 @@
 $sidebar-width: 284px;
 
 #sidebar-container {
-  height: calc(100% - var(--header-total));
+  height: fit-content;
   width: $sidebar-width;
   min-width: $sidebar-width;
   max-width: $sidebar-width;
   padding: 64px 24px 32px 24px;
-  position: fixed;
+  position: sticky;
   top: var(--header-total);
-  transition:
-    top 0.3s ease-in-out,
-    height 0.3s ease-in-out;
+  transition: var(--header-transition);
   z-index: 999;
   overflow-y: auto;
 }
@@ -19,36 +17,33 @@ $sidebar-width: 284px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: min-content;
+  max-width: 100vw;
 }
 
-#content-offset {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-top: var(--header-total);
-  transition: margin-top 0.3s ease-in-out;
+#fec-seal-and-title {
+  min-height: 64px;
+  max-height: 5%;
+  margin-left: 25px;
 }
 
 .main-content {
   margin-left: auto;
   margin-right: auto;
+  margin-top: 64px;
   width: fit-content;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.sidebar-content-container .header-container {
+.sidebar-content-container app-header {
   padding: 0;
   padding-bottom: var(--header-total);
 }
 
 .row {
   margin: 0;
-}
-
-app-footer {
-  padding: 0;
 }
 
 .footer-spacer {
@@ -58,18 +53,15 @@ app-footer {
 .sidebar-content-container {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-total));
+  background-color: white;
   width: 100%;
-  padding-left: $sidebar-width;
-  margin-top: var(--header-total);
+  margin-top: 0;
   transition:
     margin-top 0.3s ease-in-out,
     min-height 0.3s ease-in-out;
   padding-top: 64px;
   & > .main-content {
     margin-left: 32px;
-    margin-right: 0;
-    width: calc(100% - 64px);
   }
 }
 
@@ -84,13 +76,33 @@ app-footer {
   background-size: cover, cover;
   background-position-x: 0px, 100%;
 
-  & > #content-offset {
+  & > .content-offset .main-content {
+    margin: 0;
+    width: 100%;
+
     margin-top: var(--header-top);
     padding-top: 0 !important ;
-
-    & > .main-content {
-      margin: 0;
-      width: 100%;
-    }
   }
+}
+
+.logout-button {
+  font-size: 18px;
+  font-family: var(--karla-bold);
+  text-transform: uppercase;
+  text-shadow: #000000 1px 0 10px;
+  color: white !important;
+  margin-right: 32px;
+}
+
+app-banner {
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+}
+
+app-header {
+  position: sticky;
+  top: var(--header-top);
+  transition: var(--header-transition);
+  z-index: 1000;
 }

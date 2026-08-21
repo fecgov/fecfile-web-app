@@ -1,4 +1,6 @@
-<div class="summary-container">
+<app-shared-summary-templates />
+
+<div class="standard-container">
   <h1>Summary page</h1>
   <hr type="solid" class="mt-2 mb-5" />
 
@@ -11,7 +13,6 @@
       [loading]="!calculationFinished()"
       sortField="name"
       [rowsPerPage]="lines().length"
-      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
       itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
@@ -45,7 +46,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
-      (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report().id)"
+      (click)="router.navigate(['/reports', this.formText(), 'detailed-summary', report().id])"
     >
       <span>Review detailed summary page</span>
       <svg pButtonIcon alt="Next Arrow" width="10" height="10">

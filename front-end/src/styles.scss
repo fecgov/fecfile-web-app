@@ -352,7 +352,8 @@ label.disabled {
 }
 
 .p-select {
-  height: var(--input-height);
+  min-height: var(--input-height);
+  height: fit-content;
 }
 
 .dialog-label {
@@ -497,17 +498,6 @@ table {
   .container {
     max-width: 1320px;
   }
-}
-
-.navbar-brand {
-  padding-top: 0.3125rem;
-  padding-bottom: 0.3125rem;
-  margin-right: 1rem;
-  font-size: 1.25rem;
-  color: rgba(0, 0, 0, 1);
-  text-decoration: none;
-  white-space: nowrap;
-  height: 53px;
 }
 
 .circle-icon-tooltip {
@@ -655,6 +645,11 @@ textarea {
 .transparent-grey {
   color: transparent;
   --icon-symbol: var(--text-color-secondary);
+}
+
+.transparent-black {
+  color: transparent;
+  --icon-symbol: #212121;
 }
 
 .fec-loader-div {

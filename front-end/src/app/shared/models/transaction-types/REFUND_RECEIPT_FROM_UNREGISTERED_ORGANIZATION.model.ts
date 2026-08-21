@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/UNREGISTERED_REFUNDS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_B_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
@@ -15,11 +15,8 @@ export class REFUND_RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchBTransacti
   );
   schema = schema;
   override isRefund = true;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

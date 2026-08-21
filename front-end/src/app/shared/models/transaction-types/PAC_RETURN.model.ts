@@ -3,7 +3,6 @@ import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLab
 import { AggregationGroups } from '../transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_RETURN';
-import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_RETURN extends SchATransactionType {
@@ -12,15 +11,12 @@ export class PAC_RETURN extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RETURN);
   schema = schema;
   override negativeAmountValueOnly = true;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override get isReattributable(): boolean {
     return false;
   }
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

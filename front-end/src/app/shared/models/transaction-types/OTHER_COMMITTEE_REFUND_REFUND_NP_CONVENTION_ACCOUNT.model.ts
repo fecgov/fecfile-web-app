@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_OTHER_COMMITTEE_REFUNDS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { AggregationGroups } from '../transaction.model';
 import { COMMITTEE, COMMITTEE_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
@@ -15,15 +15,12 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT extends SchBTra
   );
   schema = schema;
   override isRefund = true;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription() {
     return 'Pres. Nominating Convention Account: Refund';
   }
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

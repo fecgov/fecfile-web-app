@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { ReportSummaryComponent } from './report-summary/report-summary.component';
-import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
+import { ReportSummaryComponent } from '../summaries/report-summary/report-summary.component';
+import { ReportDetailedSummaryComponent } from '../summaries/report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { PrintPreviewComponent } from 'app/reports/shared/print-preview/print-preview.component';
 import { Report } from 'app/shared/models/reports/report.model';
