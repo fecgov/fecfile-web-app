@@ -129,7 +129,6 @@ export class ReattRedesUtils {
       payload instanceof SchATransaction
         ? (cloneInstance(payload.reatt_redes) as SchATransaction)
         : (cloneInstance(payload.reatt_redes) as SchBTransaction);
-    clone.transactionType = payload.transactionType;
     resetCloneMemoText(clone, payload.report_ids?.[0], {
       rebuildFromJson: false,
       resetMemoTextId: 'whenMemoTextPresent',
