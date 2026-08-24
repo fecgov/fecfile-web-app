@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, computed, DestroyRef, effect, inject, OnInit, Signal, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, Signal, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormComponent } from 'app/shared/components/form.component';
@@ -36,6 +36,7 @@ import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 import { F3FormTypes, Form3 } from 'app/shared/models/reports/form-3.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { BreakpointStore } from 'app/store/breakpoint.store';
 
 export enum ReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
@@ -58,13 +59,14 @@ export enum ReportTypeCategories {
     ButtonModule,
     DialogComponent,
   ],
+  providers: [BreakpointStore],
 })
 export class CreateSharedF3Component extends FormComponent implements OnInit {
   // INJECTIONS
   private readonly activeService = inject(FORM_3_SERVICE);
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly breakpointStore = inject(BreakpointStore);
 
   readonly reportId = injectParams('reportId');
   readonly isF3X = computed(() => this.router.url.includes('/f3x/'));
@@ -180,7 +182,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   readonly reportCodes = computed(() => getReportCodes(this.isElectionYear(), this.filingFrequency(), this.isF3X()));
 
-  readonly numReportCodeColumns = signal(3);
+  readonly numReportCodeColumns = computed(() => (this.breakpointStore.screenSize() === 'lg' ? 3 : 2));
   readonly reportCodesColumns = computed(() => {
     const codes = this.reportCodes();
     const numColumns = this.numReportCodeColumns();
@@ -239,8 +241,6 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
       this.reportTypeCategory();
       this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
     });
-
-    this.detectScreenWidth();
   }
 
   ngOnInit(): void {
@@ -266,14 +266,6 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
     });
 
     SchemaUtils.addJsonSchemaValidators(this.form, this.activeSchema(), false);
-  }
-
-  private detectScreenWidth() {
-    const mobileQuery = globalThis.matchMedia('(min-width: 992px)');
-    const mediaQueryListener = () => this.numReportCodeColumns.set(mobileQuery.matches ? 3 : 2);
-    mediaQueryListener();
-    mobileQuery.addEventListener('change', mediaQueryListener);
-    this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', mediaQueryListener));
   }
 
   readonly onHide = () => this.store.dispatch(singleClickEnableAction());
