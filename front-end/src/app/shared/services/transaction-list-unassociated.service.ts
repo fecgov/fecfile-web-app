@@ -4,9 +4,7 @@ import { TransactionListRecord } from '../models/transaction-list-record.model';
 import { QueryParams } from './api.service';
 import { TransactionListService } from './transaction-list.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class UnassociatedTransactionListService extends TransactionListService {
   override async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
     if (!ordering) {

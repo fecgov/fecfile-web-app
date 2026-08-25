@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, computed, inject, input, TemplateRef, vie
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
-import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { QueryParams } from 'app/shared/services/api.service';
 import { TableBodyContext, TableComponent } from '../../../../shared/components/table/table.component';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
@@ -19,7 +18,7 @@ import { instanceToPlain } from 'class-transformer';
   imports: [TableComponent, TableActionsButtonComponent, ConfirmDialog],
 })
 export class TransactionGuarantorsComponent extends TransactionListTableBaseComponent {
-  override readonly itemService = inject(TransactionSchC2Service);
+  readonly schedules = 'C2';
   private readonly cdr = inject(ChangeDetectorRef);
   readonly scheduleTransactionTypeLabels: LabelList = ScheduleC2TransactionTypeLabels;
 

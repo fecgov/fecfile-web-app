@@ -11,12 +11,12 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
-import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
 import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
+import { TRANSACTION_LIST_SERVICE } from 'app/shared/services/transaction-list.service';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -68,7 +68,7 @@ describe('TransactionGuarantorsComponent', () => {
           },
         },
         {
-          provide: TransactionSchC2Service,
+          provide: TRANSACTION_LIST_SERVICE,
           useValue: {
             get: (transactionId: string) =>
               of(

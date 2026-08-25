@@ -11,12 +11,14 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { UnassociatedTransactionReceiptsComponent } from './unassociated-transaction-receipts/unassociated-transaction-receipts.component';
-import { UnassociatedTransactionDisbursementsComponent } from './unassociated-transaction-disbursements/unassociated-transaction-disbursements.component';
-import { UnassociatedTransactionLoansAndDebtsComponent } from './unassociated-transaction-loans-and-debts/unassociated-transaction-loans-and-debts.component';
 import { TabsModule } from 'primeng/tabs';
 import { PrimeTemplate } from 'primeng/api';
 import { TransactionListComponent } from 'app/reports/transactions/transaction-list/transaction-list.component';
+import { TransactionDisbursementsComponent } from 'app/reports/transactions/transaction-list/transaction-disbursements/transaction-disbursements.component';
+import { TransactionLoansAndDebtsComponent } from 'app/reports/transactions/transaction-list/transaction-loans-and-debts/transaction-loans-and-debts.component';
+import { TransactionReceiptsComponent } from 'app/reports/transactions/transaction-list/transaction-receipts/transaction-receipts.component';
+import { UnassociatedTransactionListService } from 'app/shared/services/transaction-list-unassociated.service';
+import { TRANSACTION_LIST_SERVICE } from 'app/shared/services/transaction-list.service';
 
 describe('UnassociatedTransactionListComponent', () => {
   let component: UnassociatedTransactionListComponent;
@@ -35,9 +37,9 @@ describe('UnassociatedTransactionListComponent', () => {
         TransactionListComponent,
         PrimeTemplate,
         TabsModule,
-        UnassociatedTransactionReceiptsComponent,
-        UnassociatedTransactionDisbursementsComponent,
-        UnassociatedTransactionLoansAndDebtsComponent,
+        TransactionReceiptsComponent,
+        TransactionDisbursementsComponent,
+        TransactionLoansAndDebtsComponent,
       ],
       providers: [
         provideHttpClient(),
@@ -55,6 +57,7 @@ describe('UnassociatedTransactionListComponent', () => {
             isCloneable,
           },
         },
+        { provide: TRANSACTION_LIST_SERVICE, useClass: UnassociatedTransactionListService },
         {
           provide: ActivatedRoute,
           useValue: {

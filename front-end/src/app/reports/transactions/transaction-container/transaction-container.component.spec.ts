@@ -33,6 +33,7 @@ import {
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
+import { TRANSACTION_LIST_SERVICE, TransactionListService } from 'app/shared/services/transaction-list.service';
 
 const mockTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -97,6 +98,7 @@ describe('TransactionContainerComponent', () => {
         ReportService,
         ConfirmationService,
         TransactionService,
+        { provide: TRANSACTION_LIST_SERVICE, useClass: TransactionListService },
         Title,
         {
           provide: ActivatedRoute,

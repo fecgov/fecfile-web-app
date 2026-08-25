@@ -1,11 +1,10 @@
-import { Component, computed, inject, output, Signal, TemplateRef, viewChild } from '@angular/core';
+import { Component, computed, output, Signal, TemplateRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { ScheduleETransactionTypeLabels } from 'app/shared/models/sche-transaction.model';
 import { ScheduleFTransactionTypeLabels } from 'app/shared/models/schf-transaction.model';
 import { ScheduleIds } from 'app/shared/models/transaction.model';
-import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TableActionsButtonComponent } from '../../../../shared/components/table-actions-button/table-actions-button.component';
 import {
@@ -25,7 +24,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
   imports: [TableComponent, RouterLink, TableActionsButtonComponent, LabelPipe],
 })
 export class TransactionDisbursementsComponent extends TransactionListTableBaseComponent {
-  override readonly itemService = inject(TransactionSchBService);
+  readonly schedules = 'B,E,F';
   readonly scheduleTransactionTypeLabels: LabelList = [
     ...ScheduleBTransactionTypeLabels,
     ...ScheduleETransactionTypeLabels,
