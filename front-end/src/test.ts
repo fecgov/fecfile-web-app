@@ -87,6 +87,17 @@ globalThis.ResizeObserver = class ResizeObserverMock {
   disconnect = vi.fn();
 };
 
+class MockResizeObserver implements ResizeObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(_unused: ResizeObserverCallback) {}
+}
+
+globalThis.ResizeObserver = MockResizeObserver;
+
 globalThis.window.scrollTo = vi.fn();
 
 Object.defineProperty(globalThis.URL, 'createObjectURL', { writable: true, value: vi.fn() });
