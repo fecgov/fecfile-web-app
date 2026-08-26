@@ -38,24 +38,28 @@
   <ng-template pTemplate="header">
     <tr role="row">
       @for (col of columns(); track col) {
-        <th
-          [pSortableColumn]="col.sortable ? col.field : undefined"
-          [ngClass]="col.cssClass"
-          [style.width]="col.width"
-          [id]="col.field + '-column'"
-        >
-          @if (col.checkbox) {
-            <p-tableHeaderCheckbox ariaLabel="Restore" />
-            <span class="sr-only">Restore Checkbox</span>
-          } @else {
-            <div class="flex justify-content-between">
-              <span>{{ col.header }}</span>
-              @if (col.sortable) {
-                <p-sortIcon [field]="col.field" />
-              }
-            </div>
-          }
-        </th>
+        @if (col.header === '') {
+          <td></td>
+        } @else {
+          <th
+            [pSortableColumn]="col.sortable ? col.field : undefined"
+            [ngClass]="col.cssClass"
+            [style.width]="col.width"
+            scope="col"
+          >
+            @if (col.checkbox) {
+              <p-tableHeaderCheckbox ariaLabel="Restore" />
+              <span class="sr-only">Restore Checkbox</span>
+            } @else {
+              <div class="flex justify-content-between">
+                <span>{{ col.header }}</span>
+                @if (col.sortable) {
+                  <p-sortIcon [field]="col.field" />
+                }
+              </div>
+            }
+          </th>
+        }
       }
 
       <!-- This can go away after full transition to ColumnDefinition method -->
