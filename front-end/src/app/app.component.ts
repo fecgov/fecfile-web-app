@@ -36,7 +36,7 @@ export class AppComponent {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
 
-  private navigationEnd = toSignal(
+  private readonly navigationEnd = toSignal(
     this.router.events.pipe(
       map((event) => {
         if (event instanceof NavigationEnd) {
