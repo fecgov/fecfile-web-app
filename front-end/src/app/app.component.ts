@@ -36,7 +36,6 @@ export class AppComponent {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private navigationEnd = toSignal(
     this.router.events.pipe(
       map((event) => {
