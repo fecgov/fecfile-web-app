@@ -1,11 +1,23 @@
 @use 'breakpoints' as *;
 
-span {
-  display: block;
-  font-family: var(--karla);
+h1 {
+  margin-bottom: 32px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid;
+  font-size: 36px;
 }
 
-#election-cycle-text-container {
+h2 {
+  margin: 0;
+  font-size: 32px;
+}
+
+p {
+  line-height: normal;
+  margin: 0;
+}
+
+#election-cycle-info {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -21,7 +33,7 @@ span {
   }
 
   @media (min-width: $md) {
-    #election-cycle-text-container {
+    #election-cycle-info {
       width: 562px;
     }
   }

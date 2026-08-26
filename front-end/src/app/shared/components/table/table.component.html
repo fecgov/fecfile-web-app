@@ -19,22 +19,24 @@
   showGridlines
   [pt]="{ root: 'standard-container' }"
 >
-  <ng-template pTemplate="caption">
-    @if (caption()) {
-      <p-toolbar>
-        <ng-template pTemplate="left">
-          <h1 class="m-0">{{ title() }}</h1>
-        </ng-template>
-        <ng-template pTemplate="right">
-          <ng-container *ngTemplateOutlet="caption()!" />
-        </ng-template>
-      </p-toolbar>
-    } @else {
-      <div class="flex align-items-center justify-content-between">
-        <h2 class="m-0">{{ title() }}</h2>
-      </div>
-    }
-  </ng-template>
+  @if (title()) {
+    <ng-template pTemplate="caption">
+      @if (caption()) {
+        <p-toolbar>
+          <ng-template pTemplate="left">
+            <h1 class="m-0">{{ title() }}</h1>
+          </ng-template>
+          <ng-template pTemplate="right">
+            <ng-container *ngTemplateOutlet="caption()!" />
+          </ng-template>
+        </p-toolbar>
+      } @else {
+        <div class="flex align-items-center justify-content-between">
+          <h2 class="m-0">{{ title() }}</h2>
+        </div>
+      }
+    </ng-template>
+  }
   <ng-template pTemplate="header">
     <tr role="row">
       @for (col of columns(); track col) {

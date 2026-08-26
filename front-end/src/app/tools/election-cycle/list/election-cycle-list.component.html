@@ -1,46 +1,49 @@
-<h1>Election cycles</h1>
-<hr />
-<div id="election-cycle-text-container">
-  <span>
-    To create and file a Form 3, you’ll need to provide the dates of the election cycle. An election cycle begins the
-    day after the previous general election for a given federal office and ends on the date of the general election for
-    that office.
-  </span>
-  <span>
-    For current election cycle dates or information on special elections, visit <a href="https://fec.gov">FEC.gov</a>.
-  </span>
-  <span>
-    Keep in mind that election cycles cannot overlap, so if you’ve already created future cycles, you may need to update
-    those cycles as well to reflect the new dates. In the event of a runoff, the cycle end date should be updated to the
-    day of the runoff election.
-  </span>
-</div>
-<app-table
-  [(first)]="first"
-  [items]="items()"
-  title="Manage election cycles"
-  [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
-  [(totalItems)]="totalItems"
-  [loading]="loading()"
-  [(rowsPerPage)]="rowsPerPage"
-  [(selectedItems)]="selectedItems"
-  itemName="contacts"
-  sortField="sort_name"
-  [columns]="columns()"
->
-  <ng-template #caption>
-    <button
-      id="button-contacts-new"
-      pButton
-      pRipple
-      label="Add new cycle"
-      icon="pi pi-plus"
-      class="add-button"
-      (click)="addItem()"
-    ></button>
-  </ng-template>
-</app-table>
-
+<main>
+  <h1>Election cycles</h1>
+  <section id="election-cycle-info" aria-labelledby="cycle-info-heading">
+    <h2 id="cycle-info-heading" class="sr-only">About election cycles</h2>
+    <p>
+      To create and file a Form 3, you'll need to provide the dates of the election cycle. An election cycle begins the
+      day after the previous general election for a given federal office and ends on the date of the general election
+      for that office.
+    </p>
+    <p>
+      For current election cycle dates or information on special elections, visit
+      <a href="https://fec.gov" target="_blank" rel="noopener noreferrer">FEC.gov</a>.
+    </p>
+    <p>
+      Keep in mind that election cycles cannot overlap, so if you've already created future cycles, you may need to
+      update those cycles as well to reflect the new dates. In the event of a runoff, the cycle end date should be
+      updated to the day of the runoff election.
+    </p>
+  </section>
+  <section id="manage-election-cycles" aria-labelledby="manage-cycles-heading">
+    <header class="flex mb-2 justify-content-between align-items-center">
+      <h2 id="manage-cycles-heading">Manage election cycles</h2>
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Add new cycle"
+        icon="pi pi-plus"
+        class="add-button"
+        (click)="addItem()"
+      ></button>
+    </header>
+    <app-table
+      [(first)]="first"
+      [items]="items()"
+      [globalFilterFields]="['name', 'type', 'employer', 'occupation']"
+      [(totalItems)]="totalItems"
+      [loading]="loading()"
+      [(rowsPerPage)]="rowsPerPage"
+      [(selectedItems)]="selectedItems"
+      itemName="contacts"
+      sortField="sort_name"
+      [columns]="columns()"
+    />
+  </section>
+</main>
 <ng-template #actionsBody let-item>
-  <button>Edit</button>
+  <button type="button">Edit</button>
 </ng-template>
