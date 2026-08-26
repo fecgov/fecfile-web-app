@@ -1,47 +1,49 @@
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, computed, effect, inject, OnInit, Signal, signal } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { FormComponent } from 'app/shared/components/form.component';
-import { CalendarComponent } from 'app/shared/components/calendar/calendar.component';
-import { ErrorMessagesComponent } from 'app/shared/components/error-messages/error-messages.component';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { SearchableSelectComponent } from 'app/shared/components/searchable-select/searchable-select.component';
-import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
-import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import {
-  electionReportCodes,
-  FilingFrequency,
-  getCoverageDates,
-  getReportCodes,
-  ReportCodes,
-} from 'app/shared/utils/report-code.utils';
-import { SchemaUtils } from 'app/shared/utils/schema.utils';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
-import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
+import { LabelUtils, PrimeOptions, StateCode, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { electionReportCodes, getCoverageDates, getReportCodes, ReportCodes } from 'app/shared/utils/report-code.utils';
 import { environment } from 'environments/environment';
-import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { SelectButton } from 'primeng/selectbutton';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { injectParams } from 'ngxtension/inject-params';
 import { derivedAsync } from 'ngxtension/derived-async';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
-import { F3FormTypes, Form3 } from 'app/shared/models/reports/form-3.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 import { BreakpointStore } from 'app/store/breakpoint.store';
+import { form, FormField, hidden, required, submit } from '@angular/forms/signals';
+import { DateInput, validateDate, validateDateAfter } from 'app/shared/components/signal-inputs/date-input/date.input';
+import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
+import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
+import { Store } from '@ngrx/store';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
+import { SharedF3Store } from 'app/reports/shared-f3.store';
+import { UnassigningTransactionsDialogComponent } from '../unassigning-transactions-dialog/unassigning-transactions-dialog.component';
+import {
+  deserializeBaseForm3,
+  serializeForm3,
+  serializeForm3X,
+  SharedForm3Data,
+  validateNonOverlappingCoverage,
+} from '../shared-f3.validator';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { F3FormTypes, F3xFormTypes, FilingFrequency } from 'app/shared/models';
+import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 
-export enum ReportTypeCategories {
-  ELECTION_YEAR = 'Election Year',
-  NON_ELECTION_YEAR = 'Non-Election Year',
-}
+const formProperties: string[] = [
+  'filing_frequency',
+  'report_type_category',
+  'report_code',
+  'coverage_from_date',
+  'coverage_through_date',
+  'date_of_election',
+  'state_of_election',
+  'form_type',
+];
 
 @Component({
   selector: 'app-create-shared-f3',
@@ -50,137 +52,87 @@ export enum ReportTypeCategories {
   imports: [
     ReactiveFormsModule,
     RadioButtonModule,
-    SelectButton,
-    ErrorMessagesComponent,
-    CalendarComponent,
-    SearchableSelectComponent,
     SaveCancelComponent,
-    RouterLink,
     ButtonModule,
-    DialogComponent,
+    SelectButtonInput,
+    FormField,
+    DateInput,
+    SelectInput,
+    UnassigningTransactionsDialogComponent,
   ],
-  providers: [BreakpointStore],
+  providers: [BreakpointStore, SharedF3Store],
 })
-export class CreateSharedF3Component extends FormComponent implements OnInit {
+export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data> {
   // INJECTIONS
   private readonly activeService = inject(FORM_3_SERVICE);
-  protected readonly messageService = inject(MessageService);
+  readonly sharedF3Store = inject(SharedF3Store);
+  private readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   private readonly breakpointStore = inject(BreakpointStore);
+  private readonly store = inject(Store);
+  private readonly committee = this.store.selectSignal(selectCommitteeAccount);
 
   readonly reportId = injectParams('reportId');
   readonly isF3X = computed(() => this.router.url.includes('/f3x/'));
-  private readonly activeSchema = computed(() => (this.isF3X() ? f3xSchema : f3Schema));
   readonly title = computed(() => (this.isF3X() ? 'Form 3X' : 'Form 3'));
   readonly subLabel = computed(() =>
     this.isF3X()
       ? 'REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE'
       : 'REPORT OF RECEIPTS AND DISBURSEMENTS FOR AN AUTHORIZED COMMITTEE',
   );
-
-  // CONSTANTS & FORM DEFINITION
-  readonly year = new Date().getFullYear();
-  readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
-  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-
-  readonly formProperties: string[] = [
-    'filing_frequency',
-    'report_type_category',
-    'report_code',
-    'coverage_from_date',
-    'coverage_through_date',
-    'date_of_election',
-    'state_of_election',
-    'form_type',
-  ];
-
-  // Initialize unified form base
-  readonly form: FormGroup = this.fb.group(
-    SchemaUtils.getFormGroupFieldsNoBlur(this.formProperties, this.isF3X() ? f3xSchema : f3Schema),
-    { updateOn: 'blur' },
+  readonly filingFrequencyLabel = computed(() =>
+    this.form.filingFrequency().value() === 'M' ? 'MONTHLY' : 'QUARTERLY',
   );
 
+  readonly model = signal<SharedForm3Data>({
+    coverages: { from: null, to: null },
+    filingFrequency: null,
+    reportCode: null,
+    reportTypeCategory: null,
+    election: {
+      state: null,
+      date: null,
+    },
+  });
+  readonly form = form(this.model, (schema) => {
+    hidden(schema.filingFrequency, () => !(this.isF3X() && environment.userCanSetFilingFrequency));
+    hidden(schema.election, ({ valueOf }) => {
+      const reportCode = valueOf(schema.reportCode);
+      if (reportCode === null) return true;
+      return !electionReportCodes.has(reportCode);
+    });
+
+    required(schema.coverages.from, { message: requiredMessage });
+    required(schema.coverages.to, { message: requiredMessage });
+    required(schema.filingFrequency, { message: requiredMessage });
+    required(schema.reportCode, { message: requiredMessage });
+    required(schema.reportTypeCategory, { message: requiredMessage });
+
+    validateDate(schema.coverages.from);
+    validateDate(schema.coverages.to);
+    validateDate(schema.election.date);
+
+    validateNonOverlappingCoverage(schema.coverages, this.sharedF3Store.existingCoverage);
+    validateDateAfter(schema.coverages.to, schema.coverages.from);
+  });
+
+  readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   readonly filingFrequencyOptions: PrimeOptions = [
     { label: 'Quarterly', value: 'Q' },
     { label: 'Monthly', value: 'M' },
   ];
-
-  readonly reportTypeCategories = [ReportTypeCategories.ELECTION_YEAR, ReportTypeCategories.NON_ELECTION_YEAR];
-  readonly defaultReportTypeCategory = this.getDefaultTypeCategory();
-
-  // OBSERVABLES TO SIGNALS
-  readonly reportCode = toSignal(this.form.controls['report_code'].valueChanges);
-  readonly filingFrequency: Signal<FilingFrequency> = toSignal(this.form.controls['filing_frequency'].valueChanges, {
-    initialValue: 'Q',
-  });
-  readonly filingFrequencyLabel = computed(() => (this.filingFrequency() === 'M' ? 'MONTHLY' : 'QUARTERLY'));
-  readonly reportTypeCategory = toSignal(this.form.controls['report_type_category'].valueChanges);
-
-  // DERIVED ASYNCS
-  readonly existingCoverage = derivedAsync(async () => {
-    const reportId = this.reportId();
-    if (reportId && !this.report()) return undefined;
-
-    let existingCoverage = await this.activeService.getCoverageDates();
-    if (reportId) {
-      existingCoverage = existingCoverage.filter(
-        (coverage) => coverage.coverage_from_date?.getTime() !== this.report()?.coverage_from_date?.getTime(),
-      );
-    }
-    const validator = buildNonOverlappingCoverageValidator(existingCoverage);
-    this.form.controls['coverage_from_date'].addValidators(validator);
-    this.form.controls['coverage_through_date'].addValidators(validator);
-    this.form.controls['coverage_from_date'].updateValueAndValidity({ emitEvent: false });
-    this.form.controls['coverage_through_date'].updateValueAndValidity({ emitEvent: false });
-    return existingCoverage;
-  });
-
-  readonly report = derivedAsync(async () => {
-    const reportId = this.reportId();
-    if (!reportId) return undefined;
-    return this.activeService.get(reportId);
-  });
+  readonly reportTypeCategoriesOptions = LabelUtils.getPrimeOptions([
+    ['Election Year', 'Election Year'],
+    ['Non-Election Year', 'Non-Election Year'],
+  ]);
 
   readonly coverageDatesDialogVisible = signal(false);
 
-  // COMPUTED REPORT DATA & CODES
-  readonly usedReportCodes = computed(() => {
-    const existingCoverage = this.existingCoverage();
-    if (!existingCoverage) return [];
-    return existingCoverage.reduce((codes: ReportCodes[], coverage) => {
-      const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
-      if (years.includes(this.year)) {
-        return [...codes, coverage.report_code] as ReportCodes[];
-      }
-      return codes;
-    }, []);
-  });
+  private readonly isElectionYear = computed(() => 'Election Year' === this.form.reportTypeCategory().value());
 
-  private readonly committeeFrequency = computed(() =>
-    this.isF3X() && this.committeeAccount().filing_frequency === 'M' ? 'M' : 'Q',
+  readonly reportCodes = computed(() =>
+    getReportCodes(this.isElectionYear(), this.form.filingFrequency().value(), this.isF3X()),
   );
-
-  private readonly isElectionYear = computed(() => ReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());
-
-  private readonly coverages = computed(() => {
-    const report = this.report();
-    if (this.form.pristine && report) {
-      return [report.coverageDates['coverage_from_date'], report.coverageDates['coverage_through_date']];
-    }
-    return getCoverageDates(this.reportCode(), this.year, this.isElectionYear(), this.filingFrequency());
-  });
-
-  readonly disabledReportCodes = computed(() => {
-    return Object.values(ReportCodes).reduce(
-      (accumulator, currentCode) => {
-        accumulator[currentCode] = this.checkDisableReportCode(currentCode);
-        return accumulator;
-      },
-      {} as { [key in ReportCodes]: boolean },
-    );
-  });
-
-  readonly reportCodes = computed(() => getReportCodes(this.isElectionYear(), this.filingFrequency(), this.isF3X()));
 
   readonly numReportCodeColumns = computed(() => (this.breakpointStore.screenSize() === 'lg' ? 3 : 2));
   readonly reportCodesColumns = computed(() => {
@@ -190,164 +142,127 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
     let startIndex = 0;
 
     for (let i = 0; i < numColumns; i++) {
-      const baseSize = Math.floor(codes.length / numColumns);
-      const extra = i < codes.length % numColumns ? 1 : 0;
+      const baseSize = Math.floor(codes.size / numColumns);
+      const extra = i < codes.size % numColumns ? 1 : 0;
       const colSize = baseSize + extra;
-      const chunk = codes.slice(startIndex, startIndex + colSize);
+      const chunk = Array.from(codes).slice(startIndex, startIndex + colSize);
       result.push(chunk);
       startIndex += colSize;
     }
     return result;
   });
 
-  readonly isElectionReport = computed(() => electionReportCodes.includes(this.reportCode()));
   readonly reportCodeLabelMap = derivedAsync(() => this.activeService.getReportCodeLabelMap());
-
   constructor() {
     super();
     effectOnceIf(
-      () => this.existingCoverage() && !this.reportId(),
       () => {
-        this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+        const committee = this.committee();
+        if (!this.sharedF3Store.existingCoverage()) return undefined;
+
+        return {
+          filingFrequency: this.isF3X() && committee.filing_frequency === 'M' ? 'M' : 'Q',
+          candidateState: committee.candidate_state ?? null,
+        } satisfies {
+          filingFrequency: FilingFrequency;
+          candidateState: StateCode | null;
+        };
+      },
+      (data) => {
+        const report: BaseForm3 = this.sharedF3Store.report.value();
+        if (report !== null) {
+          if (!report.state_of_election) report.state_of_election = data.candidateState ?? undefined;
+          this.form().reset(deserializeBaseForm3(report));
+        } else {
+          const reportCodes = getReportCodes(true, data.filingFrequency, this.isF3X());
+          const code = this.sharedF3Store.firstEnabledReportCode(reportCodes);
+          const coverages = getCoverageDates(code, true, data.filingFrequency);
+
+          this.form().reset({
+            coverages,
+            filingFrequency: data.filingFrequency,
+            reportCode: code,
+            reportTypeCategory: 'Election Year',
+            election: {
+              state: data.candidateState,
+              date: null,
+            },
+          });
+        }
       },
     );
 
-    effectOnceIf(
-      () => this.report(),
-      () => {
-        this.form.patchValue(this.report()!);
+    effect(() => {
+      const reportCodes = this.reportCodes();
+      const reportCode = this.sharedF3Store.firstEnabledReportCode(reportCodes);
+      if (!untracked(() => this.form().dirty())) return;
+      this.form.reportCode().value.set(reportCode);
+    });
+
+    effect(() => {
+      const reportCode = this.form.reportCode().value();
+      untracked(() => {
+        if (!this.form().dirty()) return;
+        const coverages = getCoverageDates(reportCode, this.isElectionYear(), this.form.filingFrequency().value());
+        this.form.coverages().value.set(coverages);
+      });
+    });
+  }
+
+  async submitForm(jump: 'continue' | void) {
+    return submit(this.form, {
+      ignoreValidators: 'none',
+      action: async () => {
+        try {
+          const data = this.form().value();
+          const original: BaseForm3 | null = this.sharedF3Store.report.value();
+
+          const reportStub = this.isF3X()
+            ? serializeForm3X(data, (original?.form_type as F3xFormTypes) ?? F3xFormTypes.F3XN)
+            : serializeForm3(data, (original?.form_type as F3FormTypes) ?? F3FormTypes.F3N);
+
+          const report = this.sharedF3Store.isActive()
+            ? await this.update(reportStub)
+            : await this.activeService.create(reportStub, formProperties);
+
+          if (!report) return;
+          if (jump === 'continue') {
+            this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+          } else {
+            this.router.navigateByUrl('/reports');
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Report Updated',
+              life: 3000,
+            });
+          }
+          return;
+        } catch {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to submit form',
+            life: 3000,
+          });
+          return { kind: 'serverError', message: 'Failed to submit form:' };
+        }
       },
-    );
-
-    effect(() => {
-      const coverages = this.coverages();
-      this.form.patchValue({
-        coverage_from_date: coverages ? coverages[0] : null,
-        coverage_through_date: coverages ? coverages[1] : null,
-      });
-    });
-
-    effect(() => {
-      this.filingFrequency();
-      const report = this.report();
-      if (this.form.pristine && report) {
-        this.form.patchValue({ report_type_category: report.report_type_category });
-      } else {
-        this.form.patchValue({ report_type_category: this.defaultReportTypeCategory });
-      }
-    });
-
-    effect(() => {
-      this.reportTypeCategory();
-      this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
+      onInvalid: (field) => {
+        const firstError = field().errorSummary()[0];
+        console.log(firstError);
+        firstError?.fieldTree().focusBoundControl();
+      },
     });
   }
 
-  ngOnInit(): void {
-    const defaultFormType = this.isF3X() ? 'F3XN' : F3FormTypes.F3N;
-    const candidateState = this.committeeAccount().candidate_state;
-    this.form.patchValue({
-      filing_frequency: this.committeeFrequency(),
-      form_type: defaultFormType,
-      state_of_election: candidateState,
-    });
-
-    this.form.controls['coverage_from_date'].addValidators([Validators.required]);
-    this.form.controls['coverage_through_date'].addValidators([
-      Validators.required,
-      buildAfterDateValidator(this.form, 'coverage_from_date'),
-    ]);
-
-    (this.form.controls['coverage_from_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form.controls['coverage_through_date'].updateValueAndValidity({ emitEvent: false });
-    });
-    (this.form.controls['coverage_through_date'] as SubscriptionFormControl).addSubscription(() => {
-      this.form.controls['coverage_from_date'].updateValueAndValidity({ emitEvent: false });
-    });
-
-    SchemaUtils.addJsonSchemaValidators(this.form, this.activeSchema(), false);
-  }
-
-  readonly onHide = () => this.store.dispatch(singleClickEnableAction());
-
-  async submit(jump: 'continue' | void) {
-    this.formSubmitted = true;
-    blurActiveInput(this.form);
-
-    if (this.form.invalid) {
-      printFormErrors(this.form);
-      this.store.dispatch(singleClickEnableAction());
-      return;
-    }
-
-    const reportData = SchemaUtils.getFormValues(this.form, this.activeSchema(), this.formProperties);
-    const reportStub: BaseForm3 | undefined = this.isF3X() ? Form3X.fromJSON(reportData) : Form3.fromJSON(reportData);
-    reportStub.report_type_category = this.form.get('report_type_category')?.value;
-    if (this.isF3X()) {
-      (reportStub as Form3X).filing_frequency = this.form.get('filing_frequency')?.value;
-      if (reportStub.report_code === ReportCodes.TER) reportStub.form_type = F3xFormTypes.F3XT;
-    } else if (reportStub.report_code === ReportCodes.TER) reportStub.form_type = F3FormTypes.F3T;
-
-    const reportId = this.reportId();
-    const report = reportId
-      ? await this.update(reportStub, reportId)
-      : await this.activeService.create(reportStub, this.formProperties);
-    if (!report) return;
-
-    if (jump === 'continue') {
-      this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
-    } else {
-      this.router.navigateByUrl('/reports');
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Report Updated',
-        life: 3000,
-      });
-    }
-  }
-
-  private async update(summary: BaseForm3, reportId: string) {
-    summary.id = reportId;
+  private async update(summary: BaseForm3) {
+    summary.id = this.sharedF3Store.reportId()!;
     try {
-      return await this.activeService.updateWithAllowedErrorCodes(
-        summary,
-        [HttpStatusCode.BadRequest],
-        this.formProperties,
-      );
+      return await this.activeService.updateWithAllowedErrorCodes(summary, [HttpStatusCode.BadRequest], formProperties);
     } catch {
       this.coverageDatesDialogVisible.set(true);
       return;
     }
-  }
-
-  private getFirstEnabledReportCode() {
-    const report = this.report();
-    if (report && this.reportCodes().includes(report.report_code as ReportCodes)) return report.report_code;
-    return this.reportCodes().find((code) => !this.usedReportCodes().includes(code));
-  }
-
-  private checkDisableReportCode(reportCode: ReportCodes) {
-    if (this.report()?.report_code === reportCode) return false;
-    return this.usedReportCodes().includes(reportCode);
-  }
-
-  /**
-   * FECFILE-2500
-   * ELECTION YEAR
-   *   current date is between Feb 1 – Dec 31 of an even-numbered year
-   *   current date is between Jan 1 – Jan 31 of an odd-numbered year
-   *
-   * NON-ELECTION YEAR
-   *   current date is between Feb 1 – Dec 31 of an odd-numbered year
-   *   current date is between Jan 1 – Jan 31 of an even-numbered year
-   * @returns F3xReportTypeCategories
-   */
-  private getDefaultTypeCategory() {
-    const isEvenYear = this.year % 2 === 0;
-    const isJanuary = new Date().getMonth() === 0;
-    return (isEvenYear && isJanuary) || (!isEvenYear && !isJanuary)
-      ? ReportTypeCategories.NON_ELECTION_YEAR
-      : ReportTypeCategories.ELECTION_YEAR;
   }
 }

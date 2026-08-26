@@ -1,6 +1,13 @@
+import { StringDate } from '../components/signal-inputs/date-input/date.input';
+import { FilingFrequency } from '../models/reports/form-3x.model';
 import { DateUtils } from './date.utils';
+import type { PrimeOptions } from './label.utils';
 
-export type FilingFrequency = 'Q' | 'M';
+export interface Coverage {
+  from: StringDate;
+  to: StringDate;
+}
+
 type Form3Situation =
   | 'Form3_Quarterly_Election'
   | 'Form3_Quarterly_NonElection'
@@ -8,6 +15,11 @@ type Form3Situation =
   | 'Form3X_Quarterly_NonElection'
   | 'Form3X_Monthly_Election'
   | 'Form3X_Monthly_NonElection';
+
+export const filingFrequencyOptions = [
+  { label: 'Quarterly', value: 'Q' },
+  { label: 'Monthly', value: 'M' },
+] as const satisfies PrimeOptions;
 
 export const ReportCodes = {
   Q1: 'Q1',
@@ -39,48 +51,50 @@ export const ReportCodes = {
 export type ReportCodes = (typeof ReportCodes)[keyof typeof ReportCodes];
 
 export function getCoverageDates(
-  reportCode: ReportCodes,
-  year: number,
+  reportCode: ReportCodes | null,
   isElectionYear: boolean,
-  filingFrequency: FilingFrequency,
-): [Date | undefined, Date] | undefined {
+  filingFrequency: FilingFrequency | null,
+): Coverage {
+  const year = new Date().getFullYear()
+  if (reportCode === null || filingFrequency === null) return { from: null, to: null };
   if (reportCode === ReportCodes.YE) {
     const adjustedYear = DateUtils.isCurrentMonthJanuary() ? year - 1 : year;
     if (isElectionYear) {
-      return [undefined, new Date(adjustedYear, 11, 31)];
+      return { from: null, to: new Date(adjustedYear, 11, 31) };
     }
     if (filingFrequency === 'Q') {
-      return [new Date(adjustedYear, 6, 1), new Date(adjustedYear, 11, 31)];
+      return { from: new Date(adjustedYear, 6, 1), to: new Date(adjustedYear, 11, 31) };
     }
-    return [new Date(adjustedYear, 11, 1), new Date(adjustedYear, 11, 31)];
+    return { from: new Date(adjustedYear, 11, 1), to: new Date(adjustedYear, 11, 31) };
   }
 
-  const staticDateMap: Partial<Record<ReportCodes, [Date, Date]>> = {
-    [ReportCodes.Q1]: [new Date(year, 0, 1), new Date(year, 3, 0)],
-    [ReportCodes.Q2]: [new Date(year, 3, 1), new Date(year, 6, 0)],
-    [ReportCodes.Q3]: [new Date(year, 6, 1), new Date(year, 9, 0)],
-    [ReportCodes.MY]: [new Date(year, 0, 1), new Date(year, 6, 0)],
-    [ReportCodes.M2]: [new Date(year, 0, 1), new Date(year, 1, 0)],
-    [ReportCodes.M3]: [new Date(year, 1, 1), new Date(year, 2, 0)],
-    [ReportCodes.M4]: [new Date(year, 2, 1), new Date(year, 3, 0)],
-    [ReportCodes.M5]: [new Date(year, 3, 1), new Date(year, 4, 0)],
-    [ReportCodes.M6]: [new Date(year, 4, 1), new Date(year, 5, 0)],
-    [ReportCodes.M7]: [new Date(year, 5, 1), new Date(year, 6, 0)],
-    [ReportCodes.M8]: [new Date(year, 6, 1), new Date(year, 7, 0)],
-    [ReportCodes.M9]: [new Date(year, 7, 1), new Date(year, 8, 0)],
-    [ReportCodes.M10]: [new Date(year, 8, 1), new Date(year, 9, 0)],
-    [ReportCodes.M11]: [new Date(year, 9, 1), new Date(year, 10, 0)],
-    [ReportCodes.M12]: [new Date(year, 10, 1), new Date(year, 11, 0)],
+  const staticDateMap: Partial<Record<ReportCodes, Coverage>> = {
+    [ReportCodes.Q1]: { from: new Date(year, 0, 1), to: new Date(year, 3, 0) },
+    [ReportCodes.Q2]: { from: new Date(year, 3, 1), to: new Date(year, 6, 0) },
+    [ReportCodes.Q3]: { from: new Date(year, 6, 1), to: new Date(year, 9, 0) },
+    [ReportCodes.MY]: { from: new Date(year, 0, 1), to: new Date(year, 6, 0) },
+    [ReportCodes.M2]: { from: new Date(year, 0, 1), to: new Date(year, 1, 0) },
+    [ReportCodes.M3]: { from: new Date(year, 1, 1), to: new Date(year, 2, 0) },
+    [ReportCodes.M4]: { from: new Date(year, 2, 1), to: new Date(year, 3, 0) },
+    [ReportCodes.M5]: { from: new Date(year, 3, 1), to: new Date(year, 4, 0) },
+    [ReportCodes.M6]: { from: new Date(year, 4, 1), to: new Date(year, 5, 0) },
+    [ReportCodes.M7]: { from: new Date(year, 5, 1), to: new Date(year, 6, 0) },
+    [ReportCodes.M8]: { from: new Date(year, 6, 1), to: new Date(year, 7, 0) },
+    [ReportCodes.M9]: { from: new Date(year, 7, 1), to: new Date(year, 8, 0) },
+    [ReportCodes.M10]: { from: new Date(year, 8, 1), to: new Date(year, 9, 0) },
+    [ReportCodes.M11]: { from: new Date(year, 9, 1), to: new Date(year, 10, 0) },
+    [ReportCodes.M12]: { from: new Date(year, 10, 1), to: new Date(year, 11, 0) },
   };
-  return staticDateMap[reportCode];
+  return staticDateMap[reportCode] ?? { from: null, to: null };
 }
 
-export function getReportCodes(isElectionYear: boolean, filingFrequency: FilingFrequency, isForm3X: boolean) {
+export function getReportCodes(isElectionYear: boolean, filingFrequency: FilingFrequency | null, isForm3X: boolean) {
+  if (filingFrequency === null) return new Set<ReportCodes>();
   const formPart = isForm3X ? 'Form3X' : 'Form3';
   const freqPart = filingFrequency === 'M' ? 'Monthly' : 'Quarterly';
   const electPart = isElectionYear ? 'Election' : 'NonElection';
   const situationKey = `${formPart}_${freqPart}_${electPart}` as Form3Situation;
-  return SITUATION_REPORT_MAP[situationKey] || [];
+  return new Set(SITUATION_REPORT_MAP[situationKey]);
 }
 
 const SITUATION_REPORT_MAP: Record<Form3Situation, ReportCodes[]> = {
@@ -170,7 +184,7 @@ const SITUATION_REPORT_MAP: Record<Form3Situation, ReportCodes[]> = {
   ],
 };
 
-export const electionReportCodes: ReportCodes[] = [
+export const electionReportCodes = new Set<ReportCodes>([
   ReportCodes['30G'],
   ReportCodes['30R'],
   ReportCodes['30S'],
@@ -179,4 +193,21 @@ export const electionReportCodes: ReportCodes[] = [
   ReportCodes['12P'],
   ReportCodes['12R'],
   ReportCodes['12S'],
-];
+]);
+
+/**
+ * FECFILE-2500
+ * ELECTION YEAR
+ *   current date is between Feb 1 – Dec 31 of an even-numbered year
+ *   current date is between Jan 1 – Jan 31 of an odd-numbered year
+ *
+ * NON-ELECTION YEAR
+ *   current date is between Feb 1 – Dec 31 of an odd-numbered year
+ *   current date is between Jan 1 – Jan 31 of an even-numbered year
+ * @returns F3xReportTypeCategories
+ */
+export function getDefaultTypeCategory() {
+  const isEvenYear = DateUtils.currentYear % 2 === 0;
+  const isJanuary = new Date().getMonth() === 0;
+  return (isEvenYear && isJanuary) || (!isEvenYear && !isJanuary) ? 'NON_ELECTION_YEAR' : 'ELECTION_YEAR';
+}

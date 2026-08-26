@@ -116,7 +116,7 @@ export const form24Options = [
   { label: '48-Hour', value: '48' },
 ];
 
-export const StatesCodeLabels: LabelList = [
+export const StatesCodeLabels = [
   ['AL', 'Alabama'],
   ['AK', 'Alaska'],
   ['AS', 'American Samoa'],
@@ -177,7 +177,8 @@ export const StatesCodeLabels: LabelList = [
   ['WV', 'West Virginia'],
   ['WI', 'Wisconsin'],
   ['WY', 'Wyoming'],
-];
+] as const satisfies LabelList;
+export type StateCode = (typeof StatesCodeLabels)[number][0];
 export const StatesCodeMap = new Map<string, string>(StatesCodeLabels);
 
 export const CountryCodeLabels: LabelList = [

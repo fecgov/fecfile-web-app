@@ -9,7 +9,7 @@ import { PathKind, SchemaPath, validate } from '@angular/forms/signals';
 
 export type StringDate = Date | string | null;
 const invalidDateMessage = 'This date does not follow the correct format, e.g. 01/01/2020';
-export function validateDate(schemaPath: SchemaPath<string | Date | null, 1, PathKind.Child>) {
+export function validateDate(schemaPath: SchemaPath<StringDate, 1, PathKind.Child>) {
   validate(schemaPath, ({ value }) => {
     let rawValue = value();
     if (!rawValue) return null;
@@ -30,6 +30,21 @@ export function validateDate(schemaPath: SchemaPath<string | Date | null, 1, Pat
   });
 }
 
+export function validateDateAfter(dateSchema: SchemaPath<StringDate>, otherDateSchema: SchemaPath<StringDate>) {
+  validate(dateSchema, (ctx) => {
+    const date = ctx.value();
+    const otherDate = ctx.valueOf(otherDateSchema);
+    if (!date || !otherDate || typeof date === 'string' || typeof otherDate === 'string') return null;
+
+    return otherDate.getTime() > date.getTime()
+      ? {
+          kind: 'isAfter',
+          message: `${ctx.pathKeys()[1].toUpperCase()} must be after ${(ctx.stateOf(otherDateSchema).keyInParent() as string).toUpperCase()}`,
+        }
+      : null;
+  });
+}
+
 @Component({
   selector: 'app-date-input',
   imports: [DatePicker, FormsModule, InputMaskModule, ButtonModule, LabelComponent],
@@ -39,7 +54,7 @@ export function validateDate(schemaPath: SchemaPath<string | Date | null, 1, Pat
 export class DateInput extends BaseInput<StringDate> {
   readonly datePicker = viewChild.required(DatePicker);
 
-  onDateSelect(date: StringDate): void {
+  onModelChange(date: StringDate): void {
     let finalValue: StringDate = null;
 
     if (date instanceof Date) {

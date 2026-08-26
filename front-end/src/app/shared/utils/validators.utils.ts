@@ -6,6 +6,8 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { FecDatePipe } from '../pipes/fec-date.pipe';
 import { CommitteeMemberService } from '../services/committee-member.service';
 import { DateUtils } from './date.utils';
+import { StringDate } from '../components/signal-inputs/date-input/date.input';
+import { ValidationResult } from '@angular/forms/signals';
 
 export function emailValidator(control: AbstractControl): ValidationErrors | null {
   const email = control.value;
@@ -53,67 +55,52 @@ export function buildGuaranteeUniqueValuesValidator(
   };
 }
 
-export function buildNonOverlappingCoverageValidator(existingCoverage: CoverageDates[]): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const group = control.parent;
-    if (!group || !existingCoverage?.length) return null;
+export function checkCoverageOverlaps(
+  fromDate: StringDate,
+  throughDate: StringDate,
+  existingCoverage: CoverageDates[] | undefined,
+): { fromError: ValidationResult | null; throughError: ValidationResult | null } {
+  if (
+    !fromDate ||
+    !throughDate ||
+    !existingCoverage?.length ||
+    typeof fromDate === 'string' ||
+    typeof throughDate === 'string'
+  ) {
+    return { fromError: null, throughError: null };
+  }
 
-    const fromControl = group.get('coverage_from_date');
-    const throughControl = group.get('coverage_through_date');
-
-    if (control !== fromControl && control !== throughControl) return null;
-
-    const fromDate = fromControl?.value;
-    const throughDate = throughControl?.value;
-
-    const surrounding = findSurrounding(fromDate, throughDate, existingCoverage);
-    const fromError = validateDateWithinCoverage(existingCoverage, fromControl);
-    const throughError = validateDateWithinCoverage(existingCoverage, throughControl);
-
-    if (surrounding) {
-      return getCoverageOverlapError(surrounding);
-    }
-
-    if (control === fromControl) {
-      return fromError;
-    }
-
-    if (control === throughControl) {
-      return throughError;
-    }
-
-    return null;
-  };
-}
-
-function validateDateWithinCoverage(
-  existingCoverage: CoverageDates[],
-  control: AbstractControl | null,
-): ValidationErrors | null {
-  return existingCoverage.reduce((error: ValidationErrors | null, coverage) => {
-    if (error) return error;
-    return DateUtils.isWithin(control?.value, coverage.coverage_from_date, coverage.coverage_through_date)
-      ? getCoverageOverlapError(coverage)
-      : null;
-  }, null);
-}
-
-function findSurrounding(from: Date, through: Date, existingCoverage: CoverageDates[]): CoverageDates | undefined {
-  return existingCoverage.find((coverage) => {
-    const coverageFrom = coverage.coverage_from_date;
-    const coverageThrough = coverage.coverage_through_date;
-    return coverageFrom && coverageThrough && from <= coverageFrom && through >= coverageThrough;
-  });
-}
-
-function getCoverageOverlapError(collision: CoverageDates): ValidationErrors {
   const fecDatePipe = new FecDatePipe();
-  const message =
-    `You have entered coverage dates that overlap ` +
-    `the coverage dates of the following report: ${collision.report_code_label} ` +
-    ` ${fecDatePipe.transform(collision.coverage_from_date)} -` +
-    ` ${fecDatePipe.transform(collision.coverage_through_date)}`;
-  return { invaliddate: { msg: message } };
+
+  const getCoverageOverlapError = (collision: CoverageDates): ValidationResult => ({
+    kind: 'coverage-overlap',
+    message:
+      `You have entered coverage dates that overlap the coverage dates of the following report: ` +
+      `${collision.report_code_label} ` +
+      `${fecDatePipe.transform(collision.coverage_from_date)} - ` +
+      `${fecDatePipe.transform(collision.coverage_through_date)}`,
+  });
+
+  const surrounding = existingCoverage.find((coverage) => {
+    const { coverage_from_date: cFrom, coverage_through_date: cThrough } = coverage;
+    return cFrom && cThrough && new Date(fromDate) <= new Date(cFrom) && new Date(throughDate) >= new Date(cThrough);
+  });
+
+  if (surrounding) {
+    const err = getCoverageOverlapError(surrounding);
+    return { fromError: err, throughError: err };
+  }
+
+  const isWithinCoverage = (dateVal: Date) =>
+    existingCoverage.find((cov) => DateUtils.isWithin(dateVal, cov.coverage_from_date, cov.coverage_through_date));
+
+  const fromCollision = isWithinCoverage(fromDate);
+  const throughCollision = isWithinCoverage(throughDate);
+
+  return {
+    fromError: fromCollision ? getCoverageOverlapError(fromCollision) : null,
+    throughError: throughCollision ? getCoverageOverlapError(throughCollision) : null,
+  };
 }
 
 export function buildCorrespondingForm3XValidator(form: FormGroup, dateField: string, date2Field: string): ValidatorFn {

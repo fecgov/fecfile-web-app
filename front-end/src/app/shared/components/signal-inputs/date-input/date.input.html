@@ -6,18 +6,16 @@
   [inputId]="inputId()"
   [showOnFocus]="false"
   [disabled]="disabled()"
-  [(ngModel)]="value"
-  (ngModelChange)="onDateSelect($event)"
+  [ngModel]="value()"
+  (ngModelChange)="onModelChange($event)"
   [showIcon]="true"
-  [iconDisplay]="'input'"
-  ariaLabelledBy="date_picker_label"
+  iconDisplay="input"
+  [ariaLabelledBy]="inputId()+'-label'"
   [keepInvalid]="true"
   [autoClear]="false"
   placeholder="MM/DD/YYYY"
   pInputMask="99/99/9999"
   slotChar="MM/DD/YYYY"
-  appDateSanitizer
-  (onSelect)="onDateSelect($event)"
   (onBlur)="touched.set(true)"
 >
   <ng-template pTemplate="header">

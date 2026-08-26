@@ -19,6 +19,8 @@ export class CoverageDates {
   }
 }
 
+export type ReportTypeCategories = 'Election Year' | 'Non-Election Year';
+
 export abstract class BaseForm3 extends Report {
   calculation_status: string | undefined;
   override hasChangeOfAddress = true;
@@ -35,7 +37,7 @@ export abstract class BaseForm3 extends Report {
   treasurer_prefix: string | undefined;
   treasurer_suffix: string | undefined;
   @Transform(BaseModel.dateTransform) date_signed: Date | undefined;
-  report_type_category: string | undefined;
+  report_type_category: ReportTypeCategories | undefined;
 
   get coverageDates(): { [date: string]: Date | undefined } {
     return { coverage_from_date: this.coverage_from_date, coverage_through_date: this.coverage_through_date };

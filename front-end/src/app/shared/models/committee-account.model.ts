@@ -1,5 +1,6 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
+import { StateCode } from '../utils/label.utils';
 
 export const committeePatternMessage =
   'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
@@ -44,7 +45,7 @@ export class CommitteeAccount extends BaseModel {
   treasurer_name: string | undefined;
   filing_frequency: string | undefined;
   candidate_office: string | undefined;
-  candidate_state: string | undefined;
+  candidate_state: StateCode | undefined;
   candidate_district: string | undefined;
   committee_id: string | undefined;
   treasurer_name_2: string | undefined;

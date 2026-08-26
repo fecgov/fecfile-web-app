@@ -16,11 +16,13 @@ export const F3xFormTypes = {
 } as const;
 export type F3xFormTypes = (typeof F3xFormTypes)[keyof typeof F3xFormTypes];
 
+export type FilingFrequency = 'Q' | 'M';
+
 export class Form3X extends BaseForm3 {
   schema = f3xSchema;
   report_type = ReportTypes.F3X;
-  form_type = F3xFormTypes.F3XN;
-  filing_frequency: string | undefined;
+  form_type: F3xFormTypes = F3xFormTypes.F3XN;
+  filing_frequency: FilingFrequency | undefined;
 
   L6b_cash_on_hand_beginning_period: number | undefined;
   L6c_total_receipts_period: number | undefined;

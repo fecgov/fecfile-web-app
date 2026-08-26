@@ -1,4 +1,5 @@
 export class DateUtils {
+  static readonly currentYear = new Date().getFullYear();
   /**
    * For given date, convert it to a string that
    * FEC expects

@@ -51,7 +51,7 @@ import { BaseInput } from '../base.input';
   `,
   styleUrls: ['../input.scss'],
 })
-export class SelectInput extends BaseInput<string> {
+export class SelectInput extends BaseInput<string | null> {
   readonly options = input.required<PrimeOptions>();
 
   readonly selectedItemTemplate = contentChild<
