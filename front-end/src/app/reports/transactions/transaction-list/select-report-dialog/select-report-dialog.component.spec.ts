@@ -137,6 +137,8 @@ describe('SelectReportDialogComponent', () => {
         report_type: 'Form 3X',
       } as unknown as TransactionListRecord;
       ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
+      fixture.detectChanges();
+      await fixture.whenStable();
       component.selectedReport = component.availableReports()![0];
       component.selectedReport = testActiveReport();
       try {

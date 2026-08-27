@@ -29,8 +29,6 @@ export class SelectReportDialogComponent {
   readonly type = computed(() => this.selectReportDialogSignal()?.[1]);
   readonly visible = computed(() => !!this.transaction());
 
-  readonly dialogVisible = signal(false);
-
   readonly availableReports = signal<Report[] | null>(null);
   readonly hasAvailableReports = computed(() => {
     const reports = this.availableReports();
@@ -49,10 +47,7 @@ export class SelectReportDialogComponent {
 
   constructor() {
     effectOnceIf(
-      () => {
-        this.visible();
-        return this.report();
-      },
+      () => (this.visible() ? this.report() : undefined),
       (report) => {
         const coverageThroughDate = DateUtils.convertDateToFecFormat((report as Form3X).coverage_through_date!);
         this.service.getFutureReports(coverageThroughDate).then((reports) => this.availableReports.set(reports));
@@ -61,10 +56,7 @@ export class SelectReportDialogComponent {
     effect(() => {
       const data = this.selectReportDialogSignal();
       if (data && this.availableReports()) {
-        this.dialogVisible.set(true);
         this.selectedReport = undefined;
-      } else {
-        this.dialogVisible.set(false);
       }
     });
   }
@@ -79,7 +71,6 @@ export class SelectReportDialogComponent {
   }
 
   cancel() {
-    this.dialogVisible.set(false);
     ReattRedesUtils.selectReportDialogSubject.next(undefined);
   }
 }

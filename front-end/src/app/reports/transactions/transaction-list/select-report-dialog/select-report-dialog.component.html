@@ -1,9 +1,10 @@
 <app-dialog
-  [(visible)]="dialogVisible"
+  [visible]="visible()"
   [header]="hasAvailableReports() ? 'Select a report' : 'Hang on...'"
   submitLabel="Continue"
   (confirm)="createReattribution()"
   [closeOnly]="!hasAvailableReports()"
+  (reject)="cancel()"
 >
   <div class="dialog-body">
     @if (hasAvailableReports()) {
