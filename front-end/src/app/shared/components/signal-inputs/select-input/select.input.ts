@@ -26,7 +26,6 @@ import { BaseInput } from '../base.input';
         (onHide)="touched.set(true)"
         [disabled]="disabled()"
         [class.p-disabled]="disabled()"
-        appendTo="body"
       >
         @if (selectedItemTemplate()) {
           <ng-template #selectedItem let-selectedOption>

@@ -1,21 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-  id="exclamation-icon"
-  viewBox="0 0 24 24"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:svg="http://www.w3.org/2000/svg">
-  <circle
-    fill="currentColor"
-    cx="12"
-    cy="12"
-    r="12" />
-  <text
-    x="11.994141"
-    y="19.96875"
-    text-anchor="middle"
-    font-size="24px"
-    font-weight="700"
-    font-family="'Times New Roman'"
-    fill="var(--icon-symbol, #fff)"
-    id="text1">!</text>
+<svg xmlns="http://www.w3.org/2000/svg" id="exclamation-icon" viewBox="0 0 24 24" >
+  <circle fill="currentColor" cx="12" cy="12" r="11.5"/>
+  <text 
+    x="12" 
+    y="14" 
+    text-anchor="middle" 
+    dominant-baseline="central"
+    font-size="20px" 
+    font-weight="700" 
+    font-family="gandhi-regular" 
+    fill="var(--icon-symbol, #fff)" 
+    id="text1"
+  >!</text>
 </svg>

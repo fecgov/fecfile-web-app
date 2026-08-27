@@ -29,6 +29,7 @@ export class HeaderLinksComponent {
   readonly disableLogin = environment.disableLogin;
   readonly headerStyle = input(HeaderStyles.DEFAULT);
   readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
+  readonly showAllTransactionsPage = environment.showAllTransactionsPage;
 
   headerStyles = HeaderStyles;
 

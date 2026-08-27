@@ -173,7 +173,8 @@ export class TransactionNavigationControls {
 /**
  * Standard set of form buttons used across non-child transaction types.
  */
-export const STANDARD_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SPLIT_BUTTON_CONTROL]);
+export const STANDARD_SPLIT_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SPLIT_BUTTON_CONTROL]);
+export const STANDARD_LIST_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
 
 /**
  * Standard set of form buttons used across double-entry transaction forms.

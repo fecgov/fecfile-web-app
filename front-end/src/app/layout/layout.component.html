@@ -1,22 +1,20 @@
-<div id="page-container" [class]="[layoutControls().backgroundStyle]">
-  <app-banner #bannerRef />
+@let sidebar = layoutControls().sidebar;
+@let backgroundStyle = layoutControls().backgroundStyle;
+<div id="page-container" [class]="[backgroundStyle]" [class.environment-hidden]="!environmentBannerVisible()">
+  <app-environment-banner #environmentBanner />
+  <app-banner />
   @if (layoutControls().showHeader) {
-    <div class="header-container">
-      <app-header [headerStyle]="layoutControls().headerStyle" />
-    </div>
+    <app-header [headerStyle]="layoutControls().headerStyle" />
   }
+
   @if (layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
     <app-service-unavailable-banner />
   }
 
   <!--  Begin Sidebar section -->
-  @if (layoutControls().sidebar === Sidebar.Report && layoutService.showSidebar()) {
-    <div class="inline-flex w-100">
-      <div
-        [class]="layoutControls().sidebar === Sidebar.Security ? 'gray' : 'fec-background-color'"
-        class="flex-shrink-1"
-        id="sidebar-container"
-      >
+  @if (sidebar === Sidebar.Report && layoutService.showSidebar()) {
+    <div class="flex flex-grow-1 fec-background-color">
+      <div class="flex-shrink-1" id="sidebar-container">
         <app-report-sidebar />
       </div>
       <div class="sidebar-content-container">
@@ -24,29 +22,19 @@
           @if (layoutControls().showCommitteeBanner) {
             <app-committee-banner />
           }
-          <div class="router-outlet">
-            <router-outlet></router-outlet>
-          </div>
-        </div>
-        <div class="flex-grow-1 flex flex-column">
-          <div class="flex-grow-1 footer-spacer"></div>
-          <app-footer [showSidebar]="true" />
-        </div>
-      </div>
-    </div>
-  } @else if (layoutControls().sidebar === Sidebar.Security) {
-    <div class="inline-flex w-100">
-      <div class="flex-shrink-1 gray" id="sidebar-container">
-        <app-security-notice-sidebar />
-      </div>
-      <div class="sidebar-content-container">
-        <div class="router-outlet">
           <router-outlet></router-outlet>
         </div>
-        <div class="flex-grow-1 flex flex-column">
-          <div class="flex-grow-1 footer-spacer"></div>
-          <app-footer [showSidebar]="true" />
-        </div>
+        <app-footer [showSidebar]="true" />
+      </div>
+    </div>
+  } @else if (sidebar === Sidebar.Security) {
+    <div class="inline-flex gray">
+      <div class="flex-shrink-1" id="sidebar-container">
+        <app-security-notice-sidebar class="mb-5" />
+      </div>
+      <div class="sidebar-content-container">
+        <router-outlet></router-outlet>
+        <app-footer [showSidebar]="true" />
       </div>
     </div>
   }
@@ -55,30 +43,33 @@
 
   <!-- Begin No Sidebar section -->
   @else {
-    <div
-      id="content-offset"
-      #contentOffset
-      [style.marginBottom]="isCookiesDisabled() ? '-100px' : '0px'"
-      [style.paddingTop]="topPadding()"
-    >
-      <div class="main-content" [class.standard-container]="isDefault()">
-        @if (layoutControls().showCommitteeBanner) {
-          <app-committee-banner />
-        }
-        @if (isDefault()) {
-          <div class="container">
-            <router-outlet></router-outlet>
-          </div>
-        } @else {
-          <router-outlet></router-outlet>
+    @if (backgroundStyle === 'security-notice-background') {
+      <div class="flex justify-content-between align-items-center">
+        <img
+          id="fec-seal-and-title"
+          alt="FECfile+ Seal and Title"
+          src="/assets/img/seal-and-title-white.svg"
+          height="64"
+          width="247"
+        />
+        @if (loginService.userIsAuthenticated()) {
+          <a class="logout-button" (click)="loginService.logOut()"><span>Log Out</span></a>
         }
       </div>
+    }
+    <div class="main-content content-offset" [class.standard-container]="isDefault()">
+      @if (layoutControls().showCommitteeBanner) {
+        <app-committee-banner />
+      }
+      @if (isDefault()) {
+        <div class="container">
+          <router-outlet></router-outlet>
+        </div>
+      } @else {
+        <router-outlet></router-outlet>
+      }
     </div>
-    <app-footer
-      #footerRef
-      [showUpperFooter]="layoutControls().showUpperFooter"
-      [style.paddingTop]="footerTopPadding()"
-    />
+    <app-footer #footerRef [showUpperFooter]="layoutControls().showUpperFooter" />
   }
   <!-- End No Sidebar section -->
 
@@ -90,7 +81,7 @@
 @if (!layoutControls().useServiceUnavailableLoginBanner && serviceAvailable() !== true) {
   <app-dialog
     aria-labelledby="dialog-title"
-    title="We've detected a problem"
+    header="We've detected a problem"
     [showTitleWarning]="true"
     [visible]="true"
     [noInput]="true"

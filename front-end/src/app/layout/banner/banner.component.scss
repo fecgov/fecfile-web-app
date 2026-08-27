@@ -1,12 +1,9 @@
 .usa-banner {
   background-color: #f0f0f0;
-  position: fixed;
-  top: 0px;
-  z-index: 1000;
   width: 100%;
   height: var(--header-top);
-  transition: height 0.3s ease-in-out;
   overflow: hidden;
+  transition: var(--header-transition);
 }
 
 .usa-banner .grid-row {
@@ -26,12 +23,12 @@
   }
 }
 
-.usa-banner__content {
+#gov-banner-default-default {
+  display: none;
   p {
     font-family: var(--karla);
   }
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
   max-width: 60rem;
   background-color: transparent;
   font-size: 1rem;
@@ -41,16 +38,14 @@
 }
 
 @media all and (min-width: 64em) {
-  .usa-banner__content {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  #gov-banner-default-default {
+    padding-block: 1rem;
   }
 }
 
 @media all and (min-width: 40em) {
-  .usa-banner__content {
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
+  #gov-banner-default-default {
+    padding-block: 0.5rem;
   }
 }
 
@@ -66,34 +61,24 @@
   width: 1.21875ex;
 }
 
-.usa-banner__inner {
-  margin-left: 0;
-  margin-right: auto;
-  max-width: 64rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  display: flex !important;
-  flex-wrap: wrap !important;
+.usa-banner-header {
+  padding: 0.4rem 1rem;
+  min-height: 0;
+  margin-inline: 0;
+  display: flex;
   align-items: center;
 }
 
-.usa-banner__header {
-  padding-bottom: 0.4rem;
-  padding-top: 0.4rem;
-  min-height: 0;
-}
-
-.usa-banner__header-text {
+.usa-banner-header-text {
   font-family: var(--karla);
-  margin-bottom: 0;
-  margin-top: 0;
+  margin-block: 0;
   font-size: 13px;
   line-height: 1.1;
+  width: fit-content;
 }
 
-.usa-banner__header-flag {
+.usa-banner-flag {
   padding-top: 0.125rem;
-  float: left;
   margin-right: 0.5rem;
   width: 1rem;
 }

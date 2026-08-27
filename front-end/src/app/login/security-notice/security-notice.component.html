@@ -1,18 +1,3 @@
-@if (showForm) {
-  <div class="flex justify-content-between align-items-center">
-    <img
-      id="fec-seal-and-title"
-      alt="FECfile+ Seal and Title"
-      src="/assets/img/seal-and-title-white.svg"
-      height="64"
-      width="247"
-    />
-
-    <a class="logout-button" (click)="loginService.logOut()">
-      <span>Log Out</span>
-    </a>
-  </div>
-}
 <div [class.security-container]="showForm" [class.standard-container]="showForm" [class.notice-box]="!showForm">
   <div class="header">
     <h1>Terms of service and user agreement</h1>

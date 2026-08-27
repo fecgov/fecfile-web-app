@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENTS_FEA';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 import {
@@ -19,11 +19,8 @@ export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

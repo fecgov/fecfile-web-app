@@ -16,7 +16,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COORDINATED_PA
 import { CONTACTS_ONE_THROUGH_FIVE } from '../contact.model';
 import { SchFTransactionType } from '../schf-transaction-type.model';
 import { SchFTransaction, ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes } from '../schf-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { AggregationGroups } from '../transaction.model';
 
 export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
@@ -39,14 +39,12 @@ export class COORDINATED_PARTY_EXPENDITURE extends SchFTransactionType {
   override contactConfig = CONTACTS_ONE_THROUGH_FIVE;
   title = LabelUtils.get(ScheduleFTransactionTypeLabels, ScheduleFTransactionTypes.COORDINATED_PARTY_EXPENDITURE);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+
   override showAggregate = false;
   override showPayeeCandidateYTD = true;
   override dateLabel = 'DATE';
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchFTransaction.fromJSON({
