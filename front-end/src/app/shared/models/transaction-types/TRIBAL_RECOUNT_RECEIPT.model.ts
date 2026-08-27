@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECOUNT_RECEIPT';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
@@ -11,7 +11,6 @@ export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Recount Account';
@@ -21,9 +20,7 @@ export class TRIBAL_RECOUNT_RECEIPT extends SchATransactionType {
     return false;
   }
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

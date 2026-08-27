@@ -11,7 +11,7 @@ export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
   contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Partnership Attribution';

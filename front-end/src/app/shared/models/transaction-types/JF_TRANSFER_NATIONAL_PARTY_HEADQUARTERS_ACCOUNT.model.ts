@@ -21,7 +21,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransac
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   ]);
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Headquarters Buildings Account Transfer of JF Proceeds';

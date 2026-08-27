@@ -1,2 +1,2 @@
-gitpython==3.1.50
+gitpython==3.1.55
 invoke==2.2.0

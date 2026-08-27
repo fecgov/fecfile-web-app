@@ -24,7 +24,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
     ],
   );
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Pres. Nominating Convention Account Transfer of JF Proceeds';

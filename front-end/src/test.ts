@@ -81,11 +81,11 @@ if (globalThis.window !== undefined && !globalThis.window.matchMedia) {
   });
 }
 
-globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+globalThis.ResizeObserver = class ResizeObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+};
 
 globalThis.window.scrollTo = vi.fn();
 

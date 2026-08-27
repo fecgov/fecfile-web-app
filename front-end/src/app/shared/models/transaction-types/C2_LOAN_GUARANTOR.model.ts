@@ -37,7 +37,7 @@ export class C2_LOAN_GUARANTOR extends SchC2TransactionType {
   ];
 
   override readonly contactConfig = STANDARD_SINGLE_CONTACT;
-  override readonly navigationControls = new TransactionNavigationControls(
+  override readonly _navigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,

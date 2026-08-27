@@ -12,10 +12,6 @@ nav {
   border-bottom: 2px solid #e8e8e8;
   padding-left: 32px;
   padding-right: 32px;
-  z-index: 999;
-  position: fixed;
-  top: var(--header-top);
-  transition: top 0.3s ease-in-out;
   overflow: hidden;
 }
 
@@ -25,4 +21,13 @@ nav {
 
 :host ::ng-deep .dead-link {
   color: #d6d7d9 !important;
+}
+
+.navbar-brand {
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  color: rgba(0, 0, 0, 1);
+  text-decoration: none;
+  white-space: nowrap;
+  height: 53px;
 }

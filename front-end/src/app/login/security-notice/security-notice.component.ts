@@ -27,7 +27,7 @@ export const SECURITY_CONSENT_VERSION = '1';
 export class SecurityNoticeComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
-  public readonly loginService = inject(LoginService);
+  readonly loginService = inject(LoginService);
   private readonly usersService = inject(UsersService);
   private readonly activatedRoute = inject(ActivatedRoute);
   formSubmitted = false;
@@ -37,17 +37,13 @@ export class SecurityNoticeComponent implements OnInit {
   readonly hasScrolledToBottom = signal(false);
 
   readonly form = new FormGroup(
-    {
-      'security-consent-annual': new SubscriptionFormControl(false),
-    },
+    { 'security-consent-annual': new SubscriptionFormControl(false) },
     { updateOn: 'blur' },
   );
   readonly componentToLoad = environment.name === 'test' ? DevNoticeComponent : ProdNoticeComponent;
 
   constructor() {
-    this.activatedRoute.data.subscribe((d) => {
-      this.showForm = !!d['backgroundStyle'];
-    });
+    this.activatedRoute.data.subscribe((d) => (this.showForm = !!d['backgroundStyle']));
 
     effect(() => {
       this.userLoginData();

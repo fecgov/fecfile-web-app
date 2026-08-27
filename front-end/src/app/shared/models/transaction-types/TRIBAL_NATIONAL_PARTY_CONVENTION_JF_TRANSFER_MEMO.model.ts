@@ -15,7 +15,7 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SCHEDULE_
   );
   override shortName = 'Tribal';
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Pres. Nominating Convention Account JF Memo: ${

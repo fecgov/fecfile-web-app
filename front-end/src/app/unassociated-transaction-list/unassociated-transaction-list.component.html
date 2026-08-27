@@ -1,0 +1,38 @@
+<div class="transaction-list">
+  <p-toolbar>
+    <ng-template pTemplate="left">
+      <div class="flex flex-column">
+        <h1 class="gandhi-bold size-36">Transactions</h1>
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0" class="karla-bold">Unassigned</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <p class="gandhi size-16 tab-description">
+          These transactions do not fall within the coverage dates of any existing report. Transactions unassigned from
+          a report will also appear here. If you create or edit a report with new coverage dates that include the date
+          of one of these transactions, that transaction will automatically be assigned to the new report.
+          <br /><br />
+          Memo items are excluded and will not be assigned automatically.
+        </p>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+
+  <app-unassociated-transaction-receipts (reloadTables)="refreshTables()" />
+
+  <app-unassociated-transaction-disbursements
+    (requestReportSelection)="
+      openSecondaryReportSelectionDialog($event.transaction, $event.formType, $event.createMethod)
+    "
+    (reloadTables)="refreshTables()"
+  />
+
+  <app-unassociated-transaction-loans-and-debts (reloadTables)="refreshTables()" />
+</div>

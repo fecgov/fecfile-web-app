@@ -1,28 +1,5 @@
-<ng-template #descriptionTpl let-line="$implicit">
-  <div
-    class="cell-with-overlay"
-    [ngClass]="{
-      'indent-1': line.indent === 1,
-      'indent-2': line.indent === 2,
-      'numeric-line': isNumericLine(line.lineNumber),
-      bold: line.bold,
-      italic: line.italic,
-    }"
-  >
-    <span class="description-text">
-      {{ line.description }}
-    </span>
-    @if (line.overlay) {
-      <app-calculation-overlay>
-        <span class="overlay-content">
-          {{ line.overlay }}
-        </span>
-      </app-calculation-overlay>
-    }
-  </div>
-</ng-template>
-
-<div class="summary-container">
+<app-shared-summary-templates />
+<div class="standard-container">
   <h1>Detailed summary page</h1>
   <hr type="solid" class="mt-2 mb-5" />
 
@@ -36,8 +13,6 @@
       [loading]="!calculationFinished()"
       sortField="name"
       [rowsPerPage]="receiptLines().length"
-      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-      itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
     >
@@ -52,8 +27,6 @@
       [loading]="!calculationFinished()"
       sortField="name"
       [rowsPerPage]="disbursementLines().length"
-      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-      itemName="users"
       [columns]="columns()"
       [showPaginationControls]="false"
     >
@@ -61,14 +34,12 @@
     <hr class="table-bottom" />
     <app-table
       [(first)]="first"
-      [items]="contributionsExpendituresLines()"
-      title="Net contributions/operating expenditures"
-      [(totalItems)]="contributionsExpendituresLines().length"
+      [items]="thirdLines()"
+      [title]="thirdTitle()"
+      [(totalItems)]="thirdLines().length"
       [loading]="!calculationFinished()"
       sortField="name"
-      [rowsPerPage]="contributionsExpendituresLines().length"
-      [globalFilterFields]="['first_name', 'last_name', 'email', 'role', 'is_active']"
-      itemName="users"
+      [rowsPerPage]="thirdLines().length"
       [columns]="columns()"
       [showPaginationControls]="false"
     >
@@ -90,7 +61,7 @@
       pButton
       pRipple
       class="p-button-secondary icon-gap"
-      (click)="router.navigateByUrl('/reports/f3x/summary/' + report().id)"
+      (click)="router.navigate(['/reports', this.formText(), 'summary', report().id])"
     >
       <svg pButtonIcon alt="Previous Arrow" width="10" height="10" class="rotate-180">
         <use href="assets/img/arrow.svg#arrow"></use>
@@ -101,7 +72,7 @@
       pButton
       pRipple
       class="p-button-primary icon-gap"
-      (click)="router.navigateByUrl('/reports/f3x/web-print/' + report().id)"
+      (click)="router.navigate(['/reports', this.formText(), 'web-print', report().id])"
     >
       <span>See print preview</span>
       <svg pButtonIcon alt="Next Arrow" width="10" height="10">
