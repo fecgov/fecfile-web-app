@@ -81,6 +81,12 @@ if (globalThis.window !== undefined && !globalThis.window.matchMedia) {
   });
 }
 
+globalThis.ResizeObserver = class ResizeObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+};
+
 globalThis.window.scrollTo = vi.fn();
 
 Object.defineProperty(globalThis.URL, 'createObjectURL', { writable: true, value: vi.fn() });
