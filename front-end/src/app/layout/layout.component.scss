@@ -8,9 +8,9 @@ $sidebar-width: 284px;
   padding: 64px 24px 32px 24px;
   position: sticky;
   top: var(--header-total);
-  transition: var(--header-transition);
   z-index: 999;
   overflow-y: auto;
+  transition: top 0.3s ease-in-out;
 }
 
 #page-container {
@@ -19,27 +19,14 @@ $sidebar-width: 284px;
   min-height: 100vh;
   min-width: min-content;
   max-width: 100vw;
+
+  overflow-anchor: none;
 }
 
 #fec-seal-and-title {
   min-height: 64px;
   max-height: 5%;
   margin-left: 25px;
-}
-
-.header-container {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  width: 100%;
-}
-
-#content-offset {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-top: var(--header-total);
-  transition: margin-top 0.3s ease-in-out;
 }
 
 .main-content {
@@ -74,10 +61,6 @@ $sidebar-width: 284px;
   transition:
     margin-top 0.3s ease-in-out,
     min-height 0.3s ease-in-out;
-  padding-left: $sidebar-width;
-  margin-top: var(--header-total);
-
-  transition: none;
   padding-top: 64px;
   & > .main-content {
     margin-left: 32px;
@@ -86,7 +69,7 @@ $sidebar-width: 284px;
 
 .login-background {
   background-color: #ffffff;
-  min-height: 100vh;
+  max-height: 100vh;
 }
 
 .security-notice-background {

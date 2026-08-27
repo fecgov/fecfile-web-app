@@ -9,28 +9,12 @@ import { provideRouter } from '@angular/router';
 import { USE_DYNAMIC_SIDEBAR, LayoutService } from '../layout.service';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 
-class MockResizeObserver implements ResizeObserver {
-  static instances: MockResizeObserver[] = [];
-
-  observe = vi.fn();
-  unobserve = vi.fn();
-  disconnect = vi.fn();
-
-  constructor(public readonly callback: ResizeObserverCallback) {
-    MockResizeObserver.instances.push(this);
-  }
-}
-
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let layoutService: LayoutService;
 
   beforeEach(async () => {
-    MockResizeObserver.instances = [];
-
-    vi.stubGlobal('ResizeObserver', MockResizeObserver);
-
     await TestBed.configureTestingModule({
       imports: [MenubarModule, HeaderComponent],
       providers: [
@@ -43,9 +27,7 @@ describe('HeaderComponent', () => {
     }).compileComponents();
   });
 
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
+  afterEach(() => {});
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
@@ -58,18 +40,7 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create a ResizeObserver for the nav element on init', () => {
-    expect(MockResizeObserver.instances).not.toHaveLength(0);
-    const latestInstance = MockResizeObserver.instances[MockResizeObserver.instances.length - 1];
-    expect(latestInstance.observe).toHaveBeenCalled();
-  });
-
-  it('should toggle compact mode and update the header footprint on scroll', () => {
-    const setPropertySpy = vi.spyOn(component['document'].documentElement.style, 'setProperty');
-    const navElement = fixture.nativeElement.querySelector('nav');
-
-    vi.spyOn(navElement, 'getBoundingClientRect').mockReturnValue({ height: 64 } as DOMRect);
-
+  it('should enter compact mode when scrolling past the banner height', () => {
     document.documentElement.style.setProperty('--header-top', '30px');
 
     vi.stubGlobal('scrollY', 40);
@@ -77,7 +48,26 @@ describe('HeaderComponent', () => {
     component.onScroll();
 
     expect(component.isCompact).toBe(true);
-    expect(setPropertySpy).toHaveBeenCalledWith('--header-total', '64px');
+    expect(component['document'].documentElement.style.getPropertyValue('--header-total')).toBe(
+      'calc(54px + var(--header-top))',
+    );
+  });
+
+  it('should exit compact mode when scrolling back above the banner height', () => {
+    document.documentElement.style.setProperty('--header-top', '30px');
+
+    vi.stubGlobal('scrollY', 40);
+    component.onScroll();
+
+    expect(component.isCompact).toBe(true);
+
+    vi.stubGlobal('scrollY', 0);
+    component.onScroll();
+
+    expect(component.isCompact).toBe(false);
+    expect(component['document'].documentElement.style.getPropertyValue('--header-total')).toBe(
+      'calc(80px + var(--header-top))',
+    );
   });
 
   it('should toggle the sidebar when the seal image is clicked', () => {
@@ -85,11 +75,5 @@ describe('HeaderComponent', () => {
     expect(layoutService.showSidebar()).toBe(true);
     sealImage.click();
     expect(layoutService.showSidebar()).toBe(false);
-  });
-
-  it('should disconnect the ResizeObserver on destroy', () => {
-    const latestInstance = MockResizeObserver.instances[MockResizeObserver.instances.length - 1];
-    component.ngOnDestroy();
-    expect(latestInstance.disconnect).toHaveBeenCalled();
   });
 });
