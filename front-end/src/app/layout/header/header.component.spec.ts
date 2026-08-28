@@ -40,31 +40,21 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should enter compact mode when scrolling past the banner height', () => {
+  it('should enter compact mode when scrolling past 0 and exit when returning to 0', () => {
     document.documentElement.style.setProperty('--header-top', '30px');
 
-    vi.stubGlobal('scrollY', 40);
-
+    vi.stubGlobal('scrollY', 1);
     component.onScroll();
-
-    expect(component.isCompact).toBe(true);
+    fixture.detectChanges();
+    expect(component.isCompact()).toBe(true);
     expect(component['document'].documentElement.style.getPropertyValue('--header-total')).toBe(
       'calc(54px + var(--header-top))',
     );
-  });
-
-  it('should exit compact mode when scrolling back above the banner height', () => {
-    document.documentElement.style.setProperty('--header-top', '30px');
-
-    vi.stubGlobal('scrollY', 40);
-    component.onScroll();
-
-    expect(component.isCompact).toBe(true);
 
     vi.stubGlobal('scrollY', 0);
     component.onScroll();
-
-    expect(component.isCompact).toBe(false);
+    fixture.detectChanges();
+    expect(component.isCompact()).toBe(false);
     expect(component['document'].documentElement.style.getPropertyValue('--header-total')).toBe(
       'calc(80px + var(--header-top))',
     );

@@ -1,4 +1,4 @@
-import { Component, DOCUMENT, HostListener, inject, input, OnInit } from '@angular/core';
+import { Component, DOCUMENT, effect, HostListener, inject, input, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { HeaderLinksComponent } from './header-links/header-links.component';
 import { HeaderStyles } from './header-styles';
@@ -11,44 +11,24 @@ import { LayoutService, USE_DYNAMIC_SIDEBAR } from '../layout.service';
   styleUrls: ['./header.component.scss'],
   imports: [NgOptimizedImage, HeaderLinksComponent],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   private readonly document = inject(DOCUMENT);
-
   readonly layoutService = inject(LayoutService);
   readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
+
   readonly headerStyle = input(HeaderStyles.DEFAULT);
+  readonly isCompact = signal(false);
 
-  isCompact = false;
-
-  private bannerHeight = 30;
-
-  ngOnInit() {
-    this.updateBannerHeight();
-    this.updateHeaderTotal();
+  constructor() {
+    effect(() => {
+      const headerHeight = this.isCompact() ? 54 : 80;
+      this.document.documentElement.style.setProperty('--header-total', `calc(${headerHeight}px + var(--header-top))`);
+    });
   }
 
   @HostListener('window:scroll')
   onScroll() {
-    this.updateBannerHeight();
-
-    const compact = window.scrollY > this.bannerHeight;
-
-    if (this.isCompact !== compact) {
-      this.isCompact = compact;
-      this.updateHeaderTotal();
-    }
-  }
-
-  private updateBannerHeight() {
-    const bannerHeightStr = getComputedStyle(this.document.documentElement).getPropertyValue('--header-top') || '30px';
-
-    this.bannerHeight = parseInt(bannerHeightStr, 10);
-  }
-
-  private updateHeaderTotal() {
-    const headerHeight = this.isCompact ? 54 : 80;
-
-    this.document.documentElement.style.setProperty('--header-total', `calc(${headerHeight}px + var(--header-top))`);
+    this.isCompact.set(window.scrollY > 0);
   }
 
   toggleSidebar() {
