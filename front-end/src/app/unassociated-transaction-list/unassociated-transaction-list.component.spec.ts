@@ -17,6 +17,7 @@ import { UnassociatedTransactionLoansAndDebtsComponent } from './unassociated-tr
 import { TabsModule } from 'primeng/tabs';
 import { PrimeTemplate } from 'primeng/api';
 import { TransactionListComponent } from 'app/reports/transactions/transaction-list/transaction-list.component';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('UnassociatedTransactionListComponent', () => {
   let component: UnassociatedTransactionListComponent;
@@ -45,6 +46,7 @@ describe('UnassociatedTransactionListComponent', () => {
         provideRouter([]),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
         {
           provide: TransactionService,

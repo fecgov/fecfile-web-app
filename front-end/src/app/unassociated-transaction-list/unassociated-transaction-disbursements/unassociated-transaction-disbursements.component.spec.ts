@@ -11,6 +11,7 @@ import { UnassociatedTransactionDisbursementsComponent } from './unassociated-tr
 import { SelectModule } from 'primeng/select';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('UnassociatedTransactionDisbursementsComponent', () => {
   let fixture: ComponentFixture<UnassociatedTransactionDisbursementsComponent>;
@@ -25,6 +26,7 @@ describe('UnassociatedTransactionDisbursementsComponent', () => {
         provideRouter([]),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
       ],
     }).compileComponents();

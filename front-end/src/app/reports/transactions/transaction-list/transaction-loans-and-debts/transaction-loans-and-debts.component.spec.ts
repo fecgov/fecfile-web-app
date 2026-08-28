@@ -16,6 +16,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { ReportService } from 'app/shared/services/report.service';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('TransactionLoansAndDebtsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
@@ -31,6 +32,7 @@ describe('TransactionLoansAndDebtsComponent', () => {
         provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,

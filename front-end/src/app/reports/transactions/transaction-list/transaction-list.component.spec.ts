@@ -19,6 +19,7 @@ import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { Form24 } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -35,6 +36,7 @@ describe('TransactionListComponent', () => {
         provideRouter([]),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
         {
           provide: TransactionService,
