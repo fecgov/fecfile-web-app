@@ -4,8 +4,8 @@
     <p class="span-label m-0">{{ subLabel() }}</p>
   </hgroup>
   <form id="form" novalidate (submit)="$event.preventDefault()" class="grid-form">
-    <section class="grid-form" aria-labelledby="report-type-heading">
-      <h2 id="report-type-heading">Report type</h2>
+    <fieldset class="grid-form" aria-labelledby="report-type-heading">
+      <legend id="report-type-heading">Report type</legend>
 
       @if (!form.filingFrequency().hidden()) {
         <app-select-button-input
@@ -21,13 +21,13 @@
         [formField]="form.reportTypeCategory"
       />
 
-      <div class="field" data-cy="report_code">
+      <fieldset data-cy="report_code">
         @if (isF3X()) {
-          <label for="type">{{ filingFrequencyLabel() }}</label>
+          <legend>{{ filingFrequencyLabel() }}</legend>
         }
 
-        <div class="flex gap-20px">
-          @for (reportCodeColumn of reportCodesColumns(); track reportCodeColumn) {
+        <div class="flex gap-20px" role="radiogroup" [attr.aria-label]="filingFrequencyLabel()">
+          @for (reportCodeColumn of reportCodesColumns(); track $index) {
             <div class="flex flex-column gap-20px">
               @for (reportCode of reportCodeColumn; track reportCode) {
                 <div class="p-field-checkbox flex">
@@ -53,7 +53,7 @@
             </div>
           }
         </div>
-      </div>
+      </fieldset>
 
       @if (!form.election().hidden()) {
         <app-date-input [formField]="form.election.date" label="ELECTION ON" class="grid-col-3" />
@@ -64,18 +64,20 @@
           class="grid-col-3"
         />
       }
-    </section>
-    <section id="coverage" class="grid-form" aria-labelledby="coverage-heading">
-      <h2 id="coverage-heading">Covering period</h2>
+    </fieldset>
+    <fieldset id="coverage" class="grid-form" aria-labelledby="coverage-heading">
+      <legend id="coverage-heading">Covering period</legend>
       <app-date-input [formField]="form.coverages.from" label="FROM" class="grid-col-3" />
       <app-date-input [formField]="form.coverages.to" label="TO" class="grid-col-3" />
       @let coverages = form.coverages();
       @if (coverages.touched() && coverages.invalid() && coverages.errors()[0]) {
         <small class="p-error mt-1" role="alert">{{ coverages.errors()[0].message }}</small>
       }
-    </section>
-    <app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
+    </fieldset>
+    <app-save-cancel
+      (save)="submitForm($event)"
+      (cancelForm)="router.navigateByUrl('/reports')"
+      [submitDisabled]="disableSubmission()"
+    />
   </form>
 </main>
-
-<app-unassigning-transactions-dialog [(visible)]="coverageDatesDialogVisible" />

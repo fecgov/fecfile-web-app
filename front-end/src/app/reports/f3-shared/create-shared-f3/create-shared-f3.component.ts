@@ -6,7 +6,7 @@ import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-canc
 import { LabelUtils, PrimeOptions, StateCode, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { electionReportCodes, getCoverageDates, getReportCodes, ReportCodes } from 'app/shared/utils/report-code.utils';
 import { environment } from 'environments/environment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { injectParams } from 'ngxtension/inject-params';
@@ -22,7 +22,6 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 import { SharedF3Store } from 'app/reports/shared-f3.store';
-import { UnassigningTransactionsDialogComponent } from '../unassigning-transactions-dialog/unassigning-transactions-dialog.component';
 import {
   deserializeBaseForm3,
   serializeForm3,
@@ -33,6 +32,7 @@ import {
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { F3FormTypes, F3xFormTypes, FilingFrequency } from 'app/shared/models';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 const formProperties: string[] = [
   'filing_frequency',
@@ -58,12 +58,12 @@ const formProperties: string[] = [
     FormField,
     DateInput,
     SelectInput,
-    UnassigningTransactionsDialogComponent,
   ],
   providers: [BreakpointStore, SharedF3Store],
 })
 export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data> {
   // INJECTIONS
+  private readonly confirmService = inject(ConfirmationService);
   private readonly activeService = inject(FORM_3_SERVICE);
   readonly sharedF3Store = inject(SharedF3Store);
   private readonly messageService = inject(MessageService);
@@ -221,22 +221,41 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data
             ? serializeForm3X(data, (original?.form_type as F3xFormTypes) ?? F3xFormTypes.F3XN)
             : serializeForm3(data, (original?.form_type as F3FormTypes) ?? F3FormTypes.F3N);
 
-          const report = this.sharedF3Store.isActive()
-            ? await this.update(reportStub)
-            : await this.activeService.create(reportStub, formProperties);
+          const isEdit = this.sharedF3Store.isActive();
+          if (isEdit) {
+            reportStub.id = this.sharedF3Store.reportId()!;
+            const datePipe = new FecDatePipe();
+            const from = datePipe.transform(reportStub.coverage_from_date);
+            const through = datePipe.transform(reportStub.coverage_through_date);
+            const count = await this.activeService.getTransactionsOutsideCoverage(reportStub.id, from, through);
+            if (count > 0) {
+              const transaction = count > 1 ? 'transactions' : 'transaction';
+              const message = [
+                `You have ${count} ${transaction}`,
+                ` within this report that will fall outside the new coverage dates of `,
+                `${from} - ${through}. `,
+                `If you continue, ${count > 1 ? 'these' : 'this'} ${transaction} will be removed from this report `,
+                `and moved to Unassigned within the Transactions page.\n\n`,
+                `If you don't want to do this now, cancel and review your ${transaction} `,
+                `before updating your coverage dates.`,
+              ].join('');
+              const confirmed = await new Promise<boolean>((resolve) => {
+                this.confirmService.confirm({
+                  message,
+                  header: 'Heads Up!',
+                  accept: () => resolve(true),
+                  reject: () => resolve(false),
+                });
+              });
 
-          if (!report) return;
-          if (jump === 'continue') {
-            this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+              if (!confirmed) return;
+            }
+            this.update(jump, reportStub);
           } else {
-            this.router.navigateByUrl('/reports');
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successful',
-              detail: 'Report Updated',
-              life: 3000,
-            });
+            const report = await this.activeService.create(reportStub, formProperties);
+            this.finishSubmission(jump, report);
           }
+
           return;
         } catch {
           this.messageService.add({
@@ -256,13 +275,27 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data
     });
   }
 
-  private async update(summary: BaseForm3) {
-    summary.id = this.sharedF3Store.reportId()!;
-    try {
-      return await this.activeService.updateWithAllowedErrorCodes(summary, [HttpStatusCode.BadRequest], formProperties);
-    } catch {
-      this.coverageDatesDialogVisible.set(true);
-      return;
+  private finishSubmission(jump: 'continue' | void, report: BaseForm3) {
+    if (!report) return;
+    if (jump === 'continue') {
+      this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
+    } else {
+      this.router.navigateByUrl('/reports');
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Updated',
+        life: 3000,
+      });
     }
+  }
+
+  private async update(jump: 'continue' | void, summary: BaseForm3) {
+    const report = await this.activeService.updateWithAllowedErrorCodes(
+      summary,
+      [HttpStatusCode.BadRequest],
+      formProperties,
+    );
+    this.finishSubmission(jump, report);
   }
 }

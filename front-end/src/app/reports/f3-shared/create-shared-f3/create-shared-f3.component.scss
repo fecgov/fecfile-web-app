@@ -15,8 +15,26 @@
 }
 
 #coverage {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   & app-date-input {
     margin-bottom: 0;
   }
+}
+
+legend {
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+#report-type-heading,
+#coverage-heading {
+  font-size: 24px;
+  line-height: 1.2;
+  font-family: var(--gandhi-bold);
+  margin-bottom: 32px;
+}
+
+fieldset.grid-form {
+  padding-bottom: 32px;
+  border-bottom: 2px solid;
 }

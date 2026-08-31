@@ -11,7 +11,7 @@ import { ReportCodes } from 'app/shared/utils/report-code.utils';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
+import { CreateSharedF3Component } from './create-shared-f3.component';
 import { FORM_3_SERVICE, BaseForm3Service } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
 
@@ -81,8 +81,7 @@ describe('CreateSharedF3Component: New', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(component.form.get('filing_frequency')?.value).toBe('Q');
-    expect(component.form.get('form_type')?.value).toBe(F3xFormTypes.F3XN);
+    expect(component.form.filingFrequency().value()).toBe('Q');
     expect(coverageDateSpy).toHaveBeenCalled();
   });
 
@@ -91,10 +90,15 @@ describe('CreateSharedF3Component: New', () => {
     mockForm3X.id = '999';
     const createSpy = vi.spyOn(activeServiceInstance, 'create').mockResolvedValue(mockForm3X);
 
-    component.form.patchValue({
-      report_code: ReportCodes.Q2,
-      coverage_from_date: new Date('2024-04-01'),
-      coverage_through_date: new Date('2024-06-30'),
+    component.form().value.update((original) => {
+      return {
+        ...original,
+        reportCode: ReportCodes.Q2,
+        coverages: {
+          from: new Date('2024-04-01'),
+          to: new Date('2024-06-30'),
+        },
+      };
     });
     fixture.detectChanges();
 

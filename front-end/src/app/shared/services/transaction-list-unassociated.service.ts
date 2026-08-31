@@ -17,7 +17,7 @@ export class UnassociatedTransactionListService extends TransactionListService {
     }
 
     const response = await this.apiService.get<ListRestResponse>(
-      `/transactions/list/unassociated/?page=${pageNumber}&ordering=${ordering}`,
+      `/transactions/list/unassigned/?page=${pageNumber}&ordering=${ordering}`,
       params,
     );
     response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
