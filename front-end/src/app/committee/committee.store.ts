@@ -38,16 +38,23 @@ export class CommitteeStore {
   }
 
   setCommittee(committee: CommitteeAccount): void {
+    this._committeeChangedInOtherTab.set(false);
     this._committee.set(committee);
   }
 
   clearCommittee(): void {
+    this._committeeChangedInOtherTab.set(false);
     this._committee.set(null);
+  }
+
+  clearCommitteeChangedInOtherTab(): void {
+    this._committeeChangedInOtherTab.set(false);
   }
 
   reloadFromStorage(): void {
     const updated = this.loadFromStorage();
     this._committee.set(updated);
+    this._committeeChangedInOtherTab.set(false);
   }
 
   private loadFromStorage(): CommitteeAccount | null {
@@ -65,14 +72,15 @@ export class CommitteeStore {
     if (event.key !== STORAGE_KEY) return;
 
     try {
-      if (!event.newValue) return;
+      if (!event.newValue) {
+        this._committeeChangedInOtherTab.set(true);
+        return;
+      }
 
       const updatedCommittee = CommitteeAccount.fromJSON(JSON.parse(event.newValue));
-
       const currentCommitteeId = this._committee()?.id;
-      const updatedCommitteeId = updatedCommittee.id;
 
-      if (updatedCommitteeId !== currentCommitteeId) {
+      if (currentCommitteeId && updatedCommittee.id !== currentCommitteeId) {
         this._committeeChangedInOtherTab.set(true);
       }
     } catch (error) {

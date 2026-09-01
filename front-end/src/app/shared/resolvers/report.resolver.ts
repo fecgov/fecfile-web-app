@@ -14,13 +14,12 @@ export class ReportResolver {
     const reportId = route.paramMap.get('reportId');
 
     if (!reportId) {
-      await this.router.navigateByUrl('/reports');
       return undefined;
     }
 
     try {
       return await this.reportService.setActiveReportById(reportId);
-    } catch {
+    } catch (error) {
       await this.router.navigateByUrl('/reports');
       return undefined;
     }
