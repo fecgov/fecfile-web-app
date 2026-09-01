@@ -19,6 +19,8 @@ export class ReportResolver {
 
     try {
       return await this.reportService.setActiveReportById(reportId);
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       await this.router.navigateByUrl('/reports');
       return undefined;
