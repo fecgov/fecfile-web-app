@@ -15,6 +15,8 @@ export class DialogComponent {
   readonly submitLabel = input('Save');
   readonly closeOnly = input(false);
   readonly noInput = input(false);
+  readonly dismissible = input(true);
+
   readonly confirm = output<void>();
   readonly reject = output<void>();
 
@@ -25,13 +27,13 @@ export class DialogComponent {
   readonly closeOnEscape = input(true);
 
   handleEscape(event: Event) {
-    if (!this.closeOnEscape()) {
+    if (!this.closeOnEscape() || !this.dismissible()) {
       event.preventDefault();
     }
   }
 
   handleCancel(event: Event) {
-    if (!this.closeOnEscape()) {
+    if (!this.closeOnEscape() || !this.dismissible()) {
       event.preventDefault();
       return;
     }
@@ -42,7 +44,9 @@ export class DialogComponent {
   }
 
   close() {
+    if (!this.dismissible()) return;
     if (!this.dialog().nativeElement.open) return;
+
     this.visible.set(false);
     this.reject.emit();
   }
@@ -50,7 +54,7 @@ export class DialogComponent {
   constructor() {
     effect(() => {
       if (this.visible()) {
-        this.dialog().nativeElement.show();
+        this.dialog().nativeElement.showModal();
       } else {
         this.dialog().nativeElement.close();
       }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Report } from '../models/reports/report.model';
 import { ReportService } from '../services/report.service';
 
@@ -8,17 +8,21 @@ import { ReportService } from '../services/report.service';
 })
 export class ReportResolver {
   private readonly reportService = inject(ReportService);
+  private readonly router = inject(Router);
 
-  /**
-   * Returns the report record for the id passed in the URL
-   * @param {ActivatedRouteSnapshot} route
-   * @returns {Observable<Report | undefined>}
-   */
   async resolve(route: ActivatedRouteSnapshot): Promise<Report | undefined> {
-    const reportId = String(route.paramMap.get('reportId'));
+    const reportId = route.paramMap.get('reportId');
+
     if (!reportId) {
+      await this.router.navigateByUrl('/reports');
       return undefined;
     }
-    return this.reportService.setActiveReportById(reportId);
+
+    try {
+      return await this.reportService.setActiveReportById(reportId);
+    } catch {
+      await this.router.navigateByUrl('/reports');
+      return undefined;
+    }
   }
 }

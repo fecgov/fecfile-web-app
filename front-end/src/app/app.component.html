@@ -2,12 +2,22 @@
   @if (memberService.needsSecondAdmin()) {
     <app-second-committee-admin-dialog />
   }
+
   <app-poller />
   <router-outlet />
   <app-confirm-dialog id="confirm-dialog" />
   <p-toast />
   <app-download-tray />
 </div>
+
 @if (showGlossary) {
   <app-glossary />
+}
+
+@if (committeeStore.committeeChangedInOtherTab()) {
+  <app-dialog title="Committee changed" [visible]="true" [noInput]="true" [closeOnEscape]="false" [dismissible]="false">
+    <p class="karla mb-0">
+      It looks like you switched committees in another tab. Please close this tab and continue in the other tab.
+    </p>
+  </app-dialog>
 }
