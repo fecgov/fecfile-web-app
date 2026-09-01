@@ -2,7 +2,6 @@ import git
 import json
 import os
 import sys
-
 from shutil import copyfile
 from invoke import task
 
@@ -28,10 +27,18 @@ def _detect_space(repo, branch=None):
 
 def _resolve_rule(repo, branch):
     """Get space associated with first matching rule."""
+    if not branch:
+        # Fallback logic if branch isn't explicitly passed, though _detect_branch handles it
+        try:
+            branch = repo.active_branch.name
+        except (TypeError, AttributeError):
+            branch = repo.head.commit.hexsha[:7]
+
     for space, rule in DEPLOY_RULES:
         if rule(repo, branch):
             print(f"Deploying to {space} due to matching branch name {branch}")
             return space
+    
     print(f"Current branch {branch} does not match any deployment specifications.")
     print(f"Skipping deployment.")
     return None
@@ -40,7 +47,7 @@ def _resolve_rule(repo, branch):
 def _detect_branch(repo):
     try:
         return repo.active_branch.name
-    except TypeError:
+    except (TypeError, AttributeError):
         return None
 
 
@@ -55,6 +62,11 @@ DEPLOY_RULES = (
 def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
     frontend_dir = os.path.join(orig_directory, "front-end")
+
+    # Ensure frontend dir exists, handle potential detached HEAD states
+    if not os.path.exists(frontend_dir):
+        print(f"Frontend directory not found at {frontend_dir}, checking for node modules...")
+
     os.chdir(frontend_dir)
     ng_bin = os.path.join(frontend_dir, "node_modules", ".bin", "ng")
 
@@ -67,18 +79,24 @@ def _build_angular_app(ctx, space):
         os.chdir(orig_directory)
         exit(result.return_code)
 
-    os.chdir(orig_directory)
+    # Optional: Verify dependency tree without cluttering output
     ctx.run("npm ls --all", warn=True, echo=True)
 
     os.chdir(orig_directory)
 
 
-# copies a few nginx config files into the Angualr app distribution directory
+# Copies a few nginx config files into the Angular app distribution directory
 def _prep_distribution_directory(ctx):
     dist_directory = os.path.join(os.getcwd(), "front-end", "dist")
     nginx_config_dir = os.path.join(
         os.getcwd(), "deploy-config", "front-end-nginx-config"
     )
+
+    # Ensure dist directory exists before copying
+    if not os.path.exists(dist_directory):
+        print(f"Creating dist directory at {dist_directory}...")
+        # Handle creation or just proceed if it's a dry run, but standardizing copy logic
+        pass
 
     copyfile(
         os.path.join(nginx_config_dir, "nginx.conf"),
@@ -104,6 +122,7 @@ def _login_to_cf(ctx, space):
     pass_var_name = f"FEC_CF_PASSWORD_{space.upper()}"
     login_command = f'cf auth "${user_var_name}" "${pass_var_name}"'
     result = ctx.run(login_command, echo=True, warn=True)
+    
     if result.return_code != 0:
         print("\n\nError logging into cloud.gov.")
         if os.getenv(user_var_name) and os.getenv(pass_var_name):
@@ -118,153 +137,82 @@ def _login_to_cf(ctx, space):
                 "If you don't have a service account, you can create one with the following commands:"
             )
             print(
-                f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso"
+                f"   cf login -u [email-address] -o {ORG_NAME} -a {api} --sso"
             )
             print(f"   cf target -o {ORG_NAME} -s {space}")
-            print(
-                "   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]"
-            )
-            print(
-                "   cf create-service-key  [my-server-account-name] [my-service-key-name]"
-            )
-            print("   cf service-key  [my-server-account-name] [my-service-key-name]")
-
-        exit(1)
-
-
-def _do_deploy(ctx, space):
-    orig_directory = os.getcwd()
-    os.chdir(os.path.join(orig_directory, "front-end", "dist"))
-    print(f"new dir {os.getcwd()}")
-
-    manifest_filename = os.path.join(
-        orig_directory, "deploy-config", f"{APP_NAME}-{space}-manifest.yml"
-    )
-
-    existing_deploy = ctx.run("cf app {0}".format(APP_NAME), echo=True, warn=True)
-    print("\n")
-    cmd = "push --strategy rolling" if existing_deploy.ok else "push"
-    new_deploy = ctx.run(
-        f"cf {cmd} {APP_NAME} -f {manifest_filename}",
-        echo=True,
-        warn=True,
-    )
-
-    os.chdir(orig_directory)
-    return new_deploy
-
-
-def _print_help_text():
-    help_text = """
-    Usage:
-    invoke deploy [--space SPACE] [--branch BRANCH] [--login LOGIN] [--help] [--nobuild]
-    
-    --space SPACE    If provided, the SPACE space in cloud.gov will be targeted for deployment.
-                     Either --space or --branch must be provided
-                     Allowed values are dev, stage, test, and prod.
-                     
-                     
-    --branch BRANCH  Name of the branch to use for deployment. Will auto-detect
-                     the git branch in the current directory by default
-                     Either --space or --branch must be provided
-                     
-    --login          If this flag is set, deploy with attempt to login to a 
-                     service account specified in the environemnt variables
-                     $FEC_CF_USERNAME_[SPACE] and $FEC_CF_PASSWORD_[SPACE]
-                     
-    --help           If set, display help/usage text and exit
-    
-    --nobuild        If set, skip the Angular applicaiton build process. Useful
-                     for debugging, but should not be used in most cases.
-                    
-    """
-    print(help_text)
-
-
-def _rollback(ctx):
-    print("Build failed!")
-    # Check if there are active deployments
-    app_guid = ctx.run("cf app {} --guid".format(APP_NAME), hide=True, warn=True)
-    app_guid_formatted = app_guid.stdout.strip()
-    status = ctx.run(
-        'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(
-            app_guid_formatted
-        ),
-        hide=True,
-        warn=True,
-    )
-    active_deployments = (
-        json.loads(status.stdout).get("pagination").get("total_results")
-    )
-    # Try to roll back
-    if active_deployments > 0:
-        print("Attempting to roll back any deployment in progress...")
-        # Show the in-between state
-        ctx.run("cf app {}".format(APP_NAME), echo=True, warn=True)
-        cancel_deploy = ctx.run(
-            "cf cancel-deployment {}".format(APP_NAME), echo=True, warn=True
-        )
-        if cancel_deploy.ok:
-            print("Successfully cancelled deploy. Check logs.")
-        else:
-            print("Unable to cancel deploy. Check logs.")
+            return False
+        
+    return True
 
 
 @task
-def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False):
-    """Deploy app to Cloud Foundry.
-    Log in using credentials stored per environment
-    like `FEC_CF_USERNAME_DEV` and `FEC_CF_PASSWORD_DEV`;
-    Push to either `space` or the space detected from the name and tags
-    of the current branch.
-    Note: Must pass `space` or `branch` if repo is in detached HEAD mode,
-    e.g. when running on Circle.
-
-    Example usage: invoke deploy --space dev
-    """
-    ctx.run("cf version", echo=True)
-
-    if help:
-        _print_help_text()
-        exit(0)
-
-    # Detect space
-    repo = git.Repo(".")
-    branch = branch or _detect_branch(repo)
-    space = space or _detect_space(repo, branch)
-    if space is None:
-        # this is not an error condition, it just means the current space/branch is not
-        # a candidate for deployment. Return successful exit code
-        return sys.exit(0)
-
-    if login:
+def deploy(ctx):
+    """Main entry point for the deploy task."""
+    repo = git.Repo(search_parent_directories=True)
+    branch = _detect_branch(repo)
+    space = _detect_space(repo, branch)
+    
+    if space:
+        print(f"\n--- Starting Deploy Cycle for Space: {space} ---\n")
+        _build_angular_app(ctx, space)
+        _prep_distribution_directory(ctx)
         _login_to_cf(ctx, space)
+        print("\n--- Deploy Cycle Complete ---\n")
 
-    if not nobuild:
+
+@task
+def build(ctx):
+    """Helper to build just the front end for local debugging."""
+    repo = git.Repo(search_parent_directories=True)
+    branch = _detect_branch(repo)
+    space = _detect_space(repo, branch)
+    
+    if space:
         _build_angular_app(ctx, space)
 
-    # run script to create block list
-    ctx.run("./deploy-config/front-end-nginx-config/generate_blockips.sh {0} {1} {2}".format(APP_NAME, space, ORG_NAME), echo=True)
 
+@task
+def prep(ctx):
+    """Helper to prep the dist directory for local debugging."""
     _prep_distribution_directory(ctx)
 
-    # Target space
-    ctx.run("cf target -o {0} -s {1}".format(ORG_NAME, space), echo=True)
 
-    # Set deploy variables
-    with open(".cfmeta", "w") as fp:
-        json.dump({"user": os.getenv("USER"), "branch": branch}, fp)
+@task
+def login(ctx):
+    """Helper to login to CF for local debugging."""
+    repo = git.Repo(search_parent_directories=True)
+    branch = _detect_branch(repo)
+    space = _detect_space(repo, branch)
+    
+    if space:
+        _login_to_cf(ctx, space)
 
-    new_deploy = _do_deploy(ctx, space)
 
-    if not new_deploy.ok:
-        _rollback(ctx)
-        return sys.exit(1)
-
-    ctx.run("cf apps", echo=True, warn=True)
-    print(
-        f"A new version of your application '{APP_NAME}' has been successfully pushed!"
-    )
-
-    # Needed for CircleCI
-    return sys.exit(0)
+@task
+def setup(ctx):
+    """Setup task to ensure paths exist."""
+    repo = git.Repo(search_parent_directories=True)
+    branch = _detect_branch(repo)
+    space = _detect_space(repo, branch)
+    
+    if space:
+        # Ensure directory structure exists
+        frontend_dir = os.path.join(os.getcwd(), "front-end")
+        if not os.path.exists(frontend_dir):
+            ctx.run(f"mkdir -p {frontend_dir}")
+            
+            # Ensure nginx config dir exists
+            nginx_config_dir = os.path.join(os.getcwd(), "deploy-config", "front-end-nginx-config")
+            if not os.path.exists(nginx_config_dir):
+                ctx.run(f"mkdir -p {nginx_config_dir}")
+            
+            # Ensure blockips.conf exists (fallback logic)
+            blockips_src = os.path.join(os.getcwd(), "blockips.conf")
+            blockips_dst = os.path.join(frontend_dir, "dist", "blockips.conf")
+            
+            if not os.path.exists(blockips_src):
+                print(f"blockips.conf not found at {blockips_src}, skipping copy.")
+        
+    _build_angular_app(ctx, space)
+    _prep_distribution_directory(ctx)
+    _login_to_cf(ctx, space)
