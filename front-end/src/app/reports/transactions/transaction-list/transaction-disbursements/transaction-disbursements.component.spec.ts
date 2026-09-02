@@ -12,6 +12,7 @@ import { TransactionDisbursementsComponent } from './transaction-disbursements.c
 import { SelectModule } from 'primeng/select';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('TransactionDisbursementsComponent', () => {
   let fixture: ComponentFixture<TransactionDisbursementsComponent>;
@@ -26,6 +27,7 @@ describe('TransactionDisbursementsComponent', () => {
         provideRouter([]),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,

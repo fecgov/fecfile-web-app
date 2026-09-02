@@ -17,6 +17,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
 import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -53,6 +54,7 @@ describe('TransactionGuarantorsComponent', () => {
         provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,

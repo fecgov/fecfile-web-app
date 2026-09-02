@@ -7,6 +7,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { Form1MService } from 'app/shared/services/form-1m.service';
 import { ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 export const REPORTS_ROUTES: Route[] = [
   {
@@ -23,6 +24,7 @@ export const REPORTS_ROUTES: Route[] = [
     data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
     loadChildren: () => import('./transactions/routes').then((module) => module.TRANSACTION_ROUTES),
     runGuardsAndResolvers: 'always',
+    providers: [ReattRedesStore],
   },
   {
     path: 'f3',

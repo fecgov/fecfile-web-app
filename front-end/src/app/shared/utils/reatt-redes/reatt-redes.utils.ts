@@ -4,7 +4,6 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
-import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
@@ -21,10 +20,6 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static readonly selectReportDialogSubject = new Subject<
-    [TransactionListRecord, ReattRedesTypes] | undefined
-  >();
-
   public static isReattRedes(
     transaction: Transaction | TransactionListRecord | undefined,
     types: ReattRedesTypes[] = [],

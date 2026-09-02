@@ -20,6 +20,7 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from 'app/shared/models';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
@@ -38,6 +39,7 @@ describe('TransactionReceiptsComponent', () => {
         provideHttpClientTesting(),
         MessageService,
         ConfirmationService,
+        ReattRedesStore,
         provideMockStore(testMockStore()),
         {
           provide: ActivatedRoute,
