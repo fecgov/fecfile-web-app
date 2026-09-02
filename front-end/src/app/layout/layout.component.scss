@@ -8,9 +8,9 @@ $sidebar-width: 284px;
   padding: 64px 24px 32px 24px;
   position: sticky;
   top: var(--header-total);
-  transition: var(--header-transition);
   z-index: 999;
   overflow-y: auto;
+  transition: top var(--header-transition);
 }
 
 #page-container {
@@ -19,6 +19,8 @@ $sidebar-width: 284px;
   min-height: 100vh;
   min-width: min-content;
   max-width: 100vw;
+
+  overflow-anchor: none;
 }
 
 #fec-seal-and-title {
@@ -58,7 +60,7 @@ $sidebar-width: 284px;
   margin-top: 0;
   transition:
     margin-top 0.3s ease-in-out,
-    min-height 0.3s ease-in-out;Z
+    min-height 0.3s ease-in-out;
   & > .main-content {
     margin-left: 32px;
   }
@@ -102,6 +104,8 @@ app-banner {
 app-header {
   position: sticky;
   top: var(--header-top);
-  transition: var(--header-transition);
+  transition:
+    top var(--header-transition),
+    height var(--header-transition);
   z-index: 1000;
 }
