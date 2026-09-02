@@ -1,6 +1,10 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  normalizeCandidateDistrict,
+  normalizeCandidateState,
+} from 'app/shared/utils/contact-candidate-normalization.utils';
+import {
   Contact,
   ContactTypes,
   FecApiCandidateLookupData,
@@ -108,8 +112,8 @@ export class ContactSearchComponent {
       employer: '',
       occupation: '',
       candidate_office: candidate.office,
-      candidate_state: candidate.state === 'US' ? '' : candidate.state,
-      candidate_district: candidate.state === 'US' || candidate.office === 'S' ? '' : candidate.district,
+      candidate_state: normalizeCandidateState(candidate.state),
+      candidate_district: normalizeCandidateDistrict(candidate.state, candidate.office, candidate.district),
     });
   }
 
