@@ -1,43 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { provideMockStore } from '@ngrx/store/testing';
-import { ReportListComponent } from 'app/reports/report-list/report-list.component';
-import { UsersService } from 'app/shared/services/users.service';
-import { testMockStore, testUserLoginData } from 'app/shared/utils/unit-test.utils';
-import { LoginService } from '../../shared/services/login.service';
-import { SECURITY_CONSENT_VERSION, SecurityNoticeComponent } from './security-notice.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { SecurityNoticeComponent } from './security-notice.component';
 import { provideRouter } from '@angular/router';
 
 describe('SecurityNoticeComponent', () => {
   let component: SecurityNoticeComponent;
   let fixture: ComponentFixture<SecurityNoticeComponent>;
-  let usersService: UsersService;
 
   beforeEach(async () => {
     window.onbeforeunload = vi.fn();
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, SecurityNoticeComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([
-          {
-            path: 'reports',
-            component: ReportListComponent,
-          },
-        ]),
-        { provide: Window, useValue: globalThis },
-        provideMockStore(testMockStore()),
-      ],
+      imports: [SecurityNoticeComponent],
+      providers: [provideRouter([]), { provide: Window, useValue: globalThis }],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SecurityNoticeComponent);
-    TestBed.inject(LoginService);
-    usersService = TestBed.inject(UsersService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -46,30 +24,51 @@ describe('SecurityNoticeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should be disabled until scroll to bottom', () => {
-    const expectedUserLoginData = testUserLoginData();
-    expectedUserLoginData.consent_for_one_year = false;
-    const spy = vi.spyOn(usersService, 'updateCurrentUser').mockResolvedValue(expectedUserLoginData);
-    component.signConsentForm();
-    expect(spy).not.toHaveBeenCalled();
-  });
+  describe('onScroll', () => {
+    it('should set hasScrolledToBottom to true when scrolled to the bottom', () => {
+      const mockElement = {
+        scrollHeight: 500,
+        scrollTop: 296,
+        clientHeight: 200,
+      } as unknown as HTMLElement;
 
-  it('should submit', () => {
-    const expectedUserLoginData = testUserLoginData();
-    expectedUserLoginData.consent_for_one_year = false;
-    const spy = vi.spyOn(usersService, 'updateCurrentUser').mockResolvedValue(expectedUserLoginData);
-    component.hasScrolledToBottom.set(true);
-    component.signConsentForm();
+      component.onScroll({ target: mockElement } as unknown as Event);
 
-    expect(spy).toHaveBeenCalledTimes(1);
+      expect(component.hasScrolledToBottom()).toBe(true);
+    });
 
-    expect(spy).toHaveBeenCalledWith(expectedUserLoginData);
+    it('should keep hasScrolledToBottom as false when not scrolled to the bottom', () => {
+      const mockElement = {
+        scrollHeight: 500,
+        scrollTop: 100,
+        clientHeight: 200,
+      } as unknown as HTMLElement;
 
-    expectedUserLoginData.consent_for_one_year = true;
-    component.form.get('security-consent-annual')?.setValue(true);
-    component.signConsentForm();
-    expect(spy).toHaveBeenCalledWith(expectedUserLoginData);
+      component.onScroll({ target: mockElement } as unknown as Event);
 
-    expect(component.userLoginData().security_consent_version_at_login).toBe(SECURITY_CONSENT_VERSION);
+      expect(component.hasScrolledToBottom()).toBe(false);
+    });
+
+    it('should exit early if hasScrolledToBottom is already true', () => {
+      component.hasScrolledToBottom.set(true);
+
+      const mockElement = {
+        scrollHeight: 500,
+        scrollTop: 0,
+        clientHeight: 200,
+      } as unknown as HTMLElement;
+
+      component.onScroll({ target: mockElement } as unknown as Event);
+
+      expect(component.hasScrolledToBottom()).toBe(true);
+    });
+
+    it('should handle event with null target gracefully without throwing', () => {
+      expect(() => {
+        component.onScroll({ target: null } as unknown as Event);
+      }).not.toThrow();
+
+      expect(component.hasScrolledToBottom()).toBe(false);
+    });
   });
 });

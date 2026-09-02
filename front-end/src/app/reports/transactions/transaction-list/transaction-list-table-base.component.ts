@@ -20,23 +20,25 @@ import { QueryParams } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { ReattRedesTypes, ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 
-const loanReceipts = ['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE'];
-const loansDebts = [
+const loanReceipts = new Set(['LOAN_RECEIVED_FROM_BANK_RECEIPT', 'LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', 'LOAN_MADE']);
+const loansDebts = new Set([
   'LOAN_RECEIVED_FROM_INDIVIDUAL',
   'LOAN_RECEIVED_FROM_BANK',
   'LOAN_BY_COMMITTEE',
   'DEBT_OWED_BY_COMMITTEE',
   'DEBT_OWED_TO_COMMITTEE',
-];
+]);
 
 @Directive()
 export abstract class TransactionListTableBaseComponent
   extends TableListBaseComponent<TransactionListRecord>
   implements OnInit
 {
+  private readonly reatRedesStore = inject(ReattRedesStore);
   protected readonly reportService = inject(ReportService);
   protected readonly transactionService = inject(TransactionService);
   protected readonly router = inject(Router);
@@ -377,7 +379,7 @@ export abstract class TransactionListTableBaseComponent
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?reattribution=${transaction.id}`,
       );
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
+      this.reatRedesStore.setTransaction(transaction, ReattRedesTypes.REATTRIBUTED);
     }
   }
 
@@ -387,7 +389,7 @@ export abstract class TransactionListTableBaseComponent
         `/reports/transactions/report/${this.reportId}/create/${transaction.transaction_type_identifier}?redesignation=${transaction.id}`,
       );
     } else {
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
+      this.reatRedesStore.setTransaction(transaction, ReattRedesTypes.REDESIGNATED);
     }
   }
 
@@ -414,9 +416,9 @@ export abstract class TransactionListTableBaseComponent
   private canDelete(transaction: TransactionListRecord): boolean {
     if (transaction.transaction_type_identifier) {
       // Shouldn't be able to delete loan receipts
-      if (loanReceipts.includes(transaction.transaction_type_identifier)) return false;
+      if (loanReceipts.has(transaction.transaction_type_identifier)) return false;
       // Shouldn't be able to delete pulled forward loans and debts
-      if (loansDebts.includes(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
+      if (loansDebts.has(transaction.transaction_type_identifier) && (transaction.loan_id || transaction.debt_id))
         return false;
     }
 

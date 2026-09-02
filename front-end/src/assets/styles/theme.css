@@ -2905,6 +2905,16 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   border-radius: 0;
   font-weight: 700;
 }
+
+.p-menu-item.inactive-menu-item .p-menu-item-content {
+  border-left: none !important;
+  font-weight: normal !important;
+}
+.p-menu-item.active-menu-item .p-menu-item-content {
+  border-left: 5px solid var(--primary-color);
+  border-radius: 0;
+  font-weight: 700;
+}
  
 
 .p-panelmenu .p-panelmenu-header > a {
