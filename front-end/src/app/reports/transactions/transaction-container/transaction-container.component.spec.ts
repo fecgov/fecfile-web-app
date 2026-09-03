@@ -34,6 +34,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReattRedesTypes } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 const mockTransaction = getTestTransactionByType(
   ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
@@ -99,6 +100,7 @@ describe('TransactionContainerComponent', () => {
         ConfirmationService,
         TransactionService,
         ReattRedesStore,
+        Form3XService,
         Title,
         {
           provide: ActivatedRoute,

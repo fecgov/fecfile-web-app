@@ -10,6 +10,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('SelectReportDialogComponent', () => {
@@ -26,11 +27,17 @@ describe('SelectReportDialogComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
+        Form3XService,
+        { provide: FORM_3_SERVICE, useClass: Form3XService },
         ReattRedesStore,
       ],
-    });
-    service = TestBed.inject(Form3XService);
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SelectReportDialogComponent);
+    service = fixture.debugElement.injector.get(Form3XService);
     reatRedesStore = TestBed.inject(ReattRedesStore);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
     const data = {
       id: '999',
       form_type: F3xFormTypes.F3XT,

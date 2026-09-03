@@ -11,6 +11,7 @@ import { UnassociatedTransactionReceiptsComponent } from './unassociated-transac
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 describe('UnassociatedTransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<UnassociatedTransactionReceiptsComponent>;
@@ -26,6 +27,7 @@ describe('UnassociatedTransactionReceiptsComponent', () => {
         MessageService,
         ConfirmationService,
         ReattRedesStore,
+        Form3XService,
         provideMockStore(testMockStore()),
       ],
     }).compileComponents();

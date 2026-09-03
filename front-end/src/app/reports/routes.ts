@@ -24,7 +24,7 @@ export const REPORTS_ROUTES: Route[] = [
     data: { sidebarSection: ReportSidebarSection.TRANSACTIONS },
     loadChildren: () => import('./transactions/routes').then((module) => module.TRANSACTION_ROUTES),
     runGuardsAndResolvers: 'always',
-    providers: [ReattRedesStore],
+    providers: [ReattRedesStore, Form3XService],
   },
   {
     path: 'f3',

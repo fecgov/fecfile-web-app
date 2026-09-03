@@ -14,6 +14,18 @@
   />
 
   <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo01">
-    <app-header-links [headerStyle]="headerStyle()" />
+    @switch (headerStyle()) {
+      @case ('DEFAULT') {
+        @defer {
+          <app-default-header-links />
+        }
+      }
+      @case ('LOGIN') {
+        <app-login-header-links />
+      }
+      @case ('LOGOUT') {
+        <app-logout-header-links />
+      }
+    }
   </div>
 </nav>

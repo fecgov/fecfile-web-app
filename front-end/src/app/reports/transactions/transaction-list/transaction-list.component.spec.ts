@@ -20,6 +20,7 @@ import { Form24 } from 'app/shared/models';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -37,6 +38,7 @@ describe('TransactionListComponent', () => {
         MessageService,
         ConfirmationService,
         ReattRedesStore,
+        Form3XService,
         provideMockStore(testMockStore()),
         {
           provide: TransactionService,
