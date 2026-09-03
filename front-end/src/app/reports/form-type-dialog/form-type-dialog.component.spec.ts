@@ -3,7 +3,6 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { FormTypeDialogComponent } from './form-type-dialog.component';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { Form24Service } from 'app/shared/services/form-24.service';
-import { provideMockStore } from '@ngrx/store/testing';
 import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
 import { Form24 } from 'app/shared/models/reports/form-24.model';
@@ -12,12 +11,15 @@ import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
+import { CommitteeStore } from 'app/committee/committee.store';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
   let fixture: ComponentFixture<FormTypeDialogComponent>;
   let router: Router;
   let form24Service: Form24Service;
+  let committeeStore: CommitteeStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,6 +27,7 @@ describe('FormTypeDialogComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideMockStore(testMockStore()),
         provideRouter([
           {
             path: 'reports/transactions/report/2401/list',
@@ -32,7 +35,7 @@ describe('FormTypeDialogComponent', () => {
           },
         ]),
         Form24Service,
-        provideMockStore(testMockStore()),
+        CommitteeStore,
         MessageService,
         {
           provide: ActivatedRoute,
@@ -52,6 +55,7 @@ describe('FormTypeDialogComponent', () => {
       ],
     }).compileComponents();
 
+    committeeStore = TestBed.inject(CommitteeStore);
     fixture = TestBed.createComponent(FormTypeDialogComponent);
     router = TestBed.inject(Router);
     form24Service = TestBed.inject(Form24Service);
@@ -88,8 +92,11 @@ describe('FormTypeDialogComponent', () => {
     expect(create).toHaveBeenCalled();
   });
 
-  it('should filter form types', () => {
-    expect(component.eligibleReportTypes()).toEqual(new Set(testCommitteeAccount().eligible_report_types));
+  it('should filter form types', async () => {
+    committeeStore.setCommittee(testCommitteeAccount());
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(committeeStore.eligibleReportTypes()).toEqual(new Set(testCommitteeAccount().eligible_report_types));
     expect(component.filteredOptions()).not.toContain('F3');
     expect(component.filteredOptions()).not.toContain('F24');
   });

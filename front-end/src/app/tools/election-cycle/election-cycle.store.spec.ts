@@ -1,15 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { Store } from '@ngrx/store';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { Form3Service } from 'app/shared/services/form-3.service';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ElectionCycleStore } from './election-cycle.store';
 import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 describe('ElectionCycleStore', () => {
   let ecstore: ElectionCycleStore;
-  let mockStore: MockStore;
+  let committeeStore: CommitteeStore;
   let form3ServiceSpy: { getTableData: ReturnType<typeof vi.fn> };
 
   const mockCommitteeWithF3 = testCommitteeAccount();
@@ -21,16 +19,10 @@ describe('ElectionCycleStore', () => {
     form3ServiceSpy = { getTableData: vi.fn() };
 
     TestBed.configureTestingModule({
-      providers: [
-        ElectionCycleStore,
-        provideMockStore({
-          selectors: [{ selector: selectCommitteeAccount, value: mockCommitteeWithoutF3 }],
-        }),
-        { provide: Form3Service, useValue: form3ServiceSpy },
-      ],
+      providers: [ElectionCycleStore, CommitteeStore, { provide: Form3Service, useValue: form3ServiceSpy }],
     });
 
-    mockStore = TestBed.inject(Store) as MockStore;
+    committeeStore = TestBed.inject(CommitteeStore);
     ecstore = TestBed.inject(ElectionCycleStore);
   });
 
@@ -40,14 +32,12 @@ describe('ElectionCycleStore', () => {
 
   describe('isForm3Committee', () => {
     it('should return true when committee has F3 eligible report type', () => {
-      mockStore.overrideSelector(selectCommitteeAccount, mockCommitteeWithF3);
-      mockStore.refreshState();
+      committeeStore.setCommittee(mockCommitteeWithF3);
       expect(ecstore.isForm3Committee()).toBe(true);
     });
 
     it('should return false when committee does not have F3 eligible report type', () => {
-      mockStore.overrideSelector(selectCommitteeAccount, mockCommitteeWithoutF3);
-      mockStore.refreshState();
+      committeeStore.setCommittee(mockCommitteeWithoutF3);
       expect(ecstore.isForm3Committee()).toBe(false);
     });
   });
@@ -69,23 +59,20 @@ describe('ElectionCycleStore', () => {
 
   describe('showElectionCycles', () => {
     it('should return true immediately if committee is Form3 eligible without resolving resource', () => {
-      mockStore.overrideSelector(selectCommitteeAccount, mockCommitteeWithF3);
-      mockStore.refreshState();
+      committeeStore.setCommittee(mockCommitteeWithF3);
       expect(ecstore.showElectionCycles()).toBe(true);
     });
 
     it('should return true if non-Form3 committee has Form3 reports', async () => {
       form3ServiceSpy.getTableData.mockResolvedValue({ count: 2 });
-      mockStore.overrideSelector(selectCommitteeAccount, mockCommitteeWithoutF3);
-      mockStore.refreshState();
+      committeeStore.setCommittee(mockCommitteeWithoutF3);
       await new Promise((resolve) => setTimeout(resolve, 0));
       expect(ecstore.showElectionCycles()).toBe(true);
     });
 
     it('should return false if non-Form3 committee has no Form3 reports', async () => {
       form3ServiceSpy.getTableData.mockResolvedValue({ count: 0 });
-      mockStore.overrideSelector(selectCommitteeAccount, mockCommitteeWithoutF3);
-      mockStore.refreshState();
+      committeeStore.setCommittee(mockCommitteeWithoutF3);
       await new Promise((resolve) => setTimeout(resolve, 0));
       expect(ecstore.showElectionCycles()).toBe(false);
     });

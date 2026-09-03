@@ -157,7 +157,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
   });
 
   private readonly committeeFrequency = computed(() =>
-    this.isF3X() && this.committeeStore.committee()?.filing_frequency === 'M' ? 'M' : 'Q',
+    this.isF3X() && this.committeeStore.filingFrequency() === 'M' ? 'M' : 'Q',
   );
 
   private readonly isElectionYear = computed(() => ReportTypeCategories.ELECTION_YEAR === this.reportTypeCategory());

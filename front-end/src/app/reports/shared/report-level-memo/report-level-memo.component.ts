@@ -13,7 +13,6 @@ import { injectRouteData } from 'ngxtension/inject-route-data';
 import { MessageService } from 'primeng/api';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { CommitteeStore } from 'app/committee/committee.store';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -23,15 +22,12 @@ import { CommitteeStore } from 'app/committee/committee.store';
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {
   readonly router = inject(Router);
-  private readonly committeeStore = inject(CommitteeStore);
   readonly memoTextService = inject(MemoTextService);
   private readonly messageService = inject(MessageService);
 
   readonly recTypeFormProperty = 'rec_type';
   readonly text4kFormProperty = 'text4000';
   readonly formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
-
-  readonly committeeAccountId = computed(() => this.committeeStore.committee()?.committee_id);
   readonly getNextUrl = injectRouteData<(report?: Report) => string | undefined | null>('getNextUrl');
   readonly nextUrl = computed(() => this.getNextUrl()?.(this.activeReport()) || '');
 
