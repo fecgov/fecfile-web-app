@@ -8,7 +8,6 @@ import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-login-header-links',
-  imports: [],
   template: `@if (!disableLogin) {
     <a (click)="navigateToLoginDotGov()">SIGN IN</a>
   }`,
