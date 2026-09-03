@@ -14,7 +14,7 @@ export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType 
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override subTransactionConfig = [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO];
 
   override generatePurposeDescription(transaction: SchBTransaction): string {

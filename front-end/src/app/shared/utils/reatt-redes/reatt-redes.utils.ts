@@ -4,7 +4,6 @@ import { SchATransaction } from '../../models/scha-transaction.model';
 import { SchBTransaction } from '../../models/schb-transaction.model';
 import { ReattributionToUtils } from './reattribution-to.utils';
 import { ReattributionFromUtils } from './reattribution-from.utils';
-import { Subject } from 'rxjs';
 import { RedesignationToUtils } from './redesignation-to.utils';
 import { RedesignationFromUtils } from './redesignation-from.utils';
 import { MemoText } from '../../models/memo-text.model';
@@ -21,10 +20,6 @@ export enum ReattRedesTypes {
 }
 
 export class ReattRedesUtils {
-  public static readonly selectReportDialogSubject = new Subject<
-    [TransactionListRecord, ReattRedesTypes] | undefined
-  >();
-
   public static isReattRedes(
     transaction: Transaction | TransactionListRecord | undefined,
     types: ReattRedesTypes[] = [],
@@ -46,6 +41,10 @@ export class ReattRedesUtils {
     return (
       !transaction.parent_transaction_id &&
       transaction.transactionType.isReattributable &&
+      !ReattRedesUtils.isReattRedes(transaction, [
+        ReattRedesTypes.REATTRIBUTION_FROM,
+        ReattRedesTypes.REATTRIBUTION_TO,
+      ]) &&
       !ReattRedesUtils.isAtAmountLimit(transaction)
     );
   }
@@ -125,7 +124,6 @@ export class ReattRedesUtils {
       payload instanceof SchATransaction
         ? (cloneInstance(payload.reatt_redes) as SchATransaction)
         : (cloneInstance(payload.reatt_redes) as SchBTransaction);
-
     resetCloneMemoText(clone, payload.report_ids?.[0], {
       rebuildFromJson: false,
       resetMemoTextId: 'whenMemoTextPresent',

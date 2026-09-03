@@ -19,7 +19,7 @@ export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SCHEDULE
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO,
   );
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB30B',

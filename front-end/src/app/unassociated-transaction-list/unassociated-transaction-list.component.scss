@@ -1,0 +1,30 @@
+@use 'mixins' as *;
+
+:host ::ng-deep {
+  .p-toolbar {
+    @include standard-container();
+  }
+
+  .p-tab {
+    padding: 0px 0px 8px 0px;
+  }
+
+  .p-tablist-active-bar {
+    height: 4px;
+    background-color: #2e79d4;
+  }
+
+  .p-tablist-tab-list {
+    border-style: none;
+    padding-top: 32px;
+    font-size: 18px;
+  }
+
+  .p-tabpanels {
+    padding: 32px 0px 0px 0px;
+  }
+
+  .tab-description {
+    margin-bottom: 0px;
+  }
+}

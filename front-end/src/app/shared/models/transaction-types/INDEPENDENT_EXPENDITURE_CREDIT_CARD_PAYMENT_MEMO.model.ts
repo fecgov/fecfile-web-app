@@ -41,7 +41,7 @@ export class INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchETransa
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = CHILD_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = CHILD_CONTROLS;
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
   override inheritCalendarYTD = true;

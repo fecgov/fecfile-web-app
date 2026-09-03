@@ -82,14 +82,27 @@ if (globalThis.window !== undefined && !globalThis.window.matchMedia) {
   });
 }
 
-globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+globalThis.ResizeObserver = class ResizeObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+};
 
 globalThis.window.scrollTo = vi.fn();
 
 Object.defineProperty(globalThis.URL, 'createObjectURL', { writable: true, value: vi.fn() });
 
 localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(testCommitteeAccount()));
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  }),
+});

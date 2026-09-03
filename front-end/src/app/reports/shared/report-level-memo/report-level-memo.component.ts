@@ -18,7 +18,7 @@ import { CommitteeStore } from 'app/committee/committee.store';
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../../styles.scss', './report-level-memo.component.scss'],
+  styleUrls: ['./report-level-memo.component.scss'],
   imports: [ReactiveFormsModule, ButtonDirective, Ripple, SingleClickDirective, AutoResizeDirective],
 })
 export class ReportLevelMemoComponent extends FormComponent implements OnInit {

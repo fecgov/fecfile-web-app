@@ -1,0 +1,47 @@
+import { Component, computed, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ReportService } from 'app/shared/services/report.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { collectRouteData } from 'app/shared/utils/route.utils';
+import { injectNavigationEnd } from 'ngxtension/navigation-end';
+import { ReportSidebarSection } from '../menu-info';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { PanelMenu } from 'primeng/panelmenu';
+import { isForm3Group, ReportTypes } from 'app/shared/models/reports/report.model';
+import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+
+@Component({
+  selector: 'app-report-sidebar',
+  standalone: true,
+  imports: [FecDatePipe, PanelMenu],
+  templateUrl: 'report-sidebar.component.html',
+})
+export class ReportSidebarComponent {
+  private readonly navEnd = toSignal(injectNavigationEnd());
+  private readonly store = inject(Store);
+  private readonly reportService = inject(ReportService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly report = this.store.selectSignal(selectActiveReport);
+
+  readonly items = computed(() => {
+    this.navEnd();
+    const data = collectRouteData(this.route.snapshot);
+    if (!data) return [];
+    const sidebarState = data['sidebarSection'] as ReportSidebarSection;
+    const isEditable = this.reportService.isEditable(this.report());
+    return this.report().getMenuItems(sidebarState, isEditable);
+  });
+
+  readonly formLabel = computed(() => this.report().formLabel);
+  readonly subHeading = computed(() => this.report().report_code_label);
+  readonly hasCoverage = computed(() => isForm3Group(this.report().report_type));
+  readonly isAmendable = computed(
+    () => isForm3Group(this.report().report_type) || this.report().report_type === ReportTypes.F24,
+  );
+  readonly coverageFrom = computed(() => (this.report() as BaseForm3).coverage_from_date);
+  readonly coverageThrough = computed(() => (this.report() as BaseForm3).coverage_through_date);
+
+  readonly version = computed(() => this.report().version_label ?? 'Original');
+}

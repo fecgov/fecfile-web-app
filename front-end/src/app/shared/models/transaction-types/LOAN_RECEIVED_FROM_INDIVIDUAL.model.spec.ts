@@ -19,9 +19,7 @@ describe('LOAN_RECEIVED_FROM_INDIVIDUAL', () => {
   });
 
   it('should change navigation control if pulled forward', () => {
-    let navControls = transaction.transactionType.navigationControls;
-    if (navControls?.continueControls) expect(navControls.continueControls[0].label).toBe('Save both transactions');
-    navControls = transaction.transactionType.getNavigationControls(transaction);
+    let navControls = transaction.transactionType.getNavigationControls(transaction);
     if (navControls?.continueControls) expect(navControls.continueControls[0].label).toBe('Save both transactions');
     transaction.loan_id = 'test';
     navControls = transaction.transactionType.getNavigationControls(transaction);

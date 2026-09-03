@@ -1,5 +1,6 @@
 import { plainToClass, Transform } from 'class-transformer';
 import { BaseModel } from './base.model';
+import type { ReportTypes } from './reports/report.model';
 
 export const committeePatternMessage =
   'The ID entered is not in the correct format. Must have 9 characters, without spaces and without special characters.';
@@ -70,7 +71,7 @@ export class CommitteeAccount extends BaseModel {
   state_full: string | undefined;
   custodian_zip: string | undefined;
   affiliated_committee_name: string | undefined;
-  eligible_report_types: string[] = [];
+  eligible_report_types: ReportTypes[] = [];
   website: string | undefined;
   cycles: number[] = [];
   @Transform(BaseModel.dateTransform) disabled: Date | undefined;

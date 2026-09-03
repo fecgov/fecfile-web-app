@@ -40,7 +40,7 @@ export class INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchETransactionT
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
   override showCalendarYTD = true;

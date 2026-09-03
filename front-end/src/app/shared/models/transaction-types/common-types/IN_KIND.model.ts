@@ -7,7 +7,7 @@ import {
 import { ContactTypes } from '../../contact.model';
 
 export abstract class IN_KIND extends SchATransactionType {
-  override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions: ContactTypes[] = COMMITTEE;
 
