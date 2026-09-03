@@ -5,17 +5,17 @@
   }
   <li><a routerLink="/contacts">Contacts</a></li>
   <li>
-    <a (click)="toolsOp.toggle($event)">
+    <button class="nav-button" (click)="toolsOp.toggle($event)">
       <span>Tools</span>
       <svg class="dropdown-icon"><use href="assets/img/arrow.svg#arrow"></use></svg>
-    </a>
+    </button>
   </li>
 
   <li id="navbarProfileDropdownMenuLink">
-    <a (click)="accountOp.toggle($event)">
+    <button class="nav-button" (click)="accountOp.toggle($event)">
       <img class="header-navbar-icon" ngSrc="assets/img/profile_icon.svg" alt="Profile" height="16" width="8" />
       <svg class="dropdown-icon"><use href="assets/img/arrow.svg#arrow"></use></svg>
-    </a>
+    </button>
   </li>
 </ul>
 
