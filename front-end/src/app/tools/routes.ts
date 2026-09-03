@@ -16,7 +16,7 @@ export const TOOLS_ROUTES: Route[] = [
   {
     path: 'election-cycles',
     component: ElectionCyclesListComponent,
-    title: 'Election Cycles',
+    title: 'Election cycles',
     pathMatch: 'full',
     providers: [Form3Service, ElectionCycleStore],
     canActivate: [electionCycleGuard, featureFlagGuard('showForm3')],
