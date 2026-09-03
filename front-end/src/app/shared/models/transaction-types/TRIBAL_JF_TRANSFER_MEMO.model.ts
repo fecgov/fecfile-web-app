@@ -12,7 +12,7 @@ export class TRIBAL_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   override shortName = 'Tribal';
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;

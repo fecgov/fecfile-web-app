@@ -1,0 +1,69 @@
+:host::ng-deep {
+  h2 {
+    font-family: var(--gandhi-bold);
+    font-weight: bolder;
+    font-size: 24px !important;
+  }
+
+  .cell-with-overlay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .p-datatable {
+    & .p-datatable-tbody {
+      & > tr:not(:last-child) > td {
+        border-bottom: 1px solid black;
+      }
+      & > tr:nth-child(even),
+      & > tr:nth-child(odd) {
+        background-color: white;
+      }
+      & > tr:has(.numeric-line) {
+        background-color: #f5f5f5 !important;
+      }
+      & > tr:has(.description-column .bold) > td.line-column {
+        font-family: var(--karla-bold);
+      }
+    }
+  }
+
+  .description-column .bold {
+    font-family: var(--karla-bold);
+  }
+
+  .description-column .italic {
+    font-style: italic;
+  }
+
+  .line-column {
+    display: none;
+  }
+
+  .period-column {
+    --period-width: 130px;
+    width: var(--period-width);
+    min-width: var(--period-width);
+    max-width: var(--period-width);
+    text-align: right !important;
+  }
+
+  .ytd-column {
+    --ytd-width: 162px;
+    width: var(--ytd-width);
+    min-width: var(--ytd-width);
+    max-width: var(--ytd-width);
+    text-align: right !important;
+  }
+
+  @media (min-width: 768px) {
+    .line-column {
+      display: table-cell;
+      --line-width: 72px;
+      width: var(--line-width);
+      min-width: var(--line-width);
+      max-width: var(--line-width);
+    }
+  }
+}

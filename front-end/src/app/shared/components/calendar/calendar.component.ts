@@ -55,9 +55,11 @@ export class CalendarComponent implements ControlValueAccessor {
   }
 
   onDateSelect(date: StringDate): void {
-    this.value = date;
-    this.onChange(date);
-    this.onTouched();
+    this.writeValue(date);
+    if (date instanceof Date) {
+      this.onChange(date);
+      this.onTouched();
+    }
   }
 
   onYearChange(event: Event, delta: -1 | 1) {
@@ -73,5 +75,10 @@ export class CalendarComponent implements ControlValueAccessor {
 
     datePicker.onMonthChange.emit({ month: datePicker.currentMonth + 1, year: datePicker.currentYear });
     datePicker.createMonths(datePicker.currentMonth, datePicker.currentYear);
+  }
+
+  onBlur() {
+    this.onChange(this.value);
+    this.onTouched();
   }
 }

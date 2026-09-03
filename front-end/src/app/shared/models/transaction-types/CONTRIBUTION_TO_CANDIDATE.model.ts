@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CANDIDATE_CONTRIBUTIONS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import {
   COMMITTEE,
   COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
@@ -16,12 +16,10 @@ export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE);
   schema = schema;
   override hasCandidateCommittee = true;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+
   override contact2IsRequired = () => true;
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

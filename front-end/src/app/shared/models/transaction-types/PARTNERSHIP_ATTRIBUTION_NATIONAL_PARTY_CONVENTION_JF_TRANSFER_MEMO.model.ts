@@ -16,7 +16,7 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO 
   );
   schema = schema;
   override shortName = 'Partnership Attribution';
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     const committeeClause = `Pres. Nominating Convention Account JF Memo: ${

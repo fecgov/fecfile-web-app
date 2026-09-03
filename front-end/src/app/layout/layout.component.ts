@@ -1,23 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, AfterViewChecked, inject, viewChild, computed, signal, DestroyRef } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Component, inject, viewChild, computed, signal, DestroyRef, ElementRef, effect } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { collectRouteData, RouteData } from 'app/shared/utils/route.utils';
 import { FeedbackOverlayComponent } from './feedback-overlay/feedback-overlay.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BannerComponent } from './banner/banner.component';
+import { EnvironmentBannerComponent } from './environment-banner/environment-banner.component';
 import { CommitteeBannerComponent } from './committee-banner/committee-banner.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectNavigationEnd } from 'ngxtension/navigation-end';
 import { HeaderStyles } from './header/header-styles';
 import { LayoutService, USE_DYNAMIC_SIDEBAR } from './layout.service';
-import { ReportSidebarComponent } from './sidebar/report-sidebar.component';
-import { SecurityNoticeSidebarComponent } from './sidebar/security-notice-sidebar.component';
+import { ReportSidebarComponent } from './sidebar/report-sidebar/report-sidebar.component';
+import { SecurityNoticeSidebarComponent } from './sidebar/security-notice-sidebar/security-notice-sidebar.component';
 import { ServiceUnavailableBannerComponent } from './service-unavailable-banner/service-unavailable-banner.component';
 import { Store } from '@ngrx/store';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
-import { DialogModule } from 'primeng/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { LoginService } from 'app/shared/services/login.service';
 
 export enum BackgroundStyles {
   'DEFAULT' = '',
@@ -36,6 +36,7 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   imports: [
+    EnvironmentBannerComponent,
     BannerComponent,
     HeaderComponent,
     ReportSidebarComponent,
@@ -45,43 +46,35 @@ export type Sidebar = (typeof Sidebar)[keyof typeof Sidebar];
     FooterComponent,
     FeedbackOverlayComponent,
     ServiceUnavailableBannerComponent,
-    DialogModule,
     DialogComponent,
   ],
 })
-export class LayoutComponent implements AfterViewChecked {
+export class LayoutComponent {
   Sidebar = Sidebar;
+  private readonly router = inject(Router);
   readonly layoutService = inject(LayoutService);
+  readonly loginService = inject(LoginService);
   private readonly store = inject(Store);
-  readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
+  private readonly useDynamicSidebar = inject(USE_DYNAMIC_SIDEBAR);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
 
-  readonly feedbackOverlay = viewChild.required(FeedbackOverlayComponent);
   private readonly navEnd = toSignal(injectNavigationEnd());
-
-  readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
   readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
+  readonly isDefault = computed(() => this.layoutControls().backgroundStyle === BackgroundStyles.DEFAULT);
   readonly layoutControls = computed(() => {
     this.navEnd();
     return new LayoutControls(collectRouteData(this.route.snapshot));
   });
 
-  isCookiesDisabled = signal(false);
-
-  readonly topPadding = computed(() => {
-    if (this.isCookiesDisabled()) return '165px';
-    else if (this.serviceAvailable() === false) return '107px';
-    else return '64px';
+  readonly isCookiesDisabled = computed(() => {
+    this.navEnd();
+    return this.router.url === '/cookies-disabled';
   });
 
-  readonly footerTopPadding = computed(() => {
-    if (this.layoutControls().backgroundStyle === BackgroundStyles.LOGIN) return '0px';
-    else if (this.isCookiesDisabled()) return '165px';
-    else if (this.serviceAvailable() === false) return '107px';
-    else return '64px';
-  });
+  readonly environmentBanner = viewChild<ElementRef>('environmentBanner');
+  readonly environmentBannerVisible = signal(true);
 
   constructor() {
     if (this.useDynamicSidebar) {
@@ -102,10 +95,23 @@ export class LayoutComponent implements AfterViewChecked {
       mobileQuery.addEventListener('change', listener);
       this.destroyRef.onDestroy(() => mobileQuery.removeEventListener('change', listener));
     }
-  }
 
-  ngAfterViewChecked(): void {
-    this.isCookiesDisabled.set((this.route.root as any)._routerState.snapshot.url === '/cookies-disabled');
+    effect((onCleanup) => {
+      const banner = this.environmentBanner()?.nativeElement;
+
+      if (!banner) {
+        this.environmentBannerVisible.set(false);
+        return;
+      }
+
+      const observer = new IntersectionObserver(([entry]) => this.environmentBannerVisible.set(entry.isIntersecting), {
+        threshold: 0,
+      });
+
+      observer.observe(banner);
+
+      onCleanup(() => observer.disconnect());
+    });
   }
 }
 
@@ -115,7 +121,7 @@ class LayoutControls {
   showHeader = true;
   sidebar: Sidebar | null = null;
   useServiceUnavailableLoginBanner = false;
-  headerStyle = HeaderStyles.DEFAULT;
+  headerStyle: HeaderStyles = 'DEFAULT';
   showCommitteeBanner = true;
   showFeedbackButton = true;
   backgroundStyle = BackgroundStyles.DEFAULT;
@@ -128,7 +134,7 @@ class LayoutControls {
       this.showFeedbackButton = data['showFeedbackButton'] ?? this.showFeedbackButton;
       this.showHeader = data['showHeader'] ?? this.showHeader;
       this.sidebar = data['sidebar'] ?? this.sidebar;
-      this.headerStyle = (data['headerStyle'] as HeaderStyles) ?? this.headerStyle;
+      this.headerStyle = data['headerStyle'] ?? this.headerStyle;
       this.backgroundStyle = (data['backgroundStyle'] as BackgroundStyles) ?? this.backgroundStyle;
       this.useServiceUnavailableLoginBanner =
         data['showServiceUnavailableBanner'] ?? this.useServiceUnavailableLoginBanner;

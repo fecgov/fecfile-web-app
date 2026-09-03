@@ -15,7 +15,7 @@ export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchBTransactionTyp
   );
   override subTransactionConfig = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO];
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

@@ -7,6 +7,7 @@ services:
       BUILD_SCRIPT: ${BUILD_SCRIPT:-build-local}
       PORT: ${PORT:-4200}
       WATCH: ${WATCH:-0}
+      CLEAN: ${CLEAN:-0}
       LIKE_PROD: ${LIKE_PROD:-0}
       API_URL: ${API_URL:-http://localhost:8080}
       APP_URL: ${APP_URL:-http://localhost:4200}

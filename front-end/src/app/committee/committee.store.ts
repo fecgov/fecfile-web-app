@@ -1,11 +1,20 @@
-import { DestroyRef, Injectable, effect, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 const STORAGE_KEY = 'fecfile_online_committeeAccount';
 
-@Injectable({
-  providedIn: 'root',
-})
+const committeeStatusCodes: { [key: string]: string } = {
+  T: 'Terminated (T)',
+  A: 'Administratively Terminated (A)',
+  D: 'Debt (D)',
+  W: 'Waived (W)',
+  M: 'Monthly (M)',
+  Q: 'Quarterly (Q)',
+} as const;
+
+const activeStatusCodes: ReadonlySet<string> = new Set(['M', 'Q', 'W', 'D']);
+
+@Injectable({ providedIn: 'root' })
 export class CommitteeStore {
   private readonly destroyRef = inject(DestroyRef);
 
@@ -14,6 +23,20 @@ export class CommitteeStore {
 
   private readonly _committeeChangedInOtherTab = signal(false);
   readonly committeeChangedInOtherTab = this._committeeChangedInOtherTab.asReadonly();
+
+  readonly committeeName = computed(() => this.committee()?.name);
+  readonly committeeTypeLabel = computed(() => this.committee()?.committee_type_label ?? '');
+  readonly committeeID = computed(() => this.committee()?.committee_id);
+  readonly filingFrequency = computed(() => this.committee()?.filing_frequency ?? '');
+  readonly committeeFrequency = computed(() => committeeStatusCodes[this.filingFrequency()] ?? '');
+  readonly committeeStatus = computed(() => (activeStatusCodes.has(this.filingFrequency()) ? 'Active' : 'Inactive'));
+  readonly isPAC = computed(() => this.committee()?.isPAC ?? false);
+  readonly isPTY = computed(() => this.committee()?.isPTY ?? false);
+  readonly eligibleReportTypes = computed(() => {
+    const eligible_report_types = this.committee()?.eligible_report_types;
+    if (!eligible_report_types) console.error('No eligible report types in committee data');
+    return new Set(eligible_report_types);
+  });
 
   constructor() {
     effect(() => {
@@ -68,7 +91,7 @@ export class CommitteeStore {
     }
   }
 
-  private handleStorageChange = (event: StorageEvent): void => {
+  private readonly handleStorageChange = (event: StorageEvent): void => {
     if (event.key !== STORAGE_KEY) return;
 
     try {

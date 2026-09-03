@@ -4,7 +4,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECEIPT
 import { ReportTypes } from '..';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import { AggregationGroups } from '../transaction.model';
 
 export class TRIBAL_RECEIPT extends SchATransactionType {
@@ -12,7 +12,6 @@ export class TRIBAL_RECEIPT extends SchATransactionType {
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECEIPT);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Tribal Receipt';
@@ -26,9 +25,7 @@ export class TRIBAL_RECEIPT extends SchATransactionType {
     return false;
   }
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

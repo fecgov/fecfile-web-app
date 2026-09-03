@@ -1,15 +1,18 @@
+@let reports = reatRedesStore.futureReports();
+@let hasReports = reports !== null && reports.length > 0;
 <app-dialog
-  [(visible)]="dialogVisible"
-  [title]="hasAvailableReports() ? 'Select a report' : 'Hang on...'"
+  [visible]="visible()"
+  [header]="hasReports ? 'Select a report' : 'Hang on...'"
   submitLabel="Continue"
   (confirm)="createReattribution()"
-  [closeOnly]="!hasAvailableReports()"
+  [closeOnly]="!hasReports"
+  (reject)="cancel()"
 >
   <div class="dialog-body">
-    @if (hasAvailableReports()) {
+    @if (hasReports) {
       <p>
-        Pick the open report where you would like to {{ actionLabel() }} a contribution or a portion of it to a
-        different {{ actionTargetLabel() }}.
+        Pick the open report where you would like to {{ reatRedesStore.actionLabel() }} a contribution or a portion of
+        it to a different {{ reatRedesStore.actionTargetLabel() }}.
       </p>
       <label id="report-selector-label" for="report-selector">OPEN REPORTS</label>
       <div class="select-wrapper">
@@ -17,7 +20,8 @@
           <button aria-labelledby="report-selector-label">
             <selectedcontent></selectedcontent>
           </button>
-          @for (report of availableReports(); track report) {
+
+          @for (report of reports; track report) {
             <option [ngValue]="report">{{ report.formLabel }}: {{ report.report_code_label }}</option>
           }
         </select>
@@ -25,7 +29,7 @@
     } @else {
       <p>
         <b>You don't have any in-progress reports.</b>
-        <span> Create or amend a report to continue with this {{ urlParameter() }}.</span>
+        <span> Create or amend a report to continue with this {{ reatRedesStore.nounLabel() }}.</span>
       </p>
     }
   </div>
