@@ -5,7 +5,7 @@ import { ReportTypes } from '../models';
 describe('FormTypeUtils', () => {
   describe('FormType', () => {
     it('should carry properties', () => {
-      const f1FormType = new FormType('F1', 'Form 1', 'Statement of organization');
+      const f1FormType = new FormType('F1M', 'Form 1', 'Statement of organization');
       expect(f1FormType.label).toBe('Form 1');
     });
   });

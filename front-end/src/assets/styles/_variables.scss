@@ -181,19 +181,13 @@
 
   --header-top: 30px;
   --header-height: 80px;
-  --header-transition: top 0.3s ease-in-out, height 0.3s ease-in-out;
-
-  --header-stack-height: calc(
-    var(--header-height) +
-    var(--header-top)
+  --header-transition: 0.3s ease-in-out;
+  --header-total: calc(
+    var(--header-current-height) + var(--header-top)
   );
 
-  --header-total: calc(
-  var(--header-height) +
-  var(--header-top)
-);
-
   --date-field-width: 11rem;
+  
 }
 
 $breakpoints: (
@@ -203,4 +197,3 @@ $breakpoints: (
   'xl': 1200px,
   'xxl': 1400px,
 );
-

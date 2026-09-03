@@ -1,33 +1,29 @@
-.seal-and-title {
-  height: 48px;
-}
-
-a {
-  border: none;
+nav.compact .seal-and-title {
+  transform: translateZ(0) scale(0.66667);
 }
 
 nav {
+  box-sizing: border-box;
   background-color: white !important;
-  height: var(--header-height);
   border-bottom: 2px solid #e8e8e8;
+  height: 80px;
+  width: 100%;
   padding-left: 32px;
   padding-right: 32px;
   overflow: hidden;
+  transition: height var(--header-transition);
+  &.compact {
+    height: 54px;
+  }
 }
 
-.seal-link {
-  padding-left: 0px;
-}
-
-:host ::ng-deep .dead-link {
-  color: #d6d7d9 !important;
-}
-
-.navbar-brand {
+.seal-and-title {
   margin-right: 1rem;
   font-size: 1.25rem;
   color: rgba(0, 0, 0, 1);
   text-decoration: none;
   white-space: nowrap;
-  height: 53px;
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform var(--header-transition);
 }

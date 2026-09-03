@@ -48,6 +48,15 @@ const mockReports: Form3X[] = [
   }),
 ];
 
+const mockForm3XService = {
+  getAllReports: vi.fn().mockResolvedValue(mockReports),
+  get: vi.fn().mockImplementation((id: string) => {
+    const report = mockReports.find((r) => r.id === id);
+    if (!report) return Promise.reject(new Error('No report found'));
+    return Promise.resolve(report);
+  }),
+};
+
 @Component({
   imports: [LinkedReportInputComponent],
   standalone: true,
@@ -73,20 +82,23 @@ describe('LinkedReportInputComponent', () => {
   let host: TestHostComponent;
   let component: LinkedReportInputComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let form3XService: Form3XService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LinkedReportInputComponent, InputTextModule, ErrorMessagesComponent],
-      providers: [provideMockStore(testMockStore()), provideHttpClient(), FecDatePipe, Form3XService],
-    }).compileComponents();
-    form3XService = TestBed.inject(Form3XService);
-    vi.spyOn(form3XService, 'getAllReports').mockResolvedValue(mockReports);
-    vi.spyOn(form3XService, 'get').mockImplementation((id: string) => {
-      const report = mockReports.find((r) => r.id === id);
-      if (!report) return Promise.reject(new Error('No report found'));
-      return Promise.resolve(report);
-    });
+      providers: [
+        provideMockStore(testMockStore()),
+        provideHttpClient(),
+        FecDatePipe,
+        { provide: Form3XService, useValue: mockForm3XService },
+      ],
+    })
+      .overrideComponent(LinkedReportInputComponent, {
+        set: {
+          providers: [{ provide: Form3XService, useValue: mockForm3XService }],
+        },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
@@ -100,7 +112,7 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should load F3X reports on init', async () => {
-    expect(form3XService.getAllReports).toHaveBeenCalled();
+    expect(mockForm3XService.getAllReports).toHaveBeenCalled();
     expect(component.committeeF3xReports()).toEqual(mockReports);
   });
 

@@ -8,7 +8,6 @@ import { securityNoticeGuard } from 'app/shared/guards/security-notice.guard';
 import { UpdateCurrentUserComponent } from 'app/users/update-current-user/update-current-user.component';
 import { LoginComponent } from './login/login.component';
 import { SecurityNoticeComponent } from './security-notice/security-notice.component';
-import { HeaderStyles } from 'app/layout/header/header-styles';
 
 export const LOGIN_ROUTES: Route[] = [
   {
@@ -19,7 +18,7 @@ export const LOGIN_ROUTES: Route[] = [
       showUpperFooter: false,
       showCommitteeBanner: false,
       showFeedbackButton: false,
-      headerStyle: HeaderStyles.LOGIN,
+      headerStyle: 'LOGIN',
       backgroundStyle: BackgroundStyles.LOGIN,
       showServiceUnavailableBanner: true,
     },
@@ -44,7 +43,7 @@ export const LOGIN_ROUTES: Route[] = [
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
-      headerStyle: HeaderStyles.LOGOUT,
+      headerStyle: 'LOGOUT',
     },
   },
   {
@@ -55,7 +54,7 @@ export const LOGIN_ROUTES: Route[] = [
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
-      headerStyle: HeaderStyles.LOGOUT,
+      headerStyle: 'LOGOUT',
     },
   },
   {
@@ -66,7 +65,7 @@ export const LOGIN_ROUTES: Route[] = [
     data: {
       showCommitteeBanner: false,
       showUpperFooter: false,
-      headerStyle: HeaderStyles.LOGOUT,
+      headerStyle: 'LOGOUT',
     },
   },
   { path: '**', redirectTo: '' },
