@@ -2,7 +2,7 @@
   @switch (headerStyle()) {
     @case (headerStyles.DEFAULT) {
       <li><a class="nav-item" routerLink="/reports">Reports</a></li>
-      @if (showAllTransactionsPage) {
+      @if (enableUnassignedTransactions) {
         <li><a class="nav-item" routerLink="/transactions">Transactions</a></li>
       }
       <li><a class="nav-item" routerLink="/contacts">Contacts</a></li>

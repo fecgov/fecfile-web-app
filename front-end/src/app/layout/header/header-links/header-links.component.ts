@@ -4,7 +4,6 @@ import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Roles } from 'app/shared/models';
 import { LoginService } from 'app/shared/services/login.service';
-import { environment } from 'environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { Popover } from 'primeng/popover';
 import { HeaderStyles } from '../header-styles';
@@ -12,6 +11,8 @@ import { setServiceAvailableAction } from 'app/store/service-available.actions';
 import { HttpResponse } from '@angular/common/http';
 import { ApiService } from 'app/shared/services/api.service';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
+import { FEATURE_FLAGS } from 'environments/tokens/feature-flags.config';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 @Component({
   standalone: true,
@@ -21,15 +22,17 @@ import { selectServiceAvailable } from 'app/store/service-available.selectors';
   imports: [RouterLink, NgOptimizedImage, Popover, ButtonModule],
 })
 export class HeaderLinksComponent {
+  private readonly apiConfig = inject(API_CONFIG);
+  private readonly featureFlags = inject(FEATURE_FLAGS);
   private readonly router = inject(Router);
   readonly loginService = inject(LoginService);
   readonly apiService = inject(ApiService);
   readonly store = inject(Store);
-  readonly loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
-  readonly disableLogin = environment.disableLogin;
+  readonly loginDotGovAuthUrl = this.apiConfig.loginDotGovAuthUrl;
+  readonly disableLogin = this.apiConfig.disableLogin;
   readonly headerStyle = input(HeaderStyles.DEFAULT);
   readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
-  readonly showAllTransactionsPage = environment.showAllTransactionsPage;
+  readonly enableUnassignedTransactions = this.featureFlags.enableUnassignedTransactions;
 
   headerStyles = HeaderStyles;
 

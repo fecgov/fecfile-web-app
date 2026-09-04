@@ -2,7 +2,6 @@ import { AfterViewChecked, Component, effect, inject, OnInit, signal } from '@an
 import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction } from 'app/store/user-login-data.actions';
 import { CookieService } from 'ngx-cookie-service';
-import { environment } from '../../../environments/environment';
 import { ButtonModule } from 'primeng/button';
 import { ApiService } from 'app/shared/services/api.service';
 import { HttpResponse } from '@angular/common/http';
@@ -11,6 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { selectServiceAvailable } from 'app/store/service-available.selectors';
 import { DestroyerComponent } from 'app/shared/components/destroyer.component';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 @Component({
   selector: 'app-login',
@@ -19,15 +19,16 @@ import { DestroyerComponent } from 'app/shared/components/destroyer.component';
   imports: [ButtonModule, DialogModule, DialogComponent],
 })
 export class LoginComponent extends DestroyerComponent implements OnInit, AfterViewChecked {
+  private readonly apiConfig = inject(API_CONFIG);
   private readonly store = inject(Store);
   private readonly cookieService = inject(CookieService);
   protected readonly apiService = inject(ApiService);
-  public loginDotGovAuthUrl: string | undefined;
-  readonly disableLogin: boolean = environment.disableLogin;
+  public loginDotGovAuthUrl = this.apiConfig.loginDotGovAuthUrl;
+  readonly disableLogin: boolean = this.apiConfig.disableLogin;
   readonly serviceAvailable = this.store.selectSignal(selectServiceAvailable);
 
   protected loginDialogVisible = signal(false);
-  readonly whoCanUseLink = environment.whoCanUseLink;
+  readonly whoCanUseLink = this.apiConfig.whoCanUseLink;
 
   constructor() {
     super();
@@ -43,8 +44,6 @@ export class LoginComponent extends DestroyerComponent implements OnInit, AfterV
   ngOnInit() {
     this.cookieService.deleteAll();
     this.store.dispatch(userLoginDataDiscardedAction());
-    this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
-
     window.addEventListener('resize', this.updateScrollbarWidth);
   }
 

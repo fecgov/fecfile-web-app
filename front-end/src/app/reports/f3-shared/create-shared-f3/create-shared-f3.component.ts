@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
 import { LabelUtils, PrimeOptions, StateCode, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { electionReportCodes, getCoverageDates, getReportCodes, ReportCodes } from 'app/shared/utils/report-code.utils';
-import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -33,6 +32,7 @@ import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { F3FormTypes, F3xFormTypes, FilingFrequency } from 'app/shared/models';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { FEATURE_FLAGS } from 'environments/tokens/feature-flags.config';
 
 const formProperties: string[] = [
   'filing_frequency',
@@ -63,6 +63,7 @@ const formProperties: string[] = [
 })
 export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data> {
   // INJECTIONS
+  private readonly featureFlags = inject(FEATURE_FLAGS);
   private readonly confirmService = inject(ConfirmationService);
   private readonly activeService = inject(FORM_3_SERVICE);
   readonly sharedF3Store = inject(SharedF3Store);
@@ -95,7 +96,7 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data
     },
   });
   readonly form = form(this.model, (schema) => {
-    hidden(schema.filingFrequency, () => !(this.isF3X() && environment.userCanSetFilingFrequency));
+    hidden(schema.filingFrequency, () => !(this.isF3X() && this.featureFlags.userCanSetFilingFrequency));
     hidden(schema.election, ({ valueOf }) => {
       const reportCode = valueOf(schema.reportCode);
       if (reportCode === null) return true;

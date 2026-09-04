@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { inject, Injectable } from '@angular/core';
+import { API_CONFIG } from 'environments/tokens/api.config';
+import { ERROR_REPORTING_CONFIG } from 'environments/tokens/error-reporting.config';
 
 interface ErrorSampleRates {
   runtime: number;
@@ -59,6 +60,8 @@ interface NormalizedError {
 
 @Injectable({ providedIn: 'root' })
 export class FrontendErrorReportingService {
+  private readonly apiConfig = inject(API_CONFIG);
+  private readonly errorReportingConfig = inject(ERROR_REPORTING_CONFIG);
   private readonly defaultConfig: ErrorReportingConfig = {
     enabled: false,
     endpoint: '/frontend-error-report',
@@ -78,10 +81,10 @@ export class FrontendErrorReportingService {
 
   private readonly config: ErrorReportingConfig = {
     ...this.defaultConfig,
-    ...environment.errorReporting,
+    ...this.errorReportingConfig,
     sampleRates: {
       ...this.defaultConfig.sampleRates,
-      ...environment.errorReporting?.sampleRates,
+      ...this.errorReportingConfig?.sampleRates,
     },
   };
 
@@ -176,7 +179,7 @@ export class FrontendErrorReportingService {
       timestamp: new Date().toISOString(),
       path: this.sanitize(globalThis.location.pathname + globalThis.location.search),
       userAgent: this.sanitize(navigator.userAgent),
-      appEnvironment: this.sanitize(environment.name),
+      appEnvironment: this.sanitize(this.apiConfig.name),
     };
   }
 

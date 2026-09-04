@@ -7,6 +7,6 @@ export const environment = createEnvironment({
   externalLinks: 'prod',
   baseUri: 'https://stage-api.fecfile.fec.gov',
   overrides: {
-    showAllTransactionsPage: true,
+    enableUnassignedTransactions: true,
   },
 });

@@ -1,10 +1,10 @@
-import { Component, computed, signal } from '@angular/core';
-import { environment } from 'environments/environment';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ProdNoticeComponent } from './prod-notice.component';
 import { DevNoticeComponent } from './dev-notice.component';
 import { NgComponentOutlet } from '@angular/common';
 import { injectRouteData } from 'ngxtension/inject-route-data';
 import { SecurityNoticeFormComponent } from './security-notice-form/security-notice-form.component';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 export const SECURITY_CONSENT_VERSION = '1';
 
@@ -15,9 +15,10 @@ export const SECURITY_CONSENT_VERSION = '1';
   imports: [NgComponentOutlet, SecurityNoticeFormComponent],
 })
 export class SecurityNoticeComponent {
+  readonly apiConfig = inject(API_CONFIG);
   readonly backgroundStyle = injectRouteData('backgroundStyle');
   readonly showForm = computed(() => !!this.backgroundStyle());
-  readonly componentToLoad = environment.name === 'test' ? DevNoticeComponent : ProdNoticeComponent;
+  readonly componentToLoad = this.apiConfig.name === 'test' ? DevNoticeComponent : ProdNoticeComponent;
 
   readonly hasScrolledToBottom = signal(false);
   onScroll(event: Event): void {

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { userLoginDataDiscardedAction, userLoginDataRetrievedAction } from 'app/store/user-login-data.actions';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { environment } from 'environments/environment';
+import { API_CONFIG } from 'environments/tokens/api.config';
 import { CookieService } from 'ngx-cookie-service';
 import { DestroyerComponent } from '../components/destroyer.component';
 import { UsersService } from '../services/users.service';
@@ -12,6 +12,7 @@ import { UsersService } from '../services/users.service';
   providedIn: 'root',
 })
 export class LoginService extends DestroyerComponent {
+  private readonly apiConfig = inject(API_CONFIG);
   private readonly store = inject(Store);
   private readonly router = inject(Router);
   private readonly cookieService = inject(CookieService);
@@ -32,14 +33,14 @@ export class LoginService extends DestroyerComponent {
     if (!this.userIsAuthenticated()) {
       this.router.navigate(['/login']);
     } else {
-      window.location.href = environment.loginDotGovLogoutUrl;
+      window.location.href = this.apiConfig.loginDotGovLogoutUrl;
     }
   }
 
   public async retrieveUserLoginData(): Promise<void> {
-    if (!('ffapiTimeoutCookieName' in environment)) {
+    if (!('ffapiTimeoutCookieName' in this.apiConfig)) {
       console.error('The ffapi_timeout cookie name environment variables is not set.');
-    } else if (!this.cookieService.check(environment.ffapiTimeoutCookieName)) {
+    } else if (!this.cookieService.check(this.apiConfig.ffapiTimeoutCookieName)) {
       console.error('The ffapi_timeout cookie is not set.');
     }
 
@@ -49,6 +50,6 @@ export class LoginService extends DestroyerComponent {
   }
 
   public userIsAuthenticated() {
-    return new Date() < new Date(parseInt(this.cookieService.get(environment.ffapiTimeoutCookieName)) * 1000);
+    return new Date() < new Date(Number.parseInt(this.cookieService.get(this.apiConfig.ffapiTimeoutCookieName)) * 1000);
   }
 }

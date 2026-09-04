@@ -2,8 +2,8 @@ import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/comm
 import { inject, Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 export interface QueryParams {
   [param: string]:
@@ -26,10 +26,9 @@ function getHeaders(cookieService: CookieService, headersToAdd: object = {}) {
   return { ...baseHeaders, ...headersToAdd };
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ApiService {
+  private readonly apiConfig = inject(API_CONFIG);
   private readonly http = inject(HttpClient);
   private readonly cookieService = inject(CookieService);
 
@@ -38,7 +37,7 @@ export class ApiService {
   }
 
   public async fetch<T>(endpoint: string, signal?: AbortSignal): Promise<T> {
-    const response = await fetch(`${environment.apiUrl}${endpoint}`, {
+    const response = await fetch(`${this.apiConfig.apiUrl}${endpoint}`, {
       method: 'GET',
       headers: getHeaders(this.cookieService),
       credentials: 'include',
@@ -52,7 +51,7 @@ export class ApiService {
     const headers = getHeaders(this.cookieService);
 
     return firstValueFrom(
-      this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+      this.http.get<T>(`${this.apiConfig.apiUrl}${endpoint}`, {
         headers,
         params,
         withCredentials: true,
@@ -62,7 +61,7 @@ export class ApiService {
 
   public getObs<T>(endpoint: string, params: QueryParams = {}): Observable<HttpResponse<T>> {
     const headers = getHeaders(this.cookieService);
-    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+    return this.http.get<T>(`${this.apiConfig.apiUrl}${endpoint}`, {
       headers,
       params,
       withCredentials: true,
@@ -74,7 +73,7 @@ export class ApiService {
   public get_from_base_uri<T>(endpoint: string, params?: QueryParams): Promise<T> {
     const headers = getHeaders(this.cookieService);
     return firstValueFrom(
-      this.http.get<T>(`${environment.baseUri}${endpoint}`, {
+      this.http.get<T>(`${this.apiConfig.baseUri}${endpoint}`, {
         headers,
         params,
         withCredentials: true,
@@ -85,7 +84,7 @@ export class ApiService {
   public getString(endpoint: string): Promise<string> {
     const headers = getHeaders(this.cookieService);
     return firstValueFrom(
-      this.http.get(`${environment.apiUrl}${endpoint}`, {
+      this.http.get(`${this.apiConfig.apiUrl}${endpoint}`, {
         headers: headers,
         withCredentials: true,
         responseType: 'text',
@@ -110,7 +109,7 @@ export class ApiService {
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
-        this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+        this.http.post<T>(`${this.apiConfig.apiUrl}${endpoint}`, payload, {
           headers,
           params,
           withCredentials: true,
@@ -120,7 +119,7 @@ export class ApiService {
       );
     }
     return firstValueFrom(
-      this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, {
+      this.http.post<T>(`${this.apiConfig.apiUrl}${endpoint}`, payload, {
         headers,
         params,
         withCredentials: true,
@@ -145,7 +144,7 @@ export class ApiService {
     const params = this.getQueryParams(queryParams);
     if (allowedErrorCodes) {
       return firstValueFrom(
-        this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
+        this.http.put<T>(`${this.apiConfig.apiUrl}${endpoint}`, payload, {
           headers,
           params,
           withCredentials: true,
@@ -155,7 +154,7 @@ export class ApiService {
       );
     }
     return firstValueFrom(
-      this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, {
+      this.http.put<T>(`${this.apiConfig.apiUrl}${endpoint}`, payload, {
         headers,
         params,
         withCredentials: true,
@@ -165,6 +164,6 @@ export class ApiService {
 
   public delete<T>(endpoint: string): Promise<T> {
     const headers = getHeaders(this.cookieService);
-    return firstValueFrom(this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers, withCredentials: true }));
+    return firstValueFrom(this.http.delete<T>(`${this.apiConfig.apiUrl}${endpoint}`, { headers, withCredentials: true }));
   }
 }

@@ -1,13 +1,13 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { FormComponent } from 'app/shared/components/form.component';
-import { environment } from 'environments/environment';
 import { FecInternationalPhoneInputComponent } from '../../shared/components/fec-international-phone-input/fec-international-phone-input.component';
 import { ButtonModule } from 'primeng/button';
 import { SelectComponent } from 'app/shared/components/select/select.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 @Component({
   selector: 'app-committee-info',
@@ -16,6 +16,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
   imports: [ReactiveFormsModule, FecInternationalPhoneInputComponent, ButtonModule, SelectComponent],
 })
 export class CommitteeInfoComponent extends FormComponent {
+  private readonly apiConfig = inject(API_CONFIG);
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
@@ -75,6 +76,6 @@ export class CommitteeInfoComponent extends FormComponent {
    * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
-    window.open(environment.form1_link, '_blank', 'noopener');
+    window.open(this.apiConfig.form1Link, '_blank', 'noopener');
   }
 }

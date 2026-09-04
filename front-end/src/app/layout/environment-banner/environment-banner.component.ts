@@ -1,5 +1,5 @@
-import { Component, computed } from '@angular/core';
-import { environment } from 'environments/environment';
+import { Component, computed, inject } from '@angular/core';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 type BannerType = 'development' | 'stage' | 'test';
 
@@ -9,6 +9,7 @@ type BannerType = 'development' | 'stage' | 'test';
   styleUrls: ['./environment-banner.component.scss'],
 })
 export class EnvironmentBannerComponent {
+  private readonly apiConfig = inject(API_CONFIG);
   readonly showBanner = computed(() => !!this.bannerConfig);
 
   readonly subtitle = 'This site is for testing ideas and code.';
@@ -28,5 +29,5 @@ export class EnvironmentBannerComponent {
     },
   };
 
-  readonly bannerConfig = environment.environmentBanner ? this.config[environment.environmentBanner] : null;
+  readonly bannerConfig = this.apiConfig.environmentBanner ? this.config[this.apiConfig.environmentBanner] : null;
 }

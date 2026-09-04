@@ -20,7 +20,6 @@ import { FormComponent } from '../form.component';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { ConfirmationWrapperService } from 'app/shared/services/confirmation-wrapper.service';
 import { GlossaryService } from '../glossary/glossary.service';
-import { environment } from 'environments/environment';
 import type { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { Contact, ContactTypeLabels } from 'app/shared/models/contact.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
@@ -50,7 +49,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
 
   readonly activeReportId: string = this.activatedRoute.snapshot.params['reportId'] ?? '';
-  readonly showGlossary = environment.showGlossary;
+  readonly showGlossary = this.featureFlags.showGlossary;
   readonly reportTypes = ReportTypes;
   readonly saveSuccessMessage: ToastMessageOptions = {
     severity: 'success',

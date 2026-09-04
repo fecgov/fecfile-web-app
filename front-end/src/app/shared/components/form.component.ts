@@ -8,9 +8,11 @@ import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { DestroyerComponent } from './destroyer.component';
 import { firstValueFrom } from 'rxjs';
 import type { NavigationEvent } from '../models/transaction-navigation-controls.model';
+import { FEATURE_FLAGS } from 'environments/tokens/feature-flags.config';
 
 @Directive()
 export abstract class FormComponent extends DestroyerComponent {
+  protected readonly featureFlags = inject(FEATURE_FLAGS);
   readonly injector = inject(Injector);
   protected readonly fb = inject(FormBuilder);
   protected readonly store = inject(Store);

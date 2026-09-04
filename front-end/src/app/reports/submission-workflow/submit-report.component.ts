@@ -23,7 +23,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { Tooltip } from 'primeng/tooltip';
 import { takeUntil } from 'rxjs';
 import { ErrorMessagesComponent } from '../../shared/components/error-messages/error-messages.component';
-import { environment } from 'environments/environment';
+import { API_CONFIG } from 'environments/tokens/api.config';
 
 @Component({
   selector: 'app-submit-report',
@@ -45,6 +45,7 @@ import { environment } from 'environments/environment';
   ],
 })
 export class SubmitReportComponent extends FormComponent implements OnInit {
+  private readonly apiConfig = inject(API_CONFIG);
   readonly router = inject(Router);
   readonly confirmationService = inject(ConfirmationService);
   readonly apiService = inject(ApiService);
@@ -66,8 +67,8 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
     'filingPassword',
     'userCertified',
   ];
-  readonly psaHelp = `${environment.webForms}/psa/help.htm`;
-  readonly psaIndex = `${environment.webForms}/psa/index.htm`;
+  readonly psaHelp = `${this.apiConfig.webForms}/psa/help.htm`;
+  readonly psaIndex = `${this.apiConfig.webForms}/psa/index.htm`;
   loading: 0 | 1 | 2 = 0;
   readonly backdoorCodeHelpText =
     'This is only needed if you have amended or deleted <b>more than 50% of the activity</b> in the original report, or have <b>fixed an incorrect date range</b>.';
@@ -86,7 +87,7 @@ export class SubmitReportComponent extends FormComponent implements OnInit {
   readonly getContinueUrl = injectRouteData<(report?: Report) => string | undefined | null>('getContinueUrl');
   readonly continueUrl = computed(() => this.getContinueUrl()?.(this.activeReport()) || '/reports/');
   readonly backUrl = computed(() => this.getBackUrl()?.(this.activeReport()) || '');
-  readonly form1Link = environment.form1_link;
+  readonly form1Link = this.apiConfig.form1Link;
 
   constructor() {
     super();

@@ -1,4 +1,4 @@
-import { Component, signal, computed, viewChild } from '@angular/core';
+import { Component, signal, computed, viewChild, inject } from '@angular/core';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -6,9 +6,9 @@ import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.co
 import { Form3XListComponent } from './form3x-list/form3x-list.component';
 import { Form99ListComponent } from './form99-list/form99-list.component';
 import { Form1MListComponent } from './form1m-list/form1m-list.component';
-import { environment } from 'environments/environment';
 import { Form3ListComponent } from './form3-list/form3-list.component';
 import { Form24ListComponent } from './form24-list/form24-list.component';
+import { FEATURE_FLAGS } from 'environments/tokens/feature-flags.config';
 
 @Component({
   selector: 'app-report-list',
@@ -27,8 +27,9 @@ import { Form24ListComponent } from './form24-list/form24-list.component';
   ],
 })
 export class ReportListComponent {
+  private readonly featureFlags = inject(FEATURE_FLAGS);
   readonly dialogVisible = signal(false);
-  readonly showForm3 = environment.showForm3;
+  readonly showForm3 = this.featureFlags.showForm3;
 
   readonly form3xList = viewChild(Form3XListComponent);
   readonly form3List = viewChild(Form3ListComponent);
