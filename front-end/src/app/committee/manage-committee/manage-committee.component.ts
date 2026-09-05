@@ -1,20 +1,21 @@
 import { Component, computed, inject, signal, Signal, TemplateRef, viewChild } from '@angular/core';
-import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { CommitteeMember, getRoleLabel, Roles, isCommitteeAdministrator } from 'app/shared/models';
 import { Store } from '@ngrx/store';
-import { selectUserLoginData } from '../../store/user-login-data.selectors';
-import { CommitteeMemberService } from '../../shared/services/committee-member.service';
-import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { CommitteeMember, getRoleLabel, isCommitteeAdministrator, Roles } from 'app/shared/models';
 import { Ripple } from 'primeng/ripple';
 import { TableActionsButtonComponent } from '../../shared/components/table-actions-button/table-actions-button.component';
+import { ColumnDefinition, TableBodyContext, TableComponent } from '../../shared/components/table/table.component';
+import { CommitteeMemberService } from '../../shared/services/committee-member.service';
+import { selectUserLoginData } from '../../store/user-login-data.selectors';
 
-import { ButtonDirective } from 'primeng/button';
-import { TableModule } from 'primeng/table';
-import { QueryParams } from 'app/shared/services/api.service';
-import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
-import { EditNameDialogComponent } from '../edit-name-dialog/edit-name-dialog.component';
 import { AddCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/add-committee-member-dialog.component';
 import { EditCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/edit-committee-member-dialog.component';
+import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
+import { QueryParams } from 'app/shared/services/api.service';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { ButtonDirective } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { EditNameDialogComponent } from '../edit-name-dialog/edit-name-dialog.component';
 
 @Component({
   selector: 'app-manage-committee',
@@ -49,6 +50,12 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
     new TableAction<CommitteeMember>('Edit Name', () => this.editSelfVisible.set(true), undefined),
   ];
   private readonly currentUserEmail = computed(() => this.user().email ?? '');
+  public readonly adminCount = derivedAsync(
+    async () => {
+      return (await this.itemService.getAdminCount()).count;
+    },
+    { initialValue: 0 },
+  );
   readonly currentUserRole = computed(() => Roles[this.user().role as keyof typeof Roles]);
   readonly isCommitteeAdministrator = computed(() => isCommitteeAdministrator(this.currentUserRole()));
   member?: CommitteeMember;
@@ -82,7 +89,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   });
 
   override readonly params: Signal<QueryParams> = computed(() => {
-    return { page_size: this.rowsPerPage(), you_first: true };
+    return { page_size: this.rowsPerPage() };
   });
 
   public userAdded(email: string) {
@@ -99,7 +106,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   canEditMember(member: CommitteeMember): boolean {
     if (this.isCurrentUser(member) || !this.isCommitteeAdministrator()) return false;
     if (!member.isAdmin) return true;
-    return this.itemService.adminsSignal().length > 2;
+    return this.adminCount() > 2;
   }
 
   public confirmDelete(member: CommitteeMember) {

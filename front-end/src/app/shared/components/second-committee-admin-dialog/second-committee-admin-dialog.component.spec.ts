@@ -1,26 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SecondCommitteeAdminDialogComponent } from './second-committee-admin-dialog.component';
-import { Store } from '@ngrx/store';
-import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { MessageService } from 'primeng/api';
-import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils';
-import { ReactiveFormsModule } from '@angular/forms';
-import { singleClickEnableAction } from 'app/store/single-click.actions';
-import { provideMockStore } from '@ngrx/store/testing';
-import { CommitteeMember, Roles } from 'app/shared/models';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZoneChangeDetection } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { provideMockStore } from '@ngrx/store/testing';
+import { CommitteeMember, Roles } from 'app/shared/models';
+import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { CommitteeMemberEmailValidator } from 'app/shared/utils/validators.utils';
+import { singleClickEnableAction } from 'app/store/single-click.actions';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
+import { SecondCommitteeAdminDialogComponent } from './second-committee-admin-dialog.component';
 
 describe('SecondCommitteeAdminDialogComponent', () => {
   let component: SecondCommitteeAdminDialogComponent;
   let fixture: ComponentFixture<SecondCommitteeAdminDialogComponent>;
   let store: Store;
   let messageService: MessageService;
+  let committeeMemberService: CommitteeMemberService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -46,6 +47,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
     component = fixture.componentInstance;
     store = TestBed.inject(Store);
     messageService = TestBed.inject(MessageService);
+    committeeMemberService = TestBed.inject(CommitteeMemberService);
     fixture.detectChanges();
   });
 
@@ -75,7 +77,7 @@ describe('SecondCommitteeAdminDialogComponent', () => {
   it('should call addMember and show success message on valid form submission', async () => {
     const messageAddSpy = vi.spyOn(messageService, 'add');
     vi.spyOn(store, 'dispatch');
-    vi.spyOn(component.uniqueEmailValidator.committeeMemberService, 'getMembers').mockResolvedValue([]);
+    vi.spyOn(committeeMemberService, 'emailValidationCheck').mockResolvedValue({ valid: true });
     component.form.get('email')?.setValue('test@example.com');
     const addMemberSpy = vi.spyOn(component.memberService, 'addMember').mockResolvedValue(new CommitteeMember());
     await component.submitForm();

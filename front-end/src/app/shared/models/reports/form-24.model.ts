@@ -80,6 +80,9 @@ export interface Form24Data {
   type: Type24_48 | null;
   typelessName: string;
 }
+export interface Form24Name {
+  name: string;
+}
 interface UniqueNameOptions {
   existingNames: Signal<Set<string>>;
 }
