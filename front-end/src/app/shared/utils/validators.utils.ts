@@ -215,13 +215,9 @@ export class CommitteeMemberEmailValidator implements AsyncValidator {
 
   async validate(control: AbstractControl): Promise<ValidationErrors | null> {
     if (control.value) {
-      const existing_members = await this.committeeMemberService.getMembers();
-      const emails = existing_members.map((member) => {
-        return member.email.toLowerCase();
-      });
-
       const newEmail = control.value?.toLowerCase();
-      if (emails.includes(newEmail)) {
+      const validation = await this.committeeMemberService.emailValidationCheck(newEmail);
+      if (!validation.valid) {
         return {
           email: 'taken-in-committee',
         };

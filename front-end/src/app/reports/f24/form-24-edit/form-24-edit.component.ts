@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { apply, form, FormField, submit } from '@angular/forms/signals';
 import { Router } from '@angular/router';
-import { Form24Service } from 'app/shared/services/form-24.service';
-import { MessageService } from 'primeng/api';
-import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { Store } from '@ngrx/store';
+import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
+import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
+import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
+import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
+import { buildF24Name, Form24, form24Schema, Type24_48 } from 'app/shared/models/reports/form-24.model';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { form24Options } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { derivedAsync } from 'ngxtension/derived-async';
-import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-cancel.component';
-import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
-import { form24Options } from 'app/shared/utils/label.utils';
-import { buildF24Name, Form24, form24Schema, Type24_48 } from 'app/shared/models/reports/form-24.model';
-import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
-import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
+import { effectOnceIf } from 'ngxtension/effect-once-if';
+import { MessageService } from 'primeng/api';
 
 interface Form24Data {
   type: Type24_48 | null;
@@ -39,10 +39,10 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
     const type = this.form.type().value();
     return type ? `${type}-Hour:` : null;
   });
-  private readonly form24Names = derivedAsync(
+  public readonly form24Names = derivedAsync(
     async () => {
-      const reports = await this.form24Service.getAllReports();
-      return new Set<string>(reports.filter((r) => r.id !== this.report().id).map((r) => r.name!));
+      const names = await this.form24Service.getNames(this.report().id);
+      return new Set<string>(names.map((form24Name) => form24Name.name));
     },
     { initialValue: new Set<string>() },
   );

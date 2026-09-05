@@ -1,21 +1,21 @@
 import { Component, computed, inject, model, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
-import { MessageService } from 'primeng/api';
-import { environment } from 'environments/environment';
-import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
-import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { apply, form, FormField, hidden, required, submit } from '@angular/forms/signals';
-import { Form24Service } from 'app/shared/services/form-24.service';
-import { form24Options } from 'app/shared/utils/label.utils';
-import { derivedAsync } from 'ngxtension/derived-async';
-import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
-import { buildF24Name, Form24, Form24Data, form24Schema } from 'app/shared/models/reports/form-24.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
 import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
-import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
+import { buildF24Name, Form24, Form24Data, form24Schema } from 'app/shared/models/reports/form-24.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
+import { form24Options } from 'app/shared/utils/label.utils';
+import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { environment } from 'environments/environment';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { MessageService } from 'primeng/api';
 
 interface ReportFormData {
   type: ReportTypes | '';
@@ -52,8 +52,8 @@ export class FormTypeDialogComponent {
 
   private readonly form24Names = derivedAsync(
     async () => {
-      const reports = await this.form24Service.getAllReports();
-      return new Set<string>(reports.map((r) => r.name!));
+      const names = (await this.form24Service.getNames()).map((form24Name) => form24Name.name);
+      return new Set<string>(names);
     },
     { initialValue: new Set<string>() },
   );

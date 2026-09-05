@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { committeeOwnerGuard } from './committee-owner.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { CommitteeMemberService } from '../services/committee-member.service';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testCommitteeMember, testMockStore } from '../utils/unit-test.utils';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { CommitteeAccount, CommitteeMember } from '../models';
-import type { Mock } from 'vitest';
 import { signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeAccount } from '../models';
+import { CommitteeMemberService } from '../services/committee-member.service';
+import { testMockStore } from '../utils/unit-test.utils';
+import { committeeOwnerGuard } from './committee-owner.guard';
 
 let needsSecondAdminMock = signal(false);
 
@@ -21,7 +20,6 @@ describe('committeeOwnerGuard', () => {
   const state: RouterStateSnapshot = {} as any;
   let store: MockStore;
   let router: Router;
-  let getMemberSpy: Mock<() => Promise<CommitteeMember[]>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,9 +29,9 @@ describe('committeeOwnerGuard', () => {
         {
           provide: CommitteeMemberService,
           useValue: {
-            getMembers: vi.fn(),
             membersSignal: vi.fn().mockReturnValue([]),
             needsSecondAdmin: needsSecondAdminMock,
+            updateCommitteeCounts: vi.fn().mockReturnValue(Promise.resolve()),
           },
         },
         provideMockStore(testMockStore()),
@@ -41,7 +39,6 @@ describe('committeeOwnerGuard', () => {
     });
     store = TestBed.inject(MockStore);
     memberService = TestBed.inject(CommitteeMemberService);
-    getMemberSpy = vi.spyOn(memberService, 'getMembers');
     router = TestBed.inject(Router);
   });
 
@@ -62,7 +59,6 @@ describe('committeeOwnerGuard', () => {
 
   it('should not hit backend for members if no committee info yet', async () => {
     needsSecondAdminMock.set(true);
-    getMemberSpy.mockResolvedValue([testCommitteeMember(), testCommitteeMember(), testCommitteeMember()]);
     store.overrideSelector(selectCommitteeAccount, {} as CommitteeAccount);
     const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
     expect(safe).toEqual(router.createUrlTree(['/select-committee']));
@@ -70,7 +66,6 @@ describe('committeeOwnerGuard', () => {
 
   it('should route to reports page when memberService.needsSecondAdmin()', async () => {
     needsSecondAdminMock.set(true);
-    getMemberSpy.mockResolvedValue([testCommitteeMember(), testCommitteeMember(), testCommitteeMember()]);
     const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
     expect(safe).toEqual(router.createUrlTree(['/reports']));
   });

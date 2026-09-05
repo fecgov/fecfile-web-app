@@ -1,16 +1,16 @@
+import { provideHttpClient } from '@angular/common/http';
+import { Component, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { LinkedReportInputComponent } from './linked-report-input.component';
+import { Form3X, ReportStatus, Transaction, UploadSubmission } from 'app/shared/models';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { Form3XService } from 'app/shared/services/form-3x.service';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testMockStore, testScheduleATransaction, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { Transaction, Form3X, UploadSubmission, ReportStatus } from 'app/shared/models';
-import { Component, viewChild } from '@angular/core';
-import { Form3XService } from 'app/shared/services/form-3x.service';
-import { provideHttpClient } from '@angular/common/http';
+import { LinkedReportInputComponent } from './linked-report-input.component';
 
 const mockReports: Form3X[] = [
   Form3X.fromJSON({
@@ -81,7 +81,10 @@ describe('LinkedReportInputComponent', () => {
       providers: [provideMockStore(testMockStore()), provideHttpClient(), FecDatePipe, Form3XService],
     }).compileComponents();
     form3XService = TestBed.inject(Form3XService);
-    vi.spyOn(form3XService, 'getAllReports').mockResolvedValue(mockReports);
+    vi.spyOn(form3XService, 'getAssociatedForm3xReport')
+      .mockResolvedValueOnce(mockReports[0])
+      .mockResolvedValueOnce(mockReports[1])
+      .mockResolvedValueOnce(mockReports[2]);
     vi.spyOn(form3XService, 'get').mockImplementation((id: string) => {
       const report = mockReports.find((r) => r.id === id);
       if (!report) return Promise.reject(new Error('No report found'));
@@ -100,42 +103,22 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should load F3X reports on init', async () => {
-    expect(form3XService.getAllReports).toHaveBeenCalled();
-    expect(component.committeeF3xReports()).toEqual(mockReports);
+    expect(form3XService.getAssociatedForm3xReport).toHaveBeenCalled();
   });
 
   it('should set associated F3X based on disbursement date', async () => {
+    let associatedF3X = component.associatedF3X();
+    expect(associatedF3X).toBeTruthy();
+    expect(associatedF3X!.id).toBe('1');
+
     component.form.get(host.templateMap['date'])?.setValue(new Date('2024-04-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const associatedF3X = component.associatedF3X();
+    associatedF3X = component.associatedF3X();
     expect(associatedF3X).toBeTruthy();
     expect(associatedF3X!.id).toBe('2');
     expect(associatedF3X).not.toBe(component.initialForm3X());
-  });
-
-  it('should not set associated F3X if report not in progress', async () => {
-    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-04-15'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    component.form.get(host.templateMap['date'])?.setValue(new Date('2024-09-15'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-    const associatedF3X = component.associatedF3X();
-    expect(associatedF3X).toBeFalsy();
-  });
-
-  it('should set associated F3X based on dissemination date if disbursement date missing', async () => {
-    component.disbursementDate.set(undefined);
-    component.disseminationDate.set(new Date('2024-01-20'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const associatedF3X = component.associatedF3X();
-    expect(associatedF3X).toBeTruthy();
-    expect(associatedF3X!.id).toBe('1');
   });
 
   it('should correctly format the label of the associated F3X report', async () => {
@@ -174,18 +157,5 @@ describe('LinkedReportInputComponent', () => {
     await fixture.whenStable();
 
     expect(component.associatedF3X()?.id).toBe('2');
-  });
-
-  it('should update associated report when memo changes', async () => {
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(component.associatedF3X()?.id).toBe('1');
-
-    component.form.get(host.templateMap['memo_code'])?.setValue(true);
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(component.associatedF3X()?.id).toBeUndefined();
   });
 });

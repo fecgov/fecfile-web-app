@@ -5,13 +5,10 @@ import { Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testF24, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { MessageService } from 'primeng/api';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Form24EditComponent } from './form-24-edit.component';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Form24 } from 'app/shared/models';
-
-const usedReports: Form24[] = [testF24(), Form24.fromJSON({ name: '24-Hour: Taken Name' })];
+import { MessageService } from 'primeng/api';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Form24EditComponent } from './form-24-edit.component';
 
 describe('Form24EditComponent', () => {
   let component: Form24EditComponent;
@@ -36,7 +33,7 @@ describe('Form24EditComponent', () => {
     }).compileComponents();
 
     form24Service = TestBed.inject(Form24Service);
-    vi.spyOn(form24Service, 'getAllReports').mockResolvedValue(usedReports);
+    vi.spyOn(form24Service, 'getNames').mockResolvedValue([{ name: '24-Hour: Taken Name' }]);
     fixture = TestBed.createComponent(Form24EditComponent);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);

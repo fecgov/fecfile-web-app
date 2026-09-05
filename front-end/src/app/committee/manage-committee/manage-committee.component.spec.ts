@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
-import { DialogModule } from 'primeng/dialog';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ManageCommitteeComponent } from './manage-committee.component';
-import { CommitteeMember } from 'app/shared/models';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
-import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { AddCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/add-committee-member-dialog.component';
 import { Component, viewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { provideRouter } from '@angular/router';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { AddCommitteeMemberDialogComponent } from 'app/shared/components/committee-member-dialog/add-committee-member-dialog.component';
+import { CommitteeMember } from 'app/shared/models';
+import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ManageCommitteeComponent } from './manage-committee.component';
 
 @Component({
   imports: [ManageCommitteeComponent],
@@ -141,7 +141,6 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should not be able to remove committee admin if less than 3 committee admins', () => {
-    vi.spyOn(service, 'membersSignal').mockReturnValue(committeeMembers);
     committeeMembers.push(
       CommitteeMember.fromJSON({
         first_name: 'Man',
@@ -158,6 +157,7 @@ describe('ManageCommitteeComponent', () => {
   });
 
   it('should do it', () => {
+    vi.spyOn(component, 'adminCount').mockReturnValue(3);
     committeeMembers.push(
       CommitteeMember.fromJSON({
         first_name: 'Jane',
@@ -167,7 +167,6 @@ describe('ManageCommitteeComponent', () => {
         is_active: true,
       }),
     );
-    vi.spyOn(service, 'membersSignal').mockReturnValue(committeeMembers);
 
     expect(component.canEditMember(committeeMembers[0])).toBe(false);
     expect(component.canEditMember(committeeMembers[1])).toBe(true);

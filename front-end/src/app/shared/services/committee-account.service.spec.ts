@@ -7,9 +7,11 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { CommitteeAccountService } from './committee-account.service';
+import { CommitteeMemberService } from './committee-member.service';
 
 describe('CommitteeAccountService', () => {
-  let service: CommitteeAccountService;
+  let committeeAccountService: CommitteeAccountService;
+  let committeeMemberService: CommitteeMemberService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -23,11 +25,12 @@ describe('CommitteeAccountService', () => {
     });
     httpTestingController = TestBed.inject(HttpTestingController);
 
-    service = TestBed.inject(CommitteeAccountService);
+    committeeAccountService = TestBed.inject(CommitteeAccountService);
+    committeeMemberService = TestBed.inject(CommitteeMemberService);
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(committeeAccountService).toBeTruthy();
   });
 
   it('should get committees', () => {
@@ -46,7 +49,7 @@ describe('CommitteeAccountService', () => {
       pageNumber: 1,
       results: committees,
     };
-    service.getCommittees().then((response: CommitteeAccount[]) => {
+    committeeAccountService.getCommittees().then((response: CommitteeAccount[]) => {
       expect(response).toEqual(committees);
     });
     const req = httpTestingController.expectOne(`${environment.apiUrl}/committees/`);
@@ -56,9 +59,10 @@ describe('CommitteeAccountService', () => {
   });
 
   it('should call api to activate', async () => {
+    vi.spyOn(committeeMemberService, 'updateCommitteeCounts').mockResolvedValue();
     const testCommitteeAccount = new CommitteeAccount();
     testCommitteeAccount.committee_id = '123';
-    const resultPromise = service.activateCommittee(testCommitteeAccount.committee_id);
+    const resultPromise = committeeAccountService.activateCommittee(testCommitteeAccount.committee_id);
     const request = httpTestingController.expectOne(
       `${environment.apiUrl}/committees/${testCommitteeAccount.committee_id}/activate/`,
     );
@@ -72,7 +76,7 @@ describe('CommitteeAccountService', () => {
 
   it('should calle api to create committee account', () => {
     const committeeId = '123';
-    service.createCommitteeAccount(committeeId).then((committee) => {
+    committeeAccountService.createCommitteeAccount(committeeId).then((committee) => {
       expect(committee.committee_id).toBe(committeeId);
     });
     const request = httpTestingController.expectOne(`${environment.apiUrl}/committees/create_account/`);

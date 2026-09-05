@@ -19,3 +19,11 @@ export class CommitteeMember {
     return plainToInstance(CommitteeMember, json);
   }
 }
+
+export interface CommitteeMemberValidation {
+  valid: boolean;
+}
+
+export interface CommitteeCount {
+  count: number;
+}
