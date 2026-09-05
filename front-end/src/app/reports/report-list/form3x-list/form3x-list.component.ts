@@ -10,6 +10,7 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
   selector: 'app-form3x-list',
   imports: [TableComponent, SharedTemplatesComponent],
   templateUrl: './form3x-list.component.html',
+  providers: [Form3XService],
 })
 export class Form3XListComponent extends AbstractFormListComponent<Form3X> {
   readonly itemService = inject(Form3XService);

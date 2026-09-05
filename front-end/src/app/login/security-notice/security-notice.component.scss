@@ -16,8 +16,8 @@
   .notice-box [id]::before {
     content: '';
     display: block;
-    height: 150px;
-    margin-top: -150px;
+    height: calc(var(--header-total) + 10px);
+    margin-top: calc(var(--header-total) * -1 - 10px);
     visibility: hidden;
     pointer-events: none;
   }
@@ -91,6 +91,7 @@ h3 {
 .notice-box {
   width: 292px;
   padding-left: 32px;
+  margin-top: 64px;
 
   @media (min-width: 768px) {
     width: 484px;

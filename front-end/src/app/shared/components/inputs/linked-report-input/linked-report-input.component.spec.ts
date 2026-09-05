@@ -48,6 +48,15 @@ const mockReports: Form3X[] = [
   }),
 ];
 
+const mockForm3XService = {
+  getAssociatedForm3xReport: vi.fn().mockResolvedValueOnce(mockReports[0]).mockResolvedValueOnce(mockReports[1]).mockResolvedValueOnce(mockReports[2]),
+  get: vi.fn().mockImplementation((id: string) => {
+    const report = mockReports.find((r) => r.id === id);
+    if (!report) return Promise.reject(new Error('No report found'));
+    return Promise.resolve(report);
+  }),
+};
+
 @Component({
   imports: [LinkedReportInputComponent],
   standalone: true,
@@ -73,23 +82,23 @@ describe('LinkedReportInputComponent', () => {
   let host: TestHostComponent;
   let component: LinkedReportInputComponent;
   let fixture: ComponentFixture<TestHostComponent>;
-  let form3XService: Form3XService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, LinkedReportInputComponent, InputTextModule, ErrorMessagesComponent],
-      providers: [provideMockStore(testMockStore()), provideHttpClient(), FecDatePipe, Form3XService],
-    }).compileComponents();
-    form3XService = TestBed.inject(Form3XService);
-    vi.spyOn(form3XService, 'getAssociatedForm3xReport')
-      .mockResolvedValueOnce(mockReports[0])
-      .mockResolvedValueOnce(mockReports[1])
-      .mockResolvedValueOnce(mockReports[2]);
-    vi.spyOn(form3XService, 'get').mockImplementation((id: string) => {
-      const report = mockReports.find((r) => r.id === id);
-      if (!report) return Promise.reject(new Error('No report found'));
-      return Promise.resolve(report);
-    });
+      providers: [
+        provideMockStore(testMockStore()),
+        provideHttpClient(),
+        FecDatePipe,
+        { provide: Form3XService, useValue: mockForm3XService },
+      ],
+    })
+      .overrideComponent(LinkedReportInputComponent, {
+        set: {
+          providers: [{ provide: Form3XService, useValue: mockForm3XService }],
+        },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
@@ -103,7 +112,7 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should load F3X reports on init', async () => {
-    expect(form3XService.getAssociatedForm3xReport).toHaveBeenCalled();
+    expect(mockForm3XService.getAssociatedForm3xReport).toHaveBeenCalled();
   });
 
   it('should set associated F3X based on disbursement date', async () => {
