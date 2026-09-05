@@ -49,7 +49,13 @@ const mockReports: Form3X[] = [
 ];
 
 const mockForm3XService = {
-  getAssociatedForm3xReport: vi.fn().mockResolvedValueOnce(mockReports[0]).mockResolvedValueOnce(mockReports[1]).mockResolvedValueOnce(mockReports[2]),
+  getAssociatedForm3xReport: vi.fn().mockImplementation((disbursementDate: Date, disseminationDate) => {
+    const report = mockReports.find(
+      (r) => r.coverage_from_date! <= disbursementDate && r.coverage_through_date! >= disbursementDate,
+    );
+    if (!report) return Promise.resolve(undefined);
+    return Promise.resolve(report);
+  }),
   get: vi.fn().mockImplementation((id: string) => {
     const report = mockReports.find((r) => r.id === id);
     if (!report) return Promise.reject(new Error('No report found'));
@@ -116,15 +122,14 @@ describe('LinkedReportInputComponent', () => {
   });
 
   it('should set associated F3X based on disbursement date', async () => {
-    let associatedF3X = component.associatedF3X();
-    expect(associatedF3X).toBeTruthy();
-    expect(associatedF3X!.id).toBe('1');
+    let associatedF3X = await component.associatedF3X();
+    expect(associatedF3X).toBeFalsy();
 
     component.form.get(host.templateMap['date'])?.setValue(new Date('2024-04-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
-    associatedF3X = component.associatedF3X();
+    associatedF3X = await component.associatedF3X();
     expect(associatedF3X).toBeTruthy();
     expect(associatedF3X!.id).toBe('2');
     expect(associatedF3X).not.toBe(component.initialForm3X());
@@ -143,11 +148,18 @@ describe('LinkedReportInputComponent', () => {
     vi.spyOn(component.form.get('linkedF3x')!, 'setValue');
     vi.spyOn(component.form.get('linkedF3xId')!, 'setValue');
 
+    fixture.detectChanges();
+    await fixture.whenStable();
+
     component.form.get(host.templateMap['date'])?.setValue(new Date('2024-01-15'));
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenCalledWith('MID-YEAR-REPORT: 01/01/2024 - 03/31/2024');
+    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenNthCalledWith(1, '');
+    expect(component.form.get('linkedF3x')!.setValue).toHaveBeenNthCalledWith(
+      2,
+      'MID-YEAR-REPORT: 01/01/2024 - 03/31/2024',
+    );
     expect(component.form.get('linkedF3xId')!.setValue).toHaveBeenCalledWith('1');
   });
 
