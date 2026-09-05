@@ -49,7 +49,7 @@ const mockReports: Form3X[] = [
 ];
 
 const mockForm3XService = {
-  getAssociatedForm3xReport: vi.fn().mockImplementation((disbursementDate: Date, disseminationDate) => {
+  getAssociatedForm3xReport: vi.fn().mockImplementation((disbursementDate: Date) => {
     const report = mockReports.find(
       (r) => r.coverage_from_date! <= disbursementDate && r.coverage_through_date! >= disbursementDate,
     );

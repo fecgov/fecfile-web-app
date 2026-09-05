@@ -15,7 +15,6 @@ let needsSecondAdminMock = signal(false);
 
 describe('committeeOwnerGuard', () => {
   needsSecondAdminMock = signal(false);
-  let memberService: CommitteeMemberService;
   const route: ActivatedRouteSnapshot = {} as any;
   const state: RouterStateSnapshot = {} as any;
   let store: MockStore;
@@ -38,7 +37,6 @@ describe('committeeOwnerGuard', () => {
       ],
     });
     store = TestBed.inject(MockStore);
-    memberService = TestBed.inject(CommitteeMemberService);
     router = TestBed.inject(Router);
   });
 
