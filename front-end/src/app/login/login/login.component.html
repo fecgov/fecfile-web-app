@@ -18,13 +18,7 @@
   <div class="flex justify-content-center gap-3 mb-3">
     <a pButton [href]="whoCanUseLink" target="_blank">Is FECfile+ right for my committee?</a>
     @if (!disableLogin) {
-      <p-button
-        (click)="navigateToLoginDotGov()"
-        (keydown)="navigateToLoginDotGov()"
-        variant="outlined"
-        id="loginButton"
-        label="Sign in with Login.gov"
-      />
+      <p-button (click)="navigateToLoginDotGov()" variant="outlined" id="loginButton" label="Sign in with Login.gov" />
     }
   </div>
   <a class="learn-more-link" href="https://www.login.gov/what-is-login/">Learn more about Login.gov</a>
