@@ -1,8 +1,13 @@
+:host {
+  display: contents;
+}
+
 .full-version {
   width: 100%;
 }
 
 footer {
+  margin-top: 64px;
   background-color: #d8d8d8;
   font-size: 0.8rem;
 }

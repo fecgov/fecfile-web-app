@@ -14,7 +14,7 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
   );
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Recount/Legal Proceedings Account Partnership Attribution';

@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_REPAYMENT_MADE';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import {
   ORG_FIELDS,
   ADDRESS_FIELDS,
@@ -17,7 +17,7 @@ export class LOAN_REPAYMENT_MADE extends SchBTransactionType {
   contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_REPAYMENT_MADE);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+
   override inheritedFields = [
     ...INDIVIDUAL_FIELDS,
     ...ORG_FIELDS,

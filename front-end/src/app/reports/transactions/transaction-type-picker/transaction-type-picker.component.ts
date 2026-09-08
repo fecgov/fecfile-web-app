@@ -97,8 +97,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
       const transactionTypes = report.transactionTypes.filter(
         (t) =>
           group.transactionTypes.has(t) &&
-          (this.committeeStore.committee()!.isPAC || !PAC_ONLY().has(t)) &&
-          (this.committeeStore.committee()!.isPTY || !PTY_ONLY().has(t)),
+          (this.committeeStore.isPAC() || !PAC_ONLY().has(t)) &&
+          (this.committeeStore.isPTY() || !PTY_ONLY().has(t)),
       );
 
       if (this.debtId()) {

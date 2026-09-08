@@ -126,6 +126,10 @@ export class ReportListPage {
     );
   }
 
+  static goToReportSubmitPage(reportId: string, formType: string) {
+    cy.visit(`/reports/${formType}/submit/${reportId}`);
+  }
+
   private static checkReportTransactionListPageLoaded(
     reportId: string,
     includeReceipts = true,

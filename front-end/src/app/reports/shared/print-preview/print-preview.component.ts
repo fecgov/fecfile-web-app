@@ -18,7 +18,7 @@ import { CommitteeStore } from 'app/committee/committee.store';
 @Component({
   selector: 'app-print-preview',
   templateUrl: './print-preview.component.html',
-  styleUrls: ['../../styles.scss', './print-preview.component.scss'],
+  styleUrls: ['./print-preview.component.scss'],
   imports: [ButtonDirective, Ripple, SingleClickDirective],
 })
 export class PrintPreviewComponent extends DestroyerComponent implements OnInit {

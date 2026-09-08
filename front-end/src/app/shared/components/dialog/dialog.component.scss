@@ -26,6 +26,7 @@ img {
 }
 
 dialog {
+  margin: 0;
   padding: 20px 32px;
   width: 512px;
   background-color: var(--surface-a);
@@ -33,6 +34,12 @@ dialog {
   box-shadow: 0 0 4px 0 rgba(33, 33, 33, 0.5);
   border: none;
   overflow: visible;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: 1002;
   &:focus-visible {
     outline: none;
   }
@@ -51,6 +58,7 @@ dialog {
   position: absolute;
   top: 20px;
   right: 20px;
+  height: 20px;
 }
 
 .field .dialog-label {
@@ -96,20 +104,4 @@ dialog {
 
 dialog:not([open]) {
   display: none;
-}
-
-dialog[open] {
-  display: block;
-  position: fixed;
-  margin: 0;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  max-width: 90vw;
-  max-height: 90vh;
-  z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: none;
-  border-radius: 8px;
 }

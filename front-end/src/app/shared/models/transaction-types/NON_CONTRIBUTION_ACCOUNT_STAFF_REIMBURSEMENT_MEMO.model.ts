@@ -17,7 +17,7 @@ export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO extends SCHEDULE_
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO,
   );
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

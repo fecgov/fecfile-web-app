@@ -16,7 +16,7 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO ext
   );
   schema = schema;
   override shortName = 'Partnership Attribution';
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     const committeeClause = `Recount/Legal Proceedings Account JF Memo: ${

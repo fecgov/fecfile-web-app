@@ -3,7 +3,6 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_REF
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import {
   INDIVIDUAL_ORGANIZATION,
   INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
@@ -15,11 +14,8 @@ export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;
   override isRefund = true;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

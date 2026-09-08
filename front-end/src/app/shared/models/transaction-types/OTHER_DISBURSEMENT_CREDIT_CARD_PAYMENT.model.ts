@@ -14,7 +14,7 @@ export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT extends SchBTransactionType 
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override subTransactionConfig = [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO];
 
   getNewTransaction() {

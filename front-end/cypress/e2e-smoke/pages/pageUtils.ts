@@ -95,7 +95,7 @@ export class PageUtils {
 
   static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
     alias = PageUtils.getAlias(alias);
-    const input = cy.get(alias).find(calendar).find('.p-datepicker-input')
+    const input = cy.get(alias).find(calendar).find('.p-datepicker-input').first();
     const dateStr = DateUtils.convertDateToSlashFormat(dateObj);
     input.safeType(dateStr);
     input.blur();

@@ -69,6 +69,7 @@ describe('Form3XListComponent', () => {
         ConfirmationService,
         MessageService,
         ApiService,
+        Form3XService,
         provideMockStore(testMockStore()),
         CommitteeStore,
         provideRouter(ROUTES),
@@ -86,9 +87,9 @@ describe('Form3XListComponent', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
-    reportService = TestBed.inject(Form3XService);
     fixture = TestBed.createComponent(Form3XListComponent);
     component = fixture.componentInstance;
+    reportService = fixture.debugElement.injector.get(Form3XService);
     fixture.detectChanges();
   });
 
@@ -151,14 +152,14 @@ describe('Form3XListComponent', () => {
   });
 
   it('#amend should hit service', async () => {
-    const amendSpy = vi.spyOn(reportService, 'startAmendment').mockReturnValue(Promise.resolve(''));
+    const amendSpy = vi.spyOn(reportService, 'startAmendment').mockResolvedValue('');
     await component.amendReport({ id: '999' } as Form3X);
     expect(amendSpy).toHaveBeenCalled();
   });
 
   describe('unamend', () => {
     it('should hit service', async () => {
-      const unamendSpy = vi.spyOn(reportService, 'startUnamendment').mockReturnValue(Promise.resolve(''));
+      const unamendSpy = vi.spyOn(reportService, 'startUnamendment').mockResolvedValue('');
       await component.unamendReport({ id: '999' } as Form3X);
       expect(unamendSpy).toHaveBeenCalled();
     });
@@ -203,7 +204,7 @@ describe('Form3XListComponent', () => {
 
     it('should delete', async () => {
       const report = testActiveReport();
-      const deleteSpy = vi.spyOn(reportService, 'delete').mockReturnValue(Promise.resolve(null));
+      const deleteSpy = vi.spyOn(reportService, 'delete').mockResolvedValue(null);
       const messageServiceSpy = vi.spyOn(component.messageService, 'add');
       await component.delete(report);
       expect(deleteSpy).toHaveBeenCalledTimes(1);

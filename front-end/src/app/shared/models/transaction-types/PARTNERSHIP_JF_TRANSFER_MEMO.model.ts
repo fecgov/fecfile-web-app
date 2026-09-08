@@ -14,7 +14,7 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SCHEDULE_A_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup('Partnership Receipt JF Transfer Memo', [
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,

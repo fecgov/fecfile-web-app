@@ -16,7 +16,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SCHEDUL
   );
   schema = schema;
   override shortName = 'Partnership Receipt';
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup(
     'Partnership Receipt Recount/Legal Proceedings Account JF Transfer Memo',

@@ -15,7 +15,7 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SCHEDUL
   );
   override shortName = 'Tribal';
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Headquarters Buildings Account JF Memo: ${

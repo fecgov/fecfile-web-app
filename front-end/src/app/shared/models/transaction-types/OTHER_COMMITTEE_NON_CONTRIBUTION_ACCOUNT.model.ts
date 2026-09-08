@@ -2,7 +2,6 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
@@ -14,7 +13,6 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchATransactionTyp
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {
     return 'Non-contribution Account';
@@ -24,9 +22,7 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchATransactionTyp
     return false;
   }
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

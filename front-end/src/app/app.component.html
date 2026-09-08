@@ -15,7 +15,13 @@
 }
 
 @if (showCommitteeChangedDialog()) {
-  <app-dialog title="Committee changed" [visible]="true" [noInput]="true" [closeOnEscape]="false" [dismissible]="false">
+  <app-dialog
+    header="Committee changed"
+    [visible]="true"
+    [noInput]="true"
+    [closeOnEscape]="false"
+    [dismissible]="false"
+  >
     <p class="karla mb-0">
       It looks like you switched committees in another tab. Please close this tab and continue in the other tab.
     </p>

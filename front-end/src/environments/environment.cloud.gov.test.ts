@@ -3,6 +3,7 @@ import { createEnvironment } from './environment.base';
 export const environment = createEnvironment({
   production: true,
   name: 'test',
+  environmentBanner: 'test',
   externalLinks: 'stage',
   baseUri: 'https://test-api.fecfile.fec.gov',
   overrides: {

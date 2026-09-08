@@ -10,7 +10,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { MessageService, SelectItem, ToastMessageOptions } from 'primeng/api';
-import { map, Observable, of, startWith, takeUntil } from 'rxjs';
+import { map, merge, Observable, of, startWith, takeUntil } from 'rxjs';
 import { ContactIdMapType, TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { ReattRedesUtils } from 'app/shared/utils/reatt-redes/reatt-redes.utils';
@@ -337,9 +337,9 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
   getMemoHasOptional$(form: FormGroup, transactionType: TransactionType): Observable<boolean> {
     const memoControl = form.get(transactionType?.templateMap.memo_code);
     if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) return of(false);
-    return memoControl.valueChanges.pipe(
-      map(() => !memoControl.hasValidator(Validators.requiredTrue)),
-      startWith(true),
+    return merge(memoControl.valueChanges, memoControl.statusChanges).pipe(
+      startWith(null),
+      map(() => !memoControl.disabled && !memoControl.hasValidator(Validators.requiredTrue)),
       takeUntil(this.destroy$),
     );
   }

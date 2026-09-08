@@ -65,6 +65,14 @@ describe('ReattRedesUtils', () => {
       limitTxn.contribution_amount = 100;
       expect(ReattRedesUtils.canReattribute(asListRecord(limitTxn))).toBe(false);
     });
+
+    it('should block reattribution for transactions that are themselves reattributions', () => {
+      const individual_receipt = getTestIndividualReceipt();
+      individual_receipt.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_FROM;
+      expect(ReattRedesUtils.canReattribute(asListRecord(individual_receipt))).toBe(false);
+      individual_receipt.reattribution_redesignation_tag = ReattRedesTypes.REATTRIBUTION_TO;
+      expect(ReattRedesUtils.canReattribute(asListRecord(individual_receipt))).toBe(false);
+    });
   });
 
   describe('overlayForms', () => {

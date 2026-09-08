@@ -51,7 +51,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   schema = schema;
   override dependentChildTransactionTypes = [ScheduleBTransactionTypes.LOAN_MADE];
   override subTransactionConfig = [ScheduleC2TransactionTypes.C2_LOAN_GUARANTOR];
-  override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
+  override _navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,

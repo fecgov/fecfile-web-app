@@ -589,13 +589,26 @@ describe('TransactionTypeBaseComponent', () => {
       expect(spy).toHaveBeenCalled();
     });
 
-    it('should return optional label if memo not required', async () => {
+    it('should return optional label if memo not required and control is not disabled', async () => {
       fixture.detectChanges();
       if (!component.transactionType) throw new Error('Bad test');
-      component.form.get(component.transactionType?.templateMap.memo_code)?.clearValidators();
+      const memoControl = component.form.get(component.transactionType?.templateMap.memo_code)!;
+      memoControl.clearValidators();
+      memoControl.enable();
       const spy = vi.spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').mockReturnValue(false);
       const res = await firstValueFrom(component.getMemoHasOptional$(component.form, component.transactionType));
       expect(res).toEqual(true);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should not return optional label if memo not required and control is disabled', async () => {
+      fixture.detectChanges();
+      if (!component.transactionType) throw new Error('Bad test');
+      const memoControl = component.form.get(component.transactionType?.templateMap.memo_code)!;
+      memoControl.clearValidators();
+      const spy = vi.spyOn(TransactionFormUtils, 'isMemoCodeReadOnly').mockReturnValue(false);
+      const res = await firstValueFrom(component.getMemoHasOptional$(component.form, component.transactionType));
+      expect(res).toEqual(false);
       expect(spy).toHaveBeenCalled();
     });
   });

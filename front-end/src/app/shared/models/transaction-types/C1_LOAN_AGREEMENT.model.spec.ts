@@ -1,8 +1,8 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchCTransaction, ScheduleCTransactionTypes } from '../schc-transaction.model';
 import { SchC1Transaction, ScheduleC1TransactionTypes } from '../schc1-transaction.model';
-import { STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { C1_LOAN_AGREEMENT } from './C1_LOAN_AGREEMENT.model';
+import { STANDARD_LIST_CONTROLS } from '../transaction-navigation-controls.model';
 
 describe('C1_LOAN_AGREEMENT', () => {
   let transactionType: C1_LOAN_AGREEMENT;
@@ -37,8 +37,7 @@ describe('C1_LOAN_AGREEMENT', () => {
     expect(transaction.transactionType.getInheritedFields(transaction)?.length).toBeGreaterThan(0);
 
     // getNavigationControls()
-    expect(transaction.transactionType.navigationControls).toBeUndefined();
-    expect(transaction.transactionType.getNavigationControls(transaction)).toBeUndefined();
+    expect(transaction.transactionType.getNavigationControls(transaction)).toBe(STANDARD_LIST_CONTROLS);
 
     // getFooter()
     const expectedFooterText =
@@ -57,7 +56,7 @@ describe('C1_LOAN_AGREEMENT', () => {
 
     expect(transaction.transactionType.getFooter(transaction)).toBeUndefined();
     expect(transaction.transactionType.getInheritedFields(transaction)?.length).toBeUndefined();
-    expect(transaction.transactionType.getNavigationControls(transaction)).toBe(STANDARD_CONTROLS);
+    expect(transaction.transactionType.getNavigationControls(transaction)).toBe(STANDARD_LIST_CONTROLS);
     expect(transaction.transactionType.getUseParentContact(transaction)).toBe(false);
   });
 });

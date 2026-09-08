@@ -32,6 +32,6 @@ describe('CommitteeBannerComponent', () => {
     committeeStore.setCommittee(
       CommitteeAccount.fromJSON({ ...committee, committee_type_label: pacQualifiedUnauthorized }),
     );
-    expect(component.committeeTypeLabel()).toEqual(pacQualifiedUnauthorized);
+    expect(committeeStore.committeeTypeLabel()).toEqual(pacQualifiedUnauthorized);
   });
 });

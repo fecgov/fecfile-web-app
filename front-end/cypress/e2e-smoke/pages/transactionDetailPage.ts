@@ -301,7 +301,11 @@ export class TransactionDetailPage {
             .find('.p-datepicker-input')
             .should('have.value', PageUtils.dateToString(formData.due_date));
         } else {
-          cy.get(alias).find('[data-cy="dueDateInput"]').find('input').first().should('have.value', String(formData.due_date));
+          cy.get(alias)
+            .find('[data-cy="dueDateInput"]')
+            .find('input')
+            .first()
+            .should('have.value', String(formData.due_date));
         }
       }
     }
@@ -313,7 +317,10 @@ export class TransactionDetailPage {
         .should('contain', formData.loan_interest_rate_is_percent as string);
 
       if (formData.interest_rate !== undefined && formData.interest_rate !== null) {
-        cy.get(alias).find('[data-cy="interestRateInput"]').find('input:visible:first').should('have.value', String(formData.interest_rate));
+        cy.get(alias)
+          .find('[data-cy="interestRateInput"]')
+          .find('input:visible:first')
+          .should('have.value', String(formData.interest_rate));
       }
     }
   }
@@ -322,8 +329,8 @@ export class TransactionDetailPage {
     PageUtils.clickFormActionButton('Save', `app-navigation-control-bar,[data-cy="${buttonType}"]:visible`);
   }
 
-  static clickConfirmContactUpdate(){
-    cy.get('[data-cy="membership-submit"]').click();
+  static clickConfirmContactUpdate() {
+    cy.get('[data-cy="membership-submit"]:visible').click();
   }
 
   static clickInlineSave() {

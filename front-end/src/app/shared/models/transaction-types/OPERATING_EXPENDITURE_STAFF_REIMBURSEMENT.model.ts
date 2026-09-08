@@ -14,7 +14,7 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionTy
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override subTransactionConfig = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
 
   override generatePurposeDescription(transaction: SchBTransaction): string {

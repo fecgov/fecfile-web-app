@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDEPENDENT_EXPENDITURES';
 import { SchETransactionType } from '../sche-transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import {
   ORGANIZATION_INDIVIDUAL,
   ORG_FIELDS,
@@ -40,13 +40,11 @@ export class INDEPENDENT_EXPENDITURE_VOID extends SchETransactionType {
   override negativeAmountValueOnly = true;
   title = LabelUtils.get(ScheduleETransactionTypeLabels, ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_VOID);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({

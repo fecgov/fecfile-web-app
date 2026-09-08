@@ -7,6 +7,7 @@
   --surface-f: #ffffff;
   --text-color: var(--p-content-color);
   --text-color-secondary: #5b616b;
+  --color-info: #35bdbb;
   --primary-color: #112e51;
   --primary-color-text: #ffffff;
   --font-family:
@@ -36,6 +37,7 @@
   --focus-ring: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
   --fec-black: #212121;
   --warning: #631010;
+  --orange-warning: #fdb838;
   --error: #CE2026;
 
   --fec-grey-background: var(--surface-c);
@@ -175,11 +177,17 @@
   --p-tieredmenu-item-color: var(--p-content-color);
   --p-tieredmenu-separator-border-color: #212121b3; // 70% opacity of #212121
 
-  --header-height: 80px;
+  --environment-banner-height: 64px;
+
   --header-top: 30px;
-  --header-total: calc(var(--header-height) + var(--header-top));
+  --header-height: 80px;
+  --header-transition: 0.3s ease-in-out;
+  --header-total: calc(
+    var(--header-current-height) + var(--header-top)
+  );
 
   --date-field-width: 11rem;
+  
 }
 
 $breakpoints: (
@@ -189,4 +197,3 @@ $breakpoints: (
   'xl': 1200px,
   'xxl': 1400px,
 );
-

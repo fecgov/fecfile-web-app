@@ -40,7 +40,7 @@ export class INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT extends SchETransaction
     ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT,
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override contact2IsRequired = () => true;
   override subTransactionConfig = [ScheduleETransactionTypes.INDEPENDENT_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
   override showCalendarYTD = true;

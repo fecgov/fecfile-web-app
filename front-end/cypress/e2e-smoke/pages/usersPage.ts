@@ -2,8 +2,8 @@ import { UserFormData } from '../models/UserFormModel';
 import { PageUtils } from './pageUtils';
 
 export class UsersPage {
-  private static readonly addDialogSelector = '#content-offset app-add-committee-member-dialog dialog[open]';
-  private static readonly editDialogSelector = '#content-offset app-edit-committee-member-dialog dialog[open]';
+  private static readonly addDialogSelector = 'app-add-committee-member-dialog dialog[open]';
+  private static readonly editDialogSelector = 'app-edit-committee-member-dialog dialog[open]';
 
   static openAddUserDialog() {
     cy.contains('h1', 'Manage users').should('be.visible');

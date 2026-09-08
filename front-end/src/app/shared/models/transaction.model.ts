@@ -236,5 +236,7 @@ export enum ScheduleIds {
 export function cloneInstance<T extends Transaction>(instance: T | undefined): T | undefined {
   if (!instance) return undefined;
   const plain = instanceToPlain(instance);
-  return plainToInstance(instance.constructor as ClassConstructor<T>, plain);
+  const clone = plainToInstance(instance.constructor as ClassConstructor<T>, plain);
+  clone.setMetaProperties(instance.transactionType);
+  return clone;
 }

@@ -2,7 +2,7 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/MULTISTATE_INDEPENDENT_EXPENDITURE';
 import { SchETransactionType } from '../sche-transaction-type.model';
 import { SchETransaction, ScheduleETransactionTypeLabels, ScheduleETransactionTypes } from '../sche-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+
 import {
   ORGANIZATION_INDIVIDUAL,
   ORG_FIELDS,
@@ -39,7 +39,7 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
   override contactConfig = STANDARD_AND_CANDIDATE;
   title = LabelUtils.get(ScheduleETransactionTypeLabels, ScheduleETransactionTypes.MULTISTATE_INDEPENDENT_EXPENDITURE);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+
   override contact2IsRequired = () => true;
   override showCalendarYTD = true;
   override memoTextRequired = true;
@@ -50,9 +50,7 @@ export class MULTISTATE_INDEPENDENT_EXPENDITURE extends SchETransactionType {
     electionType: 'P',
   };
 
-  override get isCloneableTransactionType(): boolean {
-    return true;
-  }
+  override isCloneableTransactionType = true;
 
   getNewTransaction() {
     return SchETransaction.fromJSON({

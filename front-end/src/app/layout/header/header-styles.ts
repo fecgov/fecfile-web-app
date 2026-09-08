@@ -1,5 +1,1 @@
-export enum HeaderStyles {
-  'DEFAULT',
-  'LOGIN',
-  'LOGOUT',
-}
+export type HeaderStyles = 'DEFAULT' | 'LOGIN' | 'LOGOUT';

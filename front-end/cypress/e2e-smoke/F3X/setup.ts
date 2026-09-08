@@ -40,6 +40,7 @@ interface Results {
   candidateSenate: any;
   committee: any;
   report: string;
+  reports: string[];
   f24: string | null;
 }
 
@@ -53,6 +54,7 @@ export async function DataSetup(setup: Setup = {}) {
     candidateSenate: null,
     committee: null,
     report: '',
+    reports: [],
     f24: null,
   };
 
@@ -101,6 +103,7 @@ export async function DataSetup(setup: Setup = {}) {
         new Cypress.Promise((resolve) => {
           makeF3x(report, (response) => {
             if (index === 0) results.report = response.body.id;
+            results.reports.push(response.body.id);
             resolve();
           });
         }),

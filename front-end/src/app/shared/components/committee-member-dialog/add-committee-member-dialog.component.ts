@@ -16,7 +16,7 @@ import { DialogComponent } from '../dialog/dialog.component';
     <app-dialog
       tabindex="-1"
       aria-labelledby="dialog-title"
-      title="Add user"
+      header="Add user"
       submitLabel="Add"
       [(visible)]="detailVisible"
       [submitDisabled]="!form.valid"

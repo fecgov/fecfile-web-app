@@ -6,7 +6,7 @@ import {
 import { TemplateMapKeyType } from '../../transaction-type.model';
 
 export abstract class CONDUIT_EARMARK extends SchATransactionType {
-  override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
   override memoCodeMap = {
     true: 'Undeposited',

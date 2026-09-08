@@ -36,9 +36,9 @@
     <app-transaction-loans-and-debts (reloadTables)="refreshTables()" />
   }
 </div>
-
-<app-select-report-dialog />
-
+@if (!isForm24()) {
+  <app-select-report-dialog />
+}
 <app-secondary-report-selection-dialog
   [(dialogVisible)]="reportSelectDialogVisible"
   [reportType]="reportSelectFormType"

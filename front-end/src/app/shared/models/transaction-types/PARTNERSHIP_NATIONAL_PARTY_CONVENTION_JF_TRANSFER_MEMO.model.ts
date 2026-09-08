@@ -17,7 +17,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SCHE
   );
   schema = schema;
   override shortName = 'Partnership Receipt';
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup(
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',

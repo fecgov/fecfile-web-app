@@ -17,7 +17,7 @@ export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO extends SCHEDULE_B_MEMO
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO,
   );
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

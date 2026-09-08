@@ -1,10 +1,10 @@
+import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f1mSchema } from 'fecfile-validate/fecfile_validate_js/dist/F1M';
+import { MenuItem } from 'primeng/api';
 import { BaseModel } from '../base.model';
 import { CandidateOfficeType, Contact } from '../contact.model';
-import { Report, ReportTypes } from './report.model';
-import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
+import { Report, ReportStatus, ReportTypes } from './report.model';
 
 enum CommitteeTypes {
   STATE_PTY = 'X',
@@ -27,6 +27,10 @@ export class Form1M extends Report {
 
   get formLabel() {
     return 'Form 1M';
+  }
+
+  override get canAmend(): boolean {
+    return this.report_status === ReportStatus.SUBMIT_SUCCESS;
   }
 
   committee_type?: CommitteeType;

@@ -15,7 +15,7 @@ export class FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT extends SchBTransacti
   );
   schema = schema;
   override subTransactionConfig = [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO];
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

@@ -17,7 +17,7 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO extends SCHEDULE_
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
   );
   schema = schema;
-  override navigationControls = CHILD_CONTROLS;
+  override _navigationControls = CHILD_CONTROLS;
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',

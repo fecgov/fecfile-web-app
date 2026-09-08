@@ -72,6 +72,7 @@ export abstract class F1MContact {
     }
 
     this.control?.clearValidators();
+    this.control?.clearAsyncValidators();
     this.control?.updateValueAndValidity();
   }
 
@@ -82,8 +83,11 @@ export abstract class F1MContact {
 
     this.formFields.forEach((field: string) => {
       (this.component.report[field as keyof Form1M] as string | undefined) = undefined;
-      this.component.form.get(field)?.clearValidators();
-      this.component.form.get(field)?.setValue(undefined);
+      const f = this.component.form.get(field);
+      if (!f) return;
+      f.clearValidators();
+      f.clearAsyncValidators();
+      f.setValue(undefined);
     });
 
     this.updateValueAndValidity();

@@ -15,7 +15,7 @@ export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT extends SchBTransacti
   );
   schema = schema;
   override subTransactionConfig = [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO];
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override _navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

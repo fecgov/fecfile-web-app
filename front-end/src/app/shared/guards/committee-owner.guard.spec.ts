@@ -5,7 +5,7 @@ import { committeeOwnerGuard } from './committee-owner.guard';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { testCommitteeMember } from '../utils/unit-test.utils';
+import { testCommitteeAccount, testCommitteeMember } from '../utils/unit-test.utils';
 import type { Mock } from 'vitest';
 import { signal } from '@angular/core';
 import { CommitteeStore } from 'app/committee/committee.store';
@@ -53,10 +53,21 @@ describe('committeeOwnerGuard', () => {
     expect(TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state))).toBeTruthy();
   });
 
-  it('should return true when not memberService.needsSecondAdmin', async () => {
-    needsSecondAdminMock.set(false);
-    const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
-    expect(safe).toBe(true);
+  describe('has committee', () => {
+    beforeEach(() => committeeStore.setCommittee(testCommitteeAccount()));
+
+    it('should return true when not memberService.needsSecondAdmin', async () => {
+      needsSecondAdminMock.set(false);
+      const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
+      expect(safe).toBe(true);
+    });
+
+    it('should route to reports page when memberService.needsSecondAdmin()', async () => {
+      needsSecondAdminMock.set(true);
+      getMemberSpy.mockResolvedValue([testCommitteeMember(), testCommitteeMember(), testCommitteeMember()]);
+      const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
+      expect(safe).toEqual(router.createUrlTree(['/reports']));
+    });
   });
 
   it('should not hit backend for members if no committee info yet', async () => {
@@ -65,12 +76,5 @@ describe('committeeOwnerGuard', () => {
     committeeStore.setCommittee({} as CommitteeAccount);
     const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
     expect(safe).toEqual(router.createUrlTree(['/select-committee']));
-  });
-
-  it('should route to reports page when memberService.needsSecondAdmin()', async () => {
-    needsSecondAdminMock.set(true);
-    getMemberSpy.mockResolvedValue([testCommitteeMember(), testCommitteeMember(), testCommitteeMember()]);
-    const safe = await TestBed.runInInjectionContext(() => committeeOwnerGuard(route, state));
-    expect(safe).toEqual(router.createUrlTree(['/reports']));
   });
 });
