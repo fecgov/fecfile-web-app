@@ -4,18 +4,18 @@ import { ApiService, QueryParams } from './api.service';
 import { CommitteeMember, ListRestResponse, Roles } from '../models';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommitteeMemberService implements TableListService<CommitteeMember> {
+  private readonly committeeStore = inject(CommitteeStore);
   private readonly apiService = inject(ApiService);
   private readonly endpoint = '/committee-members/';
 
   private readonly store = inject(Store);
   private readonly userSignal = this.store.selectSignal(selectUserLoginData);
-  private readonly committeeSignal = this.store.selectSignal(selectCommitteeAccount);
 
   public readonly membersSignal = signal<CommitteeMember[]>([]);
   public readonly adminsSignal = computed(() => this.membersSignal().filter((m) => m.isAdmin));
@@ -33,7 +33,7 @@ export class CommitteeMemberService implements TableListService<CommitteeMember>
 
   constructor() {
     effect(() => {
-      if (this.committeeSignal().committee_id) {
+      if (this.committeeStore.committee()?.committee_id) {
         this.getMembers();
       } else {
         this.membersSignal.set([]);

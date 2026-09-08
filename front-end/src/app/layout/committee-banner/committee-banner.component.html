@@ -1,17 +1,17 @@
-@if (committeeID()) {
+@if (committeeStore.committeeID()) {
   <div class="mb-7">
-    <div class="committee-name">{{ committeeName() }}</div>
+    <div class="committee-name">{{ committeeStore.committeeName() }}</div>
     <div class="committee-info" aria-label="Committee Status">
       <div
         class="pi pi-circle-on status-circle"
         [style.color]="frequencyColor()"
-        [attr.aria-label]="committeeStatus()"
+        [attr.aria-label]="committeeStore.committeeStatus()"
       ></div>
-      <div class="sub-banner-item">{{ committeeFrequency() }}</div>
+      <div class="sub-banner-item">{{ committeeStore.committeeFrequency() }}</div>
       |
-      <div class="sub-banner-item">{{ committeeTypeLabel() }}</div>
+      <div class="sub-banner-item">{{ committeeStore.committeeTypeLabel() }}</div>
       |
-      <div class="sub-banner-item">ID: {{ committeeID() }}</div>
+      <div class="sub-banner-item">ID: {{ committeeStore.committeeID() }}</div>
     </div>
   </div>
 }

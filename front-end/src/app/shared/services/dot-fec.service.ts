@@ -12,9 +12,9 @@ import { ApiService } from './api.service';
 import { Report } from '../models/reports/report.model';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 export interface Download {
   id?: string;
@@ -29,6 +29,7 @@ export interface Download {
 })
 export class DotFecService {
   readonly store = inject(Store);
+  private readonly committeeStore = inject(CommitteeStore);
   private readonly apiService = inject(ApiService);
   private readonly actions = inject(Actions);
   readonly rendererFactory = inject(RendererFactory2);
@@ -39,11 +40,10 @@ export class DotFecService {
   private readonly loggedOut = toSignal(
     this.actions.pipe(filter((action) => action.type === '[User Login Data] Discarded')),
   );
-  private readonly committee = this.store.selectSignal(selectCommitteeAccount);
 
   constructor() {
     effect(() => {
-      if (this.committee() || this.loggedOut()) this.downloads.set([]);
+      if (this.committeeStore.committee() || this.loggedOut()) this.downloads.set([]);
     });
   }
 

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { testCommitteeAccount } from 'app/shared/utils/unit-test.utils';
 import { vi } from 'vitest';
 
 (globalThis as any).AbortController = class {
@@ -90,6 +91,8 @@ globalThis.ResizeObserver = class ResizeObserverMock {
 globalThis.window.scrollTo = vi.fn();
 
 Object.defineProperty(globalThis.URL, 'createObjectURL', { writable: true, value: vi.fn() });
+
+localStorage.setItem('fecfile_online_committeeAccount', JSON.stringify(testCommitteeAccount()));
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: (query: string) => ({

@@ -29,9 +29,11 @@ import {
   NavigationAction,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 @Directive()
 export abstract class TransactionTypeBaseComponent extends FormComponent implements OnInit, OnDestroy {
+  protected readonly committeeStore = inject(CommitteeStore);
   private readonly glossaryService = inject(GlossaryService);
   protected readonly messageService = inject(MessageService);
   readonly transactionService = inject(TransactionService);
@@ -261,7 +263,7 @@ export abstract class TransactionTypeBaseComponent extends FormComponent impleme
       this.form,
       this.transaction,
       this.contactTypeOptions,
-      this.committeeAccount(),
+      this.committeeStore.committee()!,
     );
   }
 

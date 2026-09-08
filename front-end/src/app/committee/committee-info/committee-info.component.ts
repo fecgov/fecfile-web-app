@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { SchemaUtils } from 'app/shared/utils/schema.utils';
@@ -8,6 +8,7 @@ import { FecInternationalPhoneInputComponent } from '../../shared/components/fec
 import { ButtonModule } from 'primeng/button';
 import { SelectComponent } from 'app/shared/components/select/select.component';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
+import { CommitteeStore } from '../committee.store';
 
 @Component({
   selector: 'app-committee-info',
@@ -16,6 +17,7 @@ import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-cont
   imports: [ReactiveFormsModule, FecInternationalPhoneInputComponent, ButtonModule, SelectComponent],
 })
 export class CommitteeInfoComponent extends FormComponent {
+  private readonly committeeStore = inject(CommitteeStore);
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
@@ -46,9 +48,11 @@ export class CommitteeInfoComponent extends FormComponent {
   constructor() {
     super();
     effect(() => {
+      const committee = this.committeeStore.committee();
+      if (!committee) return;
       this.mostRecentFilingPdfUrl = undefined; // undefined until requirements are defined https://fecgov.atlassian.net/browse/FECFILE-1704
       this.form.enable();
-      const entries = Object.entries(this.committeeAccount());
+      const entries = Object.entries(committee);
       for (const [key, value] of entries) {
         if (this.formProperties.includes(key)) {
           this.form.get(key)?.setValue(value);

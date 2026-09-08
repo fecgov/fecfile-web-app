@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { DotFecService, Download } from './dot-fec.service';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testCommitteeAccount, testMockStore } from '../utils/unit-test.utils';
+import { testMockStore } from '../utils/unit-test.utils';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
 import { Report } from '../models/reports/report.model';
@@ -10,7 +10,7 @@ import { RendererFactory2 } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { setCommitteeAccountDetailsAction } from 'app/store/committee-account.actions';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 const childNodesMap = new WeakMap();
 
@@ -61,6 +61,7 @@ describe('DotFecService', () => {
         provideHttpClientTesting(),
         DotFecService,
         ApiService,
+        CommitteeStore,
         provideMockStore(testMockStore()),
         provideRouter([]),
         { provide: Actions, useValue: actions$ },
@@ -150,7 +151,6 @@ describe('DotFecService', () => {
   it('should clear downloads on committee change', async () => {
     service.downloads.set([download]);
     expect(service.downloads().length).toEqual(1);
-    service.store.dispatch(setCommitteeAccountDetailsAction({ payload: testCommitteeAccount() }));
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(service.downloads().length).toEqual(0);
   });
