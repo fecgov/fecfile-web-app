@@ -14,6 +14,7 @@ export class Form3XService extends BaseForm3Service<Form3X> {
     const disbursementDateString = disbursementDate ? DateUtils.convertDateToFecFormat(disbursementDate) : '';
     const disseminationDateString = disseminationDate ? DateUtils.convertDateToFecFormat(disseminationDate) : '';
     const url = `${this.apiEndpoint}/associated/?disbursement_date=${disbursementDateString}&dissemination_date=${disseminationDateString}`;
-    return await this.apiService.get<Form3X | undefined>(url);
+    const response = await this.apiService.get<Form3X | undefined>(url);
+    return Form3X.fromJSON(response);
   }
 }

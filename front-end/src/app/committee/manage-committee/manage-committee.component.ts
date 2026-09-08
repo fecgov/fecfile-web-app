@@ -89,7 +89,7 @@ export class ManageCommitteeComponent extends TableListBaseComponent<CommitteeMe
   });
 
   override readonly params: Signal<QueryParams> = computed(() => {
-    return { page_size: this.rowsPerPage() };
+    return { page_size: this.rowsPerPage(), you_first: true };
   });
 
   public userAdded(email: string) {

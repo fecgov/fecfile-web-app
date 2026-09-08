@@ -91,11 +91,9 @@ describe("Users: Validation and API failure states", () => {
     cy.wait('@invite500').its('response.statusCode').should('eq', 500);
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     cy.intercept('POST', '**/committee-members/add-member/**').as('invite201'); // capture success (no stub)
-    cy.intercept('GET', '**/committee-members/?page=1**').as('GetMembers');
     UsersHelpers.submitBtn().should((membershipSubmitBtn) => UsersHelpers.assertEnabled(membershipSubmitBtn));
     UsersHelpers.submitBtn().click();
     cy.wait('@invite201').its('response.statusCode').should('be.oneOf', [200, 201]);
-    cy.wait('@GetMembers');
     PageUtils.closeToast();
     UsersPage.assertRow(adminUser, 'Pending');
   });
