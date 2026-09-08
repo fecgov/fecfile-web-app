@@ -8,6 +8,8 @@ import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
 import { UnassociatedTransactionListComponent } from './unassociated-transaction-list/unassociated-transaction-list.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
+import { ReattRedesStore } from './shared/utils/reatt-redes/reatt-redes.store';
+import { Form3XService } from './shared/services/form-3x.service';
 
 export const ROUTES: Route[] = [
   {
@@ -57,6 +59,7 @@ export const ROUTES: Route[] = [
           committeeGuard,
           featureFlagGuard('showAllTransactionsPage'),
         ],
+        providers: [ReattRedesStore, Form3XService],
       },
       {
         path: 'contacts',

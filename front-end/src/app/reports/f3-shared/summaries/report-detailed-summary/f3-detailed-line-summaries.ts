@@ -81,14 +81,14 @@ export function receiptLines(report: Form3): LineSummary[] {
     },
     {
       lineNumber: '13(a)',
-      description: 'All other loans',
+      description: 'Made or guaranteed by the candidate',
       indent: 1,
       thisPeriod: report.L13a_loans_made_or_guaranteed_by_the_candidate_period,
       yearToDate: report.L13a_loans_made_or_guaranteed_by_the_candidate_ytd,
     },
     {
       lineNumber: '13(b)',
-      description: 'Made or guaranteed by the candidate',
+      description: 'All other loans',
       indent: 1,
       thisPeriod: report.L13b_all_other_loans_period,
       yearToDate: report.L13b_all_other_loans_ytd,

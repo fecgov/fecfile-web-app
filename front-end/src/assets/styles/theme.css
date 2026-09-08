@@ -2079,6 +2079,9 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   background: var(--p-content-background);
   transition: box-shadow 0.15s;
 }
+.p-datatable .p-datatable-thead > tr > td {
+  border-block: 2px solid;
+}
 .p-datatable .p-datatable-tfoot > tr > td {
   text-align: left;
   padding: 10px;

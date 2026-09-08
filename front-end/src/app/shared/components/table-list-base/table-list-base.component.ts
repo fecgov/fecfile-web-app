@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
-  Component,
   computed,
+  Directive,
   effect,
   ElementRef,
   inject,
@@ -16,9 +16,7 @@ import { QueryParams } from 'app/shared/services/api.service';
 import { TableComponent } from '../table/table.component';
 import { TableAction } from '../table-actions-button/table-actions';
 
-@Component({
-  template: '',
-})
+@Directive()
 export abstract class TableListBaseComponent<T> implements AfterViewInit {
   readonly messageService = inject(MessageService);
   readonly confirmationService = inject(ConfirmationService);

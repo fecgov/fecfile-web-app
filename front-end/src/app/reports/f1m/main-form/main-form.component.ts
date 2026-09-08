@@ -144,7 +144,7 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
     super.ngOnInit();
     // A deep copy of activeReport has to be made because the actual activeReport
     // object is set to read-only by the NgRx store.
-    if (this.reportId) this.report = Form1M.fromJSON(JSON.parse(JSON.stringify(this.activeReport())));
+    if (this.reportId) this.report = Form1M.fromJSON(structuredClone(this.activeReport()));
 
     this.initForm();
 
@@ -240,9 +240,9 @@ export class MainFormComponent extends MainFormBaseComponent<Form1M> implements 
   }
 
   getReportPayload(): Form1M {
-    const formValues = Form1M.fromJSON(SchemaUtils.getFormValues(this.form, this.schema, this.formProperties));
+    const data = SchemaUtils.getFormValues(this.form, this.schema, this.formProperties);
     this.updateContactsWithForm(this.report, this.form);
-    return Object.assign(this.report, formValues);
+    return Object.assign(this.report, data);
   }
 
   public override async submit(jump: 'continue' | void): Promise<void> {

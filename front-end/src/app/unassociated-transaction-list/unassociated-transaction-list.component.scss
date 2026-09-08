@@ -5,6 +5,10 @@
     @include standard-container();
   }
 
+  .p-tab {
+    padding: 0px 0px 8px 0px;
+  }
+
   .p-tablist-active-bar {
     height: 4px;
     background-color: #2e79d4;
@@ -17,10 +21,7 @@
   }
 
   .p-tabpanels {
-    padding-top: 32px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 32px 0px 0px 0px;
   }
 
   .tab-description {

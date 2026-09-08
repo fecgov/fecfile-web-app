@@ -1,0 +1,40 @@
+@use 'breakpoints' as *;
+
+h1 {
+  margin-bottom: 32px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid;
+  font-size: 36px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 32px;
+}
+
+p {
+  line-height: normal;
+  margin: 0;
+}
+
+#election-cycle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 512px;
+  margin-bottom: 32px;
+}
+
+:host::ng-deep {
+  @media (max-width: $md) {
+    th {
+      padding: 10px 6px !important;
+    }
+  }
+
+  @media (min-width: $md) {
+    #election-cycle-info {
+      width: 562px;
+    }
+  }
+}

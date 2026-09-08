@@ -30,6 +30,7 @@ export interface ColumnDefinition<T> {
   field: string;
   header: string;
   cssClass?: string;
+  width?: string;
   sortable?: boolean;
   bodyTpl?: TemplateRef<TableBodyContext<T>>;
   actions?: TableAction<T>[];
@@ -64,7 +65,7 @@ export interface TableBodyContext<T> {
   providers: [CurrencyPipe, MemoCodePipe, FecDatePipe, TransactionIdPipe, DefaultZeroPipe],
 })
 export class TableComponent<T> {
-  readonly title = input.required<string>();
+  readonly title = input<string>();
   readonly itemName = input('entries');
   readonly items = input.required<T[]>();
   readonly globalFilterFields = input(['']);
