@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { environment } from 'environments/environment';
 
 export interface FeatureFlags {
   showGlossary: boolean;
@@ -10,4 +11,15 @@ export interface FeatureFlags {
   userCanSetFilingFrequency: boolean;
 }
 
-export const FEATURE_FLAGS = new InjectionToken<FeatureFlags>('FEATURE_FLAGS');
+export const FEATURE_FLAGS = new InjectionToken<FeatureFlags>('FEATURE_FLAGS', {
+  providedIn: 'root',
+  factory: () => ({
+    showGlossary: environment.showGlossary,
+    showForm3: environment.showForm3,
+    showSchedF: environment.showSchedF,
+    enableUnassignedTransactions: environment.enableUnassignedTransactions,
+    enableImport: environment.enableImport,
+    manualReportVersion: environment.manualReportVersion,
+    userCanSetFilingFrequency: environment.userCanSetFilingFrequency,
+  }),
+});

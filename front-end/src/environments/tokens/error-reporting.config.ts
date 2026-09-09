@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { environment } from 'environments/environment';
 
 export interface ErrorReportingConfig {
   enabled: boolean;
@@ -12,4 +13,7 @@ export interface ErrorReportingConfig {
   maxPayloadBytes: number;
 }
 
-export const ERROR_REPORTING_CONFIG = new InjectionToken<ErrorReportingConfig>('ERROR_REPORTING_CONFIG');
+export const ERROR_REPORTING_CONFIG = new InjectionToken<ErrorReportingConfig>('ERROR_REPORTING_CONFIG', {
+  providedIn: 'root',
+  factory: () => environment.errorReporting,
+});

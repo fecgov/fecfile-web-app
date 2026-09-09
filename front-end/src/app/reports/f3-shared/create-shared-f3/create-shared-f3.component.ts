@@ -137,21 +137,25 @@ export class CreateSharedF3Component extends SignalFormComponent<SharedForm3Data
 
   readonly numReportCodeColumns = computed(() => (this.breakpointStore.screenSize() === 'lg' ? 3 : 2));
   readonly reportCodesColumns = computed(() => {
-    const codes = this.reportCodes();
-    const numColumns = this.numReportCodeColumns();
-    const result: ReportCodes[][] = [];
-    let startIndex = 0;
+  const codes = this.reportCodes();
+  const numColumns = this.numReportCodeColumns();
+  const result: { id: string; codes: ReportCodes[] }[] = [];
+  let startIndex = 0;
 
-    for (let i = 0; i < numColumns; i++) {
-      const baseSize = Math.floor(codes.size / numColumns);
-      const extra = i < codes.size % numColumns ? 1 : 0;
-      const colSize = baseSize + extra;
-      const chunk = Array.from(codes).slice(startIndex, startIndex + colSize);
-      result.push(chunk);
-      startIndex += colSize;
-    }
-    return result;
-  });
+  for (let i = 0; i < numColumns; i++) {
+    const baseSize = Math.floor(codes.size / numColumns);
+    const extra = i < codes.size % numColumns ? 1 : 0;
+    const colSize = baseSize + extra;
+    const chunk = Array.from(codes).slice(startIndex, startIndex + colSize);
+    
+    // Create a stable identity key based on the items inside the column
+    const id = `col-${i}-${chunk.join('-')}`;
+    result.push({ id, codes: chunk });
+    
+    startIndex += colSize;
+  }
+  return result;
+});
 
   readonly reportCodeLabelMap = derivedAsync(() => this.activeService.getReportCodeLabelMap());
   constructor() {

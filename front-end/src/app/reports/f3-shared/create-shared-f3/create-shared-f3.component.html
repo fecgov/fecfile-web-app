@@ -27,9 +27,9 @@
         }
 
         <div class="flex gap-20px" role="radiogroup" [attr.aria-label]="filingFrequencyLabel()">
-          @for (reportCodeColumn of reportCodesColumns(); track $index) {
+          @for (column of reportCodesColumns(); track column.id) {
             <div class="flex flex-column gap-20px">
-              @for (reportCode of reportCodeColumn; track reportCode) {
+              @for (reportCode of column.codes; track reportCode) {
                 <div class="p-field-checkbox flex">
                   <p-radioButton
                     [inputId]="reportCode"

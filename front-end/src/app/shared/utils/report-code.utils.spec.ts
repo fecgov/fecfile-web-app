@@ -31,56 +31,57 @@ describe('ReportCodeUtils', () => {
       vi.spyOn(DateUtils, 'isCurrentMonthJanuary').mockReturnValue(true);
 
       // Test for election year
+      const adjustedYear = new Date().getFullYear() - 1;
       let coverage = getCoverageDates(ReportCodes.YE, true, 'Q')!;
       expect(coverage.from).toBeNull();
-      expect((coverage.to as Date).getFullYear()).toBe(2023);
+      expect((coverage.to as Date).getFullYear()).toBe(adjustedYear);
       expect((coverage.to as Date).getMonth()).toBe(11);
       expect((coverage.to as Date).getDate()).toBe(31);
 
       // Test for non-election year with filingFrequency 'Q'
       coverage = getCoverageDates(ReportCodes.YE, false, 'Q')!;
-      expect((coverage.from as Date).getFullYear()).toBe(2023);
+      expect((coverage.from as Date).getFullYear()).toBe(adjustedYear);
       expect((coverage.from as Date).getMonth()).toBe(6);
       expect((coverage.from as Date).getDate()).toBe(1);
-      expect((coverage.to as Date).getFullYear()).toBe(2023);
+      expect((coverage.to as Date).getFullYear()).toBe(adjustedYear);
       expect((coverage.to as Date).getMonth()).toBe(11);
       expect((coverage.to as Date).getDate()).toBe(31);
 
       // Test for non-election year with filingFrequency other than 'Q'
       coverage = getCoverageDates(ReportCodes.YE, false, 'M')!;
-      expect((coverage.from as Date).getFullYear()).toBe(2023);
+      expect((coverage.from as Date).getFullYear()).toBe(adjustedYear);
       expect((coverage.from as Date).getMonth()).toBe(11);
       expect((coverage.from as Date).getDate()).toBe(1);
-      expect((coverage.to as Date).getFullYear()).toBe(2023);
+      expect((coverage.to as Date).getFullYear()).toBe(adjustedYear);
       expect((coverage.to as Date).getMonth()).toBe(11);
       expect((coverage.to as Date).getDate()).toBe(31);
     });
 
     it('should return correct function for YE when current month is not January', () => {
       vi.spyOn(DateUtils, 'isCurrentMonthJanuary').mockReturnValue(false);
-
+      const year = new Date().getFullYear();
       // Test for election year
       let coverage = getCoverageDates(ReportCodes.YE, true, 'Q')!;
       expect(coverage.from).toBeNull();
-      expect((coverage.to as Date).getFullYear()).toBe(2024);
+      expect((coverage.to as Date).getFullYear()).toBe(year);
       expect((coverage.to as Date).getMonth()).toBe(11);
       expect((coverage.to as Date).getDate()).toBe(31);
 
       // Test for non-election year with filingFrequency 'Q'
       coverage = getCoverageDates(ReportCodes.YE, false, 'Q')!;
-      expect((coverage.from as Date).getFullYear()).toBe(2024);
+      expect((coverage.from as Date).getFullYear()).toBe(year);
       expect((coverage.from as Date).getMonth()).toBe(6);
       expect((coverage.from as Date).getDate()).toBe(1);
-      expect((coverage.to as Date).getFullYear()).toBe(2024);
+      expect((coverage.to as Date).getFullYear()).toBe(year);
       expect((coverage.to as Date).getMonth()).toBe(11);
       expect((coverage.to as Date).getDate()).toBe(31);
 
       // Test for non-election year with filingFrequency other than 'Q'
       coverage = getCoverageDates(ReportCodes.YE, false, 'M')!;
-      expect((coverage.from as Date).getFullYear()).toBe(2024);
+      expect((coverage.from as Date).getFullYear()).toBe(year);
       expect((coverage.from as Date).getMonth()).toBe(11);
       expect((coverage.from as Date).getDate()).toBe(1);
-      expect((coverage.to as Date).getFullYear()).toBe(2024);
+      expect((coverage.to as Date).getFullYear()).toBe(year);
       expect((coverage.to as Date).getMonth()).toBe(11);
       expect((coverage.to as Date).getDate()).toBe(31);
     });
@@ -94,11 +95,12 @@ describe('ReportCodeUtils', () => {
     });
 
     it('should return correct function for M3', () => {
+      const to = new Date(new Date().getFullYear(), 2, 0);
       let coverage = getCoverageDates(ReportCodes.M3, true, 'M')!;
       expect((coverage.from as Date).getMonth()).toBe(1);
       expect((coverage.from as Date).getDate()).toBe(1);
-      expect((coverage.to as Date).getMonth()).toBe(1);
-      expect((coverage.to as Date).getDate()).toBe(29);
+      expect((coverage.to as Date).getMonth()).toBe(to.getMonth());
+      expect((coverage.to as Date).getDate()).toBe(to.getDate());
 
       coverage = getCoverageDates(ReportCodes.M3, true, 'M')!;
       expect((coverage.to as Date).getDate()).toBe(28);
@@ -176,33 +178,34 @@ describe('ReportCodeUtils', () => {
       expect((coverage.to as Date).getDate()).toBe(30);
     });
 
-    it('should return undefined for all others', () => {
+    it('should return null for all others', () => {
+      const nullCoverage = { from: null, to: null };
       let result = getCoverageDates(ReportCodes.TER, true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['12G'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['12P'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['12R'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['12S'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['12C'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['30G'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['30R'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
 
       result = getCoverageDates(ReportCodes['30S'], true, 'M');
-      expect(result).toBeUndefined();
+      expect(result).toStrictEqual(nullCoverage);
     });
   });
 });
