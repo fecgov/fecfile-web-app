@@ -12,6 +12,7 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { RouterLink } from '@angular/router';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-contact-list',
@@ -36,6 +37,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
+  showRestoreDeletedContacts = environment.showRestoreDeletedContacts;
   restoreContactsButtonIsVisible = false;
   searchTerm = '';
 
@@ -94,7 +96,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   public async checkForDeletedContacts() {
     const response = await this.deletedContactService.getTableData();
-    this.restoreContactsButtonIsVisible = response.count > 0;
+    this.restoreContactsButtonIsVisible = this.showRestoreDeletedContacts && response.count > 0;
     return this.restoreContactsButtonIsVisible;
   }
 

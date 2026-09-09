@@ -208,6 +208,23 @@ describe('ContactListComponent', () => {
       expect(component.restoreContactsButtonIsVisible).toBe(false);
     });
 
+    it('Restore deleted contacts should not be visible when the feature flag is disabled', async () => {
+      component.showRestoreDeletedContacts = false;
+
+      vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
+        Promise.resolve({
+          count: 1,
+          next: '',
+          previous: '',
+          pageNumber: 1,
+          results: [contact],
+        }),
+      );
+      await component.checkForDeletedContacts();
+
+      expect(component.restoreContactsButtonIsVisible).toBe(false);
+    });
+
     it('#loadTableItems updates restore button visibility', async () => {
       vi.spyOn(service, 'getTableData').mockReturnValue(Promise.resolve(tableDataResponse));
       vi.spyOn(deletedContactService, 'getTableData').mockResolvedValue({
