@@ -43,7 +43,7 @@ export class Form24 extends Report {
     return plainToInstance(Form24, json);
   }
 
-  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean, manualReportVersion: boolean): MenuItem[] {
     const transactionItems: MenuItem[] = [
       MenuInfo.manageTransactions(this),
       {
@@ -64,7 +64,7 @@ export class Form24 extends Report {
 
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
       const items = [MenuInfo.editReport(sidebarSection, this, 'Edit report details')];
-      if (environment.manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
+      if (manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
       menuItems.unshift({
         label: 'REPORT DETAILS',
         expanded: sidebarSection === ReportSidebarSection.EDIT,

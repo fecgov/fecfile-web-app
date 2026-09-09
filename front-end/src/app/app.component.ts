@@ -6,9 +6,10 @@ import { RouterOutlet } from '@angular/router';
 import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { GlossaryComponent } from './shared/components/glossary/glossary.component';
-import { environment } from 'environments/environment';
+
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 @Component({
   selector: 'app-root',
@@ -28,5 +29,5 @@ import { CommitteeMemberService } from 'app/shared/services/committee-member.ser
 export class AppComponent {
   protected readonly elementRef = inject(ElementRef);
   readonly memberService = inject(CommitteeMemberService);
-  readonly showGlossary = environment.showGlossary;
+  readonly showGlossary = inject(FEATURE_FLAGS).showGlossary;
 }

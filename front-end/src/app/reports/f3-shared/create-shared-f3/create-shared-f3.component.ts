@@ -20,7 +20,6 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
-import { environment } from 'environments/environment';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
@@ -36,6 +35,7 @@ import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 import { F3FormTypes, Form3 } from 'app/shared/models/reports/form-3.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 export enum ReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
@@ -78,7 +78,7 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   // CONSTANTS & FORM DEFINITION
   readonly year = new Date().getFullYear();
-  readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
+  readonly userCanSetFilingFrequency: boolean = inject(FEATURE_FLAGS).userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
   readonly formProperties: string[] = [
