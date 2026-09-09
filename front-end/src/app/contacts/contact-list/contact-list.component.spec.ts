@@ -87,6 +87,7 @@ describe('ContactListComponent', () => {
 
   describe('typical', () => {
     beforeEach(() => {
+      component.showRestoreDeletedContacts = true;
       fixture.detectChanges();
     });
 
