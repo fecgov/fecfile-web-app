@@ -113,7 +113,7 @@ export class Form24SignalSchema {
       this.validateF24Name(schemaPath, excludeReportIds);
     });
 
-  private createNameResource = (
+  private readonly createNameResource = (
     nameReportIdsSignal: Signal<{ fullName: string; excludeReportIds: string } | undefined>,
   ) => {
     return rxResource({
@@ -136,9 +136,9 @@ export class Form24SignalSchema {
         return response.valid
           ? null
           : {
-              kind: 'exists',
-              message: 'This name is already in use. Please choose a different name.',
-            };
+            kind: 'exists',
+            message: 'This name is already in use. Please choose a different name.',
+          };
       },
       onError: () => ({
         kind: 'requestFailed',
