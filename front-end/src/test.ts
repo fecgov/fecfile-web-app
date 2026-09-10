@@ -90,3 +90,16 @@ globalThis.ResizeObserver = class ResizeObserverMock {
 globalThis.window.scrollTo = vi.fn();
 
 Object.defineProperty(globalThis.URL, 'createObjectURL', { writable: true, value: vi.fn() });
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  }),
+});

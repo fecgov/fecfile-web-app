@@ -8,6 +8,7 @@ import { SharedTemplatesComponent } from '../shared-templates.component';
 @Component({
   selector: 'app-form3-list',
   imports: [TableComponent, SharedTemplatesComponent],
+  providers: [Form3Service],
   templateUrl: './form3-list.component.html',
 })
 export class Form3ListComponent extends AbstractFormListComponent<Form3> {

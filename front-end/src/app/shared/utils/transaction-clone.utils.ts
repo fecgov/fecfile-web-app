@@ -107,13 +107,13 @@ export function buildClonedTransaction(source: ScheduleTransaction, reportId: st
   }
 
   if ('transaction_id_number' in clone) {
-    (clone as unknown as Record<string, unknown>)['transaction_id_number'] = undefined;
+    clone['transaction_id_number'] = undefined;
   }
   if ('reattribution_redesignation_tag' in clone) {
-    (clone as unknown as Record<string, unknown>)['reattribution_redesignation_tag'] = undefined;
+    clone['reattribution_redesignation_tag'] = undefined;
   }
   if ('reatt_redes_total' in clone) {
-    (clone as unknown as Record<string, unknown>)['reatt_redes_total'] = undefined;
+    clone['reatt_redes_total'] = undefined;
   }
 
   for (const derivedField of [
@@ -129,8 +129,6 @@ export function buildClonedTransaction(source: ScheduleTransaction, reportId: st
   }
 
   resetCloneMemoText(clone, reportId);
-
-  clone.setMetaProperties(source.transactionType);
 
   return clone;
 }

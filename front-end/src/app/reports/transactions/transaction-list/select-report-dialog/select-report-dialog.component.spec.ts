@@ -4,18 +4,21 @@ import { SelectReportDialogComponent } from './select-report-dialog.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testActiveReport, testMockStore, testScheduleATransaction } from '../../../../shared/utils/unit-test.utils';
 import { F3xFormTypes, Form3X } from '../../../../shared/models/reports/form-3x.model';
-import { ReattRedesTypes, ReattRedesUtils } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
+import { ReattRedesTypes } from '../../../../shared/utils/reatt-redes/reatt-redes.utils';
 import { Form3XService } from '../../../../shared/services/form-3x.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
+import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 
 describe('SelectReportDialogComponent', () => {
   let component: SelectReportDialogComponent;
   let fixture: ComponentFixture<SelectReportDialogComponent>;
   let service: Form3XService;
   let futureSpy: Mock;
+  let reatRedesStore: ReattRedesStore;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SelectReportDialogComponent],
@@ -24,10 +27,15 @@ describe('SelectReportDialogComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockStore(testMockStore()),
+        Form3XService,
+        { provide: FORM_3_SERVICE, useClass: Form3XService },
+        ReattRedesStore,
       ],
-    });
-    service = TestBed.inject(Form3XService);
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SelectReportDialogComponent);
+    service = fixture.debugElement.injector.get(Form3XService);
+    reatRedesStore = TestBed.inject(ReattRedesStore);
     component = fixture.componentInstance;
     fixture.detectChanges();
     const data = {
@@ -38,6 +46,9 @@ describe('SelectReportDialogComponent', () => {
     };
 
     futureSpy = vi.spyOn(service, 'getFutureReports').mockResolvedValue([Form3X.fromJSON(data)]);
+    fixture = TestBed.createComponent(SelectReportDialogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -57,12 +68,12 @@ describe('SelectReportDialogComponent', () => {
       force_unaggregated: true,
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
+    await reatRedesStore.setTransaction(transaction, ReattRedesTypes.REATTRIBUTED);
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(component.transaction()).toBeTruthy();
+    expect(reatRedesStore.transaction()).toBeTruthy();
     expect(futureSpy).toHaveBeenCalled();
-    expect(component.availableReports().length).toBe(1);
+    expect(reatRedesStore.futureReports()!).toHaveLength(1);
   });
 
   it('should clear and close on cancel', async () => {
@@ -78,15 +89,16 @@ describe('SelectReportDialogComponent', () => {
       force_unaggregated: true,
       report_type: 'Form 3X',
     } as unknown as TransactionListRecord;
-    ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-    expect(component.transaction()).toBeTruthy();
+    await reatRedesStore.setTransaction(transaction, ReattRedesTypes.REATTRIBUTED);
+    expect(reatRedesStore.transaction()).toBeTruthy();
 
     component.cancel();
-    expect(component.transaction()).toBeFalsy();
+    fixture.detectChanges();
+    expect(reatRedesStore.transaction()).toBeFalsy();
   });
 
   describe('reattRedes', () => {
-    it("should determine if it's a reattribution of redesignation", () => {
+    it("should determine if it's a reattribution of redesignation", async () => {
       const transaction: TransactionListRecord = {
         ...testScheduleATransaction(),
         name: 'TEST',
@@ -99,23 +111,24 @@ describe('SelectReportDialogComponent', () => {
         force_unaggregated: true,
         report_type: 'Form 3X',
       } as unknown as TransactionListRecord;
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-      expect(component.actionLabel()).toBe('reattribute');
-      expect(component.urlParameter()).toBe('reattribution');
-      expect(component.actionTargetLabel()).toBe('contributor');
+      await reatRedesStore.setTransaction(transaction, ReattRedesTypes.REATTRIBUTED);
+      expect(reatRedesStore.actionLabel()).toBe('reattribute');
+      expect(reatRedesStore.nounLabel()).toBe('reattribution');
+      expect(reatRedesStore.actionTargetLabel()).toBe('contributor');
 
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REDESIGNATED]);
-      expect(component.actionLabel()).toBe('redesignate');
-      expect(component.urlParameter()).toBe('redesignation');
-      expect(component.actionTargetLabel()).toBe('election');
+      await reatRedesStore.setTransaction(transaction, ReattRedesTypes.REDESIGNATED);
+      expect(reatRedesStore.actionLabel()).toBe('redesignate');
+      expect(reatRedesStore.nounLabel()).toBe('redesignation');
+      expect(reatRedesStore.actionTargetLabel()).toBe('election');
     });
   });
 
   describe('createReattribution', () => {
     it('should throw error if no base transaction', async () => {
-      ReattRedesUtils.selectReportDialogSubject.next(undefined);
+      reatRedesStore.clearTransaction();
+      fixture.detectChanges();
       try {
-        expect(component.transaction()).toBeFalsy();
+        expect(reatRedesStore.transaction()).toBeFalsy();
         await component.createReattribution();
       } catch (error) {
         expect(error).toEqual(new Error('No base transaction'));
@@ -136,8 +149,10 @@ describe('SelectReportDialogComponent', () => {
         force_unaggregated: true,
         report_type: 'Form 3X',
       } as unknown as TransactionListRecord;
-      ReattRedesUtils.selectReportDialogSubject.next([transaction, ReattRedesTypes.REATTRIBUTED]);
-      component.selectedReport = component.availableReports()[0];
+      await reatRedesStore.setTransaction(transaction, ReattRedesTypes.REATTRIBUTED);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      component.selectedReport = reatRedesStore.futureReports()![0];
       component.selectedReport = testActiveReport();
       try {
         await component.createReattribution();

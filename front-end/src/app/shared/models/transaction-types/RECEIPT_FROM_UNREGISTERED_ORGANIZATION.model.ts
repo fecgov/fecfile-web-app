@@ -3,11 +3,12 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/RECEIPT_FROM_U
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
+import { ELECTION_FIELDS, ORGANIZATION, ORGANIZATION_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '..';
 import { AggregationGroups } from '../transaction.model';
-import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchATransactionType {
-  formFields = ORGANIZATION_FORM_FIELDS;
+  formFields = [...ORGANIZATION_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
@@ -20,6 +21,10 @@ export class RECEIPT_FROM_UNREGISTERED_ORGANIZATION extends SchATransactionType 
   }
 
   override isCloneableTransactionType = true;
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
+  }
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

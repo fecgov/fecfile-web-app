@@ -2,7 +2,7 @@
 @let backgroundStyle = layoutControls().backgroundStyle;
 <div id="page-container" [class]="[backgroundStyle]" [class.environment-hidden]="!environmentBannerVisible()">
   <app-environment-banner #environmentBanner />
-  <app-banner />
+  <app-banner #bannerRef />
   @if (layoutControls().showHeader) {
     <app-header [headerStyle]="layoutControls().headerStyle" />
   }

@@ -1,47 +1,10 @@
-<div [class.security-container]="showForm" [class.standard-container]="showForm" [class.notice-box]="!showForm">
-  <div class="header">
-    <h1>Terms of service and user agreement</h1>
-  </div>
-  <div [class.notice-box-form]="showForm" (scroll)="onScroll($event)">
+<div [class.security-container]="showForm()" [class.standard-container]="showForm()" [class.notice-box]="!showForm()">
+  <h1 class="header">Terms of service and user agreement</h1>
+  <div [class.notice-box-form]="showForm()" (scroll)="onScroll($event)">
     <ng-container *ngComponentOutlet="componentToLoad"></ng-container>
   </div>
 
-  @if (showForm) {
-    <div class="footer">
-      <hr type="solid" />
-      <form [formGroup]="form">
-        <div class="field-row">
-          <p-checkbox
-            formControlName="security-consent-annual"
-            [binary]="true"
-            [disabled]="!hasScrolledToBottom()"
-            inputId="security-consent-annual"
-            ariaLabel="You consent to the security notification for one year"
-          />
-          <label for="security-consent-annual" class="p-checkbox-label" [class.p-disabled]="!hasScrolledToBottom()">
-            You consent to the security notification for one year
-          </label>
-        </div>
-      </form>
-      <div class="flex justify-content-center gap-6">
-        <p-button
-          [pt]="{ root: 'security-button' }"
-          severity="secondary"
-          label="Decline and exit"
-          (click)="loginService.logOut()"
-          (keypress)="loginService.logOut()"
-        />
-        <p-button
-          [pt]="{ root: 'security-button' }"
-          data-cy="consent-button"
-          label="Consent"
-          [disabled]="!hasScrolledToBottom()"
-          (click)="signConsentForm()"
-          (keypress)="signConsentForm()"
-        />
-      </div>
-    </div>
-
-    <div class="consent-box"></div>
+  @if (showForm()) {
+    <app-security-notice-form [hasScrolledToBottom]="hasScrolledToBottom()" />
   }
 </div>

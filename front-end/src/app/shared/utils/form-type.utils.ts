@@ -1,11 +1,11 @@
 import { ReportTypes } from '../models';
 
 export class FormType {
-  code: string;
+  code: ReportTypes;
   label: string;
   description: string;
 
-  constructor(code: string, label: string, description: string) {
+  constructor(code: ReportTypes, label: string, description: string) {
     this.code = code;
     this.label = label;
     this.description = description;

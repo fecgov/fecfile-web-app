@@ -2079,6 +2079,9 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   background: var(--p-content-background);
   transition: box-shadow 0.15s;
 }
+.p-datatable .p-datatable-thead > tr > td {
+  border-block: 2px solid;
+}
 .p-datatable .p-datatable-tfoot > tr > td {
   text-align: left;
   padding: 10px;
@@ -2898,6 +2901,16 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton {
   color: var(--primary-color);
 }
 .p-menu-item.p-focus .p-menu-item-content {
+  border-left: 5px solid var(--primary-color);
+  border-radius: 0;
+  font-weight: 700;
+}
+
+.p-menu-item.inactive-menu-item .p-menu-item-content {
+  border-left: none !important;
+  font-weight: normal !important;
+}
+.p-menu-item.active-menu-item .p-menu-item-content {
   border-left: 5px solid var(--primary-color);
   border-radius: 0;
   font-weight: 700;
