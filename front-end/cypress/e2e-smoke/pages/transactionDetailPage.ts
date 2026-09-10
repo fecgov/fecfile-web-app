@@ -364,6 +364,7 @@ export class TransactionDetailPage {
       PageUtils.clickButton('Save & add loan guarantor');
       cy.wait('@saveGuarantor');
       PageUtils.closeToast();
+      cy.waitForNetworkIdle(1000);
       PageUtils.urlCheck('create-sub-transaction' + '/C2_LOAN_GUARANTOR');
       this.clickCancel();
     };
