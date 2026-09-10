@@ -1,6 +1,6 @@
 <ul class="flex">
   <li><a routerLink="/reports">Reports</a></li>
-  @if (showAllTransactionsPage) {
+  @if (enableUnassignedTransactions) {
     <li><a routerLink="/transactions">Transactions</a></li>
   }
   <li><a routerLink="/contacts">Contacts</a></li>

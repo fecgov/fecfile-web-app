@@ -7,10 +7,7 @@ export const environment = createEnvironment({
   baseUri: 'https://api.fecfile.fec.gov',
   overrides: {
     ffapiTimeoutCookieName: 'ffapi_timeout_prod',
-    showForm3: false,
-    showSchedF: false,
-    enableImport: false,
-    manualReportVersion: false,
+
     errorReporting: {
       ...baseEnvironment.errorReporting,
       sampleRates: {
@@ -18,5 +15,11 @@ export const environment = createEnvironment({
         http4xx: 0.05,
       },
     },
+  },
+  featureFlags: {
+    showForm3: false,
+    showSchedF: false,
+    enableImport: false,
+    manualReportVersion: false,
   },
 });

@@ -12,7 +12,7 @@
 
   <h2>Report type</h2>
 
-  @if (isF3X() && userCanSetFilingFrequency) {
+  @if (isF3X() && featureFlags.userCanSetFilingFrequency) {
     <div class="field">
       <label for="filing_frequency">REPORTING FREQUENCY</label>
       <p-selectButton
@@ -96,25 +96,28 @@
   <app-save-cancel (save)="submitForm($event)" (cancelForm)="router.navigateByUrl('/reports')" />
 </form>
 
-<app-dialog
-  [(visible)]="coverageDatesDialogVisible"
-  header="Can’t save report"
-  (reject)="onHide()"
-  tabindex="-1"
-  aria-labelledby="dialog-title"
->
-  <p class="mb-0">
-    Some transactions would now fall outside your new coverage dates. To fix this, delete those transactions.
-  </p>
-  <ng-container dialog-footer #dialogFooterRef>
-    <div class="flex justify-content-center">
-      <p-button
-        type="button"
-        label="Manage your transactions"
-        class="p-button-primary dialog-button"
-        [routerLink]="['/reports/transactions/report', reportId(), 'list']"
-        [autofocus]="true"
-      ></p-button>
-    </div>
-  </ng-container>
-</app-dialog>
+<!-- This can go away after unassigned transactions are no longer feature flagged -->
+@if (!featureFlags.enableUnassignedTransactions) {
+  <app-dialog
+    [(visible)]="coverageDatesDialogVisible"
+    header="Can’t save report"
+    (reject)="onHide()"
+    tabindex="-1"
+    aria-labelledby="dialog-title"
+  >
+    <p class="mb-0">
+      Some transactions would now fall outside your new coverage dates. To fix this, delete those transactions.
+    </p>
+    <ng-container dialog-footer #dialogFooterRef>
+      <div class="flex justify-content-center">
+        <p-button
+          type="button"
+          label="Manage your transactions"
+          class="p-button-primary dialog-button"
+          [routerLink]="['/reports/transactions/report', reportId(), 'list']"
+          [autofocus]="true"
+        ></p-button>
+      </div>
+    </ng-container>
+  </app-dialog>
+}

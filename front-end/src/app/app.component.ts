@@ -6,9 +6,10 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { GlossaryComponent } from './shared/components/glossary/glossary.component';
-import { environment } from 'environments/environment';
+
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 import { Store } from '@ngrx/store';
 import { singleClickEnableAction } from './store/single-click.actions';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -32,7 +33,7 @@ import { map } from 'rxjs';
 export class AppComponent {
   protected readonly elementRef = inject(ElementRef);
   readonly memberService = inject(CommitteeMemberService);
-  readonly showGlossary = environment.showGlossary;
+  readonly showGlossary = inject(FEATURE_FLAGS).showGlossary;
   private readonly store = inject(Store);
   private readonly router = inject(Router);
 

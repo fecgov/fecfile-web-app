@@ -6,8 +6,8 @@ export const environment = createEnvironment({
   environmentBanner: undefined,
   externalLinks: 'prod',
   baseUri: 'http://localhost:8080',
-  overrides: {
+  featureFlags: {
     showGlossary: true,
-    showAllTransactionsPage: true,
+    enableUnassignedTransactions: true,
   },
 });
