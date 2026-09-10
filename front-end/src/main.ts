@@ -178,7 +178,7 @@ bootstrapApplication(AppComponent, {
       inject(FrontendErrorReportingService).initializeGlobalListeners();
     }),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.showGlossary },
+    { provide: USE_DYNAMIC_SIDEBAR, useValue: environment.featureFlags.showGlossary },
     { provide: ErrorHandler, useClass: FrontendGlobalErrorHandlerService },
   ],
 }).catch((err) => console.log(err));

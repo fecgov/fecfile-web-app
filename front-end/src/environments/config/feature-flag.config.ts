@@ -13,13 +13,5 @@ export interface FeatureFlags {
 
 export const FEATURE_FLAGS = new InjectionToken<FeatureFlags>('FEATURE_FLAGS', {
   providedIn: 'root',
-  factory: () => ({
-    showGlossary: environment.showGlossary,
-    showForm3: environment.showForm3,
-    showSchedF: environment.showSchedF,
-    enableUnassignedTransactions: environment.enableUnassignedTransactions,
-    enableImport: environment.enableImport,
-    manualReportVersion: environment.manualReportVersion,
-    userCanSetFilingFrequency: environment.userCanSetFilingFrequency,
-  }),
+  factory: () => ({ ...environment.featureFlags }),
 });
