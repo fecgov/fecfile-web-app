@@ -4,7 +4,6 @@ import { committeeGuard } from './shared/guards/committee.guard';
 import { nameGuard } from './shared/guards/name.guard';
 import { loggedInGuard } from './shared/guards/logged-in.guard';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
-import { SingleClickResolver } from './shared/resolvers/single-click.resolver';
 import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
 import { UnassociatedTransactionListComponent } from './unassociated-transaction-list/unassociated-transaction-list.component';
@@ -16,7 +15,6 @@ export const ROUTES: Route[] = [
   {
     path: '',
     component: LayoutComponent,
-    resolve: { singleClick: SingleClickResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {

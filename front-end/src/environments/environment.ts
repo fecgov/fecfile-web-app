@@ -7,5 +7,5 @@ export const environment = createEnvironment({
   baseUri: 'http://localhost:8080',
   featureFlags: {
     showGlossary: true,
-  }
+  },
 });

@@ -2,7 +2,7 @@ import { Component, ElementRef, inject } from '@angular/core';
 import { PollerComponent } from './shared/components/poller/poller.component';
 import { Toast } from 'primeng/toast';
 import { DownloadTrayComponent } from './shared/components/download-tray/download-tray.component';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { SecondCommitteeAdminDialogComponent } from './shared/components/second-committee-admin-dialog/second-committee-admin-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { GlossaryComponent } from './shared/components/glossary/glossary.component';
@@ -10,6 +10,10 @@ import { GlossaryComponent } from './shared/components/glossary/glossary.compone
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
 import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
+import { Store } from '@ngrx/store';
+import { singleClickEnableAction } from './store/single-click.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,4 +34,16 @@ export class AppComponent {
   protected readonly elementRef = inject(ElementRef);
   readonly memberService = inject(CommitteeMemberService);
   readonly showGlossary = inject(FEATURE_FLAGS).showGlossary;
+  private readonly store = inject(Store);
+  private readonly router = inject(Router);
+
+  private readonly navigationEnd = toSignal(
+    this.router.events.pipe(
+      map((event) => {
+        if (event instanceof NavigationEnd) {
+          this.store.dispatch(singleClickEnableAction());
+        }
+      }),
+    ),
+  );
 }
