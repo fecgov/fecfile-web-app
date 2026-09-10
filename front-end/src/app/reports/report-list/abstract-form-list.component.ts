@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, signal, viewChild } from '@angular/core';
+import { computed, Directive, inject, Signal, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
@@ -10,7 +10,7 @@ import { ReportService } from 'app/shared/services/report.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { SharedTemplatesComponent } from './shared-templates.component';
 
-@Component({ template: '' })
+@Directive()
 export abstract class AbstractFormListComponent<T extends Report> extends TableListBaseComponent<T> {
   protected abstract override readonly itemService: ReportService<T>;
   protected readonly router = inject(Router);

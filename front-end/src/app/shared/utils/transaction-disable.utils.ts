@@ -1,10 +1,10 @@
 import { ReportTypes } from 'app/shared/models/reports/report.model';
-import { TransactionTypes } from 'app/shared/models/transaction.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { ScheduleCTransactionTypes } from 'app/shared/models/schc-transaction.model';
 import { ScheduleDTransactionTypes } from 'app/shared/models/schd-transaction.model';
 import { ScheduleFTransactionTypes } from 'app/shared/models/schf-transaction.model';
+import { TransactionTypes } from 'app/shared/models/transaction.model';
 
 // Add transaction types per report type to disable them.
 export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<TransactionTypes>>> = {
@@ -15,14 +15,10 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
     ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION,
-    ScheduleATransactionTypes.RECEIPT_FROM_UNREGISTERED_ORGANIZATION_RETURN,
     // CONTRIBUTIONS FROM REGISTERED FILERS
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
-    ScheduleATransactionTypes.PAC_RECEIPT,
     ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
     ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
-    ScheduleATransactionTypes.PAC_RETURN,
     ScheduleATransactionTypes.CONTRIBUTION_FROM_CANDIDATE,
     ScheduleATransactionTypes.IN_KIND_CONTRIBUTION_FROM_CANDIDATE,
     // TRANSFERS

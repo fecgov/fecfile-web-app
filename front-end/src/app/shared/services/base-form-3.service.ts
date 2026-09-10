@@ -7,10 +7,8 @@ import { CommitteeAccount } from '../models';
 
 export const FORM_3_SERVICE = new InjectionToken<BaseForm3Service<BaseForm3>>('FORM_3_SERVICE');
 
-@Injectable({
-  providedIn: 'root',
-})
-export class BaseForm3Service<T extends BaseForm3> extends ReportService<T> {
+@Injectable()
+export abstract class BaseForm3Service<T extends BaseForm3> extends ReportService<T> {
   reportCodeLabelMap$ = new BehaviorSubject<{ [key in ReportCodes]: string } | undefined>(undefined);
 
   public async getCoverageDates(): Promise<CoverageDates[]> {

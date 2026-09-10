@@ -387,10 +387,10 @@ describe('ContactLookupComponent', () => {
         employer: '',
         occupation: '',
         candidate_office: candidate.office,
-        candidate_state: candidate.state === 'US' ? '' : candidate.state,
-        candidate_district: candidate.state === 'US' || candidate.office === 'S' ? '' : candidate.district,
+        candidate_state: candidate.state === 'US' ? undefined : candidate.state,
+        candidate_district: candidate.state === 'US' || candidate.office === 'S' ? undefined : candidate.district,
       });
-      vi.spyOn(contactService, 'create').mockResolvedValue(contact);
+      const createSpy = vi.spyOn(contactService, 'create').mockResolvedValue(contact);
       const getCandidateDetailsSpy = vi
         .spyOn(component.contactService, 'getCandidateDetails')
         .mockResolvedValue(candidate);
@@ -400,6 +400,11 @@ describe('ContactLookupComponent', () => {
       await fixture.whenStable();
       expect(getCandidateDetailsSpy).toHaveBeenCalledTimes(1);
       expect(getCandidateDetailsSpy).toHaveBeenCalledWith(testFecApiCandidateLookupData.candidate_id!);
+
+      const payload = createSpy.mock.calls[0]?.[0];
+      expect(payload).toBeTruthy();
+      expect(payload?.candidate_state).not.toBe('');
+      expect(payload?.candidate_district).not.toBe('');
     }
 
     it('should work with candidate name only', async () => {
@@ -492,8 +497,8 @@ describe('ContactLookupComponent', () => {
         Contact.fromJSON({
           ...baseContact,
           candidate_office: 'H',
-          candidate_state: '',
-          candidate_district: '',
+          candidate_state: undefined,
+          candidate_district: undefined,
         }),
       );
     });
@@ -517,7 +522,7 @@ describe('ContactLookupComponent', () => {
           ...baseContact,
           candidate_office: 'S',
           candidate_state: 'AZ',
-          candidate_district: '',
+          candidate_district: undefined,
         }),
       );
     });
