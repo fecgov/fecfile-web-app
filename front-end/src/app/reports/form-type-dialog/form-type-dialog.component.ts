@@ -6,7 +6,7 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
 import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
-import { Form24, Form24Data, Form24Validation } from 'app/shared/models/reports/form-24.model';
+import { Form24, Form24Data, Form24SignalSchema } from 'app/shared/models/reports/form-24.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
@@ -33,7 +33,7 @@ export class FormTypeDialogComponent {
   readonly router = inject(Router);
   readonly store = inject(Store);
   private readonly form24Service = inject(Form24Service);
-  private readonly form24Validation = inject(Form24Validation);
+  private readonly form24SignalSchema = inject(Form24SignalSchema);
   readonly formTypeOptions = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[1]);
   readonly filteredOptions = computed(() => {
     const options = this.formTypeOptions.filter((type) => this.eligibleReportTypes().has(type.code));
@@ -55,7 +55,7 @@ export class FormTypeDialogComponent {
     required(schemaPath.type, { message: requiredMessage });
     hidden(schemaPath.f24, ({ valueOf }) => valueOf(schemaPath.type) !== ReportTypes.F24);
     hidden(schemaPath.f24.typelessName, ({ valueOf }) => valueOf(schemaPath.f24.type) === null);
-    apply(schemaPath.f24, this.form24Validation.form24Schema());
+    apply(schemaPath.f24, this.form24SignalSchema.form24Schema());
   });
 
   readonly eligibleReportTypes = computed(() => {
@@ -80,7 +80,7 @@ export class FormTypeDialogComponent {
           const { type, f24 } = this.reportForm().value();
           if (type === ReportTypes.F24) {
             const form24 = Form24.fromJSON({
-              name: this.form24Validation.buildF24Name(f24.type!, f24.typelessName),
+              name: this.form24SignalSchema.buildF24Name(f24.type!, f24.typelessName),
               report_type_24_48: this.reportForm.f24.type().value(),
               street_1: this.committeeAccount().street_1,
               street_2: this.committeeAccount().street_2,

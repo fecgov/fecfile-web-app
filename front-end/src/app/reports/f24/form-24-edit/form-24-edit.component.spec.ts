@@ -3,14 +3,14 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form24Validation } from 'app/shared/models';
+import { Form24SignalSchema } from 'app/shared/models';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { testF24, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { Form24EditComponent } from './form-24-edit.component';
-import { environment } from 'environments/environment';
 
 describe('Form24EditComponent', () => {
   let component: Form24EditComponent;
@@ -28,7 +28,7 @@ describe('Form24EditComponent', () => {
         provideHttpClientTesting(),
         Form24Service,
         MessageService,
-        Form24Validation,
+        Form24SignalSchema,
         provideMockStore({
           ...testMockStore(),
           selectors: [{ selector: selectActiveReport, value: testF24() }],

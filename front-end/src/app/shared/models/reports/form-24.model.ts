@@ -100,7 +100,7 @@ export interface Form24Validation {
 @Injectable({
   providedIn: 'root',
 })
-export class Form24Validation {
+export class Form24SignalSchema {
   private readonly form24Service = inject(Form24Service);
 
   buildF24Name = (type: Type24_48 | null, name: string) => `${type}-Hour: ${name}`;

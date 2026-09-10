@@ -6,7 +6,7 @@ import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-canc
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
-import { Form24, Form24Validation, Type24_48 } from 'app/shared/models/reports/form-24.model';
+import { Form24, Form24SignalSchema, Type24_48 } from 'app/shared/models/reports/form-24.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { form24Options } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -30,7 +30,7 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
   protected readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
   private readonly form24Service = inject(Form24Service);
-  private readonly form24Validation = inject(Form24Validation);
+  private readonly form24SignalSchema = inject(Form24SignalSchema);
   private readonly store = inject(Store);
 
   private readonly activeReport = this.store.selectSignal(selectActiveReport);
@@ -42,7 +42,7 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
 
   readonly model = signal<Form24Data>({ type: null, typelessName: '' });
   readonly form = form(this.model, (schemaPath) => {
-    apply(schemaPath, this.form24Validation.form24Schema(this.report().id));
+    apply(schemaPath, this.form24SignalSchema.form24Schema(this.report().id));
   });
 
   constructor() {
@@ -70,7 +70,7 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
           const { type, typelessName } = this.form().value();
           const payload = Form24.fromJSON({
             ...this.report()!,
-            name: this.form24Validation.buildF24Name(type!, typelessName),
+            name: this.form24SignalSchema.buildF24Name(type!, typelessName),
           });
           await this.form24Service.update(payload, ['name']);
 

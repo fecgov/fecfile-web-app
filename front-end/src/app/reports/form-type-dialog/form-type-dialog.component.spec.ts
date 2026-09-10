@@ -3,7 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Form24, Form24Validation } from 'app/shared/models/reports/form-24.model';
+import { Form24, Form24SignalSchema } from 'app/shared/models/reports/form-24.model';
 import { Form3X } from 'app/shared/models/reports/form-3x.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -34,7 +34,7 @@ describe('FormTypeDialogComponent', () => {
         Form24Service,
         provideMockStore(testMockStore()),
         MessageService,
-        Form24Validation,
+        Form24SignalSchema,
         {
           provide: ActivatedRoute,
           useValue: {
