@@ -110,4 +110,17 @@ describe('ReportService', () => {
     req.flush(form3X);
     httpTestingController.verify();
   });
+
+  it('#getAllReports() happy path', async () => {
+    const mockResponse = [Form3X.fromJSON({ id: 1 }), Form3X.fromJSON({ id: 2 })];
+
+    service.getAllReports().then((response) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/reports/?page=1`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
 });

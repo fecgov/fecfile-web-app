@@ -1,13 +1,25 @@
+import { inject, Injectable, Signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import {
+  ChildFieldContext,
+  debounce,
+  metadata,
+  PathKind,
+  required,
+  schema,
+  SchemaPathTree,
+  validateAsync,
+} from '@angular/forms/signals';
+import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 import { plainToInstance, Transform } from 'class-transformer';
+import { environment } from 'environments/environment';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
+import { MenuItem } from 'primeng/api';
+import { from } from 'rxjs';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
-import { ReportSidebarSection, MenuInfo } from 'app/layout/sidebar/menu-info';
-import { MenuItem } from 'primeng/api';
-import { environment } from 'environments/environment';
-import { Signal } from '@angular/core';
-import { ChildFieldContext, metadata, PathKind, required, schema, SchemaPath, validate } from '@angular/forms/signals';
-import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 
 export type Type24_48 = '24' | '48';
 
@@ -80,38 +92,58 @@ export interface Form24Data {
   type: Type24_48 | null;
   typelessName: string;
 }
-interface UniqueNameOptions {
-  existingNames: Signal<Set<string>>;
+
+export interface Form24Validation {
+  valid: boolean;
 }
-export const buildF24Name = (type: Type24_48, name: string) => `${type}-Hour: ${name}`;
-export const form24Schema = (options: UniqueNameOptions) =>
-  schema<Form24Data>((schemaPath) => {
-    required(schemaPath.type, { message: 'This is a required field' });
-    required(schemaPath.typelessName, { message: 'This is a required field' });
-    metadata(schemaPath.typelessName, PLACEHOLDER, () => 'Provide a custom report name');
-    validate(
-      schemaPath.typelessName,
-      uniqueForm24Name(
-        {
-          existingNames: options.existingNames,
-        },
-        schemaPath.type,
-      ),
-    );
-  });
 
-function uniqueForm24Name(options: UniqueNameOptions, typeField: SchemaPath<Type24_48 | null, 1, PathKind.Child>) {
-  return (ctx: ChildFieldContext<string>) => {
-    const type = ctx.valueOf(typeField);
-    if (!type) return null;
-    const fullName = buildF24Name(type, ctx.value());
+@Injectable({
+  providedIn: 'root',
+})
+export class Form24SignalSchema {
+  private readonly form24Service = inject(Form24Service);
 
-    if (options.existingNames().has(fullName)) {
-      return {
-        kind: 'exists',
-        message: 'This name is already in use. Please choose a different name.',
-      };
-    }
-    return null;
+  buildF24Name = (type: Type24_48 | null, name: string) => `${type}-Hour: ${name}`;
+  form24Schema = (excludeReportIds?: string) =>
+    schema<Form24Data>((schemaPath) => {
+      debounce(schemaPath.typelessName, 500);
+      required(schemaPath.type, { message: 'This is a required field' });
+      required(schemaPath.typelessName, { message: 'This is a required field' });
+      metadata(schemaPath.typelessName, PLACEHOLDER, () => 'Provide a custom report name');
+      this.validateF24Name(schemaPath, excludeReportIds);
+    });
+
+  private readonly createNameResource = (
+    nameReportIdsSignal: Signal<{ fullName: string; excludeReportIds: string } | undefined>,
+  ) => {
+    return rxResource({
+      params: () => nameReportIdsSignal(),
+      stream: ({ params: { fullName, excludeReportIds } }) =>
+        from(this.form24Service.nameValidationCheck(fullName, excludeReportIds)),
+    });
   };
+
+  private validateF24Name(schemaPath: SchemaPathTree<Form24Data, PathKind.Root>, excludeReportIds?: string) {
+    return validateAsync(schemaPath.typelessName, {
+      params: (ctx: ChildFieldContext<string>) => {
+        const type = ctx.valueOf(schemaPath.type);
+        const typelessName = ctx.value();
+        const fullName = this.buildF24Name(type, typelessName);
+        return { fullName: fullName, excludeReportIds: excludeReportIds || '' };
+      },
+      factory: this.createNameResource,
+      onSuccess: (response: { valid: boolean }) => {
+        return response.valid
+          ? null
+          : {
+              kind: 'exists',
+              message: 'This name is already in use. Please choose a different name.',
+            };
+      },
+      onError: () => ({
+        kind: 'requestFailed',
+        message: 'Unable to reach server to validate.',
+      }),
+    });
+  }
 }

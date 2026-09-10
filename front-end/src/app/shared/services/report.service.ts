@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { VersionData } from 'app/reports/shared/update-version-number/version-data';
 import { setActiveReportAction } from 'app/store/active-report.actions';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { CommitteeAccount } from '../models/committee-account.model';
@@ -10,9 +11,8 @@ import { Form3X } from '../models/reports/form-3x.model';
 import { Form99 } from '../models/reports/form-99.model';
 import { Report, ReportTypes } from '../models/reports/report.model';
 import { ListRestResponse } from '../models/rest-api.model';
-import { ApiService, QueryParams } from './api.service';
-import { VersionData } from 'app/reports/shared/update-version-number/version-data';
 import { DateUtils } from '../utils/date.utils';
+import { ApiService, QueryParams } from './api.service';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getReportFromJSON<T extends Report>(json: any): T {
@@ -46,8 +46,16 @@ export class ReportService<T extends Report> implements TableListService<Report>
   }
 
   public async getAllReports(): Promise<T[]> {
-    const rawReports = await this.apiService.get<T[]>(this.apiEndpoint + '/');
-    return rawReports.map((item) => getReportFromJSON<T>(item));
+    const reports: T[] = [];
+    let next = this.apiEndpoint + '/?page=1';
+    while (next) {
+      const response = await this.apiService.get<ListRestResponse>(next);
+      next = response.next;
+      if (response.results) {
+        reports.push(...response.results.map((item) => getReportFromJSON<T>(item)));
+      }
+    }
+    return reports;
   }
 
   public async get(reportId: string): Promise<T> {

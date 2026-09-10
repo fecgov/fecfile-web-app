@@ -53,7 +53,6 @@ function loginDotGovLogin() {
   cy.intercept('GET', 'http://localhost:8080/api/v1/oidc/login-redirect').as('GetLoggedIn');
   cy.intercept('GET', 'http://localhost:8080/api/v1/committees/').as('GetCommitteeAccounts');
   cy.intercept('POST', 'http://localhost:8080/api/v1/committees/*/activate/').as('ActivateCommittee');
-  cy.intercept('GET', 'http://localhost:8080/api/v1/committee-members/').as('GetCommitteeMembers');
   cy.intercept('GET', 'http://localhost:8080/devops/status/').as('GetStatus');
 
   cy.visit('/');
@@ -72,7 +71,6 @@ function loginDotGovLogin() {
   cy.contains('Manage reports').should('exist');
 
   // Creates a second create admin after logging in if necessary
-  cy.wait('@GetCommitteeMembers'); // Wait for the guard request to resolve
   PageUtils.enterSecondCommitteeEmailIfneeded();
 }
 
