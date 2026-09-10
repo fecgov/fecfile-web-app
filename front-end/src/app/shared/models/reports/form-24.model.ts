@@ -136,9 +136,9 @@ export class Form24SignalSchema {
         return response.valid
           ? null
           : {
-            kind: 'exists',
-            message: 'This name is already in use. Please choose a different name.',
-          };
+              kind: 'exists',
+              message: 'This name is already in use. Please choose a different name.',
+            };
       },
       onError: () => ({
         kind: 'requestFailed',
