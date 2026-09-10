@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter, Router } from '@angular/router';
-import { FormTypeDialogComponent } from './form-type-dialog.component';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { Form24Service } from 'app/shared/services/form-24.service';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { of } from 'rxjs';
-import { Form24 } from 'app/shared/models/reports/form-24.model';
-import { Form3X } from 'app/shared/models/reports/form-3x.model';
-import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+import { provideMockStore } from '@ngrx/store/testing';
+import { Form24, Form24Validation } from 'app/shared/models/reports/form-24.model';
+import { Form3X } from 'app/shared/models/reports/form-3x.model';
+import { ReportTypes } from 'app/shared/models/reports/report.model';
+import { Form24Service } from 'app/shared/services/form-24.service';
+import { testCommitteeAccount, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
+import { Dialog, DialogModule } from 'primeng/dialog';
+import { of } from 'rxjs';
+import { FormTypeDialogComponent } from './form-type-dialog.component';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
@@ -34,6 +34,7 @@ describe('FormTypeDialogComponent', () => {
         Form24Service,
         provideMockStore(testMockStore()),
         MessageService,
+        Form24Validation,
         {
           provide: ActivatedRoute,
           useValue: {

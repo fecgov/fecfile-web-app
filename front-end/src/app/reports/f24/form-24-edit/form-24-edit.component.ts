@@ -6,11 +6,10 @@ import { SaveCancelComponent } from 'app/shared/components/save-cancel/save-canc
 import { SignalFormComponent } from 'app/shared/components/signal-form/signal-form.component';
 import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
-import { buildF24Name, Form24, form24Schema, Type24_48 } from 'app/shared/models/reports/form-24.model';
+import { Form24, Form24Validation, Type24_48 } from 'app/shared/models/reports/form-24.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { form24Options } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { derivedAsync } from 'ngxtension/derived-async';
 import { effectOnceIf } from 'ngxtension/effect-once-if';
 import { MessageService } from 'primeng/api';
 
@@ -31,6 +30,7 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
   protected readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
   private readonly form24Service = inject(Form24Service);
+  private readonly form24Validation = inject(Form24Validation);
   private readonly store = inject(Store);
 
   private readonly activeReport = this.store.selectSignal(selectActiveReport);
@@ -39,17 +39,10 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
     const type = this.form.type().value();
     return type ? `${type}-Hour:` : null;
   });
-  public readonly form24Names = derivedAsync(
-    async () => {
-      const names = await this.form24Service.getNames(this.report().id);
-      return new Set<string>(names.map((form24Name) => form24Name.name));
-    },
-    { initialValue: new Set<string>() },
-  );
 
   readonly model = signal<Form24Data>({ type: null, typelessName: '' });
   readonly form = form(this.model, (schemaPath) => {
-    apply(schemaPath, form24Schema({ existingNames: this.form24Names }));
+    apply(schemaPath, this.form24Validation.form24Schema(this.report().id));
   });
 
   constructor() {
@@ -77,7 +70,7 @@ export class Form24EditComponent extends SignalFormComponent<Form24Data> {
           const { type, typelessName } = this.form().value();
           const payload = Form24.fromJSON({
             ...this.report()!,
-            name: buildF24Name(type!, typelessName),
+            name: this.form24Validation.buildF24Name(type!, typelessName),
           });
           await this.form24Service.update(payload, ['name']);
 
