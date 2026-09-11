@@ -341,6 +341,7 @@ export class FecApiCandidateLookupData extends FecApiLookupData {
       // when FEC updates their candidate API to add those fields
       label: `${markedName}<br>(${markedId})`,
       value: this,
+      title: '',
     };
   }
 }
@@ -358,6 +359,7 @@ export class FecfileCandidateLookupData extends Contact {
     return {
       label: `${markedLastName}, ${markedFirstName}<br>(${markedId})`,
       value: this,
+      title: '',
     };
   }
 }
