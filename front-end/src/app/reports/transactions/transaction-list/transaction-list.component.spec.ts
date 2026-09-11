@@ -8,7 +8,6 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-
 import { TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -21,6 +20,11 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
+import {
+  AssignedTransactionActionsFactory,
+  BaseTransactionActionsFactory,
+} from './transaction-list-table/transaction-actions';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -40,6 +44,8 @@ describe('TransactionListComponent', () => {
         ReattRedesStore,
         Form3XService,
         provideMockStore(testMockStore()),
+        TransactionListService,
+        { provide: BaseTransactionActionsFactory, useClass: AssignedTransactionActionsFactory },
         {
           provide: TransactionService,
           useValue: {
@@ -137,24 +143,11 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[3].isEnabled(f3x_params)).toEqual(false);
   });
 
-  it('should call refreshTable on receipts, disbursements, and loans', async () => {
-    const receiptSpy = vi.spyOn(component.receipts(), 'refreshTable').mockResolvedValue(undefined);
-    const disbursementsSpy = vi.spyOn(component.disbursements(), 'refreshTable').mockResolvedValue(undefined);
-    const loanSpy = vi.spyOn(component.loans(), 'refreshTable').mockResolvedValue(undefined);
-    await component.refreshTables();
-    expect(receiptSpy).toHaveBeenCalled();
-    expect(disbursementsSpy).toHaveBeenCalled();
-    expect(loanSpy).toHaveBeenCalled();
-  });
-
   it('should show Clone only for allowed editable single transactions', () => {
-    const receipts = component.receipts() as unknown as {
-      rowActions: { label: string; isAvailable: (item: TransactionListRecord) => boolean }[];
-      reportService: { isEditable: (report: unknown) => boolean };
-    };
+    const receipts = component.tables()[0];
     isCloneable.mockImplementation((transaction: TransactionListRecord) => !transaction.parent_transaction_id);
     vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
-    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+    const cloneAction = receipts.rowActions().find((action) => action.label === 'Clone');
 
     expect(cloneAction).toBeDefined();
 
@@ -173,14 +166,11 @@ describe('TransactionListComponent', () => {
   });
 
   it('should navigate directly to the pre-filled create page when Clone is selected', () => {
-    const receipts = component.receipts() as unknown as {
-      rowActions: { label: string; action: (item: TransactionListRecord) => void }[];
-      reportService: { isEditable: (report: unknown) => boolean };
-    };
+    const receipts = component.tables()[0];
     vi.spyOn(receipts.reportService, 'isEditable').mockReturnValue(true);
     const confirmSpy = vi.spyOn(TestBed.inject(ConfirmationService), 'confirm');
     const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
-    const cloneAction = receipts.rowActions.find((action) => action.label === 'Clone');
+    const cloneAction = receipts.rowActions().find((action) => action.label === 'Clone');
     const transaction = TransactionListRecord.fromJSON({
       id: '100',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,

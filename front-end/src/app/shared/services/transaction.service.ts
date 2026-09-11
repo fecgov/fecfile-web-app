@@ -19,9 +19,7 @@ type PreviousAggregateField = keyof Pick<
   'aggregate' | 'calendar_ytd_per_election_office' | 'aggregate_general_elec_expended'
 >;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class TransactionService {
   protected readonly apiService = inject(ApiService);
   tableDataEndpoint = '/transactions';

@@ -1,11 +1,8 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { isForm3Group, Report, ReportTypes } from 'app/shared/models/reports/report.model';
-import { TransactionReceiptsComponent } from './transaction-receipts/transaction-receipts.component';
-import { TransactionDisbursementsComponent } from './transaction-disbursements/transaction-disbursements.component';
-import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { Toolbar } from 'primeng/toolbar';
 import { PrimeTemplate } from 'primeng/api';
 import { TableActionsButtonComponent } from '../../../shared/components/table-actions-button/table-actions-button.component';
@@ -13,6 +10,8 @@ import { SelectReportDialogComponent } from './select-report-dialog/select-repor
 import { SecondaryReportSelectionDialogComponent } from '../secondary-report-selection-dialog/secondary-report-selection-dialog.component';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { TransactionListRecord } from 'app/shared/models/transaction-list-record.model';
+import { BaseTransactionListComponent } from './base-transaction-list.component';
+import { TransactionListTableComponent } from './transaction-list-table/transaction-list-table.component';
 
 @Component({
   selector: 'app-transaction-list',
@@ -22,14 +21,12 @@ import { TransactionListRecord } from 'app/shared/models/transaction-list-record
     Toolbar,
     PrimeTemplate,
     TableActionsButtonComponent,
-    TransactionReceiptsComponent,
-    TransactionDisbursementsComponent,
-    TransactionLoansAndDebtsComponent,
     SelectReportDialogComponent,
     SecondaryReportSelectionDialogComponent,
+    TransactionListTableComponent,
   ],
 })
-export class TransactionListComponent {
+export class TransactionListComponent extends BaseTransactionListComponent {
   private readonly router = inject(Router);
   private readonly store = inject(Store);
 
@@ -77,10 +74,6 @@ export class TransactionListComponent {
   ];
   transaction?: TransactionListRecord;
 
-  readonly receipts = viewChild.required(TransactionReceiptsComponent);
-  readonly disbursements = viewChild.required(TransactionDisbursementsComponent);
-  readonly loans = viewChild.required(TransactionLoansAndDebtsComponent);
-
   readonly isForm24 = computed(() => this.report().report_type === ReportTypes.F24);
 
   async createTransactions(transactionCategory: string, report: Report): Promise<void> {
@@ -104,13 +97,5 @@ export class TransactionListComponent {
 
   public onTableActionClick(action: TableAction<Report>, report: Report) {
     action.action(report);
-  }
-
-  refreshTables() {
-    return Promise.all([
-      this.receipts().refreshTable(),
-      this.disbursements().refreshTable(),
-      this.loans().refreshTable(),
-    ]);
   }
 }

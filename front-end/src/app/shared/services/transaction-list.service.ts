@@ -6,28 +6,32 @@ import { ApiService, QueryParams } from './api.service';
 import { HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Report } from '../models/reports/report.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TransactionListService implements TableListService<TransactionListRecord> {
   protected readonly apiService = inject(ApiService);
   tableDataEndpoint = '/transactions';
 
-  public async getTableData(pageNumber = 1, ordering = '', params: QueryParams = {}): Promise<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'line_label,created';
-    }
-    if (ordering === '-line_label,created') {
-      ordering = '-line_label,-created';
-    }
+  public async getTableData(
+    pageNumber = 1,
+    ordering = 'line_label,created',
+    queryParams: QueryParams = {},
+    unassigned = false,
+  ): Promise<ListRestResponse> {
+    const finalOrdering = ordering === '-line_label,created' ? '-line_label,-created' : ordering;
+    const endpoint = `${this.tableDataEndpoint}${unassigned ? '/list/unassigned' : ''}/`;
+    const params: QueryParams = {
+      ...queryParams,
+      page: pageNumber,
+      ordering: finalOrdering,
+    };
 
-    const response = await this.apiService.get<ListRestResponse>(
-      `${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`,
-      params,
-    );
-    response.results = response.results.map((item) => TransactionListRecord.fromJSON(item));
-    response.pageNumber = pageNumber;
-    return response;
+    const response = await this.apiService.get<ListRestResponse>(endpoint, params);
+
+    return {
+      ...response,
+      pageNumber,
+      results: response.results.map((item) => TransactionListRecord.fromJSON(item)),
+    };
   }
 
   delete(transaction: TransactionListRecord): Promise<null> {

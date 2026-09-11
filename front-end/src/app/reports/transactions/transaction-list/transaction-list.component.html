@@ -23,17 +23,24 @@
     </ng-template>
   </p-toolbar>
   @if (!isForm24()) {
-    <app-transaction-receipts (reloadTables)="refreshTables()" />
+    <app-transaction-list-table
+      category="receipts"
+      [report]="report()"
+      category="receipts"
+      (reloadTables)="refreshTables()"
+    />
   }
 
-  <app-transaction-disbursements
+  <app-transaction-list-table
+    category="disbursements"
+    [report]="report()"
     (requestReportSelection)="
       openSecondaryReportSelectionDialog($event.transaction, $event.formType, $event.createMethod)
     "
     (reloadTables)="refreshTables()"
   />
   @if (!isForm24()) {
-    <app-transaction-loans-and-debts (reloadTables)="refreshTables()" />
+    <app-transaction-list-table category="loans-and-debts" [report]="report()" (reloadTables)="refreshTables()" />
   }
 </div>
 @if (!isForm24()) {

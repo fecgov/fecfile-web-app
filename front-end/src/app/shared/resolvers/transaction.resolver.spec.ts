@@ -31,6 +31,7 @@ describe('TransactionResolver', () => {
       provideHttpClient(),
       provideHttpClientTesting(),
       provideMockStore(testMockStore()),
+      TransactionResolver,
       {
         provide: TransactionListService,
         useValue: {

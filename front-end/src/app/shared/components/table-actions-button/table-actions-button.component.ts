@@ -23,6 +23,7 @@ export class TableActionsButtonComponent<T> {
   readonly buttonDataCy = input('table-actions-trigger');
   readonly actionDataCyPrefix = input('table-action');
   readonly rounded = input(true);
+  readonly dataTest = input<string>();
   readonly tableActionClick = output<{ action: TableAction<T>; actionItem: T }>();
 
   readonly filteredActions = computed(() => {
