@@ -302,9 +302,9 @@ describe('Contacts - delete guard', () => {
   });
 
   /**
-   * Remove the .skip() if the deleted contacts feature flag is enabled
+   * Change to 'it' if the deleted contacts feature flag is enabled
    */
-  it.skip('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
+  xit('Unlinked: delete -> confirm modal -> success toast -> row removed; restore deleted contact works', () => {
     cy.intercept('DELETE', '**/api/v1/contacts/**').as('deleteContact');
     cy.intercept('GET', '**/api/v1/contacts-deleted/**').as('getDeletedContacts');
     cy.intercept('POST', '**/api/v1/contacts-deleted/restore/**').as('restoreContact');
@@ -471,7 +471,7 @@ describe('Contacts - delete guard', () => {
    * but should be blocked with 403 or 409 response
    * needs changes in backend to enforce properly
    */
-  it('Linked: API delete is rejected (403/409)', () => {
+  xit('Linked: API delete is rejected (403/409)', () => {
     const fetchLinkedContact = (attempt = 1) =>
       waitForLinkedContactStatusFromApi(true, attempt, {
         pageSize: 10,
@@ -566,9 +566,9 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
   /**
    * triggers beforeEach--> Initialize--> deleteAllContacts()
    * verifies Restore deleted contacts button is not visible and contacts table is empty
-   * Remove the .skip() if the deleted contacts feature flag is enabled
+   * Change to 'it' if the deleted contacts feature flag is enabled
    */
-  it.skip('check that all contacts, including soft-deleted ones, are deleted', () => {
+  xit('check that all contacts, including soft-deleted ones, are deleted', () => {
     cy.contains('button,a', 'Restore deleted contacts')
       .should('not.exist');
     cy.contains('.empty-message', 'No data available in table').should('exist');

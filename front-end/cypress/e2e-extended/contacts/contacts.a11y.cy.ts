@@ -111,10 +111,10 @@ describe('Contacts - axe smoke (critical)', () => {
     cy.contains(/Edit Contact/i).should('not.exist');
   });
 
-   /**
-   * Remove the .skip() if the deleted contacts feature flag is enabled
+  /**
+   * Change to 'it' if the deleted contacts feature flag is enabled
    */
-  it.skip('Deleted contacts - table view', () => {
+  xit('Deleted contacts - table view', () => {
     const deletedName = 'A11y Deleted Contact';
     const contact: MockContact = {
       ...Organization_A,
