@@ -3,21 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { featureFlagGuard } from './feature-flag.guard';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlCreationOptions, UrlTree } from '@angular/router';
 import { Mock } from 'vitest';
-import { FEATURE_FLAGS, FeatureFlags } from 'environments/config/feature-flag.config';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
+import { testFeatureFlags } from '../utils/unit-test.utils';
 
 describe('featureFlagGuard', () => {
   let createUrlSpy: Mock<(commands: readonly any[], navigationExtras?: UrlCreationOptions) => UrlTree>;
   const mockRoute = {} as ActivatedRouteSnapshot;
   const mockState = {} as RouterStateSnapshot;
-  const defaultMockFlags: FeatureFlags = {
-    showGlossary: false,
-    showForm3: false,
-    showSchedF: false,
-    enableUnassignedTransactions: false,
-    enableImport: false,
-    manualReportVersion: false,
-    userCanSetFilingFrequency: false,
-  };
+  const defaultMockFlags = testFeatureFlags();
 
   function setupTest() {
     const router = TestBed.inject(Router);

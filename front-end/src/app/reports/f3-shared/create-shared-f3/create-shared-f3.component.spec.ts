@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 import { Form3X, F3xFormTypes } from 'app/shared/models';
 import { Form3XService } from 'app/shared/services/form-3x.service';
 import { ReportCodes } from 'app/shared/utils/report-code.utils';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testFeatureFlags, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CreateSharedF3Component, ReportTypeCategories } from './create-shared-f3.component';
@@ -28,16 +28,6 @@ let messageSpy: Mock;
 let updateSpy: Mock;
 let confirmSpy: Mock;
 let coverageDateSpy: Mock;
-
-const defaultMockFlags: FeatureFlags = {
-  showGlossary: false,
-  showForm3: false,
-  showSchedF: false,
-  enableUnassignedTransactions: false,
-  enableImport: false,
-  manualReportVersion: false,
-  userCanSetFilingFrequency: false,
-};
 
 const mockCoverageDates = [
   {
@@ -74,7 +64,7 @@ async function setup(params: {
       ConfirmationService,
       {
         provide: FEATURE_FLAGS,
-        useValue: { ...defaultMockFlags, ...params.featureFlags },
+        useValue: { ...testFeatureFlags(), ...params.featureFlags },
       },
     ],
   }).compileComponents();

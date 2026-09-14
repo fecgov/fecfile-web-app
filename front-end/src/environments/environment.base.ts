@@ -8,6 +8,7 @@ export const baseEnvironment = {
     showGlossary: false,
     showForm3: true,
     showSchedF: true,
+    showRestoreDeletedContacts: false,
     enableUnassignedTransactions: false,
     enableImport: true,
     manualReportVersion: true,

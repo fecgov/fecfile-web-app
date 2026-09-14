@@ -27,6 +27,7 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { FeatureFlags } from 'environments/config/feature-flag.config';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -488,5 +489,18 @@ export function testTemplateMap(): TransactionTemplateMapType {
     quinary_city: 'subordinate_city',
     quinary_state: 'subordinate_state',
     quinary_zip: 'subordinate_zip',
+  };
+}
+
+export function testFeatureFlags(): FeatureFlags {
+  return {
+    showGlossary: false,
+    showForm3: false,
+    showSchedF: false,
+    enableUnassignedTransactions: false,
+    enableImport: false,
+    manualReportVersion: false,
+    userCanSetFilingFrequency: false,
+    showRestoreDeletedContacts: false,
   };
 }
