@@ -26,8 +26,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
     ScheduleATransactionTypes.IN_KIND_TRANSFER,
     // OTHER
-    ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-    ScheduleATransactionTypes.OTHER_RECEIPTS,
     ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
     ScheduleATransactionTypes.FEDERAL_COMMITTEE_RECOUNT_DONATION,
     ScheduleATransactionTypes.UNREGISTERED_RECOUNT_DONATION_FROM_ORGANIZATION,
