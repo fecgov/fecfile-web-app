@@ -81,6 +81,22 @@ describe("Users: Validation and API failure states", () => {
     cy.get('table tbody tr').contains('td', newUser.email).should('not.exist');
   });
 
+  it('keeps the second committee administrator dialog open when dismissed with Escape', () => {
+    cy.intercept('GET', '**/api/v1/committee-members/', {
+      body: [{ email: 'admin@example.com', role: 'COMMITTEE_ADMINISTRATOR' }],
+    }).as('getSingleCommitteeAdmin');
+
+    cy.visit('/committee');
+    cy.wait('@getSingleCommitteeAdmin');
+
+    cy.get('app-second-committee-admin-dialog dialog')
+      .should('be.visible')
+      .and('not.have.descendants', 'button[aria-label="Cancel"]')
+      .focus()
+      .type('{esc}')
+      .should('be.visible');
+  });
+
   it('@allow-5xx should stub 500 on invite, keep submit enabled, then succeed on retry', () => {
     const adminUser = uniqueUser({ role: Roles.COMMITTEE_ADMINISTRATOR });
     UsersHelpers.stubOnce('POST', '**/committee-members/add-member/**', { statusCode: 500, body: { message: 'Server error' } }, 'invite500');
