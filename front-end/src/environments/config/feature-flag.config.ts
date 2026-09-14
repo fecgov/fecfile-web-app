@@ -9,6 +9,7 @@ export interface FeatureFlags {
   enableImport: boolean;
   manualReportVersion: boolean;
   userCanSetFilingFrequency: boolean;
+  showRestoreDeletedContacts: boolean;
 }
 
 export const FEATURE_FLAGS = new InjectionToken<FeatureFlags>('FEATURE_FLAGS', {

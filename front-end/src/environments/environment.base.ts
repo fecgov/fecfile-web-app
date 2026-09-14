@@ -1,3 +1,5 @@
+import type { FeatureFlags } from './config/feature-flag.config';
+
 export const baseEnvironment = {
   production: false,
   appTitle: 'FECfile+',
@@ -12,7 +14,8 @@ export const baseEnvironment = {
     enableImport: true,
     manualReportVersion: true,
     userCanSetFilingFrequency: true,
-  },
+    showRestoreDeletedContacts: false,
+  } as FeatureFlags,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {
     enabled: true,
