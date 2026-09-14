@@ -519,8 +519,9 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
    * doubly verifies the deletion of two contacts, restores one deleted contact
    * returns to Contact List, verifies un-deleted contact and restored contact are in list
    * verifies Restore deleted contacts button
+   * Change to 'it' if the deleted contacts feature flag is enabled
    */
-  it('Delete & Restore: creates three contacts, soft deletes two, restores one', () => {
+  xit('Delete & Restore: creates three contacts, soft deletes two, restores one', () => {
     const contacts: MockContact[] = [Individual_A_A, Individual_A_A, Individual_A_A];
     cy.contains('button,a', 'Add contact').should('be.visible');
     cy.contains('button,a', 'Restore deleted contacts').should('not.exist');
@@ -566,9 +567,8 @@ describe('Contacts Soft-/Hard-Delete and Restore (/contacts)', () => {
   /**
    * triggers beforeEach--> Initialize--> deleteAllContacts()
    * verifies Restore deleted contacts button is not visible and contacts table is empty
-   * Change to 'it' if the deleted contacts feature flag is enabled
    */
-  xit('check that all contacts, including soft-deleted ones, are deleted', () => {
+  it('check that all contacts, including soft-deleted ones, are deleted', () => {
     cy.contains('button,a', 'Restore deleted contacts')
       .should('not.exist');
     cy.contains('.empty-message', 'No data available in table').should('exist');
