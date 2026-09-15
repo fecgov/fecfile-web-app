@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { DestroyerComponent } from '../components/destroyer.component';
 import { UsersService } from '../services/users.service';
+import { CommitteeStore } from 'app/committee/committee.store';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,8 @@ export class LoginService extends DestroyerComponent {
   private readonly router = inject(Router);
   private readonly cookieService = inject(CookieService);
   private readonly usersService = inject(UsersService);
+  private readonly committeeStore = inject(CommitteeStore);
+
   public userLoginData = this.store.selectSignal(selectUserLoginData);
 
   readonly userHasProfileData = computed(() => !!this.userLoginData()?.first_name && !!this.userLoginData()?.last_name);
@@ -29,6 +32,8 @@ export class LoginService extends DestroyerComponent {
 
   public logOut() {
     this.store.dispatch(userLoginDataDiscardedAction());
+    this.committeeStore.clearCommittee();
+
     if (!this.userIsAuthenticated()) {
       this.router.navigate(['/login']);
     } else {

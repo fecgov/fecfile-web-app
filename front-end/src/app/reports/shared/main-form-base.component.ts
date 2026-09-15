@@ -1,5 +1,6 @@
 import { Component, effect, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommitteeStore } from 'app/committee/committee.store';
 import { FormComponent } from 'app/shared/components/form.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Report } from 'app/shared/models/reports/report.model';
@@ -11,6 +12,7 @@ import { MessageService } from 'primeng/api';
   template: '',
 })
 export abstract class MainFormBaseComponent<T extends Report> extends FormComponent implements OnInit {
+  protected readonly committeeStore = inject(CommitteeStore);
   protected abstract reportService: ReportService<T>;
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
@@ -26,7 +28,7 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
     super();
 
     effect(() => {
-      this.setConstantFormValues(this.committeeAccount());
+      this.setConstantFormValues(this.committeeStore.committee());
       if (this.reportId) {
         this.form.patchValue(this.activeReport());
       }
@@ -38,7 +40,7 @@ export abstract class MainFormBaseComponent<T extends Report> extends FormCompon
     SchemaUtils.addJsonSchemaValidators(this.form, this.schema, false);
   }
 
-  setConstantFormValues(committeeAccount?: CommitteeAccount) {
+  setConstantFormValues(committeeAccount?: CommitteeAccount | null) {
     if (!committeeAccount) return;
     this.form.patchValue({
       street_1: committeeAccount.street_1,

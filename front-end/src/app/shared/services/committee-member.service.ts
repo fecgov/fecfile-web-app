@@ -1,6 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
+import { CommitteeStore } from 'app/committee/committee.store';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { CommitteeCount, CommitteeMember, CommitteeMemberValidation, ListRestResponse, Roles } from '../models';
 import { ApiService, QueryParams } from './api.service';
@@ -9,11 +10,13 @@ import { ApiService, QueryParams } from './api.service';
   providedIn: 'root',
 })
 export class CommitteeMemberService implements TableListService<CommitteeMember> {
+  private readonly committeeStore = inject(CommitteeStore);
   private readonly apiService = inject(ApiService);
   private readonly endpoint = '/committee-members/';
 
   private readonly store = inject(Store);
   private readonly userSignal = this.store.selectSignal(selectUserLoginData);
+
   private readonly committeeCounts = signal({
     member: 0,
     admin: 0,
