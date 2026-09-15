@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { CommitteeMemberService } from '../services/committee-member.service';
 import { CommitteeStore } from 'app/committee/committee.store';
+import { CommitteeMemberService } from '../services/committee-member.service';
 
 export const committeeOwnerGuard: CanActivateFn = async () => {
   const router = inject(Router);
@@ -10,7 +10,7 @@ export const committeeOwnerGuard: CanActivateFn = async () => {
 
   const memberService = inject(CommitteeMemberService);
 
-  await memberService.getMembers();
+  await memberService.updateCommitteeCounts();
   if (memberService.needsSecondAdmin()) {
     return router.createUrlTree(['/reports']);
   }

@@ -6,7 +6,7 @@ import { initialState as initNavigationEvent } from 'app/store/navigation-event.
 import { selectNavigationEvent } from 'app/store/navigation-event.selectors';
 import { initialState as initUserLoginData } from 'app/store/user-login-data.reducer';
 import { selectUserLoginData } from 'app/store/user-login-data.selectors';
-import { CommitteeMember, Form24, Form3, Report } from '../models';
+import { Form24, Form3, Report } from '../models';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../models/contact.model';
 import { MemoText } from '../models/memo-text.model';
@@ -25,6 +25,7 @@ import { AggregationGroups, Transaction, TransactionTypes } from '../models/tran
 import { UploadSubmission } from '../models/upload-submission.model';
 import { UserLoginData } from '../models/user.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { FeatureFlags } from 'environments/config/feature-flag.config';
 
 export function testCommitteeAccount(): CommitteeAccount {
   return CommitteeAccount.fromJSON({
@@ -88,18 +89,6 @@ export function testCommitteeAccount(): CommitteeAccount {
     website: 'WWW.UNITEDSTATESPOLITICALACTIONCOMMITTEESDIRECTORY.COM',
     zip: '33310',
     eligible_report_types: ['F3X', 'F99', 'F1M'],
-  });
-}
-
-export function testCommitteeMember(): CommitteeMember {
-  return CommitteeMember.fromJSON({
-    id: '1',
-    committee_id: 'C00601211',
-    first_name: 'John',
-    last_name: 'Doe',
-    email: 'john.doe@test.com',
-    phone: '555-1234',
-    title: 'Member',
   });
 }
 
@@ -483,5 +472,18 @@ export function testTemplateMap(): TransactionTemplateMapType {
     quinary_city: 'subordinate_city',
     quinary_state: 'subordinate_state',
     quinary_zip: 'subordinate_zip',
+  };
+}
+
+export function testFeatureFlags(): FeatureFlags {
+  return {
+    showGlossary: false,
+    showForm3: false,
+    showSchedF: false,
+    enableUnassignedTransactions: false,
+    enableImport: false,
+    manualReportVersion: false,
+    userCanSetFilingFrequency: false,
+    showRestoreDeletedContacts: false,
   };
 }

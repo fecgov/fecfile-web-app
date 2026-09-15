@@ -46,7 +46,11 @@ export abstract class Report extends BaseModel {
   report_code?: string;
   report_code_label?: string;
 
-  abstract getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[];
+  abstract getMenuItems(
+    sidebarSection: ReportSidebarSection,
+    isEditable: boolean,
+    manualReportVersion: boolean,
+  ): MenuItem[];
   abstract get formLabel(): string;
 
   get canAmend() {

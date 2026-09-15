@@ -24,16 +24,15 @@ export class DialogComponent {
 
   readonly projectedFooter = contentChild('dialogFooterRef');
   readonly hasCustomFooter = computed(() => !!this.projectedFooter());
-  readonly closeOnEscape = input(true);
 
   handleEscape(event: Event) {
-    if (!this.closeOnEscape() || !this.dismissible()) {
+    if (!this.dismissible()) {
       event.preventDefault();
     }
   }
 
   handleCancel(event: Event) {
-    if (!this.closeOnEscape() || !this.dismissible()) {
+    if (!this.dismissible()) {
       event.preventDefault();
       return;
     }

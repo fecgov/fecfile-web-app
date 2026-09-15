@@ -1,6 +1,6 @@
 <ul class="flex">
   <li><a routerLink="/reports">Reports</a></li>
-  @if (showAllTransactionsPage) {
+  @if (enableUnassignedTransactions) {
     <li><a routerLink="/transactions">Transactions</a></li>
   }
   <li><a routerLink="/contacts">Contacts</a></li>
@@ -23,7 +23,7 @@
   <ul>
     <li><button appPopoverLink="/tools/update-cash-on-hand" [popover]="toolsOp">Update cash on hand</button></li>
     @if (electionCycleStore.showElectionCycles() && showForm3) {
-      <li><button appPopoverLink="/tools/election-cycles" [popover]="toolsOp">Election Cycles</button></li>
+      <li><button appPopoverLink="/tools/election-cycles" [popover]="toolsOp">Election cycles</button></li>
     }
   </ul>
 </p-popover>
@@ -32,7 +32,7 @@
   <ul>
     <li><button appPopoverLink="/committee/" [popover]="accountOp">Account</button></li>
     <li><button appPopoverLink="/committee/members" [popover]="accountOp">Users</button></li>
-    <li><button appPopoverLink="/login/select-committee/" [popover]="accountOp">Switch Committees</button></li>
+    <li><button appPopoverLink="/login/select-committee/" [popover]="accountOp">Switch committees</button></li>
     <li><button (click)="loginService.logOut()">Logout</button></li>
   </ul>
 </p-popover>

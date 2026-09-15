@@ -5,11 +5,11 @@ import { Component, signal, viewChild } from '@angular/core';
 @Component({
   imports: [DialogComponent],
   standalone: true,
-  template: `<app-dialog [(visible)]="visible" header="title" [closeOnEscape]="closeOnEscape()" />`,
+  template: `<app-dialog [(visible)]="visible" header="title" [dismissible]="dismissible()" />`,
 })
 class TestHostComponent {
   visible = signal(false);
-  closeOnEscape = signal(true);
+  dismissible = signal(true);
   component = viewChild.required(DialogComponent);
 }
 
@@ -30,8 +30,8 @@ describe('DialogComponent', () => {
   });
 
   describe('handleEscape', () => {
-    it('should not prevent default when closeOnEscape is true', () => {
-      host.closeOnEscape.set(true);
+    it('should not prevent default when dismissible is true', () => {
+      host.dismissible.set(true);
       fixture.detectChanges();
 
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -42,8 +42,8 @@ describe('DialogComponent', () => {
       expect(preventDefaultSpy).not.toHaveBeenCalled();
     });
 
-    it('should prevent default when closeOnEscape is false', () => {
-      host.closeOnEscape.set(false);
+    it('should prevent default when dismissible is false', () => {
+      host.dismissible.set(false);
       fixture.detectChanges();
 
       const event = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -56,8 +56,8 @@ describe('DialogComponent', () => {
   });
 
   describe('handleCancel', () => {
-    it('should emit reject event and close the dialog when closeOnEscape is true', () => {
-      host.closeOnEscape.set(true);
+    it('should emit reject event and close the dialog when dismissible is true', () => {
+      host.dismissible.set(true);
       host.visible.set(true);
       fixture.detectChanges();
 
@@ -73,8 +73,8 @@ describe('DialogComponent', () => {
       expect(component.visible()).toBe(false);
     });
 
-    it('should prevent default and not emit reject event when closeOnEscape is false', () => {
-      host.closeOnEscape.set(false);
+    it('should prevent default and not emit reject event when dismissible is false', () => {
+      host.dismissible.set(false);
       host.visible.set(true);
       fixture.detectChanges();
 

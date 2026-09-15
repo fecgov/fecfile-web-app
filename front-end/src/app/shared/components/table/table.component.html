@@ -41,7 +41,7 @@
     <tr role="row">
       @for (col of columns(); track col) {
         @if (col.header === '') {
-          <td></td>
+          <td [style.width]="col.width"></td>
         } @else {
           <th
             [pSortableColumn]="col.sortable ? col.field : undefined"

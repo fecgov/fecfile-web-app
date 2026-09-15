@@ -1,16 +1,21 @@
+import type { FeatureFlags } from './config/feature-flag.config';
+
 export const baseEnvironment = {
   production: false,
   appTitle: 'FECfile+',
   ffapiTimeoutCookieName: 'ffapi_timeout',
-  userCanSetFilingFrequency: true,
   disableLogin: false,
   fecSpec: 8.5,
-  showGlossary: false,
-  showForm3: true,
-  showSchedF: true,
-  showAllTransactionsPage: false,
-  enableImport: true,
-  manualReportVersion: true,
+  featureFlags: {
+    showGlossary: false,
+    showForm3: true,
+    showSchedF: true,
+    enableUnassignedTransactions: false,
+    enableImport: true,
+    manualReportVersion: true,
+    userCanSetFilingFrequency: true,
+    showRestoreDeletedContacts: false,
+  } as FeatureFlags,
   whoCanUseLink: 'https://www.fec.gov/efiling/who-can-use-fecfile-plus?dialog=open',
   errorReporting: {
     enabled: true,
@@ -32,6 +37,7 @@ export const createEnvironment = (params: {
   baseUri: string;
   environmentBanner?: 'development' | 'stage' | 'test';
   overrides?: Partial<typeof baseEnvironment>;
+  featureFlags?: Partial<typeof baseEnvironment.featureFlags>;
 }) => {
   const apiUrl = `${params.baseUri}/api/v1`;
   const webForms = params.externalLinks === 'prod' ? 'https://webforms.fec.gov' : 'https://webforms.stage.efo.fec.gov';
@@ -45,5 +51,9 @@ export const createEnvironment = (params: {
     loginDotGovLogoutUrl: `${apiUrl}/oidc/logout`,
     ffapiTimeoutCookieName: `ffapi_timeout_${params.name}`,
     ...params.overrides,
+    featureFlags: {
+      ...baseEnvironment.featureFlags,
+      ...params.featureFlags,
+    },
   };
 };

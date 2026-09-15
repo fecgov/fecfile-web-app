@@ -11,6 +11,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { PanelMenu } from 'primeng/panelmenu';
 import { isForm3Group, ReportTypes } from 'app/shared/models/reports/report.model';
 import type { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 @Component({
   selector: 'app-report-sidebar',
@@ -24,6 +25,7 @@ export class ReportSidebarComponent {
   private readonly reportService = inject(ReportService);
   private readonly route = inject(ActivatedRoute);
   private readonly report = this.store.selectSignal(selectActiveReport);
+  private readonly manualReportVersion = inject(FEATURE_FLAGS).manualReportVersion;
 
   readonly items = computed(() => {
     this.navEnd();
@@ -31,7 +33,7 @@ export class ReportSidebarComponent {
     if (!data) return [];
     const sidebarState = data['sidebarSection'] as ReportSidebarSection;
     const isEditable = this.reportService.isEditable(this.report());
-    return this.report().getMenuItems(sidebarState, isEditable);
+    return this.report().getMenuItems(sidebarState, isEditable, this.manualReportVersion);
   });
 
   readonly formLabel = computed(() => this.report().formLabel);
