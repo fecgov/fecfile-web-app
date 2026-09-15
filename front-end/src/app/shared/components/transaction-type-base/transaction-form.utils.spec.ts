@@ -6,6 +6,7 @@ import { TransactionFormUtils } from './transaction-form.utils';
 import { SchETransaction, ScheduleETransactionTypes } from 'app/shared/models/sche-transaction.model';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { ScheduleFTransactionTypes, SchFTransaction } from 'app/shared/models/schf-transaction.model';
+import { ContactTypes } from 'app/shared/models/contact.model';
 
 describe('FormUtils', () => {
   const t = new TransactionFormUtils();
@@ -67,6 +68,30 @@ describe('FormUtils', () => {
 
     const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
     expect(aggregateFormControl.value).toEqual(50);
+  });
+
+  it('should initialize Schedule B aggregate_amount as a number', () => {
+    const form = new FormGroup({
+      entity_type: new SubscriptionFormControl(),
+      aggregate_amount: new SubscriptionFormControl(),
+      memo_code: new SubscriptionFormControl(),
+      expenditure_purpose_descrip: new SubscriptionFormControl(),
+    });
+
+    const transaction = SchBTransaction.fromJSON({
+      transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
+      report_ids: ['1'],
+    });
+
+    TransactionFormUtils.resetForm(
+      form,
+      transaction,
+      [{ label: 'Organization', value: ContactTypes.ORGANIZATION }],
+      undefined,
+    );
+
+    const aggregateFormControl = form.get('aggregate_amount') as SubscriptionFormControl;
+    expect(aggregateFormControl.value).toEqual(0);
   });
 });
 
