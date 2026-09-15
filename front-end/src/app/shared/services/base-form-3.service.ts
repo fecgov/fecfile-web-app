@@ -62,4 +62,8 @@ export abstract class BaseForm3Service<T extends BaseForm3> extends ReportServic
       'zip',
     ]);
   }
+
+  getTransactionsOutsideCoverage(reportId: string, from: string, through: string) {
+    return this.apiService.get<number>(`/transactions/outside/?report_id=${reportId}&from=${from}&through=${through}`);
+  }
 }

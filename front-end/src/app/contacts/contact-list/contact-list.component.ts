@@ -12,7 +12,7 @@ import { ContactService, DeletedContactService } from 'app/shared/services/conta
 import { SelectModule } from 'primeng/select';
 import { TableAction } from 'app/shared/components/table-actions-button/table-actions';
 import { RouterLink } from '@angular/router';
-import { environment } from 'environments/environment';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 @Component({
   selector: 'app-contact-list',
@@ -37,7 +37,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
-  showRestoreDeletedContacts = environment.showRestoreDeletedContacts;
+  showRestoreDeletedContacts = inject(FEATURE_FLAGS).showRestoreDeletedContacts;
   restoreContactsButtonIsVisible = false;
   searchTerm = '';
 

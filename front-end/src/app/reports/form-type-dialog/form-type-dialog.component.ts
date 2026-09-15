@@ -3,9 +3,10 @@ import { apply, form, FormField, hidden, required, submit } from '@angular/forms
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
-import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
 import { SelectButtonInput } from 'app/shared/components/signal-inputs/select-button-input/select-button.input';
 import { SelectInput } from 'app/shared/components/signal-inputs/select-input/select.input';
+import { InputGroupInput } from 'app/shared/components/signal-inputs/input-group/input-group.input';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 import { Form24, Form24Data, Form24SignalSchema } from 'app/shared/models/reports/form-24.model';
 import { ReportTypes } from 'app/shared/models/reports/report.model';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -13,7 +14,6 @@ import { FormType, getFormTypes } from 'app/shared/utils/form-type.utils';
 import { form24Options } from 'app/shared/utils/label.utils';
 import { requiredMessage } from 'app/shared/utils/signal-schema.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 
 interface ReportFormData {
@@ -33,8 +33,9 @@ export class FormTypeDialogComponent {
   readonly router = inject(Router);
   readonly store = inject(Store);
   private readonly form24Service = inject(Form24Service);
+  private readonly showForm3 = inject(FEATURE_FLAGS).showForm3;
+  readonly formTypeOptions = Array.from(getFormTypes(this.showForm3), (mapping) => mapping[1]);
   private readonly form24SignalSchema = inject(Form24SignalSchema);
-  readonly formTypeOptions = Array.from(getFormTypes(environment.showForm3), (mapping) => mapping[1]);
   readonly filteredOptions = computed(() => {
     const options = this.formTypeOptions.filter((type) => this.eligibleReportTypes().has(type.code));
 
@@ -108,6 +109,6 @@ export class FormTypeDialogComponent {
   }
 
   getFormType(type?: ReportTypes | ''): FormType | undefined {
-    return type === undefined || type === '' ? undefined : getFormTypes(environment.showForm3).get(type as ReportTypes);
+    return type === undefined || type === '' ? undefined : getFormTypes(this.showForm3).get(type as ReportTypes);
   }
 }
