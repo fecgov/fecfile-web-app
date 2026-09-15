@@ -37,7 +37,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   contactTypeLabels: LabelList = ContactTypeLabels;
   dialogContactTypeOptions: PrimeOptions = [];
 
-  readonly showRestoreDeletedContacts = inject(FEATURE_FLAGS).showRestoreDeletedContacts;
+  showRestoreDeletedContacts = inject(FEATURE_FLAGS).showRestoreDeletedContacts;
   restoreContactsButtonIsVisible = false;
   searchTerm = '';
 

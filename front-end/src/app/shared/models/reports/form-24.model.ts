@@ -15,10 +15,10 @@ import { Form24Service } from 'app/shared/services/form-24.service';
 import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 import { plainToInstance, Transform } from 'class-transformer';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
-import { MenuItem } from 'primeng/api';
 import { from } from 'rxjs';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
+import { MenuItem } from 'primeng/api';
 
 export type Type24_48 = '24' | '48';
 
