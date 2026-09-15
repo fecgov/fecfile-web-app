@@ -1,17 +1,17 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { Component, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
+import { CommitteeMember } from 'app/shared/models';
+import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
+import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService } from 'primeng/api';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SelectModule } from 'primeng/select';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { ConfirmationService } from 'primeng/api';
-import { CommitteeMemberService } from 'app/shared/services/committee-member.service';
-import { CommitteeMember } from 'app/shared/models';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
-import { Component, viewChild } from '@angular/core';
 import { AddCommitteeMemberDialogComponent } from './add-committee-member-dialog.component';
 
 const johnSmith = CommitteeMember.fromJSON({
@@ -83,8 +83,7 @@ describe('AddCommitteeMemberDialogComponent', () => {
   it('should not add user with pre-existing email', async () => {
     const takenEmail = 'test@test.com';
     const takenEmail2 = 'TeSt@TeSt.CoM'; // Same email but with different case
-    vi.spyOn(testCommitteeService, 'getMembers').mockResolvedValue([CommitteeMember.fromJSON({ email: takenEmail })]);
-    await testCommitteeService.getMembers();
+    vi.spyOn(testCommitteeService, 'emailValidationCheck').mockResolvedValue({ valid: false });
 
     component.form.get('email')?.patchValue(takenEmail);
     const valid = await component.validateForm();
