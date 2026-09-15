@@ -1,10 +1,10 @@
-import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { ContactListPage } from '../../e2e-smoke/pages/contactListPage';
+import { Initialize } from '../../e2e-smoke/pages/loginPage';
 import { PageUtils } from '../../e2e-smoke/pages/pageUtils';
-import { ContactsDeleteHelpers, ContactsHelpers } from './contacts.helpers';
-import { makeContact, makeTransaction } from '../../e2e-smoke/requests/methods';
-import { Individual_A_A, Organization_A, MockContact } from '../../e2e-smoke/requests/library/contacts';
+import { Individual_A_A, MockContact, Organization_A } from '../../e2e-smoke/requests/library/contacts';
 import { buildScheduleA } from '../../e2e-smoke/requests/library/transactions';
+import { makeContact, makeTransaction } from '../../e2e-smoke/requests/methods';
+import { ContactsDeleteHelpers, ContactsHelpers } from './contacts.helpers';
 
 // A11Y WAIVERS (must include link)
 const WAIVERS: Record<string, { reason: string; link: string }> = {};
@@ -111,7 +111,10 @@ describe('Contacts - axe smoke (critical)', () => {
     cy.contains(/Edit Contact/i).should('not.exist');
   });
 
-  it('Deleted contacts - table view', () => {
+  /**
+   * Change to 'it' if the deleted contacts feature flag is enabled
+   */
+  xit('Deleted contacts - table view', () => {
     const deletedName = 'A11y Deleted Contact';
     const contact: MockContact = {
       ...Organization_A,
@@ -162,6 +165,7 @@ describe('Contacts - axe smoke (critical)', () => {
     cy.wait('@getTransactionHistory');
     cy.get('app-table[itemname="transactions"]', { timeout: 15000 })
       .should('exist')
+      .parent().parent()
       .scrollIntoView({ offset: { top: -120, left: 0 } })
       .should('be.visible')
       .as('transactionHistoryTable');
