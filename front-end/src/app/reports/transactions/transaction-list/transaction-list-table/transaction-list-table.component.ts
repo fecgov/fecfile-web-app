@@ -36,6 +36,7 @@ export class TransactionListTableComponent extends TableListBaseComponent<Transa
   readonly category = input.required<TransactionCategory>();
 
   readonly config = computed(() => TRANSACTION_CATEGORY_CONFIG[this.category()]);
+  readonly unassigned = computed(() => this.report() === null);
 
   readonly typeBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('typeBody');
   readonly actionsBodyTpl = viewChild.required<TemplateRef<TableBodyContext<TransactionListRecord>>>('actionsBody');
@@ -70,8 +71,6 @@ export class TransactionListTableComponent extends TableListBaseComponent<Transa
     createMethod: () => Promise<void>;
   }>();
 
-  reportId: string = this.activatedRoute.snapshot.params['reportId'];
-
   constructor() {
     super();
     this.rowsPerPage.set(5);
@@ -86,14 +85,13 @@ export class TransactionListTableComponent extends TableListBaseComponent<Transa
   }
 
   override readonly params = computed(() => {
-    const params: QueryParams = { page_size: this.rowsPerPage() };
-    if (this.reportId) params['report_id'] = this.reportId;
+    const params: QueryParams = { page_size: this.rowsPerPage(), schedules: this.config().schedules };
     const report = this.report();
     if (report) {
+      params['report_id'] = report.id ?? '';
       params['report_type'] = report.report_type;
       params['report_code_label'] = report.report_code_label ?? '';
     }
-    params['schedules'] = this.config().schedules;
 
     return params;
   });

@@ -3493,3 +3493,13 @@ td {
 .surface-ground {
   background-color: var(--surface-ground) !important;
 }
+
+.p-tablist-active-bar {
+  border-radius: 0 0 8px 8px;
+  height: 4px;
+  background-color: #2E79D4;
+}
+
+.p-tab {
+  font-size: 18px;
+}

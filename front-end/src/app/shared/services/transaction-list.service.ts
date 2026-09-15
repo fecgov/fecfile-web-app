@@ -9,23 +9,20 @@ import { Report } from '../models/reports/report.model';
 @Injectable()
 export class TransactionListService implements TableListService<TransactionListRecord> {
   protected readonly apiService = inject(ApiService);
-  tableDataEndpoint = '/transactions';
 
   public async getTableData(
     pageNumber = 1,
     ordering = 'line_label,created',
     queryParams: QueryParams = {},
-    unassigned = false,
   ): Promise<ListRestResponse> {
     const finalOrdering = ordering === '-line_label,created' ? '-line_label,-created' : ordering;
-    const endpoint = `${this.tableDataEndpoint}${unassigned ? '/list/unassigned' : ''}/`;
     const params: QueryParams = {
       ...queryParams,
       page: pageNumber,
       ordering: finalOrdering,
     };
 
-    const response = await this.apiService.get<ListRestResponse>(endpoint, params);
+    const response = await this.apiService.get<ListRestResponse>('/transactions/', params);
 
     return {
       ...response,

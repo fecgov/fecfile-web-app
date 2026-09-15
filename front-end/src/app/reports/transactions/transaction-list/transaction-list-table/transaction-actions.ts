@@ -350,20 +350,8 @@ export class AssignedTransactionActionsFactory extends BaseTransactionActionsFac
 
 @Injectable()
 export class UnassignedTransactionActionsFactory extends BaseTransactionActionsFactory {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   buildActions(ctx: ActionContext): TableAction<TransactionListRecord>[] {
-    return [
-      new TableAction(
-        'View',
-        (item) => this.router.navigateByUrl(`/transactions/list/${item.id}`),
-        () => true,
-        () => true,
-      ),
-      new TableAction(
-        'Delete',
-        (item) => ctx.deleteItem(item),
-        (item) => this.canDelete(item),
-        () => true,
-      ),
-    ];
+    return [];
   }
 }
