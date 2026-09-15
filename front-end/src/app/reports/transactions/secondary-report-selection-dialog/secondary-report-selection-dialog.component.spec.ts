@@ -11,7 +11,7 @@ import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
 import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, signal, viewChild } from '@angular/core';
+import { inputBinding, signal } from '@angular/core';
 import { F24FormTypes, Form24 } from 'app/shared/models';
 import { of } from 'rxjs';
 import { Form24Service } from 'app/shared/services/form-24.service';
@@ -42,42 +42,23 @@ const mockReports = [
     report_code_label: 'test3',
   }),
 ];
-
-@Component({
-  imports: [SecondaryReportSelectionDialogComponent],
-  standalone: true,
-  template: `<app-secondary-report-selection-dialog
-    [(dialogVisible)]="visible"
-    [reportType]="reportType"
-    [transaction]="transaction"
-    (create)="reportSelectionCreateMethod()"
-    (reloadTables)="refreshTables()"
-  />`,
-})
-class TestHostComponent {
-  component = viewChild.required(SecondaryReportSelectionDialogComponent);
-  readonly visible = signal(false);
-  reportType = ReportTypes.F24;
-  transaction: TransactionListRecord = {
-    ...testScheduleATransaction(),
-    name: 'TEST',
-    date: new Date(),
-    amount: 100,
-    balance: 0,
-    aggregate: 0,
-    report_code_label: '',
-    can_delete: true,
-    force_unaggregated: true,
-    report_type: 'Form 3X',
-  } as unknown as TransactionListRecord;
-  reportSelectionCreateMethod = vi.fn();
-  refreshTables = vi.fn();
-}
+const visible = signal(false);
+const transaction = signal({
+  ...testScheduleATransaction(),
+  name: 'TEST',
+  date: new Date(),
+  amount: 100,
+  balance: 0,
+  aggregate: 0,
+  report_code_label: '',
+  can_delete: true,
+  force_unaggregated: true,
+  report_type: 'Form 3X',
+} as unknown as TransactionListRecord);
 
 describe('SecondaryReportSelectionDialogComponent', () => {
   let component: SecondaryReportSelectionDialogComponent;
-  let fixture: ComponentFixture<TestHostComponent>;
-  let host: TestHostComponent;
+  let fixture: ComponentFixture<SecondaryReportSelectionDialogComponent>;
   let messageService: MessageService;
   let transactionListService: TransactionListService;
   let addSpy: Mock;
@@ -118,15 +99,20 @@ describe('SecondaryReportSelectionDialogComponent', () => {
         },
       ],
     }).compileComponents();
+    fixture = TestBed.createComponent(SecondaryReportSelectionDialogComponent, {
+      bindings: [
+        inputBinding('dialogVisible', visible),
+        inputBinding('transaction', transaction),
+        inputBinding('reportType', signal(ReportTypes.F24)),
+      ],
+    });
+    component = fixture.componentInstance;
     form24Service = TestBed.inject(Form24Service);
     vi.spyOn(form24Service, 'getAllReports').mockResolvedValue(mockReports);
-    transactionListService = TestBed.inject(TransactionListService);
+    transactionListService = fixture.debugElement.injector.get(TransactionListService);
     addSpy = vi.spyOn(transactionListService, 'addToReport');
     messageService = TestBed.inject(MessageService);
     messageSpy = vi.spyOn(messageService, 'add');
-    fixture = TestBed.createComponent(TestHostComponent);
-    host = fixture.componentInstance;
-    component = host.component();
     fixture.detectChanges();
   });
 
@@ -140,7 +126,7 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
     expect(form24Service.getAllReports).toHaveBeenCalled();
     const filteredReports = component.reports();
-    expect(filteredReports.length).toBe(3);
+    expect(filteredReports).toHaveLength(3);
     expect(filteredReports[0].id).toBe('1');
   });
 
@@ -154,16 +140,17 @@ describe('SecondaryReportSelectionDialogComponent', () => {
 
   it('should successfully link transaction to selected report', async () => {
     addSpy.mockResolvedValue(new HttpResponse({ status: 200 }));
-
+    component.selectedReport.set(mockReports[0]);
     await fixture.whenStable();
     fixture.detectChanges();
+    const createSpy = vi.spyOn(component.create, 'emit');
+    const reloadSpy = vi.spyOn(component.reloadTables, 'emit');
 
-    component.selectedReport.set(mockReports[0]);
     await component.linkToSelectedReport();
-    expect(addSpy).toHaveBeenCalledWith(host.transaction, mockReports[0]);
-    expect(host.reportSelectionCreateMethod).toHaveBeenCalled();
-    expect(host.refreshTables).toHaveBeenCalled();
-    expect(host.visible()).toBe(false);
+    expect(addSpy).toHaveBeenCalledWith(component.transaction(), mockReports[0]);
+    expect(createSpy).toHaveBeenCalled();
+    expect(reloadSpy).toHaveBeenCalled();
+    expect(visible()).toBe(false);
     expect(messageSpy).toHaveBeenCalledWith({
       severity: 'success',
       summary: 'Successful',

@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { Report } from '../../../../shared/models/reports/report.model';
 import { Router } from '@angular/router';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
@@ -10,7 +10,7 @@ import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store'
   selector: 'app-select-report-dialog',
   templateUrl: './select-report-dialog.component.html',
   styleUrls: ['./select-report-dialog.component.scss'],
-  imports: [ReactiveFormsModule, FormsModule, DialogComponent],
+  imports: [FormsModule, DialogComponent],
 })
 export class SelectReportDialogComponent {
   readonly reatRedesStore = inject(ReattRedesStore);

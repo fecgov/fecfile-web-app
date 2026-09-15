@@ -22,6 +22,7 @@ import type { Contact } from 'app/shared/models/contact.model';
   imports: [TableComponent, CurrencyPipe, DatePipe, LabelPipe],
   templateUrl: './contact-transaction-table.component.html',
   styleUrl: './contact-transaction-table.component.scss',
+  providers: [TransactionListService],
 })
 export class ContactTransactionTableComponent {
   private readonly transactionService = inject(TransactionListService);
@@ -128,12 +129,16 @@ export class ContactTransactionTableComponent {
     }
 
     try {
+      console.log('testing get table');
       const transactionsPage = await this.transactionService.getTableData(pageNumber, ordering, this.params());
+      console.log('post get table');
+      console.log('transactionsPage', transactionsPage);
       this.transactions = transactionsPage.results;
       this.totalTransactions.set(transactionsPage.count);
       this.tableLoading = false;
       this.emptyMessage = 'No data available in table';
     } catch {
+      console.log('failed');
       this.tableLoading = false;
       this.emptyMessage = 'Error loading transactions for contact';
     }

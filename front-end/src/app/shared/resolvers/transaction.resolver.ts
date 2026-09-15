@@ -19,9 +19,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { isTransactionTypeDisabledForReport } from '../utils/transaction-disable.utils';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TransactionResolver {
   readonly service = inject(TransactionService);
   readonly listService = inject(TransactionListService);

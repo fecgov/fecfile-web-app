@@ -6,10 +6,13 @@ import { loggedInGuard } from './shared/guards/logged-in.guard';
 import { securityNoticeGuard } from './shared/guards/security-notice.guard';
 import { committeeOwnerGuard } from './shared/guards/committee-owner.guard';
 import { CookiesDisabledComponent } from './shared/components/cookies-disabled/cookies-disabled.component';
-import { UnassociatedTransactionListComponent } from './unassociated-transaction-list/unassociated-transaction-list.component';
 import { featureFlagGuard } from 'app/shared/guards/feature-flag.guard';
-import { ReattRedesStore } from './shared/utils/reatt-redes/reatt-redes.store';
-import { Form3XService } from './shared/services/form-3x.service';
+import { UnassignedTransactionListComponent } from './reports/transactions/unassigned-transactions/unassigned-transaction-list/unassigned-transaction-list.component';
+import { TransactionListService } from './shared/services/transaction-list.service';
+import {
+  BaseTransactionActionsFactory,
+  UnassignedTransactionActionsFactory,
+} from './reports/transactions/transaction-list/transaction-list-table/transaction-actions';
 
 export const ROUTES: Route[] = [
   {
@@ -51,7 +54,7 @@ export const ROUTES: Route[] = [
       },
       {
         path: 'transactions',
-        component: UnassociatedTransactionListComponent,
+        component: UnassignedTransactionListComponent,
         canActivate: [
           loggedInGuard,
           nameGuard,
@@ -59,7 +62,10 @@ export const ROUTES: Route[] = [
           committeeGuard,
           featureFlagGuard('enableUnassignedTransactions'),
         ],
-        providers: [ReattRedesStore, Form3XService],
+        providers: [
+          TransactionListService,
+          { provide: BaseTransactionActionsFactory, useClass: UnassignedTransactionActionsFactory },
+        ],
       },
       {
         path: 'contacts',

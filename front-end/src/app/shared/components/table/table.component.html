@@ -41,11 +41,12 @@
     <tr role="row">
       @for (col of columns(); track col) {
         @if (col.header === '') {
-          <td [style.width]="col.width"></td>
+          <td [style.width]="col.width" [class.hidden]="col.width === 'none'"></td>
         } @else {
           <th
             [pSortableColumn]="col.sortable ? col.field : undefined"
             [ngClass]="col.cssClass"
+            [class.hidden]="col.width === 'none'"
             [style.width]="col.width"
             scope="col"
           >
@@ -73,7 +74,7 @@
       <!-- This can go away after full transition to ColumnDefinition method -->
 
       @for (col of columns(); track col) {
-        <td [ngClass]="col.cssClass">
+        <td [ngClass]="col.cssClass" [class.hidden]="col.width === 'none'">
           @if (col.checkbox) {
             <p-tableCheckbox [value]="item" [ariaLabel]="col.label!(item)" />
           } @else {

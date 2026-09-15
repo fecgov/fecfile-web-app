@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,14 +10,16 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { TransactionGuarantorsComponent } from './transaction-guarantors.component';
-import { TransactionSchC2Service } from 'app/shared/services/transaction-schC2.service';
 import { SchC2Transaction } from 'app/shared/models/schc2-transaction.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, provideZoneChangeDetection, signal, viewChild } from '@angular/core';
+import { Component, provideZoneChangeDetection, viewChild } from '@angular/core';
 import { ScheduleCTransactionTypes, Transaction } from 'app/shared/models';
 import { ReattRedesStore } from 'app/shared/utils/reatt-redes/reatt-redes.store';
 import { Form3XService } from 'app/shared/services/form-3x.service';
+
+import { ReportService } from 'app/shared/services/report.service';
+import { TransactionListService } from 'app/shared/services/transaction-list.service';
 
 @Component({
   imports: [TransactionGuarantorsComponent],
@@ -45,6 +46,7 @@ describe('TransactionGuarantorsComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let component: TransactionGuarantorsComponent;
   let host: TestHostComponent;
+  let reportService: ReportService<Form3X>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -72,7 +74,7 @@ describe('TransactionGuarantorsComponent', () => {
           },
         },
         {
-          provide: TransactionSchC2Service,
+          provide: TransactionListService,
           useValue: {
             get: (transactionId: string) =>
               of(
@@ -90,6 +92,9 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   beforeEach(() => {
+    reportService = TestBed.inject(ReportService);
+    vi.spyOn(reportService, 'isEditable').mockReturnValue(true);
+
     fixture = TestBed.createComponent(TestHostComponent);
     host = fixture.componentInstance;
     component = host.component();
@@ -109,7 +114,6 @@ describe('TransactionGuarantorsComponent', () => {
   });
 
   it('should have delete', () => {
-    (component.reportIsEditable as any) = signal(true);
     expect(component.rowActions[0].isAvailable(component.loan())).toEqual(false);
     expect(component.rowActions[1].isAvailable(component.loan())).toEqual(true);
     expect(component.rowActions[2].isAvailable(component.loan())).toEqual(true);
