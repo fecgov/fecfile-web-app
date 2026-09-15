@@ -70,7 +70,7 @@ describe('FormUtils', () => {
     expect(aggregateFormControl.value).toEqual(50);
   });
 
-  it('should initialize Schedule B aggregate_amount as a number for clone-like transactions', () => {
+  it('should initialize Schedule B aggregate_amount as a number', () => {
     const form = new FormGroup({
       entity_type: new SubscriptionFormControl(),
       aggregate_amount: new SubscriptionFormControl(),
