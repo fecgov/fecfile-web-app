@@ -111,7 +111,10 @@ describe('Contacts - axe smoke (critical)', () => {
     cy.contains(/Edit Contact/i).should('not.exist');
   });
 
-  it('Deleted contacts - table view', () => {
+  /**
+   * Change to 'it' if the deleted contacts feature flag is enabled
+   */
+  xit('Deleted contacts - table view', () => {
     const deletedName = 'A11y Deleted Contact';
     const contact: MockContact = {
       ...Organization_A,
