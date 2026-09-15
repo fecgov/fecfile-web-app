@@ -13,7 +13,6 @@ export const DISABLED_TRANSACTION_TYPES: Partial<Record<ReportTypes, Set<Transac
     // CONTRIBUTIONS FROM INDIVIDUALS/PERSONS
     ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
     ScheduleATransactionTypes.IN_KIND_RECEIPT,
-    ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
     ScheduleATransactionTypes.EARMARK_RECEIPT,
     // CONTRIBUTIONS FROM REGISTERED FILERS
     ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,

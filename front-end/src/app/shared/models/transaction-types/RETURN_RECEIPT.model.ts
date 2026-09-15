@@ -1,5 +1,7 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { ELECTION_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/RETURN_RECEIPT';
+import { ReportTypes } from '../reports/report.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
@@ -10,7 +12,7 @@ import {
 } from 'app/shared/utils/transaction-type-properties';
 
 export class RETURN_RECEIPT extends SchATransactionType {
-  formFields = INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS;
+  formFields = [...INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = INDIVIDUAL_ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
@@ -28,5 +30,9 @@ export class RETURN_RECEIPT extends SchATransactionType {
       transaction_type_identifier: ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
       aggregation_group: AggregationGroups.GENERAL,
     });
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 }
