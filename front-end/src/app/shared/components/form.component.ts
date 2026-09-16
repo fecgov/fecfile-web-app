@@ -2,7 +2,6 @@ import { afterNextRender, Directive, ElementRef, inject, Injector } from '@angul
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { blurActiveInput, printFormErrors } from '../utils/form.utils';
 import { singleClickEnableAction } from 'app/store/single-click.actions';
 import { DestroyerComponent } from './destroyer.component';
@@ -15,7 +14,6 @@ export abstract class FormComponent extends DestroyerComponent {
   protected readonly fb = inject(FormBuilder);
   protected readonly store = inject(Store);
   protected readonly el = inject(ElementRef);
-  protected committeeAccount = this.store.selectSignal(selectCommitteeAccount);
   protected readonly activeReport = this.store.selectSignal(selectActiveReport);
 
   protected abstract form: FormGroup;
