@@ -29,7 +29,6 @@ describe('committeeOwnerGuard', () => {
           useValue: {
             membersSignal: vi.fn().mockReturnValue([]),
             needsSecondAdmin: needsSecondAdminMock,
-            updateCommitteeCounts: vi.fn().mockReturnValue(Promise.resolve()),
           },
         },
         provideMockStore(testMockStore()),

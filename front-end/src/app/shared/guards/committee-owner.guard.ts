@@ -9,8 +9,6 @@ export const committeeOwnerGuard: CanActivateFn = async () => {
   if (!committeeStore.committee()?.committee_id) return router.createUrlTree(['/select-committee']);
 
   const memberService = inject(CommitteeMemberService);
-
-  await memberService.updateCommitteeCounts();
   if (memberService.needsSecondAdmin()) {
     return router.createUrlTree(['/reports']);
   }
