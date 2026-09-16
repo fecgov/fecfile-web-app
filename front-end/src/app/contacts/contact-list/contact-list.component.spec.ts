@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testContact, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testContact, testFeatureFlags, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -20,6 +20,7 @@ import { MemoCodePipe } from 'app/shared/pipes/memo-code.pipe';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionIdPipe } from 'app/shared/pipes/transaction-id.pipe';
 import { DefaultZeroPipe } from 'app/shared/pipes/default-zero.pipe';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -42,7 +43,7 @@ describe('ContactListComponent', () => {
   };
   let deletedContactService: DeletedContactService;
 
-  beforeEach(async () => {
+  async function setup(showRestoreDeletedContacts = true) {
     await TestBed.configureTestingModule({
       imports: [
         ToastModule,
@@ -74,20 +75,22 @@ describe('ContactListComponent', () => {
             snapshot: { params: { reportId: '99' } },
           },
         },
+        {
+          provide: FEATURE_FLAGS,
+          useValue: { ...testFeatureFlags(), showRestoreDeletedContacts },
+        },
       ],
     }).compileComponents();
-    deletedContactService = TestBed.inject(DeletedContactService);
-  });
 
-  beforeEach(() => {
+    deletedContactService = TestBed.inject(DeletedContactService);
     service = TestBed.inject(ContactService);
     fixture = TestBed.createComponent(ContactListComponent);
     component = fixture.componentInstance;
-  });
+  }
 
   describe('typical', () => {
-    beforeEach(() => {
-      component.showRestoreDeletedContacts = true;
+    beforeEach(async () => {
+      await setup();
       fixture.detectChanges();
     });
 
@@ -177,7 +180,6 @@ describe('ContactListComponent', () => {
 
     it('#restoreButton should be visible if there is a deleted contact', async () => {
       expect(component.restoreContactsButtonIsVisible).toBe(false);
-
       vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
         Promise.resolve({
           count: 1,
@@ -188,13 +190,11 @@ describe('ContactListComponent', () => {
         }),
       );
       await component.checkForDeletedContacts();
-
       expect(component.restoreContactsButtonIsVisible).toBe(true);
     });
 
     it('#restoreButton should not be visible if there are no deleted contacts', async () => {
       component.restoreContactsButtonIsVisible = true;
-
       vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
         Promise.resolve({
           count: 0,
@@ -204,25 +204,8 @@ describe('ContactListComponent', () => {
           results: [],
         }),
       );
+
       await component.checkForDeletedContacts();
-
-      expect(component.restoreContactsButtonIsVisible).toBe(false);
-    });
-
-    it('Restore deleted contacts should not be visible when the feature flag is disabled', async () => {
-      component.showRestoreDeletedContacts = false;
-
-      vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
-        Promise.resolve({
-          count: 1,
-          next: '',
-          previous: '',
-          pageNumber: 1,
-          results: [contact],
-        }),
-      );
-      await component.checkForDeletedContacts();
-
       expect(component.restoreContactsButtonIsVisible).toBe(false);
     });
 
@@ -244,8 +227,31 @@ describe('ContactListComponent', () => {
     });
   });
 
+  describe('show restore button is false', () => {
+    beforeEach(async () => {
+      await setup(false);
+      fixture.detectChanges();
+    });
+
+    it('Restore deleted contacts should not be visible when the feature flag is disabled', async () => {
+      vi.spyOn(deletedContactService, 'getTableData').mockReturnValue(
+        Promise.resolve({
+          count: 1,
+          next: '',
+          previous: '',
+          pageNumber: 1,
+          results: [contact],
+        }),
+      );
+
+      await component.checkForDeletedContacts();
+      expect(component.restoreContactsButtonIsVisible).toBe(false);
+    });
+  });
+
   describe('restoreContactsButtonIsVisible true', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
+      await setup();
       component.restoreContactsButtonIsVisible = true;
       fixture.detectChanges();
     });

@@ -1,20 +1,21 @@
-import type { MockedObject } from 'vitest';
+import { TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
-import {
-  emailValidator,
-  buildGuaranteeUniqueValuesValidator,
-  buildNonOverlappingCoverageValidator,
-  buildCorrespondingForm3XValidator,
-  buildWithinReportDatesValidator,
-  buildAfterDateValidator,
-  buildReattRedesTransactionValidator,
-  CommitteeMemberEmailValidator,
-} from './validators.utils';
+import { provideMockStore } from '@ngrx/store/testing';
+import type { MockedObject } from 'vitest';
 import { CoverageDates } from '../models/reports/base-form-3';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { CommitteeMemberService } from '../services/committee-member.service';
-import { TestBed } from '@angular/core/testing';
-import { CommitteeMember } from '../models/committee-member.model';
+import { testMockStore } from './unit-test.utils';
+import {
+  buildAfterDateValidator,
+  buildCorrespondingForm3XValidator,
+  buildGuaranteeUniqueValuesValidator,
+  buildNonOverlappingCoverageValidator,
+  buildReattRedesTransactionValidator,
+  buildWithinReportDatesValidator,
+  CommitteeMemberEmailValidator,
+  emailValidator,
+} from './validators.utils';
 
 describe('ValidatorsUtils', () => {
   describe('emailValidator', () => {
@@ -203,26 +204,26 @@ describe('ValidatorsUtils', () => {
     let validator: CommitteeMemberEmailValidator;
 
     beforeEach(() => {
-      const spy = {
-        getMembers: vi.fn().mockName('CommitteeMemberService.getMembers'),
-      };
       TestBed.configureTestingModule({
-        providers: [CommitteeMemberEmailValidator, { provide: CommitteeMemberService, useValue: spy }],
+        providers: [
+          provideMockStore(testMockStore()),
+          CommitteeMemberEmailValidator,
+          { provide: CommitteeMemberService },
+        ],
       });
       service = TestBed.inject(CommitteeMemberService) as MockedObject<CommitteeMemberService>;
       validator = TestBed.inject(CommitteeMemberEmailValidator);
     });
 
     it('should return error if email is taken', async () => {
-      const member = CommitteeMember.fromJSON({ email: 'taken@example.com' });
-      service.getMembers.mockResolvedValue([member]);
+      vi.spyOn(service, 'emailValidationCheck').mockResolvedValue({ valid: false });
       const control = new FormControl('taken@example.com');
       const result = await validator.validate(control);
       expect(result).toEqual({ email: 'taken-in-committee' });
     });
 
     it('should return null if email is not taken', async () => {
-      service.getMembers.mockResolvedValue([]);
+      vi.spyOn(service, 'emailValidationCheck').mockResolvedValue({ valid: true });
       const control = new FormControl('new@example.com');
       const result = await validator.validate(control);
       expect(result).toBeNull();

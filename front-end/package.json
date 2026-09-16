@@ -67,7 +67,7 @@
     "@cypress/schematic": "5.0.0",
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "10.0.1",
-    "@faker-js/faker": "10.3.0",
+    "@faker-js/faker": "^10.6.0",
     "@types/node": "^25.6.0",
     "@typescript-eslint/eslint-plugin": "8.57.2",
     "@typescript-eslint/parser": "8.57.2",

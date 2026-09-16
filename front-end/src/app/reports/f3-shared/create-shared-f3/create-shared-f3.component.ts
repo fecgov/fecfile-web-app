@@ -20,10 +20,9 @@ import { SchemaUtils } from 'app/shared/utils/schema.utils';
 import { SubscriptionFormControl } from 'app/shared/utils/subscription-form-control';
 import { buildAfterDateValidator, buildNonOverlappingCoverageValidator } from 'app/shared/utils/validators.utils';
 import { blurActiveInput, printFormErrors } from 'app/shared/utils/form.utils';
-import { environment } from 'environments/environment';
 import { schema as f3Schema } from 'fecfile-validate/fecfile_validate_js/dist/F3';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButton } from 'primeng/selectbutton';
@@ -36,6 +35,8 @@ import { F3xFormTypes, Form3X } from 'app/shared/models/reports/form-3x.model';
 import { F3FormTypes, Form3 } from 'app/shared/models/reports/form-3.model';
 import { FORM_3_SERVICE } from 'app/shared/services/base-form-3.service';
 import { BaseForm3 } from 'app/shared/models/reports/base-form-3';
+import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 export enum ReportTypeCategories {
   ELECTION_YEAR = 'Election Year',
@@ -65,6 +66,8 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
   protected readonly messageService = inject(MessageService);
   protected readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  readonly featureFlags = inject(FEATURE_FLAGS);
+  private readonly confirmService = inject(ConfirmationService);
 
   readonly reportId = injectParams('reportId');
   readonly isF3X = computed(() => this.router.url.includes('/f3x/'));
@@ -78,7 +81,6 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
 
   // CONSTANTS & FORM DEFINITION
   readonly year = new Date().getFullYear();
-  readonly userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   readonly stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
   readonly formProperties: string[] = [
@@ -300,7 +302,11 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
     const report = reportId
       ? await this.update(reportStub, reportId)
       : await this.activeService.create(reportStub, this.formProperties);
-    if (!report) return;
+
+    if (!report) {
+      this.store.dispatch(singleClickEnableAction());
+      return;
+    }
 
     if (jump === 'continue') {
       this.router.navigateByUrl(`/reports/transactions/report/${report.id}/list`);
@@ -316,6 +322,34 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
   }
 
   private async update(summary: BaseForm3, reportId: string) {
+    if (this.featureFlags.enableUnassignedTransactions) {
+      const datePipe = new FecDatePipe();
+      const from = datePipe.transform(summary.coverage_from_date);
+      const through = datePipe.transform(summary.coverage_through_date);
+      const count = await this.activeService.getTransactionsOutsideCoverage(reportId, from, through);
+      if (count > 0) {
+        const transaction = count > 1 ? 'transactions' : 'transaction';
+        const message = [
+          `You have ${count} ${transaction}`,
+          ` within this report that will fall outside the new coverage dates of `,
+          `${from} - ${through}. `,
+          `If you continue, ${count > 1 ? 'these' : 'this'} ${transaction} will be removed from this report `,
+          `and moved to Unassigned within the Transactions page.\n\n`,
+          `If you don't want to do this now, cancel and review your ${transaction} `,
+          `before updating your coverage dates.`,
+        ].join('');
+        const confirmed = await new Promise<boolean>((resolve) => {
+          this.confirmService.confirm({
+            message,
+            header: 'Heads Up!',
+            accept: () => resolve(true),
+            reject: () => resolve(false),
+          });
+        });
+
+        if (!confirmed) return;
+      }
+    }
     summary.id = reportId;
     try {
       return await this.activeService.updateWithAllowedErrorCodes(
@@ -324,7 +358,8 @@ export class CreateSharedF3Component extends FormComponent implements OnInit {
         this.formProperties,
       );
     } catch {
-      this.coverageDatesDialogVisible.set(true);
+      // This will no longer be required once unassigned transactions are no longer feature flagged
+      if (!this.featureFlags.enableUnassignedTransactions) this.coverageDatesDialogVisible.set(true);
       return;
     }
   }
