@@ -14,11 +14,12 @@ import { MenuInfo, ReportSidebarSection } from 'app/layout/sidebar/menu-info';
 import { Form24Service } from 'app/shared/services/form-24.service';
 import { PLACEHOLDER } from 'app/shared/utils/signal-schema.utils';
 import { plainToInstance, Transform } from 'class-transformer';
+import { environment } from 'environments/environment';
 import { schema as f24Schema } from 'fecfile-validate/fecfile_validate_js/dist/F24';
+import { MenuItem } from 'primeng/api';
 import { from } from 'rxjs';
 import { BaseModel } from '../base.model';
 import { Report, ReportStatus, ReportTypes } from './report.model';
-import { MenuItem } from 'primeng/api';
 
 export type Type24_48 = '24' | '48';
 
@@ -54,7 +55,7 @@ export class Form24 extends Report {
     return plainToInstance(Form24, json);
   }
 
-  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean, manualReportVersion: boolean): MenuItem[] {
+  getMenuItems(sidebarSection: ReportSidebarSection, isEditable: boolean): MenuItem[] {
     const transactionItems: MenuItem[] = [
       MenuInfo.manageTransactions(this),
       {
@@ -75,7 +76,7 @@ export class Form24 extends Report {
 
     if (this.report_status === ReportStatus.IN_PROGRESS || this.report_status === ReportStatus.SUBMIT_FAILURE) {
       const items = [MenuInfo.editReport(sidebarSection, this, 'Edit report details')];
-      if (manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
+      if (environment.manualReportVersion) items.push(MenuInfo.updateVersion(sidebarSection, this));
       menuItems.unshift({
         label: 'REPORT DETAILS',
         expanded: sidebarSection === ReportSidebarSection.EDIT,

@@ -24,9 +24,9 @@ import {
 } from 'app/shared/utils/transaction-type.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Accordion, AccordionModule } from 'primeng/accordion';
+import { environment } from '../../../../environments/environment';
 import { LabelPipe } from '../../../shared/pipes/label.pipe';
 import { CommitteeStore } from 'app/committee/committee.store';
-import { FEATURE_FLAGS } from 'environments/config/feature-flag.config';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -40,7 +40,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly titleService = inject(Title);
   private readonly accordion = viewChild.required(Accordion);
-  readonly showSchedF = inject(FEATURE_FLAGS).showSchedF;
 
   readonly transactionTypeLabels: LabelList = [
     ...ScheduleATransactionTypeLabels,
@@ -165,7 +164,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent {
 
   showTransaction(transactionTypeIdentifier: string): boolean {
     // currently we only hide SchedF in some ɵnvironments, but in the future?
-    return !(!this.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
+    return !(!environment.showSchedF && transactionTypeIdentifier in ScheduleFTransactionTypes);
   }
 
   getRouterLink(transactionType: string): string | undefined {

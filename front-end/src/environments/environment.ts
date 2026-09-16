@@ -5,7 +5,7 @@ export const environment = createEnvironment({
   name: 'local',
   externalLinks: 'prod',
   baseUri: 'http://localhost:8080',
-  featureFlags: {
+  overrides: {
     showGlossary: true,
   },
 });

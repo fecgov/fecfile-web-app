@@ -1,10 +1,12 @@
-import { computed, Directive, input, Input } from '@angular/core';
+import { Component, computed, input, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { TransactionTemplateMapType } from '../../models/transaction-type.model';
 import { DestroyerComponent } from '../destroyer.component';
-import type { Transaction } from 'app/shared/models/transaction.model';
-import type { TransactionTemplateMapType } from '../../models/transaction-type.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
-@Directive()
+@Component({
+  template: '',
+})
 export abstract class BaseInputComponent extends DestroyerComponent {
   readonly transaction = input<Transaction>();
   @Input() form: FormGroup = new FormGroup([], { updateOn: 'blur' });
