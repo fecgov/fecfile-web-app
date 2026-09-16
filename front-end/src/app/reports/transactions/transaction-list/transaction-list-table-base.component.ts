@@ -292,6 +292,8 @@ export abstract class TransactionListTableBaseComponent
       params['report_id'] = report.id!;
       params['report_type'] = report.report_type;
       params['report_code_label'] = report.report_code_label ?? '';
+    } else {
+      params['report_id'] = 'null';
     }
 
     return params;
