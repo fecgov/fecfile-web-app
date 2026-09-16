@@ -7,16 +7,22 @@ import { AggregationGroups } from '../transaction.model';
 import {
   INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  ELECTION_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
+import { ReportTypes } from '../reports/report.model';
 
 export class OTHER_RECEIPT extends SchATransactionType {
-  formFields = INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS;
+  formFields = [...INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS, ...ELECTION_FIELDS];
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
 
   override get isReattributable(): boolean {
     return false;
+  }
+
+  override hasElectionInformation(report_type: ReportTypes): boolean {
+    return report_type === ReportTypes.F3;
   }
 
   override isCloneableTransactionType = true;

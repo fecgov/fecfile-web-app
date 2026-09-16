@@ -39,7 +39,7 @@
     "@ngrx/store": "21.0.1",
     "@primeuix/themes": "2.0.3",
     "class-transformer": "0.5.1",
-    "fecfile-validate": "https://github.com/fecgov/fecfile-validate#dc734a595745f4bd89162bd789d343ecc36d952f",
+    "fecfile-validate": "https://github.com/fecgov/fecfile-validate#b998cb04e7cf26ef4f2bbb990b6f1ee8c82d145f",
     "intl-tel-input": "26.8.1",
     "ngrx-store-localstorage": "20.1.0",
     "ngx-cookie-service": "21.3.1",
@@ -97,7 +97,7 @@
     "crypto": false
   },
   "allowScripts": {
-    "github:fecgov/fecfile-validate#dc734a595745f4bd89162bd789d343ecc36d952f": true,
+    "github:fecgov/fecfile-validate#b998cb04e7cf26ef4f2bbb990b6f1ee8c82d145f": true,
     "esbuild@0.28.1": true
   }
 }
