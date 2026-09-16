@@ -119,6 +119,7 @@ describe('Extended F3X Schedule A Aggregation', () => {
 
         F3XAggregationHelpers.aggregateRowById(F3XAggregationHelpers.receiptsTableRoot, secondId);
         F3XAggregationHelpers.assertReceiptRowStatus(secondId, 'Unaggregated', false);
+        cy.wait(500);
         F3XAggregationHelpers.assertReceiptAggregate(secondId, '$175.00');
       });
     });
